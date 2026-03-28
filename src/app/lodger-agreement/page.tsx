@@ -7,7 +7,7 @@ import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/struc
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/lodger-agreement');
-const chooserWizardHref = '/wizard?product=tenancy_agreement&jurisdiction=england&src=lodger_page&topic=tenancy';
+const englandHubHref = '/products/ast';
 const lodgerWizardHref = '/wizard?product=england_lodger_agreement&src=lodger_page&topic=tenancy';
 const lodgerPackDocuments = getResidentialDocumentList('england_lodger_agreement');
 
@@ -69,27 +69,27 @@ export default function LodgerAgreementEnglandPage() {
       <EnglandTenancyPage
         pagePath="/lodger-agreement"
         title="Room Let / Lodger Agreement England"
-        subtitle="Choose the Lodger route for a resident-landlord room let where the occupier shares the home with the landlord and the arrangement should not be treated as the ordinary AST/HMO path."
+        subtitle="Use this when you live in the property and you are taking in a lodger. It is kept separate from the normal residential tenancy routes."
         primaryCtaLabel="Start Lodger agreement"
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
-        secondaryCtaHref={chooserWizardHref}
-        introTitle="Separate resident-landlord lodging route"
+        secondaryCtaHref={englandHubHref}
+        introTitle="For a room let in the landlord home"
         introBody={[
           'This route is for room lets where the landlord is resident in the property and the occupier shares the home. It is intentionally separate from the ordinary residential, student, and HMO/shared-house products.',
-          'Lodger is now its own England product rather than an edge case squeezed into the AST or HMO logic.',
+          'Lodger is its own England product rather than an edge case squeezed into AST or HMO logic.',
         ]}
         highlights={[
           'Resident-landlord room-let route',
           'House rules and shared-space detail',
-          'Separate from AST and HMO products',
-          'Guided setup with preview before payment',
+          'Separate from the ordinary tenancy routes',
+          'Guided setup with a preview before payment',
         ]}
         compliancePoints={[
-          "Designed to reflect the Renters' Rights Act changes from 1 May 2026 where relevant",
-          'Keeps resident-landlord lodging distinct from the ordinary England tenancy route',
-          'Captures shared-facility and notice expectations directly in the guided flow',
-          'Use the general England chooser if you are unsure whether the arrangement is really a lodger setup',
+          "Keeps the resident-landlord route separate from the main England tenancy products.",
+          'Captures shared-facility, notice, and house-rule expectations directly in the wizard.',
+          'Helps avoid treating a lodger arrangement like a normal whole-property tenancy.',
+          'Use the England hub if you are not sure whether the arrangement is really a lodger setup.',
         ]}
         keywordTargets={[
           'lodger agreement england',
@@ -100,8 +100,8 @@ export default function LodgerAgreementEnglandPage() {
         ]}
         idealFor={[
           'the landlord lives in the property and the occupier is sharing the home',
-          'you want a room-let document with house rules, shared-space notes, included services, and licence-style notice detail',
-          'you want the resident-landlord route kept separate from the ordinary tenancy and HMO products',
+          'you want a room-let document with house rules, shared-space notes, and licence-style notice detail',
+          'you want the resident-landlord route kept separate from the normal tenancy and HMO products',
         ]}
         notFor={[
           'the landlord does not live at the property and the arrangement is really a normal residential tenancy',
@@ -114,7 +114,7 @@ export default function LodgerAgreementEnglandPage() {
             title: 'England tenancy chooser',
             description:
               'If you are unsure whether the arrangement is really a lodger setup, compare it against the full England tenancy-agreement hub first.',
-            href: '/tenancy-agreement',
+            href: '/products/ast',
             ctaLabel: 'Open England hub',
           },
           {
@@ -149,7 +149,7 @@ export default function LodgerAgreementEnglandPage() {
               'That is not automatically a Lodger case. Use the England chooser and answer the occupation questions so the more suitable tenancy route can be selected.',
           },
         ]}
-        finalCtaBody="Use the Lodger route when the landlord lives at the property and the occupier is sharing the home. If not, compare the other England tenancy products instead."
+        finalCtaBody="Use the Lodger route when the landlord lives at the property and the occupier is sharing the home. If that is not the setup, compare the other England tenancy products instead."
       />
     </div>
   );

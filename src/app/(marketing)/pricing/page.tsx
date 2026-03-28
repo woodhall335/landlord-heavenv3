@@ -149,7 +149,7 @@ export default function PricingPage() {
     { sku: "money_claim", name: "Money Claim Pack", url: "/products/money-claim" },
     { sku: "ast_standard", name: "Standard Residential Tenancy Agreement", url: "/products/ast" },
     { sku: "ast_premium", name: "Premium Residential Tenancy Agreement", url: "/products/ast" },
-    { sku: "england_standard_tenancy_agreement", name: "England Standard Tenancy Agreement", url: "/tenancy-agreement" },
+    { sku: "england_standard_tenancy_agreement", name: "England Standard Tenancy Agreement", url: "/standard-tenancy-agreement" },
     { sku: "england_premium_tenancy_agreement", name: "England Premium Tenancy Agreement", url: "/premium-tenancy-agreement" },
     { sku: "england_student_tenancy_agreement", name: "England Student Tenancy Agreement", url: "/student-tenancy-agreement" },
     { sku: "england_hmo_shared_house_tenancy_agreement", name: "England HMO / Shared House Tenancy Agreement", url: "/hmo-shared-house-tenancy-agreement" },

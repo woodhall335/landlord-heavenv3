@@ -6,7 +6,7 @@ import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/joint-tenancy-agreement-england');
 const standardHref = '/wizard?product=ast_standard&src=joint_tenancy_agreement_england&topic=tenancy';
-const chooserHref = '/tenancy-agreement';
+const chooserHref = '/products/ast';
 
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement England | Shared Household Guide 2026',

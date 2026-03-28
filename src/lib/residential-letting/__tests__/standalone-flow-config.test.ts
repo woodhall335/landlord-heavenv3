@@ -120,6 +120,25 @@ describe('residential standalone flow config', () => {
     expect(visibleSteps.some((step) => step.id === 'england_written_information')).toBe(false);
   });
 
+  it('uses a structured tenant builder for the modern England tenancy products', () => {
+    ([
+      'england_standard_tenancy_agreement',
+      'england_premium_tenancy_agreement',
+      'england_student_tenancy_agreement',
+      'england_hmo_shared_house_tenancy_agreement',
+      'england_lodger_agreement',
+    ] as const).forEach((sku) => {
+      const config = getResidentialStandaloneFlowConfig(sku);
+      const tenantStep = config.steps.find((step) => step.id === 'tenant')
+        || config.steps.find((step) => step.id === 'england_transition_reference');
+
+      expect(tenantStep?.fields?.some((field) => field.id === 'number_of_tenants')).toBe(true);
+      expect(
+        tenantStep?.fields?.some((field) => field.id === 'tenants' && field.type === 'tenant_builder')
+      ).toBe(true);
+    });
+  });
+
   it('captures deeper structured product-specific fields for Premium, Student, HMO, and Lodger', () => {
     const premium = getResidentialStandaloneFlowConfig('england_premium_tenancy_agreement');
     const student = getResidentialStandaloneFlowConfig('england_student_tenancy_agreement');

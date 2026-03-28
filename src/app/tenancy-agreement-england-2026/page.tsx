@@ -26,7 +26,7 @@ const faqs = [
   {
     question: 'What should I do if I am creating a brand-new England tenancy now?',
     answer:
-      'Use the current England route on the main product page. That is where the Standard and Premium agreement options are presented around the assured periodic starting point, with clearer product framing than an older AST-led page.',
+      'Use the current England route on the main product page. That is where the five England agreement options are presented around the assured periodic starting point, with clearer product framing than an older AST-led page.',
   },
 ];
 
@@ -88,7 +88,7 @@ export default function TenancyAgreementEngland2026Page() {
           title: 'When the answer is usually "use the new route"',
           paragraphs: [
             'If you are creating a new private tenancy in England after 1 May 2026, the commercial answer is usually straightforward: start with the current England agreement route. That keeps the wording, product framing, and buying journey aligned with the present framework instead of forcing the landlord to reverse-engineer the change from older assumptions.',
-            'This is where the main product page becomes the right destination. It compares Standard and Premium, explains the current position clearly, and helps the landlord choose the level of cover that fits the property and household setup. For a new let, that is far more useful than staying on a transition explainer page for too long.',
+            'This is where the main product page becomes the right destination. It compares Standard, Premium, Student, HMO / Shared House, and Lodger routes, explains the current position clearly, and helps the landlord choose the level of cover that fits the property and household setup. For a new let, that is far more useful than staying on a transition explainer page for too long.',
             'In other words, the page should reassure the landlord quickly and then get out of the way. Once the user understands that a brand-new tenancy should start on the current route, the best next step is to view the product options and move toward purchase.',
           ],
         },
@@ -110,7 +110,7 @@ export default function TenancyAgreementEngland2026Page() {
         },
       ]}
       ctaBlockTitle="Need the current England route for a brand-new tenancy?"
-      ctaBlockDescription="Use the main product page to compare Standard and Premium, see the assured periodic starting point clearly, and avoid using outdated wording for a new agreement."
+      ctaBlockDescription="Use the main product page to compare the five England agreement routes, see the assured periodic starting point clearly, and avoid using outdated wording for a new agreement."
       faqTitle="England tenancy agreement 2026 FAQs"
       faqIntro="Simple transition answers for landlords asking what changed from 1 May 2026 and whether they need a new agreement."
       faqs={faqs}

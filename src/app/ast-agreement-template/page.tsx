@@ -16,7 +16,7 @@ const faqs = [
   {
     question: 'Why does this page point me to /products/ast?',
     answer:
-      'Because this page is built to capture AST search intent and move landlords into the main England-first product page, where the Standard and Premium options are explained more clearly and the current framework is presented directly.',
+      'Because this page is built to capture AST search intent and move landlords into the main England-first product page, where the full England route comparison is explained more clearly and the current framework is presented directly.',
   },
   {
     question: 'Does this page apply outside England?',
@@ -77,7 +77,7 @@ export default function AstAgreementTemplatePage() {
       intentHookParagraphs={[
         'Looking for an AST agreement template? For new England tenancies from 1 May 2026, the correct starting point is now an assured periodic tenancy agreement. That is why this page exists: to meet the search term landlords still use and then move them into the current England route rather than leaving them with an outdated mental model.',
         'A lot of landlords still search with AST language because it is familiar, quick to type, and deeply embedded in old landlord workflows. That search intent is commercially valuable, but the product journey should not stop at that phrase. If a landlord is letting a new private tenancy in England now, they need a page that explains the current position clearly and then takes them to the right product route.',
-        'This page therefore captures AST template demand without pretending the live England product is still best described through older AST assumptions. Instead, it explains the shift, keeps the buying journey simple, and points landlords toward the main product page where Standard and Premium options are presented around the current England framework.',
+        'This page therefore captures AST template demand without pretending the live England product is still best described through older AST assumptions. Instead, it explains the shift, keeps the buying journey simple, and points landlords toward the main product page where the five England agreement routes are presented around the current England framework.',
       ]}
       currentPositionTitle="What changed for England landlords from 1 May 2026?"
       currentPositionParagraphs={[
@@ -104,20 +104,20 @@ export default function AstAgreementTemplatePage() {
         {
           title: 'How to use this page in the funnel',
           paragraphs: [
-            'This page should move landlords in three steps. First, it confirms that AST is a valid search phrase and acknowledges why they arrived here. Second, it explains in plain English that the correct starting point for new England tenancies from 1 May 2026 is the assured periodic route. Third, it gives a clear CTA to the main product page where the Standard and Premium choices sit in a stronger commercial context.',
+            'This page should move landlords in three steps. First, it confirms that AST is a valid search phrase and acknowledges why they arrived here. Second, it explains in plain English that the correct starting point for new England tenancies from 1 May 2026 is the assured periodic route. Third, it gives a clear CTA to the main product page where the five England routes sit in a stronger commercial context.',
             'That funnel structure matters because different landlords arrive in different states. Some are ready to buy. Some are still checking whether they need a new document. Some simply want reassurance that they are not using an outdated approach. A good AST template page should support all three without becoming vague or over-legalistic.',
             'The result is a page that ranks for a familiar term, answers the core question quickly, and still behaves like part of a sales system rather than a passive article. That is the right balance for an England-first tenancy funnel designed to turn search traffic into purchases.',
           ],
         },
       ]}
       ctaBlockTitle="Ready to move from AST search language into the current England route?"
-      ctaBlockDescription="Use the main tenancy agreement page to compare Standard and Premium options, understand the England position from 1 May 2026, and avoid relying on outdated wording."
+      ctaBlockDescription="Use the main tenancy agreement page to compare the five England agreement routes, understand the England position from 1 May 2026, and avoid relying on outdated wording."
       faqTitle="AST agreement template FAQs"
       faqIntro="Clear answers for landlords who still search with AST language but need the current England tenancy route."
       faqs={faqs}
       finalCtaTitle="Compare the current England tenancy agreement options"
-      finalCtaDescription="Move from AST search language into the main England-first product page, compare Standard and Premium, and use wording designed for the current framework instead of relying on older template assumptions."
-      finalCtaLabel="Compare Standard and Premium options"
+      finalCtaDescription="Move from AST search language into the main England-first product page, compare the five England agreement routes, and use wording designed for the current framework instead of relying on older template assumptions."
+      finalCtaLabel="Compare England agreement routes"
       relatedLinks={astAgreementTemplateRelatedLinks}
     />
   );

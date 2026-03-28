@@ -7,7 +7,7 @@ import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/struc
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/hmo-shared-house-tenancy-agreement');
-const chooserWizardHref = '/wizard?product=tenancy_agreement&jurisdiction=england&src=hmo_shared_page&topic=tenancy';
+const englandHubHref = '/products/ast';
 const hmoWizardHref = '/wizard?product=england_hmo_shared_house_tenancy_agreement&src=hmo_shared_page&topic=tenancy';
 const hmoPackDocuments = getResidentialDocumentList('england_hmo_shared_house_tenancy_agreement', {
   englandTenancyPurpose: 'new_agreement',
@@ -73,27 +73,27 @@ export default function HmoSharedHouseTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/hmo-shared-house-tenancy-agreement"
         title="HMO / Shared House Tenancy Agreement England"
-        subtitle="Choose the HMO / Shared House route when communal areas, room-by-room sharers, or shared-house management detail need to be recorded expressly in the agreement."
+        subtitle="Use this when people are sharing the property and you need proper communal-area, house-rule, and sharer wording in the agreement."
         primaryCtaLabel="Start HMO / Shared House agreement"
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
-        secondaryCtaHref={chooserWizardHref}
-        introTitle="Dedicated HMO and shared-house drafting"
+        secondaryCtaHref={englandHubHref}
+        introTitle="For shared houses and HMO-style lets"
         introBody={[
-          'This route is built for England lets where communal areas, sharer expectations, and HMO/shared-house detail need to be expressed directly in the agreement instead of being implied by a generic premium tier.',
-          'HMO is now a separate first-class product. It is no longer implemented as a synonym for Premium.',
+          'This route is for England lets where communal areas, sharers, and house rules need to be expressed directly in the agreement instead of being left vague or bolted onto a generic residential product.',
+          'HMO / Shared House is now a separate product. It is no longer just another name for Premium.',
         ]}
         highlights={[
-          'HMO and communal-area drafting',
+          'Communal-area and house-rule wording',
           'Sharer-specific agreement structure',
-          'Separate from Premium and Student products',
-          'Guided setup with preview before payment',
+          'Separate from Premium and Student',
+          'Guided setup with a preview before payment',
         ]}
         compliancePoints={[
-          "Designed to reflect the Renters' Rights Act changes from 1 May 2026",
-          'Captures shared-house and HMO-specific fact patterns in the England flow',
-          'Keeps HMO/shared-house drafting separate from ordinary residential Premium drafting',
-          'Use the Lodger route instead where the landlord is resident and sharing the home',
+          "Built around the current England route from 1 May 2026 for the main tenancy wording.",
+          'Captures the fact pattern for shared houses and HMO-style occupation directly in the wizard.',
+          'Keeps communal-house wording separate from ordinary residential Premium drafting.',
+          'Use Lodger instead where the landlord lives in the property and shares the home.',
         ]}
         keywordTargets={[
           'hmo tenancy agreement england',
@@ -103,14 +103,14 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           'room by room tenancy agreement england',
         ]}
         idealFor={[
-          'the real complexity is communal living, sharer occupation, visitor policy, or HMO-style operational management',
-          'you want separate drafting for communal areas, house rules, fire-safety notes, and shared-house cleaning arrangements',
-          'you want HMO/shared-house wording without pretending the product is just a Premium residential agreement',
+          'the real complexity is communal living, sharers, visitor policy, or HMO-style management',
+          'you want separate wording for communal areas, house rules, fire-safety notes, and shared-house cleaning arrangements',
+          'you want shared-house wording without pretending the product is just Premium residential drafting',
         ]}
         notFor={[
           'the landlord is resident and the occupier is sharing the home as a lodger',
           'the let is an ordinary whole-property residential tenancy and does not need communal-area controls',
-          'the real issue is a student-focused household with guarantor and end-of-term turnover detail rather than HMO management',
+          'the real issue is a student-focused household with guarantors and end-of-term turnover rather than HMO management',
         ]}
         packHighlights={hmoPackHighlights}
         routeComparison={[
@@ -153,7 +153,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               'That is usually a Lodger / resident-landlord route rather than the HMO / Shared House tenancy path, so compare it against the Lodger product.',
           },
         ]}
-        finalCtaBody="Use the HMO / Shared House route when the real complexity is communal sharers and shared-house management detail. Premium remains a separate ordinary-residential product."
+        finalCtaBody="Use the HMO / Shared House route when the real complexity is communal sharers and shared-house management. Premium remains a separate ordinary residential product."
       />
     </div>
   );

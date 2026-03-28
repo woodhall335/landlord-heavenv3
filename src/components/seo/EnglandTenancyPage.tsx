@@ -71,7 +71,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        trustText="Updated England tenancy agreement wording - Current framework from 1 May 2026 - Older wording may be harder to rely on if issues arise"
+        trustText="Built for landlords using the current England rules from 1 May 2026. Older wording can be harder to rely on when problems come up."
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
@@ -80,9 +80,10 @@ export function EnglandTenancyPage({
             ? { label: secondaryCtaLabel, href: secondaryCtaHref }
             : undefined
         }
-        feature="Older agreements can create avoidable uncertainty if they rely on outdated wording or structure."
+        feature="Choose the agreement that matches how the property is actually being let."
+        mediaSrc="/images/tenancy_agreements.webp"
+        mediaAlt="Tenancy agreement documents and landlord paperwork"
         showTrustPositioningBar
-        hideMedia
       />
 
       <Container className="py-12 md:py-16">
@@ -109,11 +110,11 @@ export function EnglandTenancyPage({
           <section className="mb-12 rounded-[2rem] border border-[#E6E0D5] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
             <div className="max-w-3xl">
               <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                Common England searches this page answers
+                People often land here looking for
               </h2>
               <p className="mt-3 text-base leading-7 text-[#546075]">
-                We keep the wording aligned with how landlords actually search, while routing into
-                the correct England tenancy-agreement product.
+                We keep the page easy to find using the terms landlords actually search for, then
+                point you to the agreement that matches the let in real life.
               </p>
             </div>
             <div className="mt-5 flex flex-wrap gap-3">
@@ -132,7 +133,7 @@ export function EnglandTenancyPage({
         <section className="mb-12 grid gap-8 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
             <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-              What this page helps you do
+              What this route covers
             </h2>
             <ul className="mt-5 space-y-3 text-[#465066]">
               {highlights.map((item) => (
@@ -146,7 +147,7 @@ export function EnglandTenancyPage({
 
           <div className="rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)]">
             <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-              Why landlords update older England agreements
+              How this lines up with the current England rules
             </h2>
             <ul className="mt-5 space-y-3 text-[#465066]">
               {compliancePoints.map((item) => (
@@ -163,7 +164,7 @@ export function EnglandTenancyPage({
           <section className="mb-12 grid gap-8 lg:grid-cols-2">
             <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
               <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                Usually the right route if
+                This route is usually right if
               </h2>
               <ul className="mt-5 space-y-3 text-[#465066]">
                 {idealFor.map((item) => (
@@ -177,7 +178,7 @@ export function EnglandTenancyPage({
 
             <div className="rounded-[2rem] border border-[#F0DCC7] bg-[#FFF8F1] p-6 shadow-[0_14px_32px_rgba(124,72,18,0.06)]">
               <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                Usually better to choose another route if
+                Pick a different route if
               </h2>
               <ul className="mt-5 space-y-3 text-[#465066]">
                 {notFor.map((item) => (
@@ -195,11 +196,11 @@ export function EnglandTenancyPage({
           <section className="mb-12">
             <div className="max-w-3xl">
               <h2 className="text-3xl font-bold tracking-tight text-[#141B2D]">
-                What is included in this pack
+                What you get
               </h2>
               <p className="mt-3 text-base leading-7 text-[#546075]">
-                The tenancy agreement is the core document, but the pack is designed to carry the
-                practical handover and management paperwork that landlords usually need around it.
+                The agreement is the main document, but we also include the practical paperwork a
+                landlord usually needs around it.
               </p>
             </div>
             <div className="mt-6 grid gap-5 md:grid-cols-2">
@@ -232,8 +233,8 @@ export function EnglandTenancyPage({
                 Compare England agreement routes
               </h2>
               <p className="mt-3 text-base leading-7 text-[#546075]">
-                Use the route that matches how the property is actually occupied. That usually
-                matters more than legacy AST or premium language.
+                Pick the route that matches the way the property is actually being let. That matters
+                more than old AST language or a vague idea of what sounds more "premium".
               </p>
             </div>
             <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -263,7 +264,7 @@ export function EnglandTenancyPage({
         {faqs.length ? (
           <FAQSection
             title="England tenancy agreement FAQs"
-            intro="Clear answers on the England route, the updated terminology, and why older wording may be harder to rely on."
+            intro="Straight answers on which England agreement to use, what it includes, and how it fits the current rules."
             faqs={faqs}
             showContactCTA={false}
             variant="gray"
@@ -272,15 +273,14 @@ export function EnglandTenancyPage({
 
         <section className="mt-12 rounded-[2.2rem] bg-gradient-to-br from-[#201739] via-[#31205B] to-[#5641A4] p-8 text-center text-white shadow-[0_28px_72px_rgba(46,29,86,0.28)] md:p-10">
           <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-            Choose the right England agreement route
+            Choose the England agreement that fits the let
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-base leading-8 text-[#E1DBF8] md:text-lg">
             {finalCtaBody || (
               <>
-                Start with the route that fits the let now, not the template language you may have
-                used years ago. Older agreements may be harder to rely on if wording or structure is
-                outdated. England now has dedicated routes for Standard, Premium, Student,
-                HMO/Shared House, and Lodger agreements.
+                Start with the route that matches the property and the occupiers now, not the label
+                you may have used years ago. England now has separate routes for Standard, Premium,
+                Student, HMO / Shared House, and Lodger agreements.
               </>
             )}
           </p>

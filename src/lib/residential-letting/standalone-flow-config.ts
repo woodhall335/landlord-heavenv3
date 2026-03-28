@@ -15,6 +15,7 @@ export type StandaloneFieldType =
   | 'radio'
   | 'multiselect'
   | 'repeater'
+  | 'tenant_builder'
   | 'room_builder'
   | 'upload'
   | 'advisory';
@@ -50,6 +51,12 @@ export interface StandaloneRoomRecord {
     cleanliness?: string;
     notes?: string;
   }>;
+}
+
+export interface StandaloneTenantRecord {
+  full_name?: string;
+  email?: string;
+  phone?: string;
 }
 
 export interface StandaloneFieldConfig {
@@ -226,10 +233,20 @@ function commonTenantStep(title = 'Tenant details', description = 'Identify the 
     title,
     description,
     fields: [
-      { id: 'tenant_full_name', label: 'Tenant full name(s)', type: 'text', required: true, helpText: 'Use comma-separated names if there is more than one named tenant.' },
-      { id: 'tenant_email', label: 'Lead tenant email', type: 'text', required: true },
-      { id: 'tenant_phone', label: 'Lead tenant phone', type: 'text', required: true },
-      { id: 'number_of_tenants', label: 'Number of named occupiers', type: 'number', required: true },
+      {
+        id: 'number_of_tenants',
+        label: 'How many named tenants will be on the agreement?',
+        type: 'number',
+        required: true,
+        helpText: 'We will open a separate section for each tenant so they can all be named properly in the agreement.',
+      },
+      {
+        id: 'tenants',
+        label: 'Named tenant details',
+        type: 'tenant_builder',
+        required: true,
+        helpText: 'Enter the full name, email address, and phone number for each named tenant.',
+      },
     ],
   };
 }
@@ -371,10 +388,8 @@ const ENGLAND_ASSURED_TRANSITION_REQUIRED_FACTS: string[] = [
   'landlord_address_postcode',
   'landlord_email',
   'landlord_phone',
-  'tenant_full_name',
-  'tenant_email',
-  'tenant_phone',
   'number_of_tenants',
+  'tenants',
   'tenancy_start_date',
   'existing_written_tenancy_transition',
 ] as const;
@@ -388,8 +403,8 @@ const ENGLAND_ASSURED_BASE_REQUIRED_FACTS: string[] = [
   'landlord_address_line1',
   'landlord_address_town',
   'landlord_address_postcode',
-  'tenant_full_name',
   'number_of_tenants',
+  'tenants',
   'tenancy_start_date',
   'rent_amount',
   'rent_frequency',
@@ -459,6 +474,11 @@ function isTruthySelection(value: unknown): boolean {
   return false;
 }
 
+function toFactText(value: unknown): string {
+  if (value === null || value === undefined) return '';
+  return String(value).trim();
+}
+
 function hasDepositAmount(facts: Record<string, any>): boolean {
   const numeric = Number(facts.deposit_amount);
   return Number.isFinite(numeric) && numeric > 0;
@@ -488,6 +508,37 @@ function isExistingWrittenEnglandTenancy(facts: Record<string, any>): boolean {
 
 function shouldShowEnglandAssuredAgreementSteps(facts: Record<string, any>): boolean {
   return !isExistingWrittenEnglandTenancy(facts);
+}
+
+function validateStructuredTenantFacts(facts: Record<string, any>): string | null {
+  const requestedCount = Number(facts.number_of_tenants);
+  const expectedCount =
+    Number.isFinite(requestedCount) && requestedCount > 0 ? Math.floor(requestedCount) : 0;
+
+  if (expectedCount === 0) return null;
+
+  const tenants = Array.isArray(facts.tenants) ? facts.tenants : [];
+
+  if (tenants.length < expectedCount) {
+    return 'Add a separate tenant section for each named tenant on the agreement.';
+  }
+
+  for (let index = 0; index < expectedCount; index += 1) {
+    const tenant = tenants[index] || {};
+    if (!toFactText(tenant.full_name)) {
+      return `Add the full name for tenant ${index + 1}.`;
+    }
+
+    if (!toFactText(tenant.email)) {
+      return `Add the email address for tenant ${index + 1}.`;
+    }
+
+    if (!toFactText(tenant.phone)) {
+      return `Add the phone number for tenant ${index + 1}.`;
+    }
+  }
+
+  return null;
 }
 
 function getConfigRequiredFacts(config: ResidentialStandaloneFlowConfig, facts: Record<string, any>) {
@@ -603,10 +654,20 @@ function commonEnglandTransitionReferenceStep(): StandaloneStepConfig {
       { id: 'landlord_address_line1', label: 'Landlord service address line 1', type: 'text', required: true },
       { id: 'landlord_address_town', label: 'Landlord town / city', type: 'text', required: true },
       { id: 'landlord_address_postcode', label: 'Landlord postcode', type: 'text', required: true },
-      { id: 'tenant_full_name', label: 'Tenant full name(s)', type: 'text', required: true },
-      { id: 'tenant_email', label: 'Lead tenant email', type: 'text', required: true },
-      { id: 'tenant_phone', label: 'Lead tenant phone', type: 'text', required: true },
-      { id: 'number_of_tenants', label: 'Number of named occupiers', type: 'number', required: true },
+      {
+        id: 'number_of_tenants',
+        label: 'How many named tenants are on the current tenancy?',
+        type: 'number',
+        required: true,
+        helpText: 'We will open a separate section for each named tenant so the transition pack names everybody clearly.',
+      },
+      {
+        id: 'tenants',
+        label: 'Named tenant details',
+        type: 'tenant_builder',
+        required: true,
+        helpText: 'Enter the details for each tenant who should receive the transition information sheet.',
+      },
       {
         id: 'tenancy_start_date',
         label: 'Original tenancy start date',
@@ -997,6 +1058,7 @@ function commonEnglandRulesAndAccessStep(): StandaloneStepConfig {
 function createEnglandAssuredCompletionRules(product: ResidentialLettingProductSku): Array<(facts: Record<string, any>) => string | null> {
   return [
     COMMON_RULES.englandOnly,
+    (facts) => validateStructuredTenantFacts(facts),
     (facts) =>
       isExistingWrittenEnglandTenancy(facts)
         ? null
@@ -1697,7 +1759,7 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
       'shared_space_cleaning',
       'key_return_expectations',
     ],
-    completionRules: [COMMON_RULES.englandOnly],
+    completionRules: [COMMON_RULES.englandOnly, (facts) => validateStructuredTenantFacts(facts)],
     steps: [
       {
         id: 'suitability',

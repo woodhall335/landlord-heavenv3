@@ -37,9 +37,9 @@ export const productLinks = {
     type: 'product' as const,
   },
   premiumTenancyAgreement: {
-    href: '/products/ast',
+    href: '/premium-tenancy-agreement',
     title: 'Premium Tenancy Agreement',
-    description: 'HMO clauses, guarantor provisions, and advanced options.',
+    description: 'Fuller ordinary-residential drafting with broader management schedules and support documents.',
     icon: 'document' as const,
     type: 'product' as const,
   },
@@ -1060,6 +1060,48 @@ export const tenancySeoEnglandPages = {
 };
 
 export const tenancyFunnelPages = {
+  englandHub: {
+    href: '/products/ast',
+    title: 'England Tenancy Agreement Hub',
+    description: 'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  standardTenancyAgreement: {
+    href: '/standard-tenancy-agreement',
+    title: 'Standard Tenancy Agreement',
+    description: 'Baseline England residential route for straightforward whole-property lets.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  premiumTenancyAgreement: {
+    href: '/premium-tenancy-agreement',
+    title: 'Premium Tenancy Agreement',
+    description: 'Ordinary-residential premium route with fuller management and operational detail.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  studentTenancyAgreement: {
+    href: '/student-tenancy-agreement',
+    title: 'Student Tenancy Agreement',
+    description: 'England student-focused route with guarantor and end-of-term detail.',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
+  hmoSharedHouseTenancyAgreement: {
+    href: '/hmo-shared-house-tenancy-agreement',
+    title: 'HMO / Shared House Tenancy Agreement',
+    description: 'England shared-house route with communal-area controls and sharer drafting.',
+    icon: 'home' as const,
+    type: 'page' as const,
+  },
+  lodgerAgreement: {
+    href: '/lodger-agreement',
+    title: 'Room Let / Lodger Agreement',
+    description: 'Resident-landlord room-let route kept separate from the assured-tenancy products.',
+    icon: 'home' as const,
+    type: 'page' as const,
+  },
   astAgreementTemplate: {
     href: '/ast-agreement-template',
     title: 'AST Agreement Template',
@@ -1277,6 +1319,11 @@ export const renewUpdateEnglandRelatedLinks = [
 ];
 
 export const tenancyProductMoneyPageLinks = [
+  tenancyFunnelPages.standardTenancyAgreement,
+  tenancyFunnelPages.premiumTenancyAgreement,
+  tenancyFunnelPages.studentTenancyAgreement,
+  tenancyFunnelPages.hmoSharedHouseTenancyAgreement,
+  tenancyFunnelPages.lodgerAgreement,
   tenancyFunnelPages.astAgreementTemplate,
   tenancyFunnelPages.tenancyAgreementEngland2026,
   tenancyFunnelPages.assuredPeriodicTenancyAgreement,
@@ -1284,6 +1331,7 @@ export const tenancyProductMoneyPageLinks = [
 ];
 
 export const astAgreementTemplateRelatedLinks = [
+  tenancyFunnelPages.englandHub,
   tenancyFunnelPages.tenancyAgreementEngland2026,
   tenancyFunnelPages.assuredPeriodicTenancyAgreement,
   askHeavenLink,
@@ -1296,12 +1344,14 @@ export const tenancyAgreementTemplateUkRelatedLinks = [
 ];
 
 export const tenancyAgreementEngland2026RelatedLinks = [
+  tenancyFunnelPages.englandHub,
   tenancyFunnelPages.astAgreementTemplate,
   tenancyFunnelPages.assuredPeriodicTenancyAgreement,
   askHeavenLink,
 ];
 
 export const assuredPeriodicTenancyAgreementRelatedLinks = [
+  tenancyFunnelPages.englandHub,
   tenancyFunnelPages.astAgreementTemplate,
   tenancyFunnelPages.tenancyAgreementEngland2026,
   askHeavenLink,
@@ -1316,6 +1366,10 @@ export const hmoTenancyAgreementTemplateRelatedLinks = [
 
 export const rentersRightsInformationSheet2026RelatedLinks = [
   productLinks.tenancyAgreement,
+  tenancyFunnelPages.standardTenancyAgreement,
+  tenancyFunnelPages.studentTenancyAgreement,
+  tenancyFunnelPages.hmoSharedHouseTenancyAgreement,
+  tenancyFunnelPages.lodgerAgreement,
   tenancyFunnelPages.tenancyAgreementEngland2026,
   tenancyFunnelPages.assuredPeriodicTenancyAgreement,
   residentialDocumentLinks.documentsHub,

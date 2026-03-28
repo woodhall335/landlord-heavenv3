@@ -1790,7 +1790,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'england',
     cluster: 'tenancy-england',
     primaryPillar: SEO_PILLAR_ROUTES.tenancyAgreementsEngland,
-    supportingPage: '/tenancy-agreement',
+    supportingPage: '/assured-periodic-tenancy-agreement',
     primaryProduct: SEO_PRODUCT_ROUTES.ast,
     canonicalTarget: SEO_PILLAR_ROUTES.tenancyAgreementsEngland,
     anchorVariants: {
@@ -2827,15 +2827,15 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/tenancy-agreement': makeEntry('/tenancy-agreement', {
-    ...tenancyEntry('/tenancy-agreement', '/premium-tenancy-agreement', {
-      canonicalTarget: '/tenancy-agreement',
+    ...tenancyEntry('/tenancy-agreement', '/products/ast', {
+      canonicalTarget: '/products/ast',
     }),
     pageRole: 'bridge',
     freshnessRequired: true,
-    consolidationStatus: 'bridge_live',
+    consolidationStatus: 'candidate_redirect',
   }),
   '/premium-tenancy-agreement': makeEntry('/premium-tenancy-agreement', {
-    ...tenancyEntry('/premium-tenancy-agreement', '/tenancy-agreement', {
+    ...tenancyEntry('/premium-tenancy-agreement', '/products/ast', {
       canonicalTarget: '/premium-tenancy-agreement',
     }),
     pageRole: 'bridge',

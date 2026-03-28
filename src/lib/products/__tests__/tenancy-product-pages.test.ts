@@ -7,13 +7,13 @@ function readSource(relativePath: string) {
 }
 
 describe('tenancy product pages', () => {
-  it('/products/ast uses the shared tenancy pack section and pack-first copy', () => {
+  it('/products/ast acts as the five-route England tenancy hub', () => {
     const source = readSource('src/app/(marketing)/products/ast/page.tsx');
 
-    expect(source).toContain('More than a tenancy agreement. A pack built to protect your position.');
-    expect(source).toContain('Preview before payment');
-    expect(source).toContain('Supporting documents included');
-    expect(source).toContain('A practical pack: the agreement');
+    expect(source).toContain('Start here if you are not sure which England agreement to use');
+    expect(source).toContain('Compare all five England agreement types in one place');
+    expect(source).toContain('Standard, Premium, Student, HMO / Shared House, and Room Let / Lodger');
+    expect(source).toContain('pricingItemListSchema');
   });
 
   it.each([
@@ -68,20 +68,34 @@ describe('tenancy product pages', () => {
   it('shared England SEO tenancy page component exposes richer keyword, pack, and comparison sections', () => {
     const source = readSource('src/components/seo/EnglandTenancyPage.tsx');
 
-    expect(source).toContain('Common England searches this page answers');
-    expect(source).toContain('Usually the right route if');
-    expect(source).toContain('What is included in this pack');
+    expect(source).toContain('People often land here looking for');
+    expect(source).toContain('This route is usually right if');
+    expect(source).toContain('What you get');
     expect(source).toContain('Compare England agreement routes');
   });
 
-  it('England hub and Premium page surface structured product SEO and stronger Premium-specific positioning', () => {
+  it('England hub redirects to /products/ast and Premium page surfaces stronger positioning', () => {
     const hubSource = readSource('src/app/tenancy-agreement/page.tsx');
+    const astHubSource = readSource('src/app/(marketing)/products/ast/page.tsx');
     const premiumSource = readSource('src/app/premium-tenancy-agreement/page.tsx');
 
-    expect(hubSource).toContain('pricingItemListSchema');
-    expect(hubSource).toContain('Ordinary residential Premium route with fuller management, access, handover, and operational drafting.');
+    expect(hubSource).toContain("permanentRedirect('/products/ast')");
+    expect(astHubSource).toContain('For a normal residential let where you want fuller wording around access, repairs, keys, handover, and day-to-day management.');
     expect(premiumSource).toContain('productSchema');
     expect(premiumSource).toContain('england tenancy agreement management schedule');
-    expect(premiumSource).toContain('stronger supporting pack with a management schedule, handover records, utilities notes, pet-consent record, and variation paperwork');
+    expect(premiumSource).toContain('stronger supporting pack with a management schedule and handover paperwork');
+  });
+
+  it('Standard and Premium England pages use assured periodic naming in their page-facing labels', () => {
+    const standardSource = readSource('src/app/standard-tenancy-agreement/page.tsx');
+    const premiumSource = readSource('src/app/premium-tenancy-agreement/page.tsx');
+    const astHubSource = readSource('src/app/(marketing)/products/ast/page.tsx');
+
+    expect(standardSource).toContain('Assured Periodic Tenancy Agreement England');
+    expect(standardSource).toContain("name: 'Assured Periodic Tenancy Agreement'");
+    expect(premiumSource).toContain('Premium Assured Periodic Tenancy Agreement England');
+    expect(premiumSource).toContain("name: 'Premium Assured Periodic Tenancy Agreement'");
+    expect(astHubSource).toContain('Assured Periodic Tenancy Agreement');
+    expect(astHubSource).toContain('Premium Assured Periodic Tenancy Agreement');
   });
 });

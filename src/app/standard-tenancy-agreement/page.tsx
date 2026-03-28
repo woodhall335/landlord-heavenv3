@@ -8,8 +8,7 @@ import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/standard-tenancy-agreement');
 const standardWizardHref = '/wizard?product=ast_standard&src=standard_tenancy_page&topic=tenancy';
-const chooserWizardHref =
-  '/wizard?product=tenancy_agreement&jurisdiction=england&src=standard_tenancy_page&topic=tenancy';
+const englandHubHref = '/products/ast';
 
 const standardPackDocuments = getResidentialDocumentList('england_standard_tenancy_agreement', {
   englandTenancyPurpose: 'new_agreement',
@@ -35,10 +34,12 @@ const standardPackHighlights = [
   }));
 
 export const metadata: Metadata = {
-  title: 'Standard Tenancy Agreement England | Baseline Residential Route',
+  title: 'Assured Periodic Tenancy Agreement England | Baseline Residential Route',
   description:
-    'Create the Standard England Tenancy Agreement for a straightforward whole-property residential let under the current assured periodic framework.',
+    'Create the England Assured Periodic Tenancy Agreement for a straightforward whole-property residential let under the current England framework.',
   keywords: [
+    'assured periodic tenancy agreement england',
+    'england assured periodic tenancy agreement',
     'standard tenancy agreement england',
     'england tenancy agreement standard',
     'basic tenancy agreement england',
@@ -46,9 +47,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Standard Tenancy Agreement England | Baseline Residential Route',
+    title: 'Assured Periodic Tenancy Agreement England | Baseline Residential Route',
     description:
-      'Create the Standard England Tenancy Agreement for a straightforward whole-property residential let under the current assured periodic framework.',
+      'Create the England Assured Periodic Tenancy Agreement for a straightforward whole-property residential let under the current England framework.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -61,12 +62,12 @@ export default function StandardTenancyAgreementPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Standard Tenancy Agreement', url: canonicalUrl },
+          { name: 'Assured Periodic Tenancy Agreement', url: canonicalUrl },
         ])}
       />
       <StructuredData
         data={productSchema({
-          name: PRODUCTS.england_standard_tenancy_agreement.label,
+          name: 'Assured Periodic Tenancy Agreement',
           description: PRODUCTS.england_standard_tenancy_agreement.description,
           price: PRODUCTS.england_standard_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
@@ -74,28 +75,28 @@ export default function StandardTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Standard Tenancy Agreement England"
-        subtitle="Choose the Standard England tenancy agreement for a straightforward whole-property residential let where you want the current England route without the broader operational drafting carried in Premium."
-        primaryCtaLabel="Start Standard tenancy agreement"
+        title="Assured Periodic Tenancy Agreement England"
+        subtitle="Use this England assured periodic tenancy agreement if you are letting a whole property on a straightforward residential tenancy and you do not need student, HMO, lodger, or extra Premium detail."
+        primaryCtaLabel="Start assured periodic tenancy agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="View all England routes"
-        secondaryCtaHref={chooserWizardHref}
-        introTitle="Baseline England residential agreement for straightforward lets"
+        secondaryCtaHref={englandHubHref}
+        introTitle="For a normal whole-property let"
         introBody={[
-          'This is the ordinary England residential route for a straightforward whole-property tenancy where the setup does not really need the fuller Premium pack or one of the specialist Student, HMO / Shared House, or Lodger products.',
-          'Standard is designed to stay current with the England assured periodic framework from 1 May 2026 while keeping the pack proportionate for landlords who want the core agreement, supporting checklist, and practical handover paperwork without extra management layers.',
+          'This is the baseline England assured periodic route for a straightforward whole-property tenancy. Use it when the let is fairly standard and you do not need the extra operational detail in the Premium assured periodic route or one of the specialist products.',
+          'The pack is designed to cover the main agreement and the practical paperwork around it without turning a simple tenancy into something bloated or overcomplicated.',
         ]}
         highlights={[
-          'Baseline ordinary-residential England agreement',
-          'Built for straightforward whole-property lets',
-          'Separate from Premium, Student, HMO / Shared House, and Lodger products',
-          'Guided setup with preview before payment',
+          'England assured periodic agreement for a normal whole-property residential let',
+          'Keeps the wording and support paperwork proportionate',
+          'Separate from the Premium assured periodic, Student, HMO / Shared House, and Lodger routes',
+          'Guided setup with a preview before payment',
         ]}
         compliancePoints={[
-          "Designed to reflect the Renters' Rights Act changes from 1 May 2026",
-          'Built on the current England assured periodic agreement route',
-          'England written-information drafting and practical support documents sit around the main agreement',
-          'Use specialist Student, HMO / Shared House, or Lodger routes where the occupation setup needs them',
+          "Built around the current England assured periodic route from 1 May 2026.",
+          "Covers the written-information points needed for the main England residential tenancy route.",
+          'Comes with the practical England support paperwork around the agreement.',
+          'Where the facts are really student, shared-house, or resident-landlord, use the specialist route instead.',
         ]}
         keywordTargets={[
           'standard tenancy agreement england',
@@ -105,23 +106,23 @@ export default function StandardTenancyAgreementPage() {
           'ordinary residential tenancy agreement england',
         ]}
         idealFor={[
-          'the tenancy is a straightforward whole-property England let without specialist student, sharer, or resident-landlord features',
-          'you want the current England route with the core support pack but do not need the fuller Premium management schedule',
-          'you want a cleaner baseline agreement before adding more specialist complexity only where the facts genuinely require it',
+          'the tenancy is a straightforward whole-property England let',
+          'you want the current England route with the core support pack but not the fuller Premium assured periodic schedule',
+          'you want a clean baseline agreement without specialist student, shared-house, or resident-landlord wording',
         ]}
         notFor={[
-          'you want fuller operational drafting around inspections, contractor attendance, key control, and handover detail from the start',
+          'you want fuller wording around inspections, repairs handling, keys, contractor access, and handover from the start',
           'the main issue is student occupation, guarantors, or end-of-term student turnover',
-          'the property is really a shared house / HMO or a resident-landlord lodger arrangement',
+          'the property is really a shared house / HMO or a room let in the landlord home',
         ]}
         packHighlights={standardPackHighlights}
         routeComparison={[
           {
-            title: 'Premium Tenancy Agreement',
+            title: 'Premium Assured Periodic Tenancy Agreement',
             description:
-              'Use Premium when the let is still ordinary residential but you want fuller operational drafting and a broader management pack.',
+              'Use the Premium assured periodic route when the let is still ordinary residential but you want fuller operational drafting and a broader management pack.',
             href: '/premium-tenancy-agreement',
-            ctaLabel: 'Compare Premium',
+            ctaLabel: 'Compare Premium assured periodic route',
           },
           {
             title: 'Student Tenancy Agreement',
@@ -147,27 +148,27 @@ export default function StandardTenancyAgreementPage() {
         ]}
         faqs={[
           {
-            question: 'When should I choose Standard instead of Premium?',
+            question: 'When should I choose this instead of the Premium assured periodic route?',
             answer:
-              'Choose Standard when the let is a straightforward whole-property England tenancy and you do not need the fuller management, inspection, handover, and operational drafting carried in Premium.',
+              'Choose this route when the let is a straightforward whole-property England tenancy and you do not need the fuller management, inspection, handover, and operational drafting carried in the Premium assured periodic route.',
           },
           {
-            question: 'Is Standard still built for the current England route?',
+            question: 'Is this still built for the current England route?',
             answer:
-              'Yes. Standard is designed around the current England assured periodic framework rather than an older fixed-term AST-style starting point.',
+              'Yes. This page is built around the current England assured periodic framework rather than an older fixed-term AST-style starting point.',
           },
           {
-            question: 'What does the Standard pack include?',
+            question: 'What does this assured periodic pack include?',
             answer:
-              'The Standard pack centres on the main agreement and adds the England pre-tenancy checklist plus practical handover and support documents around the tenancy file.',
+              'The pack centres on the main agreement and adds the England pre-tenancy checklist plus practical handover and support documents around the tenancy file.',
           },
           {
-            question: 'Should I use Standard for a student or HMO let?',
+            question: 'Should I use this for a student or HMO let?',
             answer:
-              'Usually no. Student and HMO / Shared House now have their own England products, so Standard is best kept for ordinary residential lets that do not need those specialist routes.',
+              'Usually no. Student and HMO / Shared House now have their own England products, so this baseline assured periodic route is best kept for ordinary residential lets that do not need those specialist routes.',
           },
         ]}
-        finalCtaBody="Use Standard when the tenancy is straightforward and the property is being let as an ordinary residential whole-property home. If the let needs fuller drafting or a specialist route, compare the other England products before you start."
+        finalCtaBody="Use this assured periodic route when the tenancy is straightforward and the property is being let as an ordinary whole-property home. If you need fuller day-to-day wording or a specialist route, compare the other England products first."
       />
     </div>
   );

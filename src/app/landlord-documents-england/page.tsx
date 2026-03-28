@@ -16,10 +16,10 @@ const GROUPS = [
       'The retired England document landings now consolidate into the live tenancy agreement paths.',
     links: [
       {
-        href: '/tenancy-agreement',
-        label: 'Standard England tenancy agreement',
+        href: '/products/ast',
+        label: 'England tenancy agreement hub',
         description:
-          'Use the core England tenancy agreement route for the current assured periodic framework.',
+          'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes from the current England hub.',
       },
       {
         href: '/premium-tenancy-agreement',
@@ -115,7 +115,7 @@ export default function LandlordDocumentsEnglandPage() {
           title="England landlord documents"
           subtitle="This bridge page now routes older England document intent into the smaller set of live tenancy and arrears destinations that remain part of the public site."
           primaryCta={{ label: 'Browse live routes', href: '#documents' }}
-          secondaryCta={{ label: 'Start tenancy agreement', href: '/tenancy-agreement' }}
+          secondaryCta={{ label: 'View England tenancy hub', href: '/products/ast' }}
           align="center"
         />
 

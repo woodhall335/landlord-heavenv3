@@ -256,16 +256,17 @@ export default function RentersRightsInformationSheet2026Page() {
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
                 The Information Sheet is only one part of the wider England compliance picture.
-                Landlord Heaven also offers Standard and Premium England tenancy agreements,
-                compliance-focused workflow support, and other landlord products that help users move
-                from legal change awareness into practical action.
+                Landlord Heaven also offers Standard, Premium, Student, HMO / Shared House, and
+                Lodger England tenancy agreements, compliance-focused workflow support, and other
+                landlord products that help users move from legal change awareness into practical
+                action.
               </p>
               <p>
-                Our Standard and Premium England tenancy agreements are updated for the current
-                Renters' Rights legislation and the current England framework. That means landlords
-                can move beyond a single free PDF and into a document flow built around current
-                tenancy structure, transition handling, prescribed information, and the wider bundle
-                of paperwork they may actually need.
+                Our England tenancy-agreement routes are updated for the current Renters' Rights
+                legislation and the current England framework. That means landlords can move beyond
+                a single free PDF and into a document flow built around current tenancy structure,
+                transition handling, prescribed information, and the wider bundle of paperwork they
+                may actually need.
               </p>
             </div>
 
@@ -276,7 +277,7 @@ export default function RentersRightsInformationSheet2026Page() {
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">England tenancy agreements</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
-                  Compare Standard and Premium England agreement routes.
+                  Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes.
                 </p>
               </Link>
               <Link

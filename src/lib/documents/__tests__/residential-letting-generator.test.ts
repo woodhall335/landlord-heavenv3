@@ -461,6 +461,56 @@ describe('generateResidentialLettingDocuments', () => {
     expect(html).toContain('tenant may request consent for a pet');
   });
 
+  test('renders multiple named tenants when the England agreement is prepared for more than one tenant', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      {
+        ...baseFacts,
+        number_of_tenants: 2,
+        tenants: [
+          {
+            full_name: 'Alice Tenant',
+            email: 'alice@example.com',
+            phone: '07000 111111',
+            address: '12 Example Street, London, SW1A 1AA',
+          },
+          {
+            full_name: 'Ben Tenant',
+            email: 'ben@example.com',
+            phone: '07000 222222',
+            address: '12 Example Street, London, SW1A 1AA',
+          },
+        ],
+        tenancy_start_date: '2026-05-02',
+        england_tenancy_purpose: 'new_agreement',
+        bills_included_in_rent: 'yes',
+        included_bills_notes: 'Gas and electricity',
+        separate_bill_payments_taken: false,
+        tenant_notice_period: '2 months',
+        rent_increase_method: 'Section 13 rent increase process',
+        england_rent_in_advance_compliant: true,
+        england_no_bidding_confirmed: true,
+        england_no_discrimination_confirmed: true,
+        tenant_improvements_allowed_with_consent: true,
+        supported_accommodation_tenancy: false,
+        relevant_gas_fitting_present: false,
+        electrical_safety_certificate: true,
+        smoke_alarms_fitted: true,
+        carbon_monoxide_alarms: true,
+        epc_rating: 'C',
+        right_to_rent_check_date: '2026-04-25',
+        how_to_rent_provided: true,
+      },
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Alice Tenant');
+    expect(html).toContain('Ben Tenant');
+    expect(html).toContain('Tenant 2');
+  });
+
   test('renders separate bill-payment details, supported accommodation statements, and fuller Equality Act wording where applicable', async () => {
     const pack = await generateResidentialLettingDocuments(
       'england_standard_tenancy_agreement',

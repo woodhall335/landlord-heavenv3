@@ -37,7 +37,7 @@ const primaryLinks: NavItem[] = [
 ];
 
 const tenancyAgreementLinks: NavItem[] = [
-  { href: '/tenancy-agreement', label: 'All England Agreement Routes' },
+  { href: '/products/ast', label: 'All England Agreement Routes' },
   { href: '/standard-tenancy-agreement', label: 'Standard Tenancy Agreement' },
   { href: '/premium-tenancy-agreement', label: 'Premium Tenancy Agreement' },
   { href: '/student-tenancy-agreement', label: 'Student Tenancy Agreement' },

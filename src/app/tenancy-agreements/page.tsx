@@ -84,7 +84,7 @@ export default function TenancyAgreementsHubPage() {
             </section>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Link href="/tenancy-agreement" className="rounded-lg border p-4 hover:bg-gray-50">
+              <Link href="/standard-tenancy-agreement" className="rounded-lg border p-4 hover:bg-gray-50">
                 Standard England tenancy agreement
               </Link>
               <Link href="/premium-tenancy-agreement" className="rounded-lg border p-4 hover:bg-gray-50">
@@ -94,7 +94,7 @@ export default function TenancyAgreementsHubPage() {
                 England periodic tenancy guide
               </Link>
               <Link href={productHref} className="rounded-lg border p-4 hover:bg-gray-50">
-                Compare Standard and Premium
+                Compare all England agreement routes
               </Link>
             </div>
 
@@ -122,8 +122,8 @@ export default function TenancyAgreementsHubPage() {
                 <Link href="/landlord-documents-england" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
                   Browse England landlord documents
                 </Link>
-                <Link href="/tenancy-agreement" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
-                  Create the standard England agreement
+                <Link href="/products/ast" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
+                  Compare the England agreement hub
                 </Link>
                 <Link href="/premium-tenancy-agreement" className="rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:border-primary">
                   Use the premium agreement for more complex lets

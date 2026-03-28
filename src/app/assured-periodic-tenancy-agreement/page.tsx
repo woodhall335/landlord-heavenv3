@@ -21,7 +21,7 @@ const faqs = [
   {
     question: 'Does this page replace the main product page?',
     answer:
-      'No. This page is an explainer and bridge page. Its job is to help landlords understand the new terminology and then move them to /products/ast, where the Standard and Premium product options are explained properly.',
+      'No. This page is an explainer and bridge page. Its job is to help landlords understand the new terminology and then move them to /products/ast, where the full England product range is compared properly.',
   },
   {
     question: 'Is assured periodic wording only relevant to England?',
@@ -76,7 +76,7 @@ export default function AssuredPeriodicTenancyAgreementPage() {
       intentHookParagraphs={[
         'If you searched for assured periodic tenancy agreement, you are probably trying to understand the current England route without getting lost in old AST terminology. This page is here to make that easy. It explains what the phrase means, why it matters from 1 May 2026, and where to go next if you are ready to choose an agreement product.',
         'The key commercial opportunity here is educational intent that is close to purchase intent. These users are not casually browsing. They are often one or two steps away from buying, but they need reassurance that the newer terminology maps onto a practical product journey they can actually use.',
-        'That is why this page should not stay purely educational. It should explain the concept quickly and then route the user into the main product page where the Standard and Premium choices are easier to compare.',
+        'That is why this page should not stay purely educational. It should explain the concept quickly and then route the user into the main product page where the full England route comparison is easier to understand.',
       ]}
       currentPositionTitle="Why assured periodic wording matters in the England funnel"
       currentPositionParagraphs={[
@@ -103,14 +103,14 @@ export default function AssuredPeriodicTenancyAgreementPage() {
         {
           title: 'Why the product page remains the destination',
           paragraphs: [
-            'No matter which wording the landlord searched for, the main product page is still where the comparison happens. That page shows Standard and Premium, explains the England-first positioning, keeps other jurisdictions available, and helps the landlord avoid using outdated agreements when the current framework should be reflected more clearly.',
+            'No matter which wording the landlord searched for, the main product page is still where the comparison happens. That page now shows Standard, Premium, Student, HMO / Shared House, and Lodger routes, explains the England-first positioning, and helps the landlord avoid using outdated agreements when the current framework should be reflected more clearly.',
             'This page therefore should not become too self-contained. Its value comes from making the newer terminology understandable and then handing the user off to the commercial page with more confidence than they had when they arrived.',
             'That keeps the funnel tight: one page captures newer terminology, one page captures older AST terminology, and both routes feed the same conversion destination.',
           ],
         },
       ]}
       ctaBlockTitle="Want the current England route, not just the terminology?"
-      ctaBlockDescription="Use the main product page to compare Standard and Premium, see the England-first framing directly, and move from explanation into action."
+      ctaBlockDescription="Use the main product page to compare the five England agreement routes, see the England-first framing directly, and move from explanation into action."
       faqTitle="Assured periodic tenancy agreement FAQs"
       faqIntro="Short answers for landlords who want to understand the newer England terminology and then move into the right agreement route."
       faqs={faqs}

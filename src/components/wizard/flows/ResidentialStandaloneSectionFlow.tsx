@@ -23,6 +23,7 @@ import {
   type StandaloneRepeaterColumnConfig,
   type StandaloneRoomRecord,
   type StandaloneStepConfig,
+  type StandaloneTenantRecord,
 } from '@/lib/residential-letting/standalone-flow-config';
 import {
   type ResidentialLettingProductSku,
@@ -74,6 +75,115 @@ function createScheduleRow(field: StandaloneFieldConfig) {
   return { ...(field.emptyRow || {}) };
 }
 
+const EMPTY_TENANT: StandaloneTenantRecord = {
+  full_name: '',
+  email: '',
+  phone: '',
+};
+
+function toTextValue(value: unknown): string {
+  if (value === null || value === undefined) return '';
+  return String(value).trim();
+}
+
+function parseLegacyTenantNames(value: unknown): string[] {
+  return toTextValue(value)
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function sanitizeTenantRecord(value: unknown): StandaloneTenantRecord {
+  const source = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+
+  return {
+    full_name: toTextValue(source.full_name),
+    email: toTextValue(source.email),
+    phone: toTextValue(source.phone),
+  };
+}
+
+function getRequestedTenantCount(facts: Record<string, any>): number {
+  const numeric = Number(facts.number_of_tenants);
+  return Number.isFinite(numeric) && numeric > 0 ? Math.floor(numeric) : 0;
+}
+
+function buildTenantArrayFromFacts(
+  facts: Record<string, any>,
+  expectedCount = 0
+): StandaloneTenantRecord[] {
+  const existingTenants = Array.isArray(facts.tenants)
+    ? facts.tenants.map((tenant: unknown) => sanitizeTenantRecord(tenant))
+    : [];
+  const legacyNames = parseLegacyTenantNames(facts.tenant_full_name);
+  const inferredCount =
+    expectedCount ||
+    existingTenants.length ||
+    legacyNames.length ||
+    (toTextValue(facts.tenant_full_name) ? 1 : 0);
+
+  if (inferredCount === 0) {
+    return existingTenants;
+  }
+
+  return Array.from({ length: inferredCount }, (_, index) => {
+    const existing = existingTenants[index] || EMPTY_TENANT;
+
+    return {
+      full_name:
+        toTextValue(existing.full_name) ||
+        legacyNames[index] ||
+        (index === 0 && legacyNames.length === 0 ? toTextValue(facts.tenant_full_name) : ''),
+      email: toTextValue(existing.email) || (index === 0 ? toTextValue(facts.tenant_email) : ''),
+      phone: toTextValue(existing.phone) || (index === 0 ? toTextValue(facts.tenant_phone) : ''),
+    };
+  });
+}
+
+function syncStructuredTenantFacts(
+  facts: Record<string, any>,
+  options: { deriveCountFromExisting?: boolean } = {}
+): Record<string, any> {
+  const requestedCount = getRequestedTenantCount(facts);
+  const seededTenants = buildTenantArrayFromFacts(facts, requestedCount);
+  const effectiveCount =
+    requestedCount > 0
+      ? requestedCount
+      : options.deriveCountFromExisting
+        ? seededTenants.length
+        : 0;
+  const tenants =
+    effectiveCount > 0
+      ? Array.from({ length: effectiveCount }, (_, index) => ({
+          ...EMPTY_TENANT,
+          ...(seededTenants[index] || EMPTY_TENANT),
+        }))
+      : seededTenants;
+  const namedTenants = tenants.filter(
+    (tenant) => toTextValue(tenant.full_name) || toTextValue(tenant.email) || toTextValue(tenant.phone)
+  );
+  const primaryTenant = namedTenants[0] || tenants[0] || EMPTY_TENANT;
+  const tenantNames = namedTenants
+    .map((tenant) => toTextValue(tenant.full_name))
+    .filter(Boolean)
+    .join(', ');
+
+  return {
+    ...facts,
+    number_of_tenants:
+      effectiveCount > 0
+        ? effectiveCount
+        : facts.number_of_tenants === undefined
+          ? ''
+          : facts.number_of_tenants,
+    tenants,
+    tenant_full_name: tenantNames || toTextValue(facts.tenant_full_name),
+    tenant_email: toTextValue(primaryTenant.email) || toTextValue(facts.tenant_email),
+    tenant_phone: toTextValue(primaryTenant.phone) || toTextValue(facts.tenant_phone),
+    tenant_names: tenantNames || toTextValue(facts.tenant_names),
+  };
+}
+
 function coerceScalarValue(fieldType: string, value: string | boolean) {
   if (fieldType === 'number' || fieldType === 'currency') {
     return value === '' ? '' : Number(value);
@@ -90,6 +200,28 @@ function isFactFilled(value: unknown): boolean {
   return value !== undefined && value !== null;
 }
 
+function isTenantBuilderFilled(field: StandaloneFieldConfig, facts: Record<string, any>): boolean {
+  const expectedCount = getRequestedTenantCount(facts);
+  const tenants = Array.isArray(facts[field.id]) ? facts[field.id] : [];
+
+  if (expectedCount <= 0 || tenants.length < expectedCount) {
+    return false;
+  }
+
+  return tenants.slice(0, expectedCount).every((tenant: unknown) => {
+    const record = sanitizeTenantRecord(tenant);
+    return Boolean(record.full_name && record.email && record.phone);
+  });
+}
+
+function isFieldFilled(field: StandaloneFieldConfig, facts: Record<string, any>): boolean {
+  if (field.type === 'tenant_builder') {
+    return isTenantBuilderFilled(field, facts);
+  }
+
+  return isFactFilled(facts[field.id]);
+}
+
 function getVisibleFields(step: StandaloneStepConfig, facts: Record<string, any>) {
   return (step.fields || []).filter((field) => !field.visibleWhen || field.visibleWhen(facts));
 }
@@ -101,14 +233,14 @@ function getStepCompletion(step: StandaloneStepConfig, facts: Record<string, any
   if (requiredFields.length === 0) {
     return {
       completed: visibleFields.length > 0
-        ? visibleFields.filter((field) => isFactFilled(facts[field.id])).length
+        ? visibleFields.filter((field) => isFieldFilled(field, facts)).length
         : 0,
       total: visibleFields.length,
       isComplete: true,
     };
   }
 
-  const completed = requiredFields.filter((field) => isFactFilled(facts[field.id])).length;
+  const completed = requiredFields.filter((field) => isFieldFilled(field, facts)).length;
 
   return {
     completed,
@@ -234,6 +366,10 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   const config = useMemo(() => getResidentialStandaloneFlowConfig(product), [product]);
   const profile = useMemo(() => getResidentialStandaloneProfile(product), [product]);
   const themeStyle = useMemo(() => getResidentialStandaloneThemeVars(profile.theme), [profile.theme]);
+  const usesTenantBuilder = useMemo(
+    () => config.steps.some((step) => step.fields?.some((field) => field.type === 'tenant_builder')),
+    [config]
+  );
 
   const [facts, setFacts] = useState<Record<string, any>>({
     jurisdiction,
@@ -261,23 +397,28 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
         inspection_rooms: bootstrapLegacyRooms(loaded || {}, 'inspection_rooms'),
         inventory_rooms: bootstrapLegacyRooms(loaded || {}, 'inventory_rooms'),
       };
+      setFacts((current) => {
+        const nextFacts = {
+          ...current,
+          ...bootstrapFacts,
+          __meta: {
+            ...(loaded?.__meta || {}),
+            original_product: product,
+            product,
+            jurisdiction,
+            case_type: 'tenancy_agreement',
+          },
+        };
 
-      setFacts((current) => ({
-        ...current,
-        ...bootstrapFacts,
-        __meta: {
-          ...(loaded?.__meta || {}),
-          original_product: product,
-          product,
-          jurisdiction,
-          case_type: 'tenancy_agreement',
-        },
-      }));
+        return usesTenantBuilder
+          ? syncStructuredTenantFacts(nextFacts, { deriveCountFromExisting: true })
+          : nextFacts;
+      });
       setLoading(false);
     };
 
     void load();
-  }, [caseId, jurisdiction, product]);
+  }, [caseId, jurisdiction, product, usesTenantBuilder]);
 
   useEffect(() => {
     return () => {
@@ -375,8 +516,25 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   );
 
   const updateFact = (key: string, value: any) => {
-    setFacts((current) => ({ ...current, [key]: value }));
+    setFacts((current) => {
+      const nextFacts = { ...current, [key]: value };
+      return usesTenantBuilder &&
+        ['number_of_tenants', 'tenants', 'tenant_full_name', 'tenant_email', 'tenant_phone'].includes(key)
+        ? syncStructuredTenantFacts(nextFacts)
+        : nextFacts;
+    });
     setErrors([]);
+  };
+
+  const updateTenantRecord = (fieldId: string, index: number, key: keyof StandaloneTenantRecord, value: string) => {
+    const expectedCount = getRequestedTenantCount(facts);
+    const tenants = buildTenantArrayFromFacts(facts, expectedCount > 0 ? expectedCount : 0);
+    tenants[index] = {
+      ...EMPTY_TENANT,
+      ...(tenants[index] || EMPTY_TENANT),
+      [key]: value,
+    };
+    updateFact(fieldId, tenants);
   };
 
   const toggleMultiSelectValue = (fieldId: string, optionValue: string, checked: boolean) => {
@@ -579,6 +737,88 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
             {field.addLabel || 'Add row'}
           </button>
         </div>
+      </FieldChrome>
+    );
+  };
+
+  const renderTenantBuilderField = (field: StandaloneFieldConfig) => {
+    const tenantCount = getRequestedTenantCount(facts);
+    const tenants = buildTenantArrayFromFacts(facts, tenantCount > 0 ? tenantCount : 0);
+
+    return (
+      <FieldChrome field={field} accent>
+        {tenantCount <= 0 ? (
+          <div className="rounded-[1.35rem] border border-dashed border-slate-300 bg-white/80 px-4 py-5 text-sm leading-6 text-slate-600">
+            Start by entering how many named tenants are going on the agreement. We will then open a separate section for each tenant.
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {tenants.slice(0, tenantCount).map((tenant, index) => (
+              <section
+                key={`${field.id}-${index}`}
+                className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm"
+              >
+                <div className="mb-4">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    Named tenant {index + 1}
+                  </div>
+                  <div className="mt-1 text-base font-semibold text-slate-950">
+                    {toTextValue(tenant.full_name) || `Tenant ${index + 1}`}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="md:col-span-2">
+                    <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                      Full name
+                    </div>
+                    <Input
+                      value={tenant.full_name || ''}
+                      onChange={(event) =>
+                        updateTenantRecord(field.id, index, 'full_name', event.target.value)
+                      }
+                      placeholder="Full legal name"
+                      className={FIELD_INPUT_CLASS}
+                      fullWidth
+                    />
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                      Email address
+                    </div>
+                    <Input
+                      type="email"
+                      value={tenant.email || ''}
+                      onChange={(event) =>
+                        updateTenantRecord(field.id, index, 'email', event.target.value)
+                      }
+                      placeholder="name@example.com"
+                      className={FIELD_INPUT_CLASS}
+                      fullWidth
+                    />
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                      Phone number
+                    </div>
+                    <Input
+                      type="tel"
+                      value={tenant.phone || ''}
+                      onChange={(event) =>
+                        updateTenantRecord(field.id, index, 'phone', event.target.value)
+                      }
+                      placeholder="Phone number"
+                      className={FIELD_INPUT_CLASS}
+                      fullWidth
+                    />
+                  </div>
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
       </FieldChrome>
     );
   };
@@ -1090,6 +1330,10 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
 
     if (field.type === 'repeater') {
       return renderRepeaterField(field);
+    }
+
+    if (field.type === 'tenant_builder') {
+      return renderTenantBuilderField(field);
     }
 
     if (field.type === 'room_builder') {
