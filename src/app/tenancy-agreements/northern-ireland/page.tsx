@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
+import { buildMerchantOffer } from '@/lib/seo/structured-data';
 import {
   PRODUCT_PRICE_AMOUNT_STRINGS,
   PRODUCTS,
@@ -83,52 +84,18 @@ export default function NorthernIrelandTenancyPage() {
     description: 'Legally compliant Private Tenancy Agreement for Northern Ireland',
     image: 'https://landlordheaven.co.uk/og-image.png',
     offers: [
-      {
-        '@type': 'Offer',
+      buildMerchantOffer({
         name: 'Standard Private Tenancy',
         price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_standard,
-        priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
-        availability: 'https://schema.org/InStock',
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
-          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'GB',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-        },
-      },
-      {
-        '@type': 'Offer',
+        url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
+      }),
+      buildMerchantOffer({
         name: 'Premium Private Tenancy',
         price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_premium,
-        priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
-        availability: 'https://schema.org/InStock',
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
-          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'GB',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-        },
-      },
+        url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),
+      }),
     ],
   };
 

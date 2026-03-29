@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { TenancyPackSection } from '@/components/value-proposition';
 import { getCanonicalUrl } from '@/lib/seo/urls';
+import { buildMerchantOffer } from '@/lib/seo/structured-data';
 import {
   PRODUCT_PRICE_AMOUNT_STRINGS,
   PRODUCTS,
@@ -111,54 +112,18 @@ export default function WalesOccupationContractPage() {
       'Legally compliant Wales Occupation Contract template under the Renting Homes (Wales) Act 2016.',
     image: 'https://landlordheaven.co.uk/og-image.png',
     offers: [
-      {
-        '@type': 'Offer',
+      buildMerchantOffer({
         name: 'Standard Occupation Contract',
         price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_standard,
-        priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
-        availability: 'https://schema.org/InStock',
         url: getCanonicalUrl('/wales-tenancy-agreement-template'),
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
-          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'GB',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-        },
-      },
-      {
-        '@type': 'Offer',
+      }),
+      buildMerchantOffer({
         name: 'Premium Occupation Contract',
         price: PRODUCT_PRICE_AMOUNT_STRINGS.ast_premium,
-        priceCurrency: 'GBP',
         priceValidUntil: PRICE_VALID_UNTIL,
-        availability: 'https://schema.org/InStock',
         url: getCanonicalUrl('/wales-tenancy-agreement-template'),
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'GBP' },
-          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'GB' },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-            transitTime: { '@type': 'QuantitativeValue', minValue: '0', maxValue: '0', unitCode: 'MIN' },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'GB',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-        },
-      },
+      }),
     ],
   };
 

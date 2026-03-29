@@ -13,6 +13,50 @@ import {
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
+const DIGITAL_PRODUCT_RETURN_POLICY_URL = '/refunds';
+
+export const DIGITAL_PRODUCT_RETURN_POLICY_ID = toStructuredDataUrl(
+  `${DIGITAL_PRODUCT_RETURN_POLICY_URL}#digital-product-return-policy`
+);
+export const DIGITAL_PRODUCT_SHIPPING_SERVICE_ID = toStructuredDataUrl(
+  '/#digital-product-shipping-service'
+);
+
+const DIGITAL_PRODUCT_SHIPPING_DESTINATION = {
+  '@type': 'DefinedRegion',
+  addressCountry: 'GB',
+} as const;
+
+const DIGITAL_PRODUCT_SHIPPING_RATE = {
+  '@type': 'MonetaryAmount',
+  value: '0',
+  currency: 'GBP',
+} as const;
+
+const LANDLORD_HEAVEN_BRAND = {
+  '@type': 'Brand',
+  name: 'Landlord Heaven',
+} as const;
+
+const LANDLORD_HEAVEN_SELLER = {
+  '@type': 'Organization',
+  name: 'Landlord Heaven',
+} as const;
+
+const STRUCTURED_DATA_PRODUCT_IMAGES: Partial<Record<ProductSku, string>> = {
+  notice_only: '/images/notice_bundles.webp',
+  complete_pack: '/images/eviction_packs.webp',
+  money_claim: '/images/money_claims.webp',
+  sc_money_claim: '/images/money_claims.webp',
+  ast_standard: '/images/tenancy_agreements.webp',
+  ast_premium: '/images/tenancy_agreements.webp',
+  england_standard_tenancy_agreement: '/images/tenancy_agreements.webp',
+  england_premium_tenancy_agreement: '/images/tenancy_agreements.webp',
+  england_student_tenancy_agreement: '/images/tenancy_agreements.webp',
+  england_hmo_shared_house_tenancy_agreement: '/images/tenancy_agreements.webp',
+  england_lodger_agreement: '/images/tenancy_agreements.webp',
+  residential_tenancy_application: '/images/tenancy_agreements.webp',
+};
 
 function toStructuredDataUrl(url: string): string {
   const trimmedUrl = url.trim();
@@ -75,6 +119,75 @@ export interface ArticleSchemaInput {
   image?: string;
 }
 
+export interface MerchantOfferInput {
+  price: string;
+  url: string;
+  currency?: string;
+  availability?: string;
+  priceValidUntil?: string;
+  name?: string;
+}
+
+function buildMerchantReturnPolicySchema() {
+  return {
+    '@type': 'MerchantReturnPolicy',
+    '@id': DIGITAL_PRODUCT_RETURN_POLICY_ID,
+    url: toStructuredDataUrl(DIGITAL_PRODUCT_RETURN_POLICY_URL),
+    applicableCountry: 'GB',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+  };
+}
+
+function buildMerchantShippingServiceSchema() {
+  return {
+    '@type': 'ShippingService',
+    '@id': DIGITAL_PRODUCT_SHIPPING_SERVICE_ID,
+    name: 'Digital delivery',
+    description: 'Digital products are delivered in your account immediately after purchase.',
+    shippingConditions: {
+      '@type': 'ShippingConditions',
+      shippingDestination: DIGITAL_PRODUCT_SHIPPING_DESTINATION,
+      shippingRate: DIGITAL_PRODUCT_SHIPPING_RATE,
+    },
+  };
+}
+
+export function buildMerchantShippingDetails() {
+  return {
+    '@type': 'OfferShippingDetails',
+    shippingRate: DIGITAL_PRODUCT_SHIPPING_RATE,
+    shippingDestination: DIGITAL_PRODUCT_SHIPPING_DESTINATION,
+    hasShippingService: {
+      '@id': DIGITAL_PRODUCT_SHIPPING_SERVICE_ID,
+    },
+  };
+}
+
+export function buildMerchantReturnPolicyRef() {
+  return {
+    '@id': DIGITAL_PRODUCT_RETURN_POLICY_ID,
+  };
+}
+
+export function buildMerchantOffer(input: MerchantOfferInput) {
+  return {
+    '@type': 'Offer',
+    ...(input.name ? { name: input.name } : {}),
+    price: input.price,
+    priceCurrency: input.currency || 'GBP',
+    priceValidUntil: input.priceValidUntil || getDefaultPriceValidUntil(),
+    availability: input.availability || 'https://schema.org/InStock',
+    url: toStructuredDataUrl(input.url),
+    seller: LANDLORD_HEAVEN_SELLER,
+    shippingDetails: buildMerchantShippingDetails(),
+    hasMerchantReturnPolicy: buildMerchantReturnPolicyRef(),
+  };
+}
+
+function getStructuredDataProductImage(sku: ProductSku): string {
+  return toStructuredDataUrl(STRUCTURED_DATA_PRODUCT_IMAGES[sku] || '/og-image.png');
+}
+
 /**
  * Organization structured data
  * Use this on the homepage and footer
@@ -107,6 +220,8 @@ export function organizationSchema() {
       "https://twitter.com/LandlordHeaven",
       "https://www.linkedin.com/company/landlord-heaven"
     ],
+    "hasMerchantReturnPolicy": buildMerchantReturnPolicySchema(),
+    "hasShippingService": buildMerchantShippingServiceSchema(),
     "areaServed": [
       {
         "@type": "Country",
@@ -136,54 +251,14 @@ export function productSchema(product: Product) {
     "description": product.description,
     "url": product.url,
     "image": product.image || `${SITE_URL}/og-image.png`,
-    "brand": {
-      "@type": "Brand",
-      "name": "Landlord Heaven"
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": product.price,
-      "priceCurrency": product.currency || "GBP",
-      "priceValidUntil": product.priceValidUntil || getDefaultPriceValidUntil(),
-      "availability": product.availability || "https://schema.org/InStock",
-      "url": product.url,
-      "seller": {
-        "@type": "Organization",
-        "name": "Landlord Heaven"
-      },
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "0",
-          "currency": "GBP"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "GB"
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": "0",
-            "maxValue": "0",
-            "unitCode": "MIN"
-          },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": "0",
-            "maxValue": "0",
-            "unitCode": "MIN"
-          }
-        }
-      },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "GB",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
-      }
-    },
+    "brand": LANDLORD_HEAVEN_BRAND,
+    "offers": buildMerchantOffer({
+      price: product.price,
+      currency: product.currency,
+      priceValidUntil: product.priceValidUntil,
+      availability: product.availability,
+      url: product.url,
+    }),
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": REVIEW_RATING,
@@ -204,15 +279,16 @@ export function pricingItemListSchema(items: PricingItemListEntry[]) {
         url: toStructuredDataUrl(item.url),
         item: {
           '@type': 'Product',
+          sku: item.sku,
           name: item.name || product.label,
           description: item.description || product.description,
-          offers: {
-            '@type': 'Offer',
+          url: toStructuredDataUrl(item.url),
+          image: getStructuredDataProductImage(item.sku),
+          brand: LANDLORD_HEAVEN_BRAND,
+          offers: buildMerchantOffer({
             price: PRODUCT_PRICE_AMOUNT_STRINGS[item.sku],
-            priceCurrency: 'GBP',
-            availability: 'https://schema.org/InStock',
-            url: toStructuredDataUrl(item.url),
-          },
+            url: item.url,
+          }),
         },
       };
     }),
@@ -230,17 +306,14 @@ export function subscriptionProductSchema(product: Product) {
     "description": product.description,
     "url": product.url,
     "image": product.image || `${SITE_URL}/og-image.png`,
-    "brand": {
-      "@type": "Brand",
-      "name": "Landlord Heaven"
-    },
+    "brand": LANDLORD_HEAVEN_BRAND,
     "offers": {
-      "@type": "Offer",
-      "price": product.price,
-      "priceCurrency": product.currency || "GBP",
-      "priceValidUntil": product.priceValidUntil || getDefaultPriceValidUntil(),
-      "availability": "https://schema.org/InStock",
-      "url": product.url,
+      ...buildMerchantOffer({
+        price: product.price,
+        currency: product.currency,
+        priceValidUntil: product.priceValidUntil,
+        url: product.url,
+      }),
       "priceSpecification": {
         "@type": "UnitPriceSpecification",
         "price": product.price,
@@ -250,42 +323,6 @@ export function subscriptionProductSchema(product: Product) {
           "value": "1",
           "unitCode": "MON"
         }
-      },
-      "seller": {
-        "@type": "Organization",
-        "name": "Landlord Heaven"
-      },
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "0",
-          "currency": "GBP"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "GB"
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": "0",
-            "maxValue": "0",
-            "unitCode": "MIN"
-          },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": "0",
-            "maxValue": "0",
-            "unitCode": "MIN"
-          }
-        }
-      },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "GB",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
       }
     }
   };
