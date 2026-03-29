@@ -26,7 +26,6 @@ import {
   RiSendPlaneFill,
   RiAddLine,
   RiMicLine,
-  RiMapPin2Fill,
   RiHome6Line,
 } from "react-icons/ri";
 
@@ -51,6 +50,29 @@ const primaryPaths = [
   },
 ];
 
+const homeQuickLinks = [
+  {
+    label: "How to evict a tenant",
+    href: "#evict-tenant",
+    icon: RiHome6Line,
+  },
+  {
+    label: "Section 8 and eviction routes",
+    href: "#section-21-vs-section-8",
+    icon: RiFileTextLine,
+  },
+  {
+    label: "Recover rent arrears",
+    href: "#recover-rent-arrears",
+    icon: RiMoneyPoundCircleLine,
+  },
+  {
+    label: "Notice and court help",
+    href: "#landlord-eviction-help",
+    icon: RiShieldCheckLine,
+  },
+];
+
 export default function HomeContent() {
   const router = useRouter();
   const [askQuestion, setAskQuestion] = useState("");
@@ -68,13 +90,29 @@ export default function HomeContent() {
       <HeaderConfig mode="autoOnScroll" />
       <Hero />
 
-      <section className="bg-white border-b border-gray-100">
+      <section className="border-b border-gray-100 bg-white">
         <Container>
-          <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Homepage quick links">
-            <Link href="#evict-tenant" className="font-medium text-primary hover:underline">How to evict a tenant</Link>
-            <Link href="#section-21-vs-section-8" className="font-medium text-primary hover:underline">Section 8 and eviction routes</Link>
-            <Link href="#recover-rent-arrears" className="font-medium text-primary hover:underline">Recover rent arrears</Link>
-            <Link href="#landlord-eviction-help" className="font-medium text-primary hover:underline">Notice and court help</Link>
+          <nav
+            className="grid grid-cols-2 gap-3 py-4 md:grid-cols-4"
+            aria-label="Homepage quick links"
+          >
+            {homeQuickLinks.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="group flex min-h-[6.25rem] flex-col rounded-2xl border border-[#ece8ff] bg-[#faf8ff] px-4 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[#d8cdfa] hover:bg-white hover:shadow-[0_10px_24px_rgba(91,53,179,0.08)]"
+              >
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
+                  <item.icon className="h-5 w-5" />
+                </span>
+                <span className="mt-3 flex items-center justify-between gap-3">
+                  <span className="text-sm font-semibold leading-snug text-[#2d2152] sm:text-[15px]">
+                    {item.label}
+                  </span>
+                  <RiArrowRightLine className="h-5 w-5 shrink-0 text-primary transition group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            ))}
           </nav>
         </Container>
       </section>
@@ -356,74 +394,6 @@ export default function HomeContent() {
       {/* WHY LANDLORDS USE LANDLORD HEAVEN */}
       <WhyLandlordsUseSection />
 
-      {/* UK COVERAGE */}
-      <section className="py-20 md:py-24 bg-white">
-        <Container>
-          <div className="text-center mb-12 md:mb-14">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#692ed4]/10 px-5 py-2.5 mb-5">
-              <RiMapPin2Fill className="w-4 h-4 text-[#692ed4]" />
-              <span className="text-sm font-semibold text-[#692ed4]">
-                UK-Wide Coverage
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#0f172a] mb-5">
-              The Right Documents for Your Region
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Housing law differs across the UK. We help you use the right
-              documents for England, Wales, Scotland, or Northern Ireland.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto items-stretch">
-            <JurisdictionCard
-              flag="/gb-eng.svg"
-              title="England"
-              regionSlug="england"
-              forms={[
-                "England tenancy agreement",
-                "Section 8 Notice",
-                "County Court Forms",
-                "Money claim paperwork",
-              ]}
-            />
-            <JurisdictionCard
-              flag="/gb-wls.svg"
-              title="Wales"
-              regionSlug="wales"
-              forms={[
-                "Standard Occupation Contract",
-                "Section 173 Notice",
-                "Renting Homes Act Forms",
-                "County Court Forms",
-              ]}
-            />
-            <JurisdictionCard
-              flag="/gb-sct.svg"
-              title="Scotland"
-              regionSlug="scotland"
-              forms={[
-                "Private Residential Tenancy",
-                "Notice to Leave",
-                "First-tier Tribunal Forms",
-                "Simple Procedure",
-              ]}
-            />
-            <JurisdictionCard
-              flag="/gb-nir.svg"
-              title="Northern Ireland"
-              regionSlug="northern-ireland"
-              forms={[
-                "Private Tenancy Agreement",
-                "Northern Ireland tenancy rules",
-                "Tenancy agreements only",
-                "Eviction routes not live yet",
-              ]}
-            />
-          </div>
-        </Container>
-      </section>
-
       {/* FINAL CTA */}
       <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
@@ -457,10 +427,6 @@ export default function HomeContent() {
                 <RiShieldCheckLine className="w-5 h-5 text-primary" />
                 Mistakes flagged early
               </span>
-              <span className="flex items-center gap-2">
-                <RiGlobalLine className="w-5 h-5 text-primary" />
-                England, Wales, Scotland and Northern Ireland
-              </span>
             </div>
 
             {/* Section 8 CTA - SEO Internal Linking */}
@@ -480,14 +446,14 @@ export default function HomeContent() {
                 >
                   money claim unpaid rent guide
                 </Link>
-                {" • "}
+                {" | "}
                 <Link
                   href="/section-8-notice-template"
                   className="text-primary hover:underline font-medium"
                 >
                   Section 8 notice guide
                 </Link>
-                {" • "}
+                {" | "}
                 <Link
                   href="/products/notice-only"
                   className="text-primary hover:underline font-medium"
@@ -591,59 +557,5 @@ function getAskHeavenPromptIcon(label: string) {
     default:
       return <RiFlashlightLine className="h-5 w-5" />;
   }
-}
-
-
-function JurisdictionCard({
-  flag,
-  title,
-  regionSlug,
-  forms,
-}: {
-  flag: string;
-  title: string;
-  regionSlug: string;
-  forms: string[];
-}) {
-  const isNorthernIreland = regionSlug === "northern-ireland";
-  const ctaLabel = isNorthernIreland ? "Create Agreement" : "Choose Region";
-  const href = isNorthernIreland
-    ? `/wizard?jurisdiction=${regionSlug}&product=ast_standard&topic=tenancy&src=${SEO_SRC}`
-    : `/wizard?jurisdiction=${regionSlug}&product=notice_only&topic=eviction&src=${SEO_SRC}`;
-
-  return (
-    <div className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md flex flex-col">
-      <div className="w-16 h-16 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-center mx-auto mb-4 overflow-hidden">
-        <Image
-          src={flag}
-          alt={title}
-          width={48}
-          height={48}
-          className="w-12 h-12 object-contain"
-        />
-      </div>
-      <h3 className="text-2xl font-bold text-[#0f172a] mb-5 text-center">
-        {title}
-      </h3>
-      <ul className="text-base text-gray-700 space-y-2.5 mb-6 flex-1">
-        {forms.map((form) => (
-          <li
-            key={form}
-            className="flex items-start gap-2.5 border-b border-gray-100 pb-2.5 last:border-b-0 last:pb-0"
-          >
-            <RiCheckLine className="w-4 h-4 text-[#692ed4] shrink-0 mt-0.5" />
-            {form}
-          </li>
-        ))}
-      </ul>
-      <Link
-        href={href}
-        className="w-full h-12 rounded-xl bg-[#692ed4] hover:bg-[#5a27b8] text-white text-lg font-semibold inline-flex items-center justify-center gap-2 transition-colors"
-      >
-        {ctaLabel}
-        <RiArrowRightLine className="w-5 h-5" />
-      </Link>
-    </div>
-  );
 }
 
