@@ -71,7 +71,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        trustText="Built for landlords using the current England rules from 1 May 2026. Older wording can be harder to rely on when problems come up."
+        trustText="Built for landlords using the current England rules from 1 May 2026."
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
