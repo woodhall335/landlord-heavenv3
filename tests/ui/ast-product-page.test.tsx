@@ -98,14 +98,12 @@ describe('/products/ast page', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /Assured Periodic Tenancy Agreement for England/i,
+        name: /Tenancy Agreement for England/i,
       }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText(/Updated for the Renters' Rights Act from 1 May 2026\./i, {
-        selector: 'p',
-      }),
+      screen.getByText(/Updated for current housing law/i),
     ).toBeInTheDocument();
 
     expect(
@@ -201,7 +199,7 @@ describe('/products/ast page', () => {
       screen.getByRole('heading', { level: 2, name: 'Tenancy agreement FAQs' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/A tenancy agreement is the contract between landlord and tenant for a residential let\./i),
+      screen.getByText(/A tenancy agreement is the written contract for the let\./i),
     ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Is this still an AST for England?' }));

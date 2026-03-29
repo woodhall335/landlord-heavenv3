@@ -420,7 +420,12 @@ const faqs: FAQItem[] = [
   {
     question: 'What is a tenancy agreement?',
     answer:
-      'A tenancy agreement is the contract between landlord and tenant for a residential let. It usually covers the parties, the property, the rent, the deposit, and the practical terms that apply during the tenancy.',
+      'A tenancy agreement is the written contract for the let. Landlords also call it a rent agreement or tenancy contract. It usually covers the parties, the property, the rent, the deposit, and the practical terms that apply during the tenancy.',
+  },
+  {
+    question: 'Is a tenancy agreement the same as a rent agreement or tenancy contract?',
+    answer:
+      'Usually yes. Those phrases are often used interchangeably by landlords and tenants. The more important point is choosing the right England route for the property, occupier setup, and level of detail you need.',
   },
   {
     question: 'Is /products/ast now the main England tenancy agreement hub?',
@@ -473,37 +478,32 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title:
-    'AST / Assured Periodic Tenancy Agreement for England | Standard, Premium, Student, HMO, Lodger',
+    'Tenancy Agreement for England | Standard, Premium, Student, HMO and Lodger',
   description:
-    "Updated for the Renters' Rights Act from 1 May 2026. Compare Standard and Premium England tenancy agreement options plus dedicated Student, HMO / Shared House, and Lodger routes.",
+    'Compare the right tenancy agreement, rent agreement, or tenancy contract for an England property. Start with Standard or Premium, or choose Student, HMO / Shared House, or Lodger wording when the let needs it.',
   keywords: [
-    'ast agreement england',
-    'assured periodic tenancy agreement england',
-    'tenancy agreement uk',
-    'ast agreement template',
-    'residential tenancy agreement england',
-    'occupation contract wales',
-    'private residential tenancy scotland',
-    'private tenancy agreement northern ireland',
-    'landlord tenancy agreement template',
-    'uk tenancy agreement',
-    'renters rights act tenancy agreement',
-    'tenancy agreement for landlords',
-    'rental agreement uk',
+    'tenancy agreement',
     'england tenancy agreement',
+    'rent agreement',
+    'tenancy contract',
+    'rental agreement',
+    'assured periodic tenancy agreement england',
     'standard tenancy agreement england',
     'premium tenancy agreement england',
     'student tenancy agreement england',
     'hmo tenancy agreement england',
     'lodger agreement england',
     'renters rights act tenancy agreement england',
+    'tenancy agreement for landlords',
+    'residential tenancy agreement england',
+    'uk tenancy agreement',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title:
-      'AST / Assured Periodic Tenancy Agreement for England | Standard, Premium, Student, HMO, Lodger',
+      'Tenancy Agreement for England | Standard, Premium, Student, HMO and Lodger',
     description:
-      'Use the ranked England tenancy-agreement hub to compare Standard, Premium, Student, HMO / Shared House, and Lodger routes with AST search intent and current assured periodic wording both covered.',
+      'Compare the right tenancy agreement, rent agreement, or tenancy contract for an England property, with Standard, Premium, Student, HMO / Shared House, and Lodger routes in one place.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -707,8 +707,8 @@ export default function ASTProductPage() {
 
       <UniversalHero
         trustText="Updated for current housing law"
-        title="Assured Periodic Tenancy Agreement for England"
-        subtitle="Updated for the Renters' Rights Act from 1 May 2026. Create a compliant England tenancy agreement with Standard and Premium options, plus separate Student, HMO / Shared House, and Lodger routes when the tenancy needs something more specific."
+        title="Tenancy Agreement for England"
+        subtitle="Compare the right tenancy agreement, rent agreement, or tenancy contract for an England property. Start with the everyday assured periodic route for Standard or Premium lets, then move into Student, HMO / Shared House, or Lodger wording when the facts need something more specific."
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
@@ -859,7 +859,8 @@ export default function ASTProductPage() {
               House, and Room Let / Lodger are now separate products for setups that need more
               specific wording. Standard, Premium, Student, HMO / Shared House, and Room Let /
               Lodger each now sit in the live England product family instead of being forced into a
-              thinner two-option story.
+              thinner two-option story. If you searched for a rent agreement or tenancy contract,
+              this is the page that helps you choose the right England version.
             </p>
           </div>
 
@@ -926,10 +927,10 @@ export default function ASTProductPage() {
               Start with the right agreement for the property
             </h2>
             <p className="mt-5 text-lg leading-8 text-[#546075]">
-              A tenancy agreement sets out the key terms of the let, including the property
-              details, rent, deposit, and the rights and responsibilities of both landlord and
-              tenant. Starting with the right agreement helps you avoid unnecessary risk and saves
-              time later.
+              A tenancy agreement, sometimes called a rent agreement or tenancy contract, sets out
+              the key terms of the let, including the property details, rent, deposit, and the
+              rights and responsibilities of both landlord and tenant. Starting with the right
+              agreement helps you avoid unnecessary risk and saves time later.
             </p>
           </div>
 

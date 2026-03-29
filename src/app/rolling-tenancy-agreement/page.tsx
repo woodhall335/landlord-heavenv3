@@ -11,13 +11,13 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Rolling Tenancy Agreement England 2026 | Periodic Guide',
+  title: 'Rolling Tenancy Agreement | England Guide to Periodic Tenancies',
   description:
-    'Guide to rolling tenancy agreement and periodic tenancy wording in England, updated for the assured periodic framework used for new England agreements from 1.',
+    'Guide to the rolling tenancy phrase used by landlords in England, with links to the general periodic tenancy guide and the current agreement routes.',
   keywords: [
     'rolling tenancy agreement',
-    'periodic tenancy agreement',
-    'england tenancy agreement',
+    'rolling tenancy england',
+    'periodic tenancy guide england',
   ],
   alternates: { canonical: canonicalUrl },
 };
@@ -35,27 +35,48 @@ export default function RollingTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/rolling-tenancy-agreement"
         title="Rolling Tenancy Agreement"
-        subtitle="Periodic tenancy remains a strong search term. This page supports that demand while aligning landlords with the current England agreement routes designed for the assured periodic framework from 1 May 2026. Older rolling or fixed-term wording may be harder to rely on if it uses outdated structure."
+        subtitle="Rolling tenancy is the everyday phrase many landlords use for a periodic tenancy. This page explains that wording in plain English, then points you to the current England agreement routes if you need to create a new let."
         primaryCtaLabel="Start Standard periodic agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Start Premium periodic agreement"
         secondaryCtaHref={premiumWizardHref}
-        introTitle="Periodic tenancy demand now aligns with the live England route"
+        introTitle="Rolling tenancy is the everyday name for a periodic tenancy"
         introBody={[
-          'Of the older England tenancy search terms, rolling tenancy agreement is the closest to the assured periodic model now used in the live self-serve flow.',
-          'This page therefore acts as both an explainer and a forward path into the current England agreement routes instead of keeping landlords stuck in older fixed-term wording. Using an agreement that does not reflect the current England framework can lead to weaker protection or complications if issues arise.',
+          'When landlords say rolling tenancy, they usually mean a tenancy that continues from one rental period to the next instead of ending automatically after a fixed term.',
+          'If you want the plain-English definition first, start with the periodic tenancy guide. If you are ready to create a new England agreement, use the current Standard or Premium routes rather than relying on older wording alone.',
         ]}
         highlights={[
-          'Strong alignment between periodic search demand and the current England product',
-          'Clear current-law positioning in the CTA path',
-          'Avoid relying on outdated rolling or fixed-term wording',
+          'Explains rolling tenancy as the common-language synonym for periodic tenancy',
+          'Keeps the definition-style query separate from the live England agreement pages',
+          'Points landlords toward the current Standard and Premium routes when they are ready to act',
         ]}
         compliancePoints={[
           'Designed for the assured periodic framework used for new England lets from 1 May 2026',
-          'Periodic and rolling concepts used as education, not as legacy AST sales language',
+          'Rolling and periodic wording are explained here as plain-language terms, not as old fixed-term sales labels',
           'Older agreements may be harder to rely on if they use outdated wording or structure',
         ]}
+        routeComparison={[
+          {
+            title: 'What is a periodic tenancy?',
+            description:
+              'Start here if you want the plain-English definition and the difference between periodic and rolling wording.',
+            href: '/periodic-tenancy-agreement',
+            ctaLabel: 'Read the periodic tenancy guide',
+          },
+          {
+            title: 'Assured Periodic Tenancy Agreement',
+            description:
+              'Use the baseline England route when you are ready to create a new agreement for a straightforward whole-property let.',
+            href: '/standard-tenancy-agreement',
+            ctaLabel: 'See the Standard route',
+          },
+        ]}
         faqs={[
+          {
+            question: 'Is a rolling tenancy different from a periodic tenancy?',
+            answer:
+              'Usually no. Rolling tenancy is the everyday name many landlords use for a periodic tenancy, so the practical idea is the same.',
+          },
           {
             question: 'Can I keep using an older rolling tenancy agreement?',
             answer:

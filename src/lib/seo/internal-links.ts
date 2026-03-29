@@ -165,9 +165,9 @@ export const landingPageLinks = {
     type: 'page' as const,
   },
   tenancyTemplate: {
-    href: '/assured-shorthold-tenancy-agreement-template',
-    title: 'Tenancy Agreement Template',
-    description: 'AST template download',
+    href: '/tenancy-agreement-template',
+    title: 'Tenancy Agreement Template for England',
+    description: 'Guided England template route',
     icon: 'document' as const,
     type: 'page' as const,
   },

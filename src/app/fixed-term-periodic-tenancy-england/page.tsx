@@ -11,12 +11,11 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=fixed_term_periodic_t
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Fixed Term vs Periodic Tenancy England | Legacy Search Guide 2026',
+  title: 'Fixed Term vs Periodic Tenancy | England Comparison Guide',
   description:
-    'England guide for landlords comparing fixed-term and periodic tenancy search language.',
+    'England guide for landlords comparing fixed-term and periodic tenancy wording, with a clear route to the periodic tenancy explainer and the current agreement pages.',
   keywords: [
     'fixed term tenancy agreement england',
-    'periodic tenancy agreement england',
     'fixed term vs periodic tenancy',
     'rolling tenancy england',
     'assured periodic tenancy england',
@@ -44,22 +43,22 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
       <EnglandTenancyPage
         pagePath="/fixed-term-periodic-tenancy-england"
         title="Fixed Term vs Periodic Tenancy England"
-        subtitle="This page stays live for fixed-term and rolling-tenancy search demand, but from 1 May 2026 new England agreements generally move into the assured periodic framework rather than a new fixed-term AST model."
+        subtitle="Use this page if you are comparing fixed-term and periodic tenancy wording in England. If you need the plain-English definition first, start with the periodic tenancy guide, then come back when you are ready to compare routes."
         primaryCtaLabel="Start Standard England agreement"
         primaryCtaHref={wizardHref}
         secondaryCtaLabel="Start Premium England agreement"
         secondaryCtaHref={premiumWizardHref}
         legacyNotice="Landlords still search for fixed-term and rolling tenancy language, but Landlord Heaven no longer sells a new fixed-term AST as the core England product route."
-        introTitle="Legacy structure search, current England wording"
+        introTitle="Compare the older wording without getting stuck in it"
         introBody={[
-          'Landlords still search for fixed-term and periodic tenancy structures, so this page remains live as an explainer rather than a fixed-term AST sales page.',
-          'The live England route now uses current England tenancy agreement wording designed for the assured periodic framework from 1 May 2026.',
+          'Landlords still compare fixed-term and periodic tenancy wording because those labels shaped the older market for years.',
+          'The useful next step now is to separate the definition question from the drafting question: understand the difference first, then move into the current England agreement route that matches the property.',
         ]}
         highlights={[
-          'Captures fixed-term and rolling-tenancy search intent for England',
+          'Helps landlords compare fixed-term and periodic wording in one place',
+          'Keeps the page focused on the comparison query rather than the basic definition',
           'Routes landlords into the current Standard or Premium England agreement flow',
-          'Explains the terminology shift without keeping outdated AST sales copy',
-          'Helps landlords compare old search language with the current framework',
+          'Explains the terminology shift without turning the page into an old AST sales page',
         ]}
         compliancePoints={[
           'Makes clear that fixed-term AST language is now legacy search framing on Landlord Heaven England pages',
@@ -68,9 +67,24 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
         ]}
         keywordTargets={[
           'fixed term tenancy agreement england',
-          'periodic tenancy agreement england',
           'fixed term vs periodic tenancy',
           'rolling tenancy england',
+        ]}
+        routeComparison={[
+          {
+            title: 'What is a periodic tenancy?',
+            description:
+              'Read the plain-English guide if you want the definition of periodic and rolling tenancy before comparing routes.',
+            href: '/periodic-tenancy-agreement',
+            ctaLabel: 'Read the periodic tenancy guide',
+          },
+          {
+            title: 'Rolling tenancy guide',
+            description:
+              'Use the rolling-tenancy page if your search started with the everyday phrase landlords often use for a periodic tenancy.',
+            href: '/rolling-tenancy-agreement',
+            ctaLabel: 'Read the rolling tenancy guide',
+          },
         ]}
         faqs={[
           {

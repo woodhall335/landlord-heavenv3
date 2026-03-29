@@ -33,19 +33,22 @@ import {
 } from 'lucide-react';
 
 const PAGE_PATH = '/tenancy-agreements/england';
-const PAGE_TITLE = 'Tenancy Agreements England';
+const PAGE_TITLE = 'England Tenancy Agreement Guide';
 const PAGE_TYPE = 'tenancy' as const;
 
 const canonicalUrl = getCanonicalUrl(PAGE_PATH);
+const englandComparisonHref = '/products/ast';
 
-const wizardLinkStandard = '/wizard?product=ast_standard&src=england_tenancy_hub&topic=tenancy';
-const wizardLinkPremium = '/wizard?product=ast_premium&src=england_tenancy_hub&topic=tenancy';
+const wizardLinkStandard =
+  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=england_tenancy_guide&topic=tenancy';
+const wizardLinkPremium =
+  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=england_tenancy_guide&topic=tenancy';
 
 const faqs = [
   {
-    question: 'What is this England tenancy agreements page for?',
+    question: 'What is this England tenancy agreement guide for?',
     answer:
-      'This is the main England landing page for landlords comparing the live Landlord Heaven tenancy agreement routes before starting the wizard. It captures tenancy agreement and AST search demand while explaining when to use Standard, Premium, Student, HMO / Shared House, or Lodger for a new England let.',
+      'This is a guide page for landlords who want to understand the main England agreement types and the terminology shift from older AST language. If you are ready to compare products or start drafting, use /products/ast as the main England comparison page.',
   },
   {
     question: 'Is this page only for properties in England?',
@@ -103,9 +106,9 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title:
-    'Tenancy Agreements England | Current England Agreement Routes',
+    'England Tenancy Agreement Guide | Agreement Types and Next Steps',
   description:
-    'Compare updated England tenancy agreement routes for landlords.',
+    'Guide to the main England tenancy agreement types, with links to the main comparison page and the right route for Standard, Premium, Student, HMO / Shared House, and Lodger lets.',
   keywords: [
     'tenancy agreements england',
     'england tenancy agreement',
@@ -123,9 +126,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title:
-      'Tenancy Agreements England | Current England Agreement Routes',
+      'England Tenancy Agreement Guide | Agreement Types and Next Steps',
     description:
-      'Choose the right England tenancy agreement route for a straightforward residential let, fuller premium residential let, student let, HMO/shared house, or lodger arrangement.',
+      'Guide to the main England tenancy agreement types, with clear next steps into the main comparison page and the live product routes.',
     url: canonicalUrl,
     type: 'article',
     siteName: 'Landlord Heaven',
@@ -134,9 +137,9 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title:
-      'Tenancy Agreements England | Current England Agreement Routes',
+      'England Tenancy Agreement Guide | Agreement Types and Next Steps',
     description:
-      'Compare the live England tenancy agreement routes for Standard, Premium, Student, HMO / Shared House, and Lodger.',
+      'Guide to the England tenancy agreement types for Standard, Premium, Student, HMO / Shared House, and Lodger lets.',
   },
   robots: {
     index: true,
@@ -159,9 +162,9 @@ export default function EnglandTenancyAgreementsPage() {
       <StructuredData
         data={articleSchema({
           headline:
-            'Tenancy Agreements England | Current England Agreement Routes',
+            'England Tenancy Agreement Guide | Agreement Types and Next Steps',
           description:
-            'Main England tenancy agreements landing page comparing the live England tenancy agreement routes for landlords.',
+            'Guide to the main England tenancy agreement routes, with practical next steps into the current comparison and drafting flow.',
           url: canonicalUrl,
           datePublished: '2026-03-01',
           dateModified: '2026-03-20',
@@ -179,26 +182,23 @@ export default function EnglandTenancyAgreementsPage() {
         <UniversalHero
           badge="England Only"
           badgeIcon={<Scale className="w-4 h-4" />}
-          title="Tenancy Agreements England"
+          title="England Tenancy Agreement Guide"
           subtitle={
             <>
-              Use this page to compare the main <strong>England tenancy agreement</strong>{' '}
-              routes for new lets, understand the move from legacy <strong>AST</strong>{' '}
-              search language to current <strong>England agreement</strong>{' '}
-              wording, and choose the right path for a straightforward residential,
-              fuller premium residential, student, HMO/shared-house, or lodger
-              tenancy under the assured periodic framework from <strong>1 May 2026</strong>.
-              Older agreements may be harder to rely on if they use outdated wording or
-              structure.
+              Use this guide to understand the main <strong>England tenancy agreement</strong>{' '}
+              types, make sense of the shift from legacy <strong>AST</strong> language,
+              and then move to the main comparison page when you are ready to choose
+              between Standard, Premium, Student, HMO/shared-house, or Lodger
+              wording for a new let.
             </>
           }
           primaryCta={{
-            label: `Create Standard England Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
-            href: wizardLinkStandard,
+            label: 'Compare England agreement routes',
+            href: englandComparisonHref,
           }}
           secondaryCta={{
-            label: `Create Premium England Agreement — ${PRODUCTS.ast_premium.displayPrice}`,
-            href: wizardLinkPremium,
+            label: `Start Standard Tenancy Agreement - ${PRODUCTS.england_standard_tenancy_agreement.displayPrice}`,
+            href: wizardLinkStandard,
           }}
           showTrustPositioningBar
           variant="pastel"
@@ -322,14 +322,11 @@ export default function EnglandTenancyAgreementsPage() {
               </h2>
               <div className="mt-6 space-y-6 text-gray-700">
                 <p className="leading-7">
-                  This page is not just another thin template page with a few obvious
-                  headings and a pair of buttons at the top. It is the main England
-                  comparison page for landlords who need to decide what kind of tenancy
-                  agreement route they should use before they start the live drafting
-                  flow. That matters because many competing pages fail at the decision
-                  stage. They define a tenancy agreement in broad terms, repeat a few
-                  generic points about rent and deposit, then expect the user to know
-                  whether they need a basic document or a broader premium route.
+                  This guide is for landlords who know the property is in England but
+                  want to be sure they choose the right agreement route before they start
+                  drafting. Some users arrive ready to buy. Others are still comparing
+                  older AST wording with the newer England routes and want a clearer
+                  explanation before they commit.
                 </p>
                 <p className="leading-7">
                   Strong landlords do not only want a label. They want confidence that
@@ -341,23 +338,13 @@ export default function EnglandTenancyAgreementsPage() {
                   question: which England agreement path should I use now?
                 </p>
                 <p className="leading-7">
-                  It also needs to work for mixed search intent. Some users arrive here
-                  ready to act. They have the property, they know the move-in timeline,
-                  and they just want reassurance that they are choosing correctly. Others
-                  are still comparing old AST language against newer wording and want to
-                  know whether the standard route is enough or whether premium exists for
-                  a good reason. A strong landing page handles both audiences without
-                  becoming either too shallow for serious users or so dense that it stops
-                  converting.
+                  That matters because a straightforward whole-property let and a more
+                  involved setup do not need the same route. The guide is here to reduce
+                  guesswork before you move into the live comparison or drafting flow.
                 </p>
                 <p className="leading-7">
-                  That is why the page is framed around three practical jobs. First, it
-                  makes clear that this is an England-only route, not a UK-wide page with
-                  loose wording recycled from other jurisdictions. Second, it explains the
-                  terminology and product-positioning shift from older AST-led search
-                  language to current England tenancy agreement wording for new
-                  England agreements. Third, it helps landlords compare standard and
-                  premium in practical terms, based on the complexity of the tenancy they
+                  In short, use this page to understand the options, then move to the
+                  main comparison page or the product route that matches the tenancy you
                   are actually about to grant.
                 </p>
               </div>
@@ -420,22 +407,17 @@ export default function EnglandTenancyAgreementsPage() {
                   live product framing for new England agreements is also a mistake.
                 </p>
                 <p className="leading-7">
-                  The better approach is to acknowledge the search language openly and use
-                  it as an entry point. A landlord might still arrive here after searching
-                  for AST wording, but what they really need is a document route that feels
-                  current, commercially clear, and better aligned with the way the England
-                  product is now being presented. That is why this page captures AST and
-                  assured shorthold demand without centring the whole customer-facing story
-                  on AST-first sales copy.
+                  We keep that language visible so the page is easy to find, but the
+                  practical goal is simpler: help the landlord choose a current England
+                  agreement route once they arrive. If you searched using AST wording,
+                  you are still in the right place. The next step is to decide which live
+                  England route actually fits the let.
                 </p>
                 <p className="leading-7">
-                  Current England agreement wording gives the England offer a stronger
-                  and more modern public-facing identity. It allows the page to rank for
-                  the language users still type into search while gradually moving the
-                  customer journey onto wording that is easier to sustain as the wider
-                  England tenancy conversation evolves. It is a better long-term category
-                  story than simply repeating AST everywhere because that was historically
-                  common.
+                  In most cases that means deciding whether the tenancy belongs on the
+                  standard ordinary-residential route, the fuller ordinary-residential
+                  premium route, or one of the dedicated England products for student,
+                  HMO / shared-house, or resident-landlord arrangements.
                 </p>
                 <p className="leading-7">
                   This is also where legal-commercial discipline matters. It is useful to
@@ -525,7 +507,7 @@ export default function EnglandTenancyAgreementsPage() {
                 <div className="rounded-2xl border-2 border-gray-200 bg-white p-6 shadow-sm">
                   <h3 className="text-2xl font-bold text-gray-900">Standard England agreement</h3>
                   <p className="mt-2 text-2xl font-bold text-primary">
-                    {PRODUCTS.ast_standard.displayPrice}
+                    {PRODUCTS.england_standard_tenancy_agreement.displayPrice}
                   </p>
                   <p className="mt-5 leading-7 text-gray-700">
                     The standard route is usually the right starting point for a more
@@ -563,35 +545,35 @@ export default function EnglandTenancyAgreementsPage() {
 
                 <div className="relative rounded-2xl border-2 border-[#E6DBFF] bg-white p-6 shadow-lg">
                   <div className="absolute -top-3 left-6 rounded-full bg-yellow-400 px-3 py-1 text-xs font-bold text-gray-900">
-                    BETTER FOR COMPLEX LETS
+                    FULLER ORDINARY LETS
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Premium England agreement</h3>
                   <p className="mt-2 text-2xl font-bold text-primary">
-                    {PRODUCTS.ast_premium.displayPrice}
+                    {PRODUCTS.england_premium_tenancy_agreement.displayPrice}
                   </p>
                   <p className="mt-5 leading-7 text-gray-700">
-                    Premium is generally the better choice when the tenancy is harder to
-                    document cleanly from the outset. Shared households, HMOs, student
-                    lets, guarantor-backed arrangements, and other more operationally
-                    demanding setups often justify broader drafting rather than the leanest
-                    possible route.
+                    Premium is the better choice when the let stays within the ordinary
+                    residential route but you want fuller wording around access, repairs,
+                    keys, guarantors, payment controls, and day-to-day management. If the
+                    setup is genuinely student-focused, HMO / shared-house, or
+                    resident-landlord, use the dedicated England product instead.
                   </p>
                   <ul className="mt-6 space-y-3 text-gray-700">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
-                      Better for HMOs, student lets, and multiple sharers
+                      Better where fuller day-to-day management wording matters
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
-                      More suitable where broader rules and clearer operational coverage matter
+                      Useful when guarantors, house rules, or payment controls need clearer drafting
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
-                      Stronger fit where the occupier mix is more involved
+                      Still for ordinary residential lets rather than dedicated student, HMO, or lodger cases
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
-                      Helps users avoid under-buying for a more complex tenancy
+                      Helps avoid under-specifying an involved but non-HMO ordinary let
                     </li>
                   </ul>
                   <Link
@@ -608,14 +590,15 @@ export default function EnglandTenancyAgreementsPage() {
                 <div className="mb-3 flex items-center gap-3">
                   <BadgeCheck className="h-5 w-5 text-green-600" />
                   <h3 className="text-xl font-semibold text-green-900">
-                    Better commercial framing
+                    How to think about the choice
                   </h3>
                 </div>
                 <p className="leading-7 text-green-900/90">
-                  Premium should not feel like a vague upgrade. It should feel like the
-                  sensible route when the tenancy is more complex. Standard should not feel
-                  cheap or thin. It should feel like the efficient route for simpler lets.
-                  That is the distinction this page is built to make clear.
+                  Standard should feel like the efficient route for straightforward
+                  whole-property lets. Premium should feel like the fuller ordinary
+                  residential option when the tenancy stays in that lane but needs more
+                  drafting support. Student, HMO / Shared House, and Lodger should stay
+                  on their dedicated routes.
                 </p>
               </div>
             </div>
@@ -845,7 +828,7 @@ export default function EnglandTenancyAgreementsPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="england"
                 title="Create the right England agreement now"
-                description={`Choose Standard for a straightforward ordinary let, Premium for fuller ordinary-residential drafting, or the dedicated Student, HMO / Shared House, or Lodger route where that setup is the real match. Start from ${PRODUCTS.ast_standard.displayPrice}.`}
+                description={`Choose Standard for a straightforward ordinary let, Premium for fuller ordinary-residential drafting, or the dedicated Student, HMO / Shared House, or Lodger route where that setup is the real match. Start from ${PRODUCTS.england_standard_tenancy_agreement.displayPrice}.`}
               />
             </div>
           </div>
@@ -928,7 +911,7 @@ export default function EnglandTenancyAgreementsPage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="england"
                 title="Ready to create your England tenancy agreement?"
-                description={`Choose the route that matches the tenancy and generate your document online from ${PRODUCTS.ast_standard.displayPrice}.`}
+                description={`Choose the route that matches the tenancy and generate your document online from ${PRODUCTS.england_standard_tenancy_agreement.displayPrice}.`}
               />
               <SeoDisclaimer className="mx-auto max-w-4xl" />
             </div>
@@ -943,10 +926,10 @@ export default function EnglandTenancyAgreementsPage() {
                 links={[
                   productLinks.tenancyAgreement,
                   {
-                    href: '/assured-shorthold-tenancy-agreement-template',
-                    title: 'Assured shorthold tenancy agreement template',
+                    href: '/tenancy-agreement-template',
+                    title: 'Tenancy agreement template for England',
                     description:
-                      'Legacy AST search-intent page that routes landlords into the current England agreement flow.',
+                      'Guided England template route for landlords who start with template-style search terms.',
                     icon: 'document' as const,
                     type: 'page' as const,
                   },

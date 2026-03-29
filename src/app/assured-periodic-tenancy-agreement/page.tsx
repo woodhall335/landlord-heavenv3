@@ -31,9 +31,9 @@ const faqs = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Assured Periodic Tenancy Agreement | England Explainer',
+  title: 'What Is an Assured Periodic Tenancy Agreement? | England Guide',
   description:
-    'Learn what an assured periodic tenancy agreement means in England from 1 May 2026 and move into the main product page.',
+    'Plain-English guide to what an assured periodic tenancy agreement means in England and when to move into the main agreement comparison page.',
   keywords: [
     'assured periodic tenancy agreement',
     'what is an assured periodic tenancy agreement',
@@ -42,9 +42,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Assured Periodic Tenancy Agreement | England Explainer',
+    title: 'What Is an Assured Periodic Tenancy Agreement? | England Guide',
     description:
-      'Plain-English England explainer for the assured periodic route, with a clear CTA into the main tenancy agreement product.',
+      'Plain-English England guide to the assured periodic route, with a clear CTA into the main tenancy agreement comparison page.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -58,54 +58,54 @@ export default function AssuredPeriodicTenancyAgreementPage() {
         { name: 'Assured Periodic Tenancy Agreement', url: canonicalUrl },
       ])}
       articleSchemaData={articleSchema({
-        headline: 'Assured Periodic Tenancy Agreement',
+        headline: 'What Is an Assured Periodic Tenancy Agreement?',
         description: metadata.description as string,
         url: canonicalUrl,
         datePublished: '2026-03-24',
         dateModified: '2026-03-24',
       })}
       faqSchemaData={faqPageSchema(faqs)}
-      heroTitle="Assured Periodic Tenancy Agreement"
-      heroSubtitle="This is the current England-first terminology for new tenancies from 1 May 2026, even though many landlords still arrive using older AST search language."
+      heroTitle="What Is an Assured Periodic Tenancy Agreement?"
+      heroSubtitle="Landlords now see this phrase more often when comparing new England tenancy agreements. This page explains what it means, why it matters from 1 May 2026, and where to go next if you are choosing an agreement."
       heroMediaSrc="/images/wizard-icons/10-signing.png"
       heroMediaAlt="Illustration of a tenancy agreement being signed"
       primaryCtaLabel="Compare England agreement options"
       primaryCtaHref="/products/ast"
       pagePath={pagePath}
-      intentHookTitle="This page translates the new terminology into a buying decision"
+      intentHookTitle="Start with the term, then move to the right agreement"
       intentHookParagraphs={[
-        'If you searched for assured periodic tenancy agreement, you are probably trying to understand the current England route without getting lost in old AST terminology. This page is here to make that easy. It explains what the phrase means, why it matters from 1 May 2026, and where to go next if you are ready to choose an agreement product.',
-        'The key commercial opportunity here is educational intent that is close to purchase intent. These users are not casually browsing. They are often one or two steps away from buying, but they need reassurance that the newer terminology maps onto a practical product journey they can actually use.',
-        'That is why this page should not stay purely educational. It should explain the concept quickly and then route the user into the main product page where the full England route comparison is easier to understand.',
+        'If you searched for assured periodic tenancy agreement, you are usually trying to work out whether this is the current England route for a new tenancy. In plain English, the answer is yes: it is the wording now used for the main England route for a straightforward new let.',
+        'Most landlords do not need a theory lesson. They need to know what the phrase means, whether it fits the tenancy they are creating, and how to move from that understanding into the right agreement.',
+        'This page therefore keeps the explanation short and practical. Once the terminology makes sense, the next step is to compare the England agreement options and choose the route that fits the property.',
       ]}
-      currentPositionTitle="Why assured periodic wording matters in the England funnel"
+      currentPositionTitle="Why landlords are seeing this wording now"
       currentPositionParagraphs={[
-        'For new England tenancies from 1 May 2026, the product framing has moved away from selling an older AST-style starting point. Assured periodic wording is the clearer way to describe the current route while keeping the buying journey consistent with the present England position.',
-        'That does not mean older AST language disappears from the funnel. It means the funnel has to do two jobs at once: capture landlords who still search the old way and educate landlords who are now starting to search using the newer assured periodic wording.',
+        'For new England tenancies from 1 May 2026, the starting point is no longer best described using older fixed-term AST language. Assured periodic wording is the clearer way to describe the current route for a new let.',
+        'Older AST language still appears in searches and in day-to-day conversation, but the job of this page is simply to translate the newer phrase into something useful. Once you understand the label, you can move on to choosing the right agreement.',
       ]}
       sections={[
         {
-          title: 'Why this term needs a dedicated page',
+          title: 'What the phrase means in practice',
           paragraphs: [
-            'Search terminology changes slowly. Even after a framework shift, landlords keep using the phrases they already know until a new label becomes normal. Assured periodic tenancy agreement is therefore a growing search term that deserves its own clear landing page rather than being hidden inside a longer product page.',
-            'From an SEO point of view, that makes the page valuable because it can target a specific educational-intent cluster. From a conversion point of view, it matters because the people searching this phrase are often already aware that something changed and simply want a trustworthy route forward.',
-            'That is why the page should behave as a bridge. It should answer the terminology question, explain the shift from 1 May 2026 in plain English, and then move the user to /products/ast so the commercial choice becomes obvious.',
+            'An assured periodic tenancy agreement is the main England agreement route for a straightforward new let. It describes the structure of the tenancy rather than a specialist add-on or a separate premium tier.',
+            'In other words, if the property is an ordinary whole-property England let and nothing about the occupier setup pushes you into Student, HMO / Shared House, or Lodger territory, this is usually the starting route you are looking for.',
+            'The practical question is not just what the phrase says. It is whether the tenancy is straightforward enough for the baseline route or whether the facts justify Premium or one of the specialist products.',
           ],
         },
         {
-          title: 'How it differs from AST search intent',
+          title: 'How it differs from older AST wording',
           paragraphs: [
-            'AST pages and assured periodic pages serve related but slightly different users. AST searchers usually arrive with old terminology and need to be reoriented. Assured periodic searchers often arrive already aware that the position has changed and want confirmation that they are looking at the current England route.',
-            'That difference is useful in the funnel because it lets Landlord Heaven speak more directly to both mindsets. The AST page captures familiarity. The assured periodic page captures current-awareness intent. Both then converge on the same main product page, where the buying decision happens.',
-            'This approach is stronger than forcing every user through the same old AST framing. It keeps search capture broad while making the live product story sharper, more current, and easier to trust.',
+            'Many landlords still search for AST because that was the language they learned first. Assured periodic wording is not there to make things harder; it is there to describe the current England route more accurately.',
+            'That means older AST search language and newer assured periodic language often point toward the same next step. The difference is that assured periodic wording is the clearer label for a new England tenancy created now.',
+            'If you arrived here through older terminology, that is fine. The main thing is not to get stuck on the label when the real task is choosing the right agreement for the property.',
           ],
         },
         {
-          title: 'Why the product page remains the destination',
+          title: 'What to do next',
           paragraphs: [
-            'No matter which wording the landlord searched for, the main product page is still where the comparison happens. That page now shows Standard, Premium, Student, HMO / Shared House, and Lodger routes, explains the England-first positioning, and helps the landlord avoid using outdated agreements when the current framework should be reflected more clearly.',
-            'This page therefore should not become too self-contained. Its value comes from making the newer terminology understandable and then handing the user off to the commercial page with more confidence than they had when they arrived.',
-            'That keeps the funnel tight: one page captures newer terminology, one page captures older AST terminology, and both routes feed the same conversion destination.',
+            'If you now understand the phrase and simply need the right agreement, go to the main comparison page. That is where Standard, Premium, Student, HMO / Shared House, and Lodger routes are shown side by side.',
+            'If the tenancy is a straightforward whole-property England let, the Standard route is usually the best place to begin. If the let is still ordinary residential but needs fuller management wording, Premium is the better fit.',
+            'The aim of this page is to remove confusion, not keep you reading forever. Once the wording is clear, the useful next step is to compare the live England routes and start the right one.',
           ],
         },
       ]}

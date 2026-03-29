@@ -1348,9 +1348,9 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/periodic-tenancy-agreement': makeEntry('/periodic-tenancy-agreement', {
     ...tenancyEntry('/periodic-tenancy-agreement', '/rolling-tenancy-agreement', {
-      canonicalTarget: '/rolling-tenancy-agreement',
+      canonicalTarget: '/periodic-tenancy-agreement',
     }),
-    consolidationStatus: 'candidate_redirect',
+    consolidationStatus: 'bridge_live',
   }),
   '/tenancy-agreements/wales': makeEntry('/tenancy-agreements/wales', {
     ...regionalTenancyEntry('/tenancy-agreements/wales', 'wales', 'tenancy-wales', SEO_PILLAR_ROUTES.tenancyAgreementsWales, '/occupation-contract-template-wales', {
@@ -2882,7 +2882,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   '/fixed-term-tenancy-agreement-template': tenancyEntry('/fixed-term-tenancy-agreement-template', '/tenancy-agreement-template', {
     canonicalTarget: '/fixed-term-tenancy-agreement-template',
   }),
-  '/fixed-term-periodic-tenancy-england': tenancyEntry('/fixed-term-periodic-tenancy-england', '/rolling-tenancy-agreement', {
+  '/fixed-term-periodic-tenancy-england': tenancyEntry('/fixed-term-periodic-tenancy-england', '/periodic-tenancy-agreement', {
     canonicalTarget: '/fixed-term-periodic-tenancy-england',
   }),
   '/joint-tenancy-agreement-england': tenancyEntry('/joint-tenancy-agreement-england', '/premium-tenancy-agreement', {
@@ -2894,7 +2894,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   '/renew-tenancy-agreement-england': tenancyEntry('/renew-tenancy-agreement-england', '/tenancy-agreement', {
     canonicalTarget: '/renew-tenancy-agreement-england',
   }),
-  '/rolling-tenancy-agreement': tenancyEntry('/rolling-tenancy-agreement', '/tenancy-agreement', {
+  '/rolling-tenancy-agreement': tenancyEntry('/rolling-tenancy-agreement', '/periodic-tenancy-agreement', {
     canonicalTarget: '/rolling-tenancy-agreement',
   }),
   '/renters-rights-bill-tenancy-agreement': makeEntry('/renters-rights-bill-tenancy-agreement', {
