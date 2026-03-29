@@ -579,6 +579,22 @@ function getTenantRecords(facts: Record<string, any>): Array<Record<string, any>
   return [];
 }
 
+function getAdditionalLandlordRecords(facts: Record<string, any>): Array<Record<string, any>> {
+  if (!Array.isArray(facts.additional_landlords)) {
+    return [];
+  }
+
+  return facts.additional_landlords
+    .filter((landlord): landlord is Record<string, any> => Boolean(landlord))
+    .map((landlord) => ({
+      full_name: toText(landlord.full_name),
+      service_address: firstNonEmpty(landlord.service_address, landlord.address),
+      email: toText(landlord.email),
+      phone: toText(landlord.phone),
+    }))
+    .filter((landlord) => landlord.full_name);
+}
+
 function getTenantNames(facts: Record<string, any>): string {
   const tenants = getTenantRecords(facts);
   if (tenants.length > 0) {
@@ -597,6 +613,55 @@ function splitNames(value: unknown): string[] {
     .split(',')
     .map((entry) => entry.trim())
     .filter(Boolean);
+}
+
+function getLandlordParties(
+  shared: SharedResidentialData,
+  baseLabel = 'Landlord'
+): TemplateParty[] {
+  const allLandlords = [
+    {
+      name: shared.landlord_name,
+      address: shared.landlord_address,
+      email: shared.landlord_email,
+      phone: shared.landlord_phone,
+    },
+    ...getAdditionalLandlordRecords(shared.facts).map((landlord) => ({
+      name: landlord.full_name,
+      address: firstNonEmpty(landlord.service_address, shared.landlord_address),
+      email: landlord.email,
+      phone: landlord.phone,
+    })),
+  ].filter((landlord) => landlord.name);
+
+  const useNumberedLabels = allLandlords.length > 1;
+
+  return allLandlords.map((landlord, index) => ({
+    label: useNumberedLabels ? `${baseLabel} ${index + 1}` : baseLabel,
+    name: landlord.name,
+    address: landlord.address,
+    email: landlord.email,
+    phone: landlord.phone,
+  }));
+}
+
+function getLandlordSignatureParties(
+  shared: SharedResidentialData,
+  baseLabel = 'Landlord'
+): SignatureParty[] {
+  const allLandlords = [
+    { name: shared.landlord_name },
+    ...getAdditionalLandlordRecords(shared.facts).map((landlord) => ({
+      name: landlord.full_name,
+    })),
+  ].filter((landlord) => landlord.name);
+
+  const useNumberedLabels = allLandlords.length > 1;
+
+  return allLandlords.map((landlord, index) => ({
+    label: useNumberedLabels ? `${baseLabel} ${index + 1}` : baseLabel,
+    name: landlord.name,
+  }));
 }
 
 function normalizeResidentialFacts(rawFacts: Record<string, any>): Record<string, any> {
@@ -761,16 +826,14 @@ function getPartyDetails(
   };
 
   if (product !== 'flatmate_agreement') {
-    addParty({
-      label:
+    parties.push(
+      ...getLandlordParties(
+        shared,
         product === 'residential_sublet_agreement' || product === 'lease_assignment_agreement'
           ? 'Landlord / consenting party'
-          : 'Landlord',
-      name: shared.landlord_name,
-      address: shared.landlord_address,
-      email: shared.landlord_email,
-      phone: shared.landlord_phone,
-    });
+          : 'Landlord'
+      )
+    );
   }
 
   switch (product) {
@@ -927,7 +990,7 @@ function getSignatureParties(
 
   switch (product) {
     case 'guarantor_agreement':
-      addSignatureParty({ label: 'Landlord', name: shared.landlord_name });
+      parties.push(...getLandlordSignatureParties(shared));
       tenantParties.forEach((tenant, index) =>
         addSignatureParty({
           label: tenantParties.length > 1 ? `Tenant ${index + 1}` : 'Tenant',
@@ -942,7 +1005,7 @@ function getSignatureParties(
       });
       return parties;
     case 'lease_assignment_agreement':
-      addSignatureParty({ label: 'Landlord', name: shared.landlord_name });
+      parties.push(...getLandlordSignatureParties(shared));
       addSignatureParty({
         label: 'Outgoing tenant',
         name: firstNonEmpty(facts.outgoing_tenant_name, shared.tenant_primary_name),
@@ -950,7 +1013,7 @@ function getSignatureParties(
       addSignatureParty({ label: 'Incoming tenant', name: toText(facts.incoming_tenant_name) });
       return parties;
     case 'residential_sublet_agreement':
-      addSignatureParty({ label: 'Landlord (consent)', name: shared.landlord_name });
+      parties.push(...getLandlordSignatureParties(shared, 'Landlord (consent)'));
       addSignatureParty({
         label: 'Head tenant',
         name: firstNonEmpty(facts.head_tenant_name, shared.tenant_primary_name),
@@ -969,7 +1032,7 @@ function getSignatureParties(
       });
       return parties;
     default:
-      addSignatureParty({ label: 'Landlord', name: shared.landlord_name });
+      parties.push(...getLandlordSignatureParties(shared));
       tenantParties.forEach((tenant, index) =>
         addSignatureParty({
           label: tenantParties.length > 1 ? `${config.counterpartyLabel} ${index + 1}` : config.counterpartyLabel,
@@ -2318,7 +2381,9 @@ const ENGLAND_INCLUDED_BILL_LABELS: Record<string, string> = {
   electricity: 'Electricity',
   water_sewerage: 'Water / sewerage',
   internet_broadband: 'Internet / broadband',
+  communications: 'Communications: telephone, internet, cable, or satellite services',
   tv_licence: 'TV licence',
+  green_deal: 'Green Deal energy efficiency improvements',
 };
 
 function buildEnglandRentDueDayText(facts: Record<string, any>): string {
@@ -2601,7 +2666,8 @@ function buildEnglandAssuredSections(
     createSection({
       heading: 'Landlord Ending the Tenancy',
       paragraphs: [
-        'The landlord cannot lawfully end the tenancy just by serving a private break clause. Any possession route must follow the England assured-tenancy statutory process then in force, including any notice, prior-notice, court, or ground-specific requirements.',
+        'In most circumstances, the landlord may only end the tenancy by obtaining an order for possession and the execution of that order. The landlord cannot lawfully end the tenancy just by serving a private break clause or informal notice.',
+        'If the landlord seeks possession, the landlord or one of any joint landlords will usually need to serve a possession notice using the correct form, specify the ground or grounds relied on, and give the minimum notice period that applies to that ground or those grounds before court proceedings begin.',
         'Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy, the ground should be identified clearly in writing now and supported by the relevant factual explanation.',
       ],
     }),
@@ -2640,10 +2706,11 @@ function buildEnglandAssuredSections(
         { label: 'Right to rent checks completed', value: formatIsoDateText(facts.right_to_rent_check_date) },
       ],
       bullets: [
-        'The landlord remains responsible for keeping the structure, exterior, installations for water, gas, electricity, sanitation, space heating, and hot water in repair where section 11 or equivalent duties apply.',
-        'The property should remain fit for human habitation throughout the tenancy and the tenant should report repair issues promptly.',
+        'Section 9A of the Landlord and Tenant Act 1985 requires the landlord to ensure the property is fit for human habitation to the extent that section applies.',
+        'Section 11 of the Landlord and Tenant Act 1985 requires the landlord to keep in repair the structure and exterior and the installations for water, gas, electricity, sanitation, space heating, and hot water, to the extent that section applies.',
+        'Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020 requires relevant electrical safety standards to be met during occupation, relevant electrical installations to be inspected and tested by a qualified person at least every 5 years or sooner if the most recent report requires it, and a copy of that report to be supplied to the tenant.',
         relevantGas
-          ? 'Gas appliances and flues should continue to be checked and certificated as required by the gas safety regime.'
+          ? 'Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998 requires any relevant gas fitting and flue to be kept in a safe condition, safety checks to be carried out by a Gas Safe registered engineer at intervals determined in accordance with the Regulations, and a copy of the safety record to be given to the tenant.'
           : '',
         'Non-emergency access should normally take place on notice and at a reasonable time unless emergency circumstances justify immediate entry.',
       ],
@@ -2654,7 +2721,8 @@ function buildEnglandAssuredSections(
     createSection({
       heading: 'Pets, Adaptations, and Equal Treatment',
       bullets: [
-        'The tenant may request consent for a pet, and the landlord should deal with the request reasonably and within the time required by the law then in force.',
+        'The tenant may keep a pet at the property if the tenant asks to do so in line with section 16A of the Housing Act 1988 and the landlord gives consent.',
+        'The landlord cannot unreasonably refuse consent to keep a pet and should deal with any pet request reasonably and within the time required by the law then in force.',
         isTruthySelection(facts.tenant_improvements_allowed_with_consent)
           ? 'Where the tenant is entitled to make improvements with the landlord consent, the landlord may not unreasonably withhold consent to an improvement request where a disabled person occupies or intends to occupy the property as their only or main home and the improvement is likely to facilitate that person enjoyment of the property having regard to their disability.'
           : '',

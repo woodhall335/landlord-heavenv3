@@ -182,16 +182,23 @@ describe('residential standalone flow config', () => {
     const standard = getResidentialStandaloneFlowConfig('england_standard_tenancy_agreement');
     const termsStep = standard.steps.find((step) => step.id === 'tenancy_terms');
     const fields = termsStep?.fields || [];
+    const includedBillsField = fields.find((field) => field.id === 'included_bills');
 
-    expect(fields.find((field) => field.id === 'included_bills')).toMatchObject({
+    expect(includedBillsField).toMatchObject({
       type: 'multiselect',
       required: true,
     });
     expect(
-      fields.find((field) => field.id === 'included_bills')?.visibleWhen?.({
+      includedBillsField?.visibleWhen?.({
         bills_included_in_rent: 'yes',
       })
     ).toBe(true);
+    expect(includedBillsField?.options).toEqual(
+      expect.arrayContaining([
+        { value: 'communications', label: 'Communications: telephone, internet, cable, satellite' },
+        { value: 'green_deal', label: 'Green Deal energy efficiency payments' },
+      ])
+    );
     expect(
       fields.find((field) => field.id === 'payment_account_name')?.visibleWhen?.({
         payment_method: 'bank_transfer',
@@ -212,6 +219,25 @@ describe('residential standalone flow config', () => {
         rent_frequency: 'monthly',
       })
     ).toBe(true);
+  });
+
+  it('captures optional joint-landlord rows for the modern England tenancy routes', () => {
+    const standard = getResidentialStandaloneFlowConfig('england_standard_tenancy_agreement');
+    const landlordStep = standard.steps.find((step) => step.id === 'landlord');
+    const transitionStep = standard.steps.find((step) => step.id === 'england_transition_reference');
+
+    expect(
+      landlordStep?.fields?.find((field) => field.id === 'additional_landlords')
+    ).toMatchObject({
+      type: 'repeater',
+      addLabel: 'Add joint landlord',
+    });
+    expect(
+      transitionStep?.fields?.find((field) => field.id === 'additional_landlords')
+    ).toMatchObject({
+      type: 'repeater',
+      addLabel: 'Add joint landlord',
+    });
   });
 
   it('keeps prior-notice grounds hidden until the advanced legal toggle is enabled', () => {

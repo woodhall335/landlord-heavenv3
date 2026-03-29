@@ -152,6 +152,9 @@ describe('England assured periodic output templates', () => {
       'The Landlord may only recover possession or terminate the tenancy through the court-led statutory process in force at the relevant time and by obtaining any court order required by law.'
     );
     expect(document.html).toContain(
+      'serve a possession notice using the correct form, specify the ground or grounds relied on, and give the minimum notice period that applies to that ground or those grounds before court proceedings begin.'
+    );
+    expect(document.html).toContain(
       'The Tenant has the right to remain in the Property unless and until the Landlord establishes a lawful statutory ground for possession and obtains any court order required by law.'
     );
     expect(document.html).toContain(
@@ -166,6 +169,11 @@ describe('England assured periodic output templates', () => {
     expect(document.html).toContain(
       'any England statutory tenant information or government guidance required by law for the tenancy route'
     );
+    expect(document.html).toContain('section 9A of the Landlord and Tenant Act 1985');
+    expect(document.html).toContain('regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020');
+    expect(document.html).toContain('Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998');
+    expect(document.html).toContain('section 16A of the Housing Act 1988');
+    expect(document.html).toContain('cannot be unreasonably refused');
     expect(document.html).toContain(
       "including the Renters' Rights Act Information Sheet 2026 or other prescribed written information where applicable"
     );
@@ -212,6 +220,9 @@ describe('England assured periodic output templates', () => {
       'The Landlord may only recover possession or terminate the tenancy through the court-led statutory process in force at the relevant time and by obtaining any court order required by law.'
     );
     expect(document.html).toContain(
+      'serve a possession notice using the correct form, specify the ground or grounds relied on, and give the minimum notice period that applies to that ground or those grounds before court proceedings begin.'
+    );
+    expect(document.html).toContain(
       'The Tenant has the right to remain in the Property unless and until the Landlord establishes a lawful statutory ground for possession and obtains any court order required by law.'
     );
     expect(document.html).toContain(
@@ -223,6 +234,7 @@ describe('England assured periodic output templates', () => {
     expect(document.html).toContain(
       'Any authorised pet is permitted subject to this Agreement and any lawful reasonable conditions the Landlord may impose in writing, having regard to the request and the suitability of the Property.'
     );
+    expect(document.html).toContain('section 16A of the Housing Act 1988');
     expect(document.html).toContain(
       'The Tenant remains responsible for any pet-related damage, nuisance, fouling, infestation, smell, scratching, staining, or other related loss. The Landlord may require reasonable cleaning, treatment, or remediation where needed to restore the Property to the standard required by this Agreement, but nothing in this clause requires a prohibited payment or mandatory professional cleaning in every case.'
     );
@@ -247,6 +259,9 @@ describe('England assured periodic output templates', () => {
     expect(document.html).toContain(
       'any England statutory tenant information or government guidance required by law for the tenancy route'
     );
+    expect(document.html).toContain('section 9A of the Landlord and Tenant Act 1985');
+    expect(document.html).toContain('regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020');
+    expect(document.html).toContain('Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998');
     expect(document.html).toContain(
       'Tenant information / government guidance'
     );

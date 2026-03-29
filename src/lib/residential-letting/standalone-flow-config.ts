@@ -183,7 +183,9 @@ const INCLUDED_BILL_OPTIONS: StandaloneFieldOption[] = [
   { value: 'electricity', label: 'Electricity' },
   { value: 'water_sewerage', label: 'Water / sewerage' },
   { value: 'internet_broadband', label: 'Internet / broadband' },
+  { value: 'communications', label: 'Communications: telephone, internet, cable, satellite' },
   { value: 'tv_licence', label: 'TV licence' },
+  { value: 'green_deal', label: 'Green Deal energy efficiency payments' },
 ];
 
 function commonPropertyStep(description = 'Identify the property covered by this legal document.'): StandaloneStepConfig {
@@ -271,6 +273,39 @@ function commonLandlordStep(title = 'Landlord details'): StandaloneStepConfig {
       { id: 'landlord_address_line1', label: 'Landlord service address line 1', type: 'text', required: true },
       { id: 'landlord_address_town', label: 'Landlord town / city', type: 'text', required: true },
       { id: 'landlord_address_postcode', label: 'Landlord postcode', type: 'text', required: true },
+      {
+        id: 'additional_landlords',
+        label: 'Additional joint landlords',
+        type: 'repeater',
+        addLabel: 'Add joint landlord',
+        helpText:
+          'Optional: add any other landlord who should be named in the agreement alongside the main landlord.',
+        columns: [
+          {
+            id: 'full_name',
+            label: 'Full name',
+            type: 'text',
+            required: true,
+          },
+          {
+            id: 'service_address',
+            label: 'Service address',
+            type: 'text',
+            placeholder: 'Optional: use if different from the main landlord service address',
+          },
+          {
+            id: 'email',
+            label: 'Email',
+            type: 'text',
+          },
+          {
+            id: 'phone',
+            label: 'Phone',
+            type: 'text',
+          },
+        ],
+        emptyRow: { full_name: '', service_address: '', email: '', phone: '' },
+      },
     ],
   };
 }
@@ -723,6 +758,39 @@ function commonEnglandTransitionReferenceStep(): StandaloneStepConfig {
       { id: 'landlord_address_line1', label: 'Landlord service address line 1', type: 'text', required: true },
       { id: 'landlord_address_town', label: 'Landlord town / city', type: 'text', required: true },
       { id: 'landlord_address_postcode', label: 'Landlord postcode', type: 'text', required: true },
+      {
+        id: 'additional_landlords',
+        label: 'Additional joint landlords',
+        type: 'repeater',
+        addLabel: 'Add joint landlord',
+        helpText:
+          'Optional: add any additional landlord who should be named on the transition reference and served information.',
+        columns: [
+          {
+            id: 'full_name',
+            label: 'Full name',
+            type: 'text',
+            required: true,
+          },
+          {
+            id: 'service_address',
+            label: 'Service address',
+            type: 'text',
+            placeholder: 'Optional: use if different from the main landlord service address',
+          },
+          {
+            id: 'email',
+            label: 'Email',
+            type: 'text',
+          },
+          {
+            id: 'phone',
+            label: 'Phone',
+            type: 'text',
+          },
+        ],
+        emptyRow: { full_name: '', service_address: '', email: '', phone: '' },
+      },
       {
         id: 'number_of_tenants',
         label: 'How many named tenants are on the current tenancy?',

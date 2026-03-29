@@ -29,6 +29,40 @@ const baseFacts = {
   ],
 };
 
+function createBaseEnglandAssuredFacts(overrides: Record<string, any> = {}) {
+  return {
+    ...baseFacts,
+    tenancy_start_date: '2026-05-02',
+    england_tenancy_purpose: 'new_agreement',
+    rent_frequency: 'monthly',
+    rent_due_day_of_month: '1st',
+    payment_method: 'bank_transfer',
+    payment_account_name: 'Landlord Heaven Client Account',
+    payment_sort_code: '12-34-56',
+    payment_account_number: '12345678',
+    bills_included_in_rent: 'yes',
+    included_bills: ['gas', 'electricity', 'internet_broadband'],
+    separate_bill_payments_taken: false,
+    tenant_notice_period: '2 months',
+    rent_increase_method: 'Section 13 rent increase process',
+    england_rent_in_advance_compliant: true,
+    england_no_bidding_confirmed: true,
+    england_no_discrimination_confirmed: true,
+    tenant_improvements_allowed_with_consent: false,
+    supported_accommodation_tenancy: false,
+    relevant_gas_fitting_present: true,
+    gas_safety_certificate: true,
+    electrical_safety_certificate: true,
+    smoke_alarms_fitted: true,
+    carbon_monoxide_alarms: true,
+    epc_rating: 'C',
+    right_to_rent_check_date: '2026-04-25',
+    how_to_rent_provided: true,
+    deposit_scheme_name: 'DPS',
+    ...overrides,
+  };
+}
+
 describe('generateResidentialLettingDocuments', () => {
   test('renders guarantor agreements as deeds with witness execution', async () => {
     const pack = await generateResidentialLettingDocuments(
@@ -411,37 +445,10 @@ describe('generateResidentialLettingDocuments', () => {
   test('generates the expanded England assured-tenancy pack for the modern standard product', async () => {
     const pack = await generateResidentialLettingDocuments(
       'england_standard_tenancy_agreement',
-      {
-        ...baseFacts,
-        tenancy_start_date: '2026-05-02',
-        england_tenancy_purpose: 'new_agreement',
-        rent_frequency: 'monthly',
-        rent_due_day_of_month: '1st',
-        payment_method: 'bank_transfer',
-        payment_account_name: 'Landlord Heaven Client Account',
-        payment_sort_code: '12-34-56',
-        payment_account_number: '12345678',
+      createBaseEnglandAssuredFacts({
         furnished_status: 'furnished',
-        bills_included_in_rent: 'yes',
-        included_bills: ['gas', 'electricity', 'internet_broadband'],
-        separate_bill_payments_taken: false,
-        tenant_notice_period: '2 months',
-        rent_increase_method: 'Section 13 rent increase process',
-        england_rent_in_advance_compliant: true,
-        england_no_bidding_confirmed: true,
-        england_no_discrimination_confirmed: true,
         tenant_improvements_allowed_with_consent: true,
-        supported_accommodation_tenancy: false,
-        relevant_gas_fitting_present: true,
-        gas_safety_certificate: true,
-        electrical_safety_certificate: true,
-        smoke_alarms_fitted: true,
-        carbon_monoxide_alarms: true,
-        epc_rating: 'C',
-        right_to_rent_check_date: '2026-04-25',
-        how_to_rent_provided: true,
-        deposit_scheme_name: 'DPS',
-      },
+      }),
       { outputFormat: 'html' }
     );
 
@@ -460,14 +467,52 @@ describe('generateResidentialLettingDocuments', () => {
 
     const html = pack.documents[0].html;
     expect(html).toContain('Section 13');
+    expect(html).toContain('obtaining an order for possession and the execution of that order');
+    expect(html).toContain('serve a possession notice using the correct form');
+    expect(html).toContain('section 9A of the Landlord and Tenant Act 1985');
+    expect(html).toContain('section 11 of the Landlord and Tenant Act 1985');
+    expect(html).toContain('Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020');
+    expect(html).toContain('Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998');
     expect(html).toContain('fit for human habitation');
+    expect(html).toContain('section 16A of the Housing Act 1988');
+    expect(html).toContain('cannot unreasonably refuse consent to keep a pet');
     expect(html).toContain('section 190(9)');
-    expect(html).toContain('tenant may request consent for a pet');
+    expect(html).toContain('tenant may keep a pet at the property if the tenant asks to do so in line with section 16A of the Housing Act 1988');
     expect(html).toContain('Bank transfer');
     expect(html).toContain('Landlord Heaven Client Account');
     expect(html).toContain('12-34-56');
     expect(html).toContain('Gas, Electricity, Internet / broadband');
     expect(html).not.toContain('Prior-Notice Grounds');
+  });
+
+  test('keeps the written-information coverage for England new tenancies even when no deposit is taken', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      createBaseEnglandAssuredFacts({
+        deposit_amount: 0,
+        deposit_scheme_name: '',
+        bills_included_in_rent: 'no',
+        included_bills: [],
+        separate_bill_payments_taken: false,
+        relevant_gas_fitting_present: false,
+        gas_safety_certificate: undefined,
+      }),
+      { outputFormat: 'html' }
+    );
+
+    expect(pack.documents.map((document) => document.document_type)).not.toContain(
+      'deposit_protection_certificate'
+    );
+    expect(pack.documents.map((document) => document.document_type)).not.toContain(
+      'tenancy_deposit_information'
+    );
+
+    const html = pack.documents[0].html;
+    expect(html).toContain('No tenancy deposit is stated');
+    expect(html).toContain('No bills are stated to be included in the rent unless this agreement expressly says otherwise.');
+    expect(html).toContain('serve a possession notice using the correct form');
+    expect(html).toContain('Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020');
+    expect(html).not.toContain('Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998');
   });
 
   test('renders multiple named tenants when the England agreement is prepared for more than one tenant', async () => {
@@ -523,10 +568,7 @@ describe('generateResidentialLettingDocuments', () => {
   test('renders separate bill-payment details, supported accommodation statements, and fuller Equality Act wording where applicable', async () => {
     const pack = await generateResidentialLettingDocuments(
       'england_standard_tenancy_agreement',
-      {
-        ...baseFacts,
-        tenancy_start_date: '2026-05-02',
-        england_tenancy_purpose: 'new_agreement',
+      createBaseEnglandAssuredFacts({
         rent_period: 'month',
         payment_method: 'Standing Order',
         bills_included_in_rent: 'no',
@@ -540,20 +582,11 @@ describe('generateResidentialLettingDocuments', () => {
         ],
         tenant_notice_period: '2 months',
         rent_increase_method: 'Section 13 rent increase process',
-        england_rent_in_advance_compliant: true,
-        england_no_bidding_confirmed: true,
-        england_no_discrimination_confirmed: true,
         tenant_improvements_allowed_with_consent: true,
         supported_accommodation_tenancy: true,
         supported_accommodation_explanation: 'The tenant is being admitted to accommodation with weekly supervision and support delivered on the landlord behalf.',
         relevant_gas_fitting_present: false,
-        electrical_safety_certificate: true,
-        smoke_alarms_fitted: true,
-        carbon_monoxide_alarms: true,
-        epc_rating: 'C',
-        right_to_rent_check_date: '2026-04-25',
-        how_to_rent_provided: true,
-      },
+      }),
       { outputFormat: 'html' }
     );
 
@@ -563,8 +596,34 @@ describe('generateResidentialLettingDocuments', () => {
     expect(html).toContain('When due or how notified: monthly with the rent unless a later written invoice date is given.');
     expect(html).toContain('Supported Accommodation Status');
     expect(html).toContain('granted as supported accommodation');
+    expect(html).toContain('section 16A of the Housing Act 1988');
+    expect(html).toContain('cannot unreasonably refuse consent to keep a pet');
     expect(html).toContain('section 190(9)');
     expect(html).toContain('section 6 of the Equality Act 2010');
+  });
+
+  test('renders additional joint landlords in the England agreement parties and signature blocks', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      createBaseEnglandAssuredFacts({
+        additional_landlords: [
+          {
+            full_name: 'John Joint',
+            service_address: '7 Co-Owner Road, London, SW1A 3CC',
+            email: 'john.joint@example.com',
+            phone: '07000 333333',
+          },
+        ],
+      }),
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Landlord 1');
+    expect(html).toContain('Landlord 2');
+    expect(html).toContain('John Joint');
+    expect(html).toContain('7 Co-Owner Road, London, SW1A 3CC');
   });
 
   test('only renders prior-notice grounds when the advanced England legal section is used', async () => {
