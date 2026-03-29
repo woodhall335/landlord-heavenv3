@@ -331,21 +331,6 @@ const featurePoints: FeaturePoint[] = [
   },
 ];
 
-const howItWorks: FeaturePoint[] = [
-  {
-    title: '1. Enter tenancy details',
-    body: 'Answer a few guided questions so nothing important is missed.',
-  },
-  {
-    title: '2. We build your agreement',
-    body: 'The system creates the correct legal structure for your property, without guesswork or manual editing.',
-  },
-  {
-    title: '3. Preview and complete',
-    body: 'Check everything before you pay, then keep full access in your account.',
-  },
-];
-
 const comparisonHighlights = [
   'Correct agreement route',
   'Supporting documents included',
@@ -1030,35 +1015,6 @@ export default function ASTProductPage() {
                   ))}
                 </ul>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-16 md:mb-20">
-          <div className="rounded-[2.2rem] border border-[#E4DED3] bg-white/92 p-6 shadow-[0_18px_42px_rgba(31,41,55,0.05)] md:p-8">
-            <div className="mx-auto max-w-4xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-                How it works
-              </p>
-              <h2 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-                Get the right agreement without the guesswork
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-[#546075]">
-                Landlord Heaven helps you avoid the manual editing, second-guessing, and missed
-                details that often come with generic templates.
-              </p>
-            </div>
-
-            <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {howItWorks.map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-[1.8rem] border border-[#E6E0D6] bg-[#FCFBF8] p-6"
-                >
-                  <h3 className="text-lg font-semibold text-[#141B2D]">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-[#546075]">{item.body}</p>
-                </div>
-              ))}
             </div>
           </div>
         </section>
