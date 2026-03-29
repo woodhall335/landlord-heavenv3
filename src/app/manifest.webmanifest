@@ -4,8 +4,8 @@
   "description": "Generate court-ready eviction case bundles for UK landlords",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#241243",
-  "background_color": "#241243",
+  "theme_color": "#130c2b",
+  "background_color": "#130c2b",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

@@ -41,8 +41,8 @@ const heroBackedPages = walkPages(appDir).filter((filePath) => {
 
 describe('hero theme metadata', () => {
   it('uses the locked dark hero top-tone color', () => {
-    expect(UNIVERSAL_HERO_THEME_COLOR).toBe('#241243');
-    expect(UNIVERSAL_HERO_VIEWPORT.themeColor).toBe('#241243');
+    expect(UNIVERSAL_HERO_THEME_COLOR).toBe('#130c2b');
+    expect(UNIVERSAL_HERO_VIEWPORT.themeColor).toBe('#130c2b');
   });
 
   it('updates the manifest fallback to the same theme color', () => {
@@ -50,8 +50,8 @@ describe('hero theme metadata', () => {
       readSource(join(process.cwd(), 'src', 'app', 'manifest.webmanifest'))
     ) as { theme_color: string; background_color: string };
 
-    expect(manifest.theme_color).toBe('#241243');
-    expect(manifest.background_color).toBe('#241243');
+    expect(manifest.theme_color).toBe('#130c2b');
+    expect(manifest.background_color).toBe('#130c2b');
   });
 
   it('covers every hero-backed route with shared theme-color metadata', () => {
