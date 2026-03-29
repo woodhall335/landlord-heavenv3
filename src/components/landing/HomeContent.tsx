@@ -36,17 +36,20 @@ const primaryPaths = [
   {
     label: "Start Eviction",
     href: evictionWizardHref,
-    icon: RiHome6Line,
+    imageSrc: "/images/start-eviction.webp",
+    imageAlt: "Landlord starting the eviction process",
   },
   {
     label: "Recover Unpaid Rent",
     href: `/wizard?product=money_claim&topic=debt&src=${SEO_SRC}`,
-    icon: RiMoneyPoundCircleLine,
+    imageSrc: "/images/recover-unpaid-rent.webp",
+    imageAlt: "Landlord recovering unpaid rent",
   },
   {
     label: "Create Tenancy Agreement",
     href: `/wizard?product=ast_standard&topic=tenancy&src=${SEO_SRC}`,
-    icon: RiFileTextLine,
+    imageSrc: "/images/create-tenancy-agreements.webp",
+    imageAlt: "Create a tenancy agreement",
   },
 ];
 
@@ -140,14 +143,24 @@ export default function HomeContent() {
                 <Link
                   key={path.label}
                   href={path.href}
-                  className="group flex min-h-40 flex-col items-center justify-center rounded-3xl border border-[#e2e2f0] bg-white px-6 py-8 text-center shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:border-[#cfcff0] hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
+                  className="group flex overflow-hidden rounded-3xl border border-[#e2e2f0] bg-white text-center shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:border-[#cfcff0] hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
                 >
-                  <span className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-[#a987ff] to-[#6a2dd8] text-white shadow-md">
-                    <path.icon className="h-8 w-8" />
-                  </span>
-                  <span className="text-[1rem] font-semibold leading-tight text-[#18184d]">
-                    {path.label}
-                  </span>
+                  <div className="flex w-full flex-col">
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f5f4fb]">
+                      <Image
+                        src={path.imageSrc}
+                        alt={path.imageAlt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover transition duration-300 group-hover:scale-[1.02]"
+                      />
+                    </div>
+                    <div className="flex flex-1 items-center justify-center px-6 py-5">
+                      <span className="text-[1rem] font-semibold leading-tight text-[#18184d]">
+                        {path.label}
+                      </span>
+                    </div>
+                  </div>
                 </Link>
               ))}
             </div>
