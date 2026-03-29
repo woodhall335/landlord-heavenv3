@@ -15,6 +15,8 @@ import { PRODUCTS } from '@/lib/pricing/products';
 import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
 import { BLOG_TOPIC_HUBS } from '@/lib/blog/topic-hubs';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata = generateMetadata({
   title: 'UK Landlord Guides | Eviction, Tenancy & Rent Arrears',
   description:

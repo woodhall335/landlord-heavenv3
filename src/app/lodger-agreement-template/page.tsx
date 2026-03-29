@@ -8,6 +8,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { lodgerAgreementFAQs } from '@/data/faqs';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Lodger Agreement UK (Live-In Landlords) | Compliance Guide & Builder',
   description:

@@ -21,6 +21,8 @@ const moneyClaimProductLink = '/products/money-claim';
 
 const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Money Claim for Unpaid Rent | Landlord Court Recovery Guide',
   description:

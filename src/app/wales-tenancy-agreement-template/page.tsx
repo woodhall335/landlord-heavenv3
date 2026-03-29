@@ -19,6 +19,8 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Wales Tenancy Agreement 2026 | Legally Validated Occupation Contract',
   description: 'Create a Wales tenancy agreement (occupation contract) with solicitor-grade drafting and Renting Homes Act compliance checks.',

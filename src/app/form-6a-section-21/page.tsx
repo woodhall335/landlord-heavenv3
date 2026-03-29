@@ -11,6 +11,8 @@ import { FunnelCta } from '@/components/funnels';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Form 6A Section 21 Notice | Official Template + Guide',
   description:

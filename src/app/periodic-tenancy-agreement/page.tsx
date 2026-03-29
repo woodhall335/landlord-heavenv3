@@ -10,6 +10,8 @@ const canonicalUrl = getCanonicalUrl('/periodic-tenancy-agreement');
 const wizardHref = '/wizard?product=ast_standard&src=periodic_tenancy_agreement&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&src=periodic_tenancy_agreement&topic=tenancy';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Periodic Tenancy Agreement | England Tenancy Agreement Guide',
   description:

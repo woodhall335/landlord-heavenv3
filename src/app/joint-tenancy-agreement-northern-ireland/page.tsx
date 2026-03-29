@@ -33,6 +33,8 @@ const PAGE_TYPE = 'tenancy' as const;
 
 const astProductHref = '/products/ast';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement Northern Ireland | Multiple Tenants NI',
   description:

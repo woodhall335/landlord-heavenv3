@@ -28,6 +28,8 @@ import { northernIrelandFAQs } from '@/data/faqs';
 const noticeOnlyProductHref = '/products/notice-only';
 const tenancyAgreementProductHref = '/products/ast';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
   description: 'Guide to Notice to Quit in Northern Ireland. Notice periods, valid grounds, and correct service under the Private Tenancies Act 2022.',

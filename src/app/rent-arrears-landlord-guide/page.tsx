@@ -15,6 +15,8 @@ import {
 
 const canonical = 'https://landlordheaven.co.uk/rent-arrears-landlord-guide';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Rent Arrears Landlord Guide | Recovery, Notices, Section 8 and Next Steps | LandlordHeaven',
   description:

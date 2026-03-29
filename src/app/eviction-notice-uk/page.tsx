@@ -13,6 +13,8 @@ import { evictionNoticeUKFAQs } from '@/data/faqs';
 const canonicalUrl = getCanonicalUrl('/eviction-notice-template');
 const noticeOnlyProductHref = '/products/notice-only';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Eviction Notice UK | Types and Service Rules for Landlords [2026]',
   description:

@@ -28,6 +28,8 @@ import {
 const completePackProductHref = '/products/complete-pack';
 const moneyClaimProductHref = '/products/money-claim';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'County Court Claim Form Guide UK 2026 — N1, N5, N5B Forms Explained',
   description: 'Guide to county court claim forms for UK landlords. N1 for money claims, N5 for possession, N5B for accelerated. Fees and process explained.',

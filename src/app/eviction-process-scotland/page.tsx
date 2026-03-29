@@ -44,6 +44,8 @@ const completePackLink = '/products/complete-pack';
 const noticeOnlyLink = '/products/notice-only';
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
   description:

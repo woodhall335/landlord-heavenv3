@@ -11,6 +11,8 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
 const moneyClaimProductLink = '/products/money-claim';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'MCOL Money Claim Online | Landlord Process Guide for Rent Arrears',
   description:

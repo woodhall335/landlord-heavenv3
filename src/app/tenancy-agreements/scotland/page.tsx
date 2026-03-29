@@ -43,6 +43,8 @@ const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=scotland&src=tenancy_hub&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=scotland&src=tenancy_hub&topic=tenancy';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Private Residential Tenancy Agreement Scotland | Create a PRT Online',

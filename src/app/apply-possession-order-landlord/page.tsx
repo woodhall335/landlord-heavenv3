@@ -76,6 +76,8 @@ const faqs = [
   },
 ];
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Apply for Possession Order | N5B, N5 and Court Process Explained',
   description:

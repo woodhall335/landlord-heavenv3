@@ -20,6 +20,8 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimEnforcementLinks, productLinks } from '@/lib/seo/internal-links';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim Against Former Tenant 2026 | Trace & Recover Debts',
   description:

@@ -28,6 +28,8 @@ const lodgerPackHighlights = [
     supportingLabel: document.pages,
   }));
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Lodger Agreement England | Resident-Landlord Room Let Route',
   description:

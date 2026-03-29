@@ -14,6 +14,8 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'PRT Agreement Scotland 2026 | Legally Validated',
   description: 'Generate a Scotland PRT agreement with solicitor-grade drafting and compliance checks under the Private Housing (Tenancies) Act 2016.',

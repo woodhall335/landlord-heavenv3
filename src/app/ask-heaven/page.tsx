@@ -212,6 +212,8 @@ const faqItems = [
   },
 ];
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export async function generateMetadata({
   searchParams,
 }: {

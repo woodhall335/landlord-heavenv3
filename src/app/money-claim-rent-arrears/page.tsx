@@ -9,6 +9,8 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
   description:

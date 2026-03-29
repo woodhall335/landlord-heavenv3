@@ -70,6 +70,8 @@ const faqs = [
   },
 ];
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: "Tenant Won't Leave After Notice? What England Landlords Should Do Next",
   description:

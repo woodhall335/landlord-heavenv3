@@ -1,4 +1,4 @@
-﻿import { Metadata } from 'next';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
@@ -30,6 +30,8 @@ const completePackProductHref = '/products/complete-pack';
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 
+
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Section 21 Notice Template | Form 6A Download & Court-Ready Builder',

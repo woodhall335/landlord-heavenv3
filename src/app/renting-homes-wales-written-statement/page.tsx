@@ -17,6 +17,8 @@ const PAGE_TITLE = 'Renting Homes Wales Written Statement';
 const PAGE_TYPE = 'tenancy' as const;
 const astProductHref = '/products/ast';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Wales Written Statement 2026 | Legal Requirements',
   description: `Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,

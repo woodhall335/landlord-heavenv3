@@ -17,6 +17,8 @@ import {
 const canonical =
   'https://landlordheaven.co.uk/court-bailiff-eviction-guide';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Court Bailiff Eviction Guide | County Court Enforcement for Landlords | LandlordHeaven',

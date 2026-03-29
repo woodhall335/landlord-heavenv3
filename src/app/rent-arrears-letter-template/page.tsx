@@ -36,6 +36,8 @@ const noticeOnlyProductHref = '/products/notice-only';
 const completePackProductHref = '/products/complete-pack';
 const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Rent Arrears Letter Template UK | Free Demand Letter + Legal Next Steps',
   description:

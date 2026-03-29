@@ -17,6 +17,8 @@ import {
 const canonical =
   'https://landlordheaven.co.uk/section-8-grounds-explained';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Section 8 Grounds Explained | Eviction Grounds Guide for Landlords | LandlordHeaven',

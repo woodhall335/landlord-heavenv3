@@ -8,6 +8,8 @@ const canonicalUrl = getCanonicalUrl('/fixed-term-periodic-tenancy-england');
 const wizardHref = '/wizard?product=ast_standard&src=fixed_term_periodic_tenancy_england&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&src=fixed_term_periodic_tenancy_england&topic=tenancy';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Fixed Term vs Periodic Tenancy England | Legacy Search Guide 2026',
   description:

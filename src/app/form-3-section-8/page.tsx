@@ -13,6 +13,8 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 
 const noticeOnlyHref = '/products/notice-only';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Form 3 Section 8 Notice | Download & Guide 2026',
   description:

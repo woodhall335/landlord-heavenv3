@@ -17,6 +17,8 @@ import {
 const canonical =
   'https://landlordheaven.co.uk/warrant-of-possession-guide';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Warrant of Possession Guide | What Landlords Do After a Possession Order | LandlordHeaven',

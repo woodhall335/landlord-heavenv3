@@ -48,6 +48,8 @@ const premiumPrice =
 
 const astProductHref = '/products/ast';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
   description:

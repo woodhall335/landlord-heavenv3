@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   CheckCircle,
@@ -49,6 +49,8 @@ const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
 const completePackProductHref = '/products/complete-pack';
 const noticeOnlyProductHref = '/products/notice-only';
+
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Section 8 Notice Template | Form 3 Guide for Landlords in England',

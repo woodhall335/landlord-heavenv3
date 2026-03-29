@@ -459,6 +459,8 @@ const faqs: FAQItem[] = [
   },
 ];
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'AST / Assured Periodic Tenancy Agreement for England | Standard, Premium, Student, HMO, Lodger',

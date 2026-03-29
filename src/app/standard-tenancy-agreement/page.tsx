@@ -34,6 +34,8 @@ const standardPackHighlights = [
     supportingLabel: document.pages,
   }));
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Assured Periodic Tenancy Agreement England | Baseline Residential Route',
   description:

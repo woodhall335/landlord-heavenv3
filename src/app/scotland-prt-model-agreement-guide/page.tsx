@@ -17,6 +17,8 @@ const PAGE_TITLE = 'Scotland PRT Model Agreement Guide';
 const PAGE_TYPE = 'tenancy' as const;
 const astProductHref = '/products/ast';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Scotland PRT Model Agreement Guide 2026 | Government Template vs Ours',
   description: 'Compare the Scottish Government PRT model agreement with professional alternatives. What the model lacks explained.',

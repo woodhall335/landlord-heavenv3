@@ -1,4 +1,4 @@
-﻿import { Metadata } from 'next';
+import { Metadata } from 'next';
 import { PRODUCT_PRICE_AMOUNT_STRINGS, PRODUCTS } from '@/lib/pricing/products';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
@@ -26,6 +26,8 @@ import {
 
 const noticeOnlyProductHref = '/products/notice-only';
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
+
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Scotland Notice to Leave Template 2026 | PRT Eviction Landlords',

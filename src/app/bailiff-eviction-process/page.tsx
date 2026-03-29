@@ -17,6 +17,8 @@ import {
 const canonical =
   'https://landlordheaven.co.uk/bailiff-eviction-process';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Bailiff Eviction Process | What Happens After a Possession Order | LandlordHeaven',

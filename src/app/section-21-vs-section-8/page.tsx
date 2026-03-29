@@ -20,6 +20,8 @@ const canonical = 'https://landlordheaven.co.uk/section-21-vs-section-8';
 const noticeOnlyProductLink = '/products/notice-only';
 const completePackProductLink = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Section 21 vs Section 8 | Which Eviction Notice Should Landlords Use? | LandlordHeaven',

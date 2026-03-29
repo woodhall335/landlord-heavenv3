@@ -13,6 +13,8 @@ const productHref = '/products/ast';
 const standardWizardHref = '/wizard?product=ast_standard&src=tenancy_hub&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&src=tenancy_hub&topic=tenancy';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Tenancy Agreement UK | Find the Right Agreement for Your Property',
   description:

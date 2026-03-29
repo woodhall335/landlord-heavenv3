@@ -16,6 +16,8 @@ import {
 
 const canonical = 'https://landlordheaven.co.uk/section-8-eviction-process';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Section 8 Eviction Process 2026 | Step-by-Step Guide for Landlords',
   description:

@@ -21,6 +21,8 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
 import { scheduleOfDebtFAQs } from '@/data/faqs';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Schedule of Debt for Landlords 2026 | Rent Arrears Breakdown',
   description:

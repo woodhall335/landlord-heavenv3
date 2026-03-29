@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -60,6 +60,8 @@ const complianceLinks = {
     utm_campaign: 'how-to-evict-tenant',
   }),
 };
+
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant | UK Landlord Guide by Jurisdiction',

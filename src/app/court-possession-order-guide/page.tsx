@@ -17,6 +17,8 @@ import {
 const canonical =
   'https://landlordheaven.co.uk/court-possession-order-guide';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Court Possession Order Guide | What Happens After a Possession Hearing | LandlordHeaven',

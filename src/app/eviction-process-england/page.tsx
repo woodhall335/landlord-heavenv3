@@ -15,6 +15,8 @@ import {
 
 const canonical = 'https://landlordheaven.co.uk/eviction-process-england';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Eviction Process England | Step-by-Step Landlord Guide | LandlordHeaven',
   description:

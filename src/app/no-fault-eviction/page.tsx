@@ -10,6 +10,8 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { noFaultEvictionFAQs } from '@/data/faqs';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'No Fault Eviction (England) | Section 21 Guide for Landlords [2026]',
   description:

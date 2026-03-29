@@ -35,6 +35,8 @@ const PAGE_TYPE = 'tenancy' as const;
 
 const astProductHref = '/products/ast';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Scotland PRT Agreement Template 2026 | Create Online',
   description:

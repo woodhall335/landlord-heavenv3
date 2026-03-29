@@ -8,6 +8,8 @@ const canonicalUrl = getCanonicalUrl('/tenancy-agreement-template-free');
 const wizardHref = '/wizard?product=ast_standard&src=tenancy_agreement_template_free&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&src=tenancy_agreement_template_free&topic=tenancy';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Free Tenancy Agreement Template | England Comparison Guide 2026',
   description:

@@ -10,6 +10,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { howToRentGuideFAQs } from '@/data/faqs';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'How to Rent Guide | Landlord Requirements UK 2026',
   description:

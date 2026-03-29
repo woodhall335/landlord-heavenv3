@@ -66,6 +66,8 @@ const faqs = [
   },
 ];
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'N5B Form Guide 2026 | Accelerated Possession for Landlords',
   description:

@@ -29,6 +29,8 @@ import {
 
 const completePackHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Warrant of Possession UK — Bailiff Eviction Guide (2026)',
   description: 'How to apply for a warrant of possession after getting a court order. County court bailiffs, High Court enforcement, and what to expect on eviction day.',

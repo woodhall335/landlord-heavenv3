@@ -18,6 +18,8 @@ const canonical = 'https://landlordheaven.co.uk/section-8-court-pack';
 const noticeOnlyHref = '/products/notice-only';
 const completePackHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Section 8 Court Pack 2026 | Court-Ready Possession File for Landlords | LandlordHeaven',

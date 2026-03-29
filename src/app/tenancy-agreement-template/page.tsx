@@ -75,6 +75,8 @@ const webPageSchema = {
   inLanguage: 'en-GB',
 };
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Tenancy Agreement Template 2026 | England Residential Tenancy Agreement',

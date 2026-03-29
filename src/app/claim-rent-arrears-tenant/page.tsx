@@ -45,6 +45,8 @@ import {
 const moneyClaimLink = '/products/money-claim';
 const completePackLink = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
   description:

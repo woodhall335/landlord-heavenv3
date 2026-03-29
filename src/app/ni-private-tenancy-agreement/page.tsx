@@ -21,6 +21,8 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Northern Ireland Private Tenancy Agreement 2026 | Legally Validated',
   description: 'Create a Northern Ireland private tenancy agreement with solicitor-grade drafting and compliance-checked terms.',

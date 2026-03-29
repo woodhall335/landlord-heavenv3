@@ -21,6 +21,8 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
 import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim Unpaid Bills from Tenant 2026 | Water, Broadband & More',
   description:

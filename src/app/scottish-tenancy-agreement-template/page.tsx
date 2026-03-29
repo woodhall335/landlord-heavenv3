@@ -13,6 +13,8 @@ import { PRODUCTS } from '@/lib/pricing/products';
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Scottish Tenancy Agreement 2026 | Legally Validated PRT',
   description: 'Create a Scottish tenancy agreement (PRT) with solicitor-grade drafting and compliance checks for landlord requirements.',

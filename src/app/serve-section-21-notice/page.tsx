@@ -20,6 +20,8 @@ const canonical = 'https://landlordheaven.co.uk/serve-section-21-notice';
 const noticeOnlyProductLink = '/products/notice-only';
 const completePackProductLink = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = generateMetadata({
   title: 'Serve a Section 21 Notice | Valid Service for Landlords',
   description:

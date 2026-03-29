@@ -85,6 +85,8 @@ const GROUPS = [
   },
 ] as const;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'England Landlord Documents | Live Tenancy and Arrears Routes',
   description:

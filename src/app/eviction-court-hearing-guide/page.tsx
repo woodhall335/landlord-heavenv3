@@ -17,6 +17,8 @@ import {
 const canonical =
   'https://landlordheaven.co.uk/eviction-court-hearing-guide';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Eviction Court Hearing Guide | Bundle, Evidence and What to Expect | LandlordHeaven',

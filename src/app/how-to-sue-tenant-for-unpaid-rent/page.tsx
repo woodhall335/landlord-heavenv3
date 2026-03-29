@@ -20,6 +20,8 @@ const canonical = getCanonicalUrl('/how-to-sue-tenant-for-unpaid-rent');
 
 const moneyClaimProductLink = '/products/money-claim';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'How to Sue a Tenant for Unpaid Rent 2026 | Landlord Debt Claim Guide',
   description:

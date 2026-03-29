@@ -23,6 +23,8 @@ import { moneyClaimHeroConfig } from '@/components/landing/heroConfigs';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim Unpaid Utilities from Tenant 2026 | Bills & Energy Recovery',
   description:

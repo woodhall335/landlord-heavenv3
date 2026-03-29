@@ -8,6 +8,8 @@ const canonicalUrl = getCanonicalUrl('/fixed-term-tenancy-agreement-template');
 const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Fixed Term Tenancy Agreement Template | Legacy England Explainer',
   description:

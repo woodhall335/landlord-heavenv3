@@ -15,6 +15,8 @@ import { generateMetadata } from '@/lib/seo';
 
 const canonical = 'https://landlordheaven.co.uk/section-21-notice-guide';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = generateMetadata({
   title: 'Section 21 Notice Guide | Validity, Timing & Next Steps',
   description:

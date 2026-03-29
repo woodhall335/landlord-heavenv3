@@ -36,6 +36,8 @@ const PAGE_TYPE = 'tenancy' as const;
 
 const astProductHref = '/products/ast';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Joint PRT Tenancy Agreement Scotland | Multiple Tenants PRT 2026',
   description:

@@ -17,6 +17,8 @@ import {
 const canonical =
   'https://landlordheaven.co.uk/evict-tenant-not-paying-rent';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Evict Tenant Not Paying Rent | Landlord Rent Arrears Guide | LandlordHeaven',

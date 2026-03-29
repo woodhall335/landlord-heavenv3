@@ -8,6 +8,8 @@ const canonicalUrl = getCanonicalUrl('/joint-tenancy-agreement-template');
 const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
 const chooserHref = '/products/ast';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement England 2026 | Multiple Tenant Agreement',
   description:

@@ -8,6 +8,8 @@ const canonicalUrl = getCanonicalUrl('/renters-rights-bill-tenancy-agreement');
 const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Renters Rights Bill Tenancy Agreement | Updated England Agreement',
   description:

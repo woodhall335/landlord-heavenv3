@@ -10,6 +10,8 @@ import { eicrFAQs } from '@/data/faqs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'EICR Landlord Requirements UK | Electrical Safety Guide 2026',
   description:

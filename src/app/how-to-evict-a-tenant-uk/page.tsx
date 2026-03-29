@@ -13,6 +13,8 @@ import {
   faqPageSchema,
 } from '@/lib/seo/structured-data';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in the UK | Complete Landlord Guide | LandlordHeaven',
   description:

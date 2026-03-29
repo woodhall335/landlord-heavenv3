@@ -19,6 +19,8 @@ const canonical = 'https://landlordheaven.co.uk/section-21-checklist';
 const noticeOnlyHref = '/products/notice-only';
 const completePackHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Section 21 Checklist | Landlord Compliance, Service and Possession Readiness | LandlordHeaven',

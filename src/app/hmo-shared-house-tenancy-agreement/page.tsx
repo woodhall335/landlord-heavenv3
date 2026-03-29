@@ -32,6 +32,8 @@ const hmoPackHighlights = [
     supportingLabel: document.pages,
   }));
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'HMO / Shared House Tenancy Agreement England',
   description:

@@ -33,6 +33,8 @@ const studentPackHighlights = [
     supportingLabel: document.pages,
   }));
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Student Tenancy Agreement England | Guarantor and Sharer Route',
   description:

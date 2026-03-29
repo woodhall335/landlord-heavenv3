@@ -15,6 +15,8 @@ import {
 
 const canonical = 'https://landlordheaven.co.uk/eviction-timeline-uk';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Eviction Timeline UK | How Long the Eviction Process Takes for Landlords | LandlordHeaven',

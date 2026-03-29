@@ -19,6 +19,8 @@ const canonical = 'https://landlordheaven.co.uk/section-21-validity-checklist';
 const noticeOnlyProductLink = '/products/notice-only';
 const completePackProductLink = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Section 21 Validity Checklist | Landlord Compliance and Proof Guide | LandlordHeaven',

@@ -10,6 +10,8 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/money-claim');
 const productHref = '/products/money-claim';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Money Claim for Landlords | Recover Rent Arrears and Tenant Debt',
   description:

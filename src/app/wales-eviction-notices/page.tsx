@@ -33,6 +33,8 @@ const noticeOnlyHref = '/products/notice-only';
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 const completePackPrice = PRODUCTS.complete_pack.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
   description:

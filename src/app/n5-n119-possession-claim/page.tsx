@@ -19,6 +19,8 @@ const canonical = 'https://landlordheaven.co.uk/n5-n119-possession-claim';
 const noticeOnlyProductHref = '/products/notice-only';
 const completePackProductHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'N5 and N119 Possession Claim Guide | Standard Possession Claim for Landlords | LandlordHeaven',

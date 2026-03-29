@@ -22,6 +22,8 @@ import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 import { cleaningCostsFAQs } from '@/data/faqs';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim Cleaning Costs from Tenant 2026 | End of Tenancy Claims',
   description:

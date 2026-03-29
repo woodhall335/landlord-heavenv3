@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -15,6 +15,8 @@ import {
 } from '@/lib/seo/structured-data';
 
 const canonical = 'https://landlordheaven.co.uk/accelerated-possession-guide';
+
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title:

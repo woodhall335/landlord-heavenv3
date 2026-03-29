@@ -30,6 +30,8 @@ const faqs = tenantNotPayingRentFAQs;
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Tenant Not Paying Rent? Solicitor-Style Options Guide',
   description: 'What to do when your tenant stops paying rent. Rent demand letters, Section 8 eviction, and money claims through court explained.',

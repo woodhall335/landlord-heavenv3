@@ -19,6 +19,8 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Private Residential Tenancy Agreement 2026 | Legally Validated PRT',
   description: 'Create a Scotland Private Residential Tenancy agreement with solicitor-grade drafting and compliance checks under the 2016 Act.',

@@ -32,6 +32,8 @@ const completePackPrice = PRODUCTS.complete_pack.displayPrice;
 const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'How Much Does Eviction Cost UK? Full Breakdown (2026)',
   description: 'Complete breakdown of UK eviction costs in 2026. Court fees, bailiff costs, solicitor fees, and DIY options compared. Budget for your eviction.',

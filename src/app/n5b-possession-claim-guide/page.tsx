@@ -22,6 +22,8 @@ const canonical =
 const noticeOnlyProductHref = '/products/notice-only';
 const completePackProductHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'N5B Possession Claim Guide | Accelerated Possession After Section 21',

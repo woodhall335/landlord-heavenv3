@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -39,6 +39,8 @@ const completePackPrice = PRODUCTS.complete_pack.displayPrice;
 
 const noticeOnlyProductHref = '/products/notice-only';
 const completePackProductHref = '/products/complete-pack';
+
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Eviction Notice Template UK | Jurisdiction-Specific Landlord Notice Builder',

@@ -17,6 +17,8 @@ import {
 const canonical =
   'https://landlordheaven.co.uk/tenant-stopped-paying-rent';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title:
     'Tenant Stopped Paying Rent 2026 | Landlord Action Plan for Arrears and Possession | LandlordHeaven',

@@ -9,6 +9,8 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { preActionProtocolFAQs } from '@/data/faqs';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Pre-Action Protocol for Debt Claims | Solicitor-Style Guide',
   description:

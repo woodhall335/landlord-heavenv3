@@ -56,6 +56,8 @@ const evictionGrounds = [
   { ground: '18', description: 'Overcrowding statutory notice', notice: 'Usually 28 days', type: 'Mandatory' },
 ];
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Scotland Eviction Notices | Notice to Leave & PRT Landlord Guide',
   description:

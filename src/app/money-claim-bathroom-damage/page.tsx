@@ -21,6 +21,8 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim Bathroom Damage from Tenant | Mould, Limescale & Fixtures',
   description:

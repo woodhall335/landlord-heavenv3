@@ -48,6 +48,8 @@ const faqs: FAQItem[] = [
   },
 ];
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
   description:

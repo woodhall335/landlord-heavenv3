@@ -11,6 +11,8 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/eviction-pack-england');
 const completePackHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Eviction Pack England | Compliance-Checked Court-Ready Documents',
   description:

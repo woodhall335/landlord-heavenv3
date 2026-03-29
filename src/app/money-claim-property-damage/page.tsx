@@ -21,6 +21,8 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { NextLegalSteps } from '@/components/seo/NextLegalSteps';
 import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim for Property Damage from Tenant 2026 | Landlord Guide',
   description:

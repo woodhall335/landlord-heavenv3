@@ -20,6 +20,8 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, productLinks, residentialDocumentLinks } from '@/lib/seo/internal-links';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Claim Against Tenant Guarantor 2026 | Sue Guarantor for Rent Arrears',
   description:

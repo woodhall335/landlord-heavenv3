@@ -12,6 +12,8 @@ const canonicalUrl = getCanonicalUrl('/eviction-notice');
 const noticeOnlyProductHref = '/products/notice-only';
 const completePackProductHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Eviction Notice Service | Legally Validated Notice Pack',
   description:

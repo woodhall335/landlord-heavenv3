@@ -34,6 +34,8 @@ const completePackPrice = PRODUCTS.complete_pack.displayPrice;
 const noticeOnlyHref = '/products/notice-only';
 const completePackHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Section 21 Ban | England Landlord Deadline Guide',
   description:

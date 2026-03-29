@@ -74,6 +74,8 @@ const faqs = [
   },
 ];
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Section 21 Expired: What Next If Tenant Stays? | England Guide 2026',
   description:

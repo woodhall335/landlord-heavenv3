@@ -23,6 +23,8 @@ import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { moneyClaimGuides, moneyClaimProcessLinks, productLinks } from '@/lib/seo/internal-links';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Small Claims Court for Landlords 2026 | Tenant Debt Recovery Guide',
   description:

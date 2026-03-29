@@ -27,6 +27,8 @@ import {
   Sparkles,
 } from 'lucide-react';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Money Claim Online (MCOL) Guide for Landlords | Claim Unpaid Rent',
   description:

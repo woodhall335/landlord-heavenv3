@@ -1,4 +1,4 @@
-﻿import { Metadata } from 'next';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import {
   StructuredData,
@@ -36,6 +36,8 @@ import {
 
 const completePackLink = '/products/complete-pack';
 const noticeOnlyLink = '/products/notice-only';
+
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process',

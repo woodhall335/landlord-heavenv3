@@ -27,6 +27,8 @@ const astProductHref = '/products/ast';
 const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=northern-ireland&src=ni_tenancy_template&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=northern-ireland&src=ni_tenancy_template&topic=tenancy';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
   description: 'Generate a Northern Ireland tenancy agreement with solicitor-grade terms and compliance checks for private tenancies.',

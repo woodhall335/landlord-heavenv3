@@ -26,6 +26,8 @@ import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
 
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
   description: 'Compare options and generate a Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording.',

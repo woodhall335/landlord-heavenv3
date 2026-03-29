@@ -30,6 +30,8 @@ import {
 
 const completePackProductHref = '/products/complete-pack';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = {
   title: 'Possession Claim Guide UK - How to Apply for Court Possession (2026)',
   description: 'Complete guide to applying for a court possession order in England. Form N5, N5B, hearing process, and timelines explained for UK landlords.',
