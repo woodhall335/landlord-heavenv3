@@ -1,9 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
+  ENGLAND_TENANCY_PRODUCT_IMAGES,
   ENGLAND_TENANCY_PRODUCT_ORDER,
   type EnglandModernTenancyProductSku,
 } from '@/lib/tenancy/england-product-model';
@@ -66,29 +68,47 @@ export function EnglandTenancyProductChooser({
           {ENGLAND_TENANCY_PRODUCT_ORDER.map((product) => {
             const config = PRODUCTS[product];
             const copy = PRODUCT_CARD_COPY[product];
+            const image = ENGLAND_TENANCY_PRODUCT_IMAGES[product];
 
             return (
-              <Card key={product} className="flex h-full flex-col rounded-3xl border border-gray-200 p-6 shadow-sm">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h2 className="text-2xl font-semibold text-gray-900">{config.label}</h2>
-                    <p className="mt-2 text-sm text-gray-600">{copy.summary}</p>
-                  </div>
-                  <div className="rounded-xl bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900">
-                    {config.displayPrice}
-                  </div>
+              <Card
+                key={product}
+                padding="none"
+                className="group flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200 shadow-sm"
+              >
+                <div className="relative aspect-[16/9] border-b border-gray-200 bg-gray-100">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(min-width: 1280px) 360px, (min-width: 1024px) 50vw, 100vw"
+                    className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-transparent" />
                 </div>
 
-                <div className="mt-5 rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
-                  {copy.bullet}
-                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h2 className="text-2xl font-semibold text-gray-900">{config.label}</h2>
+                      <p className="mt-2 text-sm text-gray-600">{copy.summary}</p>
+                    </div>
+                    <div className="rounded-xl bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900">
+                      {config.displayPrice}
+                    </div>
+                  </div>
 
-                <p className="mt-4 text-sm leading-6 text-gray-600">{config.description}</p>
+                  <div className="mt-5 rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
+                    {copy.bullet}
+                  </div>
 
-                <div className="mt-auto pt-6">
-                  <Button onClick={() => onSelect(product)} fullWidth>
-                    Start {config.shortLabel}
-                  </Button>
+                  <p className="mt-4 text-sm leading-6 text-gray-600">{config.description}</p>
+
+                  <div className="mt-auto pt-6">
+                    <Button onClick={() => onSelect(product)} fullWidth>
+                      Start {config.shortLabel}
+                    </Button>
+                  </div>
                 </div>
               </Card>
             );

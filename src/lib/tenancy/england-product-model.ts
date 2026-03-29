@@ -9,6 +9,34 @@ export const ENGLAND_MODERN_TENANCY_PRODUCTS = [
 export type EnglandModernTenancyProductSku =
   (typeof ENGLAND_MODERN_TENANCY_PRODUCTS)[number];
 
+export interface EnglandTenancyProductImage {
+  src: string;
+  alt: string;
+}
+
+export const ENGLAND_TENANCY_PRODUCT_IMAGES = {
+  england_standard_tenancy_agreement: {
+    src: '/images/standard_tenancy.webp',
+    alt: 'Standard Tenancy Agreement document preview',
+  },
+  england_premium_tenancy_agreement: {
+    src: '/images/premium_tenancy.webp',
+    alt: 'Premium Tenancy Agreement document preview',
+  },
+  england_student_tenancy_agreement: {
+    src: '/images/student_tenency.webp',
+    alt: 'Student Tenancy Agreement document preview',
+  },
+  england_hmo_shared_house_tenancy_agreement: {
+    src: '/images/hmo_tenency_agreement.webp',
+    alt: 'HMO / Shared House Tenancy Agreement document preview',
+  },
+  england_lodger_agreement: {
+    src: '/images/room_let_agreement.webp',
+    alt: 'Room Let / Lodger Agreement document preview',
+  },
+} as const satisfies Record<EnglandModernTenancyProductSku, EnglandTenancyProductImage>;
+
 export const ENGLAND_LEGACY_TENANCY_ALIAS_MAP = {
   ast_standard: 'england_standard_tenancy_agreement',
   ast_premium: 'england_premium_tenancy_agreement',

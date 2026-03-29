@@ -7,15 +7,23 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import ASTProductPage from '@/app/(marketing)/products/ast/page';
 import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  ENGLAND_TENANCY_PRODUCT_IMAGES,
+  ENGLAND_TENANCY_PRODUCT_ORDER,
+} from '@/lib/tenancy/england-product-model';
 
 vi.mock('next/image', () => ({
   default: ({
     src,
     alt,
+    fill: _fill,
+    priority: _priority,
     ...rest
   }: {
     src: string | { src: string };
     alt: string;
+    fill?: boolean;
+    priority?: boolean;
     [key: string]: unknown;
   }) => <img src={typeof src === 'string' ? src : src.src} alt={alt} {...rest} />,
 }));
@@ -90,26 +98,26 @@ describe('/products/ast page', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: 'Assured Periodic Tenancy Agreement for England',
+        name: /Assured Periodic Tenancy Agreement for England/i,
       }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText(
-        /Updated for the Renters' Rights Act from 1 May 2026\. Create a compliant England tenancy agreement with Standard and Premium options\./i,
-      ),
+      screen.getByText(/Updated for the Renters' Rights Act from 1 May 2026\./i, {
+        selector: 'p',
+      }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText(
-        /If your England tenancy started before 1 May 2026, you will not usually start again with a new agreement\./i,
-      ),
+      screen.getByText(/If your tenancy started before/i, {
+        selector: 'p',
+      }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByRole('heading', {
         level: 2,
-        name: 'England is now the lead story on this page',
+        name: 'New England tenancies no longer start with old AST assumptions',
       }),
     ).toBeInTheDocument();
 
@@ -137,35 +145,46 @@ describe('/products/ast page', () => {
     render(<ASTProductPage />);
 
     const standardProductCta = screen.getByRole('link', {
-      name: `Start Standard Tenancy Agreement - ${PRODUCTS.ast_standard.displayPrice}`,
+      name: `Start Standard Tenancy Agreement - ${PRODUCTS.england_standard_tenancy_agreement.displayPrice}`,
     });
     expect(standardProductCta).toHaveAttribute(
       'href',
-      'https://landlordheaven.co.uk/wizard?product=ast_standard&src=product_page&topic=tenancy',
+      '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=products_ast_hub&topic=tenancy',
     );
 
     const premiumProductCta = screen.getByRole('link', {
-      name: `Start Premium Tenancy Agreement - ${PRODUCTS.ast_premium.displayPrice}`,
+      name: `Start Premium Tenancy Agreement - ${PRODUCTS.england_premium_tenancy_agreement.displayPrice}`,
     });
     expect(premiumProductCta).toHaveAttribute(
       'href',
-      'https://landlordheaven.co.uk/wizard?product=ast_premium&src=product_page&topic=tenancy',
+      '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=products_ast_hub&topic=tenancy',
     );
 
     const englandCta = screen.getByRole('link', {
-      name: `Create England agreement - ${PRODUCTS.ast_standard.displayPrice}`,
+      name: 'View England agreement routes',
     });
-    expect(englandCta.getAttribute('href')).toContain('jurisdiction=england');
+    expect(englandCta).toHaveAttribute('href', '/products/ast');
 
     const englandPremiumCta = screen.getByRole('link', {
-      name: `Create premium England agreement - ${PRODUCTS.ast_premium.displayPrice}`,
+      name: `Start England Premium - ${PRODUCTS.england_premium_tenancy_agreement.displayPrice}`,
     });
-    expect(englandPremiumCta.getAttribute('href')).toContain('jurisdiction=england');
+    expect(englandPremiumCta.getAttribute('href')).toContain(
+      'product=england_premium_tenancy_agreement',
+    );
 
     const niPremiumCta = screen.getByRole('link', {
       name: `Create premium Northern Ireland agreement - ${PRODUCTS.ast_premium.displayPrice}`,
     });
     expect(niPremiumCta.getAttribute('href')).toContain('jurisdiction=northern-ireland');
+  });
+
+  it('renders the shared England tenancy product card images', () => {
+    render(<ASTProductPage />);
+
+    for (const sku of ENGLAND_TENANCY_PRODUCT_ORDER) {
+      const image = ENGLAND_TENANCY_PRODUCT_IMAGES[sku];
+      expect(screen.getByAltText(image.alt)).toHaveAttribute('src', image.src);
+    }
   });
 
   it('renders the refreshed England update, FAQs, and closeout copy', () => {
@@ -192,12 +211,12 @@ describe('/products/ast page', () => {
 
     expect(
       screen.getByText(
-        /Start with the current England route, compare Standard and Premium clearly, and keep the other UK jurisdictions in view/i,
+        /Start with the current England route, compare Standard and Premium clearly, and use the Student, HMO \/ Shared House, or Lodger product/i,
       ),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        /Standard is designed for straightforward lets\. Premium is the stronger fit for HMOs, student lets, guarantors, sharers, and other more complex arrangements\./i,
+        /Standard is designed for straightforward lets\. Premium is the stronger fit for ordinary residential lets that need fuller drafting\./i,
       ),
     ).toBeInTheDocument();
 

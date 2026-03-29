@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ENGLAND_TENANCY_PRODUCT_IMAGES,
   ENGLAND_MODERN_TENANCY_PRODUCTS,
   ENGLAND_TENANCY_PRODUCT_ORDER,
   getEnglandCanonicalTenancyProduct,
@@ -18,6 +19,19 @@ describe('england-product-model', () => {
       'england_lodger_agreement',
     ]);
     expect(ENGLAND_TENANCY_PRODUCT_ORDER).toEqual(ENGLAND_MODERN_TENANCY_PRODUCTS);
+  });
+
+  it('keeps the shared England product image map aligned with the chooser order', () => {
+    expect(Object.keys(ENGLAND_TENANCY_PRODUCT_IMAGES)).toEqual(ENGLAND_TENANCY_PRODUCT_ORDER);
+    expect(
+      ENGLAND_TENANCY_PRODUCT_ORDER.map((sku) => ENGLAND_TENANCY_PRODUCT_IMAGES[sku].src)
+    ).toEqual([
+      '/images/standard_tenancy.webp',
+      '/images/premium_tenancy.webp',
+      '/images/student_tenency.webp',
+      '/images/hmo_tenency_agreement.webp',
+      '/images/room_let_agreement.webp',
+    ]);
   });
 
   it('maps legacy England AST aliases to their canonical modern products', () => {

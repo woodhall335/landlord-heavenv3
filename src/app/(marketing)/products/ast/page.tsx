@@ -16,6 +16,10 @@ import {
   pricingItemListSchema,
 } from '@/lib/seo/structured-data';
 import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  ENGLAND_TENANCY_PRODUCT_IMAGES,
+  type EnglandModernTenancyProductSku,
+} from '@/lib/tenancy/england-product-model';
 
 const canonicalUrl = getCanonicalUrl('/products/ast');
 const chooserWizardHref =
@@ -44,6 +48,7 @@ const ENGLAND_UPDATE_PRIMARY_BUTTON_CLASS = `${ENGLAND_UPDATE_BUTTON_BASE_CLASS}
 const ENGLAND_UPDATE_SECONDARY_BUTTON_CLASS = `${ENGLAND_UPDATE_BUTTON_BASE_CLASS} border border-white/25 bg-white/10 text-white hover:border-white/40 hover:bg-white/15`;
 
 type ProductCardData = {
+  sku: EnglandModernTenancyProductSku;
   name: string;
   price: string;
   kicker: string;
@@ -143,6 +148,7 @@ const explainerPoints: ExplainerPoint[] = [
 
 const productOptions: ProductCardData[] = [
   {
+    sku: 'england_standard_tenancy_agreement',
     name: 'Assured Periodic Tenancy Agreement',
     price: PRODUCTS.england_standard_tenancy_agreement.displayPrice,
     kicker: 'Best for straightforward lets',
@@ -161,6 +167,7 @@ const productOptions: ProductCardData[] = [
     ctaLabel: `Start Standard Tenancy Agreement - ${PRODUCTS.england_standard_tenancy_agreement.displayPrice}`,
   },
   {
+    sku: 'england_premium_tenancy_agreement',
     name: 'Premium Assured Periodic Tenancy Agreement',
     price: PRODUCTS.england_premium_tenancy_agreement.displayPrice,
     kicker: 'Fuller ordinary-residential route',
@@ -180,6 +187,7 @@ const productOptions: ProductCardData[] = [
     featured: true,
   },
   {
+    sku: 'england_student_tenancy_agreement',
     name: 'Student Tenancy Agreement',
     price: PRODUCTS.england_student_tenancy_agreement.displayPrice,
     kicker: 'Student-specific route',
@@ -197,6 +205,7 @@ const productOptions: ProductCardData[] = [
     ctaLabel: `Start Student Tenancy Agreement - ${PRODUCTS.england_student_tenancy_agreement.displayPrice}`,
   },
   {
+    sku: 'england_hmo_shared_house_tenancy_agreement',
     name: 'HMO / Shared House Tenancy Agreement',
     price: PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice,
     kicker: 'Shared-house and HMO route',
@@ -214,6 +223,7 @@ const productOptions: ProductCardData[] = [
     ctaLabel: `Start HMO / Shared House Agreement - ${PRODUCTS.england_hmo_shared_house_tenancy_agreement.displayPrice}`,
   },
   {
+    sku: 'england_lodger_agreement',
     name: 'Room Let / Lodger Agreement',
     price: PRODUCTS.england_lodger_agreement.displayPrice,
     kicker: 'Resident-landlord route',
@@ -500,6 +510,7 @@ export const metadata: Metadata = {
 };
 
 function ProductCard({
+  sku,
   name,
   price,
   kicker,
@@ -510,46 +521,63 @@ function ProductCard({
   ctaLabel,
   featured,
 }: ProductCardData) {
+  const image = ENGLAND_TENANCY_PRODUCT_IMAGES[sku];
+
   return (
     <div
-      className={`group flex h-full flex-col rounded-[2.2rem] border p-6 transition duration-200 hover:-translate-y-1 hover:shadow-[0_26px_64px_rgba(31,41,55,0.11)] md:p-8 ${featured ? 'border-[#D9CBFF] bg-gradient-to-br from-[#F4EFFF] via-white to-[#FBF9FF] shadow-[0_24px_60px_rgba(106,64,181,0.12)]' : 'border-[#E3E2DD] bg-gradient-to-br from-white via-[#FCFBF8] to-[#F6F2EB] shadow-[0_18px_42px_rgba(31,41,55,0.06)]'}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-[2.2rem] border transition duration-200 hover:-translate-y-1 hover:shadow-[0_26px_64px_rgba(31,41,55,0.11)] ${featured ? 'border-[#D9CBFF] bg-gradient-to-br from-[#F4EFFF] via-white to-[#FBF9FF] shadow-[0_24px_60px_rgba(106,64,181,0.12)]' : 'border-[#E3E2DD] bg-gradient-to-br from-white via-[#FCFBF8] to-[#F6F2EB] shadow-[0_18px_42px_rgba(31,41,55,0.06)]'}`}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <span
-            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${featured ? 'bg-[#EEE6FF] text-[#7C3AED]' : 'bg-[#F1ECE4] text-[#5F5A4E]'}`}
-          >
-            {kicker}
-          </span>
-          <h3 className="mt-4 text-2xl font-bold tracking-tight text-[#141B2D]">{name}</h3>
-        </div>
-
-        <div
-          className={`rounded-2xl border px-4 py-3 text-right shadow-sm backdrop-blur-sm ${featured ? 'border-[#D9CBFF] bg-white/90' : 'border-[#E6E2D9] bg-white/85'}`}
-        >
-          <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6F7191]">
-            From
-          </div>
-          <div className="text-xl font-bold text-[#141B2D]">{price}</div>
-        </div>
+      <div
+        className={`relative aspect-[16/9] border-b ${featured ? 'border-[#E8DEFF] bg-[#F4EFFF]' : 'border-[#ECE3D8] bg-[#F3EEE7]'}`}
+      >
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
+          className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#141B2D]/20 via-transparent to-transparent" />
       </div>
 
-      <p className="mt-5 text-base font-semibold leading-7 text-[#1E2A44]">Best for: {bestFor}</p>
-      <p className="mt-4 text-base leading-7 text-[#546075]">{description}</p>
+      <div className="flex flex-1 flex-col p-6 md:p-8">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <span
+              className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${featured ? 'bg-[#EEE6FF] text-[#7C3AED]' : 'bg-[#F1ECE4] text-[#5F5A4E]'}`}
+            >
+              {kicker}
+            </span>
+            <h3 className="mt-4 text-2xl font-bold tracking-tight text-[#141B2D]">{name}</h3>
+          </div>
 
-      <ul className="mt-6 flex-1 space-y-3">
-        {points.map((point) => (
-          <li key={point} className="flex items-start gap-3 text-[15px] leading-7 text-[#1E2A44]">
-            <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
-            <span>{point}</span>
-          </li>
-        ))}
-      </ul>
+          <div
+            className={`rounded-2xl border px-4 py-3 text-right shadow-sm backdrop-blur-sm ${featured ? 'border-[#D9CBFF] bg-white/90' : 'border-[#E6E2D9] bg-white/85'}`}
+          >
+            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6F7191]">
+              From
+            </div>
+            <div className="text-xl font-bold text-[#141B2D]">{price}</div>
+          </div>
+        </div>
 
-      <div className="mt-8 border-t border-white/60 pt-6">
-        <Link href={href} className={`${PRIMARY_BUTTON_CLASS} w-full sm:w-auto`}>
-          {ctaLabel}
-        </Link>
+        <p className="mt-5 text-base font-semibold leading-7 text-[#1E2A44]">Best for: {bestFor}</p>
+        <p className="mt-4 text-base leading-7 text-[#546075]">{description}</p>
+
+        <ul className="mt-6 flex-1 space-y-3">
+          {points.map((point) => (
+            <li key={point} className="flex items-start gap-3 text-[15px] leading-7 text-[#1E2A44]">
+              <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
+              <span>{point}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-8 border-t border-white/60 pt-6">
+          <Link href={href} className={`${PRIMARY_BUTTON_CLASS} w-full sm:w-auto`}>
+            {ctaLabel}
+          </Link>
+        </div>
       </div>
     </div>
   );
