@@ -8,6 +8,7 @@
 "use client";
 
 import { useState } from "react";
+import type { ComponentType } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -75,6 +76,41 @@ const homeQuickLinks = [
     icon: RiShieldCheckLine,
   },
 ];
+
+type WhyLandlordsUseCard = {
+  title: string;
+  body: string;
+  imageSrc: string;
+  imageAlt: string;
+  icon: ComponentType<{ className?: string }>;
+};
+
+const whyLandlordsUseCards = [
+  {
+    title: "Know your route before you serve anything",
+    body:
+      "If your tenant has stopped paying rent, breached the tenancy, or left you unsure which notice you need, we help you move quickly without losing time on the wrong route.",
+    imageSrc: "/images/decision_image.webp",
+    imageAlt: "Landlord notice route decision illustration",
+    icon: RiFlashlightLine,
+  },
+  {
+    title: "Avoid invalid notices and expensive possession delays",
+    body:
+      "We flag the problems that can kill your case before you generate, so you do not end up serving again and losing more time.",
+    imageSrc: "/images/validation_image.webp",
+    imageAlt: "Landlord notice validation illustration",
+    icon: RiShieldCheckLine,
+  },
+  {
+    title: "Generate court-ready landlord documents for the right UK jurisdiction",
+    body:
+      "Build eviction notices, rent arrears documents, and supporting paperwork with guidance that reflects the rules for England, Wales, Scotland, and Northern Ireland.",
+    imageSrc: "/images/jurisdiction_image.webp",
+    imageAlt: "UK jurisdiction landlord document illustration",
+    icon: RiGlobalLine,
+  },
+] satisfies WhyLandlordsUseCard[];
 
 export default function HomeContent() {
   const router = useRouter();
@@ -482,11 +518,11 @@ export default function HomeContent() {
   );
 }
 
-function WhyLandlordsUseSection() {
+export function WhyLandlordsUseSection() {
   return (
     <section className="py-20 md:py-24 bg-[#f7f7fb]">
       <Container>
-        <div className="max-w-6xl mx-auto">
+        <div className="mx-auto max-w-6xl rounded-[2.5rem] border border-[#e6e1fb] bg-[linear-gradient(180deg,#fbfaff_0%,#f8f6ff_100%)] px-6 py-8 shadow-[0_18px_60px_rgba(121,83,214,0.08)] md:px-10 md:py-10">
           <div className="text-center mb-12 md:mb-14">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2.5 mb-5">
               <RiShieldCheckLine className="w-4 h-4 text-primary" />
@@ -504,45 +540,42 @@ function WhyLandlordsUseSection() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
-            <div className="rounded-3xl border border-[#e2e2f0] bg-white p-8 shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <RiFlashlightLine className="h-7 w-7" />
-              </div>
-              <h3 className="text-2xl font-bold text-[#18184d] mb-3">
-                Know your route before you serve anything
-              </h3>
-              <p className="text-lg leading-relaxed text-[#4b4b63]">
-                If your tenant has stopped paying rent, breached the tenancy, or
-                left you unsure which notice you need, we help you move quickly
-                without losing time on the wrong route.
-              </p>
-            </div>
+            {whyLandlordsUseCards.map((card) => {
+              const Icon = card.icon;
 
-            <div className="rounded-3xl border border-[#e2e2f0] bg-white p-8 shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <RiShieldCheckLine className="h-7 w-7" />
-              </div>
-              <h3 className="text-2xl font-bold text-[#18184d] mb-3">
-                Avoid invalid notices and expensive possession delays
-              </h3>
-              <p className="text-lg leading-relaxed text-[#4b4b63]">
-                We flag the problems that can kill your case before you generate,
-                so you do not end up serving again and losing more time.
-              </p>
-            </div>
+              return (
+                <article
+                  key={card.title}
+                  className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#e5def8] bg-[linear-gradient(180deg,#ffffff_0%,#faf8ff_100%)] shadow-[0_10px_30px_rgba(115,90,196,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(115,90,196,0.12)]"
+                >
+                  <div className="relative px-7 pt-7">
+                    <div className="absolute left-7 top-7 z-10 inline-flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-primary/10 text-primary shadow-[0_10px_24px_rgba(139,92,246,0.14)] backdrop-blur-sm">
+                      <Icon className="h-7 w-7" />
+                    </div>
+                    <div className="relative overflow-hidden rounded-[1.75rem] bg-[radial-gradient(circle_at_top,_rgba(190,172,255,0.24),_rgba(255,255,255,0.96)_65%)] px-4 pb-1 pt-4">
+                      <div className="relative mx-auto aspect-[4/3] w-full max-w-[18rem]">
+                        <Image
+                          src={card.imageSrc}
+                          alt={card.imageAlt}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 30vw"
+                          className="object-contain object-center"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-            <div className="rounded-3xl border border-[#e2e2f0] bg-white p-8 shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <RiGlobalLine className="h-7 w-7" />
-              </div>
-              <h3 className="text-2xl font-bold text-[#18184d] mb-3">
-                Generate court-ready landlord documents for the right UK jurisdiction
-              </h3>
-              <p className="text-lg leading-relaxed text-[#4b4b63]">
-                Build eviction notices, rent arrears documents, and supporting paperwork with guidance that
-                reflects the rules for England, Wales, Scotland, and Northern Ireland.
-              </p>
-            </div>
+                  <div className="flex flex-1 flex-col px-8 pb-8 pt-6">
+                    <h3 className="mb-4 text-2xl font-bold leading-tight text-[#18184d]">
+                      {card.title}
+                    </h3>
+                    <p className="text-lg leading-relaxed text-[#4b4b63]">
+                      {card.body}
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           <div className="mt-12 text-center">
