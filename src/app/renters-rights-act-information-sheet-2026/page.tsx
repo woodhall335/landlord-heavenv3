@@ -22,29 +22,29 @@ const officialGovUkUrl =
 
 const faqs: FAQItem[] = [
   {
-    question: "Who must give the Renters' Rights Act Information Sheet 2026?",
+    question: "Do I still need the Information Sheet if I already have a tenancy agreement?",
     answer:
-      "It must be given for England assured or assured shorthold tenancies that were created before 1 May 2026 and have a wholly or partly written record of terms. A copy should be given to every named tenant.",
+      "Possibly, yes. The Information Sheet requirement is separate from the question of whether your current tenancy agreement is still suitable. Many landlords wrongly assume an older agreement removes the need to review their paperwork position.",
   },
   {
-    question: 'When does the Information Sheet have to be given?',
+    question: 'Does giving the Information Sheet make my old tenancy agreement safe to rely on?',
     answer:
-      'For qualifying England tenancies, it must be given by 31 May 2026. Landlords and agents should keep evidence of how and when it was sent or handed over.',
+      "No. The Information Sheet is a tenant-facing government document. It does not update, replace, fix, or validate an older tenancy agreement.",
   },
   {
-    question: 'Can I just text or email a link to the PDF?',
+    question: 'Can I just keep using my existing tenancy agreement after 1 May 2026?',
     answer:
-      'No. GOV.UK says a link alone is not valid. The tenant should receive the exact PDF itself, either as a hard copy or as an electronic attachment.',
+      "That may carry risk. Older agreements were drafted for a different framework and may no longer work in the way landlords expect when disputes, notices, or enforcement issues arise.",
   },
   {
-    question: 'Do I need to replace the tenancy agreement as well?',
+    question: 'Can I send tenants a link to the PDF instead of the file itself?',
     answer:
-      'No. GOV.UK says landlords do not need to reissue an existing written tenancy agreement just because of this Information Sheet requirement.',
+      'No. GOV.UK says a link alone is not enough. The tenant should receive the PDF itself, either as a hard copy or as an electronic attachment.',
   },
   {
-    question: 'What if the tenancy was entirely verbal before 1 May 2026?',
+    question: 'What is the real risk of relying on old tenancy paperwork?',
     answer:
-      'In that case this Information Sheet should not be used as the substitute. GOV.UK says certain written information about the key terms of the tenancy should be provided instead.',
+      'The risk is that landlords assume their existing agreement still protects them when it may contain outdated wording, gaps, or terms that do not properly support the tenancy position under the new regime.',
   },
 ];
 
@@ -53,20 +53,20 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
   description:
-    "Free PDF download of England's Renters' Rights Act Information Sheet 2026. See who must receive it by 31 May 2026 and what changes from 1 May 2026.",
+    "Download the free Renters' Rights Act Information Sheet 2026 PDF and understand why relying on an older tenancy agreement may expose landlords to risk under the new England regime.",
   keywords: [
     'renters rights act information sheet 2026',
     'renters rights information sheet pdf',
     'renters rights act information sheet download',
-    'information sheet for tenants england',
-    'free renters rights act pdf',
+    'england tenancy agreement risk 2026',
+    'old tenancy agreement renters rights act',
     'renters rights act information sheet england',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
     description:
-      "Download the England Renters' Rights Act Information Sheet 2026 PDF and see who must receive it before 31 May 2026.",
+      "Download the England Renters' Rights Act Information Sheet 2026 PDF and see why many existing tenancy agreements may no longer be safe to rely on.",
     url: canonicalUrl,
     type: 'website',
   },
@@ -101,39 +101,129 @@ export default function RentersRightsInformationSheet2026Page() {
       <main className="min-h-screen bg-[#FCFBF8]">
         <UniversalHero
           badge="Free England PDF Download"
-          title="Renters' Rights Act Information Sheet 2026"
-          subtitle="Download the official England tenant information sheet as a free PDF, then see when it must be given, who must receive it, and how Landlord Heaven supports the current England tenancy framework."
+          title="Download the Information Sheet. Do not assume your old tenancy agreement is still safe."
+          subtitle="Get the official Renters' Rights Act Information Sheet 2026 PDF, then understand the real danger: many existing tenancy agreements were written for a different framework and may no longer protect landlords in the way they expect."
           primaryCta={{ label: 'Download free PDF', href: downloadHref }}
-          secondaryCta={{ label: 'View England tenancy agreements', href: '/products/ast' }}
+          secondaryCta={{ label: 'Replace outdated tenancy paperwork', href: '/products/ast' }}
           mediaSrc="/images/wizard-icons/05-compliance.png"
-          mediaAlt="Illustration showing tenancy compliance checks and document review"
+          mediaAlt="Illustration showing document review and tenancy paperwork risk"
           mascotDecorativeOnMobile={false}
           mascotDecorativeOnDesktop={false}
           showTrustPositioningBar
-          trustText="England landlord guidance updated for the current Renters' Rights position"
+          trustText="Older tenancy agreements can create hidden legal and enforcement risk under the new regime"
         />
 
         <Container className="py-12 md:py-16">
-          <section className="mx-auto max-w-5xl rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-              Free official document
+          <section className="mx-auto max-w-5xl rounded-[2rem] border border-[#F3D3D3] bg-gradient-to-br from-[#FFF5F5] via-white to-[#FFF8F8] p-6 shadow-[0_14px_32px_rgba(127,29,29,0.08)] md:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#B91C1C]">
+              The hidden risk most landlords miss
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-              Free download of the Renters' Rights Act Information Sheet 2026
+              The Information Sheet does not make an old tenancy agreement safe
             </h2>
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
-                Looking for the Renters' Rights Act Information Sheet 2026? This page gives England
-                landlords a free PDF download together with the key rules on when it must be used.
-                The Information Sheet was published on <strong>20 March 2026</strong> and is part of the
-                England transition into the new private renting framework from <strong>1 May 2026</strong>.
+                Looking for the Renters&apos; Rights Act Information Sheet 2026? You can
+                download the free PDF here. But the bigger issue is what many landlords do
+                next: they assume their existing tenancy agreement is still fine.
               </p>
               <p>
-                The PDF on this page is the same file Landlord Heaven stores in its England tenancy
-                workflow so landlords can access it quickly. GOV.UK remains the official publication
-                source, so you should still check the government page before relying on the document
-                in case a later replacement is issued.
+                That assumption can be dangerous. The legal framework changes from{' '}
+                <strong>1 May 2026</strong>, and many older tenancy agreements were drafted
+                for a system that no longer exists in the same way. The Information Sheet is
+                only a government handout for tenants. It does <strong>not</strong> update,
+                repair, validate, or future-proof older tenancy paperwork.
               </p>
+              <p>
+                If your current agreement was created before the new regime, relying on it
+                without reviewing your paperwork position may create avoidable risk later,
+                especially if you need to enforce terms, recover possession, or deal with a
+                dispute.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              <a href={downloadHref} className="hero-btn-primary">
+                Download free PDF
+              </a>
+              <Link href="/products/ast" className="hero-btn-secondary">
+                Replace outdated tenancy paperwork
+              </Link>
+            </div>
+          </section>
+
+          <section className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-3">
+            <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                Problem
+              </p>
+              <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#141B2D]">
+                Most existing agreements were built for the old system
+              </h3>
+              <p className="mt-4 text-base leading-7 text-[#546075]">
+                Many landlords already have a tenancy agreement in place and assume that
+                means they are covered. In reality, older agreements may now sit awkwardly
+                against the new framework.
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                Risk
+              </p>
+              <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#141B2D]">
+                The Information Sheet does not fix old paperwork
+              </h3>
+              <p className="mt-4 text-base leading-7 text-[#546075]">
+                Giving tenants the correct PDF may be necessary, but it does not remove the
+                separate risk of relying on wording, structure, or assumptions from an older
+                agreement.
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                Safer route
+              </p>
+              <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#141B2D]">
+                Move into a current agreement flow instead of guessing
+              </h3>
+              <p className="mt-4 text-base leading-7 text-[#546075]">
+                Rather than assuming an older tenancy agreement still works, landlords should
+                move into a structured document route built for the current framework.
+              </p>
+            </div>
+          </section>
+
+          <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+              Free download + practical warning
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+              What this page gives you
+            </h2>
+            <div className="mt-6 grid gap-6 md:grid-cols-2">
+              <div>
+                <h3 className="text-xl font-semibold text-[#141B2D]">
+                  What you can do here
+                </h3>
+                <ul className="mt-4 list-disc space-y-3 pl-6 text-lg leading-8 text-[#546075]">
+                  <li>Download the Renters&apos; Rights Act Information Sheet 2026 PDF</li>
+                  <li>See when it must be given and how it should be delivered</li>
+                  <li>Understand why older tenancy agreements can create hidden risk</li>
+                  <li>Move into a safer tenancy paperwork route if needed</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-[#141B2D]">
+                  What this page does not do
+                </h3>
+                <ul className="mt-4 list-disc space-y-3 pl-6 text-lg leading-8 text-[#546075]">
+                  <li>It does not say an existing tenancy agreement is still safe</li>
+                  <li>It does not suggest the Information Sheet updates old paperwork</li>
+                  <li>It does not imply your current documents are still fit for purpose</li>
+                  <li>It does not remove the need to review your tenancy document position</li>
+                </ul>
+              </div>
             </div>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <a href={downloadHref} className="hero-btn-primary">
@@ -150,25 +240,28 @@ export default function RentersRightsInformationSheet2026Page() {
             </div>
           </section>
 
-          <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
-            <h2 className="text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-              What this Information Sheet is
+          <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#FDE68A] bg-[#FFFBEB] p-6 shadow-[0_14px_32px_rgba(146,64,14,0.06)] md:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#B45309]">
+              Why landlords get caught out
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+              The risky assumption: “I already have an agreement, so I&apos;m covered.”
             </h2>
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
-                The Renters' Rights Act Information Sheet 2026 is the government document that
-                explains to tenants how their tenancy may be affected by the changes introduced under
-                the new England regime. It is a tenant-facing document, but landlords and letting
-                agents need to know exactly when it has to be given and how to keep a proper record
-                of delivery.
+                This is the mistake that creates exposure. A landlord has a signed tenancy
+                agreement, so they assume the safest option is to keep using it. But older
+                tenancy agreements were drafted for a different legal structure.
               </p>
               <p>
-                This matters because many landlords assume the reform is only about new agreements.
-                In reality, one of the big practical issues is what happens to older England
-                tenancies that were already in place before <strong>1 May 2026</strong>. For qualifying
-                written or partly written assured and assured shorthold tenancies, the answer is not
-                usually to replace the agreement. Instead, the landlord or agent may need to give the
-                tenant this Information Sheet by <strong>31 May 2026</strong>.
+                That means the document you already have may no longer work in the way you
+                think it does. Some provisions may be outdated. Some assumptions may no
+                longer hold. Some gaps may only become obvious when you need to take action.
+              </p>
+              <p>
+                By the time a problem appears, it is usually too late. That is why relying on
+                an older agreement without reviewing your position can be more dangerous than
+                landlords realise.
               </p>
             </div>
           </section>
@@ -176,10 +269,10 @@ export default function RentersRightsInformationSheet2026Page() {
           <section className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-2">
             <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
               <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                Who must give it
+                When the Information Sheet may be needed
               </h2>
               <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
-                <p>You should give this Information Sheet if the tenancy:</p>
+                <p>You should review whether it applies where the tenancy:</p>
                 <ul className="list-disc space-y-3 pl-6">
                   <li>is in England</li>
                   <li>is an assured or assured shorthold tenancy</li>
@@ -187,88 +280,92 @@ export default function RentersRightsInformationSheet2026Page() {
                   <li>has a wholly or partly written record of terms</li>
                 </ul>
                 <p>
-                  A copy should be given to <strong>every named tenant</strong>. If a letting agent
-                  manages the property, GOV.UK says the agent should provide it even if the landlord
-                  has also done so.
+                  A copy should be given to <strong>every named tenant</strong>. If a letting
+                  agent manages the property, GOV.UK says the agent should provide it even if
+                  the landlord has also done so.
                 </p>
               </div>
             </div>
 
             <div className="rounded-[2rem] border border-[#D9D7F7] bg-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
               <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                When and how it must be given
+                How it should be given
               </h2>
               <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
                 <p>
-                  The deadline is <strong>31 May 2026</strong>. For qualifying written or partly written
-                  England tenancies, that is the key date landlords should be working toward.
+                  The deadline is <strong>31 May 2026</strong>. For qualifying tenancies, the
+                  exact PDF should be given to the tenant.
                 </p>
-                <p>
-                  GOV.UK says the <strong>exact PDF</strong> should be given. It can be:
-                </p>
+                <p>GOV.UK says it can be:</p>
                 <ul className="list-disc space-y-3 pl-6">
                   <li>printed and posted</li>
                   <li>handed over as a hard copy</li>
                   <li>sent electronically as a PDF attachment</li>
                 </ul>
                 <p>
-                  A <strong>link alone is not valid</strong>. That is why this page makes the PDF easy to
-                  download directly rather than only linking out to background guidance.
+                  A <strong>link alone is not valid</strong>. The tenant should receive the
+                  PDF itself, not just a page directing them elsewhere.
                 </p>
               </div>
             </div>
           </section>
 
-          <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
-            <h2 className="text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-              When this Information Sheet should not be used
+          <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#F3D3D3] bg-[#FFF6F6] p-6 shadow-[0_14px_32px_rgba(127,29,29,0.08)] md:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#B91C1C]">
+              Important warning
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+              What the Information Sheet does not do
             </h2>
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
-                The Information Sheet does not replace every other England transition task. If the
-                tenancy was entirely verbal before <strong>1 May 2026</strong>, GOV.UK says landlords
-                should not use this sheet as a substitute. Instead, certain written information about
-                the key terms of the tenancy should be given.
+                The Information Sheet is not a substitute for reviewing your tenancy
+                paperwork. It does not rewrite old clauses, fix structural weaknesses,
+                modernise outdated wording, or remove uncertainty around older agreements.
               </p>
               <p>
-                GOV.UK also says landlords do <strong>not</strong> need to reissue an existing written
-                tenancy agreement just because of this requirement. That point is important because
-                many landlords arrive thinking the safe option is to start from scratch. In most
-                written transition cases, the focus should be on getting the Information Sheet to the
-                right tenants in the right format by <strong>31 May 2026</strong>, not on replacing the
-                original agreement.
+                GOV.UK may say you do not have to reissue a tenancy agreement purely because
+                of the Information Sheet requirement. But that is not the same as saying your
+                current agreement is strong, suitable, or low-risk under the new regime.
               </p>
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
-                <p className="text-base leading-7 text-amber-900">
-                  Landlord Heaven provides this download for convenience, but GOV.UK is still the
-                  official publication source. If the government replaces the PDF in future, landlords
-                  should use the current official version.
+              <p>
+                Those are different questions. One is whether the PDF must be given. The
+                other is whether your existing tenancy agreement is still something you should
+                rely on. Landlords should not confuse the two.
+              </p>
+              <div className="rounded-2xl border border-red-200 bg-red-50 p-5">
+                <p className="text-base leading-7 text-red-900">
+                  Relying on outdated tenancy paperwork can create problems later when you
+                  need certainty most. The risk is not always visible at the start. It often
+                  appears when a tenant dispute, notice issue, arrears problem, or possession
+                  step forces the document to be tested.
                 </p>
               </div>
             </div>
           </section>
 
           <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-              Need more than the free Information Sheet?
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+              Safer next step
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-              Use Landlord Heaven for the full England paperwork journey
+              Do not stop at the free PDF
             </h2>
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
-                The Information Sheet is only one part of the wider England compliance picture.
-                Landlord Heaven also offers Standard, Premium, Student, HMO / Shared House, and
-                Lodger England tenancy agreements, compliance-focused workflow support, and other
-                landlord products that help users move from legal change awareness into practical
-                action.
+                The free Information Sheet is only one small part of the wider paperwork
+                picture. It is not a replacement for a tenancy agreement strategy.
               </p>
               <p>
-                Our England tenancy-agreement routes are updated for the current Renters' Rights
-                legislation and the current England framework. That means landlords can move beyond
-                a single free PDF and into a document flow built around current tenancy structure,
-                transition handling, prescribed information, and the wider bundle of paperwork they
-                may actually need.
+                Landlord Heaven helps landlords move away from legacy paperwork and into
+                structured agreement routes built for the current system. Instead of guessing
+                whether an old tenancy agreement still works, you can move into a document
+                flow designed for how tenancies now operate.
+              </p>
+              <p>
+                That matters because landlords usually do not lose time and money on the day
+                they download a PDF. They lose it later when older paperwork turns out not to
+                support the action they need to take.
               </p>
             </div>
 
@@ -277,9 +374,9 @@ export default function RentersRightsInformationSheet2026Page() {
                 href="/products/ast"
                 className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
               >
-                <h3 className="text-lg font-semibold text-[#141B2D]">England tenancy agreements</h3>
+                <h3 className="text-lg font-semibold text-[#141B2D]">Tenancy agreements</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
-                  Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes.
+                  Replace outdated agreements with a structured tenancy document route.
                 </p>
               </Link>
               <Link
@@ -288,7 +385,7 @@ export default function RentersRightsInformationSheet2026Page() {
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Notice Only</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
-                  Generate the right notice once the tenancy file is in order.
+                  Take the next step once the tenancy paperwork position is properly handled.
                 </p>
               </Link>
               <Link
@@ -297,7 +394,7 @@ export default function RentersRightsInformationSheet2026Page() {
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Complete Eviction Pack</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
-                  End-to-end England possession paperwork and guidance.
+                  Move from paperwork risk into an end-to-end possession route where needed.
                 </p>
               </Link>
               <Link
@@ -306,17 +403,17 @@ export default function RentersRightsInformationSheet2026Page() {
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Money Claim Pack</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
-                  Recover rent arrears, damage costs, and other tenant debt.
+                  Recover arrears and tenant debt once the underlying file is in better order.
                 </p>
               </Link>
             </div>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link href="/products/ast" className="hero-btn-primary">
-                View England tenancy agreements
+                Replace outdated tenancy paperwork
               </Link>
               <a href={downloadHref} className="hero-btn-secondary">
-                Download free PDF again
+                Download free PDF
               </a>
             </div>
           </section>
@@ -324,7 +421,7 @@ export default function RentersRightsInformationSheet2026Page() {
           <div className="mx-auto mt-12 max-w-5xl">
             <FAQSection
               title="Renters' Rights Act Information Sheet 2026 FAQs"
-              intro="Short answers for landlords who need the free PDF and want the key England rules in one place."
+              intro="Short answers for landlords who need the free PDF and want to understand the risk of relying on older tenancy agreements."
               faqs={faqs}
               showContactCTA={false}
               variant="gray"
@@ -333,21 +430,22 @@ export default function RentersRightsInformationSheet2026Page() {
 
           <section className="mx-auto mt-12 max-w-5xl rounded-[2.5rem] bg-gradient-to-br from-[#201739] via-[#31205B] to-[#5641A4] p-8 text-center text-white shadow-[0_28px_72px_rgba(46,29,86,0.28)] md:p-10">
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#C8BCFF]">
-              Ready to act
+              Final step
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-5xl">
-              Download the PDF, then move to the right England workflow
+              Download the PDF. Then stop relying on paperwork written for the old regime.
             </h2>
             <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-[#E3DCF8]">
-              Use the free Information Sheet where it is required, then move into the current England
-              agreement or landlord product route if you need more than the government handout alone.
+              The Information Sheet may be necessary, but it is not protection. If your
+              tenancy agreement was created before the new framework, the safer move is to
+              replace guesswork with a current document route.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
               <a href={downloadHref} className="hero-btn-secondary">
                 Download free PDF
               </a>
               <Link href="/products/ast" className="hero-btn-primary">
-                View England tenancy agreements
+                Replace outdated tenancy paperwork
               </Link>
             </div>
           </section>
