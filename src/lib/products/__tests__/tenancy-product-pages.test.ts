@@ -98,4 +98,19 @@ describe('tenancy product pages', () => {
     expect(astHubSource).toContain('Assured Periodic Tenancy Agreement');
     expect(astHubSource).toContain('Premium Assured Periodic Tenancy Agreement');
   });
+
+  it('Standard and Premium England pages add new-tenancy search-intent copy without dropping assured periodic primacy', () => {
+    const standardSource = readSource('src/app/standard-tenancy-agreement/page.tsx');
+    const premiumSource = readSource('src/app/premium-tenancy-agreement/page.tsx');
+
+    expect(standardSource).toContain('Assured Periodic Tenancy Agreement England');
+    expect(standardSource).toContain('Renters Rights Act tenancy agreement');
+    expect(standardSource).toContain('new tenancy agreement generator');
+    expect(standardSource).toContain('legacyNotice=');
+
+    expect(premiumSource).toContain('Premium Assured Periodic Tenancy Agreement England');
+    expect(premiumSource).toContain('Renters Rights Act tenancy agreement');
+    expect(premiumSource).toContain('new tenancy agreement generator');
+    expect(premiumSource).toContain('legacyNotice=');
+  });
 });
