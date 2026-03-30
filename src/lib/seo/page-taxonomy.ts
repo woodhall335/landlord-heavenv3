@@ -2979,8 +2979,8 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     freshnessRequired: true,
     consolidationStatus: 'bridge_live',
   }),
-  '/tenancy-agreement-template': makeEntry('/tenancy-agreement-template', {
-    ...tenancyEntry('/tenancy-agreement-template', '/assured-periodic-tenancy-agreement', {
+  '/assured-periodic-tenancy-agreement': makeEntry('/assured-periodic-tenancy-agreement', {
+    ...tenancyEntry('/assured-periodic-tenancy-agreement', '/tenancy-agreement-template', {
       canonicalTarget: '/tenancy-agreement-template',
     }),
     pageRole: 'hub',
