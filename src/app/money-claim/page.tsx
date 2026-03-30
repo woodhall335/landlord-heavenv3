@@ -1,298 +1,466 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  FileText,
+  Gavel,
+  Scale,
+} from 'lucide-react';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { UniversalHero } from '@/components/landing/UniversalHero';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
+import { EnglandMoneyClaimPreview } from '@/components/seo/EnglandMoneyClaimPreview';
 import { Container } from '@/components/ui/Container';
-import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
-import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { getMoneyClaimPreviewData } from '@/lib/previews/moneyClaimPreviews';
+import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
+import {
+  blogLinks,
+  guideLinks,
+  moneyClaimForms,
+  moneyClaimGuides,
+  productLinks,
+  toolLinks,
+} from '@/lib/seo/internal-links';
+import {
+  StructuredData,
+  breadcrumbSchema,
+  faqPageSchema,
+  type FAQItem,
+} from '@/lib/seo/structured-data';
 
 const canonicalUrl = getCanonicalUrl('/money-claim');
-const productHref = '/products/money-claim';
-
-export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
 export const metadata: Metadata = {
-  title: 'Money Claim for Landlords | Recover Rent Arrears and Tenant Debt',
+  title: 'Money Claim for Landlords (England) - Example & Guide',
   description:
-    'Court-focused landlord guide to recovering rent arrears and tenant debt: pre-action protocol, claim drafting, evidence, judgment and enforcement.',
-  alternates: { canonical: canonicalUrl },
+    'See an England landlord money claim example with pre-action, evidence, arrears, and filing guidance before you move into the claim-pack workflow.',
+  keywords: [
+    'money claim for landlords england',
+    'landlord money claim',
+    'recover tenant debt',
+    'claim unpaid rent landlord',
+    'claim unpaid bills tenant',
+  ],
+  alternates: {
+    canonical: canonicalUrl,
+  },
   openGraph: {
-    title: 'Money Claim for Landlords | Recover Rent Arrears and Tenant Debt',
+    title: 'Money Claim for Landlords (England) - Example & Guide',
     description:
-      'Practical landlord process for debt recovery from letter before action through county court judgment and enforcement.',
+      'England-first money claim hub with a real claim workflow example, evidence guidance, and the next step after the broad guide layer.',
     url: canonicalUrl,
-    type: 'website',
+    type: 'article',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
-const processSteps = [
+const pageFaqs: FAQItem[] = [
   {
-    title: '1) Confirm what is recoverable',
-    body: 'Separate contractual rent arrears, property damage, cleaning costs, and utility sums. Tie each item to tenancy terms, invoices, or evidence. Claims built on guesswork often fail at the response stage because tenants challenge unclear totals.',
+    question: 'What is a landlord money claim in England?',
+    answer:
+      'It is the county court debt-recovery route landlords use to recover unpaid rent, bills, damage costs, and other tenancy-related debts. The broad task is not just choosing a form. It is building one coherent file that explains what is owed, why it is owed, and what evidence supports each figure.',
   },
   {
-    title: '2) Follow pre-action protocol',
-    body: 'Send a proper letter before claim, supporting statement, and response form where required. Give the tenant a realistic response window and keep delivery evidence. Courts can penalise parties who skip this stage.',
+    question: 'Why does this page lead with the broad claim guide instead of the product page?',
+    answer:
+      'Because broad money-claim users usually need route clarity first. They need to see what the paperwork looks like, understand the pre-action and evidence steps, and decide whether the debt file is ready before they move into a transactional workflow.',
   },
   {
-    title: '3) Build a clear evidence bundle',
-    body: 'Prepare a dated chronology, rent ledger, tenancy agreement, communication records, and proof of loss. The aim is not volume; it is clarity and consistency from first arrear to issue date.',
+    question: 'Is unpaid rent still the strongest support route under this hub?',
+    answer:
+      'Yes. Unpaid rent remains the strongest support route because it is the most common landlord debt claim. It stays visible here, but it does not replace the broad owner page for wider money-claim intent.',
   },
   {
-    title: '4) Issue the claim on the right route',
-    body: 'Use MCOL where suitable, or issue with the correct claim form route if complexity requires it. The legal route should match claim size, defendant details, and the remedies sought.',
+    question: 'What documents matter before issuing a claim?',
+    answer:
+      'Landlords usually need a letter before claim, any required response forms, a schedule of debt or arrears, the claim form or MCOL-ready details, a particulars narrative, and supporting evidence that keeps the numbers and chronology consistent.',
   },
   {
-    title: '5) Handle response scenarios quickly',
-    body: 'If the tenant admits, negotiate payment or move for judgment terms. If they defend, tighten your particulars and evidence. If they do not respond, move promptly for default judgment.',
+    question: 'Should I use MCOL or the N1 route?',
+    answer:
+      'That depends on the claim. MCOL suits more straightforward money claims, while the N1 route can be better where the case needs more detailed particulars or a more flexible filing format. The important point is that the route should match the claim structure, not the other way around.',
   },
   {
-    title: '6) Enforce if judgment is unpaid',
-    body: 'A judgment is not the end if no money arrives. Plan enforcement in advance: attachment of earnings, third-party debt order, charging order, or enforcement officers depending on circumstances.',
+    question: 'Does the money claim pack replace the broad guide?',
+    answer:
+      'No. The pack is the primary transactional step after the broad guide has done its job. This page stays focused on route clarity, evidence structure, and what a landlord needs before they start generating claim documents.',
   },
 ];
 
-const claimHeads = [
-  'Rent arrears with a month-by-month schedule and payment history.',
-  'Damage beyond fair wear and tear, supported by check-in/check-out evidence and quotes.',
-  'Cleaning and clearance costs that are reasonably incurred and documented.',
-  'Unpaid utility or council-related sums where liability is clearly evidenced.',
-  'Interest and court fees where recoverable under the relevant rules.',
+const relatedResources = [
+  moneyClaimGuides.unpaidRent,
+  moneyClaimGuides.unpaidBills,
+  moneyClaimForms.letterBeforeAction,
+  moneyClaimForms.scheduleOfDebt,
+  moneyClaimGuides.mcolProcess,
+  moneyClaimGuides.ccjEnforcement,
+  productLinks.moneyClaim,
 ];
 
-const risks = [
-  'Skipping the pre-action stage because the debt seems obvious.',
-  'Using vague particulars that do not explain how the amount was calculated.',
-  'Claiming inflated or duplicated items that undermine credibility.',
-  'Failing to keep service records for letters and claim documents.',
-  'Assuming a CCJ guarantees payment without enforcement planning.',
-  'Mixing possession and debt strategy without deciding the primary objective.',
-];
+export default async function MoneyClaimPage() {
+  const previews = await getMoneyClaimPreviewData();
 
-export default function MoneyClaimPage() {
+  const pageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Money Claim for Landlords (England)',
+    description: metadata.description,
+    url: canonicalUrl,
+    about: [
+      { '@type': 'Thing', name: 'Landlord money claim' },
+      { '@type': 'Thing', name: 'Letter before claim' },
+      { '@type': 'Thing', name: 'Schedule of debt' },
+      { '@type': 'Thing', name: 'MCOL and N1 routes' },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fcfaff]">
+      <SeoLandingWrapper
+        pagePath="/money-claim"
+        pageTitle={metadata.title as string}
+        pageType="money"
+        jurisdiction="england"
+      />
+      <StructuredData data={pageSchema} />
+      <StructuredData data={faqPageSchema(pageFaqs)} />
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: 'Home', url: getCanonicalUrl('/') },
+          { name: 'Money Claim', url: canonicalUrl },
+        ])}
+      />
       <HeaderConfig mode="autoOnScroll" />
+
       <main>
-        <StructuredData
-          data={breadcrumbSchema([
-            { name: 'Home', url: getCanonicalUrl('/') },
-            { name: 'Money Claim', url: canonicalUrl },
-          ])}
-        />
-        <UniversalHero
-          title="Landlord Money Claim: Recover Rent Arrears and Tenant Debt"
-          subtitle="Use a practical court-ready workflow from pre-action protocol to enforcement, with clear drafting and evidence standards that reduce delay risk."
-          primaryCta={{ label: 'View Money Claim Pack', href: productHref }}
-          secondaryCta={{ label: 'See unpaid rent guide', href: '/money-claim-unpaid-rent' }}
-          showTrustPositioningBar
-          hideMedia
-        />
-
-        <Container className="py-8">
-          <div className="mx-auto max-w-5xl">
-            <SeoPageContextPanel pathname="/money-claim" />
-          </div>
-        </Container>
-
-        <Container className="py-12">
-          <div className="mx-auto max-w-5xl space-y-10 text-gray-700">
-            <section className="rounded-2xl border border-gray-200 bg-gray-50 p-7">
-              <h2 className="text-2xl font-bold text-gray-900">When this page is the right route</h2>
-              <p className="mt-4">
-                This page is for landlords with a commercial objective: recover money owed by a current or former tenant through a structured civil debt process.
-                You are not here for generic legal theory. You need route clarity, practical steps, and a sequence that preserves credibility if the tenant
-                defends the claim. In most cases, the biggest delay drivers are not obscure legal points; they are weak pre-action records, inconsistent
-                calculations, and unclear particulars.
+        <section className="border-b border-[#E6DBFF] bg-white py-12 md:py-16">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#692ed4]">
+                England landlord debt-recovery owner
               </p>
-              <p className="mt-4">
-                If your tenant is still in occupation, debt recovery often sits alongside possession strategy. That does not mean doing everything at once.
-                It means deciding your primary short-term objective (vacant possession, debt recovery, or both), then choosing documents and timing that do
-                not conflict. For many landlords, a clear debt file also improves negotiation leverage before hearing stage.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3 text-sm">
-                <Link href="/money-claim-unpaid-rent" className="rounded-lg border border-gray-200 bg-white px-4 py-2 hover:border-primary">Unpaid rent claim guide</Link>
-                <Link href="/pre-action-protocol-debt" className="rounded-lg border border-gray-200 bg-white px-4 py-2 hover:border-primary">Pre-action protocol checklist</Link>
-                <Link href="/mcol-money-claim-online" className="rounded-lg border border-gray-200 bg-white px-4 py-2 hover:border-primary">MCOL process explainer</Link>
-                <Link href="/tools/rent-arrears-calculator" className="rounded-lg border border-gray-200 bg-white px-4 py-2 hover:border-primary">Arrears + interest calculator</Link>
+              <h1 className="mt-4 text-4xl font-bold tracking-tight text-[#2a2161] md:text-5xl">
+                Money Claim for Landlords (England)
+              </h1>
+              <div className="mt-6 max-w-3xl space-y-4 text-lg leading-8 text-gray-700">
+                <p>
+                  This page is built to satisfy broad money-claim intent first. It shows what a
+                  landlord claim file actually looks like, explains the supporting routes that sit
+                  underneath the hub, and only then hands the user into the transactional claim-pack
+                  workflow.
+                </p>
+                <p>
+                  The core job is route clarity before issue. Broad users usually do not need a
+                  product pitch first. They need to understand the pre-action step, the evidence
+                  structure, the difference between MCOL and N1, and what changes depending on
+                  whether the claim is for rent, bills, guarantor liability, or damage.
+                </p>
               </div>
-            </section>
+            </div>
+          </Container>
+        </section>
 
-            <section className="rounded-2xl border border-gray-200 bg-white p-7">
-              <h2 className="text-2xl font-bold text-gray-900">End-to-end process landlords should follow</h2>
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
-                {processSteps.map((step) => (
-                  <article key={step.title} className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-                    <h3 className="font-semibold text-gray-900">{step.title}</h3>
-                    <p className="mt-2 text-sm">{step.body}</p>
-                  </article>
-                ))}
-              </div>
-              <p className="mt-6">
-                The commercial logic is simple: the earlier you standardise documents and chronology, the less expensive correction work you do later.
-                Landlords who leave drafting until the last minute often submit inconsistent amounts, unclear narratives, or missing evidence.
-                Those problems can be fixed, but fixing them under deadlines is slower and costlier than building correctly from day one.
-              </p>
-            </section>
+        <EnglandMoneyClaimPreview previews={previews} />
 
-            <section className="rounded-2xl border border-gray-200 bg-gray-50 p-7">
-              <h2 className="text-2xl font-bold text-gray-900">What you can usually claim (and how to prove it)</h2>
-              <ul className="mt-4 space-y-2">
-                {claimHeads.map((item) => (
-                  <li key={item}>• {item}</li>
-                ))}
-              </ul>
-              <p className="mt-4">
-                Strong claims connect each figure to a source document. For rent, that is typically tenancy terms plus transaction history. For damage and
-                cleaning, that is inventory condition evidence, invoice reasonableness, and causation. For utilities and ancillary sums, liability should
-                be explicit in the tenancy arrangement or later agreement. If a number cannot be explained quickly, do not assume a judge will fill the gap.
-              </p>
-              <p className="mt-4">
-                Avoid “bundle dumping.” A large stack of screenshots is not automatically persuasive. Courts and defendants need a readable narrative:
-                what was due, what was paid, what remained outstanding, what was communicated, and what opportunities were given to resolve without proceedings.
-              </p>
-            </section>
-
-            <section className="rounded-2xl border border-gray-200 bg-white p-7">
-              <h2 className="text-2xl font-bold text-gray-900">Particulars of claim: clarity beats complexity</h2>
-              <p className="mt-4">
-                Your particulars are where many landlord claims underperform. Good particulars are concise, chronological, and specific. They identify the
-                legal basis of liability, the key factual events, and the exact sums claimed. They do not rely on emotion or generic accusations.
-              </p>
-              <p className="mt-4">
-                A practical drafting structure is: parties, tenancy context, payment obligations, breach timeline, pre-action steps, amount breakdown,
-                interest basis, and relief sought. If the tenant files a defence, this structure helps you respond quickly because each allegation is already
-                anchored to a document and date.
-              </p>
-              <p className="mt-4">
-                If you are uncertain whether your matter fits MCOL format constraints, check route suitability early. Re-issuing on another route after
-                rejected filing wastes fee budget and time. This is a common issue where landlords copy old templates without adapting to present facts.
-              </p>
-            </section>
-
-            <section className="rounded-2xl border border-gray-200 bg-gray-50 p-7">
-              <h2 className="text-2xl font-bold text-gray-900">Mistakes that weaken otherwise valid debt claims</h2>
-              <div className="mt-4 grid gap-3 md:grid-cols-2">
-                {risks.map((risk) => (
-                  <p key={risk} className="rounded-lg border border-gray-200 bg-white p-3 text-sm">{risk}</p>
-                ))}
-              </div>
-              <p className="mt-5">
-                These are avoidable process failures, not inevitable litigation risk. Most can be reduced through staged prep: protocol documents first,
-                arrears and evidence schedule second, particulars third, then issue and service. The order matters.
-              </p>
-            </section>
-
-            <section className="rounded-2xl border border-gray-200 bg-white p-7">
-              <h2 className="text-2xl font-bold text-gray-900">Response, judgment and enforcement: do not stop at issue</h2>
-              <p className="mt-4">
-                Many landlords treat claim issue as the finish line. It is only the midpoint. You need a response plan for three outcomes: admission,
-                defence, or no response. Admissions may still require careful judgment wording around instalments and default consequences. Defences require
-                a disciplined factual response rather than reactive argument. No response requires timely default judgment action and correct procedural steps.
-              </p>
-              <p className="mt-4">
-                After judgment, enforcement strategy should be practical and proportionate. If the debtor has regular employment, attachment of earnings may
-                be effective. If you know where funds are held, a third-party debt order can be considered. If the debtor has real property, a charging
-                order may protect recovery over time. Enforcement choice is a commercial decision informed by recoverability, not only legal availability.
-              </p>
-            </section>
-
-            <section className="rounded-2xl border border-gray-200 bg-gray-50 p-7">
-              <h2 className="text-2xl font-bold text-gray-900">Should you run debt recovery and possession together?</h2>
-              <p className="mt-4">
-                This is one of the most important strategic choices for landlords. If the tenant remains in the property and arrears are increasing,
-                possession workflow may be the immediate priority because ongoing occupation can expand losses each month. Debt recovery can still run,
-                but timing should avoid duplicating work or creating contradictions in your factual narrative.
-              </p>
-              <p className="mt-4">
-                A practical pattern is: stabilise possession route documentation, maintain a clear debt schedule in parallel, then issue debt claim once
-                protocol and evidence are fully lined up. Where landlords go wrong is trying to file both routes with partially prepared data and then
-                correcting totals repeatedly. Courts expect consistency. Tenants and advisers will exploit inconsistencies where they can.
-              </p>
-              <p className="mt-4">
-                If your goal is fastest vacancy plus later financial recovery, say that explicitly in your internal case notes and document sequence.
-                If your goal is immediate debt judgment because tenant has left and traceable assets exist, build your file around recoverability evidence.
-                Either way, decide your objective first and draft around it.
-              </p>
-            </section>
-
-            <section className="rounded-2xl border border-gray-200 bg-white p-7">
-              <h2 className="text-2xl font-bold text-gray-900">Landlord FAQ: high-intent questions before filing</h2>
-              <div className="mt-4 space-y-5 text-sm">
-                <div>
-                  <h3 className="font-semibold text-gray-900">Can you claim after the tenancy ends?</h3>
-                  <p className="mt-1">Yes. Former tenant claims are common. The key challenge is service and debtor traceability, not legal entitlement alone.</p>
+        <section className="bg-[#F8F4FF] py-12 md:py-16">
+          <Container>
+            <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-8">
+              <h2 className="text-3xl font-bold text-[#2a2161]">
+                What landlords need before they issue
+              </h2>
+              <div className="mt-5 grid gap-4 md:grid-cols-3">
+                <div className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-5">
+                  <Scale className="h-6 w-6 text-[#692ed4]" />
+                  <h3 className="mt-4 text-lg font-semibold text-[#2a2161]">One route and one figure</h3>
+                  <p className="mt-3 text-gray-700">
+                    Broad money-claim users often know money is owed but have not stabilised the
+                    amount yet. The first job is turning the debt into one clean figure supported
+                    by one coherent route and one evidence story.
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Should you include every disputed item in one claim?</h3>
-                  <p className="mt-1">Only if evidence is mature and coherent. Weak add-ons can dilute otherwise strong rent arrears claims.</p>
+                <div className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-5">
+                  <FileText className="h-6 w-6 text-[#692ed4]" />
+                  <h3 className="mt-4 text-lg font-semibold text-[#2a2161]">Pre-action first</h3>
+                  <p className="mt-3 text-gray-700">
+                    The letter before claim and its response documents are not filler. They are
+                    part of the claim pathway and help show that the landlord tried to set out the
+                    debt properly before proceedings were issued.
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Is a hearing always required?</h3>
-                  <p className="mt-1">No. Unanswered claims can proceed by default judgment, but the paperwork still needs to be accurate.</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Do landlords recover legal costs in full?</h3>
-                  <p className="mt-1">Not always. Cost recovery depends on track, conduct, and case outcomes. Build a process that minimises avoidable spend.</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">What if the tenant offers instalments before issue?</h3>
-                  <p className="mt-1">Assess affordability and compliance risk pragmatically. A realistic plan may outperform immediate issue where recovery is likely.</p>
+                <div className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-5">
+                  <Gavel className="h-6 w-6 text-[#692ed4]" />
+                  <h3 className="mt-4 text-lg font-semibold text-[#2a2161]">Collectability still matters</h3>
+                  <p className="mt-3 text-gray-700">
+                    Filing the claim is not the end of the commercial analysis. Landlords should
+                    think about judgment, enforcement, and whether possession is also running in
+                    parallel before they commit to the final document set.
+                  </p>
                 </div>
               </div>
-            </section>
+            </div>
+          </Container>
+        </section>
 
+        <section className="bg-white py-12 md:py-16">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <h2 className="text-3xl font-bold text-[#2a2161]">
+                Choose the right money claim support route
+              </h2>
+              <p className="mt-4 max-w-3xl text-lg text-gray-700">
+                The broad owner stays above the support estate. Unpaid rent remains the strongest
+                support route, scenario pages stay scenario-specific, and process pages help with
+                the filing and evidence layers without replacing the hub.
+              </p>
 
-            <section className="rounded-2xl border border-gray-200 bg-white p-7">
-              <h2 className="text-2xl font-bold text-gray-900">Commercial playbook: choosing actions by debt profile</h2>
-              <p className="mt-4">
-                Not every arrears case should be run the same way. Your decision should reflect debt size, evidence quality, and probable recoverability.
-                For smaller clean debts with clear payment records, speed and clarity matter most. For larger or mixed claims (rent, damage, utilities),
-                document discipline matters more because defendant challenge risk increases.
-              </p>
-              <p className="mt-4">
-                A useful approach is to classify the case before issue: (1) likely uncontested and collectible, (2) likely uncontested but difficult to enforce,
-                (3) likely defended, or (4) factually complex. This classification informs how much detail you need in particulars, whether settlement should be
-                prioritised, and how aggressively to plan enforcement. Treat this as commercial triage, not legal pessimism.
-              </p>
-              <p className="mt-4">
-                Landlords often over-focus on hearing outcomes and under-focus on collectability. A perfect judgment against an untraceable debtor can be less
-                valuable than a well-documented settlement or staged enforcement path. Build your plan around realistic cash recovery, not just litigation milestones.
-              </p>
-            </section>
+              <div className="mt-8 grid gap-5 md:grid-cols-3">
+                <article className="rounded-3xl border border-[#CAB6FF] bg-[#FCFAFF] p-6 shadow-[0_14px_40px_rgba(76,29,149,0.08)]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#692ed4]">
+                    Strongest support route
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Claim unpaid rent</h3>
+                  <p className="mt-4 text-gray-700">
+                    Use this route when the main debt is arrears and the landlord needs clearer
+                    rent-led examples, arrears file structure, and judgment planning. It stays
+                    strongest underneath the broad hub, but it is still a support page, not the owner.
+                  </p>
+                  <Link
+                    href="/money-claim-unpaid-rent"
+                    className="mt-5 inline-flex items-center gap-2 font-semibold text-primary hover:underline"
+                  >
+                    Read the unpaid rent guide
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </article>
 
-            <section className="rounded-2xl border border-gray-200 bg-gray-50 p-7">
-              <h2 className="text-2xl font-bold text-gray-900">Internal links for next step clarity</h2>
-              <p className="mt-4">
-                Use the pages below as a practical sequence, not random reading. Start with protocol and debt quantification, then route specifics,
-                then enforcement support:
-              </p>
-              <ul className="mt-4 space-y-2">
-                <li>• <Link href="/pre-action-protocol-debt" className="text-primary hover:underline">Pre-action protocol debt guide</Link> for compliant first contact and response windows.</li>
-                <li>• <Link href="/tools/rent-arrears-calculator" className="text-primary hover:underline">Rent arrears calculator</Link> for clear running totals and interest logic.</li>
-                <li>• <Link href="/mcol-money-claim-online" className="text-primary hover:underline">MCOL process page</Link> for online issue and response handling.</li>
-                <li>• <Link href="/money-claim-small-claims-landlord" className="text-primary hover:underline">Small claims landlord guide</Link> for hearing-stage expectations.</li>
-                <li>• <Link href="/money-claim-ccj-enforcement" className="text-primary hover:underline">CCJ enforcement guide</Link> for post-judgment recovery options.</li>
-              </ul>
-              <p className="mt-4">
-                Sequencing content this way helps landlords avoid the most common failure pattern: filing quickly, then backfilling core protocol and evidence records
-                under deadline pressure.
-              </p>
-            </section>
-            <section className="rounded-2xl border border-gray-200 bg-gradient-to-br from-purple-50 to-indigo-50 p-7">
-              <h2 className="text-2xl font-bold text-gray-900">Landlord next steps</h2>
-              <p className="mt-4">
-                If you need to move now, start with a structured pack and then tailor it to your evidence. You can also branch into specialised pages for
-                route-specific detail (MCOL process, unpaid rent depth guide, protocol requirements, and arrears tools).
-              </p>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link href={productHref} className="hero-btn-primary">Start money claim workflow</Link>
-                <Link href="/products/complete-pack" className="hero-btn-secondary">Tenant still in property? See complete eviction pack</Link>
+                <article className="rounded-3xl border border-[#E6DBFF] bg-white p-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8a6fd1]">
+                    Scenario routes
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Bills, guarantor, and damage claims</h3>
+                  <p className="mt-4 text-gray-700">
+                    Use the scenario pages when the landlord already knows the debt type and needs
+                    route-specific details, such as unpaid bills, guarantor liability, former tenant
+                    tracing, property damage, or cleaning costs. They support the hub instead of competing
+                    with it.
+                  </p>
+                  <div className="mt-5 flex flex-wrap gap-3 text-sm">
+                    <Link href="/money-claim-unpaid-bills" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      Unpaid bills
+                    </Link>
+                    <Link href="/money-claim-unpaid-utilities" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      Unpaid utilities
+                    </Link>
+                    <Link href="/money-claim-guarantor" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      Guarantor claims
+                    </Link>
+                    <Link href="/money-claim-former-tenant" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      Former tenant claims
+                    </Link>
+                    <Link href="/money-claim-property-damage" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      Property damage
+                    </Link>
+                    <Link href="/money-claim-cleaning-costs" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      Cleaning costs
+                    </Link>
+                  </div>
+                </article>
+
+                <article className="rounded-3xl border border-[#E6DBFF] bg-white p-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8a6fd1]">
+                    Process and evidence routes
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Pre-action, filing, and enforcement</h3>
+                  <p className="mt-4 text-gray-700">
+                    These pages help when the landlord is already inside the process and needs a
+                    more precise explainer for the letter before action, schedule of debt, MCOL, the
+                    N1 route, or enforcement after judgment.
+                  </p>
+                  <div className="mt-5 flex flex-wrap gap-3 text-sm">
+                    <Link href="/money-claim-letter-before-action" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      Letter before action
+                    </Link>
+                    <Link href="/money-claim-schedule-of-debt" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      Schedule of debt
+                    </Link>
+                    <Link href="/money-claim-online-mcol" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      MCOL guide
+                    </Link>
+                    <Link href="/money-claim-n1-claim-form" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      N1 claim form
+                    </Link>
+                    <Link href="/money-claim-ccj-enforcement" className="rounded-lg border border-[#E6DBFF] px-3 py-2 text-primary hover:bg-[#FCFAFF]">
+                      CCJ enforcement
+                    </Link>
+                  </div>
+                </article>
               </div>
-            </section>
-          </div>
-        </Container>
+            </div>
+          </Container>
+        </section>
+
+        <section className="bg-[#F8F4FF] py-12 md:py-16">
+          <Container>
+            <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-8">
+              <h2 className="text-3xl font-bold text-[#2a2161]">
+                After the broad guide: move into the claim workflow
+              </h2>
+              <p className="mt-4 max-w-3xl text-lg text-gray-700">
+                Once the landlord understands the route, evidence structure, and likely filing path,
+                the primary transactional step is the money claim pack. The product remains downstream
+                because the owner page is responsible for broad intent satisfaction first.
+              </p>
+
+              <div className="mt-8 grid gap-5 md:grid-cols-2">
+                <article className="rounded-3xl border border-[#CAB6FF] bg-[#FCFAFF] p-6 shadow-[0_14px_40px_rgba(76,29,149,0.08)]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#692ed4]">
+                    Primary transactional step
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Money Claim Pack</h3>
+                  <p className="mt-4 text-gray-700">
+                    Best when the evidence file is clear enough to move from guide-level understanding
+                    into document generation: claim form, particulars, debt schedule, pre-action pack,
+                    and filing guidance.
+                  </p>
+                  <p className="mt-3 text-sm text-gray-600">One-time price: {moneyClaimPrice}</p>
+                  <Link
+                    href="/products/money-claim"
+                    className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
+                  >
+                    Start with the money claim pack
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </article>
+
+                <article className="rounded-3xl border border-[#E6DBFF] bg-white p-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8a6fd1]">
+                    Parallel possession note
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">Possession may still run in parallel</h3>
+                  <p className="mt-4 text-gray-700">
+                    If the tenant is still in occupation, possession can remain the separate primary
+                    objective even while the debt file is being prepared. That is a strategy note, not
+                    a second owner path for this page.
+                  </p>
+                  <p className="mt-4 text-sm text-gray-600">
+                    If possession route continuity matters more than debt recovery right now, review
+                    the possession workflow before you combine notice, court, and debt actions.
+                  </p>
+                </article>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        <section className="bg-white py-12 md:py-16">
+          <Container>
+            <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
+              <h2 className="text-3xl font-bold text-[#2a2161]">
+                Evidence, process, and common failure points
+              </h2>
+              <div className="mt-6 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+                <div className="space-y-5 text-gray-700">
+                  <p>
+                    Money-claim failures usually look procedural long before they look legal.
+                    Landlords often know money is owed, but the file still collapses because the
+                    letter before claim, the debt schedule, the chronology, and the final claim
+                    amount do not all say the same thing.
+                  </p>
+                  <p>
+                    The broad owner page exists to make those moving parts visible before anyone
+                    starts a pack. The better the file is organised now, the less rework is needed
+                    if the claim is defended or later enforced.
+                  </p>
+                  <div className="rounded-2xl border border-[#E6DBFF] bg-white p-5">
+                    <h3 className="text-xl font-semibold text-[#2a2161]">Common mistakes to avoid</h3>
+                    <ul className="mt-4 space-y-3">
+                      <li className="flex gap-3 text-gray-700">
+                        <AlertTriangle className="mt-0.5 h-5 w-5 text-[#692ed4]" />
+                        <span>Issuing too early with figures that still change from week to week.</span>
+                      </li>
+                      <li className="flex gap-3 text-gray-700">
+                        <AlertTriangle className="mt-0.5 h-5 w-5 text-[#692ed4]" />
+                        <span>Using a letter before claim that does not match the final debt breakdown.</span>
+                      </li>
+                      <li className="flex gap-3 text-gray-700">
+                        <AlertTriangle className="mt-0.5 h-5 w-5 text-[#692ed4]" />
+                        <span>Adding weak damage or bills items that dilute an otherwise strong arrears claim.</span>
+                      </li>
+                      <li className="flex gap-3 text-gray-700">
+                        <AlertTriangle className="mt-0.5 h-5 w-5 text-[#692ed4]" />
+                        <span>Choosing MCOL or N1 late instead of deciding the route when the file is drafted.</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-[#E6DBFF] bg-white p-5">
+                  <h3 className="text-xl font-semibold text-[#2a2161]">Helpful supporting tools</h3>
+                  <ul className="mt-4 space-y-3">
+                    <li className="rounded-xl border border-[#E6DBFF] bg-[#FCFAFF] p-4">
+                      <Link href={toolLinks.rentArrearsCalculator.href} className="font-semibold text-primary hover:underline">
+                        Rent arrears calculator
+                      </Link>
+                      <p className="mt-2 text-sm text-gray-700">
+                        Use when the landlord needs a clearer running figure before the debt schedule is finalised.
+                      </p>
+                    </li>
+                    <li className="rounded-xl border border-[#E6DBFF] bg-[#FCFAFF] p-4">
+                      <Link href={moneyClaimForms.letterBeforeAction.href} className="font-semibold text-primary hover:underline">
+                        Letter before action guide
+                      </Link>
+                      <p className="mt-2 text-sm text-gray-700">
+                        Use when the next blocker is pre-action compliance rather than the court form itself.
+                      </p>
+                    </li>
+                    <li className="rounded-xl border border-[#E6DBFF] bg-[#FCFAFF] p-4">
+                      <Link href={moneyClaimForms.scheduleOfDebt.href} className="font-semibold text-primary hover:underline">
+                        Schedule of debt guide
+                      </Link>
+                      <p className="mt-2 text-sm text-gray-700">
+                        Use when the landlord needs a cleaner itemised breakdown of rent, bills, or ancillary losses.
+                      </p>
+                    </li>
+                    <li className="rounded-xl border border-[#E6DBFF] bg-[#FCFAFF] p-4">
+                      <Link href={moneyClaimGuides.mcolProcess.href} className="font-semibold text-primary hover:underline">
+                        MCOL explainer
+                      </Link>
+                      <p className="mt-2 text-sm text-gray-700">
+                        Use when the question is route choice and filing rather than whether the debt exists.
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        <section className="bg-[#F8F4FF] py-12 md:py-16">
+          <FAQSection
+            faqs={pageFaqs}
+            title="Money Claim for Landlords FAQs"
+            includeSchema={false}
+            showContactCTA={false}
+            variant="white"
+          />
+        </section>
+
+        <section className="bg-white py-12 md:py-16">
+          <Container>
+            <div className="mx-auto max-w-5xl">
+              <RelatedLinks title="Related money claim resources" links={relatedResources} />
+            </div>
+          </Container>
+        </section>
       </main>
     </div>
   );

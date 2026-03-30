@@ -130,7 +130,8 @@ export default function MoneyClaimLetterBeforeActionPage() {
         <UniversalHero
           title="Letter Before Action for Money Claim"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_letter_before_action" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Review schedule of debt', href: '/money-claim-schedule-of-debt' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -448,6 +449,5 @@ export default function MoneyClaimLetterBeforeActionPage() {
     </>
   );
 }
-
 
 

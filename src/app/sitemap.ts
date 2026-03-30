@@ -47,10 +47,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/tools/validators/money-claim',
     '/tools/validators/scotland-notice-to-leave',
     '/tools/validators/tenancy-agreement',
+    '/tools/validators/wales-notice',
+    '/tools/section-21-validator',
     '/tenancy-agreements/premium',
+    '/tenancy-agreements',
     '/tenancy-agreement',
     '/tenancy-agreement-template-free',
     '/tenancy-agreement-template-uk',
+    '/eviction-notice',
+    '/eviction-notice-england',
+    '/eviction-notice-uk',
+    '/eviction-pack-england',
+    '/complete-eviction-pack-england',
+    '/section-21-court-pack',
+    '/section-8-court-pack',
+    '/section-21-notice-generator',
+    '/section-8-notice-generator',
+    '/mcol-money-claim-online',
+    '/wales-eviction-notice-template',
+    '/scotland-notice-to-leave-template',
     '/ast-agreement-template',
     '/ast-template-england',
     '/ast-tenancy-agreement-template',
@@ -85,8 +100,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // SEO Landing Pages - Clean URLs for wizard entry points
   // These are comprehensive, indexable landing pages with full SEO content
   const wizardLandingPages = [
-    { path: '/eviction-notice', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/eviction-pack-england', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/eviction-notice-template', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-guides', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreement-template', priority: 0.95, changeFrequency: 'weekly' as const },
@@ -111,16 +125,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/section-8-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/rent-arrears-letter-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Jurisdiction-specific template pages
-    { path: '/wales-eviction-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/scotland-notice-to-leave-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Q1 2026 SEO pages
     { path: '/tenant-wont-leave', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenant-not-paying-rent', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/possession-claim-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/eviction-cost-uk', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/how-to-evict-tenant', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/wales-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/scotland-eviction-notices', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/section-21-ban', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/section-21-ban-uk', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-21-notice', priority: 0.88, changeFrequency: 'weekly' as const },
@@ -209,7 +219,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/section-8-vs-section-21', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/periodic-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
     // Explicitly pin high-intent eviction funnel pages (do not rely on auto-discovery only)
-    { path: '/eviction-notice-england', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/how-to-evict-a-tenant-england', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/evict-tenant-not-paying-rent', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/tenant-refuses-to-leave-after-notice', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -219,15 +228,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/bailiff-eviction-process', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/claim-rent-arrears-tenant', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/how-to-sue-tenant-for-unpaid-rent', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/mcol-money-claim-online', priority: 0.8, changeFrequency: 'weekly' as const },
     // Explicitly pin all remaining eviction intent pages (no runtime auto-discovery dependency)
-    { path: '/section-21-notice-generator', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/section-8-notice-generator', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-21-vs-section-8', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/section-21-court-pack', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/section-8-court-pack', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-court-forms-england', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/complete-eviction-pack-england', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-21-checklist', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/n5b-possession-claim-form', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/n5-n119-possession-claim', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -347,7 +350,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const excludedPrefixes = ['/admin', '/api', '/auth', '/checkout', '/dashboard', '/wizard', '/success'];
-  const noindexPaths = ['/tenancy-agreements/england-wales', '/refunds'];
+  const noindexPaths = [
+    '/tenancy-agreement-template-uk',
+    '/wales-eviction-notices',
+    '/scotland-eviction-notices',
+    '/refunds',
+  ];
 
   // Keep intentional static exclusions here for any indexable route we explicitly want omitted.
   const intentionalStaticRouteExclusions = new Set<string>(sitemapAllowlist.intentionallyExcludedRoutes);

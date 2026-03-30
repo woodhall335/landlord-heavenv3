@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { metadata as hubMetadata } from '@/app/tenancy-agreement-template/page';
 import { metadata as astMetadata } from '@/app/assured-shorthold-tenancy-agreement-template/page';
@@ -10,7 +12,7 @@ const asText = (value: unknown): string =>
 describe('tenancy funnel metadata', () => {
   it('positions the main hub as the England template owner', () => {
     expect(asText(hubMetadata.title)).toBe('Tenancy Agreement Template (England) - Example & Guide');
-    expect(asText(hubMetadata.description)).toContain('England');
+    expect(asText(hubMetadata.description)).toContain('real England tenancy agreement template example');
     expect(asText(hubMetadata.alternates?.canonical)).toContain('/tenancy-agreement-template');
 
     const keywords = Array.isArray(hubMetadata.keywords)
@@ -19,6 +21,15 @@ describe('tenancy funnel metadata', () => {
     expect(keywords).toContain('tenancy agreement template');
     expect(keywords).toContain('rent agreement');
     expect(keywords).toContain('tenancy contract');
+  });
+
+  it('uses FAQ schema in the hub source so template intent is supported with structured answers', () => {
+    const content = readFileSync(
+      join(process.cwd(), 'src/app/tenancy-agreement-template/page.tsx'),
+      'utf8'
+    );
+
+    expect(content).toContain('faqPageSchema');
   });
 
   it('keeps the AST page as a legacy support page', () => {
@@ -51,4 +62,3 @@ describe('tenancy funnel metadata', () => {
     );
   });
 });
-

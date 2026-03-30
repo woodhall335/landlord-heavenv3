@@ -25,18 +25,22 @@ const content: PillarPageContent = {
   description: metadata.description as string,
   heroTitle: 'Section 8 Notice',
   heroSubtitle:
-    'The main England possession route landlords now need after the Section 21 change, especially for rent arrears, breach, anti-social behaviour, and evidence-led cases.',
+    'The main live England possession route landlords now need after the Section 21 change, with broad notice users sent back to the owner page before they commit to a transactional path.',
   icon: '/images/wizard-icons/15-rent-arrears.png',
   heroBullets: [
     'Grounds-based possession guide for England landlords.',
-    'Natural next step when Section 21 is no longer available.',
-    'Product-first route into Notice Only or the broader court workflow.',
+    'Best used after the owner page has confirmed that Section 8 is the right route.',
+    'Keeps Notice Only available, but only after the route guidance is clear.',
   ],
   quickAnswer: [
     <>
-      A Section 8 notice is the main England possession route landlords now need for rent arrears, breach, nuisance,
-      and other evidence-led cases. Since Section 21 ended in England on 1 May 2026, many landlords searching for
-      no-fault possession now need to understand{' '}
+      A Section 8 notice is the main live England possession route for rent arrears, breach, nuisance, and other
+      evidence-led cases. If you still need the broad notice example or route hierarchy, start with{' '}
+      <Link href="/eviction-notice-template" className="text-primary font-medium hover:underline">
+        the England eviction notice template hub
+      </Link>{' '}
+      first, then come back here once you know the case genuinely needs Section 8. Since Section 21 ended in England on
+      1 May 2026, many landlords searching for no-fault possession now need to understand{' '}
       <Link href="/section-21-ban-uk" className="text-primary font-medium hover:underline">
         what replaces Section 21
       </Link>{' '}
@@ -104,7 +108,7 @@ const content: PillarPageContent = {
   ],
   decisionGuide: [
     { question: 'Is unpaid rent the main problem?', recommendation: 'Use this page with the rent arrears pillar so the Section 8 notice and money-claim sequence stay aligned.' },
-    { question: 'Is the user really asking about Section 21?', recommendation: 'Move them to the Section 21 ban UK guide, then back into Section 8 once they understand the new England route.' },
+    { question: 'Does the user still need broad notice guidance first?', recommendation: 'Move them to /eviction-notice-template before you assume Section 8 is already the settled path.' },
     { question: 'Is the case already likely to reach court?', recommendation: 'Choose the Complete Pack rather than relying on notice drafting alone.' },
     { question: 'Do you already know the exact grounds and only need the notice?', recommendation: 'The Notice Only route is usually the fastest commercial fit.' },
   ],
@@ -135,7 +139,11 @@ const content: PillarPageContent = {
       title: 'Natural supporting links for this pillar',
       paragraphs: [
         <>
-          Use{' '}
+          Start with{' '}
+          <Link href="/eviction-notice-template" className="text-primary font-medium hover:underline">
+            the England notice owner page
+          </Link>{' '}
+          if the landlord still needs the notice example, route hierarchy, or service-stage overview. Then use{' '}
           <Link href="/tenant-not-paying-rent" className="text-primary font-medium hover:underline">
             tenant not paying rent in the UK
           </Link>{' '}
@@ -153,6 +161,7 @@ const content: PillarPageContent = {
     },
   ],
   supportingLinks: [
+    { label: 'Eviction notice template (England)', href: '/eviction-notice-template' },
     { label: 'Tenant not paying rent in the UK', href: '/tenant-not-paying-rent' },
     { label: 'Section 8 grounds explained', href: '/section-8-grounds-explained' },
     { label: 'Section 21 ban UK guide', href: '/section-21-ban-uk' },
@@ -161,12 +170,12 @@ const content: PillarPageContent = {
     { label: 'What happens after Section 8', href: '/what-happens-after-section-8' },
   ],
   toolLinks: [
-    { label: 'Eviction notice pack', href: '/eviction-notice' },
+    { label: 'Eviction notice template (England)', href: '/eviction-notice-template' },
     { label: 'Rent arrears calculator', href: '/tools/rent-arrears-calculator' },
   ],
-  productLink: { label: 'Court-ready Section 8 notice', href: '/products/notice-only' },
-  primaryCta: { label: 'Get Court-Ready Notice', href: '/products/notice-only' },
-  secondaryCta: { label: 'Get Complete Eviction Pack', href: '/products/complete-pack' },
+  productLink: { label: 'Start Notice Only for a settled Section 8 route', href: '/products/notice-only' },
+  primaryCta: { label: 'View England notice template', href: '/eviction-notice-template' },
+  secondaryCta: { label: 'Start with Notice Only', href: '/products/notice-only' },
   faqs: [
     { question: 'What replaces Section 21 for landlords in England?', answer: 'In many cases, landlords now need a Section 8-led possession plan supported by stronger evidence and grounds selection.' },
     { question: 'Can Section 8 be used for rent arrears?', answer: 'Yes. Rent arrears are one of the most common reasons landlords use a Section 8 notice, especially where grounds 8, 10, and 11 are relevant.' },

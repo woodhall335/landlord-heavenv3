@@ -1219,7 +1219,7 @@ export default function Section8NoticeTemplatePage() {
                   </p>
                   <p className="text-gray-600">
                     Use our{' '}
-                    <Link href="/eviction-notice" className="text-primary font-medium hover:underline">
+                    <Link href="/eviction-notice-template" className="text-primary font-medium hover:underline">
                       eviction notice pack
                     </Link>{' '}
                     to review your ground selection and notice logic before service or court escalation.

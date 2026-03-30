@@ -195,7 +195,7 @@ export default function Section21NoticeTemplatePage() {
                     </li>
                   </ul>
                   <Link
-                    href="/eviction-notice"
+                    href="/eviction-notice-template"
                     className="hero-btn-secondary block w-full text-center"
                   >
                     Try Free Starter Document
@@ -390,7 +390,7 @@ export default function Section21NoticeTemplatePage() {
                     <li>Licensing and HMO rules satisfied.</li>
                   </ul>
                   <Link
-                    href="/eviction-notice"
+                    href="/eviction-notice-template"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
                     Check notice validity â†’
@@ -694,7 +694,7 @@ export default function Section21NoticeTemplatePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/eviction-notice"
+                  href="/eviction-notice-template"
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <Download className="w-5 h-5" />

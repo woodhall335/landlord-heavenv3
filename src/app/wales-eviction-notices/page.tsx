@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   robots: {
-    index: true,
+    index: false,
     follow: true,
   },
 };

@@ -421,13 +421,13 @@ export default async function AskHeavenPage({
                   <span className="text-xs text-gray-500">Complete UK guide</span>
                 </Link>
                 <Link
-                  href="/eviction-notice"
+                  href="/eviction-notice-template"
                   className="p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/30 hover:shadow-md transition-all group"
                 >
                   <span className="font-medium text-gray-900 group-hover:text-primary block">
-                    Eviction Notice Pack
+                    Eviction Notice Template
                   </span>
-                  <span className="text-xs text-gray-500">Create a court-ready eviction notice</span>
+                  <span className="text-xs text-gray-500">Start with the broad England notice route</span>
                 </Link>
                 <Link
                   href="/section-8-notice"

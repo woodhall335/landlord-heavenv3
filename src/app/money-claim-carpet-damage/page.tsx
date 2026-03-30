@@ -131,7 +131,8 @@ export default function MoneyClaimCarpetDamagePage() {
         <UniversalHero
           title="Money Claim for Carpet Damage Costs"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_carpet_damage" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_carpet_damage' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -512,6 +513,5 @@ export default function MoneyClaimCarpetDamagePage() {
     </>
   );
 }
-
 
 

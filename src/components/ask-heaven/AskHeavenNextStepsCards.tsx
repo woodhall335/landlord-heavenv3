@@ -26,7 +26,7 @@ interface CardDefinition {
 }
 
 export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }: AskHeavenNextStepsCardsProps) {
-  const cards: CardDefinition[] = [
+  const allCards: CardDefinition[] = [
     {
       title: 'Notice Only Pack',
       price: PRODUCTS.notice_only.displayPrice,
@@ -66,6 +66,20 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       icon: <RiFileTextLine className="h-8 w-8 text-violet-500" aria-hidden="true" />,
     },
   ];
+
+  const normalizedJurisdiction =
+    jurisdiction === 'n_ireland' ? 'northern-ireland' : jurisdiction;
+
+  const cards = allCards.filter((card) => {
+    if (normalizedJurisdiction === 'england') return true;
+    if (normalizedJurisdiction === 'wales' || normalizedJurisdiction === 'scotland') {
+      return card.title === 'Notice Only Pack' || card.title === 'Tenancy Agreements';
+    }
+    if (normalizedJurisdiction === 'northern-ireland') {
+      return card.title === 'Tenancy Agreements';
+    }
+    return true;
+  });
 
   return (
     <section

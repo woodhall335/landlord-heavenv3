@@ -103,9 +103,9 @@ const whyLandlordsUseCards = [
     icon: RiShieldCheckLine,
   },
   {
-    title: "Generate court-ready landlord documents for the right UK jurisdiction",
+    title: "Generate the right landlord documents for the route you need first",
     body:
-      "Build eviction notices, rent arrears documents, and supporting paperwork with guidance that reflects the rules for England, Wales, Scotland, and Northern Ireland.",
+      "Build eviction notices, rent arrears documents, and supporting paperwork with England-first route guidance, while still keeping separate jurisdiction support where it is genuinely needed.",
     imageSrc: "/images/jurisdiction_image.webp",
     imageAlt: "UK jurisdiction landlord document illustration",
     icon: RiGlobalLine,
@@ -483,10 +483,10 @@ export default function HomeContent() {
               <p className="text-gray-600">
                 Start with the{" "}
                 <Link
-                  href="/eviction-notice-uk"
+                  href="/eviction-notice-template"
                   className="text-primary hover:underline font-medium"
                 >
-                  eviction notice UK guide
+                  eviction notice template
                 </Link>{" "}
                 if you need to serve notice. Chasing unpaid rent? Use the{" "}
                 <Link

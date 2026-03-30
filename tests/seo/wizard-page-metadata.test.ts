@@ -14,7 +14,7 @@ import {
   generateMetadata,
   WIZARD_PRODUCT_SEO,
   DEFAULT_SEO,
-} from '@/app/wizard/page';
+} from '@/app/(app)/wizard/page';
 
 const BASE_URL = 'https://landlordheaven.co.uk';
 
@@ -140,18 +140,18 @@ describe('Wizard Page Metadata - generateMetadata', () => {
   });
 
   describe('Canonical URLs', () => {
-    it('should set canonical to /eviction-notice for notice_only', async () => {
+    it('should set canonical to /eviction-notice-template for notice_only', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'notice_only' }),
       });
-      expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/eviction-notice`);
+      expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/eviction-notice-template`);
     });
 
-    it('should set canonical to /eviction-pack-england for complete_pack', async () => {
+    it('should set canonical to /products/complete-pack for complete_pack', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'complete_pack' }),
       });
-      expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/eviction-pack-england`);
+      expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/products/complete-pack`);
     });
 
     it('should set canonical to /money-claim for money_claim', async () => {
@@ -267,7 +267,7 @@ describe('Wizard Page Metadata - generateMetadata', () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'notice_only' }),
       });
-      expect(metadata.openGraph?.url).toBe(`${BASE_URL}/eviction-notice`);
+      expect(metadata.openGraph?.url).toBe(`${BASE_URL}/eviction-notice-template`);
     });
 
     it('should not set og:url for unknown products', async () => {

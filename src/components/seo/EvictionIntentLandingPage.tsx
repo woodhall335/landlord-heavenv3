@@ -260,7 +260,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Eviction', url: 'https://landlordheaven.co.uk/eviction-notice-england' },
+          { name: 'Eviction', url: 'https://landlordheaven.co.uk/eviction-notice-template' },
           { name: config.h1, url: canonical },
         ])}
       />
@@ -294,7 +294,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             <nav aria-label="Breadcrumb" className="text-sm text-gray-600">
               <Link href="/" className="hover:underline">Home</Link>
               <span className="mx-2">›</span>
-              <Link href="/eviction-notice-england" className="hover:underline">Eviction</Link>
+              <Link href="/eviction-notice-template" className="hover:underline">Eviction</Link>
               <span className="mx-2">›</span>
               <span className="font-medium text-charcoal">{config.h1}</span>
             </nav>
@@ -392,11 +392,11 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
               If you already know your route, jump straight into the matching workflow.
             </p>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <Link href="/section-21-notice-generator" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
+              <Link href="/section-21-notice-template" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
                 <p className="font-semibold text-charcoal">Section 21 route</p>
                 <p className="mt-2 text-sm">Best for no-fault route cases where compliance pre-conditions are satisfied.</p>
               </Link>
-              <Link href="/section-8-notice-generator" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
+              <Link href="/section-8-notice-template" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
                 <p className="font-semibold text-charcoal">Section 8 route</p>
                 <p className="mt-2 text-sm">Best for arrears/breach context where grounds and evidence need to align.</p>
               </Link>

@@ -81,9 +81,9 @@ export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('ast'),
   mediaSrc: '/images/tenancy_agreements.webp',
-  trustText: 'Updated for current housing law | England, Wales, Scotland and Northern Ireland',
-  title: 'Need a New',
-  highlightTitle: 'Tenancy Agreement?',
+  trustText: 'Updated for current housing law | England agreement comparison',
+  title: 'Need to Create the Right',
+  highlightTitle: 'England Agreement Routes',
   subtitle: astSubtitle,
   primaryCta: {
     label: 'Create your tenancy agreement ->',
@@ -105,11 +105,11 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('notice_only'),
   mediaSrc: '/images/notice_bundles.webp',
-  trustText: 'Updated for current housing law | England, Wales and Scotland',
-  title: 'Need an',
-  highlightTitle: 'Eviction Notice UK?',
+  trustText: 'Updated for current housing law | Notice route checks before you serve',
+  title: 'Need to Create the Right',
+  highlightTitle: 'Notice Pack?',
   subtitle:
-    'Your tenant is still in the property and you need to act. We help you choose the right section 8 notice for England, or the right notice for Wales or Scotland, so you do not lose weeks on the wrong route.',
+    'Your tenant is still in the property and you need to act. We help you choose, generate, and serve the right notice route for the property so you do not lose time on the wrong path.',
   primaryCta: {
     label: 'Generate your eviction notice ->',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
@@ -146,15 +146,35 @@ export const moneyClaimHeroConfig: HeroConfig = {
   ...withPreset('money_claim'),
   mediaSrc: '/images/money_claims.webp',
   trustText: 'Updated for current housing law | England-only',
-  title: 'Tenant Not Paying Rent?',
-  highlightTitle: 'Start a Money Claim',
+  title: 'Ready to Start a',
+  highlightTitle: 'Landlord Money Claim Pack?',
   subtitle:
-    'If the arrears keep rising, this helps you build a money claim for unpaid rent, bills, or damage in plain English and get the paperwork ready tonight.',
+    'If the arrears keep rising, this helps you start a landlord money claim pack for unpaid rent, bills, or damage and get the paperwork ready tonight.',
   primaryCta: {
     label: 'Start recovering your rent ->',
     href: '/wizard?product=money_claim&topic=debt&src=product_page',
   },
   feature: 'Set out what is owed clearly before the numbers get harder to untangle.',
+};
+
+export const moneyClaimSupportHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
+  ...withPreset('money_claim'),
+  mediaSrc: '/images/money_claims.webp',
+  trustText: 'England landlord debt-recovery support | Broad guide first',
+  title: 'Need help with a',
+  highlightTitle: 'landlord money claim?',
+  subtitle:
+    'Start with the broad England money claim guide first, then move into the support route or transactional pack that fits the debt file you already have.',
+  primaryCta: {
+    label: 'View money claim guide ->',
+    href: '/money-claim',
+  },
+  secondaryCta: {
+    label: 'Start money claim pack ->',
+    href: '/products/money-claim',
+  },
+  feature: 'Use the support page to solve the specific filing or evidence question without losing the broad claim route.',
 };
 
 /* ============================================================

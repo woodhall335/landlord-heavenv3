@@ -658,7 +658,7 @@ export default function Page() {
                 Legacy notice route only
               </Link>
               <Link
-                href="/eviction-notice"
+                href="/eviction-notice-template"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
                 Start eviction notice pack

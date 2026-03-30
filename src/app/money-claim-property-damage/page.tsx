@@ -130,7 +130,8 @@ export default function MoneyClaimPropertyDamagePage() {
         <UniversalHero
           title="Money Claim for Property Damage"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_property_damage" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_property_damage' }}
           showTrustPositioningBar
           hideMedia
         />

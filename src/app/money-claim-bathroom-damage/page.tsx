@@ -131,7 +131,8 @@ export default function MoneyClaimBathroomDamagePage() {
         <UniversalHero
           title="Money Claim for Bathroom Damage"
           subtitle="Recover bathroom damage costs through a legally validated, compliance-checked and court-ready claim process."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?reason=property_damage&src=seo_money_claim_bathroom_damage&topic=debt" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?reason=property_damage&src=seo_money_claim_bathroom_damage&topic=debt' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -518,6 +519,5 @@ export default function MoneyClaimBathroomDamagePage() {
     </>
   );
 }
-
 
 

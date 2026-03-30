@@ -907,7 +907,7 @@ export const blogPosts: BlogPost[] = [
           with all fields completed correctly.
         </p>
         <ul>
-          <li><Link href="/eviction-notice" className="text-primary hover:underline">
+          <li><Link href="/eviction-notice-template" className="text-primary hover:underline">
             Section 21 notice pack</Link> ï¿½ Preview version (not court-ready)</li>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
             Court-Ready Section 21 Notice</Link>{` - Official Form 6A, ${PRODUCTS.notice_only.displayPrice}`}</li>
@@ -4104,7 +4104,7 @@ export const blogPosts: BlogPost[] = [
         <h3>Step 1: Verify Eligibility</h3>
         <p>
           Before starting, confirm you meet all requirements. Use our{' '}
-          <Link href="/eviction-notice" className="text-primary hover:underline font-medium">
+          <Link href="/eviction-notice-template" className="text-primary hover:underline font-medium">
             Eviction notice pack
           </Link>{' '}
           to start the paid notice route with the current England workflow.

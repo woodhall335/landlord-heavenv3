@@ -102,7 +102,7 @@ const normalizeMetaDescription = (value: string, jurisdictionLabel: string) => {
 const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
   if (intent === 'money_claim') {
     return {
-      href: '/money-claim-online-mcol',
+      href: '/money-claim',
       label: 'Money claim guide (England only)',
     };
   }
@@ -166,8 +166,8 @@ const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
   if (intent === 'eviction_pack') {
     if (jurisdictionLabel === 'England') {
       return {
-        href: '/eviction-process-england',
-        label: 'England eviction process guide',
+        href: '/products/complete-pack',
+        label: 'Complete eviction pack for England',
       };
     }
     if (jurisdictionLabel === 'Wales') {
@@ -202,7 +202,7 @@ const buildSupportingLinks = (intent: string, jurisdictionLabel: string) => {
       pillar,
       {
         href: '/products/money-claim',
-        label: 'Start a money claim (England only)',
+        label: 'Start a money claim pack (England only)',
       },
     ];
   }
@@ -257,7 +257,20 @@ export const isProductHref = (href: string) =>
 export const getBlogSeoConfig = (post: BlogPost, region: BlogRegion | null): BlogSeoConfig => {
   const jurisdictionLabel = region ? JURISDICTION_LABELS[region] : 'UK';
   const commercialResult = analyzeBlogPost(post, region);
-  const primaryIntent = commercialResult.links[0]?.intent ?? 'tenancy_agreement';
+  const completePackSignal = [
+    post.title,
+    post.description,
+    post.metaDescription,
+    post.targetKeyword,
+    ...(post.tags ?? []),
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+  const primaryIntent =
+    /complete eviction pack|complete pack|eviction pack/.test(completePackSignal)
+      ? 'eviction_pack'
+      : commercialResult.links[0]?.intent ?? 'tenancy_agreement';
   let primaryCommercialLink = commercialResult.links[0]?.target ?? COMMERCIAL_LINK_TARGETS.tenancy_agreement;
   if (primaryIntent === 'eviction_pack' && jurisdictionLabel !== 'England') {
     primaryCommercialLink = COMMERCIAL_LINK_TARGETS.eviction_notice;

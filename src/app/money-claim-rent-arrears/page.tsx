@@ -58,7 +58,7 @@ export default function MoneyClaimRentArrearsPage() {
           badge="Rent Recovery"
           title="Claim Rent Arrears from Your Tenant"
           subtitle="A step-by-step guide for landlords in England to recover unpaid rent through the County Court. From pre-action letters to enforcement."
-          primaryCta={{ label: 'View Money Claim Pack', href: moneyClaimProductLink }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Calculate Arrears', href: '/tools/rent-arrears-calculator' }}
           variant="pastel"
         />

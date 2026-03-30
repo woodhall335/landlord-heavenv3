@@ -132,7 +132,8 @@ export default function MoneyClaimAbandonedGoodsPage() {
         <UniversalHero
           title="Money Claim for Abandoned Goods Costs"
           subtitle="Recover abandoned goods and clearance costs using a legally validated, court-ready money claim route."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -580,6 +581,5 @@ export default function MoneyClaimAbandonedGoodsPage() {
     </>
   );
 }
-
 
 

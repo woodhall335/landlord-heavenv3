@@ -13,8 +13,8 @@ const CORE_PRICE_EXPECTATIONS: Record<
   Extract<ProductSku, 'notice_only' | 'complete_pack' | 'money_claim' | 'ast_standard' | 'ast_premium'>,
   { amount: number; display: string; pence: number }
 > = {
-  notice_only: { amount: 29.99, display: '£29.99', pence: 2999 },
-  complete_pack: { amount: 49.99, display: '£49.99', pence: 4999 },
+  notice_only: { amount: 39.99, display: '£39.99', pence: 3999 },
+  complete_pack: { amount: 89.99, display: '£89.99', pence: 8999 },
   money_claim: { amount: 29.99, display: '£29.99', pence: 2999 },
   ast_standard: { amount: 14.99, display: '£14.99', pence: 1499 },
   ast_premium: { amount: 24.99, display: '£24.99', pence: 2499 },
@@ -87,6 +87,8 @@ describe('Pricing regression checks', () => {
   it('has no stale pricing copy on user-facing paths', () => {
     const staleHits: string[] = [];
     const staleRules: Array<{ label: string; pattern: RegExp }> = [
+      { label: 'Notice Only £29.99', pattern: /(Section\s*21|Section\s*8|Notice(?:\s+Only)?|Eviction Notice)[^\n£]{0,120}£29\.99/i },
+      { label: 'Complete Pack £49.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£49\.99/i },
       { label: 'Notice Only £19.99', pattern: /(Section\s*21|Section\s*8|Notice(?:\s+Only)?|Eviction Notice)[^\n£]{0,120}£19\.99/i },
       { label: 'Complete Pack £79.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£79\.99/i },
       { label: 'Money Claim £59.99', pattern: /Money Claim(?:s)?[^\n£]{0,120}£59\.99/i },

@@ -31,7 +31,7 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
   description:
-    `Full eviction bundle for England landlords: the right notice, N5/N119 court forms, and an AI witness statement draft. ${price} one-time.`,
+    `Full eviction bundle for England landlords with notice-to-court continuity: the right notice, N5/N119 court forms, and an AI witness statement draft. ${price} one-time.`,
   openGraph: {
     title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
     description: "Complete eviction pack for England landlords. Notice to possession order with N5, N119, witness statement, and court filing guidance included.",
@@ -119,14 +119,14 @@ export default async function CompleteEvictionPackPage() {
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Who this is for</h2>
-            <p className="mt-4 text-lg text-gray-700">This is for you if the tenant problem is heading towards court and you do not want to piece the paperwork together yourself.</p>
+            <p className="mt-4 text-lg text-gray-700">This is for you if the tenant problem is heading towards court and you do not want to piece the paperwork together yourself. The aim is notice-to-court continuity from the first route decision through filing.</p>
             <ul className="mt-6 grid gap-3 text-gray-700 md:grid-cols-2">
               <li>Your tenant is in arrears or refusing to leave and you need to move from notice towards court.</li>
               <li>You want the notice, court forms, and evidence guidance together in one pack.</li>
               <li>You want stronger confidence before you file, not more late-night guesswork.</li>
               <li>You want to reduce errors, avoid rework, and keep the case moving.</li>
             </ul>
-            <p className="mt-6 text-gray-700">This pack is built for landlords who want a fuller, practical eviction solution from first notice through court preparation.</p>
+            <p className="mt-6 text-gray-700">This pack is built for landlords who want a fuller, practical eviction solution from first notice through court preparation, helping them avoid missing forms or filing mistakes when the case turns serious.</p>
             <div className="mt-8">
               <h3 className="mb-4 text-xl font-semibold text-charcoal">Route timing and compliance still matter</h3>
               <Section21ComplianceTimingPanel />
@@ -139,7 +139,7 @@ export default async function CompleteEvictionPackPage() {
         <Container>
           <div className="mx-auto mb-6 max-w-6xl">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What's included</h2>
-            <p className="mt-3 text-gray-700">You get a full England eviction document set: notice pack, court forms, witness statement support, and filing guidance so you can progress with fewer gaps.</p>
+            <p className="mt-3 text-gray-700">You get a full England eviction document set: notice, core court forms, and filing guidance together so you can progress with fewer gaps and reduce delay risk.</p>
           </div>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
             <WhatsIncludedInteractive
@@ -166,7 +166,7 @@ export default async function CompleteEvictionPackPage() {
           </div>
           <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your pack</h2>
-            <p className="mt-4 text-gray-700">If you need a fuller eviction solution, this is the practical next step. Generate the key documents in one flow and move from problem to action quickly.</p>
+            <p className="mt-4 text-gray-700">If you need a fuller eviction solution, this is the practical next step. Generate the key documents in one flow and move from problem to action quickly, with notice, core court forms, and filing guidance together in one England route.</p>
             <div className="mt-6"><WhyLandlordHeaven variant="full" /></div>
           </div>
         </Container>

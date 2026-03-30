@@ -50,7 +50,7 @@ const nextConfig = {
       },
       {
         source: '/tools/validators/scotland-notice-to-leave',
-        destination: '/scotland-notice-to-leave-template',
+        destination: '/scotland-eviction-notices',
         permanent: true,
       },
       {
@@ -65,7 +65,7 @@ const nextConfig = {
       },
       {
         source: '/tools/validators/wales-notice',
-        destination: '/wales-eviction-notice-template',
+        destination: '/wales-eviction-notices',
         permanent: true,
       },
       {
@@ -75,7 +75,7 @@ const nextConfig = {
       },
       {
         source: '/tenancy-agreements/standard',
-        destination: '/tenancy-agreements/england-wales',
+        destination: '/tenancy-agreement-template-uk',
         permanent: true,
       },
       {
@@ -95,12 +95,22 @@ const nextConfig = {
       },
       {
         source: '/products/tenancy-agreement',
-        destination: '/tenancy-agreements/england-wales',
+        destination: '/tenancy-agreement-template-uk',
         permanent: true,
       },
       {
         source: '/tools/section-21-validator',
-        destination: '/eviction-notice',
+        destination: '/eviction-notice-template',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreements',
+        destination: '/tenancy-agreement-template-uk',
+        permanent: true,
+      },
+      {
+        source: '/tenancy-agreements/england-wales',
+        destination: '/tenancy-agreement-template-uk',
         permanent: true,
       },
       {
@@ -117,6 +127,16 @@ const nextConfig = {
       // True duplicate SEO landing URLs -> canonical SEO landing pages
       {
         source: '/eviction-notice-uk',
+        destination: '/eviction-notice-template',
+        permanent: true,
+      },
+      {
+        source: '/eviction-notice',
+        destination: '/eviction-notice-template',
+        permanent: true,
+      },
+      {
+        source: '/eviction-notice-england',
         destination: '/eviction-notice-template',
         permanent: true,
       },
@@ -249,6 +269,16 @@ const nextConfig = {
         destination: '/northern-ireland-tenancy-agreement-template',
         permanent: true,
       },
+      {
+        source: '/wales-eviction-notice-template',
+        destination: '/wales-eviction-notices',
+        permanent: true,
+      },
+      {
+        source: '/scotland-notice-to-leave-template',
+        destination: '/scotland-eviction-notices',
+        permanent: true,
+      },
       // Final SEO closeout redirects for materially identical aliases
       {
         source: '/complete-eviction-pack-england',
@@ -257,6 +287,16 @@ const nextConfig = {
       },
       {
         source: '/eviction-pack-england',
+        destination: '/products/complete-pack',
+        permanent: true,
+      },
+      {
+        source: '/section-21-court-pack',
+        destination: '/products/complete-pack',
+        permanent: true,
+      },
+      {
+        source: '/section-8-court-pack',
         destination: '/products/complete-pack',
         permanent: true,
       },

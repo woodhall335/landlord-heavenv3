@@ -132,7 +132,8 @@ export default function MoneyClaimDepositShortfallPage() {
         <UniversalHero
           title="Money Claim for Deposit Shortfall"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_deposit_shortfall" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_deposit_shortfall' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -544,6 +545,5 @@ export default function MoneyClaimDepositShortfallPage() {
     </>
   );
 }
-
 
 

@@ -132,7 +132,8 @@ export default function MoneyClaimCCJEnforcementPage() {
         <UniversalHero
           title="Money Claim CCJ Enforcement Support"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_ccj_enforcement" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Review MCOL and N1 routes', href: '/money-claim-online-mcol' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -474,6 +475,5 @@ export default function MoneyClaimCCJEnforcementPage() {
     </>
   );
 }
-
 
 

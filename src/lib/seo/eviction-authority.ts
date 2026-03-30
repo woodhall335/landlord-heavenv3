@@ -70,7 +70,7 @@ const CLUSTER_CONFIG: Record<
     label: 'Tenant problems',
     description: 'Scenario pages for non-payment, anti-social behaviour, damage, access disputes, and route choice.',
     parent: SEO_PILLAR_ROUTES.howToEvictTenant,
-      tool: '/eviction-notice',
+      tool: '/eviction-notice-template',
     product: SEO_PRODUCT_ROUTES.completePack,
   },
   'eviction-notices': {
@@ -78,7 +78,7 @@ const CLUSTER_CONFIG: Record<
     label: 'Eviction notices',
     description: 'Notice drafting, validity, service, and route-selection guidance for Section 8 and legacy Section 21 intent.',
     parent: SEO_PILLAR_ROUTES.section8Notice,
-      tool: '/eviction-notice',
+      tool: '/eviction-notice-template',
     product: SEO_PRODUCT_ROUTES.noticeOnly,
   },
   'court-process': {
@@ -86,7 +86,7 @@ const CLUSTER_CONFIG: Record<
     label: 'Court process',
     description: 'Possession claim, hearing, order, timeline, and enforcement workflow pages.',
     parent: SEO_PILLAR_ROUTES.evictionProcessUk,
-      tool: '/eviction-notice',
+      tool: '/eviction-notice-template',
     product: SEO_PRODUCT_ROUTES.completePack,
   },
   'rent-arrears': {
@@ -102,7 +102,7 @@ const CLUSTER_CONFIG: Record<
     label: 'Possession and jurisdiction guides',
     description: 'Regional eviction guidance, hub pages, and possession follow-on resources.',
     parent: SEO_PILLAR_ROUTES.evictionGuides,
-      tool: '/eviction-notice',
+      tool: '/eviction-notice-template',
     product: SEO_PRODUCT_ROUTES.completePack,
   },
   'section-21-transition': {

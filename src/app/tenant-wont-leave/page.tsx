@@ -302,7 +302,7 @@ export default function TenantWontLeavePage() {
                       </ul>
                       <div className="mt-4">
                         <Link
-                          href="/eviction-notice"
+                          href="/eviction-notice-template"
                           className="inline-flex items-center gap-2 text-red-600 font-medium hover:underline"
                         >
                           Start the eviction notice pack

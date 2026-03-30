@@ -21,6 +21,11 @@ const moneyClaimProductLink = '/products/money-claim';
 
 const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
+const moneyClaimPackCta = {
+  label: `View Money Claim Pack - ${moneyClaimPrice}`,
+  href: moneyClaimProductLink,
+};
+
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
@@ -216,7 +221,7 @@ export default function MoneyClaimUnpaidRentPage() {
         badge="Debt Recovery"
         title="Money Claim for Unpaid Rent"
         subtitle="A practical landlord guide to turning rent arrears into a court-ready debt claim with cleaner paperwork, stronger pre-action steps, and a more realistic plan for judgment and enforcement."
-        primaryCta={{ label: `View Money Claim Pack - ${moneyClaimPrice}`, href: moneyClaimProductLink }}
+        primaryCta={{ label: 'View Money Claim Guide', href: '/money-claim' }}
         secondaryCta={{ label: "Calculate What You're Owed", href: '/tools/rent-arrears-calculator' }}
         variant="pastel"
         showTrustPositioningBar
@@ -435,8 +440,8 @@ export default function MoneyClaimUnpaidRentPage() {
             <CtaBand
               title="Need the debt route structured properly before you issue?"
               body="If your main problem is unpaid rent rather than possession, the Money Claim workflow is usually the better fit. It helps landlords turn arrears into a cleaner debt file with a Letter Before Claim, a clearer schedule, and a more controlled route into court."
-              primaryHref={moneyClaimProductLink}
-              primaryLabel={`View Money Claim Pack - ${moneyClaimPrice}`}
+              primaryHref={moneyClaimPackCta.href}
+              primaryLabel={moneyClaimPackCta.label}
               secondaryHref="/products/money-claim"
               secondaryLabel="View Money Claim Pack"
             />

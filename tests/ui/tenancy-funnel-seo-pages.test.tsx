@@ -6,6 +6,7 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import TenancyAgreementTemplatePage from '@/app/tenancy-agreement-template/page';
+import EnglandTenancyAgreementsPage from '@/app/tenancy-agreements/england/page';
 import AssuredShortholdTenancyAgreementTemplatePage from '@/app/assured-shorthold-tenancy-agreement-template/page';
 import TenancyAgreementTemplateUkPage from '@/app/tenancy-agreement-template-uk/page';
 import AssuredPeriodicTenancyAgreementPage from '@/app/assured-periodic-tenancy-agreement/page';
@@ -148,8 +149,12 @@ afterEach(() => {
   document.body.innerHTML = '';
 });
 
+const expectDocumentOrder = (before: HTMLElement, after: HTMLElement) => {
+  expect(before.compareDocumentPosition(after) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+};
+
 describe('tenancy funnel SEO pages', () => {
-  it('renders the rebuilt England template hub with the sample preview and lower specialist routes', () => {
+  it('renders the rebuilt England template hub with the sample preview and the full seven-route hierarchy', () => {
     render(<TenancyAgreementTemplatePage />);
 
     expect(
@@ -169,32 +174,76 @@ describe('tenancy funnel SEO pages', () => {
       expect(screen.getAllByRole('heading', { name: heading }).length).toBeGreaterThan(0);
     });
 
-    expect(screen.getByRole('link', { name: /view standard agreement/i })).toHaveAttribute(
+    const primaryRoutesHeading = screen.getByRole('heading', {
+      level: 2,
+      name: 'Primary England agreement routes',
+    });
+    const specialistRoutesHeading = screen.getByRole('heading', {
+      level: 2,
+      name: 'Specialist England agreement routes',
+    });
+    const supportRoutesHeading = screen.getByRole('heading', {
+      level: 2,
+      name: 'Legacy AST and assured periodic support routes',
+    });
+    const comparisonHelpHeading = screen.getByRole('heading', {
+      level: 2,
+      name: 'Need route-selection help?',
+    });
+
+    const standardLink = screen.getByRole('link', { name: /view standard agreement/i });
+    const premiumLink = screen.getByRole('link', { name: /view premium agreement/i });
+    const studentLink = screen.getByRole('link', { name: /view student agreement/i });
+    const hmoLink = screen.getByRole('link', { name: /view hmo \/ shared house agreement/i });
+    const lodgerLink = screen.getByRole('link', { name: /view lodger agreement/i });
+    const astLink = screen.getByRole('link', { name: /read ast legacy guide/i });
+    const assuredPeriodicLink = screen.getByRole('link', { name: /read assured periodic guide/i });
+    const compareRoutesLink = screen.getByRole('link', { name: /compare all england agreement routes/i });
+
+    expect(standardLink).toHaveAttribute(
       'href',
       '/standard-tenancy-agreement'
     );
-    expect(screen.getByRole('link', { name: /view premium agreement/i })).toHaveAttribute(
+    expect(premiumLink).toHaveAttribute(
       'href',
       '/premium-tenancy-agreement'
     );
-    expect(screen.getByRole('link', { name: /compare agreement types/i })).toHaveAttribute(
+    expect(studentLink).toHaveAttribute('href', '/student-tenancy-agreement');
+    expect(hmoLink).toHaveAttribute('href', '/hmo-shared-house-tenancy-agreement');
+    expect(lodgerLink).toHaveAttribute('href', '/lodger-agreement');
+    expect(astLink).toHaveAttribute('href', '/assured-shorthold-tenancy-agreement-template');
+    expect(assuredPeriodicLink).toHaveAttribute('href', '/assured-periodic-tenancy-agreement');
+    expect(compareRoutesLink).toHaveAttribute(
       'href',
       '/products/ast'
     );
 
-    expect(screen.getByText('Specialist England agreement routes')).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', {
-        level: 2,
-        name: 'Keep the main template journey broad, then branch only when the facts demand it',
-      })
-    ).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Student' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'HMO / Shared House' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Lodger' })).toBeInTheDocument();
+    expectDocumentOrder(primaryRoutesHeading, specialistRoutesHeading);
+    expectDocumentOrder(specialistRoutesHeading, supportRoutesHeading);
+    expectDocumentOrder(supportRoutesHeading, comparisonHelpHeading);
+    expectDocumentOrder(standardLink, premiumLink);
+    expectDocumentOrder(premiumLink, studentLink);
+    expectDocumentOrder(lodgerLink, astLink);
+    expectDocumentOrder(assuredPeriodicLink, compareRoutesLink);
 
     const wordCount = document.body.textContent?.trim().split(/\s+/).filter(Boolean).length ?? 0;
     expect(wordCount).toBeGreaterThan(700);
+  });
+
+  it('keeps the England guide page as support-only and routes broad users back to the hub first', () => {
+    render(<EnglandTenancyAgreementsPage />);
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'England Tenancy Agreement Guide' })
+    ).toBeInTheDocument();
+    expect(
+      screen
+        .getAllByRole('link', { name: /view the england tenancy agreement template/i })
+        .every((link) => link.getAttribute('href') === '/tenancy-agreement-template')
+    ).toBe(true);
+    expect(
+      screen.getAllByText(/move to the england template hub first/i).length
+    ).toBeGreaterThan(0);
   });
 
   it('keeps the AST page as a legacy bridge into the main hub', () => {

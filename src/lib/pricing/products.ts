@@ -32,8 +32,8 @@ export function formatPriceRangeLabel(amounts: readonly number[]): string {
  * Update ONLY here when prices change. All landing pages reference these values.
  */
 export const SEO_PRICES = {
-  evictionNotice: { amount: 29.99, display: formatPriceLabel(29.99) },
-  evictionBundle: { amount: 49.99, display: formatPriceLabel(49.99) },
+  evictionNotice: { amount: 39.99, display: formatPriceLabel(39.99) },
+  evictionBundle: { amount: 89.99, display: formatPriceLabel(89.99) },
   moneyClaim: { amount: 29.99, display: formatPriceLabel(29.99) },
   tenancyStandard: { amount: 14.99, display: formatPriceLabel(14.99) },
   tenancyPremium: { amount: 24.99, display: formatPriceLabel(24.99) },
@@ -68,8 +68,8 @@ export const ALLOWED_SEO_PRICES = new Set([
  * not to /wizard?product=X. The landing pages then CTA into the wizard.
  */
 export const SEO_LANDING_ROUTES = {
-  notice_only: '/eviction-notice',
-  complete_pack: '/eviction-pack-england',
+  notice_only: '/eviction-notice-template',
+  complete_pack: '/products/complete-pack',
   money_claim: '/money-claim',
   ast_standard: '/tenancy-agreement-template',
   ast_premium: '/premium-tenancy-agreement',
@@ -444,11 +444,11 @@ export function getRegionalBadge(sku: ProductSku): string | undefined {
  *
  * @param sku - Product SKU
  * @param params - Optional URL search params to append (for analytics tracking)
- * @returns Clean SEO landing route (e.g., '/eviction-notice')
+ * @returns Clean SEO landing route (e.g., '/eviction-notice-template')
  *
  * @example
- * getProductLandingHref('notice_only') // '/eviction-notice'
- * getProductLandingHref('notice_only', { src: 'blog' }) // '/eviction-notice?src=blog'
+ * getProductLandingHref('notice_only') // '/eviction-notice-template'
+ * getProductLandingHref('notice_only', { src: 'blog' }) // '/eviction-notice-template?src=blog'
  */
 export function getProductLandingHref(
   sku: ProductSku,

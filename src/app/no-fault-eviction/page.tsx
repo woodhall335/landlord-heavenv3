@@ -194,7 +194,7 @@ export default function NoFaultEvictionPage() {
                 Start the paid eviction notice route in minutes with the current England workflow.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/eviction-notice" className="hero-btn-primary">
+                <Link href="/eviction-notice-template" className="hero-btn-primary">
                   Start Eviction Notice Pack
                 </Link>
                 <Link href="/products/notice-only" className="hero-btn-secondary">

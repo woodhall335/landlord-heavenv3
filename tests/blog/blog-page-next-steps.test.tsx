@@ -133,15 +133,15 @@ describe('Blog page next steps rollout', () => {
     [
       'how-to-serve-eviction-notice',
       [
-        { label: 'Serve Section 21 Notice', href: '/serve-section-21-notice' },
-        { label: 'Serve Section 8 Notice', href: '/serve-section-8-notice' },
+        { label: 'Eviction Notice Template', href: '/eviction-notice-template' },
+        { label: 'Section 8 Notice', href: '/section-8-notice' },
         { label: 'Notice Only Bundle', href: '/products/notice-only' },
       ],
     ],
     [
       'how-long-does-eviction-take-uk',
       [
-        { label: 'Eviction Timeline England', href: '/eviction-timeline-england' },
+        { label: 'Eviction Process UK Guide', href: '/eviction-process-uk' },
         { label: 'Possession Order Timeline', href: '/possession-order-timeline' },
         { label: 'Complete Eviction Pack', href: '/products/complete-pack' },
       ],
@@ -149,7 +149,7 @@ describe('Blog page next steps rollout', () => {
     [
       'england-money-claim-online',
       [
-        { label: 'Money Claim Online MCOL Guide', href: '/money-claim-online-mcol' },
+        { label: 'Money Claim Guide', href: '/money-claim' },
         { label: 'Claim Unpaid Rent', href: '/money-claim-unpaid-rent' },
         { label: 'Money Claim Pack', href: '/products/money-claim' },
       ],
@@ -165,7 +165,7 @@ describe('Blog page next steps rollout', () => {
     [
       'uk-money-claims-online-guide',
       [
-        { label: 'Money Claim Online MCOL Guide', href: '/money-claim-online-mcol' },
+        { label: 'Money Claim Guide', href: '/money-claim' },
         { label: 'Small Claims Court for Landlords', href: '/money-claim-small-claims-landlord' },
         { label: 'Money Claim Pack', href: '/products/money-claim' },
       ],
@@ -180,8 +180,11 @@ describe('Blog page next steps rollout', () => {
     ).toBeInTheDocument();
 
     links.forEach(({ label, href }) => {
-      const link = screen.getByRole('link', { name: new RegExp(label, 'i') });
-      expect(link).toHaveAttribute('href', href);
+      const link = screen
+        .getAllByRole('link', { name: new RegExp(label, 'i') })
+        .find((candidate) => candidate.getAttribute('href') === href);
+
+      expect(link).toBeDefined();
     });
   });
 

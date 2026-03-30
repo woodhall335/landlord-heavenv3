@@ -268,7 +268,7 @@ export default function EICRPage() {
                 <Link href={noticeOnlyProductHref} className="hero-btn-primary">
                   Create Section 21 Notice
                 </Link>
-                <Link href="/eviction-notice" className="hero-btn-secondary">
+                <Link href="/eviction-notice-template" className="hero-btn-secondary">
                   Start Notice Pack
                 </Link>
               </div>

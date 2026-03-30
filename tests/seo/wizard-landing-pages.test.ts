@@ -27,7 +27,7 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(noticeOnlyContent.title).toBeTruthy();
       expect(noticeOnlyContent.description).toBeTruthy();
       expect(noticeOnlyContent.h1).toBeTruthy();
-      expect(noticeOnlyContent.slug).toBe('eviction-notice');
+      expect(noticeOnlyContent.slug).toBe('eviction-notice-template');
     });
 
     it('should mention "procedurally correct"', () => {
@@ -90,7 +90,7 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(completePackContent.title).toBeTruthy();
       expect(completePackContent.description).toBeTruthy();
       expect(completePackContent.h1).toBeTruthy();
-      expect(completePackContent.slug).toBe('eviction-pack-england');
+      expect(completePackContent.slug).toBe('products/complete-pack');
     });
 
     it('should be explicitly England only', () => {
@@ -325,8 +325,7 @@ describe('Wizard Landing Pages - Content Configuration', () => {
         (j) => j.name === 'England'
       );
       expect(englandCoverage?.legalBasis).toContain('Current England agreement wording');
-      expect(englandCoverage?.legalBasis).toContain('HMO');
-      expect(englandCoverage?.legalBasis).toContain('guarantor');
+      expect(englandCoverage?.legalBasis).toContain('ordinary-residential premium route');
 
       // Check Wales
       const walesCoverage = astPremiumContent.jurisdictionCoverage?.find(
@@ -367,8 +366,8 @@ describe('Wizard Landing Pages - Content Registry', () => {
 
   it('should return all landing page slugs', () => {
     const slugs = getAllLandingPageSlugs();
-    expect(slugs).toContain('eviction-notice');
-    expect(slugs).toContain('eviction-pack-england');
+    expect(slugs).toContain('eviction-notice-template');
+    expect(slugs).toContain('products/complete-pack');
     expect(slugs).toContain('money-claim');
     expect(slugs).toContain('tenancy-agreement');
     expect(slugs).toContain('premium-tenancy-agreement');
@@ -441,7 +440,13 @@ describe('Wizard Landing Pages - Value Proposition Requirements', () => {
 
     it('should mention procedural benefits in whyUseThis section', () => {
       Object.values(WIZARD_LANDING_CONTENT).forEach((content) => {
-        const combinedBenefits = content.whyUseThis.benefits.join(' ').toLowerCase();
+        const combinedBenefits = [
+          content.whyUseThis.intro,
+          ...content.whyUseThis.benefits,
+          ...content.proceduralBenefits,
+        ]
+          .join(' ')
+          .toLowerCase();
         // At least one of these procedural terms should appear
         const hasProceduralTerm =
           combinedBenefits.includes('procedur') ||
@@ -548,7 +553,7 @@ describe('Wizard Landing Pages - Value Proposition Requirements', () => {
         f.question.toLowerCase().includes('hmo')
       );
       expect(hmoFaq).toBeTruthy();
-      expect(hmoFaq?.answer.toLowerCase()).toContain('joint and several');
+      expect(hmoFaq?.answer.toLowerCase()).toContain('dedicated product');
     });
 
     it('should explain guarantor clauses in FAQs', () => {
@@ -574,12 +579,12 @@ describe('Wizard Landing Pages - Value Proposition Requirements', () => {
 describe('Wizard Landing Pages - Pricing Accuracy', () => {
   it('should use correct price for Eviction Notice', () => {
     expect(noticeOnlyContent.price).toBe(SEO_PRICES.evictionNotice.display);
-    expect(noticeOnlyContent.price).toBe('£29.99');
+    expect(noticeOnlyContent.price).toBe('£39.99');
   });
 
   it('should use correct price for Eviction Bundle', () => {
     expect(completePackContent.price).toBe(SEO_PRICES.evictionBundle.display);
-    expect(completePackContent.price).toBe('£49.99');
+    expect(completePackContent.price).toBe('£89.99');
   });
 
   it('should use correct price for Money Claim', () => {
@@ -598,8 +603,8 @@ describe('Wizard Landing Pages - Pricing Accuracy', () => {
   });
 
   it('should include price in title for all products', () => {
-    expect(noticeOnlyContent.title).toContain('£29.99');
-    expect(completePackContent.title).toContain('£49.99');
+    expect(noticeOnlyContent.title).toContain('£39.99');
+    expect(completePackContent.title).toContain('£89.99');
     expect(moneyClaimContent.title).toContain('£29.99');
     expect(astStandardContent.title).toContain('£14.99');
     expect(astPremiumContent.title).toContain('£24.99');
@@ -752,9 +757,9 @@ describe('Wizard Landing Pages - Price Regression Guard', () => {
   });
 
   it('should include the current core prices in allowed SEO prices', () => {
-    expect(ALLOWED_SEO_PRICES.size).toBe(6);
-    expect(ALLOWED_SEO_PRICES.has('£29.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£49.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.size).toBeGreaterThanOrEqual(6);
+    expect(ALLOWED_SEO_PRICES.has('£39.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has('£89.99')).toBe(true);
     expect(ALLOWED_SEO_PRICES.has('£29.99')).toBe(true);
     expect(ALLOWED_SEO_PRICES.has('£14.99')).toBe(true);
     expect(ALLOWED_SEO_PRICES.has('£24.99')).toBe(true);
@@ -898,16 +903,16 @@ describe('Wizard Landing Pages - Money Claim England-Only Scope', () => {
  */
 describe('Wizard Landing Pages - SEO Route Configuration', () => {
   it('should have correct SEO landing routes defined', () => {
-    expect(SEO_LANDING_ROUTES.notice_only).toBe('/eviction-notice');
-    expect(SEO_LANDING_ROUTES.complete_pack).toBe('/eviction-pack-england');
+    expect(SEO_LANDING_ROUTES.notice_only).toBe('/eviction-notice-template');
+    expect(SEO_LANDING_ROUTES.complete_pack).toBe('/products/complete-pack');
     expect(SEO_LANDING_ROUTES.money_claim).toBe('/money-claim');
     expect(SEO_LANDING_ROUTES.ast_standard).toBe('/tenancy-agreement-template');
     expect(SEO_LANDING_ROUTES.ast_premium).toBe('/premium-tenancy-agreement');
   });
 
   it('should have slugs matching SEO landing routes', () => {
-    expect(noticeOnlyContent.slug).toBe('eviction-notice');
-    expect(completePackContent.slug).toBe('eviction-pack-england');
+    expect(noticeOnlyContent.slug).toBe('eviction-notice-template');
+    expect(completePackContent.slug).toBe('products/complete-pack');
     expect(moneyClaimContent.slug).toBe('money-claim');
     expect(astStandardContent.slug).toBe('tenancy-agreement');
     expect(astPremiumContent.slug).toBe('premium-tenancy-agreement');

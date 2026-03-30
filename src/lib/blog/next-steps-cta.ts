@@ -75,13 +75,13 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
   ],
   'how-to-serve-eviction-notice': [
     {
-      href: '/serve-section-21-notice',
-      label: 'Serve Section 21 Notice',
+      href: '/eviction-notice-template',
+      label: 'Eviction Notice Template',
       priority: 1,
     },
     {
-      href: '/serve-section-8-notice',
-      label: 'Serve Section 8 Notice',
+      href: '/section-8-notice',
+      label: 'Section 8 Notice',
       priority: 2,
     },
     {
@@ -109,8 +109,8 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
   ],
   'england-money-claim-online': [
     {
-      href: '/money-claim-online-mcol',
-      label: 'Money Claim Online MCOL Guide',
+      href: '/money-claim',
+      label: 'Money Claim Guide',
       priority: 1,
     },
     {
@@ -143,8 +143,8 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
   ],
   'uk-money-claims-online-guide': [
     {
-      href: '/money-claim-online-mcol',
-      label: 'Money Claim Online MCOL Guide',
+      href: '/money-claim',
+      label: 'Money Claim Guide',
       priority: 1,
     },
     {
@@ -461,8 +461,8 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
 
   if (isSection21Related) {
     steps.push({
-      href: SEO_PILLAR_ROUTES.section21BanUk,
-      label: 'Section 21 Ban UK Guide',
+      href: '/eviction-notice-template',
+      label: 'Eviction Notice Template',
       priority: 1,
     });
     steps.push({
@@ -471,8 +471,8 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
       priority: 2,
     });
     steps.push({
-      href: SEO_PRODUCT_ROUTES.completePack,
-      label: 'Complete Eviction Pack',
+      href: SEO_PRODUCT_ROUTES.noticeOnly,
+      label: 'Notice Only Bundle',
       priority: 3,
     });
   }
@@ -510,22 +510,19 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     lowerSlug.includes('money-claim') ||
     lowerTags.some((t) => t.includes('arrears'))
   ) {
-    steps.push({
-      href: '/tenant-not-paying-rent',
-      label: 'Tenant Not Paying Rent Guide',
-      priority: 1,
-    });
-    if (isNonEngland) {
-      steps.push(getNonEnglandArrearsStep(jurisdiction));
+    const isBroadMoneyClaimIntent =
+      lowerSlug.includes('money-claim') ||
+      lowerTags.some((t) => t.includes('money claim'));
+
+    if (isBroadMoneyClaimIntent) {
       steps.push({
-        href: SEO_PRODUCT_ROUTES.noticeOnly,
-        label: 'Notice Only Bundle',
-        priority: 3,
+        href: '/money-claim',
+        label: 'Money Claim Guide',
+        priority: 1,
       });
-    } else {
       steps.push({
-        href: SEO_PILLAR_ROUTES.section8Notice,
-        label: 'Section 8 Notice for Rent Arrears',
+        href: '/money-claim-unpaid-rent',
+        label: 'Claim Unpaid Rent',
         priority: 2,
       });
       steps.push({
@@ -533,6 +530,31 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
         label: 'Money Claim Pack',
         priority: 3,
       });
+    } else {
+      steps.push({
+        href: '/tenant-not-paying-rent',
+        label: 'Tenant Not Paying Rent Guide',
+        priority: 1,
+      });
+      if (isNonEngland) {
+        steps.push(getNonEnglandArrearsStep(jurisdiction));
+        steps.push({
+          href: SEO_PRODUCT_ROUTES.noticeOnly,
+          label: 'Notice Only Bundle',
+          priority: 3,
+        });
+      } else {
+        steps.push({
+          href: SEO_PILLAR_ROUTES.section8Notice,
+          label: 'Section 8 Notice for Rent Arrears',
+          priority: 2,
+        });
+        steps.push({
+          href: SEO_PRODUCT_ROUTES.moneyClaim,
+          label: 'Money Claim Pack',
+          priority: 3,
+        });
+      }
     }
   }
 

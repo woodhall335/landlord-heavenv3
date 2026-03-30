@@ -111,7 +111,7 @@ export interface WizardLandingContent {
  * NOTICE ONLY - Eviction Notices for England, Wales, Scotland
  */
 export const noticeOnlyContent: WizardLandingContent = {
-  slug: 'eviction-notice',
+  slug: 'eviction-notice-template',
   title: `Eviction Notice Generator 2026 | England, Wales & Scotland | ${SEO_PRICES.evictionNotice.display}`,
   description:
     'Generate procedurally correct eviction notices for England (Section 21, Section 8), Wales (Section 173/181 under Renting Homes Wales Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.',
@@ -280,7 +280,7 @@ export const noticeOnlyContent: WizardLandingContent = {
  * COMPLETE PACK - Full Eviction Bundle (England ONLY)
  */
 export const completePackContent: WizardLandingContent = {
-  slug: 'eviction-pack-england',
+  slug: 'products/complete-pack',
   title: `Complete Eviction Bundle 2026 – England | N5, N5B, N119 + Particulars of Claim | ${SEO_PRICES.evictionBundle.display}`,
   description:
     'End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route — not just the notice. All forms mapped and validated.',

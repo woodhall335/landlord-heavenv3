@@ -130,7 +130,8 @@ export default function MoneyClaimFormerTenantPage() {
         <UniversalHero
           title="Money Claim Against a Former Tenant"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_former_tenant" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_former_tenant' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -409,6 +410,5 @@ export default function MoneyClaimFormerTenantPage() {
     </>
   );
 }
-
 
 

@@ -19,12 +19,12 @@ const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Eviction Notice UK | Section 8 and Possession Notices | ${price}`,
+  title: `Notice Only Pack for Landlords | Create and Serve the Right Notice | ${price}`,
   description:
-    `Get the right eviction notice for England, Wales, or Scotland with service guidance and checks before you serve.`,
+    `Create the right notice pack for England, Wales, or Scotland with service guidance and route checks before you serve.`,
   openGraph: {
-    title: `Eviction Notice 2026 | England, Wales & Scotland | ${price}`,
-    description: "Eviction notice pack for England, Wales, and Scotland. Includes the notice itself, service instructions, a validity checklist, and preview before purchase.",
+    title: `Notice Only Pack 2026 | Generate the Right Notice | ${price}`,
+    description: "Transactional notice pack for England, Wales, and Scotland. Includes the notice itself, service instructions, a validity checklist, and preview before purchase.",
     url: getCanonicalUrl('/products/notice-only'),
   },
   alternates: {
@@ -113,10 +113,10 @@ export default async function NoticeOnlyPage() {
               <li>You are worried about serving the wrong paperwork and losing months.</li>
               <li>You want the notice, service steps, and checks lined up before you press print.</li>
             </ul>
-            <p className="mt-6 text-gray-700">Serving the correct notice is what starts your eviction route. A mistake here can delay the whole case.</p>
+            <p className="mt-6 text-gray-700">Serving the correct notice is what starts your eviction route. A mistake here can delay the whole case, so this page is built to help you avoid invalid notice mistakes before you serve.</p>
             <div className="mt-8">
               <h3 className="mb-4 text-xl font-semibold text-charcoal">Need help working out the England route?</h3>
-              <p className="mb-4 text-gray-700">Check the route first, then generate the notice that matches your case and your region.</p>
+              <p className="mb-4 text-gray-700">Check the route first, then generate the notice that matches your case and your region. The goal is simple: route checks before you generate, better service guidance, and fewer re-serves.</p>
             </div>
             <Section21ComplianceTimingPanel />
           </div>
@@ -127,7 +127,7 @@ export default async function NoticeOnlyPage() {
         <Container>
           <div className="mx-auto mb-6 max-w-6xl">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What's included</h2>
-            <p className="mt-3 text-gray-700">You get a practical notice pack: the notice itself, service instructions, and a validity checklist so you can start the process with fewer mistakes.</p>
+            <p className="mt-3 text-gray-700">You get a practical notice pack: the notice itself, service instructions, and a validity checklist so you can reduce delays caused by the wrong notice path.</p>
           </div>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
             <WhatsIncludedInteractive
@@ -161,7 +161,7 @@ export default async function NoticeOnlyPage() {
         <Container>
           <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_36px_rgba(15,23,42,0.06)] md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your pack</h2>
-            <p className="mt-4 text-gray-700">If your tenant is not paying or refusing to leave, the next step is getting the right notice in place. This pack gives you the right starting documents so you can move forward now.</p>
+            <p className="mt-4 text-gray-700">If your tenant is not paying or refusing to leave, the next step is getting the right notice in place. This pack gives you the right starting documents so you can move forward now without relying on generic wording or guesswork.</p>
             <div className="mt-6"><WhyLandlordHeaven variant="full" /></div>
             <div className="mt-8 text-center">
               <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">Find out which notice you need →</Link>

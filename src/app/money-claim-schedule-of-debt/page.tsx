@@ -78,7 +78,8 @@ export default function MoneyClaimScheduleOfDebtPage() {
         <UniversalHero
           title="Schedule of Debt for Money Claims"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_schedule_of_debt" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Review pre-action letter', href: '/money-claim-letter-before-action' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -428,6 +429,5 @@ export default function MoneyClaimScheduleOfDebtPage() {
     </>
   );
 }
-
 
 

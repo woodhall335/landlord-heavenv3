@@ -24,9 +24,9 @@ const product = PRODUCTS.money_claim;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Money Claim Pack 2026 for England Landlords | ${price}`,
+  title: `Start a Landlord Money Claim Pack 2026 | England Only | ${price}`,
   description:
-    `Recover unpaid rent, property damage, cleaning costs and other tenant debts through English courts.`,
+    `Start a landlord money claim pack for unpaid rent, property damage, cleaning costs, and other tenant debts through the England county court route.`,
   openGraph: {
     title: `Money Claim Pack 2026 for England Landlords | ${price}`,
     description: "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs and other tenant debts. N1 form, Letter Before Claim, interest calculator, and court-ready guidance included.",
@@ -122,7 +122,7 @@ export default async function MoneyClaimPage() {
         <Container>
           <div className="mx-auto mb-6 max-w-6xl">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What's included</h2>
-            <p className="mt-3 text-gray-700">You get the core money claim documents to pursue unpaid rent and tenant debt properly, including the pre-action letter pack and court claim paperwork.</p>
+            <p className="mt-3 text-gray-700">You get the core money claim documents to pursue unpaid rent and tenant debt properly, including the pre-action letter pack and court claim paperwork. This is what is included when you need to start a landlord money claim pack rather than read another general guide.</p>
           </div>
         </Container>
         <WhatsIncludedInteractive

@@ -492,11 +492,13 @@ export function NextBestActionCard({
             {jurisdiction === 'england' && (
               <>
                 <Link
-                  href="/eviction-notice"
+                  href="/eviction-notice-template"
                   className="text-xs text-primary hover:underline"
-                  onClick={() => onCtaClick?.('product', '/eviction-notice', 'Eviction Notice Pack')}
+                  onClick={() =>
+                    onCtaClick?.('guide', '/eviction-notice-template', 'Eviction Notice Template')
+                  }
                 >
-                  Eviction Notice Pack
+                  Eviction Notice Template
                 </Link>
               </>
             )}

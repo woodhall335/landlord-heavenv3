@@ -131,7 +131,8 @@ export default function MoneyClaimGardenDamagePage() {
         <UniversalHero
           title="Money Claim for Garden Damage Costs"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_garden_damage" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_garden_damage' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -551,6 +552,5 @@ export default function MoneyClaimGardenDamagePage() {
     </>
   );
 }
-
 
 

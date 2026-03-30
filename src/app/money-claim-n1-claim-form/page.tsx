@@ -130,7 +130,8 @@ export default function MoneyClaimN1ClaimFormPage() {
         <UniversalHero
           title="N1 Claim Form for Landlord Money Claims"
           subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?topic=debt&src=seo_money_claim_n1_claim_form" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Compare with MCOL', href: '/money-claim-online-mcol' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -493,6 +494,5 @@ export default function MoneyClaimN1ClaimFormPage() {
     </>
   );
 }
-
 
 

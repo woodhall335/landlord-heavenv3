@@ -131,7 +131,8 @@ export default function MoneyClaimApplianceDamagePage() {
         <UniversalHero
           title="Money Claim for Appliance Damage"
           subtitle="Recover appliance damage losses with a legally validated, solicitor-grade, court-ready money claim workflow."
-          primaryCta={{ label: "Start now", href: "/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt" }}
+          primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
+          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -487,6 +488,5 @@ export default function MoneyClaimApplianceDamagePage() {
     </>
   );
 }
-
 
 

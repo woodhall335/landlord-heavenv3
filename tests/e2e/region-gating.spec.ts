@@ -8,8 +8,8 @@
  *
  * | Product                | England | Wales | Scotland | Northern Ireland |
  * |------------------------|---------|-------|----------|------------------|
- * | Notice Only (£29.99)   | Yes     | Yes   | Yes      | No               |
- * | Eviction Pack (£49.99) | Yes     | No    | No       | No               |
+ * | Notice Only (£39.99)   | Yes     | Yes   | Yes      | No               |
+ * | Eviction Pack (£89.99) | Yes     | No    | No       | No               |
  * | Money Claim (£29.99)   | Yes     | No    | No       | No               |
  * | Standard TA (£14.99)   | Yes     | Yes   | Yes      | Yes              |
  * | Premium TA (£24.99)    | Yes     | Yes   | Yes      | Yes              |

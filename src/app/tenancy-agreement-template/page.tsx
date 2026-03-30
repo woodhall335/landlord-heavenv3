@@ -9,6 +9,7 @@ import { getCanonicalUrl } from '@/lib/seo';
 import {
   StructuredData,
   breadcrumbSchema,
+  faqPageSchema,
 } from '@/lib/seo/structured-data';
 import {
   ENGLAND_TENANCY_PRODUCT_IMAGES,
@@ -44,32 +45,85 @@ const comparisonRows = [
     genericTemplate:
       'Still depends on the landlord spotting whether the let should be Standard, Premium, Student, HMO / Shared House, or Lodger.',
     guidedAgreement:
-      'Standard and Premium lead the ordinary-residential journey, with specialist routes kept separate when the occupier setup needs different drafting.',
+      'Standard and Premium lead the ordinary-residential journey, with specialist and legacy support routes kept separate when the facts point elsewhere.',
   },
 ];
 
-const leadRoutes: Array<{
+const primaryRoutes: Array<{
   sku: EnglandModernTenancyProductSku;
   title: string;
   href: string;
   label: string;
   body: string;
+  ctaLabel: string;
 }> = [
   {
     sku: 'england_standard_tenancy_agreement',
-    title: 'Standard agreement',
+    title: 'Standard Tenancy Agreement',
     href: '/standard-tenancy-agreement',
-    label: 'Best for most straightforward whole-property lets',
+    label: 'Mainstream England route',
     body: 'Use the main England standard route when the tenancy is an ordinary residential let and you want the right agreement structure without paying for broader drafting you do not need.',
+    ctaLabel: 'View standard agreement',
   },
   {
     sku: 'england_premium_tenancy_agreement',
-    title: 'Premium agreement',
+    title: 'Premium Tenancy Agreement',
     href: '/premium-tenancy-agreement',
-    label: 'Best for fuller ordinary-residential drafting',
+    label: 'Fuller ordinary-residential drafting',
     body: 'Choose Premium when you still have a normal residential let but want broader wording around access, repairs, keys, guarantors, and day-to-day management from day one.',
+    ctaLabel: 'View premium agreement',
   },
 ];
+
+const specialistRoutes: Array<{
+  sku: EnglandModernTenancyProductSku;
+  title: string;
+  href: string;
+  summary: string;
+  ctaLabel: string;
+}> = [
+  {
+    sku: 'england_student_tenancy_agreement',
+    title: 'Student Tenancy Agreement',
+    href: '/student-tenancy-agreement',
+    summary:
+      'Use this when the let is student-focused, guarantor-backed, or needs clearer replacement and end-of-term expectations.',
+    ctaLabel: 'View student agreement',
+  },
+  {
+    sku: 'england_hmo_shared_house_tenancy_agreement',
+    title: 'HMO / Shared House Tenancy Agreement',
+    href: '/hmo-shared-house-tenancy-agreement',
+    summary:
+      'Use this when sharer controls, communal areas, or room-by-room occupation need their own drafting instead of being folded into a normal residential route.',
+    ctaLabel: 'View HMO / Shared House agreement',
+  },
+  {
+    sku: 'england_lodger_agreement',
+    title: 'Room Let / Lodger Agreement',
+    href: '/lodger-agreement',
+    summary:
+      'Use this when the landlord lives at the property and the occupier is sharing the home rather than taking the ordinary assured periodic route.',
+    ctaLabel: 'View lodger agreement',
+  },
+];
+
+const supportRoutes = [
+  {
+    title: 'Assured Shorthold Tenancy Agreement Template',
+    href: '/assured-shorthold-tenancy-agreement-template',
+    summary:
+      'Use this legacy AST guide when older terminology is driving the search. It explains the wording shift and routes you back to the main England template hub.',
+    ctaLabel: 'Read AST legacy guide',
+  },
+  {
+    title: 'Assured Periodic Tenancy Agreement',
+    href: '/assured-periodic-tenancy-agreement',
+    summary:
+      'Use this support page when you need the newer England terminology explained in plain English before returning to the main template and route-selection journey.',
+    ctaLabel: 'Read assured periodic guide',
+  },
+] as const;
 
 const clauseExplainers = [
   {
@@ -86,40 +140,11 @@ const clauseExplainers = [
   },
 ];
 
-const specialistRoutes: Array<{
-  sku: EnglandModernTenancyProductSku;
-  title: string;
-  href: string;
-  summary: string;
-}> = [
-  {
-    sku: 'england_student_tenancy_agreement',
-    title: 'Student',
-    href: '/student-tenancy-agreement',
-    summary:
-      'Use this when the let is student-focused, guarantor-backed, or needs clearer replacement and end-of-term expectations.',
-  },
-  {
-    sku: 'england_hmo_shared_house_tenancy_agreement',
-    title: 'HMO / Shared House',
-    href: '/hmo-shared-house-tenancy-agreement',
-    summary:
-      'Use this when sharer controls, communal areas, or room-by-room occupation need their own drafting instead of being folded into a normal residential route.',
-  },
-  {
-    sku: 'england_lodger_agreement',
-    title: 'Lodger',
-    href: '/lodger-agreement',
-    summary:
-      'Use this when the landlord lives at the property and the occupier is sharing the home rather than taking the ordinary assured periodic route.',
-  },
-];
-
 const faqs: FAQItem[] = [
   {
     question: 'Is this a real tenancy agreement template example?',
     answer:
-      'Yes. The sample agreement preview uses Landlord Heaven’s England standard agreement wording with safe example names, contact details, and property facts so you can see how the document is structured before choosing a route.',
+      "Yes. The sample agreement preview uses Landlord Heaven's England standard agreement wording with safe example names, contact details, and property facts so you can see how the document is structured before choosing a route.",
   },
   {
     question: 'Can I download this exact template as a blank file?',
@@ -127,9 +152,9 @@ const faqs: FAQItem[] = [
       'No. This page is designed to satisfy template intent by showing a credible example first, then guiding landlords into the route that fits the property and tenancy setup instead of leaving them with a generic blank form to edit alone.',
   },
   {
-    question: 'What is the difference between this page and /products/ast?',
+    question: 'Why do Standard and Premium come before the other route links?',
     answer:
-      'This page is the England template and example hub for broad searches such as tenancy agreement template, rent agreement, and tenancy contract. /products/ast is the route-selection page where you compare Standard, Premium, Student, HMO / Shared House, and Lodger in more detail.',
+      'Because they are the default mainstream England routes for ordinary residential lets. Specialist routes are still available, but they should appear after the main template and comparison journey instead of interrupting it.',
   },
   {
     question: 'Why do AST and assured periodic wording both appear in the cluster?',
@@ -137,9 +162,9 @@ const faqs: FAQItem[] = [
       'Because landlords still search with AST terminology, while the current England route is better explained through assured periodic language. The legacy AST support page and the assured periodic support page both point back to this main England template hub.',
   },
   {
-    question: 'When should I move to a specialist agreement instead of Standard or Premium?',
+    question: 'What is the difference between this page and /products/ast?',
     answer:
-      'Move to a specialist route when the occupier setup changes the drafting need. Student lets, HMO / Shared House arrangements, and resident-landlord lodger setups should not be forced into the same model as an ordinary residential whole-property tenancy.',
+      'This page is the England template and example hub for broad searches such as tenancy agreement template, rent agreement, and tenancy contract. /products/ast is the downstream comparison page for landlords who want every England route shown side by side after they have seen the template-first hub.',
   },
   {
     question: 'Does this page apply outside England?',
@@ -202,7 +227,8 @@ function LeadRouteCard({
   href,
   label,
   body,
-}: (typeof leadRoutes)[number]) {
+  ctaLabel,
+}: (typeof primaryRoutes)[number]) {
   const image = ENGLAND_TENANCY_PRODUCT_IMAGES[sku];
 
   return (
@@ -225,7 +251,7 @@ function LeadRouteCard({
             href={href}
             className="inline-flex items-center justify-center rounded-xl border border-[#D1C4F8] bg-[#F5F0FF] px-5 py-3 text-sm font-semibold text-[#432B87] transition hover:border-[#B69BF4] hover:bg-[#EEE6FF]"
           >
-            View {title.toLowerCase()}
+            {ctaLabel}
           </Link>
         </div>
       </div>
@@ -238,6 +264,7 @@ function SpecialistRouteCard({
   title,
   href,
   summary,
+  ctaLabel,
 }: (typeof specialistRoutes)[number]) {
   const image = ENGLAND_TENANCY_PRODUCT_IMAGES[sku];
 
@@ -259,9 +286,25 @@ function SpecialistRouteCard({
           href={href}
           className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
         >
-          View route
+          {ctaLabel}
         </Link>
       </div>
+    </article>
+  );
+}
+
+function SupportRouteCard({ title, href, summary, ctaLabel }: (typeof supportRoutes)[number]) {
+  return (
+    <article className="rounded-[1.7rem] border border-[#E3DDD2] bg-white p-5 shadow-[0_14px_32px_rgba(31,41,55,0.04)]">
+      <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">Support route</p>
+      <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#141B2D]">{title}</h3>
+      <p className="mt-3 text-sm leading-7 text-[#556177]">{summary}</p>
+      <Link
+        href={href}
+        className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
+      >
+        {ctaLabel}
+      </Link>
     </article>
   );
 }
@@ -278,6 +321,7 @@ export default function TenancyAgreementTemplatePage() {
         ])}
       />
       <StructuredData data={webPageSchema} />
+      <StructuredData data={faqPageSchema(faqs)} />
 
       <main>
         <section className="relative overflow-hidden border-b border-[#E7E0D4] bg-gradient-to-b from-[#FBF8F2] via-[#F7F3EC] to-[#F6F2EB] pt-24 pb-16 md:pt-28 md:pb-20">
@@ -306,7 +350,7 @@ export default function TenancyAgreementTemplatePage() {
                 tenancy.
               </p>
               <p>
-                If you still use older terminology, the{' '}
+                If older terminology is still shaping the search, the{' '}
                 <Link
                   href="/assured-shorthold-tenancy-agreement-template"
                   className="font-semibold text-[#4A46C8] underline-offset-4 hover:underline"
@@ -320,8 +364,8 @@ export default function TenancyAgreementTemplatePage() {
                 >
                   assured periodic guide
                 </Link>{' '}
-                both explain the wording shift, but this page remains the main England template
-                destination.
+                stay available lower in the journey, but this page remains the main England
+                template destination.
               </p>
             </div>
           </Container>
@@ -331,15 +375,16 @@ export default function TenancyAgreementTemplatePage() {
           <section className="rounded-[2.3rem] border border-[#E5DED2] bg-white p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
             <div className="max-w-3xl">
               <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
-                Transition before product routing
+                Transition before route choice
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
                 Free / generic template vs guided agreement
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
-                The example above shows what a real England agreement looks like. The next question
-                is whether you want to rely on a static template file or move into a guided route
-                that keeps the agreement structure, supporting documents, and tenancy setup aligned.
+                The example above shows what a real England agreement looks like. The next
+                question is whether you want to rely on a static template file or move into a
+                guided route that keeps the agreement structure, supporting documents, and tenancy
+                setup aligned.
               </p>
             </div>
 
@@ -366,32 +411,70 @@ export default function TenancyAgreementTemplatePage() {
                 </div>
               ))}
             </div>
+          </section>
 
-            <div className="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr_0.9fr]">
-              {leadRoutes.map((route) => (
+          <section className="mt-12 rounded-[2.3rem] border border-[#E5DED2] bg-white p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                Default next step after the preview
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                Primary England agreement routes
+              </h2>
+              <p className="mt-4 text-base leading-7 text-[#556177]">
+                Start with Standard or Premium when the let is an ordinary residential tenancy.
+                Those are the default mainstream England choices after the template-first preview.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-6 xl:grid-cols-2">
+              {primaryRoutes.map((route) => (
                 <LeadRouteCard key={route.title} {...route} />
               ))}
+            </div>
+          </section>
 
-              <article className="rounded-[2rem] border border-[#D9D0EE] bg-gradient-to-br from-[#F5F1FF] via-white to-[#FBF9FF] p-6 shadow-[0_18px_46px_rgba(91,86,232,0.08)] md:p-7">
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-                  Compare all England routes
-                </p>
-                <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#141B2D]">
-                  Need the full route-selection page?
-                </h3>
-                <p className="mt-4 text-base leading-7 text-[#556177]">
-                  Use the England comparison page if you want Standard, Premium, Student, HMO /
-                  Shared House, and Lodger shown side by side before you choose what to do next.
-                </p>
-                <div className="mt-6">
-                  <Link
-                    href="/products/ast"
-                    className="inline-flex items-center justify-center rounded-xl border border-[#CBBDF1] bg-white px-5 py-3 text-sm font-semibold text-[#432B87] transition hover:border-[#B69BF4] hover:bg-[#F7F4FF]"
-                  >
-                    Compare agreement types
-                  </Link>
-                </div>
-              </article>
+          <section className="mt-12 rounded-[2.3rem] border border-[#E5DED2] bg-[#FBF9F4] p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                Branch only when the facts demand it
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                Specialist England agreement routes
+              </h2>
+              <p className="mt-4 text-base leading-7 text-[#556177]">
+                Student, HMO / Shared House, and Lodger should stay clearly available, but they
+                belong after the mainstream England journey rather than competing with it at the
+                top of the page.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-5 lg:grid-cols-3">
+              {specialistRoutes.map((route) => (
+                <SpecialistRouteCard key={route.title} {...route} />
+              ))}
+            </div>
+          </section>
+
+          <section className="mt-12 rounded-[2.3rem] border border-[#E5DED2] bg-white p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                Legacy wording and terminology support
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                Legacy AST and assured periodic support routes
+              </h2>
+              <p className="mt-4 text-base leading-7 text-[#556177]">
+                These pages stay live so landlords using older or transitional terminology can
+                understand the wording shift, then return to the main template-first hub without
+                mistaking the support pages for the broad owner.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-5 lg:grid-cols-2">
+              {supportRoutes.map((route) => (
+                <SupportRouteCard key={route.href} {...route} />
+              ))}
             </div>
           </section>
 
@@ -420,28 +503,6 @@ export default function TenancyAgreementTemplatePage() {
             </div>
           </section>
 
-          <section className="mt-12 rounded-[2.3rem] border border-[#E5DED2] bg-[#FBF9F4] p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
-            <div className="max-w-3xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
-                Specialist England agreement routes
-              </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Keep the main template journey broad, then branch only when the facts demand it
-              </h2>
-              <p className="mt-4 text-base leading-7 text-[#556177]">
-                Standard and Premium lead the ordinary-residential journey. If the tenancy is
-                student-focused, shared-house / HMO, or resident-landlord, use the specialist route
-                instead of forcing it into the wrong document model.
-              </p>
-            </div>
-
-            <div className="mt-8 grid gap-5 lg:grid-cols-3">
-              {specialistRoutes.map((route) => (
-                <SpecialistRouteCard key={route.title} {...route} />
-              ))}
-            </div>
-          </section>
-
           <div className="mt-12">
             <FAQSection
               title="Tenancy agreement template FAQs"
@@ -451,9 +512,32 @@ export default function TenancyAgreementTemplatePage() {
               variant="gray"
             />
           </div>
+
+          <section className="mt-12 rounded-[2.3rem] border border-[#D9D0EE] bg-gradient-to-br from-[#F5F1FF] via-white to-[#FBF9FF] p-6 shadow-[0_18px_46px_rgba(91,86,232,0.08)] md:p-8">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                Secondary comparison path
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                Need route-selection help?
+              </h2>
+              <p className="mt-4 text-base leading-7 text-[#556177]">
+                Use the England comparison page only after the template-first hub if you want
+                every England route shown side by side before you choose what to do next.
+              </p>
+            </div>
+
+            <div className="mt-6">
+              <Link
+                href="/products/ast"
+                className="inline-flex items-center justify-center rounded-xl border border-[#CBBDF1] bg-white px-5 py-3 text-sm font-semibold text-[#432B87] transition hover:border-[#B69BF4] hover:bg-[#F7F4FF]"
+              >
+                Compare all England agreement routes
+              </Link>
+            </div>
+          </section>
         </Container>
       </main>
     </div>
   );
 }
-

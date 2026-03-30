@@ -29,13 +29,13 @@ vi.mock('@/lib/checkout/cta-mapper', () => ({
     return {
       primary: {
         label: isInvalid ? 'Start Eviction Pack' : 'Start Notice Only',
-        price: isInvalid ? 49.99 : 29.99,
+        price: isInvalid ? 89.99 : 39.99,
         href: `/wizard/flow?type=eviction&jurisdiction=${jurisdiction}&product=${isInvalid ? 'complete_pack' : 'notice_only'}&case_id=${caseId}&source=validator`,
         productKey: isInvalid ? 'complete_pack' : 'notice_only',
       },
       secondary: {
         label: isInvalid ? 'Start Notice Only' : 'Start Eviction Pack',
-        price: isInvalid ? 29.99 : 49.99,
+        price: isInvalid ? 39.99 : 89.99,
         href: `/wizard/flow?type=eviction&jurisdiction=${jurisdiction}&product=${isInvalid ? 'notice_only' : 'complete_pack'}&case_id=${caseId}&source=validator`,
         productKey: isInvalid ? 'notice_only' : 'complete_pack',
       },
@@ -140,8 +140,8 @@ describe('ValidationReport CTA Routing', () => {
     );
 
     // Check that prices are displayed
-    expect(screen.getByText(/£49.99/)).toBeInTheDocument();
-    expect(screen.getByText(/£29.99/)).toBeInTheDocument();
+    expect(screen.getByText(/£89.99/)).toBeInTheDocument();
+    expect(screen.getByText(/£39.99/)).toBeInTheDocument();
   });
 
   it('tracks CTA clicks with analytics', () => {

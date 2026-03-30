@@ -104,21 +104,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/blog/scotland" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Scotland Guides
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog/wales" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Wales Guides
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog/northern-ireland" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  N. Ireland Guides
-                </Link>
-              </li>
-              <li>
                 <Link href="/blog/uk" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   UK-Wide Guides
                 </Link>
@@ -168,17 +153,17 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/tenancy-agreements/wales" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/wales-tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Wales
                 </Link>
               </li>
               <li>
-                <Link href="/tenancy-agreements/scotland" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/private-residential-tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Scotland
                 </Link>
               </li>
               <li>
-                <Link href="/tenancy-agreements/northern-ireland" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/northern-ireland-tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
                   Northern Ireland
                 </Link>
               </li>

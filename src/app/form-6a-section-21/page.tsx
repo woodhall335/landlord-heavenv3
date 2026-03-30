@@ -134,7 +134,7 @@ export default function Form6APage() {
                 Answer a few questions and get a correctly completed Form 6A ready to serve.
               </p>
               <Link
-                href="/eviction-notice"
+                href="/eviction-notice-template"
                 className="hero-btn-primary inline-block"
               >
                 Generate Free Notice
@@ -502,7 +502,7 @@ export default function Form6APage() {
                 Generate a correctly completed Section 21 notice in minutes.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/eviction-notice" className="hero-btn-primary">
+                <Link href="/eviction-notice-template" className="hero-btn-primary">
                   Start Notice Pack
                 </Link>
                 <Link href="/products/complete-pack" className="hero-btn-secondary" data-cta="complete-pack" data-cta-location="bottom">

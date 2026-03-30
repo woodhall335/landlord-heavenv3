@@ -3,12 +3,9 @@
  */
 
 import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import EnglandPage from '@/app/tenancy-agreements/england/page';
-import WalesPage from '@/app/tenancy-agreements/wales/page';
-import ScotlandPage from '@/app/tenancy-agreements/scotland/page';
-import NorthernIrelandPage from '@/app/tenancy-agreements/northern-ireland/page';
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: React.ReactNode }) => (
@@ -18,74 +15,89 @@ vi.mock('next/link', () => ({
   ),
 }));
 
+vi.mock('@/components/layout/HeaderConfig', () => ({
+  HeaderConfig: () => null,
+}));
+
+vi.mock('@/components/landing/UniversalHero', () => ({
+  UniversalHero: ({
+    title,
+    subtitle,
+    primaryCta,
+    secondaryCta,
+  }: {
+    title: string;
+    subtitle?: React.ReactNode;
+    primaryCta?: { label: string; href: string };
+    secondaryCta?: { label: string; href: string };
+  }) => (
+    <section>
+      <h1>{title}</h1>
+      {subtitle ? <p>{subtitle}</p> : null}
+      {primaryCta ? <a href={primaryCta.href}>{primaryCta.label}</a> : null}
+      {secondaryCta ? <a href={secondaryCta.href}>{secondaryCta.label}</a> : null}
+    </section>
+  ),
+}));
+
+vi.mock('@/components/seo/FAQSection', () => ({
+  FAQSection: ({
+    title,
+    intro,
+    faqs,
+  }: {
+    title?: string;
+    intro?: string;
+    faqs?: Array<{ question: string; answer: string }>;
+  }) => (
+    <section>
+      {title ? <h2>{title}</h2> : null}
+      {intro ? <p>{intro}</p> : null}
+      {faqs?.map((faq) => (
+        <div key={faq.question}>
+          <h3>{faq.question}</h3>
+          <p>{faq.answer}</p>
+        </div>
+      ))}
+    </section>
+  ),
+}));
+
+vi.mock('@/components/seo/SeoPageContextPanel', () => ({
+  SeoPageContextPanel: () => <div data-testid="seo-page-context" />,
+}));
+
 const getSchemaPayloads = () =>
   Array.from(document.querySelectorAll('script[type="application/ld+json"]')).map(
     (node) => node.textContent ?? '',
   );
 
-const expectSchemaTypes = (types: string[]) => {
-  const payloads = getSchemaPayloads();
-  types.forEach((type) => {
-    expect(payloads.some((payload) => payload.includes(`"@type":"${type}"`))).toBe(true);
-  });
-};
-
-describe('tenancy agreement pages', () => {
-  it('uses jurisdiction-correct terminology', () => {
-    const { container: englandContainer } = render(<EnglandPage />);
-    expect(englandContainer.textContent).toContain('Assured Shorthold Tenancy Agreement');
+describe('England tenancy agreement guide page', () => {
+  afterEach(() => {
     cleanup();
-
-    const { container: walesContainer } = render(<WalesPage />);
-    expect(walesContainer.textContent).toContain('Occupation Contract');
-    cleanup();
-
-    const { container: scotlandContainer } = render(<ScotlandPage />);
-    expect(scotlandContainer.textContent).not.toContain('Assured Shorthold');
-    cleanup();
-
-    const { container: northernIrelandContainer } = render(<NorthernIrelandPage />);
-    expect(northernIrelandContainer.textContent).toContain('Private Tenancy Agreement');
-    expect(northernIrelandContainer.textContent).toContain('Northern Ireland');
+    document.body.innerHTML = '';
   });
 
-  it('includes FAQ, Product, and Breadcrumb schema on each page', () => {
+  it('keeps the page positioned as support content that routes back to the hub', () => {
     render(<EnglandPage />);
-    expectSchemaTypes(['FAQPage', 'Product', 'BreadcrumbList']);
-    cleanup();
 
-    render(<WalesPage />);
-    expectSchemaTypes(['FAQPage', 'Product', 'BreadcrumbList']);
-    cleanup();
-
-    render(<ScotlandPage />);
-    expectSchemaTypes(['FAQPage', 'Product', 'BreadcrumbList']);
-    cleanup();
-
-    render(<NorthernIrelandPage />);
-    expectSchemaTypes(['FAQPage', 'Product', 'BreadcrumbList']);
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'England Tenancy Agreement Guide' })
+    ).toBeInTheDocument();
+    expect(screen.getAllByText(/England template hub first/i).length).toBeGreaterThan(0);
+    expect(
+      screen
+        .getAllByRole('link', { name: /View the England tenancy agreement template/i })
+        .every((link) => link.getAttribute('href') === '/tenancy-agreement-template')
+    ).toBe(true);
   });
 
-  it('routes tenancy agreement CTAs with jurisdiction parameters', () => {
+  it('includes FAQ and breadcrumb schema rather than product schema', () => {
     render(<EnglandPage />);
-    const englandCta = screen.getByRole('link', { name: /Create Standard AST - £14.99/i });
-    expect(englandCta.getAttribute('href')).toContain('jurisdiction=england');
-    cleanup();
 
-    render(<WalesPage />);
-    const walesCta = screen.getByRole('link', { name: /Create Standard Contract - £14.99/i });
-    expect(walesCta.getAttribute('href')).toContain('jurisdiction=wales');
-    cleanup();
-
-    render(<ScotlandPage />);
-    const scotlandCtas = screen.getAllByRole('link', { name: /Create Standard PRT/i });
-    scotlandCtas.forEach((cta) => {
-      expect(cta.getAttribute('href')).toContain('jurisdiction=scotland');
-    });
-    cleanup();
-
-    render(<NorthernIrelandPage />);
-    const niCta = screen.getByRole('link', { name: /Create Standard - £14.99/i });
-    expect(niCta.getAttribute('href')).toContain('jurisdiction=northern-ireland');
+    const payloads = getSchemaPayloads();
+    expect(payloads.some((payload) => payload.includes('"@type":"FAQPage"'))).toBe(true);
+    expect(payloads.some((payload) => payload.includes('"@type":"BreadcrumbList"'))).toBe(true);
+    expect(payloads.some((payload) => payload.includes('"@type":"Product"'))).toBe(false);
   });
 });

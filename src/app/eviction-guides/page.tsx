@@ -46,7 +46,7 @@ const COURT_PROCESS = [
 ];
 
 const TOOLS = [
-  { href: '/eviction-notice', label: 'Eviction Notice Pack' },
+  { href: '/eviction-notice-template', label: 'Eviction Notice Pack' },
   { href: '/eviction-notice-template', label: 'Eviction Notice Template' },
   { href: '/tools/rent-arrears-calculator', label: 'Rent Arrears Calculator' },
   { href: '/tools/free-rent-demand-letter', label: 'Free Rent Demand Letter Tool' },
