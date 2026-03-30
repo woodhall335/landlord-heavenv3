@@ -47,7 +47,7 @@ type TenancyFunnelLandingPageProps = {
   finalCtaTitle: string;
   finalCtaDescription: string;
   finalCtaLabel: string;
-  relatedLinks: RelatedLink[];
+  relatedLinks: readonly RelatedLink[];
 };
 
 export function TenancyFunnelLandingPage({

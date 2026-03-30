@@ -33,6 +33,22 @@ const DIGITAL_PRODUCT_SHIPPING_RATE = {
   currency: 'GBP',
 } as const;
 
+const DIGITAL_PRODUCT_DELIVERY_TIME = {
+  '@type': 'ShippingDeliveryTime',
+  handlingTime: {
+    '@type': 'QuantitativeValue',
+    minValue: 0,
+    maxValue: 0,
+    unitCode: 'DAY',
+  },
+  transitTime: {
+    '@type': 'QuantitativeValue',
+    minValue: 0,
+    maxValue: 0,
+    unitCode: 'DAY',
+  },
+} as const;
+
 const LANDLORD_HEAVEN_BRAND = {
   '@type': 'Brand',
   name: 'Landlord Heaven',
@@ -157,6 +173,7 @@ export function buildMerchantShippingDetails() {
     '@type': 'OfferShippingDetails',
     shippingRate: DIGITAL_PRODUCT_SHIPPING_RATE,
     shippingDestination: DIGITAL_PRODUCT_SHIPPING_DESTINATION,
+    deliveryTime: DIGITAL_PRODUCT_DELIVERY_TIME,
     hasShippingService: {
       '@id': DIGITAL_PRODUCT_SHIPPING_SERVICE_ID,
     },

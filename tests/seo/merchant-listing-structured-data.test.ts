@@ -47,6 +47,21 @@ describe('Merchant listing structured data', () => {
     expect(noticeItem.offers.shippingDetails.hasShippingService['@id']).toBe(
       DIGITAL_PRODUCT_SHIPPING_SERVICE_ID
     );
+    expect(noticeItem.offers.shippingDetails.deliveryTime).toMatchObject({
+      '@type': 'ShippingDeliveryTime',
+      handlingTime: {
+        '@type': 'QuantitativeValue',
+        minValue: 0,
+        maxValue: 0,
+        unitCode: 'DAY',
+      },
+      transitTime: {
+        '@type': 'QuantitativeValue',
+        minValue: 0,
+        maxValue: 0,
+        unitCode: 'DAY',
+      },
+    });
     expect(noticeItem.offers.hasMerchantReturnPolicy['@id']).toBe(
       DIGITAL_PRODUCT_RETURN_POLICY_ID
     );
@@ -70,6 +85,21 @@ describe('Merchant listing structured data', () => {
     expect(schema.offers.shippingDetails.hasShippingService['@id']).toBe(
       DIGITAL_PRODUCT_SHIPPING_SERVICE_ID
     );
+    expect(schema.offers.shippingDetails.deliveryTime).toMatchObject({
+      '@type': 'ShippingDeliveryTime',
+      handlingTime: {
+        '@type': 'QuantitativeValue',
+        minValue: 0,
+        maxValue: 0,
+        unitCode: 'DAY',
+      },
+      transitTime: {
+        '@type': 'QuantitativeValue',
+        minValue: 0,
+        maxValue: 0,
+        unitCode: 'DAY',
+      },
+    });
     expect(schema.offers.hasMerchantReturnPolicy['@id']).toBe(
       DIGITAL_PRODUCT_RETURN_POLICY_ID
     );

@@ -14,7 +14,7 @@ interface RelatedLink {
 
 interface RelatedLinksProps {
   title?: string;
-  links: RelatedLink[];
+  links: readonly RelatedLink[];
   variant?: 'cards' | 'list' | 'inline';
   className?: string;
 }
