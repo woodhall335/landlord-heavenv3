@@ -7,12 +7,13 @@ function readSource(relativePath: string) {
 }
 
 describe('tenancy product pages', () => {
-  it('/products/ast acts as the five-route England tenancy hub', () => {
+  it('/products/ast now acts as the England route-selection page', () => {
     const source = readSource('src/app/(marketing)/products/ast/page.tsx');
 
     expect(source).toContain('Start here if you are not sure which England agreement to use');
     expect(source).toContain('Compare all five England agreement types in one place');
     expect(source).toContain('Standard, Premium, Student, HMO / Shared House, and Room Let / Lodger');
+    expect(source).toContain('Choose the right England agreement type');
     expect(source).toContain('pricingItemListSchema');
   });
 
@@ -74,12 +75,13 @@ describe('tenancy product pages', () => {
     expect(source).toContain('Compare England agreement routes');
   });
 
-  it('England hub redirects to /products/ast and Premium page surfaces stronger positioning', () => {
+  it('the old England alias redirects to the new template hub and Premium page surfaces stronger positioning', () => {
     const hubSource = readSource('src/app/tenancy-agreement/page.tsx');
     const astHubSource = readSource('src/app/(marketing)/products/ast/page.tsx');
     const premiumSource = readSource('src/app/premium-tenancy-agreement/page.tsx');
 
-    expect(hubSource).toContain("permanentRedirect('/products/ast')");
+    expect(hubSource).toContain("permanentRedirect('/tenancy-agreement-template')");
+    expect(astHubSource).toContain('No. The main template hub is /tenancy-agreement-template.');
     expect(astHubSource).toContain('For a normal residential let where you want fuller wording around access, repairs, keys, handover, and day-to-day management.');
     expect(premiumSource).toContain('productSchema');
     expect(premiumSource).toContain('england tenancy agreement management schedule');

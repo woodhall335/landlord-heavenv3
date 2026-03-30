@@ -942,10 +942,10 @@ export default function EnglandTenancyAgreementsPage() {
                     type: 'page' as const,
                   },
                   {
-                    href: '/tenancy-agreement-template-free',
-                    title: 'Free tenancy agreement comparison page',
+                    href: '/tenancy-agreement-template',
+                    title: 'England tenancy agreement example and guide',
                     description:
-                      'Compare free starter documents against the guided England agreement route.',
+                      'See the real England template example first, then move into the right route.',
                     icon: 'document' as const,
                     type: 'page' as const,
                   },

@@ -31,8 +31,8 @@ export const productLinks = {
   },
   tenancyAgreement: {
     href: '/products/ast',
-    title: 'Tenancy Agreement Generator',
-    description: 'Jurisdiction-specific tenancy agreements and compliance checks.',
+    title: 'England Agreement Type Comparison',
+    description: 'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes.',
     icon: 'document' as const,
     type: 'product' as const,
   },
@@ -167,7 +167,7 @@ export const landingPageLinks = {
   tenancyTemplate: {
     href: '/tenancy-agreement-template',
     title: 'Tenancy Agreement Template for England',
-    description: 'Guided England template route',
+    description: 'Real England tenancy agreement example with a route into Standard and Premium',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -608,8 +608,8 @@ export const rentArrearsRelatedLinks = [
 ];
 
 export const tenancyRelatedLinks = [
-  productLinks.tenancyAgreement,
   landingPageLinks.tenancyTemplate,
+  productLinks.tenancyAgreement,
 ];
 
 // Ask Heaven - Free Q&A tool (defined early so it can be used in jurisdiction link groups)
@@ -865,16 +865,16 @@ export const tenancyAgreementPageLinks = {
     type: 'page' as const,
   },
   astTemplateEngland: {
-    href: '/ast-template-england',
-    title: 'England AST Template',
-    description: 'Housing Act 1988 compliant',
+    href: '/assured-shorthold-tenancy-agreement-template',
+    title: 'AST Legacy Guide',
+    description: 'Legacy AST terminology explained for England landlords',
     icon: 'document' as const,
     type: 'page' as const,
   },
   tenancyAgreementFree: {
-    href: '/tenancy-agreement-template-free',
-    title: 'Free vs Paid Templates',
-    description: 'Template comparison guide',
+    href: '/tenancy-agreement-template',
+    title: 'England Template Hub',
+    description: 'Real example and guide for the main England tenancy route',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
@@ -976,11 +976,17 @@ export const tenancyAgreementPageLinks = {
 
 // England tenancy agreement links
 export const tenancyAgreementEnglandLinks = [
-  productLinks.tenancyAgreement,
+  landingPageLinks.tenancyTemplate,
   tenancyAgreementPageLinks.astTemplate,
-  tenancyAgreementPageLinks.astTemplateEngland,
+  {
+    href: '/assured-periodic-tenancy-agreement',
+    title: 'Assured Periodic Guide',
+    description: 'Support page explaining newer England terminology',
+    icon: 'document' as const,
+    type: 'page' as const,
+  },
   tenancyAgreementPageLinks.jointTenancy,
-  tenancyAgreementPageLinks.tenancyAgreementFree,
+  productLinks.tenancyAgreement,
   askHeavenLink,
 ];
 
@@ -1023,16 +1029,16 @@ export const tenancyAgreementNILinks = [
 // England AST SEO Pages
 export const tenancySeoEnglandPages = {
   astMain: {
-    href: '/assured-shorthold-tenancy-agreement',
-    title: 'Assured Shorthold Tenancy Agreement',
-    description: 'Create a legally valid AST for England',
+    href: '/assured-shorthold-tenancy-agreement-template',
+    title: 'AST Legacy Guide',
+    description: 'Legacy AST terminology routed into the main England template hub',
     icon: 'document' as const,
     type: 'page' as const,
   },
   astTemplate: {
-    href: '/ast-tenancy-agreement-template',
+    href: '/assured-shorthold-tenancy-agreement-template',
     title: 'AST Tenancy Agreement Template',
-    description: 'Court-ready AST template England',
+    description: 'Legacy AST template search intent explained for England',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -1061,9 +1067,9 @@ export const tenancySeoEnglandPages = {
 
 export const tenancyFunnelPages = {
   englandHub: {
-    href: '/products/ast',
-    title: 'England Tenancy Agreement Hub',
-    description: 'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes.',
+    href: '/tenancy-agreement-template',
+    title: 'England Tenancy Agreement Template',
+    description: 'Main England template hub with the sample agreement preview and Standard / Premium journey.',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -1103,16 +1109,16 @@ export const tenancyFunnelPages = {
     type: 'page' as const,
   },
   astAgreementTemplate: {
-    href: '/ast-agreement-template',
-    title: 'AST Agreement Template',
-    description: 'AST search intent routed into the current England agreement path.',
+    href: '/assured-shorthold-tenancy-agreement-template',
+    title: 'AST Legacy Guide',
+    description: 'Legacy AST search intent routed into the main England template hub.',
     icon: 'document' as const,
     type: 'page' as const,
   },
   tenancyAgreementTemplateUk: {
     href: '/tenancy-agreement-template-uk',
     title: 'Tenancy Agreement Template UK',
-    description: 'UK tenancy template guide with England-first product routing.',
+    description: 'Thin jurisdiction router for England, Wales, Scotland, and Northern Ireland.',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -1267,7 +1273,7 @@ export const tenancySeoNIPages = {
 
 // England AST Related Links
 export const astMainRelatedLinks = [
-  productLinks.tenancyAgreement,
+  tenancyFunnelPages.englandHub,
   tenancySeoEnglandPages.astTemplate,
   tenancySeoEnglandPages.fixedTermPeriodic,
   tenancySeoEnglandPages.jointTenancy,
@@ -1277,7 +1283,7 @@ export const astMainRelatedLinks = [
 ];
 
 export const astTemplateRelatedLinks = [
-  productLinks.tenancyAgreement,
+  tenancyFunnelPages.englandHub,
   tenancySeoEnglandPages.astMain,
   tenancySeoEnglandPages.fixedTermPeriodic,
   tenancySeoEnglandPages.renewUpdate,
@@ -1287,7 +1293,7 @@ export const astTemplateRelatedLinks = [
 ];
 
 export const fixedTermPeriodicEnglandRelatedLinks = [
-  productLinks.tenancyAgreement,
+  tenancyFunnelPages.englandHub,
   tenancySeoEnglandPages.astMain,
   tenancySeoEnglandPages.astTemplate,
   tenancySeoEnglandPages.renewUpdate,
@@ -1297,7 +1303,7 @@ export const fixedTermPeriodicEnglandRelatedLinks = [
 ];
 
 export const jointTenancyEnglandRelatedLinks = [
-  productLinks.tenancyAgreement,
+  tenancyFunnelPages.englandHub,
   tenancySeoEnglandPages.astMain,
   tenancySeoEnglandPages.astTemplate,
   toolLinks.hmoChecker,
@@ -1307,7 +1313,7 @@ export const jointTenancyEnglandRelatedLinks = [
 ];
 
 export const renewUpdateEnglandRelatedLinks = [
-  productLinks.tenancyAgreement,
+  tenancyFunnelPages.englandHub,
   tenancySeoEnglandPages.astMain,
   tenancySeoEnglandPages.astTemplate,
   tenancySeoEnglandPages.fixedTermPeriodic,
@@ -1319,27 +1325,27 @@ export const renewUpdateEnglandRelatedLinks = [
 ];
 
 export const tenancyProductMoneyPageLinks = [
+  tenancyFunnelPages.englandHub,
   tenancyFunnelPages.standardTenancyAgreement,
   tenancyFunnelPages.premiumTenancyAgreement,
   tenancyFunnelPages.studentTenancyAgreement,
   tenancyFunnelPages.hmoSharedHouseTenancyAgreement,
   tenancyFunnelPages.lodgerAgreement,
   tenancyFunnelPages.astAgreementTemplate,
-  tenancyFunnelPages.tenancyAgreementEngland2026,
   tenancyFunnelPages.assuredPeriodicTenancyAgreement,
-  tenancyFunnelPages.hmoTenancyAgreementTemplate,
 ];
 
 export const astAgreementTemplateRelatedLinks = [
   tenancyFunnelPages.englandHub,
-  tenancyFunnelPages.tenancyAgreementEngland2026,
   tenancyFunnelPages.assuredPeriodicTenancyAgreement,
+  productLinks.tenancyAgreement,
   askHeavenLink,
 ];
 
 export const tenancyAgreementTemplateUkRelatedLinks = [
-  tenancyFunnelPages.astAgreementTemplate,
+  tenancyFunnelPages.englandHub,
   tenancyFunnelPages.assuredPeriodicTenancyAgreement,
+  productLinks.tenancyAgreement,
   askHeavenLink,
 ];
 
@@ -1353,24 +1359,23 @@ export const tenancyAgreementEngland2026RelatedLinks = [
 export const assuredPeriodicTenancyAgreementRelatedLinks = [
   tenancyFunnelPages.englandHub,
   tenancyFunnelPages.astAgreementTemplate,
-  tenancyFunnelPages.tenancyAgreementEngland2026,
+  productLinks.tenancyAgreement,
   askHeavenLink,
 ];
 
 export const hmoTenancyAgreementTemplateRelatedLinks = [
+  tenancyFunnelPages.englandHub,
   tenancyFunnelPages.astAgreementTemplate,
-  tenancyFunnelPages.tenancyAgreementEngland2026,
   toolLinks.hmoChecker,
   askHeavenLink,
 ];
 
 export const rentersRightsInformationSheet2026RelatedLinks = [
-  productLinks.tenancyAgreement,
+  tenancyFunnelPages.englandHub,
   tenancyFunnelPages.standardTenancyAgreement,
   tenancyFunnelPages.studentTenancyAgreement,
   tenancyFunnelPages.hmoSharedHouseTenancyAgreement,
   tenancyFunnelPages.lodgerAgreement,
-  tenancyFunnelPages.tenancyAgreementEngland2026,
   tenancyFunnelPages.assuredPeriodicTenancyAgreement,
   residentialDocumentLinks.documentsHub,
 ];

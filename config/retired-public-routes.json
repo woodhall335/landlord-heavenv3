@@ -1,15 +1,15 @@
 {
   "routeRedirects": {
-    "/guarantor-agreement-england": "/tenancy-agreement",
-    "/residential-sublet-agreement-england": "/tenancy-agreement",
-    "/lease-amendment-england": "/tenancy-agreement",
-    "/lease-assignment-agreement-england": "/tenancy-agreement",
+    "/guarantor-agreement-england": "/tenancy-agreement-template",
+    "/residential-sublet-agreement-england": "/tenancy-agreement-template",
+    "/lease-amendment-england": "/tenancy-agreement-template",
+    "/lease-assignment-agreement-england": "/tenancy-agreement-template",
     "/rent-arrears-letter-england": "/money-claim",
     "/repayment-plan-agreement-england": "/money-claim",
-    "/rental-inspection-report-england": "/tenancy-agreement",
-    "/inventory-schedule-of-condition-england": "/tenancy-agreement",
-    "/flatmate-agreement-england": "/tenancy-agreement",
-    "/renewal-tenancy-agreement-england": "/tenancy-agreement",
+    "/rental-inspection-report-england": "/tenancy-agreement-template",
+    "/inventory-schedule-of-condition-england": "/tenancy-agreement-template",
+    "/flatmate-agreement-england": "/tenancy-agreement-template",
+    "/renewal-tenancy-agreement-england": "/tenancy-agreement-template",
     "/tools/validators": "/eviction-notice",
     "/tools/validators/section-21": "/eviction-notice",
     "/tools/validators/section-8": "/eviction-notice",
@@ -29,15 +29,15 @@
     "renewal_tenancy_agreement"
   ],
   "retiredEnglandDocumentSkuRedirects": {
-    "guarantor_agreement": "/tenancy-agreement",
-    "residential_sublet_agreement": "/tenancy-agreement",
-    "lease_amendment": "/tenancy-agreement",
-    "lease_assignment_agreement": "/tenancy-agreement",
+    "guarantor_agreement": "/tenancy-agreement-template",
+    "residential_sublet_agreement": "/tenancy-agreement-template",
+    "lease_amendment": "/tenancy-agreement-template",
+    "lease_assignment_agreement": "/tenancy-agreement-template",
     "rent_arrears_letter": "/money-claim",
     "repayment_plan_agreement": "/money-claim",
-    "rental_inspection_report": "/tenancy-agreement",
-    "inventory_schedule_condition": "/tenancy-agreement",
-    "flatmate_agreement": "/tenancy-agreement",
-    "renewal_tenancy_agreement": "/tenancy-agreement"
+    "rental_inspection_report": "/tenancy-agreement-template",
+    "inventory_schedule_condition": "/tenancy-agreement-template",
+    "flatmate_agreement": "/tenancy-agreement-template",
+    "renewal_tenancy_agreement": "/tenancy-agreement-template"
   }
 }

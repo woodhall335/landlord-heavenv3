@@ -1,5 +1,5 @@
 import { permanentRedirect } from 'next/navigation';
 
 export default function TenancyAgreementPage() {
-  permanentRedirect('/products/ast');
+  permanentRedirect('/tenancy-agreement-template');
 }

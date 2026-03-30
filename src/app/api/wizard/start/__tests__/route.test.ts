@@ -146,7 +146,7 @@ describe('POST /api/wizard/start anonymous resume', () => {
 
     expect(response.status).toBe(409);
     expect(body.reason).toBe('retired_public_product');
-    expect(body.redirect_to).toBe('/tenancy-agreement');
+    expect(body.redirect_to).toBe('/tenancy-agreement-template');
   });
 
   it('returns 200 with correct token', async () => {

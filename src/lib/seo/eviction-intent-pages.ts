@@ -1077,8 +1077,8 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
       { question: 'Is this legal advice?', answer: 'No. Landlord Heaven provides guidance and document generation for landlords, not legal advice or court representation.' },
     ],
     relatedLinks: [
-      { href: '/tenancy-agreement', label: 'England tenancy agreement route' },
-      { href: '/tenancy-agreement', label: 'Premium England tenancy agreement route' },
+      { href: '/tenancy-agreement-template', label: 'England tenancy agreement template' },
+      { href: '/products/ast', label: 'Compare England agreement types' },
       { href: '/products/notice-only', label: 'Notice Only product page' },
       { href: '/products/complete-pack', label: 'Complete Pack product page' },
       { href: '/how-to-evict-tenant', label: 'How to evict a tenant guide' },
@@ -1131,8 +1131,8 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
       { question: 'Is this legal advice?', answer: 'No. Landlord Heaven provides guidance and document generation for landlords, not legal advice or court representation.' },
     ],
     relatedLinks: [
-      { href: '/tenancy-agreement', label: 'England tenancy agreement route' },
-      { href: '/tenancy-agreement', label: 'Premium England tenancy agreement route' },
+      { href: '/tenancy-agreement-template', label: 'England tenancy agreement template' },
+      { href: '/products/ast', label: 'Compare England agreement types' },
       { href: '/products/notice-only', label: 'Notice Only product page' },
       { href: '/products/complete-pack', label: 'Complete Pack product page' },
       { href: '/how-to-evict-tenant', label: 'How to evict a tenant guide' },

@@ -98,7 +98,7 @@ describe('/products/ast page', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /Tenancy Agreement for England/i,
+        name: /Choose the right England agreement type/i,
       }),
     ).toBeInTheDocument();
 
@@ -199,12 +199,14 @@ describe('/products/ast page', () => {
       screen.getByRole('heading', { level: 2, name: 'Tenancy agreement FAQs' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/A tenancy agreement is the written contract for the let\./i),
+      screen.getByText(/This page helps you compare the five live England agreement routes/i),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Is this still an AST for England?' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Is /products/ast the main England template hub?' })
+    );
     expect(
-      screen.getByText(/Many landlords still search using AST language\./i),
+      screen.getByText(/The main template hub is \/tenancy-agreement-template\./i),
     ).toBeInTheDocument();
 
     expect(

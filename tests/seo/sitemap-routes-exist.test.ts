@@ -18,7 +18,7 @@ describe('Sitemap Route Existence', () => {
   beforeAll(async () => {
     // Import sitemap dynamically to get all routes
     const sitemapModule = await import('@/app/sitemap');
-    const sitemap = sitemapModule.default();
+    const sitemap = await sitemapModule.default();
 
     // Extract paths from sitemap URLs
     sitemapPaths = sitemap.map((entry) => {
@@ -167,8 +167,7 @@ describe('Sitemap Route Existence', () => {
     const tenancyPages = [
       // England
       '/assured-shorthold-tenancy-agreement-template',
-      '/ast-template-england',
-      '/tenancy-agreement-template-free',
+      '/tenancy-agreement-template',
       '/joint-tenancy-agreement-template',
       // Wales
       '/occupation-contract-template-wales',
@@ -224,7 +223,7 @@ describe('Sitemap Route Existence', () => {
       '/eviction-notice',
       '/eviction-pack-england',
       '/money-claim',
-      '/tenancy-agreement',
+      '/tenancy-agreement-template',
       '/premium-tenancy-agreement',
     ];
 
@@ -238,7 +237,7 @@ describe('Sitemap Route Existence', () => {
       '/eviction-notice',
       '/eviction-pack-england',
       '/money-claim',
-      '/tenancy-agreement',
+      '/tenancy-agreement-template',
       '/premium-tenancy-agreement',
     ];
 
@@ -258,13 +257,13 @@ describe('Sitemap Route Existence', () => {
 
   it('wizard landing pages should have high priority (0.95)', async () => {
     const sitemapModule = await import('@/app/sitemap');
-    const sitemap = sitemapModule.default();
+    const sitemap = await sitemapModule.default();
 
     const wizardLandingPages = [
       '/eviction-notice',
       '/eviction-pack-england',
       '/money-claim',
-      '/tenancy-agreement',
+      '/tenancy-agreement-template',
       '/premium-tenancy-agreement',
     ];
 
@@ -408,7 +407,7 @@ describe('Robots.txt Configuration', () => {
       '/eviction-notice',
       '/eviction-pack-england',
       '/money-claim',
-      '/tenancy-agreement',
+      '/tenancy-agreement-template',
       '/premium-tenancy-agreement',
     ];
 

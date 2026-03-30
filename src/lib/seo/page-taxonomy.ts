@@ -362,7 +362,7 @@ function tenancyEntry(
     pageRole: 'supporting',
     jurisdiction: 'england',
     cluster: 'tenancy-england',
-    primaryPillar: SEO_PILLAR_ROUTES.tenancyAgreementsEngland,
+    primaryPillar: '/tenancy-agreement-template',
     supportingPage,
     primaryProduct: SEO_PRODUCT_ROUTES.ast,
     primaryProductByScenario: {
@@ -2827,8 +2827,8 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/tenancy-agreement': makeEntry('/tenancy-agreement', {
-    ...tenancyEntry('/tenancy-agreement', '/products/ast', {
-      canonicalTarget: '/products/ast',
+    ...tenancyEntry('/tenancy-agreement', '/tenancy-agreement-template', {
+      canonicalTarget: '/tenancy-agreement-template',
     }),
     pageRole: 'bridge',
     freshnessRequired: true,
@@ -2843,9 +2843,12 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     consolidationStatus: 'bridge_live',
   }),
   '/tenancy-agreement-template': makeEntry('/tenancy-agreement-template', {
-    ...tenancyEntry('/tenancy-agreement-template', SEO_PILLAR_ROUTES.section21BanUk, {
+    ...tenancyEntry('/tenancy-agreement-template', '/assured-periodic-tenancy-agreement', {
       canonicalTarget: '/tenancy-agreement-template',
     }),
+    pageRole: 'hub',
+    freshnessRequired: true,
+    consolidationStatus: 'canonical',
     anchorVariants: {
       pillar: [...anchorSets.tenancyPillar],
       supporting: [...anchorSets.tenancyTransitionSupporting],
@@ -2854,7 +2857,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/tenancy-agreement-template-free': makeEntry('/tenancy-agreement-template-free', {
     ...tenancyEntry('/tenancy-agreement-template-free', '/tenancy-agreement-template', {
-      canonicalTarget: '/tenancy-agreement-template-free',
+      canonicalTarget: '/tenancy-agreement-template',
     }),
     anchorVariants: {
       pillar: [...anchorSets.tenancyPillar],
@@ -2865,9 +2868,10 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       ],
       product: [...anchorSets.tenancyProduct],
     },
+    consolidationStatus: 'candidate_redirect',
   }),
   '/assured-shorthold-tenancy-agreement-template': makeEntry('/assured-shorthold-tenancy-agreement-template', {
-    ...tenancyEntry('/assured-shorthold-tenancy-agreement-template', SEO_PILLAR_ROUTES.section21BanUk, {
+    ...tenancyEntry('/assured-shorthold-tenancy-agreement-template', '/tenancy-agreement-template', {
       canonicalTarget: '/assured-shorthold-tenancy-agreement-template',
     }),
     anchorVariants: {
@@ -2891,7 +2895,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   '/joint-tenancy-agreement-template': tenancyEntry('/joint-tenancy-agreement-template', '/premium-tenancy-agreement', {
     canonicalTarget: '/joint-tenancy-agreement-template',
   }),
-  '/renew-tenancy-agreement-england': tenancyEntry('/renew-tenancy-agreement-england', '/tenancy-agreement', {
+  '/renew-tenancy-agreement-england': tenancyEntry('/renew-tenancy-agreement-england', '/tenancy-agreement-template', {
     canonicalTarget: '/renew-tenancy-agreement-england',
   }),
   '/rolling-tenancy-agreement': tenancyEntry('/rolling-tenancy-agreement', '/periodic-tenancy-agreement', {

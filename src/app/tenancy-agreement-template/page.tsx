@@ -1,104 +1,184 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
+import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
+import { SampleAgreementPreview } from '@/components/tenancy/SampleAgreementPreview';
+import { Container } from '@/components/ui/Container';
+import { getCanonicalUrl } from '@/lib/seo';
 import {
   StructuredData,
   breadcrumbSchema,
-  articleSchema,
 } from '@/lib/seo/structured-data';
-import { getCanonicalUrl } from '@/lib/seo';
+import {
+  ENGLAND_TENANCY_PRODUCT_IMAGES,
+  type EnglandModernTenancyProductSku,
+} from '@/lib/tenancy/england-product-model';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement-template');
-const standardWizardHref =
-  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=england_tenancy_template&topic=tenancy';
-const premiumWizardHref =
-  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=england_tenancy_template&topic=tenancy';
 
-const faqs = [
+const comparisonRows = [
   {
-    question: 'Is this a downloadable blank tenancy agreement template?',
-    answer:
-      'No. This page is for landlords who searched for a tenancy agreement template but need a stronger route than a static blank file. Instead of editing a generic download yourself, you answer guided questions and generate the agreement through the live England workflow.',
+    label: 'What you are looking at',
+    genericTemplate:
+      'A static file that leaves the landlord to decide how much of it still fits the tenancy.',
+    guidedAgreement:
+      'A live England agreement route that uses the example structure as a starting point, then shapes the wording around the actual let.',
   },
   {
-    question: 'Why does this page use England tenancy agreement wording instead of only saying AST?',
-    answer:
-      'Because many landlords still search using AST language, but the current England route is better explained using current tenancy agreement wording. This page keeps older search language visible while guiding landlords into the live England agreement path.',
+    label: 'Risk of outdated wording',
+    genericTemplate:
+      'High if the template was written for a different framework, old AST assumptions, or another UK jurisdiction.',
+    guidedAgreement:
+      'Lower because the route is built around the current England position and the property setup you are actually choosing.',
   },
   {
-    question: 'Does this page reflect the current England position?',
-    answer:
-      "Yes. The page is written around the current England position for new lets while still recognising that landlords often search using older AST and Renters' Rights Bill wording.",
+    label: 'Deposit, notices, and supporting paperwork',
+    genericTemplate:
+      'Often fragmented across several files or left for the landlord to chase separately.',
+    guidedAgreement:
+      'Handled as part of a fuller agreement route so the main document and supporting pack stay aligned.',
   },
   {
-    question: "I searched for a Renters' Rights Bill tenancy agreement template. Is this still the right page?",
-    answer:
-      "Yes. Many landlords still use older Bill wording in search. This page is intended to capture that search behaviour and route it into the current England tenancy agreement journey.",
+    label: 'Choosing the right route',
+    genericTemplate:
+      'Still depends on the landlord spotting whether the let should be Standard, Premium, Student, HMO / Shared House, or Lodger.',
+    guidedAgreement:
+      'Standard and Premium lead the ordinary-residential journey, with specialist routes kept separate when the occupier setup needs different drafting.',
+  },
+];
+
+const leadRoutes: Array<{
+  sku: EnglandModernTenancyProductSku;
+  title: string;
+  href: string;
+  label: string;
+  body: string;
+}> = [
+  {
+    sku: 'england_standard_tenancy_agreement',
+    title: 'Standard agreement',
+    href: '/standard-tenancy-agreement',
+    label: 'Best for most straightforward whole-property lets',
+    body: 'Use the main England standard route when the tenancy is an ordinary residential let and you want the right agreement structure without paying for broader drafting you do not need.',
   },
   {
-    question: 'Why should I use this instead of a free tenancy agreement template?',
+    sku: 'england_premium_tenancy_agreement',
+    title: 'Premium agreement',
+    href: '/premium-tenancy-agreement',
+    label: 'Best for fuller ordinary-residential drafting',
+    body: 'Choose Premium when you still have a normal residential let but want broader wording around access, repairs, keys, guarantors, and day-to-day management from day one.',
+  },
+];
+
+const clauseExplainers = [
+  {
+    title: 'Why the term clause matters now',
+    body: 'A good England tenancy agreement no longer relies on a vague template opening and hopes the rest follows. The term section needs to tell the reader how the tenancy starts, that it continues until ended through the lawful route, and what the notice and possession framework looks like in practice.',
+  },
+  {
+    title: 'Why rent and deposit wording still drive disputes',
+    body: 'Even a simple rent agreement needs more than the monthly amount. It should make payment timing, deposit handling, permitted deductions, and the rent-change route clear enough that the landlord is not left patching the gaps later.',
+  },
+  {
+    title: 'Why responsibilities need to read like a real document',
+    body: 'Landlords often spot too late that a generic tenancy contract does not properly deal with access, repair reporting, utilities, nuisance, end-of-tenancy handback, or statutory document delivery. Those working clauses are where a real agreement earns its keep.',
+  },
+];
+
+const specialistRoutes: Array<{
+  sku: EnglandModernTenancyProductSku;
+  title: string;
+  href: string;
+  summary: string;
+}> = [
+  {
+    sku: 'england_student_tenancy_agreement',
+    title: 'Student',
+    href: '/student-tenancy-agreement',
+    summary:
+      'Use this when the let is student-focused, guarantor-backed, or needs clearer replacement and end-of-term expectations.',
+  },
+  {
+    sku: 'england_hmo_shared_house_tenancy_agreement',
+    title: 'HMO / Shared House',
+    href: '/hmo-shared-house-tenancy-agreement',
+    summary:
+      'Use this when sharer controls, communal areas, or room-by-room occupation need their own drafting instead of being folded into a normal residential route.',
+  },
+  {
+    sku: 'england_lodger_agreement',
+    title: 'Lodger',
+    href: '/lodger-agreement',
+    summary:
+      'Use this when the landlord lives at the property and the occupier is sharing the home rather than taking the ordinary assured periodic route.',
+  },
+];
+
+const faqs: FAQItem[] = [
+  {
+    question: 'Is this a real tenancy agreement template example?',
     answer:
-      'Because a static template still leaves the landlord to choose wording, structure, and setup themselves. A guided route is usually stronger for live lets because it helps create the document around the actual tenancy rather than forcing the landlord to adapt a generic blank draft.',
+      'Yes. The sample agreement preview uses Landlord Heaven’s England standard agreement wording with safe example names, contact details, and property facts so you can see how the document is structured before choosing a route.',
+  },
+  {
+    question: 'Can I download this exact template as a blank file?',
+    answer:
+      'No. This page is designed to satisfy template intent by showing a credible example first, then guiding landlords into the route that fits the property and tenancy setup instead of leaving them with a generic blank form to edit alone.',
   },
   {
     question: 'What is the difference between this page and /products/ast?',
     answer:
-      'This page is for template-style searches. /products/ast is the main England comparison page for landlords who want to look across the live agreement routes before they choose one.',
+      'This page is the England template and example hub for broad searches such as tenancy agreement template, rent agreement, and tenancy contract. /products/ast is the route-selection page where you compare Standard, Premium, Student, HMO / Shared House, and Lodger in more detail.',
   },
   {
-    question: 'Can I use this page if the property is outside England?',
+    question: 'Why do AST and assured periodic wording both appear in the cluster?',
     answer:
-      'No. This page is for England template-intent traffic. Wales, Scotland, and Northern Ireland use different legal frameworks and different agreement terminology, so landlords should always use the route that matches the property location.',
+      'Because landlords still search with AST terminology, while the current England route is better explained through assured periodic language. The legacy AST support page and the assured periodic support page both point back to this main England template hub.',
   },
   {
-    question: 'I searched for a rent agreement template or tenancy contract template. Is this still the right page?',
+    question: 'When should I move to a specialist agreement instead of Standard or Premium?',
     answer:
-      'Yes. Landlords often use tenancy agreement template, rent agreement template, and tenancy contract template interchangeably. This page is built to serve that same England template intent.',
+      'Move to a specialist route when the occupier setup changes the drafting need. Student lets, HMO / Shared House arrangements, and resident-landlord lodger setups should not be forced into the same model as an ordinary residential whole-property tenancy.',
   },
   {
-    question: 'What should a modern England tenancy agreement usually include?',
+    question: 'Does this page apply outside England?',
     answer:
-      'A modern England tenancy agreement usually needs accurate landlord and tenant details, the property address, rent and payment terms, deposit terms, occupation terms, use restrictions, repair responsibilities, notice provisions, and wording that is suitable for the actual tenancy structure rather than copied blindly from a static template.',
-  },
-  {
-    question: 'Who is this page really for?',
-    answer:
-      'This page is for England landlords who searched in template language but actually need a stronger creation route, current terminology, and a clear path into the main tenancy agreement product.',
+      'No. This example and guide are England-first. Wales, Scotland, and Northern Ireland use different tenancy frameworks and should begin from the jurisdiction-specific route instead of treating one UK template as interchangeable.',
   },
 ];
 
 const webPageSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Tenancy Agreement Template for England',
+  name: 'Tenancy Agreement Template (England) - Example & Guide',
   url: canonicalUrl,
   description:
-    'England tenancy agreement template page for landlords who want a guided builder instead of adapting a generic blank file.',
+    'Review a real England tenancy agreement template example, then compare the Standard and Premium routes before choosing the agreement that fits the let.',
   inLanguage: 'en-GB',
 };
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreement Template for England | Guided Builder',
+  title: 'Tenancy Agreement Template (England) - Example & Guide',
   description:
-    'Start with a tenancy agreement template for England, then answer guided questions to build the right agreement, rent agreement, or tenancy contract for the let.',
+    'See a real England tenancy agreement template example with clause sections for parties, rent, deposit, term, repairs, and notices before choosing Standard or Premium.',
   keywords: [
+    'tenancy agreement',
     'tenancy agreement template',
+    'rent agreement',
+    'tenancy contract',
+    'rent agreement template england',
+    'tenancy contract template england',
     'england tenancy agreement template',
-    'landlord tenancy agreement template england',
-    'rent agreement template',
-    'tenancy contract template',
-    'ast template england',
-    'assured shorthold tenancy agreement template',
-    'renters rights bill tenancy agreement',
-    'renters rights act tenancy agreement',
+    'assured periodic tenancy agreement england',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Tenancy Agreement Template for England | Guided Builder',
+    title: 'Tenancy Agreement Template (England) - Example & Guide',
     description:
-      'Use the England tenancy agreement template page to start a guided builder or move to the main England agreement comparison page.',
+      'Review a real England tenancy agreement example, then compare the Standard and Premium routes before choosing the agreement that fits the let.',
     url: canonicalUrl,
     type: 'website',
     locale: 'en_GB',
@@ -106,9 +186,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tenancy Agreement Template for England | Guided Builder',
+    title: 'Tenancy Agreement Template (England) - Example & Guide',
     description:
-      'England tenancy agreement template page for landlords who want a guided builder instead of a thin blank file.',
+      'See a real England tenancy agreement template example and compare the Standard and Premium routes.',
   },
   robots: {
     index: true,
@@ -116,74 +196,264 @@ export const metadata: Metadata = {
   },
 };
 
+function LeadRouteCard({
+  sku,
+  title,
+  href,
+  label,
+  body,
+}: (typeof leadRoutes)[number]) {
+  const image = ENGLAND_TENANCY_PRODUCT_IMAGES[sku];
+
+  return (
+    <article className="overflow-hidden rounded-[2rem] border border-[#E4DED2] bg-white shadow-[0_18px_46px_rgba(31,41,55,0.06)]">
+      <div className="relative aspect-[16/10] border-b border-[#ECE5D8] bg-[#F4EFE6]">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes="(min-width: 1024px) 460px, 100vw"
+          className="object-cover"
+        />
+      </div>
+      <div className="p-6 md:p-7">
+        <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">{label}</p>
+        <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#141B2D]">{title}</h3>
+        <p className="mt-4 text-base leading-7 text-[#556177]">{body}</p>
+        <div className="mt-6">
+          <Link
+            href={href}
+            className="inline-flex items-center justify-center rounded-xl border border-[#D1C4F8] bg-[#F5F0FF] px-5 py-3 text-sm font-semibold text-[#432B87] transition hover:border-[#B69BF4] hover:bg-[#EEE6FF]"
+          >
+            View {title.toLowerCase()}
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function SpecialistRouteCard({
+  sku,
+  title,
+  href,
+  summary,
+}: (typeof specialistRoutes)[number]) {
+  const image = ENGLAND_TENANCY_PRODUCT_IMAGES[sku];
+
+  return (
+    <article className="overflow-hidden rounded-[1.8rem] border border-[#E5DED2] bg-white/95 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
+      <div className="relative aspect-[16/9] border-b border-[#EDE7DC] bg-[#F4EFE6]">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes="(min-width: 1280px) 320px, (min-width: 768px) 33vw, 100vw"
+          className="object-cover"
+        />
+      </div>
+      <div className="p-5">
+        <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">{title}</h3>
+        <p className="mt-3 text-sm leading-7 text-[#556177]">{summary}</p>
+        <Link
+          href={href}
+          className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
+        >
+          View route
+        </Link>
+      </div>
+    </article>
+  );
+}
+
 export default function TenancyAgreementTemplatePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F6F2EB] text-[#141B2D]">
       <HeaderConfig mode="autoOnScroll" />
 
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Tenancy Agreement Template', url: canonicalUrl },
+          { name: 'Tenancy Agreement Template (England)', url: canonicalUrl },
         ])}
-      />
-      <StructuredData
-        data={articleSchema({
-          headline: 'Tenancy Agreement Template for England',
-          description: metadata.description as string,
-          url: canonicalUrl,
-          datePublished: '2026-03-01',
-          dateModified: '2026-03-29',
-        })}
       />
       <StructuredData data={webPageSchema} />
 
-      <EnglandTenancyPage
-        pagePath="/tenancy-agreement-template"
-        title="Tenancy Agreement Template for England"
-        subtitle="Start here if you searched for a tenancy agreement template, rent agreement template, or tenancy contract template for England. Instead of adapting a thin blank file, you can answer guided questions and build the right agreement for the let."
-        primaryCtaLabel="Start Standard template flow"
-        primaryCtaHref={standardWizardHref}
-        secondaryCtaLabel="Start Premium template flow"
-        secondaryCtaHref={premiumWizardHref}
-        legacyNotice="Landlords still search for AST template, rent agreement template, or tenancy contract template. This page keeps that language visible, but routes you into the current England agreement journey rather than leaving you to edit a generic download on your own."
-        introTitle="Looking for a tenancy agreement template in England?"
-        introBody={[
-          'If you searched for a tenancy agreement template, rent agreement template, tenancy contract template, or an older AST-style template for England, you are usually looking for a reliable starting point for a real tenancy rather than a document to patch together on your own.',
-          'That is why this page focuses on a guided route instead of a thin blank file. You answer questions about the property and the let, and the builder helps shape the agreement around the tenancy you are actually creating.',
-          'Many landlords still search using older AST language, while others search in broader template language. This page keeps both habits in view without forcing the live England product back into outdated wording.',
-          'The page is England-only on purpose. Wales, Scotland, and Northern Ireland use different legal frameworks and different agreement terminology, so a generic UK template is often the wrong place to begin.',
-          'If you are ready to start now, use the template flow and build the agreement around the actual tenancy. If you would rather compare the live England routes first, move to /products/ast and review Standard, Premium, Student, HMO / Shared House, and Lodger side by side.',
-          'A modern England agreement still needs the basics done properly: the parties, the property, the rent, the deposit terms, occupation terms, practical use restrictions, repair responsibilities, and wording that matches the occupier setup instead of relying on a one-size-fits-all file.',
-        ]}
-        highlights={[
-          'Built for landlords who searched for a tenancy agreement template, rent agreement template, or tenancy contract template',
-          'Guided builder instead of a blank file left for manual editing',
-          'Keeps older AST wording visible without forcing outdated product labels',
-          'England-only wording and route selection',
-          'Clear path to /products/ast if you want to compare all England routes first',
-          'Explains what a modern England agreement should usually cover',
-          'Better fit than adapting a generic UK template',
-          'Supports both quick-start and comparison journeys',
-        ]}
-        compliancePoints={[
-          'England-only wording and route selection, with no Wales, Scotland, or Northern Ireland carryover terminology',
-          "Current England reform messaging reflected carefully rather than through overclaims",
-          'Legacy AST and older Bill wording treated as search-language entry points, not the whole live product story',
-          'Template-style searches routed into the live workflow and linked clearly to /products/ast as the main comparison page',
-          'Built around the actual tenancy setup instead of pretending a blank template is always enough',
-          'Clear next-step journey from template search into either the builder or the broader England comparison page',
-        ]}
-        keywordTargets={[
-          'tenancy agreement template',
-          'england tenancy agreement template',
-          'rent agreement template',
-          'tenancy contract template',
-          'assured shorthold tenancy agreement template',
-          'renters rights bill tenancy agreement',
-        ]}
-        faqs={faqs}
-      />
+      <main>
+        <section className="relative overflow-hidden border-b border-[#E7E0D4] bg-gradient-to-b from-[#FBF8F2] via-[#F7F3EC] to-[#F6F2EB] pt-24 pb-16 md:pt-28 md:pb-20">
+          <div className="pointer-events-none absolute left-[-8rem] top-[8rem] h-56 w-56 rounded-full bg-[#E7DBFF] opacity-60 blur-3xl" />
+          <div className="pointer-events-none absolute right-[-7rem] top-[22rem] h-56 w-56 rounded-full bg-[#FFEFD6] opacity-70 blur-3xl" />
+
+          <Container>
+            <div className="max-w-4xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#7C3AED]">
+                England example and guide
+              </p>
+              <h1 className="mt-4 text-4xl font-bold tracking-tight text-[#141B2D] md:text-6xl">
+                Tenancy Agreement Template (England)
+              </h1>
+            </div>
+
+            <div className="mt-8 md:mt-10">
+              <SampleAgreementPreview />
+            </div>
+
+            <div className="mt-8 max-w-4xl space-y-4 text-lg leading-8 text-[#556177]">
+              <p>
+                Landlords searching for a tenancy agreement, rent agreement, or tenancy contract
+                usually want to see the structure first. That is why this page starts with a real
+                England template example before moving into the agreement routes that fit a live
+                tenancy.
+              </p>
+              <p>
+                If you still use older terminology, the{' '}
+                <Link
+                  href="/assured-shorthold-tenancy-agreement-template"
+                  className="font-semibold text-[#4A46C8] underline-offset-4 hover:underline"
+                >
+                  AST legacy guide
+                </Link>{' '}
+                and the{' '}
+                <Link
+                  href="/assured-periodic-tenancy-agreement"
+                  className="font-semibold text-[#4A46C8] underline-offset-4 hover:underline"
+                >
+                  assured periodic guide
+                </Link>{' '}
+                both explain the wording shift, but this page remains the main England template
+                destination.
+              </p>
+            </div>
+          </Container>
+        </section>
+
+        <Container className="py-12 md:py-16">
+          <section className="rounded-[2.3rem] border border-[#E5DED2] bg-white p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                Transition before product routing
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                Free / generic template vs guided agreement
+              </h2>
+              <p className="mt-4 text-base leading-7 text-[#556177]">
+                The example above shows what a real England agreement looks like. The next question
+                is whether you want to rely on a static template file or move into a guided route
+                that keeps the agreement structure, supporting documents, and tenancy setup aligned.
+              </p>
+            </div>
+
+            <div className="mt-8 overflow-hidden rounded-[1.8rem] border border-[#E5DED2]">
+              <div className="grid bg-[#FBF9F4] text-sm font-semibold text-[#3A4459] md:grid-cols-[1.15fr_1fr_1fr]">
+                <div className="border-b border-[#E5DED2] px-5 py-4 md:border-b-0 md:border-r" />
+                <div className="border-b border-[#E5DED2] px-5 py-4 md:border-b-0 md:border-r">
+                  Free / generic template
+                </div>
+                <div className="px-5 py-4">Guided agreement route</div>
+              </div>
+              {comparisonRows.map((row) => (
+                <div
+                  key={row.label}
+                  className="grid border-t border-[#E5DED2] bg-white text-sm leading-7 text-[#556177] md:grid-cols-[1.15fr_1fr_1fr]"
+                >
+                  <div className="border-b border-[#EDE7DC] px-5 py-4 font-semibold text-[#141B2D] md:border-b-0 md:border-r">
+                    {row.label}
+                  </div>
+                  <div className="border-b border-[#EDE7DC] px-5 py-4 md:border-b-0 md:border-r">
+                    {row.genericTemplate}
+                  </div>
+                  <div className="px-5 py-4">{row.guidedAgreement}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr_0.9fr]">
+              {leadRoutes.map((route) => (
+                <LeadRouteCard key={route.title} {...route} />
+              ))}
+
+              <article className="rounded-[2rem] border border-[#D9D0EE] bg-gradient-to-br from-[#F5F1FF] via-white to-[#FBF9FF] p-6 shadow-[0_18px_46px_rgba(91,86,232,0.08)] md:p-7">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                  Compare all England routes
+                </p>
+                <h3 className="mt-3 text-2xl font-bold tracking-tight text-[#141B2D]">
+                  Need the full route-selection page?
+                </h3>
+                <p className="mt-4 text-base leading-7 text-[#556177]">
+                  Use the England comparison page if you want Standard, Premium, Student, HMO /
+                  Shared House, and Lodger shown side by side before you choose what to do next.
+                </p>
+                <div className="mt-6">
+                  <Link
+                    href="/products/ast"
+                    className="inline-flex items-center justify-center rounded-xl border border-[#CBBDF1] bg-white px-5 py-3 text-sm font-semibold text-[#432B87] transition hover:border-[#B69BF4] hover:bg-[#F7F4FF]"
+                  >
+                    Compare agreement types
+                  </Link>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section className="mt-12 rounded-[2.3rem] border border-[#E5DED2] bg-white p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                Clause explanations
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                Why these clauses matter in a live England agreement
+              </h2>
+            </div>
+
+            <div className="mt-8 grid gap-5 lg:grid-cols-3">
+              {clauseExplainers.map((item) => (
+                <article
+                  key={item.title}
+                  className="rounded-[1.8rem] border border-[#E9E2D7] bg-[#FBF9F4] p-5"
+                >
+                  <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-[#556177]">{item.body}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="mt-12 rounded-[2.3rem] border border-[#E5DED2] bg-[#FBF9F4] p-6 shadow-[0_18px_46px_rgba(31,41,55,0.05)] md:p-8">
+            <div className="max-w-3xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                Specialist England agreement routes
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                Keep the main template journey broad, then branch only when the facts demand it
+              </h2>
+              <p className="mt-4 text-base leading-7 text-[#556177]">
+                Standard and Premium lead the ordinary-residential journey. If the tenancy is
+                student-focused, shared-house / HMO, or resident-landlord, use the specialist route
+                instead of forcing it into the wrong document model.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-5 lg:grid-cols-3">
+              {specialistRoutes.map((route) => (
+                <SpecialistRouteCard key={route.title} {...route} />
+              ))}
+            </div>
+          </section>
+
+          <div className="mt-12">
+            <FAQSection
+              title="Tenancy agreement template FAQs"
+              intro="Clear answers for landlords comparing a static template with the live England agreement routes."
+              faqs={faqs}
+              showContactCTA={false}
+              variant="gray"
+            />
+          </div>
+        </Container>
+      </main>
     </div>
   );
 }
+

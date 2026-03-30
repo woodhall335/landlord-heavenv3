@@ -330,29 +330,45 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
         ? '/wales-tenancy-agreement-template'
         : region === 'northern-ireland'
         ? '/northern-ireland-tenancy-agreement-template'
-        : '/assured-shorthold-tenancy-agreement-template';
+        : '/tenancy-agreement-template';
+    const primaryTenancyHref = region === 'england' ? '/tenancy-agreement-template' : '/products/ast';
+    const primaryTenancyLabel =
+      region === 'england' ? 'View the England tenancy agreement template' : 'Get the Tenancy Agreement Pack';
+    const secondaryTenancyHref = region === 'england' ? '/products/ast' : tenancyLink;
+    const secondaryTenancyLabel =
+      region === 'england' ? 'Compare England agreement types' : 'Download the template';
 
     return {
       jurisdictionLabel: `${jurisdictionName} tenancy agreements`,
       scenarioLabel: 'creating compliant tenancy agreements',
       primaryCTA: {
-        label: 'Get the Tenancy Agreement Pack',
-        href: '/products/ast',
+        label: primaryTenancyLabel,
+        href: primaryTenancyHref,
       },
       secondaryCTA: {
-        label: 'Download the template',
-        href: tenancyLink,
+        label: secondaryTenancyLabel,
+        href: secondaryTenancyHref,
       },
       relatedLinks: [
         {
-          href: '/products/ast',
-          title: 'Tenancy Agreement Pack',
-          description: 'Standard and Premium agreements with compliance checks.',
+          href: primaryTenancyHref,
+          title:
+            region === 'england' ? 'England Tenancy Agreement Template' : 'Tenancy Agreement Pack',
+          description:
+            region === 'england'
+              ? 'Main England template hub with a real sample agreement preview.'
+              : 'Standard and Premium agreements with compliance checks.',
         },
         {
-          href: tenancyLink,
-          title: `${jurisdictionName} tenancy agreement template`,
-          description: 'Jurisdiction-specific tenancy requirements.',
+          href: secondaryTenancyHref,
+          title:
+            region === 'england'
+              ? 'Compare England agreement types'
+              : `${jurisdictionName} tenancy agreement template`,
+          description:
+            region === 'england'
+              ? 'Route-selection page for Standard, Premium, Student, HMO / Shared House, and Lodger.'
+              : 'Jurisdiction-specific tenancy requirements.',
         },
       ],
     };

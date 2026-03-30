@@ -1,60 +1,54 @@
 import { describe, expect, it } from 'vitest';
-import { metadata as astAgreementTemplateMetadata } from '@/app/ast-agreement-template/page';
-import { metadata as tenancyAgreementTemplateUkMetadata } from '@/app/tenancy-agreement-template-uk/page';
-import { metadata as tenancyAgreementEngland2026Metadata } from '@/app/tenancy-agreement-england-2026/page';
+import { metadata as hubMetadata } from '@/app/tenancy-agreement-template/page';
+import { metadata as astMetadata } from '@/app/assured-shorthold-tenancy-agreement-template/page';
+import { metadata as ukMetadata } from '@/app/tenancy-agreement-template-uk/page';
 import { metadata as assuredPeriodicMetadata } from '@/app/assured-periodic-tenancy-agreement/page';
-import { metadata as hmoMetadata } from '@/app/hmo-tenancy-agreement-template/page';
 
 const asText = (value: unknown): string =>
   typeof value === 'string' ? value : value?.toString?.() ?? '';
 
-const pageMetadata = [
-  {
-    name: '/ast-agreement-template',
-    metadata: astAgreementTemplateMetadata,
-    expectedTitle: 'AST Agreement Template UK | England Updated for 1 May 2026',
-    keyword: 'ast agreement template',
-  },
-  {
-    name: '/tenancy-agreement-template-uk',
-    metadata: tenancyAgreementTemplateUkMetadata,
-    expectedTitle: 'Tenancy Agreement Template UK | England Updated for 1 May 2026',
-    keyword: 'tenancy agreement template uk',
-  },
-  {
-    name: '/tenancy-agreement-england-2026',
-    metadata: tenancyAgreementEngland2026Metadata,
-    expectedTitle: 'Do I Need a New Tenancy Agreement After 1 May 2026? | England Guide',
-    keyword: 'tenancy agreement england 2026',
-  },
-  {
-    name: '/assured-periodic-tenancy-agreement',
-    metadata: assuredPeriodicMetadata,
-    expectedTitle: 'Assured Periodic Tenancy Agreement | England Explainer',
-    keyword: 'assured periodic tenancy agreement',
-  },
-  {
-    name: '/hmo-tenancy-agreement-template',
-    metadata: hmoMetadata,
-    expectedTitle: 'HMO Tenancy Agreement Template | Premium England Route',
-    keyword: 'hmo tenancy agreement template',
-  },
-];
-
 describe('tenancy funnel metadata', () => {
-  it.each(pageMetadata)('%s includes England-first metadata', ({ metadata, expectedTitle, keyword }) => {
-    expect(asText(metadata.title)).toBe(expectedTitle);
-    expect(asText(metadata.description)).toContain('England');
+  it('positions the main hub as the England template owner', () => {
+    expect(asText(hubMetadata.title)).toBe('Tenancy Agreement Template (England) - Example & Guide');
+    expect(asText(hubMetadata.description)).toContain('England');
+    expect(asText(hubMetadata.alternates?.canonical)).toContain('/tenancy-agreement-template');
 
-    const keywords = metadata.keywords ?? [];
-    const keywordText = Array.isArray(keywords) ? keywords.join(' ') : asText(keywords);
-    expect(keywordText).toContain(keyword);
+    const keywords = Array.isArray(hubMetadata.keywords)
+      ? hubMetadata.keywords.join(' ')
+      : asText(hubMetadata.keywords);
+    expect(keywords).toContain('tenancy agreement template');
+    expect(keywords).toContain('rent agreement');
+    expect(keywords).toContain('tenancy contract');
   });
 
-  it('keeps 1 May 2026 visible on the relevant pages', () => {
-    expect(asText(astAgreementTemplateMetadata.description)).toContain('1 May 2026');
-    expect(asText(tenancyAgreementTemplateUkMetadata.description)).toContain('1 May 2026');
-    expect(asText(tenancyAgreementEngland2026Metadata.title)).toContain('1 May 2026');
-    expect(asText(assuredPeriodicMetadata.description)).toContain('1 May 2026');
+  it('keeps the AST page as a legacy support page', () => {
+    expect(asText(astMetadata.title)).toBe(
+      'Assured Shorthold Tenancy Agreement Template | AST Legacy Guide'
+    );
+    expect(asText(astMetadata.description)).toContain('Legacy AST explainer');
+    expect(asText(astMetadata.alternates?.canonical)).toContain(
+      '/assured-shorthold-tenancy-agreement-template'
+    );
+  });
+
+  it('keeps the assured periodic page as support-only metadata', () => {
+    expect(asText(assuredPeriodicMetadata.title)).toBe(
+      'Assured Periodic Tenancy Agreement | England Support Guide'
+    );
+    expect(asText(assuredPeriodicMetadata.description)).toContain('support page');
+    expect(asText(assuredPeriodicMetadata.alternates?.canonical)).toContain(
+      '/assured-periodic-tenancy-agreement'
+    );
+  });
+
+  it('marks the UK router noindex,follow', () => {
+    expect(asText(ukMetadata.title)).toBe('Tenancy Agreement Template UK | Choose Your Jurisdiction');
+    expect((ukMetadata.robots as { index?: boolean; follow?: boolean } | undefined)?.index).toBe(
+      false
+    );
+    expect((ukMetadata.robots as { index?: boolean; follow?: boolean } | undefined)?.follow).toBe(
+      true
+    );
   });
 });
+

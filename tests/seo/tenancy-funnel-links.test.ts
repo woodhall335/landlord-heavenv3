@@ -7,7 +7,7 @@ describe('tenancy funnel sitemap and internal links', () => {
     const content = readFileSync(join(process.cwd(), 'src/app/sitemap.ts'), 'utf8');
 
     [
-      '/ast-agreement-template',
+      '/tenancy-agreement-template',
       '/tenancy-agreement-template-uk',
       '/tenancy-agreement-england-2026',
       '/assured-periodic-tenancy-agreement',

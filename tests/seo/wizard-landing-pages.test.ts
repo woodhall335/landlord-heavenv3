@@ -901,7 +901,7 @@ describe('Wizard Landing Pages - SEO Route Configuration', () => {
     expect(SEO_LANDING_ROUTES.notice_only).toBe('/eviction-notice');
     expect(SEO_LANDING_ROUTES.complete_pack).toBe('/eviction-pack-england');
     expect(SEO_LANDING_ROUTES.money_claim).toBe('/money-claim');
-    expect(SEO_LANDING_ROUTES.ast_standard).toBe('/tenancy-agreement');
+    expect(SEO_LANDING_ROUTES.ast_standard).toBe('/tenancy-agreement-template');
     expect(SEO_LANDING_ROUTES.ast_premium).toBe('/premium-tenancy-agreement');
   });
 

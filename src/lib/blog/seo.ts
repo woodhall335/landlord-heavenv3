@@ -110,8 +110,8 @@ const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
   if (intent === 'tenancy_agreement') {
     if (jurisdictionLabel === 'England') {
       return {
-        href: '/assured-shorthold-tenancy-agreement-template',
-        label: 'England tenancy agreement guide',
+        href: '/tenancy-agreement-template',
+        label: 'England tenancy agreement template',
       };
     }
     if (jurisdictionLabel === 'Wales') {
@@ -208,6 +208,16 @@ const buildSupportingLinks = (intent: string, jurisdictionLabel: string) => {
   }
 
   if (intent === 'tenancy_agreement') {
+    if (jurisdictionLabel === 'England') {
+      return [
+        pillar,
+        {
+          href: '/products/ast',
+          label: 'Compare England agreement types',
+        },
+      ];
+    }
+
     const links = [
       pillar,
       {

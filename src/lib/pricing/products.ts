@@ -71,14 +71,14 @@ export const SEO_LANDING_ROUTES = {
   notice_only: '/eviction-notice',
   complete_pack: '/eviction-pack-england',
   money_claim: '/money-claim',
-  ast_standard: '/products/ast',
+  ast_standard: '/tenancy-agreement-template',
   ast_premium: '/premium-tenancy-agreement',
   england_standard_tenancy_agreement: '/standard-tenancy-agreement',
   england_premium_tenancy_agreement: '/premium-tenancy-agreement',
   england_student_tenancy_agreement: '/student-tenancy-agreement',
   england_hmo_shared_house_tenancy_agreement: '/hmo-shared-house-tenancy-agreement',
   england_lodger_agreement: '/lodger-agreement',
-  residential_tenancy_application: '/tenancy-agreement',
+  residential_tenancy_application: '/tenancy-agreement-template',
 } as const;
 
 export type ProductSku =

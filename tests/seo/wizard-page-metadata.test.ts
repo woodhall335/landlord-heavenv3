@@ -161,11 +161,11 @@ describe('Wizard Page Metadata - generateMetadata', () => {
       expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/money-claim`);
     });
 
-    it('should set canonical to /tenancy-agreement for ast_standard', async () => {
+    it('should set canonical to /tenancy-agreement-template for ast_standard', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'ast_standard' }),
       });
-      expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/tenancy-agreement`);
+      expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/tenancy-agreement-template`);
     });
 
     it('should set canonical to /premium-tenancy-agreement for ast_premium', async () => {
@@ -175,11 +175,11 @@ describe('Wizard Page Metadata - generateMetadata', () => {
       expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/premium-tenancy-agreement`);
     });
 
-    it('should set canonical to /tenancy-agreement for tenancy_agreement', async () => {
+    it('should set canonical to /tenancy-agreement-template for tenancy_agreement', async () => {
       const metadata = await generateMetadata({
         searchParams: Promise.resolve({ product: 'tenancy_agreement' }),
       });
-      expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/tenancy-agreement`);
+      expect(metadata.alternates?.canonical).toBe(`${BASE_URL}/tenancy-agreement-template`);
     });
 
     it('should NOT set canonical for unknown product', async () => {

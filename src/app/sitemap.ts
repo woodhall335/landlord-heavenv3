@@ -48,6 +48,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/tools/validators/scotland-notice-to-leave',
     '/tools/validators/tenancy-agreement',
     '/tenancy-agreements/premium',
+    '/tenancy-agreement',
+    '/tenancy-agreement-template-free',
+    '/tenancy-agreement-template-uk',
+    '/ast-agreement-template',
+    '/ast-template-england',
+    '/ast-tenancy-agreement-template',
     '/$',
     ...RETIRED_PUBLIC_ROUTES,
     ...phase3SitemapExclusions,
@@ -72,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/products/notice-only', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/complete-pack', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/money-claim', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/products/ast', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/products/ast', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
@@ -83,6 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/eviction-pack-england', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-guides', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreement-template', priority: 0.95, changeFrequency: 'weekly' as const },
   ];
 
   // Tenancy agreement pages - individual jurisdiction pages
@@ -158,13 +165,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/hmo-shared-house-tenancy-agreement', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/lodger-agreement', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/assured-shorthold-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/ast-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreement-template-uk', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreement-england-2026', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/assured-periodic-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/hmo-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/renters-rights-act-information-sheet-2026', priority: 0.82, changeFrequency: 'weekly' as const },
-    { path: '/tenancy-agreement-template-free', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/joint-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Pages - Wales (Q1 2026)
     { path: '/wales-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },

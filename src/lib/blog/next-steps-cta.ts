@@ -353,17 +353,17 @@ function getTenancyNextSteps(
       return [
         {
           href: '/tenancy-agreement-template',
-          label: 'UK Tenancy Agreement Guide',
+          label: 'England Tenancy Agreement Template',
           priority: 1,
         },
         {
-          href: '/tenancy-agreement',
-          label: 'Residential Tenancy Agreement Guide',
+          href: '/tenancy-agreement-template-uk',
+          label: 'Choose the Right UK Jurisdiction',
           priority: 2,
         },
         {
           href: SEO_PRODUCT_ROUTES.ast,
-          label: 'Tenancy Agreement Pack',
+          label: 'Compare England Agreement Types',
           priority: 3,
         },
       ];
@@ -371,18 +371,18 @@ function getTenancyNextSteps(
     default:
       return [
         {
-          href: '/tenancy-agreements/england',
-          label: 'England Tenancy Agreement Guide',
+          href: '/tenancy-agreement-template',
+          label: 'England Tenancy Agreement Template',
           priority: 1,
         },
         {
           href: '/assured-shorthold-tenancy-agreement-template',
-          label: 'England Tenancy Agreement Template',
+          label: 'AST Legacy Guide',
           priority: 2,
         },
         {
           href: SEO_PRODUCT_ROUTES.ast,
-          label: 'Tenancy Agreement Pack',
+          label: 'Compare England Agreement Types',
           priority: 3,
         },
       ];

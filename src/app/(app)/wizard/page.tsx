@@ -219,7 +219,7 @@ export default async function WizardPage({
   const product = typeof params.product === 'string' ? params.product : undefined;
 
   if (product && isRetiredPublicSku(product)) {
-    redirect(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement');
+    redirect(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement-template');
   }
 
   return (

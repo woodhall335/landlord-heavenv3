@@ -187,7 +187,7 @@ export async function POST(request: Request) {
       validationResult.data;
 
     if (!case_id && isRetiredPublicSku(product)) {
-      const redirectTo = getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement';
+      const redirectTo = getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement-template';
       return NextResponse.json(
         {
           error: 'This product has been retired from the public site.',

@@ -3,22 +3,25 @@
  */
 
 import React from 'react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import AstAgreementTemplatePage from '@/app/ast-agreement-template/page';
+import TenancyAgreementTemplatePage from '@/app/tenancy-agreement-template/page';
+import AssuredShortholdTenancyAgreementTemplatePage from '@/app/assured-shorthold-tenancy-agreement-template/page';
 import TenancyAgreementTemplateUkPage from '@/app/tenancy-agreement-template-uk/page';
-import TenancyAgreementEngland2026Page from '@/app/tenancy-agreement-england-2026/page';
 import AssuredPeriodicTenancyAgreementPage from '@/app/assured-periodic-tenancy-agreement/page';
-import HmoTenancyAgreementTemplatePage from '@/app/hmo-tenancy-agreement-template/page';
 
 vi.mock('next/image', () => ({
   default: ({
     src,
     alt,
+    fill: _fill,
+    priority: _priority,
     ...rest
   }: {
     src: string | { src: string };
     alt: string;
+    fill?: boolean;
+    priority?: boolean;
     [key: string]: unknown;
   }) => <img src={typeof src === 'string' ? src : src.src} alt={alt} {...rest} />,
 }));
@@ -43,94 +46,208 @@ vi.mock('@/components/layout/HeaderConfig', () => ({
   HeaderConfig: () => null,
 }));
 
-const pages = [
-  {
-    name: '/ast-agreement-template',
-    component: <AstAgreementTemplatePage />,
-    heading: 'AST Agreement Template',
-    hook: /Looking for an AST agreement template\? For new England tenancies from 1 May 2026/i,
-    mediaAlt: 'Illustration showing tenancy agreement options and summary cards',
-    mediaSrc: '/images/wizard-icons/12-summary-cards.png',
-  },
-  {
-    name: '/tenancy-agreement-template-uk',
-    component: <TenancyAgreementTemplateUkPage />,
-    heading: 'Tenancy Agreement Template UK',
-    hook: /If you searched for a tenancy agreement template UK, the real question is not just which template to use\./i,
-    mediaAlt: 'Illustration of tenancy terms and agreement clauses',
-    mediaSrc: '/images/wizard-icons/44-terms.png',
-  },
-  {
-    name: '/tenancy-agreement-england-2026',
-    component: <TenancyAgreementEngland2026Page />,
-    heading: 'Do I Need a New Tenancy Agreement After 1 May 2026?',
-    hook: /If you are asking whether you need a new tenancy agreement after 1 May 2026/i,
-    mediaAlt: 'Illustration showing a tenancy timeline and calendar change',
-    mediaSrc: '/images/wizard-icons/11-calendar-timeline.png',
-  },
-  {
-    name: '/assured-periodic-tenancy-agreement',
-    component: <AssuredPeriodicTenancyAgreementPage />,
-    heading: 'Assured Periodic Tenancy Agreement',
-    hook: /If you searched for assured periodic tenancy agreement, you are probably trying to understand the current England route/i,
-    mediaAlt: 'Illustration of a tenancy agreement being signed',
-    mediaSrc: '/images/wizard-icons/10-signing.png',
-  },
-  {
-    name: '/hmo-tenancy-agreement-template',
-    component: <HmoTenancyAgreementTemplatePage />,
-    heading: 'HMO Tenancy Agreement Template',
-    hook: /Landlords searching for an HMO tenancy agreement template are usually not looking for the same thing/i,
-    mediaAlt: 'Illustration showing premium tenancy agreement features',
-    mediaSrc: '/images/wizard-icons/46-premium.png',
-  },
-];
+vi.mock('@/components/landing/UniversalHero', () => ({
+  UniversalHero: ({
+    title,
+    subtitle,
+    primaryCta,
+    secondaryCta,
+    mediaAlt,
+    mediaSrc,
+  }: {
+    title: string;
+    subtitle?: React.ReactNode;
+    primaryCta?: { label: string; href: string };
+    secondaryCta?: { label: string; href: string };
+    mediaAlt?: string;
+    mediaSrc?: string;
+  }) => (
+    <section>
+      <h1>{title}</h1>
+      {subtitle ? <p>{subtitle}</p> : null}
+      {primaryCta ? <a href={primaryCta.href}>{primaryCta.label}</a> : null}
+      {secondaryCta ? <a href={secondaryCta.href}>{secondaryCta.label}</a> : null}
+      {mediaAlt && mediaSrc ? <img alt={mediaAlt} src={mediaSrc} /> : null}
+    </section>
+  ),
+}));
+
+vi.mock('@/components/seo/FAQSection', () => ({
+  FAQSection: ({
+    title,
+    intro,
+    faqs,
+  }: {
+    title?: string;
+    intro?: string;
+    faqs?: Array<{ question: string; answer: string }>;
+  }) => (
+    <section>
+      {title ? <h2>{title}</h2> : null}
+      {intro ? <p>{intro}</p> : null}
+      {faqs?.map((faq) => (
+        <div key={faq.question}>
+          <h3>{faq.question}</h3>
+          <p>{faq.answer}</p>
+        </div>
+      ))}
+    </section>
+  ),
+}));
+
+vi.mock('@/components/seo/RelatedLinks', () => ({
+  RelatedLinks: ({
+    title,
+    links,
+  }: {
+    title?: string;
+    links: Array<{ href: string; title: string }>;
+  }) => (
+    <section>
+      {title ? <h2>{title}</h2> : null}
+      {links.map((link) => (
+        <a key={link.href} href={link.href}>
+          {link.title}
+        </a>
+      ))}
+    </section>
+  ),
+}));
+
+vi.mock('@/components/seo/SeoCtaBlock', () => ({
+  SeoCtaBlock: ({
+    title,
+    description,
+    primaryText,
+  }: {
+    title: string;
+    description: string;
+    primaryText: string;
+  }) => (
+    <section>
+      <h2>{title}</h2>
+      <p>{description}</p>
+      <span>{primaryText}</span>
+    </section>
+  ),
+}));
+
+vi.mock('@/lib/seo/structured-data', async () => {
+  const actual = await vi.importActual<object>('@/lib/seo/structured-data');
+  return {
+    ...actual,
+    StructuredData: () => null,
+    breadcrumbSchema: () => ({}),
+    articleSchema: () => ({}),
+    faqPageSchema: () => ({}),
+  };
+});
+
+afterEach(() => {
+  cleanup();
+  document.body.innerHTML = '';
+});
 
 describe('tenancy funnel SEO pages', () => {
-  beforeEach(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query: string) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
+  it('renders the rebuilt England template hub with the sample preview and lower specialist routes', () => {
+    render(<TenancyAgreementTemplatePage />);
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Tenancy Agreement Template (England)' })
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('sample-agreement-preview')).toBeInTheDocument();
+
+    [
+      'Parties',
+      'Property',
+      'Rent',
+      'Deposit',
+      'Term',
+      'Repairs / responsibilities',
+      'Notices / ending tenancy',
+    ].forEach((heading) => {
+      expect(screen.getAllByRole('heading', { name: heading }).length).toBeGreaterThan(0);
     });
-    window.scrollTo = vi.fn();
+
+    expect(screen.getByRole('link', { name: /view standard agreement/i })).toHaveAttribute(
+      'href',
+      '/standard-tenancy-agreement'
+    );
+    expect(screen.getByRole('link', { name: /view premium agreement/i })).toHaveAttribute(
+      'href',
+      '/premium-tenancy-agreement'
+    );
+    expect(screen.getByRole('link', { name: /compare agreement types/i })).toHaveAttribute(
+      'href',
+      '/products/ast'
+    );
+
+    expect(screen.getByText('Specialist England agreement routes')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        level: 2,
+        name: 'Keep the main template journey broad, then branch only when the facts demand it',
+      })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Student' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'HMO / Shared House' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Lodger' })).toBeInTheDocument();
+
+    const wordCount = document.body.textContent?.trim().split(/\s+/).filter(Boolean).length ?? 0;
+    expect(wordCount).toBeGreaterThan(700);
   });
 
-  afterEach(() => {
-    cleanup();
-    document.body.innerHTML = '';
+  it('keeps the AST page as a legacy bridge into the main hub', () => {
+    render(<AssuredShortholdTenancyAgreementTemplatePage />);
+
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Assured Shorthold Tenancy Agreement Template',
+      })
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId('sample-agreement-preview')).not.toBeInTheDocument();
+    expect(
+      screen
+        .getAllByRole('link', { name: 'View the England tenancy agreement template' })
+        .some((link) => link.getAttribute('href') === '/tenancy-agreement-template')
+    ).toBe(true);
+    expect(
+      screen
+        .getAllByRole('link', { name: 'Read the assured periodic guide' })
+        .some((link) => link.getAttribute('href') === '/assured-periodic-tenancy-agreement')
+    ).toBe(true);
   });
 
-  it.each(pages)('%s renders the intended funnel content', ({ component, heading, hook, mediaAlt, mediaSrc }) => {
-    render(component);
+  it('renders the UK router as a thin jurisdiction selector with no preview', () => {
+    render(<TenancyAgreementTemplateUkPage />);
 
-    expect(screen.getByRole('heading', { level: 1, name: heading })).toBeInTheDocument();
-    expect(screen.getByText(hook)).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Tenancy Agreement Template UK' })
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId('sample-agreement-preview')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Choose England' })).toHaveAttribute(
+      'href',
+      '/tenancy-agreement-template'
+    );
+    expect(screen.getByRole('link', { name: 'Choose Wales' })).toHaveAttribute(
+      'href',
+      '/wales-tenancy-agreement-template'
+    );
+  });
 
-    const astProductLinks = screen
-      .getAllByRole('link')
-      .filter((link) => link.getAttribute('href') === '/products/ast');
-    expect(astProductLinks.length).toBeGreaterThanOrEqual(3);
+  it('keeps the assured periodic page support-only and linked back to the hub', () => {
+    render(<AssuredPeriodicTenancyAgreementPage />);
 
-    const relatedSeoLinks = screen
-      .getAllByRole('link')
-      .filter((link) => {
-        const href = link.getAttribute('href') ?? '';
-        return href.startsWith('/') && href !== '/products/ast';
-      });
-    expect(relatedSeoLinks.length).toBeGreaterThan(0);
-
-    expect(screen.getByAltText(mediaAlt)).toHaveAttribute('src', mediaSrc);
-
-    const wordCount = document.body.textContent?.trim().split(/\s+/).length ?? 0;
-    expect(wordCount).toBeGreaterThan(650);
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Assured Periodic Tenancy Agreement' })
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId('sample-agreement-preview')).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'View the England tenancy agreement template' })
+    ).toHaveAttribute('href', '/tenancy-agreement-template');
+    expect(
+      screen.getByText(/this page is not trying to replicate the main template preview/i)
+    ).toBeInTheDocument();
   });
 });

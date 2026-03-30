@@ -7,13 +7,12 @@ const asText = (value: unknown): string =>
 describe('/products/ast metadata', () => {
   it('uses the refreshed title and description positioning', () => {
     expect(asText(metadata.title)).toBe(
-      'Assured Periodic Tenancy Agreement for England | Updated for 1 May 2026',
+      'Choose the Right England Agreement Type | Standard, Premium, Student, HMO and Lodger',
     );
 
-    expect(asText(metadata.description)).toContain('Assured Periodic Tenancy Agreement for England');
-    expect(asText(metadata.description)).toContain('1 May 2026');
-    expect(asText(metadata.description)).toContain('AST');
-    expect(asText(metadata.description)).toContain('Wales, Scotland, and Northern Ireland');
+    expect(asText(metadata.description)).toContain('Compare the five England agreement routes');
+    expect(asText(metadata.description)).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
+    expect(asText(metadata.description)).toContain('England');
     expect(asText(metadata.description)).not.toContain('ensure legal compliance');
   });
 
@@ -21,18 +20,18 @@ describe('/products/ast metadata', () => {
     const openGraph = metadata.openGraph ?? {};
 
     expect(asText(openGraph.title)).toBe(
-      'Assured Periodic Tenancy Agreement for England | Updated for 1 May 2026',
+      'Choose the Right England Agreement Type | Standard, Premium, Student, HMO and Lodger',
     );
-    expect(asText(openGraph.description)).toContain('Standard and Premium');
-    expect(asText(openGraph.description)).toContain('1 May 2026');
-    expect(asText(openGraph.description)).toContain('AST');
+    expect(asText(openGraph.description)).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
+    expect(asText(openGraph.description)).toContain('England agreement type');
   });
 
-  it('keeps AST capture in keywords without overclaiming', () => {
+  it('keeps the keywords focused on route selection rather than broad head terms', () => {
     const keywords = metadata.keywords ?? [];
     const text = Array.isArray(keywords) ? keywords.join(' ') : asText(keywords);
 
-    expect(text).toContain('ast agreement template');
+    expect(text).toContain('england agreement types');
     expect(text).toContain('assured periodic tenancy agreement england');
+    expect(text).not.toContain('tenancy contract');
   });
 });

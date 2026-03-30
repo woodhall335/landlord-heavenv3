@@ -153,7 +153,7 @@ function WizardFlowContent() {
 
   useEffect(() => {
     if (!editCaseId && product && isRetiredPublicSku(product)) {
-      router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement');
+      router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement-template');
       return;
     }
 
@@ -256,7 +256,7 @@ function WizardFlowContent() {
 
     try {
       if (!editCaseId && product && isRetiredPublicSku(product)) {
-        router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement');
+        router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement-template');
         return;
       }
 
