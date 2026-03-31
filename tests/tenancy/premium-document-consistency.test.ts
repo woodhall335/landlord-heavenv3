@@ -122,7 +122,7 @@ describe('Product Meta Pricing', () => {
     it('includes original price for comparison', () => {
       const meta = getProductMeta('ast_premium');
       expect(meta.originalPrice).toBeDefined();
-      expect(meta.originalPrice).toContain('Ãƒâ€šÂ£200');
+      expect(meta.originalPrice).toContain('£200');
     });
 
     it('includes savings message', () => {

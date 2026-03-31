@@ -61,12 +61,12 @@ const faqs = [
   {
     question: 'What is Money Claim Online (MCOL)?',
     answer:
-      "Money Claim Online is the government's online system for making civil money claims up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£100,000 in England and Wales. It lets landlords issue a claim without attending court at the start.",
+      "Money Claim Online is the government's online system for making civil money claims up to £100,000 in England and Wales. It lets landlords issue a claim without attending court at the start.",
   },
   {
     question: 'How much does MCOL cost?',
     answer:
-      'MCOL court fees depend on your claim amount: up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£300 costs ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£35, ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£300.01-ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£500 costs ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50, ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£500.01-ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,000 costs ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£70, ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,000.01-ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,500 costs ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£80, ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,500.01-ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£3,000 costs ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£115, ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£3,000.01-ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£5,000 costs ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£205, ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£5,000.01-ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£10,000 costs ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£455. Higher amounts are a percentage of the claim.',
+      'MCOL court fees depend on your claim amount: up to £300 costs £35, £300.01-£500 costs £50, £500.01-£1,000 costs £70, £1,000.01-£1,500 costs £80, £1,500.01-£3,000 costs £115, £3,000.01-£5,000 costs £205, £5,000.01-£10,000 costs £455. Higher amounts are a percentage of the claim.',
   },
   {
     question: 'How long does MCOL take?',
@@ -81,7 +81,7 @@ const faqs = [
   {
     question: 'Can I claim interest through MCOL?',
     answer:
-      'Yes. You can usually claim statutory interest (commonly 8% per year) where appropriate. YouÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ll need to calculate it accurately for your claim.',
+      'Yes. You can usually claim statutory interest (commonly 8% per year) where appropriate. You’ll need to calculate it accurately for your claim.',
   },
   {
     question: 'What documents do I need for MCOL?',
@@ -99,14 +99,14 @@ const faqs = [
       'If they do not respond in time, you can request default judgment through MCOL. This gives you a judgment you can then enforce.',
   },
   {
-    question: 'Can I use MCOL for claims over ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£10,000?',
+    question: 'Can I use MCOL for claims over £10,000?',
     answer:
-      'Yes, MCOL can handle claims up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£100,000. Claims over ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£10,000 are typically not small claims and may have different procedural expectations.',
+      'Yes, MCOL can handle claims up to £100,000. Claims over £10,000 are typically not small claims and may have different procedural expectations.',
   },
   {
     question: "What's the difference between MCOL and the paper N1 form?",
     answer:
-      'MCOL is online and usually faster. The N1 is a paper/standard claim form route often used when MCOL isnÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢t suitable. Both can start a county court money claim.',
+      'MCOL is online and usually faster. The N1 is a paper/standard claim form route often used when MCOL isn’t suitable. Both can start a county court money claim.',
   },
   {
     question: 'How detailed should my evidence bundle be?',
@@ -191,7 +191,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   <div>
                     <h2 className="text-lg font-semibold text-charcoal">Built for MCOL success</h2>
                     <p className="text-sm text-gray-600">
-                      Your claim reads clearly: who owes what, why, and how itÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s calculated.
+                      Your claim reads clearly: who owes what, why, and how it’s calculated.
                     </p>
                   </div>
                 </div>
@@ -203,7 +203,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   <div>
                     <h2 className="text-lg font-semibold text-charcoal">Process-first, not template-first</h2>
                     <p className="text-sm text-gray-600">
-                      We align letter ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ particulars ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ interest ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ filing steps so your story matches end-to-end.
+                      We align letter → particulars → interest → filing steps so your story matches end-to-end.
                     </p>
                   </div>
                 </div>
@@ -233,8 +233,8 @@ export default function MoneyClaimOnlineMCOLPage() {
                   What is Money Claim Online (MCOL)?
                 </h2>
                 <p className="mt-4 text-lg text-gray-700">
-                  MCOL is the governmentÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s online system for issuing county court money claims in
-                  England &amp; Wales ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â used by landlords to recover unpaid rent, damages, and other
+                  MCOL is the government’s online system for issuing county court money claims in
+                  England &amp; Wales — used by landlords to recover unpaid rent, damages, and other
                   tenancy debts.
                 </p>
 
@@ -328,13 +328,13 @@ export default function MoneyClaimOnlineMCOLPage() {
                     href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                     className="hero-btn-primary"
                   >
-                    Prepare my claim pack ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢
+                    Prepare my claim pack →
                   </Link>
                   <Link
                     href="/products/money-claim"
                     className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#CDB8F6] bg-white px-5 py-3 font-medium text-[#692ED4] transition-colors hover:bg-[#F3EEFF]"
                   >
-                    View whatÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s included <ArrowRight className="h-4 w-4" />
+                    View what’s included <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
               </div>
@@ -364,14 +364,14 @@ export default function MoneyClaimOnlineMCOLPage() {
                     </thead>
                     <tbody>
                       {[
-                        ['Up to ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£300', 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£35'],
-                        ['ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£300.01 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£500', 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50'],
-                        ['ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£500.01 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,000', 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£70'],
-                        ['ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,000.01 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,500', 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£80'],
-                        ['ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£1,500.01 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£3,000', 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£115'],
-                        ['ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£3,000.01 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£5,000', 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£205'],
-                        ['ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£5,000.01 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£10,000', 'ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£455'],
-                        ['ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£10,000.01 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£100,000', '5% of claim'],
+                        ['Up to £300', '£35'],
+                        ['£300.01 – £500', '£50'],
+                        ['£500.01 – £1,000', '£70'],
+                        ['£1,000.01 – £1,500', '£80'],
+                        ['£1,500.01 – £3,000', '£115'],
+                        ['£3,000.01 – £5,000', '£205'],
+                        ['£5,000.01 – £10,000', '£455'],
+                        ['£10,000.01 – £100,000', '5% of claim'],
                       ].map(([a, b], i) => (
                         <tr key={a} className={i % 2 ? 'bg-[#fcfaff]' : ''}>
                           <td className="border-b border-gray-100 px-6 py-4 text-gray-700">{a}</td>
@@ -382,7 +382,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   </table>
                 </div>
                 <p className="px-6 py-4 text-xs text-gray-500">
-                  Fees shown reflect your on-page table (ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“correct as of January 2026ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â). Additional fees may apply if a case proceeds to hearing or enforcement.
+                  Fees shown reflect your on-page table (“correct as of January 2026”). Additional fees may apply if a case proceeds to hearing or enforcement.
                 </p>
               </div>
             </div>
@@ -396,7 +396,7 @@ export default function MoneyClaimOnlineMCOLPage() {
               <div className="mb-10 text-center">
                 <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What your Money Claim Pack includes</h2>
                 <p className="mt-3 text-gray-700">
-                  Everything you need to move from ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“tenant owes moneyÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â to a clean MCOL submission.
+                  Everything you need to move from “tenant owes money” to a clean MCOL submission.
                 </p>
               </div>
 
@@ -419,7 +419,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   },
                   {
                     title: 'Step-by-step filing guide',
-                    text: 'What to enter, what to keep, what happens next ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â and enforcement options.',
+                    text: 'What to enter, what to keep, what happens next — and enforcement options.',
                     icon: <CheckCircle2 className="h-6 w-6 text-[#692ED4]" />,
                   },
                 ].map((c) => (
@@ -441,7 +441,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                   className="hero-btn-primary"
                 >
-                  Prepare my claim ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {PRODUCTS.money_claim.displayPrice} ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢
+                  Prepare my claim — {PRODUCTS.money_claim.displayPrice} →
                 </Link>
                 <p className="text-sm text-gray-600">
                   Court fees are extra (paid directly to MCOL). You can usually claim them back.
@@ -492,7 +492,7 @@ export default function MoneyClaimOnlineMCOLPage() {
             <div className="mx-auto max-w-3xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_22px_60px_rgba(105,46,212,0.35)] md:p-12">
               <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to file MCOL with confidence?</h2>
               <p className="mb-8 text-xl text-white/90">
-                Generate your Letter Before Action, Particulars, and interest output ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â aligned end-to-end.
+                Generate your Letter Before Action, Particulars, and interest output — aligned end-to-end.
               </p>
 
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -500,7 +500,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                   className="hero-btn-primary"
                 >
-                  Prepare my MCOL claim pack ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢
+                  Prepare my MCOL claim pack →
                 </Link>
               </div>
 
@@ -508,10 +508,10 @@ export default function MoneyClaimOnlineMCOLPage() {
                 className="mt-6 flex flex-col items-center gap-2 text-sm text-white/90 md:flex-row md:justify-center md:gap-6"
                 aria-label="Purchase reassurance"
               >
-                <li>ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Preview before paying</li>
-                <li>ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Unlimited regenerations</li>
-                <li>ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Stored 12+ months</li>
-                <li>ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ One-time payment ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â no subscription</li>
+                <li>✓ Preview before paying</li>
+                <li>✓ Unlimited regenerations</li>
+                <li>✓ Stored 12+ months</li>
+                <li>✓ One-time payment — no subscription</li>
               </ul>
             </div>
           </Container>

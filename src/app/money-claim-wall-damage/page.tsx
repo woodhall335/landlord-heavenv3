@@ -71,7 +71,7 @@ const faqs = [
   {
     question: 'How much can I claim for wall repairs?',
     answer:
-      'Typical costs include: filling and painting a small hole ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£30-50, larger hole repair ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50-100, full wall replastering ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£150-400, door replacement ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£100-300 plus hanging. Get professional quotes for your specific damage.',
+      'Typical costs include: filling and painting a small hole £30-50, larger hole repair £50-100, full wall replastering £150-400, door replacement £100-300 plus hanging. Get professional quotes for your specific damage.',
   },
   {
     question: 'Can I claim if I need to repaint the whole room?',
@@ -255,13 +255,13 @@ export default function MoneyClaimWallDamagePage() {
                     Fair Wear &amp; Tear (Not Claimable)
                   </h3>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Small picture hook holes (typically 1-2 per wall)</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Slight scuff marks at normal height</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Minor marks around light switches</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Small cracks from building settlement</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Light fading from sunlight</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Door hinge wear from normal use</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Normal key/handle marks around locks</li>
+                    <li>• Small picture hook holes (typically 1-2 per wall)</li>
+                    <li>• Slight scuff marks at normal height</li>
+                    <li>• Minor marks around light switches</li>
+                    <li>• Small cracks from building settlement</li>
+                    <li>• Light fading from sunlight</li>
+                    <li>• Door hinge wear from normal use</li>
+                    <li>• Normal key/handle marks around locks</li>
                   </ul>
                 </div>
               </div>
@@ -269,7 +269,7 @@ export default function MoneyClaimWallDamagePage() {
               {/* Ask Heaven callout */}
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">ÃƒÆ’Ã‚Â¢Ãƒâ€¹Ã…â€œÃƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â</span>
+                  <span className="text-2xl">☁️</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
                       Not sure if your wall damage is claimable?
@@ -307,35 +307,35 @@ export default function MoneyClaimWallDamagePage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Small hole fill + paint (per hole)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£30 - ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£30 - £50</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Large hole repair + match paint</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50 - ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£100</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £100</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Internal door replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£100 - ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£250</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£100 - £250</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Door hanging (labour only)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50 - ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£100</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £100</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Plaster repair (per sqm)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£40 - ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£80</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£40 - £80</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Full room repaint (avg room)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£200 - ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£400</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£200 - £400</td>
                     </tr>
                     <tr>
                       <td className="px-6 py-3 text-gray-600">Skirting board repair (per metre)</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£15 - ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£30</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£15 - £30</td>
                     </tr>
                     <tr className="bg-gray-50">
                       <td className="px-6 py-3 text-gray-600">Door lock replacement</td>
-                      <td className="px-6 py-3 text-gray-900 font-medium">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£50 - ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£120</td>
+                      <td className="px-6 py-3 text-gray-900 font-medium">£50 - £120</td>
                     </tr>
                   </tbody>
                 </table>
@@ -348,7 +348,7 @@ export default function MoneyClaimWallDamagePage() {
                 <p className="text-gray-600 text-sm">
                   If claiming for full room repainting, you must account for when the room was
                   last painted. Example: Room painted 3 years ago with expected 7-year life
-                  = 57% remaining value. Maximum claim = total cost ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â 57%.
+                  = 57% remaining value. Maximum claim = total cost × 57%.
                 </p>
               </div>
             </div>
@@ -370,10 +370,10 @@ export default function MoneyClaimWallDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Photo Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Check-in wall/door photos</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Check-out damage photos</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Close-ups with ruler for scale</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Location context shots</li>
+                    <li>• Check-in wall/door photos</li>
+                    <li>• Check-out damage photos</li>
+                    <li>• Close-ups with ruler for scale</li>
+                    <li>• Location context shots</li>
                   </ul>
                 </div>
 
@@ -383,10 +383,10 @@ export default function MoneyClaimWallDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Documentation</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Check-in/out inventory reports</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Tenancy agreement (fixing clauses)</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Last decoration dates</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Correspondence about damage</li>
+                    <li>• Check-in/out inventory reports</li>
+                    <li>• Tenancy agreement (fixing clauses)</li>
+                    <li>• Last decoration dates</li>
+                    <li>• Correspondence about damage</li>
                   </ul>
                 </div>
 
@@ -396,10 +396,10 @@ export default function MoneyClaimWallDamagePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">Cost Evidence</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Decorator/handyman quotes</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Material costs</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Door replacement quotes</li>
-                    <li>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Betterment calculations</li>
+                    <li>• Decorator/handyman quotes</li>
+                    <li>• Material costs</li>
+                    <li>• Door replacement quotes</li>
+                    <li>• Betterment calculations</li>
                   </ul>
                 </div>
               </div>
@@ -466,11 +466,11 @@ export default function MoneyClaimWallDamagePage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_wall_damage&reason=property_damage"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {PRODUCTS.money_claim.displayPrice}
+                Start Your Claim — {PRODUCTS.money_claim.displayPrice}
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
-                Court fees from ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£35 extra (based on claim amount)
+                Court fees from £35 extra (based on claim amount)
               </p>
             </div>
           </div>

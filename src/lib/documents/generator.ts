@@ -805,8 +805,8 @@ export function isFullHtmlDocument(html: string): boolean {
 
 function normalizeCurrencySymbolsInHtml(html: string): string {
   return html
-    .replace(/Â£/g, '&#163;')
-    .replace(/£/g, '&#163;');
+    .replace(/\u00A3/g, '&#163;')
+    .replace(/\u00C2\u00A3/g, '&#163;');
 }
 
 /**

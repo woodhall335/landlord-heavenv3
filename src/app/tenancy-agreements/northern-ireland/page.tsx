@@ -190,7 +190,7 @@ export default function NorthernIrelandTenancyPage() {
         {/* 2025 Legal Updates Highlight */}
         <section className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto bg-primary text-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold mb-4">ðŸ†• 2025 Legal Updates for Northern Ireland</h2>
+            <h2 className="text-3xl font-bold mb-4">🆕 2025 Legal Updates for Northern Ireland</h2>
             <p className="text-lg mb-6">
               Important changes came into effect on <strong>1 April 2025</strong> affecting all private tenancies in Northern Ireland:
             </p>
@@ -202,19 +202,19 @@ export default function NorthernIrelandTenancyPage() {
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-2">ðŸ’° Rent Increase Restrictions</h3>
+                <h3 className="text-xl font-semibold mb-2">💰 Rent Increase Restrictions</h3>
                 <p className="text-sm">
                   Rent increases limited to <strong>once per year</strong> with a minimum <strong>12-month gap</strong> between increases. Landlords must give <strong>3 months' written notice</strong> of any increase.
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-2">ðŸ“… Length-Based Notice Periods</h3>
+                <h3 className="text-xl font-semibold mb-2">📅 Length-Based Notice Periods</h3>
                 <p className="text-sm">
                   Notice to Quit periods now based on tenancy length: <strong>28 days</strong> (under 1 year), <strong>56 days</strong> (1-10 years), <strong>84 days</strong> (10+ years).
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-2">ðŸ  Enhanced Tenant Protections</h3>
+                <h3 className="text-xl font-semibold mb-2">🛡️ Enhanced Tenant Protections</h3>
                 <p className="text-sm">
                   Stronger protections against retaliatory evictions, improved complaint procedures, and clearer requirements for landlord obligations and property standards.
                 </p>
@@ -467,7 +467,7 @@ export default function NorthernIrelandTenancyPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-red-600">
-                <div className="text-4xl mb-4">ðŸ“œ</div>
+                <div className="text-4xl mb-4">📜</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">2025 Legal Compliance</h3>
                 <p className="text-gray-700">
                   Our agreements are fully updated for 2025, including mandatory EICR requirements, rent increase restrictions, and length-based notice periods. Demonstrates full compliance with current NI law.
@@ -475,7 +475,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-green-600">
-                <div className="text-4xl mb-4">ðŸ’°</div>
+                <div className="text-4xl mb-4">💰</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Financial Clarity</h3>
                 <p className="text-gray-700">
                   Clear terms on rent amount, payment dates, deposit (max 2 months' rent), permitted charges, and rent increase procedures (once per year, 12-month gap, 3 months' notice).
@@ -491,7 +491,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-orange-600">
-                <div className="text-4xl mb-4">ðŸ”’</div>
+                <div className="text-4xl mb-4">🔒</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Deposit Protection</h3>
                 <p className="text-gray-700">
                   Clearly states deposit amount (maximum 2 months' rent), chosen protection scheme (TDS NI or MyDeposits NI), and procedures for deductions. Protects both landlord and tenant interests.
@@ -499,7 +499,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-600">
-                <div className="text-4xl mb-4">ðŸ </div>
+                <div className="text-4xl mb-4">🏠</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Property Standards</h3>
                 <p className="text-gray-700">
                   Documents compliance with safety requirements: gas safety certificate, EICR (from 2025), EPC, smoke alarms. Clarifies landlord's repair and maintenance obligations.
@@ -507,7 +507,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6 border-t-4 border-indigo-600">
-                <div className="text-4xl mb-4">ðŸ“‹</div>
+                <div className="text-4xl mb-4">📋</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Professional Standard</h3>
                 <p className="text-gray-700">
                   A comprehensive, professional agreement builds tenant confidence, demonstrates professionalism, and sets clear expectations for a positive landlord-tenant relationship.
@@ -525,7 +525,7 @@ export default function NorthernIrelandTenancyPage() {
             <div className="space-y-8">
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-3xl">
-                  ðŸ 
+                  🏠
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Private Landlords in Northern Ireland</h3>
@@ -537,7 +537,7 @@ export default function NorthernIrelandTenancyPage() {
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
-                  ðŸ¢
+                  🏢
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Letting Agents and Property Managers</h3>
@@ -549,7 +549,7 @@ export default function NorthernIrelandTenancyPage() {
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
-                  ðŸ”‘
+                  🔑
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">First-Time Landlords</h3>
@@ -561,7 +561,7 @@ export default function NorthernIrelandTenancyPage() {
 
               <div className="flex items-start gap-4">
                 <div className="shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
-                  ðŸ’¼
+                  💼
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Portfolio Landlords</h3>

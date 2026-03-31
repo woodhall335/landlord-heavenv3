@@ -644,19 +644,19 @@ export async function sendTrialReminderEmail(params: {
         <td bgcolor="${COLORS.cardBgAlt}" style="background-color: ${COLORS.cardBgAlt}; padding: 20px; border-radius: 6px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Automated compliance reminders</strong> (90/30/7 days advance)</td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Automated compliance reminders</strong> (90/30/7 days advance)</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Multi-property management</strong></td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Multi-property management</strong></td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Council-specific HMO license applications</strong></td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Council-specific HMO license applications</strong></td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Tenant document portal</strong></td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Tenant document portal</strong></td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">â€¢ <strong>Priority support</strong></td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.white};">• <strong>Priority support</strong></td>
             </tr>
           </table>
         </td>

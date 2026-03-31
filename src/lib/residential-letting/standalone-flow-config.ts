@@ -709,7 +709,7 @@ function commonEnglandTenancyPurposeStep(productLabel: string): StandaloneStepCo
         tone: 'warning',
         visibleWhen: (facts) => isExistingWrittenEnglandTenancy(facts),
         items: [
-          'This route prepares transition guidance and includes the exact Rentersâ€™ Rights Act Information Sheet 2026 PDF instead of generating a fresh tenancy agreement.',
+          'This route prepares transition guidance and includes the exact Renters? Rights Act Information Sheet 2026 PDF instead of generating a fresh tenancy agreement.',
           'You still need to give the information sheet to every named tenant for an existing written England assured tenancy transition case by 31 May 2026.',
         ],
       },

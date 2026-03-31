@@ -34,7 +34,7 @@ export const SEO_DESCRIPTION_RECOMMENDED_MIN = 120;
 export const SEO_DESCRIPTION_RECOMMENDED_MAX = 160;
 export const SEO_KEYWORDS_RECOMMENDED_MAX = 8;
 
-const MOJIBAKE_PATTERN = /(?:Ã|Â|â|ðŸ|ï¸)/;
+const MOJIBAKE_PATTERN = /(?:\u00C3\u0192|\u00C3\u201A|\u00C3\u00A2|\u00C3\u00B0\u00C5\u00B8|\u00C3\u00AF\u00C2\u00B8)/;
 
 /**
  * Core keywords that apply to most pages.

@@ -187,7 +187,7 @@ function getUnifiedNoticeExpiryDate(params: UnifiedExpiryParams): string | undef
     };
 
     const result = calculateSection21ExpiryDate(dateParams);
-    console.log(`ðŸ“… [getUnifiedooticeExpiryDate] Computed expiry: ${result.earliest_valid_date}`);
+    console.log(`📅 [getUnifiedooticeExpiryDate] Computed expiry: ${result.earliest_valid_date}`);
     return result.earliest_valid_date;
   } catch (err) {
     console.warn('[getUnifiedNoticeExpiryDate] Calculation failed:', err);
@@ -232,9 +232,9 @@ function buildSection8TemplateData(
     evictionCase.tenancy_start_date ||
     '';
 
-  // Build ground descriptions string (e.g., "Ground 8 â€“ Serious rent arrears, Ground 10 â€“ ...")
+  // Build ground descriptions string (e.g., "Ground 8 – Serious rent arrears, Ground 10 – ...")
   const groundDescriptions = evictionCase.grounds
-    .map((g) => `Ground ${g.code.replace('Ground ', '')} â€“ ${g.title}`)
+    .map((g) => `Ground ${g.code.replace('Ground ', '')} – ${g.title}`)
     .join(', ');
 
   const now = new Date().toISOString().split('T')[0];
@@ -285,8 +285,8 @@ function assertArrearsTotalsConsistent(params: {
     return;
   }
 
-  const plainTotal = `Â£${canonicalTotal.toFixed(2)}`;
-  const witnessTotal = `Â£${canonicalTotal.toLocaleString('en-GB', {
+  const plainTotal = `£${canonicalTotal.toFixed(2)}`;
+  const witnessTotal = `£${canonicalTotal.toLocaleString('en-GB', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
@@ -895,7 +895,7 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): {
   court_stage?: { start: string; end: string };
   enforcement_stage?: { start: string; end: string };
 } {
-  const baseDaysootice = 14; // generic baseline â€“ templates can explain nuances
+  const baseDaysootice = 14; // generic baseline – templates can explain nuances
   const baseDaysCourt = 90;
   const baseDaysEnforcement = 60;
 
@@ -904,7 +904,7 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): {
   const hasMandatoryGround = evictionCase.grounds?.some((g) => g.mandatory);
   const jurisdiction = evictionCase.jurisdiction;
 
-  // Simple tweaks â€“ you can refine per-ground in templates:
+  // Simple tweaks – you can refine per-ground in templates:
   let noticeDays = baseDaysootice;
   let courtDays = baseDaysCourt;
   let enforcementDays = baseDaysEnforcement;
@@ -1106,9 +1106,9 @@ async function generateEnglandOrWalesEvictionPack(
       // oO BYPASS: Compliance timing is a statutory requirement. Users must fix
       // their compliance data in the wizard before pack generation can proceed.
       // =========================================================================
-      console.error('ðŸš¨ COMPLIAoCE TIMIoG VIOLATIOoS DETECTED (Section 21 may be IoVALID):');
+      console.error('🚨 COMPLIANCE TIMING VIOLATIONS DETECTED (Section 21 may be INVALID):');
       for (const issue of timingResult.issues) {
-        const severity = issue.severity === 'error' ? 'ðŸš¨ BLOCK:' : 'âš ï¸ WARo:';
+        const severity = issue.severity === 'error' ? '🚨 BLOCK:' : '⚠️ WARN:';
         console.error(`  ${severity} [${issue.field}] ${issue.message}`);
         if (issue.expected) console.error(`     Expected: ${issue.expected}`);
         if (issue.actual) console.error(`     Actual: ${issue.actual}`);
@@ -1157,7 +1157,7 @@ async function generateEnglandOrWalesEvictionPack(
       service_method: section21ServiceMethod,
     });
 
-    console.log(`ðŸ“… Section 21 pack unified expiry date: ${unifiedExpiryDate}`);
+    console.log(`📅 Section 21 pack unified expiry date: ${unifiedExpiryDate}`);
 
     // Store in caseData for all downstream document generators
     if (unifiedExpiryDate) {
@@ -1214,13 +1214,13 @@ async function generateEnglandOrWalesEvictionPack(
     const { validateSection21CourtReady, logValidationResults: logS21Validation } = await import('./court-ready-validator');
     const s21Validation = validateSection21CourtReady(section21Doc.html || '', 'section21_form6a');
     if (!s21Validation.isValid) {
-      console.error('ðŸš¨ Section 21 Form 6A FAILED court-ready validation:');
+      console.error('🚨 Section 21 Form 6A FAILED court-ready validation:');
       logS21Validation([s21Validation]);
       // In production, this should block the pack generation
       // For now, log the error but continue to allow existing flows
       // TODO: Consider throwing here after sufficient testing
     } else {
-      console.log('âœ… Section 21 Form 6A passed court-ready validation');
+      console.log('✅ Section 21 Form 6A passed court-ready validation');
     }
 
     documents.push({
@@ -1460,7 +1460,7 @@ export async function generateCompleteEvictionPack(
     throw new Error(`Invalid jurisdiction: ${jurisdiction}. Must be one of: england, wales, scotland, northern-ireland`);
   }
 
-  console.log(`\nðŸ“¦ Generating Complete Eviction Pack for ${jurisdiction}...`);
+  console.log(`\n📦 Generating Complete Eviction Pack for ${jurisdiction}...`);
   console.log('='.repeat(80));
 
   // ==========================================================================
@@ -1711,13 +1711,13 @@ export async function generateCompleteEvictionPack(
           file_name: 'schedule_of_arrears.pdf',
         });
 
-        console.log('âœ… Generated schedule of arrears');
+        console.log('✅ Generated schedule of arrears');
       } else if (!arrearsData.is_authoritative && arrearsData.legacy_warning) {
         // Log warning for legacy data
-        console.warn(`âš ï¸  Schedule of arrears not generated: ${arrearsData.legacy_warning}`);
+        console.warn(`⚠️  Schedule of arrears not generated: ${arrearsData.legacy_warning}`);
       }
     } catch (error) {
-      console.error('âš ï¸  Failed to generate schedule of arrears:', error);
+      console.error('⚠️  Failed to generate schedule of arrears:', error);
       // Don't fail the entire pack if schedule generation fails
     }
   }
@@ -1758,9 +1758,9 @@ export async function generateCompleteEvictionPack(
       };
       const result = calculateSection21ExpiryDate(params);
       posExpiryDate = result.earliest_valid_date;
-      console.log(`ðŸ“… Calculated notice_expiry_date for Proof of Service: ${posExpiryDate}`);
+      console.log(`📅 Calculated notice_expiry_date for Proof of Service: ${posExpiryDate}`);
     } catch (err) {
-      console.warn('âš ï¸  Could not calculate notice_expiry_date for Proof of Service:', err);
+      console.warn('⚠️  Could not calculate notice_expiry_date for Proof of Service:', err);
     }
   }
 
@@ -1792,7 +1792,7 @@ export async function generateCompleteEvictionPack(
       // This focuses on statutory compliance confirmation
       witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness_statement_section21.hbs`;
       witnessStatementContent = null; // Section 21 template is self-contained
-      console.log('ðŸ“ Using Section 21 witness statement template');
+      console.log('📝 Using Section 21 witness statement template');
     } else if (isSection8Case && jurisdiction === 'england') {
       // Use deterministic builder for England Section 8 cases
       // This generates court-ready content from case facts without AI
@@ -1817,7 +1817,7 @@ export async function generateCompleteEvictionPack(
       });
       witnessStatementContent = buildWitnessStatementSections(sectionsInput);
       witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`;
-      console.log('ðŸ“ Using deterministic witness statement builder for Section 8 case');
+      console.log('📝 Using deterministic witness statement builder for Section 8 case');
     } else {
       // Fall back to AI-powered generation for other cases
       const witnessStatementContext = extractWitnessStatementContext(wizardFacts);
@@ -1881,10 +1881,10 @@ export async function generateCompleteEvictionPack(
                 service_method: (caseData?.notice_service_method?.toLowerCase().includes('post') ? 'first_class_post' : 'hand_delivery') as ServiceMethod,
               };
               const result = calculateSection21ExpiryDate(params);
-              console.log(`ðŸ“… Calculated notice_expiry_date for witness statement: ${result.earliest_valid_date}`);
+              console.log(`📅 Calculated notice_expiry_date for witness statement: ${result.earliest_valid_date}`);
               return result.earliest_valid_date;
             } catch (err) {
-              console.warn('âš ï¸  Could not calculate notice_expiry_date:', err);
+              console.warn('⚠️  Could not calculate notice_expiry_date:', err);
               return undefined;
             }
           }
@@ -1904,7 +1904,7 @@ export async function generateCompleteEvictionPack(
     // Validate court-readiness (no placeholders or template text)
     const wsValidation = validateCourtReady(witnessStatementDoc.html || '', 'witness_statement');
     if (!wsValidation.isValid) {
-      console.warn('âš ï¸  Witness statement has validation issues:');
+      console.warn('⚠️  Witness statement has validation issues:');
       logValidationResults([wsValidation]);
     }
 
@@ -1918,9 +1918,9 @@ export async function generateCompleteEvictionPack(
       file_name: 'witness_statement.pdf',
     });
 
-    console.log('âœ… Generated witness statement');
+    console.log('✅ Generated witness statement');
   } catch (error) {
-    console.error('âš ï¸  Failed to generate witness statement:', error);
+    console.error('⚠️  Failed to generate witness statement:', error);
     // Don't fail the entire pack if witness statement generation fails
   }
 
@@ -1980,9 +1980,9 @@ export async function generateCompleteEvictionPack(
       file_name: 'court_bundle_index.pdf',
     });
 
-    console.log(`âœ… Generated court bundle index (${isSection21 ? 'Section 21' : 'Section 8'})`);
+    console.log(`✅ Generated court bundle index (${isSection21 ? 'Section 21' : 'Section 8'})`);
   } catch (error) {
-    console.error('âš ï¸  Failed to generate court bundle index:', error);
+    console.error('⚠️  Failed to generate court bundle index:', error);
   }
 
   // Hearing checklist - ROUTE-AWARE
@@ -2020,9 +2020,9 @@ export async function generateCompleteEvictionPack(
       file_name: 'hearing_checklist.pdf',
     });
 
-    console.log(`âœ… Generated hearing checklist (${isSection21 ? 'Section 21' : 'Section 8'})`);
+    console.log(`✅ Generated hearing checklist (${isSection21 ? 'Section 21' : 'Section 8'})`);
   } catch (error) {
-    console.error('âš ï¸  Failed to generate hearing checklist:', error);
+    console.error('⚠️  Failed to generate hearing checklist:', error);
   }
 
   // Engagement letter (for arrears cases) - generated as FIoAL FORM for court packs
@@ -2090,15 +2090,15 @@ export async function generateCompleteEvictionPack(
             path.join(outputDir, 'arrears-letter-debug.json'),
             JSON.stringify(arrearsDebugLog, null, 2)
           );
-          console.log('âœ… Wrote arrears debug log to tests/output/arrears-letter-debug.json');
+          console.log('✅ Wrote arrears debug log to tests/output/arrears-letter-debug.json');
         } catch (writeErr) {
-          console.warn('âš ï¸  Could not write arrears debug log:', writeErr);
+          console.warn('⚠️  Could not write arrears debug log:', writeErr);
         }
       }
 
       // For court packs, arrears figure must be present and non-zero for arrears grounds
       if (letterTotalArrears === undefined || letterTotalArrears === null || letterTotalArrears === 0) {
-        console.warn('âš ï¸  Arrears engagement letter: oo valid arrears amount found. Letter will show Â£0.00 which may be incorrect.');
+        console.warn('⚠️  Arrears engagement letter: no valid arrears amount found. Letter will show £0.00 which may be incorrect.');
         console.warn('    Checked paths: arrears_items, total_arrears, arrears_total, issues.rent_arrears.total_arrears');
       }
 
@@ -2131,7 +2131,7 @@ export async function generateCompleteEvictionPack(
       // Validate court-readiness (no placeholders or template text)
       const letterValidation = validateCourtReady(arrearsLetterDoc.html || '', 'arrears_engagement_letter');
       if (!letterValidation.isValid) {
-        console.warn('âš ï¸  Arrears engagement letter has validation issues:');
+        console.warn('⚠️  Arrears engagement letter has validation issues:');
         logValidationResults([letterValidation]);
       }
 
@@ -2145,9 +2145,9 @@ export async function generateCompleteEvictionPack(
         file_name: 'arrears_engagement_letter.pdf',
       });
 
-      console.log('âœ… Generated arrears engagement letter (final form)');
+      console.log('✅ Generated arrears engagement letter (final form)');
     } catch (error) {
-      console.error('âš ï¸  Failed to generate arrears engagement letter:', error);
+      console.error('⚠️  Failed to generate arrears engagement letter:', error);
     }
   }
 
@@ -2197,7 +2197,7 @@ export async function generateCompleteEvictionPack(
     });
   }
 
-  console.log(`âœ… Generated ${documents.length} documents for complete eviction pack`);
+  console.log(`✅ Generated ${documents.length} documents for complete eviction pack`);
 
   // ==========================================================================
   // CROSS-DOCUMEoT COoSISTEoCY VALIDATIOo (P0 FIX - Jan 2026)
@@ -2236,14 +2236,14 @@ export async function generateCompleteEvictionPack(
     const consistencyResult = validateCrossDocumentConsistency(crossDocData);
 
     if (!consistencyResult.isConsistent) {
-      console.error('âŒ CRITICAL: Cross-document consistency validation FAILED');
+      console.error('❌ CRITICAL: Cross-document consistency validation FAILED');
       logConsistencyResults(consistencyResult);
       // Log specific issues for debugging
       for (const issue of consistencyResult.issues.filter(i => i.severity === 'error')) {
-        console.error(`   â†’ ${issue.field}: ${issue.message}`);
+        console.error(`   → ${issue.field}: ${issue.message}`);
       }
     } else {
-      console.log('âœ… Cross-document consistency validation passed');
+      console.log('✅ Cross-document consistency validation passed');
     }
   }
 
@@ -2302,7 +2302,7 @@ export async function generateNoticeOnlyPack(
     throw new Error(`Invalid jurisdiction: ${jurisdiction}. Must be one of: england, wales, scotland, northern-ireland`);
   }
 
-  console.log(`\nðŸ“„ Generating ootice Only Pack for ${jurisdiction}...`);
+  console.log(`\n📄 Generating ootice Only Pack for ${jurisdiction}...`);
 
   // ==========================================================================
   // WALES GROUoD_CODES DERIVATIOo
@@ -3167,7 +3167,7 @@ export async function generateNoticeOnlyPack(
     }
   }
 
-  console.log(`âœ… Generated ${documents.length} documents for ootice Only pack`);
+  console.log(`✅ Generated ${documents.length} documents for ootice Only pack`);
 
   return {
     case_id: caseId,

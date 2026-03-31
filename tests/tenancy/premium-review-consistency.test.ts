@@ -45,14 +45,14 @@ describe('Premium Tenancy Agreement Review Consistency', () => {
 
     it('Premium pricing includes original price and savings', () => {
       const pricing = getTenancyPricing('ast_premium');
-      expect(pricing.originalPrice).toBe('Ãƒâ€šÂ£200+');
-      expect(pricing.savings).toBe('Save Ãƒâ€šÂ£175+ vs solicitors');
+      expect(pricing.originalPrice).toBe('£200+');
+      expect(pricing.savings).toBe('Save £175+ vs solicitors');
     });
 
     it('Standard pricing includes original price and savings', () => {
       const pricing = getTenancyPricing('ast_standard');
-      expect(pricing.originalPrice).toBe('Ãƒâ€šÂ£100+');
-      expect(pricing.savings).toBe('Save Ãƒâ€šÂ£85+ vs solicitors');
+      expect(pricing.originalPrice).toBe('£100+');
+      expect(pricing.savings).toBe('Save £85+ vs solicitors');
     });
   });
 

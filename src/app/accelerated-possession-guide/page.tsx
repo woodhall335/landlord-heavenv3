@@ -281,7 +281,7 @@ export default function Page() {
                 the papers without requiring a hearing in every case.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                The word â€œacceleratedâ€ can make the route sound automatic, but that is not
+                The word “accelerated” can make the route sound automatic, but that is not
                 how it works in practice. The route is only efficient where the documents
                 are consistent, the notice is valid, and service can be shown clearly. If
                 the court sees problems in the file, it can still slow down, request
@@ -303,7 +303,7 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 Landlords sometimes assume accelerated possession means a judge will simply
                 wave the case through. In reality, the route is efficient because it is
-                strict. It works best when the paperwork answers the courtâ€™s likely
+                strict. It works best when the paperwork answers the court’s likely
                 questions before the questions even arise.
               </p>
             </Card>
@@ -341,7 +341,7 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 It also suits landlords who understand that speed comes from preparation,
                 not from rushing. A carefully prepared Section 21 file can make this route
-                feel controlled. A badly prepared file can make even an â€œacceleratedâ€ claim
+                feel controlled. A badly prepared file can make even an “accelerated” claim
                 drag on longer than a better-chosen route would have done.
               </p>
             </Card>
@@ -381,9 +381,9 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 This is why route discipline matters. Choosing the wrong route is not just
                 a technical error. It can cost months of time, more rent loss, and a full
-                restart. Landlords get better outcomes when they ask, â€œWhat route does this
-                file genuinely support?â€ rather than â€œWhich route sounds quickest on
-                paper?â€
+                restart. Landlords get better outcomes when they ask, “What route does this
+                file genuinely support?” rather than “Which route sounds quickest on
+                paper?”
               </p>
             </Card>
 
@@ -414,7 +414,7 @@ export default function Page() {
                 the strength of the claim.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
-                The landlordâ€™s file should also be internally consistent. Dates on the
+                The landlord’s file should also be internally consistent. Dates on the
                 notice, tenancy terms, communications, and service records should all align
                 cleanly. Where one part of the file contradicts another, the court may
                 question the reliability of the claim or require further information.
@@ -578,22 +578,22 @@ export default function Page() {
               </div>
               <p className="mt-4 leading-7 text-gray-700">
                 The key reason some claims feel quick and others feel slow is not just the
-                courtâ€™s speed. It is whether the file was clear enough to be processed
+                court’s speed. It is whether the file was clear enough to be processed
                 without unnecessary friction.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 Landlords should avoid building their expectations around the absolute best
-                case. A straightforward file may move well, but even then the courtâ€™s
+                case. A straightforward file may move well, but even then the court’s
                 workload still matters. A listed hearing, a defence, or missing information
                 can add further time. The safer commercial approach is to work from a
                 realistic timeline and treat good preparation as the main thing within the
-                landlordâ€™s control.
+                landlord’s control.
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 In other words, the fastest route is usually the route least likely to
                 trigger delay. That is why paper quality matters so much in accelerated
                 possession. A smoother claim often comes from better discipline, not just
-                from choosing a route with â€œacceleratedâ€ in the name.
+                from choosing a route with “accelerated” in the name.
               </p>
             </Card>
 
@@ -748,7 +748,7 @@ export default function Page() {
               </p>
               <p className="mt-4 leading-7 text-gray-700">
                 The better choice is not the one with the bigger label. It is the one that
-                matches the case stage, the landlordâ€™s confidence level, and the amount of
+                matches the case stage, the landlord’s confidence level, and the amount of
                 support needed to keep the route clean from notice to possession.
               </p>
             </Card>

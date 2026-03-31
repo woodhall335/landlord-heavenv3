@@ -166,7 +166,7 @@ export default function Section21NoticeTemplatePage() {
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">Â£0</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -251,8 +251,8 @@ export default function Section21NoticeTemplatePage() {
               {/* Savings callout */}
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
-                  <span className="font-semibold text-green-600">Save Â£150-270</span> compared to
-                  solicitor fees (typically Â£180-300 for Section 21 notices)
+                  <span className="font-semibold text-green-600">Save £150-270</span> compared to
+                  solicitor fees (typically £180-300 for Section 21 notices)
                 </p>
               </div>
             </div>
@@ -267,7 +267,7 @@ export default function Section21NoticeTemplatePage() {
                 How to Get Your Section 21 Template
               </h2>
               <p className="text-gray-600 text-center mb-12">
-                Generate your notice in 3 simple steps â€” no legal knowledge required
+                Generate your notice in 3 simple steps — no legal knowledge required
               </p>
 
               <div className="grid md:grid-cols-3 gap-8">
@@ -377,7 +377,7 @@ export default function Section21NoticeTemplatePage() {
                     <li>Minimum 2 months notice period.</li>
                     <li>Notice must expire after the fixed term ends.</li>
                     <li>Issue court proceedings within 6 months of expiry.</li>
-                    <li>Typical possession timeline: 4â€“6 months end to end.</li>
+                    <li>Typical possession timeline: 4–6 months end to end.</li>
                   </ul>
                 </div>
 
@@ -393,7 +393,7 @@ export default function Section21NoticeTemplatePage() {
                     href="/eviction-notice-template"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    Check notice validity â†’
+                    Check notice validity →
                   </Link>
                 </div>
 
@@ -409,7 +409,7 @@ export default function Section21NoticeTemplatePage() {
                     href="/how-to-evict-tenant"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    See the full eviction process â†’
+                    See the full eviction process →
                   </Link>
                 </div>
               </div>
@@ -469,7 +469,7 @@ export default function Section21NoticeTemplatePage() {
               <p>Form 6A is the prescribed notice for serving a Section 21 no-fault possession notice in England. It sets out the parties, property, and notice dates in a required format. Landlords should use the correct version and ensure all statutory prerequisites are satisfied before service.</p>
 
               <h2>How Long Is a Section 21 Notice?</h2>
-              <p>A Section 21 notice must usually give at least two monthsâ€™ notice. The end date should provide the full statutory period after valid service. If the notice period is short or calculated incorrectly, the court can refuse possession and require the landlord to restart the notice process.</p>
+              <p>A Section 21 notice must usually give at least two months’ notice. The end date should provide the full statutory period after valid service. If the notice period is short or calculated incorrectly, the court can refuse possession and require the landlord to restart the notice process.</p>
 
               <h2>Section 21 Notice Deposit Protection</h2>
               <p>Deposit protection is central to Section 21 validity. If the deposit was not protected on time or prescribed information was not served correctly, a Section 21 notice can fail. Landlords should check scheme records and documentary evidence before issuing the notice.</p>

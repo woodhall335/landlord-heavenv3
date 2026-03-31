@@ -956,7 +956,7 @@ function MoneyClaimReviewContent({
           <ul className="space-y-1">
             {positives.map((positive: string, i: number) => (
               <li key={i} className="text-sm text-green-800">
-                âœ“ {positive}
+                ✓ {positive}
               </li>
             ))}
           </ul>
@@ -1572,7 +1572,7 @@ function EvictionReviewContent({
             </p>
             {(analysis.red_flags?.length > 0 || analysis.compliance_issues?.length > 0) && (
               <p className="text-sm text-amber-700 mt-2">
-                âš ï¸ See &quot;Things to Fix or Improve&quot; below for compliance concerns.
+                ⚠️ See &quot;Things to Fix or Improve&quot; below for compliance concerns.
               </p>
             )}
           </div>
@@ -1644,7 +1644,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.tenancy_agreement_uploaded
                   ? 'Marked as provided in your case facts.'
-                  : 'Not uploaded yet â€“ strongly recommended so the judge can see the contract.'}
+                  : 'Not uploaded yet – strongly recommended so the judge can see the contract.'}
               </p>
             </div>
           </div>
@@ -1660,7 +1660,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.rent_schedule_uploaded
                   ? 'Arrears schedule recorded for the claim.'
-                  : 'Not uploaded yet â€“ courts expect a clear chronology of missed payments.'}
+                  : 'Not uploaded yet – courts expect a clear chronology of missed payments.'}
               </p>
             </div>
           </div>
@@ -1676,7 +1676,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.bank_statements_uploaded
                   ? 'Supporting payment history has been flagged.'
-                  : 'Not flagged yet â€“ optional, but helpful to prove what was paid or missed.'}
+                  : 'Not flagged yet – optional, but helpful to prove what was paid or missed.'}
               </p>
             </div>
           </div>
@@ -1692,7 +1692,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.other_evidence_uploaded
                   ? 'You have flagged additional documents (photos, quotes, correspondence, etc.).'
-                  : 'Not flagged yet â€“ think about emails, texts, photos or reports that support your case.'}
+                  : 'Not flagged yet – think about emails, texts, photos or reports that support your case.'}
               </p>
             </div>
           </div>
@@ -2054,7 +2054,7 @@ function NoticeOnlyReviewContent({
           <ul className="space-y-3">
             {blockingIssues.map((issue: any, index: number) => (
               <li key={index} className="flex items-start gap-3 bg-white p-4 rounded border border-red-100">
-                <span className="text-red-500 mt-0.5">âœ•</span>
+                <span className="text-red-500 mt-0.5">✕</span>
                 <div>
                   <p className="font-medium text-red-900">{issue.description || issue}</p>
                   {issue.action_required && (
@@ -2100,7 +2100,7 @@ function NoticeOnlyReviewContent({
               <div className="space-y-3 mb-4">
                 {s21Validation.blockers.map((blocker, index) => (
                   <div key={index} className="flex items-start gap-3 p-4 bg-white rounded border border-red-200">
-                    <span className="text-red-500 mt-0.5">âœ•</span>
+                    <span className="text-red-500 mt-0.5">✕</span>
                     <div className="flex-1">
                       <p className="font-medium text-red-900">{blocker.code.replace('S21_', '').replace(/_/g, ' ')}</p>
                       <p className="text-sm text-red-700 mt-1">{blocker.message}</p>
@@ -2156,11 +2156,11 @@ function NoticeOnlyReviewContent({
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-3">
                   {item.notApplicable ? (
-                    <span className="text-gray-400 text-xl">â€”</span>
+                    <span className="text-gray-400 text-xl">—</span>
                   ) : item.passed ? (
-                    <span className="text-green-500 text-xl">âœ“</span>
+                    <span className="text-green-500 text-xl">✓</span>
                   ) : (
-                    <span className="text-red-500 text-xl">âœ•</span>
+                    <span className="text-red-500 text-xl">✕</span>
                   )}
                   <span className={
                     item.notApplicable
@@ -3024,7 +3024,7 @@ function TenancyReviewContent({
   const obligations = getJurisdictionObligations(jurisdiction);
 
   // SINGLE SOURCE OF TRUTH: Resolve effective product using consistent priority order
-  // Priority: purchased_product â†’ URL product param â†’ inferred from facts â†’ default to standard
+  // Priority: purchased_product → URL product param → inferred from facts → default to standard
   const effectiveProduct = resolveEffectiveProduct({
     purchasedProduct: analysis.purchased_product,
     urlProduct: product,

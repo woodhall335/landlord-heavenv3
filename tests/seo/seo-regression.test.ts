@@ -109,7 +109,7 @@ describe('SEO Regression Tests', () => {
       const blogCTAPath = path.join(process.cwd(), 'src/components/blog/BlogCTA.tsx');
       const content = fs.readFileSync(blogCTAPath, 'utf-8');
 
-      const hardcodedPricePattern = /["'](?:GBP\s*)?\u00A3\d+\.\d{2}["']|["'](?:Â£|£)\d+\.\d{2}["']/g;
+      const hardcodedPricePattern = /["'](?:GBP\s*)?\u00A3\d+\.\d{2}["']|["'](?:\u00C2\u00A3|\u00A3)\d+\.\d{2}["']/g;
       const matches = content.match(hardcodedPricePattern);
 
       expect(matches).toBeNull();
@@ -128,7 +128,7 @@ describe('SEO Regression Tests', () => {
       const blogPagePath = path.join(process.cwd(), 'src/app/(marketing)/blog/[slug]/page.tsx');
       const content = fs.readFileSync(blogPagePath, 'utf-8');
 
-      const hardcodedPricePattern = /["'](?:Â£|£)\d+\.\d{2}["']/g;
+      const hardcodedPricePattern = /["'](?:\u00C2\u00A3|\u00A3)\d+\.\d{2}["']/g;
       const matches = content.match(hardcodedPricePattern);
 
       expect(matches).toBeNull();

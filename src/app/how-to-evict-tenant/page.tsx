@@ -342,7 +342,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ´</span>
+                <span className="text-4xl">🏴</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a tenant in England
                 </h2>
@@ -472,7 +472,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ´</span>
+                <span className="text-4xl">🏴</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a contract-holder in Wales
                 </h2>
@@ -543,7 +543,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ´</span>
+                <span className="text-4xl">🏴</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a tenant in Scotland
                 </h2>
@@ -615,7 +615,7 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">ðŸ‡¬ðŸ‡§</span>
+                <span className="text-4xl">🇬🇧</span>
                 <h2 className="text-3xl font-bold text-gray-900">
                   Evicting a tenant in Northern Ireland
                 </h2>
