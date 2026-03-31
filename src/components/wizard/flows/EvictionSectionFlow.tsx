@@ -73,6 +73,7 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 
 // Analytics and attribution
 import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
 // Validation context for live field validation
@@ -604,8 +605,14 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       // Track step completion if the current section is complete
       const current = visibleSections[currentSectionIndex];
       if (current && current.isComplete(facts, jurisdiction)) {
+        const normalizedStep = normalizeWizardStep(current.id);
         // Only fire if not already tracked for this step
-        const shouldTrack = markStepCompleted(current.id);
+        const shouldTrack = markStepCompleted(current.id, {
+          caseId,
+          product: 'complete_pack',
+          jurisdiction,
+          stepGroup: normalizedStep.stepGroup,
+        });
         if (shouldTrack) {
           const attribution = getWizardAttribution();
           trackWizardStepCompleteWithAttribution({
@@ -614,6 +621,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
             step: current.id,
             stepIndex: currentSectionIndex,
             totalSteps: visibleSections.length,
+            caseId,
             src: attribution.src,
             topic: attribution.topic,
             utm_source: attribution.utm_source,

@@ -20,6 +20,7 @@ import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { trackWizardStartWithAttribution } from '@/lib/analytics';
 import {
   setWizardAttribution,
+  getOrCreateWizardFlowSession,
   hasWizardStarted,
   markWizardStarted,
   extractAttributionFromUrl,
@@ -210,26 +211,38 @@ function WizardFlowContent() {
   useEffect(() => {
     // Only track once per component mount AND per session
     if (hasTrackedStartRef.current) return;
-    if (!hasRequiredParams || !product || !jurisdiction) return;
+    if (!hasRequiredParams || !jurisdiction) return;
+
+    const trackingProduct = normalizedProduct || product;
+    if (!trackingProduct) return;
+
+    const flowTrackingContext = {
+      type,
+      product: trackingProduct,
+      jurisdiction,
+      caseId: editCaseId,
+    };
 
     // Check if wizard_start was already fired this session (prevents duplicate on refresh)
-    if (hasWizardStarted()) {
+    if (hasWizardStarted(flowTrackingContext)) {
       hasTrackedStartRef.current = true;
       return;
     }
+
+    const { sessionId } = getOrCreateWizardFlowSession(flowTrackingContext);
 
     // Update attribution with URL params (in case user deep-linked directly to /wizard/flow)
     const urlAttribution = extractAttributionFromUrl(searchParams);
     const attribution = setWizardAttribution({
       ...urlAttribution,
-      product: product,
-      jurisdiction: jurisdiction,
+      product: trackingProduct,
+      jurisdiction,
     });
 
     // Track wizard_start with full attribution
     trackWizardStartWithAttribution({
-      product: product,
-      jurisdiction: jurisdiction,
+      product: trackingProduct,
+      jurisdiction,
       src: attribution.src,
       topic: attribution.topic,
       utm_source: attribution.utm_source,
@@ -237,12 +250,13 @@ function WizardFlowContent() {
       utm_campaign: attribution.utm_campaign,
       landing_url: attribution.landing_url,
       first_seen_at: attribution.first_seen_at,
+      flowSessionId: sessionId,
     });
 
     // Mark as started to prevent duplicates
-    markWizardStarted();
+    markWizardStarted(flowTrackingContext);
     hasTrackedStartRef.current = true;
-  }, [hasRequiredParams, product, jurisdiction, searchParams]);
+  }, [editCaseId, hasRequiredParams, jurisdiction, normalizedProduct, product, searchParams, type]);
 
   // Initialize case for structured wizard / section flows
   const startStructuredWizard = useCallback(async () => {

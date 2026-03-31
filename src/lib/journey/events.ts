@@ -1,4 +1,4 @@
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, trackEventOnce } from '@/lib/analytics';
 import { getJourneyState, type JourneyState } from '@/lib/journey/state';
 
 const ALLOWED_JOURNEY_KEYS = new Set<keyof JourneyState>([
@@ -89,10 +89,13 @@ export function trackCtaImpression({
   location: string;
   context?: Partial<JourneyEventContext>;
 }): void {
-  trackEvent('journey_cta_impression', {
+  trackEventOnce('journey_cta_impression', {
     cta_id,
     location,
     context: sanitizeContext(buildContext(context)),
+  }, {
+    dedupeScope: 'page',
+    dedupeKey: `${cta_id}:${location}:${JSON.stringify(sanitizeContext(buildContext(context)))}`,
   });
 }
 
@@ -119,9 +122,12 @@ export function trackToolComplete({
   tool_name: string;
   context?: Partial<JourneyEventContext>;
 }): void {
-  trackEvent('journey_tool_complete', {
+  trackEventOnce('journey_tool_complete', {
     tool_name,
     context: sanitizeContext(buildContext(context)),
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: `${tool_name}:${JSON.stringify(sanitizeContext(buildContext(context)))}`,
   });
 }
 

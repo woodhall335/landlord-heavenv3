@@ -81,6 +81,7 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 
 // Analytics and attribution
 import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
 // Route types for England, Wales, and Scotland
@@ -854,8 +855,14 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       // Track step completion if the current section is complete
       const current = visibleSections[currentSectionIndex];
       if (current && current.isComplete(facts, jurisdiction)) {
+        const normalizedStep = normalizeWizardStep(current.id);
         // Only fire if not already tracked for this step
-        const shouldTrack = markStepCompleted(current.id);
+        const shouldTrack = markStepCompleted(current.id, {
+          caseId,
+          product: 'notice_only',
+          jurisdiction,
+          stepGroup: normalizedStep.stepGroup,
+        });
         if (shouldTrack) {
           const attribution = getWizardAttribution();
           trackWizardStepCompleteWithAttribution({
@@ -864,6 +871,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             step: current.id,
             stepIndex: currentSectionIndex,
             totalSteps: visibleSections.length,
+            caseId,
             src: attribution.src,
             topic: attribution.topic,
             utm_source: attribution.utm_source,

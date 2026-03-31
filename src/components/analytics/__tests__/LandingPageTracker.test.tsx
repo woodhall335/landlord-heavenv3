@@ -61,6 +61,9 @@ describe('LandingPageTracker', () => {
         page_title: 'How to Evict a Tenant',
         page_type: 'problem',
         jurisdiction: undefined,
+      }, {
+        dedupeScope: 'page',
+        dedupeKey: '/how-to-evict-tenant:all',
       });
     });
 
@@ -79,6 +82,9 @@ describe('LandingPageTracker', () => {
         page_title: 'Section 21 Notice England',
         page_type: 'court',
         jurisdiction: 'england',
+      }, {
+        dedupeScope: 'page',
+        dedupeKey: '/section-21-notice-england:england',
       });
     });
 
@@ -283,7 +289,8 @@ describe('Page type mapping', () => {
       );
       expect(mockTrackEvent).toHaveBeenLastCalledWith(
         'landing_view',
-        expect.objectContaining({ page_type: 'problem' })
+        expect.objectContaining({ page_type: 'problem' }),
+        expect.objectContaining({ dedupeScope: 'page' })
       );
       cleanup();
     });
@@ -302,7 +309,8 @@ describe('Page type mapping', () => {
       );
       expect(mockTrackEvent).toHaveBeenLastCalledWith(
         'landing_view',
-        expect.objectContaining({ page_type: 'court' })
+        expect.objectContaining({ page_type: 'court' }),
+        expect.objectContaining({ dedupeScope: 'page' })
       );
       cleanup();
     });
@@ -320,7 +328,8 @@ describe('Page type mapping', () => {
       );
       expect(mockTrackEvent).toHaveBeenLastCalledWith(
         'landing_view',
-        expect.objectContaining({ page_type: 'money' })
+        expect.objectContaining({ page_type: 'money' }),
+        expect.objectContaining({ dedupeScope: 'page' })
       );
       cleanup();
     });

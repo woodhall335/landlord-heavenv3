@@ -232,6 +232,7 @@ function ReviewPageInner() {
         hasWarnings: analysis.decision_engine?.blocking_issues?.some(
           (issue: any) => issue.severity === 'warning'
         ) ?? false,
+        caseId: caseId ?? undefined,
         src: attribution.src,
         topic: attribution.topic,
         utm_source: attribution.utm_source,
@@ -4171,5 +4172,3 @@ export default function ReviewPage() {
     </Suspense>
   );
 }
-
-

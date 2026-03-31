@@ -38,12 +38,23 @@ export interface CheckoutAttributionPayload {
   ga_client_id: string | null;
 }
 
+export interface WizardFlowTrackingContext {
+  type?: string | null;
+  product?: string | null;
+  jurisdiction?: string | null;
+  caseId?: string | null;
+  stepGroup?: string | null;
+}
+
 const ATTRIBUTION_KEY = 'wizard_attribution';
 const ATTRIBUTION_KEY_LOCAL = 'lh_attribution'; // localStorage for cross-session persistence
 const COMPLETED_STEPS_KEY = 'wizard_completed_steps';
 const WIZARD_STARTED_KEY = 'wizard_started';
 const ABANDON_SENT_KEY = 'wizard_abandon_sent';
 const PURCHASE_COMPLETE_KEY = 'wizard_purchase_complete';
+const FLOW_SESSION_ID_KEY = 'wizard_flow_session_id';
+const FLOW_SIGNATURE_KEY = 'wizard_flow_signature';
+const FLOW_TRACKED_EVENTS_KEY = 'wizard_flow_tracked_events';
 
 /**
  * Default attribution values when none are present
@@ -132,6 +143,47 @@ function isLocalStorageAvailable(): boolean {
     return true;
   } catch {
     return false;
+  }
+}
+
+function generateFlowSessionId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+
+  return `flow_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function buildWizardFlowSignature(context: WizardFlowTrackingContext = {}): string {
+  return [
+    context.type || 'unknown_type',
+    context.product || 'unknown_product',
+    context.jurisdiction || 'unknown_jurisdiction',
+    context.caseId || 'new_case',
+  ].join('::');
+}
+
+function getTrackedWizardEvents(): string[] {
+  if (!isSessionStorageAvailable()) return [];
+
+  try {
+    const stored = window.sessionStorage.getItem(FLOW_TRACKED_EVENTS_KEY);
+    if (!stored) return [];
+
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed.filter((value) => typeof value === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+function setTrackedWizardEvents(events: string[]): void {
+  if (!isSessionStorageAvailable()) return;
+
+  try {
+    window.sessionStorage.setItem(FLOW_TRACKED_EVENTS_KEY, JSON.stringify(events));
+  } catch {
+    // Ignore storage errors
   }
 }
 
@@ -276,6 +328,9 @@ export function clearWizardAttribution(): void {
       window.sessionStorage.removeItem(COMPLETED_STEPS_KEY);
       window.sessionStorage.removeItem(WIZARD_STARTED_KEY);
       window.sessionStorage.removeItem(ABANDON_SENT_KEY);
+      window.sessionStorage.removeItem(FLOW_SESSION_ID_KEY);
+      window.sessionStorage.removeItem(FLOW_SIGNATURE_KEY);
+      window.sessionStorage.removeItem(FLOW_TRACKED_EVENTS_KEY);
     } catch {
       // Ignore storage errors
     }
@@ -305,27 +360,124 @@ export function clearAllAttribution(): void {
 // WIZARD START TRACKING
 // =============================================================================
 
+export function getOrCreateWizardFlowSession(
+  context: WizardFlowTrackingContext = {}
+): { sessionId: string; signature: string } {
+  const signature = buildWizardFlowSignature(context);
+
+  if (!isSessionStorageAvailable()) {
+    return {
+      sessionId: generateFlowSessionId(),
+      signature,
+    };
+  }
+
+  try {
+    const storedSignature = window.sessionStorage.getItem(FLOW_SIGNATURE_KEY);
+    const storedSessionId = window.sessionStorage.getItem(FLOW_SESSION_ID_KEY);
+
+    if (storedSignature === signature && storedSessionId) {
+      return {
+        sessionId: storedSessionId,
+        signature,
+      };
+    }
+
+    const sessionId = generateFlowSessionId();
+    window.sessionStorage.setItem(FLOW_SIGNATURE_KEY, signature);
+    window.sessionStorage.setItem(FLOW_SESSION_ID_KEY, sessionId);
+    window.sessionStorage.removeItem(FLOW_TRACKED_EVENTS_KEY);
+
+    return {
+      sessionId,
+      signature,
+    };
+  } catch {
+    return {
+      sessionId: generateFlowSessionId(),
+      signature,
+    };
+  }
+}
+
+function buildWizardTrackedEventKey(
+  eventName: 'wizard_start' | 'wizard_step_complete' | 'wizard_review_view',
+  context: WizardFlowTrackingContext = {}
+): string {
+  const { sessionId } = getOrCreateWizardFlowSession(context);
+
+  if (eventName === 'wizard_start') {
+    return `wizard_start::${sessionId}`;
+  }
+
+  if (eventName === 'wizard_review_view') {
+    return `wizard_review_view::${context.caseId || sessionId}`;
+  }
+
+  return `wizard_step_complete::${context.caseId || sessionId}::${context.stepGroup || 'unknown_step'}`;
+}
+
+export function hasWizardEventTracked(trackedEventKey: string): boolean {
+  return getTrackedWizardEvents().includes(trackedEventKey);
+}
+
+export function markWizardEventTracked(trackedEventKey: string): void {
+  const trackedEvents = getTrackedWizardEvents();
+  if (trackedEvents.includes(trackedEventKey)) {
+    return;
+  }
+
+  trackedEvents.push(trackedEventKey);
+  setTrackedWizardEvents(trackedEvents);
+}
+
+export function resetWizardFlowTracking(): void {
+  if (!isSessionStorageAvailable()) return;
+
+  try {
+    window.sessionStorage.removeItem(FLOW_SESSION_ID_KEY);
+    window.sessionStorage.removeItem(FLOW_SIGNATURE_KEY);
+    window.sessionStorage.removeItem(FLOW_TRACKED_EVENTS_KEY);
+    window.sessionStorage.removeItem(COMPLETED_STEPS_KEY);
+    window.sessionStorage.removeItem(WIZARD_STARTED_KEY);
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 /**
  * Check if wizard_start has already been fired this session
  */
-export function hasWizardStarted(): boolean {
-  if (!isSessionStorageAvailable()) return false;
+export function hasWizardStarted(context: WizardFlowTrackingContext = {}): boolean {
+  const trackedEventKey = buildWizardTrackedEventKey('wizard_start', context);
+  const { sessionId } = getOrCreateWizardFlowSession(context);
 
-  try {
-    return window.sessionStorage.getItem(WIZARD_STARTED_KEY) === 'true';
-  } catch {
-    return false;
+  if (isSessionStorageAvailable()) {
+    try {
+      if (window.sessionStorage.getItem(WIZARD_STARTED_KEY) === sessionId) {
+        return true;
+      }
+    } catch {
+      // Ignore storage errors
+    }
   }
+
+  return hasWizardEventTracked(trackedEventKey);
 }
 
 /**
  * Mark wizard as started (prevents duplicate wizard_start events)
  */
-export function markWizardStarted(): void {
+export function markWizardStarted(context: WizardFlowTrackingContext = {}): void {
+  const trackedEventKey = buildWizardTrackedEventKey('wizard_start', context);
+  const { sessionId } = getOrCreateWizardFlowSession(context);
+
+  markWizardEventTracked(trackedEventKey);
+
   if (!isSessionStorageAvailable()) return;
 
   try {
-    window.sessionStorage.setItem(WIZARD_STARTED_KEY, 'true');
+    window.sessionStorage.setItem(WIZARD_STARTED_KEY, sessionId);
   } catch {
     // Ignore storage errors
   }
@@ -369,8 +521,23 @@ export function isStepCompleted(stepId: string): boolean {
  * Returns true if this is the first completion (should fire event)
  * Returns false if already completed (should skip event)
  */
-export function markStepCompleted(stepId: string): boolean {
-  if (isStepCompleted(stepId)) {
+export function markStepCompleted(
+  stepId: string,
+  context: WizardFlowTrackingContext = {}
+): boolean {
+  const scopedStepKey = context.stepGroup || stepId;
+  const completedStepStorageKey = context.caseId
+    ? `${context.caseId}:${scopedStepKey}`
+    : scopedStepKey;
+  const trackedEventKey = buildWizardTrackedEventKey('wizard_step_complete', {
+    ...context,
+    stepGroup: scopedStepKey,
+  });
+
+  if (
+    hasWizardEventTracked(trackedEventKey) ||
+    getCompletedSteps().includes(completedStepStorageKey)
+  ) {
     return false; // Already completed, don't fire event
   }
 
@@ -378,8 +545,9 @@ export function markStepCompleted(stepId: string): boolean {
 
   try {
     const completed = getCompletedSteps();
-    completed.push(stepId);
+    completed.push(completedStepStorageKey);
     window.sessionStorage.setItem(COMPLETED_STEPS_KEY, JSON.stringify(completed));
+    markWizardEventTracked(trackedEventKey);
     return true; // First completion, fire event
   } catch {
     return true; // On error, assume first completion
@@ -390,13 +558,7 @@ export function markStepCompleted(stepId: string): boolean {
  * Reset completed steps (e.g., when starting a new wizard)
  */
 export function resetCompletedSteps(): void {
-  if (!isSessionStorageAvailable()) return;
-
-  try {
-    window.sessionStorage.removeItem(COMPLETED_STEPS_KEY);
-  } catch {
-    // Ignore storage errors
-  }
+  resetWizardFlowTracking();
 }
 
 // =============================================================================

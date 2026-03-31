@@ -394,6 +394,110 @@ describe('wizardAttribution', () => {
       expect(() => getCheckoutAttribution()).not.toThrow();
     });
   });
+
+  describe('wizard flow tracking', () => {
+    it('reuses the same flow session for the same signature and rotates for a new flow', async () => {
+      const { getOrCreateWizardFlowSession } = await import('../wizardAttribution');
+
+      const first = getOrCreateWizardFlowSession({
+        type: 'eviction',
+        product: 'notice_only',
+        jurisdiction: 'england',
+      });
+      const second = getOrCreateWizardFlowSession({
+        type: 'eviction',
+        product: 'notice_only',
+        jurisdiction: 'england',
+      });
+      const third = getOrCreateWizardFlowSession({
+        type: 'eviction',
+        product: 'complete_pack',
+        jurisdiction: 'england',
+      });
+
+      expect(second.sessionId).toBe(first.sessionId);
+      expect(third.sessionId).not.toBe(first.sessionId);
+    });
+
+    it('tracks wizard start per flow instead of globally', async () => {
+      const { hasWizardStarted, markWizardStarted } = await import('../wizardAttribution');
+
+      const noticeFlow = {
+        type: 'eviction',
+        product: 'notice_only',
+        jurisdiction: 'england',
+      };
+      const completePackFlow = {
+        type: 'eviction',
+        product: 'complete_pack',
+        jurisdiction: 'england',
+      };
+
+      expect(hasWizardStarted(noticeFlow)).toBe(false);
+      markWizardStarted(noticeFlow);
+      expect(hasWizardStarted(noticeFlow)).toBe(true);
+      expect(hasWizardStarted(completePackFlow)).toBe(false);
+    });
+
+    it('dedupes step completion per case and normalized step group', async () => {
+      const { markStepCompleted } = await import('../wizardAttribution');
+
+      expect(
+        markStepCompleted('property', {
+          type: 'eviction',
+          product: 'notice_only',
+          jurisdiction: 'england',
+          caseId: 'case-1',
+          stepGroup: 'property',
+        })
+      ).toBe(true);
+
+      expect(
+        markStepCompleted('property', {
+          type: 'eviction',
+          product: 'notice_only',
+          jurisdiction: 'england',
+          caseId: 'case-1',
+          stepGroup: 'property',
+        })
+      ).toBe(false);
+
+      expect(
+        markStepCompleted('property', {
+          type: 'eviction',
+          product: 'notice_only',
+          jurisdiction: 'england',
+          caseId: 'case-2',
+          stepGroup: 'property',
+        })
+      ).toBe(true);
+    });
+
+    it('resetWizardFlowTracking clears flow-scoped tracking state', async () => {
+      const {
+        hasWizardStarted,
+        markWizardStarted,
+        markStepCompleted,
+        resetWizardFlowTracking,
+      } = await import('../wizardAttribution');
+
+      const flowContext = {
+        type: 'tenancy_agreement',
+        product: 'tenancy_agreement',
+        jurisdiction: 'england',
+        caseId: 'case-3',
+      };
+
+      markWizardStarted(flowContext);
+      expect(hasWizardStarted(flowContext)).toBe(true);
+      expect(markStepCompleted('review', { ...flowContext, stepGroup: 'review' })).toBe(true);
+
+      resetWizardFlowTracking();
+
+      expect(hasWizardStarted(flowContext)).toBe(false);
+      expect(markStepCompleted('review', { ...flowContext, stepGroup: 'review' })).toBe(true);
+    });
+  });
 });
 
 describe('Attribution end-to-end flow', () => {

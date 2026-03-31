@@ -33,7 +33,6 @@ import {
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   trackWizardEntryViewWithAttribution,
-  trackWizardStartWithAttribution,
   trackWizardIncompatibleChoice,
 } from '@/lib/analytics';
 import type { WizardJurisdiction, WizardProduct, WizardSource, WizardTopic } from '@/lib/wizard/buildWizardLink';
@@ -45,8 +44,7 @@ import {
 import {
   initializeAttribution,
   setWizardAttribution,
-  getWizardAttribution,
-  resetCompletedSteps,
+  resetWizardFlowTracking,
 } from '@/lib/wizard/wizardAttribution';
 import {
   isResidentialLettingProductSku,
@@ -428,8 +426,8 @@ function WizardPageInner() {
     // Initialize attribution from URL params
     const attribution = initializeAttribution();
 
-    // Reset completed steps for fresh wizard session
-    resetCompletedSteps();
+    // Reset wizard flow tracking for a fresh session
+    resetWizardFlowTracking();
 
     // Track entry view with full attribution
     trackWizardEntryViewWithAttribution({
@@ -550,24 +548,9 @@ function WizardPageInner() {
         : autoSwitchedProduct || productParam || selectedDocument.type;
 
       // Update attribution with selected product and jurisdiction
-      const attribution = setWizardAttribution({
+      setWizardAttribution({
         product: effectiveProduct,
         jurisdiction: selectedJurisdiction.value,
-      });
-
-      // Track wizard start with full attribution
-      // Note: The actual wizard_start will fire on /wizard/flow mount with dedupe
-      // This is click-based tracking for backwards compatibility
-      trackWizardStartWithAttribution({
-        product: effectiveProduct,
-        jurisdiction: selectedJurisdiction.value,
-        src: attribution.src,
-        topic: attribution.topic,
-        utm_source: attribution.utm_source,
-        utm_medium: attribution.utm_medium,
-        utm_campaign: attribution.utm_campaign,
-        landing_url: attribution.landing_url,
-        first_seen_at: attribution.first_seen_at,
       });
 
       // Build URL with tracking params preserved

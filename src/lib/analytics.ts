@@ -23,25 +23,64 @@ export {
   trackEvent as trackVercelEvent,
 } from './analytics/track';
 
+import {
+  getResolvedAnalyticsDispatchOptions,
+  hasTrackedAnalyticsEvent,
+  markTrackedAnalyticsEvent,
+  type AnalyticsDispatchOptions,
+} from './analytics/ga4-dispatch';
+import { normalizeWizardStep } from './analytics/wizard-step-taxonomy';
+
 /**
  * Track a custom event in both Google Analytics and Facebook Pixel
  */
 export function trackEvent(
   eventName: string,
-  eventParams?: Record<string, any>
+  eventParams?: Record<string, any>,
+  dispatchOptions?: AnalyticsDispatchOptions
 ): void {
+  const hasGoogleTracking =
+    typeof window !== 'undefined' && typeof window.gtag === 'function';
+  const hasFacebookTracking =
+    typeof window !== 'undefined' && typeof window.fbq === 'function';
+
+  if (!hasGoogleTracking && !hasFacebookTracking) {
+    return;
+  }
+
+  const resolved = getResolvedAnalyticsDispatchOptions(eventName, eventParams, dispatchOptions);
+  if (
+    resolved.dedupeScope !== 'none' &&
+    resolved.dedupeKey &&
+    hasTrackedAnalyticsEvent(resolved.dedupeKey)
+  ) {
+    return;
+  }
+
   // Google Analytics / Google Ads
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, eventParams);
+  if (hasGoogleTracking) {
+    window.gtag('event', eventName, resolved.eventParams);
   }
 
   // Facebook Pixel - map common events
-  if (typeof window !== 'undefined' && window.fbq) {
+  if (hasFacebookTracking) {
     const fbEventName = mapToFacebookEvent(eventName);
     if (fbEventName) {
-      window.fbq('track', fbEventName, eventParams);
+      window.fbq('track', fbEventName, resolved.eventParams);
     }
   }
+
+  if (resolved.dedupeScope !== 'none' && resolved.dedupeKey) {
+    markTrackedAnalyticsEvent(resolved.dedupeKey);
+  }
+}
+
+export function trackEventOnce(
+  eventName: string,
+  eventParams?: Record<string, any>,
+  dispatchOptions?: AnalyticsDispatchOptions
+): void {
+  trackEvent(eventName, eventParams, dispatchOptions);
 }
 
 /**
@@ -304,6 +343,9 @@ export function trackValidatorView(
     event_category: 'validators',
     validator_type: validatorKey,
     jurisdiction: jurisdiction || 'unknown',
+  }, {
+    dedupeScope: 'page',
+    dedupeKey: `${validatorKey}:${jurisdiction || 'unknown'}`,
   });
 
   // Track as Facebook ViewContent for validator pages
@@ -453,6 +495,9 @@ export function trackWizardEntryView(params: WizardTrackingParams): void {
     jurisdiction: params.jurisdiction || 'not_selected',
     source: params.src || 'direct',
     topic: params.topic || 'general',
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: `${params.product}:${params.jurisdiction || 'not_selected'}`,
   });
 
   // Track as Facebook ViewContent
@@ -475,6 +520,9 @@ export function trackWizardStart(params: WizardTrackingParams): void {
     jurisdiction: params.jurisdiction || 'unknown',
     source: params.src || 'direct',
     topic: params.topic || 'general',
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: `${params.product}:${params.jurisdiction || 'unknown'}`,
   });
 
   // Track as Facebook AddToCart (intent signal)
@@ -496,14 +544,35 @@ export function trackWizardStepComplete(params: {
   step: string;
   stepIndex?: number;
   totalSteps?: number;
+  caseId?: string;
 }): void {
-  trackEvent('wizard_step_complete', {
+  const normalizedStep = normalizeWizardStep(params.step);
+  const basePayload = {
     event_category: 'wizard',
     product: params.product,
     jurisdiction: params.jurisdiction,
     step_name: params.step,
+    step_group: normalizedStep.stepGroup,
     step_index: params.stepIndex ?? 0,
     total_steps: params.totalSteps ?? 0,
+  };
+
+  trackEvent('wizard_step_complete', {
+    ...basePayload,
+  }, {
+    family: 'wizard_step_complete',
+    variant: 'canonical',
+    dedupeScope: params.caseId ? 'case' : 'session',
+    dedupeKey: `${params.caseId || 'session'}:${normalizedStep.stepGroup}`,
+  });
+
+  trackEvent(normalizedStep.normalizedEventName, {
+    ...basePayload,
+  }, {
+    family: 'wizard_step_complete',
+    variant: 'derived',
+    dedupeScope: params.caseId ? 'case' : 'session',
+    dedupeKey: `${params.caseId || 'session'}:${normalizedStep.stepGroup}`,
   });
 }
 
@@ -515,6 +584,7 @@ export function trackWizardReviewView(params: {
   jurisdiction: string;
   hasBlockers?: boolean;
   hasWarnings?: boolean;
+  caseId?: string;
 }): void {
   trackEvent('wizard_review_view', {
     event_category: 'wizard',
@@ -522,6 +592,9 @@ export function trackWizardReviewView(params: {
     jurisdiction: params.jurisdiction,
     has_blockers: params.hasBlockers ?? false,
     has_warnings: params.hasWarnings ?? false,
+  }, {
+    dedupeScope: params.caseId ? 'case' : 'session',
+    dedupeKey: params.caseId || `${params.product}:${params.jurisdiction}`,
   });
 
   // Track as Facebook InitiateCheckout (high intent signal)
@@ -633,6 +706,7 @@ export interface WizardFullAttributionParams {
   utm_campaign?: string;
   landing_url?: string;
   first_seen_at?: string;
+  flowSessionId?: string;
 }
 
 /**
@@ -650,6 +724,9 @@ export function trackWizardEntryViewWithAttribution(params: WizardFullAttributio
     utm_campaign: params.utm_campaign,
     landing_url: params.landing_url,
     first_seen_at: params.first_seen_at,
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: `${params.product}:${params.jurisdiction || 'not_selected'}`,
   });
 
   // Track as Facebook ViewContent
@@ -677,6 +754,9 @@ export function trackWizardStartWithAttribution(params: WizardFullAttributionPar
     utm_campaign: params.utm_campaign,
     landing_url: params.landing_url,
     first_seen_at: params.first_seen_at,
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: params.flowSessionId || `${params.product}:${params.jurisdiction || 'unknown'}`,
   });
 
   // Track as Facebook AddToCart (intent signal)
@@ -698,6 +778,7 @@ export function trackWizardStepCompleteWithAttribution(params: {
   step: string;
   stepIndex?: number;
   totalSteps?: number;
+  caseId?: string;
   src: string;
   topic: string;
   utm_source?: string;
@@ -706,11 +787,13 @@ export function trackWizardStepCompleteWithAttribution(params: {
   landing_url?: string;
   first_seen_at?: string;
 }): void {
-  trackEvent('wizard_step_complete', {
+  const normalizedStep = normalizeWizardStep(params.step);
+  const basePayload = {
     event_category: 'wizard',
     product: params.product,
     jurisdiction: params.jurisdiction,
     step_name: params.step,
+    step_group: normalizedStep.stepGroup,
     step_index: params.stepIndex ?? 0,
     total_steps: params.totalSteps ?? 0,
     source: params.src || 'direct',
@@ -720,6 +803,24 @@ export function trackWizardStepCompleteWithAttribution(params: {
     utm_campaign: params.utm_campaign,
     landing_url: params.landing_url,
     first_seen_at: params.first_seen_at,
+  };
+
+  trackEvent('wizard_step_complete', {
+    ...basePayload,
+  }, {
+    family: 'wizard_step_complete',
+    variant: 'canonical',
+    dedupeScope: params.caseId ? 'case' : 'session',
+    dedupeKey: `${params.caseId || 'session'}:${normalizedStep.stepGroup}`,
+  });
+
+  trackEvent(normalizedStep.normalizedEventName, {
+    ...basePayload,
+  }, {
+    family: 'wizard_step_complete',
+    variant: 'derived',
+    dedupeScope: params.caseId ? 'case' : 'session',
+    dedupeKey: `${params.caseId || 'session'}:${normalizedStep.stepGroup}`,
   });
 }
 
@@ -731,6 +832,7 @@ export function trackWizardReviewViewWithAttribution(params: {
   jurisdiction: string;
   hasBlockers?: boolean;
   hasWarnings?: boolean;
+  caseId?: string;
   src: string;
   topic: string;
   utm_source?: string;
@@ -752,6 +854,9 @@ export function trackWizardReviewViewWithAttribution(params: {
     utm_campaign: params.utm_campaign,
     landing_url: params.landing_url,
     first_seen_at: params.first_seen_at,
+  }, {
+    dedupeScope: params.caseId ? 'case' : 'session',
+    dedupeKey: params.caseId || `${params.product}:${params.jurisdiction}`,
   });
 
   // Track as Facebook InitiateCheckout (high intent signal)
@@ -814,6 +919,9 @@ export function trackWizardIncompatibleChoice(params: {
     action: params.action,
     source: params.src || 'direct',
     topic: params.topic || 'general',
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: `${params.attemptedProduct}:${params.jurisdiction}:${params.resolvedProduct}:${params.action}`,
   });
 }
 
@@ -858,6 +966,9 @@ export function trackAskHeavenView(params: AskHeavenTrackingParams): void {
     landing_url: params.landing_url,
     first_seen_at: params.first_seen_at,
     question_count: params.question_count,
+  }, {
+    dedupeScope: 'page',
+    dedupeKey: `${params.jurisdiction || 'not_selected'}:${params.topic || 'general'}`,
   });
 
   // Track as Facebook ViewContent
@@ -1163,6 +1274,9 @@ export function trackOutcomeConfidenceShown(params: {
     event_category: 'money_claim_intelligence',
     claim_type_count: params.claimTypes.length,
     // Only track count, not PII or specific claim details that could identify the user
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: [...params.claimTypes].sort().join(',') || 'none',
   });
 }
 
@@ -1176,6 +1290,9 @@ export function trackCourtFeeEstimatorViewed(params: {
     event_category: 'money_claim_intelligence',
     amount_band: params.amountBand,
     // Band is anonymized (e.g., 'under_300', '300_500') - no exact amounts
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: params.amountBand,
   });
 }
 
@@ -1189,6 +1306,9 @@ export function trackEvidenceGalleryViewed(params: {
     event_category: 'money_claim_intelligence',
     claim_type_count: params.claimTypes.length,
     // Only track count for analytics, not specific claim types to avoid PII
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: [...params.claimTypes].sort().join(',') || 'none',
   });
 }
 
@@ -1348,6 +1468,9 @@ export function trackClauseDiffViewed(params: {
     jurisdiction: params.jurisdiction,
     variant: params.variant,
     clause_count: params.clauseCount,
+  }, {
+    dedupeScope: 'page',
+    dedupeKey: `${params.jurisdiction}:${params.variant}:${params.clauseCount}`,
   });
 
   // Track as ViewContent for retargeting

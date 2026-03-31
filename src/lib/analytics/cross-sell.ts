@@ -9,7 +9,7 @@
  * All events are anonymized (no PII).
  */
 
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, trackEventOnce } from '@/lib/analytics';
 import type { WizardProduct } from '@/lib/wizard/buildWizardLink';
 import type { CrossSellSource } from '@/lib/cross-sell/recommendations';
 
@@ -28,11 +28,14 @@ export function trackCrossSellImpression(
   page: string,
   targetProduct: WizardProduct
 ): void {
-  trackEvent('cross_sell_impression', {
+  trackEventOnce('cross_sell_impression', {
     event_category: 'cross_sell',
     page,
     target_product: targetProduct,
     timestamp: new Date().toISOString(),
+  }, {
+    dedupeScope: 'page',
+    dedupeKey: `${page}:${targetProduct}`,
   });
 
   // Also track to FB for retargeting
@@ -112,11 +115,14 @@ export function trackWizardAttributionMissing(
   entryPath: string,
   referrer?: string
 ): void {
-  trackEvent('wizard_attribution_missing_detected', {
+  trackEventOnce('wizard_attribution_missing_detected', {
     event_category: 'attribution',
     entry_path: entryPath,
     referrer: referrer || 'direct',
     timestamp: new Date().toISOString(),
+  }, {
+    dedupeScope: 'session',
+    dedupeKey: `${entryPath}:${referrer || 'direct'}`,
   });
 }
 

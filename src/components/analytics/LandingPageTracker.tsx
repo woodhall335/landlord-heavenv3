@@ -60,6 +60,9 @@ export function LandingPageTracker({
       page_title: pageTitle,
       page_type: pageType,
       jurisdiction: jurisdiction || undefined,
+    }, {
+      dedupeScope: 'page',
+      dedupeKey: `${pagePath}:${jurisdiction || 'all'}`,
     });
   }, [pagePath, pageTitle, pageType, jurisdiction]);
 

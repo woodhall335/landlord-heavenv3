@@ -45,6 +45,7 @@ import {
   trackTenancyStandardSelectedDespiteRecommendation,
   TenancyPremiumRecommendationReason,
 } from '@/lib/analytics';
+import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 import {
   getTenancyTierLabelFromFacts,
@@ -782,8 +783,14 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       // Track step completion if the current section is complete
       const current = visibleSections[currentSectionIndex];
       if (current && current.isComplete(facts)) {
+        const normalizedStep = normalizeWizardStep(current.id);
         // Only fire if not already tracked for this step
-        const shouldTrack = markStepCompleted(current.id);
+        const shouldTrack = markStepCompleted(current.id, {
+          caseId,
+          product: product || 'tenancy_agreement',
+          jurisdiction,
+          stepGroup: normalizedStep.stepGroup,
+        });
         if (shouldTrack) {
           const attribution = getWizardAttribution();
           trackWizardStepCompleteWithAttribution({
@@ -792,6 +799,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
             step: current.id,
             stepIndex: currentSectionIndex,
             totalSteps: visibleSections.length,
+            caseId,
             src: attribution.src,
             topic: attribution.topic,
             utm_source: attribution.utm_source,
