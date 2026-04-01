@@ -21,17 +21,17 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title:
-    'Tenant Left Without Paying Rent | What Landlords Should Do Next | LandlordHeaven',
+    'Tenant Left Without Paying Rent | Recover Rent Arrears After a Tenant Leaves',
   description:
-    'A practical guide for landlords in England when a tenant leaves owing rent.',
+    'Landlord guide to recovering unpaid rent after a tenant leaves. Confirm the final arrears balance, organise the evidence, and decide whether to pursue a money claim.',
   alternates: {
     canonical,
   },
   openGraph: {
     title:
-      'Tenant Left Without Paying Rent | What Landlords Should Do Next | LandlordHeaven',
+      'Tenant Left Without Paying Rent | Recover Rent Arrears After a Tenant Leaves',
     description:
-      'Plain-English guidance for landlords dealing with unpaid rent after a tenant leaves. Understand the final balance, the evidence that matters, and how landlords usually approach recovery.',
+      'Plain-English landlord guidance on unpaid rent after a tenant leaves. Confirm the final balance, separate arrears from end-of-tenancy issues, and decide whether recovery is worth pursuing.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -40,18 +40,11 @@ export const metadata: Metadata = {
 
 const jumpLinks = [
   { href: '#quick-answer', label: 'Quick answer' },
-  { href: '#what-it-usually-means', label: 'What it usually means when a tenant leaves owing rent' },
-  { href: '#first-things-to-check', label: 'First things to check after the tenant has gone' },
-  { href: '#confirming-the-final-balance', label: 'Confirming the final balance' },
-  { href: '#deposit-and-other-adjustments', label: 'Deposit and other adjustments' },
-  { href: '#documents-you-need', label: 'Documents you should gather' },
-  { href: '#how-landlords-usually-approach-it', label: 'How landlords usually approach it' },
-  { href: '#when-the-file-is-strong', label: 'When the file is strong enough to pursue' },
-  { href: '#timeline-after-the-tenant-leaves', label: 'Timeline after the tenant leaves' },
-  { href: '#common-mistakes', label: 'Common mistakes landlords make' },
+  { href: '#final-balance', label: 'Confirm the final balance' },
+  { href: '#documents-you-need', label: 'Documents you need' },
+  { href: '#common-mistakes', label: 'Common mistakes' },
   { href: '#money-claim-vs-complete-pack', label: 'Money Claim vs Complete Pack' },
   { href: '#faqs', label: 'FAQs' },
-  { href: '#final-cta', label: 'Next steps' },
 ] as const;
 
 const faqs: FAQItem[] = [
@@ -61,14 +54,14 @@ const faqs: FAQItem[] = [
       'The first step is confirming the final balance properly. Landlords usually review the tenancy agreement, rent due dates, payment records, and any final adjustments so they know exactly what is still owed before deciding on recovery.',
   },
   {
-    question: 'Can I still recover unpaid rent after the tenant leaves?',
+    question: 'Can I recover unpaid rent after a tenant leaves?',
     answer:
       'Yes. A tenant leaving the property does not automatically remove the rent debt. Landlords can still consider recovery, but the strength of the case usually depends on how clear the arrears schedule and supporting records are.',
   },
   {
-    question: 'Should I update the arrears schedule after the tenant leaves?',
+    question: 'Can I claim rent arrears after the tenancy ends?',
     answer:
-      'Yes. The arrears schedule should usually be updated to show the final position at the point the tenancy ended or the tenant vacated, so the running balance is clean and easy to explain.',
+      'In many cases, yes. The key issue is usually not whether the tenancy has ended, but whether the landlord can show a clean final balance, a clear rent history, and documents that explain how the debt figure was calculated.',
   },
   {
     question: 'Does the deposit automatically clear the rent arrears?',
@@ -172,135 +165,249 @@ export default function Page() {
           description: metadata.description as string,
           url: canonical,
           datePublished: '2026-03-01',
-          dateModified: '2026-03-13',
+          dateModified: '2026-03-31',
         })}
       />
 
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Eviction guides', url: 'https://landlordheaven.co.uk/eviction-guides' },
+          {
+            name: 'Eviction guides',
+            url: 'https://landlordheaven.co.uk/eviction-guides',
+          },
           { name: 'Tenant Left Without Paying Rent', url: canonical },
         ])}
       />
 
+      <StructuredData
+        data={faqPageSchema(
+          faqs.map((faq) => ({
+            question: faq.question,
+            answer: faq.answer,
+          }))
+        )}
+      />
+
       <UniversalHero
         title="Tenant Left Without Paying Rent"
-        subtitle="A practical landlord guide to understanding the arrears position and deciding what to do once a tenant leaves owing rent."
-        primaryCta={{ label: 'Start Money Claim Pack', href: '/products/money-claim' }}
-        secondaryCta={{ label: 'Need Complete Pack instead?', href: '/products/complete-pack' }}
+        subtitle="Confirm what is still owed, separate rent arrears from end-of-tenancy issues, and decide whether to pursue recovery with a stronger money-claim file."
+        primaryCta={{
+          label: 'Recover unpaid rent',
+          href: '/products/money-claim',
+        }}
+        secondaryCta={{
+          label: 'Compare claim routes',
+          href: '#money-claim-vs-complete-pack',
+        }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
-        mediaAlt="Tenant leaving owing rent landlord guide icon"
+        mediaAlt="Recover unpaid rent after a tenant leaves landlord guide icon"
         showReviewPill
         showTrustPositioningBar
       >
         <p className="mt-6 text-sm text-white/90 md:text-base">
-          This guide explains what landlords usually do when a tenant leaves owing
-          rent, how to confirm the final arrears balance, what paperwork matters
-          most, and how to decide whether recovery is worth pursuing once the
-          occupation problem is over.
+          This guide explains how landlords usually approach unpaid rent after a
+          tenant leaves, how to confirm the final arrears balance, what documents
+          matter most, and when it makes sense to turn the file into a money
+          claim rather than treat it as a leftover tenancy dispute.
         </p>
       </UniversalHero>
 
       <section className="border-b border-[#E6DBFF] bg-white py-8">
         <Container>
-          <nav
-            aria-labelledby="guide-links-heading"
-            className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
-          >
-            <h2 id="guide-links-heading" className="text-2xl font-semibold text-[#2a2161]">
-              In This Guide
-            </h2>
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
-              {jumpLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
+          <div className="mx-auto mb-6 max-w-5xl">
+            <SeoPageContextPanel pathname="/tenant-left-without-paying-rent" />
+          </div>
+
+          <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <nav
+              aria-labelledby="guide-links-heading"
+              className="rounded-2xl border border-[#E6DBFF] bg-white p-6"
+            >
+              <h2
+                id="guide-links-heading"
+                className="text-2xl font-semibold text-[#2a2161]"
+              >
+                In This Guide
+              </h2>
+
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {jumpLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="rounded-xl border border-[#E6DBFF] px-4 py-4 text-primary transition hover:bg-[#F8F4FF]"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </nav>
+
+            <div className="rounded-2xl border border-[#E6DBFF] bg-[linear-gradient(180deg,#fbf8ff_0%,#f3ebff_100%)] p-6">
+              <h3 className="text-xl font-semibold text-[#2a2161]">
+                Former tenant owes rent?
+              </h3>
+
+              <p className="mt-3 leading-7 text-gray-700">
+                Once the tenant has already gone, landlords usually get better
+                results by treating the file as a debt-recovery problem, not as a
+                leftover possession problem.
+              </p>
+
+              <div className="mt-5 grid gap-3">
+                {[
+                  'Confirm the final rent arrears balance',
+                  'Separate arrears from cleaning, damage, and deposit issues',
+                  'Organise the documents into one recovery-ready file',
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-xl border border-[#E6DBFF] bg-white px-4 py-3 text-sm text-gray-700"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link
+                  href="/products/money-claim"
+                  className="rounded-lg bg-primary px-5 py-3 text-white"
                 >
-                  {link.label}
-                </a>
-              ))}
+                  Start Money Claim Pack
+                </Link>
+                <Link
+                  href="#money-claim-vs-complete-pack"
+                  className="rounded-lg border border-[#D8C8FF] bg-white px-5 py-3 text-primary"
+                >
+                  Which route do I need?
+                </Link>
+              </div>
             </div>
-          </nav>
+          </div>
         </Container>
       </section>
 
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
-            <SeoPageContextPanel pathname="/tenant-left-without-paying-rent" />
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
-                When a tenant leaves without paying rent, the property problem and the
-                money problem stop being the same thing. The occupation issue may be over
-                because the tenant has gone, but the arrears issue may still remain. That
-                means the landlord usually moves from managing possession or tenancy
-                control to managing a final debt position.
+                When a tenant leaves without paying rent, the occupation problem
+                and the money problem stop being the same thing. The tenant may
+                have gone, but the rent debt may still remain. That means the
+                next task is usually not possession. It is confirming what is
+                still owed and deciding whether the file is strong enough to
+                support recovery.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the first job is not chasing the debt aggressively. It
-                is confirming what is actually owed. Landlords normally need to review the
-                tenancy agreement, check the rent due dates, compare those dates with the
-                payments received, and calculate the final balance up to the point the
-                tenant left or the tenancy ended.
+                In practical terms, the first job is not chasing the debt
+                aggressively. It is confirming the final balance properly.
+                Landlords usually need to review the tenancy agreement, check the
+                rent due dates, compare those dates with the payments received,
+                and calculate the final balance up to the point the tenant left
+                or the tenancy ended.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                The strongest post-tenancy arrears cases usually come from landlords who
-                can produce one clean chronology. That chronology should show what rent was
-                due, what was paid, where the shortfalls happened, and what the final
-                figure became. If the file is messy, unclear, or full of assumptions, the
-                problem is often not the legal right to the money. The problem is proving
-                the figure cleanly.
+                The strongest cases to recover unpaid rent after a tenant leaves
+                usually come from landlords who can produce one clean chronology.
+                That chronology should show what rent was due, what was paid,
+                where the shortfalls happened, and what figure remained
+                outstanding at the end. If the file is messy, unclear, or full of
+                assumptions, the main problem is often not whether the money is
+                owed. It is proving the figure cleanly.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                The safest way to think about this page is simple. A tenant leaving without
-                paying rent does not automatically wipe out the arrears. But landlords
-                usually get the best outcome when they stop, tidy the file, separate rent
-                debt from every other tenancy-end issue, and then decide what step makes
-                commercial and legal sense next.
+                The safest way to think about this page is simple. A former
+                tenant owing rent does not automatically wipe out the arrears.
+                But landlords usually get the best outcome when they stop, tidy
+                the file, separate pure rent arrears from every other tenancy-end
+                issue, and then decide what step makes commercial and legal sense
+                next.
               </p>
             </Card>
+
+            <div className="rounded-2xl border border-[#E6DBFF] bg-[#F7F1FF] p-6 md:p-8">
+              <h2 className="text-2xl font-semibold text-[#2a2161]">
+                Do you have a recovery-ready arrears file?
+              </h2>
+
+              <p className="mt-4 leading-7 text-gray-700">
+                Landlords usually do better once the tenant has left if they stop,
+                confirm the final balance, and turn the tenancy records into one
+                clean arrears chronology before pursuing recovery.
+              </p>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {[
+                  'Final rent balance confirmed',
+                  'Arrears schedule reconciled',
+                  'Payment history checked',
+                  'Deposit kept separate from pure arrears',
+                  'Supporting documents gathered',
+                  'One clean chronology prepared',
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-xl border border-[#E6DBFF] bg-white px-4 py-3 text-sm text-gray-700"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/products/money-claim"
+                  className="rounded-lg bg-primary px-5 py-3 text-white"
+                >
+                  Start Money Claim Pack
+                </Link>
+                <Link
+                  href="#money-claim-vs-complete-pack"
+                  className="rounded-lg border border-[#D8C8FF] bg-white px-5 py-3 text-primary"
+                >
+                  Compare claim routes
+                </Link>
+              </div>
+            </div>
 
             <Card
               id="what-it-usually-means"
               title="What It Usually Means When a Tenant Leaves Owing Rent"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                When landlords say a tenant left without paying rent, several different
-                things may be happening at once. In some cases the tenant simply moved out
-                after falling behind over a period of time. In other cases the tenant left
-                during or after a dispute. Sometimes the tenancy had already reached a
-                formal possession stage. Sometimes the tenant just disappeared and the
-                landlord was left trying to work out what was unpaid.
+                When landlords say a tenant left without paying rent, several
+                different things may be happening at once. In some cases the
+                tenant simply moved out after falling behind over a period of
+                time. In other cases the tenant left during or after a dispute.
+                Sometimes the tenancy had already reached a formal possession
+                stage. Sometimes the tenant just disappeared and the landlord was
+                left trying to work out what was unpaid.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                That is why the phrase sounds simple but the file behind it is often not.
-                One landlord may be dealing with one missed month and a clean record.
-                Another may be dealing with a long running arrears history, part-payments,
-                changing promises, deposit issues, property condition issues, and
-                uncertainty about the exact date the tenant really vacated. These details
-                matter because they change what the final balance looks like and how easy
-                it is to prove.
+                That is why the phrase sounds simple but the file behind it is
+                often not. One landlord may be dealing with one missed month and
+                a clean record. Another may be dealing with a long running
+                arrears history, part-payments, changing promises, deposit
+                issues, property condition issues, and uncertainty about the
+                exact date the tenant really vacated. These details matter
+                because they change what the final balance looks like and how
+                easy it is to prove.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                The key practical shift is that once the tenant has gone, landlords are no
-                longer asking how to recover occupation. They are asking what is still
-                owed, how reliable the evidence is, and whether it is sensible to pursue
-                that balance. That is a different kind of file. It needs cleaner numbers,
-                cleaner categories, and clearer thinking than many landlords realise.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, landlords usually do best when they do not treat the
-                tenant leaving as the end of the file. It is usually the moment when the
-                file has to be converted from a tenancy-management file into a final
-                arrears and recovery file.
+                The practical shift is that once the tenant has gone, landlords
+                are no longer asking how to recover occupation. They are asking
+                what is still owed, how reliable the evidence is, and whether it
+                is sensible to pursue that balance. That is a different kind of
+                file. It needs cleaner numbers, cleaner categories, and clearer
+                thinking than many landlords realise.
               </p>
             </Card>
 
@@ -309,28 +416,20 @@ export default function Page() {
               title="First Things to Check After the Tenant Has Gone"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                Before looking at recovery, landlords usually need to stabilise the facts.
-                That means confirming when the tenant actually left, whether the tenancy
-                definitely ended, what rent date the account reached before departure, and
-                whether there are any payments still in transit or recent credits not yet
-                reflected in the ledger.
+                Before looking at recovery, landlords usually need to stabilise
+                the facts. That means confirming when the tenant actually left,
+                whether the tenancy definitely ended, what rent date the account
+                reached before departure, and whether there are any payments
+                still in transit or recent credits not yet reflected in the
+                ledger.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                This is also the point to check whether the arrears record has been kept in
-                a disciplined way. If the landlord has an up-to-date rent schedule already,
-                this stage is straightforward. If not, it may need reconstructing from
-                bank records, rent logs, and correspondence. The longer that process is
-                delayed, the harder it often becomes to explain later.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                Landlords should also be careful not to bundle every post-tenancy issue
-                into one number too early. Rent arrears are one issue. Damage, cleaning,
-                utilities, belongings, locksmith costs, and deposit questions may all be
-                relevant as well, but they are not automatically the same thing. The more
-                clearly those categories are separated, the easier it becomes to explain
-                the rent debt itself.
+                This is also the point to check whether the arrears record has
+                been kept in a disciplined way. If the landlord has an up-to-date
+                rent schedule already, this stage is straightforward. If not, it
+                may need reconstructing from bank records, rent logs, and
+                correspondence.
               </p>
 
               <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
@@ -340,56 +439,41 @@ export default function Page() {
                 <li>Separate rent arrears from damage or cleaning issues</li>
                 <li>Make sure later credits or adjustments are not being missed</li>
               </ul>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, landlords often lose more time correcting the basics
-                later than they would lose by spending a short period getting the final
-                facts straight now.
-              </p>
             </Card>
 
-            <Card
-              id="confirming-the-final-balance"
-              title="Confirming the Final Balance"
-            >
+            <Card id="final-balance" title="Confirm the Final Balance">
               <p className="mt-4 leading-7 text-gray-700">
-                Confirming the final balance is usually the most important stage in the
-                whole process. This is where the landlord stops talking in rough estimates
-                and works out what is actually owed. The final balance should show what
-                rent was due under the tenancy, what payments were received, where the
-                shortfalls happened, and what figure remained outstanding at the relevant
-                end point.
+                Confirming the final balance is usually the most important stage
+                in the whole process. This is where the landlord stops talking in
+                rough estimates and works out what is actually owed. The final
+                balance should show what rent was due under the tenancy, what
+                payments were received, where the shortfalls happened, and what
+                figure remained outstanding at the relevant end point.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                In most cases, the cleanest way to do this is through a full arrears
-                schedule. A good schedule usually lists every rent due date, every payment
-                received, the amount of any shortfall, and the running balance. If the
-                landlord later makes an adjustment, a credit, or a correction, that should
-                be shown clearly rather than hidden inside one unexplained total.
+                In most cases, the cleanest way to do this is through a full
+                arrears schedule. A good schedule usually lists every rent due
+                date, every payment received, the amount of any shortfall, and
+                the running balance. If the landlord later makes an adjustment, a
+                credit, or a correction, that should be shown clearly rather than
+                hidden inside one unexplained total.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                Many weak recovery files fail at this stage. Not because no money is owed,
-                but because the landlord cannot explain how the figure was reached. A debt
-                number written in an email or remembered from a rough spreadsheet is not
-                the same as a clean final arrears chronology. The stronger file is the one
-                that lets somebody else follow the figures without guesswork.
+                Many weak files fail at this stage. Not because no money is owed,
+                but because the landlord cannot explain how the figure was
+                reached. A debt number written in an email or remembered from a
+                rough spreadsheet is not the same as a clean final arrears
+                chronology. The stronger file is the one that lets somebody else
+                follow the figures without guesswork.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                This is also where precision matters more than frustration. Landlords are
-                often understandably angry when a tenant leaves without paying rent. But
-                the file still has to be accurate. If the landlord overstates the balance,
-                ignores credits, or mixes rent with unrelated charges, the position becomes
-                weaker rather than stronger.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the final balance should answer three simple questions.
-                What was due? What was paid? What remained outstanding at the end? If the
-                file cannot answer those three questions clearly, it usually needs more
-                work before any recovery decision is made.
+                This is also where precision matters more than frustration. If
+                the landlord overstates the balance, ignores credits, or mixes
+                rent with unrelated charges, the position becomes weaker rather
+                than stronger.
               </p>
             </Card>
 
@@ -398,64 +482,43 @@ export default function Page() {
               title="Deposit and Other Adjustments"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                One of the most common reasons these files become confused is that landlords
-                start treating the deposit as if it automatically solves the arrears
-                position. In reality, the deposit may be relevant to the overall end of
-                tenancy balance, but it does not remove the need for a clean arrears
-                calculation. The landlord still needs to know what the rent debt was before
-                any later adjustments are considered.
+                One of the most common reasons these files become confused is
+                that landlords start treating the deposit as if it automatically
+                solves the arrears position. In reality, the deposit may be
+                relevant to the overall end-of-tenancy balance, but it does not
+                remove the need for a clean arrears calculation.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                The same applies to other items. If there are cleaning costs, damage
-                charges, replacement items, key issues, or utility-related questions,
-                landlords should usually keep them separate from the pure rent history.
-                They may matter commercially, but they should not be allowed to blur the
-                arrears picture. A file is easier to trust when each category is clear.
+                The same applies to other items. If there are cleaning costs,
+                damage charges, replacement items, key issues, or utility-related
+                questions, landlords should usually keep them separate from the
+                pure rent history. They may matter commercially, but they should
+                not be allowed to blur the arrears picture.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                This does not mean the landlord ignores those other issues. It means the
-                landlord keeps the rent balance clean first. Then, if appropriate, any
-                later credits, deposit allocations, or other adjustments can be shown in a
-                way that is easy to understand.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, landlords usually get a cleaner outcome when they work
-                in layers: first the rent debt, then any later credits, then any separate
-                tenancy-end issues. Trying to do everything in one blended figure often
-                produces a file that nobody can follow confidently.
+                In practical terms, landlords usually get a cleaner outcome when
+                they work in layers: first the rent debt, then any later credits,
+                then any separate tenancy-end issues.
               </p>
             </Card>
 
             <CtaBand
-              title="Ready to turn the final balance into a debt-recovery file?"
-              body="Money Claim Pack is usually the stronger fit once the tenant has already gone and the main task is proving the arrears clearly enough to pursue recovery. Complete Pack is the better secondary route where the wider possession background, evidence continuity, or eviction-stage context still needs active support."
+              title="Tenant already gone? Focus on the debt file now."
+              body="Once the occupation issue is over, landlords usually get better results by turning the file into a clean rent-arrears claim rather than treating it as a leftover eviction problem. Money Claim Pack is usually the stronger fit where the main task is proving the final balance clearly enough to pursue recovery."
               primaryHref="/products/money-claim"
               primaryLabel="Start Money Claim Pack"
-              secondaryHref="/products/complete-pack"
-              secondaryLabel="Need Complete Pack instead?"
+              secondaryHref="#money-claim-vs-complete-pack"
+              secondaryLabel="Compare claim routes"
             />
 
-            <Card
-              id="documents-you-need"
-              title="Documents You Should Gather"
-            >
+            <Card id="documents-you-need" title="Documents You Need">
               <p className="mt-4 leading-7 text-gray-700">
-                Once the tenant has gone and the landlord is confirming the final position,
-                the most important task is gathering the core documents in one place. This
-                is not about creating the biggest possible file. It is about creating the
-                clearest one. The best arrears packs are usually disciplined rather than
-                bloated.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In most cases, the core records include the tenancy agreement, the rent
-                terms, a clear arrears schedule, payment records, and any documents that
-                explain the chronology. If the tenancy ended through a possession route,
-                the possession history may still matter as background, but the arrears
-                figure itself usually remains the central document.
+                Once the tenant has gone and the landlord is confirming the final
+                position, the most important task is gathering the core documents
+                in one place. This is not about creating the biggest possible
+                file. It is about creating the clearest one.
               </p>
 
               <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
@@ -468,16 +531,11 @@ export default function Page() {
               </ul>
 
               <p className="mt-4 leading-7 text-gray-700">
-                The most important document is often the final schedule itself. If that
-                schedule is clean, the rest of the file becomes easier to understand. If
-                that schedule is weak, the whole file often feels less reliable no matter
-                how many extra documents are attached around it.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, landlords usually do not need more paperwork. They need
-                better organised paperwork. A shorter file with one clear chronology is
-                often far stronger than a large folder full of duplicate or mixed material.
+                The most important document is often the final schedule itself.
+                If that schedule is clean, the rest of the file becomes easier to
+                understand. If that schedule is weak, the whole file often feels
+                less reliable no matter how many extra documents are attached
+                around it.
               </p>
             </Card>
 
@@ -486,33 +544,25 @@ export default function Page() {
               title="How Landlords Usually Approach It"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                Most landlords do not approach this as one dramatic single moment. They
-                usually move through stages. First they secure the property and confirm the
-                tenant has actually gone. Then they lock the final arrears figure. Then
-                they decide whether the debt file is strong enough and commercially worth
-                pursuing further.
+                Most landlords do not approach this as one dramatic single
+                moment. They usually move through stages. First they secure the
+                property and confirm the tenant has actually gone. Then they lock
+                the final arrears figure. Then they decide whether the debt file
+                is strong enough and commercially worth pursuing further.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                This matters because the emotional instinct is often to chase the money
-                immediately. But emotional urgency is not the same thing as file readiness.
-                The stronger approach is usually slower and more disciplined at the start.
-                Get the final number right. Make sure the documents support it. Separate
-                the rent issue from everything else. Then decide what step makes sense.
+                This matters because the emotional instinct is often to chase the
+                money immediately. But emotional urgency is not the same thing as
+                file readiness. The stronger approach is usually slower and more
+                disciplined at the start.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                Good landlords also think commercially at this stage. A legally valid debt
-                is not always a sensible recovery target. The amount owed, the quality of
-                the documents, the likely response, and the realistic prospect of recovery
-                all matter. Some cases are clean and worth pursuing. Others are legally
-                arguable but practically weak.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the strongest landlord approach is usually calm and
-                document-led. One final balance. One final chronology. One clear decision
-                about whether the next step is worthwhile.
+                Good landlords also think commercially at this stage. A legally
+                valid debt is not always a sensible recovery target. The amount
+                owed, the quality of the documents, and the realistic prospect of
+                recovery all matter.
               </p>
             </Card>
 
@@ -521,34 +571,25 @@ export default function Page() {
               title="When the File Is Strong Enough to Pursue"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                Landlords often ask whether they can pursue the arrears once the tenant has
-                gone. A better question is whether the file is strong enough to pursue
-                cleanly. In practical terms, a strong file usually has a clear tenancy
-                agreement, a clean arrears schedule, payment records that reconcile
-                properly, and a final balance that can be explained without confusion.
+                A better question than whether you can pursue the arrears is
+                whether the file is strong enough to pursue cleanly. In practical
+                terms, a strong file usually has a clear tenancy agreement, a
+                clean arrears schedule, payment records that reconcile properly,
+                and a final balance that can be explained without confusion.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                A weak file often shows the opposite signs. The final number may be based
-                on assumptions. Credits may be missing. The rent history may not match the
-                bank history. Damage and arrears may be mixed together in the same total.
-                Or the landlord may be relying on memory rather than a disciplined
-                chronology. The debt may still be real, but the file is harder to trust.
+                A weak file often shows the opposite signs. The final number may
+                be based on assumptions. Credits may be missing. The rent history
+                may not match the bank history. Damage and arrears may be mixed
+                together in the same total.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                This is why landlords usually do better by assessing both legal strength
-                and commercial value together. A case may be technically arguable but still
-                not be the right place to spend further time and effort. Equally, a clean,
-                well-documented arrears file may justify moving forward because the figures
-                are solid and the position is easy to support.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, a good test is whether somebody unfamiliar with the
-                tenancy could read the key documents and understand the final balance
-                quickly. If they can, the file is usually much closer to recovery-ready. If
-                they cannot, the landlord probably still needs to tidy the record first.
+                In practical terms, a good test is whether somebody unfamiliar
+                with the tenancy could read the key documents and understand the
+                final balance quickly. If they can, the file is usually much
+                closer to recovery-ready.
               </p>
             </Card>
 
@@ -557,13 +598,9 @@ export default function Page() {
               title="Timeline After the Tenant Leaves"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                Once the tenant has left, landlords should think in stages rather than
-                assume one fixed timetable. The timeline usually depends less on the
-                calendar and more on how clean the file is. If the rent schedule is up to
-                date and the tenancy records are disciplined, the final balance can be
-                confirmed relatively quickly. If the file is confused, the first stage may
-                take much longer because the landlord is reconstructing the arrears after
-                the fact.
+                Once the tenant has left, landlords should think in stages rather
+                than assume one fixed timetable. The timeline usually depends
+                less on the calendar and more on how clean the file is.
               </p>
 
               <div className="mt-6 overflow-x-auto rounded-xl border border-[#E6DBFF] bg-white">
@@ -571,20 +608,24 @@ export default function Page() {
                   <thead className="bg-[#F8F4FF] text-[#2a2161]">
                     <tr>
                       <th className="px-4 py-3 text-left font-semibold">Stage</th>
-                      <th className="px-4 py-3 text-left font-semibold">What usually happens</th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        What usually happens
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
                       <td className="px-4 py-3 font-medium">Tenant gone</td>
                       <td className="px-4 py-3">
-                        Landlord confirms the property is back and stabilises the basic facts
+                        Landlord confirms the property is back and stabilises the
+                        basic facts
                       </td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
                       <td className="px-4 py-3 font-medium">Balance review</td>
                       <td className="px-4 py-3">
-                        Rent history is reconciled and the final arrears figure is checked
+                        Rent history is reconciled and the final arrears figure is
+                        checked
                       </td>
                     </tr>
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
@@ -596,73 +637,69 @@ export default function Page() {
                     <tr className="border-t border-[#E6DBFF] text-gray-700">
                       <td className="px-4 py-3 font-medium">Decision stage</td>
                       <td className="px-4 py-3">
-                        Landlord decides whether the debt is strong enough and worth pursuing
+                        Landlord decides whether the debt is strong enough and
+                        worth pursuing
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                The main point is that most delay at this stage comes from file condition,
-                not from the idea of the debt itself. Clear records speed decisions. Messy
-                records create hesitation, revision, and avoidable rework.
-              </p>
             </Card>
 
-            <Card
-              id="common-mistakes"
-              title="Common Mistakes Landlords Make"
-            >
+            <Card id="common-mistakes" title="Common Mistakes Landlords Make">
               <p className="mt-4 leading-7 text-gray-700">
-                Most post-tenancy arrears problems are not created by one dramatic error.
-                They usually come from a series of smaller file mistakes that make the
-                final balance harder to trust. The more disciplined the landlord is at the
-                end of the tenancy, the easier it becomes to decide what to do next.
+                Most post-tenancy arrears problems are not created by one
+                dramatic error. They usually come from a series of smaller file
+                mistakes that make the final balance harder to trust.
               </p>
 
               <ul className="mt-4 list-disc space-y-3 pl-5 text-gray-700">
                 <li>
-                  <span className="font-medium">Assuming the final balance is obvious.</span>
+                  <span className="font-medium">
+                    Assuming the final balance is obvious.
+                  </span>
                   <span className="block">
-                    Landlords often know the tenant owes money, but still need a proper
-                    final schedule rather than a rough estimate.
+                    Landlords often know the tenant owes money, but still need a
+                    proper final schedule rather than a rough estimate.
                   </span>
                 </li>
                 <li>
-                  <span className="font-medium">Mixing rent debt with every other issue.</span>
+                  <span className="font-medium">
+                    Mixing rent debt with every other issue.
+                  </span>
                   <span className="block">
-                    Damage, cleaning, utilities, and deposit issues can confuse the rent
-                    position if they are blended into one unclear total.
+                    Damage, cleaning, utilities, and deposit issues can confuse
+                    the rent position if they are blended into one unclear total.
                   </span>
                 </li>
                 <li>
-                  <span className="font-medium">Failing to reconcile the payment records.</span>
+                  <span className="font-medium">
+                    Failing to reconcile the payment records.
+                  </span>
                   <span className="block">
-                    A schedule that does not match the actual payment history usually
-                    becomes much weaker under scrutiny.
+                    A schedule that does not match the actual payment history
+                    usually becomes much weaker under scrutiny.
                   </span>
                 </li>
                 <li>
-                  <span className="font-medium">Leaving the file tidy-up too late.</span>
+                  <span className="font-medium">
+                    Leaving the file tidy-up too late.
+                  </span>
                   <span className="block">
-                    The longer the landlord waits, the harder it can become to reconstruct
-                    the timeline cleanly.
+                    The longer the landlord waits, the harder it can become to
+                    reconstruct the timeline cleanly.
                   </span>
                 </li>
                 <li>
-                  <span className="font-medium">Pursuing out of frustration rather than file strength.</span>
+                  <span className="font-medium">
+                    Pursuing out of frustration rather than file strength.
+                  </span>
                   <span className="block">
-                    Recovery decisions are usually stronger when based on evidence quality
-                    and realistic recoverability.
+                    Recovery decisions are usually stronger when based on
+                    evidence quality and realistic recoverability.
                   </span>
                 </li>
               </ul>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, the biggest time saver after a tenant leaves is not raw
-                speed. It is avoiding file confusion before the next decision is made.
-              </p>
             </Card>
 
             <Card
@@ -670,34 +707,62 @@ export default function Page() {
               title="Money Claim Pack vs Complete Pack"
             >
               <p className="mt-4 leading-7 text-gray-700">
-                Landlords reading about a tenant leaving without paying rent are often no
-                longer dealing with the simplest early-stage arrears problem. In many
-                cases, the main issue is now proving the final balance clearly, deciding
-                whether recovery is worth pursuing, and turning the tenancy records into a
-                debt-focused file.
+                Landlords reading about a tenant moving out owing rent are often
+                no longer dealing with the simplest early-stage arrears problem.
+                In many cases, the main issue is now proving the final balance
+                clearly, deciding whether recovery is worth pursuing, and
+                turning the tenancy records into a debt-focused file.
               </p>
 
-              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Money Claim Pack</h3>
+              <div className="mt-6 overflow-x-auto rounded-xl border border-[#E6DBFF] bg-white">
+                <table className="w-full border-collapse text-sm">
+                  <thead className="bg-[#F8F4FF] text-[#2a2161]">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Your situation
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Better route
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3">
+                        Tenant has already left and you need to recover unpaid
+                        rent
+                      </td>
+                      <td className="px-4 py-3 font-medium">Money Claim Pack</td>
+                    </tr>
+                    <tr className="border-t border-[#E6DBFF] text-gray-700">
+                      <td className="px-4 py-3">
+                        Possession history still matters and the file is wider
+                        than pure debt
+                      </td>
+                      <td className="px-4 py-3 font-medium">Complete Pack</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">
+                Money Claim Pack
+              </h3>
               <p className="mt-2 leading-7 text-gray-700">
-                Money Claim Pack is usually the stronger fit where the tenant has already
-                left and the landlord now needs a debt-recovery workflow. It is better
-                aligned to arrears schedules, letters before action, particulars, and the
-                core steps that support a county court money claim.
+                Money Claim Pack is usually the stronger fit where the tenant has
+                already left and the landlord now needs a debt-recovery
+                workflow. It is better aligned to arrears schedules, letters
+                before action, particulars, and the core steps that support a
+                county court money claim.
               </p>
 
-              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">Complete Eviction Pack</h3>
+              <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">
+                Complete Pack
+              </h3>
               <p className="mt-2 leading-7 text-gray-700">
-                Complete Pack is the better secondary route where the wider possession
-                history, evidence continuity, or eviction-stage strategy still matters to
-                the landlord's overall position. It is useful when the debt issue sits
-                alongside unfinished route questions rather than replacing them.
-              </p>
-
-              <p className="mt-4 leading-7 text-gray-700">
-                In practical terms, once the tenant has gone and the main question is how
-                to recover the balance, Money Claim Pack is usually the better first
-                route. Complete Pack remains the backup route where the wider case still
-                needs eviction-led support.
+                Complete Pack is the better secondary route where the wider
+                possession history, evidence continuity, or eviction-stage
+                strategy still matters to the landlord&apos;s overall position.
               </p>
             </Card>
           </div>
@@ -714,25 +779,31 @@ export default function Page() {
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">
+              Next Steps
+            </h2>
+
             <p className="mt-4 leading-7 text-gray-700">
-              When a tenant leaves without paying rent, the strongest next move is usually
-              not immediate pressure. It is confirming the final rent balance properly and
-              turning the tenancy records into one clean arrears file. That means one
-              schedule, one chronology, and one clear understanding of what is still owed.
+              When a tenant leaves without paying rent, the strongest next move
+              is usually not immediate pressure. It is confirming the final rent
+              balance properly and turning the tenancy records into one clean
+              arrears file. That means one schedule, one chronology, and one
+              clear understanding of what is still owed.
             </p>
+
             <p className="mt-4 leading-7 text-gray-700">
-              Landlords usually get better outcomes when they separate the occupation
-              problem from the money problem once the tenant has gone. The property may be
-              back, but the debt question still needs its own structured approach. The
-              cleaner the file, the easier it becomes to decide whether pursuing the
-              balance is legally and commercially worthwhile.
+              Landlords usually get better outcomes when they separate the
+              occupation problem from the money problem once the tenant has gone.
+              The property may be back, but the debt question still needs its
+              own structured approach.
             </p>
+
             <p className="mt-4 leading-7 text-gray-700">
-              If the tenant has already gone and your next job is turning the final
-              balance into a clean claim, start with Money Claim Pack. If you still need
-              broader possession-route continuity or eviction support around the wider
-              file, use Complete Pack as the secondary route.
+              If the tenant has already gone and your next job is recovering
+              unpaid rent or turning the final balance into a clean claim, start
+              with Money Claim Pack. If you still need broader possession-route
+              continuity or eviction support around the wider file, use Complete
+              Pack as the secondary route.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
