@@ -5,6 +5,7 @@ import {
   StructuredData,
   breadcrumbSchema,
   articleSchema,
+  productSchema,
 } from '@/lib/seo/structured-data';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -101,6 +102,15 @@ export const metadata: Metadata = {
 export default function ScotlandEvictionNoticesPage() {
   return (
     <>
+      <StructuredData
+        data={productSchema({
+          name: 'Scotland Notice to Leave Pack',
+          description:
+            'Scotland Notice to Leave guidance with product-led next steps for Private Residential Tenancy landlords.',
+          price: PRODUCTS.notice_only.price.toFixed(2),
+          url: canonicalUrl,
+        })}
+      />
       <StructuredData
         data={articleSchema({
           headline: 'Scotland Eviction Notices | Notice to Leave & PRT Landlord Guide',

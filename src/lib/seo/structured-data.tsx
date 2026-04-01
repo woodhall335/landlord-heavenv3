@@ -201,6 +201,17 @@ export function buildMerchantOffer(input: MerchantOfferInput) {
   };
 }
 
+export function buildProductAggregateRating() {
+  const reviewCount = getDynamicReviewCount();
+
+  return {
+    '@type': 'AggregateRating',
+    ratingValue: REVIEW_RATING,
+    reviewCount: reviewCount.toString(),
+    ratingCount: reviewCount.toString(),
+  };
+}
+
 function getStructuredDataProductImage(sku: ProductSku): string {
   return toStructuredDataUrl(STRUCTURED_DATA_PRODUCT_IMAGES[sku] || '/og-image.png');
 }
@@ -210,8 +221,6 @@ function getStructuredDataProductImage(sku: ProductSku): string {
  * Use this on the homepage and footer
  */
 export function organizationSchema() {
-  const reviewCount = getDynamicReviewCount();
-
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -245,11 +254,7 @@ export function organizationSchema() {
         "name": "United Kingdom"
       }
     ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": REVIEW_RATING,
-      "reviewCount": reviewCount.toString()
-    }
+    "aggregateRating": buildProductAggregateRating()
   };
 }
 
@@ -259,8 +264,6 @@ export function organizationSchema() {
  *
  */
 export function productSchema(product: Product) {
-  const reviewCount = getDynamicReviewCount();
-
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -276,11 +279,7 @@ export function productSchema(product: Product) {
       availability: product.availability,
       url: product.url,
     }),
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": REVIEW_RATING,
-      "reviewCount": reviewCount.toString()
-    }
+    "aggregateRating": buildProductAggregateRating()
   };
 }
 
@@ -302,6 +301,7 @@ export function pricingItemListSchema(items: PricingItemListEntry[]) {
           url: toStructuredDataUrl(item.url),
           image: getStructuredDataProductImage(item.sku),
           brand: LANDLORD_HEAVEN_BRAND,
+          aggregateRating: buildProductAggregateRating(),
           offers: buildMerchantOffer({
             price: PRODUCT_PRICE_AMOUNT_STRINGS[item.sku],
             url: item.url,
@@ -324,6 +324,7 @@ export function subscriptionProductSchema(product: Product) {
     "url": product.url,
     "image": product.image || `${SITE_URL}/og-image.png`,
     "brand": LANDLORD_HEAVEN_BRAND,
+    "aggregateRating": buildProductAggregateRating(),
     "offers": {
       ...buildMerchantOffer({
         price: product.price,
@@ -492,11 +493,7 @@ export function softwareApplicationSchema() {
       "highPrice": highPrice,
       "priceCurrency": "GBP"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": REVIEW_RATING,
-      "reviewCount": reviewCount.toString()
-    }
+    "aggregateRating": buildProductAggregateRating()
   };
 }
 

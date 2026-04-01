@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, buildProductAggregateRating } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
@@ -71,7 +71,9 @@ export default function Section21NoticeTemplatePage() {
         highPrice: PRODUCT_PRICE_AMOUNT_STRINGS.notice_only,
         priceCurrency: 'GBP',
         offerCount: '2',
+        availability: 'https://schema.org/InStock',
       },
+      aggregateRating: buildProductAggregateRating(),
     },
   };
 

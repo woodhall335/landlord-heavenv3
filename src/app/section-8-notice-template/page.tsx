@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import {
   StructuredData,
+  buildProductAggregateRating,
   breadcrumbSchema,
   articleSchema,
   faqPageSchema,
@@ -117,7 +118,9 @@ export default function Section8NoticeTemplatePage() {
         highPrice: PRODUCT_PRICE_AMOUNT_STRINGS.complete_pack,
         priceCurrency: 'GBP',
         offerCount: '2',
+        availability: 'https://schema.org/InStock',
       },
+      aggregateRating: buildProductAggregateRating(),
     },
   };
 

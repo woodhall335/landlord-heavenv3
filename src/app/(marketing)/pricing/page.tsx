@@ -7,6 +7,7 @@ import { StructuredData, pricingItemListSchema } from "@/lib/seo/structured-data
 import { StandardHero } from "@/components/marketing/StandardHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { LANDLORD_DOCUMENT_PRICE_RANGE, PRODUCTS } from "@/lib/pricing/products";
+import { getDynamicReviewCount, REVIEW_RATING } from "@/lib/reviews/reviewStats";
 import {
   PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
   RESIDENTIAL_LETTING_PRODUCTS,
@@ -139,6 +140,7 @@ const solicitorComparison = [
 ];
 
 export default function PricingPage() {
+  const reviewCount = getDynamicReviewCount();
   const residentialProducts = PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map(
     (sku) => RESIDENTIAL_LETTING_PRODUCTS[sku]
   );
@@ -167,6 +169,10 @@ export default function PricingPage() {
         subtitle="Compare the packs side by side, see what each one includes, and choose the one that fits your problem tonight."
         variant="pastel"
       >
+        <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-white/60 bg-white/15 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm">
+          <span aria-hidden="true">★★★★★</span>
+          <span>{`${REVIEW_RATING}/5 | ${reviewCount} reviews`}</span>
+        </div>
         <p className="text-sm text-white">All prices are one-time payments</p>
         <p className="mt-2 text-sm text-white">
           Notices: England, Wales, and Scotland. Complete Pack and Money Claims: England only. Tenancy agreements: UK-wide plus dedicated England Standard, Premium, Student, HMO / Shared House, and Lodger routes below.
