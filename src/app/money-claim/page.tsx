@@ -38,7 +38,7 @@ const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 export const metadata: Metadata = {
   title: 'Money Claim for Landlords (England) - Example & Guide',
   description:
-    'See an England landlord money claim example with pre-action, evidence, arrears, and filing guidance before you move into the claim-pack workflow.',
+    'See an England landlord money claim example with pre-action, evidence, arrears, and filing guidance before you move into the court claim-pack workflow.',
   keywords: [
     'money claim for landlords england',
     'landlord money claim',

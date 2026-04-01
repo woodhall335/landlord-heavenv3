@@ -5,7 +5,7 @@ import { AlertTriangle } from "lucide-react";
 export const metadata = generateMetadata({
   title: "Terms and Conditions | Landlord Heaven Services",
   description:
-    "Read the terms and conditions for using Landlord Heaven's UK landlord document services, checkout, delivery, and permitted use of digital products.",
+    "Read the terms and conditions for using Landlord Heaven's UK landlord document services, checkout, delivery, permitted use, and account responsibilities.",
   path: "/terms",
   keywords: [
     "landlord heaven terms",

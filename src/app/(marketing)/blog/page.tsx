@@ -20,7 +20,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata = generateMetadata({
   title: 'UK Landlord Guides | Eviction, Tenancy & Rent Arrears',
   description:
-    'Read UK landlord guides on Section 8, eviction notices, rent arrears, tenancy agreements, possession claims, and compliance updates.',
+    'Read UK landlord guides on Section 8, Section 21, eviction notices, rent arrears, tenancy agreements, possession claims, and practical compliance updates.',
   path: '/blog',
   keywords: [
     'how to evict a tenant',
