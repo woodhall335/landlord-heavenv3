@@ -5,7 +5,11 @@
       "route": "section_8",
       "filename": "Form_3A.pdf",
       "version": "2026-05",
-      "effective_date": "2026-05-01"
+      "effective_date": "2026-05-01",
+      "canonicalLabel": "Form 3A notice",
+      "canonicalTitle": "Form 3A Notice Seeking Possession",
+      "status": "active",
+      "historicAliases": ["Form 3", "Form 3 notice"]
     },
     {
       "jurisdiction": "england",

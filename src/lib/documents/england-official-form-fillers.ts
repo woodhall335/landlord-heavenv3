@@ -209,6 +209,15 @@ function formatCurrency(value?: number | string | null): string {
 }
 
 function calculateEarliestCourtDate(data: OfficialFormData): string {
+  const explicitDate =
+    data.notice_expiry_date ||
+    data.earliest_proceedings_date ||
+    data.earliest_possession_date;
+
+  if (explicitDate) {
+    return String(explicitDate);
+  }
+
   const serviceDate =
     data.notice_served_date ||
     data.section_8_notice_date ||
@@ -289,8 +298,12 @@ function createForm3AOverlay(form: PDFForm, pdfDoc: PDFDocument) {
 
 export async function fillForm3AForm(
   data: OfficialFormData,
-  _options: EnglandOfficialFormOptions = {},
+  options: EnglandOfficialFormOptions = {},
 ): Promise<Uint8Array> {
+  if (options.flatten) {
+    console.warn('⚠️ [Form3A] Flattening official notice PDFs is disabled. Preserving editable AcroForm fields.');
+  }
+
   const pdfDoc = await loadOfficialForm('Form_3A.pdf');
   const form = pdfDoc.getForm();
 

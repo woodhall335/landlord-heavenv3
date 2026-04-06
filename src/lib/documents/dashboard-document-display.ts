@@ -173,7 +173,7 @@ export function getDashboardDocumentTitle(documentType: string): string {
     rental_inspection_report: 'Rental Inspection Report',
     flatmate_agreement: 'Flatmate Agreement',
     renewal_tenancy_agreement: 'Renewal Tenancy Agreement',
-    section8_notice: 'Form 3 Notice Seeking Possession',
+    section8_notice: 'Form 3A Notice Seeking Possession',
     service_instructions: 'Service Instructions',
     cover_letter_to_tenant: 'Cover Letter to Tenant',
     service_checklist: 'Service & Compliance Checklist',

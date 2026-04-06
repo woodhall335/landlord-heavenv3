@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-04-06T14:36:57.269Z",
+  "runId": "2026-04-06T14-36-57-159Z",
+  "documents": [
+    {
+      "fileName": "notice.html",
+      "type": "html",
+      "title": "Form 3 Notice Seeking Possession",
+      "key": "section8_notice"
+    },
+    {
+      "fileName": "service-instructions.pdf",
+      "type": "pdf",
+      "title": "Service Instructions",
+      "key": "service_instructions"
+    },
+    {
+      "fileName": "service-checklist.pdf",
+      "type": "pdf",
+      "title": "Service & Validity Checklist",
+      "key": "validity_checklist"
+    },
+    {
+      "fileName": "compliance-declaration.pdf",
+      "type": "pdf",
+      "title": "Pre-Service Compliance Declaration",
+      "key": "compliance_declaration"
+    },
+    {
+      "fileName": "arrears-schedule.pdf",
+      "type": "pdf",
+      "title": "Rent Schedule / Arrears Statement",
+      "key": "arrears_schedule"
+    }
+  ],
+  "skipped": []
+}

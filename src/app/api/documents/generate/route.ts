@@ -861,7 +861,7 @@ export async function POST(request: Request) {
               pdf: Buffer.from(pdfBytes),
               html: null,
             };
-            documentTitle = 'Form 3A - Notice seeking possession';
+            documentTitle = 'Form 3A Notice Seeking Possession';
           } else {
             generatedDoc = await generateSection8Notice(safeCaseData as any);
             documentTitle = 'Section 8 Notice - Notice Seeking Possession';
@@ -1658,7 +1658,7 @@ export async function POST(request: Request) {
               : wizardFacts.eviction_route === 'section_21'
               ? 'Section 21 Notice (Form 6A)'
               : wizardFacts.eviction_route === 'section_8'
-              ? 'Section 8 Notice (Form 3)'
+              ? 'Section 8 Notice'
               : 'Notice seeking possession',
           });
 

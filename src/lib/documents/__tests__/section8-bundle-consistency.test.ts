@@ -2,7 +2,7 @@
  * Section 8 Bundle Consistency Tests
  *
  * Regression tests to ensure the England Section 8 templates keep a single
- * canonical Form 3 terminology and notice timeline across the support docs.
+ * canonical Form 3A terminology and notice timeline across the support docs.
  */
 
 import * as fs from 'fs';
@@ -41,7 +41,7 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('{{notice_name}}');
-    expect(content).not.toContain('Form 3A');
+    expect(content).toContain('Form 3A');
   });
 
   test('checklist renders both canonical Section 8 support dates', () => {
@@ -51,7 +51,6 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('{{notice_name}}');
-    expect(content).not.toContain('Form 3A');
   });
 
   test('proof of service includes expiry and earliest proceedings rows', () => {
@@ -90,7 +89,6 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('{{#if (hasValue notice_expiry_date)}}');
     expect(content).toContain('{{#if (hasValue earliest_proceedings_date)}}');
     expect(content).toContain('{{#if (hasValue defendant_circumstances_text)}}');
-    expect(content).not.toContain('Form 3A');
   });
 
   test('witness statement only renders the timeline section when timeline content exists', () => {

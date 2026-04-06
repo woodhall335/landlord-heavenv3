@@ -281,14 +281,14 @@ export function buildWitnessExhibits(input: WitnessStatementSectionsInput): Witn
     {
       key: 'section8_notice',
       label: `${prefix}2`,
-      title: 'Form 3 Notice',
-      description: 'Form 3 notice seeking possession served on the tenant.',
+      title: 'Form 3A Notice',
+      description: 'Form 3A notice seeking possession served on the tenant.',
     },
     {
       key: 'proof_of_service',
       label: `${prefix}3`,
       title: 'Proof of Service',
-      description: 'Certificate or other evidence showing how the Form 3 notice was served.',
+      description: 'Certificate or other evidence showing how the Form 3A notice was served.',
     },
   ];
 
@@ -465,7 +465,7 @@ function buildGroundsForPossession(
     // Arrears at notice date with months equivalent and threshold comparison (Ground 8 proof requirement #1)
     if (input.notice.served_date && arrearsAtNotice > 0) {
       lines.push('');
-      let noticeStatement = `At the date of service of the Form 3 notice (${formatUKDate(input.notice.served_date)}), the total rent arrears stood at ${formatCurrency(arrearsAtNotice)}`;
+      let noticeStatement = `At the date of service of the Form 3A notice (${formatUKDate(input.notice.served_date)}), the total rent arrears stood at ${formatCurrency(arrearsAtNotice)}`;
       if (monthsAtNotice > 0) {
         noticeStatement += `, representing approximately ${monthsAtNotice.toFixed(1)} months' rent`;
       }
@@ -617,7 +617,7 @@ function buildTimeline(input: WitnessStatementSectionsInput): string {
 
   // Notice served
   const serviceMethod = formatServiceMethod(input.notice.service_method);
-  pushEvent(input.notice.served_date, `Form 3 notice served on the tenant by ${serviceMethod}`);
+  pushEvent(input.notice.served_date, `Form 3A notice served on the tenant by ${serviceMethod}`);
 
   // Notice expiry
   if (input.notice.expiry_date) {

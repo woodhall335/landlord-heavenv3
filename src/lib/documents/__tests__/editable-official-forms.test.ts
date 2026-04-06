@@ -10,6 +10,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
+import { generateSection8Notice } from '../section8-generator';
 import {
   fillForm3AForm,
   fillN5BForm,
@@ -284,6 +285,54 @@ describe('Editable Official Forms - No Flatten', () => {
       expect(explanation).toContain('Ground 8 is relied on as the mandatory serious rent arrears ground.');
       expect(explanation).toContain('The tenancy began on');
       expect(explanation.length).toBeGreaterThan(180);
+    });
+
+    it('generateSection8Notice returns the editable official Form 3A PDF output', async () => {
+      const generated = await generateSection8Notice({
+        landlord_full_name: COMPLETE_FORM3A_CASE_DATA.landlord_full_name,
+        landlord_address: COMPLETE_FORM3A_CASE_DATA.landlord_address,
+        landlord_phone: COMPLETE_FORM3A_CASE_DATA.landlord_phone,
+        landlord_email: COMPLETE_FORM3A_CASE_DATA.landlord_email,
+        tenant_full_name: COMPLETE_FORM3A_CASE_DATA.tenant_full_name,
+        tenant_2_name: COMPLETE_FORM3A_CASE_DATA.tenant_2_name,
+        property_address: COMPLETE_FORM3A_CASE_DATA.property_address,
+        tenancy_start_date: COMPLETE_FORM3A_CASE_DATA.tenancy_start_date,
+        rent_amount: 1200,
+        rent_frequency: 'monthly',
+        payment_date: 1,
+        grounds: [
+          {
+            code: '1A',
+            title: 'Sale of dwelling house',
+            legal_basis: 'Housing Act 1988, Schedule 2, Ground 1A',
+            particulars: 'The landlord intends to sell the property on the open market.',
+            mandatory: true,
+          },
+          {
+            code: 8,
+            title: 'Serious rent arrears',
+            legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
+            particulars: 'The tenant owes more than three months of rent.',
+            mandatory: true,
+          },
+        ],
+        service_date: '2026-06-01',
+        notice_period_days: 122,
+        earliest_possession_date: '2026-10-01',
+        earliest_proceedings_date: '2026-10-01',
+        any_mandatory_ground: true,
+        any_discretionary_ground: false,
+      });
+
+      expect(generated.pdf).toBeDefined();
+      expect(generated.html).toContain('Form 3A');
+
+      const pdfDoc = await PDFDocument.load(generated.pdf!);
+      const form = pdfDoc.getForm();
+
+      expect(form.getFields().length).toBeGreaterThan(0);
+      expect(form.getTextField('form3a_tenant_names').getText()).toContain('Sonia Shezadi');
+      expect(form.getTextField('form3a_grounds_text').getText()).toContain('Ground 1A');
     });
   });
 

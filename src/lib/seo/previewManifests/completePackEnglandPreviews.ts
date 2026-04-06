@@ -8,7 +8,7 @@ export interface CompletePackPreviewDocument {
 }
 
 export const section8Documents: CompletePackPreviewDocument[] = [
-  { id: 'notice', title: 'Section 8 Notice (Form 3)', category: 'Notices', previewPath: '/images/previews/complete-pack/england/section8/notice.webp' },
+  { id: 'notice', title: 'Form 3A Notice Seeking Possession', category: 'Notices', previewPath: '/images/previews/complete-pack/england/section8/notice.webp' },
   { id: 'n5', title: 'Form N5 — Claim for Possession', category: 'Court Forms', previewPath: '/images/previews/complete-pack/england/section8/n5.webp' },
   { id: 'n119', title: 'Form N119 — Particulars of Claim', category: 'Court Forms', previewPath: '/images/previews/complete-pack/england/section8/n119.webp' },
   { id: 'witness', title: 'AI Witness Statement', category: 'AI-Generated', previewPath: '/images/previews/complete-pack/england/section8/witness-statement.webp' },

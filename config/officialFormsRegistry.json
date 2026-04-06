@@ -6,6 +6,9 @@
       "route": "section_8",
       "officialFormKey": "form3a",
       "pdfPath": "public/official-forms/Form_3A.pdf",
+      "status": "active",
+      "canonicalLabel": "Form 3A notice",
+      "historicAliases": ["Form 3", "Form 3 notice"],
       "notes": "England post-1 May 2026 possession notice",
       "version": "2026-05"
     },
@@ -15,6 +18,9 @@
       "route": "section_8",
       "officialFormKey": "form3a",
       "pdfPath": "public/official-forms/Form_3A.pdf",
+      "status": "active",
+      "canonicalLabel": "Form 3A notice",
+      "historicAliases": ["Form 3", "Form 3 notice"],
       "notes": "England post-1 May 2026 possession notice",
       "version": "2026-05"
     },

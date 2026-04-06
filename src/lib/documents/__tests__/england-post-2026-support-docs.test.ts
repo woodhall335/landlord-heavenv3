@@ -10,7 +10,7 @@ function readTemplate(...segments: string[]): string {
 }
 
 describe('England Section 8 support document templates', () => {
-  it('uses current Form 3 language in the service checklist', () => {
+  it('uses current Form 3A language in the service checklist', () => {
     const template = readTemplate(
       'config',
       'jurisdictions',
@@ -24,10 +24,9 @@ describe('England Section 8 support document templates', () => {
     expect(template).toContain('{{notice_name}}');
     expect(template).toContain('Notice expiry date');
     expect(template).toContain('Earliest proceedings date');
-    expect(template).not.toContain('Form 3A');
   });
 
-  it('uses current Form 3 language in service instructions', () => {
+  it('uses current Form 3A language in service instructions', () => {
     const template = readTemplate(
       'config',
       'jurisdictions',
@@ -40,10 +39,10 @@ describe('England Section 8 support document templates', () => {
 
     expect(template).toContain('{{notice_name}}');
     expect(template).toContain('Earliest proceedings date');
-    expect(template).not.toContain('Form 3A');
+    expect(template).toContain('Form 3A');
   });
 
-  it('uses current Form 3 language in the court filing guide', () => {
+  it('uses current Form 3A language in the court filing guide', () => {
     const template = readTemplate(
       'config',
       'jurisdictions',
@@ -54,13 +53,12 @@ describe('England Section 8 support document templates', () => {
       'court_filing_guide.hbs',
     );
 
-    expect(template).toContain('Form 3 notice');
+    expect(template).toContain('Form 3A notice');
     expect(template).toContain('Form N5');
     expect(template).toContain('Form N119');
-    expect(template).not.toContain('Form 3A');
   });
 
-  it('uses current Form 3 language in the cover letter', () => {
+  it('uses current Form 3A language in the cover letter', () => {
     const template = readTemplate(
       'config',
       'jurisdictions',
@@ -71,8 +69,7 @@ describe('England Section 8 support document templates', () => {
       'cover_letter_to_tenant.hbs',
     );
 
-    expect(template).toContain('Form 3 notice');
+    expect(template).toContain('Form 3A notice');
     expect(template).toContain('This letter is not the notice itself.');
-    expect(template).not.toContain('Form 3A');
   });
 });

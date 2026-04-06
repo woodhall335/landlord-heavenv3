@@ -11,11 +11,17 @@ import {
   validateSection8ExpiryDate,
   type Section8DateParams,
 } from './notice-date-calculator';
+import { fillForm3AForm } from './england-official-form-fillers';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
+import { buildEnglandForm3AGroundsText, getEnglandGroundLegalWording } from '@/lib/england-possession/legal-wording';
+import { buildEnglandForm3AExplanation } from '@/lib/england-possession/pack-drafting';
 import {
   ENGLAND_SECTION8_FORM_NAME,
   ENGLAND_SECTION8_NOTICE_NAME,
   ENGLAND_SECTION8_NOTICE_TITLE,
+  normalizeEnglandSection8FormName,
+  normalizeEnglandSection8NoticeName,
+  normalizeEnglandSection8NoticeTitle,
 } from '@/lib/england-possession/section8-terminology';
 
 // ============================================================================
@@ -23,7 +29,7 @@ import {
 // ============================================================================
 
 export interface Section8Ground {
-  code: number; // 1-17
+  code: number | string; // Supports post-2026 alphanumeric grounds such as 1A
   title: string;
   legal_basis: string;
   particulars: string;
@@ -205,11 +211,17 @@ export interface Section8NoticeData {
 // GROUND DEFINITIONS
 // ============================================================================
 
-export const GROUND_DEFINITIONS: Record<number | '14A', Omit<Section8Ground, 'particulars' | 'supporting_evidence'>> = {
+export const GROUND_DEFINITIONS: Record<number | '1A' | '14A', Omit<Section8Ground, 'particulars' | 'supporting_evidence'>> = {
   1: {
     code: 1,
     title: 'Landlord previously occupied as only or principal home',
     legal_basis: 'Housing Act 1988, Schedule 2, Ground 1',
+    mandatory: true,
+  },
+  '1A': {
+    code: '1A',
+    title: 'Sale of dwelling house',
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 1A',
     mandatory: true,
   },
   2: {
@@ -342,11 +354,15 @@ export function determineNoticePeriod(grounds: Section8Ground[]): number {
  * Build a Section 8 ground object
  */
 export function buildGround(
-  groundNumber: number,
+  groundNumber: number | string,
   particulars: string,
   supportingEvidence?: string
 ): Section8Ground {
-  const definition = GROUND_DEFINITIONS[groundNumber];
+  const normalizedGround =
+    typeof groundNumber === 'string'
+      ? groundNumber.replace(/^Ground\s+/i, '').trim().toUpperCase()
+      : groundNumber;
+  const definition = GROUND_DEFINITIONS[normalizedGround as keyof typeof GROUND_DEFINITIONS];
   if (!definition) {
     throw new Error(`Invalid ground number: ${groundNumber}`);
   }
@@ -418,17 +434,26 @@ export async function generateSection8Notice(
   data.any_discretionary_ground = data.grounds.some((g) => !g.mandatory);
 
   // Enrich grounds with statutory_text from Schedule 2 if not already present
-  // This ensures Form 3 compliance: "Give the full text (as set out in Schedule 2...)"
-  data.grounds = data.grounds.map((ground) => {
-    if (ground.statutory_text) {
-      return ground;
-    }
-    const def = SECTION8_GROUND_DEFINITIONS[ground.code];
-    return {
-      ...ground,
-      statutory_text: def?.full_text || '',
-    };
-  });
+  // This ensures Form 3A compliance: "Give the full text (as set out in Schedule 2...)"
+  data.grounds = await Promise.all(
+    data.grounds.map(async (ground) => {
+      if (ground.statutory_text) {
+        return ground;
+      }
+
+      const normalizedCode = String(ground.code).replace(/^Ground\s+/i, '').trim().toUpperCase();
+      const legacyGroundDefinition =
+        /^\d+$/.test(normalizedCode)
+          ? SECTION8_GROUND_DEFINITIONS[Number.parseInt(normalizedCode, 10)]
+          : undefined;
+      const currentGroundWording = await getEnglandGroundLegalWording(normalizedCode);
+
+      return {
+        ...ground,
+        statutory_text: currentGroundWording?.legalWording || legacyGroundDefinition?.full_text || '',
+      };
+    }),
+  );
 
   // Add rent period description if missing
   if (!data.rent_period_description) {
@@ -441,16 +466,64 @@ export async function generateSection8Notice(
     data.rent_period_description = descriptions[data.rent_frequency] || 'month';
   }
 
-  return generateDocument({
+  const groundCodes = data.grounds.map((ground) =>
+    String(ground.code).replace(/^Ground\s+/i, '').trim().toUpperCase(),
+  );
+  const canonicalFormName = normalizeEnglandSection8FormName(data.form_name);
+  const canonicalNoticeName = normalizeEnglandSection8NoticeName(data.notice_name);
+  const canonicalNoticeTitle = normalizeEnglandSection8NoticeTitle(data.notice_title);
+  const canonicalEarliestProceedingsDate =
+    data.earliest_proceedings_date || data.earliest_possession_date;
+  const serviceDateForOfficialForm = data.service_date || new Date().toISOString().split('T')[0];
+
+  // Keep the HTML mirror for preview/support flows, but use the official
+  // editable Form_3A.pdf for the actual England notice PDF output.
+  const htmlPreview = await generateDocument({
     templatePath: 'uk/england/templates/notice_only/form_3_section8/notice.hbs',
     data: {
       ...data,
-      form_name: data.form_name || ENGLAND_SECTION8_FORM_NAME,
-      notice_name: data.notice_name || ENGLAND_SECTION8_NOTICE_NAME,
-      notice_title: data.notice_title || ENGLAND_SECTION8_NOTICE_TITLE,
-      earliest_proceedings_date: data.earliest_proceedings_date || data.earliest_possession_date,
+      form_name: canonicalFormName,
+      notice_name: canonicalNoticeName,
+      notice_title: canonicalNoticeTitle,
+      earliest_proceedings_date: canonicalEarliestProceedingsDate,
     },
     isPreview,
-    outputFormat: 'both',
+    outputFormat: 'html',
   });
+
+  const pdfBytes = await fillForm3AForm({
+    jurisdiction: 'england',
+    landlord_full_name: data.landlord_full_name,
+    landlord_address: data.landlord_address,
+    landlord_phone: data.landlord_phone,
+    landlord_email: data.landlord_email,
+    tenant_full_name: data.tenant_full_name,
+    tenant_2_name: data.tenant_2_name,
+    property_address: data.property_address,
+    tenancy_start_date: data.tenancy_start_date,
+    rent_amount: data.rent_amount,
+    rent_frequency: data.rent_frequency,
+    ground_codes: groundCodes,
+    notice_served_date: serviceDateForOfficialForm,
+    notice_expiry_date: data.earliest_possession_date,
+    earliest_proceedings_date: canonicalEarliestProceedingsDate,
+    form3a_grounds_text: await buildEnglandForm3AGroundsText(groundCodes),
+    form3a_explanation: buildEnglandForm3AExplanation({
+      ...data,
+      ground_codes: groundCodes,
+      notice_served_date: serviceDateForOfficialForm,
+      notice_expiry_date: data.earliest_possession_date,
+      earliest_proceedings_date: canonicalEarliestProceedingsDate,
+      payment_day: data.payment_date,
+      total_arrears: data.total_arrears ?? data.current_arrears_amount ?? data.arrears_at_notice_date,
+    }),
+    signatory_name: data.landlord_full_name,
+    signatory_capacity: 'landlord',
+    signature_date: serviceDateForOfficialForm,
+  } as any);
+
+  return {
+    ...htmlPreview,
+    pdf: Buffer.from(pdfBytes),
+  };
 }

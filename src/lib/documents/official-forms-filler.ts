@@ -2557,7 +2557,7 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
 
   // Legacy fallback retained for backwards compatibility with older data shapes.
   if (!reasonAText && data.total_arrears && data.total_arrears > 0) {
-    const noticeLabel = data.jurisdiction === 'england' ? 'Form 3 notice' : 'Section 8 Notice';
+    const noticeLabel = data.jurisdiction === 'england' ? 'Form 3A notice' : 'Section 8 Notice';
     const arrearsStatement = `Rent lawfully due under the tenancy agreement has not been paid. ` +
       `As at the date of service of the ${noticeLabel}, the arrears amounted to £${data.total_arrears.toFixed(2)}. ` +
       `Full details of rent periods, payments, and outstanding arrears are set out in the attached Schedule of Arrears.`;
@@ -2626,8 +2626,8 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   // Determine notice type based on claim type
   const noticeType = data.claim_type === 'section_8'
     ? data.jurisdiction === 'england'
-      ? 'Notice seeking possession (Form 3)'
-      : 'Notice seeking possession (Form 3)'
+      ? 'Notice seeking possession (Form 3A)'
+      : 'Notice seeking possession'
     : data.claim_type === 'section_21'
       ? 'Section 21 Notice'
       : 'Notice seeking possession';
@@ -2973,7 +2973,7 @@ export async function fillForm6A(_data: CaseData): Promise<Uint8Array> {
  * Main entry point - fill any official court form
  *
  * Supported forms:
- * - form3a: England possession notice (editable official PDF overlay)
+ * - form3a: England possession notice (editable official Form 3A PDF overlay)
  * - n5: Claim for possession of property
  * - n5b: Claim for possession (accelerated procedure - Section 21)
  * - n119: Particulars of claim for possession
@@ -2994,7 +2994,7 @@ export async function fillOfficialForm(
     throw new Error(
       '[DEPRECATED] Form 6A cannot be generated via fillOfficialForm. ' +
       'Section 21 (Form 6A) notices must be generated via HBS template using generateSection21Notice() from section21-generator.ts. ' +
-      'This function only supports official PDFs such as Form 3, N5, N5B, N119, N325, N325A, and N1.'
+      'This function only supports official PDFs such as Form 3A, N5, N5B, N119, N325, N325A, and N1.'
     );
   }
 

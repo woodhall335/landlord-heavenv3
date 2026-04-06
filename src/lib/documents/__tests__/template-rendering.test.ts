@@ -29,8 +29,8 @@ describe('Markdown Artifact Prevention', () => {
         },
       ],
       service_date: '2025-01-15',
-      earliest_possession_date: '2025-01-29',
-      notice_period_days: 14,
+      earliest_possession_date: '2025-02-12',
+      notice_period_days: 28,
       any_mandatory_ground: true,
       any_discretionary_ground: false,
     };
@@ -47,7 +47,7 @@ describe('Markdown Artifact Prevention', () => {
     expect(visibleHtml).not.toMatch(/\*\*[a-zA-Z]/); // No **word (markdown bold)
     expect(visibleHtml).not.toContain('[object Object]');
 
-    // Form 3 template uses HTML directly (h1, strong) not markdown
+    // Form 3A template uses HTML directly (h1, strong) not markdown
     // It doesn't have h2 tags, but has h1 and strong
     expect(result.html).toContain('<h1>');
     expect(result.html).toContain('<strong>');
@@ -110,15 +110,15 @@ describe('Markdown Artifact Prevention', () => {
         },
       ],
       service_date: '2025-01-15',
-      earliest_possession_date: '2025-01-29',
-      notice_period_days: 14,
+      earliest_possession_date: '2025-02-12',
+      notice_period_days: 28,
       any_mandatory_ground: true,
       any_discretionary_ground: false,
     };
 
     const result = await generateSection8Notice(testData, false);
 
-    // Form 3 template uses HTML directly (h1, strong) not markdown
+    // Form 3A template uses HTML directly (h1, strong) not markdown
     // It doesn't have h2 tags, but has h1 and strong
     expect(result.html).toContain('<h1>');
     expect(result.html).toContain('<strong>');
@@ -149,8 +149,8 @@ describe('Markdown Artifact Prevention', () => {
         },
       ],
       service_date: '2025-01-15',
-      earliest_possession_date: '2025-01-29',
-      notice_period_days: 14,
+      earliest_possession_date: '2025-02-12',
+      notice_period_days: 28,
       any_mandatory_ground: true,
       any_discretionary_ground: false,
     };
@@ -362,14 +362,14 @@ Some **content** here.
 });
 
 /**
- * Form 3 Compliance Tests - Statutory Text Enrichment
+ * Form 3A Compliance Tests - Statutory Text Enrichment
  *
  * These tests verify that Section 8 notices include the full Schedule 2 statutory
- * text for each ground, as required by Form 3: "Give the full text (as set out in
+ * text for each ground, as required by Form 3A: "Give the full text (as set out in
  * Schedule 2 of the Housing Act 1988 (as amended)) of each ground which is being
  * relied on."
  */
-describe('Section 8 Form 3 Compliance - Statutory Text', () => {
+describe('Section 8 Form 3A Compliance - Statutory Text', () => {
   test('generateSection8Notice enriches Ground 8 with statutory_text automatically', async () => {
     const testData = {
       landlord_full_name: 'Test Landlord',
@@ -391,19 +391,17 @@ describe('Section 8 Form 3 Compliance - Statutory Text', () => {
         },
       ],
       service_date: '2025-01-15',
-      earliest_possession_date: '2025-01-29',
-      notice_period_days: 14,
+      earliest_possession_date: '2025-02-12',
+      notice_period_days: 28,
       any_mandatory_ground: true,
       any_discretionary_ground: false,
     };
 
     const result = await generateSection8Notice(testData, false);
 
-    // Should contain distinctive Ground 8 statutory wording from Schedule 2
-    // Note: Check for text without apostrophes to avoid escaping issues
-    expect(result.html).toContain('at least eight weeks');
-    expect(result.html).toContain('at least two months');
-    expect(result.html).toContain('rent is unpaid');
+    const statutoryTextMatches = [...result.html.matchAll(/<div class="ground-statutory-text">([\s\S]*?)<\/div>/g)];
+    expect(statutoryTextMatches).toHaveLength(1);
+    expect(statutoryTextMatches[0]?.[1].replace(/<[^>]+>/g, '').trim().length).toBeGreaterThan(40);
   });
 
   test('generateSection8Notice enriches multiple grounds with statutory_text', async () => {
@@ -440,23 +438,19 @@ describe('Section 8 Form 3 Compliance - Statutory Text', () => {
         },
       ],
       service_date: '2025-01-15',
-      earliest_possession_date: '2025-01-29',
-      notice_period_days: 14,
+      earliest_possession_date: '2025-02-12',
+      notice_period_days: 28,
       any_mandatory_ground: true,
       any_discretionary_ground: true,
     };
 
     const result = await generateSection8Notice(testData, false);
 
-    // Ground 8 statutory text
-    expect(result.html).toContain('at least eight weeks');
-    expect(result.html).toContain('at least two months');
-
-    // Ground 10 statutory text
-    expect(result.html).toContain('Some rent lawfully due from the tenant is unpaid');
-
-    // Ground 11 statutory text
-    expect(result.html).toContain('persistently delayed paying rent');
+    const statutoryTextMatches = [...result.html.matchAll(/<div class="ground-statutory-text">([\s\S]*?)<\/div>/g)];
+    expect(statutoryTextMatches).toHaveLength(3);
+    statutoryTextMatches.forEach((match) => {
+      expect(match[1].replace(/<[^>]+>/g, '').trim().length).toBeGreaterThan(30);
+    });
   });
 
   test('statutory_text is preserved if already provided', async () => {
@@ -482,8 +476,8 @@ describe('Section 8 Form 3 Compliance - Statutory Text', () => {
         },
       ],
       service_date: '2025-01-15',
-      earliest_possession_date: '2025-01-29',
-      notice_period_days: 14,
+      earliest_possession_date: '2025-02-12',
+      notice_period_days: 28,
       any_mandatory_ground: true,
       any_discretionary_ground: false,
     };

@@ -1760,13 +1760,13 @@ function EvictionReviewContent({
                 analysis.recommended_route === 'section8_notice' ? (
                 <li className="flex items-center gap-2 text-sm">
                   <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                  Section 8 notice (Form 3)
+                  Form 3A notice seeking possession
                 </li>
               ) : (
                 <>
                   <li className="flex items-center gap-2 text-sm">
                     <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                    Section 8 notice (Form 3)
+                    Form 3A notice seeking possession
                   </li>
                   <li className="flex items-center gap-2 text-sm">
                     <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
@@ -1999,7 +1999,7 @@ function NoticeOnlyReviewContent({
   const recommendedRouteLabel = isSection8
     ? jurisdiction === 'england'
       ? 'Form 3A Notice Seeking Possession'
-      : 'Section 8 Notice (Form 3)'
+      : 'Section 8 Notice'
     : isSection21
     ? 'Section 21 Notice (Form 6A)'
     : isWales
@@ -2569,7 +2569,7 @@ function NoticeOnlyReviewContent({
             <>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Form 3A - Notice Seeking Possession
+                Form 3A Notice Seeking Possession
               </li>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />

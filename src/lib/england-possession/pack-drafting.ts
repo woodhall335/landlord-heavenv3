@@ -187,7 +187,7 @@ function buildGroundNarrative(code: EnglandGroundCode, data: DraftingInput): str
       return [
         'Ground 8 is relied on as the mandatory serious rent arrears ground.',
         noticeDate && totalArrears > 0
-          ? `At the date of service of the Form 3 notice on ${noticeDate}, the arrears were ${formatCurrencyText(totalArrears)}.`
+          ? `At the date of service of the Form 3A notice on ${noticeDate}, the arrears were ${formatCurrencyText(totalArrears)}.`
           : '',
         threshold && threshold.amount > 0
           ? `That exceeded the Ground 8 threshold of ${formatCurrencyText(threshold.amount)} (${threshold.description}).`
@@ -251,7 +251,7 @@ function buildSharedNarrativeParagraphs(data: DraftingInput): string[] {
 
 function buildForm3NoticeSentence(data: DraftingInput): string {
   const noticeDate = formatLongDate(data.notice_served_date || data.section_8_notice_date);
-  return noticeDate ? `The Form 3 notice was served on ${noticeDate}.` : '';
+  return noticeDate ? `The Form 3A notice was served on ${noticeDate}.` : '';
 }
 
 export function buildEnglandForm3AExplanation(data: DraftingInput): string {

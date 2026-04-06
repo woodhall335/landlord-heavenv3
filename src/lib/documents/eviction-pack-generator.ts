@@ -14,7 +14,7 @@
 
 import { generateDocument } from './generator';
 import { assertNoticeOnlyValid, assertCompletePackValid } from './noticeOnly';
-import { generateSection8Notice, Section8NoticeData } from './section8-generator';
+import { generateSection8Notice, Section8Ground, Section8NoticeData } from './section8-generator';
 import { generateSection21Notice, Section21NoticeData } from './section21-generator';
 import { fillN5Form, fillN119Form, CaseData, fillN5BForm } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
@@ -261,8 +261,29 @@ function resolveSection8GroundParams(evictionCase: EvictionCase): Section8DatePa
       mandatory: typeof ground === 'string' ? undefined : ground.mandatory,
     });
 
-    return result;
+  return result;
   }, []);
+}
+
+function mapEvictionCaseGroundToSection8NoticeGround(ground: any, groundsData: any): Section8Ground {
+  const normalizedGroundCode = String(ground.code || '')
+    .replace(/^Ground\s+/i, '')
+    .trim()
+    .toUpperCase();
+  const typedGroundCode: Section8Ground['code'] =
+    /^\d+$/.test(normalizedGroundCode) ? Number.parseInt(normalizedGroundCode, 10) : normalizedGroundCode;
+  const legacyGroundDefinition =
+    typeof typedGroundCode === 'number' ? SECTION8_GROUND_DEFINITIONS[typedGroundCode] : undefined;
+
+  return {
+    code: typedGroundCode,
+    title: ground.title,
+    legal_basis: getGroundDetails(groundsData, String(ground.code || ''))?.statute || '',
+    particulars: ground.particulars,
+    supporting_evidence: ground.evidence,
+    mandatory: ground.mandatory || false,
+    statutory_text: legacyGroundDefinition?.full_text || '',
+  };
 }
 
 function resolveSection8CanonicalNoticeData(
@@ -1652,19 +1673,7 @@ async function generateEnglandOrWalesEvictionPack(
       rent_amount: evictionCase.rent_amount,
       rent_frequency: evictionCase.rent_frequency,
       payment_date: evictionCase.payment_day,
-      grounds: evictionCase.grounds.map((g) => {
-        const groundCode = parseInt(g.code.replace('Ground ', ''));
-        const groundDef = SECTION8_GROUND_DEFINITIONS[groundCode];
-        return {
-          code: groundCode,
-          title: g.title,
-          legal_basis: getGroundDetails(groundsData, g.code)?.statute || '',
-          particulars: g.particulars,
-          supporting_evidence: g.evidence,
-          mandatory: g.mandatory || false,
-          statutory_text: groundDef?.full_text || '',
-        };
-      }),
+      grounds: evictionCase.grounds.map((ground) => mapEvictionCaseGroundToSection8NoticeGround(ground, groundsData)),
       service_date: currentSection8TemplateData.service_date || undefined,
       notice_period_days: currentSection8TemplateData.notice_period_days || 0,
       earliest_possession_date: currentSection8TemplateData.earliest_possession_date || '',
@@ -3743,19 +3752,7 @@ export async function generateNoticeOnlyPack(
           rent_amount: evictionCase.rent_amount,
           rent_frequency: evictionCase.rent_frequency,
           payment_date: evictionCase.payment_day,
-          grounds: evictionCase.grounds.map((g) => {
-            const groundCode = parseInt(g.code.replace('Ground ', ''));
-            const groundDef = SECTION8_GROUND_DEFINITIONS[groundCode];
-            return {
-              code: groundCode,
-              title: g.title,
-              legal_basis: getGroundDetails(groundsData, g.code)?.statute || '',
-              particulars: g.particulars,
-              supporting_evidence: g.evidence,
-              mandatory: g.mandatory || false,
-              statutory_text: groundDef?.full_text || '',
-            };
-          }),
+          grounds: evictionCase.grounds.map((ground) => mapEvictionCaseGroundToSection8NoticeGround(ground, groundsData)),
           // Pass service_date from resolved template data to ensure consistent date across all documents
           service_date: section8TemplateData.service_date,
           notice_period_days: section8TemplateData.notice_period_days || 0,

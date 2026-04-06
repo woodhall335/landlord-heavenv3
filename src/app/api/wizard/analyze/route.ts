@@ -1030,7 +1030,7 @@ export async function POST(request: Request) {
             {
               id: 's8_notice',
               document_type: 'notice',
-              document_title: 'Form 3A notice seeking possession',
+              document_title: 'Form 3A Notice Seeking Possession',
             },
           );
         } else if (isSection21Route) {
@@ -1046,7 +1046,7 @@ export async function POST(request: Request) {
             {
               id: 's8_notice',
               document_type: 'notice',
-              document_title: 'Section 8 notice (Form 3)',
+              document_title: 'Form 3A Notice Seeking Possession',
             },
           );
         } else {
@@ -1056,8 +1056,8 @@ export async function POST(request: Request) {
               id: 's8_notice',
               document_type: 'notice',
               document_title: canonicalJurisdiction === 'england'
-                ? 'Form 3A notice seeking possession'
-                : 'Section 8 notice (Form 3)',
+                ? 'Form 3A Notice Seeking Possession'
+                : 'Section 8 notice',
             },
           );
         }

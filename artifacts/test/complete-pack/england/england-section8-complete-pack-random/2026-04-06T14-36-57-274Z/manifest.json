@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-04-06T14:36:57.423Z",
+  "runId": "2026-04-06T14-36-57-274Z",
+  "documents": [
+    {
+      "fileName": "notice.pdf",
+      "type": "pdf",
+      "title": "Form 3 Notice Seeking Possession",
+      "key": "section8_notice"
+    },
+    {
+      "fileName": "n5.pdf",
+      "type": "pdf",
+      "title": "Form N5 - Claim for Possession",
+      "key": "n5_claim"
+    },
+    {
+      "fileName": "n119.pdf",
+      "type": "pdf",
+      "title": "Form N119 - Particulars of Claim",
+      "key": "n119_particulars"
+    },
+    {
+      "fileName": "arrears-schedule.pdf",
+      "type": "pdf",
+      "title": "Schedule of Arrears",
+      "key": "arrears_schedule"
+    },
+    {
+      "fileName": "evidence-checklist.pdf",
+      "type": "pdf",
+      "title": "Evidence Collection Checklist",
+      "key": "evidence_checklist"
+    },
+    {
+      "fileName": "proof-of-service.pdf",
+      "type": "pdf",
+      "title": "Proof of Service Certificate",
+      "key": "proof_of_service"
+    },
+    {
+      "fileName": "witness-statement.pdf",
+      "type": "pdf",
+      "title": "Witness Statement",
+      "key": "witness_statement"
+    },
+    {
+      "fileName": "court-bundle-index.html",
+      "type": "html",
+      "title": "Court Bundle Index",
+      "key": "court_bundle_index"
+    },
+    {
+      "fileName": "hearing-checklist.pdf",
+      "type": "pdf",
+      "title": "Hearing Checklist",
+      "key": "hearing_checklist"
+    },
+    {
+      "fileName": "arrears-engagement-letter.html",
+      "type": "html",
+      "title": "Arrears Engagement Letter",
+      "key": "arrears_engagement_letter"
+    },
+    {
+      "fileName": "case-summary.pdf",
+      "type": "pdf",
+      "title": "Eviction Case Summary",
+      "key": "case_summary"
+    }
+  ],
+  "skipped": []
+}

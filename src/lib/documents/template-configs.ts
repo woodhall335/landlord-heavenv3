@@ -72,7 +72,7 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
         {
           id: 'notice-section-8',
           templatePath: 'uk/england/templates/notice_only/form_3_section8/notice.hbs',
-          title: 'Section 8 Notice (Form 3)',
+          title: 'Form 3A Notice Seeking Possession',
           type: 'notice',
           description: 'Your grounds-based possession notice',
           category: 'notice',
