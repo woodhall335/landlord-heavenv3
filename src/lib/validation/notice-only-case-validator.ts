@@ -17,6 +17,7 @@ import {
   calculateCombinedNoticePeriod,
   getSelectedGrounds,
 } from '@/lib/grounds';
+import { validateEnglandPost2026WizardFacts } from '@/lib/england-possession/post-2026-validation';
 import { isArrearsEvidenceComplete } from '@/lib/grounds/evidence-suggestions';
 
 /**
@@ -122,13 +123,14 @@ export function validateNoticeOnlyCase(facts: Record<string, any>): NoticeOnlyVa
   // Compute included grounds
   const includedGrounds = computeIncludedGrounds(facts);
 
-  // Check if Section 8 route with grounds
+  // England now uses a single Form 3A-led possession route internally aliased to section_8.
+  // Keep the legacy route key for compatibility, but message in post-2026 terms.
   const isSection8 = noticeRoute === 'section_8';
 
   if (isSection8 && includedGrounds.length === 0) {
     errors.push({
       code: 'NO_GROUNDS_SELECTED',
-      message: 'Please select at least one ground for your Section 8 notice.',
+      message: 'Please select at least one possession ground for your Form 3A notice.',
     });
   }
 
@@ -144,9 +146,10 @@ export function validateNoticeOnlyCase(facts: Record<string, any>): NoticeOnlyVa
   const arrearsScheduleComplete = arrearsStatus.complete;
 
   if (includesArrearsGrounds && !arrearsScheduleComplete) {
-    errors.push({
+    warnings.push({
       code: 'ARREARS_SCHEDULE_INCOMPLETE',
-      message: arrearsStatus.message,
+      message:
+        'Arrears grounds can still be included in the notice pack, but your complete pack and court bundle will be stronger if you finish the arrears schedule now.',
     });
   }
 
@@ -161,10 +164,24 @@ export function validateNoticeOnlyCase(facts: Record<string, any>): NoticeOnlyVa
     }
   }
 
+  const englandValidation = validateEnglandPost2026WizardFacts(facts, includedGrounds);
+  englandValidation.blockingIssues.forEach((issue) => {
+    errors.push({
+      code: issue.code,
+      message: issue.message,
+    });
+  });
+  englandValidation.warnings.forEach((issue) => {
+    warnings.push({
+      code: issue.code,
+      message: issue.message,
+    });
+  });
+
   return {
     valid: errors.length === 0,
     includedGrounds,
-    noticePeriodDays,
+    noticePeriodDays: englandValidation.noticePeriodDays || noticePeriodDays,
     includesArrearsGrounds,
     arrearsScheduleComplete,
     errors,

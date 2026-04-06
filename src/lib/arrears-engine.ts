@@ -16,6 +16,7 @@
  */
 
 import type { ArrearsItem, TenancyFacts } from './case-facts/schema';
+import { getGround8Threshold } from './grounds/ground8-threshold';
 
 // ============================================================================
 // TYPES
@@ -78,6 +79,10 @@ export interface Ground8ValidationResult {
   arrears_in_months: number;
   /** Required threshold in months */
   threshold_months: number;
+  /** Human-readable threshold label for the applicable jurisdiction */
+  threshold_label?: string;
+  /** Threshold amount for the current rent frequency */
+  threshold_amount?: number;
   /** Human-readable explanation */
   explanation: string;
   /** Whether this result is based on authoritative schedule data */
@@ -90,7 +95,7 @@ export interface Ground8ValidationResult {
 // CONSTANTS
 // ============================================================================
 
-/** Ground 8 requires at least 2 months' rent in arrears */
+/** Legacy default threshold used outside England's post-1 May 2026 PRS flow */
 const GROUND_8_THRESHOLD_MONTHS = 2;
 
 /** Periods per month for each frequency */
@@ -399,8 +404,24 @@ export function validateGround8Eligibility(params: {
     legacy_total_arrears,
   } = params;
 
-  // Determine threshold based on jurisdiction
-  const threshold_months = jurisdiction === 'scotland' ? 3 : GROUND_8_THRESHOLD_MONTHS;
+  // Determine threshold based on jurisdiction.
+  // England's post-1 May 2026 PRS flow uses 13 weeks / 3 months, depending on rent frequency.
+  const englandThreshold = jurisdiction === 'england'
+    ? getGround8Threshold(rent_amount, rent_frequency)
+    : null;
+  const threshold_months = jurisdiction === 'scotland'
+    ? 3
+    : jurisdiction === 'england'
+    ? 3
+    : GROUND_8_THRESHOLD_MONTHS;
+  const threshold_label = jurisdiction === 'england'
+    ? englandThreshold?.description || '3 months'
+    : `${threshold_months} months`;
+  const threshold_amount = jurisdiction === 'england'
+    ? englandThreshold?.amount || 0
+    : rent_amount > 0
+    ? rent_amount * threshold_months
+    : 0;
 
   // Check if we have authoritative schedule data
   const hasScheduleData = arrears_items && arrears_items.length > 0;
@@ -418,17 +439,21 @@ export function validateGround8Eligibility(params: {
 
       // Check eligibility based on legacy data (for wizard gating)
       // but flag as non-authoritative for court purposes
-      const meetsThreshold = legacyMonths >= threshold_months;
+      const meetsThreshold = jurisdiction === 'england'
+        ? legacy_total_arrears >= threshold_amount
+        : legacyMonths >= threshold_months;
 
       return {
         is_eligible: meetsThreshold, // Allow wizard to proceed if threshold is met
         arrears_in_months: legacyMonths,
         threshold_months,
+        threshold_label,
+        threshold_amount,
         explanation: meetsThreshold
           ? `Ground 8 threshold appears MET based on legacy data: ${legacyMonths.toFixed(2)} months ` +
-            `(threshold: ${threshold_months} months). Note: A detailed arrears schedule is required for court.`
+            `(threshold: ${threshold_label}). Note: A detailed arrears schedule is required for court.`
           : `Ground 8 threshold NOT MET: ${legacyMonths.toFixed(2)} months of arrears ` +
-            `(threshold: ${threshold_months} months). Additional ${(threshold_months - legacyMonths).toFixed(2)} months required.`,
+            `(threshold: ${threshold_label}). Additional arrears are required before Ground 8 can be relied on.`,
         is_authoritative: false,
         legacy_warning: 'Ground 8 eligibility calculated from total arrears only. ' +
           'Courts require a detailed period-by-period arrears schedule. Please complete the schedule before proceedings.',
@@ -439,8 +464,10 @@ export function validateGround8Eligibility(params: {
       is_eligible: false,
       arrears_in_months: 0,
       threshold_months,
+      threshold_label,
+      threshold_amount,
       explanation: 'No arrears data provided. Ground 8 requires at least ' +
-        `${threshold_months} months' rent in arrears.`,
+        `${threshold_label} rent in arrears.`,
       is_authoritative: false,
     };
   }
@@ -448,7 +475,9 @@ export function validateGround8Eligibility(params: {
   // Compute arrears from schedule
   const computed = computeArrears(arrears_items, rent_frequency, rent_amount);
 
-  const is_eligible = computed.arrears_in_months >= threshold_months;
+  const is_eligible = jurisdiction === 'england'
+    ? computed.total_arrears >= threshold_amount
+    : computed.arrears_in_months >= threshold_months;
 
   let explanation: string;
   if (is_eligible) {
@@ -460,10 +489,23 @@ export function validateGround8Eligibility(params: {
       `Additional ${(threshold_months - computed.arrears_in_months).toFixed(2)} months required.`;
   }
 
+  if (jurisdiction === 'england') {
+    explanation = is_eligible
+      ? `Ground 8 threshold MET: ${computed.arrears_in_months.toFixed(2)} months of arrears ` +
+        `(threshold: ${threshold_label}). Total arrears: Â£${computed.total_arrears.toFixed(2)}.`
+      : `Ground 8 threshold NOT MET: ${computed.arrears_in_months.toFixed(2)} months of arrears ` +
+        `(threshold: ${threshold_label}). Current arrears: Â£${computed.total_arrears.toFixed(2)}. ` +
+        `Additional arrears are required before Ground 8 can be relied on.`;
+  }
+
+  explanation = explanation.replace(/Ã‚Â£|Â£/g, 'GBP ');
+
   return {
     is_eligible,
     arrears_in_months: computed.arrears_in_months,
     threshold_months,
+    threshold_label,
+    threshold_amount,
     explanation,
     is_authoritative: true,
   };

@@ -129,7 +129,7 @@ section_21_rules:
       # Gas cert status unconfirmed (generate stage)
       - condition: "facts.has_gas_appliances === true && facts.gas_certificate_provided === undefined"
     message: "Gas safety certificate must be provided before serving Section 21."
-    rationale: "Landlords must provide tenants with a copy of the gas safety record within 28 days of the check."
+    rationale: "Gas Safety (Installation and Use) Regulations 1998 regulation 36 requires landlords to provide tenants with the gas safety record."
     field: gas_certificate_provided
 
   # ---------------------------------------------------------------------------
@@ -251,7 +251,7 @@ section_21_rules:
     applies_when:
       - condition: "computed.notice_period_calculation_error === true"
     message: "Unable to calculate the minimum Section 21 notice period."
-    rationale: "Service date, tenancy start date, and tenancy type are required for notice period calculation."
+    rationale: "Housing Act 1988 section 21 notice validity depends on calculating the statutory period from the service date and tenancy timing."
     field: notice_expiry_date
 
 # =============================================================================
@@ -291,7 +291,7 @@ section_8_rules:
       # Unable to calculate notice period
       - condition: "computed.s8_notice_period_calculation_error === true"
     message: "Notice period issue - expiry date must meet statutory minimum for selected grounds."
-    rationale: "Notice periods vary by ground: 2 weeks for most mandatory, 2 months for discretionary."
+    rationale: "Housing Act 1988 section 8 and Schedule 2 require the prescribed notice period for each selected ground."
     field: notice_expiry_date
 
   # ---------------------------------------------------------------------------
@@ -365,7 +365,7 @@ common_rules:
     applies_when:
       - condition: "!facts.landlord_full_name && !facts.landlord_name"
     message: "Landlord name is required for document generation."
-    rationale: "The notice must identify the landlord serving it."
+    rationale: "Housing Act 1988 section 8 and section 21 notices must identify the landlord serving the notice."
     field: landlord_full_name
 
   - id: tenant_name_required
@@ -374,7 +374,7 @@ common_rules:
     applies_when:
       - condition: "!facts.tenant_full_name && !facts.tenant_name"
     message: "Tenant name is required for document generation."
-    rationale: "The notice must identify the tenant being served."
+    rationale: "Housing Act 1988 section 8 and section 21 notices must identify the tenant being served."
     field: tenant_full_name
 
   - id: property_address_required
@@ -383,7 +383,7 @@ common_rules:
     applies_when:
       - condition: "!facts.property_address_line1"
     message: "Property address is required for document generation."
-    rationale: "The notice must identify the property."
+    rationale: "Housing Act 1988 section 8 and section 21 notices must identify the dwelling-house to which the claim relates."
     field: property_address_line1
 
   # ---------------------------------------------------------------------------
@@ -396,7 +396,7 @@ common_rules:
     applies_when:
       - condition: "!facts.tenancy_start_date"
     message: "Tenancy start date is required for notice period calculations."
-    rationale: "Tenancy start date is needed to calculate notice periods and check timing bars."
+    rationale: "Housing Act 1988 section 21(4B) and Schedule 2 timing checks require the tenancy start date."
     field: tenancy_start_date
 
   - id: tenancy_start_date_future
@@ -405,7 +405,7 @@ common_rules:
     applies_when:
       - condition: "facts.tenancy_start_date && computed.tenancy_start_in_future === true"
     message: "Tenancy start date cannot be in the future."
-    rationale: "Cannot serve eviction notice for a tenancy that has not yet begun."
+    rationale: "Housing Act 1988 section 8 and section 21 cannot be used before the tenancy has begun."
     field: tenancy_start_date
 
   # ---------------------------------------------------------------------------
@@ -418,7 +418,7 @@ common_rules:
     applies_when:
       - condition: "!facts.notice_service_date && !facts.notice_served_date && !computed.service_date"
     message: "Notice service date is required."
-    rationale: "Service date is needed to calculate expiry date and check timing requirements."
+    rationale: "Housing Act 1988 section 8 and section 21 notice periods run from the service date, so it must be known."
     field: notice_service_date
 
   - id: notice_before_tenancy
@@ -427,7 +427,7 @@ common_rules:
     applies_when:
       - condition: "computed.notice_before_tenancy_start === true"
     message: "Notice cannot be served before the tenancy started."
-    rationale: "Eviction notice must be served during the tenancy period."
+    rationale: "Housing Act 1988 section 8 and section 21 notices can only be served during an existing tenancy."
     field: notice_service_date
 
   - id: expiry_before_service
@@ -436,7 +436,7 @@ common_rules:
     applies_when:
       - condition: "computed.expiry_before_service === true"
     message: "Notice expiry date must be after service date."
-    rationale: "The notice period runs from service to expiry."
+    rationale: "Housing Act 1988 section 8 and section 21 require the expiry date to fall after service so a valid notice period is given."
     field: notice_expiry_date
 
   # ---------------------------------------------------------------------------
@@ -449,7 +449,7 @@ common_rules:
     applies_when:
       - condition: "facts.jurisdiction === 'northern-ireland'"
     message: "Notice-only eviction flows are not supported in Northern Ireland."
-    rationale: "Northern Ireland has different eviction legislation."
+    rationale: "Housing Act 1988 does not govern Northern Ireland; the Housing (Northern Ireland) Order 1983 and Private Tenancies (Northern Ireland) Order 2006 apply there instead."
     field: jurisdiction
 
 # =============================================================================

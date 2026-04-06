@@ -201,6 +201,10 @@ export async function POST(request: Request) {
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);
     const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
+    const englandPost2026EvictionRoute =
+      effectiveJurisdiction === 'england' && resolvedCaseType === 'eviction'
+        ? 'section_8'
+        : null;
     const canonicalProduct =
       effectiveJurisdiction === 'england'
         ? getEnglandCanonicalTenancyProduct(product)
@@ -363,7 +367,14 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: effectiveJurisdiction,
         jurisdiction: effectiveJurisdiction,
-        ...(validator_key ? { selected_notice_route: validator_key } : {}),
+        ...(englandPost2026EvictionRoute
+          ? {
+              selected_notice_route: englandPost2026EvictionRoute,
+              eviction_route: englandPost2026EvictionRoute,
+            }
+          : validator_key
+          ? { selected_notice_route: validator_key }
+          : {}),
       };
 
       const { data, error } = await adminSupabase
@@ -416,7 +427,12 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: facts.property_country ?? effectiveJurisdiction,
         jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
-        ...(validator_key && !facts.selected_notice_route
+        ...(englandPost2026EvictionRoute
+          ? {
+              selected_notice_route: englandPost2026EvictionRoute,
+              eviction_route: englandPost2026EvictionRoute,
+            }
+          : validator_key && !facts.selected_notice_route
           ? { selected_notice_route: validator_key }
           : {}),
       };

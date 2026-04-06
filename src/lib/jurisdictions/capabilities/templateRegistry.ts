@@ -23,7 +23,11 @@ export interface TemplateResolutionResult {
 const noticeTemplates: Record<Jurisdiction, Record<string, string[]>> = {
   england: {
     section_21: ["uk/england/templates/notice_only/form_6a_section21/notice.hbs"],
-    section_8: ["uk/england/templates/notice_only/form_3_section8/notice.hbs"],
+    section_8: [
+      "uk/england/templates/notice_only/form_3_section8/notice.hbs",
+      "uk/england/templates/eviction/service_instructions_section_8.hbs",
+      "uk/england/templates/eviction/cover_letter_to_tenant.hbs",
+    ],
   },
   wales: {
     // Full prefixed route names (as used in MQS)
@@ -45,14 +49,23 @@ const noticeTemplates: Record<Jurisdiction, Record<string, string[]>> = {
   "northern-ireland": {},
 };
 
-const evictionPackTemplates: Record<Jurisdiction, string[]> = {
-  england: [
-    "uk/england/templates/notice_only/form_6a_section21/notice.hbs",
-    "uk/england/templates/notice_only/form_3_section8/notice.hbs",
-  ],
-  wales: ["uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"],
-  scotland: ["uk/scotland/templates/eviction/notice_to_leave_official.hbs"],
-  "northern-ireland": [],
+const evictionPackTemplates: Record<Jurisdiction, Record<string, string[]>> = {
+  england: {
+    section_8: [
+      "uk/england/templates/notice_only/form_3_section8/notice.hbs",
+      "uk/england/templates/eviction/service_instructions_section_8.hbs",
+      "uk/england/templates/eviction/cover_letter_to_tenant.hbs",
+      "uk/england/templates/eviction/court_filing_guide.hbs",
+    ],
+  },
+  wales: {
+    wales_section_173: ["uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"],
+    wales_fault_based: ["uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"],
+  },
+  scotland: {
+    notice_to_leave: ["uk/scotland/templates/eviction/notice_to_leave_official.hbs"],
+  },
+  "northern-ireland": {},
 };
 
 const tenancyAgreementTemplates: Record<Jurisdiction, string[]> = {
@@ -143,7 +156,9 @@ export function resolveTemplatesForFlow(params: TemplateLookupParams): TemplateR
       templates.push(...(noticeTemplates[jurisdiction][route] ?? []));
     }
   } else if (product === "eviction_pack") {
-    templates.push(...(evictionPackTemplates[jurisdiction] ?? []));
+    for (const route of routes) {
+      templates.push(...(evictionPackTemplates[jurisdiction][route] ?? []));
+    }
   } else if (product === "tenancy_agreement") {
     templates.push(...(tenancyAgreementTemplates[jurisdiction] ?? []));
   } else if (product === "money_claim") {

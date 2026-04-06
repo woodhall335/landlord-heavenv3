@@ -58,7 +58,7 @@ export function PreviewStack() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-charcoal">What&apos;s included in your Complete Eviction Bundle (England Only)</h2>
-          <p className="mt-3 text-gray-600">Choose Section 8 or Section 21. Preview every document before you pay.</p>
+          <p className="mt-3 text-gray-600">Preview the current England notice-to-claim workflow before you pay.</p>
           <div className="mt-6">
             <PackSelector selected={selectedPack} onSelect={handlePackSelect} />
           </div>

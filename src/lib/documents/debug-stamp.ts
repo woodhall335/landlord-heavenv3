@@ -2,7 +2,7 @@
  * Debug Stamp Utilities
  *
  * Adds debug information to generated PDFs for tracing generation source.
- * Only active in development mode (NODE_ENV !== 'production').
+ * Only active when explicitly enabled by environment flag.
  *
  * Debug stamp includes:
  * - Git commit SHA
@@ -60,15 +60,10 @@ export interface DebugStampInfo {
 
 /**
  * Check if debug stamps should be added to PDFs.
- * Only enabled in development/test environments.
+ * Only enabled when an explicit flag is set.
  */
 export function isDebugStampEnabled(): boolean {
-  // Enable in dev, test, or when explicitly enabled
-  return (
-    process.env.NODE_ENV !== 'production' ||
-    process.env.PDF_DEBUG_STAMP === '1' ||
-    process.env.DEBUG_PDF === '1'
-  );
+  return process.env.PDF_DEBUG_STAMP === '1' || process.env.DEBUG_PDF === '1';
 }
 
 /**

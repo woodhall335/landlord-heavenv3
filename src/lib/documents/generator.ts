@@ -448,6 +448,19 @@ function registerHandlebarsHelpers() {
     return safeText(value);
   });
 
+  Handlebars.registerHelper('hasValue', function (value: any) {
+    if (value === null || value === undefined) {
+      return false;
+    }
+    if (typeof value === 'string') {
+      return value.trim().length > 0;
+    }
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+    return Boolean(value);
+  });
+
   /**
    * formatUKDate - Format dates in UK legal document format (D Month YYYY)
    *

@@ -1,407 +1,245 @@
 {{!--
   ============================================================================
-  SECTION 8 NOTICE - SERVICE AND VALIDITY CHECKLIST
-  Housing Act 1988, Section 8
+  FORM 3 NOTICE - SERVICE AND VALIDITY CHECKLIST
   ============================================================================
-  Harmonized design system matching Form 6A and Form 3 templates
+  Canonical checklist for England Section 8 notice packs.
 --}}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Section 8 Notice - Service and Validity Checklist</title>
+  <title>{{notice_name}} - Service and Validity Checklist</title>
   <style>
     {{{print_css}}}
 
-    /* ===== @PAGE OVERRIDE - MATCH FORM 3 MARGINS ===== */
     @page {
       size: A4;
-      margin: 10mm; /* Narrow margins to match Form 3 */
+      margin: 10mm;
     }
 
-    /* Zero out body padding since @page handles margins */
     body {
-      padding: 0;
       margin: 0 auto;
+      padding: 0;
+      color: #1a1a1a;
+      font-size: 10pt;
+      line-height: 1.55;
     }
 
-    /* ===== KEEP-TOGETHER UTILITIES ===== */
-    /* Prevent numbered circle headings from splitting */
-    .keep-together {
-      page-break-inside: avoid !important;
-      break-inside: avoid !important;
-    }
-
-    /* Section headers with numbered badges must stay with content */
-    .details-section h2,
-    .numbered-badge {
-      page-break-after: avoid !important;
-      break-after: avoid-page !important;
-    }
-
-    /* ===== HARMONIZED DOCUMENT STYLES ===== */
-    
-    /* Document Header */
     .doc-header {
       text-align: center;
       margin-bottom: 1.5em;
       padding-bottom: 1em;
       border-bottom: 2px solid #1a1a1a;
     }
-    
+
     .doc-header h1 {
+      margin: 0 0 0.4em 0;
       font-size: 14pt;
-      font-weight: 600;
-      margin: 0 0 0.5em 0;
-      line-height: 1.3;
-      color: #1a1a1a;
+      font-weight: 700;
     }
-    
+
     .doc-badge {
       display: inline-block;
+      padding: 0.3em 0.8em;
       background: #1a1a1a;
       color: white;
-      padding: 0.3em 0.8em;
       font-size: 10pt;
       font-weight: 600;
-      letter-spacing: 0.5px;
     }
 
-    /* Purpose Box */
-    .purpose-box {
-      border: 2px solid #1a1a1a;
+    .summary-box,
+    .checklist-box,
+    .callout {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .summary-box,
+    .checklist-box {
+      margin: 1.25em 0;
+      border: 1px solid #d8d8d8;
+      background: #fff;
+    }
+
+    .summary-box {
       padding: 1em;
-      margin: 1.5em 0;
       background: #fafafa;
     }
-    
-    .purpose-box p {
-      font-size: 10pt;
-      line-height: 1.5;
-      margin: 0;
-    }
 
-    /* Global heading page-break controls - must come before nested rules */
-    h2 {
-      page-break-after: avoid;
-    }
-
-    /* Details Grid */
-    .details-section {
-      margin: 1.5em 0;
-    }
-    
-    .details-section h2 {
-      font-size: 12pt;
-      font-weight: 600;
-      margin: 0 0 1em 0;
-      padding-bottom: 0.5em;
-      border-bottom: 2px solid #1a1a1a;
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-    }
-    
-    .details-section h2 .num {
-      background: #1a1a1a;
-      color: white;
-      width: 1.5em;
-      height: 1.5em;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10pt;
-    }
-    
-    .details-grid {
+    .summary-grid {
       display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 0.5em 1em;
-      font-size: 10pt;
+      grid-template-columns: 190px 1fr;
+      gap: 0.45em 1em;
     }
-    
-    .details-grid dt {
+
+    .summary-grid dt {
       font-weight: 600;
       color: #444;
     }
-    
-    .details-grid dd {
+
+    .summary-grid dd {
       margin: 0;
-      color: #1a1a1a;
-      padding-bottom: 0.5em;
-      border-bottom: 1px solid #eee;
     }
 
-    /* Checklist Box */
-    .checklist-box {
-      border: 1px solid #1a1a1a;
-      margin: 1.5em 0;
-      page-break-inside: avoid;
-    }
-    
-    .checklist-box h3 {
-      font-size: 11pt;
+    .section-title {
+      margin: 1.75em 0 0.75em 0;
+      padding-bottom: 0.4em;
+      border-bottom: 2px solid #1a1a1a;
+      font-size: 12pt;
       font-weight: 700;
+    }
+
+    .checklist-box .heading {
       margin: 0;
-      padding: 0.6em 0.8em;
+      padding: 0.7em 0.9em;
       background: #1a1a1a;
       color: white;
+      font-size: 11pt;
+      font-weight: 700;
     }
-    
+
     .checklist-box .content {
       padding: 1em;
-      background: #fff;
-    }
-    
-    .checklist-box p {
-      font-size: 10pt;
-      margin: 0 0 0.75em 0;
-      font-weight: 500;
-    }
-    
-    .checklist-box ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    
-    .checklist-box li {
-      font-size: 10pt;
-      line-height: 1.6;
-      margin: 0.6em 0;
-      padding-left: 2em;
-      position: relative;
-    }
-    
-    .checklist-box li .checkbox {
-      position: absolute;
-      left: 0;
-      top: 0.15em;
-      width: 14px;
-      height: 14px;
-      border: 1.5px solid #1a1a1a;
-      background: white;
-    }
-    
-    .checklist-box li ul {
-      margin-top: 0.5em;
-      padding-left: 0;
-    }
-    
-    .checklist-box li li {
-      padding-left: 1.5em;
-      margin: 0.3em 0;
-      font-size: 9pt;
-      color: #555;
-    }
-    
-    .checklist-box li li::before {
-      content: "•";
-      position: absolute;
-      left: 0.5em;
-    }
-    
-    .checklist-box li li .checkbox {
-      display: none;
     }
 
-    /* Alert Boxes */
-    .alert-box {
+    ul {
+      margin: 0.4em 0 0 1.2em;
+    }
+
+    li {
+      margin: 0.4em 0;
+    }
+
+    .callout {
+      margin: 1.25em 0;
       padding: 1em;
-      margin: 1.5em 0;
-      border-left: 4px solid;
-      page-break-inside: avoid;
-    }
-    
-    .alert-box.warning {
-      background: #fffbeb;
-      border-color: #f59e0b;
-    }
-    
-    .alert-box h4 {
-      font-size: 10pt;
-      font-weight: 700;
-      margin: 0 0 0.5em 0;
-    }
-    
-    .alert-box p {
-      font-size: 10pt;
-      line-height: 1.5;
-      margin: 0.3em 0;
+      border-left: 4px solid #1a1a1a;
+      background: #f7f7f7;
     }
 
-    /* Footer */
+    .callout.warning {
+      border-color: #b45309;
+      background: #fff7ed;
+    }
+
+    .callout.critical {
+      border-color: #b91c1c;
+      background: #fef2f2;
+    }
+
     .doc-footer {
       margin-top: 2em;
       padding-top: 1em;
-      border-top: 2px solid #1a1a1a;
+      border-top: 1px solid #d8d8d8;
       font-size: 9pt;
-      color: #666;
-    }
-    
-    .doc-footer p {
-      margin: 0.3em 0;
-    }
-
-    /* Page break controls for sections */
-    .checklist {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .checklist-section {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    @media print {
-      .checklist-box,
-      .alert-box {
-        page-break-inside: avoid;
-      }
+      color: #555;
     }
   </style>
 </head>
 <body>
+  <div class="doc-header">
+    <h1>Service and Validity Checklist</h1>
+    <span class="doc-badge">{{notice_name}}</span>
+  </div>
 
-<!-- Document Header -->
-<div class="doc-header">
-  <h1>Service and Validity Checklist</h1>
-  <span class="doc-badge">Section 8 Notice</span>
-</div>
+  <div class="callout">
+    <p><strong>Purpose:</strong> Use this checklist to verify that the {{notice_name}} is internally consistent across the notice and support documents, has been served using a defensible method, and is ready for evidence use if a claim is issued.</p>
+  </div>
 
-<!-- Legal Disclaimer -->
-<div class="alert-box" style="background: #f8f8f8; border-color: #1a1a1a;">
-  <h4>ℹ️ Important</h4>
-  <p>Landlord Heaven provides document generation and general information only. We are not a law firm and do not provide legal advice. Court outcomes depend on your evidence, service, and the facts of the case.</p>
-</div>
+  <div class="summary-box">
+    <dl class="summary-grid">
+      <dt>Landlord</dt>
+      <dd>{{landlord_full_name}}</dd>
+      <dt>Tenant</dt>
+      <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      <dt>Property</dt>
+      <dd>{{property_address}}</dd>
+      {{#if (hasValue tenancy_start_date_formatted)}}
+      <dt>Tenancy start date</dt>
+      <dd>{{tenancy_start_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue service_date_formatted)}}
+      <dt>Notice service date</dt>
+      <dd>{{service_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue notice_expiry_date_formatted)}}
+      <dt>Notice expiry date</dt>
+      <dd>{{notice_expiry_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue earliest_proceedings_date_formatted)}}
+      <dt>Earliest proceedings date</dt>
+      <dd>{{earliest_proceedings_date_formatted}}</dd>
+      {{/if}}
+      {{#if ground_descriptions}}
+      <dt>Grounds relied on</dt>
+      <dd>{{ground_descriptions}}</dd>
+      {{/if}}
+    </dl>
+  </div>
 
-<!-- Purpose -->
-<div class="purpose-box">
-  <p><strong>Purpose:</strong> Use this checklist to verify your Section 8 notice was served correctly and meets all validity requirements. Keep this checklist with your evidence file.</p>
-</div>
-
-<!-- Notice Details -->
-<div class="details-section">
-  <h2><span class="num">1</span> Notice Details</h2>
-  <dl class="details-grid">
-    <dt>Landlord:</dt>
-    <dd>{{landlord_full_name}}</dd>
-    {{#if landlord_address}}
-    <dt>Landlord Address:</dt>
-    <dd>{{landlord_address}}</dd>
-    {{/if}}
-    <dt>Tenant:</dt>
-    <dd>{{tenant_full_name}}</dd>
-    <dt>Property Address:</dt>
-    <dd>{{property_address}}</dd>
-    <dt>Tenancy Start Date:</dt>
-    <dd>{{tenancy_start_date_formatted}}</dd>
-    <dt>Notice Service Date:</dt>
-    <dd>{{service_date_formatted}}</dd>
-    <dt>Earliest Possession Date:</dt>
-    <dd>{{earliest_possession_date_formatted}}</dd>
-    {{#if grounds}}
-    <dt>Grounds:</dt>
-    <dd>{{ground_descriptions}}</dd>
-    {{/if}}
-  </dl>
-</div>
-
-<!-- Service Evidence -->
-<div class="details-section">
-  <h2><span class="num">2</span> Service Evidence Checklist</h2>
-  
+  <h2 class="section-title">Service Evidence</h2>
   <div class="checklist-box">
-    <h3>Evidence of Service</h3>
+    <div class="heading">Keep With The Pack</div>
     <div class="content">
-      <p>Confirm you have collected and retained the following evidence of service:</p>
       <ul>
-        <li><span class="checkbox"></span> Original signed Section 8 notice (Form 3)</li>
-        <li><span class="checkbox"></span> Copy of the notice served to tenant</li>
-        <li><span class="checkbox"></span> Date and time of service recorded</li>
-        <li><span class="checkbox"></span> Method of service documented (hand delivery / first class post / recorded delivery)</li>
-        <li><span class="checkbox"></span> Proof of service:
-          <ul>
-            <li>If hand delivered: Photo of letterbox with notice visible, witness statement</li>
-            <li>If posted: Proof of postage receipt from Royal Mail</li>
-            <li>If recorded delivery: Tracking number and delivery confirmation</li>
-          </ul>
-        </li>
-        <li><span class="checkbox"></span> Witness details recorded (name, address, signature) if applicable</li>
-        <li><span class="checkbox"></span> Any correspondence from tenant acknowledging receipt</li>
+        <li>A copy of the completed {{notice_name}} that was served.</li>
+        <li>A note of the service date, time, place, and method.</li>
+        <li>Proof of posting, tracking, witness details, or photographs, depending on the service method used.</li>
+        <li>Any follow-up correspondence showing the tenant received or responded to the notice.</li>
       </ul>
     </div>
   </div>
 
-  <div class="alert-box warning">
-    <h4>⚠️ Keep All Evidence</h4>
-    <p>You must prove service in court. Without clear evidence, your claim may be dismissed even if the notice is otherwise valid.</p>
-  </div>
-</div>
-
-<!-- Validity Requirements -->
-<div class="details-section"><div class="section checklist-section">
-  <h2><span class="num">3</span> Validity Requirements</h2>
-  
+  <h2 class="section-title">Validity Checks</h2>
   <div class="checklist-box">
-    <h3>Notice Validity (Housing Act 1988, Section 8)</h3>
+    <div class="heading">Before You Rely On The Notice</div>
     <div class="content">
-      <p>Verify your notice meets these validity requirements:</p>
       <ul>
-        <li><span class="checkbox"></span> Notice uses correct form (Form 3 or substantially similar)</li>
-        <li><span class="checkbox"></span> All mandatory fields completed (landlord name/address, tenant name, property address)</li>
-        <li><span class="checkbox"></span> Ground(s) for possession clearly stated with particulars</li>
-        <li><span class="checkbox"></span> Notice period is sufficient for the grounds claimed:
-          <ul>
-            <li><strong>60 days (2 months) minimum:</strong> Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16</li>
-            <li><strong>14 days (2 weeks) minimum:</strong> Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17</li>
-            <li><strong>Immediate (0 days):</strong> Ground 14A (domestic violence), Ground 14 (serious ASB only)</li>
-            <li><strong>Mixed grounds:</strong> Use the MAXIMUM notice period required among all grounds claimed</li>
-          </ul>
-        </li>
-        {{#if is_fixed_term}}
-        <li><span class="checkbox"></span> Fixed term tenancy: Notice only valid if tenancy agreement allows possession during fixed term, or fixed term has ended</li>
-        {{else}}
-        <li><span class="checkbox"></span> Periodic tenancy: Notice period calculated correctly from rent payment date</li>
-        {{/if}}
-        <li><span class="checkbox"></span> Notice signed and dated by landlord or landlord's agent</li>
+        <li>The pack uses the same canonical notice timeline across the notice, proof of service, summary, and bundle documents.</li>
+        <li>The correct prescribed notice form is used for the case.</li>
+        <li>The landlord, tenant, and property details are complete and match the tenancy records.</li>
+        <li>Each ground relied on is identified clearly and supported with particulars.</li>
+        <li>The notice period has been checked against the grounds relied on, using the longest period that applies where multiple grounds are included.</li>
+        <li>The earliest proceedings date shown in the pack is the date you intend to rely on if the claim is issued.</li>
+        <li>The notice is signed and dated by the landlord or an authorised agent.</li>
         {{#if has_mandatory_ground}}
-        <li><span class="checkbox"></span> Mandatory ground claimed: If the ground is fully proven at the hearing, the court must generally grant possession. Note: Some mandatory grounds (e.g., Grounds 1-7) require prior written notice to the tenant before/at the start of the tenancy.</li>
+        <li>Where a mandatory ground is relied on, the evidence is still sufficient to prove the ground and any prerequisite facts at the hearing.</li>
         {{else}}
-        <li><span class="checkbox"></span> Discretionary ground(s) claimed: Court will consider whether it is reasonable to grant possession, taking into account all circumstances including tenant's personal situation.</li>
+        <li>Where only discretionary grounds are relied on, the evidence explains why possession is reasonable in all the circumstances.</li>
         {{/if}}
       </ul>
     </div>
   </div>
-</div></div>
 
-<!-- After Service -->
-<div class="details-section">
-  <h2><span class="num">4</span> After Service</h2>
-  
+  <div class="callout warning">
+    <p><strong>Notice periods:</strong> The required notice period depends on the grounds relied on and can change. If you alter the grounds, the service method, or the intended service date, regenerate the pack so every document uses the same recalculated dates.</p>
+  </div>
+
+  <h2 class="section-title">After Service</h2>
   <div class="checklist-box">
-    <h3>Post-Service Actions</h3>
+    <div class="heading">Do Not Do These Things</div>
     <div class="content">
       <ul>
-        <li><span class="checkbox"></span> Wait until possession date has passed: <strong>{{earliest_possession_date_formatted}}</strong></li>
-        <li><span class="checkbox"></span> Do not change locks or remove tenant belongings (illegal eviction)</li>
-        <li><span class="checkbox"></span> Do not harass tenant or cut off utilities</li>
-        <li><span class="checkbox"></span> If tenant remains after possession date, apply to court using Form N5 (standard possession claim)</li>
-        <li><span class="checkbox"></span> Keep proof of service readily accessible for court</li>
+        {{#if (hasValue earliest_proceedings_date_formatted)}}
+        <li>Do not issue possession proceedings before {{earliest_proceedings_date_formatted}}.</li>
+        {{/if}}
+        <li>Do not change locks or remove belongings without a court order and lawful enforcement.</li>
+        <li>Do not leave the service method or service evidence undocumented.</li>
+        <li>Do not let one court-facing document use a different court name or notice timeline from the others.</li>
       </ul>
     </div>
   </div>
-</div>
 
-<!-- Footer -->
-<div class="doc-footer">
-  <p><strong>Legal Basis:</strong> Housing Act 1988, Section 8 and Schedule 2</p>
-  <p><strong>Generated:</strong> {{generated_date}}</p>
-  <p><strong>Landlord Heaven Notice Only Pack</strong> | England</p>
-</div>
+  <div class="callout critical">
+    <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds particulars are inconsistent across the pack, even where the underlying arrears or breach evidence is strong.</p>
+  </div>
 
+  <div class="doc-footer">
+    <p><strong>Generated:</strong> {{generated_date}}</p>
+    {{#unless clean_output}}
+    <p><strong>Landlord Heaven</strong> | England Section 8 support document</p>
+    {{/unless}}
+  </div>
 </body>
 </html>

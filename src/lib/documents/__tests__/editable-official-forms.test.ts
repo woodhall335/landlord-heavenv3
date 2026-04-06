@@ -11,9 +11,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
 import {
+  fillForm3AForm,
   fillN5BForm,
   fillN5Form,
   fillN119Form,
+  fillN325Form,
+  fillN325AForm,
   CaseData,
   TemplateFieldMissingError,
   assertPdfHasFields,
@@ -119,6 +122,41 @@ const COMPLETE_N119_CASE_DATA: CaseData = {
   signature_date: '2026-01-23',
 };
 
+const COMPLETE_FORM3A_CASE_DATA: CaseData = {
+  jurisdiction: 'england',
+  landlord_full_name: 'Tariq Ahmed Mohammed',
+  landlord_address: '45 Park Lane\nLeeds\nWest Yorkshire\nLS1 1AA',
+  landlord_phone: '0113 555 0101',
+  landlord_email: 'landlord@example.com',
+  tenant_full_name: 'Sonia Shezadi',
+  tenant_2_name: 'Hamza Shezadi',
+  property_address: '35 Woodhall Park Avenue\nPudsey\nWest Yorkshire\nLS28 7HF',
+  tenancy_start_date: '2023-01-15',
+  notice_served_date: '2026-06-01',
+  ground_codes: ['1A', '8', '10'],
+  form3a_grounds_text:
+    'Ground 1A - Sale of dwelling house.\nGround 8 - Rent arrears.\nGround 10 - Any rent arrears.',
+  form3a_explanation:
+    'Ground 1A: The landlord intends to sell.\nGround 8 and 10: Rent arrears exceed the statutory threshold.',
+  signatory_name: 'Tariq Ahmed Mohammed',
+  signatory_capacity: 'landlord',
+  signature_date: '2026-06-01',
+};
+
+const COMPLETE_N325_CASE_DATA: CaseData = {
+  ...COMPLETE_N5_CASE_DATA,
+  claim_number: 'K00LS123',
+  total_arrears: 5100,
+  total_claim_amount: 5455,
+  court_fee: 355,
+  signature_date: '2026-09-10',
+};
+
+const COMPLETE_N325A_CASE_DATA: CaseData = {
+  ...COMPLETE_N325_CASE_DATA,
+  service_address: '45 Park Lane\nLeeds\nLS1 1AA',
+};
+
 // =============================================================================
 // TEST SUITE: NO FLATTEN - EDITABLE OFFICIAL FORMS
 // =============================================================================
@@ -194,6 +232,80 @@ describe('Editable Official Forms - No Flatten', () => {
       // The PDF should have form fields (not flattened)
       expect(fields.length).toBeGreaterThan(0);
       console.log(`✅ N119 output has ${fields.length} editable AcroForm fields`);
+    });
+
+    it('prefills the key particulars fields for an arrears claim', async () => {
+      const pdfBytes = await fillN119Form({
+        ...COMPLETE_N119_CASE_DATA,
+        claim_type: 'section_8',
+        ground_codes: ['8', '10', '11'],
+        ground_numbers: '8, 10, 11',
+        notice_served_date: '2026-06-01',
+        tenant_vulnerability: true,
+        tenant_vulnerability_details: 'The tenant has indicated health and financial difficulties.',
+        known_tenant_defences: 'The tenant has referred to delays in Universal Credit housing payments.',
+      });
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+
+      expect(form.getTextField('4. (a) The reason the claimant is asking for possession is:').getText()).toContain('Ground 8');
+      expect(form.getTextField('4. (b) The reason the claimant is asking for possession is:').getText()).toContain('No separate breach particulars');
+      expect(form.getTextField('4. (c) The reason the claimant is asking for possession is:').getText()).toContain('Ground 8, Schedule 2, Housing Act 1988');
+      expect(form.getTextField('5. The following steps have already been taken to recover any arrears:').getText()).toContain('Form 3A');
+      expect(form.getTextField('7. The following information is known about the defendant’s circumstances:').getText()).toContain('health and financial difficulties');
+      expect(form.getTextField('8. The claimant is asking the court to take the following financial or other information into account when making its decision whether or not to grant an order for possession:').getText()).toContain('rent arrears');
+    });
+  });
+
+  describe('Form 3A - England Possession Notice', () => {
+    it('should produce an editable PDF with the custom AcroForm overlay retained', async () => {
+      const pdfBytes = await fillForm3AForm(COMPLETE_FORM3A_CASE_DATA);
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+
+      expect(form.getFields().length).toBeGreaterThanOrEqual(30);
+      expect(form.getTextField('form3a_tenant_names').getText()).toContain('Sonia Shezadi');
+      expect(form.getTextField('form3a_grounds_text').getText()).toContain('Ground 1A');
+    });
+
+    it('uses the drafted explanation when the landlord narrative is too thin', async () => {
+      const pdfBytes = await fillForm3AForm({
+        ...COMPLETE_FORM3A_CASE_DATA,
+        ground_codes: ['1A', '8', '10', '11'],
+        rent_amount: 1200,
+        rent_frequency: 'monthly',
+        total_arrears: 4200,
+        form3a_explanation: 'Ground 1A: The landlord intends to sell the property on the open market after possession is recovered.',
+      });
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+      const explanation = form.getTextField('form3a_explanation_text').getText();
+
+      expect(explanation).toContain('Ground 8 is relied on as the mandatory serious rent arrears ground.');
+      expect(explanation).toContain('The tenancy began on');
+      expect(explanation.length).toBeGreaterThan(180);
+    });
+  });
+
+  describe('N325 Form - Warrant Request', () => {
+    it('should remain editable after filling', async () => {
+      const pdfBytes = await fillN325Form(COMPLETE_N325_CASE_DATA);
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+
+      expect(form.getFields().length).toBeGreaterThan(0);
+      expect(form.getTextField('Claim number').getText()).toContain('K00LS123');
+    });
+  });
+
+  describe('N325A Form - Suspended Order Warrant Request', () => {
+    it('should remain editable after filling', async () => {
+      const pdfBytes = await fillN325AForm(COMPLETE_N325A_CASE_DATA);
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+
+      expect(form.getFields().length).toBeGreaterThan(0);
+      expect(form.getTextField('Claim Number').getText()).toContain('K00LS123');
     });
   });
 });

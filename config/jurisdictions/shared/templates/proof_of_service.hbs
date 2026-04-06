@@ -1,9 +1,8 @@
 {{!--
   ============================================================================
   PROOF OF SERVICE CERTIFICATE
-  Legal Evidence Document
   ============================================================================
-  Court-ready certificate documenting notice service
+  Court-facing support record for notice service.
 --}}
 
 <!DOCTYPE html>
@@ -20,93 +19,58 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #1a1a1a;
       font-size: 11pt;
       line-height: 1.6;
-      color: #1a1a1a;
-      padding: 0;
-      margin: 0;
     }
 
-    /* Document Header */
     .doc-header {
       text-align: center;
-      margin-bottom: 2em;
-      padding-bottom: 1.5em;
-      border-bottom: 3px double #1a1a1a;
+      margin-bottom: 1.75em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
     }
 
     .doc-header h1 {
-      font-size: 18pt;
-      font-weight: 700;
       margin: 0 0 0.25em 0;
-      color: #1a1a1a;
+      font-size: 17pt;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 0.08em;
     }
 
     .doc-subtitle {
+      color: #555;
       font-size: 10pt;
-      color: #666;
-      font-style: italic;
     }
 
-    /* Certificate Number */
-    .certificate-number {
+    .reference {
+      margin: 1em 0 1.5em 0;
       text-align: right;
       font-size: 9pt;
       color: #666;
-      margin-bottom: 1.5em;
     }
 
-    /* Declaration Section */
-    .declaration {
-      margin: 2em 0;
-      line-height: 2;
+    .details-box,
+    .signature-section,
+    .notice-box {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
-    .declaration p {
-      margin: 1.5em 0;
-      text-align: justify;
-    }
-
-    /* Form Fields */
-    .field {
-      display: inline-block;
-      min-width: 200px;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 0 0.5em;
-      font-weight: 600;
-    }
-
-    .field.short {
-      min-width: 100px;
-    }
-
-    .field.long {
-      min-width: 300px;
-    }
-
-    /* Details Box */
+    .notice-box,
     .details-box {
-      margin: 2em 0;
-      border: 2px solid #1a1a1a;
-      padding: 1.5em;
-    }
-
-    .details-box h2 {
-      font-size: 12pt;
-      font-weight: 700;
-      margin: 0 0 1em 0;
-      padding-bottom: 0.5em;
-      border-bottom: 1px solid #ddd;
-      text-transform: uppercase;
+      margin: 1.5em 0;
+      padding: 1.2em;
+      border: 1px solid #d8d8d8;
+      background: #fff;
     }
 
     .details-grid {
       display: grid;
       grid-template-columns: 180px 1fr;
-      gap: 0.75em 1em;
+      gap: 0.55em 1em;
     }
 
     .details-grid dt {
@@ -116,280 +80,161 @@
 
     .details-grid dd {
       margin: 0;
-      border-bottom: 1px dotted #ccc;
-      padding-bottom: 0.25em;
-    }
-
-    /* Service Method */
-    .service-method {
-      margin: 2em 0;
-    }
-
-    .service-method h2 {
-      font-size: 12pt;
-      font-weight: 700;
-      margin: 0 0 1em 0;
-      text-transform: uppercase;
     }
 
     .method-options {
-      display: grid;
-      gap: 0.75em;
+      margin-top: 0.75em;
     }
 
-    .method-option {
+    .method-row {
       display: flex;
-      align-items: flex-start;
       gap: 0.75em;
+      margin: 0.55em 0;
     }
 
     .checkbox {
-      width: 18px;
-      height: 18px;
-      border: 2px solid #1a1a1a;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #1a1a1a;
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 0.2em;
     }
 
     .checkbox.checked {
       background: #1a1a1a;
-      position: relative;
     }
 
-    .checkbox.checked::after {
-      content: "✓";
-      color: white;
-      position: absolute;
-      left: 2px;
-      top: -2px;
-      font-size: 14px;
-    }
-
-    .method-label {
-      font-weight: 600;
-    }
-
-    .method-description {
-      font-size: 9pt;
-      color: #666;
-    }
-
-    /* Signature Section */
     .signature-section {
-      margin-top: 3em;
-      page-break-inside: avoid;
-    }
-
-    .signature-section h2 {
-      font-size: 12pt;
-      font-weight: 700;
-      margin: 0 0 1.5em 0;
-      text-transform: uppercase;
+      margin-top: 2em;
     }
 
     .signature-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2em;
+      gap: 1.5em;
     }
 
     .signature-box {
-      border: 1px solid #ddd;
-      padding: 1.5em;
-    }
-
-    .signature-box h3 {
-      font-size: 10pt;
-      font-weight: 700;
-      margin: 0 0 1em 0;
-      color: #444;
+      border: 1px solid #d8d8d8;
+      padding: 1em;
     }
 
     .signature-line {
-      margin: 1.5em 0 0.5em 0;
+      height: 2.5em;
       border-bottom: 1px solid #1a1a1a;
-      height: 40px;
+      margin-top: 1em;
     }
 
-    .signature-label {
-      font-size: 9pt;
-      color: #666;
-    }
-
-    /* Legal Notice */
-    .legal-notice {
-      margin-top: 2em;
-      padding: 1em;
-      background: #f8f8f8;
-      border: 1px solid #ddd;
-      font-size: 8pt;
-      color: #666;
-    }
-
-    .legal-notice p {
-      margin: 0.5em 0;
-    }
-
-    /* Footer */
     .doc-footer {
       margin-top: 2em;
       padding-top: 1em;
-      border-top: 1px solid #ddd;
-      font-size: 8pt;
-      color: #888;
+      border-top: 1px solid #d8d8d8;
+      font-size: 9pt;
+      color: #555;
       text-align: center;
-    }
-
-    @media print {
-      .signature-section {
-        page-break-inside: avoid;
-      }
     }
   </style>
 </head>
 <body>
+  <div class="doc-header">
+    <h1>Certificate of Service</h1>
+    <div class="doc-subtitle">Proof of notice service for possession proceedings</div>
+  </div>
 
-<!-- Document Header -->
-<div class="doc-header">
-  <h1>Certificate of Service</h1>
-  <div class="doc-subtitle">Proof of Notice Service for Court Proceedings</div>
-</div>
+  <div class="reference">
+    Reference: POS-{{case_id}}-{{current_date_short}}
+  </div>
 
-<!-- Certificate Reference -->
-<div class="certificate-number">
-  Reference: POS-{{case_id}}-{{current_date_short}}
-</div>
+  <div class="notice-box">
+    <p>I, <strong>{{landlord_full_name}}</strong>, certify that the notice described below was served in the manner indicated on the tenant at:</p>
+    <p><strong>{{property_address}}</strong></p>
+  </div>
 
-<!-- Declaration -->
-<div class="declaration">
-  <p>
-    I, <span class="field long">{{landlord_full_name}}</span>, being the landlord/agent
-    of the property known as:
-  </p>
-  <p style="text-align: center; font-weight: 600; font-size: 12pt;">
-    {{property_address}}
-  </p>
-  <p>
-    do hereby certify that the notice described below was served upon the tenant(s)
-    in the manner indicated.
-  </p>
-</div>
+  <div class="details-box">
+    <h2>Notice details</h2>
+    <dl class="details-grid">
+      {{#if (hasValue notice_type)}}
+      <dt>Notice type</dt>
+      <dd>{{notice_type}}</dd>
+      {{/if}}
+      <dt>Tenant name(s)</dt>
+      <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      <dt>Service address</dt>
+      <dd>{{property_address}}</dd>
+      {{#if (hasValue service_date_formatted)}}
+      <dt>Date of service</dt>
+      <dd>{{service_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue notice_expiry_date_formatted)}}
+      <dt>Notice expiry date</dt>
+      <dd>{{notice_expiry_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue earliest_proceedings_date_formatted)}}
+      <dt>Earliest proceedings date</dt>
+      <dd>{{earliest_proceedings_date_formatted}}</dd>
+      {{/if}}
+    </dl>
+  </div>
 
-<!-- Notice Details -->
-<div class="details-box">
-  <h2>Notice Details</h2>
-  <dl class="details-grid">
-    <dt>Notice Type:</dt>
-    <dd>{{notice_type}}</dd>
-    <dt>Tenant Name(s):</dt>
-    <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
-    <dt>Service Address:</dt>
-    <dd>{{property_address}}</dd>
-    <dt>Date of Service:</dt>
-    <dd>{{service_date_formatted}}</dd>
-    <dt>Time of Service:</dt>
-    <dd>_______________</dd>
-    <dt>Notice Expiry Date:</dt>
-    <dd>{{earliest_possession_date_formatted}}</dd>
-  </dl>
-</div>
-
-<!-- Service Method -->
-<div class="service-method">
-  <h2>Method of Service</h2>
-  <div class="method-options">
-    <div class="method-option">
-      <div class="checkbox {{#if (eq service_method 'hand')}}checked{{/if}}"></div>
-      <div>
-        <div class="method-label">Hand Delivery</div>
-        <div class="method-description">Delivered by hand through the letterbox or directly to the tenant</div>
+  <div class="details-box">
+    <h2>Method of service</h2>
+    <div class="method-options">
+      <div class="method-row">
+        <div class="checkbox {{#if (eq service_method 'hand')}}checked{{/if}}"></div>
+        <div>Hand delivery through the letterbox or directly to the tenant</div>
       </div>
-    </div>
-    <div class="method-option">
-      <div class="checkbox {{#if (eq service_method 'post')}}checked{{/if}}"></div>
-      <div>
-        <div class="method-label">First Class Post</div>
-        <div class="method-description">Sent via Royal Mail First Class post (deemed served 2 working days after posting)</div>
+      <div class="method-row">
+        <div class="checkbox {{#if (eq service_method 'post')}}checked{{/if}}"></div>
+        <div>First class post</div>
       </div>
-    </div>
-    <div class="method-option">
-      <div class="checkbox {{#if (eq service_method 'recorded_delivery')}}checked{{/if}}"></div>
-      <div>
-        <div class="method-label">Recorded/Signed Delivery</div>
-        <div class="method-description">Sent via Royal Mail Recorded or Signed For delivery</div>
+      <div class="method-row">
+        <div class="checkbox {{#if (eq service_method 'recorded_delivery')}}checked{{/if}}"></div>
+        <div>Recorded or signed delivery</div>
       </div>
-    </div>
-    <div class="method-option">
-      <div class="checkbox"></div>
-      <div>
-        <div class="method-label">Other Method</div>
-        <div class="method-description">Please specify: ________________________________</div>
+      <div class="method-row">
+        <div class="checkbox"></div>
+        <div>Other method (specify if used)</div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Additional Evidence -->
-<div class="details-box">
-  <h2>Supporting Evidence</h2>
-  <dl class="details-grid">
-    <dt>Witness Present:</dt>
-    <dd>Yes / No (circle)</dd>
-    <dt>Witness Name:</dt>
-    <dd>________________________________</dd>
-    <dt>Photo Taken:</dt>
-    <dd>Yes / No (circle)</dd>
-    <dt>Proof of Postage Ref:</dt>
-    <dd>________________________________</dd>
-    <dt>Tracking Number:</dt>
-    <dd>________________________________</dd>
-  </dl>
-</div>
+  <div class="details-box">
+    <h2>Supporting record</h2>
+    <p>Keep any witness details, photographs, proof of posting, or tracking references with the served-copy file for this notice.</p>
+    <p>If extra service evidence exists, attach it behind this certificate in the same bundle.</p>
+  </div>
 
-<!-- Signature Section -->
-<div class="signature-section">
-  <h2>Declaration & Signature</h2>
+  <div class="signature-section">
+    <h2>Declaration and signature</h2>
+    <p>I believe the information in this certificate is true and accurate to the best of my knowledge. I understand that it may be relied on in court proceedings.</p>
 
-  <p style="font-size: 10pt; margin-bottom: 1.5em;">
-    I declare that the information provided in this certificate is true and accurate to the best of my knowledge.
-    I understand that this document may be used as evidence in court proceedings.
-  </p>
-
-  <div class="signature-grid">
-    <div class="signature-box">
-      <h3>Landlord/Agent</h3>
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <div class="signature-line"></div>
-      <div class="signature-label">Print Name</div>
-      <div class="signature-line"></div>
-      <div class="signature-label">Date</div>
-    </div>
-
-    <div class="signature-box">
-      <h3>Witness (if applicable)</h3>
-      <div class="signature-line"></div>
-      <div class="signature-label">Signature</div>
-      <div class="signature-line"></div>
-      <div class="signature-label">Print Name</div>
-      <div class="signature-line"></div>
-      <div class="signature-label">Address</div>
+    <div class="signature-grid">
+      <div class="signature-box">
+        <p><strong>Landlord / agent</strong></p>
+        <div class="signature-line"></div>
+        <p>Signature</p>
+        <div class="signature-line"></div>
+        <p>Print name</p>
+        <div class="signature-line"></div>
+        <p>Date</p>
+      </div>
+      <div class="signature-box">
+        <p><strong>Witness (if applicable)</strong></p>
+        <div class="signature-line"></div>
+        <p>Signature</p>
+        <div class="signature-line"></div>
+        <p>Print name</p>
+        <div class="signature-line"></div>
+        <p>Address</p>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Legal Notice -->
-<div class="legal-notice">
-  <p><strong>Important:</strong> This certificate should be completed at the time of service and kept with your records.
-  You may be required to produce this document as evidence in court proceedings.</p>
-  <p>Under the Housing Act 1988, proper service of notice is essential for valid possession proceedings.
-  False statements in this certificate may constitute contempt of court.</p>
-</div>
-
-<!-- Footer -->
-<div class="doc-footer">
-  <p>Generated by Landlord Heaven | {{current_date}}</p>
-</div>
-
+  <div class="doc-footer">
+    <p><strong>Generated:</strong> {{current_date}}</p>
+    {{#unless clean_output}}
+    <p><strong>Landlord Heaven</strong> | Proof of service support document</p>
+    {{/unless}}
+  </div>
 </body>
 </html>

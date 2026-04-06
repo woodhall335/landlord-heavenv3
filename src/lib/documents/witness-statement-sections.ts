@@ -16,6 +16,8 @@
  */
 
 import type { WitnessStatementJSON } from '@/lib/ai/witness-statement-generator';
+import { buildN119DefendantCircumstancesText } from '@/lib/england-possession/pack-drafting';
+import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
 
 // =============================================================================
 // Types
@@ -31,6 +33,13 @@ export interface ArrearsItem {
   amount_due: number;
   amount_paid: number;
   amount_owed: number;
+}
+
+export interface WitnessExhibit {
+  key: string;
+  label: string;
+  title: string;
+  description: string;
 }
 
 /**
@@ -113,6 +122,9 @@ export interface WitnessStatementSectionsInput {
   // Arrears at specific dates (for Ground 8 proof requirements)
   arrearsAtNoticeDate?: number;
   arrearsAtStatementDate?: number;
+
+  // Equivalent of N119 section 7
+  defendant_circumstances_text?: string;
 
   // Signing information
   signing?: {
@@ -208,6 +220,92 @@ function buildPropertyAddress(property: WitnessStatementSectionsInput['property'
     property.postcode,
   ].filter(Boolean);
   return parts.join(', ');
+}
+
+function getSignatoryInitials(input: WitnessStatementSectionsInput): string {
+  const source = input.signing?.signatory_name || input.landlord.full_name || 'Exhibit';
+  const initials = source
+    .split(/\s+/)
+    .map((part) => part.trim().charAt(0).toUpperCase())
+    .filter(Boolean)
+    .slice(0, 3)
+    .join('');
+
+  return initials || 'EX';
+}
+
+function uniqueStrings(values: Array<string | null | undefined>): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const value of values) {
+    const trimmed = typeof value === 'string' ? value.trim() : '';
+    if (!trimmed) continue;
+    const normalized = trimmed.toLowerCase();
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(trimmed);
+  }
+
+  return result;
+}
+
+function getVerifiedSupportingDocuments(input: WitnessStatementSectionsInput): string[] {
+  const compliance = input.compliance;
+
+  return uniqueStrings([
+    ...(input.evidence_uploads || []),
+    compliance?.deposit_protected === true && compliance.deposit_scheme
+      ? `Tenancy Deposit Certificate (${compliance.deposit_scheme})`
+      : null,
+    compliance?.gas_safety_provided === true ? 'Gas Safety Certificate (CP12)' : null,
+    compliance?.epc_provided === true
+      ? `Energy Performance Certificate (EPC)${compliance.epc_rating ? ` - Rating ${compliance.epc_rating}` : ''}`
+      : null,
+    compliance?.eicr_provided === true ? 'Electrical Installation Condition Report (EICR)' : null,
+    compliance?.how_to_rent_provided === true
+      ? '"How to Rent" Guide - Government prescribed information'
+      : null,
+  ]);
+}
+
+export function buildWitnessExhibits(input: WitnessStatementSectionsInput): WitnessExhibit[] {
+  const prefix = getSignatoryInitials(input);
+  const exhibits: WitnessExhibit[] = [
+    {
+      key: 'schedule_of_arrears',
+      label: `${prefix}1`,
+      title: 'Schedule of Arrears',
+      description: 'Period-by-period breakdown of rent due, payments received, and running balance.',
+    },
+    {
+      key: 'section8_notice',
+      label: `${prefix}2`,
+      title: 'Form 3 Notice',
+      description: 'Form 3 notice seeking possession served on the tenant.',
+    },
+    {
+      key: 'proof_of_service',
+      label: `${prefix}3`,
+      title: 'Proof of Service',
+      description: 'Certificate or other evidence showing how the Form 3 notice was served.',
+    },
+  ];
+
+  getVerifiedSupportingDocuments(input).forEach((documentTitle, index) => {
+    exhibits.push({
+      key: `verified_supporting_document_${index + 1}`,
+      label: `${prefix}${index + 4}`,
+      title: documentTitle,
+      description: 'Verified supporting document available for the court bundle.',
+    });
+  });
+
+  return exhibits;
+}
+
+function getExhibitByKey(exhibits: WitnessExhibit[], key: string): WitnessExhibit | undefined {
+  return exhibits.find((exhibit) => exhibit.key === key);
 }
 
 /**
@@ -307,6 +405,25 @@ function getOrdinalSuffix(day: number): string {
   }
 }
 
+function describeGround8ThresholdRequirement(
+  frequency: WitnessStatementSectionsInput['tenancy']['rent_frequency']
+): string {
+  switch (frequency) {
+    case 'weekly':
+      return "13 weeks' rent";
+    case 'fortnightly':
+      return "13 weeks' rent (7 fortnightly payments)";
+    case 'monthly':
+      return "3 months' rent";
+    case 'quarterly':
+      return "1 quarter's rent";
+    case 'yearly':
+      return "3 months' rent";
+    default:
+      return 'the statutory Ground 8 threshold';
+  }
+}
+
 /**
  * Build Section 3: GROUNDS FOR POSSESSION
  *
@@ -317,7 +434,10 @@ function getOrdinalSuffix(day: number): string {
  * - Add commitment to provide updated schedule before hearing
  * - Phrase Ground 8 correctly (no assertions about hearing outcomes)
  */
-function buildGroundsForPossession(input: WitnessStatementSectionsInput): string {
+function buildGroundsForPossession(
+  input: WitnessStatementSectionsInput,
+  exhibits: WitnessExhibit[]
+): string {
   const grounds = input.section8.grounds.map(normalizeGroundCode);
   const lines: string[] = [];
 
@@ -332,20 +452,20 @@ function buildGroundsForPossession(input: WitnessStatementSectionsInput): string
     const arrearsAtNotice = input.arrearsAtNoticeDate ?? totalArrears;
     const arrearsAtStatement = input.arrearsAtStatementDate ?? totalArrears;
     const rentAmount = input.tenancy.rent_amount || 0;
-
-    // Calculate Ground 8 threshold (2 months' rent)
-    const ground8Threshold = rentAmount * 2;
+    const ground8Threshold = getGround8Threshold(rentAmount, input.tenancy.rent_frequency);
+    const thresholdRequirement = describeGround8ThresholdRequirement(input.tenancy.rent_frequency);
+    const scheduleExhibit = getExhibitByKey(exhibits, 'schedule_of_arrears');
 
     // Calculate months equivalent at notice date
     const monthsAtNotice = rentAmount > 0 ? arrearsAtNotice / rentAmount : 0;
 
     lines.push('');
-    lines.push('Ground 8 is a mandatory ground for possession. Ground 8 requires that at least two months\' rent be unpaid both at the date of the notice and at the date of the hearing.');
+    lines.push(`Ground 8 is a mandatory ground for possession. Ground 8 requires that at least ${thresholdRequirement} be unpaid both at the date of the notice and at the date of the hearing.`);
 
     // Arrears at notice date with months equivalent and threshold comparison (Ground 8 proof requirement #1)
     if (input.notice.served_date && arrearsAtNotice > 0) {
       lines.push('');
-      let noticeStatement = `At the date of service of the Section 8 Notice (${formatUKDate(input.notice.served_date)}), the total rent arrears stood at ${formatCurrency(arrearsAtNotice)}`;
+      let noticeStatement = `At the date of service of the Form 3 notice (${formatUKDate(input.notice.served_date)}), the total rent arrears stood at ${formatCurrency(arrearsAtNotice)}`;
       if (monthsAtNotice > 0) {
         noticeStatement += `, representing approximately ${monthsAtNotice.toFixed(1)} months' rent`;
       }
@@ -353,8 +473,8 @@ function buildGroundsForPossession(input: WitnessStatementSectionsInput): string
       lines.push(noticeStatement);
 
       // Add threshold comparison if we have valid rent amount
-      if (ground8Threshold > 0 && arrearsAtNotice >= ground8Threshold) {
-        lines.push(`This significantly exceeds the Ground 8 threshold of 2 months' rent (${formatCurrency(ground8Threshold)}).`);
+      if (ground8Threshold.amount > 0 && arrearsAtNotice >= ground8Threshold.amount) {
+        lines.push(`This significantly exceeds the Ground 8 threshold of ${thresholdRequirement} (${formatCurrency(ground8Threshold.amount)}).`);
       }
     }
 
@@ -372,7 +492,7 @@ function buildGroundsForPossession(input: WitnessStatementSectionsInput): string
 
     // Reference to Schedule of Arrears
     lines.push('');
-    lines.push('A detailed Schedule of Arrears showing the period-by-period breakdown of rent due and payments received is attached to this pack.');
+    lines.push(`A detailed Schedule of Arrears${scheduleExhibit ? ` (Exhibit ${scheduleExhibit.label})` : ''} showing the period-by-period breakdown of rent due and payments received is attached to this pack.`);
 
     // Commitment to provide updated schedule (Ground 8 proof requirement #3)
     lines.push('');
@@ -478,41 +598,38 @@ function buildComplianceSection(input: WitnessStatementSectionsInput): string | 
  */
 function buildTimeline(input: WitnessStatementSectionsInput): string {
   const events: { date: string; description: string }[] = [];
+  const pushEvent = (date: string | undefined, description: string) => {
+    if (!date || Number.isNaN(new Date(date).getTime())) {
+      return;
+    }
+
+    events.push({ date, description });
+  };
 
   // Tenancy start
-  events.push({
-    date: input.tenancy.start_date,
-    description: 'Tenancy commenced',
-  });
+  pushEvent(input.tenancy.start_date, 'Tenancy commenced');
 
   // Earliest arrears period
   const earliestArrears = getEarliestArrearsPeriod(input.arrears?.items);
   if (earliestArrears) {
-    events.push({
-      date: earliestArrears,
-      description: 'First period of unpaid rent began',
-    });
+    pushEvent(earliestArrears, 'First period of unpaid rent began');
   }
 
   // Notice served
   const serviceMethod = formatServiceMethod(input.notice.service_method);
-  events.push({
-    date: input.notice.served_date,
-    description: `Section 8 Notice served on the tenant by ${serviceMethod}`,
-  });
+  pushEvent(input.notice.served_date, `Form 3 notice served on the tenant by ${serviceMethod}`);
 
   // Notice expiry
-  events.push({
-    date: input.notice.expiry_date,
-    description: 'Notice period expired (earliest date proceedings could commence)',
-  });
+  if (input.notice.expiry_date) {
+    pushEvent(input.notice.expiry_date, 'Notice period expired (earliest date proceedings could commence)');
+  }
 
   // Signature date (if provided and after notice expiry)
-  if (input.signing?.signature_date && input.signing.signature_date >= input.notice.expiry_date) {
-    events.push({
-      date: input.signing.signature_date,
-      description: 'This witness statement prepared',
-    });
+  if (
+    input.signing?.signature_date &&
+    (!input.notice.expiry_date || input.signing.signature_date >= input.notice.expiry_date)
+  ) {
+    pushEvent(input.signing.signature_date, 'This witness statement prepared');
   }
 
   // Sort events chronologically
@@ -535,12 +652,19 @@ function buildTimeline(input: WitnessStatementSectionsInput): string {
  * IMPORTANT: Do NOT state a document is attached unless evidence_uploads or
  * compliance fields confirm it. This prevents false claims about attached documents.
  */
-function buildSupportingEvidence(input: WitnessStatementSectionsInput): string {
+function buildSupportingEvidence(
+  input: WitnessStatementSectionsInput,
+  exhibits: WitnessExhibit[]
+): string {
   const lines: string[] = [];
   const compliance = input.compliance;
+  const scheduleExhibit = getExhibitByKey(exhibits, 'schedule_of_arrears');
+  const section8NoticeExhibit = getExhibitByKey(exhibits, 'section8_notice');
+  const proofOfServiceExhibit = getExhibitByKey(exhibits, 'proof_of_service');
+  const verifiedDocs = exhibits.filter((exhibit) => exhibit.key.startsWith('verified_supporting_document_'));
 
   // === PACK DOCUMENTS (always generated as part of this pack) ===
-  lines.push('The following documents are included in this possession pack:');
+  lines.push('I rely on the following exhibits and supporting documents in support of this claim:');
   lines.push('');
 
   // Court forms (always included in court pack)
@@ -549,56 +673,23 @@ function buildSupportingEvidence(input: WitnessStatementSectionsInput): string {
   lines.push('• Form N119 - Particulars of Claim for Possession');
   lines.push('');
 
-  // Notice documents (always included)
-  lines.push('Notice Documents:');
-  lines.push('• Section 8 Notice (Form 3) - Notice seeking possession served on the tenant');
-  lines.push('• Proof of Service Certificate - Template for evidencing service');
+  lines.push('Witness Exhibits:');
+  if (scheduleExhibit) {
+    lines.push(`• Exhibit ${scheduleExhibit.label}: ${scheduleExhibit.title} - ${scheduleExhibit.description}`);
+  }
+  if (section8NoticeExhibit) {
+    lines.push(`• Exhibit ${section8NoticeExhibit.label}: ${section8NoticeExhibit.title} - ${section8NoticeExhibit.description}`);
+  }
+  if (proofOfServiceExhibit) {
+    lines.push(`• Exhibit ${proofOfServiceExhibit.label}: ${proofOfServiceExhibit.title} - ${proofOfServiceExhibit.description}`);
+  }
   lines.push('');
 
-  // Arrears documents (included if arrears case)
-  if (input.arrears && input.arrears.total_arrears > 0) {
-    lines.push('Arrears Documentation:');
-    lines.push('• Schedule of Arrears - Period-by-period breakdown of rent due, payments received, and running balance');
-    lines.push('');
-  }
-
   // === VERIFIED UPLOADED/CONFIRMED DOCUMENTS ===
-  const verifiedDocs: string[] = [];
-
-  // Check evidence uploads - filter out undefined/null/empty values to prevent "undefined" in output
-  if (input.evidence_uploads && input.evidence_uploads.length > 0) {
-    const validUploads = input.evidence_uploads.filter(
-      (upload): upload is string => typeof upload === 'string' && upload.trim().length > 0
-    );
-    verifiedDocs.push(...validUploads);
-  }
-
-  // Check compliance-related uploads (only if explicitly verified)
-  if (compliance?.deposit_protected === true && compliance.deposit_scheme) {
-    verifiedDocs.push(`Tenancy Deposit Certificate (${compliance.deposit_scheme})`);
-  }
-  if (compliance?.gas_safety_provided === true) {
-    verifiedDocs.push('Gas Safety Certificate (CP12)');
-  }
-  if (compliance?.epc_provided === true) {
-    verifiedDocs.push(`Energy Performance Certificate (EPC)${compliance.epc_rating ? ` - Rating ${compliance.epc_rating}` : ''}`);
-  }
-  if (compliance?.eicr_provided === true) {
-    verifiedDocs.push('Electrical Installation Condition Report (EICR)');
-  }
-  if (compliance?.how_to_rent_provided === true) {
-    verifiedDocs.push('"How to Rent" Guide - Government prescribed information');
-  }
-
-  // Filter final list to ensure no undefined/null values and render only if we have valid docs
-  const filteredVerifiedDocs = verifiedDocs.filter(
-    (doc): doc is string => typeof doc === 'string' && doc.trim().length > 0
-  );
-
-  if (filteredVerifiedDocs.length > 0) {
+  if (verifiedDocs.length > 0) {
     lines.push('Verified Documents Available:');
-    filteredVerifiedDocs.forEach(doc => {
-      lines.push(`• ${doc}`);
+    verifiedDocs.forEach((doc) => {
+      lines.push(`• Exhibit ${doc.label}: ${doc.title}`);
     });
     lines.push('');
   }
@@ -637,7 +728,10 @@ function buildSupportingEvidence(input: WitnessStatementSectionsInput): string {
  * This provides a focused narrative about the arrears for the rent_arrears section
  * of the witness statement, separate from the grounds section.
  */
-function buildRentArrearsNarrative(input: WitnessStatementSectionsInput): string | undefined {
+function buildRentArrearsNarrative(
+  input: WitnessStatementSectionsInput,
+  exhibits: WitnessExhibit[]
+): string | undefined {
   if (!input.arrears || input.arrears.total_arrears <= 0) {
     return undefined;
   }
@@ -652,8 +746,8 @@ function buildRentArrearsNarrative(input: WitnessStatementSectionsInput): string
     lines.push(`This represents ${arrearsMonths} ${arrearsMonths === 1 ? 'complete rental period' : 'complete rental periods'} during which no payment, or insufficient payment, has been received.`);
   }
 
-  // Reference arrears schedule
-  lines.push('A detailed Schedule of Arrears is attached to this pack, showing the period-by-period breakdown of rent due, payments received, and the running balance of arrears.');
+  const scheduleExhibit = getExhibitByKey(exhibits, 'schedule_of_arrears');
+  lines.push(`A detailed Schedule of Arrears${scheduleExhibit ? ` (Exhibit ${scheduleExhibit.label})` : ''} is attached to this pack, showing the period-by-period breakdown of rent due, payments received, and the running balance of arrears.`);
 
   return lines.join(' ');
 }
@@ -662,7 +756,13 @@ function buildRentArrearsNarrative(input: WitnessStatementSectionsInput): string
  * Build the conclusion/statement of truth section
  */
 function buildConclusion(): string {
-  return 'I believe that the facts stated in this witness statement are true. I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.';
+  return 'For those reasons, I respectfully ask the court to make the possession order sought and, if the court thinks fit, judgment for the arrears and costs claimed.';
+}
+
+function buildDefendantCircumstances(
+  input: WitnessStatementSectionsInput
+): string | undefined {
+  return input.defendant_circumstances_text?.trim() || undefined;
 }
 
 // =============================================================================
@@ -681,14 +781,17 @@ function buildConclusion(): string {
 export function buildWitnessStatementSections(
   input: WitnessStatementSectionsInput
 ): WitnessStatementJSON {
+  const exhibits = buildWitnessExhibits(input);
+
   return {
     introduction: buildIntroduction(input),
     tenancy_history: buildTenancyHistory(input),
-    rent_arrears: buildRentArrearsNarrative(input),
+    rent_arrears: buildRentArrearsNarrative(input, exhibits),
     conduct_issues: undefined, // Not applicable for Ground 8 arrears cases
-    grounds_summary: buildGroundsForPossession(input),
+    grounds_summary: buildGroundsForPossession(input, exhibits),
     timeline: buildTimeline(input),
-    evidence_references: buildSupportingEvidence(input),
+    defendant_circumstances: buildDefendantCircumstances(input),
+    evidence_references: buildSupportingEvidence(input, exhibits),
     conclusion: buildConclusion(),
   };
 }
@@ -807,6 +910,8 @@ export function extractWitnessStatementSectionsInput(
     nestedNotice.expiry_date ||
     nestedNotice.notice_expiry_date ||
     data.notice_expiry_date ||
+    data.earliest_proceedings_date ||
+    data.earliest_possession_date ||
     '';
   const serviceMethod =
     nestedNotice.service_method ||
@@ -867,6 +972,8 @@ export function extractWitnessStatementSectionsInput(
     nestedSigning.signature_date ||
     new Date().toISOString().split('T')[0];
 
+  const defendantCircumstancesText = buildN119DefendantCircumstancesText(data);
+
   return {
     landlord: {
       full_name: landlordFullName,
@@ -912,6 +1019,7 @@ export function extractWitnessStatementSectionsInput(
     },
     arrearsAtNoticeDate: arrearsAtNoticeDate,
     arrearsAtStatementDate: arrearsTotal,
+    defendant_circumstances_text: defendantCircumstancesText,
     evidence_uploads: evidenceUploads,
     signing: {
       signatory_name: signatoryName,

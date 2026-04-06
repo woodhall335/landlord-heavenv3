@@ -448,7 +448,12 @@ function buildCaseData(
   caseType: EvictionCase['case_type'],
   wizardFacts: any
 ): CaseData {
-  const claimType: CaseData['claim_type'] = caseType === 'no_fault' ? 'section_21' : 'section_8';
+  const claimType: CaseData['claim_type'] =
+    evictionCase.jurisdiction === 'england'
+      ? 'section_8'
+      : caseType === 'no_fault'
+      ? 'section_21'
+      : 'section_8';
   const groundNumbers = evictionCase.grounds
     .map((g) => g.code.replace(/Ground\s*/i, ''))
     .filter(Boolean)
@@ -500,6 +505,40 @@ function buildCaseData(
       return humanReadableMethod || undefined;
     })(),
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
+    ground_particulars:
+      wizardFacts.ground_particulars ||
+      wizardFacts.section_8_particulars ||
+      wizardFacts.section8_details ||
+      facts.court.particulars_of_claim ||
+      undefined,
+    section_8_particulars:
+      wizardFacts.section_8_particulars ||
+      wizardFacts.ground_particulars ||
+      wizardFacts.section8_details ||
+      facts.court.particulars_of_claim ||
+      undefined,
+    section8_details:
+      wizardFacts.section8_details ||
+      wizardFacts.ground_particulars ||
+      wizardFacts.section_8_particulars ||
+      facts.court.particulars_of_claim ||
+      undefined,
+    tenant_vulnerability:
+      wizardFacts.tenant_vulnerability ??
+      (facts as any).risk?.tenant_vulnerability ??
+      undefined,
+    tenant_vulnerability_details:
+      wizardFacts.tenant_vulnerability_details ||
+      (facts as any).risk?.tenant_vulnerability_details ||
+      undefined,
+    known_tenant_defences:
+      wizardFacts.known_tenant_defences ||
+      (facts as any).risk?.known_tenant_defences ||
+      undefined,
+    benefit_type:
+      wizardFacts.benefit_type ||
+      wizardFacts.tenant_benefits_details ||
+      undefined,
     total_arrears:
       wizardFacts.total_arrears ||
       wizardFacts.rent_arrears_amount ||

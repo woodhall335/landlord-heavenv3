@@ -49,8 +49,8 @@ export default function TermsPage() {
               Landlord Heaven provides legal document generation services for UK landlords, including but not
               limited to:
             </p>
-            <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
-              <li>Eviction notices (Section 8, Section 21, and jurisdiction equivalents)</li>
+              <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
+              <li>Eviction notices (current England notices and jurisdiction equivalents)</li>
               <li>Tenancy agreements (ASTs, PRTs, and Northern Ireland equivalents)</li>
               <li>Court forms and money claim documents</li>
               <li>HMO compliance management and tracking</li>

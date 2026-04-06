@@ -9,6 +9,10 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
+import {
+  ENGLAND_SECTION8_NOTICE_NAME,
+  ENGLAND_SECTION8_NOTICE_TITLE,
+} from '@/lib/england-possession/section8-terminology';
 import { getEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
 
 export type PackItemCategory =
@@ -379,29 +383,15 @@ function getPremiumSupportPackItems(jurisdictionLabel: string): PackItem[] {
 
 function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   const items: PackItem[] = [];
-  const { route, has_arrears, include_arrears_schedule } = args;
+  const { has_arrears, include_arrears_schedule } = args;
 
-  // Section 21 (No-Fault)
-  if (route === 'section_21') {
-    items.push({
-      key: 'section21_notice',
-      title: 'Section 21 Notice (Form 6A)',
-      description: 'Official no-fault possession notice',
-      category: 'Notice',
-      required: true,
-    });
-  }
-
-  // Section 8 (Grounds-Based)
-  if (route === 'section_8') {
-    items.push({
-      key: 'section8_notice',
-      title: 'Section 8 Notice (Form 3)',
-      description: 'Grounds-based possession notice',
-      category: 'Notice',
-      required: true,
-    });
-  }
+  items.push({
+    key: 'section8_notice',
+    title: ENGLAND_SECTION8_NOTICE_TITLE,
+    description: 'Official England possession notice for the current Section 8 route',
+    category: 'Notice',
+    required: true,
+  });
 
   // Common items
   items.push({
@@ -413,24 +403,38 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   });
 
   items.push({
-    key: 'service_checklist',
-    title: 'Service & Validity Checklist',
-    description: 'Ensure your notice is legally compliant',
-    category: 'Checklists',
+    key: 'cover_letter_to_tenant',
+    title: 'Cover Letter to Tenant',
+    description: `Non-statutory covering letter to send alongside the ${ENGLAND_SECTION8_NOTICE_NAME}`,
+    category: 'Guidance',
     required: true,
   });
 
-  // Pre-Service Compliance Declaration - verification of compliance requirements
   items.push({
-    key: 'compliance_declaration',
-    title: 'Pre-Service Compliance Declaration',
-    description: 'Verification of compliance requirements before serving notice',
+    key: 'service_checklist',
+    title: 'Service & Compliance Checklist',
+    description: `Notice validity, service, and compliance checks for your ${ENGLAND_SECTION8_NOTICE_NAME}`,
     category: 'Checklists',
     required: true,
   });
 
-  // Arrears schedule for Section 8 rent arrears cases
-  if (route === 'section_8' && (has_arrears || include_arrears_schedule)) {
+  items.push({
+    key: 'evidence_checklist',
+    title: 'Ground-Specific Evidence Checklist',
+    description: 'Evidence prompts tailored to the possession grounds you selected',
+    category: 'Checklists',
+    required: true,
+  });
+
+  items.push({
+    key: 'proof_of_service',
+    title: 'Proof of Service Support',
+    description: `Editable support form for recording how and when your ${ENGLAND_SECTION8_NOTICE_NAME} was served`,
+    category: 'Evidence',
+    required: true,
+  });
+
+  if (has_arrears || include_arrears_schedule) {
     items.push({
       key: 'arrears_schedule',
       title: 'Rent Arrears Schedule',
@@ -445,68 +449,27 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
 
 function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
   const items = getEnglandNoticeOnlyContents(args);
-  const { route } = args;
-
-  // Section 21 uses accelerated procedure
-  if (route === 'section_21') {
-    items.push({
-      key: 'n5b_claim',
-      title: 'Form N5B - Accelerated Possession Claim',
-      description: 'Fast-track court claim form',
-      category: 'Court forms',
-      required: true,
-    });
-  }
-
-  // Section 8 uses standard procedure
-  if (route === 'section_8') {
-    items.push({
-      key: 'n5_claim',
-      title: 'Form N5 - Claim for Possession',
-      description: 'Standard possession claim form',
-      category: 'Court forms',
-      required: true,
-    });
-
-    items.push({
-      key: 'n119_particulars',
-      title: 'Form N119 - Particulars of Claim',
-      description: 'Detailed grounds and evidence summary',
-      category: 'Court forms',
-      required: true,
-    });
-  }
-
-  // Common complete pack items
   items.push({
-    key: 'witness_statement',
-    title: 'Witness Statement',
-    description: 'AI-drafted statement for court',
-    category: 'Evidence',
+    key: 'n5_claim',
+    title: 'Form N5 - Claim for Possession',
+    description: 'Standard possession claim form for the county court paper route',
+    category: 'Court forms',
+    required: true,
+  });
+
+  items.push({
+    key: 'n119_particulars',
+    title: 'Form N119 - Particulars of Claim',
+    description: 'Particulars of claim to accompany your possession claim',
+    category: 'Court forms',
     required: true,
   });
 
   items.push({
     key: 'court_filing_guide',
     title: 'Court Filing Guide',
-    description: 'Step-by-step County Court filing instructions',
+    description: 'Step-by-step filing guide for N5/N119, including when rent-only claims may also be filed online',
     category: 'Guidance',
-    required: true,
-  });
-
-  items.push({
-    key: 'evidence_checklist',
-    title: 'Evidence Collection Checklist',
-    description: 'Required documents for your case',
-    category: 'Checklists',
-    required: true,
-  });
-
-  items.push({
-    key: 'proof_of_service',
-    title: 'Proof of Service Template',
-    description: 'Certificate confirming notice delivery',
-    category: 'Evidence',
     required: true,
   });
 

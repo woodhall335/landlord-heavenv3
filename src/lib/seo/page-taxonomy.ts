@@ -104,6 +104,7 @@ export const SEO_PILLAR_ROUTES = {
   howToEvictTenant: '/how-to-evict-tenant',
   evictionProcessUk: '/eviction-process-uk',
   evictionNoticeTemplate: '/eviction-notice-template',
+  rentersRightsActEvictionRules: '/renters-rights-act-eviction-rules',
   completePack: '/products/complete-pack',
   section8Notice: '/section-8-notice',
   section21Notice: '/section-21-notice',
@@ -309,7 +310,7 @@ function rentArrearsEntry(
       ],
       product: [...anchorSets.moneyClaimProduct],
     },
-    section21TransitionEligible: true,
+    section21TransitionEligible: false,
     freshnessRequired: false,
     consolidationStatus: 'supporting_live',
     ...config,
@@ -1170,12 +1171,12 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/eviction-notice-template': makeEntry('/eviction-notice-template', {
-    ...genericNoticeEntry('/eviction-notice-template', '/section-8-notice', {
+    ...genericNoticeEntry('/eviction-notice-template', '/eviction-notice-england', {
       canonicalTarget: SEO_PILLAR_ROUTES.evictionNoticeTemplate,
     }),
     pageRole: 'pillar',
     primaryPillar: SEO_PILLAR_ROUTES.evictionNoticeTemplate,
-    supportingPage: '/section-8-notice',
+    supportingPage: '/eviction-notice-england',
     freshnessRequired: true,
     consolidationStatus: 'canonical',
     anchorVariants: {
@@ -1185,9 +1186,9 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
         'England eviction notice guide',
       ],
       supporting: [
-        'Section 8 notice guide',
+        'England notice generator guide',
         'notice route before serving',
-        'how landlords choose the right notice',
+        'how landlords choose the right current notice',
       ],
       product: [
         'jurisdiction-specific eviction notice workflow',
@@ -1196,13 +1197,13 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
   }),
   '/eviction-notice-england': makeEntry('/eviction-notice-england', {
-    ...genericNoticeEntry('/eviction-notice-england', '/section-21-notice', {
+    ...genericNoticeEntry('/eviction-notice-england', '/form-3-section-8', {
       canonicalTarget: SEO_PILLAR_ROUTES.evictionNoticeTemplate,
     }),
     pageRole: 'bridge',
     jurisdiction: 'england',
     primaryPillar: SEO_PILLAR_ROUTES.evictionNoticeTemplate,
-    supportingPage: '/section-21-notice',
+    supportingPage: '/form-3-section-8',
     anchorVariants: {
       pillar: [
         'eviction notice template for England',
@@ -1210,15 +1211,15 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
         'England eviction notice next steps',
       ],
       supporting: [
-        'Section 21 transition guide',
-        'legacy Section 21 terminology',
-        'what replaces older England notice language',
+        'Form 3A notice guide',
+        'current England notice language',
+        'what current England landlords should serve',
       ],
       product: [...anchorSets.noticeOnlyProduct],
     },
-    section21TransitionEligible: true,
+    section21TransitionEligible: false,
     freshnessRequired: true,
-    consolidationStatus: 'candidate_redirect',
+    consolidationStatus: 'bridge_live',
   }),
   '/section-21-notice-period': makeEntry('/section-21-notice-period', {
     pageType: 'notice',
@@ -1504,10 +1505,10 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/form-3-section-8': makeEntry('/form-3-section-8', {
     ...section8TemplateEntry('/form-3-section-8', '/section-8-eviction-process', {
-      canonicalTarget: '/section-8-notice-template',
+      canonicalTarget: '/form-3-section-8',
     }),
-    pageRole: 'product-adjacent',
-    consolidationStatus: 'candidate_redirect',
+    pageRole: 'supporting',
+    consolidationStatus: 'supporting_live',
   }),
   '/section-21-court-pack': productAdjacentRedirectEntry(
     '/section-21-court-pack',
@@ -1836,7 +1837,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       ],
       product: [...anchorSets.section8NoticeProduct],
     },
-    section21TransitionEligible: true,
+    section21TransitionEligible: false,
     freshnessRequired: true,
     consolidationStatus: 'canonical',
   }),
@@ -1999,11 +2000,11 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/how-to-evict-a-tenant-england': makeEntry('/how-to-evict-a-tenant-england', {
     pageType: 'guide',
-    pageRole: 'bridge',
+    pageRole: 'supporting',
     jurisdiction: 'england',
     cluster: 'how-to-evict',
     primaryPillar: SEO_PILLAR_ROUTES.howToEvictTenant,
-    supportingPage: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: '/eviction-process-england',
     primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
     primaryProductByScenario: {
@@ -2016,9 +2017,9 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       supporting: [...anchorSets.evictionProcessPillar],
       product: [...anchorSets.noticeOnlyProduct],
     },
-    section21TransitionEligible: true,
+    section21TransitionEligible: false,
     freshnessRequired: true,
-    consolidationStatus: 'bridge_live',
+    consolidationStatus: 'supporting_live',
   }),
   '/how-to-rent-guide': makeEntry('/how-to-rent-guide', {
     pageType: 'guide',
@@ -2051,6 +2052,37 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   '/rent-arrears-landlord-guide': rentArrearsEntry('/rent-arrears-landlord-guide', SEO_PILLAR_ROUTES.section8Notice, {
     canonicalTarget: '/rent-arrears-landlord-guide',
   }),
+  '/renters-rights-act-eviction-rules': makeEntry('/renters-rights-act-eviction-rules', {
+    pageType: 'guide',
+    pageRole: 'supporting',
+    jurisdiction: 'england',
+    cluster: 'legal-updates',
+    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: '/eviction-process-england',
+    primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
+    secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
+    primaryProductByScenario: {
+      notice: SEO_PRODUCT_ROUTES.noticeOnly,
+      court: SEO_PRODUCT_ROUTES.completePack,
+    },
+    canonicalTarget: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
+    anchorVariants: {
+      pillar: [
+        'Renters Rights Act eviction rules',
+        'current England eviction rules',
+        'England possession rules 2026',
+      ],
+      supporting: [
+        'England eviction process guide',
+        'current possession notice route',
+        'Renters Rights Act landlord guide',
+      ],
+      product: [...anchorSets.noticeOnlyProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'supporting_live',
+  }),
   '/eviction-process-england': makeEntry('/eviction-process-england', {
     pageType: 'court',
     pageRole: 'supporting',
@@ -2066,8 +2098,8 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       supporting: [...anchorSets.section8Pillar],
       product: [...anchorSets.completePackProduct],
     },
-    section21TransitionEligible: true,
-    freshnessRequired: false,
+    section21TransitionEligible: false,
+    freshnessRequired: true,
     consolidationStatus: 'supporting_live',
   }),
   '/section-8-grounds-explained': section8Entry('/section-8-grounds-explained', SEO_PILLAR_ROUTES.tenantNotPayingRent, {

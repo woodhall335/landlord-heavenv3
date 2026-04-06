@@ -251,7 +251,7 @@
 
 <!-- Court Header -->
 <div class="court-header">
-  <p class="court-name">In the {{court_name}} County Court</p>
+  <p class="court-name">In the {{court_name}}</p>
   <p class="claim-number">Claim No: </p>
   <div class="claim-number-box">&nbsp;</div>
 </div>
@@ -341,9 +341,19 @@
   </div>
 </div>
 
+{{#if witness_statement.defendant_circumstances}}
+<!-- Defendant Circumstances -->
+<div class="statement-section">
+  <h2><span class="num">{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{else}}{{#if witness_statement.conduct_issues}}6{{else}}5{{/if}}{{/if}}</span> Defendant Circumstances</h2>
+  <div class="statement-content">
+    {{{witness_statement.defendant_circumstances}}}
+  </div>
+</div>
+{{/if}}
+
 <!-- Supporting Evidence -->
 <div class="statement-section">
-  <h2><span class="num">{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{else}}{{#if witness_statement.conduct_issues}}6{{else}}5{{/if}}{{/if}}</span> Supporting Evidence</h2>
+  <h2><span class="num">{{#if witness_statement.defendant_circumstances}}{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}8{{else}}7{{/if}}{{else}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{/if}}{{else}}{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{else}}{{#if witness_statement.conduct_issues}}6{{else}}5{{/if}}{{/if}}{{/if}}</span> Supporting Evidence</h2>
   <div class="statement-content">
     {{{witness_statement.evidence_references}}}
   </div>
@@ -351,7 +361,7 @@
 
 <!-- Conclusion -->
 <div class="statement-section">
-  <h2><span class="num">{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}8{{else}}7{{/if}}{{else}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{/if}}</span> Statement of Truth</h2>
+  <h2><span class="num">{{#if witness_statement.defendant_circumstances}}{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}9{{else}}8{{/if}}{{else}}{{#if witness_statement.conduct_issues}}8{{else}}7{{/if}}{{/if}}{{else}}{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}8{{else}}7{{/if}}{{else}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{/if}}{{/if}}</span> Conclusion</h2>
   <div class="statement-content">
     {{{witness_statement.conclusion}}}
   </div>
@@ -392,7 +402,9 @@
 <!-- Footer -->
 <div class="doc-footer">
   <p><strong>Generated:</strong> {{generated_date}}</p>
+  {{#unless clean_output}}
   <p><strong>Landlord Heaven</strong> | Witness Statement for Possession Proceedings</p>
+  {{/unless}}
 </div>
 
 </body>

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowRight, FileText, Calculator, Scale, Home, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface RelatedLink {
   href: string;
@@ -53,24 +53,24 @@ export function RelatedLinks({
   const itemsPerView = isMobile ? 1 : 3;
   const maxIndex = Math.max(0, dedupedLinks.length - itemsPerView);
 
-  const goToNext = useCallback(() => {
+  const goToNext = () => {
     setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-  }, [maxIndex]);
+  };
 
-  const goToPrev = useCallback(() => {
+  const goToPrev = () => {
     setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
-  }, [maxIndex]);
+  };
 
   // Auto-slide effect
   useEffect(() => {
     if (variant !== 'cards' || isHovered || dedupedLinks.length <= itemsPerView) return;
 
     const interval = setInterval(() => {
-      goToNext();
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [variant, isHovered, dedupedLinks.length, itemsPerView, goToNext]);
+  }, [variant, isHovered, dedupedLinks.length, itemsPerView, maxIndex]);
 
   if (variant === 'inline') {
     return (

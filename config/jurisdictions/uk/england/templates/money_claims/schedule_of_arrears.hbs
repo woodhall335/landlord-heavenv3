@@ -230,7 +230,7 @@
     <dd>{{claimant_reference}}</dd>
     {{/if}}
     <dt>Schedule Date:</dt>
-    <dd>{{generation_date}}</dd>
+    <dd>{{format_date generation_date "long"}}</dd>
   </dl>
 </div>
 
@@ -244,11 +244,11 @@
     </div>
     <div class="summary-item">
       <dt>Due Day</dt>
-      <dd>{{#if payment_day}}{{payment_day}}{{#if usual_payment_weekday}} ({{usual_payment_weekday}}){{/if}} of each {{rent_frequency}} period{{else}}Per tenancy agreement{{/if}}</dd>
+      <dd>{{#if payment_day}}{{payment_day}}{{ordinal_suffix payment_day}} of each {{#if (eq rent_frequency "monthly")}}month{{else}}{{rent_frequency}} period{{/if}}{{#if usual_payment_weekday}} ({{usual_payment_weekday}}){{/if}}{{else}}Per tenancy agreement{{/if}}</dd>
     </div>
     <div class="summary-item">
       <dt>Tenancy Start Date</dt>
-      <dd>{{tenancy_start_date}}</dd>
+      <dd>{{format_date tenancy_start_date "long"}}</dd>
     </div>
     <div class="summary-item">
       <dt>Total Arrears Claimed</dt>
@@ -303,7 +303,7 @@
 
 <!-- Footer -->
 <div class="doc-footer">
-  <p><strong>Generated:</strong> {{generation_date}}</p>
+  <p><strong>Generated:</strong> {{format_date generation_date "long"}}</p>
   <p><strong>Landlord Heaven Money Claim Pack</strong> | England</p>
   <p><em>This schedule supports the particulars of claim and demonstrates the calculation of arrears owed.</em></p>
 </div>

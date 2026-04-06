@@ -48,7 +48,7 @@ interface NextBestActionCardProps {
  * Transactional intent keywords - indicate user wants to take action
  */
 const TRANSACTIONAL_PATTERNS =
-  /serve\s+notice|evict|possession\s+order|court|tribunal|claim\s+form|mcol|n5|n1|form\s+6a|form\s+3|grounds|end\s+tenancy|terminate|notice\s+to\s+leave|section\s+173/i;
+  /serve\s+notice|evict|possession\s+order|court|tribunal|claim\s+form|mcol|n5|n1|form\s+3a|grounds|end\s+tenancy|terminate|notice\s+to\s+leave|section\s+173/i;
 
 /**
  * Check if the question indicates transactional intent
@@ -145,8 +145,8 @@ function getEvictionCopy(jurisdiction: WizardJurisdiction): {
     default:
       return {
         title: 'Serve an Eviction Notice',
-        description: 'Create a compliant Section 21 or Section 8 notice',
-        buttonText: 'Start Eviction Wizard',
+        description: 'Create a compliant current England notice',
+        buttonText: 'Start England Notice Wizard',
       };
   }
 }

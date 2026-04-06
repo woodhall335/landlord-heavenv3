@@ -70,7 +70,7 @@ section_173_rules:
     applies_when:
       - condition: "computed.within_six_month_bar === true"
     message: "Section 173 cannot be served in the first six months of the occupation contract."
-    rationale: "RH(W)A 2016 s.173 prohibits no-fault notices during the first 6 months of a standard occupation contract."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 prohibits no-fault notices during the first 6 months of a standard occupation contract."
     field: contract_start_date
 
   # ---------------------------------------------------------------------------
@@ -89,7 +89,7 @@ section_173_rules:
       # Expiry date missing (when dates exist but expiry not provided)
       - condition: "(facts.contract_start_date || facts.tenancy_start_date) && computed.service_date && !facts.notice_expiry_date && !computed.expiry_date"
     message: "Cannot calculate statutory minimum notice period - contract start date, service date, and expiry date are all required."
-    rationale: "The 6-month bar and notice period calculations require all dates to be provided."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 notice-period and timing checks require the contract start date, service date, and expiry date."
     field: notice_expiry_date
 
   # ---------------------------------------------------------------------------
@@ -105,7 +105,7 @@ section_173_rules:
     applies_when:
       - condition: "computed.s173_notice_period_too_short === true"
     message: "Wales Section 173 requires minimum 6 months notice period."
-    rationale: "RH(W)A 2016 s.173 mandates at least 6 months notice for no-fault possession."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 mandates at least 6 months notice for no-fault possession."
     field: notice_expiry_date
 
   - id: s173_deposit_not_protected
@@ -115,7 +115,7 @@ section_173_rules:
     applies_when:
       - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
     message: "Wales Section 173 notice is invalid without deposit protection."
-    rationale: "Deposits for occupation contracts must be protected in an approved scheme within 30 days."
+    rationale: "Housing Act 2004 section 213 deposit-protection requirements apply in Wales and affect the validity of the Renting Homes (Wales) Act 2016 section 173 route."
     field: deposit_protected
 
   - id: s173_written_statement_missing
@@ -145,7 +145,7 @@ fault_based_rules:
     applies_when:
       - condition: "!facts.wales_breach_type && !facts.section8_grounds && (!facts.wales_fault_grounds || facts.wales_fault_grounds.length === 0)"
     message: "Wales fault-based notice requires breach grounds under Schedule 9 of RH(W)A 2016."
-    rationale: "Fault-based possession requires specification of the breach ground (s157, s159, s161, or s162)."
+    rationale: "Renting Homes (Wales) Act 2016 Schedule 9 and sections 157, 159, 161, and 162 require the landlord to specify the relied-on breach ground."
     field: wales_breach_type
 
   # ---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ fault_based_rules:
     applies_when:
       - condition: "computed.wales_fault_notice_period_too_short === true"
     message: "Wales Section 159 requires minimum 56 days (8 weeks) notice."
-    rationale: "RH(W)A 2016 s.159 requires discretionary grounds to give at least 8 weeks notice."
+    rationale: "Renting Homes (Wales) Act 2016 section 159 requires discretionary fault-based grounds to give at least 8 weeks notice."
     field: notice_expiry_date
 
   # ---------------------------------------------------------------------------
@@ -171,7 +171,7 @@ fault_based_rules:
     applies_when:
       - condition: "facts.rent_smart_wales_registered !== true"
     message: "Rent Smart Wales registration is mandatory before serving any eviction notice in Wales."
-    rationale: "All landlords in Wales must be registered with Rent Smart Wales."
+    rationale: "Renting Homes (Wales) Act 2016 and the Housing (Wales) Act 2014 licensing regime require landlords and agents to comply with Rent Smart Wales registration rules."
     field: rent_smart_wales_registered
 
   # ---------------------------------------------------------------------------
@@ -184,7 +184,7 @@ fault_based_rules:
     applies_when:
       - condition: "facts.deposit_taken === true && facts.deposit_protected !== true"
     message: "Deposit must be protected before serving fault-based notice."
-    rationale: "Deposit protection is required for all occupation contracts in Wales."
+    rationale: "Housing Act 2004 section 213 requires tenancy deposits in Wales to be protected before possession action proceeds safely."
     field: deposit_protected
 
 # =============================================================================
@@ -203,7 +203,7 @@ common_rules:
     applies_when:
       - condition: "!facts.landlord_full_name && !facts.landlord_name"
     message: "Landlord name is required for document generation."
-    rationale: "The notice must identify the landlord serving it."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 notices and Schedule 9 fault notices must identify the landlord serving the notice."
     field: landlord_full_name
 
   - id: contract_holder_name_required
@@ -212,7 +212,7 @@ common_rules:
     applies_when:
       - condition: "!facts.tenant_full_name && !facts.tenant_name && !facts.contract_holder_name"
     message: "Contract holder name is required for document generation."
-    rationale: "The notice must identify the contract holder being served."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 notices and Schedule 9 fault notices must identify the contract-holder being served."
     field: tenant_full_name
 
   - id: property_address_required
@@ -221,7 +221,7 @@ common_rules:
     applies_when:
       - condition: "!facts.property_address_line1"
     message: "Dwelling address is required for document generation."
-    rationale: "The notice must identify the dwelling."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 notices and Schedule 9 fault notices must identify the dwelling."
     field: property_address_line1
 
   # ---------------------------------------------------------------------------
@@ -234,7 +234,7 @@ common_rules:
     applies_when:
       - condition: "!facts.contract_start_date && !facts.tenancy_start_date"
     message: "Occupation contract start date is required for notice period calculations."
-    rationale: "Contract start date is needed to check timing bars and calculate notice periods."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 timing bars and fault-notice calculations require the occupation contract start date."
     field: contract_start_date
 
   - id: contract_start_date_future
@@ -243,7 +243,7 @@ common_rules:
     applies_when:
       - condition: "(facts.contract_start_date || facts.tenancy_start_date) && computed.contract_start_in_future === true"
     message: "Occupation contract start date cannot be in the future."
-    rationale: "Cannot serve eviction notice for an occupation contract that has not yet begun."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 and Schedule 9 possession notices can only be served during an existing occupation contract."
     field: contract_start_date
 
   # ---------------------------------------------------------------------------
@@ -256,7 +256,7 @@ common_rules:
     applies_when:
       - condition: "!facts.notice_service_date && !facts.notice_served_date && !computed.service_date"
     message: "Notice service date is required."
-    rationale: "Service date is needed to calculate expiry date and check timing requirements."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 and section 159 notice periods run from the service date, so it must be known."
     field: notice_service_date
 
   - id: notice_before_contract
@@ -265,7 +265,7 @@ common_rules:
     applies_when:
       - condition: "computed.notice_before_contract_start === true"
     message: "Notice cannot be served before the occupation contract started."
-    rationale: "Eviction notice must be served during the contract period."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 and Schedule 9 notices must be served during the occupation contract."
     field: notice_service_date
 
   - id: expiry_before_service
@@ -274,7 +274,7 @@ common_rules:
     applies_when:
       - condition: "computed.expiry_before_service === true"
     message: "Notice expiry date must be after service date."
-    rationale: "The notice period runs from service to expiry."
+    rationale: "Renting Homes (Wales) Act 2016 section 173 and section 159 require the expiry date to fall after service so the statutory notice period is given."
     field: notice_expiry_date
 
 # =============================================================================

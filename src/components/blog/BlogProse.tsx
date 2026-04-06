@@ -43,7 +43,7 @@ const CONTEXTUAL_LINKS = [
   { href: '/section-8-notice-guide', anchor: 'Section 8 notice guide', pattern: /\b(section 8|ground 8|ground 10|ground 11|rent arrears eviction)\b/i },
   { href: '/evict-tenant-not-paying-rent', anchor: 'evict tenant not paying rent guide', pattern: /\b(tenant not paying rent|evict tenant not paying rent|unpaid rent)\b/i },
   { href: '/tenant-stopped-paying-rent', anchor: 'tenant stopped paying rent playbook', pattern: /\b(tenant stopped paying rent|missed rent payment|late rent)\b/i },
-  { href: '/section-21-notice-guide', anchor: 'Section 21 notice guide', pattern: /\b(section 21|form 6a|no-fault eviction|accelerated possession)\b/i },
+  { href: '/renters-rights-act-eviction-rules', anchor: 'current England eviction rules', pattern: /\b(renters' rights act|current england possession|current england eviction rules)\b/i },
   { href: '/how-to-evict-a-tenant-uk', anchor: 'step-by-step UK eviction process', pattern: /\b(eviction process|possession process|possession hearing|eviction timeline|court hearing)\b/i },
   { href: '/money-claim-unpaid-rent', anchor: 'money claim for unpaid rent', pattern: /\b(money claim|mcol|debt recovery|recover rent arrears|county court claim)\b/i },
 ] as const;
@@ -158,10 +158,6 @@ function buildSituationFirstOpener(
 ): string {
   const haystack = `${post.title} ${post.targetKeyword} ${post.category} ${post.tags.join(' ')}`.toLowerCase();
   const keyword = post.targetKeyword.toLowerCase();
-
-  if (haystack.includes('section 21')) {
-    return 'You may have searched for Section 21 because you need your property back fast. Since Section 21 ends in England on 1 May 2026, this guide explains what changed and what to do next.';
-  }
 
   if (haystack.includes('section 8') || haystack.includes('ground 8') || haystack.includes('ground 10') || haystack.includes('ground 11')) {
     if (haystack.includes('arrears') || haystack.includes('rent')) {

@@ -47,6 +47,27 @@ export async function POST(request: Request) {
     }
 
     const caseFacts = await getCaseFacts(caseId);
+    const derivedJurisdiction = deriveJurisdictionFromFacts(caseFacts);
+
+    if (
+      derivedJurisdiction === 'england' &&
+      (
+        documentType === 'section21_notice' ||
+        documentType === 'n5b_claim' ||
+        caseFacts.selected_notice_route === 'section_21' ||
+        caseFacts.eviction_route === 'section_21'
+      )
+    ) {
+      return NextResponse.json(
+        {
+          error: 'ENGLAND_POST_2026_ROUTE_ONLY',
+          code: documentType === 'n5b_claim' ? 'N5B_NOT_AVAILABLE' : 'SECTION_21_ABOLISHED',
+          message:
+            'For England cases on or after 1 May 2026, generate a Form 3A notice and use the standard possession route with N5 and N119 instead.',
+        },
+        { status: 422 }
+      );
+    }
 
     // ========================================
     // PRE-GENERATION CONSISTENCY CHECK (complete_pack only)

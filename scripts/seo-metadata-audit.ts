@@ -48,6 +48,13 @@ const EXEMPT_ROUTE_PREFIXES = [
   '/success',
 ];
 
+const APP_DIR = path.join(process.cwd(), 'src', 'app');
+const ROOT_LAYOUT_PATH = path.join(APP_DIR, 'layout.tsx');
+const PAGE_FILE_NAMES = new Set(['page.tsx', 'page.ts']);
+const DYNAMIC_SEGMENT_PATTERN = /^\[.*\]$/;
+const ROUTE_GROUP_PATTERN = /^\(.*\)$/;
+const PARALLEL_SEGMENT_PATTERN = /^@/;
+
 type SharedMetadataShape = {
   source: 'intent' | 'phase5' | 'pass2';
   title: string;
@@ -70,22 +77,129 @@ type AuditResult = {
   warnings: string[];
 };
 
+type GlobalMetadataDefaults = {
+  hasTwitterCard: boolean;
+  hasOgImage: boolean;
+  hasKeywords: boolean;
+};
+
 function isExemptRoute(route: string): boolean {
   return EXEMPT_ROUTE_PREFIXES.some((prefix) => route.startsWith(prefix));
 }
 
-function findPageFile(route: string): string | null {
-  const appDir = path.join(process.cwd(), 'src', 'app');
-  const routePath = route === '/' ? '' : route.slice(1);
-  const candidates = [
-    path.join(appDir, routePath, 'page.tsx'),
-    path.join(appDir, routePath, 'page.ts'),
-  ];
+function walkFiles(dir: string): string[] {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const files: string[] = [];
 
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) {
-      return candidate;
+  for (const entry of entries) {
+    if (entry.name.startsWith('.')) {
+      continue;
     }
+
+    const absPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...walkFiles(absPath));
+      continue;
+    }
+
+    files.push(absPath);
+  }
+
+  return files;
+}
+
+function routeFromPageFile(appDir: string, absFilePath: string): string | null {
+  const rel = path.relative(appDir, absFilePath);
+  const segments = rel.split(path.sep).filter(Boolean);
+  const fileName = segments.at(-1);
+
+  if (!fileName || !PAGE_FILE_NAMES.has(fileName)) {
+    return null;
+  }
+
+  segments.pop();
+
+  if (segments.some((segment) => DYNAMIC_SEGMENT_PATTERN.test(segment))) {
+    return null;
+  }
+
+  const normalizedSegments = segments.filter(
+    (segment) => !ROUTE_GROUP_PATTERN.test(segment) && !PARALLEL_SEGMENT_PATTERN.test(segment),
+  );
+
+  return normalizedSegments.length > 0 ? `/${normalizedSegments.join('/')}` : '/';
+}
+
+function buildPageFileIndex(appDir: string): Map<string, string> {
+  const index = new Map<string, string>();
+
+  if (!fs.existsSync(appDir)) {
+    return index;
+  }
+
+  for (const absFilePath of walkFiles(appDir)) {
+    if (!PAGE_FILE_NAMES.has(path.basename(absFilePath)) || absFilePath.includes(`${path.sep}__tests__${path.sep}`)) {
+      continue;
+    }
+
+    const route = routeFromPageFile(appDir, absFilePath);
+    if (!route || index.has(route)) {
+      continue;
+    }
+
+    index.set(route, absFilePath);
+  }
+
+  return index;
+}
+
+const pageFileIndex = buildPageFileIndex(APP_DIR);
+
+function detectGlobalMetadataDefaults(): GlobalMetadataDefaults {
+  if (!fs.existsSync(ROOT_LAYOUT_PATH)) {
+    return {
+      hasTwitterCard: false,
+      hasOgImage: false,
+      hasKeywords: false,
+    };
+  }
+
+  const layoutContent = fs.readFileSync(ROOT_LAYOUT_PATH, 'utf8');
+  const usesDefaultMetadata = layoutContent.includes('...defaultMetadata');
+
+  return {
+    hasTwitterCard: usesDefaultMetadata,
+    hasOgImage: usesDefaultMetadata,
+    hasKeywords: usesDefaultMetadata,
+  };
+}
+
+const globalMetadataDefaults = detectGlobalMetadataDefaults();
+
+function findPageFile(route: string): string | null {
+  return pageFileIndex.get(route) ?? null;
+}
+
+function findNearestLayoutFile(pageFilePath: string): string | null {
+  let currentDir = path.dirname(pageFilePath);
+
+  while (currentDir.startsWith(APP_DIR)) {
+    const candidates = [
+      path.join(currentDir, 'layout.tsx'),
+      path.join(currentDir, 'layout.ts'),
+    ];
+
+    for (const candidate of candidates) {
+      if (fs.existsSync(candidate)) {
+        return candidate;
+      }
+    }
+
+    if (currentDir === APP_DIR) {
+      break;
+    }
+
+    currentDir = path.dirname(currentDir);
   }
 
   return null;
@@ -130,8 +244,23 @@ function getSharedMetadata(route: string): SharedMetadataShape | null {
   return null;
 }
 
-function extractHead(content: string): string {
-  return content.split(/\r?\n/).slice(0, 220).join('\n');
+function extractMetadataWindow(content: string): string {
+  const exportMarkers = [
+    'export const metadata',
+    'export async function generateMetadata',
+    'export function generateMetadata',
+  ];
+
+  const startIndex = exportMarkers
+    .map((marker) => content.indexOf(marker))
+    .filter((index) => index >= 0)
+    .sort((a, b) => a - b)[0];
+
+  if (startIndex === undefined) {
+    return content.split(/\r?\n/).slice(0, 220).join('\n');
+  }
+
+  return content.slice(startIndex, startIndex + 6000);
 }
 
 function extractFirstValue(head: string, fieldName: string): string | null {
@@ -197,26 +326,37 @@ function auditRoute(route: string): AuditResult {
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
-  const head = extractHead(content);
-  const hasMetadataExport = /export\s+(const metadata|async function generateMetadata|function generateMetadata)/.test(content);
-  const usesSharedHelper = /getIntentPageMetadata\(|getPhase5Metadata\(|getPass2Metadata\(/.test(content);
-  const usesMetadataGenerator = /=\s*generateMetadataForPageType\(|=\s*generateMetadata\(/.test(content);
+  const pageHasMetadataExport = /export\s+(const metadata|async function generateMetadata|function generateMetadata)/.test(content);
+  const layoutPath = pageHasMetadataExport ? null : findNearestLayoutFile(filePath);
+  const layoutContent = layoutPath ? fs.readFileSync(layoutPath, 'utf8') : '';
+  const layoutHasMetadataExport = layoutContent
+    ? /export\s+(const metadata|async function generateMetadata|function generateMetadata)/.test(layoutContent)
+    : false;
+  const metadataSourceContent = pageHasMetadataExport
+    ? content
+    : layoutHasMetadataExport
+      ? layoutContent
+      : content;
+  const metadataWindow = extractMetadataWindow(metadataSourceContent);
+  const hasMetadataExport = pageHasMetadataExport || layoutHasMetadataExport;
+  const usesSharedHelper = /getIntentPageMetadata\(|getPhase5Metadata\(|getPass2Metadata\(/.test(metadataSourceContent);
+  const usesMetadataGenerator = /=\s*generateMetadataForPageType\(|=\s*generateMetadata\(/.test(metadataSourceContent);
   const helperGuarantees = usesSharedHelper || usesMetadataGenerator;
 
-  const title = sharedMetadata?.title ?? extractFirstValue(head, 'title');
-  const description = sharedMetadata?.description ?? extractFirstValue(head, 'description');
+  const title = sharedMetadata?.title ?? extractFirstValue(metadataWindow, 'title');
+  const description = sharedMetadata?.description ?? extractFirstValue(metadataWindow, 'description');
   const keywords = sharedMetadata?.keywords.length
     ? sharedMetadata.keywords
-    : extractKeywords(head);
+    : extractKeywords(metadataWindow);
 
   const result: AuditResult = {
     route,
     filePath,
     hasMetadataExport,
-    hasCanonical: helperGuarantees || head.includes('alternates:') || head.includes('canonical:'),
-    hasTwitterCard: helperGuarantees || head.includes('twitter:'),
-    hasKeywords: helperGuarantees || keywords.length > 0,
-    hasOgImage: helperGuarantees || head.includes('openGraph:') || head.includes('images:'),
+    hasCanonical: helperGuarantees || metadataWindow.includes('alternates:') || metadataWindow.includes('canonical:'),
+    hasTwitterCard: helperGuarantees || metadataWindow.includes('twitter:') || globalMetadataDefaults.hasTwitterCard,
+    hasKeywords: helperGuarantees || keywords.length > 0 || globalMetadataDefaults.hasKeywords,
+    hasOgImage: helperGuarantees || metadataWindow.includes('openGraph:') || metadataWindow.includes('images:') || globalMetadataDefaults.hasOgImage,
     title,
     description,
     keywords,

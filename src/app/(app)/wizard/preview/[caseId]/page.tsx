@@ -354,6 +354,7 @@ export default function WizardPreviewPage() {
           return 'fault_based_notice';
         }
       }
+      if (jurisdiction === 'england') return 'section8_notice';
       if (noticeRoute === 'section_21' || noticeRoute === 'accelerated_possession') return 'section21_notice';
       return 'section8_notice';
     };
@@ -362,7 +363,7 @@ export default function WizardPreviewPage() {
     // Section 21 (no-fault) does NOT require arrears schedule
     // Section 8 and Wales fault-based routes need arrears schedule when arrears data exists
     const routeRequiresArrearsSchedule = (): boolean => {
-      const isSection8 = noticeRoute === 'section_8' || noticeRoute === 'section-8';
+      const isSection8 = jurisdiction === 'england' || noticeRoute === 'section_8' || noticeRoute === 'section-8';
       const isWalesFaultBased = noticeRoute === 'fault_based' || noticeRoute === 'fault-based' || noticeRoute === 'wales_fault_based';
       const isScotlandWithArrears = jurisdiction === 'scotland'; // Scotland Notice to Leave can include arrears grounds
       return isSection8 || isWalesFaultBased || isScotlandWithArrears;
@@ -373,6 +374,10 @@ export default function WizardPreviewPage() {
       types.push(getNoticeType());
       types.push('service_instructions');
       types.push('service_checklist');
+      if (jurisdiction === 'england') {
+        types.push('evidence_checklist');
+        types.push('proof_of_service');
+      }
       // Include arrears schedule when applicable (Section 8 with arrears grounds + data)
       if (options.includeArrearsSchedule) {
         types.push('arrears_schedule');
@@ -383,33 +388,18 @@ export default function WizardPreviewPage() {
 
       // Court forms (England/Wales only) - route-specific per pack-contents.ts
       if (jurisdiction === 'england' || jurisdiction === 'wales') {
-        // England Section 21 uses accelerated N5B procedure ONLY (no N5/N119)
-        // All other routes (England Section 8, Wales Section 173, Wales fault-based) use N5 + N119
-        const isEnglandSection21 =
-          jurisdiction === 'england' &&
-          (noticeRoute === 'section_21' ||
-            noticeRoute === 'section-21' ||
-            noticeRoute === 'accelerated_possession' ||
-            noticeRoute === 'accelerated_section21');
-
-        if (isEnglandSection21) {
-          // England Section 21: Use N5B accelerated procedure only
-          types.push('n5b_claim');
-        } else {
-          // England Section 8, Wales Section 173, Wales fault-based: Use standard N5 + N119 procedure
-          types.push('n5_claim');
-          types.push('n119_particulars');
-        }
+        types.push('n5_claim');
+        types.push('n119_particulars');
       }
-
-      // AI-generated documents
-      // Note: compliance_audit and risk_assessment removed as of Jan 2026 pack restructure
-      types.push('witness_statement');
 
       // Guidance documents
       // Note: eviction_roadmap removed as of Jan 2026 pack restructure
       types.push('service_instructions');
       types.push('service_checklist');
+      if (jurisdiction === 'england') {
+        types.push('evidence_checklist');
+        types.push('proof_of_service');
+      }
 
       if (jurisdiction === 'england' || jurisdiction === 'wales') {
         types.push('court_filing_guide');
@@ -747,17 +737,20 @@ export default function WizardPreviewPage() {
 
                   // Get user-friendly document title for display
                   const docTypeLabels: Record<string, string> = {
-                    section8_notice: 'Section 8 Notice',
+                    section8_notice: (caseData?.jurisdiction || 'england') === 'england'
+                      ? 'Form 3A Notice Seeking Possession'
+                      : 'Section 8 Notice',
                     section21_notice: 'Section 21 Notice (Form 6A)',
                     n5_claim: 'Form N5 - Claim for Possession',
                     n119_particulars: 'Form N119 - Particulars of Claim',
                     n5b_claim: 'Form N5B - Accelerated Possession',
-                    witness_statement: 'Witness Statement',
                     service_instructions: 'Service Instructions',
-                    service_checklist: 'Service Checklist',
+                    service_checklist: (caseData?.jurisdiction || 'england') === 'england'
+                      ? 'Service & Compliance Checklist'
+                      : 'Service Checklist',
                     court_filing_guide: 'Court Filing Guide',
-                    evidence_checklist: 'Evidence Checklist',
-                    proof_of_service: 'Proof of Service',
+                    evidence_checklist: 'Ground-Specific Evidence Checklist',
+                    proof_of_service: 'Proof of Service Support',
                     arrears_schedule: 'Arrears Schedule',
                   };
                   const docTitle = docTypeLabels[docType] || docType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());

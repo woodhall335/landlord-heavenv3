@@ -157,7 +157,7 @@ export default function AboutPage() {
                   <li className="flex items-center gap-2">
                     <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-4" />
                     <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-4" />
-                    England & Wales: Section 8/21, ASTs, Form 6A
+                    England & Wales: current possession notices, tenancy agreements, and court forms
                   </li>
                   <li className="flex items-center gap-2">
                     <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-4" />
@@ -197,7 +197,7 @@ export default function AboutPage() {
                   Thousands of successful cases.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>Official Form 6A, N5, AT6 formats</li>
+                  <li>Official Form 3A, N5, AT6, and related court formats</li>
                   <li>Comply with latest legislation</li>
                   <li>Smart validation before generation</li>
                   <li>Accepted by all UK courts</li>
@@ -378,7 +378,7 @@ export default function AboutPage() {
                   Official Government Forms
                 </h4>
                 <p className="text-sm text-gray-700">
-                  We use actual Form 6A, N5, AT6, and other official forms - not generic document drafts. Courts require these
+                  We use actual Form 3A, N5, AT6, and other official forms - not generic document drafts. Courts require these
                   specific formats.
                 </p>
               </div>

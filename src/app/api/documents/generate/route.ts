@@ -55,6 +55,9 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
+import { getEnglandGroundDefinition } from '@/lib/england-possession/ground-catalog';
+import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
+import { buildEnglandForm3AExplanation } from '@/lib/england-possession/pack-drafting';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -122,6 +125,8 @@ const generateDocumentSchema = z.object({
     'n5_claim', // England court possession claim
     'n119_particulars', // England particulars of claim
     'n5b_claim', // England accelerated possession (Section 21)
+    'n325_request', // England warrant of possession request
+    'n325a_request', // England warrant after suspended order breach
     // Evidence tools
     'arrears_schedule', // Rent arrears schedule
     // AI-generated documents (Ask Heaven)
@@ -137,6 +142,7 @@ const generateDocumentSchema = z.object({
     'case_summary', // Case summary document
     'court_filing_guide', // Court filing instructions (England & Wales)
     'tribunal_lodging_guide', // Tribunal lodging guide (Scotland)
+    'cover_letter_to_tenant', // Non-statutory cover letter
     // Evidence tools
     'evidence_checklist', // Evidence collection checklist
     'proof_of_service', // Proof of service template (editable PDF)
@@ -171,6 +177,7 @@ function resolveProductForDocument(documentType: string, caseFacts: Record<strin
     'expert_guidance',
     'eviction_timeline',
     'case_summary',
+    'cover_letter_to_tenant',
     'proof_of_service',
   ]);
 
@@ -188,6 +195,45 @@ function resolveProductForDocument(documentType: string, caseFacts: Record<strin
 function buildAddress(...parts: Array<string | null | undefined>) {
   const cleaned = parts.map((p) => (typeof p === 'string' ? p.trim() : p)).filter(Boolean) as string[];
   return cleaned.join('\n');
+}
+
+function normalizeProofOfServiceMethod(value: unknown):
+  | 'hand_delivery'
+  | 'letterbox'
+  | 'first_class_post'
+  | 'recorded_delivery'
+  | 'email'
+  | 'other'
+  | undefined {
+  const normalized = String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, '_');
+
+  switch (normalized) {
+    case 'hand':
+    case 'by_hand':
+    case 'hand_delivery':
+    case 'personal_delivery':
+      return 'hand_delivery';
+    case 'letterbox':
+    case 'through_letterbox':
+      return 'letterbox';
+    case 'first_class_post':
+    case 'post':
+    case 'firstclasspost':
+      return 'first_class_post';
+    case 'recorded_delivery':
+    case 'recorded_post':
+    case 'signed_for':
+      return 'recorded_delivery';
+    case 'email':
+      return 'email';
+    case 'other':
+      return 'other';
+    default:
+      return undefined;
+  }
 }
 
 /**
@@ -257,100 +303,19 @@ function buildGroundSpecificEvidence(selectedGrounds: string[]): Array<{ ground:
     return [];
   }
 
-  const groundEvidenceMap: Record<string, { title: string; evidence_items: string[] }> = {
-    '8': {
-      title: 'Rent Arrears (Mandatory)',
-      evidence_items: [
-        'Rent payment schedule showing all payments due and received',
-        'Bank statements showing rent transactions',
-        'Copies of rent demand letters sent to tenant',
-        'Schedule of arrears with running balance',
-        'Current arrears figure at time of notice AND at time of hearing',
-      ],
-    },
-    '10': {
-      title: 'Rent Arrears (Discretionary)',
-      evidence_items: [
-        'Rent payment schedule showing all payments due and received',
-        'Bank statements showing rent transactions',
-        'Evidence of arrears at notice date and hearing date',
-      ],
-    },
-    '11': {
-      title: 'Persistent Delay in Paying Rent',
-      evidence_items: [
-        'Full rent payment history showing pattern of late payments',
-        'Records of reminders/demands sent',
-        'Evidence of dates rent was due vs. dates paid',
-      ],
-    },
-    '12': {
-      title: 'Breach of Tenancy Agreement',
-      evidence_items: [
-        'Copy of tenancy agreement highlighting breached clause',
-        'Evidence of the breach (photos, correspondence, complaints)',
-        'Copies of warning letters sent to tenant',
-      ],
-    },
-    '13': {
-      title: 'Waste or Neglect',
-      evidence_items: [
-        'Dated photographs showing condition of property',
-        'Inventory/check-in report for comparison',
-        'Repair quotes or invoices for damage',
-        'Any correspondence about maintenance issues',
-      ],
-    },
-    '14': {
-      title: 'Nuisance or Annoyance',
-      evidence_items: [
-        'Incident log with dates, times, descriptions',
-        'Complaint letters from neighbours',
-        'Police reports or crime reference numbers',
-        'Witness statements from affected parties',
-        'Any relevant court orders (injunctions, ASBOs)',
-      ],
-    },
-    '14A': {
-      title: 'Domestic Violence',
-      evidence_items: [
-        'Court orders or injunctions',
-        'Police reports',
-        'Partner/tenant departure evidence',
-      ],
-    },
-    '15': {
-      title: 'Deterioration of Furniture',
-      evidence_items: [
-        'Inventory showing original condition',
-        'Photographs of current condition',
-        'Receipts for original furniture',
-      ],
-    },
-    '17': {
-      title: 'False Statement to Obtain Tenancy',
-      evidence_items: [
-        'Original application form or references',
-        'Evidence of false information provided',
-        'Correspondence about the discovered falsehood',
-      ],
-    },
-  };
-
   return selectedGrounds.map((ground) => {
     const match = ground.match(/ground\s*([0-9a-z]+)/i);
-    const groundNum = match ? match[1].toUpperCase() : ground;
-    const groundInfo = groundEvidenceMap[groundNum];
+    const groundNum = match ? match[1].toUpperCase() : String(ground).toUpperCase();
+    const groundInfo = getEnglandGroundDefinition(groundNum);
 
     if (groundInfo) {
       return {
         ground: `Ground ${groundNum}`,
         title: groundInfo.title,
-        evidence_items: groundInfo.evidence_items,
+        evidence_items: groundInfo.evidenceCategories,
       };
     }
 
-    // Default for unknown grounds
     return {
       ground: `Ground ${groundNum}`,
       title: ground,
@@ -457,7 +422,7 @@ function prepareGuidanceDocumentData(
 
   // Determine notice type label
   const noticeType = route === 'section_21' ? 'Section 21 Notice'
-    : route === 'section_8' ? 'Section 8 Notice'
+    : route === 'section_8' ? 'Form 3A Notice Seeking Possession'
     : route === 'section_173' || route === 'wales_section_173' ? 'Section 173 Notice'
     : route === 'notice_to_leave' ? 'Notice to Leave'
     : route === 'fault_based' || route === 'wales_fault_based' ? 'Fault-Based Notice'
@@ -465,7 +430,7 @@ function prepareGuidanceDocumentData(
 
   // Determine case type
   const caseType = route === 'section_21' ? 'No-fault eviction'
-    : route === 'section_8' ? 'Rent arrears / breach'
+    : route === 'section_8' ? 'Post-1 May 2026 England possession'
     : route === 'section_173' ? 'No-fault eviction (Wales)'
     : route === 'notice_to_leave' ? 'PRT eviction (Scotland)'
     : 'Eviction';
@@ -475,6 +440,13 @@ function prepareGuidanceDocumentData(
   // Build ground-specific required evidence items
   const requiredEvidence =
     route === 'section_8' ? buildGroundSpecificEvidence(selectedGrounds) : [];
+  const normalizedGroundCodes = (Array.isArray(selectedGrounds) ? selectedGrounds : [])
+    .map((ground) => {
+      const match = String(ground).match(/ground\s*([0-9a-z]+)/i);
+      return match ? match[1].toUpperCase() : String(ground).toUpperCase();
+    });
+  const hasGround1A = normalizedGroundCodes.includes('1A');
+  const usesRentArrearsGrounds = normalizedGroundCodes.some((ground) => ['8', '10', '11'].includes(ground));
 
   return {
     // Spread original wizard facts
@@ -506,6 +478,15 @@ function prepareGuidanceDocumentData(
     ground_1_claimed: ground1Claimed,
     notice_period_days: noticePeriodDays,
     required_evidence: requiredEvidence,
+    selected_ground_codes: normalizedGroundCodes,
+    is_england_post_2026: jurisdiction === 'england',
+    has_ground_1a: hasGround1A,
+    uses_rent_arrears_grounds: usesRentArrearsGrounds,
+    section_16e_duties_checked: wizardFacts.section_16e_duties_checked,
+    breathing_space_checked: wizardFacts.breathing_space_checked,
+    tenant_in_breathing_space: wizardFacts.tenant_in_breathing_space,
+    evidence_bundle_ready: wizardFacts.evidence_bundle_ready,
+    ground_1a_reletting_acknowledged: wizardFacts.ground_1a_reletting_acknowledged,
 
     // Fixed term detection
     is_fixed_term: wizardFacts.is_fixed_term || wizardFacts.fixed_term ||
@@ -836,7 +817,10 @@ export async function POST(request: Request) {
             });
             return NextResponse.json(
               {
-                error: 'Missing required fields for Section 8 notice',
+                error:
+                  canonicalJurisdiction === 'england'
+                    ? 'Missing required fields for Form 3A notice'
+                    : 'Missing required fields for Section 8 notice',
                 code: 'MISSING_REQUIRED_FIELDS',
                 documentType: 'section8_notice',
                 missing,
@@ -846,12 +830,68 @@ export async function POST(request: Request) {
             );
           }
 
-          generatedDoc = await generateSection8Notice(safeCaseData as any);
-          documentTitle = 'Section 8 Notice - Notice Seeking Possession';
+          if (canonicalJurisdiction === 'england') {
+            const selectedGrounds = getSelectedGrounds(wizardFacts);
+            const groundsText = await buildEnglandForm3AGroundsText(selectedGrounds);
+            const draftedForm3AExplanation = buildEnglandForm3AExplanation({
+              ...safeCaseData,
+              ...wizardFacts,
+              ground_codes: selectedGrounds,
+            });
+            const form3AData: CaseData = {
+              ...(safeCaseData as CaseData),
+              ground_codes: selectedGrounds,
+              form3a_grounds_text: groundsText,
+              form3a_explanation: draftedForm3AExplanation,
+              landlord_address_line1: wizardFacts.landlord_address_line1 || safeCaseData.landlord_address_line1,
+              landlord_address_line2: wizardFacts.landlord_address_line2 || safeCaseData.landlord_address_line2,
+              landlord_city: wizardFacts.landlord_city || safeCaseData.landlord_city,
+              landlord_county: wizardFacts.landlord_county || safeCaseData.landlord_county,
+              landlord_postcode: wizardFacts.landlord_postcode || safeCaseData.landlord_postcode,
+              property_address_line1: wizardFacts.property_address_line1 || safeCaseData.property_address_line1,
+              property_address_line2: wizardFacts.property_address_line2 || safeCaseData.property_address_line2,
+              property_city: wizardFacts.property_city || safeCaseData.property_city,
+              property_county: wizardFacts.property_county || safeCaseData.property_county,
+              property_postcode: wizardFacts.property_postcode || safeCaseData.property_postcode,
+              signatory_capacity: wizardFacts.signatory_capacity || 'landlord',
+            };
+
+            const pdfBytes = await fillOfficialForm('form3a', form3AData);
+            generatedDoc = {
+              pdf: Buffer.from(pdfBytes),
+              html: null,
+            };
+            documentTitle = 'Form 3A - Notice seeking possession';
+          } else {
+            generatedDoc = await generateSection8Notice(safeCaseData as any);
+            documentTitle = 'Section 8 Notice - Notice Seeking Possession';
+          }
           break;
         }
 
         case 'section21_notice': {
+          if (canonicalJurisdiction === 'england') {
+            return NextResponse.json(
+              {
+                code: 'SECTION_21_ABOLISHED',
+                error: 'SECTION_21_ABOLISHED',
+                user_message:
+                  'Section 21 is not part of the England private rented possession flow on or after 1 May 2026. Use Form 3A instead.',
+                blocking_issues: [
+                  {
+                    code: 'SECTION_21_ABOLISHED',
+                    fields: [],
+                    user_fix_hint: 'Use Form 3A and the standard possession route instead of Form 6A / N5B.',
+                  },
+                ],
+                warnings: [],
+                alternative_routes: ['section_8'],
+                suggested_action: 'Generate Form 3A instead.',
+              },
+              { status: 422 }
+            );
+          }
+
           // ✅ ELIGIBILITY CHECK: Verify Section 21 is allowed before generating
           // First check if wizard has auto-selected a different route
           const selectedNoticeRoute = normalizeRoute((wizardFacts as any).selected_notice_route);
@@ -1180,7 +1220,54 @@ export async function POST(request: Request) {
           break;
         }
 
+        case 'n325_request': {
+          const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+          const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData;
+          const pdfBytes = await fillOfficialForm('n325', safeCaseData);
+
+          generatedDoc = {
+            pdf: Buffer.from(pdfBytes),
+            html: null,
+          };
+
+          documentTitle = 'Form N325 - Request for Warrant for Possession of Land';
+          break;
+        }
+
+        case 'n325a_request': {
+          const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+          const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData;
+          const pdfBytes = await fillOfficialForm('n325a', safeCaseData);
+
+          generatedDoc = {
+            pdf: Buffer.from(pdfBytes),
+            html: null,
+          };
+
+          documentTitle = 'Form N325A - Request for Warrant Following a Suspended Order';
+          break;
+        }
+
         case 'n5b_claim': {
+          if (canonicalJurisdiction === 'england') {
+            return NextResponse.json(
+              {
+                code: 'N5B_NOT_AVAILABLE',
+                error: 'N5B_NOT_AVAILABLE',
+                user_message:
+                  'N5B accelerated possession is not part of the England private rented possession flow on or after 1 May 2026. Use N5 and N119 instead.',
+                blocking_issues: [
+                  {
+                    code: 'N5B_NOT_AVAILABLE',
+                    fields: [],
+                    user_fix_hint: 'Use the standard possession route with Form 3A, N5, and N119.',
+                  },
+                ],
+              },
+              { status: 422 }
+            );
+          }
+
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
           const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData;
 
@@ -1264,6 +1351,14 @@ export async function POST(request: Request) {
               arrears_total: arrearsData.arrears_total,
               rent_amount: rentAmount,
               rent_frequency: rentFrequency,
+              tenancy_start_date:
+                wizardFacts.tenancy_start_date ||
+                caseFacts.tenancy?.start_date ||
+                '',
+              payment_day:
+                wizardFacts.rent_due_day ||
+                caseFacts.tenancy?.rent_due_day ||
+                '',
             },
             isPreview: is_preview,
             outputFormat: 'both',
@@ -1404,6 +1499,29 @@ export async function POST(request: Request) {
           break;
         }
 
+        case 'cover_letter_to_tenant': {
+          if (canonicalJurisdiction !== 'england') {
+            return NextResponse.json(
+              { error: 'Cover Letter to Tenant is currently configured for the England Form 3A flow only.' },
+              { status: 400 }
+            );
+          }
+
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
+
+          generatedDoc = await generateDocument({
+            templatePath: 'uk/england/templates/eviction/cover_letter_to_tenant.hbs',
+            data: guidanceData,
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Cover Letter to Tenant';
+          break;
+        }
+
         case 'service_checklist': {
           const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
           const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
@@ -1431,7 +1549,7 @@ export async function POST(request: Request) {
             outputFormat: 'both',
           });
 
-          documentTitle = 'Service & Validity Checklist';
+          documentTitle = 'Service & Compliance Checklist';
           break;
         }
 
@@ -1513,17 +1631,31 @@ export async function POST(request: Request) {
             outputFormat: 'both',
           });
 
-          documentTitle = 'Evidence Collection Checklist';
+          documentTitle = 'Ground-Specific Evidence Checklist';
           break;
         }
 
         case 'proof_of_service': {
           // Generate editable PDF form with fillable fields
+          const proofPropertyAddress =
+            wizardFacts.property_address ||
+            buildAddress(
+              wizardFacts.property_address_line1,
+              wizardFacts.property_address_line2,
+              wizardFacts.property_address_town || wizardFacts.property_city,
+              wizardFacts.property_address_county,
+              wizardFacts.property_address_postcode,
+            );
           const proofPdfBytes = await generateProofOfServicePDF({
             landlord_name: wizardFacts.landlord_full_name,
             tenant_name: wizardFacts.tenant_full_name,
-            property_address: wizardFacts.property_address,
-            document_served: wizardFacts.eviction_route === 'section_21'
+            property_address: proofPropertyAddress,
+            served_date: wizardFacts.notice_served_date || wizardFacts.notice_date,
+            expiry_date: wizardFacts.notice_expiry_date || wizardFacts.earliest_possession_date,
+            service_method: normalizeProofOfServiceMethod(wizardFacts.notice_service_method),
+            document_served: canonicalJurisdiction === 'england'
+              ? 'Form 3A notice seeking possession'
+              : wizardFacts.eviction_route === 'section_21'
               ? 'Section 21 Notice (Form 6A)'
               : wizardFacts.eviction_route === 'section_8'
               ? 'Section 8 Notice (Form 3)'
@@ -1535,7 +1667,7 @@ export async function POST(request: Request) {
             html: null, // Editable PDFs have no HTML representation
           };
 
-          documentTitle = 'Proof of Service (Editable Form)';
+          documentTitle = 'Proof of Service Support';
           break;
         }
 
@@ -1548,11 +1680,14 @@ export async function POST(request: Request) {
             );
           }
 
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
+
           generatedDoc = await generateDocument({
             templatePath: 'uk/england/templates/eviction/court_filing_guide.hbs',
             data: {
-              ...wizardFacts,
-              jurisdiction: canonicalJurisdiction,
+              ...guidanceData,
               current_date: new Date().toLocaleDateString('en-GB'),
             },
             isPreview: is_preview,

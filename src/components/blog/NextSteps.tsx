@@ -59,12 +59,12 @@ function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
   };
 
   const descriptionMap: Record<string, string> = {
-    '/section-21-notice-template': 'Free Form 6A template for England landlords',
-    '/section-8-notice-template': 'Free Form 3 template for England landlords',
-    '/serve-section-21-notice': 'Methods, timing, and proof for serving Form 6A correctly',
-    '/serve-section-8-notice': 'Serve Form 3 with the right grounds, dates, and evidence',
+    '/section-21-notice-template': 'Current England notice hub for route guidance and next steps',
+    '/section-8-notice-template': 'Current Form 3A guidance for England landlords',
+    '/serve-section-21-notice': 'Historical transition guidance for older notice-serving searches',
+    '/serve-section-8-notice': 'Serve Form 3A with the right grounds, dates, and evidence',
     '/eviction-court-forms-england': 'Understand the main county court possession forms and when to use them',
-    '/n5b-form-guide': 'Accelerated possession form guidance for Section 21 claims',
+    '/n5b-form-guide': 'Current N5 and N119 possession claim guidance for England landlords',
     '/court-possession-order-guide': 'Prepare for order-stage paperwork, hearing outcomes, and enforcement',
     '/eviction-timeline-england': 'Stage-by-stage England eviction timeline from notice to bailiff',
     '/possession-order-timeline': 'Track the order stage and the delays that affect enforcement',

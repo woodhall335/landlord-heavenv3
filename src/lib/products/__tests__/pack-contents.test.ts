@@ -11,7 +11,7 @@ import type { GetPackContentsArgs, PackItem } from '../pack-contents';
 describe('getPackContents', () => {
   describe('notice_only product', () => {
     describe('england', () => {
-      it('returns Section 21 notice items', () => {
+      it('always returns the Form 3A-led England notice pack', () => {
         const args: GetPackContentsArgs = {
           product: 'notice_only',
           jurisdiction: 'england',
@@ -20,12 +20,16 @@ describe('getPackContents', () => {
         const items = getPackContents(args);
 
         expect(items.length).toBeGreaterThan(0);
-        expect(items.find(i => i.key === 'section21_notice')).toBeDefined();
+        expect(items.find(i => i.key === 'section8_notice')?.title).toContain('Form 3A');
         expect(items.find(i => i.key === 'service_instructions')).toBeDefined();
+        expect(items.find(i => i.key === 'cover_letter_to_tenant')).toBeDefined();
         expect(items.find(i => i.key === 'service_checklist')).toBeDefined();
+        expect(items.find(i => i.key === 'evidence_checklist')).toBeDefined();
+        expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
+        expect(items.find(i => i.key === 'section21_notice')).toBeUndefined();
       });
 
-      it('returns Section 8 notice items', () => {
+      it('returns the same Form 3A notice pack for the section_8 compatibility route', () => {
         const args: GetPackContentsArgs = {
           product: 'notice_only',
           jurisdiction: 'england',
@@ -138,7 +142,7 @@ describe('getPackContents', () => {
 
   describe('complete_pack product', () => {
     describe('england', () => {
-      it('returns Section 21 complete pack with N5B (accelerated)', () => {
+      it('maps England complete pack to Form 3A plus N5/N119 even for legacy section_21 inputs', () => {
         const args: GetPackContentsArgs = {
           product: 'complete_pack',
           jurisdiction: 'england',
@@ -146,15 +150,17 @@ describe('getPackContents', () => {
         };
         const items = getPackContents(args);
 
-        expect(items.find(i => i.key === 'section21_notice')).toBeDefined();
-        expect(items.find(i => i.key === 'n5b_claim')).toBeDefined();
-        expect(items.find(i => i.key === 'witness_statement')).toBeDefined();
+        expect(items.find(i => i.key === 'section8_notice')?.title).toContain('Form 3A');
+        expect(items.find(i => i.key === 'n5_claim')).toBeDefined();
+        expect(items.find(i => i.key === 'n119_particulars')).toBeDefined();
         expect(items.find(i => i.key === 'court_filing_guide')).toBeDefined();
-        // N5 not included for Section 21 (uses accelerated)
-        expect(items.find(i => i.key === 'n5_claim')).toBeUndefined();
+        expect(items.find(i => i.key === 'cover_letter_to_tenant')).toBeDefined();
+        expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
+        expect(items.find(i => i.key === 'n5b_claim')).toBeUndefined();
+        expect(items.find(i => i.key === 'witness_statement')).toBeUndefined();
       });
 
-      it('returns Section 8 complete pack with N5 and N119', () => {
+      it('returns England complete pack with N5 and N119', () => {
         const args: GetPackContentsArgs = {
           product: 'complete_pack',
           jurisdiction: 'england',
@@ -162,7 +168,7 @@ describe('getPackContents', () => {
         };
         const items = getPackContents(args);
 
-        expect(items.find(i => i.key === 'section8_notice')).toBeDefined();
+        expect(items.find(i => i.key === 'section8_notice')?.title).toContain('Form 3A');
         expect(items.find(i => i.key === 'n5_claim')).toBeDefined();
         expect(items.find(i => i.key === 'n119_particulars')).toBeDefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
@@ -900,8 +906,8 @@ describe('Jurisdiction correctness', () => {
     });
   });
 
-  describe('England - Section 8/21 ARE supported (Housing Act 1988)', () => {
-    it('England + section_8 returns Section 8 notice', () => {
+  describe('England post-1 May 2026 possession packs', () => {
+    it('England + section_8 returns Form 3A notice pack', () => {
       const items = getPackContents({
         product: 'notice_only',
         jurisdiction: 'england',
@@ -909,19 +915,21 @@ describe('Jurisdiction correctness', () => {
       });
 
       expect(items.find(i => i.key === 'section8_notice')).toBeDefined();
+      expect(items.find(i => i.title.includes('Form 3A'))).toBeDefined();
     });
 
-    it('England + section_21 returns Section 21 notice', () => {
+    it('England + section_21 still resolves to the Form 3A notice pack', () => {
       const items = getPackContents({
         product: 'notice_only',
         jurisdiction: 'england',
         route: 'section_21',
       });
 
-      expect(items.find(i => i.key === 'section21_notice')).toBeDefined();
+      expect(items.find(i => i.key === 'section8_notice')).toBeDefined();
+      expect(items.find(i => i.key === 'section21_notice')).toBeUndefined();
     });
 
-    it('England complete_pack uses County Court forms', () => {
+    it('England complete_pack uses the standard possession court forms', () => {
       const items = getPackContents({
         product: 'complete_pack',
         jurisdiction: 'england',
@@ -930,7 +938,8 @@ describe('Jurisdiction correctness', () => {
 
       expect(items.find(i => i.key === 'n5_claim')).toBeDefined();
       expect(items.find(i => i.key === 'n119_particulars')).toBeDefined();
-      expect(items.find(i => i.description?.includes('County Court'))).toBeDefined();
+      expect(items.find(i => i.key === 'n5b_claim')).toBeUndefined();
+      expect(items.find(i => i.description?.toLowerCase().includes('county court'))).toBeDefined();
     });
   });
 });

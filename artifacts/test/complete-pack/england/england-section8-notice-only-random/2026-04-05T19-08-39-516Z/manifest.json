@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-04-05T19:08:39.529Z",
+  "runId": "2026-04-05T19-08-39-516Z",
+  "jurisdiction": "england",
+  "variant": "england-section8-notice-only-random",
+  "packSlug": "england-section8-notice-only-random",
+  "docs": [
+    {
+      "key": "section8_notice",
+      "filename": "notice.html",
+      "title": "Section 8 Notice",
+      "type": "html"
+    },
+    {
+      "key": "service_instructions",
+      "filename": "service-instructions.pdf",
+      "title": "Service Instructions",
+      "type": "pdf"
+    },
+    {
+      "key": "validity_checklist",
+      "filename": "service-checklist.pdf",
+      "title": "Service & Validity Checklist",
+      "type": "pdf"
+    },
+    {
+      "key": "compliance_declaration",
+      "filename": "compliance-declaration.pdf",
+      "title": "Pre-Service Compliance Declaration",
+      "type": "pdf"
+    },
+    {
+      "key": "arrears_schedule",
+      "filename": "arrears-schedule.pdf",
+      "title": "Rent Schedule / Arrears Statement",
+      "type": "pdf"
+    }
+  ],
+  "skipped": [],
+  "metadata": {
+    "caseId": "EVICT-RANDOM-1775415865117-9399",
+    "sampleType": "fictional-random-party-data",
+    "landlord": "Daniel Mercer",
+    "tenant": "Ivy Carleton",
+    "grounds": [
+      "Ground 8",
+      "Ground 10"
+    ],
+    "arrears": 3600
+  }
+}

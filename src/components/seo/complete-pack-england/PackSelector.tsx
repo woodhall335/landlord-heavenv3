@@ -6,8 +6,7 @@ interface PackSelectorProps {
 }
 
 const options = [
-  { id: 'section8' as const, label: 'Section 8 Eviction Pack' },
-  { id: 'section21' as const, label: 'Section 21 Eviction Pack' },
+  { id: 'section8' as const, label: 'Current England Possession Pack' },
 ];
 
 export function PackSelector({ selected, onSelect }: PackSelectorProps) {
@@ -24,7 +23,7 @@ export function PackSelector({ selected, onSelect }: PackSelectorProps) {
           onKeyDown={(event) => {
             if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
               event.preventDefault();
-              onSelect(selected === 'section8' ? 'section21' : 'section8');
+              onSelect('section8');
             }
           }}
           className={`pill-selector-btn ${selected === option.id ? 'pill-selector-btn-active' : 'pill-selector-btn-inactive'}`}

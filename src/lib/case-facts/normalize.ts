@@ -13,6 +13,11 @@ import {
   SECTION8_GROUND_DEFINITIONS,
   type Section8GroundDefinition,
 } from '../grounds/section8-ground-definitions';
+import {
+  calculateEnglandPossessionNoticePeriod,
+  getEnglandGroundDefinition as getPost2026EnglandGroundDefinition,
+} from '@/lib/england-possession/ground-catalog';
+import { calculateEarliestValidPossessionDate } from '@/lib/england-possession/post-2026-validation';
 import { calculateSection21ExpiryDate } from '../documents/notice-date-calculator';
 import { getArrearsScheduleData, type ArrearsScheduleData } from '../documents/arrears-schedule-mapper';
 import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
@@ -44,6 +49,12 @@ export function formatUkLegalDate(dateStr: string | null | undefined): string | 
   } catch {
     return null;
   }
+}
+
+function addDaysToDate(dateStr: string, days: number): string {
+  const date = new Date(`${dateStr}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().split('T')[0];
 }
 
 /**
@@ -2615,42 +2626,6 @@ export function normalizeCaseFacts(
 // =============================================================================
 
 /**
- * Notice periods required for each Section 8 ground (in days)
- *
- * Legal basis: Housing Act 1988, Section 8(4) and Schedule 2
- *
- * 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 10, 11, 12, 13, 14, 14ZA, 15, 17
- * 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 16
- * Immediate (0 days): Ground 14 (serious anti-social behaviour), Ground 14A
- *
- * NOTE: Ground 14 can be served with immediate effect in cases of serious
- * anti-social behaviour, but defaults to 14 days for standard nuisance.
- */
-const GROUND_NOTICE_PERIODS: Record<number | string, number> = {
-  1: 60,    // 2 months - landlord previously occupied
-  2: 60,    // 2 months - mortgage lender requires possession
-  3: 14,    // 2 weeks - holiday let
-  4: 14,    // 2 weeks - educational institution let
-  5: 60,    // 2 months - minister of religion
-  6: 60,    // 2 months - demolition/reconstruction
-  7: 60,    // 2 months - death of periodic tenant
-  '7A': 14, // 2 weeks - abandonment (fixed term)
-  '7B': 14, // 2 weeks - abandonment (periodic)
-  8: 14,    // 2 weeks - serious rent arrears (8 weeks/2 months)
-  9: 60,    // 2 months - suitable alternative accommodation
-  10: 14,   // 2 weeks - some rent arrears
-  11: 14,   // 2 weeks - persistent delay in paying rent
-  12: 14,   // 2 weeks - breach of tenancy obligation
-  13: 14,   // 2 weeks - deterioration of dwelling
-  14: 14,   // 2 weeks (default) - nuisance/annoyance (can be immediate for serious ASB)
-  '14ZA': 14, // 2 weeks - riot conviction
-  '14A': 0,   // Immediate - domestic violence
-  15: 14,   // 2 weeks - deterioration of furniture
-  16: 60,   // 2 months - former employee
-  17: 14,   // 2 weeks - false statement
-};
-
-/**
  * Calculate the required notice period based on selected grounds
  * Returns the MAXIMUM notice period required across all selected grounds
  *
@@ -2658,37 +2633,7 @@ const GROUND_NOTICE_PERIODS: Record<number | string, number> = {
  * @returns Notice period in days (defaults to 14 if no grounds specified)
  */
 function calculateRequiredNoticePeriod(selectedGrounds: (string | number)[]): number {
-  if (!selectedGrounds || selectedGrounds.length === 0) {
-    return 14; // Default for Section 8 when no specific grounds
-  }
-
-  let maxPeriod = 0;
-
-  for (const ground of selectedGrounds) {
-    // Normalize ground code
-    let groundKey: string | number = ground;
-    if (typeof ground === 'string') {
-      const match = ground.match(/ground[_\s-]*([0-9]+[ab]?)/i);
-      if (match) {
-        groundKey = match[1].toUpperCase();
-      } else {
-        const numMatch = ground.match(/^([0-9]+[ab]?)$/i);
-        if (numMatch) {
-          groundKey = numMatch[1].toUpperCase();
-        }
-      }
-    }
-
-    // Try numeric key first, then string key
-    const numericKey = typeof groundKey === 'string' ? parseInt(groundKey, 10) : groundKey;
-    const period = GROUND_NOTICE_PERIODS[numericKey] ?? GROUND_NOTICE_PERIODS[groundKey] ?? 14;
-
-    if (period > maxPeriod) {
-      maxPeriod = period;
-    }
-  }
-
-  return maxPeriod;
+  return calculateEnglandPossessionNoticePeriod(selectedGrounds).noticePeriodDays;
 }
 
 // SECTION8_GROUND_DEFINITIONS is now imported from '@/lib/grounds/section8-ground-definitions'
@@ -2819,7 +2764,12 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       particularsEntry?.narrative ||
       defaultNarrative;
 
-    if (arrearsAmount !== null && arrearsAmount !== undefined && groundDef && [8, 10, 11].includes(groundDef.code)) {
+    if (
+      arrearsAmount !== null &&
+      arrearsAmount !== undefined &&
+      groundDef &&
+      ['8', '10', '11'].includes(String(groundDef.code))
+    ) {
       const formattedAmount = formatCurrency(arrearsAmount) || arrearsAmount;
       facts.push(`<strong>Total amount owed:</strong> ${formattedAmount}`);
     }
@@ -2859,7 +2809,23 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
   return filteredGrounds.map((groundStr: string) => {
     const groundNumStr = normalizeGroundCode(groundStr) || '';
     const groundKey = groundNumStr === '14A' ? '14A' : parseInt(groundNumStr, 10);
-    const groundDef = SECTION8_GROUND_DEFINITIONS[groundKey] || SECTION8_GROUND_DEFINITIONS[groundNumStr];
+    const groundDef =
+      SECTION8_GROUND_DEFINITIONS[groundKey] ||
+      SECTION8_GROUND_DEFINITIONS[groundNumStr] ||
+      (() => {
+        const englandGround = getPost2026EnglandGroundDefinition(groundNumStr);
+        if (!englandGround) {
+          return undefined;
+        }
+
+        return {
+          code: englandGround.code,
+          title: englandGround.title,
+          mandatory: englandGround.mandatory,
+          legal_basis: `Housing Act 1988, Schedule 2, Ground ${englandGround.code}`,
+          full_text: '',
+        } satisfies Section8GroundDefinition;
+      })();
 
     if (!groundDef) {
       console.warn(`[buildGroundsArray] Unknown ground: ${groundStr}`);
@@ -4235,9 +4201,9 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     templateData.notice_period_months = noticePeriodDays >= 60 ? 2 : 0;
     templateData.notice_period_description = noticePeriodDays >= 60 ? '2 months' : '2 weeks';
 
-    const serviceDate = new Date(templateData.service_date);
-    const earliestDate = new Date(serviceDate.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000);
-    templateData.earliest_possession_date = earliestDate.toISOString().split('T')[0];
+    templateData.earliest_possession_date =
+      calculateEarliestValidPossessionDate(templateData.service_date, groundsList) ||
+      addDaysToDate(templateData.service_date, noticePeriodDays);
 
     console.log(`[mapNoticeOnlyFacts] Notice period calculated: ${noticePeriodDays} days (${templateData.notice_period_description}) based on grounds: ${groundsList.join(', ')}`);
   }

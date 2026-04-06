@@ -12,6 +12,11 @@ import {
   type Section8DateParams,
 } from './notice-date-calculator';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
+import {
+  ENGLAND_SECTION8_FORM_NAME,
+  ENGLAND_SECTION8_NOTICE_NAME,
+  ENGLAND_SECTION8_NOTICE_TITLE,
+} from '@/lib/england-possession/section8-terminology';
 
 // ============================================================================
 // TYPES
@@ -171,9 +176,14 @@ export interface Section8NoticeData {
   service_date?: string; // Date notice is served (defaults to today)
   notice_period_days: number;
   earliest_possession_date: string;
+  earliest_proceedings_date?: string;
   earliest_possession_date_explanation?: string; // How we calculated this
   any_mandatory_ground: boolean;
   any_discretionary_ground: boolean;
+  form_name?: string;
+  notice_name?: string;
+  notice_title?: string;
+  clean_output?: boolean;
 
   // Help information
   council_phone?: string;
@@ -432,7 +442,13 @@ export async function generateSection8Notice(
 
   return generateDocument({
     templatePath: 'uk/england/templates/notice_only/form_3_section8/notice.hbs',
-    data,
+    data: {
+      ...data,
+      form_name: data.form_name || ENGLAND_SECTION8_FORM_NAME,
+      notice_name: data.notice_name || ENGLAND_SECTION8_NOTICE_NAME,
+      notice_title: data.notice_title || ENGLAND_SECTION8_NOTICE_TITLE,
+      earliest_proceedings_date: data.earliest_proceedings_date || data.earliest_possession_date,
+    },
     isPreview,
     outputFormat: 'both',
   });

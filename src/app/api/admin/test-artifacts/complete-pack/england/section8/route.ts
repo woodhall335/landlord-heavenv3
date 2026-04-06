@@ -27,7 +27,16 @@ export async function POST() {
 
     setupTestAI();
 
-    const pack = await generateCompleteEvictionPack(buildEnglandSection8CompletePackFacts());
+    const pack = await generateCompleteEvictionPack(
+      buildEnglandSection8CompletePackFacts({
+        overrides: {
+          property_address_line1: '16 Willow Mews',
+          property_city: 'York',
+          property_postcode: 'YO24 3HX',
+          court_name: 'York County Court and Family Court',
+        },
+      })
+    );
     const validation = validateCompletePackDocuments({
       documents: pack.documents,
       jurisdiction: 'england',

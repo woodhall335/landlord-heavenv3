@@ -68,13 +68,13 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
           ? 'Notice to Leave for Scottish Private Residential Tenancies'
           : jurisdiction === 'wales'
             ? 'Renting Homes (Wales) Act Compliant Notices'
-            : 'Section 21/8 (England), Section 173 (Wales), Notice to Leave (Scotland)',
+            : 'Form 3A possession route (England), Section 173 (Wales), Notice to Leave (Scotland)',
         eyebrow: 'Notice Only',
       };
     case 'complete_pack':
       return {
         title: 'Complete Eviction Pack',
-        subtitle: 'England-only bundle: Section 21/8 routes with N5 / N5B / N119, witness statement draft, evidence checklist, and filing guidance',
+        subtitle: 'England-only bundle: Form 3A notice with N5 / N119, evidence checklist, and filing guidance',
         eyebrow: 'Complete Pack',
       };
     case 'ast_standard':
@@ -146,14 +146,14 @@ const documentOptions: DocumentOption[] = [
   {
     type: 'notice_only',
     title: 'Eviction Notices',
-    description: 'Jurisdiction-specific notice bundles: Section 21/8 (England), Section 173 (Wales), Notice to Leave (Scotland)',
+    description: 'Jurisdiction-specific notice bundles: Form 3A possession route (England), Section 173 (Wales), Notice to Leave (Scotland)',
     icon: RiFileTextLine,
     price: `From ${PRODUCTS.notice_only.displayPrice}`,
   },
   {
     type: 'complete_pack',
     title: 'Complete Eviction Pack',
-    description: 'England-only case bundle with N5 / N5B / N119 routes, witness statement draft, and filing guide',
+    description: 'England-only case bundle with Form 3A, N5, N119, and filing guide',
     icon: RiScales3Line,
     price: PRODUCTS.complete_pack.displayPrice,
     regionBadge: 'England only',
@@ -380,7 +380,7 @@ function WizardPageInner() {
       }
       return preselectedDocument;
     });
-  const [selectedJurisdiction, setSelectedJurisdiction] =
+  const [selectedJurisdictionState, setSelectedJurisdictionState] =
     useState<JurisdictionOption | null>(preselectedJurisdiction);
 
   // Determine initial step
@@ -456,10 +456,6 @@ function WizardPageInner() {
   const showNorthernIrelandTenancyOnlyBadge = showsNorthernIrelandTenancyOnlyBadge(
     selectedDocument?.type ?? null
   );
-  const showInfoOnlyNorthernIrelandTransitionNote =
-    selectedJurisdiction?.value === 'northern-ireland' &&
-    showNorthernIrelandTenancyOnlyBadge &&
-    !standaloneProfile;
 
   // Filter jurisdictions to only show those available for the selected document type
   const availableJurisdictions = useMemo(() => {
@@ -480,24 +476,27 @@ function WizardPageInner() {
     });
   }, [effectiveWizardProduct, selectedDocument, showNorthernIrelandTenancyOnlyBadge, standaloneProfile]);
 
-  const isJurisdictionLocked = availableJurisdictions.length === 1;
-
-  useEffect(() => {
+  const selectedJurisdiction = useMemo(() => {
     if (availableJurisdictions.length === 1) {
-      const [onlyJurisdiction] = availableJurisdictions;
-      setSelectedJurisdiction((current) =>
-        current?.value === onlyJurisdiction.value ? current : onlyJurisdiction
-      );
-      return;
+      return availableJurisdictions[0];
     }
 
     if (
-      selectedJurisdiction &&
-      !availableJurisdictions.some((jur) => jur.value === selectedJurisdiction.value)
+      selectedJurisdictionState &&
+      availableJurisdictions.some((jur) => jur.value === selectedJurisdictionState.value)
     ) {
-      setSelectedJurisdiction(null);
+      return selectedJurisdictionState;
     }
-  }, [availableJurisdictions, selectedJurisdiction]);
+
+    return null;
+  }, [availableJurisdictions, selectedJurisdictionState]);
+
+  const showInfoOnlyNorthernIrelandTransitionNote =
+    selectedJurisdiction?.value === 'northern-ireland' &&
+    showNorthernIrelandTenancyOnlyBadge &&
+    !standaloneProfile;
+
+  const isJurisdictionLocked = availableJurisdictions.length === 1;
 
   // Handle Start My Case Bundle button - scroll to the appropriate section based on current step
   const handleStartNowClick = () => {
@@ -519,13 +518,13 @@ function WizardPageInner() {
         (selectedJurisdiction.value === 'northern-ireland' &&
           showsNorthernIrelandTenancyOnlyBadge(doc.type)));
     if (selectedJurisdiction && !canKeepSelectedJurisdiction) {
-      setSelectedJurisdiction(null);
+      setSelectedJurisdictionState(null);
     }
     setStep(2);
   };
 
   const handleJurisdictionSelect = (jur: JurisdictionOption) => {
-    setSelectedJurisdiction(jur);
+    setSelectedJurisdictionState(jur);
   };
 
   const handleStart = () => {
@@ -837,5 +836,6 @@ export default function WizardClientPage() {
     </Suspense>
   );
 }
+
 
 

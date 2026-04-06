@@ -26,7 +26,17 @@ function getWarnState(): SupabaseWarnState {
   return globalThis.__supabaseWarnState;
 }
 
+function shouldSuppressSupabaseConfigWarning() {
+  return (
+    process.env.NODE_ENV === 'test' ||
+    process.env.VITEST === 'true' ||
+    process.env.NEXT_PHASE === 'phase-production-build'
+  );
+}
+
 export function warnSupabaseNotConfiguredOnce(message = warnMessage) {
+  if (shouldSuppressSupabaseConfigWarning()) return;
+
   const warnState = getWarnState();
   if (warnState.warned) return;
 

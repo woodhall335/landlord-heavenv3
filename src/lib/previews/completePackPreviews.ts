@@ -10,15 +10,14 @@ export type CompletePackVariantKey = 'section8' | 'section21';
 export type CompletePackPreviewData = Record<CompletePackVariantKey, PreviewDoc[]>;
 
 const VARIANT_LABELS: Record<CompletePackVariantKey, string> = {
-  section8: 'Section 8 Eviction Pack',
-  section21: 'Section 21 Eviction Pack',
+  section8: 'Current England possession pack',
+  section21: 'Historical legacy pack',
 };
 
 const SPECIAL_TITLE_WORDS: Record<string, string> = {
   ai: 'AI',
   n5: 'N5',
   n119: 'N119',
-  n5b: 'N5B',
   epc: 'EPC',
   hmcts: 'HMCTS',
 };
@@ -83,7 +82,7 @@ const loadVariantDocs = async (variant: CompletePackVariantKey): Promise<Preview
 };
 
 export const getCompletePackPreviewData = async (): Promise<CompletePackPreviewData> => {
-  const variants: CompletePackVariantKey[] = ['section8', 'section21'];
+  const variants: CompletePackVariantKey[] = ['section8'];
 
   const entries = await Promise.all(
     variants.map(async (variant) => [variant, await loadVariantDocs(variant)] as const),

@@ -1,53 +1,76 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { getCanonicalUrl } from '@/lib/seo';
-import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
+import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
-import { noFaultEvictionFAQs } from '@/data/faqs';
+import { LegacySection21Banner } from '@/components/seo/LegacySection21Banner';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
+const canonical = getCanonicalUrl('/no-fault-eviction');
+
 export const metadata: Metadata = {
-  title: 'No Fault Eviction (England) | Section 21 Guide for Landlords [2026]',
+  title: 'No-Fault Eviction (England) | Historical Transition and Current Rules',
   description:
-    'Guide to no-fault evictions using Section 21 in England. Requirements, notice periods, and how to serve a valid notice.',
+    'Historical-only bridge page for landlords searching no-fault eviction terms after England moved into the Renters’ Rights Act framework and current possession rules.',
   keywords: [
     'no fault eviction',
-    'no fault eviction UK',
+    'no fault eviction england',
     'section 21 no fault',
     'no fault eviction notice',
-    'evict tenant without reason',
-    'section 21 notice',
-    'no grounds eviction',
+    'section 21 historical only',
+    'renters rights act eviction rules',
   ],
-  openGraph: {
-    title: 'No Fault Eviction (England) | Section 21 Guide',
-    description:
-      'Everything landlords need to know about no-fault evictions using Section 21 in England.',
-    type: 'article',
-    url: getCanonicalUrl('/no-fault-eviction'),
-  },
   alternates: {
-    canonical: getCanonicalUrl('/no-fault-eviction'),
+    canonical,
+  },
+  openGraph: {
+    title: 'No-Fault Eviction (England) | Historical Transition and Current Rules',
+    description:
+      'Historical-only explanation of no-fault eviction search intent and where landlords should go under the current England framework.',
+    type: 'article',
+    url: canonical,
   },
 };
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
-  { name: 'No Fault Eviction', url: '/no-fault-eviction' },
+  { name: 'No-Fault Eviction', url: '/no-fault-eviction' },
 ];
 
-const noticeOnlyHref = '/products/notice-only';
+const faqs = [
+  {
+    question: 'Is no-fault eviction still a current England route?',
+    answer:
+      'No. Section 21 ended in England on 1 May 2026, so no-fault eviction should now be treated as historical search language rather than a current live route.',
+  },
+  {
+    question: 'Why keep this page live?',
+    answer:
+      'Landlords still search for no-fault eviction wording. This page stays live to explain the change calmly, then guide users into the current England possession and eviction rules.',
+  },
+  {
+    question: 'What should I follow instead?',
+    answer:
+      'Follow the current England possession route, the current notice rules, and the current court process under the Renters’ Rights Act framework.',
+  },
+  {
+    question: 'Where should I go next for a live case?',
+    answer:
+      'Start with the England notice hub if you still need route clarity, then move into the current notice pack or complete pack once the route and evidence are clear.',
+  },
+];
 
 export default function NoFaultEvictionPage() {
   return (
     <>
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
+      <StructuredData data={faqPageSchema(faqs)} />
 
       <div className="min-h-screen bg-gray-50">
         <SeoLandingWrapper
@@ -58,147 +81,121 @@ export default function NoFaultEvictionPage() {
         />
         <HeaderConfig mode="autoOnScroll" />
         <UniversalHero
-          title="No-Fault Eviction (England): Section 21 Guide"
-          subtitle="Check Section 21 eligibility, notice timing, and service steps before moving to possession proceedings."
-          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
-          secondaryCta={{ label: 'Section 21 requirements', href: '#requirements' }}
+          title="No-Fault Eviction (England)"
+          subtitle="A historical-only bridge page for landlords still searching no-fault eviction terms after England moved into the Renters’ Rights Act framework."
+          primaryCta={{ label: 'See the current England process', href: '/eviction-process-england' }}
+          secondaryCta={{ label: 'Start the current notice pack', href: '/products/notice-only' }}
           showTrustPositioningBar
           hideMedia
         />
 
-        {/* Main Content */}
         <Container>
-          <div className="max-w-4xl mx-auto py-12">
+          <div className="mx-auto max-w-4xl py-12">
             <div className="mb-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
               <SeoPageContextPanel pathname="/no-fault-eviction" />
-              <p className="mt-4 text-gray-700 leading-7">
-                For England no-fault files, start with the{' '}
-                <Link href="/section-21-ban-uk" className="font-medium text-primary hover:underline">
-                  Section 21 transition guide
-                </Link>
-                , cross-check the wording against the{' '}
-                <Link href="/section-21-notice-template" className="font-medium text-primary hover:underline">
-                  Section 21 notice template guide
-                </Link>
-                , and begin on the{' '}
-                <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
-                  Notice Only product page
-                </Link>{' '}
-                while the matter is still at notice stage.
-              </p>
+              <div className="mt-4">
+                <LegacySection21Banner compact />
+              </div>
             </div>
-            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
+
+            <div className="mb-12 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
               <div className="prose prose-slate max-w-none">
-                <h2>What is a No-Fault Eviction?</h2>
+                <h2>What this page means today</h2>
                 <p>
-                  A no-fault eviction (also called a &quot;no-grounds eviction&quot;) allows a landlord to
-                  end an assured shorthold tenancy without needing to prove the tenant has done
-                  anything wrong. You don&apos;t need to give a reason - you simply want your property
-                  back.
+                  “No-fault eviction” is now mainly a historical England search term. Before{' '}
+                  <strong>1 May 2026</strong>, landlords often used Section 21 as the familiar
+                  no-fault route. That is no longer the current framework.
                 </p>
                 <p>
-                  In England, no-fault evictions are carried out using a <strong>Section 21 notice</strong>{' '}
-                  under the Housing Act 1988. The prescribed form is <Link href="/form-6a-section-21">Form 6A</Link>.
+                  If you are dealing with a live England case now, do not follow old Section 21,
+                  Form 6A, N5B, or accelerated-possession guidance as if it were current. Follow
+                  the current possession and eviction rules instead.
                 </p>
 
-                <h2 id="requirements">Requirements for a Valid No-Fault Eviction</h2>
-                <p>Before serving a Section 21 notice, you must have:</p>
-                <ul>
-                  <li>Protected the tenant&apos;s deposit in a government-approved scheme</li>
-                  <li>Provided the deposit prescribed information within 30 days</li>
-                  <li>Given the tenant the current &quot;How to Rent&quot; guide</li>
-                  <li>Provided a valid Gas Safety Certificate (if applicable)</li>
-                  <li>Provided a valid Energy Performance Certificate (EPC)</li>
-                  <li>Waited at least 4 months from the start of the tenancy</li>
-                </ul>
-
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
-                  <p className="text-amber-800 font-semibold mb-2">
-                    Renters’ Rights Act update
-                  </p>
-                  <p className="text-amber-700 text-sm">
-                    No-fault evictions (Section 21) end from 1 May 2026 in England.
-                  </p>
-                  <p className="text-amber-700 text-sm mt-2">
-                    Official source:{' '}
-                    <Link href="https://www.gov.uk/government/news/section-21-no-fault-evictions-to-end-on-1-may-2026" className="underline">GOV.UK</Link>
-                  </p>
-                </div>
-
-                <h2>How to Serve a No-Fault Eviction Notice</h2>
-                <ol>
-                  <li>
-                    <strong>Check eligibility:</strong> Ensure you&apos;ve met all the requirements above
-                  </li>
-                  <li>
-                    <strong>Complete Form 6A:</strong> Use the official prescribed form for England
-                  </li>
-                  <li>
-                    <strong>Calculate the notice period:</strong> Minimum 2 months from service date
-                  </li>
-                  <li>
-                    <strong>Serve the notice:</strong> By first class post, recorded delivery, or hand
-                    delivery with a witness
-                  </li>
-                  <li>
-                    <strong>Keep proof:</strong> Retain evidence of service (posting receipt, delivery
-                    confirmation, or witness statement)
-                  </li>
-                </ol>
-
-                <h2>What Happens After Serving Notice?</h2>
+                <h2>What you should do instead</h2>
                 <p>
-                  After the 2-month notice period expires:
+                  Start with the{' '}
+                  <Link href="/eviction-notice-template" className="font-medium text-primary hover:underline">
+                    England notice hub
+                  </Link>{' '}
+                  if you still need route clarity. Then move into the{' '}
+                  <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
+                    current England notice guide
+                  </Link>{' '}
+                  and the wider{' '}
+                  <Link href="/eviction-process-england" className="font-medium text-primary hover:underline">
+                    England eviction process
+                  </Link>{' '}
+                  so you are following the current framework from the start.
+                </p>
+                <p>
+                  If your case is already moving toward a live notice or court pack, use the
+                  current products rather than older Section 21 routes:
                 </p>
                 <ul>
-                  <li>If the tenant leaves, you can take possession</li>
                   <li>
-                    If the tenant doesn&apos;t leave, you must apply to court for a possession order using
-                    Form N5B (accelerated procedure)
+                    <Link href="/products/notice-only" className="font-medium text-primary hover:underline">
+                      Notice Only
+                    </Link>{' '}
+                    for the current notice-stage workflow
                   </li>
-                  <li>The court will grant possession if the notice was valid</li>
-                  <li>If the tenant still doesn&apos;t leave, you&apos;ll need to request a bailiff warrant</li>
+                  <li>
+                    <Link href="/products/complete-pack" className="font-medium text-primary hover:underline">
+                      Complete Pack
+                    </Link>{' '}
+                    for the notice-to-court workflow
+                  </li>
                 </ul>
 
-                <h2>No-Fault vs Fault-Based Eviction</h2>
+                <h2>Historical dates that still matter</h2>
                 <p>
-                  If your tenant has rent arrears or breached the tenancy, you might prefer a{' '}
-                  <strong>Section 8</strong> (fault-based) eviction. This can sometimes be faster,
-                  especially for serious rent arrears.
+                  Section 21 ended in England on <strong>1 May 2026</strong>. If a landlord had
+                  already served a qualifying Section 21 notice before that date, court proceedings
+                  needed to begin by <strong>31 July 2026</strong>.
+                </p>
+                <ul>
+                  <li>Those dates only matter for genuine historical transition issues.</li>
+                  <li>They should not be treated as a current “serve it now” route.</li>
+                  <li>Most live England cases now need the current possession process instead.</li>
+                </ul>
+
+                <h2>No-fault search intent vs current England possession</h2>
+                <p>
+                  Landlords still search for no-fault eviction terms, but current England cases now
+                  turn on the current possession rules, current notice wording, current court
+                  process, and clear evidence planning.
                 </p>
                 <p>
                   <Link href="/section-21-vs-section-8">
-                    Compare Section 21 vs Section 8
+                    Compare historical Section 21 language with the current England route
                   </Link>
                 </p>
               </div>
             </div>
 
-            {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
-          showTrustPositioningBar
-                faqs={noFaultEvictionFAQs}
+                faqs={faqs}
                 title="No-Fault Eviction FAQ"
                 showContactCTA={false}
                 variant="white"
               />
             </div>
 
-            {/* CTA */}
-            <div className="p-8 bg-purple-50 rounded-2xl text-center">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900">
-                Ready to Start Your No-Fault Eviction?
+            <div className="rounded-2xl bg-purple-50 p-8 text-center">
+              <h2 className="mb-4 text-2xl font-bold text-gray-900">
+                Ready to follow the current England route?
               </h2>
-              <p className="text-gray-600 mb-6">
-                Start the paid eviction notice route in minutes with the current England workflow.
+              <p className="mb-6 text-gray-600">
+                Move from historical search intent into the current Renters’ Rights Act framework
+                and the current England workflow.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/eviction-notice-template" className="hero-btn-primary">
-                  Start Eviction Notice Pack
+              <div className="flex flex-col justify-center gap-4 sm:flex-row">
+                <Link href="/eviction-process-england" className="hero-btn-primary">
+                  See the current England process
                 </Link>
                 <Link href="/products/notice-only" className="hero-btn-secondary">
-                  Full Notice Pack
+                  Start current notice pack
                 </Link>
               </div>
             </div>

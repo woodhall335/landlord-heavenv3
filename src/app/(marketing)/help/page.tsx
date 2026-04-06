@@ -335,7 +335,7 @@ export default function HelpPage() {
                         valid. Our documents:
                       </p>
                       <ul className="mt-3 space-y-2">
-                        <li>- Use official government forms (Form 6A, AT6, N5, etc.)</li>
+                        <li>- Use official government forms (Form 3A, AT6, N5, etc.)</li>
                         <li>- Follow current legislation (Housing Act 1988, 2016 Scotland Act, etc.)</li>
                         <li>- Include all required information and clauses</li>
                         <li>- Are identical to what solicitors produce</li>

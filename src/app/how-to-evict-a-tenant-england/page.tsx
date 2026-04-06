@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
-import { EvictionIntentLandingPage } from '@/components/seo/EvictionIntentLandingPage';
-import { INTENT_PAGES, getIntentPageMetadata } from '@/lib/seo/eviction-intent-pages';
+import {
+  CurrentFrameworkGuidePage,
+  getCurrentFrameworkMetadata,
+} from '@/components/seo/CurrentFrameworkGuidePage';
+import { getCurrentFrameworkPageConfig } from '@/lib/seo/england-current-framework-pages';
 
-const config = INTENT_PAGES['how-to-evict-a-tenant-england'];
+const config = getCurrentFrameworkPageConfig('how-to-evict-a-tenant-england');
 
-export const metadata: Metadata = getIntentPageMetadata(config);
+export const metadata: Metadata = getCurrentFrameworkMetadata(config);
 
 export default function Page() {
-  return <EvictionIntentLandingPage config={config} />;
+  return <CurrentFrameworkGuidePage config={config} />;
 }

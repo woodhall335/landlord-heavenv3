@@ -67,7 +67,7 @@ notice_to_leave_rules:
     applies_when:
       - condition: "Array.isArray(facts.scotland_ground_codes) && facts.scotland_ground_codes.length > 1 && computed.mixed_grounds_allowed === false"
     message: "Mixed grounds require confirmed statutory notice period approach."
-    rationale: "Multiple grounds may have different notice periods; system requires clarification."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 and Schedule 3 can produce different notice periods for mixed grounds, so the statutory approach must be confirmed."
     field: eviction_grounds
 
   # ---------------------------------------------------------------------------
@@ -101,7 +101,7 @@ notice_to_leave_rules:
       # Calculation error
       - condition: "computed.ntl_notice_period_calculation_error === true"
     message: "Notice period issue - expiry date must meet the statutory 28/84 day period for selected grounds."
-    rationale: "Notice periods vary by ground: typically 28 days for mandatory, 84 days for discretionary."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 and Schedule 3 set the statutory notice period for each selected ground."
     field: notice_expiry
 
   # ---------------------------------------------------------------------------
@@ -169,7 +169,7 @@ common_rules:
     applies_when:
       - condition: "!facts.landlord_full_name && !facts.landlord_name"
     message: "Landlord name is required for document generation."
-    rationale: "The notice must identify the landlord serving it."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 notice to leave requirements mean the landlord must be identified."
     field: landlord_full_name
 
   - id: tenant_name_required
@@ -178,7 +178,7 @@ common_rules:
     applies_when:
       - condition: "!facts.tenant_full_name && !facts.tenant_name"
     message: "Tenant name is required for document generation."
-    rationale: "The notice must identify the tenant being served."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 notice to leave requirements mean the tenant must be identified."
     field: tenant_full_name
 
   - id: property_address_required
@@ -187,7 +187,7 @@ common_rules:
     applies_when:
       - condition: "!facts.property_address_line1"
     message: "Property address is required for document generation."
-    rationale: "The notice must identify the property."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 notice to leave requirements mean the let property must be identified."
     field: property_address_line1
 
   # ---------------------------------------------------------------------------
@@ -200,7 +200,7 @@ common_rules:
     applies_when:
       - condition: "!facts.tenancy_start_date"
     message: "Tenancy start date is required."
-    rationale: "Tenancy start date is needed for validation."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 and Schedule 3 timing checks require the tenancy start date."
     field: tenancy_start_date
 
   - id: tenancy_start_date_future
@@ -209,7 +209,7 @@ common_rules:
     applies_when:
       - condition: "facts.tenancy_start_date && computed.tenancy_start_in_future === true"
     message: "Tenancy start date cannot be in the future."
-    rationale: "Cannot serve eviction notice for a tenancy that has not yet begun."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 cannot be used before the tenancy has begun."
     field: tenancy_start_date
 
   # ---------------------------------------------------------------------------
@@ -222,7 +222,7 @@ common_rules:
     applies_when:
       - condition: "!facts.notice_service_date && !facts.notice_date && !computed.service_date"
     message: "Notice date is required."
-    rationale: "Service date is needed to calculate expiry date."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 notice periods run from the notice date or service date, so it must be known."
     field: notice_date
 
   - id: notice_before_tenancy
@@ -231,7 +231,7 @@ common_rules:
     applies_when:
       - condition: "computed.notice_before_tenancy_start === true"
     message: "Notice cannot be served before the tenancy started."
-    rationale: "Eviction notice must be served during the tenancy period."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 requires the notice to leave to be served during the tenancy."
     field: notice_date
 
   - id: expiry_before_service
@@ -240,7 +240,7 @@ common_rules:
     applies_when:
       - condition: "computed.expiry_before_service === true"
     message: "Notice expiry date must be after notice date."
-    rationale: "The notice period runs from notice date to expiry."
+    rationale: "Private Housing (Tenancies) (Scotland) Act 2016 section 62 requires the expiry date to fall after the notice date so a valid notice period is given."
     field: notice_expiry
 
   # ---------------------------------------------------------------------------

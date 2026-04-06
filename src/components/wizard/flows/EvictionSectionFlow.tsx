@@ -85,7 +85,7 @@ interface WizardSection {
   label: string;
   description: string;
   // Route-specific visibility (England/Wales only)
-  routes?: ('section_8' | 'section_21')[];
+  routes?: ('section_8')[];
   // Jurisdiction-specific visibility
   jurisdictions?: ('england' | 'wales' | 'scotland')[];
   // Validation function to check if section is complete
@@ -99,7 +99,7 @@ interface WizardSection {
 // Define all sections with their visibility rules
 // These sections apply to England and Wales
 // Valid routes by jurisdiction
-const ENGLAND_ROUTES = ['section_8', 'section_21'] as const;
+const ENGLAND_ROUTES = ['section_8'] as const;
 const WALES_ROUTES = ['section_173', 'fault_based'] as const;
 
 const ENGLAND_WALES_SECTIONS: WizardSection[] = [
@@ -166,7 +166,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     id: 'section21_compliance',
     label: 'Section 21 Compliance',
     description: 'Compliance requirements for no-fault eviction',
-    routes: ['section_21'],
+    routes: [],
     isComplete: (facts) => {
       // Check all S21 compliance requirements
       const hasDeposit = facts.deposit_taken === true;
@@ -250,7 +250,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
 
           if (!validation.is_eligible) {
             blockers.push(
-              `Ground 8 threshold not met: ${validation.arrears_in_months?.toFixed(2) || 0} months arrears (minimum 2 months required)`
+              `Ground 8 threshold not met: ${validation.arrears_in_months?.toFixed(2) || 0} months arrears (minimum ${validation.threshold_label || '3 months'} required)`
             );
           }
         }
@@ -498,7 +498,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         if (isWales) return false;
         // England: only show if route matches
         if (!route) return false;
-        return section.routes.includes(route as 'section_8' | 'section_21');
+        return section.routes.includes(route as 'section_8');
       }
 
       // Non-route-specific sections: show case_basics always, others once route is valid

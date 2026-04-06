@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
@@ -31,10 +31,10 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
   description:
-    `Full eviction bundle for England landlords with notice-to-court continuity: the right notice, N5/N119 court forms, and an AI witness statement draft. ${price} one-time.`,
+    `Full possession bundle for England landlords with notice-to-court continuity: Form 3A, N5/N119 court forms, evidence checklists, and filing guidance. ${price} one-time.`,
   openGraph: {
     title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
-    description: "Complete eviction pack for England landlords. Notice to possession order with N5, N119, witness statement, and court filing guidance included.",
+    description: "Complete possession pack for England landlords. Form 3A, N5, N119, evidence checklists, and court filing guidance included.",
     url: getCanonicalUrl('/products/complete-pack'),
   },
   alternates: {
@@ -48,7 +48,7 @@ export const runtime = 'nodejs';
 const faqs = [
   {
     question: "What documents do I get?",
-    answer: "You receive an England-only case bundle: the notice for your route, service instructions, a service and validity checklist, court forms (N5/N5B/N119 where applicable), an AI witness statement draft, a filing guide, an evidence checklist, and a proof of service certificate."
+    answer: "You receive an England-only case bundle: Form 3A, service instructions, a service and validity checklist, N5 and N119 court forms, a filing guide, an evidence checklist, and a proof of service certificate."
   },
   {
     question: "Can I preview before I pay?",
@@ -64,7 +64,7 @@ const faqs = [
   },
   {
     question: "Are these genuine official court forms?",
-    answer: "Yes. We use official HMCTS forms (N5, N5B, N119) for England County Court routes. These are the same forms you'd download from government sources, populated with your case details."
+    answer: "Yes. We use the official HMCTS England possession forms that apply to the post-1 May 2026 route, including N5 and N119, populated with your case details."
   },
   {
     question: "How long does the eviction process take?",
@@ -89,7 +89,7 @@ export default async function CompleteEvictionPackPage() {
       {/* Structured Data for SEO */}
       <StructuredData data={productSchema({
         name: "Complete Eviction Case Bundle",
-        description: "Complete eviction bundle with all court forms from notice to possession order. Includes N5, N119 forms, AI-drafted witness statements, and step-by-step guidance.",
+        description: "Complete possession bundle with the court forms from notice to possession order. Includes Form 3A, N5, N119, and step-by-step guidance.",
         price: product.price.toString(),
         url: "https://landlordheaven.co.uk/products/complete-pack"
       })} />
@@ -241,7 +241,7 @@ export default async function CompleteEvictionPackPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-charcoal mb-2">File with Court/Tribunal (After Notice Period)</h3>
                   <p className="text-gray-600">
-                    Submit the relevant England County Court forms (N5/N119 or N5B) with the court fee. The court issues the claim and serves the tenant.
+                    Submit the relevant England County Court route after notice expiry. Rent-only arrears claims can use PCOL, while other possession claims use N5 and N119 with the court fee.
                   </p>
                 </div>
               </div>
@@ -333,7 +333,7 @@ export default async function CompleteEvictionPackPage() {
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">County Court Forms (N5, N5B, N119)</td>
+                  <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">County Court Forms (N5, N119)</td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
@@ -396,7 +396,7 @@ export default async function CompleteEvictionPackPage() {
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Get Complete Eviction Case Bundle - {price} →
+                Get Complete Eviction Case Bundle - {price} â†’
               </Link>
             </div>
           </div>
@@ -417,7 +417,7 @@ export default async function CompleteEvictionPackPage() {
                     Also need to recover unpaid rent?
                   </h3>
                   <p className="text-gray-600 mb-4">
-                    Eviction gets you possession — but if your tenant owes rent arrears, you may also want to
+                    Eviction gets you possession â€” but if your tenant owes rent arrears, you may also want to
                     pursue a money claim. Many landlords do both: eviction for possession AND a money claim to
                     recover what they&apos;re owed.
                   </p>
@@ -426,13 +426,13 @@ export default async function CompleteEvictionPackPage() {
                       href="/wizard?product=money_claim&src=complete_pack_crosssell"
                       className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#692ED4] px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#5a21be]"
                     >
-                      Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice}
+                      Get Money Claim Pack â€” {PRODUCTS.money_claim.displayPrice}
                     </Link>
                     <Link
                       href="/money-claim-unpaid-rent"
                       className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#CDB8F6] px-5 py-2.5 font-medium text-[#692ED4] transition-colors hover:bg-[#F3EEFF]"
                     >
-                      Learn about money claims →
+                      Learn about money claims â†’
                     </Link>
                   </div>
                 </div>
@@ -499,6 +499,7 @@ export default async function CompleteEvictionPackPage() {
     </div>
   );
 }
+
 
 
 

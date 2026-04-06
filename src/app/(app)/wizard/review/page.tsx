@@ -1473,7 +1473,9 @@ function EvictionReviewContent({
               <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
                 <RiCheckboxCircleLine className="inline h-4 w-4 mr-1 text-[#7C3AED]" />
                 {analysis.recommended_route === 'section_8'
-                  ? 'SECTION 8 (Fault-based)'
+                  ? jurisdiction === 'england'
+                    ? 'FORM 3A POSSESSION ROUTE'
+                    : 'SECTION 8 (Fault-based)'
                   : analysis.recommended_route === 'section_21'
                   ? 'SECTION 21 (No-fault)'
                   : analysis.recommended_route.toUpperCase().replace(/_/g, ' ')}
@@ -1742,9 +1744,14 @@ function EvictionReviewContent({
           ) : (
             <>
               {/* Route-specific notice display for England/Wales */}
-              {analysis.recommended_route === 'section_21' ||
-              analysis.recommended_route === 'accelerated_possession' ||
-              analysis.recommended_route === 'accelerated_section21' ? (
+              {jurisdiction === 'england' ? (
+                <li className="flex items-center gap-2 text-sm">
+                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
+                  Form 3A notice seeking possession
+                </li>
+              ) : analysis.recommended_route === 'section_21' ||
+                analysis.recommended_route === 'accelerated_possession' ||
+                analysis.recommended_route === 'accelerated_section21' ? (
                 <li className="flex items-center gap-2 text-sm">
                   <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                   Section 21 notice (Form 6A)
@@ -1990,7 +1997,9 @@ function NoticeOnlyReviewContent({
 
   // Build route label based on actual route
   const recommendedRouteLabel = isSection8
-    ? 'Section 8 Notice (Form 3)'
+    ? jurisdiction === 'england'
+      ? 'Form 3A Notice Seeking Possession'
+      : 'Section 8 Notice (Form 3)'
     : isSection21
     ? 'Section 21 Notice (Form 6A)'
     : isWales
@@ -2217,8 +2226,8 @@ function NoticeOnlyReviewContent({
                 No grounds selected
               </h2>
               <p className="text-sm text-amber-700 mb-4">
-                Please go back and select at least one ground for your Section 8 notice.
-                Common grounds for rent arrears include Ground 8 (serious arrears - 2+ months).
+                Please go back and select at least one ground for your {jurisdiction === 'england' ? 'Form 3A notice' : 'Section 8 notice'}.
+                Common rent arrears grounds include Ground 8, which now requires 3 months or 13 weeks of arrears in England depending on rent frequency.
               </p>
               <Button
                 onClick={onEdit}
@@ -2238,7 +2247,7 @@ function NoticeOnlyReviewContent({
                 Selected Grounds (included in your notice)
               </h2>
               <p className="text-sm text-gray-600 mb-4">
-                These grounds will be included in your Section 8 notice.
+                These grounds will be included in your {jurisdiction === 'england' ? 'Form 3A notice' : 'Section 8 notice'}.
                 {selectedOnlyPeriod.noticePeriodDays === 14 && selectedGrounds.length === 1 && selectedGrounds.includes('8') && (
                   <span className="block mt-1 text-green-700 font-medium">
                     Ground 8 only requires 14 days notice.
@@ -2560,7 +2569,7 @@ function NoticeOnlyReviewContent({
             <>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Form 3 - Section 8 Notice
+                Form 3A - Notice Seeking Possession
               </li>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />

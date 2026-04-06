@@ -1,84 +1,40 @@
 /**
- * Notice Period Utilities for Section 8 Grounds
+ * England possession notice period utilities for the post-1 May 2026 regime.
  *
- * Provides utilities for calculating notice periods when multiple grounds
- * are included in a Section 8 notice.
- *
- * Key rule: The notice period must be the MAXIMUM of all included grounds.
+ * We retain the legacy export names used throughout the repo so the wider codebase
+ * can move over without a flag-day refactor.
  */
 
-/**
- * Canonical ground notice periods (in days) for Section 8 grounds.
- * This is the SINGLE SOURCE OF TRUTH used across the entire codebase.
- *
- * Source: Housing Act 1988, Schedule 2 (as amended)
- */
-export const SECTION8_GROUND_NOTICE_PERIODS: Record<string, number> = {
-  // Mandatory grounds
-  '1': 60, // 2 months - landlord previously occupied
-  '2': 60, // 2 months - mortgage lender requires possession
-  '3': 14, // 2 weeks - holiday let
-  '4': 14, // 2 weeks - educational institution let
-  '5': 60, // 2 months - minister of religion
-  '6': 60, // 2 months - demolition/reconstruction
-  '7': 60, // 2 months - death of periodic tenant
-  '7A': 14, // 2 weeks - abandonment (fixed term)
-  '7B': 14, // 2 weeks - abandonment (periodic)
-  '8': 14, // 2 weeks - serious rent arrears (8 weeks/2 months)
+import {
+  calculateEnglandPossessionNoticePeriod,
+  ENGLAND_POST_2026_GROUND_CATALOG,
+  getEnglandGroundDefinition,
+  getEnglandGroundNoticePeriodDays,
+  hasEnglandRentArrearsGround,
+  normalizeEnglandGroundCode,
+  type EnglandGroundCode,
+} from '@/lib/england-possession/ground-catalog';
 
-  // Discretionary grounds
-  '9': 60, // 2 months - suitable alternative accommodation
-  '10': 14, // 2 weeks - some rent arrears
-  '11': 14, // 2 weeks - persistent delay in paying rent
-  '12': 14, // 2 weeks - breach of tenancy obligation
-  '13': 14, // 2 weeks - deterioration of dwelling
-  '14': 14, // 2 weeks (default) - nuisance/annoyance
-  '14ZA': 14, // 2 weeks - riot conviction
-  '14A': 0, // Immediate - domestic violence
-  '15': 14, // 2 weeks - deterioration of furniture
-  '16': 60, // 2 months - former employee
-  '17': 14, // 2 weeks - false statement
-};
+export const SECTION8_GROUND_NOTICE_PERIODS: Record<string, number> = Object.fromEntries(
+  Object.values(ENGLAND_POST_2026_GROUND_CATALOG).map((ground) => [ground.code, ground.noticePeriodDays]),
+);
 
-/**
- * Check if a ground is arrears-related (8, 10, or 11)
- */
-export function isArrearsGround(groundCode: string | number): boolean {
-  const code = normalizeGroundCode(groundCode);
-  return code === '8' || code === '10' || code === '11';
-}
-
-/**
- * Check if any of the provided grounds are arrears-related
- */
-export function hasArrearsGround(grounds: Array<string | number>): boolean {
-  return grounds.some((g) => isArrearsGround(g));
-}
-
-/**
- * Normalize ground code to string format (handles "Ground 8", "ground_8", "8", 8)
- */
 export function normalizeGroundCode(code: string | number): string {
-  const codeStr = String(code).toUpperCase();
-  // Remove "GROUND " or "GROUND_" prefix if present
-  return codeStr.replace(/^GROUND[\s_]*/i, '').trim();
+  return normalizeEnglandGroundCode(code) || String(code).toUpperCase().replace(/^GROUND[\s_]*/i, '').trim();
 }
 
-/**
- * Get the notice period in days for a specific ground
- */
+export function isArrearsGround(groundCode: string | number): boolean {
+  return hasEnglandRentArrearsGround([groundCode]);
+}
+
+export function hasArrearsGround(grounds: Array<string | number>): boolean {
+  return hasEnglandRentArrearsGround(grounds);
+}
+
 export function getGroundNoticePeriod(groundCode: string | number): number {
-  const code = normalizeGroundCode(groundCode);
-  return SECTION8_GROUND_NOTICE_PERIODS[code] ?? 14; // Default to 14 days for unknown grounds
+  return getEnglandGroundNoticePeriodDays(groundCode);
 }
 
-/**
- * Calculate the required notice period when multiple grounds are included.
- * Uses the MAXIMUM notice period across all included grounds.
- *
- * @param grounds - Array of ground codes (e.g., ["8", "10", "Ground 11"])
- * @returns Object with minimum period and explanation
- */
 export function calculateCombinedNoticePeriod(grounds: Array<string | number>): {
   noticePeriodDays: number;
   drivingGrounds: string[];
@@ -94,50 +50,36 @@ export function calculateCombinedNoticePeriod(grounds: Array<string | number>): 
     };
   }
 
-  // Calculate period for each ground
-  const groundPeriods = grounds.map((g) => {
-    const code = normalizeGroundCode(g);
-    const days = getGroundNoticePeriod(code);
-    return { code, days };
-  });
+  const result = calculateEnglandPossessionNoticePeriod(grounds);
+  const groundPeriods = grounds.map((ground) => ({
+    code: normalizeGroundCode(ground),
+    days: getGroundNoticePeriod(ground),
+  }));
 
-  // Find maximum period
-  const maxPeriod = Math.max(...groundPeriods.map((g) => g.days));
-
-  // Find all grounds that require the maximum period
-  const drivingGrounds = groundPeriods
-    .filter((g) => g.days === maxPeriod)
-    .map((g) => `Ground ${g.code}`);
-
-  // Build explanation
-  let explanation: string;
-  if (maxPeriod === 60) {
-    const twoMonthGrounds = groundPeriods.filter((g) => g.days === 60);
-    const twoMonthCodes = twoMonthGrounds.map((g) => `Ground ${g.code}`).join(', ');
-    explanation = `${twoMonthCodes} require${twoMonthGrounds.length === 1 ? 's' : ''} 60 days (2 months) notice. This is the minimum notice period for your notice.`;
-  } else if (maxPeriod === 14) {
-    explanation = 'All selected grounds require 14 days minimum notice.';
-  } else if (maxPeriod === 0) {
+  let explanation = `Selected grounds require ${result.noticePeriodDays} days minimum notice.`;
+  if (result.immediateApplicationAllowed && result.noticePeriodDays === 0) {
     explanation = 'Selected ground(s) allow immediate court proceedings.';
-  } else {
-    explanation = `Selected grounds require ${maxPeriod} days minimum notice.`;
+  } else if (result.noticePeriodDays >= 120) {
+    explanation = `${result.drivingGrounds.map((ground) => `Ground ${ground}`).join(', ')} require 4 months notice.`;
+  } else if (result.noticePeriodDays >= 61) {
+    explanation = `${result.drivingGrounds.map((ground) => `Ground ${ground}`).join(', ')} require 2 months notice.`;
+  } else if (result.noticePeriodDays === 28) {
+    explanation = `${result.drivingGrounds.map((ground) => `Ground ${ground}`).join(', ')} require 4 weeks notice.`;
+  } else if (result.noticePeriodDays === 14) {
+    explanation = 'All selected grounds require 2 weeks minimum notice.';
   }
 
   return {
-    noticePeriodDays: maxPeriod,
-    drivingGrounds,
+    noticePeriodDays: result.noticePeriodDays,
+    drivingGrounds: result.drivingGrounds.map((ground) => `Ground ${ground}`),
     explanation,
     groundPeriods,
   };
 }
 
-/**
- * Compare notice periods when adding recommended grounds.
- * Returns information about how the period changes.
- */
 export function compareNoticePeriods(
   selectedGrounds: Array<string | number>,
-  recommendedGrounds: Array<string | number>
+  recommendedGrounds: Array<string | number>,
 ): {
   selectedPeriod: number;
   combinedPeriod: number;
@@ -146,82 +88,42 @@ export function compareNoticePeriods(
   explanation: string;
 } {
   const selectedResult = calculateCombinedNoticePeriod(selectedGrounds);
-  const combinedGrounds = [...selectedGrounds, ...recommendedGrounds];
-  const combinedResult = calculateCombinedNoticePeriod(combinedGrounds);
-
+  const combinedResult = calculateCombinedNoticePeriod([...selectedGrounds, ...recommendedGrounds]);
   const increasesNotice = combinedResult.noticePeriodDays > selectedResult.noticePeriodDays;
   const increaseAmount = combinedResult.noticePeriodDays - selectedResult.noticePeriodDays;
-
-  let explanation: string;
-  if (increasesNotice) {
-    const newDrivingGrounds = combinedResult.drivingGrounds.filter(
-      (g) => !selectedResult.drivingGrounds.includes(g)
-    );
-    explanation = `Adding recommended grounds will increase your notice period from ${selectedResult.noticePeriodDays} days to ${combinedResult.noticePeriodDays} days because ${newDrivingGrounds.join(', ')} require${newDrivingGrounds.length === 1 ? 's' : ''} ${combinedResult.noticePeriodDays} days notice.`;
-  } else {
-    explanation = `Notice period remains ${selectedResult.noticePeriodDays} days. The recommended grounds do not require a longer notice period.`;
-  }
 
   return {
     selectedPeriod: selectedResult.noticePeriodDays,
     combinedPeriod: combinedResult.noticePeriodDays,
     increasesNotice,
     increaseAmount,
-    explanation,
+    explanation: increasesNotice
+      ? `Adding the extra grounds increases the notice period from ${selectedResult.noticePeriodDays} days to ${combinedResult.noticePeriodDays} days.`
+      : `Notice period remains ${selectedResult.noticePeriodDays} days.`,
   };
 }
 
-/**
- * Get ground type (mandatory vs discretionary)
- */
 export function getGroundType(groundCode: string | number): 'mandatory' | 'discretionary' {
-  const code = normalizeGroundCode(groundCode);
-  // Mandatory grounds: 1, 2, 3, 4, 5, 6, 7, 7A, 7B, 8
-  const mandatoryGrounds = ['1', '2', '3', '4', '5', '6', '7', '7A', '7B', '8'];
-  return mandatoryGrounds.includes(code) ? 'mandatory' : 'discretionary';
+  return getEnglandGroundDefinition(groundCode)?.mandatory ? 'mandatory' : 'discretionary';
 }
 
-/**
- * Get a human-readable description of a ground
- */
 export function getGroundDescription(groundCode: string | number): {
   code: string;
   title: string;
   type: 'mandatory' | 'discretionary';
   noticePeriodDays: number;
 } {
-  const code = normalizeGroundCode(groundCode);
-  const type = getGroundType(code);
-  const noticePeriodDays = getGroundNoticePeriod(code);
-
-  const titles: Record<string, string> = {
-    '1': 'Landlord previously occupied as only or principal home',
-    '2': 'Mortgage lender requires possession',
-    '3': 'Out of season holiday letting',
-    '4': 'Out of season student letting',
-    '5': 'Property required for minister of religion',
-    '6': 'Intention to demolish or reconstruct',
-    '7': 'Death of periodic tenant (within 12 months)',
-    '7A': 'Abandonment (fixed term)',
-    '7B': 'Abandonment (periodic)',
-    '8': 'Serious rent arrears (2+ months)',
-    '9': 'Suitable alternative accommodation',
-    '10': 'Some rent arrears',
-    '11': 'Persistent delay in paying rent',
-    '12': 'Breach of tenancy obligation',
-    '13': 'Deterioration of dwelling',
-    '14': 'Nuisance or annoyance',
-    '14ZA': 'Riot conviction',
-    '14A': 'Domestic violence',
-    '15': 'Deterioration of furniture',
-    '16': 'Former employee',
-    '17': 'False statement',
-  };
+  const normalized = normalizeGroundCode(groundCode);
+  const definition = getEnglandGroundDefinition(normalized);
 
   return {
-    code,
-    title: titles[code] || `Ground ${code}`,
-    type,
-    noticePeriodDays,
+    code: normalized,
+    title: definition?.title || `Ground ${normalized}`,
+    type: definition?.mandatory ? 'mandatory' : 'discretionary',
+    noticePeriodDays: definition?.noticePeriodDays ?? 14,
   };
+}
+
+export function getEnglandPost2026GroundCodes(): EnglandGroundCode[] {
+  return Object.keys(ENGLAND_POST_2026_GROUND_CATALOG) as EnglandGroundCode[];
 }

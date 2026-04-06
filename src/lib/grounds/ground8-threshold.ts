@@ -17,18 +17,18 @@ export function getGround8Threshold(
 
   switch (frequency) {
     case 'weekly':
-      return { amount: baseAmount * 8, description: '8 weeks' };
+      return { amount: baseAmount * 13, description: '13 weeks' };
     case 'fortnightly':
-      return { amount: baseAmount * 4, description: '8 weeks (4 fortnightly payments)' };
+      return { amount: baseAmount * 7, description: '13 weeks (7 fortnightly payments)' };
     case 'monthly':
-      return { amount: baseAmount * 2, description: '2 months' };
+      return { amount: baseAmount * 3, description: '3 months' };
     case 'quarterly':
       return { amount: baseAmount * 1, description: '1 quarter' };
     case 'yearly':
       return { amount: baseAmount / 4, description: '3 months' };
     case 'other':
     default:
-      return { amount: baseAmount * 2, description: '2 months' };
+      return { amount: baseAmount * 3, description: '3 months' };
   }
 }
 

@@ -15,6 +15,12 @@ import {
   resolveEPCFacts,
   resolveLicensingFacts,
 } from '../wizard/complianceFactResolvers';
+import { calculateCombinedNoticePeriod, getNormalizedSelectedGrounds } from '../grounds';
+import {
+  getEnglandGroundDefinition,
+  isEnglandRentOnlyClaimEligible,
+} from '../england-possession/ground-catalog';
+import { calculateEarliestValidPossessionDate } from '../england-possession/post-2026-validation';
 
 // ============================================================================
 // TYPES
@@ -85,7 +91,148 @@ export interface DecisionOutput {
 // ENGLAND & WALES DECISION LOGIC
 // ============================================================================
 
+function analyzeEnglandPost2026(input: DecisionInput): DecisionOutput {
+  const facts = input.facts as Record<string, any>;
+  const selectedGrounds = getNormalizedSelectedGrounds(facts, facts);
+  const noticePeriod = calculateCombinedNoticePeriod(selectedGrounds);
+  const landlordProfile = String(
+    facts.landlord_profile ||
+      facts.parties?.landlord?.landlord_profile ||
+      'private_landlord',
+  );
+  const tenancyStartDate = facts.tenancy?.start_date || facts.tenancy_start_date;
+  const noticeServiceDate =
+    facts.notice?.notice_date ||
+    facts.notice_served_date ||
+    facts.section_8_notice_date ||
+    facts.signature_date ||
+    new Date().toISOString().split('T')[0];
+  const noticeExpiryDate =
+    facts.notice?.expiry_date ||
+    facts.notice_expiry_date ||
+    calculateEarliestValidPossessionDate(noticeServiceDate, selectedGrounds);
+
+  const output: DecisionOutput = {
+    recommended_routes: ['section_8'],
+    allowed_routes: ['section_8'],
+    blocked_routes: ['section_21'],
+    recommended_grounds: selectedGrounds
+      .map((groundCode): GroundRecommendation | null => {
+        const ground = getEnglandGroundDefinition(groundCode);
+        if (!ground) return null;
+
+        return {
+          code: ground.code,
+          title: ground.title,
+          type: ground.mandatory ? 'mandatory' : 'discretionary',
+          weight: ground.mandatory ? 'high' : 'medium',
+          notice_period_days: ground.noticePeriodDays,
+          reasoning: `Form 3A ground ${ground.code} is available in the post-1 May 2026 England regime.`,
+          success_probability: ground.mandatory ? 'high' : 'medium',
+          mandatory: ground.mandatory,
+          ground_title: ground.title,
+          explanation: ground.noticePeriodLabel,
+          required_evidence: ground.evidenceCategories,
+        };
+      })
+      .filter((ground): ground is GroundRecommendation => ground !== null),
+    notice_period_suggestions: {
+      section_8: noticePeriod.noticePeriodDays,
+    },
+    pre_action_requirements: { required: false, met: null, details: [] },
+    blocking_issues: [
+      {
+        route: 'section_21',
+        issue: 'section_21_abolished',
+        description:
+          'Section 21 notices and accelerated possession are not available for England private-rented possession claims on or after 1 May 2026.',
+        action_required: 'Use Form 3A and proceed through the standard possession route.',
+        severity: 'blocking',
+        legal_basis: 'England private rented sector post-1 May 2026 possession regime',
+      },
+    ],
+    warnings: [],
+    analysis_summary:
+      selectedGrounds.length > 0
+        ? `Use Form 3A for England with ${selectedGrounds.join(', ')} and a ${noticePeriod.noticePeriodDays}-day minimum notice period.`
+        : 'Use Form 3A for England. Select at least one possession ground before serving notice.',
+    route_explanations: {
+      section_8: isEnglandRentOnlyClaimEligible(selectedGrounds)
+        ? 'Use Form 3A now. Rent-only arrears claims may be filed online or on paper, but the product prepares the paper N5/N119 route as well.'
+        : 'Use Form 3A now, then proceed by the standard county court possession route with N5 and N119.',
+      section_21:
+        'Section 21 and N5B accelerated possession are not part of the England private-rented flow after 1 May 2026.',
+    },
+  };
+
+  if (selectedGrounds.length === 0) {
+    output.warnings.push('No possession grounds selected yet. Form 3A requires at least one valid ground.');
+  }
+
+  for (const groundCode of selectedGrounds) {
+    const ground = getEnglandGroundDefinition(groundCode);
+    if (!ground) continue;
+
+    if (ground.landlordProfiles && !ground.landlordProfiles.includes(landlordProfile as any)) {
+      output.blocking_issues.push({
+        route: 'section_8',
+        issue: `ground_${ground.code}_landlord_profile`,
+        description: `Ground ${ground.code} (${ground.title}) only applies to certain landlord types.`,
+        action_required: 'Change the selected grounds or confirm the landlord profile matches the statutory ground.',
+        severity: 'blocking',
+        legal_basis: `Form 3A ground ${ground.code}`,
+      });
+      output.allowed_routes = [];
+    }
+
+    if (ground.earliestUseAfterTenancyMonths && tenancyStartDate) {
+      const start = new Date(tenancyStartDate);
+      const notice = new Date(noticeExpiryDate);
+      const elapsedMonths =
+        (notice.getFullYear() - start.getFullYear()) * 12 + (notice.getMonth() - start.getMonth());
+
+      if (!Number.isNaN(start.getTime()) && !Number.isNaN(notice.getTime()) && elapsedMonths < ground.earliestUseAfterTenancyMonths) {
+        output.blocking_issues.push({
+          route: 'section_8',
+          issue: `ground_${ground.code}_timing`,
+          description: `Ground ${ground.code} (${ground.title}) cannot be used on the current date in the notice until ${ground.earliestUseAfterTenancyMonths} months into the tenancy.`,
+          action_required: 'Remove this ground or move the notice date so the ground becomes available.',
+          severity: 'blocking',
+          legal_basis: `Form 3A ground ${ground.code}`,
+        });
+        output.allowed_routes = [];
+      }
+    }
+
+    if (ground.requiresPriorNotice) {
+      const priorNoticeGiven =
+        facts.prior_notice_served === true ||
+        facts.prior_written_notice_given === true ||
+        facts.ground_prerequisite_notice_served === true;
+
+      if (!priorNoticeGiven) {
+        output.warnings.push(
+          `Ground ${ground.code} (${ground.title}) normally depends on prior written notice or qualifying tenancy-start wording. Confirm that prerequisite before serving Form 3A.`,
+        );
+      }
+    }
+  }
+
+  if (output.allowed_routes.length === 0) {
+    output.recommended_routes = [];
+    output.analysis_summary =
+      'One or more selected England possession grounds appear unavailable on the facts entered. Review the blocking issues before serving Form 3A.';
+  }
+
+  return output;
+}
+
 function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
+  const canonicalJurisdiction = normalizeJurisdiction(String(input.jurisdiction));
+  if (canonicalJurisdiction === 'england') {
+    return analyzeEnglandPost2026(input);
+  }
+
   const { facts, stage = 'generate' } = input; // Default to strictest validation
   const output: DecisionOutput = {
     recommended_routes: [],

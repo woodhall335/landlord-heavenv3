@@ -29,22 +29,22 @@ const COMPLETE_PACK_PRICE = SEO_PRICES.evictionBundle.display;
 const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = {
   'notice_only:england:eviction': {
     product: 'notice_only',
-    title: 'Generate a Section 21 or Section 8 Notice',
-    description: `Create a compliant Section 21 or Section 8 notice for England (${NOTICE_PRICE}).`,
-    buttonText: 'Start Section 21/8 Wizard',
+    title: 'Generate a Current England Notice',
+    description: `Create a current England possession notice workflow (${NOTICE_PRICE}).`,
+    buttonText: 'Start England Notice Wizard',
     displayPrice: NOTICE_PRICE,
   },
   'notice_only:england:arrears_notice': {
     product: 'notice_only',
-    title: 'Serve a Section 8 Notice for rent arrears',
-    description: `Generate a Section 8 notice grounded on rent arrears (${NOTICE_PRICE}).`,
-    buttonText: 'Start Section 8 Wizard',
+    title: 'Serve a Current England Notice for rent arrears',
+    description: `Generate a current England notice workflow grounded on rent arrears (${NOTICE_PRICE}).`,
+    buttonText: 'Start England Notice Wizard',
     displayPrice: NOTICE_PRICE,
   },
   'notice_only:england:notice_validity': {
     product: 'notice_only',
     title: 'Check your notice is valid',
-    description: 'Review Section 21 or Section 8 requirements before serving notice.',
+    description: 'Review the current England notice requirements before serving.',
     buttonText: 'Check notice validity',
     displayPrice: NOTICE_PRICE,
   },
@@ -149,7 +149,7 @@ const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = 
 };
 
 const COURT_PROCESS_PATTERN =
-  /court|possession|hearing|warrant|bailiff|enforcement|order|n5b|n5|n119|n55|n325|high court|writ/i;
+  /court|possession|hearing|warrant|bailiff|enforcement|order|n5|n119|n55|n325|high court|writ/i;
 const NOTICE_VALIDITY_PATTERN =
   /valid|validity|check|compliant|correct|serve properly|served correctly|is my notice/i;
 const ARREARS_NOTICE_PATTERN =

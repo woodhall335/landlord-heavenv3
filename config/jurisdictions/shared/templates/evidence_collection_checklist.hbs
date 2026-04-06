@@ -251,6 +251,20 @@
   <dd>{{current_date}}</dd>
 </dl>
 
+{{#if is_england_post_2026}}
+<div class="tips-box" style="background: #fff7ed; border-color: #ea580c;">
+  <h3>Critical Post-1 May 2026 England checks</h3>
+  <ul>
+    <li>Put deposit protection, prescribed information, and proof of service at the front of the bundle. Unresolved deposit compliance can stop possession on most grounds.</li>
+    <li>Check whether the tenant is in a Debt Respite Scheme breathing space before serving or filing on rent-arrears grounds.</li>
+    <li>Where you rely on a prior-notice ground, keep the written statement of terms that identified that ground under sections 16D and 16E.</li>
+    {{#if has_ground_1a}}
+    <li>For Ground 1A, keep sale evidence ready and note the section 16E restricted period and the 12-month post-possession reletting restriction.</li>
+    {{/if}}
+  </ul>
+</div>
+{{/if}}
+
 <!-- Essential Documents -->
 <div class="section-header">
   <span class="num">1</span>
@@ -294,7 +308,7 @@
       <div class="checkbox"></div>
       <div class="checklist-item-content">
         <div class="checklist-item-title">Deposit Protection Certificate</div>
-        <div class="checklist-item-description">Certificate from DPS, TDS, or MyDeposits confirming protection</div>
+        <div class="checklist-item-description">Certificate from DPS, TDS, or MyDeposits confirming protection. Missing or late protection can block possession on most grounds.</div>
       </div>
       <span class="checklist-item-status status-essential">ESSENTIAL</span>
     </div>
@@ -302,7 +316,7 @@
       <div class="checkbox"></div>
       <div class="checklist-item-content">
         <div class="checklist-item-title">Prescribed Information</div>
-        <div class="checklist-item-description">Copy of prescribed information served to tenant</div>
+        <div class="checklist-item-description">Copy of prescribed information served to tenant, with service date and method. Missing prescribed information is a common defence.</div>
       </div>
       <span class="checklist-item-status status-essential">ESSENTIAL</span>
     </div>

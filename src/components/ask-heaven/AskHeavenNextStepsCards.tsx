@@ -31,7 +31,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
       title: 'Notice Only Pack',
       price: PRODUCTS.notice_only.displayPrice,
       description:
-        'Best if you need to serve or check an eviction notice (Section 21, Section 8, Section 173, or Notice to Leave).',
+        'Best if you need to serve or check the current notice route for your jurisdiction.',
       ctaText: 'Generate a compliant notice',
       href: productLinks.noticeOnly.href,
       ariaLabel: 'Open Notice Only Pack',

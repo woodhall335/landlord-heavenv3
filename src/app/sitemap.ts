@@ -55,7 +55,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/tenancy-agreement-template-free',
     '/tenancy-agreement-template-uk',
     '/eviction-notice',
-    '/eviction-notice-england',
     '/eviction-notice-uk',
     '/eviction-pack-england',
     '/complete-eviction-pack-england',
@@ -63,6 +62,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/section-8-court-pack',
     '/section-21-notice-generator',
     '/section-8-notice-generator',
+    '/section-21-notice-guide',
+    '/section-21-notice-period',
+    '/serve-section-21-notice',
+    '/section-21-notice-template',
+    '/form-6a-section-21',
+    '/section-21-validity-checklist',
+    '/section-21-checklist',
+    '/section-21-expired-what-next',
+    '/tenant-ignores-section-21',
+    '/what-happens-after-section-21',
+    '/section-8-vs-section-21',
+    '/accelerated-possession-guide',
+    '/n5b-form-guide',
+    '/n5b-possession-claim-form',
+    '/n5b-possession-claim-guide',
     '/mcol-money-claim-online',
     '/wales-eviction-notice-template',
     '/scotland-notice-to-leave-template',
@@ -112,7 +126,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Long-tail landing pages - SEO targeted
   const landingPages = [
     { path: '/how-to-evict-a-tenant-uk', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/section-21-notice-guide', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/section-8-notice-guide', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/rent-arrears-landlord-guide', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-england', priority: 0.95, changeFrequency: 'weekly' as const },
@@ -120,7 +133,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/section-8-notice', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/section-21-notice', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/section-21-ban-uk', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/section-21-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/eviction-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-8-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/rent-arrears-letter-template', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -131,13 +143,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/possession-claim-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/eviction-cost-uk', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/how-to-evict-tenant', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/section-21-ban', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/section-21-ban-uk', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/section-21-notice', priority: 0.88, changeFrequency: 'weekly' as const },
+    { path: '/section-21-vs-section-8', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/no-fault-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/section-8-notice', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-uk', priority: 0.9, changeFrequency: 'weekly' as const },
-    // Q2 2026 SEO pages
-    { path: '/n5b-form-guide', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/warrant-of-possession', priority: 0.8, changeFrequency: 'weekly' as const },
     // Money Claim SEO Expansion (Q1 2026) - Damage focused
     { path: '/money-claim-cleaning-costs', priority: 0.8, changeFrequency: 'weekly' as const },
@@ -192,8 +203,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/fixed-term-periodic-tenancy-england', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/renew-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
     // High-Intent SEO Landing Pages (Jan 2026)
-    { path: '/form-6a-section-21', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/no-fault-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/form-3-section-8', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/lodger-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/money-claim-online-mcol', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -211,18 +220,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const extraIndexablePages = [{ path: '/apply-possession-order-landlord', priority: 0.8, changeFrequency: 'weekly' as const }];
 
   const pillarPages = [
+    { path: '/eviction-notice-england', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-england', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-scotland', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-wales', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/section-21-expired-what-next', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/section-8-rent-arrears-eviction', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/section-8-vs-section-21', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/periodic-tenancy-agreement', priority: 0.85, changeFrequency: 'weekly' as const },
     // Explicitly pin high-intent eviction funnel pages (do not rely on auto-discovery only)
     { path: '/how-to-evict-a-tenant-england', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/evict-tenant-not-paying-rent', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/tenant-refuses-to-leave-after-notice', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/section-21-notice-period', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/section-8-grounds-explained', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/possession-order-process', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/bailiff-eviction-process', priority: 0.85, changeFrequency: 'weekly' as const },
@@ -231,8 +239,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Explicitly pin all remaining eviction intent pages (no runtime auto-discovery dependency)
     { path: '/section-21-vs-section-8', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-court-forms-england', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/section-21-checklist', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/n5b-possession-claim-form', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/n5-n119-possession-claim', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-timeline-england', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/tenant-stopped-paying-rent', priority: 0.82, changeFrequency: 'weekly' as const },
@@ -244,17 +250,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/tenant-anti-social-behaviour', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/how-long-does-eviction-take', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/eviction-timeline-uk', priority: 0.85, changeFrequency: 'weekly' as const },
-    { path: '/accelerated-possession-guide', priority: 0.83, changeFrequency: 'weekly' as const },
     { path: '/warrant-of-possession-guide', priority: 0.83, changeFrequency: 'weekly' as const },
     { path: '/court-bailiff-eviction-guide', priority: 0.83, changeFrequency: 'weekly' as const },
     { path: '/notice-to-quit-guide', priority: 0.82, changeFrequency: 'weekly' as const },
-    { path: '/section-21-validity-checklist', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/section-8-eviction-process', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/rent-arrears-eviction-guide', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/landlord-eviction-checklist', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/court-possession-order-guide', priority: 0.83, changeFrequency: 'weekly' as const },
-    { path: '/n5b-possession-claim-guide', priority: 0.83, changeFrequency: 'weekly' as const },
-    { path: '/serve-section-21-notice', priority: 0.84, changeFrequency: 'weekly' as const },
     { path: '/serve-section-8-notice', priority: 0.84, changeFrequency: 'weekly' as const },
     { path: '/tenant-left-without-paying-rent', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/recover-rent-arrears-after-eviction', priority: 0.82, changeFrequency: 'weekly' as const },
@@ -266,11 +268,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/can-a-landlord-evict-for-noise-complaints', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/can-a-landlord-evict-for-pets', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/can-you-evict-a-tenant-for-property-damage', priority: 0.8, changeFrequency: 'monthly' as const },
-    { path: '/what-happens-after-section-21', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/what-happens-after-section-8', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/how-long-does-bailiff-eviction-take', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/how-long-after-court-order-do-bailiffs-evict', priority: 0.8, changeFrequency: 'monthly' as const },
-    { path: '/tenant-ignores-section-21', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/tenant-ignores-section-8', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/how-to-speed-up-eviction-uk', priority: 0.8, changeFrequency: 'monthly' as const },
   ];
@@ -314,20 +314,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Ask Heaven Q&A Pages
   let askHeavenPages: MetadataRoute.Sitemap = [];
-  try {
-    const questionRepository = createSupabaseAdminQuestionRepository();
-    const sitemapQuestions = await questionRepository.getForSitemap();
+  const hasAskHeavenSitemapConfig = Boolean(
+    process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
 
-    askHeavenPages = sitemapQuestions
-      .filter((q) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(q.slug))
-      .map((q) => ({
-        url: `${SITE_ORIGIN}/ask-heaven/${q.slug}`,
-        lastModified: new Date(q.updated_at),
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
-      }));
-  } catch (error) {
-    console.warn('[Sitemap] Failed to load Ask Heaven questions:', error);
+  if (hasAskHeavenSitemapConfig) {
+    try {
+      const questionRepository = createSupabaseAdminQuestionRepository();
+      const sitemapQuestions = await questionRepository.getForSitemap();
+
+      askHeavenPages = sitemapQuestions
+        .filter((q) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(q.slug))
+        .map((q) => ({
+          url: `${SITE_ORIGIN}/ask-heaven/${q.slug}`,
+          lastModified: new Date(q.updated_at),
+          changeFrequency: 'monthly' as const,
+          priority: 0.7,
+        }));
+    } catch (error) {
+      console.warn('[Sitemap] Failed to load Ask Heaven questions:', error);
+    }
   }
 
   // Pages that always get stable dates (products, tools, etc.)

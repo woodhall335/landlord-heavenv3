@@ -1,11 +1,11 @@
-# ============================================================================
+﻿# ============================================================================
 # ENGLAND NOTICE ONLY - Master Question Set
-# Housing Act 1988 - WITH ALL CLAUDE CODE FIXES APPLIED
+# Post-1 May 2026 private rented possession flow
 # ============================================================================
 
 jurisdiction: england
-legal_framework: "Housing Act 1988"
-tenancy_type: "Assured Shorthold Tenancy (AST)"
+legal_framework: "Housing Act 1988 / Renters' Rights Act 2025"
+tenancy_type: "Assured periodic tenancy / assured tenancy in the private rented sector"
 
 questions:
   # ========================================
@@ -46,7 +46,7 @@ questions:
         validation:
           required: true
         width: half
-      # Telephone: Optional per Form 6A - NOT legally mandatory but renders if provided
+      # Telephone: Optional contact field for the Form 3A notice if provided
       - id: landlord_phone
         label: "Telephone (optional)"
         inputType: tel
@@ -61,24 +61,48 @@ questions:
       - landlord_postcode
       - landlord_phone
 
-  # TASK B: Route selection EARLY (before route-dependent questions)
+  # England post-1 May 2026: single possession route using Form 3A.
   - id: selected_notice_route
     section: Notice Type
-    question: "Which type of notice do you want to serve?"
+    question: "England possession route"
     inputType: radio
     validation:
       required: true
-    helperText: "Select your notice type first. The system will then ask relevant questions for that type."
+    helperText: "England private rented possession notices now use Form 3A. Section 21 is not part of this flow."
     options:
-      - value: "section_21"
-        label: "Section 21 - No-fault eviction"
-        helperText: "2 months notice, strict compliance required"
       - value: "section_8"
-        label: "Section 8 - Grounds-based eviction"
-        helperText: "14+ days notice, specific grounds required"
+        label: "Form 3A possession route"
+        helperText: "Select possession grounds and generate the official Form 3A notice"
     width: full
     maps_to:
       - selected_notice_route
+
+  - id: landlord_profile
+    section: Landlord Details
+    question: "Which landlord profile best fits this property?"
+    inputType: select
+    validation:
+      required: true
+    options:
+      - value: "private_landlord"
+        label: "Private landlord"
+      - value: "supported_accommodation_provider"
+        label: "Supported accommodation provider"
+      - value: "employer_landlord"
+        label: "Employer landlord"
+      - value: "university_or_college"
+        label: "University or college"
+      - value: "agricultural_landlord"
+        label: "Agricultural landlord"
+      - value: "private_registered_provider"
+        label: "Private registered provider"
+      - value: "local_authority_owned_company"
+        label: "Local authority owned company"
+      - value: "minister_of_religion_housing"
+        label: "Minister of religion housing"
+    helperText: "Some Form 3A grounds only apply to specific landlord categories."
+    maps_to:
+      - landlord_profile
 
   - id: tenant_full_name
     section: Tenant Details
@@ -232,8 +256,9 @@ questions:
     content: |
       **Compliance requirements for eviction notices:**
 
-      We'll check your compliance status. This is critical for Section 21 validity,
-      and helps establish your position for Section 8 cases too.
+      We'll check your compliance status. For England private rented possession claims
+      served on or after 1 May 2026, deposit protection and prescribed information
+      can still block the court from making a possession order on most grounds.
 
   - id: deposit_taken
     section: Deposit & Compliance
@@ -241,7 +266,7 @@ questions:
     inputType: yes_no
     validation:
       required: true
-    helperText: "Deposit protection is a legal requirement for Section 21 notices. For Section 8, it's not required but good practice."
+    helperText: "For post-1 May 2026 England possession claims, deposit protection can still block the court from making a possession order on most grounds unless the deposit issue has been resolved."
     maps_to:
       - deposit_taken
 
@@ -272,9 +297,11 @@ questions:
     section: Deposit & Compliance
     question: "Does the property have gas appliances?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: true
-    helperText: "Gas boiler, gas hob, gas fire, etc. Gas safety certification is required for Section 21 but good practice for all notices."
+    helperText: "This legacy Section 21 field is hidden from the post-1 May 2026 England possession flow."
     maps_to:
       - has_gas_appliances
 
@@ -292,12 +319,12 @@ questions:
     validation:
       required: true
     helperText: |
-      Deposit protection is a legal requirement for Section 21 notices. For Section 8, it's not required but may be relevant for your records.
+      For post-1 May 2026 England possession claims, deposit protection can still block the court from making a possession order on most grounds unless the deposit issue has been resolved.
 
       Approved schemes:
-      • Deposit Protection Service (DPS)
-      • MyDeposits
-      • Tenancy Deposit Scheme (TDS)
+      â€¢ Deposit Protection Service (DPS)
+      â€¢ MyDeposits
+      â€¢ Tenancy Deposit Scheme (TDS)
     maps_to:
       - deposit_protected
 
@@ -359,7 +386,7 @@ questions:
       questionId: deposit_protected_scheme
       value: true
     content: |
-      **📅 CRITICAL: 30-Day Deposit Compliance Timeline**
+      **Critical: 30-Day Deposit Compliance Timeline**
 
       From the date the deposit was **paid by tenant**, you must:
 
@@ -371,7 +398,7 @@ questions:
       - Protection deadline: 31st January
       - Prescribed info deadline: 31st January
 
-      ⚠️ **If either deadline is missed, your Section 21 notice is INVALID.**
+      **If either deadline is missed, the court will usually be unable to make a possession order on most Form 3A grounds unless the deposit has been returned or otherwise resolved.**
 
       The system will validate these dates when generating documents.
 
@@ -389,11 +416,11 @@ questions:
           value: true
     validation:
       required: true
-    helperText: "Prescribed information about the deposit protection scheme. This is a legal requirement for Section 21 notices, but not required for Section 8."
+    helperText: "Prescribed information about the deposit protection scheme. For post-1 May 2026 England possession claims, missing prescribed information can still block the court from making a possession order on most grounds unless the deposit issue has been resolved."
     maps_to:
       - prescribed_info_given
 
-  # CRITICAL: Prescribed info date - required for Section 21 validity
+  # CRITICAL: Prescribed info date for post-1 May 2026 deposit compliance
   - id: prescribed_info_served_date
     section: Deposit & Compliance
     question: "When was prescribed information served?"
@@ -407,9 +434,9 @@ questions:
     validation:
       required: true
     helperText: |
-      CRITICAL FOR SECTION 21: Must be served within 30 days of receiving deposit.
+      Critical for most post-1 May 2026 England possession grounds: this should normally be served within 30 days of receiving the deposit.
 
-      **Section 21 is INVALID if:**
+      **The court will usually refuse possession on most grounds if:**
       - Prescribed info served more than 30 days after deposit received
       - Prescribed info never served
 
@@ -421,12 +448,14 @@ questions:
     section: Deposit & Compliance
     question: "Was a valid gas safety certificate provided?"
     inputType: yes_no
+    routes:
+      - section_21
     dependsOn:
       questionId: has_gas_appliances
       value: true
     validation:
       required: true
-    helperText: "Must be provided and renewed annually. This is a legal requirement for Section 21 notices."
+    helperText: "This is not a Form 3A validity requirement and is hidden from the post-1 May 2026 England possession flow."
     maps_to:
       - gas_certificate_provided
 
@@ -448,10 +477,10 @@ questions:
       This is a legal requirement for Section 21 notices.
 
       **Legal exemptions exist but are not supported:**
-      • Listed buildings
-      • Buildings to be demolished
-      • Temporary structures
-      • Certain holiday accommodations
+      â€¢ Listed buildings
+      â€¢ Buildings to be demolished
+      â€¢ Temporary structures
+      â€¢ Certain holiday accommodations
 
       **If you believe your property is EPC exempt:**
       Consult a solicitor for manual preparation.
@@ -474,8 +503,8 @@ questions:
       System automatically determines if required based on
       tenancy start date.
 
-      • Before Oct 1, 2015: Not required
-      • On or after Oct 1, 2015: Required (for Section 21)
+      â€¢ Before Oct 1, 2015: Not required
+      â€¢ On or after Oct 1, 2015: Required (for Section 21)
 
       **System calculates requirement automatically.**
 
@@ -672,7 +701,7 @@ questions:
     helperText: "We need these details to validate Ground 8 (mandatory) threshold and calculate notice periods."
     fields:
       - id: arrears_total
-        label: "Total arrears amount (£)"
+        label: "Total arrears amount (Â£)"
         inputType: currency
         validation:
           required: true
@@ -689,23 +718,24 @@ questions:
       - arrears_from_date
 
   # ========================================
-  # SECTION 8 GROUNDS (must come BEFORE notice_service for proper flow)
+  # FORM 3A POSSESSION GROUNDS (must come BEFORE notice_service for proper flow)
   # ========================================
 
   # Ground selection fetches all available grounds from API (config/jurisdictions/uk/england/grounds/)
   # No static options needed - UI loads complete ground list with descriptions
   - id: section8_grounds_selection
-    section: Section 8 Grounds
-    question: "Select grounds for eviction"
+    section: Possession Grounds
+    question: "Select the possession grounds you want to rely on"
     inputType: multi_select
     dependsOn:
       questionId: selected_notice_route
       value: section_8
     validation:
       required: true
-    helperText: "Select all grounds that apply to your case. Grounds are loaded from legal database."
+    helperText: "Select all Form 3A grounds that apply. The pack will calculate the longest notice period automatically."
     maps_to:
       - section8_grounds
+      - selected_grounds
 
   - id: ground14_severity
     section: Section 8 Grounds
@@ -725,7 +755,7 @@ questions:
       - ground14_severity
 
   - id: ground_particulars
-    section: Section 8 Grounds
+    section: Possession Grounds
     question: "Provide specific details for each ground selected"
     inputType: textarea
     dependsOn:
@@ -733,17 +763,101 @@ questions:
       value: section_8
     validation:
       required: true
-    helperText: "For each ground, provide: dates, amounts (if arrears), specific incidents, evidence available. Be factual and specific."
+    helperText: "For each ground, provide dates, amounts, incidents, prerequisites, and evidence. This will feed Form 3A question 4.3."
     suggestion_prompt: >
-      Draft clear, factual particulars for Section 8 Notice. For each ground selected, provide:
+      Draft clear, factual particulars for Form 3A. For each ground selected, provide:
       - Dates when incidents occurred or breaches started
       - Amounts (if rent arrears)
+      - Any prior notice or tenancy-start warning relied on
       - Specific examples and evidence
       - Witnesses or documentation available
       Keep professional and court-ready. Focus on facts, not opinions.
     maps_to:
       - ground_particulars
       - section_8_particulars
+
+  - id: ground_prerequisite_notice_served
+    section: Possession Grounds
+    question: "If any selected ground depends on prior written notice or tenancy-start wording, have you already given that notice?"
+    inputType: radio
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    options:
+      - value: true
+        label: "Yes"
+      - value: false
+        label: "No"
+    helperText: "Some grounds such as student or specialist accommodation routes depend on prior written notice."
+    maps_to:
+      - ground_prerequisite_notice_served
+
+  - id: section_16e_duties_checked
+    section: Possession Compliance
+    question: "Have you complied with the landlord duties required by section 16E before seeking possession?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    helperText: "This is a post-1 May 2026 England possession requirement. The system will not let you proceed unless you confirm this."
+    maps_to:
+      - section_16e_duties_checked
+
+  - id: breathing_space_checked
+    section: Possession Compliance
+    question: "Have you checked whether the tenant is in a Debt Respite Scheme breathing space?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    helperText: "Check before serving the notice and again before filing at court."
+    maps_to:
+      - breathing_space_checked
+
+  - id: tenant_in_breathing_space
+    section: Possession Compliance
+    question: "Is the tenant currently in an active breathing space?"
+    inputType: yes_no
+    dependsOn:
+      questionId: breathing_space_checked
+      value: true
+    validation:
+      required: true
+    helperText: "If yes, the system will block service or filing until the breathing space restriction no longer applies."
+    maps_to:
+      - tenant_in_breathing_space
+
+  - id: evidence_bundle_ready
+    section: Possession Compliance
+    question: "Have you gathered the core evidence for every selected ground?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    helperText: "For example: arrears schedule, sale evidence, prior notice evidence, photographs, witness evidence, or tenancy-breach records."
+    maps_to:
+      - evidence_bundle_ready
+
+  - id: ground_1a_reletting_acknowledged
+    section: Possession Compliance
+    question: "If you recover possession on Ground 1A, do you understand the 12-month re-letting restriction?"
+    inputType: yes_no
+    dependsOn:
+      questionId: section8_grounds_selection
+      contains: Ground 1A
+    validation:
+      required: true
+    helperText: "This does not stop you serving notice, but the landlord should understand the post-possession restriction and keep sale evidence."
+    maps_to:
+      - ground_1a_reletting_acknowledged
 
   - id: notice_strategy
     section: Section 8 Grounds
@@ -756,10 +870,10 @@ questions:
       required: true
     options:
       - value: "minimum"
-        label: "Minimum legal period (ground-dependent: 14 days or 2 months)"
+        label: "Minimum legal period (ground-dependent under the post-2026 Form 3A rules)"
       - value: "recommended"
-        label: "Recommended period (60 days for discretionary grounds)"
-    helperText: "Notice period depends on selected grounds. Grounds 10 & 11 require 2 months minimum. All other grounds require 2 weeks minimum."
+        label: "Recommended period with extra buffer"
+    helperText: "Notice period depends on the selected Form 3A grounds. The longest statutory notice period among your chosen grounds controls the notice."
     maps_to:
       - notice_strategy
 
@@ -844,11 +958,11 @@ questions:
     content: |
       **Your Section 21 notice expiry date will be calculated automatically** based on:
 
-      • Your service date (entered above)
-      • Whether tenancy is fixed term or periodic
-      • Fixed term end date (if applicable)
-      • Break clause date (if applicable)
-      • The 4-month restriction from tenancy start
+      â€¢ Your service date (entered above)
+      â€¢ Whether tenancy is fixed term or periodic
+      â€¢ Fixed term end date (if applicable)
+      â€¢ Break clause date (if applicable)
+      â€¢ The 4-month restriction from tenancy start
 
       The system ensures compliance with Housing Act 1988, Section 21(4) requirements
       (minimum 2 calendar months notice, cannot expire before fixed term ends, etc.)
@@ -874,7 +988,7 @@ questions:
         label: "Or summarize key terms"
         inputType: textarea
         helperText: "If unable to upload, describe: start date, rent amount, key terms"
-        placeholder: "E.g., AST started 01/01/2024, rent £1,200pcm due 1st of each month..."
+        placeholder: "E.g., AST started 01/01/2024, rent Â£1,200pcm due 1st of each month..."
         width: full
     maps_to:
       - evidence.tenancy_agreement_uploads
@@ -910,3 +1024,5 @@ questions:
       required: false
     maps_to:
       - evidence.other_uploads
+
+

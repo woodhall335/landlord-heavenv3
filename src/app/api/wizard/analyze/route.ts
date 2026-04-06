@@ -1018,13 +1018,22 @@ export async function POST(request: Request) {
         );
       } else {
         // England: Show route-specific notices based on recommended route
+        const isEnglandPost2026Route = canonicalJurisdiction === 'england';
         const isSection21Route = finalRecommendedRoute === 'section_21' ||
                                   finalRecommendedRoute === 'accelerated_possession' ||
                                   finalRecommendedRoute === 'accelerated_section21';
         const isSection8Route = finalRecommendedRoute === 'section_8' ||
                                  finalRecommendedRoute === 'section8_notice';
 
-        if (isSection21Route) {
+        if (isEnglandPost2026Route) {
+          previewDocuments.push(
+            {
+              id: 's8_notice',
+              document_type: 'notice',
+              document_title: 'Form 3A notice seeking possession',
+            },
+          );
+        } else if (isSection21Route) {
           previewDocuments.push(
             {
               id: 's21_notice',
@@ -1046,12 +1055,9 @@ export async function POST(request: Request) {
             {
               id: 's8_notice',
               document_type: 'notice',
-              document_title: 'Section 8 notice (Form 3)',
-            },
-            {
-              id: 's21_notice',
-              document_type: 'notice',
-              document_title: 'Section 21 notice (Form 6A)',
+              document_title: canonicalJurisdiction === 'england'
+                ? 'Form 3A notice seeking possession'
+                : 'Section 8 notice (Form 3)',
             },
           );
         }
@@ -1065,31 +1071,20 @@ export async function POST(request: Request) {
         );
 
         if (!isNoticeOnly) {
-          // Section 21 uses accelerated possession (N5B only)
-          // Section 8 uses standard possession (N5 + N119)
-          if (isSection21Route) {
-            previewDocuments.push({
-              id: 'n5b',
+          previewDocuments.push(
+            {
+              id: 'n5',
               document_type: 'court_form',
-              document_title: 'N5B accelerated possession claim',
+              document_title: 'N5 claim form',
               requiredToFile: true,
-            });
-          } else {
-            previewDocuments.push(
-              {
-                id: 'n5',
-                document_type: 'court_form',
-                document_title: 'N5 claim form',
-                requiredToFile: true,
-              },
-              {
-                id: 'n119',
-                document_type: 'court_form',
-                document_title: 'N119 particulars of claim',
-                requiredToFile: true,
-              },
-            );
-          }
+            },
+            {
+              id: 'n119',
+              document_type: 'court_form',
+              document_title: 'N119 particulars of claim',
+              requiredToFile: true,
+            },
+          );
         }
       }
     }
@@ -1112,13 +1107,13 @@ export async function POST(request: Request) {
       if (canonicalJurisdiction === 'england') {
         if (effectiveRoute === 'section_21') {
           recommended_route_label =
-            'Section 21 possession (accelerated or standard, depending on compliance)';
+            'Legacy Section 21 route (not used for England private-rented claims on or after 1 May 2026)';
         } else if (effectiveRoute === 'section_8') {
-          recommended_route_label = 'Section 8 standard possession (N5 + N119)';
+          recommended_route_label = 'England possession route (Form 3A notice plus N5/N119 claim pack)';
         } else if (effectiveRoute === 'notice_only') {
-          recommended_route_label = 'Notice-only route (serve notice now, claim later)';
+          recommended_route_label = 'Notice-only route (serve Form 3A now, claim later)';
         } else if (effectiveRoute === 'standard_possession') {
-          recommended_route_label = 'Standard possession (N5 + N119)';
+          recommended_route_label = 'England possession route (Form 3A notice plus N5/N119 claim pack)';
         }
       } else if (canonicalJurisdiction === 'wales') {
         if (effectiveRoute === 'wales_section_173') {

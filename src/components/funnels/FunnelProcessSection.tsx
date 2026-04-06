@@ -51,15 +51,15 @@ const ROUTE_IMAGE_BY_ID: Record<string, { src: string; alt: string }> = {
   },
   section21: {
     src: '/images/nofaulteviction.webp',
-    alt: 'No fault eviction',
+    alt: 'Historical legacy route',
   },
   section173: {
     src: '/images/nofaulteviction.webp',
-    alt: 'No fault eviction',
+    alt: 'Possession notice',
   },
   'notice-to-leave': {
     src: '/images/nofaulteviction.webp',
-    alt: 'No fault eviction',
+    alt: 'Possession notice',
   },
   'money-claim-route': {
     src: '/images/moneyclaims.webp',
@@ -102,7 +102,7 @@ const STEP_IMAGE_MATCHERS: StepImageMatcher[] = [
   { pattern: /(^|_)n1(_|$)|form_n1/, src: '/images/whyitmatters/n1.png', alt: 'Form N1' },
   { pattern: /(^|_)n119(_|$)/, src: '/images/whyitmatters/n119.png', alt: 'Form N119' },
   { pattern: /(^|_)n5(_|$)/, src: '/images/whyitmatters/n5.png', alt: 'Form N5' },
-  { pattern: /(^|_)n5b(_|$)/, src: '/images/whyitmatters/n5b.png', alt: 'Form N5B' },
+  { pattern: /(^|_)n5b(_|$)/, src: '/images/whyitmatters/n5b.png', alt: 'Historical legacy claim form' },
   { pattern: /notice_to_leave/, src: '/images/whyitmatters/notice_to_leave.png', alt: 'Notice to Leave' },
   {
     pattern: /pre_service_compliance_checklist/,
@@ -126,12 +126,12 @@ const STEP_IMAGE_MATCHERS: StepImageMatcher[] = [
   {
     pattern: /section_21|form_6a/,
     src: '/images/whyitmatters/section_21_eviction_notice.png',
-    alt: 'Section 21 eviction notice',
+    alt: 'Historical legacy notice',
   },
   {
-    pattern: /section_8|form_3/,
+    pattern: /section_8|form_3a|form_3/,
     src: '/images/whyitmatters/section_8_eviction_notice.png',
-    alt: 'Section 8 eviction notice',
+    alt: 'Current England possession notice',
   },
   {
     pattern: /service_instructions|serving_instructions/,
@@ -160,11 +160,11 @@ const getStepImage = (step: FunnelProcessStep, routeId: string) => {
 
   if (normalized.includes('notice') || normalized.includes('eviction')) {
     if (routeId === 'section21') {
-      return { src: '/images/whyitmatters/section_21_eviction_notice.png', alt: 'Section 21 eviction notice' };
+      return { src: '/images/whyitmatters/section_21_eviction_notice.png', alt: 'Historical legacy notice' };
     }
 
     if (routeId === 'section8') {
-      return { src: '/images/whyitmatters/section_8_eviction_notice.png', alt: 'Section 8 eviction notice' };
+      return { src: '/images/whyitmatters/section_8_eviction_notice.png', alt: 'Current England possession notice' };
     }
 
     if (routeId === 'section173') {
@@ -260,47 +260,38 @@ export function FunnelProcessSection({
   );
 
   const cta = CTA_BY_PRODUCT[product];
-  const [activeTabId, setActiveTabId] = useState(model.defaultTabId);
+  const [selectedTabId, setSelectedTabId] = useState(model.defaultTabId);
 
   const desktopTrackRef = useRef<HTMLDivElement | null>(null);
   const mobileTrackRef = useRef<HTMLDivElement | null>(null);
   const pauseUntilRef = useRef(0);
   const dragStateRef = useRef({ active: false, startX: 0, startScrollLeft: 0 });
 
-  useEffect(() => {
-    setActiveTabId(model.defaultTabId);
-  }, [model.defaultTabId]);
+  const activeTabId = model.tabs.some((tab) => tab.id === selectedTabId)
+    ? selectedTabId
+    : model.defaultTabId;
 
   const activeTab = useMemo(
     () => model.tabs.find((tab) => tab.id === activeTabId) ?? model.tabs[0],
     [activeTabId, model.tabs],
   );
 
-  const [activeRouteId, setActiveRouteId] = useState('');
-
-  useEffect(() => {
-    if (!activeTab) {
-      setActiveRouteId('');
-      return;
+  const [selectedRouteId, setSelectedRouteId] = useState('');
+  const activeRouteId = useMemo(() => {
+    if (!activeTab || activeTab.routes.length === 0) {
+      return '';
     }
 
-    if (activeTab.routes.length === 0) {
-      setActiveRouteId('');
-      return;
-    }
-
-    const selectedRoute = getRouteById(activeTab.routes, activeRouteId);
-    if (selectedRoute) {
-      return;
+    if (getRouteById(activeTab.routes, selectedRouteId)) {
+      return selectedRouteId;
     }
 
     if (activeTab.routes.length === 1) {
-      setActiveRouteId(activeTab.routes[0].id);
-      return;
+      return activeTab.routes[0].id;
     }
 
-    setActiveRouteId('');
-  }, [activeTab, activeRouteId]);
+    return '';
+  }, [activeTab, selectedRouteId]);
 
   const activeRoute = activeTab ? getRouteById(activeTab.routes, activeRouteId) : undefined;
   const steps = activeRoute?.steps ?? [];
@@ -421,7 +412,7 @@ export function FunnelProcessSection({
                     role="tab"
                     aria-selected={isActive}
                     aria-controls={`funnel-panel-${tab.id}`}
-                    onClick={() => setActiveTabId(tab.id)}
+                    onClick={() => setSelectedTabId(tab.id)}
                     className={`pill-selector-btn ${isActive ? 'pill-selector-btn-active' : 'pill-selector-btn-inactive'}`}
                   >
                     {tab.label}
@@ -449,7 +440,7 @@ export function FunnelProcessSection({
                     <button
                       key={route.id}
                       type="button"
-                      onClick={() => setActiveRouteId(route.id)}
+                      onClick={() => setSelectedRouteId(route.id)}
                       className={`rounded-2xl border p-5 text-left transition ${
                         isSelected
                           ? 'border-violet-400 bg-violet-100/70 shadow-[0_10px_24px_rgba(124,58,237,0.16)]'

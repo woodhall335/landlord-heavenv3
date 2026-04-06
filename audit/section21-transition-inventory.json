@@ -1,0 +1,4377 @@
+{
+  "generatedAt": "2026-04-05T18:20:08.297Z",
+  "scannedFiles": 2192,
+  "updatedPages": [
+    "/form-3-section-8",
+    "/section-8-notice",
+    "/renters-rights-act-eviction-rules",
+    "/eviction-notice-england",
+    "/how-to-evict-a-tenant-england",
+    "/eviction-process-england",
+    "/eviction-notice-template"
+  ],
+  "wordCounts": [
+    {
+      "slug": "form-3-section-8",
+      "visibleWordCount": 2076,
+      "passes": true
+    },
+    {
+      "slug": "section-8-notice",
+      "visibleWordCount": 1910,
+      "passes": true
+    },
+    {
+      "slug": "renters-rights-act-eviction-rules",
+      "visibleWordCount": 1866,
+      "passes": true
+    },
+    {
+      "slug": "eviction-notice-england",
+      "visibleWordCount": 1738,
+      "passes": true
+    },
+    {
+      "slug": "how-to-evict-a-tenant-england",
+      "visibleWordCount": 1688,
+      "passes": true
+    },
+    {
+      "slug": "eviction-process-england",
+      "visibleWordCount": 1576,
+      "passes": true
+    },
+    {
+      "slug": "eviction-notice-template",
+      "visibleWordCount": 1616,
+      "passes": true
+    }
+  ],
+  "legacyReferencesRetained": [
+    {
+      "file": ".github/PULL_REQUEST_TEMPLATE/validation-legal-critical.md",
+      "line": 19,
+      "term": "Section 21",
+      "snippet": "<!-- e.g., Housing Act 1988, Section 21(4B) -->",
+      "classification": "internal_compatibility",
+      "reason": "Non-owner source retained as internal compatibility or backlog content outside the public allowlist scan."
+    },
+    {
+      "file": "artifacts/ask-heaven-indexability-audit.json",
+      "line": 59,
+      "term": "N5B",
+      "snippet": "\"slug\": \"section-21-accelerated-possession-n5b-guide\",",
+      "classification": "internal_compatibility",
+      "reason": "Non-owner source retained as internal compatibility or backlog content outside the public allowlist scan."
+    },
+    {
+      "file": "artifacts/ask-heaven-indexability-audit.json",
+      "line": 255,
+      "term": "s21",
+      "snippet": "\"slug\": \"defended-possession-claim-s8-s21\",",
+      "classification": "internal_compatibility",
+      "reason": "Non-owner source retained as internal compatibility or backlog content outside the public allowlist scan."
+    },
+    {
+      "file": "audit/legal-validity-audit-v2.1.json",
+      "line": 113,
+      "term": "N5B",
+      "snippet": "\"officialForms\": \"public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf\",",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/legal-validity-audit-v2.1.json",
+      "line": 352,
+      "term": "N5B",
+      "snippet": "\"public/official-forms/n5b-eng.pdf\"",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/legal-validity-audit-v2.1.json",
+      "line": 357,
+      "term": "N5B",
+      "snippet": "\"public/official-forms/n5b-eng.pdf\"",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/legal-validity-audit-v2.1.json",
+      "line": 432,
+      "term": "N5B",
+      "snippet": "\"public/official-forms/n5b-eng.pdf\"",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/legal-validity-audit-v2.1.json",
+      "line": 865,
+      "term": "N5B",
+      "snippet": "\"pdfPath\": \"public/official-forms/n5b-eng.pdf\",",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/legal-validity-audit-v2.1.md",
+      "line": 16,
+      "term": "N5B",
+      "snippet": "| england | eviction_pack | section_21 | PARTIAL | public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf | issues | ok | ok | ok | MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs |",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/legal-validity-audit-v2.1.md",
+      "line": 57,
+      "term": "N5B",
+      "snippet": "- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf]",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/legal-validity-audit-v2.1.md",
+      "line": 59,
+      "term": "N5B",
+      "snippet": "- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [-]",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/orphan-whitelist.json",
+      "line": 169,
+      "term": "N5B",
+      "snippet": "\"public/official-forms/n5b-eng.pdf\",",
+      "classification": "test_or_audit",
+      "reason": "Tests and audit assets are permitted to reference legacy terms for enforcement."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 54,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 55,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"<!-- e.g., Housing Act 1988, Section 21(4B) -->\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 62,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 63,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"slug\\\": \\\"section-21-accelerated-possession-n5b-guide\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 70,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 71,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"slug\\\": \\\"defended-possession-claim-s8-s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 78,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 79,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"officialForms\\\": \\\"public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 86,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 87,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"public/official-forms/n5b-eng.pdf\\\"\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 94,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 95,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"public/official-forms/n5b-eng.pdf\\\"\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 102,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 103,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"public/official-forms/n5b-eng.pdf\\\"\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 110,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 111,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"pdfPath\\\": \\\"public/official-forms/n5b-eng.pdf\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 118,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 119,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"| england | eviction_pack | section_21 | PARTIAL | public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf | issues | ok | ok | ok | MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs |\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 126,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 127,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf]\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 134,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 135,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [-]\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 142,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 143,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"public/official-forms/n5b-eng.pdf\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 150,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 151,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 158,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 159,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"<!-- e.g., Housing Act 1988, Section 21(4B) -->\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 166,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 167,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 174,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 175,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"slug\\\\\\\": \\\\\\\"section-21-accelerated-possession-n5b-guide\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 182,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 183,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 190,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 191,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"slug\\\\\\\": \\\\\\\"defended-possession-claim-s8-s21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 198,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 199,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 206,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 207,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"officialForms\\\\\\\": \\\\\\\"public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 214,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 215,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 222,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 223,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\"\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 230,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 231,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 238,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 239,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\"\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 246,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 247,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 254,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 255,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\"\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 262,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 263,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 270,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 271,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"pdfPath\\\\\\\": \\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 278,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 279,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 286,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 287,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"| england | eviction_pack | section_21 | PARTIAL | public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf | issues | ok | ok | ok | MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs |\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 294,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 295,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 302,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 303,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf]\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 310,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 311,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 318,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 319,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [-]\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 326,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 327,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 334,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 335,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 342,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 343,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 350,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 351,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"Section 21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 358,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 359,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 366,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 367,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"<!-- e.g., Housing Act 1988, Section 21(4B) -->\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 374,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 375,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 382,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 383,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 390,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 391,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 398,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 399,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"slug\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"section-21-accelerated-possession-n5b-guide\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 406,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 407,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 414,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 415,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"s21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 422,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 423,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 430,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 431,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"slug\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"defended-possession-claim-s8-s21\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 438,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 439,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 446,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 447,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 454,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 455,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 462,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 463,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"officialForms\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 470,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 471,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 478,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 479,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 486,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 487,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 494,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 495,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\"\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 502,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 503,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 510,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 511,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 518,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 519,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 526,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 527,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\"\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 534,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 535,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 542,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 543,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 550,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 551,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 558,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 559,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\"\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 566,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 567,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 574,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 575,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 582,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 583,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 590,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 591,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"pdfPath\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 598,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 599,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 606,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 607,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 614,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 615,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 622,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 623,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"| england | eviction_pack | section_21 | PARTIAL | public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf | issues | ok | ok | ok | MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs |\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 630,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 631,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 638,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 639,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 646,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 647,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 654,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 655,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf]\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 662,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 663,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 670,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 671,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 678,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 679,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 686,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 687,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [-]\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 694,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 695,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 702,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 703,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 710,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 711,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 718,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 719,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 726,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 727,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 734,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 735,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"Section 21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 742,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 743,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 750,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 751,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"Section 21\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 758,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 759,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 766,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 767,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"Section 21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 774,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 775,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 782,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 783,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"<!-- e.g., Housing Act 1988, Section 21(4B) -->\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 790,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 791,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 798,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 799,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 806,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 807,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 814,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 815,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 822,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 823,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 830,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 831,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 838,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 839,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 846,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 847,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"slug\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"section-21-accelerated-possession-n5b-guide\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 854,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 855,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 862,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 863,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"s21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 870,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 871,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 878,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 879,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"s21\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 886,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 887,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 894,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 895,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"s21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 902,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 903,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 910,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 911,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"slug\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"defended-possession-claim-s8-s21\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 918,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 919,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 926,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 927,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 934,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 935,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 942,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 943,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 950,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 951,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 958,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 959,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 966,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 967,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 974,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 975,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"officialForms\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 982,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 983,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 990,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 991,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 998,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 999,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1006,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1007,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1014,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1015,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1022,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1023,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1030,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1031,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1038,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1039,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1046,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1047,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1054,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1055,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1062,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1063,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1070,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1071,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1078,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1079,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1086,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1087,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1094,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1095,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1102,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1103,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1110,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1111,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1118,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1119,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1126,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1127,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1134,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1135,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1142,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1143,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1150,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1151,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1158,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1159,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1166,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1167,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1174,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1175,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1182,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1183,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1190,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1191,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1198,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1199,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1206,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1207,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1214,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1215,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1222,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1223,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1230,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1231,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"pdfPath\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1238,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1239,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1246,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1247,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1254,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1255,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1262,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1263,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1270,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1271,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1278,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1279,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1286,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1287,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1294,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1295,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"| england | eviction_pack | section_21 | PARTIAL | public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf | issues | ok | ok | ok | MEDIUM: Registry-only templates: uk/england/templates/notice_only/form_6a_section21/notice.hbs, uk/england/templates/notice_only/form_3_section8/notice.hbs |\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1302,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1303,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1310,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1311,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1318,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1319,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1326,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1327,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1334,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1335,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1342,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1343,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1350,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1351,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1358,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1359,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf]\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1366,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1367,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1374,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1375,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1382,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1383,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1390,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1391,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1398,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1399,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1406,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1407,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1414,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1415,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1422,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1423,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"- england/section_21: expected [public/official-forms/n5-eng.pdf, public/official-forms/n119-eng.pdf, public/official-forms/n5b-eng.pdf], mapped [-]\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1430,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1431,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1438,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1439,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1446,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1447,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1454,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1455,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1462,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1463,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1470,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1471,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1478,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1479,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1486,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1487,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1494,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1495,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1502,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1503,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"Section 21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1510,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1511,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1518,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1519,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"Section 21\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1526,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1527,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1534,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1535,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"Section 21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1542,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1543,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1550,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1551,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"Section 21\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1558,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1559,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1566,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1567,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"Section 21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1574,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1575,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1582,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1583,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"Section 21\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1590,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1591,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1598,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1599,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"Section 21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1606,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1607,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"Section 21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1614,
+      "term": "Section 21",
+      "snippet": "\"term\": \"Section 21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1615,
+      "term": "Section 21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"<!-- e.g., Housing Act 1988, Section 21(4B) -->\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1622,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1623,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1630,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1631,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1638,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1639,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1646,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1647,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1654,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1655,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1662,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1663,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1670,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1671,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1678,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1679,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1686,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1687,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1694,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1695,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1702,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1703,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1710,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1711,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1718,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1719,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1726,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1727,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1734,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1735,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1742,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1743,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"slug\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"section-21-accelerated-possession-n5b-guide\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1750,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1751,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1758,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1759,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"s21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1766,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1767,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1774,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1775,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"s21\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1782,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1783,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1790,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1791,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"s21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1798,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1799,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1806,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1807,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"s21\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1814,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1815,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1822,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1823,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"s21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1830,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1831,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1838,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1839,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"s21\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1846,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1847,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1854,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1855,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"s21\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1862,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1863,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"s21\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1870,
+      "term": "s21",
+      "snippet": "\"term\": \"s21\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1871,
+      "term": "s21",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"slug\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"defended-possession-claim-s8-s21\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1878,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1879,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1886,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1887,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1894,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1895,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1902,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1903,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1910,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1911,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1918,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1919,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1926,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1927,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1934,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1935,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1942,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1943,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1950,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1951,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1958,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1959,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1966,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1967,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"term\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"N5B\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1974,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1975,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1982,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1983,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"term\\\\\\\": \\\\\\\"N5B\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1990,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1991,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1998,
+      "term": "N5B",
+      "snippet": "\"term\": \"N5B\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    },
+    {
+      "file": "audit/section21-transition-inventory.json",
+      "line": 1999,
+      "term": "N5B",
+      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"officialForms\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
+      "classification": "approved_transition_hub",
+      "reason": "Legacy terms are allowed on the four approved transition hubs only."
+    }
+  ],
+  "legacyReferencesRemovedOrRetired": [
+    {
+      "source": "/guarantor-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/residential-sublet-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/lease-amendment-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/lease-assignment-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/rent-arrears-letter-england",
+      "destination": "/money-claim"
+    },
+    {
+      "source": "/repayment-plan-agreement-england",
+      "destination": "/money-claim"
+    },
+    {
+      "source": "/rental-inspection-report-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/inventory-schedule-of-condition-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/flatmate-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/renewal-tenancy-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/tools/validators",
+      "destination": "/eviction-notice-england"
+    },
+    {
+      "source": "/tools/validators/section-21",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/tools/validators/section-8",
+      "destination": "/section-8-notice"
+    },
+    {
+      "source": "/tools/free-section-21-notice-generator",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/tools/free-section-8-notice-generator",
+      "destination": "/eviction-notice-england"
+    },
+    {
+      "source": "/section-21-ban",
+      "destination": "/section-21-ban-uk"
+    },
+    {
+      "source": "/section-21-notice-guide",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-notice-period",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/serve-section-21-notice",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-notice-template",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-notice-generator",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/form-6a-section-21",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-validity-checklist",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-checklist",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-expired-what-next",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/tenant-ignores-section-21",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/what-happens-after-section-21",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-8-vs-section-21",
+      "destination": "/section-21-vs-section-8"
+    },
+    {
+      "source": "/accelerated-possession-guide",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/n5b-form-guide",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/n5b-possession-claim-form",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/n5b-possession-claim-guide",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/blog/renters-reform-bill-what-landlords-need-to-know",
+      "destination": "/renters-rights-act-eviction-rules"
+    },
+    {
+      "source": "/blog/what-is-section-21-notice",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/blog/section-21-vs-section-8",
+      "destination": "/section-21-vs-section-8"
+    },
+    {
+      "source": "/blog/england-section-21-process",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/blog/england-accelerated-possession",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/blog/section-21",
+      "destination": "/section-21-ban-uk"
+    }
+  ],
+  "redirectsApplied": [
+    {
+      "source": "/guarantor-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/residential-sublet-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/lease-amendment-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/lease-assignment-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/rent-arrears-letter-england",
+      "destination": "/money-claim"
+    },
+    {
+      "source": "/repayment-plan-agreement-england",
+      "destination": "/money-claim"
+    },
+    {
+      "source": "/rental-inspection-report-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/inventory-schedule-of-condition-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/flatmate-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/renewal-tenancy-agreement-england",
+      "destination": "/tenancy-agreement-template"
+    },
+    {
+      "source": "/tools/validators",
+      "destination": "/eviction-notice-england"
+    },
+    {
+      "source": "/tools/validators/section-21",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/tools/validators/section-8",
+      "destination": "/section-8-notice"
+    },
+    {
+      "source": "/tools/free-section-21-notice-generator",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/tools/free-section-8-notice-generator",
+      "destination": "/eviction-notice-england"
+    },
+    {
+      "source": "/section-21-ban",
+      "destination": "/section-21-ban-uk"
+    },
+    {
+      "source": "/section-21-notice-guide",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-notice-period",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/serve-section-21-notice",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-notice-template",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-notice-generator",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/form-6a-section-21",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-validity-checklist",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-checklist",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-21-expired-what-next",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/tenant-ignores-section-21",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/what-happens-after-section-21",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/section-8-vs-section-21",
+      "destination": "/section-21-vs-section-8"
+    },
+    {
+      "source": "/accelerated-possession-guide",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/n5b-form-guide",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/n5b-possession-claim-form",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/n5b-possession-claim-guide",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/blog/renters-reform-bill-what-landlords-need-to-know",
+      "destination": "/renters-rights-act-eviction-rules"
+    },
+    {
+      "source": "/blog/what-is-section-21-notice",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/blog/section-21-vs-section-8",
+      "destination": "/section-21-vs-section-8"
+    },
+    {
+      "source": "/blog/england-section-21-process",
+      "destination": "/section-21-notice"
+    },
+    {
+      "source": "/blog/england-accelerated-possession",
+      "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/blog/section-21",
+      "destination": "/section-21-ban-uk"
+    }
+  ],
+  "itemsNeedingLegalReview": [],
+  "form3TerminologyViolations": [],
+  "summary": {
+    "totalLegacyMatches": 8832,
+    "activeViolations": 0,
+    "form3Violations": 0,
+    "wordCountFailures": 0,
+    "classificationCounts": {
+      "internal_compatibility": 3287,
+      "test_or_audit": 3102,
+      "approved_transition_hub": 1174,
+      "approved_redirect_metadata": 3,
+      "inactive_retired_runtime_support": 4,
+      "deprecated_historical": 1238,
+      "devolved_historical_note": 24
+    }
+  }
+}

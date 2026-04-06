@@ -1,0 +1,87 @@
+{
+  "generatedAt": "2026-04-05T19:08:39.538Z",
+  "runId": "2026-04-05T19-08-39-530Z",
+  "jurisdiction": "england",
+  "variant": "england-section8-complete-pack-random",
+  "packSlug": "england-section8-complete-pack-random",
+  "docs": [
+    {
+      "key": "section8_notice",
+      "filename": "notice.pdf",
+      "title": "Section 8 Notice - Notice Seeking Possession",
+      "type": "pdf"
+    },
+    {
+      "key": "n5_claim",
+      "filename": "n5.pdf",
+      "title": "Form N5 - Claim for Possession",
+      "type": "pdf"
+    },
+    {
+      "key": "n119_particulars",
+      "filename": "n119.pdf",
+      "title": "Form N119 - Particulars of Claim",
+      "type": "pdf"
+    },
+    {
+      "key": "arrears_schedule",
+      "filename": "arrears-schedule.pdf",
+      "title": "Schedule of Arrears",
+      "type": "pdf"
+    },
+    {
+      "key": "evidence_checklist",
+      "filename": "evidence-checklist.pdf",
+      "title": "Evidence Collection Checklist",
+      "type": "pdf"
+    },
+    {
+      "key": "proof_of_service",
+      "filename": "proof-of-service.pdf",
+      "title": "Proof of Service Certificate",
+      "type": "pdf"
+    },
+    {
+      "key": "witness_statement",
+      "filename": "witness-statement.pdf",
+      "title": "Witness Statement",
+      "type": "pdf"
+    },
+    {
+      "key": "court_bundle_index",
+      "filename": "court-bundle-index.html",
+      "title": "Court Bundle Index",
+      "type": "html"
+    },
+    {
+      "key": "hearing_checklist",
+      "filename": "hearing-checklist.pdf",
+      "title": "Hearing Checklist",
+      "type": "pdf"
+    },
+    {
+      "key": "arrears_engagement_letter",
+      "filename": "arrears-engagement-letter.html",
+      "title": "Arrears Engagement Letter",
+      "type": "html"
+    },
+    {
+      "key": "case_summary",
+      "filename": "case-summary.pdf",
+      "title": "Eviction Case Summary",
+      "type": "pdf"
+    }
+  ],
+  "skipped": [],
+  "metadata": {
+    "caseId": "EVICT-RANDOM-1775415865117-9399",
+    "sampleType": "fictional-random-party-data",
+    "landlord": "Daniel Mercer",
+    "tenant": "Ivy Carleton",
+    "grounds": [
+      "Ground 8",
+      "Ground 10"
+    ],
+    "arrears": 3600
+  }
+}

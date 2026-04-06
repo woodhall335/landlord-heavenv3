@@ -4,13 +4,13 @@
  * Official fee structure for England & Wales civil claims.
  * Source: https://www.gov.uk/court-fees-what-they-are
  *
- * Last updated: December 2025
+ * Last updated: April 2026
  *
  * IMPORTANT: Fees are subject to change. Check HMCTS website for current rates.
  */
 
 // =============================================================================
-// FEE CONSTANTS (HMCTS Fee Order 2024)
+// FEE CONSTANTS (EX50A November 2025 / GOV.UK current fee pages)
 // =============================================================================
 
 /**
@@ -18,13 +18,13 @@
  */
 export const POSSESSION_FEES = {
   /** Standard possession claim (N5) - Housing Act 1988 */
-  STANDARD_POSSESSION: 355,
+  STANDARD_POSSESSION: 404,
 
   /** Accelerated possession (N5B) - Section 21 only */
-  ACCELERATED_POSSESSION: 355,
+  ACCELERATED_POSSESSION: 404,
 
   /** Online possession claim (if using PCOL) */
-  ONLINE_POSSESSION: 355,
+  ONLINE_POSSESSION: 404,
 } as const;
 
 /**
@@ -89,7 +89,7 @@ export function calculateMoneyClaimFee(claimAmount: number): number {
  * Calculate total court fees for a possession claim
  *
  * @param claimType - 'section_8' | 'section_21' | 'accelerated_section21'
- * @param arrearsAmount - Total rent arrears being claimed (0 if not claiming money)
+ * @param arrearsAmount - Total rent arrears being claimed (retained for API compatibility)
  * @param isOnline - Whether filing online (PCOL) - currently no discount difference
  * @returns Fee breakdown
  */
@@ -104,8 +104,9 @@ export function calculatePossessionFees(
     ? POSSESSION_FEES.ACCELERATED_POSSESSION
     : POSSESSION_FEES.STANDARD_POSSESSION;
 
-  // Money claim fee (if claiming arrears)
-  const moneyClaimFee = arrearsAmount > 0 ? calculateMoneyClaimFee(arrearsAmount) : 0;
+  // Recovery-of-land claims use the fixed issue fee even where rent arrears
+  // are pursued in the same possession proceedings.
+  const moneyClaimFee = 0;
 
   // Total
   const totalFee = possessionFee + moneyClaimFee;
@@ -115,8 +116,12 @@ export function calculatePossessionFees(
     ? `Accelerated possession claim: £${possessionFee}`
     : `Standard possession claim: £${possessionFee}`;
 
-  if (moneyClaimFee > 0) {
+  if (arrearsAmount > 0) {
     description += ` + Money claim (£${arrearsAmount.toFixed(2)} arrears): £${moneyClaimFee}`;
+  }
+
+  if (arrearsAmount > 0) {
+    description = `${isAccelerated ? 'Accelerated' : 'Standard'} possession claim: £${possessionFee} (including any rent arrears sought within the same possession claim)`;
   }
 
   return {

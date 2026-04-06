@@ -164,7 +164,7 @@ section_21_rules:
     applies_when:
       - condition: "facts.epc_gas_cert_served === false || facts.epc_provided === false"
     message: "Section 21 requires EPC to be provided."
-    rationale: "Energy Performance Certificate must be provided to tenants."
+    rationale: "Energy Performance of Buildings (England and Wales) Regulations 2012 regulation 6 requires the EPC to be given to the tenant for Section 21 compliance."
     field: epc_provided
 
   # ---------------------------------------------------------------------------
@@ -177,7 +177,7 @@ section_21_rules:
     applies_when:
       - condition: "facts.has_gas_appliances === true && facts.gas_certificate_provided !== true && facts.epc_gas_cert_served !== true"
     message: "Section 21 requires gas safety certificate for properties with gas."
-    rationale: "Landlords must provide a copy of the gas safety record."
+    rationale: "Gas Safety (Installation and Use) Regulations 1998 regulation 36 requires the gas safety record to be provided for Section 21 compliance."
     field: gas_certificate_provided
 
   # ---------------------------------------------------------------------------
@@ -289,7 +289,7 @@ section_8_rules:
       # TS: has arrears ground (8/10/11) but !hasArrears && !totalArrears
       - condition: "computed.has_arrears_ground === true && facts.has_rent_arrears !== true && facts.has_arrears !== true && !facts.total_arrears && !facts.arrears_total && !facts.arrears_at_notice_date"
     message: "Arrears grounds selected but no arrears data provided."
-    rationale: "Grounds 8, 10, 11 require evidence of rent arrears."
+    rationale: "Housing Act 1988 Schedule 2 Grounds 8, 10, and 11 require arrears evidence to support the possession claim."
     field: total_arrears
 
   # ---------------------------------------------------------------------------
@@ -352,7 +352,7 @@ section_8_rules:
       # TS: has grounds but !particulars
       - condition: "(facts.section8_grounds || facts.section8_grounds_selection) && !facts.section8_details && !facts.ground_particulars"
     message: "Section 8 requires particulars of each ground."
-    rationale: "The notice and court forms require specific details for each ground."
+    rationale: "Housing Act 1988 section 8 and Schedule 2 require particulars supporting each relied-on ground."
     field: ground_particulars
 
   # ---------------------------------------------------------------------------
@@ -367,7 +367,7 @@ section_8_rules:
     applies_when:
       - condition: "computed.s8_notice_period_too_short === true"
     message: "Expiry date is earlier than the statutory minimum for the selected grounds."
-    rationale: "Notice periods vary by ground: 2 weeks for mandatory grounds (1, 2, 5-7, 7A, 7B, 8), 2 months for discretionary."
+    rationale: "Housing Act 1988 section 8 and Schedule 2 require the prescribed notice period for each selected ground before issuing the claim."
     field: notice_expiry_date
 
 # =============================================================================
@@ -388,7 +388,7 @@ common_rules:
       # TS: !facts.landlord_full_name && !facts.landlord_name
       - condition: "!facts.landlord_full_name && !facts.landlord_name"
     message: "Landlord name is required for document generation."
-    rationale: "Court forms require the claimant to be identified."
+    rationale: "Housing Act 1988 possession proceedings and Form N5 require the claimant landlord to be identified."
     field: landlord_full_name
 
   - id: missing_tenant_name
@@ -398,7 +398,7 @@ common_rules:
       # TS: !facts.tenant_full_name && !facts.tenant_name
       - condition: "!facts.tenant_full_name && !facts.tenant_name"
     message: "Tenant name is required for document generation."
-    rationale: "Court forms require the defendant to be identified."
+    rationale: "Housing Act 1988 possession proceedings and Form N5 require the defendant tenant to be identified."
     field: tenant_full_name
 
   - id: missing_property_address
@@ -408,7 +408,7 @@ common_rules:
       # TS: !facts.property_address_line1
       - condition: "!facts.property_address_line1"
     message: "Property address is required for document generation."
-    rationale: "Court forms require the property address."
+    rationale: "Housing Act 1988 possession proceedings and Form N5 require the property address to be identified."
     field: property_address_line1
 
   # ---------------------------------------------------------------------------
@@ -423,7 +423,7 @@ common_rules:
       # TS: !facts.tenancy_start_date
       - condition: "!facts.tenancy_start_date"
     message: "Tenancy start date is required for notice period calculations."
-    rationale: "Start date is needed for notice period and four-month bar calculations."
+    rationale: "Housing Act 1988 section 21(4B) and Schedule 2 timing checks require the tenancy start date."
     field: tenancy_start_date
 
   - id: future_tenancy_start
@@ -433,7 +433,7 @@ common_rules:
       # TS: facts.tenancy_start_date > today
       - condition: "facts.tenancy_start_date && computed.tenancy_start_in_future === true"
     message: "Tenancy start date cannot be in the future."
-    rationale: "Cannot evict from a tenancy that has not begun."
+    rationale: "Housing Act 1988 section 8 and section 21 cannot be relied on before the tenancy has begun."
     field: tenancy_start_date
 
   # ---------------------------------------------------------------------------
@@ -448,7 +448,7 @@ common_rules:
       # TS: !noticeServiceDate (where noticeServiceDate = facts.notice_served_date || facts.notice_service_date)
       - condition: "!facts.notice_served_date && !facts.notice_service_date"
     message: "Notice service date is required for court applications."
-    rationale: "Court forms require the notice service date."
+    rationale: "Housing Act 1988 section 8 and section 21 possession claims require the notice service date to plead compliance and timing."
     field: notice_served_date
 
   - id: notice_before_tenancy
@@ -458,7 +458,7 @@ common_rules:
       # TS: noticeServiceDate < facts.tenancy_start_date
       - condition: "computed.notice_before_tenancy_start === true"
     message: "Notice cannot be served before the tenancy started."
-    rationale: "Eviction notice must be served during the tenancy."
+    rationale: "Housing Act 1988 section 8 and section 21 notices must be served during an existing tenancy."
     field: notice_served_date
 
   - id: expiry_before_service
@@ -468,7 +468,7 @@ common_rules:
       # TS: noticeExpiry <= noticeServiceDate
       - condition: "computed.expiry_before_service === true"
     message: "Notice expiry date must be after service date."
-    rationale: "Notice period runs from service to expiry."
+    rationale: "Housing Act 1988 section 8 and section 21 require the expiry date to fall after service so a valid notice period is given."
     field: notice_expiry_date
 
   # ---------------------------------------------------------------------------

@@ -1,0 +1,791 @@
+---
+title: Court Filing Guide
+category: guidance
+description: How to file your England post-2026 possession claim
+filename: court_filing_guide.pdf
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Court Filing Guide - England</title>
+  <style>
+    /**
+ * ============================================================================
+ * LANDLORD HEAVEN - PRINT DESIGN SYSTEM
+ * Central stylesheet for Notice Only PDFs (England, Wales, Scotland)
+ * ============================================================================
+ *
+ * PURPOSE:
+ * - Consistent typography, spacing, and page-break rules across all jurisdictions
+ * - Professional layout that renders consistently in Puppeteer PDF generation
+ * - Responsive to legal form requirements while maintaining visual excellence
+ *
+ * USAGE:
+ * - Include in <head> of notice.hbs templates
+ * - Supplement with jurisdiction-specific overrides if needed (rare)
+ * - Do NOT inline style attributes; use utility classes instead
+ *
+ * IMPORTANT:
+ * - This stylesheet governs LAYOUT ONLY - legal wording is NEVER changed
+ * - Page breaks prevent orphaned headings and split sections
+ * - All spacing uses consistent vertical rhythm (0.5em increments)
+ */
+
+/* ============================================================================
+   DOCUMENT FOUNDATION
+   ============================================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4;
+  margin: 0.75in 0.75in 1in 0.75in; /* Top, Right, Bottom, Left */
+}
+
+html {
+  font-size: 12pt; /* Base font size for all calculations */
+}
+
+body {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.5;
+  color: #000;
+  background: #fff;
+  max-width: 8.5in;
+  margin: 0 auto;
+  padding: 0.5in;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "clig" 0;
+
+  /* Prevent text overflow */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+/* Main Headings */
+h1 {
+  font-size: 14pt;
+  font-weight: bold;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  /* Prevent orphan headings at bottom of page */
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h1 + h1 {
+  margin-top: 0.5em; /* Tighter spacing for consecutive h1s when documents stack headings */
+}
+
+/* Subheadings */
+h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  text-align: center;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Section Headings */
+h3 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h4 {
+  font-size: 11pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1em 0 0.5em 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Paragraphs */
+p {
+  margin: 0 0 0.75em 0;
+  line-height: 1.5;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Lists */
+ul, ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+/* Emphasis */
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+/* Links (for URLs in notices) */
+.link, a {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all; /* Prevent long URLs from overflowing */
+}
+
+/* ============================================================================
+   LAYOUT COMPONENTS
+   ============================================================================ */
+
+/* Info Box (e.g., "Information for the Tenant") */
+.info-box {
+  border: 2px solid #000;
+  padding: 1em;
+  margin: 1em 0 1.5em 0;
+  background-color: #f9f9f9;
+
+  page-break-inside: avoid;
+}
+
+.info-box h3,
+.info-box h4 {
+  margin-top: 0;
+}
+
+.info-box p:first-of-type {
+  margin-top: 0;
+}
+
+/* Section Block (logical grouping) */
+.section {
+  margin: 1.5em 0;
+
+  /* Prevent splitting key sections across pages */
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Field Groups (label + value pairs) */
+.field-group {
+  margin: 1em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.field-label {
+  font-weight: bold;
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  display: block;
+}
+
+.field-value {
+  margin-left: 0.25in;
+  border-bottom: 1px dotted #666;
+  min-height: 1.5em;
+  padding: 0.25em 0;
+  display: block;
+}
+
+.field-value:empty::after {
+  content: "\00a0"; /* Non-breaking space to maintain height */
+}
+
+/* Multiline field (for particulars, evidence, etc.) */
+.multiline-field {
+  margin-left: 0.25in;
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  min-height: 3em;
+  background-color: #fafafa;
+}
+
+/* Ground Block (for Section 8 grounds, eviction grounds, etc.) */
+.ground-block {
+  margin: 1em 0 1em 0.25in;
+  padding: 0.75em;
+  border-left: 3px solid #666;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ground-block p:first-child {
+  margin-top: 0;
+}
+
+/* Part Label (for Wales RHW forms: Part A, Part B, etc.) */
+.part-label {
+  font-weight: bold;
+  font-size: 11pt;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0.25em 0 0.25em 0.5em;
+  border-left: 4px solid #333;
+  background-color: #f0f0f0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Signature Block */
+.signature-block {
+  margin-top: 2em;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Checkbox (for forms with tick boxes) */
+.checkbox {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #000;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  background-color: #fff;
+}
+
+/* ============================================================================
+   PAGE BREAK UTILITIES
+   ============================================================================ */
+
+/* Prevent breaking inside element */
+.avoid-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Keep element with next sibling (prevent orphan headings) */
+.keep-with-next {
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Force page break before element */
+.page-break-before {
+  page-break-before: always;
+  break-before: page;
+}
+
+/* Force page break after element */
+.page-break-after {
+  page-break-after: always;
+  break-after: page;
+}
+
+/* Allow auto page breaks (override avoid rules) */
+.allow-break {
+  page-break-inside: auto;
+  break-inside: auto;
+}
+
+/* ============================================================================
+   GUIDANCE SECTIONS (usually at end of notice)
+   ============================================================================ */
+
+.guidance-section {
+  margin-top: 2em;
+  padding-top: 1.5em;
+  border-top: 2px solid #000;
+
+  /* Optionally force new page for long guidance */
+  page-break-before: auto;
+}
+
+.guidance-section h2 {
+  text-align: left; /* Override center alignment for guidance headings */
+  font-size: 12pt;
+  margin: 1.5em 0 0.5em 0;
+}
+
+.guidance-section h3 {
+  font-size: 11pt;
+  margin: 1em 0 0.5em 0;
+}
+
+/* ============================================================================
+   SPACING UTILITIES
+   ============================================================================ */
+
+.mt-0 { margin-top: 0 !important; }
+.mt-1 { margin-top: 0.5em !important; }
+.mt-2 { margin-top: 1em !important; }
+.mt-3 { margin-top: 1.5em !important; }
+.mt-4 { margin-top: 2em !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: 0.5em !important; }
+.mb-2 { margin-bottom: 1em !important; }
+.mb-3 { margin-bottom: 1.5em !important; }
+.mb-4 { margin-bottom: 2em !important; }
+
+.ml-0 { margin-left: 0 !important; }
+.ml-1 { margin-left: 0.25in !important; }
+.ml-2 { margin-left: 0.5in !important; }
+
+/* ============================================================================
+   TEXT UTILITIES
+   ============================================================================ */
+
+.text-center { text-align: center !important; }
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+
+.font-small { font-size: 10pt !important; }
+.font-normal { font-size: 12pt !important; }
+.font-large { font-size: 14pt !important; }
+
+.font-italic { font-style: italic !important; }
+.font-bold { font-weight: bold !important; }
+
+/* ============================================================================
+   PRINT-SPECIFIC OPTIMIZATIONS
+   ============================================================================ */
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0.5in;
+  }
+
+  /* Ensure links are visible when printed */
+  a[href^="http"]:after {
+    content: none; /* Don't show URLs after links (they're already visible) */
+  }
+
+  /* Prevent widows and orphans */
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Ensure headings stay with following content */
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+}
+
+/* ============================================================================
+   SCOTLAND-SPECIFIC STYLING
+   ============================================================================ */
+
+/* Scotland Notice to Leave uses larger title */
+.scotland-title {
+  font-size: 18pt;
+  margin: 0.5em 0;
+}
+
+/* Scotland ground blocks with border */
+.scotland-ground-block {
+  margin: 1em 0;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* ============================================================================
+   TABLE SUPPORT (if needed for complex data)
+   ============================================================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+th, td {
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+/* ============================================================================
+   END OF PRINT DESIGN SYSTEM
+   ============================================================================ */
+
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2em;
+      padding-bottom: 1em;
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .header h1 {
+      font-size: 18pt;
+      margin: 0 0 0.5em 0;
+      text-transform: uppercase;
+    }
+
+    .header .subtitle {
+      font-size: 12pt;
+      color: #666;
+    }
+
+    .section {
+      margin: 1.5em 0;
+      page-break-inside: avoid;
+    }
+
+    .section h2 {
+      font-size: 13pt;
+      margin: 0 0 0.75em 0;
+      padding: 0.5em;
+      background: #1a1a1a;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .section h3 {
+      font-size: 11pt;
+      margin: 1em 0 0.5em 0;
+      color: #1a1a1a;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.25em;
+    }
+
+    .step-box {
+      background: #f5f5f5;
+      border-left: 4px solid #1a1a1a;
+      padding: 1em;
+      margin: 1em 0;
+    }
+
+    .step-number {
+      display: inline-block;
+      background: #1a1a1a;
+      color: white;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      border-radius: 50%;
+      margin-right: 0.5em;
+      font-weight: bold;
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 1em;
+      margin: 1em 0;
+      border-radius: 4px;
+    }
+
+    .info-box {
+      background: #e7f3ff;
+      border: 1px solid #2196f3;
+      padding: 1em;
+      margin: 1em 0;
+      border-radius: 4px;
+    }
+
+    .success-box {
+      background: #d4edda;
+      border: 1px solid #28a745;
+      padding: 1em;
+      margin: 1em 0;
+      border-radius: 4px;
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      padding: 0.5em 0;
+      padding-left: 2em;
+      position: relative;
+    }
+
+    .checklist li::before {
+      content: "[ ]";
+      position: absolute;
+      left: 0;
+      font-size: 11pt;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.5em;
+      text-align: left;
+    }
+
+    th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #1a1a1a;
+      font-size: 9pt;
+      color: #666;
+    }
+
+    @media print {
+      .section {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Court Filing Guide</h1>
+  <p class="subtitle">England private rented possession claims on and after 1 May 2026</p>
+  <p>Generated: 05/04/2026</p>
+</div>
+
+<div class="section">
+  <h2>Overview</h2>
+  <p>This guide explains the court stage after serving Form 3A in England's private rented sector.</p>
+  <ul>
+    <li><strong>PCOL</strong> may be used if the claim is only for rent arrears.</li>
+    <li><strong>Paper filing</strong> with Form N5 and Form N119 is the standard route for non-rent or mixed-ground claims and can also be used for rent-only claims if preferred.</li>
+  </ul>
+
+  <div class="info-box">
+    <strong>Which court?</strong> File at the County Court that covers the area where the property is located. Find your court at <em>www.gov.uk/find-court-tribunal</em>.
+  </div>
+
+  <div class="warning-box">
+    <strong>Fees and official forms:</strong> The current County Court recovery-of-land issue fee is GBP 404 for both PCOL and paper possession claims. This pack is mapped to the current official GOV.UK N5 and N119 PDFs; check GOV.UK again immediately before filing in case HMCTS publishes an updated form or fee.
+  </div>
+</div>
+
+<div class="section">
+  <h2>Option 1: PCOL For Rent-Only Claims</h2>
+
+  <p>Possession Claims Online (PCOL) can be used if you are seeking possession only because the tenant owes rent.</p>
+
+  <h3>Eligibility for PCOL</h3>
+  <ul>
+    <li>the claim is only for rent arrears possession grounds</li>
+    <li>the property is residential and has a valid UK postcode</li>
+    <li>there are no more than 2 defendants</li>
+    <li>you can pay the fee online</li>
+  </ul>
+
+  <div class="step-box">
+    <p><span class="step-number">1</span> <strong>Create an account</strong></p>
+    <p>Register at <em>www.possessionclaim.gov.uk</em>.</p>
+  </div>
+
+  <div class="step-box">
+    <p><span class="step-number">2</span> <strong>Prepare your evidence</strong></p>
+    <p>Have the tenancy information, Form 3A notice details, proof of service, and up to 2 years of rent due and rent paid data ready. Check first that the tenant is not in a breathing space if you rely on Grounds 8, 10 or 11.</p>
+  </div>
+
+  <div class="step-box">
+    <p><span class="step-number">3</span> <strong>Upload the supporting documents</strong></p>
+    <p>Include the tenancy agreement, the completed Form 3A notice, proof of service, and the arrears schedule or rent statement. If the tenant receives Universal Credit housing support, keep any DWP direct-payment request or deduction correspondence with the bundle.</p>
+  </div>
+
+  <div class="step-box">
+    <p><span class="step-number">4</span> <strong>Pay the fee and submit</strong></p>
+    <p>Possession claims currently cost GBP 404. Once submitted, you will receive a claim number and the court will serve the claim on the tenant.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Option 2: Paper Filing With N5 And N119</h2>
+
+  <h3>Documents Required</h3>
+  <ul class="checklist">
+    <li>Form N5 claim form</li>
+    <li>Form N119 particulars of claim</li>
+    <li>Copy of the tenancy agreement</li>
+    <li>Copy of the served Form 3A notice</li>
+    <li>Proof of service</li>
+    <li>Arrears schedule if rent grounds are used</li>
+    <li>Supporting evidence for each ground relied on</li>
+    <li>Optional certificate of service (N215)</li>
+  </ul>
+
+  <div class="warning-box">
+    Give the court at least one extra copy of each document. If the tenancy is joint, provide an extra copy for each tenant and keep a copy for yourself.
+  </div>
+
+  <h3>Filing Steps</h3>
+  <div class="step-box">
+    <p><span class="step-number">1</span> <strong>Complete Form N5 and Form N119</strong></p>
+    <p>Your Landlord Heaven complete pack includes both forms ready for review and signature.</p>
+  </div>
+
+  <div class="step-box">
+    <p><span class="step-number">2</span> <strong>Send the papers to court</strong></p>
+    <p>Post, email, or deliver the papers to the County Court that covers the property. Check local court rules before filing by email.</p>
+  </div>
+
+  <div class="step-box">
+    <p><span class="step-number">3</span> <strong>Pay the court fee</strong></p>
+    <table>
+      <tr>
+        <th>Application</th>
+        <th>Current fee</th>
+      </tr>
+      <tr>
+        <td>Possession claim</td>
+        <td>GBP 404</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="step-box">
+    <p><span class="step-number">4</span> <strong>Wait for issue and hearing date</strong></p>
+    <p>The court will issue the claim, serve it on the tenant, and list the possession hearing.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>What Happens Next</h2>
+
+  <ol>
+    <li>The court serves the claim on the tenant.</li>
+    <li>The tenant usually has 14 days to file a defence.</li>
+    <li>The court lists a possession hearing.</li>
+    <li>You attend with the notice, proof of service, and evidence for each ground.</li>
+    <li>The judge decides whether to make a possession order, a suspended order, a money order, or dismiss the claim.</li>
+  </ol>
+
+  <div class="warning-box">
+    A claim can be dismissed or delayed if the Form 3A notice is incomplete, the notice period is too short, the deposit rules were not satisfied where they apply, service cannot be proved, or the evidence does not match the grounds relied on.
+  </div>
+</div>
+
+<div class="section">
+  <h2>Pre-Hearing Preparation</h2>
+
+  <ul class="checklist">
+    <li>Bring the sealed claim, tenancy agreement, Form 3A, proof of service, and the latest arrears schedule.</li>
+    <li>Be ready to explain the rent history, the notice date, the notice period, and the evidence for each ground relied on.</li>
+    <li>If the tenant offers a repayment plan or a suspended possession order, decide in advance what terms you would accept.</li>
+    <li>Review any defence filed by the tenant and bring documents that answer it directly, especially on deposit compliance, disrepair, service, and the arrears figure.</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>Money Judgment And Debt Recovery</h2>
+
+  <p>Where you seek possession on rent arrears grounds, the court can also make a money judgment for arrears, issue fee, and any costs it allows.</p>
+
+  <div class="info-box">
+    If the tenant leaves before the hearing or after judgment, keep the arrears schedule updated. You may still need to pursue the debt separately if the possession claim no longer continues or if the arrears change materially.
+  </div>
+
+  <div class="warning-box">
+    If the tenant is in a breathing space, do not serve or progress rent-arrears enforcement without following the debt respite rules or obtaining the court's permission where required.
+  </div>
+</div>
+
+<div class="section">
+  <h2>After The Possession Order</h2>
+
+  <p>If the tenant does not leave by the date in the order, you can apply for enforcement.</p>
+
+  <div class="step-box">
+    <p><span class="step-number">1</span> <strong>Request a warrant for possession</strong></p>
+    <p>Use Form N325 for an outright possession order, or Form N325A if a suspended possession order has been breached. The current warrant fee is GBP 148.</p>
+  </div>
+
+  <div class="step-box">
+    <p><span class="step-number">2</span> <strong>Bailiff enforcement</strong></p>
+    <p>The court will list the bailiff appointment. Have a locksmith ready for the eviction date if enforcement is granted.</p>
+  </div>
+
+  <div class="success-box">
+    <strong>Tip:</strong> Keep the notice, claim papers, service evidence, and possession order together for the enforcement stage.
+  </div>
+</div>
+
+<div class="section">
+  <h2>Useful Links</h2>
+  <ul>
+    <li><strong>PCOL:</strong> www.possessionclaim.gov.uk</li>
+    <li><strong>Find your court:</strong> www.gov.uk/find-court-tribunal</li>
+    <li><strong>Court fees:</strong> www.gov.uk/court-fees-what-they-are</li>
+    <li><strong>Help with fees:</strong> www.gov.uk/get-help-with-court-fees</li>
+  </ul>
+</div>
+
+<div class="footer">
+  <p><strong>Landlord Heaven</strong> | Court Filing Guide for Post-2026 England Possession Claims</p>
+  <p><em>This guide is for informational purposes only and does not constitute legal advice. Court procedure and fees may change, so verify the current HMCTS position before filing.</em></p>
+  <p>Generated: 05/04/2026</p>
+</div>
+
+</body>
+</html>

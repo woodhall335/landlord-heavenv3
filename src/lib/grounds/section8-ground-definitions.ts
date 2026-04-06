@@ -12,7 +12,7 @@
  */
 
 export interface Section8GroundDefinition {
-  code: number;
+  code: number | string;
   title: string;
   mandatory: boolean;
   legal_basis: string;

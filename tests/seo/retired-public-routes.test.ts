@@ -54,14 +54,14 @@ describe('retired public route decommission', () => {
         '/tools/free-section-21-notice-generator?type=eviction&jurisdiction=england&product=notice_only&src=product_page&topic=eviction',
         redirects
       )
-    ).toBe('/eviction-notice?type=eviction&jurisdiction=england&product=notice_only&src=product_page&topic=eviction');
+    ).toBe('/section-21-notice?type=eviction&jurisdiction=england&product=notice_only&src=product_page&topic=eviction');
 
     expect(
       applyPathRedirect(
         '/tools/free-section-8-notice-generator?type=eviction&jurisdiction=england&product=notice_only&src=product_page&topic=eviction',
         redirects
       )
-    ).toBe('/eviction-notice?type=eviction&jurisdiction=england&product=notice_only&src=product_page&topic=eviction');
+    ).toBe('/eviction-notice-england?type=eviction&jurisdiction=england&product=notice_only&src=product_page&topic=eviction');
   });
 
   it('keeps retired public routes out of the sitemap output', async () => {

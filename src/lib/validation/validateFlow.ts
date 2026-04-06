@@ -11,7 +11,9 @@ import { validateRequirements, type ValidationIssue, type ValidationOutput } fro
 import { collectSchemaKeys } from '../jurisdictions/facts/referenceScanner';
 import { runDecisionEngine, type DecisionInput } from '../decision-engine';
 import { mapDecisionIssuesToValidationIssues } from '../decision-engine/issueMapper';
+import { validateEnglandPost2026WizardFacts } from '../england-possession/post-2026-validation';
 import { wizardFactsToCaseFacts } from '../case-facts/normalize';
+import { getFlowMapping } from '../mqs/mapping.generated';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -51,6 +53,33 @@ function dedupeIssues(issues: ValidationIssue[]): ValidationIssue[] {
   }
 
   return deduped;
+}
+
+function resolveQuestionIds(
+  jurisdiction: Jurisdiction,
+  product: Product,
+  route: string,
+  factKeys: string[],
+): { affectedQuestionId?: string; alternateQuestionIds?: string[] } {
+  const mapping = getFlowMapping(jurisdiction, product, route);
+  if (!mapping) {
+    return {};
+  }
+
+  const questionIds = Array.from(
+    new Set(
+      factKeys.flatMap((factKey) => mapping.factKeyToQuestionIds[factKey] || []),
+    ),
+  );
+
+  if (questionIds.length === 0) {
+    return {};
+  }
+
+  return {
+    affectedQuestionId: questionIds[0],
+    alternateQuestionIds: questionIds.slice(1),
+  };
 }
 
 /**
@@ -382,6 +411,7 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
 
   // Step 5: Run decision engine for compliance checks (eviction flows only)
   let decisionIssues: ValidationIssue[] = [];
+  let customIssues: ValidationIssue[] = [];
 
   if (product === 'notice_only' || product === 'eviction_pack') {
     try {
@@ -424,6 +454,7 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
           if (
             (route === 'section_8' || route === 'wales_fault_based') &&
             (originalIssue.issue === 'deposit_not_protected' ||
+             originalIssue.issue === 'section_21_abolished' ||
              originalIssue.issue === 'prescribed_info_not_given')
           ) {
             // Filter out entirely - these are not relevant for Section 8
@@ -458,16 +489,38 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
     }
   }
 
+  if (jurisdiction === 'england' && route === 'section_8' && (product === 'notice_only' || product === 'eviction_pack')) {
+    const englandValidation = validateEnglandPost2026WizardFacts(facts as Record<string, any>);
+    customIssues = [
+      ...englandValidation.blockingIssues,
+      ...englandValidation.warnings,
+    ].map((issue) => {
+      const resolved = resolveQuestionIds(jurisdiction, product, route, issue.fields);
+      return {
+        code: issue.code,
+        severity: issue.severity,
+        fields: issue.fields,
+        affected_question_id: resolved.affectedQuestionId,
+        alternate_question_ids: resolved.alternateQuestionIds?.length ? resolved.alternateQuestionIds : undefined,
+        user_fix_hint: issue.message,
+        description: issue.message,
+        legal_basis: issue.legalBasis,
+      } satisfies ValidationIssue;
+    });
+  }
+
   // Step 6: Merge decision engine issues with requirements issues
   let allBlockingIssues = [
     ...validation.blocking_issues,
     ...decisionIssues.filter(i => i.severity === 'blocking'),
+    ...customIssues.filter(i => i.severity === 'blocking'),
   ];
 
   let allWarnings = [
     ...validation.warnings,
     ...schemaValidation.issues,
     ...decisionIssues.filter(i => i.severity === 'warning'),
+    ...customIssues.filter(i => i.severity === 'warning'),
   ];
 
   // Step 7: Dedupe issues

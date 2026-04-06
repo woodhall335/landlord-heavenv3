@@ -233,9 +233,9 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       link: '/section-8-rent-arrears-eviction',
     },
     {
-      title: 'Scenario: Fixed-term tenancy ending',
-      route: 'Recommended route: Section 21 notice if eligibility and compliance checks are satisfied.',
-      link: '/section-21-checklist',
+      title: 'Scenario: User arrives with old Section 21 language',
+      route: 'Recommended route: transition the user into the current England framework before anything is served.',
+      link: '/section-21-notice',
     },
     {
       title: 'Scenario: Tenant remains after notice',
@@ -336,7 +336,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             <p className="mt-1 text-gray-700">Landlords usually get better outcomes by confirming the right route first, serving a valid notice with provable service, and preparing court-ready chronology before deadlines. This reduces avoidable resets, protects evidence continuity, and keeps possession progression moving from notice through claim and enforcement when tenants still refuse to leave.</p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Numbered steps</p>
             <ol className="mt-4 list-decimal space-y-2 pl-5 text-gray-700">
-              <li>Confirm whether your case is no-fault, breach-based, or rent arrears driven.</li>
+              <li>Confirm whether the user is dealing with historical Section 21 language or a current England case.</li>
               <li>Serve the right notice and keep service proof usable for court.</li>
               <li>Wait for the notice period and log all tenant responses.</li>
               <li>Progress to possession claim paperwork only when chronology is consistent.</li>
@@ -385,20 +385,22 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section id="section-21-vs-section-8-explainer" className="py-14">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal">Section 21 vs Section 8: choose the right route</h2>
+            <h2 className="text-3xl font-bold text-charcoal">Historical Section 21 searches vs the current England route</h2>
             <p className="mt-4 text-gray-700">
-              A cheap template becomes expensive quickly if it sends you down the wrong route. If you are still deciding,
-              use the <Link href="/section-21-vs-section-8" className="text-primary hover:underline"> Section 21 vs Section 8 comparison guide</Link> before serving anything.
-              If you already know your route, jump straight into the matching workflow.
+              A cheap template becomes expensive quickly if it sends you down the wrong route. If
+              you are still translating older Section 21 language, use the{' '}
+              <Link href="/section-21-vs-section-8" className="text-primary hover:underline">historical comparison guide</Link>{' '}
+              before serving anything. If you already know your current route, jump straight into
+              the matching workflow.
             </p>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <Link href="/section-21-notice-template" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
-                <p className="font-semibold text-charcoal">Section 21 route</p>
-                <p className="mt-2 text-sm">Best for no-fault route cases where compliance pre-conditions are satisfied.</p>
+              <Link href="/section-21-notice" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
+                <p className="font-semibold text-charcoal">Historical Section 21 transition</p>
+                <p className="mt-2 text-sm">Best when the user needs a calm explanation that Section 21 is historical only and what replaced it.</p>
               </Link>
               <Link href="/section-8-notice-template" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
-                <p className="font-semibold text-charcoal">Section 8 route</p>
-                <p className="mt-2 text-sm">Best for arrears/breach context where grounds and evidence need to align.</p>
+                <p className="font-semibold text-charcoal">Current England possession route</p>
+                <p className="mt-2 text-sm">Best for live cases where grounds, notice timing, evidence, and the current court path need to align.</p>
               </Link>
             </div>
           </div>
@@ -414,7 +416,10 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
               <ul className="mt-4 space-y-2 text-gray-700">
                 {config.templateRisks.map((risk) => <li key={risk}>• {risk}</li>)}
               </ul>
-              <p className="mt-6 text-gray-700">For Section 21 specifically, use the <Link href="/section-21-checklist" className="text-primary hover:underline">Section 21 checklist</Link>. For court progression details, see <Link href="/eviction-court-forms-england" className="text-primary hover:underline">eviction court forms explained</Link>.</p>
+              <p className="mt-6 text-gray-700">
+                For historical Section 21 search intent, use the <Link href="/section-21-notice" className="text-primary hover:underline">Section 21 transition guide</Link>.
+                For live England court progression details, see <Link href="/eviction-court-forms-england" className="text-primary hover:underline">eviction court forms explained</Link>.
+              </p>
             </div>
             <div className="rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
               <Image src={config.icon} alt="wizard icon" width={220} height={220} className="mx-auto h-auto w-full max-w-[220px]" />
@@ -432,7 +437,11 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal">Court forms explained and route continuity</h2>
-            <p className="mt-4 text-gray-700">If the tenant does not leave, route continuity matters. For N5B-focused no-fault progression, see <Link href="/n5b-possession-claim-form" className="text-primary hover:underline">N5B possession claim form guidance</Link>. For grounds-based claim forms, use <Link href="/n5-n119-possession-claim" className="text-primary hover:underline">N5 and N119 possession claim guidance</Link>.</p>
+            <p className="mt-4 text-gray-700">
+              If the tenant does not leave, route continuity matters. For current England
+              possession claims, use <Link href="/n5-n119-possession-claim" className="text-primary hover:underline">N5 and N119 possession claim guidance</Link>.
+              For the wider notice-to-court sequence, use <Link href="/eviction-process-england" className="text-primary hover:underline">the England eviction process guide</Link>.
+            </p>
             <div className="mt-6 overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead>

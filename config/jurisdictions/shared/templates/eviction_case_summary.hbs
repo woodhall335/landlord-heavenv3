@@ -1,19 +1,206 @@
-<h1>Eviction Case Summary</h1>
-<p>Case ID: {{case_id}}</p>
-<p>Jurisdiction: {{jurisdiction}}</p>
-<p>Landlord: {{landlord_full_name}}</p>
-<p>Tenant: {{tenant_full_name}}</p>
-<p>Property: {{property_address}}</p>
-<p>Grounds:</p>
-{{!-- FIX 5: Handle Section 21 no-fault eviction cases --}}
-{{#if is_section_21}}
-<ul>
-  <li><strong>Section 21 (No-fault eviction)</strong> — Housing Act 1988</li>
-</ul>
-{{else}}
-<ul>
-  {{#each grounds}}
-    <li>{{this.code}} - {{this.title}}</li>
-  {{/each}}
-</ul>
-{{/if}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Eviction Case Summary</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      margin: 0;
+    }
+
+    .header {
+      border-bottom: 2px solid #1a1a1a;
+      margin-bottom: 1.5em;
+      padding-bottom: 0.75em;
+    }
+
+    .header h1 {
+      margin: 0 0 0.25em 0;
+      font-size: 16pt;
+    }
+
+    .header p {
+      margin: 0.2em 0;
+      color: #555;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
+      margin-bottom: 1.5em;
+    }
+
+    .card {
+      border: 1px solid #d9d9d9;
+      padding: 0.9em 1em;
+      background: #fafafa;
+    }
+
+    .card h2 {
+      margin: 0 0 0.6em 0;
+      font-size: 11pt;
+    }
+
+    .key-facts {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5em;
+    }
+
+    .key-facts th,
+    .key-facts td {
+      border: 1px solid #d9d9d9;
+      padding: 8px 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .key-facts th {
+      width: 28%;
+      background: #f2f2f2;
+      font-weight: 600;
+    }
+
+    .section {
+      margin-bottom: 1.25em;
+    }
+
+    .section h2 {
+      font-size: 11pt;
+      margin: 0 0 0.5em 0;
+      padding-bottom: 0.25em;
+      border-bottom: 1px solid #d9d9d9;
+    }
+
+    .section p,
+    .section ul {
+      margin: 0;
+    }
+
+    .section ul {
+      padding-left: 1.2em;
+    }
+
+    .muted {
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Eviction Case Summary</h1>
+    <p><strong>Case ID:</strong> {{case_id}}</p>
+    <p><strong>Jurisdiction:</strong> {{jurisdiction}}</p>
+    <p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>
+  </div>
+
+  <div class="summary-grid">
+    <div class="card">
+      <h2>Parties</h2>
+      <p><strong>Claimant:</strong> {{landlord_full_name}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</p>
+      <p><strong>Defendant:</strong> {{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</p>
+      <p><strong>Property:</strong> {{property_address}}</p>
+      {{#if court_name}}<p><strong>Court:</strong> {{court_name}}</p>{{/if}}
+    </div>
+    <div class="card">
+      <h2>Route</h2>
+      {{#if is_section_21}}
+      <p><strong>Current route:</strong> Section 21 (no-fault possession)</p>
+      {{else}}
+      <p><strong>Current route:</strong> Section 8 possession claim</p>
+      {{/if}}
+      <p><strong>Grounds relied on:</strong> {{#if is_section_21}}Section 21{{else}}{{#if groundsReliedUpon}}{{join groundsReliedUpon ", "}}{{else}}No grounds recorded{{/if}}{{/if}}</p>
+      {{#if grounds_summary_text}}<p class="muted">{{grounds_summary_text}}</p>{{/if}}
+    </div>
+  </div>
+
+  <table class="key-facts">
+    <tbody>
+      <tr>
+        <th>Tenancy start date</th>
+        <td>{{format_date tenancy_start_date "long"}}</td>
+        <th>Rent</th>
+        <td>{{currency rent_amount}} {{rent_frequency_label}}</td>
+      </tr>
+      <tr>
+        <th>Due day</th>
+        <td>{{payment_day_display}}</td>
+        <th>Current arrears</th>
+        <td>{{currency current_arrears_total}}</td>
+      </tr>
+      <tr>
+        <th>Arrears at notice date</th>
+        <td>{{currency arrears_at_notice_date}}</td>
+        <th>Notice served</th>
+        <td>{{format_date notice_served_date "long"}}</td>
+      </tr>
+      {{#if notice_expiry_date}}
+      <tr>
+        <th>Notice expiry date</th>
+        <td>{{format_date notice_expiry_date "long"}}</td>
+        <th>Earliest proceedings date</th>
+        <td>{{format_date earliest_proceedings_date "long"}}</td>
+      </tr>
+      {{else}}
+      <tr>
+        <th>Earliest proceedings date</th>
+        <td>{{format_date earliest_proceedings_date "long"}}</td>
+        <th>Compliance snapshot</th>
+        <td>{{#if compliance_status_items.length}}{{compliance_status_items.length}} items recorded{{else}}No compliance items recorded{{/if}}</td>
+      </tr>
+      {{/if}}
+      {{#if notice_expiry_date}}
+      <tr>
+        <th>Compliance snapshot</th>
+        <td colspan="3">{{#if compliance_status_items.length}}{{compliance_status_items.length}} items recorded{{else}}No compliance items recorded{{/if}}</td>
+      </tr>
+      {{/if}}
+    </tbody>
+  </table>
+
+  <div class="section">
+    <h2>Case Narrative</h2>
+    <p>{{case_narrative_text}}</p>
+  </div>
+
+  <div class="section">
+    <h2>Compliance Status Snapshot</h2>
+    <ul>
+      {{#if compliance_status_items.length}}
+        {{#each compliance_status_items}}
+        <li>{{this}}</li>
+        {{/each}}
+      {{else}}
+        <li>No compliance snapshot items were recorded in the pack data.</li>
+      {{/if}}
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Pre-action and Procedural Steps</h2>
+    <p>{{steps_taken_text}}</p>
+  </div>
+
+  <div class="section">
+    <h2>Defendant Circumstances</h2>
+    <p>{{defendant_circumstances_text}}</p>
+  </div>
+
+  <div class="section">
+    <h2>Financial Position and Relief Sought</h2>
+    <p>{{financial_info_text}}</p>
+  </div>
+</body>
+</html>

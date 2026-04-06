@@ -3,7 +3,6 @@ import { BlogPost } from './types';
 export type BlogTopicHubSlug =
   | 'eviction-guides'
   | 'rent-arrears'
-  | 'section-21'
   | 'section-8'
   | 'landlord-compliance'
   | 'wales-landlord-guides'
@@ -31,19 +30,19 @@ const postText = (post: BlogPost): string =>
 export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
   'eviction-guides': {
     slug: 'eviction-guides',
-    title: 'Eviction Guides Hub | Section 21, Section 8 & Possession',
+    title: 'Eviction Guides Hub | England Possession, Section 8 & Court Process',
     name: 'Eviction Guides',
     description: 'Guides to help you choose the right notice, understand court steps, and get your property back.',
     metaDescription:
-      'Explore eviction guides for UK landlords covering Section 21, Section 8, court hearings, possession timelines, and enforcement next steps.',
+      'Explore eviction guides for UK landlords covering current England possession notices, Section 8, court hearings, possession timelines, and enforcement next steps.',
     intro:
       'Start here if you need to work out how to evict a tenant, which notice applies, or what happens after the notice expires.',
     pillarLinks: [
-      { href: '/how-to-evict-tenant', label: 'How to evict a tenant in the UK' },
-      { href: '/section-21-ban-uk', label: 'Section 21 ban guide for landlords' },
+      { href: '/how-to-evict-a-tenant-england', label: 'How to evict a tenant in England' },
+      { href: '/renters-rights-act-eviction-rules', label: 'Current England eviction rules' },
       { href: '/section-8-notice', label: 'Section 8 notice guide' },
     ],
-    matcher: (post) => includesAny(postText(post), ['evict', 'possession', 'bailiff', 'court', 'section 21', 'section 8']),
+    matcher: (post) => includesAny(postText(post), ['evict', 'possession', 'bailiff', 'court', 'section 8']),
   },
   'rent-arrears': {
     slug: 'rent-arrears',
@@ -61,29 +60,13 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
     ],
     matcher: (post) => includesAny(postText(post), ['arrears', 'unpaid rent', 'money claim', 'rent debt', 'tenant stopped paying']),
   },
-  'section-21': {
-    slug: 'section-21',
-    title: 'Section 21 Guides | Notice, Validity & Possession',
-    name: 'Section 21',
-    description: 'Guides explaining what Section 21 was, what changed, and what landlords now need to use instead.',
-    metaDescription:
-      'Explore Section 21 guides for landlords covering Form 6A validity, notice periods, service proof, accelerated possession, and common mistakes.',
-    intro:
-      'If you searched for Section 21, this hub explains the change from 1 May 2026 and points you to the live routes that replace it in England.',
-    pillarLinks: [
-      { href: '/section-21-ban-uk', label: 'Section 21 ban UK guide' },
-      { href: '/section-21-notice', label: 'Section 21 notice transition guide' },
-      { href: '/section-21-validity-checklist', label: 'Section 21 validity checklist' },
-    ],
-    matcher: (post) => includesAny(postText(post), ['section 21', 'form 6a', 'accelerated possession', 'no-fault']),
-  },
   'section-8': {
     slug: 'section-8',
-    title: 'Section 8 Guides | Grounds, Form 3 & Arrears',
+    title: 'Section 8 Guides | Grounds, Form 3A & Arrears',
     name: 'Section 8',
     description: 'Guides on Section 8 grounds, arrears, anti-social behaviour, and what happens after notice.',
     metaDescription:
-      'Explore Section 8 guides for landlords covering Form 3, rent arrears grounds, service, evidence, hearings, and possession strategy.',
+      'Explore Section 8 guides for landlords covering Form 3A, rent arrears grounds, service, evidence, hearings, and possession strategy.',
     intro:
       'Start here if Section 8 is likely to be your route and you need to know which grounds fit, what evidence matters, and what to do next.',
     pillarLinks: [
@@ -91,7 +74,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
       { href: '/section-8-grounds-explained', label: 'Section 8 grounds explained' },
       { href: '/serve-section-8-notice', label: 'How to serve a Section 8 notice' },
     ],
-    matcher: (post) => includesAny(postText(post), ['section 8', 'form 3', 'ground 8', 'ground 10', 'ground 11']),
+    matcher: (post) => includesAny(postText(post), ['section 8', 'form 3a', 'ground 8', 'ground 10', 'ground 11']),
   },
   'landlord-compliance': {
     slug: 'landlord-compliance',
@@ -104,7 +87,7 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
       'Use these guides to sort the checks and documents that can trip you up later if they are missing or late.',
     pillarLinks: [
       { href: '/how-to-evict-tenant', label: 'Eviction process overview' },
-      { href: '/section-21-ban-uk', label: 'Section 21 transition and compliance dependencies' },
+      { href: '/renters-rights-act-eviction-rules', label: 'Current England eviction rules' },
       { href: '/section-8-notice', label: 'Section 8 process requirements' },
     ],
     matcher: (post) => includesAny(postText(post), ['compliance', 'gas safety', 'epc', 'eicr', 'deposit', 'right to rent', 'licensing']),

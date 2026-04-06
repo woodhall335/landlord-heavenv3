@@ -25,6 +25,19 @@ import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 import { generateArrearsBreakdownForCourt } from './arrears-schedule-mapper';
+import {
+  fillForm3AForm,
+  fillN325AForm,
+  fillN325Form,
+} from './england-official-form-fillers';
+import {
+  buildN119DefendantCircumstancesText,
+  buildN119FinancialInfoText,
+  buildN119OtherBreachDetailsText,
+  buildN119ReasonForPossessionText,
+  buildN119StatutoryGroundsText,
+  buildN119StepsTakenText,
+} from '@/lib/england-possession/pack-drafting';
 // Note: flattenPdf import removed - official forms should NEVER be flattened
 // to preserve user editability for final adjustments before court submission
 
@@ -2359,6 +2372,10 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
  * @returns A short particulars string suitable for N119 field 4(a)
  */
 export function buildN119ReasonForPossession(data: CaseData): string {
+  return buildN119ReasonForPossessionText(data) || buildN119ReasonForPossessionLegacy(data);
+}
+
+function buildN119ReasonForPossessionLegacy(data: CaseData): string {
   const parts: string[] = [];
 
   // Parse ground codes/numbers
@@ -2429,8 +2446,7 @@ export function buildN119ReasonForPossession(data: CaseData): string {
  * Uses the short version (buildN119ReasonForPossession) to prevent field overflow.
  */
 function generateParticularsOfClaim(data: CaseData): string {
-  // Use the short version to prevent overflow in PDF form fields
-  return buildN119ReasonForPossession(data);
+  return buildN119ReasonForPossessionText(data);
 }
 
 // =============================================================================
@@ -2533,24 +2549,33 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   // 4(c) - Statutory grounds (MUST be populated for Section 8 with explicit statutory basis)
 
   // Q4(a) - Rent Arrears
-  // For arrears cases, state rent unpaid and reference the attached schedule
-  if (data.total_arrears && data.total_arrears > 0) {
+  // Fill from the shared post-2026 drafting helper before falling back to legacy text.
+  const reasonAText = buildN119ReasonForPossessionText(data);
+  if (reasonAText) {
+    setTextOptional(form, N119_FIELDS.REASON_A, reasonAText, ctx);
+  }
+
+  // Legacy fallback retained for backwards compatibility with older data shapes.
+  if (!reasonAText && data.total_arrears && data.total_arrears > 0) {
+    const noticeLabel = data.jurisdiction === 'england' ? 'Form 3 notice' : 'Section 8 Notice';
     const arrearsStatement = `Rent lawfully due under the tenancy agreement has not been paid. ` +
-      `As at the date of service of the Section 8 Notice, the arrears amounted to £${data.total_arrears.toFixed(2)}. ` +
+      `As at the date of service of the ${noticeLabel}, the arrears amounted to £${data.total_arrears.toFixed(2)}. ` +
       `Full details of rent periods, payments, and outstanding arrears are set out in the attached Schedule of Arrears.`;
     setTextOptional(form, N119_FIELDS.REASON_A, arrearsStatement, ctx);
-  } else if (data.particulars_of_claim) {
+  } else if (!reasonAText && data.particulars_of_claim) {
     // Use custom particulars if provided
     setTextOptional(form, N119_FIELDS.REASON_A, data.particulars_of_claim, ctx);
   }
 
   // Q4(b) - Other Breach Details
-  // IMPORTANT: Only populate if user has explicitly provided other breach details
-  // Do NOT invent breaches or insert placeholders
-  if (data.other_breach_details) {
+  // Use deterministic post-2026 drafting so the field is never silently blank
+  // for arrears-only claims and still reflects any non-rent grounds where present.
+  const reasonBText = buildN119OtherBreachDetailsText(data);
+  if (reasonBText) {
+    setTextOptional(form, N119_FIELDS.REASON_B, reasonBText, ctx);
+  } else if (data.other_breach_details) {
     setTextOptional(form, N119_FIELDS.REASON_B, data.other_breach_details, ctx);
   }
-  // If no other breach details, leave Q4(b) blank (do not fill with anything)
 
   // Q4(c) - Statutory Grounds
   // MUST ALWAYS be populated for Section 8 cases with explicit statutory basis
@@ -2559,6 +2584,10 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   const hasGround8 = grounds.includes('8') || data.ground_codes?.includes('ground_8');
   const hasGround10 = grounds.includes('10') || data.ground_codes?.includes('ground_10');
   const hasGround11 = grounds.includes('11') || data.ground_codes?.includes('ground_11');
+  const statutoryBasisText = buildN119StatutoryGroundsText(data);
+  if (statutoryBasisText) {
+    setTextOptional(form, N119_FIELDS.REASON_C, statutoryBasisText, ctx);
+  }
 
   const statutoryGroundsParts: string[] = [];
   if (hasGround8) {
@@ -2575,7 +2604,7 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
     statutoryGroundsParts.push(`Ground(s) ${data.ground_numbers}, Schedule 2, Housing Act 1988`);
   }
 
-  if (statutoryGroundsParts.length > 0) {
+  if (!statutoryBasisText && statutoryGroundsParts.length > 0) {
     const statutoryBasis = 'The claimant relies on the following statutory grounds for possession: ' +
       statutoryGroundsParts.join('; ') + '.';
     setTextOptional(form, N119_FIELDS.REASON_C, statutoryBasis, ctx);
@@ -2583,7 +2612,7 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
 
   // === STEPS TAKEN (Section 5 / Q5 - Steps to recover arrears) ===
   // CRITICAL: Do NOT fabricate steps. Use only recorded steps or a safe neutral default.
-  const stepsText = getStepsToRecoverArrears(data);
+  const stepsText = buildN119StepsTakenText(data);
   if (stepsText) {
     setTextOptional(form, N119_FIELDS.STEPS_TAKEN, stepsText, ctx);
   }
@@ -2591,12 +2620,14 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   // === NOTICE DETAILS (Section 6) ===
   // Q6: Notice type and date served
   // The form asks "(a) notice seeking possession..." or "(g) some other notice (specify)"
-  // For Section 8 cases, we use "Notice seeking possession (Form 3)"
+  // For England Section 8 cases, use the current prescribed notice label.
   // For Section 21 cases, we use "Section 21 Notice"
 
   // Determine notice type based on claim type
   const noticeType = data.claim_type === 'section_8'
-    ? 'Notice seeking possession (Form 3)'
+    ? data.jurisdiction === 'england'
+      ? 'Notice seeking possession (Form 3)'
+      : 'Notice seeking possession (Form 3)'
     : data.claim_type === 'section_21'
       ? 'Section 21 Notice'
       : 'Notice seeking possession';
@@ -2635,6 +2666,16 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
         setTextOptional(form, N119_FIELDS.NOTICE_DATE_YEAR, dateParts[0].slice(-2), ctx);
       }
     }
+  }
+
+  const defendantCircumstances = buildN119DefendantCircumstancesText(data);
+  if (defendantCircumstances) {
+    setTextOptional(form, N119_FIELDS.DEFENDANT_CIRCUMSTANCES, defendantCircumstances, ctx);
+  }
+
+  const financialInfo = buildN119FinancialInfoText(data);
+  if (financialInfo) {
+    setTextOptional(form, N119_FIELDS.FINANCIAL_INFO, financialInfo, ctx);
   }
 
   // === DEMOTION ORDER (Section 11) ===
@@ -2932,22 +2973,28 @@ export async function fillForm6A(_data: CaseData): Promise<Uint8Array> {
  * Main entry point - fill any official court form
  *
  * Supported forms:
+ * - form3a: England possession notice (editable official PDF overlay)
  * - n5: Claim for possession of property
  * - n5b: Claim for possession (accelerated procedure - Section 21)
  * - n119: Particulars of claim for possession
+ * - n325: Request for warrant for possession of land
+ * - n325a: Request for warrant following a suspended possession order
  * - n1: Claim form (for money claims)
  *
  * @deprecated form6a - Use generateSection21Notice() from section21-generator.ts instead.
  *             Form 6A is a prescribed notice, not a court form, and must be generated
  *             via HBS template for matrix compliance.
  */
-export async function fillOfficialForm(formType: 'n5' | 'n5b' | 'n119' | 'n1' | 'form6a', data: CaseData): Promise<Uint8Array> {
+export async function fillOfficialForm(
+  formType: 'form3a' | 'n5' | 'n5b' | 'n119' | 'n325' | 'n325a' | 'n1' | 'form6a',
+  data: CaseData,
+): Promise<Uint8Array> {
   // P0-B: Block form6a at entry point as well
   if (formType === 'form6a') {
     throw new Error(
       '[DEPRECATED] Form 6A cannot be generated via fillOfficialForm. ' +
       'Section 21 (Form 6A) notices must be generated via HBS template using generateSection21Notice() from section21-generator.ts. ' +
-      'This function only supports court forms (N5, N5B, N119, N1).'
+      'This function only supports official PDFs such as Form 3, N5, N5B, N119, N325, N325A, and N1.'
     );
   }
 
@@ -2955,18 +3002,26 @@ export async function fillOfficialForm(formType: 'n5' | 'n5b' | 'n119' | 'n1' | 
   console.log('=' .repeat(60));
 
   switch (formType) {
+    case 'form3a':
+      return await fillForm3AForm(data);
     case 'n5':
       return await fillN5Form(data);
     case 'n5b':
       return await fillN5BForm(data);
     case 'n119':
       return await fillN119Form(data);
+    case 'n325':
+      return await fillN325Form(data);
+    case 'n325a':
+      return await fillN325AForm(data);
     case 'n1':
       return await fillN1Form(data);
     default:
       throw new Error(`Unknown form type: ${formType}`);
   }
 }
+
+export { fillForm3AForm, fillN325Form, fillN325AForm };
 
 /**
  * Save filled form to file (for testing)

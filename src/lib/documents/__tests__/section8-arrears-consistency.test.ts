@@ -140,18 +140,25 @@ describe('Section 8 Notice Arrears Consistency', () => {
   const createAboveThresholdMonthlyCase = () => {
     const arrearsItems: ArrearsItem[] = [
       {
+        period_start: '2025-10-01',
+        period_end: '2025-10-31',
+        rent_due: 1200,
+        rent_paid: 0,
+        amount_owed: 1200,
+      },
+      {
         period_start: '2025-11-01',
         period_end: '2025-11-30',
-        rent_due: 1250,
+        rent_due: 1200,
         rent_paid: 0,
-        amount_owed: 1250,
+        amount_owed: 1200,
       },
       {
         period_start: '2025-12-01',
         period_end: '2025-12-31',
-        rent_due: 1250,
+        rent_due: 1200,
         rent_paid: 0,
-        amount_owed: 1250,
+        amount_owed: 1200,
       },
     ];
 
@@ -159,7 +166,7 @@ describe('Section 8 Notice Arrears Consistency', () => {
       arrearsItems,
       rentAmount: 1200,
       rentFrequency: 'monthly' as const,
-      expectedTotal: 2500,
+      expectedTotal: 3600,
     };
   };
 

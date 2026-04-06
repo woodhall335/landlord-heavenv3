@@ -4,10 +4,14 @@ import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
+import {
+  ENGLAND_SECTION8_NOTICE_NAME,
+  ENGLAND_SECTION8_NOTICE_TITLE,
+} from '@/lib/england-possession/section8-terminology';
 import { normalizeEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
 
 // ============================================
-// NOTICE ONLY DOCUMENTS (4 per jurisdiction)
+// NOTICE ONLY DOCUMENTS
 // ============================================
 
 /**
@@ -27,77 +31,56 @@ export function getNoticeOnlyDocuments(
 
   // ENGLAND
   if (jurisdiction === 'england') {
-    if (noticeRoute === 'section_21' || noticeRoute === 'section-21' || noticeRoute === 'accelerated_possession' || noticeRoute === 'accelerated_section21') {
-      documents.push(
-        {
-          id: 'notice-section-21',
-          title: 'Section 21 Notice (Form 6A)',
-          description: 'Official no-fault eviction notice for assured shorthold tenancies',
-          icon: 'notice',
-          pages: '3-4 pages',
-          category: 'Notice',
-        },
-        {
-          id: 'service-instructions-s21',
-          title: 'Service Instructions',
-          description: 'Step-by-step guide on how to legally serve your Section 21 notice',
-          icon: 'guidance',
-          pages: '2 pages',
-          category: 'Guidance',
-        },
-        {
-          id: 'validity-checklist-s21',
-          title: 'Service & Validity Checklist',
-          description: 'Pre-service checklist to ensure your notice meets all legal requirements',
-          icon: 'checklist',
-          pages: '2 pages',
-          category: 'Checklists',
-        },
-        {
-          id: 'pre-service-compliance-s21',
-          title: 'Pre-Service Compliance Declaration',
-          description: 'Verification of compliance requirements before serving notice',
-          icon: 'compliance',
-          pages: '2-3 pages',
-          category: 'Checklists',
-        }
-      );
-    } else if (noticeRoute === 'section_8' || noticeRoute === 'section-8') {
-      documents.push(
-        {
-          id: 'notice-section-8',
-          title: 'Section 8 Notice (Form 3)',
-          description: 'Grounds-based possession notice with your selected eviction grounds',
-          icon: 'notice',
-          pages: '4-5 pages',
-          category: 'Notice',
-        },
-        {
-          id: 'service-instructions-s8',
-          title: 'Service Instructions',
-          description: 'Step-by-step guide on how to legally serve your Section 8 notice',
-          icon: 'guidance',
-          pages: '2 pages',
-          category: 'Guidance',
-        },
-        {
-          id: 'validity-checklist-s8',
-          title: 'Service & Validity Checklist',
-          description: 'Pre-service checklist to ensure your notice meets all legal requirements',
-          icon: 'checklist',
-          pages: '2 pages',
-          category: 'Checklists',
-        },
-        {
-          id: 'pre-service-compliance-s8',
-          title: 'Pre-Service Compliance Declaration',
-          description: 'Verification of compliance requirements before serving notice',
-          icon: 'compliance',
-          pages: '2-3 pages',
-          category: 'Checklists',
-        }
-      );
-    }
+    documents.push(
+      {
+        id: 'notice-form-3a',
+        title: ENGLAND_SECTION8_NOTICE_TITLE,
+        description: 'Official England possession notice for the current Section 8 route',
+        icon: 'notice',
+        pages: '10 pages',
+        category: 'Notice',
+      },
+      {
+        id: 'service-instructions-form-3a',
+        title: 'Service Instructions',
+        description: `Step-by-step guide on how to legally serve your ${ENGLAND_SECTION8_NOTICE_NAME}`,
+        icon: 'guidance',
+        pages: '2 pages',
+        category: 'Guidance',
+      },
+      {
+        id: 'cover-letter-form-3a',
+        title: 'Cover Letter to Tenant',
+        description: `Non-statutory covering letter to send alongside your ${ENGLAND_SECTION8_NOTICE_NAME}`,
+        icon: 'guidance',
+        pages: '1 page',
+        category: 'Guidance',
+      },
+      {
+        id: 'validity-checklist-form-3a',
+        title: 'Service & Compliance Checklist',
+        description: `Pre-service checklist for ${ENGLAND_SECTION8_NOTICE_NAME} validity, timing, and compliance`,
+        icon: 'checklist',
+        pages: '2 pages',
+        category: 'Checklists',
+      },
+      {
+        id: 'evidence-checklist-form-3a',
+        title: 'Ground-Specific Evidence Checklist',
+        description: 'Evidence prompts tailored to the possession grounds in your notice',
+        icon: 'checklist',
+        pages: '2 pages',
+        category: 'Checklists',
+      },
+      {
+        id: 'proof-of-service-form-3a',
+        title: 'Proof of Service Support',
+        description: `Editable support form for recording how and when your ${ENGLAND_SECTION8_NOTICE_NAME} was served`,
+        icon: 'evidence',
+        pages: '1-2 pages',
+        category: 'Evidence',
+      }
+    );
   }
 
   // WALES
@@ -230,26 +213,27 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
 
   // Add court forms - route-specific (aligned with pack-contents.ts single source of truth)
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
-    // England Section 21 uses accelerated N5B procedure ONLY (no N5/N119)
-    // All other routes (England Section 8, Wales Section 173, Wales fault-based) use N5 + N119
-    const isEnglandSection21 =
-      jurisdiction === 'england' &&
-      (noticeRoute?.includes('21') ||
-        noticeRoute === 'accelerated_possession' ||
-        noticeRoute === 'accelerated_section21');
-
-    if (isEnglandSection21) {
-      // England Section 21: Use N5B accelerated procedure only
+    if (jurisdiction === 'england') {
       documents.push({
-        id: 'form-n5b',
-        title: 'Form N5B - Accelerated Possession',
-        description: 'Fast-track possession claim (usually no court hearing required)',
+        id: 'form-n5',
+        title: 'Form N5 - Claim for Possession',
+        description: 'Official court form to start a standard possession claim',
         icon: 'court-form',
-        pages: '6 pages',
+        pages: '8 pages',
         category: 'Court Forms',
       });
+      documents.push(
+        {
+          id: 'form-n119',
+          title: 'Form N119 - Particulars of Claim',
+          description: 'Detailed grounds and particulars for your possession claim',
+          icon: 'court-form',
+          pages: '4-6 pages',
+          category: 'Court Forms',
+        }
+      );
     } else {
-      // England Section 8, Wales Section 173, Wales fault-based: Use standard N5 + N119 procedure
+      // Wales routes continue to use the standard N5 + N119 paper route.
       documents.push(
         {
           id: 'form-n5',
@@ -282,28 +266,14 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
     });
   }
 
-  // AI-Generated Documents
-  // Note: Compliance Audit and Risk Assessment removed as of Jan 2026 pack restructure
-  documents.push(
-    {
-      id: 'witness-statement',
-      title: 'AI Witness Statement',
-      description: 'Court-ready witness statement drafted by AI based on your specific case facts',
-      icon: 'ai-generated',
-      pages: '3-5 pages',
-      category: 'AI-Generated',
-    }
-  );
-
-  // Guidance Documents
-  // Note: Eviction Roadmap removed as of Jan 2026 pack restructure
-
   // Court filing guide based on jurisdiction
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
     documents.push({
       id: 'court-filing-guide',
       title: 'Court Filing Guide',
-      description: 'How to file your possession claim at the county court',
+      description: jurisdiction === 'england'
+        ? 'How to file your England possession claim using N5/N119, including when rent-only claims may also be filed online'
+        : 'How to file your possession claim at the county court',
       icon: 'guidance',
       pages: '3 pages',
       category: 'Guidance',

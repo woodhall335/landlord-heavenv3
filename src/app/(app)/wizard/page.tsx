@@ -51,16 +51,16 @@ interface WizardProductSEO {
  */
 export const WIZARD_PRODUCT_SEO: Record<string, WizardProductSEO> = {
   notice_only: {
-    title: `Eviction Notice Wizard | Section 21, Section 8, Notice to Leave | ${SEO_PRICES.evictionNotice.display}`,
+    title: `Eviction Notice Wizard | Form 3A, Wales notice, Notice to Leave | ${SEO_PRICES.evictionNotice.display}`,
     description:
-      'Create a procedurally correct eviction notice for England (Section 21/Section 8), Wales (Section 173/181), or Scotland (Notice to Leave). Guided wizard with compliance checks and official forms.',
+      'Create a procedurally correct eviction notice for England (Form 3A possession route), Wales, or Scotland. Guided wizard with compliance checks and official forms.',
     h1: 'Eviction Notice Wizard',
     canonicalRoute: SEO_LANDING_ROUTES.notice_only,
   },
   complete_pack: {
     title: `Complete Eviction Pack Wizard | Notice + Court Forms | England | ${SEO_PRICES.evictionBundle.display}`,
     description:
-      'Generate your complete eviction bundle: Section 21 or Section 8 notice, N5/N5B claim forms, N119 Particulars of Claim, and court filing guide. England only.',
+      'Generate your complete England possession bundle: Form 3A notice, N5 and N119 claim forms, evidence checklist, and court filing guide.',
     h1: 'Complete Eviction Pack Wizard',
     canonicalRoute: SEO_LANDING_ROUTES.complete_pack,
   },
@@ -229,4 +229,5 @@ export default async function WizardPage({
     </>
   );
 }
+
 

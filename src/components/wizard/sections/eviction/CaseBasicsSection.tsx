@@ -15,7 +15,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 
 interface CaseBasicsSectionProps {
@@ -25,7 +25,7 @@ interface CaseBasicsSectionProps {
 }
 
 // Valid routes by jurisdiction
-const ENGLAND_ROUTES = ['section_8', 'section_21'];
+const ENGLAND_ROUTES = ['section_8'];
 const WALES_ROUTES = ['section_173', 'fault_based'];
 
 export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
@@ -46,6 +46,12 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
   const handleResetRoute = () => {
     onUpdate({ eviction_route: '' });
   };
+
+  useEffect(() => {
+    if (!isWales && evictionRoute !== 'section_8') {
+      void onUpdate({ eviction_route: 'section_8' });
+    }
+  }, [isWales, evictionRoute, onUpdate]);
 
   return (
     <div className="space-y-6">
@@ -81,7 +87,7 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                 The previously selected route &quot;{evictionRoute}&quot; is not valid for {isWales ? 'Welsh' : 'English'} law.
                 {isWales
                   ? ' Wales uses the Renting Homes (Wales) Act 2016, not Housing Act 1988 notices.'
-                  : ' England uses Housing Act 1988 notices (Section 8/21).'}
+                  : ' England private rented possession now uses the single Form 3A route.'}
               </p>
               <button
                 onClick={handleResetRoute}
@@ -112,8 +118,8 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
           ) : (
             <>
               <strong>Why these options?</strong> England uses the{' '}
-              <em>Housing Act 1988</em> for private tenancy evictions.
-              Choose Section 21 for no-fault possession or Section 8 for grounds-based eviction.
+              <em>post-1 May 2026 private rented possession route</em> for landlord claims.
+              Section 21 and accelerated possession no longer apply. Use Form 3A and the updated possession grounds.
             </>
           )}
         </p>
@@ -124,8 +130,8 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
           {/* ================================================================== */}
           {!isWales && (
             <>
-              {/* Section 21 Option - England only */}
-              <label
+              {false && (
+                <label
                 className={`
                   flex items-start p-4 border rounded-lg cursor-pointer transition-all
                   ${evictionRoute === 'section_21'
@@ -158,7 +164,8 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                     </span>
                   </div>
                 </div>
-              </label>
+                </label>
+              )}
 
               {/* Section 8 Option - England only */}
               <label
@@ -178,6 +185,27 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                   className="mt-1 mr-3"
                 />
                 <div>
+                  <div className="mb-3">
+                    <span className="font-medium text-gray-900">
+                      Form 3A possession route
+                    </span>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Use the post-1 May 2026 England private rented possession route.
+                      The notice period depends on the selected ground, and the court claim normally proceeds with N5 and N119.
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">
+                        Form 3A
+                      </span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">
+                        N5 + N119
+                      </span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">
+                        PCOL for rent-only arrears
+                      </span>
+                    </div>
+                  </div>
+                  <div className="hidden">
                   <span className="font-medium text-gray-900">
                     Section 8 — Grounds-based eviction
                   </span>
@@ -187,11 +215,12 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                   </p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">
-                      Form 3
+                      Form 3A
                     </span>
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">
                       Standard Possession (N5 + N119)
                     </span>
+                  </div>
                   </div>
                 </div>
               </label>
@@ -298,7 +327,7 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
       </div>
 
       {/* Route-specific info boxes */}
-      {evictionRoute === 'section_21' && (
+      {false && evictionRoute === 'section_21' && (
         <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
           <h4 className="text-sm font-medium text-purple-900 mb-2">
             Section 21 Requirements
@@ -318,23 +347,23 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
       {evictionRoute === 'section_8' && (
         <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
           <h4 className="text-sm font-medium text-amber-900 mb-2">
-            Section 8 Grounds (Housing Act 1988, Schedule 2)
+            England Post-1 May 2026 Possession Flow
           </h4>
           <div className="text-sm text-amber-800">
             <p className="mb-2">
-              <strong>Mandatory grounds</strong> (court must grant possession if proven):
+              <strong>Notice stage:</strong> serve Form 3A using the selected possession ground or grounds.
             </p>
             <ul className="list-disc list-inside mb-3">
-              <li>Ground 8: 2+ months rent arrears at notice and hearing</li>
-              <li>Grounds 1-7: Owner occupation, mortgage, etc.</li>
+              <li>Ground 8 serious arrears now requires 3 months or 13 weeks of arrears, depending on rent frequency.</li>
+              <li>Notice periods vary by ground, including 4 months, 4 weeks, 2 weeks, or immediate-application routes.</li>
+              <li>Section 21 and N5B accelerated possession are no longer part of the England private rented flow.</li>
             </ul>
             <p className="mb-2">
-              <strong>Discretionary grounds</strong> (court decides if reasonable):
+              <strong>Court stage:</strong> use N5 and N119 for standard possession claims, with PCOL available for rent-only arrears claims.
             </p>
             <ul className="list-disc list-inside">
-              <li>Ground 10/11: Rent arrears / persistent delay</li>
-              <li>Ground 12: Breach of tenancy</li>
-              <li>Ground 14: Antisocial behaviour</li>
+              <li>The wizard will gather ground-specific evidence and particulars for the notice and court bundle.</li>
+              <li>Enforcement forms N325 and N325A are only needed later if an order is breached or ignored.</li>
             </ul>
           </div>
         </div>

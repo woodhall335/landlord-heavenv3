@@ -82,17 +82,17 @@ const noticeOnlyPurposeMatchers: PurposeMatcher[] = [
   {
     pattern: /section-21|form-6a/,
     copy: {
-      whatItDoes: 'Creates the no-fault possession notice in the prescribed format for England.',
-      whyItMatters: 'Using the correct form and wording helps avoid an invalid notice challenge.',
-      whenUsed: 'Served first when you are proceeding on the Section 21 route.',
+      whatItDoes: 'Captures the older historical notice stage used before the England changeover.',
+      whyItMatters: 'It is retained only to explain older files and prevent users following outdated steps.',
+      whenUsed: 'Used only when you are reviewing a historical legacy file.',
     },
   },
   {
-    pattern: /section-8|form-3/,
+    pattern: /section-8|form-3a|form-3/,
     copy: {
-      whatItDoes: 'Sets out the specific possession grounds relied on for fault-based eviction.',
+      whatItDoes: 'Sets out the possession grounds relied on for the current England route.',
       whyItMatters: 'Grounds and notice period errors can undermine the possession claim later in court.',
-      whenUsed: 'Served first when proceeding on a Section 8 route.',
+      whenUsed: 'Served first when proceeding on the current England possession route.',
     },
   },
   {
@@ -165,9 +165,9 @@ const completePackPurposeMatchers: PurposeMatcher[] = [
   {
     pattern: /n5b/,
     copy: {
-      whatItDoes: 'Prepares the accelerated possession claim form for Section 21 proceedings.',
-      whyItMatters: 'Correct completion helps prevent avoidable court queries and delays.',
-      whenUsed: 'Used when filing the accelerated possession route after notice expiry.',
+      whatItDoes: 'Flags a historical legacy claim form that is no longer part of the current England route.',
+      whyItMatters: 'This prevents users from relying on an outdated filing path for live cases.',
+      whenUsed: 'Used only when reviewing a historical legacy file.',
     },
   },
   {
@@ -175,7 +175,7 @@ const completePackPurposeMatchers: PurposeMatcher[] = [
     copy: {
       whatItDoes: 'Builds the claim form used to open standard possession proceedings.',
       whyItMatters: 'This form initiates the court route and must align with your notice case.',
-      whenUsed: 'Filed once the Section 8 notice period has expired.',
+      whenUsed: 'Filed once the current England notice period has expired.',
     },
   },
   {
@@ -314,13 +314,13 @@ type FallbackDoc = {
 
 const NOTICE_FALLBACK_DOCS: Record<NoticeVariantKey, FallbackDoc[]> = {
   section21: [
-    { key: 'section21-form6a-notice', title: 'Section 21 Form 6A Notice' },
+    { key: 'legacy-historical-notice', title: 'Historical legacy notice' },
     { key: 'compliance-declaration', title: 'Compliance Declaration' },
     { key: 'service-instructions', title: 'Service Instructions' },
     { key: 'validity-checklist', title: 'Validity Checklist' },
   ],
   section8: [
-    { key: 'section8-form3-notice', title: 'Section 8 Form 3 Notice' },
+    { key: 'section8-form3a-notice', title: 'England Form 3A Possession Notice' },
     { key: 'rent-arrears-schedule', title: 'Rent Arrears Schedule' },
     { key: 'service-instructions', title: 'Service Instructions' },
     { key: 'validity-checklist', title: 'Validity Checklist' },
@@ -348,15 +348,15 @@ const NOTICE_FALLBACK_DOCS: Record<NoticeVariantKey, FallbackDoc[]> = {
 
 const COMPLETE_PACK_FALLBACK_DOCS: Record<CompletePackVariantKey, FallbackDoc[]> = {
   section21: [
-    { key: 'notice', title: 'Section 21 Notice' },
-    { key: 'n5b', title: 'Form N5B' },
+    { key: 'legacy-historical-notice', title: 'Historical legacy notice' },
+    { key: 'legacy-historical-claim', title: 'Historical legacy claim form' },
     { key: 'witness-statement', title: 'Witness Statement' },
     { key: 'evidence-checklist', title: 'Evidence Checklist' },
     { key: 'proof-of-service', title: 'Proof of Service' },
     { key: 'hearing-checklist', title: 'Hearing Checklist' },
   ],
   section8: [
-    { key: 'notice', title: 'Section 8 Notice' },
+    { key: 'notice', title: 'England Form 3A Possession Notice' },
     { key: 'n5', title: 'Form N5' },
     { key: 'n119', title: 'Form N119 Particulars' },
     { key: 'witness-statement', title: 'Witness Statement' },
@@ -405,7 +405,6 @@ const hydrateSteps = (product: FunnelProduct, routeId: string, docs: PreviewDoc[
 };
 
 const noticeOnlyTabs = (previews?: NoticeOnlyPreviewData): FunnelProcessTab[] => {
-  const section21Docs = previews?.england?.section21 ?? [];
   const section8Docs = previews?.england?.section8 ?? [];
   const section173Docs = previews?.wales?.section173 ?? [];
   const rhw23Docs = previews?.wales?.rhw23 ?? [];
@@ -415,18 +414,12 @@ const noticeOnlyTabs = (previews?: NoticeOnlyPreviewData): FunnelProcessTab[] =>
     {
       id: 'england',
       label: 'England',
-      description: 'Housing Act routes with no-fault and grounds-based pathways.',
+      description: 'Current possession route with notice, claim, and evidence workflow.',
       routes: [
         {
-          id: 'section21',
-          label: 'Section 21 (No-fault)',
-          subtitle: 'Use when ending an assured shorthold tenancy without alleging breach.',
-          steps: hydrateSteps('notice_only', 'section21', section21Docs, NOTICE_FALLBACK_DOCS.section21),
-        },
-        {
           id: 'section8',
-          label: 'Section 8 (Fault-based)',
-          subtitle: 'Use when relying on breach grounds such as rent arrears.',
+          label: 'Current England possession route',
+          subtitle: 'Use the current notice, evidence, and claim workflow for live England cases.',
           steps: hydrateSteps('notice_only', 'section8', section8Docs, NOTICE_FALLBACK_DOCS.section8),
         },
       ],
@@ -475,18 +468,12 @@ const completePackTabs = (previews?: CompletePackPreviewData): FunnelProcessTab[
   {
     id: 'england',
     label: 'England',
-    description: 'Court pack pathways for no-fault and grounds-based possession in England.',
+    description: 'Notice-to-claim bundle for the current England possession workflow.',
     routes: [
       {
-        id: 'section21',
-        label: 'Section 21 -> N5B',
-        subtitle: 'Notice stage to accelerated possession claim bundle.',
-        steps: hydrateSteps('complete_pack', 'section21', previews?.section21 ?? [], COMPLETE_PACK_FALLBACK_DOCS.section21),
-      },
-      {
         id: 'section8',
-        label: 'Section 8 -> N5 + N119',
-        subtitle: 'Notice stage to standard possession claim bundle.',
+        label: 'Current England route -> N5 + N119',
+        subtitle: 'Notice stage to the standard possession claim bundle.',
         steps: hydrateSteps('complete_pack', 'section8', previews?.section8 ?? [], COMPLETE_PACK_FALLBACK_DOCS.section8),
       },
     ],

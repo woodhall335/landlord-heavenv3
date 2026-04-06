@@ -94,14 +94,9 @@ const NOTICE_ONLY_CONFIG: Record<JurisdictionKey, JurisdictionConfig> = {
     legalNote: 'Housing Act 1988 compliant',
     noticeVariants: [
       {
-        key: 'section21',
-        label: 'Section 21',
-        description: 'Form 6A no-fault possession notice.',
-      },
-      {
         key: 'section8',
-        label: 'Section 8',
-        description: 'Form 3 grounds-based possession notice.',
+        label: 'Current England possession route',
+        description: 'Form 3A possession notice with current grounds-based guidance.',
       },
     ],
   },
@@ -211,14 +206,9 @@ const tenancyJurisdictionOrder: TenancyPreviewJurisdiction[] = [
 
 const COMPLETE_PACK_VARIANTS: NoticeVariant[] = [
   {
-    key: 'section21',
-    label: 'Section 21',
-    description: 'No-fault eviction route for England.',
-  },
-  {
     key: 'section8',
-    label: 'Section 8',
-    description: 'Grounds-based eviction route for arrears or breach.',
+    label: 'Current England possession pack',
+    description: 'Form 3A, N5, and N119 workflow for the current England route.',
   },
 ];
 
@@ -240,7 +230,7 @@ const getDefaultSubtitle = (product: WhatsIncludedInteractiveProps['product']) =
     return 'Select your jurisdiction, then preview every document in the pack.';
   }
   if (product === 'complete_pack') {
-    return 'England-only pack. Choose Section 8 or Section 21, then preview every document.';
+    return 'England-only pack. Preview the current notice-to-claim workflow before you buy.';
   }
   if (product === 'ast') {
     return 'Select your jurisdiction and product level, then preview every document in the pack.';
@@ -274,7 +264,7 @@ const getDocumentDescription = (document: PreviewDoc) => {
   if (haystack.includes('letter-before-claim')) return 'Pre-action letter template before issuing proceedings.';
   if (haystack.includes('interest')) return 'Interest calculation worksheet for the court claim.';
   if (haystack.includes('n1') || haystack.includes('claim-form')) return 'Core claim form template for issuing proceedings.';
-  if (haystack.includes('section') || haystack.includes('notice') || haystack.includes('form-6a') || haystack.includes('form-3')) {
+  if (haystack.includes('section') || haystack.includes('notice') || haystack.includes('form-3a') || haystack.includes('form-3')) {
     return 'Primary legal notice generated from your case details.';
   }
 
@@ -360,13 +350,13 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
     : isAst
       ? props.defaultJurisdiction ?? 'england'
       : 'england';
-  const initialPackVariant = isCompletePack ? props.defaultVariant ?? 'section21' : 'section21';
+  const initialPackVariant = isCompletePack ? props.defaultVariant ?? 'section8' : 'section8';
   const initialTenancyTier = isAst ? props.defaultTier ?? 'standard' : 'standard';
 
   const [selectedJurisdiction, setSelectedJurisdiction] = useState<InteractiveJurisdictionKey>(initialJurisdiction);
   const defaultNoticeVariantKey = isNoticeOnly
     ? NOTICE_ONLY_CONFIG[selectedJurisdiction as JurisdictionKey].noticeVariants[0].key
-    : 'section21';
+    : 'section8';
   const [selectedNoticeVariant, setSelectedNoticeVariant] = useState<NoticeVariantKey>(defaultNoticeVariantKey);
   const [selectedPackVariant, setSelectedPackVariant] = useState<CompletePackVariantKey>(initialPackVariant);
   const [selectedTenancyTier, setSelectedTenancyTier] = useState<TenancyPreviewTier>(initialTenancyTier);
@@ -399,7 +389,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
     : noticeVariants[0]?.key;
 
   const documents = isNoticeOnly
-    ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction as JurisdictionKey]?.[effectiveNoticeVariant ?? 'section21'] ?? []
+    ? (previews as NoticeOnlyPreviewData)[selectedJurisdiction as JurisdictionKey]?.[effectiveNoticeVariant ?? 'section8'] ?? []
     : isCompletePack
       ? (previews as CompletePackPreviewData)[selectedPackVariant] ?? []
       : isAst
@@ -413,7 +403,9 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
 
   const title = props.titleOverride ?? getDefaultTitle(product);
   const subtitle = props.subtitleOverride ?? getDefaultSubtitle(product);
-  const showNoticeTypeSelector = isCompletePack || (isNoticeOnly && selectedJurisdiction !== 'scotland');
+  const showNoticeTypeSelector = isCompletePack
+    ? COMPLETE_PACK_VARIANTS.length > 1
+    : isNoticeOnly && selectedJurisdiction !== 'scotland' && noticeVariants.length > 1;
   const lockJurisdiction = isAst ? props.lockJurisdiction ?? false : false;
   const legalNote = isNoticeOnly ? jurisdictionConfig?.legalNote : isAst ? tenancyConfig?.legalNote : 'England only';
 

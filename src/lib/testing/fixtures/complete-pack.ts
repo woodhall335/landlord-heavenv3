@@ -2,6 +2,7 @@ import { calculateSection8ExpiryDate, calculateSection21ExpiryDate } from '@/lib
 
 interface BuildSection8Options {
   logDates?: boolean;
+  overrides?: Record<string, any>;
 }
 
 interface BuildSection21Options {
@@ -13,7 +14,7 @@ function toIsoDate(value: Date): string {
 }
 
 export function buildEnglandSection8CompletePackFacts(options: BuildSection8Options = {}) {
-  const { logDates = false } = options;
+  const { logDates = false, overrides = {} } = options;
   const today = new Date();
   const noticeServedDate = toIsoDate(today);
 
@@ -96,6 +97,7 @@ export function buildEnglandSection8CompletePackFacts(options: BuildSection8Opti
         rent_arrears_amount: 2400,
       },
     },
+    ...overrides,
   } as any;
 }
 

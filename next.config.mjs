@@ -136,28 +136,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/eviction-notice-england',
-        destination: '/eviction-notice-template',
-        permanent: true,
-      },
-      {
         source: '/section-8-notice-guide',
         destination: '/section-8-notice',
-        permanent: true,
-      },
-      {
-        source: '/section-21-notice-guide',
-        destination: '/section-21-notice',
-        permanent: true,
-      },
-      {
-        source: '/section-21-ban',
-        destination: '/section-21-ban-uk',
-        permanent: true,
-      },
-      {
-        source: '/section-21-checklist',
-        destination: '/section-21-validity-checklist',
         permanent: true,
       },
 
@@ -235,11 +215,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/n5b-form-guide',
-        destination: '/n5b-possession-claim-guide',
-        permanent: true,
-      },
-      {
         source: '/warrant-of-possession',
         destination: '/warrant-of-possession-guide',
         permanent: true,
@@ -301,18 +276,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/section-21-notice-generator',
-        destination: '/section-21-notice-template',
-        permanent: true,
-      },
-      {
         source: '/section-8-notice-generator',
-        destination: '/section-8-notice-template',
-        permanent: true,
-      },
-      {
-        source: '/n5b-possession-claim-form',
-        destination: '/n5b-possession-claim-guide',
+        destination: '/eviction-notice-england',
         permanent: true,
       },
       {

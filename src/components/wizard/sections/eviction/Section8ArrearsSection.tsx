@@ -29,6 +29,7 @@ import { validateGround8Eligibility, computeArrears } from '@/lib/arrears-engine
 import { AskHeavenInlineEnhancer } from '../../AskHeavenInlineEnhancer';
 import { useValidationContextSafe } from '@/components/wizard/ValidationContext';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
 
 interface Section8ArrearsSectionProps {
   facts: WizardFacts;
@@ -81,6 +82,11 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
       jurisdiction: 'england',
     });
   }, [hasGround8, arrearsItems, facts.rent_amount, facts.rent_frequency]);
+
+  const ground8Threshold = useMemo(
+    () => getGround8Threshold(facts.rent_amount || 0, facts.rent_frequency || 'monthly'),
+    [facts.rent_amount, facts.rent_frequency]
+  );
 
   // P0-4 FIX: Validate arrears date ranges
   // Check for: start > end, negative durations, overlapping periods
@@ -296,7 +302,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
         </h4>
         {hasGround8 && (
           <p className="text-sm text-purple-800">
-            Ground 8 is a <strong>mandatory ground</strong> requiring at least 2 months&apos; rent
+            Ground 8 is a <strong>mandatory ground</strong> requiring at least {ground8Threshold.description} rent
             arrears at both the date of service and the date of the hearing.
             The court requires a detailed period-by-period breakdown.
           </p>
@@ -349,7 +355,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
           <div className={`text-sm ${ground8Validation.is_eligible ? 'text-green-800' : 'text-red-800'}`}>
             <p>
               Arrears: {ground8Validation.arrears_in_months?.toFixed(2) || 0} months
-              ({ground8Validation.is_eligible ? '≥' : '<'} 2 months required)
+              ({ground8Validation.is_eligible ? '≥' : '<'} {ground8Validation.threshold_label || ground8Threshold.description} required)
             </p>
             {!ground8Validation.is_eligible && (
               <p className="mt-2 font-medium">
@@ -428,6 +434,10 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
   onUpdate,
 }) => {
   const particularsText = facts.section8_details || '';
+  const ground8Threshold = useMemo(
+    () => getGround8Threshold(facts.rent_amount || 0, facts.rent_frequency || 'monthly'),
+    [facts.rent_amount, facts.rent_frequency]
+  );
 
   // Generate a suggested starting point based on arrears data
   const generateSuggestion = useCallback(() => {
@@ -440,12 +450,12 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
       suggestion += `There are ${arrearsSummary.periods_fully_unpaid} rental period(s) that are fully unpaid. `;
     }
 
-    if (arrearsSummary.arrears_in_months >= 2) {
-      suggestion += `This exceeds the Ground 8 threshold of 2 months' arrears.`;
-    }
+      if (arrearsSummary.total_arrears >= ground8Threshold.amount) {
+        suggestion += `This exceeds the Ground 8 threshold of ${ground8Threshold.description} arrears.`;
+      }
 
     return suggestion;
-  }, [arrearsSummary]);
+  }, [arrearsSummary, ground8Threshold.amount, ground8Threshold.description]);
 
   const handleUseSuggestion = () => {
     const suggestion = generateSuggestion();
@@ -468,11 +478,11 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
     <div className="pt-6 border-t border-gray-200 space-y-4">
       <div>
         <h4 className="text-base font-medium text-gray-900 mb-1">
-          Particulars of Claim
+          Possession particulars
         </h4>
         <p className="text-sm text-gray-600">
-          Describe the grounds for possession based on the arrears schedule above.
-          This will appear in your court documents.
+          Describe the possession grounds based on the arrears schedule above.
+          This will feed the Form 3A explanation and the N119 court particulars.
         </p>
       </div>
 
@@ -495,7 +505,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
       {/* Particulars textarea */}
       <div className="space-y-2">
         <label htmlFor="section8_details" className="block text-sm font-medium text-gray-700">
-          Particulars for selected grounds
+          Possession particulars for selected grounds
           <span className="text-red-500 ml-1">*</span>
         </label>
         <textarea
@@ -515,7 +525,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
       {/* Ask Heaven Inline Enhancer */}
       <AskHeavenInlineEnhancer
         questionId="section8_details"
-        questionText="Particulars for Section 8 grounds (rent arrears)"
+        questionText="Possession particulars for Form 3A and N119 rent arrears grounds"
         answer={particularsText}
         onApply={(newText) => onUpdate({ section8_details: newText })}
         context={enhanceContext}

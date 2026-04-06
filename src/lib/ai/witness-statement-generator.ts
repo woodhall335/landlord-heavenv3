@@ -27,8 +27,9 @@ export interface WitnessStatementJSON {
   conduct_issues?: string; // If claiming ASB, breach of tenancy - specific incidents with dates
   grounds_summary: string; // Summary of grounds being relied upon
   timeline: string; // Chronological timeline of key events
+  defendant_circumstances?: string; // Known defendant circumstances / neutral fallback
   evidence_references: string; // Reference to exhibits/documents supporting the statement
-  conclusion: string; // Final statement affirming truthfulness
+  conclusion: string; // Final closing / relief sought before the signed statement of truth block
 }
 
 export interface WitnessStatementContext {
@@ -211,6 +212,7 @@ Required JSON structure:
       conduct_issues: { type: 'string' },
       grounds_summary: { type: 'string' },
       timeline: { type: 'string' },
+      defendant_circumstances: { type: 'string' },
       evidence_references: { type: 'string' },
       conclusion: { type: 'string' },
     },
@@ -247,6 +249,7 @@ function mergeWithFallback(
     conduct_issues: ai.conduct_issues || fallback.conduct_issues,
     grounds_summary: ai.grounds_summary || fallback.grounds_summary,
     timeline: ai.timeline || fallback.timeline,
+    defendant_circumstances: ai.defendant_circumstances || fallback.defendant_circumstances,
     evidence_references: ai.evidence_references || fallback.evidence_references,
     conclusion: ai.conclusion || fallback.conclusion,
   };

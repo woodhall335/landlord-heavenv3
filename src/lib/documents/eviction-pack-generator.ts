@@ -33,6 +33,8 @@ import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/
 import {
   buildWitnessStatementSections,
   extractWitnessStatementSectionsInput,
+  buildWitnessExhibits,
+  type WitnessExhibit,
 } from './witness-statement-sections';
 import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
 import { computeRiskAssessment } from '@/lib/case-intel/risk-assessment';
@@ -69,9 +71,29 @@ import {
 } from './court-ready-validator';
 import { buildComplianceTimingDataWithFallback } from './compliance-timing-facts';
 import { isSection173Route, isWalesFaultBasedRoute } from '@/lib/wales/section173FormSelector';
-import { calculateSection21ExpiryDate, type Section21DateParams, type ServiceMethod } from './notice-date-calculator';
+import {
+  calculateSection8ExpiryDate,
+  calculateSection21ExpiryDate,
+  type Section8DateParams,
+  type Section21DateParams,
+  type ServiceMethod,
+} from './notice-date-calculator';
 import { computeEvictionArrears, proRatePartialPeriods } from '@/lib/eviction/arrears/computeArrears';
-import { isGround8Eligible } from '@/lib/grounds/ground8-threshold';
+import { getGround8Threshold, isGround8Eligible } from '@/lib/grounds/ground8-threshold';
+import {
+  buildN119DefendantCircumstancesText,
+  buildN119FinancialInfoText,
+  buildN119ReasonForPossessionText,
+  buildN119StatutoryGroundsText,
+  buildN119StepsTakenText,
+} from '@/lib/england-possession/pack-drafting';
+import {
+  ENGLAND_SECTION8_FORM_NAME,
+  ENGLAND_SECTION8_NOTICE_NAME,
+  ENGLAND_SECTION8_NOTICE_TITLE,
+  ENGLAND_SECTION8_NOTICE_TYPE_LABEL,
+} from '@/lib/england-possession/section8-terminology';
+import { isDebugStampEnabled } from './debug-stamp';
 
 // ============================================================================
 // DATE FORMATTIoG HELPER - UK Legal Format
@@ -199,6 +221,331 @@ function getUnifiedNoticeExpiryDate(params: UnifiedExpiryParams): string | undef
 // PRO-RATA HELPER - For Partial Rent Periods
 // ============================================================================
 
+interface CanonicalSection8NoticeData {
+  serviceDate: string;
+  earliestPossessionDate: string;
+  noticePeriodDays: number;
+  explanation?: string;
+}
+
+function resolveSection8ServiceDate(...sources: Array<Record<string, any> | null | undefined>): string {
+  for (const source of sources) {
+    const value =
+      source?.notice_service_date ||
+      source?.notice_served_date ||
+      source?.section_8_notice_date ||
+      source?.service_date ||
+      source?.notice_date ||
+      source?.notice?.service_date ||
+      source?.notice?.served_date ||
+      source?.['notice_service.notice_date'];
+
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return value;
+    }
+  }
+
+  return new Date().toISOString().split('T')[0];
+}
+
+function resolveSection8GroundParams(evictionCase: EvictionCase): Section8DateParams['grounds'] {
+  return (evictionCase.grounds || []).reduce<Section8DateParams['grounds']>((result, ground) => {
+    const rawCode = typeof ground === 'string' ? ground : ground.code;
+    const normalizedCode = String(rawCode || '').replace(/^Ground\s+/i, '').trim();
+    if (!normalizedCode) {
+      return result;
+    }
+
+    result.push({
+      code: normalizedCode,
+      mandatory: typeof ground === 'string' ? undefined : ground.mandatory,
+    });
+
+    return result;
+  }, []);
+}
+
+function resolveSection8CanonicalNoticeData(
+  evictionCase: EvictionCase,
+  wizardFacts: Record<string, any> = {},
+  caseData?: Partial<CaseData> | null
+): CanonicalSection8NoticeData {
+  const serviceDate = resolveSection8ServiceDate(caseData as Record<string, any>, wizardFacts);
+  const existingExpiry =
+    wizardFacts.notice_expiry_date ||
+    wizardFacts.earliest_possession_date ||
+    wizardFacts.section8_expiry_date ||
+    wizardFacts.notice?.expiry_date ||
+    wizardFacts['notice_service.notice_expiry_date'] ||
+    caseData?.notice_expiry_date ||
+    (caseData as Record<string, any> | null | undefined)?.earliest_possession_date ||
+    '';
+  const groundParams = resolveSection8GroundParams(evictionCase);
+
+  if (groundParams.length === 0) {
+    return {
+      serviceDate,
+      earliestPossessionDate: existingExpiry,
+      noticePeriodDays: 0,
+    };
+  }
+
+  const calculated = calculateSection8ExpiryDate({
+    service_date: serviceDate,
+    grounds: groundParams,
+    tenancy_start_date: evictionCase.tenancy_start_date,
+    fixed_term: evictionCase.fixed_term,
+    fixed_term_end_date: evictionCase.fixed_term_end_date,
+  });
+
+  return {
+    serviceDate,
+    earliestPossessionDate: existingExpiry || calculated.earliest_valid_date,
+    noticePeriodDays: calculated.notice_period_days,
+    explanation: calculated.explanation,
+  };
+}
+
+type CourtFacingRenderOptions = {
+  cleanOutput: boolean;
+  courtMode: boolean;
+};
+
+function resolveCanonicalCourtName(...sources: Array<Record<string, any> | null | undefined>): string | undefined {
+  for (const source of sources) {
+    const value =
+      source?.court_name ||
+      source?.court?.court_name ||
+      source?.courtName;
+
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+
+  return undefined;
+}
+
+function resolveCourtFacingRenderOptions(
+  ...sources: Array<Record<string, any> | null | undefined>
+): CourtFacingRenderOptions {
+  const explicitCleanOutput = sources.some(
+    (source) => source?.clean_output === true || source?.cleanOutput === true
+  );
+  const explicitCourtMode = sources.some(
+    (source) => source?.court_mode === true || source?.courtMode === true
+  );
+  const envEnabled =
+    process.env.COURT_MODE_RENDER === '1' || process.env.CLEAN_OUTPUT_RENDER === '1';
+
+  const cleanOutput = explicitCleanOutput || explicitCourtMode || envEnabled;
+
+  return {
+    cleanOutput,
+    courtMode: explicitCourtMode || envEnabled,
+  };
+}
+
+function getNestedValue(
+  source: Record<string, any> | null | undefined,
+  path: string
+): unknown {
+  if (!source) {
+    return undefined;
+  }
+
+  return path.split('.').reduce<unknown>((value, segment) => {
+    if (value && typeof value === 'object' && segment in (value as Record<string, any>)) {
+      return (value as Record<string, any>)[segment];
+    }
+
+    return undefined;
+  }, source);
+}
+
+function resolveBooleanField(
+  sources: Array<Record<string, any> | null | undefined>,
+  ...paths: string[]
+): boolean | null {
+  for (const source of sources) {
+    for (const path of paths) {
+      const value = getNestedValue(source, path);
+      if (typeof value === 'boolean') {
+        return value;
+      }
+    }
+  }
+
+  return null;
+}
+
+function resolveStringField(
+  sources: Array<Record<string, any> | null | undefined>,
+  ...paths: string[]
+): string | undefined {
+  for (const source of sources) {
+    for (const path of paths) {
+      const value = getNestedValue(source, path);
+      if (typeof value === 'string' && value.trim().length > 0) {
+        return value.trim();
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function assertCourtNameConsistentAcrossDocuments(params: {
+  documents: EvictionPackDocument[];
+  courtName?: string;
+  documentTypes: string[];
+}): void {
+  const { documents, courtName, documentTypes } = params;
+
+  if (!courtName) {
+    return;
+  }
+
+  const courtNamePattern = new RegExp(escapeRegExp(courtName), 'i');
+
+  for (const documentType of documentTypes) {
+    const document = documents.find((item) => item.document_type === documentType);
+    if (!document?.html) {
+      continue;
+    }
+
+    if (!courtNamePattern.test(document.html)) {
+      throw new Error(
+        `COURT_NAME_MISMATCH: Expected "${courtName}" to appear in ${documentType}, but it did not.`
+      );
+    }
+  }
+}
+
+function applySection8CanonicalNoticeData(
+  target: Record<string, any> | null | undefined,
+  canonicalNotice: CanonicalSection8NoticeData
+): void {
+  if (!target) {
+    return;
+  }
+
+  target.notice_service_date = target.notice_service_date || canonicalNotice.serviceDate;
+  target.notice_served_date = target.notice_served_date || canonicalNotice.serviceDate;
+  target.section_8_notice_date = target.section_8_notice_date || canonicalNotice.serviceDate;
+  target.service_date = target.service_date || canonicalNotice.serviceDate;
+  target.notice_date = target.notice_date || canonicalNotice.serviceDate;
+
+  if (canonicalNotice.earliestPossessionDate) {
+    target.notice_expiry_date = canonicalNotice.earliestPossessionDate;
+    target.earliest_possession_date = canonicalNotice.earliestPossessionDate;
+    target.earliest_proceedings_date = canonicalNotice.earliestPossessionDate;
+    target.section8_expiry_date = canonicalNotice.earliestPossessionDate;
+    target.expiry_date = target.expiry_date || canonicalNotice.earliestPossessionDate;
+  }
+
+  if (canonicalNotice.noticePeriodDays > 0) {
+    target.notice_period_days = canonicalNotice.noticePeriodDays;
+  }
+
+  if (canonicalNotice.explanation) {
+    target.earliest_possession_date_explanation = canonicalNotice.explanation;
+  }
+
+  if (target.notice && typeof target.notice === 'object') {
+    target.notice.service_date = target.notice.service_date || canonicalNotice.serviceDate;
+    target.notice.served_date = target.notice.served_date || canonicalNotice.serviceDate;
+    if (canonicalNotice.earliestPossessionDate) {
+      target.notice.expiry_date = canonicalNotice.earliestPossessionDate;
+      target.notice.notice_expiry_date = canonicalNotice.earliestPossessionDate;
+      target.notice.earliest_proceedings_date = canonicalNotice.earliestPossessionDate;
+    }
+  }
+}
+
+function getOrdinalSuffix(value: number): string {
+  if (value >= 11 && value <= 13) {
+    return `${value}th`;
+  }
+
+  switch (value % 10) {
+    case 1:
+      return `${value}st`;
+    case 2:
+      return `${value}nd`;
+    case 3:
+      return `${value}rd`;
+    default:
+      return `${value}th`;
+  }
+}
+
+function formatPaymentDayDisplay(
+  paymentDay?: number | null,
+  rentFrequency?: string | null,
+  usualPaymentWeekday?: string | null
+): string {
+  if (!paymentDay || !Number.isFinite(paymentDay)) {
+    return 'Per tenancy agreement';
+  }
+
+  const base = `${getOrdinalSuffix(paymentDay)} of each ${rentFrequency === 'monthly' ? 'month' : rentFrequency || 'rental'} period`;
+  return usualPaymentWeekday ? `${base} (${usualPaymentWeekday})` : base;
+}
+
+function formatRentFrequencyLabel(value?: string | null): string {
+  const mapping: Record<string, string> = {
+    weekly: 'weekly',
+    fortnightly: 'fortnightly',
+    monthly: 'monthly',
+    quarterly: 'quarterly',
+    yearly: 'yearly',
+  };
+
+  return mapping[value || ''] || String(value || 'monthly');
+}
+
+function buildCaseSummaryComplianceItems(params: {
+  evictionCase: EvictionCase;
+  caseData?: Partial<CaseData> | null;
+  wizardFacts?: Record<string, any>;
+  noticeServedDate?: string;
+  earliestProceedingsDate?: string;
+}): string[] {
+  const { evictionCase, caseData, wizardFacts, noticeServedDate, earliestProceedingsDate } = params;
+  const items: string[] = [];
+
+  if (evictionCase.deposit_protected || wizardFacts?.deposit_protected || caseData?.deposit_scheme) {
+    const scheme = caseData?.deposit_scheme || wizardFacts?.deposit_scheme_name || evictionCase.deposit_scheme || 'tenancy deposit scheme';
+    const protectedDate = caseData?.deposit_protection_date || wizardFacts?.deposit_protection_date || evictionCase.deposit_protection_date;
+    items.push(`Deposit protection recorded${scheme ? ` with ${scheme}` : ''}${protectedDate ? ` on ${formatUKLegalDate(protectedDate)}` : ''}.`);
+  } else {
+    items.push('Deposit protection status is not confirmed in the available pack data.');
+  }
+
+  if (wizardFacts?.gas_safety_provided === true || wizardFacts?.gas_safety_certificate === true || caseData?.gas_safety_check_date) {
+    items.push(`Gas safety evidence recorded${caseData?.gas_safety_check_date ? ` on ${formatUKLegalDate(caseData.gas_safety_check_date)}` : ''}.`);
+  }
+
+  if (wizardFacts?.epc_provided === true || wizardFacts?.epc_served === true || evictionCase.epc_rating || caseData?.epc_provided_date) {
+    items.push(`Energy Performance Certificate evidence recorded${evictionCase.epc_rating ? ` (rating ${evictionCase.epc_rating})` : ''}${caseData?.epc_provided_date ? ` on ${formatUKLegalDate(caseData.epc_provided_date)}` : ''}.`);
+  }
+
+  if (wizardFacts?.how_to_rent_provided === true || wizardFacts?.how_to_rent_served === true || caseData?.how_to_rent_date) {
+    items.push(`How to Rent guide evidence recorded${caseData?.how_to_rent_date ? ` on ${formatUKLegalDate(caseData.how_to_rent_date)}` : ''}.`);
+  }
+
+  if (noticeServedDate || earliestProceedingsDate) {
+    items.push(`Notice served${noticeServedDate ? ` on ${formatUKLegalDate(noticeServedDate)}` : ''}${earliestProceedingsDate ? ` with earliest proceedings date ${formatUKLegalDate(earliestProceedingsDate)}` : ''}.`);
+  }
+
+  return items;
+}
+
 /**
  * Build formatted date fields for Section 8 templates.
  * Ensures service_date_formatted, earliest_possession_date_formatted,
@@ -206,30 +553,96 @@ function getUnifiedNoticeExpiryDate(params: UnifiedExpiryParams): string | undef
  */
 function buildSection8TemplateData(
   evictionCase: EvictionCase,
-  wizardFacts: any
+  wizardFacts: any,
+  caseData?: Partial<CaseData> | null
 ): Record<string, any> {
-  // Resolve service date from multiple possible sources (first non-empty wins)
-  const serviceDate =
-    wizardFacts.notice_service_date ||
-    wizardFacts.notice_served_date ||
-    wizardFacts.section_8_notice_date ||
-    wizardFacts.service_date ||
-    wizardFacts.notice_date ||
-    wizardFacts['notice_service.notice_date'] ||
-    new Date().toISOString().split('T')[0];
-
-  // Resolve earliest possession / expiry date
-  const earliestPossessionDate =
-    wizardFacts.notice_expiry_date ||
-    wizardFacts.earliest_possession_date ||
-    wizardFacts.section8_expiry_date ||
-    wizardFacts['notice_service.notice_expiry_date'] ||
-    '';
+  const canonicalNotice = resolveSection8CanonicalNoticeData(evictionCase, wizardFacts, caseData);
+  const serviceDate = canonicalNotice.serviceDate;
+  const earliestPossessionDate = canonicalNotice.earliestPossessionDate;
+  const courtName =
+    resolveCanonicalCourtName(caseData as Record<string, any>, evictionCase as Record<string, any>, wizardFacts) ||
+    'County Court';
+  const renderOptions = resolveCourtFacingRenderOptions(
+    wizardFacts,
+    caseData as Record<string, any>,
+    evictionCase as Record<string, any>
+  );
+  const rawServiceMethod =
+    resolveStringField(
+      [wizardFacts, caseData as Record<string, any>, evictionCase as Record<string, any>],
+      'notice_service_method',
+      'service_method',
+      'notice.service_method'
+    ) || '';
+  const templateServiceMethod = mapServiceMethodForTemplate(rawServiceMethod) || rawServiceMethod;
+  const complianceSources = [
+    wizardFacts as Record<string, any>,
+    caseData as Record<string, any>,
+    evictionCase as Record<string, any>,
+  ];
+  const depositProtected = resolveBooleanField(complianceSources, 'deposit_protected');
+  const prescribedInfoGiven = resolveBooleanField(
+    complianceSources,
+    'prescribed_info_given',
+    'prescribed_info_served',
+    'tenancy.prescribed_info_given',
+    'compliance.prescribed_info_given',
+    'compliance.prescribed_info_served'
+  );
+  const gasCertProvided = resolveBooleanField(
+    complianceSources,
+    'gas_cert_provided',
+    'gas_certificate_provided',
+    'gas_safety_provided',
+    'gas_safety_certificate',
+    'compliance.gas_cert_provided'
+  );
+  const epcProvided = resolveBooleanField(
+    complianceSources,
+    'epc_provided',
+    'epc_served',
+    'compliance.epc_provided',
+    'compliance.epc_served'
+  );
+  const howToRentGiven = resolveBooleanField(
+    complianceSources,
+    'how_to_rent_given',
+    'how_to_rent_provided',
+    'how_to_rent_served',
+    'compliance.how_to_rent_given',
+    'compliance.how_to_rent_served'
+  );
+  const hmoLicenseRequired = resolveBooleanField(
+    complianceSources,
+    'hmo_license_required',
+    'licensing_required',
+    'property.hmo_license_required',
+    'compliance.hmo_license_required'
+  );
+  const hmoLicenseValid = resolveBooleanField(
+    complianceSources,
+    'hmo_license_valid',
+    'property_licensed',
+    'compliance.hmo_license_valid'
+  );
+  const depositSchemeName =
+    resolveStringField(
+      complianceSources,
+      'deposit_scheme_name',
+      'deposit_scheme',
+      'tenancy.deposit_scheme_name'
+    ) || '';
 
   // Resolve tenancy start date
   const tenancyStartDate =
     wizardFacts.tenancy_start_date ||
     evictionCase.tenancy_start_date ||
+    '';
+  const paymentDay = wizardFacts.rent_due_day || wizardFacts.payment_day || evictionCase.payment_day;
+  const usualPaymentWeekday =
+    wizardFacts.usual_payment_weekday ||
+    wizardFacts.tenancy?.usual_payment_weekday ||
+    (caseData as any)?.usual_payment_weekday ||
     '';
 
   // Build ground descriptions string (e.g., "Ground 8 – Serious rent arrears, Ground 10 – ...")
@@ -248,14 +661,45 @@ function buildSection8TemplateData(
     notice_date: serviceDate,
     intended_service_date: serviceDate,
     earliest_possession_date: earliestPossessionDate,
+    notice_expiry_date: earliestPossessionDate,
+    earliest_proceedings_date: earliestPossessionDate,
+    section8_expiry_date: earliestPossessionDate,
+    expiry_date: earliestPossessionDate,
     tenancy_start_date: tenancyStartDate,
+    payment_day: paymentDay,
+    usual_payment_weekday: usualPaymentWeekday,
+    notice_period_days: canonicalNotice.noticePeriodDays || wizardFacts.notice_period_days || 0,
+    earliest_possession_date_explanation:
+      canonicalNotice.explanation || wizardFacts.earliest_possession_date_explanation,
     // Formatted dates for templates
     service_date_formatted: formatUKLegalDate(serviceDate),
     notice_date_formatted: formatUKLegalDate(serviceDate),
     earliest_possession_date_formatted: formatUKLegalDate(earliestPossessionDate),
+    notice_expiry_date_formatted: formatUKLegalDate(earliestPossessionDate),
+    earliest_proceedings_date_formatted: formatUKLegalDate(earliestPossessionDate),
     tenancy_start_date_formatted: formatUKLegalDate(tenancyStartDate),
     generated_date: formatUKLegalDate(now),
     current_date: now,
+    form_name: ENGLAND_SECTION8_FORM_NAME,
+    notice_name: ENGLAND_SECTION8_NOTICE_NAME,
+    notice_type_label: ENGLAND_SECTION8_NOTICE_TYPE_LABEL,
+    notice_title: ENGLAND_SECTION8_NOTICE_TITLE,
+    court_name: courtName,
+    clean_output: renderOptions.cleanOutput,
+    court_mode: renderOptions.courtMode,
+    selected_notice_route: wizardFacts.selected_notice_route || wizardFacts.eviction_route || 'section_8',
+    notice_service_method: rawServiceMethod,
+    service_method: templateServiceMethod,
+    deposit_protected: depositProtected,
+    deposit_scheme_name: depositSchemeName,
+    prescribed_info_given: prescribedInfoGiven,
+    prescribed_info_served: prescribedInfoGiven,
+    gas_cert_provided: gasCertProvided,
+    epc_provided: epcProvided,
+    how_to_rent_given: howToRentGiven,
+    how_to_rent_served: howToRentGiven,
+    hmo_license_required: hmoLicenseRequired,
+    hmo_license_valid: hmoLicenseValid,
     // Ground descriptions for checklist
     ground_descriptions: groundDescriptions,
     grounds: evictionCase.grounds,
@@ -265,6 +709,14 @@ function buildSection8TemplateData(
     // oested objects for template compatibility (compliance_checklist.hbs expects these)
     tenancy: {
       start_date: tenancyStartDate,
+    },
+    notice: {
+      ...(wizardFacts.notice || {}),
+      service_date: serviceDate,
+      served_date: serviceDate,
+      expiry_date: earliestPossessionDate,
+      notice_expiry_date: earliestPossessionDate,
+      earliest_proceedings_date: earliestPossessionDate,
     },
     metadata: {
       generated_at: now,
@@ -298,12 +750,18 @@ function assertArrearsTotalsConsistent(params: {
     { docType: 'arrears_engagement_letter', expected: plainTotal },
   ];
 
+  const normalizeCurrencyMarkup = (html: string): string =>
+    html
+      .replace(/&#(?:163|xA3);/gi, '£')
+      .replace(/&pound;/gi, '£')
+      .replace(/\u00C2\u00A3/g, '£');
+
   for (const check of checks) {
     const doc = documents.find((item) => item.document_type === check.docType);
     if (!doc?.html) {
       continue;
     }
-    if (!doc.html.includes(check.expected)) {
+    if (!normalizeCurrencyMarkup(doc.html).includes(check.expected)) {
       throw new Error(
         `ARREARS_TOTAL_MISMATCH: ${check.docType} does not include canonical total ${check.expected}`
       );
@@ -383,6 +841,10 @@ export interface EvictionCase {
   rent_amount: number;
   rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   payment_day: number;
+  usual_payment_weekday?: string;
+  notice_served_date?: string;
+  notice_expiry_date?: string;
+  earliest_possession_date?: string;
 
   // Grounds for eviction
   grounds: GroundClaim[];
@@ -692,7 +1154,7 @@ function getNoticeTypeLabel(evictionCase: EvictionCase): string {
 
   // England routes
   if (hasSection8Grounds) {
-    return 'Section 8 ootice (Form 3)';
+    return ENGLAND_SECTION8_NOTICE_NAME;
   }
 
   // Section 21 (no-fault eviction) for England
@@ -757,30 +1219,50 @@ async function generateProofOfService(
     service_date?: string;
     expiry_date?: string;
     service_method?: string;
-  }
+  },
+  templateData: Record<string, any> = {}
 ): Promise<EvictionPackDocument> {
   const templatePath = 'shared/templates/proof_of_service.hbs';
 
   // Get notice type based on case
-  const noticeType = getNoticeTypeLabel(evictionCase);
+  const noticeType = templateData.notice_name || getNoticeTypeLabel(evictionCase);
 
   // Format dates if provided
-  const serviceDateFormatted = serviceDetails?.service_date
-    ? formatUKLegalDate(serviceDetails.service_date)
+  const serviceDate = templateData.notice_service_date || templateData.service_date || serviceDetails?.service_date;
+  const expiryDate =
+    templateData.notice_expiry_date ||
+    templateData.earliest_possession_date ||
+    templateData.earliest_proceedings_date ||
+    serviceDetails?.expiry_date;
+  const earliestProceedingsDate =
+    templateData.earliest_proceedings_date ||
+    templateData.notice_expiry_date ||
+    templateData.earliest_possession_date ||
+    serviceDetails?.expiry_date;
+  const serviceDateFormatted = serviceDate ? formatUKLegalDate(serviceDate) : '';
+  const expiryDateFormatted = expiryDate
+    ? formatUKLegalDate(expiryDate)
     : '';
-  const expiryDateFormatted = serviceDetails?.expiry_date
-    ? formatUKLegalDate(serviceDetails.expiry_date)
+  const earliestProceedingsDateFormatted = earliestProceedingsDate
+    ? formatUKLegalDate(earliestProceedingsDate)
     : '';
 
   const data = {
     ...evictionCase,
+    ...templateData,
     // Map notice type based on route
     notice_type: noticeType,
     // Map service details
     service_date_formatted: serviceDateFormatted,
     earliest_possession_date_formatted: expiryDateFormatted,
+    notice_expiry_date_formatted: expiryDateFormatted,
+    earliest_proceedings_date_formatted: earliestProceedingsDateFormatted,
+    notice_expiry_date: expiryDate,
+    earliest_proceedings_date: earliestProceedingsDate,
     // Map service method for checkbox matching
-    service_method: mapServiceMethodForTemplate(serviceDetails?.service_method),
+    service_method: mapServiceMethodForTemplate(
+      templateData.service_method || templateData.notice_service_method || serviceDetails?.service_method
+    ),
     // Add current date for reference
     current_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
     current_date_short: new Date().toISOString().split('T')[0].replace(/-/g, ''),
@@ -970,18 +1452,22 @@ async function generateEnglandOrWalesEvictionPack(
   const derivedRoute = deriveEvictionRoute(wizardFacts);
   const isSection21Route = derivedRoute === 'section21';
   const isSection8Route = derivedRoute === 'section8';
+  const section8TemplateData =
+    jurisdiction === 'england' && isSection8Route && evictionCase.grounds.length > 0
+      ? buildSection8TemplateData(evictionCase, wizardFacts || {}, caseData)
+      : null;
 
   // 1. Section 8 ootice (if fault-based grounds)
   if (evictionCase.grounds.length > 0) {
-    // oOTE: Do oOT hardcode notice period - it varies by ground (14 days for Ground 8,
-    // 60 days for Grounds 10/11). Let section8-generator auto-calculate based on grounds.
-    // service_date defaults to today if not provided.
-    const serviceDate = caseData.notice_served_date || caseData.section_8_notice_date;
-
+    const currentSection8TemplateData =
+      section8TemplateData || buildSection8TemplateData(evictionCase, wizardFacts || {}, caseData);
     const section8Data: Section8NoticeData = {
       landlord_full_name: evictionCase.landlord_full_name,
       landlord_address: evictionCase.landlord_address,
+      landlord_phone: evictionCase.landlord_phone,
+      landlord_2_name: evictionCase.landlord_2_name,
       tenant_full_name: evictionCase.tenant_full_name,
+      tenant_2_name: evictionCase.tenant_2_name,
       property_address: evictionCase.property_address,
       tenancy_start_date: evictionCase.tenancy_start_date,
       rent_amount: evictionCase.rent_amount,
@@ -1000,20 +1486,22 @@ async function generateEnglandOrWalesEvictionPack(
           statutory_text: groundDef?.full_text || '',
         };
       }),
-      // Pass service date if user provided it; section8-generator will calculate
-      // earliest_possession_date and notice_period_days based on grounds
-      service_date: serviceDate || undefined,
-      // Let section8-generator auto-calculate these based on grounds:
-      notice_period_days: 0, // Will be computed by generator
-      earliest_possession_date: '', // Will be computed by generator
+      service_date: currentSection8TemplateData.service_date || undefined,
+      notice_period_days: currentSection8TemplateData.notice_period_days || 0,
+      earliest_possession_date: currentSection8TemplateData.earliest_possession_date || '',
+      earliest_proceedings_date: currentSection8TemplateData.earliest_proceedings_date || '',
       any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
       any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
+      form_name: currentSection8TemplateData.form_name,
+      notice_name: currentSection8TemplateData.notice_name,
+      notice_title: currentSection8TemplateData.notice_title,
+      clean_output: currentSection8TemplateData.clean_output,
     };
 
     const section8Doc = await generateSection8Notice(section8Data, false);
 
     documents.push({
-      title: 'Section 8 Notice - Notice Seeking Possession',
+      title: ENGLAND_SECTION8_NOTICE_TITLE,
       description: 'Official notice to tenant citing grounds for possession',
       category: 'notice',
       document_type: 'section8_notice',
@@ -1604,6 +2092,31 @@ export async function generateCompleteEvictionPack(
     const { evictionCase: ewCase, caseData: ewCaseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
     evictionCase = { ...ewCase, jurisdiction: jurisdiction as Jurisdiction };
     caseData = ewCaseData; // Store for use throughout the function
+
+    if (jurisdiction === 'england' && deriveEvictionRoute(wizardFacts) === 'section8' && evictionCase.grounds.length > 0) {
+      const canonicalSection8Notice = resolveSection8CanonicalNoticeData(evictionCase, wizardFacts, caseData);
+      const canonicalCourtName =
+        resolveCanonicalCourtName(caseData as Record<string, any>, evictionCase as Record<string, any>, wizardFacts) ||
+        'County Court';
+      const renderOptions = resolveCourtFacingRenderOptions(
+        wizardFacts,
+        caseData as Record<string, any>,
+        evictionCase as Record<string, any>
+      );
+      applySection8CanonicalNoticeData(wizardFacts, canonicalSection8Notice);
+      applySection8CanonicalNoticeData(caseData as Record<string, any>, canonicalSection8Notice);
+      applySection8CanonicalNoticeData(evictionCase as Record<string, any>, canonicalSection8Notice);
+      wizardFacts.court_name = canonicalCourtName;
+      caseData.court_name = canonicalCourtName;
+      evictionCase.court_name = canonicalCourtName;
+      wizardFacts.clean_output = renderOptions.cleanOutput;
+      wizardFacts.court_mode = renderOptions.courtMode;
+      (caseData as Record<string, any>).clean_output = renderOptions.cleanOutput;
+      (caseData as Record<string, any>).court_mode = renderOptions.courtMode;
+      (evictionCase as Record<string, any>).clean_output = renderOptions.cleanOutput;
+      (evictionCase as Record<string, any>).court_mode = renderOptions.courtMode;
+    }
+
     regionDocs = await generateEnglandOrWalesEvictionPack(evictionCase, ewCaseData, groundsData, wizardFacts);
   } else if (jurisdiction === 'scotland') {
     const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);
@@ -1618,6 +2131,13 @@ export async function generateCompleteEvictionPack(
   const groundsReliedUpon = (evictionCase.grounds || [])
     .map((ground) => (typeof ground === 'string' ? ground : ground.code))
     .filter(Boolean);
+  const isEnglandSection8Case =
+    jurisdiction === 'england' &&
+    deriveEvictionRoute(wizardFacts) === 'section8' &&
+    evictionCase.grounds.length > 0;
+  const section8CanonicalRenderData = isEnglandSection8Case
+    ? buildSection8TemplateData(evictionCase, wizardFacts || {}, caseData || undefined)
+    : null;
 
   // 1.1 Generate Schedule of Arrears if arrears grounds selected
   if (hasArrearsGroundsSelected(selectedGroundCodes)) {
@@ -1639,21 +2159,12 @@ export async function generateCompleteEvictionPack(
         const jurisdictionKey = jurisdiction === 'wales' ? 'wales' : 'england';
         const today = new Date().toISOString().split('T')[0];
 
-        // Calculate Ground 8 threshold
-        const ground8ThresholdAmount = rentAmount * 2; // 2 months' rent for Ground 8
+        const ground8Threshold = getGround8Threshold(rentAmount, rentFrequency);
+        const ground8ThresholdAmount = ground8Threshold.amount;
         const arrearsAtScheduleDate = arrearsData.arrears_total;
         const arrearsAtNoticeDate = canonicalArrears?.arrearsAtNoticeDate ?? arrearsAtScheduleDate;
         const meetsThresholdAtNotice = arrearsAtNoticeDate >= ground8ThresholdAmount;
         const meetsThresholdAtSchedule = arrearsAtScheduleDate >= ground8ThresholdAmount;
-
-        // Format rent frequency for display
-        const rentFrequencyDisplay: Record<string, string> = {
-          weekly: 'weekly',
-          fortnightly: 'fortnightly',
-          monthly: 'monthly',
-          quarterly: 'quarterly',
-          yearly: 'yearly',
-        };
 
         // Get notice date from wizard facts
         const noticeDate = wizardFacts?.notice_served_date ||
@@ -1661,9 +2172,12 @@ export async function generateCompleteEvictionPack(
                           wizardFacts?.notice?.served_date ||
                           null;
 
-        const rentFrequencyLabel = rentFrequency
-          ? (rentFrequencyDisplay[rentFrequency] ?? rentFrequency)
-          : null;
+        const rentFrequencyLabel = rentFrequency ? formatRentFrequencyLabel(rentFrequency) : null;
+        const usualPaymentWeekday =
+          wizardFacts?.usual_payment_weekday ||
+          wizardFacts?.tenancy?.usual_payment_weekday ||
+          (caseData as any)?.usual_payment_weekday ||
+          undefined;
 
         const scheduleDoc = await generateDocument({
           templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
@@ -1685,12 +2199,14 @@ export async function generateCompleteEvictionPack(
             // Tenancy information (required by template for summary box)
             rent_amount: rentAmount,
             tenancy_start_date: evictionCase.tenancy_start_date,
+            payment_day: rentDueDay,
+            usual_payment_weekday: usualPaymentWeekday,
             // Arrears at key dates
             arrears_at_notice_date: arrearsAtNoticeDate,
             arrears_at_schedule_date: arrearsAtScheduleDate,
             // Ground 8 threshold data
             ground8_threshold: ground8ThresholdAmount,
-            ground8_threshold_description: '2 months\' rent',
+            ground8_threshold_description: `${ground8Threshold.description} rent`,
             meets_threshold_at_notice: meetsThresholdAtNotice,
             meets_threshold_at_schedule: meetsThresholdAtSchedule,
             rent_frequency: rentFrequencyLabel,
@@ -1769,7 +2285,11 @@ export async function generateCompleteEvictionPack(
     expiry_date: posExpiryDate,
     service_method: posServiceMethod,
   };
-  const proofOfService = await generateProofOfService(evictionCase, serviceDetails);
+  const proofOfService = await generateProofOfService(
+    evictionCase,
+    serviceDetails,
+    section8CanonicalRenderData || {}
+  );
   documents.push(proofOfService);
 
   // 3.1 Generate witness statement
@@ -1779,6 +2299,7 @@ export async function generateCompleteEvictionPack(
   // Section 8: Focus on arrears, grounds, and pre-action protocol compliance
   // Section 21: Focus on statutory compliance (deposit, gas, EPC, How to Rent)
   // ==========================================================================
+  let witnessExhibits: WitnessExhibit[] = [];
   try {
     // Determine if this is a Section 8 case (has fault-based grounds)
     const isSection8Case = evictionCase.grounds && evictionCase.grounds.length > 0;
@@ -1815,6 +2336,7 @@ export async function generateCompleteEvictionPack(
         // Ensure arrears at notice date is passed explicitly
         arrears_at_notice_date: canonicalArrears?.arrearsAtNoticeDate ?? evictionCase.arrears_at_notice_date,
       });
+      witnessExhibits = buildWitnessExhibits(sectionsInput);
       witnessStatementContent = buildWitnessStatementSections(sectionsInput);
       witnessStatementTemplatePath = `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`;
       console.log('📝 Using deterministic witness statement builder for Section 8 case');
@@ -1830,6 +2352,7 @@ export async function generateCompleteEvictionPack(
       data: {
         ...evictionCase,
         ...(caseData || {}), // Include caseData for compliance dates and o5B fields (if available)
+        ...(section8CanonicalRenderData || {}),
         groundsReliedUpon,
         witness_statement: witnessStatementContent,
         // Map to template-expected field names
@@ -1840,7 +2363,11 @@ export async function generateCompleteEvictionPack(
         tenant_full_name: evictionCase.tenant_full_name,
         tenant_2_name: evictionCase.tenant_2_name,
         landlord_address: evictionCase.landlord_address,
-        court_name: jurisdiction === 'scotland' ? 'First-tier Tribunal' : 'County Court',
+        court_name:
+          section8CanonicalRenderData?.court_name ||
+          caseData?.court_name ||
+          evictionCase.court_name ||
+          (jurisdiction === 'scotland' ? 'First-tier Tribunal' : 'County Court'),
         // Compliance data for Section 21 witness statement (use optional chaining for null safety)
         deposit_amount: evictionCase.deposit_amount,
         deposit_scheme: caseData?.deposit_scheme,
@@ -1849,17 +2376,25 @@ export async function generateCompleteEvictionPack(
         gas_safety_check_date: caseData?.gas_safety_check_date,
         how_to_rent_date: caseData?.how_to_rent_date,
         how_to_rent_method: caseData?.how_to_rent_method,
-        notice_served_date: caseData?.notice_served_date || caseData?.section_21_notice_date,
-        notice_service_method: caseData?.notice_service_method,
+        notice_served_date:
+          section8CanonicalRenderData?.notice_service_date ||
+          caseData?.notice_served_date ||
+          caseData?.section_8_notice_date ||
+          caseData?.section_21_notice_date,
+        notice_service_method:
+          section8CanonicalRenderData?.notice_service_method ||
+          caseData?.notice_service_method,
         // FIX 2 (Jan 2026): Ensure notice_expiry_date is ALWAYS provided (no placeholder)
         // Calculate it if not provided in any source
         notice_expiry_date: (() => {
           // Try all known sources first
-          const existing = caseData?.notice_expiry_date ||
+          const existing = section8CanonicalRenderData?.notice_expiry_date ||
+            caseData?.notice_expiry_date ||
             evictionCase.notice_expiry_date ||
             wizardFacts?.notice_expiry_date ||
             wizardFacts?.earliest_possession_date;
           if (existing) return existing;
+          if (isSection8Case) return undefined;
 
           // Fallback: Calculate from service date and tenancy params
           const serviceDate = caseData?.section_21_notice_date ||
@@ -1890,6 +2425,10 @@ export async function generateCompleteEvictionPack(
           }
           return undefined;
         })(),
+        earliest_proceedings_date:
+          section8CanonicalRenderData?.earliest_proceedings_date ||
+          caseData?.earliest_proceedings_date ||
+          caseData?.notice_expiry_date,
         fixed_term: caseData?.fixed_term,
         fixed_term_end_date: caseData?.fixed_term_end_date,
         // FIX 4: Add statement date (claim generation date) for auto-dating witness statement
@@ -1952,6 +2491,7 @@ export async function generateCompleteEvictionPack(
       data: {
         ...evictionCase,
         ...(caseData || {}), // Include caseData for deposit_scheme, notice_expiry_date, etc.
+        ...(section8CanonicalRenderData || {}),
         landlord_full_name: evictionCase.landlord_full_name,
         landlord_2_name: evictionCase.landlord_2_name,
         tenant_full_name: evictionCase.tenant_full_name,
@@ -1959,10 +2499,33 @@ export async function generateCompleteEvictionPack(
         property_address: evictionCase.property_address,
         deposit_amount: evictionCase.deposit_amount,
         deposit_scheme: caseData?.deposit_scheme,
-        notice_expiry_date: caseData?.notice_expiry_date,
+        notice_expiry_date:
+          section8CanonicalRenderData?.notice_expiry_date ||
+          caseData?.notice_expiry_date,
+        earliest_proceedings_date:
+          section8CanonicalRenderData?.earliest_proceedings_date ||
+          caseData?.earliest_proceedings_date ||
+          caseData?.notice_expiry_date,
+        notice_service_date:
+          section8CanonicalRenderData?.notice_service_date ||
+          caseData?.notice_served_date ||
+          caseData?.section_8_notice_date,
         court_fee: caseData?.court_fee,
+        bundle_exhibit_schedule_of_arrears: witnessExhibits.find((exhibit) => exhibit.key === 'schedule_of_arrears')?.label,
+        bundle_exhibit_section8_notice: witnessExhibits.find((exhibit) => exhibit.key === 'section8_notice')?.label,
+        bundle_exhibit_proof_of_service: witnessExhibits.find((exhibit) => exhibit.key === 'proof_of_service')?.label,
+        bundle_verified_exhibits: witnessExhibits
+          .filter((exhibit) => exhibit.key.startsWith('verified_supporting_document_'))
+          .map((exhibit, index) => ({
+            ...exhibit,
+            tab: `F${index + 1}`,
+          })),
         generated_date: new Date().toISOString().split('T')[0],
-        court_name: evictionCase.court_name || 'County Court',
+        court_name:
+          section8CanonicalRenderData?.court_name ||
+          caseData?.court_name ||
+          evictionCase.court_name ||
+          'County Court',
       },
       isPreview: false,
       outputFormat: 'both',
@@ -1996,13 +2559,19 @@ export async function generateCompleteEvictionPack(
       data: {
         ...evictionCase,
         ...(caseData || {}),
+        ...(section8CanonicalRenderData || {}),
         groundsReliedUpon,
         landlord_full_name: evictionCase.landlord_full_name,
         tenant_full_name: evictionCase.tenant_full_name,
         tenant_2_name: evictionCase.tenant_2_name,
         property_address: evictionCase.property_address,
+        ground8_threshold_amount: getGround8Threshold(rentAmountInput, rentFrequencyInput).amount,
+        ground8_threshold_label: `${getGround8Threshold(rentAmountInput, rentFrequencyInput).description} rent`,
         generated_date: new Date().toISOString().split('T')[0],
-        court_name: evictionCase.court_name,
+        court_name:
+          section8CanonicalRenderData?.court_name ||
+          caseData?.court_name ||
+          evictionCase.court_name,
       },
       isPreview: false,
       outputFormat: 'both',
@@ -2120,12 +2689,14 @@ export async function generateCompleteEvictionPack(
         },
         isPreview: false,
         outputFormat: 'both',
-        // Add debug stamp for PDF tracing
-        debugStamp: {
-          generatorName: 'eviction-pack-generator.ts',
-          caseId: caseId,
-          additionalTemplates: [],
-        },
+        // Add debug stamp for PDF tracing only when explicitly enabled
+        debugStamp: isDebugStampEnabled()
+          ? {
+              generatorName: 'eviction-pack-generator.ts',
+              caseId: caseId,
+              additionalTemplates: [],
+            }
+          : undefined,
       });
 
       // Validate court-readiness (no placeholders or template text)
@@ -2152,15 +2723,75 @@ export async function generateCompleteEvictionPack(
   }
 
   // 4. Generate case summary document
+  const noticeServedDate =
+    caseData?.notice_served_date ||
+    caseData?.section_8_notice_date ||
+    wizardFacts?.notice_served_date ||
+    wizardFacts?.notice_service_date;
+  const earliestProceedingsDate =
+    caseData?.notice_expiry_date ||
+    wizardFacts?.notice_expiry_date ||
+    wizardFacts?.earliest_possession_date ||
+    wizardFacts?.section8_expiry_date;
+  const currentArrearsTotal = canonicalArrears?.total ?? evictionCase.current_arrears ?? totalArrearsInput;
+  const arrearsAtNoticeDate = canonicalArrears?.arrearsAtNoticeDate ?? evictionCase.arrears_at_notice_date ?? currentArrearsTotal;
+  const paymentDay = wizardFacts?.rent_due_day || wizardFacts?.payment_day || evictionCase.payment_day;
+  const usualPaymentWeekday =
+    wizardFacts?.usual_payment_weekday ||
+    wizardFacts?.tenancy?.usual_payment_weekday ||
+    (caseData as any)?.usual_payment_weekday ||
+    undefined;
+  const caseSummaryDraftingData = {
+    ...wizardFacts,
+    ...evictionCase,
+    ...(caseData || {}),
+    ground_codes: groundsReliedUpon,
+    total_arrears: currentArrearsTotal,
+    current_arrears: currentArrearsTotal,
+    arrears_at_notice_date: arrearsAtNoticeDate,
+    notice_served_date: noticeServedDate,
+    section_8_notice_date: noticeServedDate,
+    notice_expiry_date: earliestProceedingsDate,
+    rent_due_day: paymentDay,
+  };
   const caseSummaryDoc = await generateDocument({
     templatePath: 'shared/templates/eviction_case_summary.hbs',
     data: {
       ...evictionCase,
+      ...(caseData || {}),
+      ...(section8CanonicalRenderData || {}),
       grounds_data: groundsData,
       groundsReliedUpon,
-      // FIX 5: Add flag for Section 21 no-fault eviction to populate Grounds field
       is_section_21: evictionCase.case_type === 'no_fault',
+      generated_date: new Date().toISOString().split('T')[0],
       generated_at: new Date().toISOString(),
+      rent_frequency_label: formatRentFrequencyLabel(evictionCase.rent_frequency),
+      payment_day_display: formatPaymentDayDisplay(paymentDay, evictionCase.rent_frequency, usualPaymentWeekday),
+      notice_served_date: noticeServedDate,
+      notice_expiry_date:
+        section8CanonicalRenderData?.notice_expiry_date ||
+        caseData?.notice_expiry_date,
+      earliest_proceedings_date:
+        section8CanonicalRenderData?.earliest_proceedings_date ||
+        earliestProceedingsDate,
+      current_arrears_total: currentArrearsTotal,
+      arrears_at_notice_date: arrearsAtNoticeDate,
+      grounds_summary_text: buildN119StatutoryGroundsText(caseSummaryDraftingData),
+      case_narrative_text: buildN119ReasonForPossessionText(caseSummaryDraftingData),
+      steps_taken_text: buildN119StepsTakenText(caseSummaryDraftingData),
+      defendant_circumstances_text: buildN119DefendantCircumstancesText(caseSummaryDraftingData),
+      financial_info_text: buildN119FinancialInfoText(caseSummaryDraftingData),
+      compliance_status_items: buildCaseSummaryComplianceItems({
+        evictionCase,
+        caseData,
+        wizardFacts,
+        noticeServedDate,
+        earliestProceedingsDate,
+      }),
+      court_name:
+        section8CanonicalRenderData?.court_name ||
+        caseData?.court_name ||
+        evictionCase.court_name,
     },
     isPreview: false,
     outputFormat: 'both',
@@ -2194,6 +2825,14 @@ export async function generateCompleteEvictionPack(
       enforce: enforceArrearsConsistency,
       ground8Eligible,
       ground8Selected,
+    });
+  }
+
+  if (isEnglandSection8Case) {
+    assertCourtNameConsistentAcrossDocuments({
+      documents,
+      courtName: section8CanonicalRenderData?.court_name,
+      documentTypes: ['witness_statement', 'court_bundle_index', 'hearing_checklist', 'case_summary'],
     });
   }
 
@@ -2919,7 +3558,10 @@ export async function generateNoticeOnlyPack(
         {
           landlord_full_name: evictionCase.landlord_full_name,
           landlord_address: evictionCase.landlord_address,
+          landlord_phone: evictionCase.landlord_phone,
+          landlord_2_name: evictionCase.landlord_2_name,
           tenant_full_name: evictionCase.tenant_full_name,
+          tenant_2_name: evictionCase.tenant_2_name,
           property_address: evictionCase.property_address,
           tenancy_start_date: evictionCase.tenancy_start_date,
           rent_amount: evictionCase.rent_amount,
@@ -2940,16 +3582,21 @@ export async function generateNoticeOnlyPack(
           }),
           // Pass service_date from resolved template data to ensure consistent date across all documents
           service_date: section8TemplateData.service_date,
-          notice_period_days: 14,
-          earliest_possession_date: '',
+          notice_period_days: section8TemplateData.notice_period_days || 0,
+          earliest_possession_date: section8TemplateData.earliest_possession_date || '',
+          earliest_proceedings_date: section8TemplateData.earliest_proceedings_date || '',
           any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
           any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
+          form_name: section8TemplateData.form_name,
+          notice_name: section8TemplateData.notice_name,
+          notice_title: section8TemplateData.notice_title,
+          clean_output: section8TemplateData.clean_output,
         },
         false
       );
       documents.push({
-        title: 'Section 8 Notice',
-        description: 'Notice seeking possession',
+        title: ENGLAND_SECTION8_NOTICE_TITLE,
+        description: `Official ${ENGLAND_SECTION8_NOTICE_NAME} for England possession proceedings`,
         category: 'notice',
         document_type: 'section8_notice',
         html: section8Doc.html,
@@ -2967,7 +3614,7 @@ export async function generateNoticeOnlyPack(
         });
         documents.push({
           title: 'Service Instructions',
-          description: 'How to legally serve your Section 8 notice',
+          description: `How to legally serve your ${ENGLAND_SECTION8_NOTICE_NAME}`,
           category: 'guidance',
           document_type: 'service_instructions',
           html: serviceInstructionsDoc.html,
@@ -2988,7 +3635,7 @@ export async function generateNoticeOnlyPack(
         });
         documents.push({
           title: 'Service & Validity Checklist',
-          description: 'Verify your notice meets all legal requirements',
+          description: `Verify your ${ENGLAND_SECTION8_NOTICE_NAME} meets key service and timing requirements`,
           category: 'guidance',
           document_type: 'validity_checklist',
           html: checklistDoc.html,
@@ -3186,4 +3833,3 @@ export async function generateNoticeOnlyPack(
 }
 
 export { generateNoticeOnlyPack as generateooticeOnlyPack };
-

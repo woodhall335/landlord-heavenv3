@@ -190,7 +190,7 @@ describe("Witness Statement Sections Builder", () => {
 
       it("correctly phrases Ground 8 requirements (no certainty about hearing)", () => {
         expect(sections.grounds_summary).toContain(
-          "at least two months' rent"
+          "at least 3 months' rent"
         );
         // Should NOT assert certainty about hearing outcome
         expect(sections.grounds_summary.toLowerCase()).not.toContain("will be ordered");
@@ -265,14 +265,17 @@ describe("Witness Statement Sections Builder", () => {
 
       it("mentions Schedule of Arrears as attached", () => {
         expect(sections.evidence_references).toContain("Schedule of Arrears");
+        expect(sections.evidence_references).toContain("Exhibit TM1");
       });
 
       it("mentions Section 8 Notice as attached", () => {
         expect(sections.evidence_references).toContain("Section 8 Notice");
+        expect(sections.evidence_references).toContain("Exhibit TM2");
       });
 
       it("mentions Proof of Service as attached", () => {
         expect(sections.evidence_references).toContain("Proof of Service");
+        expect(sections.evidence_references).toContain("Exhibit TM3");
       });
 
       it("does NOT falsely claim evidence_uploads are attached when empty", () => {
@@ -309,19 +312,22 @@ describe("Witness Statement Sections Builder", () => {
       });
     });
 
-    describe("Conclusion (Statement of Truth)", () => {
-      it("contains statement of truth text", () => {
+    describe("Defendant Circumstances", () => {
+      it("includes the neutral fallback text when no circumstances are known", () => {
+        expect(sections.defendant_circumstances).toBeTruthy();
+        expect(sections.defendant_circumstances).toContain("The claimant is not aware of any further information");
+      });
+    });
+
+    describe("Conclusion", () => {
+      it("contains a court-facing closing", () => {
         expect(sections.conclusion).toBeTruthy();
-        expect(sections.conclusion.length).toBeGreaterThan(50);
+        expect(sections.conclusion.length).toBeGreaterThan(40);
       });
 
-      it("contains required legal language about truth", () => {
-        expect(sections.conclusion).toContain("true");
-        expect(sections.conclusion).toContain("believe");
-      });
-
-      it("mentions contempt of court", () => {
-        expect(sections.conclusion).toContain("contempt of court");
+      it("asks the court for the relief sought", () => {
+        expect(sections.conclusion).toContain("possession order");
+        expect(sections.conclusion).toContain("arrears and costs");
       });
     });
 

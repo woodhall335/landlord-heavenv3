@@ -31,6 +31,7 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
+import { listEnglandGroundDefinitions } from '@/lib/england-possession/ground-catalog';
 
 interface NoticeSectionProps {
   facts: WizardFacts;
@@ -50,21 +51,14 @@ const SERVICE_METHODS = [
 ];
 
 // Section 8 grounds with notice periods
-const SECTION_8_GROUNDS = [
-  { value: 'Ground 1', label: 'Ground 1 - Landlord occupation', period: 60, mandatory: true },
-  { value: 'Ground 2', label: 'Ground 2 - Mortgage lender', period: 60, mandatory: true },
-  { value: 'Ground 7', label: 'Ground 7 - Tenant death', period: 60, mandatory: false },
-  { value: 'Ground 7A', label: 'Ground 7A - Serious offence', period: 14, mandatory: true },
-  { value: 'Ground 8', label: 'Ground 8 - 2+ months rent arrears', period: 14, mandatory: true },
-  { value: 'Ground 10', label: 'Ground 10 - Rent arrears', period: 60, mandatory: false },
-  { value: 'Ground 11', label: 'Ground 11 - Persistent delay', period: 60, mandatory: false },
-  { value: 'Ground 12', label: 'Ground 12 - Breach of tenancy', period: 60, mandatory: false },
-  { value: 'Ground 13', label: 'Ground 13 - Waste or neglect', period: 60, mandatory: false },
-  { value: 'Ground 14', label: 'Ground 14 - Nuisance or annoyance', period: 14, mandatory: false },
-  { value: 'Ground 14A', label: 'Ground 14A - Domestic violence', period: 14, mandatory: true },
-  { value: 'Ground 15', label: 'Ground 15 - Damaged furniture', period: 60, mandatory: false },
-  { value: 'Ground 17', label: 'Ground 17 - False statement', period: 60, mandatory: false },
-];
+const SECTION_8_GROUNDS = listEnglandGroundDefinitions().map((ground) => ({
+  value: `Ground ${ground.code}`,
+  label: `Ground ${ground.code} - ${ground.title}`,
+  period: ground.noticePeriodDays,
+  periodLabel: ground.noticePeriodLabel,
+  periodMonths: ground.noticePeriodMonths,
+  mandatory: ground.mandatory,
+}));
 
 // =============================================================================
 // INLINE NOTICE-ONLY SUBFLOW
@@ -160,15 +154,42 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
     return maxPeriod;
   }, [isSection8, selectedGrounds]);
 
+  const minNoticePeriodLabel = useMemo(() => {
+    if (!isSection8) return '2 months';
+    if (selectedGrounds.length === 0) return '2 weeks';
+
+    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => selectedGrounds.includes(ground.value));
+    if (matchingGrounds.length === 0) return `${minNoticePeriod} days`;
+
+    const drivingLabels = Array.from(
+      new Set(
+        matchingGrounds
+          .filter((ground) => ground.period === minNoticePeriod)
+          .map((ground) => ground.periodLabel || `${ground.period} days`)
+      )
+    );
+
+    return drivingLabels.join(' / ');
+  }, [isSection8, selectedGrounds, minNoticePeriod]);
+
   // Calculate suggested service and expiry dates
   const today = new Date().toISOString().split('T')[0];
   const suggestedExpiryDate = useMemo(() => {
     // FIXED (Jan 2026): Check both notice_date (new) and notice_service_date (old)
     const serviceDate = facts.notice_date || facts.notice_service_date || today;
     const date = new Date(serviceDate);
-    date.setDate(date.getDate() + minNoticePeriod);
+    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) =>
+      selectedGrounds.includes(ground.value) && ground.period === minNoticePeriod
+    );
+    const noticePeriodMonths = Math.max(...matchingGrounds.map((ground) => ground.periodMonths || 0), 0);
+
+    if (noticePeriodMonths > 0) {
+      date.setMonth(date.getMonth() + noticePeriodMonths);
+    } else {
+      date.setDate(date.getDate() + minNoticePeriod);
+    }
     return date.toISOString().split('T')[0];
-  }, [facts.notice_date, facts.notice_service_date, minNoticePeriod, today]);
+  }, [facts.notice_date, facts.notice_service_date, minNoticePeriod, selectedGrounds, today]);
 
   // Initialize notice_date (and notice_service_date for backwards compat) when entering service step
   // This ensures the displayed default value is also saved to facts
@@ -270,7 +291,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             Generate Notice - Step {currentStepNum} of {totalSteps}
           </h4>
           <p className="text-xs text-[#7C3AED] mt-1">
-            Complete these questions to generate your {isSection8 ? 'Section 8' : 'Section 21'} notice
+            Complete these questions to generate your {isSection8 ? 'Form 3A' : 'Section 21'} notice
           </p>
         </div>
       </div>
@@ -510,9 +531,9 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
       {/* Section 8 Grounds Step */}
       {isSection8 && currentStep === 'grounds' && (
         <div className="space-y-4">
-          <h5 className="text-sm font-medium text-gray-700">Section 8 Grounds</h5>
+          <h5 className="text-sm font-medium text-gray-700">Form 3A Grounds</h5>
           <p className="text-xs text-gray-500">
-            Select all grounds that apply to your case. This determines the minimum notice period.
+            Select all grounds that apply to your case. This determines the minimum Form 3A notice period.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -545,7 +566,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                       {ground.mandatory ? 'Mandatory' : 'Discretionary'}
                     </span>
                     <span className="text-xs text-gray-500">
-                      {ground.period} days
+                      {ground.periodLabel || `${ground.period} days`}
                     </span>
                   </div>
                 </div>
@@ -559,10 +580,10 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                 <strong>Selected:</strong> {selectedGrounds.join(', ')}
               </p>
               <p className="text-xs text-purple-700 mt-1">
-                Minimum notice period: {minNoticePeriod} days
+                Minimum notice period: {minNoticePeriodLabel}
               </p>
               <p className="text-xs text-[#7C3AED] mt-2">
-                You&apos;ll provide the particulars for these grounds after completing the arrears schedule.
+                You&apos;ll provide the possession particulars for these grounds after completing the arrears schedule.
               </p>
             </div>
           )}
@@ -678,7 +699,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
               Notice Will Be Generated
             </h5>
             <p className="text-sm text-green-700 mt-1">
-              Your {isSection8 ? 'Form 3 (Section 8)' : 'Form 6A (Section 21)'} notice will be
+              Your {isSection8 ? 'Form 3A' : 'Form 6A (Section 21)'} notice will be
               generated and included in your eviction pack when you complete the wizard.
             </p>
           </div>
@@ -755,14 +776,41 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     return maxPeriod;
   }, [isSection8, selectedGrounds]);
 
+  const minNoticePeriodLabel = useMemo(() => {
+    if (!isSection8) return '2 months';
+    if (selectedGrounds.length === 0) return '2 weeks';
+
+    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => selectedGrounds.includes(ground.value));
+    if (matchingGrounds.length === 0) return `${minNoticePeriod} days`;
+
+    const drivingLabels = Array.from(
+      new Set(
+        matchingGrounds
+          .filter((ground) => ground.period === minNoticePeriod)
+          .map((ground) => ground.periodLabel || `${ground.period} days`)
+      )
+    );
+
+    return drivingLabels.join(' / ');
+  }, [isSection8, selectedGrounds, minNoticePeriod]);
+
   // Calculate suggested expiry date
   const suggestedExpiryDate = useMemo(() => {
     if (!facts.notice_served_date) return null;
     const servedDate = new Date(facts.notice_served_date);
     const expiryDate = new Date(servedDate);
-    expiryDate.setDate(expiryDate.getDate() + minNoticePeriod);
+    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) =>
+      selectedGrounds.includes(ground.value) && ground.period === minNoticePeriod
+    );
+    const noticePeriodMonths = Math.max(...matchingGrounds.map((ground) => ground.periodMonths || 0), 0);
+
+    if (noticePeriodMonths > 0) {
+      expiryDate.setMonth(expiryDate.getMonth() + noticePeriodMonths);
+    } else {
+      expiryDate.setDate(expiryDate.getDate() + minNoticePeriod);
+    }
     return expiryDate.toISOString().split('T')[0];
-  }, [facts.notice_served_date, minNoticePeriod]);
+  }, [facts.notice_served_date, minNoticePeriod, selectedGrounds]);
 
   // Handle ground selection
   const handleGroundToggle = (ground: string) => {
@@ -836,7 +884,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                   No, I need to generate a notice
                 </span>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  We'll help you create the correct notice ({isSection8 ? 'Form 3 - Section 8' : 'Form 6A - Section 21'}) as part of your eviction pack.
+                  We'll help you create the correct notice ({isSection8 ? 'Form 3A' : 'Form 6A - Section 21'}) as part of your eviction pack.
                 </p>
               </div>
             </label>
@@ -848,7 +896,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       {isNoticeOnlyMode && (
         <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
           <h4 className="text-sm font-medium text-purple-900">
-            Generate Your {isSection8 ? 'Section 8' : 'Section 21'} Notice
+            Generate Your {isSection8 ? 'Form 3A' : 'Section 21'} Notice
           </h4>
           <p className="text-sm text-purple-700 mt-1">
             Complete the details below to generate your court-ready eviction notice.
@@ -927,7 +975,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
               )}
             </div>
             <p className="text-xs text-gray-500">
-              Leave blank to auto-calculate. Minimum {minNoticePeriod} days for your selected route/grounds.
+              Leave blank to auto-calculate. Minimum {minNoticePeriodLabel} for your selected route/grounds.
             </p>
           </div>
 
@@ -936,7 +984,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             <div className="pt-4 border-t border-gray-200 space-y-4">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
-                  Section 8 Grounds
+                  Form 3A Grounds
                   <span className="text-red-500 ml-1">*</span>
                 </label>
                 <p className="text-xs text-gray-500">
@@ -1044,7 +1092,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
               Notice Setup Complete
             </h4>
             <p className="text-sm text-green-700 mt-1">
-              Your {isSection8 ? 'Section 8 (Form 3)' : 'Section 21 (Form 6A)'} notice will be generated
+              Your {isSection8 ? 'Form 3A' : 'Section 21 (Form 6A)'} notice will be generated
               when you complete the eviction pack wizard.
             </p>
           </div>

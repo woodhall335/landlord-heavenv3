@@ -8,7 +8,6 @@ import { RelatedGuidesCarousel } from '@/components/blog/RelatedGuidesCarousel';
 import { Sources } from '@/components/blog/Sources';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { CategoryPage } from '@/components/blog/CategoryPage';
-import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { BlogPost } from '@/lib/blog/types';
 import {
@@ -141,9 +140,9 @@ const BLOG_STICKY_TOP_OFFSET = '7rem';
 
 
 const CORE_EVICTION_GUIDES = [
-  { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
-  { href: '/section-8-notice-guide', label: 'Section 8 notice guide' },
-  { href: '/how-to-evict-a-tenant-uk', label: 'How to evict a tenant in the UK' },
+  { href: '/eviction-notice-template', label: 'England notice hub' },
+  { href: '/section-8-notice', label: 'Section 8 notice guide' },
+  { href: '/how-to-evict-a-tenant-england', label: 'How to evict a tenant in England' },
   { href: '/evict-tenant-not-paying-rent', label: 'Evicting a tenant not paying rent' },
   { href: '/tenant-stopped-paying-rent', label: 'Tenant stopped paying rent playbook' },
 ] as const;
@@ -221,12 +220,12 @@ function extractFaqsFromContent(content: ReactNode): Array<{ question: string; a
 function inferBlogStageHint(post: BlogPost): StageEstimate {
   const haystack = `${post.title} ${post.targetKeyword} ${post.tags.join(' ')}`.toLowerCase();
 
-  if (['n5', 'n5b', 'court', 'hearing', 'bailiff', 'warrant'].some((keyword) => haystack.includes(keyword))) {
+  if (['n5', 'n119', 'court', 'hearing', 'bailiff', 'warrant'].some((keyword) => haystack.includes(keyword))) {
     return 'court_ready';
   }
 
   if (
-    ['serving notice', 'eviction notice', 'proof of service', 'section 8', 'section 21', 'notice to leave'].some(
+    ['serving notice', 'eviction notice', 'proof of service', 'section 8', 'notice to leave'].some(
       (keyword) => haystack.includes(keyword),
     )
   ) {
@@ -1011,9 +1010,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
             <div className="container mx-auto px-4">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
                 <span className="font-semibold">Section 21 ends 1 May 2026 —</span>
-                <Section21Countdown variant="compact" className="text-white font-bold" />
-                <Link href="/section-21-ban" className="text-white underline hover:no-underline font-medium">
-                  See what replaces it
+                <span className="text-white font-bold">We are aligned with the Renters' Rights Act.</span>
+                <Link href="/renters-rights-act-eviction-rules" className="text-white underline hover:no-underline font-medium">
+                  See the current rules
                 </Link>
               </div>
             </div>

@@ -1185,6 +1185,31 @@
       "required": false,
       "description": "Auto-generated placeholder to align MQS and validators"
     },
+    "section_16e_duties_checked": {
+      "type": "boolean",
+      "required": false,
+      "description": "Confirmation that section 16E landlord duties have been complied with before seeking possession"
+    },
+    "breathing_space_checked": {
+      "type": "boolean",
+      "required": false,
+      "description": "Confirmation that the landlord checked whether the tenant is in a Debt Respite Scheme breathing space"
+    },
+    "tenant_in_breathing_space": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether the tenant is currently in an active Debt Respite Scheme breathing space"
+    },
+    "evidence_bundle_ready": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether the landlord has gathered the core evidence for every selected possession ground"
+    },
+    "ground_1a_reletting_acknowledged": {
+      "type": "boolean",
+      "required": false,
+      "description": "Confirmation that the landlord understands the 12-month re-letting restriction for Ground 1A"
+    },
     "has_gas_appliances": {
       "type": "string",
       "required": false,
@@ -3368,6 +3393,35 @@
     "garden_maintenance": { "type": "string", "required": false, "description": "Flat mapping for wizard - garden maintenance responsibility" },
     "number_of_tenants": { "type": "number", "required": false, "description": "Flat mapping for wizard - number of tenants" },
     "council_tax_responsibility": { "type": "string", "required": false, "description": "Flat mapping for wizard - council tax responsibility" },
+    "eviction_route": { "type": "string", "required": false, "description": "Selected England possession route" },
+    "landlord_profile": { "type": "string", "required": false, "description": "Selected landlord profile for ground eligibility" },
+    "notice_service_method_detail": { "type": "string", "required": false, "description": "Free-text service method detail when a custom service method is used" },
+    "selected_grounds": { "type": "array", "required": false, "description": "Legacy alias for selected possession grounds" },
+    "ground_prerequisite_notice_served": { "type": "boolean", "required": false, "description": "Whether any required prior written notice was served before relying on the selected ground" },
+    "deposit_returned": { "type": "boolean", "required": false, "description": "Whether the tenancy deposit has been returned to the tenant" },
+    "deposit_reduced_to_legal_cap_confirmed": { "type": "boolean", "required": false, "description": "Whether any retained deposit has been reduced to the legal cap before service" },
+    "improvement_notice_served": { "type": "boolean", "required": false, "description": "Whether a local authority improvement notice has been served" },
+    "emergency_remedial_action": { "type": "boolean", "required": false, "description": "Whether emergency remedial action has been taken by the local authority" },
+    "no_prohibited_fees_confirmed": { "type": "boolean", "required": false, "description": "Whether the landlord has confirmed no prohibited fees remain outstanding" },
+    "subsequent_tenancy": { "type": "boolean", "required": false, "description": "Whether the current tenancy is a subsequent tenancy or renewal" },
+    "tenancy_agreement_date": { "type": "date", "required": false, "description": "Date of the tenancy agreement document relied upon" },
+    "n5b_q20_paper_determination": { "type": "boolean", "required": false, "description": "Legacy paper determination preference retained for mapping compatibility" },
+    "has_tenancy_agreement_copy": { "type": "boolean", "required": false, "description": "Whether a tenancy agreement copy is available for the court bundle" },
+    "has_section21_notice_copy": { "type": "boolean", "required": false, "description": "Whether a Section 21 notice copy is available in legacy cases" },
+    "has_proof_of_service": { "type": "boolean", "required": false, "description": "Whether proof of service evidence is available" },
+    "has_deposit_certificate_copy": { "type": "boolean", "required": false, "description": "Whether a deposit protection certificate copy is available" },
+    "has_epc_copy": { "type": "boolean", "required": false, "description": "Whether an EPC copy is available" },
+    "has_gas_certificate_copy": { "type": "boolean", "required": false, "description": "Whether a gas safety certificate copy is available" },
+    "has_break_clause": { "type": "boolean", "required": false, "description": "Whether the tenancy agreement contains a break clause" },
+    "notice_service.serving_capacity": { "type": "string", "required": false, "description": "Capacity in which the notice was served, for example landlord or agent" },
+    "england_tenancy_purpose": { "type": "string", "required": false, "description": "England tenancy-agreement purpose or transition scenario" },
+    "tenant_notice_period": { "type": "string", "required": false, "description": "Tenant notice period stated in the tenancy agreement flow" },
+    "existing_written_tenancy_transition": { "type": "boolean", "required": false, "description": "Whether an existing written tenancy is being transitioned to the post-reform regime" },
+    "existing_verbal_tenancy_summary": { "type": "string", "required": false, "description": "Summary of an existing verbal tenancy for post-reform England agreement flows" },
+    "tenancy_regime_confirmation": { "type": "string", "required": false, "description": "Confirmation of the tenancy regime selected in the wizard" },
+    "england_rent_in_advance_compliant": { "type": "boolean", "required": false, "description": "Whether the England rent-in-advance terms meet the reform rules" },
+    "england_no_bidding_confirmed": { "type": "boolean", "required": false, "description": "Whether no prohibited bidding practices have been used" },
+    "england_no_discrimination_confirmed": { "type": "boolean", "required": false, "description": "Whether the letting flow complies with the no-discrimination confirmation" },
     "pets_allowed": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - pets allowed" },
     "smoking_allowed": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - smoking allowed" },
     "break_clause": { "type": "boolean", "required": false, "description": "Flat mapping for wizard - break clause included" },

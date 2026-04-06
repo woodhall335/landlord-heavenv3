@@ -10,6 +10,12 @@
  * - Notice to Leave (Scotland): Ground-specific notice periods
  */
 
+import {
+  calculateEnglandPossessionNoticePeriod,
+  getEnglandGroundDefinition,
+  normalizeEnglandGroundCode,
+} from '@/lib/england-possession/ground-catalog';
+
 // ============================================================================
 // TYPES
 // ============================================================================
@@ -104,36 +110,10 @@ export type NoticePeriodResult = {
 // SECTION 8 DATE CALCULATION (ENGLAND & WALES)
 // ============================================================================
 
-/**
- * Ground-specific notice periods (in days) as per Housing Act 1988, Schedule 2
- *
- * Legal requirements:
- * - 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 10, 11, 12, 13, 14, 14ZA, 15, 17
- * - 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 16
- * - Immediate (0 days): Ground 14 (serious ASB), Ground 14A
- */
-const SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
-  1: 60,    // 2 months - landlord previously occupied
-  2: 60,    // 2 months - mortgage lender requires possession
-  3: 14,    // 2 weeks - holiday let
-  4: 14,    // 2 weeks - educational institution let
-  5: 60,    // 2 months - minister of religion
-  6: 60,    // 2 months - demolition/reconstruction
-  7: 60,    // 2 months - death of periodic tenant
-  '7A': 14, // 2 weeks - abandonment (fixed term)
-  '7B': 14, // 2 weeks - abandonment (periodic)
-  8: 14,    // 2 weeks - serious rent arrears (8 weeks/2 months)
-  9: 60,    // 2 months - suitable alternative accommodation
-  10: 14,   // 2 weeks - some rent arrears
-  11: 14,   // 2 weeks - persistent delay in paying rent
-  12: 14,   // 2 weeks - breach of tenancy obligation
-  13: 14,   // 2 weeks - deterioration of dwelling
-  14: 14,   // 2 weeks (default) - nuisance/annoyance (can be immediate for serious ASB)
-  '14ZA': 14, // 2 weeks - riot conviction
-  '14A': 0,   // Immediate - domestic violence
-  15: 14,   // 2 weeks - deterioration of furniture
-  16: 60,   // 2 months - former employee
-  17: 14,   // 2 weeks - false statement
+const LEGACY_SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
+  3: 14,
+  '14A': 0,
+  16: 60,
 };
 
 /**
@@ -172,34 +152,42 @@ export function calculateSection8NoticePeriod(
     );
   }
 
-  const hasGround14A = grounds.some((g) => String(g.code) === '14A');
-  const hasGround14 = grounds.some((g) => String(g.code) === '14' || g.code === 14);
-  const discretionaryGrounds = grounds.filter((g) => !g.mandatory);
+  const normalizedGrounds = grounds.map((ground) => ({
+    requestedCode: ground.code,
+    normalizedCode: normalizeEnglandGroundCode(ground.code),
+    mandatory: ground.mandatory === true,
+  }));
+  const normalizedCodes = normalizedGrounds
+    .map((ground) => ground.normalizedCode)
+    .filter((ground): ground is NonNullable<typeof ground> => Boolean(ground));
 
-  // Calculate the MAXIMUM notice period required across all selected grounds
-  let maxNoticePeriod = 0;
-  const groundPeriods: Array<{ code: string | number; days: number }> = [];
+  const hasGround14A = normalizedGrounds.some((ground) => String(ground.requestedCode).toUpperCase() === '14A');
+  const hasGround14 = normalizedCodes.includes('14');
+  const discretionaryGrounds = normalizedGrounds.filter((ground) => ground.mandatory !== true);
 
-  for (const ground of grounds) {
-    const code = String(ground.code).toUpperCase();
-    let period: number;
-
-    // Special handling for Ground 14 with severity
-    if ((code === '14' || ground.code === 14) && severity === 'serious') {
-      period = 0; // Immediate for serious ASB
-    } else {
-      // Look up the standard notice period for this ground
-      const numericCode = parseInt(code, 10);
-      period = SECTION8_GROUND_NOTICE_PERIODS[code] ??
-               SECTION8_GROUND_NOTICE_PERIODS[numericCode] ??
-               14; // Default to 14 days for unknown grounds
+  const catalogResult = calculateEnglandPossessionNoticePeriod(normalizedCodes);
+  const groundPeriods = normalizedGrounds.map((ground) => {
+    if (ground.normalizedCode) {
+      return {
+        code: ground.requestedCode,
+        normalizedCode: ground.normalizedCode,
+        days: getEnglandGroundDefinition(ground.normalizedCode)?.noticePeriodDays ?? 14,
+      };
     }
 
-    groundPeriods.push({ code: ground.code, days: period });
-    if (period > maxNoticePeriod) {
-      maxNoticePeriod = period;
-    }
-  }
+    const requestedCode = String(ground.requestedCode).toUpperCase();
+    const numericCode = parseInt(requestedCode, 10);
+    return {
+      code: ground.requestedCode,
+      normalizedCode: undefined,
+      days:
+        LEGACY_SECTION8_GROUND_NOTICE_PERIODS[requestedCode] ??
+        LEGACY_SECTION8_GROUND_NOTICE_PERIODS[numericCode] ??
+        14,
+    };
+  });
+  const maxNoticePeriod =
+    groundPeriods.length > 0 ? Math.max(...groundPeriods.map((ground) => ground.days)) : 14;
 
   let minimum_legal_days = maxNoticePeriod;
   let recommended_days: number | undefined;
@@ -207,55 +195,31 @@ export function calculateSection8NoticePeriod(
   let explanation_recommended: string | undefined;
   let legal_basis: string;
 
-  // Build explanation based on what's driving the notice period
-  const twoMonthGrounds = groundPeriods.filter(g => g.days === 60);
-  const twoWeekGrounds = groundPeriods.filter(g => g.days === 14);
   const immediateGrounds = groundPeriods.filter(g => g.days === 0);
+  const drivingGrounds = catalogResult.drivingGrounds
+    .map((groundCode) => getEnglandGroundDefinition(groundCode))
+    .filter((ground): ground is NonNullable<typeof ground> => Boolean(ground));
+  const drivingGroundLabels = drivingGrounds.map((ground) => `Ground ${ground.code}`);
+  const drivingNoticeLabels = Array.from(new Set(drivingGrounds.map((ground) => ground.noticePeriodLabel)));
 
   if (immediateGrounds.length > 0 && maxNoticePeriod === 0) {
-    // Only immediate grounds selected
     if (hasGround14A) {
-      explanation_minimum = 'Ground 14A (domestic violence) allows immediate court proceedings (0 days notice).';
+      explanation_minimum = 'Ground 14A allows immediate court proceedings for legacy domestic abuse cases.';
       legal_basis = 'Housing Act 1988, Schedule 2, Ground 14A';
-    } else if (hasGround14 && severity === 'serious') {
+    } else if (hasGround14) {
       explanation_minimum =
-        'Ground 14 serious ASB allows immediate court proceedings (0 days notice). ' +
-        'Serious ASB includes violence, threats, drug dealing, or criminal damage.';
+        'Ground 14 allows immediate court proceedings under the post-1 May 2026 England possession regime.';
       legal_basis = 'Housing Act 1988, Schedule 2, Ground 14';
     } else {
       explanation_minimum = 'Selected ground(s) allow immediate court proceedings.';
       legal_basis = 'Housing Act 1988, Schedule 2';
     }
-  } else if (maxNoticePeriod === 60) {
-    // Two-month grounds drive the period
-    const twoMonthCodes = twoMonthGrounds.map(g => `Ground ${g.code}`).join(', ');
+  } else if (drivingGroundLabels.length > 0 && drivingNoticeLabels.length > 0) {
     explanation_minimum =
-      `${twoMonthCodes} require${twoMonthGrounds.length === 1 ? 's' : ''} 2 months (60 days) minimum notice ` +
-      'under Schedule 2 of the Housing Act 1988.';
-    legal_basis = 'Housing Act 1988, Schedule 2';
-
-    if (twoMonthGrounds.some(g => String(g.code) === '10' || g.code === 10)) {
-      explanation_minimum += ' Ground 10 (some rent arrears) specifically requires 2 months notice.';
-    }
-    if (twoMonthGrounds.some(g => String(g.code) === '11' || g.code === 11)) {
-      explanation_minimum += ' Ground 11 (persistent delay in paying rent) specifically requires 2 months notice.';
-    }
-  } else if (maxNoticePeriod === 14) {
-    // All selected grounds are 2-week grounds
-    explanation_minimum =
-      'Selected ground(s) require 14 days minimum notice under Schedule 2 of the Housing Act 1988.';
-    legal_basis = 'Housing Act 1988, Schedule 2';
-
-    // For discretionary 14-day grounds, suggest 60 days as recommended
-    if (discretionaryGrounds.length > 0 && !hasGround14A && !(hasGround14 && severity === 'serious')) {
-      recommended_days = 60;
-      explanation_recommended =
-        'While 14 days is legally sufficient for discretionary grounds, ' +
-        '60 days demonstrates reasonableness to the court and may improve success probability. ' +
-        'This is not legally required. Courts may still grant possession after the minimum period.';
-    }
+      `${drivingGroundLabels.join(', ')} require${drivingGroundLabels.length === 1 ? 's' : ''} ${drivingNoticeLabels.join(' / ').toLowerCase()} notice ` +
+      'under the post-1 May 2026 England possession rules.';
+    legal_basis = `Housing Act 1988, Schedule 2 (${drivingGroundLabels.join(', ')})`;
   } else {
-    // Fallback
     explanation_minimum = `Selected ground(s) require ${maxNoticePeriod} days minimum notice.`;
     legal_basis = 'Housing Act 1988, Schedule 2';
   }
@@ -297,8 +261,17 @@ export function calculateSection8ExpiryDate(params: Section8DateParams): DateCal
     jurisdiction,
   });
 
-  // Add notice period to service date (UTC-safe)
-  let expiryDateObj = addUTCDays(serviceDateObj, periodResult.used_days);
+  const normalizedCodes = grounds
+    .map((ground) => normalizeEnglandGroundCode(ground.code))
+    .filter((ground): ground is NonNullable<typeof ground> => Boolean(ground));
+  const monthPeriods = normalizedCodes
+    .map((groundCode) => getEnglandGroundDefinition(groundCode)?.noticePeriodMonths)
+    .filter((months): months is number => typeof months === 'number' && months > 0);
+
+  let expiryDateObj =
+    monthPeriods.length > 0
+      ? addUTCMonths(serviceDateObj, Math.max(...monthPeriods))
+      : addUTCDays(serviceDateObj, periodResult.used_days);
 
   // NOTE: Section 8 does NOT extend to fixed term end (unlike Section 21)
   // Section 8 can be used during fixed term for mandatory grounds
@@ -307,8 +280,9 @@ export function calculateSection8ExpiryDate(params: Section8DateParams): DateCal
   const earliest_valid_date = toISODateString(expiryDateObj);
 
   const explanation =
-    `We calculated this date by adding ${periodResult.used_days} days to your service date (${formatDate(serviceDateObj)}). ` +
-    periodResult.explanation_minimum;
+    monthPeriods.length > 0
+      ? `We calculated this date by adding ${Math.max(...monthPeriods)} calendar month${Math.max(...monthPeriods) === 1 ? '' : 's'} to your service date (${formatDate(serviceDateObj)}). ${periodResult.explanation_minimum}`
+      : `We calculated this date by adding ${periodResult.used_days} days to your service date (${formatDate(serviceDateObj)}). ${periodResult.explanation_minimum}`;
 
   return {
     earliest_valid_date,

@@ -39,20 +39,12 @@ const ROUTE_COPY: Record<
   }
 > = {
   section8: {
-    heading: 'Section 8 notice bundle preview',
+    heading: 'Current England notice bundle preview',
     eyebrow: 'Primary live route',
     intro:
-      'Section 8 is the main live notice route in England. This preview shows the notice bundle a landlord reviews before serving: the notice itself, the supporting arrears material, service guidance, and the final validity checks that help prevent a re-serve.',
+      'This preview shows the current England notice bundle a landlord reviews before serving: the notice itself, the supporting case material, service guidance, and the final validity checks that help prevent a re-serve.',
     summary:
-      'Use this route when the case depends on rent arrears, breach, nuisance, or another evidence-led ground. The page leads with Section 8 because it is the live mainstream route that broad England notice users now need to understand first.',
-  },
-  section21: {
-    heading: 'Section 21 legacy bundle preview',
-    eyebrow: 'Legacy transition support',
-    intro:
-      'Section 21 is retained here as a legacy transition route. Landlords still search for it, so the hub shows the older notice bundle and explains how the service and validity checks differed before the route ended in England.',
-    summary:
-      'This lower-prominence preview exists to convert old terminology into current route clarity. It is a support block, not the default path for broad England notice intent.',
+      'Use this route when the case depends on rent arrears, breach, nuisance, or another evidence-led ground. The page leads with the current England route because that is the live path broad notice users now need to understand first.',
   },
 };
 
@@ -71,7 +63,7 @@ function sortSteps(routeId: string, steps: FunnelProcessStep[]) {
   });
 }
 
-function findEnglandRoute(previews: NoticeOnlyPreviewData, routeId: 'section8' | 'section21') {
+function findEnglandRoute(previews: NoticeOnlyPreviewData, routeId: 'section8') {
   const model = buildFunnelProcessSectionModel({
     product: 'notice_only',
     noticePreviews: previews,
@@ -86,18 +78,14 @@ function RoutePreview({
   routeId,
 }: {
   route: FunnelProcessRoute;
-  routeId: 'section8' | 'section21';
+  routeId: 'section8';
 }) {
   const copy = ROUTE_COPY[routeId];
   const steps = sortSteps(routeId, route.steps);
 
   return (
     <article
-      className={`rounded-3xl border p-6 md:p-8 ${
-        routeId === 'section8'
-          ? 'border-[#CAB6FF] bg-white shadow-[0_18px_50px_rgba(76,29,149,0.10)]'
-          : 'border-[#E6DBFF] bg-[#FCFAFF]'
-      }`}
+      className="rounded-3xl border border-[#CAB6FF] bg-white p-6 shadow-[0_18px_50px_rgba(76,29,149,0.10)] md:p-8"
     >
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#692ed4]">{copy.eyebrow}</p>
       <h3 className="mt-3 text-2xl font-bold text-[#2a2161]">{copy.heading}</h3>
@@ -164,9 +152,8 @@ function RoutePreview({
 
 export function EnglandNoticePreview({ previews }: EnglandNoticePreviewProps) {
   const section8Route = findEnglandRoute(previews, 'section8');
-  const section21Route = findEnglandRoute(previews, 'section21');
 
-  if (!section8Route || !section21Route) {
+  if (!section8Route) {
     return null;
   }
 
@@ -193,7 +180,6 @@ export function EnglandNoticePreview({ previews }: EnglandNoticePreviewProps) {
 
           <div className="mt-10 space-y-8">
             <RoutePreview route={section8Route} routeId="section8" />
-            <RoutePreview route={section21Route} routeId="section21" />
           </div>
         </div>
       </Container>

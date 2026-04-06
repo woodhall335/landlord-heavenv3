@@ -23,8 +23,8 @@ const JURISDICTION_LABELS: Record<JurisdictionKey, string> = {
 };
 
 const NOTICE_VARIANT_LABELS: Record<NoticeVariantKey, string> = {
-  section21: 'Section 21 Form 6A',
-  section8: 'Section 8 Form 3',
+  section21: 'Historical legacy notice',
+  section8: 'England Form 3A possession notice',
   section173: 'Section 173',
   rhw23: 'RHW23',
   'notice-to-leave': 'Notice to Leave',
@@ -98,7 +98,7 @@ const loadVariantDocs = async (jurisdiction: JurisdictionKey, variant: NoticeVar
 export const getNoticeOnlyPreviewData = async (): Promise<NoticeOnlyPreviewData> => {
   const jurisdictions: JurisdictionKey[] = ['england', 'wales', 'scotland'];
   const variantsByJurisdiction: Record<JurisdictionKey, NoticeVariantKey[]> = {
-    england: ['section21', 'section8'],
+    england: ['section8'],
     wales: ['section173', 'rhw23'],
     scotland: ['notice-to-leave'],
   };

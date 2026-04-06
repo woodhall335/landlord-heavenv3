@@ -279,7 +279,7 @@ function getNoticeDoc(jurisdiction: string): { name: string; benefit: string } {
     case 'scotland':
       return { name: 'Notice to Leave (PRT)', benefit: 'Scottish PRT eviction notice' };
     default:
-      return { name: 'Section 21 (Form 6A) or Section 8 (Form 3)', benefit: 'Court-ready eviction notice' };
+      return { name: 'England possession notice (Form 3A)', benefit: 'Court-ready notice for the current England possession route' };
   }
 }
 
@@ -293,7 +293,6 @@ function getCourtForms(jurisdiction: string): { name: string; benefit: string }[
   return [
     { name: 'Form N5 (Claim for Possession)', benefit: 'Official court claim form' },
     { name: 'Form N119 (Particulars of Claim)', benefit: 'Detailed grounds for your claim' },
-    { name: 'Form N5B (Accelerated Possession)', benefit: 'Fast-track for Section 21/173 (no hearing)' },
   ];
 }
 

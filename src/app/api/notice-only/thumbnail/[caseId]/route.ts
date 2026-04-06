@@ -8,7 +8,7 @@
  * notice-only flows where documents are only generated post-payment.
  *
  * Supports:
- * - England: section21_notice, section8_notice, service_instructions, service_checklist
+ * - England: Form 3A notice thumbnails, service instructions, service checklist
  * - Wales: section173_notice, fault_based_notice, service_instructions, service_checklist
  * - Scotland: notice_to_leave, service_instructions, service_checklist
  * - All: arrears_schedule (when applicable)
@@ -29,6 +29,7 @@ import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/t
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales';
 import { generateSection21Notice, mapWizardToSection21Data } from '@/lib/documents/section21-generator';
+import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -58,7 +59,7 @@ function errorResponse(code: string, message: string, status: number, details?: 
 function resolveDocumentType(configId: string, jurisdiction: string, route: string): string | null {
   // Notice documents
   if (configId === 'notice-section-21' || configId === 'section21_notice') {
-    return 'section21_notice';
+    return jurisdiction === 'england' ? 'section8_notice' : 'section21_notice';
   }
   if (configId === 'notice-section-8' || configId === 'section8_notice') {
     return 'section8_notice';
@@ -110,7 +111,7 @@ function getTemplatePath(
   // England templates
   if (jurisdiction === 'england') {
     if (docType === 'section8_notice') {
-      return 'uk/england/templates/notice_only/form_3_section8/notice.hbs';
+      return 'FORM3A_SPECIAL';
     }
     if (docType === 'section21_notice') {
       // Section 21 uses a dedicated generator - handle differently
@@ -314,6 +315,10 @@ export async function GET(
       }
     }
 
+    if (jurisdiction === 'england') {
+      selectedRoute = 'section_8';
+    }
+
     // Derive ground_codes for Wales fault-based
     if (jurisdiction === 'wales' && selectedRoute === 'wales_fault_based') {
       const existingGroundCodes = wizardFacts.ground_codes;
@@ -371,7 +376,50 @@ export async function GET(
     // Generate HTML content
     let html: string;
 
-    if (templatePath === 'SECTION21_SPECIAL') {
+    if (templatePath === 'FORM3A_SPECIAL') {
+      const selectedGrounds = [
+        ...(Array.isArray(wizardFacts.selected_grounds) ? wizardFacts.selected_grounds : []),
+        ...(Array.isArray(wizardFacts.section8_grounds) ? wizardFacts.section8_grounds : []),
+        ...(Array.isArray(wizardFacts.section8_grounds_selection) ? wizardFacts.section8_grounds_selection : []),
+      ]
+        .map((ground) =>
+          String((ground && typeof ground === 'object' ? ground.code || ground.value || ground.label : ground) || '').trim()
+        )
+        .filter(Boolean);
+      const groundsText = await buildEnglandForm3AGroundsText(selectedGrounds);
+
+      html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Form 3A Notice Seeking Possession</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 28px; color: #111827; }
+    .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6b7280; }
+    h1 { font-size: 26px; margin: 8px 0 18px; }
+    .meta { font-size: 14px; margin-bottom: 18px; color: #374151; }
+    .card { border: 2px solid #111827; padding: 18px; margin-bottom: 16px; }
+    .card h2 { font-size: 16px; margin: 0 0 10px; }
+    .label { font-weight: 700; }
+    pre { white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.45; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="eyebrow">England official notice</div>
+  <h1>Form 3A Notice Seeking Possession</h1>
+  <div class="meta">Post-1 May 2026 private rented sector route</div>
+  <div class="card">
+    <h2>Tenant and property</h2>
+    <div><span class="label">Tenant:</span> ${templateData.tenant_full_name || ''}</div>
+    <div><span class="label">Property:</span> ${templateData.property_address || ''}</div>
+  </div>
+  <div class="card">
+    <h2>Ground wording</h2>
+    <pre>${groundsText}</pre>
+  </div>
+</body>
+</html>`;
+    } else if (templatePath === 'SECTION21_SPECIAL') {
       // Use dedicated Section 21 generator
       const section21NoticeData = mapWizardToSection21Data(wizardFacts, {
         serviceDate: templateData.service_date || templateData.notice_date,

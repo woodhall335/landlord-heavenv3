@@ -45,7 +45,7 @@ const scotlandEvictionCta = (
   </p>
 );
 
-export const blogPosts: BlogPost[] = [
+const allBlogPosts: BlogPost[] = [
   // ============================================
   // POST 0: Renters Reform Bill (FEATURED - URGENT)
   // Target: 2,000+ words
@@ -39634,10 +39634,22 @@ export const blogPosts: BlogPost[] = [
 
 ];
 
+// Deprecated/historical legacy-search posts kept only for redirect inventory and historical reference.
+const RETIRED_LEGACY_BLOG_SLUGS = new Set([
+  'renters-reform-bill-what-landlords-need-to-know',
+  'what-is-section-21-notice',
+  'section-21-vs-section-8',
+  'england-section-21-process',
+  'england-accelerated-possession',
+]);
+
+export const blogPosts: BlogPost[] = allBlogPosts.filter(
+  (post) => !RETIRED_LEGACY_BLOG_SLUGS.has(post.slug)
+);
+
 export function getBlogPost(slug: string): BlogPost | undefined {
   return blogPosts.find((post) => post.slug === slug);
 }
-
 
 
 

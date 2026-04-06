@@ -170,8 +170,8 @@ export const Section21ActionRequired: React.FC<Section21ActionRequiredProps> = (
           <div className="flex-1">
             <h2 className="text-xl font-bold text-success mb-1">Requirements Confirmed</h2>
             <p className="text-gray-700">
-              Your Section 21 documents are now being generated. Please wait a moment while we
-              complete the process.
+              Your current England notice documents are now being generated. Please wait a moment
+              while we complete the process.
             </p>
           </div>
         </div>
@@ -187,11 +187,12 @@ export const Section21ActionRequired: React.FC<Section21ActionRequiredProps> = (
         </div>
         <div className="flex-1">
           <h2 className="text-xl font-bold text-amber-900 mb-1">
-            Action Required to Generate Section 21 Notice
+            Action Required to Generate Current England Notice
           </h2>
           <p className="text-amber-800">
-            Your Section 21 notice cannot be generated until you confirm the following statutory
-            requirements have been met. This is a legal requirement under the Housing Act 1988.
+            Your current England notice cannot be generated until you confirm the following
+            statutory requirements have been met. This is a legal compliance check under the
+            Housing Act 1988 framework.
           </p>
         </div>
       </div>

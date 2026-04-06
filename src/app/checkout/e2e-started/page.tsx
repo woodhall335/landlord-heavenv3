@@ -1,3 +1,19 @@
+import type { Metadata } from 'next';
+import { generateMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = generateMetadata({
+  title: 'Checkout Started E2E Audit Route',
+  description:
+    'Noindex checkout-start route used for deterministic end-to-end funnel auditing and instrumentation during automated test runs.',
+  path: '/checkout/e2e-started',
+  noindex: true,
+  keywords: [
+    'checkout started audit route',
+    'e2e checkout instrumentation',
+    'noindex test route',
+  ],
+});
+
 export default async function E2EStartedPage({
   searchParams,
 }: {

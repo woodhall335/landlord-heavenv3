@@ -4,7 +4,6 @@ import { StructuredData } from '@/lib/seo/structured-data';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { BlogFilteredList } from '@/components/blog/BlogFilteredList';
 import { blogPosts } from '@/lib/blog/posts';
-import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { BLOG_CATEGORIES, getPostCountsByRegion, BlogRegion } from '@/lib/blog/categories';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
@@ -20,7 +19,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata = generateMetadata({
   title: 'UK Landlord Guides | Eviction, Tenancy & Rent Arrears',
   description:
-    'Read UK landlord guides on Section 8, Section 21, eviction notices, rent arrears, tenancy agreements, possession claims, and practical compliance updates.',
+    'Read UK landlord guides on current England possession notices, rent arrears, tenancy agreements, possession claims, and practical compliance updates.',
   path: '/blog',
   keywords: [
     'how to evict a tenant',
@@ -109,24 +108,6 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Urgency Banner */}
-        <section className="bg-primary py-6">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-white">
-              <span className="font-semibold text-lg text-white">
-                Section 21 ends 1 May 2026
-              </span>
-              <Section21Countdown variant="compact" className="text-white font-bold" />
-              <Link
-                href="/section-21-ban"
-                className="text-white underline hover:no-underline font-medium"
-              >
-                Learn what this means for you
-              </Link>
-            </div>
-          </div>
-        </section>
-
         {/* Browse by Region */}
         <section id="blog-jurisdictions" className="border-b border-gray-100 bg-white py-10 lg:py-14">
           <div className="container mx-auto px-4">
@@ -179,7 +160,7 @@ export default function BlogPage() {
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Browse by Problem</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              Pick the problem you are dealing with: Section 8, rent arrears, tenancy setup, or region-specific rules.
+              Pick the problem you are dealing with: current possession notices, rent arrears, tenancy setup, or region-specific rules.
             </p>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {Object.values(BLOG_TOPIC_HUBS).map((hub) => (

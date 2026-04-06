@@ -19,10 +19,7 @@ import { wizardFactsToCaseFacts, mapNoticeOnlyFacts } from '@/lib/case-facts/nor
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
 import { generateDocument } from '@/lib/documents/generator';
-import {
-  generateSection21Notice,
-  mapWizardToSection21Data,
-} from '@/lib/documents/section21-generator';
+import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-filler';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
 import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
@@ -44,6 +41,9 @@ import {
   trackYamlOnlyValidation,
   isYamlOnlyMode,
 } from '@/lib/validation/shadow-mode-adapter';
+import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
+import { getEnglandGroundDefinition } from '@/lib/england-possession/ground-catalog';
+import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -63,6 +63,42 @@ function getScotlandGroundLegalBasis(groundNumber: number): string {
     8: 'Landlord needs property for family member (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 8)',
   };
   return grounds[groundNumber] || `Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground ${groundNumber}`;
+}
+
+function getEnglandSelectedGrounds(wizardFacts: Record<string, any>, templateData: Record<string, any>): string[] {
+  const normalizeGround = (ground: any) =>
+    String(
+      (ground && typeof ground === 'object' ? ground.code || ground.value || ground.label : ground) || ''
+    ).trim();
+
+  const fromWizard = [
+    ...(Array.isArray(wizardFacts.selected_grounds) ? wizardFacts.selected_grounds : []),
+    ...(Array.isArray(wizardFacts.section8_grounds) ? wizardFacts.section8_grounds : []),
+    ...(Array.isArray(wizardFacts.section8_grounds_selection) ? wizardFacts.section8_grounds_selection : []),
+  ];
+
+  if (fromWizard.length > 0) {
+    return fromWizard.map(normalizeGround).filter(Boolean);
+  }
+
+  return Array.isArray(templateData.grounds)
+    ? templateData.grounds
+        .map(normalizeGround)
+        .filter(Boolean)
+    : [];
+}
+
+function buildEnglandRequiredEvidence(selectedGrounds: string[]) {
+  return selectedGrounds.map((ground) => {
+    const code = String(ground).replace(/^ground\s*/i, '').trim();
+    const definition = getEnglandGroundDefinition(code);
+
+    return {
+      ground: `Ground ${code}`,
+      title: definition?.title || 'Possession ground',
+      evidence_items: definition?.evidenceCategories || [],
+    };
+  });
 }
 
 export async function GET(
@@ -228,6 +264,14 @@ export async function GET(
         selected_route = 'section_8';
       }
       console.log(`[NOTICE-PREVIEW-API] No route specified, using jurisdiction default: ${selected_route}`);
+    }
+
+    if (jurisdiction === 'england' && selected_route !== 'section_8') {
+      console.log('[NOTICE-PREVIEW-API] Normalizing England notice route to Form 3A possession route:', {
+        raw: selected_route,
+        normalized: 'section_8',
+      });
+      selected_route = 'section_8';
     }
 
     console.log('[NOTICE-PREVIEW-API] Selected route (normalized):', selected_route);
@@ -721,45 +765,49 @@ export async function GET(
         deposit_scheme: templateData.deposit_scheme,
       });
 
-      // 1. Generate notice (Section 8 or Section 21)
+      // 1. Generate notice (England post-1 May 2026 uses Form 3A)
       if (selected_route === 'section_8') {
-        console.log('[NOTICE-PREVIEW-API] Generating Section 8 notice');
+        console.log('[NOTICE-PREVIEW-API] Generating England Form 3A notice');
         try {
-          const section8Doc = await generateDocument({
-            templatePath: 'uk/england/templates/notice_only/form_3_section8/notice.hbs',
-            data: templateData,
-            outputFormat: 'pdf',
-            isPreview: true,
-          });
-          if (section8Doc.pdf) {
-            documents.push({
-              title: 'Section 8 Notice (Form 3)',
-              category: 'notice',
-              pdf: section8Doc.pdf,
-            });
-          }
-        } catch (err) {
-          console.error('[NOTICE-PREVIEW-API] Section 8 generation failed:', err);
-        }
-      } else if (selected_route === 'section_21') {
-        console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice via canonical generator');
-        try {
-          // Use canonical mapper and generator for Form 6A compliance
-          // This ensures ALL Section 21 generation paths produce identical output
-          const section21NoticeData = mapWizardToSection21Data(wizardFacts, {
-            serviceDate: templateData.service_date || templateData.notice_date,
-          });
+          const selectedGrounds = getEnglandSelectedGrounds(wizardFacts, templateData);
+          const groundsText = await buildEnglandForm3AGroundsText(selectedGrounds);
+          const form3AData: CaseData = {
+            ...(templateData as CaseData),
+            ground_codes: selectedGrounds,
+            form3a_grounds_text: groundsText,
+            form3a_explanation:
+              wizardFacts.ground_particulars ||
+              wizardFacts.section_8_particulars ||
+              wizardFacts.particulars_of_claim ||
+              '',
+            notice_served_date: templateData.service_date || templateData.notice_date,
+            signature_date:
+              wizardFacts.signature_date ||
+              templateData.signature_date ||
+              new Date().toISOString().split('T')[0],
+            landlord_address_line1: wizardFacts.landlord_address_line1 || templateData.landlord_address_line1,
+            landlord_address_line2: wizardFacts.landlord_address_line2 || templateData.landlord_address_line2,
+            landlord_city: wizardFacts.landlord_city || templateData.landlord_city,
+            landlord_county: wizardFacts.landlord_county || templateData.landlord_county,
+            landlord_postcode: wizardFacts.landlord_postcode || templateData.landlord_postcode,
+            property_address_line1: wizardFacts.property_address_line1 || templateData.property_address_line1,
+            property_address_line2: wizardFacts.property_address_line2 || templateData.property_address_line2,
+            property_city: wizardFacts.property_city || templateData.property_city,
+            property_county: wizardFacts.property_county || templateData.property_county,
+            property_postcode: wizardFacts.property_postcode || templateData.property_postcode,
+            signatory_capacity: wizardFacts.signatory_capacity || 'landlord',
+          };
 
-          const section21Doc = await generateSection21Notice(section21NoticeData, true);
-          if (section21Doc.pdf) {
+          const pdfBytes = await fillOfficialForm('form3a', form3AData);
+          if (pdfBytes.length > 0) {
             documents.push({
-              title: 'Section 21 Notice (Form 6A)',
+              title: 'Form 3A Notice Seeking Possession',
               category: 'notice',
-              pdf: section21Doc.pdf,
+              pdf: Buffer.from(pdfBytes),
             });
           }
         } catch (err) {
-          console.error('[NOTICE-PREVIEW-API] Section 21 generation failed:', err);
+          console.error('[NOTICE-PREVIEW-API] Form 3A generation failed:', err);
         }
       }
 
@@ -796,7 +844,7 @@ export async function GET(
 
         if (checklistDoc.pdf) {
           documents.push({
-            title: `Service and Validity Checklist`,
+            title: 'Service & Compliance Checklist',
             category: 'checklist',
             pdf: checklistDoc.pdf,
           });
@@ -805,35 +853,55 @@ export async function GET(
         console.error(`[NOTICE-PREVIEW-API] ${checklistRoute} checklist generation failed:`, err);
       }
 
-      // 4. Generate compliance checklist (pre-service verification)
-      // Use dedicated Section 21 compliance checklist for Section 21 notices
-      // to ensure correct mapping of wizard answers and proper labeling
-      const complianceTemplatePath = selected_route === 'section_21'
-        ? 'uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs'
-        : 'uk/england/templates/eviction/compliance_checklist.hbs';
-
-      console.log(`[NOTICE-PREVIEW-API] Generating ${selected_route === 'section_21' ? 'Section 21' : 'Section 8'} compliance checklist`);
+      // 4. Generate ground-specific evidence checklist
+      console.log('[NOTICE-PREVIEW-API] Generating ground-specific evidence checklist');
       try {
-        const complianceDoc = await generateDocument({
-          templatePath: complianceTemplatePath,
-          data: templateData,
+        const selectedGrounds = getEnglandSelectedGrounds(wizardFacts, templateData);
+        const evidenceDoc = await generateDocument({
+          templatePath: 'shared/templates/evidence_collection_checklist.hbs',
+          data: {
+            property_address: templateData.property_address,
+            tenant_name: templateData.tenant_full_name,
+            case_type: 'England Form 3A possession notice',
+            current_date: new Date().toISOString().split('T')[0],
+            required_evidence: buildEnglandRequiredEvidence(selectedGrounds),
+          },
           outputFormat: 'pdf',
         });
 
-        if (complianceDoc.pdf) {
+        if (evidenceDoc.pdf) {
           documents.push({
-            title: selected_route === 'section_21'
-              ? 'Section 21 Pre-Service Compliance Checklist'
-              : 'Pre-Service Compliance Checklist',
+            title: 'Ground-Specific Evidence Checklist',
             category: 'checklist',
-            pdf: complianceDoc.pdf,
+            pdf: evidenceDoc.pdf,
           });
         }
       } catch (err) {
-        console.error(`[NOTICE-PREVIEW-API] ${selected_route === 'section_21' ? 'Section 21' : 'England'} compliance checklist generation failed:`, err);
+        console.error('[NOTICE-PREVIEW-API] Ground-specific evidence checklist generation failed:', err);
       }
 
-      // 5. Generate Rent Schedule / Arrears Breakdown (if Section 8 with arrears grounds and data)
+      // 5. Generate proof of service support
+      console.log('[NOTICE-PREVIEW-API] Generating proof of service support');
+      try {
+        const proofOfService = await generateProofOfServicePDF({
+          landlord_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
+          tenant_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
+          property_address: wizardFacts.property_address || templateData.property_address,
+          document_served: 'Form 3A notice seeking possession',
+          served_date: templateData.service_date || templateData.notice_date,
+          expiry_date: templateData.earliest_possession_date,
+        });
+
+        documents.push({
+          title: 'Proof of Service Support',
+          category: 'guidance',
+          pdf: Buffer.from(proofOfService),
+        });
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] Proof of service generation failed:', err);
+      }
+
+      // 6. Generate Rent Schedule / Arrears Breakdown (if Section 8 with arrears grounds and data)
       if (selected_route === 'section_8') {
         const noticeValidation = validateNoticeOnlyCase(wizardFacts);
         const arrearsItems = wizardFacts.arrears_items || [];

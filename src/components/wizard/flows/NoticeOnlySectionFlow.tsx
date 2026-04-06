@@ -85,7 +85,7 @@ import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
 // Route types for England, Wales, and Scotland
-type EnglandRoute = 'section_8' | 'section_21';
+type EnglandRoute = 'section_8';
 type WalesRoute = 'section_173' | 'fault_based';
 type ScotlandRoute = 'notice_to_leave';
 type EvictionRoute = EnglandRoute | WalesRoute | ScotlandRoute;
@@ -110,7 +110,7 @@ interface WizardSection {
 }
 
 // Valid routes by jurisdiction
-const ENGLAND_ROUTES = ['section_8', 'section_21'] as const;
+const ENGLAND_ROUTES = ['section_8'] as const;
 const WALES_ROUTES = ['section_173', 'fault_based'] as const;
 const SCOTLAND_ROUTES = ['notice_to_leave'] as const;
 
@@ -264,7 +264,7 @@ const SECTIONS: WizardSection[] = [
     label: 'Compliance',
     description: 'Compliance requirements for Section 21',
     // Only for England Section 21 - Wales has different requirements
-    routes: ['section_21'] as EvictionRoute[],
+    routes: [] as EvictionRoute[],
     isComplete: (facts) => {
       const hasDeposit = facts.deposit_taken === true;
       if (hasDeposit) {
@@ -381,7 +381,7 @@ const SECTIONS: WizardSection[] = [
 
           if (!validation.is_eligible) {
             blockers.push(
-              `Ground 8 threshold not met: ${validation.arrears_in_months?.toFixed(2) || 0} months arrears (minimum 2 months required)`
+              `Ground 8 threshold not met: ${validation.arrears_in_months?.toFixed(2) || 0} months arrears (minimum ${validation.threshold_label || '3 months'} required)`
             );
           }
         }
@@ -1159,9 +1159,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                   return 'Wales notice';
                 }
                 // England routes
-                return facts.eviction_route === 'section_21'
-                  ? 'Section 21 (No-Fault)'
-                  : 'Section 8 (Fault-Based)';
+                return jurisdiction === 'england'
+                  ? 'Form 3A possession route'
+                  : 'Notice route';
               })()}
             </p>
             <p>

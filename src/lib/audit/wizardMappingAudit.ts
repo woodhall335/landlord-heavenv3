@@ -209,7 +209,14 @@ export function collectTemplateCoverage(): { coverage: TemplateCoverage[]; refer
 export function extractPdfReferences(templatePath: string): string[] {
   const content = fs.readFileSync(templatePath, "utf8");
   const matches = content.match(/[\w\/_-]+\.pdf/gi) || [];
-  return Array.from(new Set(matches.map((m) => path.normalize(m))));
+  return Array.from(
+    new Set(
+      matches
+        // Ignore template output metadata such as "filename: court_filing_guide.pdf".
+        .filter((match) => match.includes("/") || match.includes("\\"))
+        .map((m) => path.normalize(m)),
+    ),
+  );
 }
 
 export function collectPdfCoverage(templatePaths: Iterable<string>, additionalReferenced: Iterable<string> = []): PdfCoverage {
@@ -307,9 +314,8 @@ export function findOrphanTemplates(referencedTemplates: Set<string>): string[] 
   return allTemplates
     .filter((tpl) => !tpl.includes(`${path.sep}_shared${path.sep}`))
     .filter((tpl) => {
-      const normalized = path.normalize(tpl);
       const relative = path.normalize(path.relative(process.cwd(), tpl));
-      return !referencedNormalized.has(normalized) && !whitelist.templates.has(relative);
+      return !referencedNormalized.has(relative) && !whitelist.templates.has(relative);
     })
     .map((tpl) => path.relative(process.cwd(), tpl))
     .sort();
@@ -398,9 +404,9 @@ export function collectOfficialFormCoverage(
   flows: FlowDiscovery[],
   registryEntries: OfficialFormRegistryEntry[] = loadOfficialFormsRegistry(),
 ): OfficialFormCoverage {
+  const whitelist = loadWhitelist();
   const referenced = new Set<string>();
   const missing = new Set<string>();
-  const whitelist = loadWhitelist();
   const existing = findAllPdfFiles();
   const flowsMissingRegistry: string[] = [];
   const entriesByFlow = buildOfficialFormIndex(registryEntries);

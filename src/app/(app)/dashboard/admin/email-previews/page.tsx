@@ -340,7 +340,7 @@ export default function AdminEmailPreviewsPage() {
                   </tr>
                   <tr>
                     <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Product:</td>
-                    <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; text-align: right;">Section 21 Notice Pack</td>
+                    <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; text-align: right;">Current England Notice Pack</td>
                   </tr>
                   <tr>
                     <td colspan="2" style="padding-top: 10px; border-top: 1px solid ${COLORS.border};"></td>
