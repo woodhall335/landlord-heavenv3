@@ -149,6 +149,7 @@
     </dl>
   </div>
 
+  {{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}
   <div class="timeline-box">
     <h3>Notice timeline</h3>
     <dl class="summary-grid">
@@ -166,6 +167,7 @@
       {{/if}}
     </dl>
   </div>
+  {{/if}}
 
   <div class="section">
     <h3>Before the hearing</h3>

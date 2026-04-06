@@ -4,6 +4,7 @@ import {
   generateCompleteEvictionPack,
   generateNoticeOnlyPack,
 } from '../../src/lib/documents/eviction-pack-generator';
+import { generateDocument } from '../../src/lib/documents/generator';
 import {
   buildN119FinancialInfoText,
   buildN119ReasonForPossessionText,
@@ -51,6 +52,32 @@ function expectNoDebugLeakage(html: string) {
   expect(html).not.toContain('eviction-pack-generator.ts');
 }
 
+function extractCourtReferences(html: string): string[] {
+  const refs = new Set<string>();
+  const patterns = [
+    /<dt>\s*Court\s*<\/dt>\s*<dd>([\s\S]*?)<\/dd>/gi,
+    /<strong>\s*Court:\s*<\/strong>\s*([\s\S]*?)<\/p>/gi,
+    /<p[^>]*class=["'][^"']*court-name[^"']*["'][^>]*>\s*In the\s+([\s\S]*?)<\/p>/gi,
+  ];
+
+  for (const pattern of patterns) {
+    let match: RegExpExecArray | null;
+    while ((match = pattern.exec(html)) !== null) {
+      const value = match[1]
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (value) {
+        refs.add(value);
+      }
+    }
+  }
+
+  return Array.from(refs);
+}
+
 beforeAll(() => {
   process.env.DISABLE_WITNESS_STATEMENT_AI = 'true';
   process.env.DISABLE_COMPLIANCE_AUDIT_AI = 'true';
@@ -84,6 +111,8 @@ describe('Section 8 document hardening', () => {
         total_arrears: 3600,
         notice_served_date: '2026-04-01',
         notice_service_method: 'first_class_post',
+        deposit_protected: true,
+        prescribed_info_given: false,
         clean_output: true,
         court_mode: true,
       };
@@ -110,6 +139,8 @@ describe('Section 8 document hardening', () => {
 
       expect(complianceDeclaration).toContain('Form 3 notice');
       expect(complianceDeclaration).not.toContain('Form 3A');
+      expect(complianceDeclaration).toContain('Significant risk');
+      expect(complianceDeclaration).toContain('This does not automatically invalidate a Section 8 notice');
 
       expect(noticeHtml).not.toContain('<label>Telephone</label>');
       expect((noticeHtml.match(/class="signatory-block/g) || []).length).toBe(1);
@@ -175,6 +206,7 @@ describe('Section 8 document hardening', () => {
       for (const html of [witnessHtml, bundleHtml, checklistHtml, caseSummaryHtml]) {
         expect(html).toContain(expectedCourt);
         expect(html).not.toContain('Central London County Court');
+        expect(extractCourtReferences(html)).toEqual([expectedCourt]);
       }
 
       expect(bundleHtml).toContain('Form 3 notice');
@@ -215,5 +247,95 @@ describe('Section 8 document hardening', () => {
       expect(text).toContain('Form 3 notice');
       expect(text).not.toContain('Form 3A');
     }
+  });
+
+  it('omits empty optional rows and sections in rendered court-facing templates', async () => {
+    const caseSummary = await generateDocument({
+      templatePath: 'shared/templates/eviction_case_summary.hbs',
+      data: {
+        case_id: 'section8-template-guards',
+        jurisdiction: 'england',
+        landlord_full_name: 'Alex Landlord',
+        tenant_full_name: 'Tina Tenant',
+        property_address: '16 Willow Mews, York, YO24 3HX',
+        is_section_21: false,
+        groundsReliedUpon: ['Ground 8'],
+        current_arrears_total: 3600,
+        case_narrative_text: 'Test narrative.',
+        steps_taken_text: 'Test steps.',
+        financial_info_text: 'Test financial position.',
+        compliance_status_items: [],
+        rent_frequency_label: 'monthly',
+        clean_output: true,
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+    const caseSummaryText = toPlainText(caseSummary.html);
+
+    expect(caseSummaryText).not.toContain('Notice expiry date');
+    expect(caseSummaryText).not.toContain('Earliest proceedings date');
+    expect(caseSummaryText).not.toContain('Defendant Circumstances');
+
+    const proofOfService = await generateDocument({
+      templatePath: 'shared/templates/proof_of_service.hbs',
+      data: {
+        case_id: 'section8-proof-guards',
+        landlord_full_name: 'Alex Landlord',
+        tenant_full_name: 'Tina Tenant',
+        property_address: '16 Willow Mews, York, YO24 3HX',
+        notice_type: 'Form 3 notice',
+        service_method: 'post',
+        clean_output: true,
+        current_date: '6 April 2026',
+        current_date_short: '20260406',
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+    const proofText = toPlainText(proofOfService.html);
+
+    expect(proofText).not.toContain('Other method');
+
+    const hearingChecklist = await generateDocument({
+      templatePath: 'uk/england/templates/eviction/hearing_checklist.hbs',
+      data: {
+        landlord_full_name: 'Alex Landlord',
+        tenant_full_name: 'Tina Tenant',
+        property_address: '16 Willow Mews, York, YO24 3HX',
+        groundsReliedUpon: ['Ground 8'],
+        notice_name: 'Form 3 notice',
+        generated_date: '2026-04-06',
+        clean_output: true,
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+    const hearingText = toPlainText(hearingChecklist.html);
+
+    expect(hearingText).not.toContain('Notice timeline');
+    expect(hearingText).not.toContain('Notice expiry date');
+    expect(hearingText).not.toContain('Earliest proceedings date');
+  });
+
+  it('distinguishes unknown compliance data from confirmed Section 8 failures', async () => {
+    const complianceChecklist = await generateDocument({
+      templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+      data: {
+        selected_notice_route: 'section_8',
+        notice_name: 'Form 3 notice',
+        property_address: '16 Willow Mews, York, YO24 3HX',
+        tenancy_start_date: '2024-01-01',
+        current_date: '2026-04-06',
+        clean_output: true,
+      },
+      isPreview: false,
+      outputFormat: 'html',
+    });
+    const complianceText = toPlainText(complianceChecklist.html);
+
+    expect(complianceText).toContain('Deposit protection status is not confirmed in the current pack data');
+    expect(complianceText).toContain('How to Rent service is not confirmed in the current pack data');
+    expect(complianceText).not.toContain('The deposit is not recorded as protected in an approved scheme');
   });
 });

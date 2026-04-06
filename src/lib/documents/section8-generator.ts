@@ -184,6 +184,7 @@ export interface Section8NoticeData {
   notice_name?: string;
   notice_title?: string;
   clean_output?: boolean;
+  court_mode?: boolean;
 
   // Help information
   council_phone?: string;

@@ -61,12 +61,14 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('{{notice_type}}');
+    expect(content).toContain("{{#unless (or (eq service_method 'hand') (eq service_method 'post') (eq service_method 'recorded_delivery'))}}");
   });
 
   test('hearing checklist includes the practical contingencies section', () => {
     const templatePath = path.join(TEMPLATES_BASE, 'eviction/hearing_checklist.hbs');
     const content = fs.readFileSync(templatePath, 'utf-8');
 
+    expect(content).toContain('{{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}');
     expect(content).toContain('What to do if...');
     expect(content).toContain('The tenant attends with a defence.');
     expect(content).toContain('The tenant raises housing disrepair or a counterclaim.');
@@ -79,5 +81,31 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('{{#if (hasValue landlord_phone)}}');
     expect(content).toContain('{{#if (hasValue landlord_2_name)}}');
+  });
+
+  test('case summary guards optional notice rows and avoids empty defendant sections', () => {
+    const templatePath = path.join(process.cwd(), 'config/jurisdictions/shared/templates/eviction_case_summary.hbs');
+    const content = fs.readFileSync(templatePath, 'utf-8');
+
+    expect(content).toContain('{{#if (hasValue notice_expiry_date)}}');
+    expect(content).toContain('{{#if (hasValue earliest_proceedings_date)}}');
+    expect(content).toContain('{{#if (hasValue defendant_circumstances_text)}}');
+    expect(content).not.toContain('Form 3A');
+  });
+
+  test('witness statement only renders the timeline section when timeline content exists', () => {
+    const templatePath = path.join(TEMPLATES_BASE, 'eviction/witness-statement.hbs');
+    const content = fs.readFileSync(templatePath, 'utf-8');
+
+    expect(content).toContain('{{#if (hasValue witness_statement.timeline)}}');
+  });
+
+  test('compliance checklist uses tri-state Section 8 risk wording instead of overstating unknown values', () => {
+    const templatePath = path.join(TEMPLATES_BASE, 'eviction/compliance_checklist.hbs');
+    const content = fs.readFileSync(templatePath, 'utf-8');
+
+    expect(content).toContain('Deposit protection status is not confirmed in the current pack data.');
+    expect(content).toContain('prescribed information service is not confirmed in the current pack data.');
+    expect(content).toContain('How to Rent service is not confirmed in the current pack data.');
   });
 });

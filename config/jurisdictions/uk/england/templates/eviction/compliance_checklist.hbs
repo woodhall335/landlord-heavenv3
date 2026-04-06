@@ -223,75 +223,110 @@
   <div class="item">
     <h3>Deposit protection and prescribed information</h3>
     {{#if (eq selected_notice_route "section_21")}}
-      {{#if deposit_protected}}
-        {{#if prescribed_info_given}}
+      {{#if (eq deposit_protected true)}}
+        {{#if (eq prescribed_info_given true)}}
         <div class="status advisory">Recorded as satisfied</div>
         <p>The pack records that the deposit was protected and the prescribed information was given.</p>
         {{else}}
         <div class="status critical">Critical blocker</div>
+        {{#if (eq prescribed_info_given false)}}
         <p>The deposit is recorded as protected, but the prescribed information is not recorded as having been given. That can block reliance on a Section 21 notice until the position is corrected.</p>
+        {{else}}
+        <p>Deposit protection is recorded, but prescribed information service is not confirmed in the current pack data. A Section 21 notice should not be relied on until that position is checked and corrected if necessary.</p>
         {{/if}}
-      {{else}}
+        {{/if}}
+      {{else if (eq deposit_protected false)}}
       <div class="status critical">Critical blocker</div>
       <p>The deposit is not recorded as protected in an approved scheme. A Section 21 notice should not be relied on until that issue is resolved.</p>
+      {{else}}
+      <div class="status critical">Critical blocker</div>
+      <p>Deposit protection status is not confirmed in the current pack data. A Section 21 notice should not be relied on until the position has been checked.</p>
       {{/if}}
     {{else}}
-      {{#if deposit_protected}}
-        {{#if prescribed_info_given}}
+      {{#if (eq deposit_protected true)}}
+        {{#if (eq prescribed_info_given true)}}
         <div class="status advisory">Recorded as satisfied</div>
         <p>The pack records deposit protection and prescribed information compliance.</p>
         {{else}}
         <div class="status risk">Significant risk</div>
+        {{#if (eq prescribed_info_given false)}}
         <p>The deposit appears to have been protected, but prescribed information is not recorded as having been given.</p>
+        {{else}}
+        <p>The deposit appears to have been protected, but prescribed information service is not confirmed in the current pack data.</p>
+        {{/if}}
         <p>This does not automatically invalidate a Section 8 notice, but it may expose the landlord to penalties, counterclaims, or credibility issues and should be resolved where possible.</p>
         {{/if}}
-      {{else}}
+      {{else if (eq deposit_protected false)}}
       <div class="status risk">Significant risk</div>
       <p>The deposit is not recorded as protected in an approved scheme.</p>
       <p>This does not automatically invalidate a Section 8 notice, but it may expose the landlord to penalties, counterclaims, or credibility issues and should be resolved where possible.</p>
+      {{else}}
+      <div class="status advisory">Advisory / good practice</div>
+      <p>Deposit protection status is not confirmed in the current pack data. Check the scheme record and any prescribed information service record before relying on the file.</p>
       {{/if}}
     {{/if}}
   </div>
 
   <div class="item">
     <h3>Gas safety</h3>
-    {{#if gas_cert_provided}}
+    {{#if (eq gas_cert_provided true)}}
     <div class="status advisory">Recorded as satisfied</div>
     <p>The pack records a gas safety certificate as provided.</p>
     {{else if (eq selected_notice_route "section_21")}}
     <div class="status critical">Critical blocker</div>
+    {{#if (eq gas_cert_provided false)}}
     <p>No gas safety provision is recorded. That can block reliance on a Section 21 notice where the requirement applies.</p>
     {{else}}
+    <p>No gas safety provision is confirmed in the current pack data. That can block reliance on a Section 21 notice where the requirement applies.</p>
+    {{/if}}
+    {{else if (eq gas_cert_provided false)}}
     <div class="status risk">Significant risk</div>
     <p>No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can expose the landlord to regulatory and evidential risk.</p>
+    {{else}}
+    <div class="status advisory">Advisory / good practice</div>
+    <p>No gas safety provision is confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but the tenancy file should still be checked and the evidence retained if available.</p>
     {{/if}}
   </div>
 
   <div class="item">
     <h3>Energy Performance Certificate (EPC)</h3>
-    {{#if epc_provided}}
+    {{#if (eq epc_provided true)}}
     <div class="status advisory">Recorded as satisfied</div>
     <p>The pack records EPC provision{{#if epc_rating}} with rating {{epc_rating}}{{/if}}.</p>
     {{else if (eq selected_notice_route "section_21")}}
     <div class="status critical">Critical blocker</div>
+    {{#if (eq epc_provided false)}}
     <p>No EPC provision is recorded. That can block reliance on a Section 21 notice.</p>
     {{else}}
+    <p>No EPC provision is confirmed in the current pack data. That can block reliance on a Section 21 notice.</p>
+    {{/if}}
+    {{else if (eq epc_provided false)}}
     <div class="status risk">Significant risk</div>
     <p>No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.</p>
+    {{else}}
+    <div class="status advisory">Advisory / good practice</div>
+    <p>No EPC provision is confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but the tenancy file should still be checked and updated where possible.</p>
     {{/if}}
   </div>
 
   <div class="item">
     <h3>How to Rent guide</h3>
-    {{#if how_to_rent_given}}
+    {{#if (eq how_to_rent_given true)}}
     <div class="status advisory">Recorded as satisfied</div>
     <p>The pack records that the How to Rent guide was given.</p>
     {{else if (eq selected_notice_route "section_21")}}
     <div class="status critical">Critical blocker</div>
+    {{#if (eq how_to_rent_given false)}}
     <p>No How to Rent service record is shown. That can block reliance on a Section 21 notice.</p>
     {{else}}
+    <p>How to Rent service is not confirmed in the current pack data. That can block reliance on a Section 21 notice.</p>
+    {{/if}}
+    {{else if (eq how_to_rent_given false)}}
     <div class="status advisory">Advisory / good practice</div>
     <p>No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.</p>
+    {{else}}
+    <div class="status advisory">Advisory / good practice</div>
+    <p>How to Rent service is not confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.</p>
     {{/if}}
   </div>
 

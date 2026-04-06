@@ -333,6 +333,7 @@
   </div>
 </div>
 
+{{#if (hasValue witness_statement.timeline)}}
 <!-- Timeline of Events -->
 <div class="statement-section">
   <h2><span class="num">{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}6{{else}}5{{/if}}{{else}}{{#if witness_statement.conduct_issues}}5{{else}}4{{/if}}{{/if}}</span> Timeline of Events</h2>
@@ -340,6 +341,7 @@
     {{{witness_statement.timeline}}}
   </div>
 </div>
+{{/if}}
 
 {{#if witness_statement.defendant_circumstances}}
 <!-- Defendant Circumstances -->

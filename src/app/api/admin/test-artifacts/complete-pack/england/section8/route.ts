@@ -34,6 +34,8 @@ export async function POST() {
           property_city: 'York',
           property_postcode: 'YO24 3HX',
           court_name: 'York County Court and Family Court',
+          clean_output: true,
+          court_mode: true,
         },
       })
     );

@@ -422,7 +422,8 @@ describe('Section 8 Template Files - Structure Verification', () => {
 
       expect(content).toContain('Section 8');
       expect(content).toContain('{{service_date_formatted}}');
-      expect(content).toContain('{{earliest_possession_date_formatted}}');
+      expect(content).toContain('{{notice_expiry_date_formatted}}');
+      expect(content).toContain('{{earliest_proceedings_date_formatted}}');
       expect(content).toContain('{{property_address}}');
       expect(content).toContain('{{tenant_full_name}}');
     });
@@ -444,21 +445,20 @@ describe('Section 8 Template Files - Structure Verification', () => {
       expect(content).toContain('Section 8');
       expect(content).toContain('{{tenancy_start_date_formatted}}');
       expect(content).toContain('{{service_date_formatted}}');
-      expect(content).toContain('{{earliest_possession_date_formatted}}');
+      expect(content).toContain('{{notice_expiry_date_formatted}}');
+      expect(content).toContain('{{earliest_proceedings_date_formatted}}');
       expect(content).toContain('{{ground_descriptions}}');
       // has_mandatory_ground is used as a conditional block
       expect(content).toContain('has_mandatory_ground');
     });
 
-    it('MUST contain legally accurate notice period guidance', () => {
+    it('MUST contain route-safe notice period guidance', () => {
       const templatePath = path.join(TEMPLATES_BASE, 'eviction/checklist_section_8.hbs');
       const content = fs.readFileSync(templatePath, 'utf-8');
 
-      // Correct: 60 days for Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16
-      expect(content).toMatch(/60 days.*2 months.*Grounds 1.*2.*5.*6.*7.*9.*10.*11.*16/is);
-
-      // Correct: 14 days for Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 15, 17
-      expect(content).toMatch(/14 days.*2 weeks.*Ground.*8/is);
+      expect(content).toContain('Notice periods:');
+      expect(content).toContain('The required notice period depends on the grounds relied on and can change.');
+      expect(content).toContain('regenerate the pack so every document uses the same recalculated dates');
     });
   });
 });

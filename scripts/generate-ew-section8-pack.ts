@@ -53,6 +53,8 @@ async function main() {
     property_city: 'York',
     property_postcode: 'YO24 3HX',
     court_name: 'York County Court and Family Court',
+    clean_output: true,
+    court_mode: true,
     total_arrears: 3600,
     rent_arrears_amount: 3600,
     arrears_items: arrearsItems,

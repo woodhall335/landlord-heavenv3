@@ -191,10 +191,12 @@
         <div class="checkbox {{#if (eq service_method 'recorded_delivery')}}checked{{/if}}"></div>
         <div>Recorded or signed delivery</div>
       </div>
+      {{#unless (or (eq service_method 'hand') (eq service_method 'post') (eq service_method 'recorded_delivery'))}}
       <div class="method-row">
-        <div class="checkbox"></div>
-        <div>Other method (specify if used)</div>
+        <div class="checkbox {{#if (hasValue service_method)}}checked{{/if}}"></div>
+        <div>Other method{{#if (hasValue service_method)}}: {{service_method}}{{else}} (specify if used){{/if}}</div>
       </div>
+      {{/unless}}
     </div>
   </div>
 

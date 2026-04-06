@@ -128,45 +128,58 @@
 
   <table class="key-facts">
     <tbody>
+      {{#if (hasValue tenancy_start_date)}}
       <tr>
         <th>Tenancy start date</th>
-        <td>{{format_date tenancy_start_date "long"}}</td>
-        <th>Rent</th>
-        <td>{{currency rent_amount}} {{rent_frequency_label}}</td>
-      </tr>
-      <tr>
-        <th>Due day</th>
-        <td>{{payment_day_display}}</td>
-        <th>Current arrears</th>
-        <td>{{currency current_arrears_total}}</td>
-      </tr>
-      <tr>
-        <th>Arrears at notice date</th>
-        <td>{{currency arrears_at_notice_date}}</td>
-        <th>Notice served</th>
-        <td>{{format_date notice_served_date "long"}}</td>
-      </tr>
-      {{#if notice_expiry_date}}
-      <tr>
-        <th>Notice expiry date</th>
-        <td>{{format_date notice_expiry_date "long"}}</td>
-        <th>Earliest proceedings date</th>
-        <td>{{format_date earliest_proceedings_date "long"}}</td>
-      </tr>
-      {{else}}
-      <tr>
-        <th>Earliest proceedings date</th>
-        <td>{{format_date earliest_proceedings_date "long"}}</td>
-        <th>Compliance snapshot</th>
-        <td>{{#if compliance_status_items.length}}{{compliance_status_items.length}} items recorded{{else}}No compliance items recorded{{/if}}</td>
+        <td colspan="3">{{format_date tenancy_start_date "long"}}</td>
       </tr>
       {{/if}}
-      {{#if notice_expiry_date}}
+      {{#if (or (hasValue rent_amount) (eq rent_amount 0))}}
+      <tr>
+        <th>Rent</th>
+        <td colspan="3">{{currency rent_amount}} {{rent_frequency_label}}</td>
+      </tr>
+      {{/if}}
+      {{#if (hasValue payment_day_display)}}
+      <tr>
+        <th>Due day</th>
+        <td colspan="3">{{payment_day_display}}</td>
+      </tr>
+      {{/if}}
+      {{#if (or (hasValue current_arrears_total) (eq current_arrears_total 0))}}
+      <tr>
+        <th>Current arrears</th>
+        <td colspan="3">{{currency current_arrears_total}}</td>
+      </tr>
+      {{/if}}
+      {{#if (or (hasValue arrears_at_notice_date) (eq arrears_at_notice_date 0))}}
+      <tr>
+        <th>Arrears at notice date</th>
+        <td colspan="3">{{currency arrears_at_notice_date}}</td>
+      </tr>
+      {{/if}}
+      {{#if (hasValue notice_served_date)}}
+      <tr>
+        <th>Notice served</th>
+        <td colspan="3">{{format_date notice_served_date "long"}}</td>
+      </tr>
+      {{/if}}
+      {{#if (hasValue notice_expiry_date)}}
+      <tr>
+        <th>Notice expiry date</th>
+        <td colspan="3">{{format_date notice_expiry_date "long"}}</td>
+      </tr>
+      {{/if}}
+      {{#if (hasValue earliest_proceedings_date)}}
+      <tr>
+        <th>Earliest proceedings date</th>
+        <td colspan="3">{{format_date earliest_proceedings_date "long"}}</td>
+      </tr>
+      {{/if}}
       <tr>
         <th>Compliance snapshot</th>
         <td colspan="3">{{#if compliance_status_items.length}}{{compliance_status_items.length}} items recorded{{else}}No compliance items recorded{{/if}}</td>
       </tr>
-      {{/if}}
     </tbody>
   </table>
 
@@ -193,14 +206,18 @@
     <p>{{steps_taken_text}}</p>
   </div>
 
+  {{#if (hasValue defendant_circumstances_text)}}
   <div class="section">
     <h2>Defendant Circumstances</h2>
     <p>{{defendant_circumstances_text}}</p>
   </div>
+  {{/if}}
 
+  {{#if (hasValue financial_info_text)}}
   <div class="section">
     <h2>Financial Position and Relief Sought</h2>
     <p>{{financial_info_text}}</p>
   </div>
+  {{/if}}
 </body>
 </html>
