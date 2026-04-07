@@ -8,7 +8,9 @@ import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/student-tenancy-agreement');
 const englandHubHref = '/products/ast';
-const studentWizardHref = '/wizard?product=england_student_tenancy_agreement&src=student_tenancy_page&topic=tenancy';
+const studentWizardHref =
+  '/wizard?product=england_student_tenancy_agreement&src=student_tenancy_page&topic=tenancy';
+
 const studentPackDocuments = getResidentialDocumentList('england_student_tenancy_agreement', {
   englandTenancyPurpose: 'new_agreement',
   depositTaken: true,
@@ -38,18 +40,22 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Student Tenancy Agreement England | Guarantor and Sharer Route',
   description:
-    'Create the England Student Tenancy Agreement with student-focused sharer, guarantor, and end-of-term detail.',
+    'Create an England Student Tenancy Agreement with clearer wording for student sharers, guarantors, replacements, and end-of-term hand-back.',
   keywords: [
     'student tenancy agreement england',
     'student tenancy agreement template',
     'student house agreement england',
     'student let agreement england',
+    'student tenancy agreement with guarantor',
+    'student sharer tenancy agreement',
+    'student house tenancy agreement',
+    'student agreement england',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Student Tenancy Agreement England | Guarantor and Sharer Route',
     description:
-      'Create the England Student Tenancy Agreement with student-focused sharer, guarantor, and end-of-term detail.',
+      'Create an England Student Tenancy Agreement with clearer wording for student sharers, guarantors, replacements, and end-of-term hand-back.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -73,30 +79,32 @@ export default function StudentTenancyAgreementPage() {
           url: canonicalUrl,
         })}
       />
+
       <EnglandTenancyPage
         pagePath="/student-tenancy-agreement"
         title="Student Tenancy Agreement England"
-        subtitle="Use this when the tenants are students and you want clearer wording on guarantors, joint tenants, replacements, and end-of-term hand-back than a general residential agreement gives you."
-        primaryCtaLabel="Start Student tenancy agreement"
+        subtitle="Use this England student tenancy agreement generator when the occupiers are students and you want clearer wording on guarantors, joint tenants, replacement requests, and end-of-term move-out than a general residential agreement usually provides."
+        primaryCtaLabel="Start student tenancy agreement"
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        introTitle="For student households"
+        legacyNotice="If you were searching for a student tenancy agreement template, a student house agreement, or a student tenancy agreement with guarantor wording, this is the dedicated England student route rather than a generic residential agreement adapted after the fact."
+        introTitle="Built for student households"
         introBody={[
-          'This route is designed for student lets where guarantors, joint occupation, replacement requests, and move-out expectations usually need to be spelled out properly from the start.',
-          'It is separate from Premium and separate from the HMO / Shared House route, so you do not have to squeeze a student tenancy into a generic residential product.',
+          'This route is designed for student lets where guarantors, shared occupation, replacement requests, and end-of-term expectations usually need much clearer wording from the outset.',
+          'Instead of trying to fit a student household into a general residential agreement, this pack is built around the issues that come up most often in student lets: multiple occupiers, guarantor support, mid-tenancy changes, key return, and how the property is handed back at the end of the academic cycle.',
         ]}
         highlights={[
-          'Student-focused agreement wording',
-          'Guarantor, sharer, and replacement detail',
-          'Clearer end-of-term and hand-back expectations',
-          'Guided setup with a preview before payment',
+          'Student-focused agreement wording for shared occupation',
+          'Clearer treatment of guarantors, joint tenants, and replacement requests',
+          'Better end-of-term and move-out wording than a generic residential agreement',
+          'Guided generator with a preview before payment',
         ]}
         compliancePoints={[
-          "Built on the current England route from 1 May 2026 for the main tenancy wording.",
-          'Lets student cases be handled as student cases instead of being hidden inside Premium.',
-          'Captures the practical written-information and support points around the agreement.',
-          'If the real issue is communal-house management or resident-landlord sharing, compare the HMO or Lodger routes.',
+          'Built around the current England route from 1 May 2026 for the main tenancy wording.',
+          'Lets student households be handled as student households instead of being forced into a generic residential route.',
+          'Includes the practical support documents that usually matter around student handover and variation.',
+          'If the real issue is shared-house management, communal controls, or resident-landlord occupation, compare the HMO / Shared House or Lodger routes instead.',
         ]}
         keywordTargets={[
           'student tenancy agreement england',
@@ -104,59 +112,89 @@ export default function StudentTenancyAgreementPage() {
           'student tenancy agreement with guarantor',
           'student let agreement england',
           'student sharer tenancy agreement',
+          'student house agreement england',
         ]}
         idealFor={[
-          'the household is genuinely student-focused',
-          'guarantor detail, replacement requests, and end-of-term hand-back matter from the start',
-          'you want the option to include a guarantor deed alongside the student agreement pack',
+          'the tenants are students and the let is genuinely student-focused',
+          'guarantor wording matters from the start',
+          'joint tenants, sharers, and replacement requests need to be dealt with more clearly',
+          'end-of-term move-out and hand-back expectations need to be set properly',
+          'you want the option to include a guarantor deed alongside the agreement pack',
         ]}
         notFor={[
-          'the main issue is HMO or shared-house management rather than student occupation',
-          'the landlord is resident and the arrangement is really a lodger room let',
-          'the let is an ordinary non-student whole-property tenancy and you only need Standard or Premium',
+          'the main issue is HMO or shared-house management rather than student occupation itself',
+          'the landlord lives at the property and the arrangement is really a lodger room let',
+          'the let is an ordinary non-student whole-property tenancy and Standard or Premium would be more proportionate',
         ]}
         packHighlights={studentPackHighlights}
         routeComparison={[
           {
             title: 'Premium Tenancy Agreement',
             description:
-              'Premium is for fuller ordinary-residential drafting, but it is no longer the default product for student lets.',
+              'Premium is for ordinary residential lets that need fuller operational drafting, but it is no longer the default choice for student households.',
             href: '/premium-tenancy-agreement',
             ctaLabel: 'Compare Premium',
           },
           {
             title: 'HMO / Shared House',
             description:
-              'Use HMO / Shared House when communal controls and shared-house rules are the main complexity, even if some occupiers are students.',
+              'Choose HMO / Shared House when communal rules, house management, or room-by-room occupation are the main complexity, even if some occupiers are students.',
             href: '/hmo-shared-house-tenancy-agreement',
             ctaLabel: 'Compare HMO',
           },
           {
-            title: 'England chooser',
+            title: 'Standard Tenancy Agreement',
             description:
-              'If you are weighing up Standard, Premium, Student, HMO, or Lodger, open the main England tenancy-agreement hub first.',
+              'Choose Standard when the tenancy is a straightforward non-student whole-property let and you do not need student-specific wording.',
+            href: '/standard-tenancy-agreement',
+            ctaLabel: 'Compare Standard',
+          },
+          {
+            title: 'England tenancy agreement hub',
+            description:
+              'Still deciding between Standard, Premium, Student, HMO, or Lodger? Use the main England hub to compare the routes properly.',
             href: '/products/ast',
             ctaLabel: 'Open England hub',
           },
         ]}
         faqs={[
           {
+            question: 'Why use a student tenancy agreement instead of a general residential agreement?',
+            answer:
+              'Because student lets often raise issues that a general residential agreement does not deal with clearly enough. Guarantors, multiple sharers, replacement requests, and end-of-term hand-back are all more common in student households, so it helps to use wording built for that setup from the start.',
+          },
+          {
             question: 'Is this now separate from Premium?',
             answer:
-              'Yes. Student lets now have their own dedicated England product instead of being treated as a Premium variant by default.',
+              'Yes. Student lets now have their own dedicated England route instead of being treated as a Premium variant by default. Premium is for ordinary residential lets that need more management detail; this route is for student-specific occupation patterns and expectations.',
           },
           {
             question: 'Does this route cover guarantor-focused drafting?',
             answer:
-              'Yes. The guided flow captures student-specific sharer and guarantor detail so the agreement can reflect that setup more directly.',
+              'Yes. The guided flow is designed to capture the student-specific guarantor and sharer setup more clearly, and the pack can include a guarantor deed where needed.',
+          },
+          {
+            question: 'Is this suitable for joint student tenants sharing one property?',
+            answer:
+              'Usually yes. This route is intended for student households where joint occupation and shared responsibility need to be reflected more clearly than they would be in a generic agreement.',
+          },
+          {
+            question: 'What if one student wants to be replaced during the tenancy?',
+            answer:
+              'That is one of the reasons this route exists. Student lets are more likely to involve replacement requests or mid-tenancy changes, so this pack is better suited to that kind of setup than a general residential agreement.',
           },
           {
             question: 'Should I use this for every shared student property?',
             answer:
-              'Use the Student route where the case is genuinely student-focused. If the main issue is HMO or shared-house management detail rather than student occupation, compare it against the HMO / Shared House route.',
+              'Use the Student route when the case is genuinely student-focused. If the real complexity is house management, communal controls, room-by-room occupation, or HMO-style arrangements, compare it against the HMO / Shared House route first.',
+          },
+          {
+            question: 'Does this help with end-of-term move-out expectations?',
+            answer:
+              'Yes. One of the key benefits of this route is clearer wording around hand-back, key return, and end-of-term expectations, which are often more important in student lets than in ordinary residential tenancies.',
           },
         ]}
-        finalCtaBody="Use the Student route for student households, guarantor-backed lets, and clearer end-of-term expectations. If you are still deciding, compare it against the other England products on the main hub."
+        finalCtaBody="Use the Student route when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this is usually the better fit than a general residential agreement. If you are still deciding, compare it against the other England routes on the main hub."
       />
     </div>
   );

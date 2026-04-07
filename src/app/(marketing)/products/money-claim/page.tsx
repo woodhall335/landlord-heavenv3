@@ -29,7 +29,8 @@ export const metadata: Metadata = {
     `Start a landlord money claim pack for unpaid rent, property damage, cleaning costs, and other tenant debts through the England county court route.`,
   openGraph: {
     title: `Money Claim Pack 2026 for England Landlords | ${price}`,
-    description: "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs and other tenant debts. N1 form, Letter Before Claim, interest calculator, and court-ready guidance included.",
+    description:
+      "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs, and other tenant debts. Includes Form N1, a Letter Before Claim, an interest calculator, and court-ready guidance.",
     url: getCanonicalUrl('/products/money-claim'),
   },
   alternates: {
@@ -43,43 +44,53 @@ export const runtime = 'nodejs';
 const faqs = [
   {
     question: "What documents do I get?",
-    answer: "You receive 10 documents: Form N1 (Money Claim), Particulars of Claim, Schedule of Arrears, Interest Calculation (s.69 County Courts Act), Letter Before Claim (PAP-DEBT compliant), Defendant Information Sheet, Reply Form, Financial Statement, Court Filing Guide, and Enforcement Guide."
+    answer:
+      "You receive 10 documents: Form N1 (Money Claim), Particulars of Claim, a Schedule of Arrears, interest calculation under section 69 of the County Courts Act, a PAP-DEBT compliant Letter Before Claim, Defendant Information Sheet, Reply Form, Financial Statement, Court Filing Guide, and Enforcement Guide.",
   },
   {
     question: "Can I claim for damage or cleaning after the tenant leaves?",
-    answer: "Yes! You can claim for property damage, professional cleaning, rubbish removal, unpaid utilities, and other costs. You'll need evidence such as photos, invoices, and quotes. Select the relevant reasons in the wizard and itemise each cost in the Damages section."
+    answer:
+      "Yes. You can claim for property damage, professional cleaning, rubbish removal, unpaid utilities, and other costs. You will need evidence such as photos, invoices, and quotes. In the wizard, select the relevant claim reasons and itemise each cost in the damages section.",
   },
   {
     question: "Can I claim arrears if the tenant has already left?",
-    answer: "Yes! You have 6 years from the date arrears became due to make a claim. You'll need the tenant's current address for court service."
+    answer:
+      "Yes. You generally have 6 years from the date the arrears became due to make a claim. You will need the tenant’s current address for service.",
   },
   {
     question: "Can I combine rent arrears with damage claims?",
-    answer: "Yes! Our wizard lets you select multiple claim reasons. You can claim rent arrears, property damage, cleaning costs, unpaid utilities, and other tenant debts all in one claim."
+    answer:
+      "Yes. The wizard lets you select multiple claim reasons, so you can include rent arrears, property damage, cleaning costs, unpaid utilities, and other tenant debts in one claim.",
   },
   {
     question: "Can I claim interest on the debt?",
-    answer: "Yes! You can claim 8% statutory interest per year on debts. Our interest calculator works this out automatically for rent arrears. For damage claims, interest runs from when you notified the tenant of the amount owed."
+    answer:
+      "Yes. You can usually claim 8% statutory interest per year. Our interest calculator works this out automatically for rent arrears. For damage claims, interest generally runs from the date you told the tenant how much was owed.",
   },
   {
     question: "What happens if the tenant defends the claim?",
-    answer: "If the tenant submits a defence, the court will schedule a hearing. You'll need to attend and present your evidence."
+    answer:
+      "If the tenant files a defence, the court will usually list the case for a hearing. You will need to attend and present your evidence.",
   },
   {
     question: "How do I collect the money after winning?",
-    answer: "After judgment, if the tenant doesn't pay voluntarily, you can use: Bailiffs, Attachment of Earnings (deduct from wages), or Charging Order (secure against their property). We include guides for all enforcement methods."
+    answer:
+      "If you obtain judgment and the tenant still does not pay, you may be able to enforce it through bailiffs, an attachment of earnings order, or a charging order. We include guidance on the main enforcement options.",
   },
   {
     question: "Which jurisdictions do you support?",
-    answer: "England only. This pack uses the N1 form and PAP-DEBT Letter Before Claim for English courts."
+    answer:
+      "England only. This pack uses Form N1 and a PAP-DEBT Letter Before Claim for the English court process.",
   },
   {
     question: "How long are documents stored?",
-    answer: "Documents are stored in your portal for at least 12 months. You can download and save them any time."
+    answer:
+      "Documents are stored in your portal for at least 12 months. You can download and save them at any time.",
   },
   {
     question: "Do you provide legal advice?",
-    answer: "No. We provide document generation and guidance, not legal advice. Ask Heaven helps you understand the process but is not a solicitor and does not provide legal representation."
+    answer:
+      "No. We provide document generation and practical guidance, not legal advice. Ask Heaven helps you understand the process, but it is not a solicitor and does not provide legal representation.",
   }
 ];
 
@@ -89,20 +100,24 @@ export default async function MoneyClaimPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderConfig mode="autoOnScroll" />
-      {/* Structured Data for SEO */}
-      <StructuredData data={productSchema({
-        name: "Money Claim Pack - Recover Rent Arrears",
-        description: "Recover unpaid rent arrears through the County Court in England. Structured claim documents, PAP-DEBT support, N1 format, interest calculation, and filing guidance included.",
-        price: product.price.toString(),
-        url: "https://landlordheaven.co.uk/products/money-claim"
-      })} />
-      <StructuredData data={breadcrumbSchema([
-        { name: "Home", url: "https://landlordheaven.co.uk" },
-        { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
-        { name: "Money Claim Pack", url: "https://landlordheaven.co.uk/products/money-claim" }
-      ])} />
 
-      {/* Hero Section */}
+      <StructuredData
+        data={productSchema({
+          name: "Money Claim Pack - Recover Rent Arrears",
+          description:
+            "Recover unpaid rent arrears through the County Court in England. Includes structured claim documents, PAP-DEBT support, Form N1, interest calculation, and filing guidance.",
+          price: product.price.toString(),
+          url: "https://landlordheaven.co.uk/products/money-claim",
+        })}
+      />
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: "Home", url: "https://landlordheaven.co.uk" },
+          { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
+          { name: "Money Claim Pack", url: "https://landlordheaven.co.uk/products/money-claim" },
+        ])}
+      />
+
       <UniversalHero {...moneyClaimHeroConfig} showTrustPositioningBar />
 
       <FunnelProcessSection product="money_claim" moneyClaimPreviews={previews} />
@@ -110,10 +125,18 @@ export default async function MoneyClaimPage() {
       <section className="bg-white border-y border-[#EDE2FF]">
         <Container>
           <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Money claim quick links">
-            <Link href="#who-this-is-for" className="font-medium text-primary hover:underline">Who this is for</Link>
-            <Link href="#whats-included" className="font-medium text-primary hover:underline">What's included</Link>
-            <Link href="#how-it-works" className="font-medium text-primary hover:underline">How it works</Link>
-            <Link href="#start-your-pack" className="font-medium text-primary hover:underline">Start your pack</Link>
+            <Link href="#who-this-is-for" className="font-medium text-primary hover:underline">
+              Who this is for
+            </Link>
+            <Link href="#whats-included" className="font-medium text-primary hover:underline">
+              What's included
+            </Link>
+            <Link href="#how-it-works" className="font-medium text-primary hover:underline">
+              How it works
+            </Link>
+            <Link href="#start-your-pack" className="font-medium text-primary hover:underline">
+              Start your pack
+            </Link>
           </nav>
         </Container>
       </section>
@@ -122,7 +145,9 @@ export default async function MoneyClaimPage() {
         <Container>
           <div className="mx-auto mb-6 max-w-6xl">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What's included</h2>
-            <p className="mt-3 text-gray-700">You get the core money claim documents to pursue unpaid rent and tenant debt properly, including the pre-action letter pack and court claim paperwork. This is what is included when you need to start a landlord money claim pack rather than read another general guide.</p>
+            <p className="mt-3 text-gray-700">
+              You get the core documents needed to pursue unpaid rent and other tenant debt properly, including the pre-action letter pack and the court claim paperwork. This is for landlords who want to start a money claim with the right documents in place, rather than trying to piece everything together from general guidance.
+            </p>
           </div>
         </Container>
         <WhatsIncludedInteractive
@@ -137,36 +162,38 @@ export default async function MoneyClaimPage() {
         <Container>
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">Who this is for</h2>
-            <p className="text-gray-600 mb-6">This pack is for landlords who are owed money and need a practical route to recover rent arrears or other tenant debt.</p>
+            <p className="text-gray-600 mb-6">
+              This pack is for landlords who are owed money and want a practical way to recover rent arrears or other tenant debt.
+            </p>
             <ul className="mb-10 grid gap-3 text-left text-gray-700 md:grid-cols-2">
-              <li>• Tenant owes rent and you need to recover arrears.</li>
+              <li>• Your tenant owes rent and you want to recover the arrears.</li>
               <li>• You want to start a money claim with the right documents.</li>
-              <li>• You need a compliant Letter Before Claim before court action.</li>
+              <li>• You need a compliant Letter Before Claim before starting court action.</li>
               <li>• You want a clear process instead of piecing forms together manually.</li>
             </ul>
             <div className="grid md:grid-cols-3 gap-6 text-left">
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h3 className="font-semibold text-gray-900 mb-3">Typical timeline</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
-                  <li>Letter before claim: 14 days.</li>
-                  <li>Default judgment: 2–4 weeks.</li>
-                  <li>Defended claims: 3–6 months.</li>
+                  <li>Letter before claim: usually 30 days.</li>
+                  <li>Default judgment: often 2–4 weeks.</li>
+                  <li>Defended claims: often 3–6 months.</li>
                 </ul>
               </div>
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h3 className="font-semibold text-gray-900 mb-3">Court fees</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
-                  <li>Fees vary by claim size and filing route.</li>
-                  <li>Most fees can be added to the claim.</li>
-                  <li>Pack includes England County Court fee guidance.</li>
+                  <li>Fees vary depending on claim value and filing route.</li>
+                  <li>In many cases, court fees can be added to the claim.</li>
+                  <li>The pack includes County Court fee guidance for England.</li>
                 </ul>
               </div>
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h3 className="font-semibold text-gray-900 mb-3">Evidence checklist</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
-                  <li>Tenancy agreement + rent schedule.</li>
+                  <li>Tenancy agreement and rent schedule.</li>
                   <li>Bank statements showing missed payments.</li>
-                  <li>Demand letters and tenant responses.</li>
+                  <li>Demand letters and any tenant responses.</li>
                 </ul>
                 <Link href="/money-claim-unpaid-rent" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
                   See the landlord money claim guide →
@@ -177,7 +204,6 @@ export default async function MoneyClaimPage() {
         </Container>
       </section>
 
-      {/* AI-Drafted Documents Feature */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
         <Container>
           <div className="max-w-4xl mx-auto">
@@ -186,12 +212,11 @@ export default async function MoneyClaimPage() {
                 AI-Drafted Court Documents
               </h2>
               <p className="text-xl text-gray-700">
-                Ask Heaven drafts professional court documents for your claim
+                Ask Heaven helps draft the key court documents for your claim
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              {/* Particulars of Claim */}
               <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -200,29 +225,28 @@ export default async function MoneyClaimPage() {
                   <h3 className="text-xl font-bold text-charcoal">Particulars of Claim</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
-                  Ask Heaven drafts a professional Particulars of Claim document:
+                  Ask Heaven drafts a clear, court-ready Particulars of Claim document covering:
                 </p>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-blue-600 font-bold">✓</span>
-                    <span>Tenancy agreement details and terms</span>
+                    <span>Tenancy agreement details and key terms</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-600 font-bold">✓</span>
-                    <span>Arrears breakdown with dates and amounts</span>
+                    <span>Arrears broken down by date and amount</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-600 font-bold">✓</span>
-                    <span>Interest calculation (8% statutory rate)</span>
+                    <span>Interest calculation at the statutory 8% rate</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-600 font-bold">✓</span>
-                    <span>Legal formatting ready for court submission</span>
+                    <span>Formatting suitable for court submission</span>
                   </li>
                 </ul>
               </div>
 
-              {/* Letter Before Claim */}
               <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -231,37 +255,36 @@ export default async function MoneyClaimPage() {
                   <h3 className="text-xl font-bold text-charcoal">Letter Before Claim</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
-                  PAP-DEBT compliant Letter Before Action:
+                  A PAP-DEBT compliant Letter Before Claim that includes:
                 </p>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
-                    <span>PAP-DEBT compliance (required for E&W)</span>
+                    <span>PAP-DEBT compliance for the England route</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
-                    <span>Clear breakdown of debt owed</span>
+                    <span>A clear breakdown of the debt claimed</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
-                    <span>30-day notice period</span>
+                    <span>The standard response period before court action</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
-                    <span>Includes all required PAP enclosures</span>
+                    <span>The required PAP enclosures</span>
                   </li>
                 </ul>
               </div>
             </div>
 
             <p className="text-xs text-gray-500 text-center italic">
-              AI-drafted documents should be reviewed before submission. You may wish to have a solicitor review for complex claims.
+              AI-drafted documents should be checked before submission. For more complex claims, you may wish to have them reviewed by a solicitor.
             </p>
           </div>
         </Container>
       </section>
 
-      {/* Why Landlord Heaven */}
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
@@ -270,15 +293,29 @@ export default async function MoneyClaimPage() {
         </Container>
       </section>
 
-      {/* How It Works */}
       <section id="how-it-works" className="scroll-mt-24 py-16 md:py-20 bg-white">
         <Container>
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-[#F8F5FF] p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">How it works</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <div className="rounded-2xl bg-white p-5"><h3 className="font-semibold">1) Choose what you are claiming</h3><p className="mt-2 text-sm text-gray-700">Select rent arrears, damage, cleaning, utilities, or combined debt reasons.</p></div>
-              <div className="rounded-2xl bg-white p-5"><h3 className="font-semibold">2) Add case facts and evidence</h3><p className="mt-2 text-sm text-gray-700">Enter tenancy details, debt breakdowns, and supporting evidence information.</p></div>
-              <div className="rounded-2xl bg-white p-5"><h3 className="font-semibold">3) Generate and issue your claim pack</h3><p className="mt-2 text-sm text-gray-700">Preview your documents, send the Letter Before Claim, then move into court filing.</p></div>
+              <div className="rounded-2xl bg-white p-5">
+                <h3 className="font-semibold">1) Choose what you want to claim</h3>
+                <p className="mt-2 text-sm text-gray-700">
+                  Select rent arrears, damage, cleaning, utilities, or a combination of claim reasons.
+                </p>
+              </div>
+              <div className="rounded-2xl bg-white p-5">
+                <h3 className="font-semibold">2) Add the case details and evidence</h3>
+                <p className="mt-2 text-sm text-gray-700">
+                  Enter the tenancy details, debt breakdown, and the supporting evidence you have.
+                </p>
+              </div>
+              <div className="rounded-2xl bg-white p-5">
+                <h3 className="font-semibold">3) Generate and issue your claim pack</h3>
+                <p className="mt-2 text-sm text-gray-700">
+                  Preview your documents, send the Letter Before Claim, and then move on to court filing if needed.
+                </p>
+              </div>
             </div>
             <div className="mt-8 text-center">
               <Link
@@ -292,7 +329,6 @@ export default async function MoneyClaimPage() {
         </Container>
       </section>
 
-      {/* Comparison Table */}
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
@@ -304,32 +340,31 @@ export default async function MoneyClaimPage() {
         </Container>
       </section>
 
-      {/* When to Use */}
       <section id="when-to-use" className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">When to Use Money Claim Pack</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">When to use the Money Claim Pack</h2>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Use Money Claim If:</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Use the Money Claim Pack if:</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Tenant owes rent arrears (current or former tenant)</li>
-                  <li>• Tenant caused property damage needing repair</li>
-                  <li>• You paid for professional cleaning or rubbish removal</li>
-                  <li>• Tenant left unpaid utilities in your name</li>
-                  <li>• Claim is under £10,000</li>
-                  <li>• You know where tenant lives/works</li>
+                  <li>• The tenant owes rent arrears, whether they are still in the property or have already left.</li>
+                  <li>• The tenant caused property damage that needs repair.</li>
+                  <li>• You paid for professional cleaning or rubbish removal.</li>
+                  <li>• The tenant left unpaid utilities in your name.</li>
+                  <li>• The claim is within the usual small claims range.</li>
+                  <li>• You know where the tenant lives or works.</li>
                 </ul>
               </div>
 
               <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg">
-                <h3 className="text-xl font-semibold text-charcoal mb-3">Consider Carefully If:</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Think carefully if:</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Tenant has no known income or assets</li>
-                  <li>• Tenant has left the country</li>
-                  <li>• You don&apos;t have current contact details</li>
-                  <li>• Arrears are very small (court fees may exceed recovery)</li>
+                  <li>• The tenant has no known income or assets.</li>
+                  <li>• The tenant has left the country.</li>
+                  <li>• You do not have current contact details.</li>
+                  <li>• The debt is very small and the costs may outweigh recovery.</li>
                 </ul>
               </div>
             </div>
@@ -337,7 +372,7 @@ export default async function MoneyClaimPage() {
             <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
               <p className="text-charcoal font-semibold mb-2">Need to evict first?</p>
               <p className="text-gray-700">
-                If your tenant is still in the property, start with our{" "}
+                If the tenant is still in the property, start with our{" "}
                 <Link href="/products/notice-only" className="text-primary hover:underline">
                   Notice Only Pack
                 </Link>{" "}
@@ -345,19 +380,18 @@ export default async function MoneyClaimPage() {
                 <Link href="/products/complete-pack" className="text-primary hover:underline">
                   Complete Eviction Pack
                 </Link>
-                . You can pursue money claims separately after possession.
+                . You can pursue a money claim separately alongside or after the possession process, depending on your case.
               </p>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Court Fees */}
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
-              Court Fees (Paid Separately to Court)
+              Court Fees (paid separately to the court)
             </h2>
 
             <div className="overflow-x-auto">
@@ -410,15 +444,14 @@ export default async function MoneyClaimPage() {
             </div>
 
             <div className="mt-6 space-y-2 text-sm text-gray-600">
-              <p>• Court fees are paid to the court when filing, NOT to Landlord Heaven</p>
-              <p>• If you win, court fees can be added to your claim (tenant pays)</p>
-              <p>• Money Claim Online (MCOL) is cheaper - use it where possible</p>
+              <p>• Court fees are paid to the court, not to Landlord Heaven.</p>
+              <p>• If you win, court fees can often be added to your claim.</p>
+              <p>• Money Claim Online can be cheaper, so use it where appropriate.</p>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Cross-sell: Eviction for Tenant Still in Property */}
       <section className="py-12 md:py-16 bg-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto">
@@ -429,12 +462,10 @@ export default async function MoneyClaimPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-charcoal mb-2">
-                    Need to evict the tenant too?
+                    Need to evict the tenant as well?
                   </h3>
                   <p className="text-gray-600 mb-4">
-                    A money claim recovers what you&apos;re owed — but if you also need the tenant OUT of the
-                    property, you&apos;ll need an eviction notice. You can pursue both simultaneously: eviction
-                    for possession and money claim for the debt.
+                    A money claim helps you recover what you are owed. If you also need the tenant to leave the property, you will need an eviction notice too. Many landlords run both routes: eviction for possession and a money claim for the debt.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link
@@ -462,7 +493,6 @@ export default async function MoneyClaimPage() {
         </Container>
       </section>
 
-      {/* FAQ */}
       <FAQSection
         title="Frequently Asked Questions"
         faqs={faqs}
@@ -471,7 +501,6 @@ export default async function MoneyClaimPage() {
         variant="white"
       />
 
-      {/* Related Resources */}
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
@@ -490,13 +519,12 @@ export default async function MoneyClaimPage() {
         </Container>
       </section>
 
-      {/* CTA */}
       <section id="start-your-pack" className="scroll-mt-24 py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Recover What You&apos;re Owed?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to recover what you’re owed?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              If your tenant is not paying rent, start your money claim now and generate the documents you need to recover unpaid rent and other tenancy debt.
+              If your tenant has not paid rent, start your money claim now and generate the documents you need to recover unpaid rent and other tenancy-related debt.
             </p>
             <Link
               href="/wizard?product=money_claim&src=product_page"
@@ -513,5 +541,3 @@ export default async function MoneyClaimPage() {
     </div>
   );
 }
-
-
