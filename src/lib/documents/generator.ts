@@ -925,6 +925,7 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       'compliance',        // Used for compliance data display
       'metadata',          // Used by service_instructions.hbs: {{format_date metadata.generated_at}}
       'tenancy',           // Used by compliance_checklist.hbs: {{tenancy.start_date}}
+      'drafting_model',    // Used by England possession support docs for shared narrative sections
     ];
 
     const safeData = Object.entries(enrichedData).reduce((acc, [key, value]) => {

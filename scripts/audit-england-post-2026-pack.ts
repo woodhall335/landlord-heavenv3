@@ -12,6 +12,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { getPackContents } from '@/lib/products/pack-contents';
 import { getSelectedGrounds } from '@/lib/grounds';
 import { getEnglandGroundDefinition, listEnglandGroundDefinitions } from '@/lib/england-possession/ground-catalog';
+import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
 import { validateFlow, type FlowValidationResult } from '@/lib/validation/validateFlow';
 import { validateNoticeOnlyCase } from '@/lib/validation/notice-only-case-validator';
 import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
@@ -196,7 +197,7 @@ function prepareGuidanceDocumentData(
   const hasGround1A = normalizedGroundCodes.includes('1A');
   const usesRentArrearsGrounds = normalizedGroundCodes.some((ground) => ['8', '10', '11'].includes(ground));
 
-  return {
+  return enrichEnglandSection8SupportContext({
     ...wizardFacts,
     jurisdiction: 'england',
     route,
@@ -225,7 +226,7 @@ function prepareGuidanceDocumentData(
     tenant_in_breathing_space: wizardFacts.tenant_in_breathing_space,
     evidence_bundle_ready: wizardFacts.evidence_bundle_ready,
     ground_1a_reletting_acknowledged: wizardFacts.ground_1a_reletting_acknowledged,
-  };
+  });
 }
 
 function collectLegacyFlags(content: string): string[] {

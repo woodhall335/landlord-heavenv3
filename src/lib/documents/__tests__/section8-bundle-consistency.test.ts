@@ -88,7 +88,30 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('{{#if (hasValue notice_expiry_date)}}');
     expect(content).toContain('{{#if (hasValue earliest_proceedings_date)}}');
-    expect(content).toContain('{{#if (hasValue defendant_circumstances_text)}}');
+    expect(content).toContain('drafting_model.caseSummary.defendantCircumstancesParagraphs.length');
+  });
+
+  test('shared guidance templates route England Section 8 copy through the canonical drafting model', () => {
+    const caseSummaryPath = path.join(process.cwd(), 'config/jurisdictions/shared/templates/case_summary.hbs');
+    const evidenceChecklistPath = path.join(
+      process.cwd(),
+      'config/jurisdictions/shared/templates/evidence_collection_checklist.hbs',
+    );
+    const coverLetterPath = path.join(
+      TEMPLATES_BASE,
+      'eviction/cover_letter_to_tenant.hbs',
+    );
+
+    const caseSummaryContent = fs.readFileSync(caseSummaryPath, 'utf-8');
+    const evidenceChecklistContent = fs.readFileSync(evidenceChecklistPath, 'utf-8');
+    const coverLetterContent = fs.readFileSync(coverLetterPath, 'utf-8');
+
+    expect(caseSummaryContent).toContain('drafting_model.caseSummary.narrativeParagraphs.length');
+    expect(caseSummaryContent).toContain('drafting_model.previewSummary.readinessItems.length');
+    expect(caseSummaryContent).not.toContain('drafting_model.previewSummary.narrativeParagraphs');
+    expect(evidenceChecklistContent).toContain('drafting_model.evidenceChecklist.groundSections.length');
+    expect(coverLetterContent).toContain('drafting_model.coverLetter.introParagraphs.length');
+    expect(coverLetterContent).toContain('{{notice_name}}');
   });
 
   test('witness statement only renders the timeline section when timeline content exists', () => {

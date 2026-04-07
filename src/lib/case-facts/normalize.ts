@@ -1318,6 +1318,100 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // GROUND-SPECIFIC DETAILED FACTS (Section 8 per-ground questions)
   // =============================================================================
 
+  const getGroundField = (groundCode: string, field: string) => {
+    const lowerPath = `ground_${groundCode.toLowerCase()}.${field}`;
+    const upperPath = `ground_${groundCode.toUpperCase()}.${field}`;
+    return getWizardValue(wizard, lowerPath) ?? (upperPath !== lowerPath ? getWizardValue(wizard, upperPath) : null);
+  };
+
+  const buildSpecialistOccupationGround = (groundCode: string) => ({
+    factual_basis: getGroundField(groundCode, 'factual_basis'),
+    qualifying_occupier: getGroundField(groundCode, 'qualifying_occupier'),
+    occupier_relationship: getGroundField(groundCode, 'occupier_relationship'),
+    trigger_date: getGroundField(groundCode, 'trigger_date'),
+    notice_or_status_details: getGroundField(groundCode, 'notice_or_status_details'),
+    supporting_evidence: getGroundField(groundCode, 'supporting_evidence'),
+  });
+
+  const buildConductGround = (groundCode: string) => {
+    const behaviourType = getGroundField(groundCode, 'behaviour_type');
+
+    return {
+      behaviour_type: Array.isArray(behaviourType) ? behaviourType : (behaviourType ? [behaviourType] : null),
+      incident_count: coerceNumber(getGroundField(groundCode, 'incident_count')),
+      incidents_description: getGroundField(groundCode, 'incidents_description'),
+      affected_parties: getGroundField(groundCode, 'affected_parties'),
+      witnesses: coerceBoolean(getGroundField(groundCode, 'witnesses')),
+      witness_names: getGroundField(groundCode, 'witness_names'),
+      police_involved: coerceBoolean(getGroundField(groundCode, 'police_involved')),
+      police_reference: getGroundField(groundCode, 'police_reference'),
+      council_involved: coerceBoolean(getGroundField(groundCode, 'council_involved')),
+      council_reference: getGroundField(groundCode, 'council_reference'),
+      warnings_issued: getGroundField(groundCode, 'warnings_issued'),
+    };
+  };
+
+  base.ground_1 = {
+    intended_occupier: getGroundField('1', 'intended_occupier'),
+    occupier_relationship: getGroundField('1', 'occupier_relationship'),
+    occupation_reason: getGroundField('1', 'occupation_reason'),
+    decision_date: getGroundField('1', 'decision_date'),
+    intended_start_date: getGroundField('1', 'intended_start_date'),
+    supporting_evidence: getGroundField('1', 'supporting_evidence'),
+  };
+
+  base.ground_1a = {
+    sale_reason: getGroundField('1a', 'sale_reason'),
+    sale_steps_taken: getGroundField('1a', 'sale_steps_taken'),
+    decision_date: getGroundField('1a', 'decision_date'),
+    intended_sale_timing: getGroundField('1a', 'intended_sale_timing'),
+    supporting_evidence: getGroundField('1a', 'supporting_evidence'),
+  };
+
+  base.ground_2 = buildSpecialistOccupationGround('2');
+  base.ground_2za = buildSpecialistOccupationGround('2za');
+  base.ground_2zb = buildSpecialistOccupationGround('2zb');
+  base.ground_2zc = buildSpecialistOccupationGround('2zc');
+  base.ground_2zd = buildSpecialistOccupationGround('2zd');
+  base.ground_4 = buildSpecialistOccupationGround('4');
+  base.ground_4a = buildSpecialistOccupationGround('4a');
+  base.ground_5 = buildSpecialistOccupationGround('5');
+  base.ground_5a = buildSpecialistOccupationGround('5a');
+  base.ground_5b = buildSpecialistOccupationGround('5b');
+  base.ground_5c = buildSpecialistOccupationGround('5c');
+  base.ground_5e = buildSpecialistOccupationGround('5e');
+  base.ground_5f = buildSpecialistOccupationGround('5f');
+  base.ground_5g = buildSpecialistOccupationGround('5g');
+  base.ground_5h = buildSpecialistOccupationGround('5h');
+
+  base.ground_6 = {
+    works_description: getGroundField('6', 'works_description'),
+    possession_requirement_reason: getGroundField('6', 'possession_requirement_reason'),
+    intended_start_date: getGroundField('6', 'intended_start_date'),
+    planning_or_contractor_status: getGroundField('6', 'planning_or_contractor_status'),
+    supporting_evidence: getGroundField('6', 'supporting_evidence'),
+  };
+
+  base.ground_6b = {
+    works_description: getGroundField('6b', 'works_description'),
+    possession_requirement_reason: getGroundField('6b', 'possession_requirement_reason'),
+    intended_start_date: getGroundField('6b', 'intended_start_date'),
+    planning_or_contractor_status: getGroundField('6b', 'planning_or_contractor_status'),
+    supporting_evidence: getGroundField('6b', 'supporting_evidence'),
+  };
+
+  base.ground_7 = buildSpecialistOccupationGround('7');
+  base.ground_7a = buildConductGround('7a');
+
+  base.ground_7b = {
+    affected_occupiers: getGroundField('7b', 'affected_occupiers'),
+    status_basis: getGroundField('7b', 'status_basis'),
+    notice_source: getGroundField('7b', 'notice_source'),
+    status_check_date: getGroundField('7b', 'status_check_date'),
+    decision_or_reference: getGroundField('7b', 'decision_or_reference'),
+    supporting_evidence: getGroundField('7b', 'supporting_evidence'),
+  };
+
   // Ground 8 - Serious Rent Arrears
   base.ground_8 = {
     arrears_at_notice: parseCurrencyAmount(getWizardValue(wizard, 'ground_8.arrears_at_notice') ?? getWizardValue(wizard, 'g8_arrears_at_notice')),
@@ -1366,7 +1460,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   const g14BehaviourType = getWizardValue(wizard, 'ground_14.behaviour_type') ?? getWizardValue(wizard, 'g14_behaviour_type');
   base.ground_14 = {
     behaviour_type: Array.isArray(g14BehaviourType) ? g14BehaviourType : (g14BehaviourType ? [g14BehaviourType] : null),
-    incident_count: parseCurrencyAmount(getWizardValue(wizard, 'ground_14.incident_count') ?? getWizardValue(wizard, 'g14_incident_count')),
+    incident_count: coerceNumber(getWizardValue(wizard, 'ground_14.incident_count') ?? getWizardValue(wizard, 'g14_incident_count')),
     incidents_description: getWizardValue(wizard, 'ground_14.incidents_description') ?? getWizardValue(wizard, 'g14_incidents_description'),
     affected_parties: getWizardValue(wizard, 'ground_14.affected_parties') ?? getWizardValue(wizard, 'g14_affected_parties'),
     witnesses: coerceBoolean(getWizardValue(wizard, 'ground_14.witnesses') ?? getWizardValue(wizard, 'g14_witnesses')),
@@ -1377,6 +1471,9 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     council_reference: getWizardValue(wizard, 'ground_14.council_reference') ?? getWizardValue(wizard, 'g14_council_reference'),
     warnings_issued: getWizardValue(wizard, 'ground_14.warnings_issued') ?? getWizardValue(wizard, 'g14_warnings_issued'),
   };
+
+  base.ground_14a = buildConductGround('14a');
+  base.ground_14za = buildConductGround('14za');
 
   // Ground 15 - Damage to Furniture
   base.ground_15 = {
@@ -1396,6 +1493,16 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     discovery_date: getWizardValue(wizard, 'ground_17.discovery_date') ?? getWizardValue(wizard, 'g17_discovery_date'),
     discovery_method: getWizardValue(wizard, 'ground_17.discovery_method') ?? getWizardValue(wizard, 'g17_discovery_method'),
   };
+
+  base.ground_9 = {
+    alternative_address: getGroundField('9', 'alternative_address'),
+    availability_date: getGroundField('9', 'availability_date'),
+    suitability_summary: getGroundField('9', 'suitability_summary'),
+    affordability_summary: getGroundField('9', 'affordability_summary'),
+    supporting_evidence: getGroundField('9', 'supporting_evidence'),
+  };
+
+  base.ground_18 = buildSpecialistOccupationGround('18');
 
   // =============================================================================
   // RISK INDICATORS
@@ -2412,7 +2519,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
             if (extracted) return extracted;
           }
         }
-      } catch (e) {
+      } catch {
         // Fallback - skip this part
       }
     }
@@ -2491,9 +2598,9 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
         'section8',           // Section 8 notice configuration/facts object
       ];
 
-      // Check if key matches ground_* pattern (e.g., ground_8, ground_10, ground_17)
+      // Check if key matches ground_* pattern (e.g., ground_8, ground_1a, ground_14za)
       // These are structured objects containing ground-specific details
-      const isGroundObject = /^ground[_\s]?\d+$/i.test(key);
+      const isGroundObject = /^ground[_\s]?\d+[a-z]*$/i.test(key);
 
       if (knownStructures.includes(key) || isGroundObject) {
         // Skip known nested structures and ground objects

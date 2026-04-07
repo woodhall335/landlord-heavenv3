@@ -1,0 +1,70 @@
+/**
+ * @vitest-environment jsdom
+ */
+
+import React, { useState } from 'react';
+import { describe, it, expect, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+
+import type { WizardFacts } from '@/lib/case-facts/schema';
+import { NoticeSection } from '../NoticeSection';
+
+function renderControlledNoticeSection(initialFacts: WizardFacts, mode: 'complete_pack' | 'notice_only' = 'notice_only') {
+  const updatesSpy = vi.fn();
+
+  const Wrapper = () => {
+    const [facts, setFacts] = useState<WizardFacts>(initialFacts);
+
+    const handleUpdate = (updates: Record<string, any>) => {
+      updatesSpy(updates);
+      setFacts((current) => ({ ...current, ...updates }));
+    };
+
+    return (
+      <NoticeSection
+        facts={facts}
+        jurisdiction="england"
+        onUpdate={handleUpdate}
+        mode={mode}
+      />
+    );
+  };
+
+  render(<Wrapper />);
+
+  return updatesSpy;
+}
+
+describe('NoticeSection specialist England ground capture', () => {
+  it('shows specialist ground detail questions in notice-only mode when a sale ground is selected', () => {
+    const updatesSpy = renderControlledNoticeSection({
+      __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },
+      eviction_route: 'section_8',
+      section8_grounds: [],
+    });
+
+    fireEvent.click(screen.getByLabelText(/Ground 1A - Sale of dwelling house/i));
+
+    expect(updatesSpy).toHaveBeenCalledWith({ section8_grounds: ['Ground 1A'] });
+    expect(screen.getByText('Specialist Ground Details')).toBeInTheDocument();
+    expect(screen.getByLabelText('Why is the property being sold?')).toBeInTheDocument();
+    expect(screen.getByLabelText('What sale steps have already been taken?')).toBeInTheDocument();
+    expect(screen.getByLabelText('What evidence supports the sale intention?')).toBeInTheDocument();
+  });
+
+  it('shows specialist ground detail questions on the already-served complete-pack path', () => {
+    renderControlledNoticeSection({
+      __meta: { product: 'complete_pack', original_product: 'complete_pack', jurisdiction: 'england' },
+      eviction_route: 'section_8',
+      notice_already_served: true,
+      notice_served_date: '2026-03-12',
+      notice_service_method: 'first_class_post',
+      section8_grounds: ['Ground 6', 'Ground 7B'],
+    }, 'complete_pack');
+
+    expect(screen.getByText('Specialist Ground Details')).toBeInTheDocument();
+    expect(screen.getByLabelText('Describe the proposed works')).toBeInTheDocument();
+    expect(screen.getByLabelText('What official notice or source material is relied on?')).toBeInTheDocument();
+    expect(screen.getByLabelText('Reference or decision identifier')).toBeInTheDocument();
+  });
+});

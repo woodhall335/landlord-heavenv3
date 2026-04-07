@@ -17,6 +17,7 @@ import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/
 import { getLawProfile } from '@/lib/law-profile';
 import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import { getSelectedGrounds } from '@/lib/grounds';
+import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
 
 export const runtime = 'nodejs';
 
@@ -1098,6 +1099,9 @@ export async function POST(request: Request) {
 
     let is_court_ready: boolean | null = null;
     let readiness_summary: string | null = null;
+    let drafting_preview:
+      | { title: string; paragraphs: string[]; checklist: string[] }
+      | null = null;
     // Use finalRecommendedRoute for the label since that's what's actually recommended
     const effectiveRoute = finalRecommendedRoute || route;
     let recommended_route_label: string = effectiveRoute;
@@ -1160,10 +1164,50 @@ export async function POST(request: Request) {
       }
     }
 
+    const wf = wizardFacts as any;
+
+    if (caseData.case_type === 'eviction' && canonicalJurisdiction === 'england' && effectiveRoute === 'section_8') {
+      const selectedGrounds = getSelectedGrounds(wizardFacts as any);
+
+      if (selectedGrounds.length > 0) {
+        const draftingContext = enrichEnglandSection8SupportContext({
+          ...wf,
+          property_address:
+            wf?.property_address ||
+            [
+              facts.property?.address_line1,
+              facts.property?.address_line2,
+              facts.property?.city,
+              facts.property?.postcode,
+            ]
+              .filter((part): part is string => typeof part === 'string' && part.trim().length > 0)
+              .join(', '),
+          landlord_full_name: wf?.landlord_full_name || facts.parties?.landlord?.name,
+          tenant_full_name: wf?.tenant_full_name || facts.parties?.tenants?.[0]?.name,
+          court_name: wf?.court_name || 'County Court',
+          ground_codes: selectedGrounds,
+          selected_grounds: selectedGrounds,
+          tenancy_start_date: wf?.tenancy_start_date || facts.tenancy?.start_date,
+          notice_service_date: wf?.notice_served_date || wf?.service_date || wf?.notice_date,
+          notice_expiry_date: wf?.notice_expiry_date || wf?.earliest_possession_date,
+          earliest_proceedings_date:
+            wf?.earliest_proceedings_date || wf?.notice_expiry_date || wf?.earliest_possession_date,
+          rent_amount: wf?.rent_amount || facts.tenancy?.rent_amount,
+          rent_frequency: wf?.rent_frequency || facts.tenancy?.rent_frequency,
+          total_arrears: wf?.total_arrears || facts.issues?.rent_arrears?.total_arrears,
+        });
+
+        drafting_preview = {
+          title: draftingContext.preview_summary.shortTitle,
+          paragraphs: draftingContext.preview_summary.narrativeParagraphs,
+          checklist: draftingContext.preview_summary.readinessItems,
+        };
+      }
+    }
+
     // Build case_facts object for review page consumption
     // Contains persisted wizard facts relevant to grounds selection and review display
     // IMPORTANT: Include Section 21 compliance fields for Review page validation
-    const wf = wizardFacts as any;
     const caseFacts = {
       section8_grounds: getSelectedGrounds(wizardFacts as any),
       include_recommended_grounds: wf?.include_recommended_grounds || false,
@@ -1270,6 +1314,7 @@ export async function POST(request: Request) {
       case_strength_band,
       is_court_ready,
       readiness_summary,
+      drafting_preview,
       red_flags,
       compliance_issues: compliance,
       evidence_overview,

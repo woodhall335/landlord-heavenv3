@@ -345,4 +345,32 @@ describe('Section 8 document hardening', () => {
     expect(complianceText).toContain('How to Rent service is not confirmed in the current pack data');
     expect(complianceText).not.toContain('The deposit is not recorded as protected in an approved scheme');
   });
+
+  it(
+    'renders non-arrears England packs without arrears-centric bundle or hearing language',
+    async () => {
+      const pack = await generateCompleteEvictionPack(
+        buildEnglandSection8CompletePackFacts({
+          overrides: {
+            section8_grounds: ['Ground 1A'],
+            total_arrears: 0,
+            rent_arrears_amount: 0,
+            arrears_breakdown: '',
+            arrears_items: [],
+            court_name: 'York County Court and Family Court',
+          },
+        }),
+      );
+
+      const bundleText = toPlainText(getHtml(pack, 'court_bundle_index'));
+      const hearingText = toPlainText(getHtml(pack, 'hearing_checklist'));
+
+      expect(bundleText).toContain('Ground-specific use or sale evidence');
+      expect(bundleText).toContain('Sale of dwelling house evidence');
+      expect(bundleText).not.toContain('Schedule of arrears');
+      expect(hearingText).not.toContain('Update the schedule of arrears');
+      expect(hearingText).toContain('Explain why the statutory ground is made out on the facts');
+    },
+    120000,
+  );
 });

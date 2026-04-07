@@ -13,192 +13,212 @@ filename: case_summary.pdf
   <style>
     {{{print_css}}}
 
+    @page {
+      size: A4;
+      margin: 16mm;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      font-size: 11pt;
-      line-height: 1.5;
-      color: #333;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 2em;
-      padding-bottom: 1em;
-      border-bottom: 3px solid #1a1a1a;
-    }
-
-    .header h1 {
-      font-size: 18pt;
-      margin: 0 0 0.5em 0;
-      text-transform: uppercase;
-    }
-
-    .header p {
       font-size: 10pt;
-      color: #666;
+      line-height: 1.55;
+      color: #1a1a1a;
       margin: 0;
     }
 
+    .header {
+      margin-bottom: 1.5em;
+      padding-bottom: 0.9em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .header h1 {
+      margin: 0 0 0.3em 0;
+      font-size: 17pt;
+    }
+
+    .header p {
+      margin: 0.2em 0;
+      color: #555;
+    }
+
+    .summary-box,
+    .section,
+    .callout {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .summary-box,
     .section {
-      margin: 1.5em 0;
+      margin: 1.2em 0;
+      border: 1px solid #d8d8d8;
+      background: #fff;
+    }
+
+    .summary-box {
       padding: 1em;
-      border: 1px solid #ddd;
       background: #fafafa;
     }
 
-    .section h2 {
-      font-size: 12pt;
-      margin: 0 0 0.75em 0;
-      padding-bottom: 0.5em;
-      border-bottom: 2px solid #1a1a1a;
-      text-transform: uppercase;
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 0.45em 1em;
     }
 
-    .detail-row {
-      display: flex;
-      margin: 0.5em 0;
-    }
-
-    .detail-label {
+    .summary-grid dt {
       font-weight: 600;
-      width: 200px;
-      flex-shrink: 0;
+      color: #444;
     }
 
-    .detail-value {
-      flex-grow: 1;
+    .summary-grid dd {
+      margin: 0;
     }
 
-    .highlight-box {
-      background: #f0f0f0;
+    .section h2 {
+      margin: 0;
+      padding: 0.75em 0.95em;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 11pt;
+    }
+
+    .section .content {
       padding: 1em;
-      margin: 1em 0;
-      border-left: 4px solid #1a1a1a;
     }
 
-    .footer {
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 2px solid #1a1a1a;
-      font-size: 9pt;
-      color: #666;
+    p {
+      margin: 0 0 0.75em 0;
+    }
+
+    ul {
+      margin: 0.4em 0 0 1.2em;
+    }
+
+    li {
+      margin: 0.4em 0;
+    }
+
+    .callout {
+      margin: 1.2em 0;
+      padding: 0.95em 1em;
+      border-left: 4px solid #1a1a1a;
+      background: #f7f7f7;
+    }
+
+    .money {
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>Eviction Case Summary</h1>
-  <p>Generated on {{current_date}}</p>
-</div>
-
-<div class="section">
-  <h2>Property Details</h2>
-  <div class="detail-row">
-    <span class="detail-label">Property Address:</span>
-    <span class="detail-value">{{property_address}}</span>
+  <div class="header">
+    <h1>Eviction Case Summary</h1>
+    <p>Prepared on {{current_date}}</p>
+    {{#if notice_name}}<p>Notice relied on: {{notice_name}}</p>{{/if}}
   </div>
-  <div class="detail-row">
-    <span class="detail-label">Jurisdiction:</span>
-    <span class="detail-value">{{jurisdiction}}</span>
-  </div>
-</div>
 
-<div class="section">
-  <h2>Parties</h2>
-  <div class="detail-row">
-    <span class="detail-label">Landlord:</span>
-    <span class="detail-value">{{landlord_full_name}}</span>
+  <div class="summary-box">
+    <dl class="summary-grid">
+      <dt>Landlord</dt>
+      <dd>{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{/unless}}</dd>
+      <dt>Tenant</dt>
+      <dd>{{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{/unless}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      <dt>Property</dt>
+      <dd>{{property_address}}</dd>
+      {{#if court_name}}
+      <dt>Court</dt>
+      <dd>{{court_name}}</dd>
+      {{/if}}
+      {{#if ground_descriptions}}
+      <dt>Grounds relied on</dt>
+      <dd>{{ground_descriptions}}</dd>
+      {{/if}}
+      {{#if (hasValue tenancy_start_date_formatted)}}
+      <dt>Tenancy start date</dt>
+      <dd>{{tenancy_start_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue service_date_formatted)}}
+      <dt>Notice service date</dt>
+      <dd>{{service_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue notice_expiry_date_formatted)}}
+      <dt>Notice expiry date</dt>
+      <dd>{{notice_expiry_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue earliest_proceedings_date_formatted)}}
+      <dt>Earliest proceedings date</dt>
+      <dd>{{earliest_proceedings_date_formatted}}</dd>
+      {{/if}}
+      {{#if rent_amount}}
+      <dt>Contract rent</dt>
+      <dd>£{{rent_amount}} {{rent_frequency}}</dd>
+      {{/if}}
+      {{#if total_arrears}}
+      <dt>Recorded arrears</dt>
+      <dd class="money">£{{total_arrears}}</dd>
+      {{/if}}
+    </dl>
   </div>
-  {{#if landlord_address}}
-  <div class="detail-row">
-    <span class="detail-label">Landlord Address:</span>
-    <span class="detail-value">{{landlord_address}}</span>
+
+  <div class="callout">
+    <p>This summary draws together the key possession facts, the notice chronology, and the main points to be carried consistently across the support documents and any later court pack.</p>
+  </div>
+
+  <div class="section">
+    <h2>Case Narrative</h2>
+    <div class="content">
+      {{#if drafting_model.caseSummary.narrativeParagraphs.length}}
+        {{#each drafting_model.caseSummary.narrativeParagraphs}}
+      <p>{{this}}</p>
+        {{/each}}
+      {{else}}
+      <p>The landlord seeks possession of the property identified above using the route selected in the current case data.</p>
+      {{#if case_summary}}<p>{{case_summary}}</p>{{/if}}
+      {{/if}}
+    </div>
+  </div>
+
+  {{#if (or drafting_model.caseSummary.stepsParagraphs.length drafting_model.previewSummary.readinessItems.length)}}
+  <div class="section">
+    <h2>Procedural Focus</h2>
+    <div class="content">
+      <ul>
+        {{#if drafting_model.caseSummary.stepsParagraphs.length}}
+          {{#each drafting_model.caseSummary.stepsParagraphs}}
+        <li>{{this}}</li>
+          {{/each}}
+        {{else}}
+          {{#each drafting_model.previewSummary.readinessItems}}
+        <li>{{this}}</li>
+          {{/each}}
+        {{/if}}
+      </ul>
+    </div>
   </div>
   {{/if}}
-  <div class="detail-row">
-    <span class="detail-label">Tenant:</span>
-    <span class="detail-value">{{tenant_full_name}}</span>
-  </div>
-  {{#if tenant_2_name}}
-  <div class="detail-row">
-    <span class="detail-label">Second Tenant:</span>
-    <span class="detail-value">{{tenant_2_name}}</span>
-  </div>
-  {{/if}}
-</div>
 
-<div class="section">
-  <h2>Tenancy Details</h2>
-  <div class="detail-row">
-    <span class="detail-label">Tenancy Type:</span>
-    <span class="detail-value">{{tenancy_type}}</span>
-  </div>
-  <div class="detail-row">
-    <span class="detail-label">Start Date:</span>
-    <span class="detail-value">{{tenancy_start_date}}</span>
-  </div>
-  {{#if fixed_term_end_date}}
-  <div class="detail-row">
-    <span class="detail-label">Fixed Term End:</span>
-    <span class="detail-value">{{fixed_term_end_date}}</span>
+  {{#if drafting_model.caseSummary.defendantCircumstancesParagraphs.length}}
+  <div class="section">
+    <h2>Defendant Circumstances</h2>
+    <div class="content">
+      {{#each drafting_model.caseSummary.defendantCircumstancesParagraphs}}
+      <p>{{this}}</p>
+      {{/each}}
+    </div>
   </div>
   {{/if}}
-  <div class="detail-row">
-    <span class="detail-label">Rent:</span>
-    <span class="detail-value">£{{rent_amount}} {{rent_frequency}}</span>
-  </div>
-  {{#if deposit_amount}}
-  <div class="detail-row">
-    <span class="detail-label">Deposit:</span>
-    <span class="detail-value">£{{deposit_amount}}</span>
-  </div>
-  <div class="detail-row">
-    <span class="detail-label">Deposit Protected:</span>
-    <span class="detail-value">{{#if deposit_protected}}Yes{{else}}Not confirmed{{/if}}</span>
-  </div>
-  {{/if}}
-</div>
 
-<div class="section">
-  <h2>Eviction Details</h2>
-  <div class="detail-row">
-    <span class="detail-label">Eviction Route:</span>
-    <span class="detail-value">{{eviction_route}}</span>
-  </div>
-  {{#if ground_numbers}}
-  <div class="detail-row">
-    <span class="detail-label">Grounds:</span>
-    <span class="detail-value">{{ground_numbers}}</span>
+  {{#if drafting_model.caseSummary.financialParagraphs.length}}
+  <div class="section">
+    <h2>Financial Position</h2>
+    <div class="content">
+      {{#each drafting_model.caseSummary.financialParagraphs}}
+      <p>{{this}}</p>
+      {{/each}}
+    </div>
   </div>
   {{/if}}
-  {{#if total_arrears}}
-  <div class="highlight-box">
-    <strong>Rent Arrears:</strong> £{{total_arrears}}
-  </div>
-  {{/if}}
-</div>
-
-{{#if notice_served_date}}
-<div class="section">
-  <h2>Notice Details</h2>
-  <div class="detail-row">
-    <span class="detail-label">Notice Served:</span>
-    <span class="detail-value">{{notice_served_date}}</span>
-  </div>
-  {{#if notice_expiry_date}}
-  <div class="detail-row">
-    <span class="detail-label">Notice Expires:</span>
-    <span class="detail-value">{{notice_expiry_date}}</span>
-  </div>
-  {{/if}}
-</div>
-{{/if}}
-
-<div class="footer">
-  <p><strong>Landlord Heaven</strong> | Case Summary for Eviction Proceedings</p>
-  <p><em>This is a summary of information provided. It is not legal advice. Always verify details before proceeding.</em></p>
-</div>
-
 </body>
 </html>

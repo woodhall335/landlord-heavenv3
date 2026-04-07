@@ -13,335 +13,197 @@ filename: court_filing_guide.pdf
   <style>
     {{{print_css}}}
 
+    @page {
+      size: A4;
+      margin: 16mm;
+    }
+
     body {
       font-family: Arial, sans-serif;
       font-size: 10pt;
-      line-height: 1.5;
-      color: #333;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
+      line-height: 1.55;
+      color: #1a1a1a;
+      margin: 0;
     }
 
     .header {
+      margin-bottom: 1.5em;
+      padding-bottom: 0.9em;
+      border-bottom: 2px solid #1a1a1a;
       text-align: center;
-      margin-bottom: 2em;
-      padding-bottom: 1em;
-      border-bottom: 3px solid #1a1a1a;
     }
 
     .header h1 {
-      font-size: 18pt;
-      margin: 0 0 0.5em 0;
-      text-transform: uppercase;
+      margin: 0 0 0.3em 0;
+      font-size: 17pt;
     }
 
-    .header .subtitle {
-      font-size: 12pt;
-      color: #666;
+    .header p {
+      margin: 0.2em 0;
+      color: #555;
     }
 
-    .section {
-      margin: 1.5em 0;
+    .summary-box,
+    .section,
+    .callout {
       page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .summary-box,
+    .section {
+      margin: 1.2em 0;
+      border: 1px solid #d8d8d8;
+      background: #fff;
+    }
+
+    .summary-box {
+      padding: 1em;
+      background: #fafafa;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 0.45em 1em;
+    }
+
+    .summary-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .summary-grid dd {
+      margin: 0;
     }
 
     .section h2 {
-      font-size: 13pt;
+      margin: 0;
+      padding: 0.75em 0.95em;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 11pt;
+    }
+
+    .section .content {
+      padding: 1em;
+    }
+
+    .callout {
+      margin: 1.2em 0;
+      padding: 0.95em 1em;
+      border-left: 4px solid #b45309;
+      background: #fff7ed;
+    }
+
+    p {
       margin: 0 0 0.75em 0;
-      padding: 0.5em;
-      background: #1a1a1a;
-      color: white;
-      text-transform: uppercase;
     }
 
-    .section h3 {
-      font-size: 11pt;
-      margin: 1em 0 0.5em 0;
-      color: #1a1a1a;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 0.25em;
+    ul {
+      margin: 0.35em 0 0 1.2em;
     }
 
-    .step-box {
-      background: #f5f5f5;
-      border-left: 4px solid #1a1a1a;
-      padding: 1em;
-      margin: 1em 0;
-    }
-
-    .step-number {
-      display: inline-block;
-      background: #1a1a1a;
-      color: white;
-      width: 24px;
-      height: 24px;
-      text-align: center;
-      line-height: 24px;
-      border-radius: 50%;
-      margin-right: 0.5em;
-      font-weight: bold;
-    }
-
-    .warning-box {
-      background: #fff3cd;
-      border: 1px solid #ffc107;
-      padding: 1em;
-      margin: 1em 0;
-      border-radius: 4px;
-    }
-
-    .info-box {
-      background: #e7f3ff;
-      border: 1px solid #2196f3;
-      padding: 1em;
-      margin: 1em 0;
-      border-radius: 4px;
-    }
-
-    .success-box {
-      background: #d4edda;
-      border: 1px solid #28a745;
-      padding: 1em;
-      margin: 1em 0;
-      border-radius: 4px;
-    }
-
-    .checklist {
-      list-style: none;
-      padding: 0;
-    }
-
-    .checklist li {
-      padding: 0.5em 0;
-      padding-left: 2em;
-      position: relative;
-    }
-
-    .checklist li::before {
-      content: "[ ]";
-      position: absolute;
-      left: 0;
-      font-size: 11pt;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1em 0;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 0.5em;
-      text-align: left;
-    }
-
-    th {
-      background: #f5f5f5;
-      font-weight: 600;
-    }
-
-    .footer {
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 2px solid #1a1a1a;
-      font-size: 9pt;
-      color: #666;
-    }
-
-    @media print {
-      .section {
-        page-break-inside: avoid;
-      }
+    li {
+      margin: 0.38em 0;
     }
   </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>Court Filing Guide</h1>
-  <p class="subtitle">England Section 8 possession claims</p>
-  <p>Generated: {{current_date}}</p>
-</div>
-
-<div class="section">
-  <h2>Overview</h2>
-  <p>This guide explains the court stage after serving a Form 3A notice in England.</p>
-  <ul>
-    <li><strong>PCOL</strong> may be used if the claim is only for rent arrears.</li>
-    <li><strong>Paper filing</strong> with Form N5 and Form N119 is the standard route for non-rent or mixed-ground claims and can also be used for rent-only claims if preferred.</li>
-  </ul>
-
-  <div class="info-box">
-    <strong>Which court?</strong> File at the County Court that covers the area where the property is located. Find your court at <em>www.gov.uk/find-court-tribunal</em>.
+  <div class="header">
+    <h1>Court Filing Guide</h1>
+    <p>England possession claim guidance for the current pack.</p>
   </div>
 
-  <div class="warning-box">
-    <strong>Fees and official forms:</strong> The current County Court recovery-of-land issue fee is GBP 404 for both PCOL and paper possession claims. This pack is mapped to the current official GOV.UK N5 and N119 PDFs; check GOV.UK again immediately before filing in case HMCTS publishes an updated form or fee.
-  </div>
-</div>
-
-<div class="section">
-  <h2>Option 1: PCOL For Rent-Only Claims</h2>
-
-  <p>Possession Claims Online (PCOL) can be used if you are seeking possession only because the tenant owes rent.</p>
-
-  <h3>Eligibility for PCOL</h3>
-  <ul>
-    <li>the claim is only for rent arrears possession grounds</li>
-    <li>the property is residential and has a valid UK postcode</li>
-    <li>there are no more than 2 defendants</li>
-    <li>you can pay the fee online</li>
-  </ul>
-
-  <div class="step-box">
-    <p><span class="step-number">1</span> <strong>Create an account</strong></p>
-    <p>Register at <em>www.possessionclaim.gov.uk</em>.</p>
-  </div>
-
-  <div class="step-box">
-    <p><span class="step-number">2</span> <strong>Prepare your evidence</strong></p>
-    <p>Have the tenancy information, Form 3A notice details, proof of service, and up to 2 years of rent due and rent paid data ready. Check first that the tenant is not in a breathing space if you rely on Grounds 8, 10 or 11.</p>
-  </div>
-
-  <div class="step-box">
-    <p><span class="step-number">3</span> <strong>Upload the supporting documents</strong></p>
-    <p>Include the tenancy agreement, the completed Form 3A notice, proof of service, and the arrears schedule or rent statement. If the tenant receives Universal Credit housing support, keep any DWP direct-payment request or deduction correspondence with the bundle.</p>
+  <div class="summary-box">
+    <dl class="summary-grid">
+      {{#if court_name}}
+      <dt>Court</dt>
+      <dd>{{court_name}}</dd>
+      {{/if}}
+      <dt>Landlord</dt>
+      <dd>{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{/unless}}</dd>
+      <dt>Tenant</dt>
+      <dd>{{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{/unless}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      <dt>Property</dt>
+      <dd>{{property_address}}</dd>
+      {{#if ground_descriptions}}
+      <dt>Grounds relied on</dt>
+      <dd>{{ground_descriptions}}</dd>
+      {{/if}}
+      {{#if (hasValue service_date_formatted)}}
+      <dt>Notice service date</dt>
+      <dd>{{service_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue earliest_proceedings_date_formatted)}}
+      <dt>Earliest proceedings date</dt>
+      <dd>{{earliest_proceedings_date_formatted}}</dd>
+      {{/if}}
+    </dl>
   </div>
 
-  <div class="step-box">
-    <p><span class="step-number">4</span> <strong>Pay the fee and submit</strong></p>
-    <p>Possession claims currently cost GBP 404. Once submitted, you will receive a claim number and the court will serve the claim on the tenant.</p>
-  </div>
-</div>
-
-<div class="section">
-  <h2>Option 2: Paper Filing With N5 And N119</h2>
-
-  <h3>Documents Required</h3>
-  <ul class="checklist">
-    <li>Form N5 claim form</li>
-    <li>Form N119 particulars of claim</li>
-    <li>Copy of the tenancy agreement</li>
-    <li>Copy of the served Form 3A notice</li>
-    <li>Proof of service</li>
-    <li>Arrears schedule if rent grounds are used</li>
-    <li>Supporting evidence for each ground relied on</li>
-    <li>Optional certificate of service (N215)</li>
-  </ul>
-
-  <div class="warning-box">
-    Give the court at least one extra copy of each document. If the tenancy is joint, provide an extra copy for each tenant and keep a copy for yourself.
+  <div class="callout">
+    {{#if drafting_model.courtFilingGuide.overviewParagraphs.length}}
+      {{#each drafting_model.courtFilingGuide.overviewParagraphs}}
+    <p>{{this}}</p>
+      {{/each}}
+    {{else}}
+    <p>Before filing the claim, make sure the court forms, the notice, and the support documents all use the same facts, dates, and parties.</p>
+    {{/if}}
   </div>
 
-  <h3>Filing Steps</h3>
-  <div class="step-box">
-    <p><span class="step-number">1</span> <strong>Complete Form N5 and Form N119</strong></p>
-    <p>Your Landlord Heaven complete pack includes both forms ready for review and signature.</p>
+  <div class="section">
+    <h2>Before Issue</h2>
+    <div class="content">
+      <ul>
+        {{#if drafting_model.courtFilingGuide.preparationItems.length}}
+          {{#each drafting_model.courtFilingGuide.preparationItems}}
+        <li>{{this}}</li>
+          {{/each}}
+        {{else}}
+        <li>Check that the notice period has expired and the dates in the pack still match.</li>
+        <li>Review the claim forms and supporting documents together before filing.</li>
+        {{/if}}
+      </ul>
+    </div>
   </div>
 
-  <div class="step-box">
-    <p><span class="step-number">2</span> <strong>Send the papers to court</strong></p>
-    <p>Post, email, or deliver the papers to the County Court that covers the property. Check local court rules before filing by email.</p>
+  <div class="section">
+    <h2>What To File</h2>
+    <div class="content">
+      <ul>
+        {{#if drafting_model.courtFilingGuide.filingItems.length}}
+          {{#each drafting_model.courtFilingGuide.filingItems}}
+        <li>{{this}}</li>
+          {{/each}}
+        {{else}}
+        <li>Form N5 claim form and Form N119 particulars of claim.</li>
+        <li>The served notice and proof of service.</li>
+        <li>The tenancy agreement and supporting evidence for the pleaded grounds.</li>
+        {{/if}}
+      </ul>
+    </div>
   </div>
 
-  <div class="step-box">
-    <p><span class="step-number">3</span> <strong>Pay the court fee</strong></p>
-    <table>
-      <tr>
-        <th>Application</th>
-        <th>Current fee</th>
-      </tr>
-      <tr>
-        <td>Possession claim</td>
-        <td>GBP 404</td>
-      </tr>
-    </table>
+  {{#if drafting_model.courtFilingGuide.afterIssueItems.length}}
+  <div class="section">
+    <h2>After Issue</h2>
+    <div class="content">
+      <ul>
+        {{#each drafting_model.courtFilingGuide.afterIssueItems}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
   </div>
+  {{/if}}
 
-  <div class="step-box">
-    <p><span class="step-number">4</span> <strong>Wait for issue and hearing date</strong></p>
-    <p>The court will issue the claim, serve it on the tenant, and list the possession hearing.</p>
+  {{#if drafting_model.courtFilingGuide.warningParagraphs.length}}
+  <div class="callout">
+    {{#each drafting_model.courtFilingGuide.warningParagraphs}}
+    <p>{{this}}</p>
+    {{/each}}
   </div>
-</div>
-
-<div class="section">
-  <h2>What Happens Next</h2>
-
-  <ol>
-    <li>The court serves the claim on the tenant.</li>
-    <li>The tenant usually has 14 days to file a defence.</li>
-    <li>The court lists a possession hearing.</li>
-    <li>You attend with the notice, proof of service, and evidence for each ground.</li>
-    <li>The judge decides whether to make a possession order, a suspended order, a money order, or dismiss the claim.</li>
-  </ol>
-
-  <div class="warning-box">
-    A claim can be dismissed or delayed if the Form 3A notice is incomplete, the notice period is too short, the deposit rules were not satisfied where they apply, service cannot be proved, or the evidence does not match the grounds relied on.
-  </div>
-</div>
-
-<div class="section">
-  <h2>Pre-Hearing Preparation</h2>
-
-  <ul class="checklist">
-    <li>Bring the sealed claim, tenancy agreement, the Form 3A notice, proof of service, and the latest arrears schedule.</li>
-    <li>Be ready to explain the rent history, the notice date, the notice period, and the evidence for each ground relied on.</li>
-    <li>If the tenant offers a repayment plan or a suspended possession order, decide in advance what terms you would accept.</li>
-    <li>Review any defence filed by the tenant and bring documents that answer it directly, especially on deposit compliance, disrepair, service, and the arrears figure.</li>
-  </ul>
-</div>
-
-<div class="section">
-  <h2>Money Judgment And Debt Recovery</h2>
-
-  <p>Where you seek possession on rent arrears grounds, the court can also make a money judgment for arrears, issue fee, and any costs it allows.</p>
-
-  <div class="info-box">
-    If the tenant leaves before the hearing or after judgment, keep the arrears schedule updated. You may still need to pursue the debt separately if the possession claim no longer continues or if the arrears change materially.
-  </div>
-
-  <div class="warning-box">
-    If the tenant is in a breathing space, do not serve or progress rent-arrears enforcement without following the debt respite rules or obtaining the court's permission where required.
-  </div>
-</div>
-
-<div class="section">
-  <h2>After The Possession Order</h2>
-
-  <p>If the tenant does not leave by the date in the order, you can apply for enforcement.</p>
-
-  <div class="step-box">
-    <p><span class="step-number">1</span> <strong>Request a warrant for possession</strong></p>
-    <p>Use Form N325 for an outright possession order, or Form N325A if a suspended possession order has been breached. The current warrant fee is GBP 148.</p>
-  </div>
-
-  <div class="step-box">
-    <p><span class="step-number">2</span> <strong>Bailiff enforcement</strong></p>
-    <p>The court will list the bailiff appointment. Have a locksmith ready for the eviction date if enforcement is granted.</p>
-  </div>
-
-  <div class="success-box">
-    <strong>Tip:</strong> Keep the notice, claim papers, service evidence, and possession order together for the enforcement stage.
-  </div>
-</div>
-
-<div class="section">
-  <h2>Useful Links</h2>
-  <ul>
-    <li><strong>PCOL:</strong> www.possessionclaim.gov.uk</li>
-    <li><strong>Find your court:</strong> www.gov.uk/find-court-tribunal</li>
-    <li><strong>Court fees:</strong> www.gov.uk/court-fees-what-they-are</li>
-    <li><strong>Help with fees:</strong> www.gov.uk/get-help-with-court-fees</li>
-  </ul>
-</div>
-
-<div class="footer">
-  <p><strong>Landlord Heaven</strong> | Court Filing Guide for Post-2026 England Possession Claims</p>
-  <p><em>This guide is for informational purposes only and does not constitute legal advice. Court procedure and fees may change, so verify the current HMCTS position before filing.</em></p>
-  <p>Generated: {{current_date}}</p>
-</div>
-
+  {{/if}}
 </body>
 </html>

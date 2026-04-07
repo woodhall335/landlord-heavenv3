@@ -145,6 +145,11 @@
 
   <div class="callout">
     <p><strong>Purpose:</strong> Use this checklist to verify that the {{notice_name}} is internally consistent across the notice and support documents, has been served using a defensible method, and is ready for evidence use if a claim is issued.</p>
+    {{#if drafting_model.validityChecklist.overviewParagraphs.length}}
+      {{#each drafting_model.validityChecklist.overviewParagraphs}}
+    <p>{{this}}</p>
+      {{/each}}
+    {{/if}}
   </div>
 
   <div class="summary-box">
@@ -183,10 +188,16 @@
     <div class="heading">Keep With The Pack</div>
     <div class="content">
       <ul>
+        {{#if drafting_model.validityChecklist.serviceEvidenceItems.length}}
+          {{#each drafting_model.validityChecklist.serviceEvidenceItems}}
+        <li>{{this}}</li>
+          {{/each}}
+        {{else}}
         <li>A copy of the completed {{notice_name}} that was served.</li>
         <li>A note of the service date, time, place, and method.</li>
         <li>Proof of posting, tracking, witness details, or photographs, depending on the service method used.</li>
         <li>Any follow-up correspondence showing the tenant received or responded to the notice.</li>
+        {{/if}}
       </ul>
     </div>
   </div>
@@ -196,6 +207,11 @@
     <div class="heading">Before You Rely On The Notice</div>
     <div class="content">
       <ul>
+        {{#if drafting_model.validityChecklist.validityItems.length}}
+          {{#each drafting_model.validityChecklist.validityItems}}
+        <li>{{this}}</li>
+          {{/each}}
+        {{else}}
         <li>The pack uses the same canonical notice timeline across the notice, proof of service, summary, and bundle documents.</li>
         <li>The correct prescribed notice form is used for the case.</li>
         <li>The landlord, tenant, and property details are complete and match the tenancy records.</li>
@@ -207,6 +223,7 @@
         <li>Where a mandatory ground is relied on, the evidence is still sufficient to prove the ground and any prerequisite facts at the hearing.</li>
         {{else}}
         <li>Where only discretionary grounds are relied on, the evidence explains why possession is reasonable in all the circumstances.</li>
+        {{/if}}
         {{/if}}
       </ul>
     </div>
@@ -221,18 +238,29 @@
     <div class="heading">Do Not Do These Things</div>
     <div class="content">
       <ul>
+        {{#if drafting_model.validityChecklist.afterServiceItems.length}}
+          {{#each drafting_model.validityChecklist.afterServiceItems}}
+        <li>{{this}}</li>
+          {{/each}}
+        {{else}}
         {{#if (hasValue earliest_proceedings_date_formatted)}}
         <li>Do not issue possession proceedings before {{earliest_proceedings_date_formatted}}.</li>
         {{/if}}
         <li>Do not change locks or remove belongings without a court order and lawful enforcement.</li>
         <li>Do not leave the service method or service evidence undocumented.</li>
         <li>Do not let one court-facing document use a different court name or notice timeline from the others.</li>
+        {{/if}}
       </ul>
     </div>
   </div>
 
   <div class="callout critical">
     <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds particulars are inconsistent across the pack, even where the underlying arrears or breach evidence is strong.</p>
+    {{#if drafting_model.validityChecklist.riskParagraphs.length}}
+      {{#each drafting_model.validityChecklist.riskParagraphs}}
+    <p>{{this}}</p>
+      {{/each}}
+    {{/if}}
   </div>
 
   <div class="doc-footer">

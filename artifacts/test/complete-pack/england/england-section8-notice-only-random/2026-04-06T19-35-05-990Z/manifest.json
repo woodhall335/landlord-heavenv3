@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-04-06T19:35:06.334Z",
+  "runId": "2026-04-06T19-35-05-990Z",
+  "jurisdiction": "england",
+  "variant": "england-section8-notice-only-random",
+  "packSlug": "notice-only",
+  "docs": [
+    {
+      "key": "section8_notice",
+      "filename": "notice.pdf",
+      "title": "Form 3A Notice Seeking Possession",
+      "type": "pdf"
+    },
+    {
+      "key": "service_instructions",
+      "filename": "service-instructions.pdf",
+      "title": "Service Instructions",
+      "type": "pdf"
+    },
+    {
+      "key": "validity_checklist",
+      "filename": "service-checklist.pdf",
+      "title": "Service & Validity Checklist",
+      "type": "pdf"
+    },
+    {
+      "key": "compliance_declaration",
+      "filename": "compliance-declaration.pdf",
+      "title": "Pre-Service Compliance Declaration",
+      "type": "pdf"
+    },
+    {
+      "key": "arrears_schedule",
+      "filename": "arrears-schedule.pdf",
+      "title": "Rent Schedule / Arrears Statement",
+      "type": "pdf"
+    }
+  ],
+  "skipped": [],
+  "metadata": {
+    "total_documents": 5,
+    "includes_court_forms": false,
+    "includes_expert_guidance": true,
+    "includes_evidence_tools": false,
+    "premium_features": [
+      "Notice + Service Instructions + Checklists"
+    ],
+    "sampleKind": "england-section8-notice-only",
+    "expectedNoticeForm": "Form 3A",
+    "editablePdf": true
+  }
+}

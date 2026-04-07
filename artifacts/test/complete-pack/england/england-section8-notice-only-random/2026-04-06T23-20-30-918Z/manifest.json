@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-04-06T23:22:16.785Z",
+  "runId": "2026-04-06T23-20-30-918Z",
+  "jurisdiction": "england",
+  "variant": "england-section8-notice-only-random",
+  "packSlug": "notice-only",
+  "docs": [
+    {
+      "key": "section8_notice",
+      "filename": "notice.pdf",
+      "title": "Form 3A Notice Seeking Possession",
+      "type": "pdf"
+    },
+    {
+      "key": "service_instructions",
+      "filename": "service-instructions.pdf",
+      "title": "Service Instructions",
+      "type": "pdf"
+    },
+    {
+      "key": "validity_checklist",
+      "filename": "service-checklist.pdf",
+      "title": "Service & Validity Checklist",
+      "type": "pdf"
+    },
+    {
+      "key": "arrears_schedule",
+      "filename": "arrears-schedule.pdf",
+      "title": "Rent Schedule / Arrears Statement",
+      "type": "pdf"
+    }
+  ],
+  "skipped": [],
+  "metadata": {
+    "total_documents": 4,
+    "includes_court_forms": false,
+    "includes_expert_guidance": true,
+    "includes_evidence_tools": false,
+    "premium_features": [
+      "Notice + Service Instructions + Checklists"
+    ],
+    "sampleKind": "england-section8-notice-only",
+    "expectedNoticeForm": "Form 3A",
+    "editablePdf": true,
+    "noticeFieldCount": 43
+  }
+}

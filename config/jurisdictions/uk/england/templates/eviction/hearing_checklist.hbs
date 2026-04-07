@@ -152,6 +152,11 @@
   {{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}
   <div class="timeline-box">
     <h3>Notice timeline</h3>
+    {{#if drafting_model.hearingChecklist.overviewParagraphs.length}}
+      {{#each drafting_model.hearingChecklist.overviewParagraphs}}
+    <p>{{this}}</p>
+      {{/each}}
+    {{/if}}
     <dl class="summary-grid">
       {{#if (hasValue notice_service_date)}}
       <dt>Notice service date</dt>
@@ -172,6 +177,11 @@
   <div class="section">
     <h3>Before the hearing</h3>
     <ul class="checklist">
+      {{#if drafting_model.hearingChecklist.beforeItems.length}}
+        {{#each drafting_model.hearingChecklist.beforeItems}}
+      <li>{{this}}</li>
+        {{/each}}
+      {{else}}
       <li>
         File the court bundle and serve the same bundle on the defendant in accordance with any case directions.
         <div class="notes">Keep proof that the bundle was filed and served.</div>
@@ -188,24 +198,36 @@
         Review the {{notice_name}}, proof of service, witness statement, and bundle index together.
         <div class="notes">The court name and notice timeline should match across the pack.</div>
       </li>
+      {{/if}}
     </ul>
   </div>
 
   <div class="section">
     <h3>Documents to bring</h3>
     <ul class="checklist">
+      {{#if drafting_model.hearingChecklist.documentItems.length}}
+        {{#each drafting_model.hearingChecklist.documentItems}}
+      <li>{{this}}</li>
+        {{/each}}
+      {{else}}
       <li>Your indexed court bundle.</li>
       <li>The original tenancy agreement.</li>
       <li>The original {{notice_name}}.</li>
       <li>The original proof of service certificate or service evidence.</li>
       <li>The updated arrears schedule and any supporting payment records.</li>
       <li>Photo ID and any key correspondence relevant to the grounds relied on.</li>
+      {{/if}}
     </ul>
   </div>
 
   <div class="section">
     <h3>At the hearing</h3>
     <ul class="checklist">
+      {{#if drafting_model.hearingChecklist.atHearingItems.length}}
+        {{#each drafting_model.hearingChecklist.atHearingItems}}
+      <li>{{this}}</li>
+        {{/each}}
+      {{else}}
       <li>
         Arrive early and check in with the usher.
       </li>
@@ -218,14 +240,21 @@
       <li>
         If the tenant raises disrepair, set-off, or a payment proposal, tell the judge what you accept, what you dispute, and which documents address the point.
       </li>
+      {{/if}}
     </ul>
   </div>
 
-  {{#if (contains groundsReliedUpon "Ground 8")}}
+  {{#if (or drafting_model.hearingChecklist.warningParagraphs.length (contains groundsReliedUpon "Ground 8"))}}
   <div class="warning-box">
+    {{#if drafting_model.hearingChecklist.warningParagraphs.length}}
+      {{#each drafting_model.hearingChecklist.warningParagraphs}}
+    <p>{{this}}</p>
+      {{/each}}
+    {{else}}
     <p><strong>Ground 8 reminder:</strong> arrears must still satisfy the statutory threshold at the hearing if you want to rely on Ground 8 as a mandatory ground.</p>
     {{#if ground8_threshold_label}}
     <p><strong>Threshold reference:</strong> {{ground8_threshold_label}}</p>
+    {{/if}}
     {{/if}}
   </div>
   {{/if}}
@@ -233,6 +262,11 @@
   <div class="section">
     <h3>What to do if...</h3>
     <ul class="checklist">
+      {{#if drafting_model.hearingChecklist.contingencyItems.length}}
+        {{#each drafting_model.hearingChecklist.contingencyItems}}
+      <li>{{this}}</li>
+        {{/each}}
+      {{else}}
       <li>
         The tenant attends with a defence.
         <div class="notes">Read it, identify what you accept or dispute, and point the judge to the relevant documents.</div>
@@ -245,6 +279,7 @@
         The tenant raises housing disrepair or a counterclaim.
         <div class="notes">Stay factual and explain what notice, inspection, or repair steps are evidenced in your file.</div>
       </li>
+      {{/if}}
     </ul>
   </div>
 

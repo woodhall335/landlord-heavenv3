@@ -719,6 +719,36 @@ function MoneyClaimReviewContent({
         </Card>
       )}
 
+      {analysis?.drafting_preview?.paragraphs?.length > 0 && (
+        <Card className="p-4 border-slate-200 bg-white">
+          <div className="flex items-start gap-3">
+            <RiFileTextLine className="h-5 w-5 text-slate-700 mt-0.5" />
+            <div className="space-y-2">
+              <h2 className="text-sm font-semibold text-slate-900">
+                Drafting Preview
+              </h2>
+              {analysis.drafting_preview.title && (
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                  {analysis.drafting_preview.title}
+                </p>
+              )}
+              {analysis.drafting_preview.paragraphs.map((paragraph: string, index: number) => (
+                <p key={`drafting-preview-${index}`} className="text-sm text-slate-700">
+                  {paragraph}
+                </p>
+              ))}
+              {analysis.drafting_preview.checklist?.length > 0 && (
+                <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                  {analysis.drafting_preview.checklist.slice(0, 3).map((item: string, index: number) => (
+                    <li key={`drafting-check-${index}`}>{item}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </Card>
+      )}
+
       {/* Value Communication: Jurisdiction Explainer + Checks Summary */}
       <div className="grid md:grid-cols-2 gap-4">
         <JurisdictionExplainer jurisdiction={jurisdiction} product="money_claim" />

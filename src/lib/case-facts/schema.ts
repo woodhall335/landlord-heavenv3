@@ -494,6 +494,57 @@ export interface Ground17Facts {
   induced_granting?: boolean | null;
 }
 
+export interface Ground1Facts {
+  intended_occupier: string | null;
+  occupier_relationship: string | null;
+  occupation_reason: string | null;
+  decision_date: string | null;
+  intended_start_date: string | null;
+  supporting_evidence: string | null;
+}
+
+export interface Ground1AFacts {
+  sale_reason: string | null;
+  sale_steps_taken: string | null;
+  decision_date: string | null;
+  intended_sale_timing: string | null;
+  supporting_evidence: string | null;
+}
+
+export interface SpecialistOccupationGroundFacts {
+  factual_basis: string | null;
+  qualifying_occupier: string | null;
+  occupier_relationship: string | null;
+  trigger_date: string | null;
+  notice_or_status_details: string | null;
+  supporting_evidence: string | null;
+}
+
+export interface Ground6Facts {
+  works_description: string | null;
+  possession_requirement_reason: string | null;
+  intended_start_date: string | null;
+  planning_or_contractor_status: string | null;
+  supporting_evidence: string | null;
+}
+
+export interface Ground9Facts {
+  alternative_address: string | null;
+  availability_date: string | null;
+  suitability_summary: string | null;
+  affordability_summary: string | null;
+  supporting_evidence: string | null;
+}
+
+export interface Ground7BFacts {
+  affected_occupiers: string | null;
+  status_basis: string | null;
+  notice_source: string | null;
+  status_check_date: string | null;
+  decision_or_reference: string | null;
+  supporting_evidence: string | null;
+}
+
 // =============================================================================
 // RISK INDICATORS
 // =============================================================================
@@ -593,14 +644,40 @@ export interface CaseFacts {
   // Section 21 specific compliance data
   section21?: Section21Facts;
   // Ground-specific details (Section 8)
+  ground_1?: Ground1Facts;
+  ground_1a?: Ground1AFacts;
+  ground_2?: SpecialistOccupationGroundFacts;
+  ground_2za?: SpecialistOccupationGroundFacts;
+  ground_2zb?: SpecialistOccupationGroundFacts;
+  ground_2zc?: SpecialistOccupationGroundFacts;
+  ground_2zd?: SpecialistOccupationGroundFacts;
+  ground_4?: SpecialistOccupationGroundFacts;
+  ground_4a?: SpecialistOccupationGroundFacts;
+  ground_5?: SpecialistOccupationGroundFacts;
+  ground_5a?: SpecialistOccupationGroundFacts;
+  ground_5b?: SpecialistOccupationGroundFacts;
+  ground_5c?: SpecialistOccupationGroundFacts;
+  ground_5e?: SpecialistOccupationGroundFacts;
+  ground_5f?: SpecialistOccupationGroundFacts;
+  ground_5g?: SpecialistOccupationGroundFacts;
+  ground_5h?: SpecialistOccupationGroundFacts;
+  ground_6?: Ground6Facts;
+  ground_6b?: Ground6Facts;
+  ground_7?: SpecialistOccupationGroundFacts;
+  ground_7a?: Ground14Facts;
+  ground_7b?: Ground7BFacts;
   ground_8?: Ground8Facts;
+  ground_9?: Ground9Facts;
   ground_10?: Ground10Facts;
   ground_11?: Ground11Facts;
   ground_12?: Ground12Facts;
   ground_13?: Ground13Facts;
   ground_14?: Ground14Facts;
+  ground_14a?: Ground14Facts;
+  ground_14za?: Ground14Facts;
   ground_15?: Ground15Facts;
   ground_17?: Ground17Facts;
+  ground_18?: SpecialistOccupationGroundFacts;
   // Risk assessment data
   risk?: RiskFacts;
   // Communication timeline
@@ -839,6 +916,184 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     eicr_expiry: null,
   },
   // Ground-specific details (Section 8)
+  ground_1: {
+    intended_occupier: null,
+    occupier_relationship: null,
+    occupation_reason: null,
+    decision_date: null,
+    intended_start_date: null,
+    supporting_evidence: null,
+  },
+  ground_1a: {
+    sale_reason: null,
+    sale_steps_taken: null,
+    decision_date: null,
+    intended_sale_timing: null,
+    supporting_evidence: null,
+  },
+  ground_2: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_2za: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_2zb: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_2zc: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_2zd: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_4: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_4a: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_5: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_5a: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_5b: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_5c: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_5e: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_5f: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_5g: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_5h: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_6: {
+    works_description: null,
+    possession_requirement_reason: null,
+    intended_start_date: null,
+    planning_or_contractor_status: null,
+    supporting_evidence: null,
+  },
+  ground_6b: {
+    works_description: null,
+    possession_requirement_reason: null,
+    intended_start_date: null,
+    planning_or_contractor_status: null,
+    supporting_evidence: null,
+  },
+  ground_7: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
+  },
+  ground_7a: {
+    behaviour_type: null,
+    incident_count: null,
+    incidents_description: null,
+    affected_parties: null,
+    witnesses: null,
+    witness_names: null,
+    police_involved: null,
+    police_reference: null,
+    council_involved: null,
+    council_reference: null,
+    warnings_issued: null,
+  },
+  ground_7b: {
+    affected_occupiers: null,
+    status_basis: null,
+    notice_source: null,
+    status_check_date: null,
+    decision_or_reference: null,
+    supporting_evidence: null,
+  },
   ground_8: {
     arrears_at_notice: null,
     arrears_current: null,
@@ -905,6 +1160,47 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     how_discovered: null,
     evidence: null,
     induced_granting: null,
+  },
+  ground_9: {
+    alternative_address: null,
+    availability_date: null,
+    suitability_summary: null,
+    affordability_summary: null,
+    supporting_evidence: null,
+  },
+  ground_14a: {
+    behaviour_type: null,
+    incident_count: null,
+    incidents_description: null,
+    affected_parties: null,
+    witnesses: null,
+    witness_names: null,
+    police_involved: null,
+    police_reference: null,
+    council_involved: null,
+    council_reference: null,
+    warnings_issued: null,
+  },
+  ground_14za: {
+    behaviour_type: null,
+    incident_count: null,
+    incidents_description: null,
+    affected_parties: null,
+    witnesses: null,
+    witness_names: null,
+    police_involved: null,
+    police_reference: null,
+    council_involved: null,
+    council_reference: null,
+    warnings_issued: null,
+  },
+  ground_18: {
+    factual_basis: null,
+    qualifying_occupier: null,
+    occupier_relationship: null,
+    trigger_date: null,
+    notice_or_status_details: null,
+    supporting_evidence: null,
   },
   risk: {
     known_tenant_defences: null,

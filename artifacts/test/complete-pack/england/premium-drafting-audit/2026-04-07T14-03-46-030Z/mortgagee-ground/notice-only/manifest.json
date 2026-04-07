@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-04-07T14:04:18.956Z",
+  "scenario": "mortgagee-ground",
+  "grounds": [
+    "2"
+  ],
+  "product": "notice_only",
+  "documents": [
+    {
+      "title": "Form 3A notice",
+      "file": "notice.pdf"
+    },
+    {
+      "title": "service-instructions.html",
+      "file": "service-instructions.html"
+    },
+    {
+      "title": "cover-letter.html",
+      "file": "cover-letter.html"
+    },
+    {
+      "title": "service-checklist.html",
+      "file": "service-checklist.html"
+    },
+    {
+      "title": "evidence-checklist.html",
+      "file": "evidence-checklist.html"
+    },
+    {
+      "title": "case-summary.html",
+      "file": "case-summary.html"
+    },
+    {
+      "title": "roadmap.html",
+      "file": "roadmap.html"
+    },
+    {
+      "title": "Proof of service",
+      "file": "proof-of-service.pdf"
+    }
+  ]
+}

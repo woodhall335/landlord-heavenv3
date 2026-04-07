@@ -185,7 +185,13 @@
 
   <div class="section">
     <h2>Case Narrative</h2>
-    <p>{{case_narrative_text}}</p>
+    {{#if drafting_model.caseSummary.narrativeParagraphs.length}}
+      {{#each drafting_model.caseSummary.narrativeParagraphs}}
+      <p>{{this}}</p>
+      {{/each}}
+    {{else}}
+      <p>{{case_narrative_text}}</p>
+    {{/if}}
   </div>
 
   <div class="section">
@@ -203,20 +209,38 @@
 
   <div class="section">
     <h2>Pre-action and Procedural Steps</h2>
-    <p>{{steps_taken_text}}</p>
+    {{#if drafting_model.caseSummary.stepsParagraphs.length}}
+      {{#each drafting_model.caseSummary.stepsParagraphs}}
+      <p>{{this}}</p>
+      {{/each}}
+    {{else}}
+      <p>{{steps_taken_text}}</p>
+    {{/if}}
   </div>
 
-  {{#if (hasValue defendant_circumstances_text)}}
+  {{#if (or drafting_model.caseSummary.defendantCircumstancesParagraphs.length (hasValue defendant_circumstances_text))}}
   <div class="section">
     <h2>Defendant Circumstances</h2>
-    <p>{{defendant_circumstances_text}}</p>
+    {{#if drafting_model.caseSummary.defendantCircumstancesParagraphs.length}}
+      {{#each drafting_model.caseSummary.defendantCircumstancesParagraphs}}
+      <p>{{this}}</p>
+      {{/each}}
+    {{else}}
+      <p>{{defendant_circumstances_text}}</p>
+    {{/if}}
   </div>
   {{/if}}
 
-  {{#if (hasValue financial_info_text)}}
+  {{#if (or drafting_model.caseSummary.financialParagraphs.length (hasValue financial_info_text))}}
   <div class="section">
     <h2>Financial Position and Relief Sought</h2>
-    <p>{{financial_info_text}}</p>
+    {{#if drafting_model.caseSummary.financialParagraphs.length}}
+      {{#each drafting_model.caseSummary.financialParagraphs}}
+      <p>{{this}}</p>
+      {{/each}}
+    {{else}}
+      <p>{{financial_info_text}}</p>
+    {{/if}}
   </div>
   {{/if}}
 </body>

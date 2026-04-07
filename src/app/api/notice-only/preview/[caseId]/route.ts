@@ -42,7 +42,7 @@ import {
   isYamlOnlyMode,
 } from '@/lib/validation/shadow-mode-adapter';
 import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
-import { getEnglandGroundDefinition } from '@/lib/england-possession/ground-catalog';
+import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
 import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
 
 export const dynamic = 'force-dynamic';
@@ -86,19 +86,6 @@ function getEnglandSelectedGrounds(wizardFacts: Record<string, any>, templateDat
         .map(normalizeGround)
         .filter(Boolean)
     : [];
-}
-
-function buildEnglandRequiredEvidence(selectedGrounds: string[]) {
-  return selectedGrounds.map((ground) => {
-    const code = String(ground).replace(/^ground\s*/i, '').trim();
-    const definition = getEnglandGroundDefinition(code);
-
-    return {
-      ground: `Ground ${code}`,
-      title: definition?.title || 'Possession ground',
-      evidence_items: definition?.evidenceCategories || [],
-    };
-  });
 }
 
 export async function GET(
@@ -749,6 +736,30 @@ export async function GET(
       templateData.caseFacts = caseFacts;
       templateData.wizardFacts = wizardFacts;
 
+      const selectedGrounds = getEnglandSelectedGrounds(wizardFacts, templateData);
+
+      if (selected_route === 'section_8') {
+        Object.assign(
+          templateData,
+          enrichEnglandSection8SupportContext({
+            ...templateData,
+            court_name:
+              wizardFacts.court_name ||
+              wizardFacts.county_court ||
+              templateData.court_name ||
+              'County Court',
+            ground_codes: selectedGrounds,
+            selected_grounds: selectedGrounds,
+            notice_service_date: templateData.service_date || templateData.notice_date,
+            notice_expiry_date: templateData.notice_expiry_date || templateData.earliest_possession_date,
+            earliest_proceedings_date:
+              templateData.earliest_proceedings_date ||
+              templateData.notice_expiry_date ||
+              templateData.earliest_possession_date,
+          }),
+        );
+      }
+
       // Note: mapNoticeOnlyFacts() already creates nested objects (property, tenant, tenancy, deposit, compliance, metadata)
       // No need to duplicate that work here
 
@@ -769,7 +780,6 @@ export async function GET(
       if (selected_route === 'section_8') {
         console.log('[NOTICE-PREVIEW-API] Generating England Form 3A notice');
         try {
-          const selectedGrounds = getEnglandSelectedGrounds(wizardFacts, templateData);
           const groundsText = await buildEnglandForm3AGroundsText(selectedGrounds);
           const form3AData: CaseData = {
             ...(templateData as CaseData),
@@ -779,6 +789,7 @@ export async function GET(
               wizardFacts.ground_particulars ||
               wizardFacts.section_8_particulars ||
               wizardFacts.particulars_of_claim ||
+              templateData.drafting_model?.noticeExplanationParagraphs?.join('\n\n') ||
               '',
             notice_served_date: templateData.service_date || templateData.notice_date,
             signature_date:
@@ -856,16 +867,9 @@ export async function GET(
       // 4. Generate ground-specific evidence checklist
       console.log('[NOTICE-PREVIEW-API] Generating ground-specific evidence checklist');
       try {
-        const selectedGrounds = getEnglandSelectedGrounds(wizardFacts, templateData);
         const evidenceDoc = await generateDocument({
           templatePath: 'shared/templates/evidence_collection_checklist.hbs',
-          data: {
-            property_address: templateData.property_address,
-            tenant_name: templateData.tenant_full_name,
-            case_type: 'England Form 3A possession notice',
-            current_date: new Date().toISOString().split('T')[0],
-            required_evidence: buildEnglandRequiredEvidence(selectedGrounds),
-          },
+          data: templateData,
           outputFormat: 'pdf',
         });
 
@@ -887,9 +891,9 @@ export async function GET(
           landlord_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
           tenant_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
           property_address: wizardFacts.property_address || templateData.property_address,
-          document_served: 'Form 3A notice seeking possession',
+          document_served: templateData.notice_name || 'Form 3A notice',
           served_date: templateData.service_date || templateData.notice_date,
-          expiry_date: templateData.earliest_possession_date,
+          expiry_date: templateData.notice_expiry_date || templateData.earliest_possession_date,
         });
 
         documents.push({

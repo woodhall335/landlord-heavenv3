@@ -81,6 +81,7 @@ import {
 import { computeEvictionArrears, proRatePartialPeriods } from '@/lib/eviction/arrears/computeArrears';
 import { getGround8Threshold, isGround8Eligible } from '@/lib/grounds/ground8-threshold';
 import {
+  buildEnglandPossessionDraftingModel,
   buildN119DefendantCircumstancesText,
   buildN119FinancialInfoText,
   buildN119ReasonForPossessionText,
@@ -804,6 +805,20 @@ function buildSection8TemplateData(
     .join(', ');
 
   const now = new Date().toISOString().split('T')[0];
+  const draftingModel = buildEnglandPossessionDraftingModel({
+    ...evictionCase,
+    ...(caseData || {}),
+    ...wizardFacts,
+    ground_codes: evictionCase.grounds.map((ground) => String(ground.code).replace(/^Ground\s+/i, '').trim()),
+    selected_grounds: evictionCase.grounds.map(
+      (ground) => `Ground ${String(ground.code).replace(/^Ground\s+/i, '').trim()}`,
+    ),
+    notice_service_date: serviceDate,
+    notice_served_date: serviceDate,
+    notice_expiry_date: earliestPossessionDate,
+    earliest_proceedings_date: earliestPossessionDate,
+    court_name: courtName,
+  });
 
   return {
     ...evictionCase,
@@ -871,6 +886,7 @@ function buildSection8TemplateData(
       notice_expiry_date: earliestPossessionDate,
       earliest_proceedings_date: earliestPossessionDate,
     },
+    drafting_model: draftingModel,
     metadata: {
       generated_at: now,
     },
@@ -2500,6 +2516,7 @@ export async function generateCompleteEvictionPack(
       const sectionsInput = extractWitnessStatementSectionsInput({
         ...wizardFacts,
         ...evictionCase,
+        ...(section8CanonicalRenderData || {}),
         groundsReliedUpon,
         ...(canonicalArrears
           ? {

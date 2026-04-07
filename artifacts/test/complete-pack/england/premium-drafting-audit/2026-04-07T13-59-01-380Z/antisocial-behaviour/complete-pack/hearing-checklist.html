@@ -1,0 +1,653 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hearing Checklist</title>
+  <style>
+    /**
+ * ============================================================================
+ * LANDLORD HEAVEN - PRINT DESIGN SYSTEM
+ * Central stylesheet for Notice Only PDFs (England, Wales, Scotland)
+ * ============================================================================
+ *
+ * PURPOSE:
+ * - Consistent typography, spacing, and page-break rules across all jurisdictions
+ * - Professional layout that renders consistently in Puppeteer PDF generation
+ * - Responsive to legal form requirements while maintaining visual excellence
+ *
+ * USAGE:
+ * - Include in <head> of notice.hbs templates
+ * - Supplement with jurisdiction-specific overrides if needed (rare)
+ * - Do NOT inline style attributes; use utility classes instead
+ *
+ * IMPORTANT:
+ * - This stylesheet governs LAYOUT ONLY - legal wording is NEVER changed
+ * - Page breaks prevent orphaned headings and split sections
+ * - All spacing uses consistent vertical rhythm (0.5em increments)
+ */
+
+/* ============================================================================
+   DOCUMENT FOUNDATION
+   ============================================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4;
+  margin: 0.75in 0.75in 1in 0.75in; /* Top, Right, Bottom, Left */
+}
+
+html {
+  font-size: 12pt; /* Base font size for all calculations */
+}
+
+body {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.5;
+  color: #000;
+  background: #fff;
+  max-width: 8.5in;
+  margin: 0 auto;
+  padding: 0.5in;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "clig" 0;
+
+  /* Prevent text overflow */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+/* Main Headings */
+h1 {
+  font-size: 14pt;
+  font-weight: bold;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  /* Prevent orphan headings at bottom of page */
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h1 + h1 {
+  margin-top: 0.5em; /* Tighter spacing for consecutive h1s when documents stack headings */
+}
+
+/* Subheadings */
+h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  text-align: center;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Section Headings */
+h3 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h4 {
+  font-size: 11pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1em 0 0.5em 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Paragraphs */
+p {
+  margin: 0 0 0.75em 0;
+  line-height: 1.5;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Lists */
+ul, ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+/* Emphasis */
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+/* Links (for URLs in notices) */
+.link, a {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all; /* Prevent long URLs from overflowing */
+}
+
+/* ============================================================================
+   LAYOUT COMPONENTS
+   ============================================================================ */
+
+/* Info Box (e.g., "Information for the Tenant") */
+.info-box {
+  border: 2px solid #000;
+  padding: 1em;
+  margin: 1em 0 1.5em 0;
+  background-color: #f9f9f9;
+
+  page-break-inside: avoid;
+}
+
+.info-box h3,
+.info-box h4 {
+  margin-top: 0;
+}
+
+.info-box p:first-of-type {
+  margin-top: 0;
+}
+
+/* Section Block (logical grouping) */
+.section {
+  margin: 1.5em 0;
+
+  /* Prevent splitting key sections across pages */
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Field Groups (label + value pairs) */
+.field-group {
+  margin: 1em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.field-label {
+  font-weight: bold;
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  display: block;
+}
+
+.field-value {
+  margin-left: 0.25in;
+  border-bottom: 1px dotted #666;
+  min-height: 1.5em;
+  padding: 0.25em 0;
+  display: block;
+}
+
+.field-value:empty::after {
+  content: "\00a0"; /* Non-breaking space to maintain height */
+}
+
+/* Multiline field (for particulars, evidence, etc.) */
+.multiline-field {
+  margin-left: 0.25in;
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  min-height: 3em;
+  background-color: #fafafa;
+}
+
+/* Ground Block (for Section 8 grounds, eviction grounds, etc.) */
+.ground-block {
+  margin: 1em 0 1em 0.25in;
+  padding: 0.75em;
+  border-left: 3px solid #666;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ground-block p:first-child {
+  margin-top: 0;
+}
+
+/* Part Label (for Wales RHW forms: Part A, Part B, etc.) */
+.part-label {
+  font-weight: bold;
+  font-size: 11pt;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0.25em 0 0.25em 0.5em;
+  border-left: 4px solid #333;
+  background-color: #f0f0f0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Signature Block */
+.signature-block {
+  margin-top: 2em;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Checkbox (for forms with tick boxes) */
+.checkbox {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #000;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  background-color: #fff;
+}
+
+/* ============================================================================
+   PAGE BREAK UTILITIES
+   ============================================================================ */
+
+/* Prevent breaking inside element */
+.avoid-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Keep element with next sibling (prevent orphan headings) */
+.keep-with-next {
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+/* Force page break before element */
+.page-break-before {
+  page-break-before: always;
+  break-before: page;
+}
+
+/* Force page break after element */
+.page-break-after {
+  page-break-after: always;
+  break-after: page;
+}
+
+/* Allow auto page breaks (override avoid rules) */
+.allow-break {
+  page-break-inside: auto;
+  break-inside: auto;
+}
+
+/* ============================================================================
+   GUIDANCE SECTIONS (usually at end of notice)
+   ============================================================================ */
+
+.guidance-section {
+  margin-top: 2em;
+  padding-top: 1.5em;
+  border-top: 2px solid #000;
+
+  /* Optionally force new page for long guidance */
+  page-break-before: auto;
+}
+
+.guidance-section h2 {
+  text-align: left; /* Override center alignment for guidance headings */
+  font-size: 12pt;
+  margin: 1.5em 0 0.5em 0;
+}
+
+.guidance-section h3 {
+  font-size: 11pt;
+  margin: 1em 0 0.5em 0;
+}
+
+/* ============================================================================
+   SPACING UTILITIES
+   ============================================================================ */
+
+.mt-0 { margin-top: 0 !important; }
+.mt-1 { margin-top: 0.5em !important; }
+.mt-2 { margin-top: 1em !important; }
+.mt-3 { margin-top: 1.5em !important; }
+.mt-4 { margin-top: 2em !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: 0.5em !important; }
+.mb-2 { margin-bottom: 1em !important; }
+.mb-3 { margin-bottom: 1.5em !important; }
+.mb-4 { margin-bottom: 2em !important; }
+
+.ml-0 { margin-left: 0 !important; }
+.ml-1 { margin-left: 0.25in !important; }
+.ml-2 { margin-left: 0.5in !important; }
+
+/* ============================================================================
+   TEXT UTILITIES
+   ============================================================================ */
+
+.text-center { text-align: center !important; }
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+
+.font-small { font-size: 10pt !important; }
+.font-normal { font-size: 12pt !important; }
+.font-large { font-size: 14pt !important; }
+
+.font-italic { font-style: italic !important; }
+.font-bold { font-weight: bold !important; }
+
+/* ============================================================================
+   PRINT-SPECIFIC OPTIMIZATIONS
+   ============================================================================ */
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0.5in;
+  }
+
+  /* Ensure links are visible when printed */
+  a[href^="http"]:after {
+    content: none; /* Don't show URLs after links (they're already visible) */
+  }
+
+  /* Prevent widows and orphans */
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Ensure headings stay with following content */
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+}
+
+/* ============================================================================
+   SCOTLAND-SPECIFIC STYLING
+   ============================================================================ */
+
+/* Scotland Notice to Leave uses larger title */
+.scotland-title {
+  font-size: 18pt;
+  margin: 0.5em 0;
+}
+
+/* Scotland ground blocks with border */
+.scotland-ground-block {
+  margin: 1em 0;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* ============================================================================
+   TABLE SUPPORT (if needed for complex data)
+   ============================================================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+th, td {
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+/* ============================================================================
+   END OF PRINT DESIGN SYSTEM
+   ============================================================================ */
+
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      margin: 0 auto;
+      padding: 0;
+      color: #1a1a1a;
+      font-size: 10pt;
+      line-height: 1.55;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .header h1 {
+      margin: 0 0 0.35em 0;
+      font-size: 16pt;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 11pt;
+      color: #555;
+      font-weight: 400;
+    }
+
+    .summary-box,
+    .timeline-box,
+    .section,
+    .warning-box {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .summary-box,
+    .timeline-box,
+    .warning-box {
+      margin-bottom: 1.25em;
+      padding: 1em;
+      border: 1px solid #d8d8d8;
+      background: #fafafa;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 0.45em 1em;
+    }
+
+    .summary-grid dt {
+      font-weight: 600;
+    }
+
+    .summary-grid dd {
+      margin: 0;
+    }
+
+    .section {
+      margin-bottom: 1.4em;
+    }
+
+    .section h3 {
+      margin: 0 0 0.75em 0;
+      padding: 0.6em 0.9em;
+      background: #1a1a1a;
+      color: white;
+      font-size: 11pt;
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checklist li {
+      position: relative;
+      padding: 0.6em 0 0.6em 1.8em;
+      border-bottom: 1px solid #ececec;
+    }
+
+    .checklist li::before {
+      content: "[ ]";
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      font-weight: 700;
+    }
+
+    .notes {
+      margin-top: 0.25em;
+      color: #555;
+      font-size: 9pt;
+    }
+
+    .warning-box {
+      background: #fff7ed;
+      border-color: #b45309;
+    }
+
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #d8d8d8;
+      font-size: 9pt;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Hearing Checklist</h1>
+    <h2>Section 8 possession proceedings</h2>
+  </div>
+
+  <div class="summary-box">
+    <dl class="summary-grid">
+      <dt>Property</dt>
+      <dd>16 Willow Mews
+York
+YO24 3HX</dd>
+      <dt>Tenant</dt>
+      <dd></dd>
+      <dt>Court</dt>
+      <dd>York County Court and Family Court</dd>
+      <dt>Hearing date</dt>
+      <dd><em>To be notified by court</em></dd>
+    </dl>
+  </div>
+
+  <div class="timeline-box">
+    <h3>Notice timeline</h3>
+    <p>The claimant seeks possession of 16 Willow Mews
+York
+YO24 3HX relying on Ground 14 (Antisocial behaviour).</p>
+    <p>Form 3A notice served on 1 June 2026, expiring on 8 June 2026, with proceedings not intended before 8 June 2026.</p>
+    <dl class="summary-grid">
+      <dt>Notice service date</dt>
+      <dd>1 June 2026</dd>
+      <dt>Notice expiry date</dt>
+      <dd>8 June 2026</dd>
+      <dt>Earliest proceedings date</dt>
+      <dd>8 June 2026</dd>
+    </dl>
+  </div>
+
+  <div class="section">
+    <h3>Before the hearing</h3>
+    <ul class="checklist">
+      <li>Review the notice, service record, witness statement, and bundle index together so the pack remains internally consistent.</li>
+      <li>Check that the witness statement and exhibits still describe the pleaded ground accurately as at the hearing date.</li>
+      <li>Check whether the tenant has filed a defence, witness statement, or counterclaim and identify the documents that answer it.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Documents to bring</h3>
+    <ul class="checklist">
+      <li>Indexed court bundle</li>
+      <li>Original tenancy agreement</li>
+      <li>Form 3A notice</li>
+      <li>Proof of service evidence</li>
+      <li>Incident log, complaint records, or witness statements</li>
+      <li>Police, council, or managing-agent records where available</li>
+      <li>Warning letters, tenancy breach notices, or investigation notes</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>At the hearing</h3>
+    <ul class="checklist">
+      <li>Keep submissions short, factual, and tied to the pleaded ground or grounds.</li>
+      <li>Explain why the statutory ground is made out on the facts and where the supporting evidence appears in the bundle.</li>
+      <li>Be ready to identify what you accept, what you dispute, and which exhibit addresses the point.</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <p>Keep the language sober and factual. The court will usually expect dates, incidents, and supporting material rather than broad character assertions.</p>
+  </div>
+
+  <div class="section">
+    <h3>What to do if...</h3>
+    <ul class="checklist">
+      <li>If the tenant raises disrepair, set-off, or a counterclaim, keep the response anchored to the pleadings and documents.</li>
+      <li>If the tenant challenges the factual basis of the ground, identify the most direct witness or documentary material supporting the allegation.</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <p><strong>Date:</strong> 7 April 2026</p>
+  </div>
+</body>
+</html>

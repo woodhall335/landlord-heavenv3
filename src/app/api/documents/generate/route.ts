@@ -58,6 +58,7 @@ import {
 import { getEnglandGroundDefinition } from '@/lib/england-possession/ground-catalog';
 import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
 import { buildEnglandForm3AExplanation } from '@/lib/england-possession/pack-drafting';
+import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -448,7 +449,7 @@ function prepareGuidanceDocumentData(
   const hasGround1A = normalizedGroundCodes.includes('1A');
   const usesRentArrearsGrounds = normalizedGroundCodes.some((ground) => ['8', '10', '11'].includes(ground));
 
-  return {
+  const baseData = {
     // Spread original wizard facts
     ...wizardFacts,
 
@@ -506,6 +507,26 @@ function prepareGuidanceDocumentData(
     generated_date,
     current_date: generated_date,
   };
+
+  if (jurisdiction === 'england' && route === 'section_8') {
+    return enrichEnglandSection8SupportContext({
+      ...baseData,
+      court_name:
+        wizardFacts.court_name ||
+        wizardFacts.county_court ||
+        caseFacts?.court_name ||
+        'County Court',
+      tenant_full_name: wizardFacts.tenant_full_name || caseFacts.parties?.tenants?.[0]?.name || '',
+      landlord_full_name: wizardFacts.landlord_full_name || caseFacts.parties?.landlord?.name || '',
+      tenancy_start_date: tenancyStartDate,
+      notice_service_date: serviceDate,
+      notice_expiry_date: expiryDate,
+      earliest_proceedings_date:
+        wizardFacts.earliest_proceedings_date || wizardFacts.notice_expiry_date || wizardFacts.earliest_possession_date,
+    });
+  }
+
+  return baseData;
 }
 
 export async function POST(request: Request) {

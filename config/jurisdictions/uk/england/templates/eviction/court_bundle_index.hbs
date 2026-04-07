@@ -130,6 +130,11 @@
   </div>
 
   <div class="case-details">
+    {{#if drafting_model.bundleIndex.overviewParagraphs.length}}
+      {{#each drafting_model.bundleIndex.overviewParagraphs}}
+    <p>{{this}}</p>
+      {{/each}}
+    {{/if}}
     <dl class="case-details-grid">
       <dt>Case number</dt>
       <dd><em>To be assigned by court</em></dd>
@@ -225,8 +230,20 @@
       </tr>
 
       <tr class="section-header">
-        <td colspan="6">D. Arrears evidence</td>
+        <td colspan="6">{{#if drafting_model.bundleIndex.sectionTitle}}{{drafting_model.bundleIndex.sectionTitle}}{{else}}D. Arrears evidence{{/if}}</td>
       </tr>
+      {{#if drafting_model.bundleIndex.groundRows.length}}
+        {{#each drafting_model.bundleIndex.groundRows}}
+      <tr>
+        <td class="checkbox-col"><span class="checkbox"></span></td>
+        <td class="tab-number">D{{add @index 1}}</td>
+        <td>{{title}}</td>
+        <td>{{description}}</td>
+        <td class="page-ref"></td>
+        <td class="page-ref"></td>
+      </tr>
+        {{/each}}
+      {{else}}
       <tr>
         <td class="checkbox-col"><span class="checkbox"></span></td>
         <td class="tab-number">D1</td>
@@ -243,6 +260,7 @@
         <td class="page-ref"></td>
         <td class="page-ref"></td>
       </tr>
+      {{/if}}
 
       <tr class="section-header">
         <td colspan="6">E. Tenancy documents</td>
@@ -305,10 +323,16 @@
   <div class="notes-section">
     <h3>Bundle preparation notes</h3>
     <ul>
+      {{#if drafting_model.bundleIndex.preparationItems.length}}
+        {{#each drafting_model.bundleIndex.preparationItems}}
+      <li>{{this}}</li>
+        {{/each}}
+      {{else}}
       <li>Number all pages consecutively throughout the bundle.</li>
       <li>Update this index if you add or remove documents.</li>
       <li>Bring originals of the main documents to the hearing.</li>
       <li>Check any local court directions before filing the bundle.</li>
+      {{/if}}
     </ul>
   </div>
 

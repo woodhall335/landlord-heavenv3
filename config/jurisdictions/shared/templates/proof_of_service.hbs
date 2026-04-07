@@ -202,8 +202,14 @@
 
   <div class="details-box">
     <h2>Supporting record</h2>
-    <p>Keep any witness details, photographs, proof of posting, or tracking references with the served-copy file for this notice.</p>
-    <p>If extra service evidence exists, attach it behind this certificate in the same bundle.</p>
+    {{#if drafting_model.proofOfService.recordParagraphs.length}}
+      {{#each drafting_model.proofOfService.recordParagraphs}}
+      <p>{{this}}</p>
+      {{/each}}
+    {{else}}
+      <p>Keep any witness details, photographs, proof of posting, or tracking references with the served-copy file for this notice.</p>
+      <p>If extra service evidence exists, attach it behind this certificate in the same bundle.</p>
+    {{/if}}
   </div>
 
   <div class="signature-section">

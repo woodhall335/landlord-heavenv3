@@ -1210,3 +1210,73 @@ describe('resolveNoticeExpiryDate', () => {
     expect(resolveNoticeExpiryDate(wizard)).toBe('2026-04-01');
   });
 });
+
+describe('specialist England Section 8 grounds', () => {
+  test('should map sale, redevelopment, alternative accommodation, and immigration specialist facts', () => {
+    const wizard: WizardFacts = {
+      section8_grounds: ['Ground 1A', 'Ground 6', 'Ground 9', 'Ground 7B'],
+      'ground_1a.sale_reason': 'the landlord is restructuring their portfolio',
+      'ground_1a.sale_steps_taken': 'two valuations obtained and draft sales particulars prepared',
+      'ground_1a.decision_date': '2026-03-01',
+      'ground_1a.intended_sale_timing': 'marketing is intended within 2 weeks of possession',
+      'ground_1a.supporting_evidence': 'valuation letters and email instructions to the estate agent',
+      'ground_6.works_description': 'rear extension, rewiring, and full replacement of the heating system',
+      'ground_6.possession_requirement_reason': 'the contractor requires vacant possession for structural works and access',
+      'ground_6.intended_start_date': '2026-05-15',
+      'ground_6.planning_or_contractor_status': 'building control approval obtained and contractor booked',
+      'ground_6.supporting_evidence': 'approved plans and contractor quote',
+      'ground_9.alternative_address': 'Flat 4, 22 Riverside Road, York YO1 7AA',
+      'ground_9.availability_date': '2026-04-20',
+      'ground_9.suitability_summary': 'two-bedroom flat close to the tenant’s current school and work links',
+      'ground_9.affordability_summary': 'rent is within the local housing allowance and the tenancy can start immediately',
+      'ground_9.supporting_evidence': 'draft tenancy offer and landlord confirmation',
+      'ground_7b.affected_occupiers': 'the sole tenant and her adult son',
+      'ground_7b.status_basis': 'a Home Office disqualification notice states that neither occupier has a right to rent',
+      'ground_7b.notice_source': 'Home Office notice dated 12 March 2026',
+      'ground_7b.status_check_date': '2026-03-12',
+      'ground_7b.decision_or_reference': 'HMO-RTR-44219',
+      'ground_7b.supporting_evidence': 'Home Office notice and right-to-rent check record',
+    };
+
+    const result = wizardFactsToCaseFacts(wizard);
+
+    expect(result.ground_1a?.sale_reason).toBe('the landlord is restructuring their portfolio');
+    expect(result.ground_1a?.supporting_evidence).toContain('valuation letters');
+    expect(result.ground_6?.works_description).toContain('rear extension');
+    expect(result.ground_6?.planning_or_contractor_status).toContain('building control approval');
+    expect(result.ground_9?.alternative_address).toContain('Riverside Road');
+    expect(result.ground_9?.suitability_summary).toContain('school and work links');
+    expect(result.ground_7b?.status_basis).toContain('Home Office disqualification notice');
+    expect(result.ground_7b?.decision_or_reference).toBe('HMO-RTR-44219');
+  });
+
+  test('should map specialist occupation and conduct variants from flat wizard keys', () => {
+    const wizard: WizardFacts = {
+      section8_grounds: ['Ground 2ZA', 'Ground 7A', 'Ground 18'],
+      'ground_2za.factual_basis': 'the superior lease is ending and the claimant must deliver up vacant possession',
+      'ground_2za.qualifying_occupier': 'superior landlord',
+      'ground_2za.occupier_relationship': 'headlease possession obligation',
+      'ground_2za.trigger_date': '2026-06-01',
+      'ground_2za.notice_or_status_details': 'notice to quit served by the superior landlord',
+      'ground_2za.supporting_evidence': 'copy headlease and superior landlord notice',
+      'ground_7a.behaviour_type': ['serious criminal conduct', 'threats to neighbours'],
+      'ground_7a.incident_count': '3',
+      'ground_7a.incidents_description': 'two police call-outs and one assault allegation in the communal hallway',
+      'ground_7a.police_reference': 'YRK/7711/26',
+      'ground_18.factual_basis': 'the accommodation is tied to the tenant’s employment, which has now ended',
+      'ground_18.qualifying_occupier': 'replacement employee',
+      'ground_18.occupier_relationship': 'employment-linked occupation',
+      'ground_18.trigger_date': '2026-02-28',
+      'ground_18.supporting_evidence': 'employment termination letter and staff housing policy',
+    };
+
+    const result = wizardFactsToCaseFacts(wizard);
+
+    expect(result.ground_2za?.factual_basis).toContain('superior lease is ending');
+    expect(result.ground_2za?.trigger_date).toBe('2026-06-01');
+    expect(result.ground_7a?.incident_count).toBe(3);
+    expect(result.ground_7a?.behaviour_type).toEqual(['serious criminal conduct', 'threats to neighbours']);
+    expect(result.ground_18?.qualifying_occupier).toBe('replacement employee');
+    expect(result.ground_18?.supporting_evidence).toContain('staff housing policy');
+  });
+});

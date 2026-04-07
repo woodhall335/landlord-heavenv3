@@ -16,17 +16,17 @@ filename: cover_letter_to_tenant.pdf
     body {
       font-family: Arial, sans-serif;
       font-size: 10.5pt;
-      line-height: 1.55;
-      color: #222;
-      max-width: 760px;
+      line-height: 1.6;
+      color: #1a1a1a;
       margin: 0 auto;
-      padding: 20px;
+      max-width: 760px;
+      padding: 0;
     }
 
     .letterhead {
       margin-bottom: 2em;
-      border-bottom: 2px solid #1a1a1a;
       padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
     }
 
     .sender,
@@ -39,47 +39,53 @@ filename: cover_letter_to_tenant.pdf
     }
 
     .subject {
+      margin: 1.25em 0 0.85em 0;
       font-weight: 700;
-      margin: 1.5em 0 0.75em 0;
       text-transform: uppercase;
     }
 
-    .notice-box {
-      border: 1px solid #1a1a1a;
-      background: #f6f6f6;
-      padding: 1em;
+    .notice-box,
+    .callout {
       margin: 1em 0 1.5em 0;
+      padding: 1em;
+      border: 1px solid #d8d8d8;
+      background: #fafafa;
     }
 
-    .notice-box p {
+    .notice-box p,
+    .callout p {
       margin: 0.35em 0;
     }
 
     ul {
-      margin: 0.75em 0 0.75em 1.2em;
+      margin: 0.5em 0 0 1.2em;
+    }
+
+    li {
+      margin: 0.35em 0;
     }
 
     .closing {
-      margin-top: 2em;
+      margin-top: 1.75em;
     }
 
     .small-note {
+      margin-top: 1.5em;
+      padding-top: 0.8em;
+      border-top: 1px solid #d8d8d8;
       font-size: 9pt;
       color: #555;
-      margin-top: 1.75em;
-      border-top: 1px solid #ddd;
-      padding-top: 0.75em;
     }
   </style>
 </head>
 <body>
   <div class="letterhead">
-    <div class="sender">{{landlord_name}}</div>
+    <div class="sender">{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{/unless}}</div>
     {{#if landlord_address}}<div class="sender">{{landlord_address}}</div>{{/if}}
   </div>
 
   <div class="recipient">
-    {{tenant_name}}
+    {{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{/unless}}
     {{#if property_address}}
     {{property_address}}
     {{/if}}
@@ -87,41 +93,51 @@ filename: cover_letter_to_tenant.pdf
 
   <div class="meta">
     <p><strong>Date:</strong> {{current_date}}</p>
-    <p><strong>Property:</strong> {{property_address}}</p>
+    {{#if property_address}}<p><strong>Property:</strong> {{property_address}}</p>{{/if}}
   </div>
 
-  <div class="subject">Enclosed: {{notice_type}}</div>
+  <div class="subject">Enclosed: {{notice_title}}{{#unless notice_title}}{{notice_name}}{{/unless}}</div>
 
-  <p>Dear {{tenant_name}},</p>
+  <p>Dear {{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{/unless}},</p>
 
-  <p>Please find enclosed a {{notice_type}} relating to the above property.</p>
+  {{#if drafting_model.coverLetter.introParagraphs.length}}
+    {{#each drafting_model.coverLetter.introParagraphs}}
+  <p>{{this}}</p>
+    {{/each}}
+  {{else}}
+  <p>Please find enclosed the {{notice_name}} relating to the above property.</p>
+  {{/if}}
 
   <div class="notice-box">
-    <p><strong>This letter is not the notice itself.</strong> The legal notice is the enclosed Form 3A notice.</p>
-    {{#if service_date_formatted}}<p><strong>Date served:</strong> {{service_date_formatted}}</p>{{/if}}
-    {{#if expiry_date}}<p><strong>Earliest date court action may be started:</strong> {{expiry_date}}</p>{{/if}}
+    <p><strong>This letter is not the notice itself.</strong> The legal notice is the enclosed {{notice_name}}.</p>
+    {{#if (hasValue service_date_formatted)}}<p><strong>Notice service date:</strong> {{service_date_formatted}}</p>{{/if}}
+    {{#if (hasValue notice_expiry_date_formatted)}}<p><strong>Notice expiry date:</strong> {{notice_expiry_date_formatted}}</p>{{/if}}
+    {{#if (hasValue earliest_proceedings_date_formatted)}}<p><strong>Earliest proceedings date:</strong> {{earliest_proceedings_date_formatted}}</p>{{/if}}
     {{#if ground_descriptions}}<p><strong>Grounds relied on:</strong> {{ground_descriptions}}</p>{{/if}}
   </div>
 
-  <p>Please read the enclosed notice carefully. It explains the possession grounds being relied on and the earliest date on which court proceedings may be started if the matter is not resolved first.</p>
-
-  {{#if uses_rent_arrears_grounds}}
-  <p>If this notice includes rent arrears grounds, you should contact the landlord or agent promptly if you wish to discuss payment, make a proposal, or explain any issue affecting the rent account.</p>
+  {{#if drafting_model.coverLetter.actionItems.length}}
+  <div class="callout">
+    <p><strong>Practical next steps:</strong></p>
+    <ul>
+      {{#each drafting_model.coverLetter.actionItems}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  </div>
   {{/if}}
 
-  <p>You may wish to seek independent advice as soon as possible. Sources of help can include Shelter, Citizens Advice, a housing adviser, your local authority housing team, or a solicitor.</p>
-
-  <ul>
-    <li>Keep a copy of the enclosed notice and this letter.</li>
-    <li>Take advice promptly if you disagree with the notice or need housing assistance.</li>
-    <li>If you want to discuss the matter directly, use the contact details on the notice or any existing agreed contact route.</li>
-  </ul>
+  {{#if drafting_model.coverLetter.closingParagraphs.length}}
+    {{#each drafting_model.coverLetter.closingParagraphs}}
+  <p>{{this}}</p>
+    {{/each}}
+  {{/if}}
 
   <div class="closing">
     <p>Yours sincerely,</p>
-    <p>{{landlord_name}}</p>
+    <p>{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{/unless}}</p>
   </div>
 
-  <p class="small-note">This covering letter is a support document provided for clarity. It is not itself a legal notice and does not replace the enclosed Form 3A notice.</p>
+  <p class="small-note">This covering letter is a support document provided for clarity. It does not replace the enclosed {{notice_name}} and is not itself a statutory notice.</p>
 </body>
 </html>

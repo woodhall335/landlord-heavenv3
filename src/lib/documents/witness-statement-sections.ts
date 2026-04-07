@@ -16,7 +16,10 @@
  */
 
 import type { WitnessStatementJSON } from '@/lib/ai/witness-statement-generator';
-import { buildN119DefendantCircumstancesText } from '@/lib/england-possession/pack-drafting';
+import {
+  buildEnglandPossessionDraftingModel,
+  buildN119DefendantCircumstancesText,
+} from '@/lib/england-possession/pack-drafting';
 import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
 
 // =============================================================================
@@ -132,6 +135,10 @@ export interface WitnessStatementSectionsInput {
     capacity?: string;
     signature_date: string;
   };
+
+  // Raw merged source data so the shared England drafting layer can
+  // produce the same narrative across witness, notice, and court docs.
+  source_data?: Record<string, any>;
 }
 
 // =============================================================================
@@ -765,6 +772,18 @@ function buildDefendantCircumstances(
   return input.defendant_circumstances_text?.trim() || undefined;
 }
 
+function paragraphsToHtml(paragraphs: string[]): string | undefined {
+  const clean = paragraphs.map((paragraph) => paragraph.trim()).filter(Boolean);
+  if (clean.length === 0) return undefined;
+  return clean.map((paragraph) => `<p>${paragraph}</p>`).join('\n');
+}
+
+function bulletsToHtml(items: string[]): string | undefined {
+  const clean = items.map((item) => item.trim()).filter(Boolean);
+  if (clean.length === 0) return undefined;
+  return `<ul>${clean.map((item) => `<li>${item}</li>`).join('')}</ul>`;
+}
+
 // =============================================================================
 // Main Builder Function
 // =============================================================================
@@ -782,17 +801,50 @@ export function buildWitnessStatementSections(
   input: WitnessStatementSectionsInput
 ): WitnessStatementJSON {
   const exhibits = buildWitnessExhibits(input);
+  const draftSource = {
+    ...(input.source_data || {}),
+    rent_amount: input.source_data?.rent_amount ?? input.tenancy.rent_amount,
+    rent_frequency: input.source_data?.rent_frequency ?? input.tenancy.rent_frequency,
+    tenancy_start_date: input.source_data?.tenancy_start_date ?? input.tenancy.start_date,
+    notice_service_date: input.source_data?.notice_service_date ?? input.notice.served_date,
+    notice_served_date: input.source_data?.notice_served_date ?? input.notice.served_date,
+    notice_expiry_date: input.source_data?.notice_expiry_date ?? input.notice.expiry_date,
+    earliest_proceedings_date:
+      input.source_data?.earliest_proceedings_date ?? input.notice.expiry_date,
+    ground_codes:
+      input.source_data?.ground_codes ??
+      input.section8.grounds.map((ground) => normalizeGroundCode(ground).replace(/^Ground\s+/i, '')),
+    selected_grounds: input.source_data?.selected_grounds ?? input.section8.grounds,
+    total_arrears: input.source_data?.total_arrears ?? input.arrears?.total_arrears,
+    current_arrears: input.source_data?.current_arrears ?? input.arrears?.total_arrears,
+    arrears_at_notice_date: input.source_data?.arrears_at_notice_date ?? input.arrearsAtNoticeDate,
+  };
+  const draftingModel = buildEnglandPossessionDraftingModel(draftSource);
+  const groundsSummaryHtml =
+    paragraphsToHtml(draftingModel.witness.groundsParagraphs) ||
+    buildGroundsForPossession(input, exhibits);
+  const rentArrearsHtml =
+    paragraphsToHtml(draftingModel.witness.rentArrearsParagraphs) ||
+    buildRentArrearsNarrative(input, exhibits);
+  const conductIssuesHtml = paragraphsToHtml(draftingModel.witness.conductParagraphs);
+  const timelineHtml = bulletsToHtml(draftingModel.witness.timelineItems) || buildTimeline(input);
+  const evidenceHtml =
+    [paragraphsToHtml(draftingModel.witness.evidenceParagraphs), bulletsToHtml(draftingModel.witness.evidenceItems)]
+      .filter(Boolean)
+      .join('\n') || buildSupportingEvidence(input, exhibits);
+  const conclusionHtml =
+    paragraphsToHtml(draftingModel.witness.conclusionParagraphs) || buildConclusion();
 
   return {
     introduction: buildIntroduction(input),
     tenancy_history: buildTenancyHistory(input),
-    rent_arrears: buildRentArrearsNarrative(input, exhibits),
-    conduct_issues: undefined, // Not applicable for Ground 8 arrears cases
-    grounds_summary: buildGroundsForPossession(input, exhibits),
-    timeline: buildTimeline(input),
+    rent_arrears: rentArrearsHtml,
+    conduct_issues: conductIssuesHtml,
+    grounds_summary: groundsSummaryHtml,
+    timeline: timelineHtml,
     defendant_circumstances: buildDefendantCircumstances(input),
-    evidence_references: buildSupportingEvidence(input, exhibits),
-    conclusion: buildConclusion(),
+    evidence_references: evidenceHtml,
+    conclusion: conclusionHtml,
   };
 }
 
@@ -1026,5 +1078,6 @@ export function extractWitnessStatementSectionsInput(
       capacity: nestedSigning.capacity || 'claimant_landlord',
       signature_date: signatureDate,
     },
+    source_data: data,
   };
 }
