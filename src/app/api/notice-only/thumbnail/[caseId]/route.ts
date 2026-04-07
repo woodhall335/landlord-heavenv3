@@ -392,7 +392,7 @@ export async function GET(
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Form 3A Notice Seeking Possession</title>
+  <title>Form 3A notice</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 28px; color: #111827; }
     .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6b7280; }
@@ -406,7 +406,7 @@ export async function GET(
 </head>
 <body>
   <div class="eyebrow">England official notice</div>
-  <h1>Form 3A Notice Seeking Possession</h1>
+    <h1>Form 3A notice</h1>
   <div class="meta">Post-1 May 2026 private rented sector route</div>
   <div class="card">
     <h2>Tenant and property</h2>

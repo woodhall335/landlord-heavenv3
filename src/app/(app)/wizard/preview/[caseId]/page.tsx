@@ -738,7 +738,7 @@ export default function WizardPreviewPage() {
                   // Get user-friendly document title for display
                   const docTypeLabels: Record<string, string> = {
                     section8_notice: (caseData?.jurisdiction || 'england') === 'england'
-                      ? 'Form 3A Notice Seeking Possession'
+                              ? 'Form 3A notice'
                       : 'Section 8 Notice',
                     section21_notice: 'Section 21 Notice (Form 6A)',
                     n5_claim: 'Form N5 - Claim for Possession',

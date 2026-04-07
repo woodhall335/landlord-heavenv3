@@ -21,6 +21,7 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Court');
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
+    expect(content).toContain('Latest proceedings date');
   });
 
   test.each([
@@ -40,6 +41,7 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
+    expect(content).toContain('Latest proceedings date');
     expect(content).toContain('{{notice_name}}');
     expect(content).toContain('Form 3A');
   });
@@ -50,16 +52,18 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
+    expect(content).toContain('Latest proceedings date');
     expect(content).toContain('{{notice_name}}');
   });
 
-  test('proof of service includes expiry and earliest proceedings rows', () => {
+  test('proof of service includes expiry and proceedings timeline rows using the canonical notice label', () => {
     const templatePath = path.join(process.cwd(), 'config/jurisdictions/shared/templates/proof_of_service.hbs');
     const content = fs.readFileSync(templatePath, 'utf-8');
 
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
-    expect(content).toContain('{{notice_type}}');
+    expect(content).toContain('Latest proceedings date');
+    expect(content).toContain('{{notice_name}}');
     expect(content).toContain("{{#unless (or (eq service_method 'hand') (eq service_method 'post') (eq service_method 'recorded_delivery'))}}");
   });
 
@@ -68,6 +72,7 @@ describe('Section 8 bundle consistency', () => {
     const content = fs.readFileSync(templatePath, 'utf-8');
 
     expect(content).toContain('{{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}');
+    expect(content).toContain('Latest proceedings date');
     expect(content).toContain('What to do if...');
     expect(content).toContain('The tenant attends with a defence.');
     expect(content).toContain('The tenant raises housing disrepair or a counterclaim.');
@@ -112,6 +117,7 @@ describe('Section 8 bundle consistency', () => {
     expect(evidenceChecklistContent).toContain('drafting_model.evidenceChecklist.groundSections.length');
     expect(coverLetterContent).toContain('drafting_model.coverLetter.introParagraphs.length');
     expect(coverLetterContent).toContain('{{notice_name}}');
+    expect(coverLetterContent).not.toContain('{{notice_title}}');
   });
 
   test('witness statement only renders the timeline section when timeline content exists', () => {

@@ -558,6 +558,10 @@ th, td { padding: 0.5em; border: 1px solid #ccc; text-align: left; vertical-alig
 th { font-weight: bold; background-color: #f0f0f0; }
 `.trim();
 
+function stripCssComments(css: string): string {
+  return css.replace(/\/\*[\s\S]*?\*\//g, '').trim();
+}
+
 /**
  * Load and cache the centralized print.css stylesheet
  */
@@ -578,7 +582,7 @@ export function loadPrintCss(): string {
 
   for (const printCssPath of possiblePaths) {
     try {
-      cachedPrintCss = readFileSync(printCssPath, 'utf-8');
+      cachedPrintCss = stripCssComments(readFileSync(printCssPath, 'utf-8'));
       console.log('[PRINT SYSTEM] ✅ Loaded print.css from:', printCssPath);
       console.log('[PRINT SYSTEM] CSS length:', cachedPrintCss.length, 'characters');
       return cachedPrintCss;
@@ -590,7 +594,7 @@ export function loadPrintCss(): string {
   // Use fallback CSS if file cannot be loaded from any path
   console.warn('[PRINT SYSTEM] ⚠️  Could not load print.css from any path, using fallback CSS');
   console.warn('[PRINT SYSTEM] Tried paths:', possiblePaths);
-  cachedPrintCss = FALLBACK_PRINT_CSS;
+  cachedPrintCss = stripCssComments(FALLBACK_PRINT_CSS);
   return cachedPrintCss;
 }
 

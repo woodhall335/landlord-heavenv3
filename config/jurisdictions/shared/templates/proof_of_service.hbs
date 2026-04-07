@@ -146,16 +146,16 @@
   </div>
 
   <div class="notice-box">
-    <p>I, <strong>{{landlord_full_name}}</strong>, certify that the notice described below was served in the manner indicated on the tenant at:</p>
+    <p>{{#if (hasValue landlord_full_name)}}I, <strong>{{landlord_full_name}}</strong>, certify{{else}}I certify{{/if}} that the notice described below was served in the manner indicated on the tenant at:</p>
     <p><strong>{{property_address}}</strong></p>
   </div>
 
   <div class="details-box">
     <h2>Notice details</h2>
     <dl class="details-grid">
-      {{#if (hasValue notice_type)}}
+      {{#if (hasValue notice_name)}}
       <dt>Notice type</dt>
-      <dd>{{notice_type}}</dd>
+      <dd>{{notice_name}}</dd>
       {{/if}}
       <dt>Tenant name(s)</dt>
       <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
@@ -172,6 +172,10 @@
       {{#if (hasValue earliest_proceedings_date_formatted)}}
       <dt>Earliest proceedings date</dt>
       <dd>{{earliest_proceedings_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue latest_proceedings_date_formatted)}}
+      <dt>Latest proceedings date</dt>
+      <dd>{{latest_proceedings_date_formatted}}</dd>
       {{/if}}
     </dl>
   </div>
@@ -226,6 +230,7 @@
         <div class="signature-line"></div>
         <p>Date</p>
       </div>
+      {{#if (or (hasValue witness_name) (hasValue witness_full_name) (hasValue witness_address) (hasValue service_witness_required))}}
       <div class="signature-box">
         <p><strong>Witness (if applicable)</strong></p>
         <div class="signature-line"></div>
@@ -235,6 +240,7 @@
         <div class="signature-line"></div>
         <p>Address</p>
       </div>
+      {{/if}}
     </div>
   </div>
 

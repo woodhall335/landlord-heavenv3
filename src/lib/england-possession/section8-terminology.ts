@@ -1,11 +1,11 @@
 export const ENGLAND_SECTION8_FORM_NAME = 'Form 3A';
 export const ENGLAND_SECTION8_NOTICE_NAME = 'Form 3A notice';
 export const ENGLAND_SECTION8_NOTICE_TYPE_LABEL = ENGLAND_SECTION8_NOTICE_NAME;
-export const ENGLAND_SECTION8_NOTICE_TITLE = 'Form 3A Notice Seeking Possession';
+export const ENGLAND_SECTION8_NOTICE_TITLE = ENGLAND_SECTION8_NOTICE_NAME;
 
 export const ENGLAND_SECTION8_HISTORIC_FORM_NAMES = ['Form 3'] as const;
 export const ENGLAND_SECTION8_HISTORIC_NOTICE_NAMES = ['Form 3 notice'] as const;
-export const ENGLAND_SECTION8_HISTORIC_NOTICE_TITLES = ['Form 3 Notice Seeking Possession'] as const;
+export const ENGLAND_SECTION8_HISTORIC_NOTICE_TITLES = ['Form 3 Notice Seeking Possession', 'Form 3A Notice Seeking Possession'] as const;
 
 const ENGLAND_SECTION8_LEGACY_NOTICE_NAME_ALIASES = [
   ...ENGLAND_SECTION8_HISTORIC_NOTICE_NAMES,

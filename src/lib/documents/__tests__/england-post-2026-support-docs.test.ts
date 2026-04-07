@@ -24,6 +24,7 @@ describe('England Section 8 support document templates', () => {
     expect(template).toContain('{{notice_name}}');
     expect(template).toContain('Notice expiry date');
     expect(template).toContain('Earliest proceedings date');
+    expect(template).toContain('Latest proceedings date');
   });
 
   it('uses current Form 3A language in service instructions', () => {
@@ -39,6 +40,7 @@ describe('England Section 8 support document templates', () => {
 
     expect(template).toContain('{{notice_name}}');
     expect(template).toContain('Earliest proceedings date');
+    expect(template).toContain('Latest proceedings date');
     expect(template).toContain('Form 3A');
   });
 
@@ -71,6 +73,7 @@ describe('England Section 8 support document templates', () => {
 
     expect(template).toContain('{{notice_name}}');
     expect(template).toContain('This letter is not the notice itself.');
+    expect(template).not.toContain('{{notice_title}}');
   });
 
   it('routes shared guidance templates through the central drafting model', () => {

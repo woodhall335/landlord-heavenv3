@@ -139,8 +139,10 @@
     <dl class="summary-grid">
       <dt>Property</dt>
       <dd>{{property_address}}</dd>
+      {{#if (hasValue tenant_full_name)}}
       <dt>Tenant</dt>
       <dd>{{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{/unless}}</dd>
+      {{/if}}
       <dt>Case type</dt>
       <dd>{{case_type}}</dd>
       {{#if ground_descriptions}}
@@ -154,6 +156,14 @@
       {{#if (hasValue notice_expiry_date_formatted)}}
       <dt>Notice expiry date</dt>
       <dd>{{notice_expiry_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue earliest_proceedings_date_formatted)}}
+      <dt>Earliest proceedings date</dt>
+      <dd>{{earliest_proceedings_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue latest_proceedings_date_formatted)}}
+      <dt>Latest proceedings date</dt>
+      <dd>{{latest_proceedings_date_formatted}}</dd>
       {{/if}}
       <dt>Prepared</dt>
       <dd>{{current_date}}</dd>

@@ -121,10 +121,14 @@ filename: case_summary.pdf
 
   <div class="summary-box">
     <dl class="summary-grid">
+      {{#if (hasValue landlord_full_name)}}
       <dt>Landlord</dt>
       <dd>{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{/unless}}</dd>
+      {{/if}}
+      {{#if (hasValue tenant_full_name)}}
       <dt>Tenant</dt>
       <dd>{{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{/unless}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      {{/if}}
       <dt>Property</dt>
       <dd>{{property_address}}</dd>
       {{#if court_name}}
@@ -150,6 +154,10 @@ filename: case_summary.pdf
       {{#if (hasValue earliest_proceedings_date_formatted)}}
       <dt>Earliest proceedings date</dt>
       <dd>{{earliest_proceedings_date_formatted}}</dd>
+      {{/if}}
+      {{#if (hasValue latest_proceedings_date_formatted)}}
+      <dt>Latest proceedings date</dt>
+      <dd>{{latest_proceedings_date_formatted}}</dd>
       {{/if}}
       {{#if rent_amount}}
       <dt>Contract rent</dt>

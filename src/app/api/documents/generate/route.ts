@@ -423,7 +423,7 @@ function prepareGuidanceDocumentData(
 
   // Determine notice type label
   const noticeType = route === 'section_21' ? 'Section 21 Notice'
-    : route === 'section_8' ? 'Form 3A Notice Seeking Possession'
+        : route === 'section_8' ? 'Form 3A notice'
     : route === 'section_173' || route === 'wales_section_173' ? 'Section 173 Notice'
     : route === 'notice_to_leave' ? 'Notice to Leave'
     : route === 'fault_based' || route === 'wales_fault_based' ? 'Fault-Based Notice'
@@ -882,7 +882,7 @@ export async function POST(request: Request) {
               pdf: Buffer.from(pdfBytes),
               html: null,
             };
-            documentTitle = 'Form 3A Notice Seeking Possession';
+            documentTitle = 'Form 3A notice';
           } else {
             generatedDoc = await generateSection8Notice(safeCaseData as any);
             documentTitle = 'Section 8 Notice - Notice Seeking Possession';
@@ -1675,7 +1675,7 @@ export async function POST(request: Request) {
             expiry_date: wizardFacts.notice_expiry_date || wizardFacts.earliest_possession_date,
             service_method: normalizeProofOfServiceMethod(wizardFacts.notice_service_method),
             document_served: canonicalJurisdiction === 'england'
-              ? 'Form 3A notice seeking possession'
+              ? 'Form 3A notice'
               : wizardFacts.eviction_route === 'section_21'
               ? 'Section 21 Notice (Form 6A)'
               : wizardFacts.eviction_route === 'section_8'

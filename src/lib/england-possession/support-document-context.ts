@@ -15,6 +15,15 @@ import {
 
 type DraftingContextInput = Record<string, any>;
 
+function toNonEmptyString(value: unknown): string {
+  if (value === undefined || value === null) {
+    return '';
+  }
+
+  const text = String(value).trim();
+  return text.length > 0 ? text : '';
+}
+
 function getByPath(source: DraftingContextInput | null | undefined, path: string): unknown {
   if (!source) return undefined;
   if (path in source) return source[path];
@@ -36,6 +45,17 @@ function getFirstValue(source: DraftingContextInput, ...paths: string[]): unknow
   }
 
   return undefined;
+}
+
+function getFirstText(source: DraftingContextInput, ...paths: string[]): string {
+  return toNonEmptyString(getFirstValue(source, ...paths));
+}
+
+function joinAddressLines(...parts: unknown[]): string {
+  return parts
+    .map((part) => toNonEmptyString(part))
+    .filter(Boolean)
+    .join('\n');
 }
 
 function formatDateUK(value: unknown): string {
@@ -123,6 +143,43 @@ export function enrichEnglandSection8SupportContext<T extends DraftingContextInp
 ): T & EnglandSection8SupportContext {
   const groundCodes = extractGroundCodes(input);
   const selectedGrounds = groundCodes.map((code) => `Ground ${code}`);
+  const landlordFullName = getFirstText(
+    input,
+    'landlord_full_name',
+    'landlord_name',
+    'claimant_name',
+    'landlord.name',
+    'claimant.name',
+  );
+  const tenantFullName = getFirstText(
+    input,
+    'tenant_full_name',
+    'tenant_name',
+    'tenant1_name',
+    'defendant_name',
+    'tenant.name',
+    'defendant.name',
+  );
+  const tenantSecondName = getFirstText(input, 'tenant_2_name', 'tenant2_name', 'defendant_2_name');
+  const propertyAddress =
+    getFirstText(input, 'property_address', 'property.full_address', 'property.address') ||
+    joinAddressLines(
+      getFirstValue(input, 'property_address_line1', 'property.address_line1'),
+      getFirstValue(input, 'property_address_line2', 'property.address_line2'),
+      getFirstValue(input, 'property_city', 'property.town', 'property.city'),
+      getFirstValue(input, 'property_county', 'property.county'),
+      getFirstValue(input, 'property_postcode', 'property.postcode'),
+    );
+  const landlordAddress =
+    getFirstText(input, 'landlord_address', 'claimant_address', 'landlord.address', 'claimant.address') ||
+    joinAddressLines(
+      getFirstValue(input, 'landlord_address_line1', 'service_address_line1', 'landlord.address_line1'),
+      getFirstValue(input, 'landlord_address_line2', 'service_address_line2', 'landlord.address_line2'),
+      getFirstValue(input, 'landlord_city', 'service_address_town', 'service_address_city', 'landlord.town', 'landlord.city'),
+      getFirstValue(input, 'landlord_county', 'service_address_county', 'landlord.county'),
+      getFirstValue(input, 'landlord_postcode', 'service_postcode', 'landlord.postcode'),
+    );
+  const courtName = getFirstText(input, 'court_name', 'court.name');
   const serviceDate =
     getFirstValue(input, 'notice_service_date', 'notice_served_date', 'service_date', 'notice_date', 'notice.service_date') ||
     '';
@@ -138,6 +195,8 @@ export function enrichEnglandSection8SupportContext<T extends DraftingContextInp
   const earliestProceedingsDate =
     getFirstValue(input, 'earliest_proceedings_date', 'notice_expiry_date', 'earliest_possession_date') ||
     noticeExpiryDate;
+  const latestProceedingsDate =
+    getFirstValue(input, 'latest_proceedings_date', 'notice.latest_proceedings_date') || '';
   const tenancyStartDate =
     getFirstValue(input, 'tenancy_start_date', 'tenancy.start_date') || '';
   const definitions = groundCodes
@@ -165,6 +224,7 @@ export function enrichEnglandSection8SupportContext<T extends DraftingContextInp
     ground_codes: groundCodes,
     selected_ground_codes: groundCodes,
     selected_grounds: selectedGrounds,
+    groundsReliedUpon: input.groundsReliedUpon || selectedGrounds,
     ground_numbers: input.ground_numbers || groundCodes.join(', '),
     grounds_count: groundCodes.length,
     ground_descriptions: groundDescriptions,
@@ -172,16 +232,29 @@ export function enrichEnglandSection8SupportContext<T extends DraftingContextInp
     has_ground_1a: groundCodes.includes('1A'),
     uses_rent_arrears_grounds: groundCodes.some((code) => ['8', '10', '11'].includes(code)),
     is_england_post_2026: true,
-    form_name: input.form_name || ENGLAND_SECTION8_FORM_NAME,
-    notice_name: input.notice_name || ENGLAND_SECTION8_NOTICE_NAME,
-    notice_type: input.notice_type || ENGLAND_SECTION8_NOTICE_TITLE,
-    notice_title: input.notice_title || ENGLAND_SECTION8_NOTICE_TITLE,
+    form_name: ENGLAND_SECTION8_FORM_NAME,
+    notice_name: ENGLAND_SECTION8_NOTICE_NAME,
+    notice_type: ENGLAND_SECTION8_NOTICE_NAME,
+    notice_title: ENGLAND_SECTION8_NOTICE_NAME,
+    official_notice_title: ENGLAND_SECTION8_NOTICE_TITLE,
+    landlord_full_name: landlordFullName,
+    landlord_name: landlordFullName,
+    claimant_name: landlordFullName,
+    tenant_full_name: tenantFullName,
+    tenant_name: tenantFullName,
+    defendant_name: tenantFullName,
+    tenant_2_name: tenantSecondName || input.tenant_2_name || input.tenant2_name || '',
+    property_address: propertyAddress,
+    landlord_address: landlordAddress,
+    service_address: input.service_address || landlordAddress,
+    court_name: courtName || input.court_name || '',
     service_date: input.service_date || serviceDate,
     notice_service_date: serviceDate,
     notice_served_date: input.notice_served_date || serviceDate,
     earliest_possession_date: input.earliest_possession_date || noticeExpiryDate,
     notice_expiry_date: noticeExpiryDate,
     earliest_proceedings_date: earliestProceedingsDate,
+    latest_proceedings_date: latestProceedingsDate,
     display_possession_date: input.display_possession_date || noticeExpiryDate,
     tenancy_start_date_formatted: input.tenancy_start_date_formatted || formatDateUK(tenancyStartDate),
     service_date_formatted: input.service_date_formatted || formatDateUK(serviceDate),
@@ -191,8 +264,12 @@ export function enrichEnglandSection8SupportContext<T extends DraftingContextInp
     notice_expiry_date_formatted: input.notice_expiry_date_formatted || formatDateUK(noticeExpiryDate),
     earliest_proceedings_date_formatted:
       input.earliest_proceedings_date_formatted || formatDateUK(earliestProceedingsDate),
+    latest_proceedings_date_formatted:
+      input.latest_proceedings_date_formatted || formatDateUK(latestProceedingsDate),
     display_possession_date_formatted:
       input.display_possession_date_formatted || formatDateUK(input.display_possession_date || noticeExpiryDate),
+    clean_output: input.clean_output ?? input.court_mode ?? false,
+    court_mode: input.court_mode ?? input.clean_output ?? false,
     required_evidence: input.required_evidence || buildRequiredEvidence(groundCodes),
     preview_summary: draftingModel.previewSummary,
     drafting_model: draftingModel,

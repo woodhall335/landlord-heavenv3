@@ -80,12 +80,14 @@ filename: cover_letter_to_tenant.pdf
 </head>
 <body>
   <div class="letterhead">
-    <div class="sender">{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{/unless}}</div>
+    {{#if (hasValue landlord_full_name)}}
+    <div class="sender">{{landlord_full_name}}</div>
+    {{/if}}
     {{#if landlord_address}}<div class="sender">{{landlord_address}}</div>{{/if}}
   </div>
 
   <div class="recipient">
-    {{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{/unless}}
+    {{#if (hasValue tenant_full_name)}}{{tenant_full_name}}{{else}}Tenant{{/if}}
     {{#if property_address}}
     {{property_address}}
     {{/if}}
@@ -96,9 +98,9 @@ filename: cover_letter_to_tenant.pdf
     {{#if property_address}}<p><strong>Property:</strong> {{property_address}}</p>{{/if}}
   </div>
 
-  <div class="subject">Enclosed: {{notice_title}}{{#unless notice_title}}{{notice_name}}{{/unless}}</div>
+  <div class="subject">Enclosed: {{notice_name}}</div>
 
-  <p>Dear {{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{/unless}},</p>
+  <p>Dear {{#if (hasValue tenant_full_name)}}{{tenant_full_name}}{{else}}Tenant{{/if}},</p>
 
   {{#if drafting_model.coverLetter.introParagraphs.length}}
     {{#each drafting_model.coverLetter.introParagraphs}}
@@ -113,6 +115,7 @@ filename: cover_letter_to_tenant.pdf
     {{#if (hasValue service_date_formatted)}}<p><strong>Notice service date:</strong> {{service_date_formatted}}</p>{{/if}}
     {{#if (hasValue notice_expiry_date_formatted)}}<p><strong>Notice expiry date:</strong> {{notice_expiry_date_formatted}}</p>{{/if}}
     {{#if (hasValue earliest_proceedings_date_formatted)}}<p><strong>Earliest proceedings date:</strong> {{earliest_proceedings_date_formatted}}</p>{{/if}}
+    {{#if (hasValue latest_proceedings_date_formatted)}}<p><strong>Latest proceedings date:</strong> {{latest_proceedings_date_formatted}}</p>{{/if}}
     {{#if ground_descriptions}}<p><strong>Grounds relied on:</strong> {{ground_descriptions}}</p>{{/if}}
   </div>
 
@@ -135,7 +138,9 @@ filename: cover_letter_to_tenant.pdf
 
   <div class="closing">
     <p>Yours sincerely,</p>
-    <p>{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{/unless}}</p>
+    {{#if (hasValue landlord_full_name)}}
+    <p>{{landlord_full_name}}</p>
+    {{/if}}
   </div>
 
   <p class="small-note">This covering letter is a support document provided for clarity. It does not replace the enclosed {{notice_name}} and is not itself a statutory notice.</p>

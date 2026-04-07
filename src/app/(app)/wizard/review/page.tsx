@@ -1777,7 +1777,7 @@ function EvictionReviewContent({
               {jurisdiction === 'england' ? (
                 <li className="flex items-center gap-2 text-sm">
                   <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                  Form 3A notice seeking possession
+                          Form 3A notice
                 </li>
               ) : analysis.recommended_route === 'section_21' ||
                 analysis.recommended_route === 'accelerated_possession' ||
@@ -1790,13 +1790,13 @@ function EvictionReviewContent({
                 analysis.recommended_route === 'section8_notice' ? (
                 <li className="flex items-center gap-2 text-sm">
                   <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                  Form 3A notice seeking possession
+                        Form 3A notice
                 </li>
               ) : (
                 <>
                   <li className="flex items-center gap-2 text-sm">
                     <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                    Form 3A notice seeking possession
+                        Form 3A notice
                   </li>
                   <li className="flex items-center gap-2 text-sm">
                     <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
@@ -2028,7 +2028,7 @@ function NoticeOnlyReviewContent({
   // Build route label based on actual route
   const recommendedRouteLabel = isSection8
     ? jurisdiction === 'england'
-      ? 'Form 3A Notice Seeking Possession'
+                              ? 'Form 3A notice'
       : 'Section 8 Notice'
     : isSection21
     ? 'Section 21 Notice (Form 6A)'
@@ -2599,7 +2599,7 @@ function NoticeOnlyReviewContent({
             <>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Form 3A Notice Seeking Possession
+                        Form 3A notice
               </li>
               <li className="flex items-center gap-2 text-gray-700">
                 <RiFileTextLine className="w-4 h-4 text-gray-400" />

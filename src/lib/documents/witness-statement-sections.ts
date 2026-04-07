@@ -289,7 +289,7 @@ export function buildWitnessExhibits(input: WitnessStatementSectionsInput): Witn
       key: 'section8_notice',
       label: `${prefix}2`,
       title: 'Form 3A Notice',
-      description: 'Form 3A notice seeking possession served on the tenant.',
+    description: 'Form 3A notice served on the tenant.',
     },
     {
       key: 'proof_of_service',

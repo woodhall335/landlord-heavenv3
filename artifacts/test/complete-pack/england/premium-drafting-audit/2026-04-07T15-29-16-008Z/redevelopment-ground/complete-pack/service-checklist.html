@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form 3A notice - Service and Validity Checklist</title>
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4;
+  margin: 0.75in 0.75in 1in 0.75in; 
+}
+
+html {
+  font-size: 12pt; 
+}
+
+body {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.5;
+  color: #000;
+  background: #fff;
+  max-width: 8.5in;
+  margin: 0 auto;
+  padding: 0.5in;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "clig" 0;
+
+  
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+
+
+
+h1 {
+  font-size: 14pt;
+  font-weight: bold;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h1 + h1 {
+  margin-top: 0.5em; 
+}
+
+
+h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  text-align: center;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+h3 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h4 {
+  font-size: 11pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1em 0 0.5em 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+p {
+  margin: 0 0 0.75em 0;
+  line-height: 1.5;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+
+ul, ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+
+.link, a {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all; 
+}
+
+
+
+
+.info-box {
+  border: 2px solid #000;
+  padding: 1em;
+  margin: 1em 0 1.5em 0;
+  background-color: #f9f9f9;
+
+  page-break-inside: avoid;
+}
+
+.info-box h3,
+.info-box h4 {
+  margin-top: 0;
+}
+
+.info-box p:first-of-type {
+  margin-top: 0;
+}
+
+
+.section {
+  margin: 1.5em 0;
+
+  
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.field-group {
+  margin: 1em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.field-label {
+  font-weight: bold;
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  display: block;
+}
+
+.field-value {
+  margin-left: 0.25in;
+  border-bottom: 1px dotted #666;
+  min-height: 1.5em;
+  padding: 0.25em 0;
+  display: block;
+}
+
+.field-value:empty::after {
+  content: "\00a0"; 
+}
+
+
+.multiline-field {
+  margin-left: 0.25in;
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  min-height: 3em;
+  background-color: #fafafa;
+}
+
+
+.ground-block {
+  margin: 1em 0 1em 0.25in;
+  padding: 0.75em;
+  border-left: 3px solid #666;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ground-block p:first-child {
+  margin-top: 0;
+}
+
+
+.part-label {
+  font-weight: bold;
+  font-size: 11pt;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0.25em 0 0.25em 0.5em;
+  border-left: 4px solid #333;
+  background-color: #f0f0f0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+.signature-block {
+  margin-top: 2em;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.checkbox {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #000;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  background-color: #fff;
+}
+
+
+
+
+.avoid-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.keep-with-next {
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+.page-break-before {
+  page-break-before: always;
+  break-before: page;
+}
+
+
+.page-break-after {
+  page-break-after: always;
+  break-after: page;
+}
+
+
+.allow-break {
+  page-break-inside: auto;
+  break-inside: auto;
+}
+
+
+
+.guidance-section {
+  margin-top: 2em;
+  padding-top: 1.5em;
+  border-top: 2px solid #000;
+
+  
+  page-break-before: auto;
+}
+
+.guidance-section h2 {
+  text-align: left; 
+  font-size: 12pt;
+  margin: 1.5em 0 0.5em 0;
+}
+
+.guidance-section h3 {
+  font-size: 11pt;
+  margin: 1em 0 0.5em 0;
+}
+
+
+
+.mt-0 { margin-top: 0 !important; }
+.mt-1 { margin-top: 0.5em !important; }
+.mt-2 { margin-top: 1em !important; }
+.mt-3 { margin-top: 1.5em !important; }
+.mt-4 { margin-top: 2em !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: 0.5em !important; }
+.mb-2 { margin-bottom: 1em !important; }
+.mb-3 { margin-bottom: 1.5em !important; }
+.mb-4 { margin-bottom: 2em !important; }
+
+.ml-0 { margin-left: 0 !important; }
+.ml-1 { margin-left: 0.25in !important; }
+.ml-2 { margin-left: 0.5in !important; }
+
+
+
+.text-center { text-align: center !important; }
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+
+.font-small { font-size: 10pt !important; }
+.font-normal { font-size: 12pt !important; }
+.font-large { font-size: 14pt !important; }
+
+.font-italic { font-style: italic !important; }
+.font-bold { font-weight: bold !important; }
+
+
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0.5in;
+  }
+
+  
+  a[href^="http"]:after {
+    content: none; 
+  }
+
+  
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+}
+
+
+
+
+.scotland-title {
+  font-size: 18pt;
+  margin: 0.5em 0;
+}
+
+
+.scotland-ground-block {
+  margin: 1em 0;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+th, td {
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
+    body {
+      margin: 0 auto;
+      padding: 0;
+      color: #1a1a1a;
+      font-size: 10pt;
+      line-height: 1.55;
+    }
+
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .doc-header h1 {
+      margin: 0 0 0.4em 0;
+      font-size: 14pt;
+      font-weight: 700;
+    }
+
+    .doc-badge {
+      display: inline-block;
+      padding: 0.3em 0.8em;
+      background: #1a1a1a;
+      color: white;
+      font-size: 10pt;
+      font-weight: 600;
+    }
+
+    .summary-box,
+    .checklist-box,
+    .callout {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .summary-box,
+    .checklist-box {
+      margin: 1.25em 0;
+      border: 1px solid #d8d8d8;
+      background: #fff;
+    }
+
+    .summary-box {
+      padding: 1em;
+      background: #fafafa;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 0.45em 1em;
+    }
+
+    .summary-grid dt {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .summary-grid dd {
+      margin: 0;
+    }
+
+    .section-title {
+      margin: 1.75em 0 0.75em 0;
+      padding-bottom: 0.4em;
+      border-bottom: 2px solid #1a1a1a;
+      font-size: 12pt;
+      font-weight: 700;
+    }
+
+    .checklist-box .heading {
+      margin: 0;
+      padding: 0.7em 0.9em;
+      background: #1a1a1a;
+      color: white;
+      font-size: 11pt;
+      font-weight: 700;
+    }
+
+    .checklist-box .content {
+      padding: 1em;
+    }
+
+    ul {
+      margin: 0.4em 0 0 1.2em;
+    }
+
+    li {
+      margin: 0.4em 0;
+    }
+
+    .callout {
+      margin: 1.25em 0;
+      padding: 1em;
+      border-left: 4px solid #1a1a1a;
+      background: #f7f7f7;
+    }
+
+    .callout.warning {
+      border-color: #b45309;
+      background: #fff7ed;
+    }
+
+    .callout.critical {
+      border-color: #b91c1c;
+      background: #fef2f2;
+    }
+
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #d8d8d8;
+      font-size: 9pt;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="doc-header">
+    <h1>Service and Validity Checklist</h1>
+    <span class="doc-badge">Form 3A notice</span>
+  </div>
+
+  <div class="callout">
+    <p><strong>Purpose:</strong> Use this checklist to verify that the Form 3A notice is internally consistent across the notice and support documents, has been served using a defensible method, and is ready for evidence use if a claim is issued.</p>
+    <p>Use this checklist to confirm that the Form 3A notice and the supporting papers tell the same story in a careful, evidence-led way.</p>
+    <p>The claimant seeks possession of 16 Willow Mews
+York
+North Yorkshire
+YO24 3HX relying on Ground 6 (Redevelopment).</p>
+  </div>
+
+  <div class="summary-box">
+    <dl class="summary-grid">
+      <dt>Landlord</dt>
+      <dd>Daniel Mercer</dd>
+      <dt>Tenant</dt>
+      <dd>Ivy Carleton</dd>
+      <dt>Property</dt>
+      <dd>16 Willow Mews
+York
+North Yorkshire
+YO24 3HX</dd>
+      <dt>Tenancy start date</dt>
+      <dd>01/02/2024</dd>
+      <dt>Notice service date</dt>
+      <dd>01/06/2026</dd>
+      <dt>Notice expiry date</dt>
+      <dd>01/10/2026</dd>
+      <dt>Earliest proceedings date</dt>
+      <dd>01/10/2026</dd>
+      <dt>Grounds relied on</dt>
+      <dd>Ground 6 – Redevelopment</dd>
+    </dl>
+  </div>
+
+  <h2 class="section-title">Service Evidence</h2>
+  <div class="checklist-box">
+    <div class="heading">Keep With The Pack</div>
+    <div class="content">
+      <ul>
+        <li>Copy of the served notice</li>
+        <li>Proof of service certificate or service witness note</li>
+        <li>Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.</li>
+        <li>If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and why the service date used in the pack is the correct date.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="section-title">Validity Checks</h2>
+  <div class="checklist-box">
+    <div class="heading">Before You Rely On The Notice</div>
+    <div class="content">
+      <ul>
+        <li>Check that the same party names, address, grounds, court name, and notice timeline appear consistently across the Form 3A notice, the support documents, and any court forms.</li>
+        <li>Be ready to explain why the works genuinely require possession and what documents support that position.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <p><strong>Notice periods:</strong> The required notice period depends on the grounds relied on and can change. If you alter the grounds, the service method, or the intended service date, regenerate the pack so every document uses the same recalculated dates.</p>
+  </div>
+
+  <h2 class="section-title">After Service</h2>
+  <div class="checklist-box">
+    <div class="heading">Do Not Do These Things</div>
+    <div class="content">
+      <ul>
+        <li>Review the pack as a whole before issue so that dates, court details, and ground wording remain aligned.</li>
+        <li>Remove empty or unused sections rather than leaving placeholder text or blank visual gaps in court-facing documents.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout critical">
+    <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds particulars are inconsistent across the pack, even where the underlying arrears or breach evidence is strong.</p>
+  </div>
+
+  <div class="doc-footer">
+    <p><strong>Generated:</strong> 07/04/2026</p>
+  </div>
+</body>
+</html>

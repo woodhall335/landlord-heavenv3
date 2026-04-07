@@ -142,10 +142,14 @@
       <dt>Court</dt>
       <dd>{{court_name}}</dd>
       {{/if}}
+      {{#if (hasValue landlord_full_name)}}
       <dt>Claimant</dt>
       <dd>{{landlord_full_name}}</dd>
+      {{/if}}
+      {{#if (hasValue tenant_full_name)}}
       <dt>Defendant</dt>
       <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      {{/if}}
       <dt>Property</dt>
       <dd>{{property_address}}</dd>
       {{#if (hasValue notice_service_date)}}
@@ -159,6 +163,10 @@
       {{#if (hasValue earliest_proceedings_date)}}
       <dt>Earliest proceedings date</dt>
       <dd>{{format_date earliest_proceedings_date "long"}}</dd>
+      {{/if}}
+      {{#if (hasValue latest_proceedings_date)}}
+      <dt>Latest proceedings date</dt>
+      <dd>{{format_date latest_proceedings_date "long"}}</dd>
       {{/if}}
       <dt>Bundle prepared</dt>
       <dd>{{format_date generated_date "long"}}</dd>
@@ -204,7 +212,7 @@
         <td class="checkbox-col"><span class="checkbox"></span></td>
         <td class="tab-number">B1</td>
         <td>{{notice_name}}</td>
-        <td>{{notice_title}}</td>
+        <td>Official {{notice_name}} relied on for this claim</td>
         <td class="page-ref">{{bundle_exhibit_section8_notice}}</td>
         <td class="page-ref"></td>
       </tr>
@@ -224,7 +232,7 @@
         <td class="checkbox-col"><span class="checkbox"></span></td>
         <td class="tab-number">C1</td>
         <td>Witness statement</td>
-        <td>Witness statement of {{landlord_full_name}}</td>
+        <td>{{#if (hasValue landlord_full_name)}}Witness statement of {{landlord_full_name}}{{else}}Witness statement supporting the claim{{/if}}</td>
         <td class="page-ref"></td>
         <td class="page-ref"></td>
       </tr>

@@ -58,15 +58,6 @@ function toGroundLabels(codes: string[]): string[] {
   return codes.map((code) => `Ground ${String(code).replace(/^Ground\s+/i, '').trim().toUpperCase()}`);
 }
 
-function withGroundData(base: WizardFacts, code: string, facts: Record<string, any>) {
-  const normalized = String(code).replace(/^Ground\s+/i, '').trim().toLowerCase();
-  base[`ground_${normalized}`] = facts;
-
-  Object.entries(facts).forEach(([key, value]) => {
-    base[`ground_${normalized}.${key}`] = value;
-  });
-}
-
 function buildNoticeOnlyBaseFacts(): WizardFacts {
   return {
     jurisdiction: 'england',
@@ -125,14 +116,18 @@ function buildCompletePackBaseFacts(): WizardFacts {
         jurisdiction: 'england',
       },
       landlord_name: 'Daniel Mercer',
+      landlord_full_name: 'Daniel Mercer',
       landlord_address_line1: '27 Rowan Avenue',
       landlord_city: 'Leeds',
+      landlord_county: 'West Yorkshire',
       landlord_postcode: 'LS8 2PF',
       landlord_email: 'daniel.mercer@example.com',
       landlord_phone: '01132225555',
       tenant1_name: 'Ivy Carleton',
+      tenant_full_name: 'Ivy Carleton',
       property_address_line1: '16 Willow Mews',
       property_city: 'York',
+      property_county: 'North Yorkshire',
       property_postcode: 'YO24 3HX',
       tenancy_start_date: '2024-02-01',
       notice_date: '2026-06-01',
@@ -299,6 +294,8 @@ function buildNoticeOnlyGuidanceData(wizardFacts: WizardFacts) {
     wizardFacts.landlord_county,
     wizardFacts.landlord_postcode,
   );
+  const tenantName = wizardFacts.tenant_full_name || wizardFacts.tenant1_name;
+  const landlordName = wizardFacts.landlord_full_name || wizardFacts.landlord_name;
 
   return enrichEnglandSection8SupportContext({
     ...wizardFacts,
@@ -308,10 +305,10 @@ function buildNoticeOnlyGuidanceData(wizardFacts: WizardFacts) {
     generated_date: '07/04/2026',
     property_address: propertyAddress,
     landlord_address: landlordAddress,
-    tenant_name: wizardFacts.tenant_full_name,
-    landlord_name: wizardFacts.landlord_full_name,
-    tenant_full_name: wizardFacts.tenant_full_name,
-    landlord_full_name: wizardFacts.landlord_full_name,
+    tenant_name: tenantName,
+    landlord_name: landlordName,
+    tenant_full_name: tenantName,
+    landlord_full_name: landlordName,
     case_type: 'England possession route',
     ground_codes: selectedGrounds,
     selected_grounds: selectedGrounds,
@@ -354,8 +351,8 @@ async function generateNoticeOnlyPack(rootDir: string, wizardFacts: WizardFacts)
   }
 
   const proofOfServiceBytes = await generateProofOfServicePDF({
-    landlord_name: wizardFacts.landlord_full_name,
-    tenant_name: wizardFacts.tenant_full_name,
+    landlord_name: wizardFacts.landlord_full_name || wizardFacts.landlord_name,
+    tenant_name: wizardFacts.tenant_full_name || wizardFacts.tenant1_name,
     property_address: guidanceData.property_address,
     document_served: guidanceData.notice_name,
     served_date: wizardFacts.notice_served_date,
@@ -381,10 +378,15 @@ async function generateNoticeOnlyPack(rootDir: string, wizardFacts: WizardFacts)
         data: {
           claimant_reference: 'sample-notice-only',
           generation_date: new Date().toISOString().slice(0, 10),
+          clean_output: wizardFacts.clean_output ?? false,
           property_address: guidanceData.property_address,
-          tenant_full_name: wizardFacts.tenant_full_name,
+          tenant_full_name: wizardFacts.tenant_full_name || wizardFacts.tenant1_name,
+          tenant_name: wizardFacts.tenant_full_name || wizardFacts.tenant1_name,
+          tenant1_name: wizardFacts.tenant1_name,
           tenant_2_name: wizardFacts.tenant_2_name,
-          landlord_full_name: wizardFacts.landlord_full_name,
+          landlord_full_name: wizardFacts.landlord_full_name || wizardFacts.landlord_name,
+          landlord_name: wizardFacts.landlord_full_name || wizardFacts.landlord_name,
+          claimant_name: wizardFacts.landlord_full_name || wizardFacts.landlord_name,
           landlord_2_name: wizardFacts.landlord_2_name,
           rent_amount: wizardFacts.rent_amount || 0,
           rent_frequency: wizardFacts.rent_frequency || 'monthly',

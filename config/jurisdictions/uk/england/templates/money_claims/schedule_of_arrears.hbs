@@ -222,9 +222,9 @@
     <dt>Property:</dt>
     <dd>{{property_address}}</dd>
     <dt>Defendant:</dt>
-    <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+    <dd>{{tenant_full_name}}{{#unless tenant_full_name}}{{tenant_name}}{{#unless tenant_name}}{{tenant1_name}}{{/unless}}{{/unless}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
     <dt>Claimant:</dt>
-    <dd>{{landlord_full_name}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</dd>
+    <dd>{{landlord_full_name}}{{#unless landlord_full_name}}{{landlord_name}}{{#unless landlord_name}}{{claimant_name}}{{/unless}}{{/unless}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</dd>
     {{#if claimant_reference}}
     <dt>Claim Reference:</dt>
     <dd>{{claimant_reference}}</dd>
@@ -304,8 +304,10 @@
 <!-- Footer -->
 <div class="doc-footer">
   <p><strong>Generated:</strong> {{format_date generation_date "long"}}</p>
+  {{#unless clean_output}}
   <p><strong>Landlord Heaven Money Claim Pack</strong> | England</p>
   <p><em>This schedule supports the particulars of claim and demonstrates the calculation of arrears owed.</em></p>
+  {{/unless}}
 </div>
 
 </body>
