@@ -32,6 +32,8 @@ export const PRICE_IDS = {
   NOTICE_ONLY: process.env.STRIPE_PRICE_ID_NOTICE_ONLY!,
   EVICTION_PACK: process.env.STRIPE_PRICE_ID_EVICTION_PACK!,
   MONEY_CLAIM: process.env.STRIPE_PRICE_ID_MONEY_CLAIM!,
+  SECTION13_STANDARD: process.env.STRIPE_PRICE_ID_SECTION13_STANDARD!,
+  SECTION13_DEFENSIVE: process.env.STRIPE_PRICE_ID_SECTION13_DEFENSIVE!,
   STANDARD_AST: process.env.STRIPE_PRICE_ID_STANDARD_AST!,
   PREMIUM_AST: process.env.STRIPE_PRICE_ID_PREMIUM_AST!,
   STUDENT_TENANCY: process.env.STRIPE_PRICE_ID_STUDENT_TENANCY!,
@@ -66,6 +68,16 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     name: 'Money Claim Pack',
     type: 'one_time',
     category: 'money_claim',
+  },
+  [PRICE_IDS.SECTION13_STANDARD]: {
+    name: 'Section 13 Wizard',
+    type: 'one_time',
+    category: 'rent_increase',
+  },
+  [PRICE_IDS.SECTION13_DEFENSIVE]: {
+    name: 'Section 13 Defensive Pack',
+    type: 'one_time',
+    category: 'rent_increase',
   },
   [PRICE_IDS.STANDARD_AST]: {
     name: ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,

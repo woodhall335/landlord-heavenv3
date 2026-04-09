@@ -106,6 +106,31 @@ function getEnglandMoneyClaimSteps(): NextStepsResult {
   };
 }
 
+function getEnglandSection13Steps(product: string): NextStepsResult {
+  const common = [
+    'Review the computed earliest valid rent increase date and the proof-of-service details before serving the notice.',
+    'Serve Form 4A using the method you recorded and keep copies of the notice and your proof-of-service record.',
+    'The tenant can apply to the tribunal up to the day before the proposed start date, and the tribunal can set a lower rent.',
+    'Keep your comparable-rent report, listing links, and property evidence ready in case the increase is challenged.',
+  ];
+
+  if (product !== 'section13_defensive') {
+    return {
+      title: 'What to do next',
+      steps: common,
+    };
+  }
+
+  return {
+    title: 'What to do next',
+    steps: [
+      ...common,
+      'Use the tribunal-ready bundle, response template, and evidence checklist if the tenant starts a market-rent challenge.',
+      'Upload any missing evidence before the hearing bundle is finalised so your indexed pack is complete.',
+    ],
+  };
+}
+
 function getEnglandASTSteps(): NextStepsResult {
   return {
     title: 'What to do next',
@@ -284,16 +309,19 @@ export function getNextSteps(args: GetNextStepsArgs): NextStepsResult {
 
   // ENGLAND
   if (jur === 'england') {
-    switch (product) {
-      case 'notice_only':
-        return getEnglandNoticeOnlySteps(route, notice_period_days);
-      case 'complete_pack':
-        return getEnglandCompletePackSteps(route);
-      case 'money_claim':
-        return getEnglandMoneyClaimSteps();
-      case 'ast_standard':
-      case 'ast_premium':
-        return getEnglandASTSteps();
+      switch (product) {
+        case 'notice_only':
+          return getEnglandNoticeOnlySteps(route, notice_period_days);
+        case 'complete_pack':
+          return getEnglandCompletePackSteps(route);
+        case 'money_claim':
+          return getEnglandMoneyClaimSteps();
+        case 'section13_standard':
+        case 'section13_defensive':
+          return getEnglandSection13Steps(product);
+        case 'ast_standard':
+        case 'ast_premium':
+          return getEnglandASTSteps();
       default:
         return { title: 'What to do next', steps: ['Review your documents and follow the included instructions.'] };
     }

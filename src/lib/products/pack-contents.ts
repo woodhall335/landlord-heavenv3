@@ -24,6 +24,103 @@ export type PackItemCategory =
   | 'Tenancy agreement'
   | 'Other';
 
+function getEnglandSection13Contents(product: string): PackItem[] {
+  const baseItems: PackItem[] = [
+    {
+      key: 'section13_form_4a',
+      title: 'Form 4A rent increase notice',
+      description: 'Official England Form 4A completed from your Section 13 wizard answers.',
+      category: 'Notice',
+      required: true,
+    },
+    {
+      key: 'section13_justification_report',
+      title: 'Rent increase justification report',
+      description: 'Comparable-rent summary, adjustment reasoning, and median market-rent analysis.',
+      category: 'Evidence',
+      required: true,
+    },
+    {
+      key: 'section13_proof_of_service_record',
+      title: 'Proof of service record',
+      description: 'Service-method record and signed delivery evidence note for the Section 13 notice.',
+      category: 'Evidence',
+      required: true,
+    },
+    {
+      key: 'section13_cover_letter',
+      title: 'Rent increase cover letter',
+      description: 'Plain-English cover letter to accompany the notice and explain the proposed increase.',
+      category: 'Guidance',
+      required: true,
+    },
+  ];
+
+  if (product !== 'section13_defensive') {
+    return baseItems;
+  }
+
+  return [
+    ...baseItems,
+    {
+      key: 'section13_tribunal_argument_summary',
+      title: 'Tribunal Argument Summary',
+      description: 'One-page landlord argument brief tying the proposed rent to the comparable evidence and banding.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'section13_tribunal_defence_guide',
+      title: 'Tribunal defence guide',
+      description: 'Step-by-step tribunal preparation guide for a challenged rent increase.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'section13_landlord_response_template',
+      title: 'Landlord response template',
+      description: 'Pre-filled landlord response template aligned to the live rent-determination process.',
+      category: 'Court forms',
+      required: true,
+    },
+    {
+      key: 'section13_legal_briefing',
+      title: 'Tribunal legal briefing',
+      description: 'Three-page hearing briefing covering evidence themes and preparation points.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'section13_evidence_checklist',
+      title: 'Evidence checklist',
+      description: 'Checklist of the evidence to print or upload for a tribunal-ready bundle.',
+      category: 'Checklists',
+      required: true,
+    },
+    {
+      key: 'section13_negotiation_email_template',
+      title: 'Negotiation email template',
+      description: 'Template wording to open discussions before a tribunal challenge.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'section13_tribunal_bundle',
+      title: 'Merged tribunal bundle PDF',
+      description: 'Indexed hearing bundle with exhibits, page numbers, and supporting documents.',
+      category: 'Evidence',
+      required: true,
+    },
+    {
+      key: 'section13_tribunal_bundle_zip',
+      title: 'Tribunal bundle ZIP',
+      description: 'ZIP export containing the merged bundle and all supporting files individually.',
+      category: 'Evidence',
+      required: true,
+    },
+  ];
+}
+
 export interface PackItem {
   /** Stable identifier e.g. 'notice_form', 'service_instructions' */
   key: string;
@@ -1180,6 +1277,9 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
         return getEnglandCompletePackContents(args);
       case 'money_claim':
         return getEnglandMoneyClaimContents();
+      case 'section13_standard':
+      case 'section13_defensive':
+        return getEnglandSection13Contents(product);
       case 'ast_standard':
         return getEnglandASTContents('standard', hasInventoryData);
       case 'ast_premium':
@@ -1238,6 +1338,8 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
       case 'notice_only':
       case 'complete_pack':
       case 'money_claim':
+      case 'section13_standard':
+      case 'section13_defensive':
         return [];
       default:
         return [];

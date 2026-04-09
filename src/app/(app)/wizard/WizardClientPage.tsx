@@ -103,6 +103,14 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
         subtitle: 'England-only (County Court / MCOL-ready). Recover unpaid rent or tenancy-related debt with guided claim structuring.',
         eyebrow: 'Money Claim',
       };
+    case 'section13_standard':
+    case 'section13_defensive':
+      return {
+        title: 'Section 13 Rent Increase Wizard',
+        subtitle:
+          'England-only Form 4A workflow with post-1 May 2026 date validation, comparable-rent analysis, and a tribunal-ready upgrade path.',
+        eyebrow: product === 'section13_defensive' ? 'Defensive Pack' : 'Section 13',
+      };
     default:
       if (product && isResidentialLettingProductSku(product)) {
         const residentialProduct = RESIDENTIAL_LETTING_PRODUCTS[product];
@@ -122,7 +130,7 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
 }
 
 interface DocumentOption {
-  type: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
+  type: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'rent_increase';
   title: string;
   description: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -141,6 +149,7 @@ interface JurisdictionOption {
 // - notice_only: England, Wales, Scotland
 // - complete_pack: England only
 // - money_claim: England only
+// - rent_increase: England only
 // - tenancy_agreement: All UK regions
 const documentOptions: DocumentOption[] = [
   {
@@ -164,6 +173,14 @@ const documentOptions: DocumentOption[] = [
     description: 'England-only money claim bundle for rent arrears and tenancy debts (County Court / MCOL-ready)',
     icon: RiMoneyPoundCircleLine,
     price: PRODUCTS.money_claim.displayPrice,
+    regionBadge: 'England only',
+  },
+  {
+    type: 'rent_increase',
+    title: 'Section 13 Rent Increase',
+    description: 'England-only Form 4A wizard with market comparables, date rules, and a tribunal-ready defensive pack',
+    icon: RiAlertLine,
+    price: `From ${PRODUCTS.section13_standard.displayPrice}`,
     regionBadge: 'England only',
   },
   {
@@ -193,7 +210,8 @@ function showsNorthernIrelandTenancyOnlyBadge(
   return (
     documentType === 'notice_only' ||
     documentType === 'complete_pack' ||
-    documentType === 'money_claim'
+    documentType === 'money_claim' ||
+    documentType === 'rent_increase'
   );
 }
 
@@ -216,7 +234,7 @@ function isJurisdictionEnabled(
   }
 
   // Wales and Scotland only support notice_only and tenancy_agreement
-  // complete_pack and money_claim are England-only
+  // complete_pack, money_claim, and rent_increase are England-only
   if (jurisdiction === 'wales' || jurisdiction === 'scotland') {
     return documentType === 'notice_only' || documentType === 'tenancy_agreement';
   }
@@ -263,6 +281,9 @@ function mapProductToDocumentType(
       return 'notice_only';
     case 'money_claim':
       return 'money_claim';
+    case 'section13_standard':
+    case 'section13_defensive':
+      return 'rent_increase';
     case 'ast_standard':
     case 'ast_premium':
     case 'tenancy_agreement':
@@ -280,6 +301,8 @@ function getWizardFlowType(documentType: DocumentOption['type']): string {
       return 'eviction';
     case 'money_claim':
       return 'money_claim';
+    case 'rent_increase':
+      return 'rent_increase';
     case 'tenancy_agreement':
       return 'tenancy_agreement';
     default:
@@ -303,6 +326,8 @@ function getEffectiveWizardProduct(
       product === 'notice_only' ||
       product === 'complete_pack' ||
       product === 'money_claim' ||
+      product === 'section13_standard' ||
+      product === 'section13_defensive' ||
       product === 'ast_standard' ||
       product === 'ast_premium' ||
       product === 'tenancy_agreement'
@@ -315,7 +340,7 @@ function getEffectiveWizardProduct(
     }
   }
 
-  return documentType;
+  return documentType === 'rent_increase' ? 'section13_standard' : documentType;
 }
 
 /**
@@ -685,7 +710,7 @@ function WizardPageInner() {
             </p>
 
             {/* Filter products based on pre-selected jurisdiction (from URL param) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
               {getAvailableDocumentOptions(selectedJurisdiction?.value ?? null).map((doc) => {
                 const Icon = doc.icon;
 

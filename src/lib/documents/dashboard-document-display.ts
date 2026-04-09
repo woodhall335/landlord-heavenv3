@@ -5,7 +5,7 @@
  * including tenancy agreement variants (ast_agreement*).
  */
 
-export type DashboardDocumentCategory = 'eviction' | 'money_claim' | 'tenancy_agreement' | 'other';
+export type DashboardDocumentCategory = 'eviction' | 'money_claim' | 'tenancy_agreement' | 'rent_increase' | 'other';
 
 const TENANCY_SUPPORT_DOCUMENT_TYPES = new Set([
   'inventory_schedule',
@@ -131,6 +131,25 @@ export function getDashboardDocumentCategory(documentType: string): DashboardDoc
     return 'money_claim';
   }
 
+  if (
+    [
+      'section13_form_4a',
+      'section13_justification_report',
+      'section13_proof_of_service_record',
+      'section13_cover_letter',
+      'section13_tribunal_argument_summary',
+      'section13_tribunal_defence_guide',
+      'section13_landlord_response_template',
+      'section13_legal_briefing',
+      'section13_evidence_checklist',
+      'section13_negotiation_email_template',
+      'section13_tribunal_bundle',
+      'section13_tribunal_bundle_zip',
+    ].includes(documentType)
+  ) {
+    return 'rent_increase';
+  }
+
   return 'other';
 }
 
@@ -170,6 +189,18 @@ export function getDashboardDocumentTitle(documentType: string): string {
     lease_assignment_agreement: 'Lease Assignment Agreement',
     rent_arrears_letter: 'Rent Arrears Letter',
     repayment_plan_agreement: 'Repayment Plan Agreement',
+    section13_form_4a: 'Form 4A Rent Increase Notice',
+    section13_justification_report: 'Rent Increase Justification Report',
+    section13_proof_of_service_record: 'Proof of Service Record',
+    section13_cover_letter: 'Rent Increase Cover Letter',
+    section13_tribunal_argument_summary: 'Tribunal Argument Summary',
+    section13_tribunal_defence_guide: 'Tribunal Defence Guide',
+    section13_landlord_response_template: 'Landlord Response Template',
+    section13_legal_briefing: 'Tribunal Legal Briefing',
+    section13_evidence_checklist: 'Evidence Checklist',
+    section13_negotiation_email_template: 'Negotiation Email Template',
+    section13_tribunal_bundle: 'Merged Tribunal Bundle PDF',
+    section13_tribunal_bundle_zip: 'Tribunal Bundle ZIP',
     residential_tenancy_application: 'Residential Tenancy Application',
     rental_inspection_report: 'Rental Inspection Report',
     flatmate_agreement: 'Flatmate Agreement',

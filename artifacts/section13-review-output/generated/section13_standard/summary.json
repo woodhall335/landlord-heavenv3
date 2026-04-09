@@ -1,0 +1,53 @@
+{
+  "productType": "section13_standard",
+  "workflowStatus": "fulfilled",
+  "bundleWarnings": [],
+  "documentTypes": [
+    {
+      "type": "section13_form_4a",
+      "file": "section13-form-4a-section13_standard-review-case.pdf",
+      "title": "Form 4A rent increase notice"
+    },
+    {
+      "type": "section13_justification_report",
+      "file": "section13-justification-report-section13_standard-review-case.pdf",
+      "title": "Rent increase justification report"
+    },
+    {
+      "type": "section13_proof_of_service_record",
+      "file": "section13-proof-of-service-section13_standard-review-case.pdf",
+      "title": "Proof of service record"
+    },
+    {
+      "type": "section13_cover_letter",
+      "file": "section13-cover-letter-section13_standard-review-case.pdf",
+      "title": "Rent increase cover letter"
+    }
+  ],
+  "bundleAssets": [],
+  "preview": {
+    "rulesVersion": "england_assured_section13_2026-05-01",
+    "comparableCount": 8,
+    "sourceBackedCount": 8,
+    "freshComparableCount": 8,
+    "userOverrideCount": 0,
+    "lowerQuartile": 1328.75,
+    "median": 1375,
+    "upperQuartile": 1415,
+    "proposedRentMonthly": 1360,
+    "proposedPositionLabel": "Below the adjusted median market rent",
+    "challengeBand": "moderate_likelihood",
+    "challengeBandLabel": "Moderate likelihood of challenge",
+    "challengeBandExplainer": "Based on where your proposed rent sits within the adjusted comparable rent range.",
+    "evidenceBand": "strong",
+    "evidenceBandLabel": "Strong evidence strength",
+    "evidenceBandExplainer": "Based on how many comparables you have, how recent they are, and how many are source-backed rather than manual or heavily overridden.",
+    "previewSummary": "8 comparable 2-bed homes within 0.5 miles",
+    "defensibilitySummarySentence": "Your proposed rent (£1360.00) sits below the median comparable rent (£1375.00 pcm), with strong evidence strength based on 8 recent source-backed comparables.",
+    "canAutoGenerateJustification": true,
+    "earliestValidStartDate": "2026-06-01",
+    "enteredStartDateValid": true,
+    "validationIssues": [],
+    "warnings": []
+  }
+}

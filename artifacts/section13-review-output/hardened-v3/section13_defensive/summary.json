@@ -1,0 +1,21 @@
+{
+  "productType": "section13_defensive",
+  "caseId": "section13_defensive-review-case",
+  "documentCount": 11,
+  "documentTypes": [
+    "section13_form_4a",
+    "section13_justification_report",
+    "section13_proof_of_service_record",
+    "section13_cover_letter",
+    "section13_tribunal_defence_guide",
+    "section13_landlord_response_template",
+    "section13_legal_briefing",
+    "section13_evidence_checklist",
+    "section13_negotiation_email_template",
+    "section13_tribunal_bundle",
+    "section13_tribunal_bundle_zip"
+  ],
+  "workflowStatus": "bundle_ready",
+  "bundleWarnings": [],
+  "bundleAssetCount": 11
+}

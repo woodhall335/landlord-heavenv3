@@ -349,6 +349,16 @@ export async function POST(request: Request) {
               [resolvedProductType, ...addOnProducts],
             );
 
+            if (resolvedProductType === 'section13_standard' || resolvedProductType === 'section13_defensive') {
+              await supabase
+                .from('cases')
+                .update({
+                  workflow_status: 'paid',
+                  workflow_status_updated_at: new Date().toISOString(),
+                })
+                .eq('id', resolvedCaseId);
+            }
+
             await supabase
               .from('orders')
               .update({ fulfillment_status: 'processing' })

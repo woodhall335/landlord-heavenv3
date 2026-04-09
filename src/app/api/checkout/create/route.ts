@@ -60,6 +60,10 @@ function normalizeToPaymentSku(productType: string): string {
   return displayToPayment[productType] || productType;
 }
 
+function isSection13ProductSku(productType: string): boolean {
+  return productType === 'section13_standard' || productType === 'section13_defensive';
+}
+
 const ADD_ON_ELIGIBLE_PRODUCTS = [
   'ast_standard',
   'ast_premium',
@@ -78,6 +82,8 @@ const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   complete_pack: PRICE_IDS.EVICTION_PACK,
   money_claim: PRICE_IDS.MONEY_CLAIM,
   sc_money_claim: PRICE_IDS.MONEY_CLAIM, // Same price as England/Wales money claim
+  section13_standard: PRICE_IDS.SECTION13_STANDARD,
+  section13_defensive: PRICE_IDS.SECTION13_DEFENSIVE,
   ast_standard: PRICE_IDS.STANDARD_AST,
   ast_premium: PRICE_IDS.PREMIUM_AST,
   england_standard_tenancy_agreement: PRICE_IDS.STANDARD_AST,
@@ -105,6 +111,8 @@ function validateStripePriceIds(): void {
     { key: 'STRIPE_PRICE_ID_NOTICE_ONLY', value: PRICE_IDS.NOTICE_ONLY },
     { key: 'STRIPE_PRICE_ID_EVICTION_PACK', value: PRICE_IDS.EVICTION_PACK },
     { key: 'STRIPE_PRICE_ID_MONEY_CLAIM', value: PRICE_IDS.MONEY_CLAIM },
+    { key: 'STRIPE_PRICE_ID_SECTION13_STANDARD', value: PRICE_IDS.SECTION13_STANDARD },
+    { key: 'STRIPE_PRICE_ID_SECTION13_DEFENSIVE', value: PRICE_IDS.SECTION13_DEFENSIVE },
     { key: 'STRIPE_PRICE_ID_STANDARD_AST', value: PRICE_IDS.STANDARD_AST },
     { key: 'STRIPE_PRICE_ID_PREMIUM_AST', value: PRICE_IDS.PREMIUM_AST },
     { key: 'STRIPE_PRICE_ID_STUDENT_TENANCY', value: PRICE_IDS.STUDENT_TENANCY },
@@ -133,6 +141,7 @@ validateStripePriceIds();
 const createCheckoutSchema = z.object({
   product_type: z.enum([
     'notice_only', 'complete_pack', 'money_claim', 'sc_money_claim',
+    'section13_standard', 'section13_defensive',
     'ast_standard', 'ast_premium',
     'tenancy_agreement', // Generic tenancy agreement (defaults to standard tier)
     // Jurisdiction-specific display SKUs
@@ -278,7 +287,7 @@ export async function POST(request: Request) {
 
     const adminSupabase = createAdminClient();
 
-    const normalizedProductType = normalizeToPaymentSku(product_type);
+    const normalizedProductType = normalizeToPaymentSku(String(product_type));
     const requestedAddOnSkus = Array.from(
       new Set(
         (add_ons || [])
@@ -314,7 +323,7 @@ export async function POST(request: Request) {
         .eq('id', user.id);
     }
 
-    const priceId = PRODUCT_TO_PRICE_ID[product_type];
+    const priceId = PRODUCT_TO_PRICE_ID[String(product_type)];
     if (priceId) {
       try {
         assertValidPriceId(priceId, `${product_type} product`);
@@ -350,7 +359,7 @@ export async function POST(request: Request) {
       // Use admin client for case lookup - case might have just been linked
       const { data: caseData, error: caseError } = await adminSupabase
         .from('cases')
-        .select('jurisdiction, case_type, user_id, collected_facts')
+        .select('jurisdiction, case_type, user_id, collected_facts, workflow_status')
         .eq('id', case_id)
         .single();
 
@@ -417,6 +426,48 @@ export async function POST(request: Request) {
             );
           }
         }
+
+        if (isSection13ProductSku(normalizedProductType)) {
+          const collectedFacts = ((caseData as any).collected_facts || {}) as Record<string, any>;
+          const section13Facts = collectedFacts.section13 || {};
+          const preview = section13Facts.preview || null;
+          const workflowStatus = (caseData as any).workflow_status || null;
+
+          if (caseData.case_type !== 'rent_increase') {
+            return NextResponse.json(
+              { error: 'Section 13 checkout is only available for rent increase cases.' },
+              { status: 400 }
+            );
+          }
+
+          if (caseData.jurisdiction !== 'england') {
+            return NextResponse.json(
+              { error: 'Section 13 checkout is currently available for England cases only.' },
+              { status: 400 }
+            );
+          }
+
+          if (!preview || workflowStatus === 'draft') {
+            return NextResponse.json(
+              {
+                error: 'Complete the Section 13 wizard preview before checkout.',
+                code: 'SECTION13_PREVIEW_REQUIRED',
+              },
+              { status: 400 }
+            );
+          }
+
+          if (!section13Facts.tenancy?.tenantNames?.length || !section13Facts.proposal?.proposedRentAmount) {
+            return NextResponse.json(
+              {
+                error: 'Complete the tenancy and proposed rent steps before checkout.',
+                code: 'SECTION13_REQUIRED_FIELDS_MISSING',
+              },
+              { status: 400 }
+            );
+          }
+        }
+
         // Check money claim jurisdiction restrictions
         if (product_type === 'money_claim' && !['england', 'wales'].includes(caseData.jurisdiction)) {
           return NextResponse.json(
@@ -450,7 +501,7 @@ export async function POST(request: Request) {
               user_message:
                 'This standalone tenancy document is currently available for England only.',
               supported: {
-                [product_type]: ['england'],
+                [String(product_type)]: ['england'],
                 tenancy_agreement: ['england', 'wales', 'scotland', 'northern-ireland'],
               },
               redirect_to: '/products/ast',
@@ -676,6 +727,16 @@ export async function POST(request: Request) {
                 .eq('id', pendingOrder.id);
             }
 
+            if (case_id && isSection13ProductSku(normalizedProductType)) {
+              await adminSupabase
+                .from('cases')
+                .update({
+                  workflow_status: 'awaiting_payment',
+                  workflow_status_updated_at: new Date().toISOString(),
+                })
+                .eq('id', case_id);
+            }
+
             const response: CheckoutPendingResponse = {
               status: 'pending',
               checkout_url: sessionCheck.url,
@@ -877,6 +938,16 @@ export async function POST(request: Request) {
         stripe_checkout_url: session.url,
       })
       .eq('id', (order as any).id);
+
+    if (case_id && isSection13ProductSku(normalizedProductType)) {
+      await adminSupabase
+        .from('cases')
+        .update({
+          workflow_status: 'awaiting_payment',
+          workflow_status_updated_at: new Date().toISOString(),
+        })
+        .eq('id', case_id);
+    }
 
     logger.info('Created new checkout session', {
       caseId: case_id,

@@ -19,6 +19,35 @@ import {
   isResidentialLettingProductSku,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
+import {
+  generateSection13CoreDocuments,
+  getSection13Form4AAssetMetadata,
+  SECTION13_CORE_DOCUMENT_TYPES,
+  SECTION13_DEFENSIVE_DOCUMENT_TYPES,
+  type Section13EvidenceFile,
+} from '@/lib/documents/section13-generator';
+import {
+  buildSection13BundleJobIdempotencyKey,
+  buildSection13EvidenceSetHash,
+  createOrGetSection13BundleJob,
+  createSection13OutputSnapshot,
+  getDefaultSection13StateForCase,
+  getSection13Comparables,
+  getSection13DocumentsForSnapshot,
+  getSection13EvidenceUploads,
+  getSection13OutputSnapshotByOrderId,
+  replaceSection13BundleAssets,
+} from '@/lib/section13/server';
+import {
+  buildSection13JustificationSummaryText,
+  computeSection13Preview,
+} from '@/lib/section13/rules';
+import type {
+  Section13BundleAsset,
+  Section13EvidenceUpload,
+  Section13OutputSnapshot,
+  Section13ProductSku,
+} from '@/lib/section13/types';
 
 // =============================================================================
 // TYPES
@@ -252,6 +281,7 @@ type PersistableGeneratedDocument = {
   html?: string | null;
   pdf?: Buffer;
   file_name: string;
+  contentType?: string;
 };
 
 async function persistGeneratedDocuments(
@@ -264,19 +294,33 @@ async function persistGeneratedDocuments(
     productType: string;
     documents: PersistableGeneratedDocument[];
     metadata?: Record<string, unknown>;
+    outputSnapshotId?: string | null;
+    storageFolder?: string | null;
   }
 ): Promise<number> {
-  const { caseId, userId, jurisdiction, orderId, productType, documents, metadata } = params;
+  const {
+    caseId,
+    userId,
+    jurisdiction,
+    orderId,
+    productType,
+    documents,
+    metadata,
+    outputSnapshotId,
+    storageFolder,
+  } = params;
   let generatedDocsCount = 0;
 
   for (const doc of documents) {
     if (!doc.pdf) continue;
 
-    const fileName = `${userId}/${caseId}/${doc.file_name}`;
+    const fileName = storageFolder
+      ? `${storageFolder}/${doc.file_name}`
+      : `${userId}/${caseId}/${doc.file_name}`;
     const { error: uploadError } = await supabase.storage
       .from('documents')
       .upload(fileName, doc.pdf, {
-        contentType: 'application/pdf',
+        contentType: doc.contentType || 'application/pdf',
         upsert: true,
       });
 
@@ -290,6 +334,8 @@ async function persistGeneratedDocuments(
       {
         user_id: userId,
         case_id: caseId,
+        order_id: orderId,
+        output_snapshot_id: outputSnapshotId || null,
         document_type: doc.document_type,
         document_title: doc.title,
         jurisdiction,
@@ -301,10 +347,15 @@ async function persistGeneratedDocuments(
           description: doc.description,
           pack_type: productType,
           order_id: orderId,
+          output_snapshot_id: outputSnapshotId || null,
           ...(metadata || {}),
         },
       },
-      { onConflict: 'case_id,document_type,is_preview' }
+      {
+        onConflict: outputSnapshotId
+          ? 'case_id,document_type,is_preview,output_snapshot_id'
+          : 'case_id,document_type,is_preview',
+      }
     );
 
     if (insertError) {
@@ -315,6 +366,340 @@ async function persistGeneratedDocuments(
   }
 
   return generatedDocsCount;
+}
+
+async function loadSection13EvidenceFiles(
+  supabase: ReturnType<typeof createAdminClient>,
+  evidenceUploads: Section13EvidenceUpload[]
+): Promise<Section13EvidenceFile[]> {
+  const files: Section13EvidenceFile[] = [];
+
+  for (const upload of evidenceUploads) {
+    if (!upload.storagePath || upload.uploadStatus === 'failed') {
+      continue;
+    }
+
+    try {
+      const { data, error } = await supabase.storage
+        .from('documents')
+        .download(upload.storagePath);
+
+      if (error || !data) {
+        console.warn('[fulfillment] Could not download Section 13 evidence upload', {
+          uploadId: upload.id,
+          storagePath: upload.storagePath,
+          error: error?.message,
+        });
+        continue;
+      }
+
+      const arrayBuffer = await data.arrayBuffer();
+      files.push({
+        upload,
+        bytes: new Uint8Array(arrayBuffer),
+        contentType: upload.mimeType || data.type || 'application/octet-stream',
+      });
+    } catch (error: any) {
+      console.warn('[fulfillment] Failed to load Section 13 evidence upload', {
+        uploadId: upload.id,
+        storagePath: upload.storagePath,
+        error: error?.message || String(error),
+      });
+    }
+  }
+
+  return files;
+}
+
+async function persistSection13BundleAssets(
+  supabase: ReturnType<typeof createAdminClient>,
+  caseId: string,
+  assets: Section13BundleAsset[]
+): Promise<void> {
+  const documentTypes = Array.from(
+    new Set(
+      assets
+        .map((asset) => {
+          const metadata = (asset.metadata || {}) as Record<string, unknown>;
+          const documentType = metadata.document_type;
+          return typeof documentType === 'string' && documentType.length > 0 ? documentType : null;
+        })
+        .filter((value): value is string => Boolean(value))
+    )
+  );
+
+  let documentIdByType = new Map<string, string>();
+
+  if (documentTypes.length > 0) {
+    const { data: docs } = await supabase
+      .from('documents')
+      .select('id, document_type')
+      .eq('case_id', caseId)
+      .in('document_type', documentTypes)
+      .order('created_at', { ascending: false });
+
+    documentIdByType = new Map<string, string>();
+    for (const doc of docs || []) {
+      if (!documentIdByType.has((doc as any).document_type)) {
+        documentIdByType.set((doc as any).document_type, (doc as any).id);
+      }
+    }
+  }
+
+  await replaceSection13BundleAssets(
+    supabase,
+    caseId,
+    assets.map((asset) => {
+      const metadata = (asset.metadata || {}) as Record<string, unknown>;
+      const documentType =
+        typeof metadata.document_type === 'string' ? metadata.document_type : null;
+
+      return {
+        ...asset,
+        sourceDocumentId:
+          asset.sourceDocumentId ||
+          (documentType ? documentIdByType.get(documentType) || null : null),
+      };
+    })
+  );
+}
+
+async function ensureSection13OutputSnapshot(params: {
+  supabase: ReturnType<typeof createAdminClient>;
+  orderId: string;
+  caseId: string;
+  state: Record<string, any>;
+  comparables: Record<string, any>[];
+}): Promise<Section13OutputSnapshot> {
+  const { supabase, orderId, caseId, state, comparables } = params;
+  const existing = await getSection13OutputSnapshotByOrderId(supabase, orderId);
+  if (existing) {
+    return existing;
+  }
+
+  const formMetadata = await getSection13Form4AAssetMetadata();
+  const justificationSummaryText = buildSection13JustificationSummaryText(state as any, state.preview);
+  const manualJustification =
+    typeof state.adjustments?.manualJustification === 'string'
+      ? state.adjustments.manualJustification.trim()
+      : '';
+  const justificationNarrativeText = manualJustification
+    ? `${justificationSummaryText} ${manualJustification}`
+    : justificationSummaryText;
+
+  return createSection13OutputSnapshot(supabase, {
+    orderId,
+    caseId,
+    rulesVersion: state.rulesVersion,
+    formAssetVersion: formMetadata.version,
+    formAssetSha256: formMetadata.sha256,
+    stateSnapshot: JSON.parse(JSON.stringify(state)),
+    previewMetrics: JSON.parse(JSON.stringify(state.preview || {})),
+    defensibilitySummarySentence:
+      state.preview?.defensibilitySummarySentence ||
+      'Add a proposed rent and enough recent source-backed comparables to generate a defensibility summary.',
+    justificationSummaryText,
+    justificationNarrativeText,
+    comparableSnapshot: JSON.parse(JSON.stringify(comparables)),
+  });
+}
+
+function getExpectedSection13DocumentKeys(productType: Section13ProductSku): string[] {
+  return [
+    ...(productType === 'section13_defensive'
+      ? SECTION13_DEFENSIVE_DOCUMENT_TYPES
+      : SECTION13_CORE_DOCUMENT_TYPES),
+  ];
+}
+
+async function validateSection13SnapshotFulfillment(params: {
+  supabase: ReturnType<typeof createAdminClient>;
+  caseId: string;
+  outputSnapshotId: string;
+  productType: Section13ProductSku;
+}): Promise<FulfillmentValidation> {
+  const { supabase, caseId, outputSnapshotId, productType } = params;
+  const expectedKeys = getExpectedSection13DocumentKeys(productType);
+  const docs = await getSection13DocumentsForSnapshot(supabase, {
+    caseId,
+    outputSnapshotId,
+    documentTypes: expectedKeys,
+  });
+  const actualDocs = docs.map((row) => ({
+    document_type: (row as any).document_type,
+    document_title: (row as any).document_title,
+  }));
+  const { missingKeys, actualCanonicalKeys } = computeMissingDocumentKeys(expectedKeys, actualDocs);
+
+  return {
+    isComplete: missingKeys.length === 0 && actualDocs.length >= expectedKeys.length,
+    expectedCount: expectedKeys.length,
+    actualCount: actualDocs.length,
+    expectedKeys,
+    actualTitles: actualDocs.map((doc) => doc.document_title),
+    actualCanonicalKeys,
+    missingKeys,
+  };
+}
+
+async function queueSection13BundleJob(params: {
+  supabase: ReturnType<typeof createAdminClient>;
+  caseId: string;
+  orderId: string;
+  outputSnapshot: Section13OutputSnapshot;
+  evidenceUploads: Section13EvidenceUpload[];
+}): Promise<void> {
+  const { supabase, caseId, orderId, outputSnapshot, evidenceUploads } = params;
+  const evidenceSetHash = buildSection13EvidenceSetHash(evidenceUploads);
+  const idempotencyKey = buildSection13BundleJobIdempotencyKey({
+    caseId,
+    orderId,
+    outputSnapshotId: outputSnapshot.id || '',
+    evidenceSetHash,
+  });
+
+  await createOrGetSection13BundleJob(supabase, {
+    caseId,
+    orderId,
+    outputSnapshotId: outputSnapshot.id || '',
+    idempotencyKey,
+    status: 'queued',
+    generationMode: 'sync',
+    attemptCount: 0,
+    maxAttempts: 3,
+    warningCount: 0,
+  });
+}
+
+async function generateSection13DocumentsForSnapshot(params: {
+  supabase: ReturnType<typeof createAdminClient>;
+  orderId: string;
+  caseId: string;
+  userId: string;
+  jurisdiction: string;
+  productType: Section13ProductSku;
+  wizardFacts: Record<string, any>;
+}): Promise<{
+  generatedCount: number;
+  outputSnapshot: Section13OutputSnapshot;
+  validation: FulfillmentValidation;
+  wasAlreadyComplete: boolean;
+}> {
+  const { supabase, orderId, caseId, userId, jurisdiction, productType, wizardFacts } = params;
+  const section13State = getDefaultSection13StateForCase(wizardFacts, productType);
+  const comparables = await getSection13Comparables(supabase, caseId);
+  section13State.preview = computeSection13Preview(section13State, comparables);
+  const outputSnapshot = await ensureSection13OutputSnapshot({
+    supabase,
+    orderId,
+    caseId,
+    state: section13State as any,
+    comparables: comparables as any[],
+  });
+
+  const preValidation = await validateSection13SnapshotFulfillment({
+    supabase,
+    caseId,
+    outputSnapshotId: outputSnapshot.id || '',
+    productType,
+  });
+
+  const evidenceUploads =
+    productType === 'section13_defensive'
+      ? await getSection13EvidenceUploads(supabase, caseId)
+      : [];
+
+  if (preValidation.isComplete && preValidation.actualCount > 0) {
+    if (productType === 'section13_defensive') {
+      await queueSection13BundleJob({
+        supabase,
+        caseId,
+        orderId,
+        outputSnapshot,
+        evidenceUploads,
+      });
+    }
+
+    await supabase
+      .from('cases')
+      .update({
+        workflow_status: 'fulfilled',
+        workflow_status_updated_at: new Date().toISOString(),
+      })
+      .eq('id', caseId);
+
+    return {
+      generatedCount: preValidation.actualCount,
+      outputSnapshot,
+      validation: preValidation,
+      wasAlreadyComplete: true,
+    };
+  }
+
+  const evidenceFiles =
+    productType === 'section13_defensive'
+      ? await loadSection13EvidenceFiles(supabase, evidenceUploads)
+      : [];
+
+  const documents = await generateSection13CoreDocuments({
+    caseId,
+    productType,
+    state: outputSnapshot.stateSnapshot,
+    comparables: outputSnapshot.comparableSnapshot,
+    evidenceFiles,
+    snapshot: outputSnapshot,
+  });
+
+  const generatedCount = await persistGeneratedDocuments(supabase, {
+    caseId,
+    userId,
+    jurisdiction,
+    orderId,
+    productType,
+    documents,
+    outputSnapshotId: outputSnapshot.id || null,
+    storageFolder: `${userId}/${caseId}/${outputSnapshot.id || orderId}`,
+    metadata: {
+      rules_version: outputSnapshot.rulesVersion,
+      form_asset_version: outputSnapshot.formAssetVersion,
+      form_asset_sha256: outputSnapshot.formAssetSha256,
+      challenge_band: outputSnapshot.previewMetrics?.challengeBand,
+      evidence_band: outputSnapshot.previewMetrics?.evidenceBand,
+      workflow_status: 'fulfilled',
+    },
+  });
+
+  if (productType === 'section13_defensive') {
+    await queueSection13BundleJob({
+      supabase,
+      caseId,
+      orderId,
+      outputSnapshot,
+      evidenceUploads,
+    });
+  }
+
+  await supabase
+    .from('cases')
+    .update({
+      workflow_status: 'fulfilled',
+      workflow_status_updated_at: new Date().toISOString(),
+    })
+    .eq('id', caseId);
+
+  const postValidation = await validateSection13SnapshotFulfillment({
+    supabase,
+    caseId,
+    outputSnapshotId: outputSnapshot.id || '',
+    productType,
+  });
+
+  return {
+    generatedCount,
+    outputSnapshot,
+    validation: postValidation,
+    wasAlreadyComplete: false,
+  };
 }
 
 async function generateDocumentsForProduct(params: {
@@ -407,6 +792,20 @@ async function generateDocumentsForProduct(params: {
       documents: astPack.documents,
       metadata: { tier: astPack.tier },
     });
+  }
+
+  if (productType === 'section13_standard' || productType === 'section13_defensive') {
+    const result = await generateSection13DocumentsForSnapshot({
+      supabase,
+      orderId,
+      caseId,
+      userId,
+      jurisdiction,
+      productType: productType as Section13ProductSku,
+      wizardFacts: wizardFacts as Record<string, any>,
+    });
+
+    return result.generatedCount;
   }
 
   if (isResidentialLettingProductSku(productType)) {
@@ -539,6 +938,113 @@ export async function fulfillOrder({
     }
   }
 
+  const isSection13Fulfillment =
+    fulfillmentProducts.length > 0 &&
+    fulfillmentProducts.every(
+      (sku) => sku === 'section13_standard' || sku === 'section13_defensive'
+    );
+
+  if (isSection13Fulfillment) {
+    const resolvedUserId = userId || (caseData as any).user_id;
+    if (!resolvedUserId) {
+      throw new Error('Unable to resolve user for fulfillment');
+    }
+
+    const section13Product = fulfillmentProducts.includes('section13_defensive')
+      ? 'section13_defensive'
+      : 'section13_standard';
+
+    await supabase
+      .from('orders')
+      .update({ fulfillment_status: 'processing' })
+      .eq('id', orderId);
+
+    await supabase
+      .from('cases')
+      .update({
+        workflow_status: 'generating',
+        workflow_status_updated_at: new Date().toISOString(),
+      })
+      .eq('id', caseId);
+
+    try {
+      const result = await generateSection13DocumentsForSnapshot({
+        supabase,
+        orderId,
+        caseId,
+        userId: resolvedUserId,
+        jurisdiction,
+        productType: section13Product,
+        wizardFacts: wizardFacts as Record<string, any>,
+      });
+
+      logFulfillmentValidation(orderId, caseId, section13Product, result.validation);
+
+      if (!result.validation.isComplete) {
+        await safeUpdateOrderWithMetadata(
+          supabase,
+          orderId,
+          { fulfillment_status: 'processing' },
+          {
+            total_documents: result.validation.actualCount,
+            expected_documents: result.validation.expectedCount,
+            generated_documents: result.generatedCount,
+            validation: 'incomplete',
+            missing_keys: result.validation.missingKeys,
+            last_attempt: new Date().toISOString(),
+            output_snapshot_id: result.outputSnapshot.id || null,
+            rules_version: result.outputSnapshot.rulesVersion,
+            products: fulfillmentProducts,
+            add_ons: addOns,
+          }
+        );
+
+        return {
+          status: 'incomplete',
+          documents: result.validation.actualCount,
+          validation: result.validation,
+          error: `Incomplete fulfillment: ${result.validation.actualCount}/${result.validation.expectedCount} documents. Missing: ${result.validation.missingKeys.join(', ')}`,
+        };
+      }
+
+      await safeUpdateOrderWithMetadata(
+        supabase,
+        orderId,
+        {
+          fulfillment_status: 'fulfilled',
+          fulfilled_at: new Date().toISOString(),
+        },
+        {
+          total_documents: result.validation.actualCount,
+          expected_documents: result.validation.expectedCount,
+          generated_documents: result.generatedCount,
+          validation: 'complete',
+          output_snapshot_id: result.outputSnapshot.id || null,
+          rules_version: result.outputSnapshot.rulesVersion,
+          form_asset_version: result.outputSnapshot.formAssetVersion,
+          products: fulfillmentProducts,
+          add_ons: addOns,
+        }
+      );
+
+      await supabase
+        .from('cases')
+        .update({
+          status: 'completed',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', caseId);
+
+      return {
+        status: result.wasAlreadyComplete ? 'already_fulfilled' : 'fulfilled',
+        documents: result.validation.actualCount,
+        validation: result.validation,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // ==========================================================================
   // VALIDATION: Check if fulfillment is already complete
   // This replaces the old "any doc exists" check with proper validation
@@ -611,6 +1117,16 @@ export async function fulfillOrder({
     .from('orders')
     .update({ fulfillment_status: 'processing' })
     .eq('id', orderId);
+
+  if (fulfillmentProducts.some((sku) => sku === 'section13_standard' || sku === 'section13_defensive')) {
+    await supabase
+      .from('cases')
+      .update({
+        workflow_status: 'generating',
+        workflow_status_updated_at: new Date().toISOString(),
+      })
+      .eq('id', caseId);
+  }
 
   const isTenancyAgreementProduct = fulfillmentProducts.some(
     (sku) =>

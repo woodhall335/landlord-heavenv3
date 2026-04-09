@@ -483,6 +483,12 @@ export interface DocumentRow {
   /** Foreign key to cases.id (NULLABLE) */
   case_id: string | null;
 
+  /** Foreign key to orders.id (NULLABLE) */
+  order_id: string | null;
+
+  /** Foreign key to section13_output_snapshots.id (NULLABLE) */
+  output_snapshot_id: string | null;
+
   /** Document type: 'n5', 'n119', 'form_e', etc. (NOT NULL) */
   document_type: string;
 
@@ -545,6 +551,12 @@ export interface DocumentInsert {
   /** Optional: Foreign key to cases.id */
   case_id?: string | null;
 
+  /** Optional: Foreign key to orders.id */
+  order_id?: string | null;
+
+  /** Optional: Foreign key to section13_output_snapshots.id */
+  output_snapshot_id?: string | null;
+
   /** Required: Document type */
   document_type: string;
 
@@ -603,6 +615,12 @@ export interface DocumentUpdate {
 
   /** Optional: Foreign key to cases.id */
   case_id?: string | null;
+
+  /** Optional: Foreign key to orders.id */
+  order_id?: string | null;
+
+  /** Optional: Foreign key to section13_output_snapshots.id */
+  output_snapshot_id?: string | null;
 
   /** Optional: Document type */
   document_type?: string;

@@ -15,6 +15,7 @@ import { EvictionSectionFlow } from '@/components/wizard/flows/EvictionSectionFl
 import { NoticeOnlySectionFlow } from '@/components/wizard/flows/NoticeOnlySectionFlow';
 import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow';
 import { ResidentialStandaloneSectionFlow } from '@/components/wizard/flows/ResidentialStandaloneSectionFlow';
+import { Section13WizardFlow } from '@/components/wizard/flows/Section13WizardFlow';
 import { EnglandTenancyProductChooser } from '@/components/wizard/EnglandTenancyProductChooser';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { trackWizardStartWithAttribution } from '@/lib/analytics';
@@ -47,7 +48,7 @@ const USE_EVICTION_SECTION_FLOW = true;
 const USE_NOTICE_ONLY_SECTION_FLOW = true;
 const USE_TENANCY_SECTION_FLOW = true;
 
-type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
+type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement' | 'rent_increase';
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
 type AskHeavenProduct = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 type TenancyFlowProduct =
@@ -79,6 +80,7 @@ function WizardFlowContent() {
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
   const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
+  const recoveryToken = searchParams.get('recovery_token');
   const mode = searchParams.get('mode');
   const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
   const fixMode = searchParams.get('fix_mode') === 'true'; // Single-question fix mode (returns to validation after save)
@@ -194,6 +196,7 @@ function WizardFlowContent() {
 
     if (type === 'money_claim') return 'money_claim';
     if (type === 'tenancy_agreement') return 'tenancy_agreement';
+    if (type === 'rent_increase') return null;
 
     if (type === 'eviction') {
       // For eviction flows, we treat Ask Heaven product as either notice_only or complete_pack
@@ -276,6 +279,32 @@ function WizardFlowContent() {
 
       // Resume existing case if editing
       if (editCaseId) {
+        if (type === 'rent_increase' && recoveryToken) {
+          const recoveryResponse = await fetch('/api/section13/recover', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...getSessionTokenHeaders(),
+            },
+            body: JSON.stringify({
+              caseId: editCaseId,
+              recoveryToken,
+            }),
+          });
+
+          const recoveryData = await recoveryResponse.json().catch(() => ({}));
+          if (!recoveryResponse.ok) {
+            const message =
+              recoveryData?.error || 'This recovery link could not be used. Please request a new link.';
+            setStartError(message);
+            throw new Error(message);
+          }
+
+          const params = new URLSearchParams(searchParams.toString());
+          params.delete('recovery_token');
+          router.replace(`/wizard/flow?${params.toString()}`);
+        }
+
         setCaseId(editCaseId);
         setLoading(false);
         return;
@@ -289,6 +318,11 @@ function WizardFlowContent() {
       if (type === 'money_claim') {
         // Money claim flows: use money_claim product
         startProduct = rawProduct === 'money_claim' ? rawProduct : 'money_claim';
+      } else if (type === 'rent_increase') {
+        startProduct =
+          rawProduct === 'section13_defensive' || rawProduct === 'section13_standard'
+            ? rawProduct
+            : 'section13_standard';
       } else if (type === 'tenancy_agreement') {
         // Tenancy flows: keep AST tiers if provided
         if (
@@ -355,7 +389,7 @@ function WizardFlowContent() {
     } finally {
       setLoading(false);
     }
-  }, [editCaseId, jurisdiction, product, productVariant, type]);
+  }, [editCaseId, jurisdiction, product, productVariant, recoveryToken, router, searchParams, type]);
 
   useEffect(() => {
     if (!hasRequiredParams) {
@@ -369,7 +403,7 @@ function WizardFlowContent() {
       return;
     }
 
-    if (type === 'tenancy_agreement' || type === 'money_claim' || type === 'eviction') {
+    if (type === 'tenancy_agreement' || type === 'money_claim' || type === 'eviction' || type === 'rent_increase') {
       void startStructuredWizard();
     } else if (editCaseId) {
       setCaseId(editCaseId);
@@ -410,6 +444,11 @@ function WizardFlowContent() {
         ? normalizedProduct ?? 'tenancy_agreement'
         : askHeavenProduct ?? 'ast_standard';
       router.push(`/wizard/review?case_id=${completedCaseId}&product=${productParam}`);
+      return;
+    }
+
+    if (type === 'rent_increase') {
+      router.push(`/dashboard/cases/${completedCaseId}`);
       return;
     }
 
@@ -463,6 +502,23 @@ function WizardFlowContent() {
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
         topic={topicParam}
         reason={reasonParam}
+      />
+    );
+  }
+
+  if (
+    type === 'rent_increase' &&
+    jurisdiction === 'england'
+  ) {
+    return (
+      <Section13WizardFlow
+        caseId={caseId}
+        jurisdiction="england"
+        product={
+          normalizedProduct === 'section13_defensive'
+            ? 'section13_defensive'
+            : 'section13_standard'
+        }
       />
     );
   }

@@ -9,6 +9,8 @@ export type WizardProduct =
   | 'notice_only'
   | 'complete_pack'
   | 'money_claim'
+  | 'section13_standard'
+  | 'section13_defensive'
   | 'ast_standard'
   | 'ast_premium'
   | 'tenancy_agreement'
@@ -149,6 +151,10 @@ export function isProductSupportedInJurisdiction(
     return jurisdiction === 'england';
   }
 
+  if (product === 'section13_standard' || product === 'section13_defensive') {
+    return jurisdiction === 'england';
+  }
+
   if (jurisdiction === 'northern-ireland') {
     return product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium';
   }
@@ -187,6 +193,8 @@ export function getUnsupportedProductMessage(
       notice_only: 'Eviction notices',
       complete_pack: 'Complete eviction packs',
       money_claim: 'Money claims',
+      section13_standard: 'Section 13 rent increase packs',
+      section13_defensive: 'Section 13 tribunal-ready packs',
       ast_standard: 'Tenancy agreements',
       ast_premium: 'Premium tenancy agreements',
       tenancy_agreement: 'Tenancy agreements',
@@ -271,6 +279,18 @@ export const WIZARD_LINKS = {
     jurisdiction: 'scotland',
     src: 'nav',
     topic: 'money_claim',
+  }),
+  section13Standard: buildWizardLink({
+    product: 'section13_standard',
+    jurisdiction: 'england',
+    src: 'nav',
+    topic: 'general',
+  }),
+  section13Defensive: buildWizardLink({
+    product: 'section13_defensive',
+    jurisdiction: 'england',
+    src: 'nav',
+    topic: 'general',
   }),
 
   // Tenancy Agreements

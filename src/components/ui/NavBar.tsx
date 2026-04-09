@@ -33,7 +33,8 @@ const primaryLinks: NavItem[] = [
   { href: "/products/notice-only", label: "Notice Only" },
   { href: "/products/complete-pack", label: "Eviction Pack" },
   { href: "/products/money-claim", label: "Money Claims" },
-  { href: "/blog", label: "Landlord Guides" },
+  { href: "/wizard?product=section13_standard&jurisdiction=england", label: "Section 13" },
+  { href: "/rent-increase", label: "Rent Increase Guide" },
 ];
 
 const tenancyAgreementLinks: NavItem[] = [

@@ -1,0 +1,305 @@
+{
+  "productType": "section13_defensive",
+  "workflowStatus": "bundle_ready",
+  "bundleWarnings": [],
+  "documentTypes": [
+    {
+      "type": "section13_form_4a",
+      "file": "section13-form-4a-section13_defensive-review-case.pdf",
+      "title": "Form 4A rent increase notice"
+    },
+    {
+      "type": "section13_justification_report",
+      "file": "section13-justification-report-section13_defensive-review-case.pdf",
+      "title": "Rent increase justification report"
+    },
+    {
+      "type": "section13_proof_of_service_record",
+      "file": "section13-proof-of-service-section13_defensive-review-case.pdf",
+      "title": "Proof of service record"
+    },
+    {
+      "type": "section13_cover_letter",
+      "file": "section13-cover-letter-section13_defensive-review-case.pdf",
+      "title": "Rent increase cover letter"
+    },
+    {
+      "type": "section13_tribunal_defence_guide",
+      "file": "section13-tribunal-defence-guide-section13_defensive-review-case.pdf",
+      "title": "Tribunal defence guide"
+    },
+    {
+      "type": "section13_landlord_response_template",
+      "file": "section13-landlord-response-template-section13_defensive-review-case.pdf",
+      "title": "Landlord response template"
+    },
+    {
+      "type": "section13_legal_briefing",
+      "file": "section13-legal-briefing-section13_defensive-review-case.pdf",
+      "title": "Tribunal legal briefing"
+    },
+    {
+      "type": "section13_evidence_checklist",
+      "file": "section13-evidence-checklist-section13_defensive-review-case.pdf",
+      "title": "Evidence checklist"
+    },
+    {
+      "type": "section13_negotiation_email_template",
+      "file": "section13-negotiation-email-template-section13_defensive-review-case.pdf",
+      "title": "Negotiation email template"
+    },
+    {
+      "type": "section13_tribunal_bundle",
+      "file": "section13-tribunal-bundle-section13_defensive-review-case.pdf",
+      "title": "Merged tribunal bundle PDF"
+    },
+    {
+      "type": "section13_tribunal_bundle_zip",
+      "file": "section13-tribunal-bundle-section13_defensive-review-case.zip",
+      "title": "Tribunal bundle ZIP"
+    }
+  ],
+  "bundleAssets": [
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "cover",
+      "assetType": "report",
+      "title": "Bundle cover sheet",
+      "sourceKind": "supporting_input",
+      "exhibitLabel": null,
+      "orderIndex": 0,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": null
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "index",
+      "assetType": "report",
+      "title": "Bundle index",
+      "sourceKind": "supporting_input",
+      "exhibitLabel": null,
+      "orderIndex": 1,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": null
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "core_notice",
+      "assetType": "form",
+      "title": "Form 4A rent increase notice",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 2,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 9,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_form_4a"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "supporting_report",
+      "assetType": "report",
+      "title": "Rent increase justification report",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 3,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 3,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_justification_report"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "supporting_report",
+      "assetType": "report",
+      "title": "Proof of service record",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 4,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_proof_of_service_record"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "supporting_report",
+      "assetType": "report",
+      "title": "Rent increase cover letter",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 5,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_cover_letter"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "supporting_report",
+      "assetType": "report",
+      "title": "Tribunal defence guide",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 6,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_tribunal_defence_guide"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "supporting_report",
+      "assetType": "report",
+      "title": "Landlord response template",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 7,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_landlord_response_template"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "supporting_report",
+      "assetType": "report",
+      "title": "Tribunal legal briefing",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 8,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_legal_briefing"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "supporting_report",
+      "assetType": "report",
+      "title": "Evidence checklist",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 9,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_evidence_checklist"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "correspondence",
+      "assetType": "correspondence",
+      "title": "Negotiation email template",
+      "sourceKind": "generated_document",
+      "exhibitLabel": null,
+      "orderIndex": 10,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": null,
+      "metadata": {
+        "document_type": "section13_negotiation_email_template"
+      }
+    },
+    {
+      "rulesVersion": "england_assured_section13_2026-05-01",
+      "logicalSection": "uploaded_evidence",
+      "assetType": "evidence",
+      "title": "Sample EPC certificate",
+      "sourceKind": "uploaded_evidence",
+      "exhibitLabel": "Exhibit A",
+      "orderIndex": 11,
+      "includeInMerged": true,
+      "status": "generated",
+      "pageCount": 1,
+      "generationError": null,
+      "sourceDocumentId": null,
+      "sourceUploadId": "sample-evidence-1",
+      "metadata": {
+        "document_type": null
+      }
+    }
+  ],
+  "preview": {
+    "rulesVersion": "england_assured_section13_2026-05-01",
+    "comparableCount": 8,
+    "sourceBackedCount": 8,
+    "freshComparableCount": 8,
+    "userOverrideCount": 0,
+    "lowerQuartile": 1328.75,
+    "median": 1375,
+    "upperQuartile": 1415,
+    "proposedRentMonthly": 1360,
+    "proposedPositionLabel": "Below the adjusted median market rent",
+    "challengeBand": "moderate_likelihood",
+    "challengeBandLabel": "Moderate likelihood of challenge",
+    "challengeBandExplainer": "Based on where your proposed rent sits within the adjusted comparable rent range.",
+    "evidenceBand": "strong",
+    "evidenceBandLabel": "Strong evidence strength",
+    "evidenceBandExplainer": "Based on how many comparables you have, how recent they are, and how many are source-backed rather than manual or heavily overridden.",
+    "previewSummary": "8 comparable 2-bed homes within 0.5 miles",
+    "defensibilitySummarySentence": "Your proposed rent (£1360.00) sits below the median comparable rent (£1375.00 pcm), with strong evidence strength based on 8 recent source-backed comparables.",
+    "canAutoGenerateJustification": true,
+    "earliestValidStartDate": "2026-06-01",
+    "enteredStartDateValid": true,
+    "validationIssues": [],
+    "warnings": []
+  }
+}

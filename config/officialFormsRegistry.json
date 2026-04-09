@@ -70,6 +70,30 @@
       "version": "2024-12"
     },
     {
+      "jurisdiction": "england",
+      "product": "section13_standard",
+      "route": "rent_increase",
+      "officialFormKey": "form_4a",
+      "pdfPath": "public/official-forms/Form_4A.pdf",
+      "status": "active",
+      "canonicalLabel": "Form 4A rent increase notice",
+      "historicAliases": ["Section 13 notice", "Form 4A"],
+      "notes": "England assured tenancy rent increase notice from 1 May 2026",
+      "version": "2026-05"
+    },
+    {
+      "jurisdiction": "england",
+      "product": "section13_defensive",
+      "route": "rent_increase",
+      "officialFormKey": "form_4a",
+      "pdfPath": "public/official-forms/Form_4A.pdf",
+      "status": "active",
+      "canonicalLabel": "Form 4A rent increase notice",
+      "historicAliases": ["Section 13 notice", "Form 4A"],
+      "notes": "England assured tenancy rent increase notice from 1 May 2026",
+      "version": "2026-05"
+    },
+    {
       "jurisdiction": "wales",
       "product": "eviction_pack",
       "route": "wales_section_173",

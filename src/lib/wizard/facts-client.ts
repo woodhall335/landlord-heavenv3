@@ -9,13 +9,15 @@ import { getSessionTokenHeaders } from '@/lib/session-token';
  */
 
 // What the checkpoint route needs (mirrors the route's Zod schema)
-type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
+type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement' | 'rent_increase' | null;
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
 // Product includes both core products and tenancy agreement tier variants
 type Product =
   | 'notice_only'
   | 'complete_pack'
   | 'money_claim'
+  | 'section13_standard'
+  | 'section13_defensive'
   | 'tenancy_agreement'
   | 'ast_standard'
   | 'ast_premium'

@@ -35,6 +35,8 @@ export const SEO_PRICES = {
   evictionNotice: { amount: 39.99, display: formatPriceLabel(39.99) },
   evictionBundle: { amount: 89.99, display: formatPriceLabel(89.99) },
   moneyClaim: { amount: 29.99, display: formatPriceLabel(29.99) },
+  section13Standard: { amount: 19.99, display: formatPriceLabel(19.99) },
+  section13Defensive: { amount: 34.99, display: formatPriceLabel(34.99) },
   tenancyStandard: { amount: 14.99, display: formatPriceLabel(14.99) },
   tenancyPremium: { amount: 24.99, display: formatPriceLabel(24.99) },
   tenancyStudent: { amount: 24.99, display: formatPriceLabel(24.99) },
@@ -52,6 +54,8 @@ export const ALLOWED_SEO_PRICES = new Set([
   SEO_PRICES.evictionNotice.display,
   SEO_PRICES.evictionBundle.display,
   SEO_PRICES.moneyClaim.display,
+  SEO_PRICES.section13Standard.display,
+  SEO_PRICES.section13Defensive.display,
   SEO_PRICES.tenancyStandard.display,
   SEO_PRICES.tenancyPremium.display,
   SEO_PRICES.tenancyStudent.display,
@@ -71,6 +75,8 @@ export const SEO_LANDING_ROUTES = {
   notice_only: '/eviction-notice-template',
   complete_pack: '/products/complete-pack',
   money_claim: '/money-claim',
+  section13_standard: '/wizard?product=section13_standard&jurisdiction=england',
+  section13_defensive: '/wizard?product=section13_defensive&jurisdiction=england',
   ast_standard: '/tenancy-agreement-template',
   ast_premium: '/premium-tenancy-agreement',
   england_standard_tenancy_agreement: '/standard-tenancy-agreement',
@@ -85,6 +91,8 @@ export type ProductSku =
   | 'notice_only'
   | 'complete_pack'
   | 'money_claim'
+  | 'section13_standard'
+  | 'section13_defensive'
   | 'sc_money_claim'
   | 'ast_standard'
   | 'ast_premium'
@@ -143,6 +151,28 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     priceNote: 'England only',
     wizardHref: '/wizard?product=money_claim',
     productPageHref: SEO_LANDING_ROUTES.money_claim,
+  },
+  section13_standard: {
+    sku: 'section13_standard',
+    label: 'Section 13 Wizard',
+    shortLabel: 'Section 13 Standard',
+    description: 'Generate Form 4A, proof of service, and a rent increase justification report',
+    price: SEO_PRICES.section13Standard.amount,
+    displayPrice: SEO_PRICES.section13Standard.display,
+    priceNote: 'England only',
+    wizardHref: '/wizard?product=section13_standard&jurisdiction=england&src=product_page&topic=general',
+    productPageHref: SEO_LANDING_ROUTES.section13_standard,
+  },
+  section13_defensive: {
+    sku: 'section13_defensive',
+    label: 'Section 13 Defensive Pack',
+    shortLabel: 'Section 13 Defensive',
+    description: 'Tribunal-ready Section 13 bundle with hearing pack, guidance, and evidence tools',
+    price: SEO_PRICES.section13Defensive.amount,
+    displayPrice: SEO_PRICES.section13Defensive.display,
+    priceNote: 'England only',
+    wizardHref: '/wizard?product=section13_defensive&jurisdiction=england&src=product_page&topic=general',
+    productPageHref: SEO_LANDING_ROUTES.section13_defensive,
   },
   sc_money_claim: {
     sku: 'sc_money_claim',
@@ -254,6 +284,8 @@ export const PRODUCT_PRICE_LABELS = {
   notice_only: PRODUCTS.notice_only.displayPrice,
   complete_pack: PRODUCTS.complete_pack.displayPrice,
   money_claim: PRODUCTS.money_claim.displayPrice,
+  section13_standard: PRODUCTS.section13_standard.displayPrice,
+  section13_defensive: PRODUCTS.section13_defensive.displayPrice,
   sc_money_claim: PRODUCTS.sc_money_claim.displayPrice,
   ast_standard: PRODUCTS.ast_standard.displayPrice,
   ast_premium: PRODUCTS.ast_premium.displayPrice,
@@ -273,6 +305,8 @@ export const PRODUCT_PRICE_AMOUNT_STRINGS = {
   notice_only: formatPriceAmount(PRODUCTS.notice_only.price),
   complete_pack: formatPriceAmount(PRODUCTS.complete_pack.price),
   money_claim: formatPriceAmount(PRODUCTS.money_claim.price),
+  section13_standard: formatPriceAmount(PRODUCTS.section13_standard.price),
+  section13_defensive: formatPriceAmount(PRODUCTS.section13_defensive.price),
   sc_money_claim: formatPriceAmount(PRODUCTS.sc_money_claim.price),
   ast_standard: formatPriceAmount(PRODUCTS.ast_standard.price),
   ast_premium: formatPriceAmount(PRODUCTS.ast_premium.price),
@@ -368,6 +402,14 @@ export const REGIONAL_PRODUCT_AVAILABILITY: Record<
     badge: 'England only',
   },
   money_claim: {
+    available: ['england'],
+    badge: 'England only',
+  },
+  section13_standard: {
+    available: ['england'],
+    badge: 'England only',
+  },
+  section13_defensive: {
     available: ['england'],
     badge: 'England only',
   },

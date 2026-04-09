@@ -27,6 +27,7 @@ import {
   type ProductType,
 } from '@/lib/wizard/mqs-loader';
 import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
+import { createEmptySection13State } from '@/lib/section13';
 import {
   RESIDENTIAL_LETTING_PRODUCT_SKUS,
   RESIDENTIAL_LETTING_PRODUCTS,
@@ -58,6 +59,8 @@ const startWizardSchema = z.object({
     'notice_only',
     'complete_pack',
     'money_claim',
+    'section13_standard',
+    'section13_defensive',
     'money_claim_england_wales',
     'money_claim_scotland',
     'tenancy_agreement',
@@ -71,7 +74,7 @@ const startWizardSchema = z.object({
   // so runLegalValidator knows which validator to apply
   validator_key: z.string().optional(),
   // Additional metadata from validator pages
-  case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']).optional(),
+  case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement', 'rent_increase']).optional(),
   product_variant: z.string().optional(),
   requested_product: z.string().optional(),
 });
@@ -80,6 +83,8 @@ type StartProduct =
   | ProductType
   | 'ast_standard'
   | 'ast_premium'
+  | 'section13_standard'
+  | 'section13_defensive'
   | 'money_claim_england_wales'
   | 'money_claim_scotland'
   | ResidentialProduct;
@@ -101,6 +106,9 @@ const productToCaseType = (product: StartProduct) => {
     case 'ast_standard':
     case 'ast_premium':
       return 'tenancy_agreement';
+    case 'section13_standard':
+    case 'section13_defensive':
+      return 'rent_increase';
     default:
       return null;
   }
@@ -137,7 +145,10 @@ const resolveProductTier = (
 };
 
 // Normalize product to MQS product type
-const normalizeProduct = (product: StartProduct): ProductType => {
+const normalizeProduct = (product: StartProduct): ProductType | 'rent_increase' => {
+  if (product === 'section13_standard' || product === 'section13_defensive') {
+    return 'rent_increase';
+  }
   if (product === 'ast_standard' || product === 'ast_premium') {
     return 'tenancy_agreement';
   }
@@ -244,6 +255,27 @@ export async function POST(request: Request) {
 
     if (!resolvedCaseType) {
       return NextResponse.json({ error: 'Invalid product' }, { status: 400 });
+    }
+
+    if (
+      resolvedCaseType === 'rent_increase' &&
+      effectiveJurisdiction !== 'england'
+    ) {
+      return NextResponse.json(
+        {
+          code: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          error: 'PRODUCT_NOT_AVAILABLE_IN_REGION',
+          user_message: 'The Section 13 rent increase wizard is currently available for England only.',
+          supported: {
+            section13_standard: ['england'],
+            section13_defensive: ['england'],
+          },
+          redirect_to: '/wizard?product=section13_standard&jurisdiction=england',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 400 }
+      );
     }
 
     // Northern Ireland gating: only tenancy agreements are supported
@@ -362,11 +394,21 @@ export async function POST(request: Request) {
           ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
           ...(validator_key ? { validator_key: validator_key as string | null } : {}),
           ...(product_variant ? { product_variant: product_variant as string | null } : {}),
+          ...(resolvedCaseType === 'rent_increase'
+            ? { rules_version: 'england_assured_section13_2026-05-01' }
+            : {}),
         },
         // IMPORTANT: root-level product_tier so MQS version questions see it as answered
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: effectiveJurisdiction,
         jurisdiction: effectiveJurisdiction,
+        ...(resolvedCaseType === 'rent_increase'
+          ? {
+              section13: createEmptySection13State(
+                storedProduct as 'section13_standard' | 'section13_defensive'
+              ),
+            }
+          : {}),
         ...(englandPost2026EvictionRoute
           ? {
               selected_notice_route: englandPost2026EvictionRoute,
@@ -385,6 +427,9 @@ export async function POST(request: Request) {
           case_type: resolvedCaseType,
           jurisdiction: effectiveJurisdiction,
           status: 'in_progress',
+          workflow_status: resolvedCaseType === 'rent_increase' ? 'draft' : null,
+          workflow_status_updated_at:
+            resolvedCaseType === 'rent_increase' ? new Date().toISOString() : null,
           wizard_progress: 0,
           collected_facts: initialFacts as any,
         } as any)
@@ -419,6 +464,9 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
         ...(validator_key ? { validator_key: validator_key as string | null } : {}),
         ...(product_variant ? { product_variant: product_variant as string | null } : {}),
+        ...(resolvedCaseType === 'rent_increase'
+          ? { rules_version: 'england_assured_section13_2026-05-01' }
+          : {}),
       };
 
       const updatedFacts: any = {
@@ -427,6 +475,15 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: facts.property_country ?? effectiveJurisdiction,
         jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
+        ...(resolvedCaseType === 'rent_increase'
+          ? {
+              section13:
+                facts.section13 ||
+                createEmptySection13State(
+                  storedProduct as 'section13_standard' | 'section13_defensive'
+                ),
+            }
+          : {}),
         ...(englandPost2026EvictionRoute
           ? {
               selected_notice_route: englandPost2026EvictionRoute,
@@ -447,10 +504,21 @@ export async function POST(request: Request) {
       }
     }
 
+    if (resolvedCaseType === 'rent_increase') {
+      return NextResponse.json({
+        case_id: caseRecord.id,
+        product: storedProduct,
+        jurisdiction: effectiveJurisdiction,
+        next_question: null,
+        is_complete: false,
+        smart_review: null,
+      });
+    }
+
     // ------------------------------------------------
     // 4. Load MQS for this product/jurisdiction
     // ------------------------------------------------
-    const mqs = loadMQSOrError(normalizedProduct, effectiveJurisdiction);
+    const mqs = loadMQSOrError(normalizedProduct as ProductType, effectiveJurisdiction);
     if (!mqs) {
       return NextResponse.json(
         { error: 'MQS not implemented for this jurisdiction yet' },

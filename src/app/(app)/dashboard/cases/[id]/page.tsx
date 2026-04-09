@@ -56,6 +56,14 @@ interface Document {
   created_at: string;
 }
 
+interface Section13SupportRequestState {
+  id?: string;
+  status: 'received' | 'in_review' | 'responded';
+  priority: 'normal' | 'high' | 'urgent';
+  createdAt?: string | null;
+  resolvedAt?: string | null;
+}
+
 // Polling configuration
 const POLL_INTERVAL_MS = 2500; // 2.5 seconds
 const POLL_TIMEOUT_MS = 60000; // 60 seconds max polling
@@ -140,6 +148,7 @@ export default function CaseDetailPage() {
 
   const [caseDetails, setCaseDetails] = useState<CaseDetails | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
+  const [section13SupportRequest, setSection13SupportRequest] = useState<Section13SupportRequestState | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [isRegenerating, setIsRegenerating] = useState(false);
@@ -237,6 +246,23 @@ export default function CaseDetailPage() {
       console.error('Failed to fetch order status:', err);
     }
     return null;
+  }, [caseId]);
+
+  const fetchSection13SupportState = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/section13/ask-heaven?caseId=${caseId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setSection13SupportRequest(data.latestSupportRequest || null);
+        return;
+      }
+
+      if (response.status === 403) {
+        setSection13SupportRequest(null);
+      }
+    } catch (err) {
+      console.error('Failed to fetch Section 13 support state:', err);
+    }
   }, [caseId]);
 
   // Stop polling and cleanup
@@ -389,6 +415,24 @@ export default function CaseDetailPage() {
     fetchCaseDocuments();
   }, [caseId, fetchCaseDetails, fetchCaseDocuments]);
 
+  useEffect(() => {
+    if (
+      caseDetails?.case_type === 'rent_increase' &&
+      orderStatus?.paid &&
+      orderStatus.product_type === 'section13_defensive'
+    ) {
+      void fetchSection13SupportState();
+      return;
+    }
+
+    setSection13SupportRequest(null);
+  }, [
+    caseDetails?.case_type,
+    orderStatus?.paid,
+    orderStatus?.product_type,
+    fetchSection13SupportState,
+  ]);
+
   // Load pack contents when case details are available
   useEffect(() => {
     if (!caseDetails) return;
@@ -407,6 +451,8 @@ export default function CaseDetailPage() {
         ? (caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim')
         : caseDetails.case_type === 'eviction'
           ? (facts.__meta?.product || 'complete_pack')
+        : caseDetails.case_type === 'rent_increase'
+          ? (facts.section13?.selectedPlan || 'section13_standard')
         : caseDetails.case_type === 'tenancy_agreement'
             ? (
               canonicalEnglandProduct ||
@@ -610,6 +656,7 @@ export default function CaseDetailPage() {
     const labels: Record<string, string> = {
       money_claim: 'Money Claim',
       tenancy_agreement: 'Tenancy Agreement',
+      rent_increase: 'Section 13 Rent Increase',
     };
     return labels[caseType] || caseType;
   };
@@ -657,6 +704,16 @@ export default function CaseDetailPage() {
       const isPremium = isPremiumTenancyDisplay(caseDetails?.jurisdiction, facts, effectiveProduct);
       const agreementLabel = getTenancyAgreementRouteLabel(caseDetails?.jurisdiction, isPremium, effectiveProduct);
       parts.push(agreementLabel);
+    } else if (caseType === 'rent_increase') {
+      const section13 = caseDetails?.collected_facts?.section13 || {};
+      const bedrooms = section13.tenancy?.bedrooms;
+      const planLabel =
+        getEffectiveProduct() === 'section13_defensive' ? 'Defensive Pack' : 'Standard Pack';
+      parts.push('England Section 13 / Form 4A');
+      if (bedrooms) {
+        parts.push(`${bedrooms}-bed property`);
+      }
+      parts.push(planLabel);
     }
 
     return {
@@ -735,6 +792,8 @@ export default function CaseDetailPage() {
       if (!product) {
         if (caseDetails.case_type === 'money_claim') {
           product = caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
+        } else if (caseDetails.case_type === 'rent_increase') {
+          product = facts.section13?.selectedPlan || 'section13_standard';
         } else if (caseDetails.case_type === 'tenancy_agreement') {
           if (caseDetails.jurisdiction === 'england') {
             product = 'england_standard_tenancy_agreement';
@@ -1030,6 +1089,28 @@ export default function CaseDetailPage() {
                   Downloads remain available.
                 </span>
               )}
+            </div>
+          )}
+
+          {caseDetails.case_type === 'rent_increase' && orderStatus?.product_type === 'section13_defensive' && section13SupportRequest && (
+            <div className="mb-4 rounded-lg border border-violet-200 bg-violet-50 p-3 text-sm text-violet-900">
+              <div className="font-semibold">
+                {section13SupportRequest.status === 'received'
+                  ? 'Support request received'
+                  : section13SupportRequest.status === 'in_review'
+                    ? 'In review'
+                    : 'Responded'}
+              </div>
+              <div className="mt-1 text-violet-900/80">
+                Priority: {section13SupportRequest.priority.charAt(0).toUpperCase() + section13SupportRequest.priority.slice(1)}
+                {section13SupportRequest.createdAt
+                  ? ` • Updated ${new Intl.DateTimeFormat('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(section13SupportRequest.createdAt))}`
+                  : ''}
+              </div>
             </div>
           )}
 

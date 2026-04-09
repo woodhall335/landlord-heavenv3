@@ -627,6 +627,48 @@ The Landlord Heaven Team
   });
 }
 
+export async function sendSection13RecoveryLinkEmail(params: {
+  to: string;
+  resumeUrl: string;
+  propertyAddress?: string | null;
+}): Promise<{ success: boolean; error?: string }> {
+  const { to, resumeUrl, propertyAddress } = params;
+
+  const cardContent = `
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Your Section 13 Wizard draft is ready to resume.</p>
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">Use the secure link below to return to your saved rent increase case${propertyAddress ? ` for <strong style="color: ${COLORS.white};">${propertyAddress}</strong>` : ''}.</p>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+      <tr>
+        <td align="center">
+          ${getBulletproofButton('Resume My Section 13 Draft', resumeUrl)}
+        </td>
+      </tr>
+    </table>
+
+    ${getInfoBox('The recovery link is intended for your use only. If you did not request it, you can ignore this email.')}
+
+    <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button does not work, copy and paste this link into your browser:<br><a href="${resumeUrl}" style="color: ${COLORS.primaryLight}; text-decoration: none;">${resumeUrl}</a></p>
+  `;
+
+  const emailContent = `
+    ${getLogoRow()}
+    ${getHeaderBanner('Resume Your Section 13 Draft')}
+    ${getContentCard(cardContent)}
+    ${getEmailFooter(false)}
+  `;
+
+  const html = getEmailWrapper(emailContent);
+  const text = `Resume your Section 13 draft: ${resumeUrl}`;
+
+  return sendEmail({
+    to,
+    subject: 'Resume your Section 13 Wizard draft',
+    html,
+    text,
+  });
+}
+
 /**
  * Send HMO Pro trial reminder (Day 5: 2 days left)
  */
