@@ -379,6 +379,12 @@ const nextConfig = {
     ];
   },
   devIndicators: false,
+  outputFileTracingExcludes: {
+    '/api/admin/test-artifacts/**': ['artifacts/**/*'],
+    '/api/admin/test-artifacts/complete-pack/england/section21': ['artifacts/**/*'],
+    '/api/admin/test-artifacts/complete-pack/england/section8': ['artifacts/**/*'],
+    '/api/admin/test-artifacts/complete-pack/download': ['artifacts/**/*'],
+  },
   // Allow localhost for development
   allowedDevOrigins: ['localhost:5000', 'localhost:3000'],
   // Exclude PDF libraries from webpack bundling (they have native dependencies)
