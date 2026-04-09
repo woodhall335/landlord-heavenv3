@@ -324,6 +324,9 @@ export function Section13WizardFlow({
     [localPreview, state]
   );
 
+  const displayedScrapeMessage =
+    scrapeMessage || effectiveState.comparablesMeta.lastScrapeSummary || null;
+
   const purchasedPlan =
     orderStatus?.paid &&
     (orderStatus.product_type === 'section13_standard' ||
@@ -436,39 +439,19 @@ export function Section13WizardFlow({
     }
   }, [effectiveState.landlord.landlordEmail, recoveryEmail]);
 
-  async function startCheckout() {
+  async function continueToSharedCheckoutPreview() {
     setCheckoutLoading(true);
     setCheckoutError(null);
 
     try {
       await persistDraft({ awaitingPayment: true });
-
-      const response = await fetch('/api/checkout/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          product_type: effectiveState.selectedPlan,
-          case_id: caseId,
-        }),
+      const params = new URLSearchParams({
+        product: effectiveState.selectedPlan,
+        jurisdiction: jurisdiction,
       });
-
-      if (response.status === 401) {
-        const redirect = encodeURIComponent(window.location.pathname + window.location.search);
-        router.push(`/auth/login?redirect=${redirect}&case_id=${caseId}`);
-        return;
-      }
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Checkout could not be started');
-      }
-
-      const checkoutUrl = data.session_url || data.checkout_url || data.redirect_url;
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
-      }
+      router.push(`/wizard/preview/${caseId}?${params.toString()}`);
     } catch (error: any) {
-      setCheckoutError(error?.message || 'Checkout could not be started');
+      setCheckoutError(error?.message || 'Checkout preview could not be opened');
     } finally {
       setCheckoutLoading(false);
     }
@@ -1404,14 +1387,10 @@ export function Section13WizardFlow({
                 {csvImportLoading ? <span className="text-sm text-gray-600">Importing CSV…</span> : null}
               </div>
 
-              {scrapeMessage ? (
+              {displayedScrapeMessage ? (
                 <div className="mt-3 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-sm text-violet-900">
-                  {scrapeMessage}
+                  {displayedScrapeMessage}
                 </div>
-              ) : null}
-
-              {effectiveState.comparablesMeta.lastScrapeSummary ? (
-                <p className="mt-3 text-sm text-gray-700">{effectiveState.comparablesMeta.lastScrapeSummary}</p>
               ) : null}
             </div>
 
@@ -1657,14 +1636,14 @@ export function Section13WizardFlow({
                 Payment unlocks the completed Form 4A, your full report, and, for Defensive Pack purchases, the tribunal-ready bundle tools.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
-                <Button onClick={() => void startCheckout()} disabled={checkoutLoading}>
+                <Button onClick={() => void continueToSharedCheckoutPreview()} disabled={checkoutLoading}>
                   {checkoutLoading ? (
                     <>
                       <RiLoader4Line className="mr-2 h-4 w-4 animate-spin" />
-                      Starting checkout
+                      Opening checkout preview
                     </>
                   ) : (
-                    <>Continue to secure checkout</>
+                    <>Continue to preview and checkout</>
                   )}
                 </Button>
                 <button
@@ -2038,6 +2017,7 @@ export function Section13WizardFlow({
       completedCount={completedCount}
       totalCount={STEP_CONFIG.length}
       progress={(completedCount / STEP_CONFIG.length) * 100}
+      stickyTopClass="top-[96px] md:top-[100px]"
       tabs={tabs}
       sectionTitle={currentStep.title}
       sectionDescription={currentStep.description}
@@ -2067,12 +2047,16 @@ export function Section13WizardFlow({
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-500">{jurisdiction === 'england' ? 'England only' : jurisdiction}</span>
             <Button
-              onClick={() =>
-                setCurrentStepIndex((index) => Math.min(STEP_CONFIG.length - 1, index + 1))
-              }
+              onClick={() => {
+                if (currentStep.id === 'preview' && !orderStatus?.paid) {
+                  void continueToSharedCheckoutPreview();
+                  return;
+                }
+                setCurrentStepIndex((index) => Math.min(STEP_CONFIG.length - 1, index + 1));
+              }}
               disabled={currentStepIndex === STEP_CONFIG.length - 1}
             >
-              Continue
+              {currentStep.id === 'preview' && !orderStatus?.paid ? 'Go to checkout preview' : 'Continue'}
               <RiArrowRightLine className="ml-2 h-4 w-4" />
             </Button>
           </div>

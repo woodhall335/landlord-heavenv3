@@ -18,6 +18,7 @@ import {
   getCompletePackDocuments,
   getMoneyClaimDocuments,
   getASTDocuments,
+  getSection13Documents,
   getProductMeta,
 } from '@/lib/documents/document-configs';
 import {
@@ -71,6 +72,10 @@ interface GeneratedDocument {
   id: string;
   document_type: string;
   title: string;
+}
+
+function isSection13ProductSku(value: string | null | undefined): value is 'section13_standard' | 'section13_defensive' {
+  return value === 'section13_standard' || value === 'section13_defensive';
 }
 
 /**
@@ -494,9 +499,15 @@ export default function WizardPreviewPage() {
         // 4. collected_facts.__meta.original_product
         // 5. Infer from notice-only specific facts (selected_notice_route present indicates notice_only)
         const urlProduct = searchParams.get('product');
+        const section13Facts = wizardFacts.section13 || {};
+        const section13SelectedPlan =
+          section13Facts.selectedPlan ||
+          section13Facts.selected_plan ||
+          section13Facts.product;
         let inferredProduct =
           lockedProduct ||
           urlProduct ||
+          section13SelectedPlan ||
           originalMeta.canonical_product ||
           factsMeta.product ||
           originalMeta.product ||
@@ -522,6 +533,10 @@ export default function WizardPreviewPage() {
           }
         }
 
+        if (!inferredProduct && fetchedCase.case_type === 'rent_increase') {
+          inferredProduct = 'section13_standard';
+        }
+
         if (inferredProduct === 'notice_only') {
           setSelectedProduct('notice_only');
         } else if (inferredProduct) {
@@ -536,6 +551,7 @@ export default function WizardPreviewPage() {
 
         // Determine if this is a notice_only case (for choosing correct preview API)
         const isNoticeOnly = inferredProduct === 'notice_only';
+        const isSection13 = isSection13ProductSku(inferredProduct);
 
         // Validate with checkpoint if needed for eviction cases
         if (fetchedCase.case_type === 'eviction' && !fetchedCase.recommended_route) {
@@ -645,6 +661,11 @@ export default function WizardPreviewPage() {
               // Validation endpoint may not exist - that's OK, continue without it
               console.log('[Preview] Notice Only validation not available:', validateError);
             }
+          } else if (isSection13) {
+            console.log('[Preview] Section 13 case - using locked-output preview cards with shared checkout flow', {
+              caseId,
+              product: productForGen,
+            });
           } else {
             // NON-NOTICE-ONLY: Use legacy individual document generation
             // (complete_pack, money_claim, etc.)
@@ -818,13 +839,19 @@ export default function WizardPreviewPage() {
     if (!caseData) return [];
 
     const facts = caseData.collected_facts as any || {};
+    const section13State = facts.section13 || {};
+    const section13SelectedPlan =
+      section13State.selectedPlan ||
+      section13State.selected_plan ||
+      section13State.product;
     const product =
       selectedProduct ||
+      section13SelectedPlan ||
       facts.__meta?.canonical_product ||
       facts.product ||
       facts.__meta?.product ||
       searchParams.get('product') ||
-      'notice_only';
+      (caseData.case_type === 'rent_increase' ? 'section13_standard' : 'notice_only');
     const jurisdiction = caseData.jurisdiction || 'england';
     // Use section_8 as fallback since it's the safer default (fault-based requires proving grounds)
     // Section 21 requires strict compliance which may not be met
@@ -880,6 +907,10 @@ export default function WizardPreviewPage() {
       case 'money_claim':
       case 'sc_money_claim':
         baseDocuments = getMoneyClaimDocuments(jurisdiction);
+        break;
+      case 'section13_standard':
+      case 'section13_defensive':
+        baseDocuments = getSection13Documents(product);
         break;
       case 'ast_standard':
       case 'tenancy_agreement':
@@ -998,6 +1029,19 @@ export default function WizardPreviewPage() {
       // Guidance
       'filing-guide': ['filing_guide', 'court_filing_guide', 'filing_guide_scotland'],
       'enforcement-guide': ['enforcement_guide', 'enforcement_guide_scotland'],
+      // SECTION 13
+      'section13-form-4a': ['section13_form_4a'],
+      'section13-cover-letter': ['section13_cover_letter'],
+      'section13-justification-report': ['section13_justification_report'],
+      'section13-proof-of-service-record': ['section13_proof_of_service_record'],
+      'section13-tribunal-argument-summary': ['section13_tribunal_argument_summary'],
+      'section13-tribunal-defence-guide': ['section13_tribunal_defence_guide'],
+      'section13-landlord-response-template': ['section13_landlord_response_template'],
+      'section13-legal-briefing': ['section13_legal_briefing'],
+      'section13-evidence-checklist': ['section13_evidence_checklist'],
+      'section13-negotiation-email-template': ['section13_negotiation_email_template'],
+      'section13-tribunal-bundle-pdf': ['section13_tribunal_bundle'],
+      'section13-tribunal-bundle-zip': ['section13_tribunal_bundle_zip'],
     };
 
     // Enrich documents with generated document IDs for thumbnails
@@ -1038,13 +1082,19 @@ export default function WizardPreviewPage() {
   const getProduct = (): string => {
     if (!caseData) return 'notice_only';
     const facts = caseData.collected_facts as any || {};
+    const section13State = facts.section13 || {};
+    const section13SelectedPlan =
+      section13State.selectedPlan ||
+      section13State.selected_plan ||
+      section13State.product;
     return (
       selectedProduct ||
+      section13SelectedPlan ||
       facts.__meta?.canonical_product ||
       facts.product ||
       facts.__meta?.product ||
       searchParams.get('product') ||
-      'notice_only'
+      (caseData.case_type === 'rent_increase' ? 'section13_standard' : 'notice_only')
     );
   };
 

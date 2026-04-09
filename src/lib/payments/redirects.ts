@@ -21,6 +21,8 @@ export type CheckoutProduct =
   | 'complete_pack'
   | 'money_claim'
   | 'sc_money_claim'
+  | 'section13_standard'
+  | 'section13_defensive'
   | 'ast_standard'
   | 'ast_premium'
   | 'england_standard_tenancy_agreement'

@@ -18,6 +18,8 @@ const SOLICITOR_COSTS: Record<string, { low: string; high: string; label: string
   notice_only: { low: '200', high: '300', label: 'eviction notices' },
   complete_pack: { low: '1,500', high: '2,500', label: 'eviction packs' },
   money_claim: { low: '800', high: '1,200', label: 'money claims' },
+  section13_standard: { low: '350', high: '700', label: 'rent increase notice packs' },
+  section13_defensive: { low: '900', high: '1,800', label: 'tribunal-ready rent increase files' },
   ast_standard: { low: '150', high: '400', label: 'tenancy agreements' },
   ast_premium: { low: '150', high: '400', label: 'tenancy agreements' },
   tenancy_agreement: { low: '150', high: '400', label: 'tenancy agreements' },

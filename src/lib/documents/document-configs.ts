@@ -423,6 +423,119 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
 }
 
 // ============================================
+// SECTION 13 RENT INCREASE PACK DOCUMENTS
+// ============================================
+
+export function getSection13Documents(product: 'section13_standard' | 'section13_defensive'): DocumentInfo[] {
+  const standardDocuments: DocumentInfo[] = [
+    {
+      id: 'section13-form-4a',
+      title: 'Form 4A Rent Increase Notice',
+      description: 'Official assured tenancy rent increase notice for England.',
+      icon: 'notice',
+      pages: '9 pages',
+      category: 'Notice',
+    },
+    {
+      id: 'section13-cover-letter',
+      title: 'Section 13 Cover Letter',
+      description: 'Practical service guidance and immediate next steps for issuing the notice pack.',
+      icon: 'guidance',
+      pages: '1 page',
+      category: 'Guidance',
+    },
+    {
+      id: 'section13-justification-report',
+      title: 'Rent Increase Justification Report',
+      description: 'Comparable-led market positioning report with challenge and evidence bands.',
+      icon: 'evidence',
+      pages: '2-4 pages',
+      category: 'Evidence',
+    },
+    {
+      id: 'section13-proof-of-service-record',
+      title: 'Proof of Service Record',
+      description: 'Service record to document how and when Form 4A was served.',
+      icon: 'checklist',
+      pages: '1 page',
+      category: 'Evidence',
+    },
+  ];
+
+  if (product === 'section13_standard') {
+    return standardDocuments;
+  }
+
+  return [
+    ...standardDocuments,
+    {
+      id: 'section13-tribunal-argument-summary',
+      title: 'Tribunal Argument Summary',
+      description: 'One-page case-specific argument brief for the landlord response position.',
+      icon: 'guidance',
+      pages: '1 page',
+      category: 'Defensive',
+    },
+    {
+      id: 'section13-tribunal-defence-guide',
+      title: 'Tribunal Defence Guide',
+      description: 'Step-by-step hearing preparation guidance for Section 13 rent challenges.',
+      icon: 'guidance',
+      pages: '2-3 pages',
+      category: 'Defensive',
+    },
+    {
+      id: 'section13-landlord-response-template',
+      title: 'Landlord Response Template',
+      description: 'Response template aligned to the current tribunal market-rent process.',
+      icon: 'court-form',
+      pages: '1-2 pages',
+      category: 'Defensive',
+    },
+    {
+      id: 'section13-legal-briefing',
+      title: 'Tribunal Legal Briefing',
+      description: 'Concise legal context for hearings, evidence expectations, and positioning.',
+      icon: 'guidance',
+      pages: '2 pages',
+      category: 'Defensive',
+    },
+    {
+      id: 'section13-evidence-checklist',
+      title: 'Evidence Checklist',
+      description: 'Checklist for uploaded exhibits and bundle-readiness checks.',
+      icon: 'checklist',
+      pages: '1-2 pages',
+      category: 'Defensive',
+    },
+    {
+      id: 'section13-negotiation-email-template',
+      title: 'Negotiation Email Template',
+      description: 'Structured wording template for pre-hearing negotiation correspondence.',
+      icon: 'guidance',
+      pages: '1 page',
+      category: 'Defensive',
+    },
+    {
+      id: 'section13-tribunal-bundle-pdf',
+      title: 'Merged Tribunal Bundle PDF',
+      description: 'Deterministic merged bundle with cover, index, core docs, and exhibits.',
+      icon: 'court-form',
+      pages: 'Variable',
+      category: 'Bundle',
+    },
+    {
+      id: 'section13-tribunal-bundle-zip',
+      title: 'Tribunal Bundle ZIP Export',
+      description: 'ZIP export containing bundle assets and supporting documents.',
+      icon: 'evidence',
+      pages: 'Download',
+      category: 'Bundle',
+    },
+  ];
+}
+
+// ============================================
 // AST DOCUMENTS
 // ============================================
 
@@ -731,6 +844,31 @@ export function getProductMeta(product: string): ProductMeta {
         'Pre-action letter',
         'Filing guide',
         'Enforcement guide',
+      ],
+    },
+    'section13_standard': {
+      name: 'Section 13 Standard Pack',
+      price: PRODUCTS.section13_standard.displayPrice,
+      originalPrice: '£350+',
+      savings: 'Save £300+ vs ad hoc legal drafting',
+      features: [
+        'Official Form 4A notice',
+        'Case-specific cover letter and service guidance',
+        'Comparable-led justification report',
+        'Proof of service record',
+      ],
+    },
+    'section13_defensive': {
+      name: 'Section 13 Defensive Pack',
+      price: PRODUCTS.section13_defensive.displayPrice,
+      originalPrice: '£900+',
+      savings: 'Save £850+ vs solicitor-led prep',
+      features: [
+        'Everything in Standard',
+        'Tribunal Argument Summary',
+        'Defence guide, legal briefing, and response template',
+        'Evidence checklist and negotiation wording',
+        'Merged tribunal bundle PDF and ZIP export',
       ],
     },
     // STANDARD TENANCY AGREEMENT - agreement plus support pack

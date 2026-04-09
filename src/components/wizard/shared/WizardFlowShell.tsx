@@ -26,6 +26,7 @@ export interface WizardFlowShellProps {
   sidebar?: React.ReactNode;
   children: React.ReactNode;
   navigation: React.ReactNode;
+  stickyTopClass?: string;
 }
 
 export function WizardFlowShell({
@@ -40,6 +41,7 @@ export function WizardFlowShell({
   sidebar,
   children,
   navigation,
+  stickyTopClass = 'top-0',
 }: WizardFlowShellProps) {
   const completionLabel = `${completedCount} of ${totalCount} sections complete`;
   const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
@@ -47,7 +49,7 @@ export function WizardFlowShell({
 
   return (
     <div className={clsx('min-h-screen', isWizardThemeV2 ? 'bg-white' : 'bg-gray-50')}>
-      <header className={clsx('border-b sticky top-0 z-10 bg-white/95 backdrop-blur', isWizardThemeV2 ? 'border-violet-200' : 'border-gray-200')}>
+      <header className={clsx('border-b sticky z-10 bg-white/95 backdrop-blur', stickyTopClass, isWizardThemeV2 ? 'border-violet-200' : 'border-gray-200')}>
         <div className={clsx('mx-auto px-4 py-4', isWizardThemeV2 ? 'max-w-[1240px]' : 'max-w-6xl')}>
           <div className="mb-2.5 flex items-center justify-between">
             <h1 className={clsx('font-semibold', isWizardThemeV2 ? 'text-xl tracking-tight text-violet-950' : 'text-lg text-gray-900')}>

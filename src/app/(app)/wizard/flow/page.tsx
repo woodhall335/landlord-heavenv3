@@ -448,7 +448,12 @@ function WizardFlowContent() {
     }
 
     if (type === 'rent_increase') {
-      router.push(`/dashboard/cases/${completedCaseId}`);
+      const previewParams = new URLSearchParams();
+      const section13Product =
+        normalizedProduct === 'section13_defensive' ? 'section13_defensive' : 'section13_standard';
+      previewParams.set('product', section13Product);
+      previewParams.set('jurisdiction', 'england');
+      router.push(`/wizard/preview/${completedCaseId}?${previewParams.toString()}`);
       return;
     }
 
