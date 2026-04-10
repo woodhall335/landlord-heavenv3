@@ -34,25 +34,25 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center">
             {/* Trust Badge - Matches AST "Professional Tenancies" badge exactly */}
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
+              <span className="text-sm font-semibold text-primary">Trusted by 10,000+ UK landlords</span>
             </div>
 
             {/* Main Headline - Value-focused */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-              Court-Ready Eviction Case Bundles
-              <span className="block text-primary">in Minutes, Not Days</span>
+              Landlord Documents That Help You
+              <span className="block text-primary">Act Quickly and Stay Organised</span>
             </h1>
 
             {/* Subheadline - Benefit + differentiation */}
             <p className="text-xl md:text-2xl mb-8 text-gray-600 max-w-2xl mx-auto">
-              Reduce possession failure risk with guided notices, court forms, and tenancy agreements —
-              <span className="font-semibold text-gray-800"> statutory-grounded preparation for court filing</span>.
+              Create guided notices, court paperwork, rent claim documents, and tenancy agreements in one place.
+              <span className="font-semibold text-gray-800"> Built to help landlords move forward without legal jargon</span>.
             </p>
 
             {/* CTA Buttons - Uses hero-btn-primary/secondary from globals.css */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/wizard" className="hero-btn-primary">
-                Generate Your Documents →
+                Start Your Documents
               </Link>
               <Link href="/pricing" className="hero-btn-secondary">
                 View Pricing
@@ -65,7 +65,7 @@ export default function Home() {
 
             {/* Trust Indicators */}
             <p className="mt-4 text-sm text-gray-600">
-              Instant download • Court-ready format • All UK jurisdictions • No legal experience needed
+              Instant download • Guided workflows • UK-wide coverage • No legal experience needed
             </p>
           </div>
         </Container>
@@ -97,8 +97,8 @@ export default function Home() {
               Get Your Documents in Minutes
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our guided wizard makes creating professional court-ready case bundles easy —
-              no legal experience required.
+              Our guided wizard helps you build the right landlord paperwork step by step,
+              without needing to decode the legal process on your own.
             </p>
           </div>
 
@@ -132,7 +132,7 @@ export default function Home() {
 
             <div className="mt-14 text-center">
               <Link href="/wizard" className="hero-btn-primary">
-                Start Your Documents Now →
+                Start Your Documents Now
               </Link>
               <p className="mt-4 text-sm text-gray-600">Free to start • Pay only when you're ready</p>
             </div>
@@ -262,8 +262,8 @@ export default function Home() {
           ============================================================ */}
       <FAQSection
         badge="Common Questions"
-        title="Frequently Asked Questions"
-        intro="Everything you need to know before getting started."
+        title="Questions landlords ask before getting started"
+        intro="Clear answers on what the documents do, when to use them, and how the process works."
         faqs={[
           {
             question: "Are these documents legally valid?",
@@ -306,13 +306,13 @@ export default function Home() {
               Ready to Get Your Documents?
             </h2>
             <p className="text-xl mb-8 text-gray-600">
-              Join 10,000+ landlords saving time and money.
+              Join thousands of landlords getting their paperwork sorted faster.
               <span className="font-semibold text-gray-800"> Start in under 2 minutes.</span>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/wizard" className="hero-btn-primary">
-                Generate Your Documents →
+                Start Your Documents
               </Link>
               <Link href="/ask-heaven" className="hero-btn-secondary">
                 Ask Heaven a Question
@@ -321,7 +321,7 @@ export default function Home() {
 
             {/* Final trust indicators */}
             <p className="mt-4 text-sm text-gray-600">
-              Court-ready documents • Expert guidance • 12+ months secure storage
+              Guided landlord documents • Practical guidance • 12+ months secure storage
             </p>
           </div>
         </Container>
@@ -404,7 +404,7 @@ function ProductCard({
           <div className="flex items-center justify-between">
             <span className="text-xs text-green-600 font-semibold">vs solicitor</span>
             <span className="text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-              Learn more →
+              Learn more -&gt;
             </span>
           </div>
         </div>

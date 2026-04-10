@@ -53,7 +53,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
       'Your fixed term has ended, the tenant will not leave, and you want a clean no-fault route without a paperwork restart.',
       'You are unsure whether your compliance record is complete enough to serve safely right now.',
       'You need to act this week and want a guided workflow instead of editing generic templates manually.',
-      'You inherited tenancy admin from an agent and need to verify whether deposit and prescribed information records are actually court-ready.',
+      'You inherited tenancy admin from an agent and need to verify whether deposit and prescribed information records are actually ready to rely on.',
       'You expect possession might go to paper-based accelerated possession and want your notice-stage chronology to be usable later, not rebuilt from scratch.',
       'You are balancing arrears pressure with route safety and need confidence that a Section 21 route is still available before committing to service.',
     ],
@@ -191,7 +191,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
       { point: 'Ground selection support', landlordHeaven: 'Guided journey', alternative: 'Blank template with no route support' },
       { point: 'Time to first draft', landlordHeaven: 'Immediate', alternative: 'Manual drafting or waiting for appointments' },
       { point: 'Update workflow', landlordHeaven: 'Quick regeneration', alternative: 'Manual rework and version confusion' },
-      { point: 'Court readiness mindset', landlordHeaven: 'Built around next-step workflow', alternative: 'Forms-only approach' },
+      { point: 'Court-stage mindset', landlordHeaven: 'Built around next-step workflow', alternative: 'Forms-only approach' },
     ],
     faqs: [
       { question: 'Is Section 8 mainly for rent arrears?', answer: 'It is commonly used for arrears, but Section 8 also covers other tenancy breaches depending on the grounds you rely on.' },
@@ -387,7 +387,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
       { href: '/eviction-court-forms-england', label: 'Eviction court forms explained' },
       { href: '/products/complete-pack', label: 'See the full complete eviction workflow' },
     ],
-    finalCta: 'Start your Section 8 court-ready flow',
+    finalCta: 'Start your Section 8 court pack',
   },
   'eviction-court-forms-england': {
     slug: 'eviction-court-forms-england',
@@ -449,7 +449,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     problemIntro: 'Landlords lose momentum when each eviction stage is handled in separate tools. Notice drafting, court forms, evidence prep, and witness support should be connected.',
     intentDeepDive: 'This page is for high-intent landlords who want one complete possession workflow, not fragmented steps. The angle is end-to-end speed with structure: align notice and court paperwork, maintain evidence continuity, and reduce expensive restarts.',
     landlordScenarios: [
-      'You want one route from first notice through court-ready pack preparation.',
+      'You want one route from first notice through guided pack preparation.',
       'You are done with patching templates and need a cleaner system for faster execution.',
       'You want a practical middle ground between DIY chaos and high solicitor drafting spend.',
     ],
@@ -808,7 +808,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     h1: 'Section 8 Grounds Explained for Landlords',
     heroSubheadline: 'Confused by grounds numbers and legal wording? This guide translates Section 8 grounds into practical decisions so you can choose the right next step.',
     heroCta: 'Start your Section 8 notice →',
-    secondaryCta: { label: 'Need court-ready progression? Start Section 8 court pack →', product: 'complete_pack', src: 'section_8_grounds_explained' },
+    secondaryCta: { label: 'Need ready to rely on progression? Start Section 8 court pack →', product: 'complete_pack', src: 'section_8_grounds_explained' },
     primaryProduct: 'notice_only',
     primarySrc: 'section_8_grounds_explained',
     proofBullets: ['Plain-English explanation of mandatory vs discretionary grounds', 'Strong focus on arrears use-cases', 'Direct handoff into Section 8 generator'],
@@ -1050,7 +1050,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1104,7 +1104,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1158,7 +1158,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1211,7 +1211,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1264,7 +1264,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1317,7 +1317,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1370,7 +1370,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1423,7 +1423,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1476,7 +1476,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1529,7 +1529,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1582,7 +1582,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1635,7 +1635,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1688,7 +1688,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1741,7 +1741,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1794,7 +1794,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1847,7 +1847,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1900,7 +1900,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -1953,7 +1953,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2006,7 +2006,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2059,7 +2059,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2112,7 +2112,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2165,7 +2165,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2218,7 +2218,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2271,7 +2271,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2324,7 +2324,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2377,7 +2377,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],
@@ -2430,7 +2430,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
     intentDeepDive: 'This page is intentionally structured for high-intent SEO and commercial action. It opens with a direct answer, then covers legal route selection, document readiness, common mistakes, risks of invalid steps, and a clear CTA into the correct product journey. The objective is to help landlords make defensible decisions quickly without dropping into template-only guesswork.',
     landlordScenarios: [
       'You need to act now but want to avoid serving the wrong notice and restarting later.',
-      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and court-ready if required.',
+      'Your tenancy issue has escalated and you need a route that is practical, evidence-led, and ready to rely on if required.',
       'You want clear next steps that move from guide content into the right product page and workflow.',
     ],
     mistakeRisks: ['Choosing the wrong legal route for your tenancy facts', 'Using weak service methods with limited proof', 'Submitting inconsistent dates across documents', 'Delaying escalation and compounding rent loss'],

@@ -110,7 +110,7 @@ const COMPLETE_PACK_FOR_MONEY_CLAIM: CrossSellRecommendation = {
 const NOTICE_ONLY_FOR_TENANCY: CrossSellRecommendation = {
   product: 'notice_only',
   title: 'Eviction Notices',
-  description: 'Problems with your tenant? Get court-ready Section 21 & Section 8 notices.',
+  description: 'Problems with your tenant? Get guided Section 21 and Section 8 notice workflows.',
   price: PRODUCTS.notice_only.displayPrice,
   ctaText: 'View Eviction Notices',
   angle: 'future_proofing',
@@ -192,8 +192,8 @@ export const TENANCY_PAGE_CROSS_SELLS: CrossSellConfig = {
 export const SECTION21_TOOL_CROSS_SELLS: CrossSellConfig = {
   primary: {
     product: 'notice_only',
-    title: 'Court-Ready Notice Pack',
-    description: 'Get a valid, court-ready Section 21 with serving instructions.',
+    title: 'Guided Notice Pack',
+    description: 'Get a current Section 21 workflow with serving instructions for landlords.',
     price: PRODUCTS.notice_only.displayPrice,
     ctaText: 'Get Notice Pack',
     angle: 'upgrade_from_free',
@@ -211,8 +211,8 @@ export const SECTION21_TOOL_CROSS_SELLS: CrossSellConfig = {
 export const SECTION8_TOOL_CROSS_SELLS: CrossSellConfig = {
   primary: {
     product: 'notice_only',
-    title: 'Court-Ready Notice Pack',
-    description: 'Get Section 8 + Section 21 notices with full legal grounds.',
+    title: 'Guided Notice Pack',
+    description: 'Get guided Section 8 and Section 21 notice workflows with the right supporting prompts.',
     price: PRODUCTS.notice_only.displayPrice,
     ctaText: 'Get Notice Pack',
     angle: 'upgrade_from_free',

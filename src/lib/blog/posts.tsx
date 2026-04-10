@@ -611,7 +611,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            {`Generate Court-Ready Section 21 Notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
+            {`Generate Section 21 Notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
             {`Complete Eviction Pack (notices + court forms) - ${PRODUCTS.complete_pack.displayPrice}`}</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
@@ -904,14 +904,14 @@ const allBlogPosts: BlogPost[] = [
         <h3>Option 1: Generate Online (Recommended)</h3>
         <p>
           The fastest and most reliable method is to use an online service that generates
-          a court-ready Form 6A. This ensures you&apos;re using the current prescribed form
+          a current Form 6A. This ensures you&apos;re using the current prescribed form
           with all fields completed correctly.
         </p>
         <ul>
           <li><Link href="/eviction-notice-template" className="text-primary hover:underline">
-            Section 21 notice pack</Link> - Preview version (not court-ready)</li>
+            Section 21 notice pack</Link> - Preview version (preview only)</li>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Court-Ready Section 21 Notice</Link>{` - Official Form 6A, ${PRODUCTS.notice_only.displayPrice}`}</li>
+            Guided Section 21 Notice</Link>{` - Official Form 6A, ${PRODUCTS.notice_only.displayPrice}`}</li>
         </ul>
 
         <h3>Option 2: Download from Gov.uk</h3>
@@ -1299,7 +1299,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Generate Court-Ready Eviction Notice</Link></li>
+            Generate Eviction Notice</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Complete Section 21 Guide</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
@@ -1932,12 +1932,12 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           The clock starts ticking when you serve your notice. Make sure you have a valid,
-          court-ready document from day one.
+          usable document from day one.
         </p>
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Get Court-Ready Eviction Notice</Link></li>
+            Get Guided Eviction Notice</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
             Complete Eviction Pack (notices + court forms)</Link></li>
           <li><Link href="/blog/how-to-serve-eviction-notice" className="text-primary hover:underline">
@@ -2949,7 +2949,7 @@ const allBlogPosts: BlogPost[] = [
           <h3 className="text-xl font-bold text-gray-900 mb-4">Don&apos;t Wait—Section 21 Ends Soon</h3>
           <p className="text-gray-700 mb-6">
             With Section 21 ending on 1 May 2026, landlords who may need to regain possession should
-            serve their notices now. Our document generator creates court-ready Section 21 notices in minutes.
+            serve their notices now. Our document generator creates Section 21 notices in minutes.
           </p>
           <Link
             href="/products/notice-only"
@@ -3437,7 +3437,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Generate Your Section 8 Notice</h3>
           <p className="text-gray-700 mb-6">
-            Our document generator creates court-ready Section 8 notices with properly drafted particulars
+            Our document generator creates Section 8 notices with the right particulars
             for each ground. Includes guidance on evidence gathering and the court process.
           </p>
           <Link
@@ -3868,7 +3868,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Generate Your Section 8 Notice</h3>
           <p className="text-gray-700 mb-6">
-            Our document generator creates court-ready Section 8 notices with Ground 8, 10, and 11 properly
+            Our document generator creates Section 8 notices with Ground 8, 10, and 11 set out clearly
             drafted. Includes a rent arrears schedule template and hearing preparation guide.
           </p>
           <Link
@@ -4371,7 +4371,7 @@ const allBlogPosts: BlogPost[] = [
           <h3 className="text-xl font-bold text-gray-900 mb-4">Start Your Accelerated Possession Claim</h3>
           <p className="text-gray-700 mb-6">
             Our Complete Eviction Pack includes all the documents you need for accelerated possession: validated
-            Section 21 notice, Form N5B guidance, and a step-by-step process guide. Get court-ready documents today.
+            Section 21 notice, Form N5B guidance, and a step-by-step process guide. Get your landlord documents today.
           </p>
           <Link
             href="/products/complete-pack"
@@ -5768,7 +5768,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="text-gray-700 mb-6">
             Our Complete Eviction Pack includes Section 8 notices, incident log templates, and
             guidance on building a Ground 14 case. Take action against antisocial behaviour with
-            court-ready documentation.
+            clear landlord documentation.
           </p>
           <Link
             href="/products/complete-pack"
@@ -7532,9 +7532,9 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Need a Section 8 Notice for Ground 12?</h3>
           <p className="text-gray-700 mb-6">
-            Our Section 8 notice generator creates court-ready notices for Ground 12 and all other
-            grounds. Simply select your grounds, enter the breach details, and download your
-            professionally formatted notice.
+            Our Section 8 notice generator helps you build a clear notice for Ground 12 and the
+            other Section 8 grounds. Select the grounds, enter the breach details, and download
+            a notice you can review and serve with confidence.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link
@@ -37255,7 +37255,7 @@ const allBlogPosts: BlogPost[] = [
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
           <p className="text-amber-900 text-sm">
-            <strong>Need court-ready documents?</strong> Our{' '}
+            <strong>Need landlord documents that are ready to use?</strong> Our{' '}
             <Link href="/products/money-claim" className="text-primary font-semibold hover:underline">
               Money Claim Pack
             </Link>{' '}
@@ -38065,7 +38065,7 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 my-8">
-          <h3 className="font-semibold text-gray-900 mb-2">Get Court-Ready Documents Fast</h3>
+          <h3 className="font-semibold text-gray-900 mb-2">Get Your Documents Quickly</h3>
           <p className="text-gray-700 mb-4">
             Our Money Claim Pack generates your Letter Before Action and Particulars of Claim
             in minutes—no waiting for solicitors.

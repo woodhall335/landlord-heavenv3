@@ -93,8 +93,8 @@ const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = 
   'complete_pack:england:court_process': {
     product: 'complete_pack',
     title: 'Get the Complete Eviction Pack',
-    description: `Court-ready bundle with notice, possession forms, and guidance (${COMPLETE_PACK_PRICE}).`,
-    buttonText: 'Start court-ready pack',
+    description: `Guided bundle with your notice, possession forms, and landlord guidance (${COMPLETE_PACK_PRICE}).`,
+    buttonText: 'Start complete pack',
     displayPrice: COMPLETE_PACK_PRICE,
     priceNote: 'England only',
   },
