@@ -58,13 +58,13 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
           {/* Thumbnail or Icon */}
           {thumbnailUrl && !thumbnailError ? (
             <div
-              className="relative w-16 h-22 flex-shrink-0 cursor-pointer group"
+              className="relative w-16 h-22 flex-shrink-0 cursor-pointer group overflow-hidden rounded-lg border bg-white shadow-sm"
               onClick={handlePreviewClick}
             >
               <img
                 src={thumbnailUrl}
                 alt={`Preview of ${document.title}`}
-                className="w-16 h-22 object-cover rounded-lg border shadow-sm"
+                className="h-full w-full object-contain bg-white"
                 onLoad={() => setThumbnailLoading(false)}
                 onError={(e) => {
                   // Log thumbnail load failure for debugging (works in both dev and production)
@@ -185,7 +185,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
               <img
                 src={thumbnailUrl}
                 alt={`Full preview of ${document.title}`}
-                className="w-full h-auto rounded-lg shadow-lg"
+                className="mx-auto h-auto max-w-full rounded-lg bg-white shadow-lg"
               />
             </div>
             <div className="p-4 border-t bg-gray-50 flex items-center justify-between">
