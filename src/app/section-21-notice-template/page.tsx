@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import Link from 'next/link';
 import { StructuredData, breadcrumbSchema, buildProductAggregateRating } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
@@ -34,7 +34,7 @@ const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Section 21 Notice Template | Form 6A Download & Court-Ready Builder',
+  title: 'Section 21 Notice Template | Form 6A Guide For Landlords',
   description: 'Plain-English Section 21 notice template guidance with Form 6A wording, service guidance, and compliance checks for landlords in England.',
   keywords: [
     'section 21 notice template',
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/section-21-notice-template',
   },
   openGraph: {
-    title: 'Section 21 Notice Template | Form 6A Download & Court-Ready Builder',
+    title: 'Section 21 Notice Template | Form 6A Guide For Landlords',
     description: 'Free Section 21 notice template for landlords in England. Build a compliant Form 6A fast and avoid costly delays.',
     type: 'website',
   },
@@ -59,12 +59,12 @@ export default function Section21NoticeTemplatePage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'Section 21 Notice Template',
-    description: 'Free Section 21 notice template and court-ready Form 6A generator for England.',
+    description: 'Free Section 21 notice template and guided Form 6A workflow for England landlords.',
     url: 'https://landlordheaven.co.uk/section-21-notice-template',
     mainEntity: {
       '@type': 'Product',
       name: 'Section 21 Notice (Form 6A)',
-      description: 'Court-ready Section 21 eviction notice for England landlords',
+      description: 'Guided Section 21 Form 6A workflow for England landlords',
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
@@ -156,10 +156,10 @@ export default function Section21NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Free starter document vs court-ready notice
+                Free starter document vs guided landlord notice
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Our free Section 21 template is useful for understanding the <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault eviction process</Link>, but if you are dealing with a live case, the stronger option is the court-ready version with the compliance checks built in.
+                Our free Section 21 template is useful for understanding the <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault eviction process</Link>, but if you are dealing with a live case, the stronger option is the guided version with the compliance checks built in.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">
@@ -167,7 +167,7 @@ export default function Section21NoticeTemplatePage() {
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
                   <div className="text-center mb-6">
                     <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">Free Starter Document</span>
-                    <div className="text-4xl font-bold text-gray-900 mt-2">£0</div>
+                    <div className="text-4xl font-bold text-gray-900 mt-2">Â£0</div>
                   </div>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3">
@@ -211,7 +211,7 @@ export default function Section21NoticeTemplatePage() {
                     </span>
                   </div>
                   <div className="text-center mb-6">
-                    <span className="text-sm font-medium text-primary uppercase tracking-wide">Court-Ready</span>
+                    <span className="text-sm font-medium text-primary uppercase tracking-wide">Guided Landlord Version</span>
                     <div className="text-4xl font-bold text-gray-900 mt-2">{noticeOnlyPrice}</div>
                   </div>
                   <ul className="space-y-4 mb-8">
@@ -244,7 +244,7 @@ export default function Section21NoticeTemplatePage() {
                     href={noticeOnlyProductHref}
                     className="hero-btn-primary block w-full text-center"
                   >
-                    Get Court-Ready Notice
+                    Get Guided Landlord Version Notice
                   </Link>
                 </div>
               </div>
@@ -252,8 +252,8 @@ export default function Section21NoticeTemplatePage() {
               {/* Savings callout */}
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
-                  <span className="font-semibold text-green-600">Save £150-270</span> compared to
-                  solicitor fees (typically £180-300 for Section 21 notices)
+                  <span className="font-semibold text-green-600">Save Â£150-270</span> compared to
+                  solicitor fees (typically Â£180-300 for Section 21 notices)
                 </p>
               </div>
             </div>
@@ -268,7 +268,7 @@ export default function Section21NoticeTemplatePage() {
                 How to Get Your Section 21 Template
               </h2>
               <p className="text-gray-600 text-center mb-12">
-                Generate your notice in 3 simple steps — no legal knowledge required
+                Generate your notice in 3 simple steps â€” no legal knowledge required
               </p>
 
               <div className="grid md:grid-cols-3 gap-8">
@@ -298,7 +298,7 @@ export default function Section21NoticeTemplatePage() {
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-2">Download & Serve</h3>
                   <p className="text-gray-600 text-sm">
-                    Get your court-ready Form 6A with serving instructions
+                    Get your guided Form 6A with serving instructions
                   </p>
                 </div>
               </div>
@@ -338,7 +338,7 @@ export default function Section21NoticeTemplatePage() {
                 <div className="flex items-start gap-4 p-6 bg-gray-50 rounded-xl">
                   <Gavel className="w-8 h-8 text-primary flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Court-Ready Format</h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">Guided Landlord Version Format</h3>
                     <p className="text-gray-600 text-sm">
                       Uses official prescribed Form 6A format
                     </p>
@@ -378,7 +378,7 @@ export default function Section21NoticeTemplatePage() {
                     <li>Minimum 2 months notice period.</li>
                     <li>Notice must expire after the fixed term ends.</li>
                     <li>Issue court proceedings within 6 months of expiry.</li>
-                    <li>Typical possession timeline: 4–6 months end to end.</li>
+                    <li>Typical possession timeline: 4â€“6 months end to end.</li>
                   </ul>
                 </div>
 
@@ -394,7 +394,7 @@ export default function Section21NoticeTemplatePage() {
                     href="/eviction-notice-template"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    Check notice validity →
+                    Check notice validity â†’
                   </Link>
                 </div>
 
@@ -410,7 +410,7 @@ export default function Section21NoticeTemplatePage() {
                     href="/how-to-evict-tenant"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    See the full eviction process →
+                    See the full eviction process â†’
                   </Link>
                 </div>
               </div>
@@ -470,7 +470,7 @@ export default function Section21NoticeTemplatePage() {
               <p>Form 6A is the prescribed notice for serving a Section 21 no-fault possession notice in England. It sets out the parties, property, and notice dates in a required format. Landlords should use the correct version and ensure all statutory prerequisites are satisfied before service.</p>
 
               <h2>How Long Is a Section 21 Notice?</h2>
-              <p>A Section 21 notice must usually give at least two months’ notice. The end date should provide the full statutory period after valid service. If the notice period is short or calculated incorrectly, the court can refuse possession and require the landlord to restart the notice process.</p>
+              <p>A Section 21 notice must usually give at least two monthsâ€™ notice. The end date should provide the full statutory period after valid service. If the notice period is short or calculated incorrectly, the court can refuse possession and require the landlord to restart the notice process.</p>
 
               <h2>Section 21 Notice Deposit Protection</h2>
               <p>Deposit protection is central to Section 21 validity. If the deposit was not protected on time or prescribed information was not served correctly, a Section 21 notice can fail. Landlords should check scheme records and documentary evidence before issuing the notice.</p>
@@ -677,7 +677,7 @@ export default function Section21NoticeTemplatePage() {
         {/* FAQ Section */}
         <FAQSection
           faqs={enhancedFaqs}
-          title="Section 21 Notice Template FAQ"
+          title="Section 21 Notice Template FAQs For Landlords"
           showContactCTA={false}
           variant="gray"
         />
@@ -690,7 +690,7 @@ export default function Section21NoticeTemplatePage() {
                 Get Your Section 21 Notice Template Now
               </h2>
               <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Don&apos;t risk an invalid notice. Generate a court-ready Form 6A in minutes
+                Don&apos;t risk an invalid notice. Generate a guided Form 6A in minutes
                 and serve with confidence.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -705,12 +705,12 @@ export default function Section21NoticeTemplatePage() {
                   href={noticeOnlyProductHref}
                   className="hero-btn-secondary inline-flex items-center justify-center gap-2"
                 >
-                  {`Get Court-Ready — ${noticeOnlyPrice}`}
+                  {`Get Guided Landlord Version â€” ${noticeOnlyPrice}`}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
               <p className="mt-8 text-white/70 text-sm">
-                Official Form 6A &bull; AI Compliance Check &bull; Designed for Court Acceptance
+                Official Form 6A &bull; AI Compliance Check &bull; Designed to reduce rejection risk
               </p>
             </div>
           </div>
@@ -740,5 +740,6 @@ export default function Section21NoticeTemplatePage() {
     </>
   );
 }
+
 
 

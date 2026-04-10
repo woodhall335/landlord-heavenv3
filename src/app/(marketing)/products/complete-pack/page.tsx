@@ -468,7 +468,7 @@ export default async function CompleteEvictionPackPage() {
                       href="/wizard?product=money_claim&src=complete_pack_crosssell"
                       className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#692ED4] px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#5a21be]"
                     >
-                      Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice}
+                      Get Money Claim Pack â€” {PRODUCTS.money_claim.displayPrice}
                     </Link>
                     <Link
                       href="/money-claim-unpaid-rent"

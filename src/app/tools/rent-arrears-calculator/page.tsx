@@ -288,7 +288,7 @@ export default function RentArrearsCalculator() {
 
       y -= 40;
 
-      page.drawText(`Monthly Rent: £${rentAmount}`, {
+      page.drawText(`Monthly Rent: Â£${rentAmount}`, {
         x: 50,
         y,
         size: 12,
@@ -317,7 +317,7 @@ export default function RentArrearsCalculator() {
           const dueDate = item.dueDate
             ? new Date(`${item.dueDate}T00:00:00`).toLocaleDateString('en-GB')
             : 'N/A';
-          const line = `${dueDate}: £${outstanding.toFixed(2)} outstanding`;
+          const line = `${dueDate}: Â£${outstanding.toFixed(2)} outstanding`;
           page.drawText(line, {
             x: 70,
             y,
@@ -346,7 +346,7 @@ export default function RentArrearsCalculator() {
 
       y -= 25;
 
-      page.drawText(`Total Arrears: £${totals.totalOutstanding.toFixed(2)}`, {
+      page.drawText(`Total Arrears: Â£${totals.totalOutstanding.toFixed(2)}`, {
         x: 70,
         y,
         size: 12,
@@ -357,7 +357,7 @@ export default function RentArrearsCalculator() {
       y -= 20;
 
       if (estimatedInterest > 0) {
-        page.drawText(`Interest (8% p.a. for ${daysOutstanding} days): £${estimatedInterest.toFixed(2)}`, {
+        page.drawText(`Interest (8% p.a. for ${daysOutstanding} days): Â£${estimatedInterest.toFixed(2)}`, {
           x: 70,
           y,
           size: 11,
@@ -367,7 +367,7 @@ export default function RentArrearsCalculator() {
 
         y -= 20;
 
-        page.drawText(`TOTAL CLAIM: £${(totals.totalOutstanding + estimatedInterest).toFixed(2)}`, {
+        page.drawText(`TOTAL CLAIM: Â£${(totals.totalOutstanding + estimatedInterest).toFixed(2)}`, {
           x: 70,
           y,
           size: 14,
@@ -395,7 +395,7 @@ export default function RentArrearsCalculator() {
           color: rgb(0.4, 0.4, 0.4),
         });
       } else {
-        page.drawText(`TOTAL CLAIM: £${totals.totalOutstanding.toFixed(2)}`, {
+        page.drawText(`TOTAL CLAIM: Â£${totals.totalOutstanding.toFixed(2)}`, {
           x: 70,
           y,
           size: 14,
@@ -450,7 +450,7 @@ export default function RentArrearsCalculator() {
         secondaryCta={{ label: 'See the Money Claim Pack ->', href: '/products/money-claim' }}
       >
         <p className="mt-4 text-sm text-white/90">
-          Instant calculation • Clear arrears summary • Built to help landlords prepare the next move
+          Instant calculation â€¢ Clear arrears summary â€¢ Built to help landlords prepare the next move
         </p>
       </UniversalHero>
 
@@ -505,7 +505,7 @@ export default function RentArrearsCalculator() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 font-medium">Rent due (£)</label>
+                  <label className="text-sm text-gray-600 font-medium">Rent due (Â£)</label>
                   <Input
                     type="number"
                     value={item.dueAmount}
@@ -516,7 +516,7 @@ export default function RentArrearsCalculator() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 font-medium">Paid (£)</label>
+                  <label className="text-sm text-gray-600 font-medium">Paid (Â£)</label>
                   <Input
                     type="number"
                     value={item.paidAmount}
@@ -564,15 +564,15 @@ export default function RentArrearsCalculator() {
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <p className="text-sm text-gray-600">Total rent due</p>
-                <p className="text-2xl font-bold text-charcoal mt-1">£{totals.totalDue.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-charcoal mt-1">Â£{totals.totalDue.toFixed(2)}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <p className="text-sm text-gray-600">Total paid</p>
-                <p className="text-2xl font-bold text-charcoal mt-1">£{totals.totalPaid.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-charcoal mt-1">Â£{totals.totalPaid.toFixed(2)}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <p className="text-sm text-gray-600">Outstanding arrears</p>
-                <p className="text-2xl font-bold text-red-600 mt-1">£{totals.totalOutstanding.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-red-600 mt-1">Â£{totals.totalOutstanding.toFixed(2)}</p>
               </div>
             </div>
 
@@ -583,12 +583,12 @@ export default function RentArrearsCalculator() {
                     Estimated Interest (8% p.a.)
                   </span>
                   <span className="text-xl font-bold text-warning-700">
-                    £{estimatedInterest.toFixed(2)}
+                    Â£{estimatedInterest.toFixed(2)}
                   </span>
                 </div>
                 <div className="space-y-2 text-xs text-gray-700">
                   <p>
-                    <strong>Calculation:</strong> £{totals.totalOutstanding.toFixed(2)} × 8% × ({daysOutstanding} days ÷ 365) = £{estimatedInterest.toFixed(2)}
+                    <strong>Calculation:</strong> Â£{totals.totalOutstanding.toFixed(2)} Ã— 8% Ã— ({daysOutstanding} days Ã· 365) = Â£{estimatedInterest.toFixed(2)}
                   </p>
                   <p>
                     <strong>From:</strong>{' '}

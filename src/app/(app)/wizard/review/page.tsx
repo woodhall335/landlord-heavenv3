@@ -1677,7 +1677,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.tenancy_agreement_uploaded
                   ? 'Marked as provided in your case facts.'
-                  : 'Not uploaded yet – strongly recommended so the judge can see the contract.'}
+                  : 'Not uploaded yet â€“ strongly recommended so the judge can see the contract.'}
               </p>
             </div>
           </div>
@@ -1693,7 +1693,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.rent_schedule_uploaded
                   ? 'Arrears schedule recorded for the claim.'
-                  : 'Not uploaded yet – courts expect a clear chronology of missed payments.'}
+                  : 'Not uploaded yet â€“ courts expect a clear chronology of missed payments.'}
               </p>
             </div>
           </div>
@@ -1709,7 +1709,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.bank_statements_uploaded
                   ? 'Supporting payment history has been flagged.'
-                  : 'Not flagged yet – optional, but helpful to prove what was paid or missed.'}
+                  : 'Not flagged yet â€“ optional, but helpful to prove what was paid or missed.'}
               </p>
             </div>
           </div>
@@ -1725,7 +1725,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.other_evidence_uploaded
                   ? 'You have flagged additional documents (photos, quotes, correspondence, etc.).'
-                  : 'Not flagged yet – think about emails, texts, photos or reports that support your case.'}
+                  : 'Not flagged yet â€“ think about emails, texts, photos or reports that support your case.'}
               </p>
             </div>
           </div>
@@ -2196,7 +2196,7 @@ function NoticeOnlyReviewContent({
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-3">
                   {item.notApplicable ? (
-                    <span className="text-gray-400 text-xl">—</span>
+                    <span className="text-gray-400 text-xl">â€”</span>
                   ) : item.passed ? (
                     <span className="text-green-500 text-xl">?</span>
                   ) : (

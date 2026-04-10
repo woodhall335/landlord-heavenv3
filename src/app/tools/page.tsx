@@ -72,7 +72,7 @@ export default function ToolsHubPage() {
                     className="hero-btn-primary block text-center"
                     aria-label={`Try ${tool.label}`}
                   >
-                    Try Free Tool ->
+                    Try Free Tool -&gt;
                   </Link>
                 </div>
               ))}
@@ -128,7 +128,7 @@ export default function ToolsHubPage() {
                   className="hero-btn-secondary text-center"
                   aria-label={`Try ${tool.label}`}
                 >
-                  Try Free Tool ->
+                  Try Free Tool -&gt;
                 </Link>
               </div>
             ))}

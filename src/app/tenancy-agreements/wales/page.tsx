@@ -187,7 +187,7 @@ export default function WalesOccupationContractPage() {
             </div>
 
             <div className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-800 mb-5">
-              Updated for 2026 • Renting Homes (Wales) Act 2016 compliant
+              Updated for 2026 â€¢ Renting Homes (Wales) Act 2016 compliant
             </div>
 
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -221,7 +221,7 @@ export default function WalesOccupationContractPage() {
             </div>
 
             <p className="mt-4 text-sm text-gray-600">
-              Instant download • Written statement included • No subscription required
+              Instant download â€¢ Written statement included â€¢ No subscription required
             </p>
           </div>
         </section>
@@ -797,7 +797,7 @@ export default function WalesOccupationContractPage() {
               </Link>
             </div>
             <p className="mt-6 text-sm text-red-100">
-              Instant download • Legally compliant • No subscription required
+              Instant download â€¢ Legally compliant â€¢ No subscription required
             </p>
           </div>
         </section>

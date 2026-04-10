@@ -249,7 +249,7 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 20;
 
-      page.drawText(`Monthly Rent: £${formData.rentAmount || '[amount]'}`, {
+      page.drawText(`Monthly Rent: Â£${formData.rentAmount || '[amount]'}`, {
         x: 50,
         y: yPosition,
         size: 11,
@@ -267,7 +267,7 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 18;
 
-      page.drawText(`Total Outstanding: £${formData.amountOwed || '[amount]'}`, {
+      page.drawText(`Total Outstanding: Â£${formData.amountOwed || '[amount]'}`, {
         x: 50,
         y: yPosition,
         size: 11,
@@ -293,7 +293,7 @@ export default function RentDemandLetterGenerator() {
           })
         : '[Payment Deadline]';
 
-      const para2 = `You are required to pay the outstanding amount of £${formData.amountOwed || '[amount]'} by ${deadlineDate}.`;
+      const para2 = `You are required to pay the outstanding amount of Â£${formData.amountOwed || '[amount]'} by ${deadlineDate}.`;
       const para2Lines = wrapText(para2, width - 100);
 
       para2Lines.forEach((line) => {
@@ -462,7 +462,7 @@ export default function RentDemandLetterGenerator() {
         secondaryCta={{ label: 'See the Full Claim Pack ->', href: '/products/notice-only?product=demand_letter' }}
       >
         <p className="mt-4 text-sm text-white/90">
-          Instant download • Clear wording • Built for landlords chasing arrears • Need examples? See our{' '}
+          Instant download â€¢ Clear wording â€¢ Built for landlords chasing arrears â€¢ Need examples? See our{' '}
           <Link href="/rent-arrears-letter-template" className="underline font-semibold">
             rent arrears letter template guide
           </Link>
@@ -582,7 +582,7 @@ export default function RentDemandLetterGenerator() {
 
                 <div>
                   <label htmlFor="rentAmount" className="block text-sm font-medium text-gray-700">
-                    Monthly Rent Amount (£) <span className="text-error-500">*</span>
+                    Monthly Rent Amount (Â£) <span className="text-error-500">*</span>
                   </label>
                   <input
                     type="number"
@@ -598,7 +598,7 @@ export default function RentDemandLetterGenerator() {
 
                 <div>
                   <label htmlFor="amountOwed" className="block text-sm font-medium text-gray-700">
-                    Total Amount Owed (£) <span className="text-error-500">*</span>
+                    Total Amount Owed (Â£) <span className="text-error-500">*</span>
                   </label>
                   <input
                     type="number"
