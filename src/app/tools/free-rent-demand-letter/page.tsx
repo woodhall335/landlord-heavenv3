@@ -35,17 +35,17 @@ const faqs = [
   {
     question: 'What if the tenant ignores the demand letter?',
     answer:
-      `If the tenant doesn't respond or pay by the deadline, you have several options: (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10, or 11. (2) Start a money claim through the courts to recover the debt (without seeking possession). (3) Continue to pursue payment informally while considering your options. Our Complete Eviction Pack (${completePackPrice}) includes Section 8 notices with compliance checks.`,
+      `If the tenant doesn't respond or pay by the deadline, you have several options: (1) Serve a Section 8 notice seeking possession based on rent arrears grounds 8, 10, or 11. (2) Start a money claim through the courts to recover the debt without seeking possession. (3) Continue to pursue payment informally while considering your options. Our Complete Eviction Pack (${completePackPrice}) includes Section 8 notices with compliance checks.`,
   },
   {
     question: 'Can I charge interest on rent arrears?',
     answer:
-      "Only if your tenancy agreement specifically includes a clause allowing you to charge interest on late rent payments. Check your AST carefully. Even if your agreement includes an interest clause, the rate must be reasonable (typically 3-5% above Bank of England base rate). If there's no interest clause in your tenancy agreement, you cannot charge interest unless and until you obtain a county court judgment (CCJ).",
+      "Only if your tenancy agreement specifically includes a clause allowing you to charge interest on late rent payments. Check your AST carefully. Even if your agreement includes an interest clause, the rate must be reasonable, typically 3-5% above Bank of England base rate. If there's no interest clause in your tenancy agreement, you cannot charge interest unless and until you obtain a county court judgment (CCJ).",
   },
   {
     question: 'Should I send a demand letter before a Section 8 notice?',
     answer:
-      "Yes, it's good practice to send a demand letter before serving a Section 8 notice. Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings. (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay quickly once reminded. (4) It strengthens your case if you proceed to court. Many judges look favorably on landlords who've tried to work with tenants before legal action.",
+      "Yes, it's good practice to send a demand letter before serving a Section 8 notice. It gives the tenant a chance to pay, shows the court you tried to resolve the matter reasonably, and may help you avoid a bigger dispute if the arrears can still be cleared quickly.",
   },
 ];
 
@@ -64,11 +64,12 @@ export default function RentDemandLetterGenerator() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
+
   const upsellConfig = {
     toolName: 'Free Rent Demand Letter Generator',
     toolType: 'generator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: `Upgrade to court-ready pack — ${noticeOnlyPrice}`,
+    ctaLabel: `Upgrade to full money claim pack - ${noticeOnlyPrice}`,
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [
@@ -82,10 +83,9 @@ export default function RentDemandLetterGenerator() {
       'Evidence-ready arrears schedule',
     ],
     description:
-      'If the tenant does not pay, upgrade for a court-ready money claim bundle with forms and evidence templates.',
+      'If the tenant still does not pay, move into the full money claim bundle with the forms and evidence templates you need for the next step.',
   };
 
-  // Set default payment deadline to 14 days from today
   useEffect(() => {
     const defaultDeadline = new Date();
     defaultDeadline.setDate(defaultDeadline.getDate() + 14);
@@ -93,9 +93,7 @@ export default function RentDemandLetterGenerator() {
     setFormData((prev) => ({ ...prev, paymentDeadline: formattedDate }));
   }, []);
 
-  // PDF generation function (called after email captured)
   const generatePDF = useCallback(async () => {
-    // Validate all required fields
     if (!formData.landlordName?.trim()) {
       alert('Please enter your name');
       return;
@@ -121,9 +119,8 @@ export default function RentDemandLetterGenerator() {
 
     try {
       const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
-
       const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([595, 842]); // A4
+      const page = pdfDoc.addPage([595, 842]);
       const { width, height } = page.getSize();
 
       const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
@@ -131,7 +128,6 @@ export default function RentDemandLetterGenerator() {
 
       let yPosition = height - 80;
 
-      // Date
       const todayDate = new Date().toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'long',
@@ -147,7 +143,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 40;
 
-      // Landlord details
       const landlordLines = formData.landlordAddress.split('\n').filter((line) => line.trim());
 
       page.drawText(formData.landlordName || '[Landlord Name]', {
@@ -171,7 +166,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 25;
 
-      // Tenant details
       const tenantLines = formData.tenantAddress.split('\n').filter((line) => line.trim());
 
       page.drawText(formData.tenantName || '[Tenant Name]', {
@@ -195,7 +189,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 30;
 
-      // Salutation
       page.drawText(`Dear ${formData.tenantName || '[Tenant Name]'},`, {
         x: 50,
         y: yPosition,
@@ -205,7 +198,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 30;
 
-      // Subject line
       page.drawText('FORMAL DEMAND FOR PAYMENT OF RENT ARREARS', {
         x: 50,
         y: yPosition,
@@ -215,7 +207,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 30;
 
-      // Letter body
       const wrapText = (text: string, maxWidth: number) => {
         const words = text.split(' ');
         const lines: string[] = [];
@@ -234,7 +225,6 @@ export default function RentDemandLetterGenerator() {
         return lines;
       };
 
-      // Paragraph 1
       const para1 = `I am writing to you regarding the outstanding rent arrears on the property located at ${formData.tenantAddress || '[Property Address]'}.`;
       const para1Lines = wrapText(para1, width - 100);
 
@@ -250,7 +240,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 15;
 
-      // Arrears summary section
       page.drawText('ARREARS SUMMARY:', {
         x: 50,
         y: yPosition,
@@ -260,7 +249,7 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 20;
 
-      page.drawText(`Monthly Rent: £${formData.rentAmount || '[amount]'}`, {
+      page.drawText(`Monthly Rent: �${formData.rentAmount || '[amount]'}`, {
         x: 50,
         y: yPosition,
         size: 11,
@@ -278,7 +267,7 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 18;
 
-      page.drawText(`Total Outstanding: £${formData.amountOwed || '[amount]'}`, {
+      page.drawText(`Total Outstanding: �${formData.amountOwed || '[amount]'}`, {
         x: 50,
         y: yPosition,
         size: 11,
@@ -287,7 +276,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 30;
 
-      // Payment required section
       page.drawText('PAYMENT REQUIRED:', {
         x: 50,
         y: yPosition,
@@ -305,7 +293,7 @@ export default function RentDemandLetterGenerator() {
           })
         : '[Payment Deadline]';
 
-      const para2 = `You are required to pay the outstanding amount of £${formData.amountOwed || '[amount]'} by ${deadlineDate}.`;
+      const para2 = `You are required to pay the outstanding amount of �${formData.amountOwed || '[amount]'} by ${deadlineDate}.`;
       const para2Lines = wrapText(para2, width - 100);
 
       para2Lines.forEach((line) => {
@@ -320,7 +308,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 15;
 
-      // Legal warning (if included)
       if (formData.includeLegalWarning) {
         const legalWarning = `If payment is not received by ${deadlineDate}, I will have no option but to commence legal proceedings to recover the arrears. This may include serving a Section 8 notice seeking possession of the property and/or pursuing a money claim through the courts. You will be liable for all legal costs incurred.`;
         const warningLines = wrapText(legalWarning, width - 100);
@@ -338,8 +325,8 @@ export default function RentDemandLetterGenerator() {
         yPosition -= 15;
       }
 
-      // Financial difficulties paragraph
-      const para3 = 'If you are experiencing financial difficulties, please contact me immediately to discuss payment arrangements. I am willing to work with you to resolve this matter, but I must receive payment or hear from you by the deadline specified above.';
+      const para3 =
+        'If you are experiencing financial difficulties, please contact me immediately to discuss payment arrangements. I am willing to work with you to resolve this matter, but I must receive payment or hear from you by the deadline specified above.';
       const para3Lines = wrapText(para3, width - 100);
 
       para3Lines.forEach((line) => {
@@ -354,7 +341,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 30;
 
-      // Closing
       page.drawText('Yours sincerely,', {
         x: 50,
         y: yPosition,
@@ -364,7 +350,6 @@ export default function RentDemandLetterGenerator() {
       });
       yPosition -= 40;
 
-      // Signature line
       page.drawText('_______________________________', {
         x: 50,
         y: yPosition,
@@ -382,7 +367,6 @@ export default function RentDemandLetterGenerator() {
         color: rgb(0, 0, 0),
       });
 
-      // Footer
       page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.co.uk`, {
         x: 50,
         y: 50,
@@ -391,23 +375,18 @@ export default function RentDemandLetterGenerator() {
         color: rgb(0.5, 0.5, 0.5),
       });
 
-      // Save and download
-const pdfBytes = await pdfDoc.save();
+      const pdfBytes = await pdfDoc.save();
+      const safeBytes = new Uint8Array(pdfBytes);
+      const blob = new Blob([safeBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
 
-// ✅ Make a "real" Uint8Array backed by a normal ArrayBuffer (not SharedArrayBuffer/ArrayBufferLike)
-const safeBytes = new Uint8Array(pdfBytes);
-
-const blob = new Blob([safeBytes], { type: 'application/pdf' });
-const url = URL.createObjectURL(blob);
-
-const link = document.createElement('a');
-link.href = url;
-link.download = 'rent-demand-letter.pdf';
-document.body.appendChild(link);
-link.click();
-link.remove();
-URL.revokeObjectURL(url);
-
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'rent-demand-letter.pdf';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
 
       setGenerated(true);
       setIsGenerating(false);
@@ -417,7 +396,6 @@ URL.revokeObjectURL(url);
       alert('Failed to generate PDF. Please try again.');
     }
   }, [formData]);
-
 
   useEffect(() => {
     if (!generated) return;
@@ -444,13 +422,11 @@ URL.revokeObjectURL(url);
     });
   }, [generated]);
 
-  // Email gate hook - requires email before PDF download
   const gate = useEmailGate({
     source: 'tool:rent-demand-letter',
     onProceed: generatePDF,
   });
 
-  // Handler that checks gate before generating
   const handleGenerate = () => {
     gate.checkGateAndProceed();
   };
@@ -476,36 +452,39 @@ URL.revokeObjectURL(url);
       <UniversalHero
         badge="Free Tool"
         title="Rent Demand Letter Generator"
-        subtitle="Generate a Professional Rent Demand Letter for Unpaid Arrears"
+        subtitle="Create a clear rent demand letter you can send to a tenant who has fallen into arrears."
         align="center"
         hideMedia
         showReviewPill={false}
         showTrustPositioningBar
         showUsageCounter
-        primaryCta={{ label: 'Start Free Generator →', href: '#generator' }}
-        secondaryCta={{ label: 'Get Court-Ready Version →', href: '/products/notice-only?product=demand_letter' }}
+        primaryCta={{ label: 'Start Free Generator ->', href: '#generator' }}
+        secondaryCta={{ label: 'See the Full Claim Pack ->', href: '/products/notice-only?product=demand_letter' }}
       >
-        <p className="mt-4 text-sm text-white/90">Instant download • Basic template • Upgrade for legal compliance • Need examples? See our <Link href="/rent-arrears-letter-template" className="underline font-semibold">rent arrears letter template guide</Link></p>
+        <p className="mt-4 text-sm text-white/90">
+          Instant download � Clear wording � Built for landlords chasing arrears � Need examples? See our{' '}
+          <Link href="/rent-arrears-letter-template" className="underline font-semibold">
+            rent arrears letter template guide
+          </Link>
+        </p>
       </UniversalHero>
 
-      {/* Legal Disclaimer Banner */}
       <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
         <Container>
           <div className="flex items-start gap-3">
             <RiAlertLine className="mt-1 h-6 w-6 shrink-0 text-[#7C3AED]" />
             <div>
-              <p className="text-sm font-semibold text-warning-900">
-                Legal Disclaimer
-              </p>
+              <p className="text-sm font-semibold text-warning-900">Legal Disclaimer</p>
               <p className="text-sm text-warning-800">
-                This free version is not court-ready and is provided for general informational use only. It is not legal advice. For legally validated, court-ready documents, upgrade to the paid version.
+                This free version gives you a basic demand letter for general guidance only. It is not
+                legal advice, and it does not replace a fully prepared claim pack if you need to move
+                into formal recovery action.
               </p>
             </div>
           </div>
         </Container>
       </div>
 
-      {/* Main Content */}
       <div className="py-20 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto">
@@ -514,368 +493,314 @@ URL.revokeObjectURL(url);
                 Generate Your Rent Demand Letter
               </h2>
 
-      <div className="mb-6 rounded-lg border-2 border-primary-200 bg-primary-50 p-5">
-        <div className="flex items-start gap-3">
-          <RiInformationLine className="mt-0.5 h-6 w-6 shrink-0 text-[#7C3AED]" />
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">
-              Need to calculate arrears first?
-            </h3>
-            <p className="text-sm text-gray-700 mb-3">
-              Use our Rent Arrears Calculator to generate a detailed breakdown with interest calculations,
-              then come back here to create the formal demand letter.
-            </p>
-            <a
-              href="/tools/rent-arrears-calculator"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-primary-600 border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 transition-all"
-            >
-              Open Arrears Calculator
-              <RiExternalLinkLine className="h-4 w-4 text-[#7C3AED]" />
-            </a>
-          </div>
-        </div>
-      </div>
+              <div className="mb-6 rounded-lg border-2 border-primary-200 bg-primary-50 p-5">
+                <div className="flex items-start gap-3">
+                  <RiInformationLine className="mt-0.5 h-6 w-6 shrink-0 text-[#7C3AED]" />
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                      Need to calculate arrears first?
+                    </h3>
+                    <p className="text-sm text-gray-700 mb-3">
+                      Use our rent arrears calculator to build a clearer breakdown with interest
+                      calculations, then come back here to turn that into a formal demand letter.
+                    </p>
+                    <a
+                      href="/tools/rent-arrears-calculator"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-primary-600 border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 transition-all"
+                    >
+                      Open Arrears Calculator
+                      <RiExternalLinkLine className="h-4 w-4 text-[#7C3AED]" />
+                    </a>
+                  </div>
+                </div>
+              </div>
 
-      <form className="space-y-6">
-        {/* Landlord Name */}
-        <div>
-          <label
-            htmlFor="landlordName"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Your Name (Landlord) <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="landlordName"
-            value={formData.landlordName}
-            onChange={(e) =>
-              setFormData({ ...formData, landlordName: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="Your full legal name"
-          />
-        </div>
+              <form className="space-y-6">
+                <div>
+                  <label htmlFor="landlordName" className="block text-sm font-medium text-gray-700">
+                    Your Name (Landlord) <span className="text-error-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="landlordName"
+                    value={formData.landlordName}
+                    onChange={(e) => setFormData({ ...formData, landlordName: e.target.value })}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
+                    placeholder="Your full legal name"
+                  />
+                </div>
 
-        {/* Landlord Address */}
-        <div>
-          <label
-            htmlFor="landlordAddress"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Your Address (Landlord) <span className="text-error-500">*</span>
-          </label>
-          <textarea
-            id="landlordAddress"
-            value={formData.landlordAddress}
-            onChange={(e) =>
-              setFormData({ ...formData, landlordAddress: e.target.value })
-            }
-            rows={3}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="Your address including postcode"
-          />
-        </div>
+                <div>
+                  <label
+                    htmlFor="landlordAddress"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Your Address (Landlord) <span className="text-error-500">*</span>
+                  </label>
+                  <textarea
+                    id="landlordAddress"
+                    value={formData.landlordAddress}
+                    onChange={(e) => setFormData({ ...formData, landlordAddress: e.target.value })}
+                    rows={3}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
+                    placeholder="Your address including postcode"
+                  />
+                </div>
 
-        {/* Tenant Name */}
-        <div>
-          <label
-            htmlFor="tenantName"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Tenant Name <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="tenantName"
-            value={formData.tenantName}
-            onChange={(e) =>
-              setFormData({ ...formData, tenantName: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="Tenant's full name"
-          />
-        </div>
+                <div>
+                  <label htmlFor="tenantName" className="block text-sm font-medium text-gray-700">
+                    Tenant Name <span className="text-error-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="tenantName"
+                    value={formData.tenantName}
+                    onChange={(e) => setFormData({ ...formData, tenantName: e.target.value })}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
+                    placeholder="Tenant's full name"
+                  />
+                </div>
 
-        {/* Tenant Address (Property Address) */}
-        <div>
-          <label
-            htmlFor="tenantAddress"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Property Address <span className="text-error-500">*</span>
-          </label>
-          <textarea
-            id="tenantAddress"
-            value={formData.tenantAddress}
-            onChange={(e) =>
-              setFormData({ ...formData, tenantAddress: e.target.value })
-            }
-            rows={3}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="Full property address including postcode"
-          />
-          <p className="mt-1 text-xs text-gray-500">
-            The address of the rental property where arrears accrued
-          </p>
-        </div>
+                <div>
+                  <label htmlFor="tenantAddress" className="block text-sm font-medium text-gray-700">
+                    Property Address <span className="text-error-500">*</span>
+                  </label>
+                  <textarea
+                    id="tenantAddress"
+                    value={formData.tenantAddress}
+                    onChange={(e) => setFormData({ ...formData, tenantAddress: e.target.value })}
+                    rows={3}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
+                    placeholder="Full property address including postcode"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    The address of the rental property where arrears accrued
+                  </p>
+                </div>
 
-        {/* Monthly Rent Amount */}
-        <div>
-          <label
-            htmlFor="rentAmount"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Monthly Rent Amount (£) <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="number"
-            id="rentAmount"
-            value={formData.rentAmount}
-            onChange={(e) =>
-              setFormData({ ...formData, rentAmount: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="e.g., 1200"
-            min="0"
-            step="0.01"
-          />
-        </div>
+                <div>
+                  <label htmlFor="rentAmount" className="block text-sm font-medium text-gray-700">
+                    Monthly Rent Amount (�) <span className="text-error-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    id="rentAmount"
+                    value={formData.rentAmount}
+                    onChange={(e) => setFormData({ ...formData, rentAmount: e.target.value })}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
+                    placeholder="e.g., 1200"
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
 
-        {/* Amount Owed */}
-        <div>
-          <label
-            htmlFor="amountOwed"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Total Amount Owed (£) <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="number"
-            id="amountOwed"
-            value={formData.amountOwed}
-            onChange={(e) =>
-              setFormData({ ...formData, amountOwed: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="e.g., 3600"
-            min="0"
-            step="0.01"
-          />
-        </div>
+                <div>
+                  <label htmlFor="amountOwed" className="block text-sm font-medium text-gray-700">
+                    Total Amount Owed (�) <span className="text-error-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    id="amountOwed"
+                    value={formData.amountOwed}
+                    onChange={(e) => setFormData({ ...formData, amountOwed: e.target.value })}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
+                    placeholder="e.g., 3600"
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
 
-        {/* Periods Covered */}
-        <div>
-          <label
-            htmlFor="periodsCovered"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Rental Periods Covered <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="periodsCovered"
-            value={formData.periodsCovered}
-            onChange={(e) =>
-              setFormData({ ...formData, periodsCovered: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-            placeholder="e.g., October 2024 to December 2024"
-          />
-          <p className="mt-1 text-xs text-gray-500">
-            Specify which months/periods the arrears relate to
-          </p>
-        </div>
+                <div>
+                  <label
+                    htmlFor="periodsCovered"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Rental Periods Covered <span className="text-error-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="periodsCovered"
+                    value={formData.periodsCovered}
+                    onChange={(e) => setFormData({ ...formData, periodsCovered: e.target.value })}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
+                    placeholder="e.g., October 2024 to December 2024"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Specify which months or periods the arrears relate to
+                  </p>
+                </div>
 
-        {/* Payment Deadline */}
-        <div>
-          <label
-            htmlFor="paymentDeadline"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Payment Deadline <span className="text-error-500">*</span>
-          </label>
-          <input
-            type="date"
-            id="paymentDeadline"
-            value={formData.paymentDeadline}
-            onChange={(e) =>
-              setFormData({ ...formData, paymentDeadline: e.target.value })
-            }
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
-          />
-          <p className="mt-1 text-xs text-gray-500">
-            Typically 14 days from today (pre-filled)
-          </p>
-        </div>
+                <div>
+                  <label
+                    htmlFor="paymentDeadline"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Payment Deadline <span className="text-error-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    id="paymentDeadline"
+                    value={formData.paymentDeadline}
+                    onChange={(e) => setFormData({ ...formData, paymentDeadline: e.target.value })}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-200"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Typically 14 days from today, which is pre-filled for you
+                  </p>
+                </div>
 
-        {/* Include Legal Warning */}
-        <div className="flex items-start">
-          <input
-            type="checkbox"
-            id="includeLegalWarning"
-            checked={formData.includeLegalWarning}
-            onChange={(e) =>
-              setFormData({ ...formData, includeLegalWarning: e.target.checked })
-            }
-            className="mt-1 mr-3"
-          />
-          <label htmlFor="includeLegalWarning" className="text-sm text-gray-700">
-            <span className="font-medium">Include legal warning</span>
-            <span className="block text-xs text-gray-500 mt-1">
-              Warns tenant of potential legal proceedings if payment not received
-            </span>
-          </label>
-        </div>
+                <div className="flex items-start">
+                  <input
+                    type="checkbox"
+                    id="includeLegalWarning"
+                    checked={formData.includeLegalWarning}
+                    onChange={(e) =>
+                      setFormData({ ...formData, includeLegalWarning: e.target.checked })
+                    }
+                    className="mt-1 mr-3"
+                  />
+                  <label htmlFor="includeLegalWarning" className="text-sm text-gray-700">
+                    <span className="font-medium">Include legal warning</span>
+                    <span className="block text-xs text-gray-500 mt-1">
+                      Warn the tenant that formal recovery action may follow if payment is not made
+                    </span>
+                  </label>
+                </div>
 
-        {/* Generate Button */}
-        <button
-          type="button"
-          onClick={handleGenerate}
-          disabled={!isFormValid || isGenerating}
-          className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isGenerating
-            ? 'Generating Letter...'
-            : 'Generate Free Letter'}
-        </button>
+                <button
+                  type="button"
+                  onClick={handleGenerate}
+                  disabled={!isFormValid || isGenerating}
+                  className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isGenerating ? 'Generating Letter...' : 'Generate Free Letter'}
+                </button>
 
-        {generated && (
-          <div className="rounded-lg bg-success-50 border border-success-200 p-4 space-y-4">
-            <p className="text-sm text-success-800 font-medium">
-              ✓ Demand letter generated successfully! Your PDF has been downloaded.
-            </p>
+                {generated && (
+                  <div className="rounded-lg bg-success-50 border border-success-200 p-4 space-y-4">
+                    <p className="text-sm text-success-800 font-medium">
+                      Your demand letter has been generated and downloaded successfully.
+                    </p>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
-              <h3 className="font-semibold text-gray-900">What happens next</h3>
-              <ol className="mt-2 space-y-2 text-sm text-gray-700 list-decimal list-inside">
-                <li>Serve the demand letter and keep proof of service.</li>
-                <li>Allow the stated deadline to expire.</li>
-                <li>If unpaid, prepare notice/court documents using the recommended pack.</li>
-              </ol>
-            </div>
+                    <div className="rounded-lg border border-gray-200 bg-white p-4">
+                      <h3 className="font-semibold text-gray-900">What happens next</h3>
+                      <ol className="mt-2 space-y-2 text-sm text-gray-700 list-decimal list-inside">
+                        <li>Serve the demand letter and keep proof of service.</li>
+                        <li>Allow the stated deadline to expire.</li>
+                        <li>If the arrears remain unpaid, move into the next notice or claim step.</li>
+                      </ol>
+                    </div>
 
-            <NextStepWidget stageHint="demand_sent" location="tool_result" />
+                    <NextStepWidget stageHint="demand_sent" location="tool_result" />
 
-            <div className="mt-4">
-              <ToolUpsellCard {...upsellConfig} />
-            </div>
-          </div>
-        )}
-      </form>
+                    <div className="mt-4">
+                      <ToolUpsellCard {...upsellConfig} />
+                    </div>
+                  </div>
+                )}
+              </form>
 
-      <div className="mt-8">
-        <ToolUpsellCard {...upsellConfig} />
-      </div>
+              <div className="mt-8">
+                <ToolUpsellCard {...upsellConfig} />
+              </div>
 
-      {/* Educational Content */}
-      <div className="mt-12 space-y-8">
-        {/* Section 1 */}
-        <div className="rounded-xl bg-primary-50 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-gray-900">
-            When to Send a Rent Demand Letter
-          </h3>
-          <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
-            <p>
-              A rent demand letter (also called an arrears demand letter or formal rent demand) is a
-              written notice to your tenant requesting payment of overdue rent. It's an important
-              first step before taking legal action.
-            </p>
-            <p>
-              <strong>You should send a demand letter:</strong>
-            </p>
-            <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>
-                <strong>Before serving Section 8 notice:</strong> If you're using grounds 8, 10, or 11
-                (rent arrears grounds), it's good practice to demand payment first
-              </li>
-              <li>
-                <strong>Before money claim:</strong> The Pre-Action Protocol for Debt Claims requires
-                you to give the tenant a chance to pay before starting court proceedings
-              </li>
-              <li>
-                <strong>As evidence for court:</strong> If the case goes to court, the demand letter
-                shows you tried to resolve the matter before legal action
-              </li>
-              <li>
-                <strong>To maintain good relations:</strong> Sometimes tenants have genuine reasons for
-                late payment. A formal letter gives them a chance to explain or arrange payment
-              </li>
-            </ul>
-            <p className="text-primary-700 font-semibold mt-4">
-              💡 Tip: Always keep proof of service (recorded delivery receipt, email confirmation, or
-              witness statement if hand-delivered). This evidence may be crucial in court.
-            </p>
-          </div>
-        </div>
+              <div className="mt-12 space-y-8">
+                <div className="rounded-xl bg-primary-50 p-6">
+                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                    When to Send a Rent Demand Letter
+                  </h3>
+                  <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
+                    <p>
+                      A rent demand letter is a written notice asking the tenant to clear overdue rent.
+                      It is often the first sensible formal step when arrears start to build.
+                    </p>
+                    <p>
+                      <strong>You should usually send one:</strong>
+                    </p>
+                    <ul className="list-disc list-inside space-y-1 ml-4">
+                      <li>
+                        <strong>Before serving a Section 8 notice:</strong> if you may rely on rent
+                        arrears grounds, it helps to show you first asked for payment clearly
+                      </li>
+                      <li>
+                        <strong>Before a money claim:</strong> the Pre-Action Protocol for Debt Claims
+                        expects you to give the tenant a chance to pay before proceedings start
+                      </li>
+                      <li>
+                        <strong>As part of your evidence:</strong> if the case reaches court, the letter
+                        helps show that you tried to resolve matters reasonably
+                      </li>
+                      <li>
+                        <strong>To keep the door open to payment:</strong> some tenants will pay once the
+                        arrears are set out properly in writing
+                      </li>
+                    </ul>
+                    <p className="text-primary-700 font-semibold mt-4">
+                      Tip: Always keep proof of service, such as a postage receipt, email trail, or
+                      witness note if the letter is hand-delivered.
+                    </p>
+                  </div>
+                </div>
 
-        {/* Section 2 */}
-        <div className="rounded-xl bg-blue-50 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-gray-900">
-            How to Serve a Demand Letter
-          </h3>
-          <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
-            <p>
-              Proper service is crucial. The tenant must actually receive the letter for it to be
-              effective. Here are the recommended methods:
-            </p>
+                <div className="rounded-xl bg-blue-50 p-6">
+                  <h3 className="mb-4 text-xl font-semibold text-gray-900">
+                    How to Serve a Demand Letter
+                  </h3>
+                  <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
+                    <p>
+                      The letter needs to reach the tenant properly if you want it to carry weight later.
+                      These are the usual service options.
+                    </p>
 
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">
-                1. First Class Post or Recorded Delivery (Recommended)
-              </h4>
-              <p>
-                Send the letter by first class post or, better yet, recorded delivery. Keep the proof
-                of postage receipt. The letter is deemed served 2 days after posting (if first class).
-                Recorded delivery gives you proof of delivery.
-              </p>
-            </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-2">
+                        1. First Class Post or Recorded Delivery
+                      </h4>
+                      <p>
+                        Post the letter and keep the proof of postage. Recorded delivery can help if you
+                        want stronger evidence that it arrived.
+                      </p>
+                    </div>
 
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">
-                2. Email (If Tenancy Agreement Allows)
-              </h4>
-              <p>
-                Check if your tenancy agreement specifies that notices can be served by email. If so,
-                send the letter as a PDF attachment and keep a copy of the sent email. Consider
-                requesting a read receipt.
-              </p>
-            </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-2">
+                        2. Email, if Your Tenancy Agreement Allows It
+                      </h4>
+                      <p>
+                        If the tenancy agreement allows service by email, send the letter as a PDF and
+                        keep a copy of the message you sent.
+                      </p>
+                    </div>
 
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">
-                3. Hand Delivery
-              </h4>
-              <p>
-                You can hand-deliver the letter to the tenant personally or through the letterbox.
-                If possible, take a witness with you who can sign a statement confirming delivery.
-                Take a dated photo of the letter going through the letterbox if hand-delivering.
-              </p>
-            </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-2">3. Hand Delivery</h4>
+                      <p>
+                        You can hand the letter to the tenant or deliver it through the letterbox. If
+                        possible, take a witness and keep a dated record of how it was served.
+                      </p>
+                    </div>
 
-            <p className="text-warning-700 font-semibold mt-4">
-              ⚠️ Important: Always keep copies of the demand letter and proof of service. You may
-              need these as evidence if you proceed to Section 8 notice or money claim proceedings.
-            </p>
-          </div>
-        </div>
-
-      </div>
+                    <p className="text-warning-700 font-semibold mt-4">
+                      Important: Keep copies of the demand letter and proof of service. You may need
+                      both later if the matter moves into a Section 8 notice or money claim.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </Container>
       </div>
 
       <FAQSection
-        title="Frequently Asked Questions"
+        title="Rent Demand Letter FAQs For Landlords"
         faqs={faqs}
         showContactCTA={false}
         variant="white"
       />
 
-      {/* Related Resources */}
       <Container className="pb-12">
         <RelatedLinks
           title="Related Resources"
@@ -888,7 +813,6 @@ URL.revokeObjectURL(url);
         />
       </Container>
 
-      {/* Email Gate Modal */}
       {gate.showGate && (
         <ToolEmailGate
           toolName="Rent Demand Letter"
@@ -900,5 +824,3 @@ URL.revokeObjectURL(url);
     </div>
   );
 }
-
-

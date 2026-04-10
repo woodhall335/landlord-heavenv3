@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Money Claim Pack 2026 for England Landlords | ${price}`,
     description:
-      "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs, and other tenant debts. Includes Form N1, a Letter Before Claim, an interest calculator, and court-ready guidance.",
+      "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs, and other tenant debts. Includes Form N1, a Letter Before Claim, an interest calculator, and practical guidance on issuing the claim.",
     url: getCanonicalUrl('/products/money-claim'),
   },
   alternates: {
@@ -225,7 +225,7 @@ export default async function MoneyClaimPage() {
                   <h3 className="text-xl font-bold text-charcoal">Particulars of Claim</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
-                  Ask Heaven drafts a clear, court-ready Particulars of Claim document covering:
+                  Ask Heaven helps draft a clear Particulars of Claim document covering:
                 </p>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start gap-2">
@@ -494,7 +494,7 @@ export default async function MoneyClaimPage() {
       </section>
 
       <FAQSection
-        title="Frequently Asked Questions"
+        title="Money claim FAQs for landlords"
         faqs={faqs}
         includeSchema={false}
         showContactCTA={false}

@@ -27,7 +27,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Claim Cleaning Costs from Tenant 2026 | End of Tenancy Claims',
   description:
-    'Recover cleaning and rubbish removal costs from tenants. What qualifies as claimable and how to make a successful court claim.',
+    'Plain-English landlord guide to claiming cleaning and rubbish removal costs after a tenancy ends, including what you can prove and how to prepare the claim.',
   keywords: [
     'tenant cleaning costs',
     'end of tenancy cleaning claim',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Claim Cleaning Costs from Tenant 2026 | End of Tenancy Claims',
     description:
-      'Landlord guide to recovering excessive cleaning and rubbish removal costs from tenants through the courts.',
+      'Landlord guide to recovering cleaning and rubbish removal costs where the property was left in a worse condition than check-in.',
     type: 'article',
     url: getCanonicalUrl('/money-claim-cleaning-costs'),
   },
@@ -77,7 +77,7 @@ export default function MoneyClaimCleaningCostsPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim for Cleaning Costs"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If a tenant leaves the property filthy or full of rubbish, this guide helps you work out what you can fairly claim, what evidence you need, and how to present it properly."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_cleaning_costs' }}
           showTrustPositioningBar
@@ -113,7 +113,7 @@ export default function MoneyClaimCleaningCostsPage() {
                   href="/products/money-claim?reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
                   className="inline-flex items-center justify-center gap-2 bg-white text-teal-800 font-semibold py-4 px-8 rounded-xl hover:bg-teal-50 transition-colors"
                 >
-                  Start Cleaning Costs Claim
+                  Start cleaning costs claim
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -229,11 +229,11 @@ export default function MoneyClaimCleaningCostsPage() {
                   What You Cannot Claim
                 </h3>
                 <ul className="space-y-2 text-gray-700 text-sm">
-                  <li>• Routine between-tenancy cleaning (normal turnover)</li>
-                  <li>• Cleaning to a higher standard than at check-in</li>
-                  <li>• Normal dust accumulation during the tenancy</li>
-                  <li>• Cleaning if no check-in inventory exists to prove original standard</li>
-                  <li>• Items you would clean anyway regardless of tenant</li>
+                  <li>Routine between-tenancy cleaning as part of normal turnover</li>
+                  <li>Cleaning to a higher standard than the property was at check-in</li>
+                  <li>Normal dust or ordinary day-to-day use during the tenancy</li>
+                  <li>Cleaning where you cannot prove the original condition at move-in</li>
+                  <li>Work you would have carried out anyway before reletting</li>
                 </ul>
               </div>
 
@@ -268,8 +268,9 @@ export default function MoneyClaimCleaningCostsPage() {
               </h2>
 
               <p className="text-gray-600 mb-8">
-                Cleaning claims succeed or fail on evidence. You must prove the property
-                was clean at check-in and dirty at check-out - without both, courts may
+                Cleaning claims succeed or fail on evidence. You need to show the property
+                was in a better condition at check-in than it was at check-out. Without
+                evidence of both, courts may
                 reject your claim.
               </p>
 
@@ -542,7 +543,7 @@ export default function MoneyClaimCleaningCostsPage() {
                   className="inline-flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700"
                 >
                   <FileText className="w-4 h-4" />
-                  Start Cleaning Costs Claim
+                  Start cleaning costs claim
                 </Link>
               </div>
             </div>
@@ -554,7 +555,7 @@ export default function MoneyClaimCleaningCostsPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl font-bold mb-6">
-                Ready to Recover Your Cleaning Costs?
+                Ready to recover your cleaning costs?
               </h2>
               <p className="text-xl text-teal-100 mb-8">
                 Our Money Claim Pack walks you through documenting the mess, calculating
@@ -565,7 +566,7 @@ export default function MoneyClaimCleaningCostsPage() {
                   href="/products/money-claim?reason=cleaning&topic=debt&src=seo_money_claim_cleaning_costs"
                   className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 font-semibold py-4 px-8 rounded-xl hover:bg-teal-50 transition-colors"
                 >
-                  Start Cleaning Costs Claim
+                  Start cleaning costs claim
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -623,7 +624,7 @@ export default function MoneyClaimCleaningCostsPage() {
 
         {/* FAQ Section */}
         <FAQSection
-          title="Cleaning Costs Claims: Frequently Asked Questions"
+          title="Cleaning costs claims FAQs for landlords"
           faqs={cleaningCostsFAQs}
           showContactCTA={false}
           variant="white"

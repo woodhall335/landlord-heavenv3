@@ -108,7 +108,7 @@ const faqs = [
 export default function MoneyClaimWallDamagePage() {
   const hero = {
     ...moneyClaimSupportHeroConfig,
-    trustText: 'Solicitor-grade | Compliance-checked | Court-ready',
+    trustText: 'Landlord-focused | Evidence-led | Repair cost guidance',
     primaryCta: {
       label: 'View money claim guide ->',
       href: '/money-claim',
@@ -119,7 +119,7 @@ export default function MoneyClaimWallDamagePage() {
     },
     title: 'Claim Tenant Wall & Door Damage Properly',
     subtitle:
-      'Create a solicitor-grade, compliance-checked damages claim backed by evidence and clear cost schedules.',
+      'If a tenant has left holes, broken doors, or damaged fixtures behind, this guide helps you separate fair wear from genuine damage and build a clearer repair-cost claim.',
   };
 
   return (
@@ -481,7 +481,7 @@ export default function MoneyClaimWallDamagePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Wall and door damage FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -512,6 +512,5 @@ export default function MoneyClaimWallDamagePage() {
     </>
   );
 }
-
 
 

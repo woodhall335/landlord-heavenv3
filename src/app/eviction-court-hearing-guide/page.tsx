@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Eviction Court Hearing Guide | Bundle, Evidence and What to Expect | LandlordHeaven',
   description:
-    'A plain-English eviction court hearing guide for landlords in England.',
+    'Plain-English landlord guide to eviction court hearings in England, including bundle preparation, evidence, what judges focus on, and what happens next.',
   alternates: {
     canonical,
   },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title:
       'Eviction Court Hearing Guide | Bundle, Evidence and What to Expect | LandlordHeaven',
     description:
-      'Prepare your eviction hearing file, understand what judges usually focus on, and plan what happens after the hearing.',
+      'Landlord guide to preparing an eviction hearing file, understanding what judges focus on, and planning what happens after the hearing.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -185,8 +185,8 @@ export default function Page() {
 
       <UniversalHero
         title="Eviction Court Hearing Guide"
-        subtitle="Prepare your hearing file, understand what the judge usually focuses on, and plan your next move before hearing day."
-        primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
+        subtitle="If your case is heading to a hearing, this guide helps you prepare the bundle properly, understand what the judge is likely to focus on, and plan the next step before the day arrives."
+        primaryCta={{ label: 'Start complete eviction pack', href: '/products/complete-pack' }}
         secondaryCta={{ label: 'Need notice drafting first?', href: '/products/notice-only' }}
         mediaSrc="/images/wizard-icons/07-review-finish.png"
         mediaAlt="Eviction court hearing guide icon"
@@ -645,13 +645,13 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Eviction Court Hearing FAQs" />
+        <FAQSection faqs={faqs} title="Eviction court hearing FAQs" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Hearing-stage eviction work rewards preparation more than speed. The
               landlord who arrives with a clean chronology, a focused bundle, and a clear

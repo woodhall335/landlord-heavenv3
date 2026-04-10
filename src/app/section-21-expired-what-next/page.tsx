@@ -151,9 +151,9 @@ export default function Section21ExpiredPage() {
 
         <UniversalHero
           title="Section 21 Expired: What to Do Next"
-          subtitle="If your Section 21 notice has expired and the tenant is still in the property, the next step is usually the court possession route. Here is what England landlords should do next, what to avoid, and when the N5B route may be relevant."
+          subtitle="If your Section 21 has expired and the tenant is still in the property, the next step is usually the court route. This guide shows what to do next, what to avoid, and when the N5B route may fit."
           primaryCta={{
-            label: `Start Complete Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
+            label: `Start complete eviction pack - ${PRODUCTS.complete_pack.displayPrice}`,
             href: completePackProductHref,
           }}
           secondaryCta={{ label: 'Jump to key steps', href: '#next-steps' }}
@@ -167,7 +167,7 @@ export default function Section21ExpiredPage() {
               <SeoPageContextPanel pathname="/section-21-expired-what-next" className="mb-6" />
               <FunnelCta
                 title="Move to possession order support now"
-                subtitle="When a Section 21 expires, the next step is usually the court route. We can help you prepare the full pack."
+                subtitle="When a Section 21 expires, landlords usually need to move into the court stage with a cleaner file and clearer route plan."
                 primaryHref={completePackProductHref}
                 primaryText="Get complete pack"
                 primaryDataCta="complete-pack"
@@ -293,7 +293,7 @@ export default function Section21ExpiredPage() {
             <div className="max-w-4xl mx-auto">
               <FunnelCta
                 title="Ready to file accelerated possession?"
-                subtitle="Avoid delay by preparing the court bundle correctly from the start."
+                subtitle="Avoid delay by preparing the court bundle properly from the start."
                 primaryHref="/products/complete-pack"
                 primaryText="Start complete eviction pack"
                 primaryDataCta="complete-pack"
@@ -706,7 +706,7 @@ export default function Section21ExpiredPage() {
                 jurisdiction="england"
                 pagePath="/section-21-expired-what-next"
                 title="Ready to Move to Possession?"
-                description="Get the court-stage documents, route guidance and clearer next steps you need after your Section 21 expires."
+              description="Get the court-stage documents, route guidance, and practical next steps you need after your Section 21 expires."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

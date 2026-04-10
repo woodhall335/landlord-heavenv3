@@ -191,8 +191,8 @@ export default function Page() {
 
       <UniversalHero
         title="How to Serve a Section 8 Notice"
-        subtitle="A practical landlord guide to choosing grounds carefully, serving the notice properly, and preparing the evidence needed for a stronger possession case."
-        primaryCta={{ label: 'View Section 8 Notice Pack', href: noticeOnlyProductLink }}
+        subtitle="This guide shows how landlords serve a Section 8 notice properly by choosing the right grounds first, handling service carefully, and keeping the evidence file in shape for court."
+        primaryCta={{ label: 'View Section 8 notice pack', href: noticeOnlyProductLink }}
         secondaryCta={{ label: 'Read the Section 8 grounds guide', href: '/section-8-grounds-explained' }}
         mediaSrc="/images/wizard-icons/14-section-8.png"
         mediaAlt="Section 8 notice service guide icon"
@@ -640,13 +640,13 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Serve Section 8 Notice FAQs" />
+        <FAQSection faqs={faqs} title="Serve Section 8 notice FAQs" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
 
             <p className="mt-4 leading-7 text-gray-700">
               Section 8 service usually works best when the landlord treats the notice as part of one

@@ -531,7 +531,7 @@ export default async function AskHeavenPage({
 
       {/* SSR FAQ Section */}
       <FAQSection
-        title="Frequently Asked Questions"
+        title="FAQs For Landlords"
         faqs={faqItems}
         showContactCTA={false}
         variant="gray"
@@ -539,3 +539,4 @@ export default async function AskHeavenPage({
     </>
   );
 }
+

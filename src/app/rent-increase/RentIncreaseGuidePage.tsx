@@ -208,7 +208,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
           <div className="mx-auto max-w-5xl">
             <FAQSection
               faqs={config.faqs}
-              title="Frequently asked questions"
+              title="FAQs for landlords"
               showContactCTA={false}
               variant="white"
             />
@@ -235,3 +235,4 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
     </div>
   );
 }
+

@@ -129,7 +129,7 @@ export default function MoneyClaimFormerTenantPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim Against a Former Tenant"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If the tenant has already gone, you can still pursue arrears, damage, or other debts. This guide helps you think through tracing, service, and whether the claim is worth it."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_former_tenant' }}
           showTrustPositioningBar
@@ -379,7 +379,7 @@ export default function MoneyClaimFormerTenantPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Former tenant claim FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -410,5 +410,4 @@ export default function MoneyClaimFormerTenantPage() {
     </>
   );
 }
-
 

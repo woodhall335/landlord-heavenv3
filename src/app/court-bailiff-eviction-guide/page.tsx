@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Court Bailiff Eviction Guide | County Court Enforcement for Landlords | LandlordHeaven',
   description:
-    'A plain-English court bailiff eviction guide for landlords in England.',
+    'Plain-English landlord guide to county court bailiff eviction in England, including enforcement timing, delay points, and what to prepare after a possession order.',
   alternates: {
     canonical,
   },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title:
       'Court Bailiff Eviction Guide | County Court Enforcement for Landlords | LandlordHeaven',
     description:
-      'Understand county court bailiff enforcement, timing, common delay points, and what landlords should prepare after a possession order.',
+      'Landlord guide to county court bailiff enforcement, timing, delay points, and what to prepare after a possession order.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',

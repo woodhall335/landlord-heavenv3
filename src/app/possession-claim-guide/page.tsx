@@ -30,7 +30,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Possession Claim Guide | How Landlords Apply for Court Possession',
   description:
-    'Landlord guide to possession claims in England. Understand N5 and N5B, court fees, timelines, hearings, and what paperwork landlords usually need before applying.',
+    'Plain-English landlord guide to possession claims in England, including N5, N5B, court fees, timelines, hearings, and the paperwork landlords usually need before applying.',
   keywords: [
     'possession claim',
     'court possession order',
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Possession Claim Guide | Court Possession Process for Landlords',
     description:
-      'Step-by-step landlord guide to court possession claims, including N5, N5B, court fees, hearing stages, and what happens after notice expires.',
+      'Landlord guide to the court possession process, including N5, N5B, hearing stages, and what usually happens after notice expires.',
     type: 'article',
     url: canonical,
   },
@@ -104,7 +104,7 @@ export default function PossessionClaimGuidePage() {
     '@type': 'WebPage',
     name: 'Possession Claim Guide',
     description:
-      'Landlord guide to applying for court possession in England, including N5 and N5B routes, court stages, and file preparation.',
+      'Plain-English landlord guide to applying for court possession in England, including N5 and N5B routes, court stages, and file preparation.',
     url: canonical,
   };
 

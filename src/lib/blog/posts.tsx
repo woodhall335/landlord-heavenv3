@@ -79,7 +79,7 @@ const allBlogPosts: BlogPost[] = [
       { id: 'rent-increases', title: 'Rent Increase Rules', level: 2 },
       { id: 'pet-keeping', title: 'Pets and Property Rights', level: 2 },
       { id: 'property-portal', title: 'Property Portal & Ombudsman', level: 2 },
-      { id: 'why-act-now', title: 'Why You Must Act Now', level: 2 },
+      { id: 'why-act-now', title: 'Why landlords need to review cases now', level: 2 },
       { id: 'renters-reform-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['what-is-section-21-notice', 'section-21-vs-section-8', 'how-long-does-eviction-take-uk'],
@@ -89,7 +89,7 @@ const allBlogPosts: BlogPost[] = [
           The <strong>Renters Reform Bill</strong>—now enacted as the <strong>Renters&apos; Rights Act 2025</strong>—represents
           the most significant overhaul of private rental law in England since the Housing Act 1988. For landlords, this
           legislation fundamentally changes how you manage tenancies, evict problem tenants, and protect your property
-          investments. Understanding these changes isn&apos;t optional—it&apos;s essential for your financial survival.
+          investments. Understanding the new framework matters because it affects how you regain possession, increase rent, and manage risk across the whole tenancy.
         </p>
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
@@ -98,7 +98,7 @@ const allBlogPosts: BlogPost[] = [
             <strong>Section 21 no-fault evictions end on 1 May 2026.</strong> If you have any tenancies where you may
             need to regain possession, you must serve your Section 21 notice before <strong>30 April 2026</strong>.
             After this date, you&apos;ll only be able to evict using Section 8, which requires proving specific grounds.
-            <strong> Do not wait—start proceedings now.</strong>
+            <strong> If you think you may need possession, review the tenancy now and decide the route early.</strong>
           </p>
         </div>
 
@@ -512,17 +512,18 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 my-8">
-          <h3 className="font-semibold text-gray-900 mb-3">Take Action Today</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">What this means for landlords now</h3>
           <p className="text-gray-700 mb-4">
-            Don&apos;t wait until April 2026 when everyone is scrambling. Generate your court-ready
-            Section 21 notice now and preserve your options before the ban takes effect.
+            If you still need to rely on a Section 21 route before the April 2026 deadline, it
+            makes sense to get your notice prepared early and keep your options open while that
+            route is still available.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link
               href="/products/notice-only"
               className="inline-flex items-center bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              {`Get Section 21 Notice - ${PRODUCTS.notice_only.displayPrice}`}
+              {`Prepare Section 21 notice - ${PRODUCTS.notice_only.displayPrice}`}
             </Link>
             <Link
               href="/products/complete-pack"
@@ -630,7 +631,7 @@ const allBlogPosts: BlogPost[] = [
     slug: 'what-is-section-21-notice',
     title: 'Section 21 Notice Explained: Complete Guide for UK Landlords (2026)',
     description: 'Everything you need to know about Section 21 no-fault eviction notices, including how to serve one correctly before the 2026 ban takes effect.',
-    metaDescription: 'Learn what a Section 21 notice is, how to serve one correctly, and why you must act before the May 2026 ban. Complete guide for UK landlords.',
+    metaDescription: 'Learn what a Section 21 notice is, how to serve one correctly, and how landlords should think about the route before the May 2026 ban. Complete guide for UK landlords.',
     date: '2026-01-02',
     updatedDate: '2026-01-02',
     readTime: '10 min read',
@@ -980,16 +981,17 @@ const allBlogPosts: BlogPost[] = [
           </div>
         </div>
 
-        <h2>Next Steps</h2>
+        <h2>What to do next</h2>
 
         <p>
-          If you&apos;re considering using Section 21, time is running out. With the ban approaching
-          in May 2026, acting now gives you the best chance of a smooth eviction process.
+          If you are weighing up Section 21, start by checking whether it still fits your timing,
+          paperwork, and possession plan. The earlier you check the route, the easier it is to
+          avoid delays later.
         </p>
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Generate Court-Ready Section 21 Notice</Link></li>
+            Prepare Section 21 notice</Link></li>
           <li><Link href="/blog/section-21-vs-section-8" className="text-primary hover:underline">
             Compare Section 21 vs Section 8</Link></li>
           <li><Link href="/blog/how-long-does-eviction-take-uk" className="text-primary hover:underline">
@@ -1288,7 +1290,7 @@ const allBlogPosts: BlogPost[] = [
           </div>
         </div>
 
-        <h2>Next Steps</h2>
+        <h2>What to do next</h2>
 
         <p>
           Whether you choose Section 21, Section 8, or both, getting the notice right is crucial.
@@ -1611,13 +1613,13 @@ const allBlogPosts: BlogPost[] = [
         <h2>Next Steps</h2>
 
         <p>
-          Ready to serve your eviction notice? Make sure you have a valid, court-ready document
-          to avoid rejection and delays.
+          If you are ready to serve notice, focus on getting the route, dates, and evidence right
+          first. That usually saves more time than rushing into service with the wrong paperwork.
         </p>
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            {`Get Court-Ready Eviction Notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
+            {`Prepare eviction notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Complete Section 21 Guide</Link></li>
           <li><Link href="/blog/how-long-does-eviction-take-uk" className="text-primary hover:underline">
@@ -2508,7 +2510,7 @@ const allBlogPosts: BlogPost[] = [
   {
     slug: 'england-section-21-process',
     title: 'Section 21 Eviction Process Explained (England, 2026)',
-    description: 'Step-by-step guide to the Section 21 eviction process in England. Learn the requirements, timeline, court procedures, and why you must act before May 2026 when Section 21 is abolished.',
+    description: 'Step-by-step guide to the Section 21 eviction process in England, including requirements, timeline, court procedure, and how landlords should plan ahead before the May 2026 abolition.',
     metaDescription: 'Complete Section 21 eviction process guide for England. Step-by-step instructions, timeline, court forms, and deadline warning. Section 21 ends May 2026.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',
@@ -7945,10 +7947,10 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Get Court-Ready Documents</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Get the documents you need for the court stage</h3>
           <p className="text-gray-700 mb-6">
-            Our Complete Eviction Pack includes not just the notice, but all court forms and
-            supporting documents you need for your possession hearing. Don&apos;t go to court unprepared.
+            Our Complete Eviction Pack includes the notice, court forms, and supporting documents
+            landlords usually need once the case moves into the possession hearing stage.
           </p>
           <Link
             href="/products/complete-pack"
@@ -35263,7 +35265,7 @@ const allBlogPosts: BlogPost[] = [
       { id: 'management', title: 'Managing Student Properties', level: 2 },
       { id: 'summer-periods', title: 'Managing Summer Periods', level: 2 },
       { id: 'returns', title: 'Maximising Returns', level: 2 },
-      { id: 'faqs', title: 'Frequently Asked Questions', level: 2 },
+      { id: 'faqs', title: 'FAQs for landlords', level: 2 },
     ],
     relatedPosts: ['uk-guarantor-agreements-guide', 'uk-hmo-management-guide', 'uk-tenant-referencing-guide'],
     content: (
@@ -35653,7 +35655,7 @@ const allBlogPosts: BlogPost[] = [
           </p>
         </div>
 
-        <h2 id="faqs">Frequently Asked Questions</h2>
+        <h2 id="faqs">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -35740,7 +35742,7 @@ const allBlogPosts: BlogPost[] = [
       { id: 'safety-compliance', title: 'Safety Compliance', level: 2 },
       { id: 'insurance', title: 'Insurance Requirements', level: 2 },
       { id: 'management', title: 'Management Considerations', level: 2 },
-      { id: 'faqs', title: 'Frequently Asked Questions', level: 2 },
+      { id: 'faqs', title: 'FAQs for landlords', level: 2 },
     ],
     relatedPosts: ['uk-landlord-licensing-guide', 'uk-property-marketing-guide', 'uk-landlord-insurance-guide'],
     content: (
@@ -36146,7 +36148,7 @@ const allBlogPosts: BlogPost[] = [
           aspectRatio="hero"
         />
 
-        <h2 id="faqs">Frequently Asked Questions</h2>
+        <h2 id="faqs">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -36233,7 +36235,7 @@ const allBlogPosts: BlogPost[] = [
       { id: 'finding-tenants', title: 'Finding Corporate Tenants', level: 2 },
       { id: 'pricing-strategy', title: 'Pricing Strategy', level: 2 },
       { id: 'management', title: 'Property Management', level: 2 },
-      { id: 'faqs', title: 'Frequently Asked Questions', level: 2 },
+      { id: 'faqs', title: 'FAQs for landlords', level: 2 },
     ],
     relatedPosts: ['uk-property-marketing-guide', 'uk-tenant-referencing-guide', 'uk-furnished-vs-unfurnished-guide'],
     content: (
@@ -36625,7 +36627,7 @@ const allBlogPosts: BlogPost[] = [
           aspectRatio="hero"
         />
 
-        <h2 id="faqs">Frequently Asked Questions</h2>
+        <h2 id="faqs">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -36713,7 +36715,7 @@ const allBlogPosts: BlogPost[] = [
       { id: 'scaling', title: 'Scaling Operations', level: 2 },
       { id: 'risk-management', title: 'Risk Management', level: 2 },
       { id: 'exit-planning', title: 'Exit Planning', level: 2 },
-      { id: 'faqs', title: 'Frequently Asked Questions', level: 2 },
+      { id: 'faqs', title: 'FAQs for landlords', level: 2 },
     ],
     relatedPosts: ['uk-buy-to-let-guide', 'uk-landlord-licensing-guide', 'uk-letting-agent-selection-guide'],
     content: (
@@ -37145,7 +37147,7 @@ const allBlogPosts: BlogPost[] = [
           </p>
         </div>
 
-        <h2 id="faqs">Frequently Asked Questions</h2>
+        <h2 id="faqs">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -37428,7 +37430,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -37660,7 +37662,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -37871,7 +37873,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -38076,7 +38078,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -38292,7 +38294,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -38506,7 +38508,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -38735,7 +38737,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -38918,7 +38920,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -39143,7 +39145,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">
@@ -39378,7 +39380,7 @@ const allBlogPosts: BlogPost[] = [
           </Link>
         </div>
 
-        <h2 id="faqs" className="scroll-mt-24">Frequently Asked Questions</h2>
+        <h2 id="faqs" className="scroll-mt-24">FAQs for landlords</h2>
 
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-lg p-6">

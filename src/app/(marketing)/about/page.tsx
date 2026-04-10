@@ -67,8 +67,7 @@ export default function AboutPage() {
               </p>
 
               <p className="text-xl leading-relaxed">
-                Landlord Heaven generates court-ready document packs for the right region in minutes, not hours. We've made
-                clearer eviction notices, tenancy agreements, rent increase files, and court claims accessible to landlords who need to move quickly without paying solicitor rates just to get started.
+                Landlord Heaven helps landlords put the right paperwork in place for the right region in minutes, not hours. We make eviction notices, tenancy agreements, rent increase documents, and money claims easier to start when you need a clear next step without paying solicitor rates just to begin.
               </p>
             </div>
           </div>
@@ -132,7 +131,7 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Smart Document Generation</h3>
                 <p className="text-gray-700 mb-4">
                   Our system analyzes your case, selects the correct notice type, calculates notice periods,
-                  and generates court-ready documents.
+                  and prepares the documents you need for the route you are taking.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li>Analyzes 18 eviction grounds in seconds</li>
@@ -189,10 +188,9 @@ export default function AboutPage() {
                 <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
                   <Building2 className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="text-2xl font-semibold text-charcoal mb-4">Court-Ready Quality</h3>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">Documents Built for the Real Process</h3>
                 <p className="text-gray-700 mb-4">
-                  Our documents use official government forms and are accepted by all UK courts and tribunals.
-                  Thousands of successful cases.
+                  Our documents use the official forms and formats landlords are expected to rely on across the UK. The goal is to help you start with the right paperwork and avoid obvious errors that slow cases down.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li>Official Form 3A, N5, AT6, and related court formats</li>
@@ -339,7 +337,7 @@ export default function AboutPage() {
                 </h4>
                 <p className="text-sm text-gray-700">
                   Advanced technology for legal reasoning. Analyzes your case, validates inputs, and generates
-                  court-ready documents with proper legal language.
+                  documents with the right structure and language for the route you are following.
                 </p>
               </div>
 

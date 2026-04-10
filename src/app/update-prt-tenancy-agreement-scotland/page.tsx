@@ -42,7 +42,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Update Scotland PRT Agreement | Tenant, Rent & Term Changes',
   description:
-    'Learn how to update a PRT tenancy agreement in Scotland. Change rent, add or remove tenants, and vary terms legally under the 2016 Act.',
+    'Plain-English landlord guide to updating a PRT agreement in Scotland, including rent changes, tenant changes, and lawful term variations under the 2016 Act.',
   keywords: [
     'update prt tenancy agreement',
     'change tenants prt',
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Update PRT Tenancy Agreement Scotland | Landlord Heaven',
     description:
-      'How to update your PRT agreement in Scotland. Rent increases, tenant changes, and term variations explained.',
+      'Landlord guide to updating a PRT agreement in Scotland, including rent increases, tenant changes, and term variations.',
     type: 'website',
   },
 };
@@ -105,8 +105,9 @@ export default function UpdatePrtTenancyAgreementScotlandPage() {
           title="Update Your PRT Tenancy Agreement"
           subtitle={
             <>
-              Learn how to <strong>legally update</strong> your Private Residential Tenancy in
-              Scotland. Rent increases, tenant changes, and term variations explained step by step.
+              Learn how to <strong>update your Private Residential Tenancy</strong> in
+              Scotland, including rent increases, tenant changes, and term variations that
+              landlords need to handle properly.
             </>
           }
           primaryCta={{

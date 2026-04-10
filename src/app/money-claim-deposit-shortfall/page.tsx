@@ -131,7 +131,7 @@ export default function MoneyClaimDepositShortfallPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim for Deposit Shortfall"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If the deposit does not come close to covering the damage, this guide shows you how to deal with the scheme first and then claim the shortfall in a more practical way."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_deposit_shortfall' }}
           showTrustPositioningBar
@@ -514,7 +514,7 @@ export default function MoneyClaimDepositShortfallPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Deposit shortfall FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -545,5 +545,4 @@ export default function MoneyClaimDepositShortfallPage() {
     </>
   );
 }
-
 

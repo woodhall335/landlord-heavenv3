@@ -16,7 +16,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Form 6A Section 21 Notice | Official Template + Guide',
   description:
-    'Form 6A Section 21 notice guide for England landlords. Download the official template, avoid invalid service mistakes, and generate a pre-filled notice fast.',
+    'Plain-English landlord guide to Form 6A in England, including what the official Section 21 template does, how to avoid service mistakes, and when to move into a guided workflow.',
   keywords: [
     'form 6a',
     'form 6a section 21',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Form 6A Section 21 Notice | Landlord Heaven',
     description:
-      'Everything you need to know about Form 6A - the official Section 21 eviction notice for England.',
+      'Landlord guide to Form 6A, the official Section 21 notice in England, with clearer service and compliance guidance.',
     type: 'article',
     url: getCanonicalUrl('/form-6a-section-21'),
   },
@@ -69,8 +69,8 @@ export default function Form6APage() {
         <HeaderConfig mode="autoOnScroll" />
         <UniversalHero
           title="Form 6A Section 21 Guide"
-          subtitle="Follow the prescribed Form 6A requirements and generate a compliance-checked Section 21 notice workflow."
-          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyHref }}
+          subtitle="If you are using the Section 21 route, this guide helps you understand what Form 6A does, where landlords usually make mistakes, and when to switch from a template to a guided notice workflow."
+          primaryCta={{ label: 'Start notice only', href: noticeOnlyHref }}
           secondaryCta={{ label: 'Need full eviction support?', href: '/products/complete-pack' }}
           showTrustPositioningBar
           hideMedia
@@ -114,8 +114,8 @@ export default function Form6APage() {
               </p>
             </div>
             <FunnelCta
-              title="Get a compliant Form 6A drafted and served"
-              subtitle="Start with Notice Only now, and move to full possession support if the tenant stays."
+              title="Get a compliant Form 6A prepared properly"
+              subtitle="Start with Notice Only now, then move to fuller possession support if the tenant stays."
               primaryHref={noticeOnlyHref}
               primaryText="Start Notice Only"
               primaryDataCta="notice-only"
@@ -129,7 +129,7 @@ export default function Form6APage() {
         <Container>
           <div className="grid md:grid-cols-2 gap-6 -mt-8 mb-12">
             <div className="p-6 border rounded-lg bg-white shadow-sm">
-              <h2 className="text-xl font-semibold mb-2">Generate Pre-Filled Form 6A</h2>
+              <h2 className="text-xl font-semibold mb-2">Generate pre-filled Form 6A</h2>
               <p className="text-gray-600 mb-4">
                 Answer a few questions and get a correctly completed Form 6A ready to serve.
               </p>
@@ -137,17 +137,17 @@ export default function Form6APage() {
                 href="/eviction-notice-template"
                 className="hero-btn-primary inline-block"
               >
-                Generate Free Notice
+                Generate free notice
               </Link>
             </div>
 
             <div className="p-6 border rounded-lg bg-white shadow-sm">
-              <h2 className="text-xl font-semibold mb-2">Get Full Notice Pack</h2>
+              <h2 className="text-xl font-semibold mb-2">Get full notice pack</h2>
               <p className="text-gray-600 mb-4">
                 Form 6A plus compliance checklist, service instructions, and validity checks.
               </p>
               <Link href="/products/notice-only" className="hero-btn-secondary inline-block">
-                View Notice Pack
+                View notice pack
               </Link>
             </div>
           </div>
@@ -487,7 +487,7 @@ export default function Form6APage() {
               {/* FAQ schema must be rendered exactly once (via FAQSection). */}
       <FAQSection
                 faqs={enhancedFaqs}
-                title="Form 6A Frequently Asked Questions"
+          title="Form 6A FAQs for landlords"
                 showContactCTA={false}
                 variant="white"
               />

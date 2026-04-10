@@ -35,7 +35,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Fixed Term vs Periodic Occupation Contract Wales | Which to Choose in 2026',
   description:
-    'Compare fixed-term and periodic occupation contracts in Wales.',
+    'Plain-English landlord guide to choosing between fixed-term and periodic occupation contracts in Wales, including what happens when the fixed term ends.',
   keywords: [
     'fixed term occupation contract wales',
     'periodic occupation contract wales',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Fixed Term vs Periodic Occupation Contract Wales | Which to Choose in 2026',
     description:
-      'Compare fixed-term and periodic occupation contracts in Wales, including notice rules, automatic conversion and break clause considerations.',
+      'Landlord guide to fixed-term and periodic occupation contracts in Wales, including notice rules, automatic conversion, and break clause considerations.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/fixed-term-periodic-occupation-contract-wales',
   },
@@ -141,7 +141,7 @@ export default function FixedTermPeriodicOccupationContractWalesPage() {
             <>
               Compare <strong>fixed-term</strong> and <strong>periodic occupation contracts</strong>{' '}
               in Wales, understand what happens when a fixed term ends, and decide which contract
-              duration suits your letting under the <strong>Renting Homes (Wales) Act 2016</strong>.
+              setup actually suits your letting under the <strong>Renting Homes (Wales) Act 2016</strong>.
             </>
           }
           primaryCta={{

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   title:
     'N5 and N119 Possession Claim Guide | Standard Possession Claim for Landlords | LandlordHeaven',
   description:
-    'A practical landlord guide to the N5 and N119 possession claim in England.',
+    'Plain-English landlord guide to the N5 and N119 possession claim route in England, including evidence, hearings, and how to keep the court file clear.',
   alternates: {
     canonical,
   },
@@ -567,7 +567,7 @@ export default function Page() {
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               If your case is moving into the standard possession claim route, now is usually
               the time to turn the notice file into a cleaner court file. That means reviewing

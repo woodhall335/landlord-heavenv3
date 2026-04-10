@@ -188,9 +188,9 @@ export default function Page() {
 
       <UniversalHero
         title="Section 8 Eviction Process"
-        subtitle="A step-by-step guide to the breach-based possession route landlords use when a tenant has broken the tenancy."
-        primaryCta={{ label: 'Start Section 8 Notice', href: '/products/notice-only' }}
-        secondaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
+        subtitle="If the tenant has broken the tenancy, this guide shows how landlords move through the breach-based possession route from notice to hearing and enforcement."
+        primaryCta={{ label: 'Start Section 8 notice', href: '/products/notice-only' }}
+        secondaryCta={{ label: 'Start complete eviction pack', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/09-court.png"
         mediaAlt="Section 8 process guide icon"
         showReviewPill
@@ -637,13 +637,13 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Section 8 Eviction Process FAQs" />
+        <FAQSection faqs={faqs} title="Section 8 eviction process FAQs" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               The Section 8 eviction process works best when the route is validated early,
               the correct grounds are chosen, and the evidence file is built before the

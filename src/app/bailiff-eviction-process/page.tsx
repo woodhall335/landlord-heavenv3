@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Bailiff Eviction Process | What Happens After a Possession Order | LandlordHeaven',
   description:
-    'A plain-English guide to the bailiff eviction process for landlords in England.',
+    'Plain-English landlord guide to the bailiff eviction process in England, including enforcement steps, timing, and what to prepare before eviction day.',
   alternates: {
     canonical,
   },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title:
       'Bailiff Eviction Process | What Happens After a Possession Order | LandlordHeaven',
     description:
-      'Understand the bailiff eviction process, enforcement steps, timelines, and what landlords should prepare before eviction day.',
+      'Landlord guide to the bailiff eviction process, enforcement steps, timelines, and what to prepare before eviction day.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',

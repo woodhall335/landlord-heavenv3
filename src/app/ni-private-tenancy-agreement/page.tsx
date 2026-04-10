@@ -25,7 +25,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Northern Ireland Private Tenancy Agreement 2026 | Legally Validated',
-  description: 'Create a Northern Ireland private tenancy agreement with solicitor-grade drafting and compliance-checked terms.',
+  description: 'Plain-English landlord guide to Northern Ireland private tenancy agreements, including what the 2022 Act requires and how to start with the right agreement.',
   keywords: [
     'private tenancy agreement NI',
     'NI private tenancy',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Northern Ireland Private Tenancy Agreement 2026 | Legally Validated',
-    description: 'Legally validated NI private tenancy agreement with compliance-checked clauses.',
+    description: 'Landlord guide to Northern Ireland private tenancy agreements and the key 2022 Act obligations behind them.',
     type: 'article',
     url: getCanonicalUrl('/ni-private-tenancy-agreement'),
   },
@@ -106,7 +106,7 @@ export default function NIPrivateTenancyAgreementPage() {
       <StructuredData
         data={articleSchema({
           headline: 'Private Tenancy Agreement NI | Complete 2026 Guide & Template',
-          description: 'Complete guide to Private Tenancy Agreements in Northern Ireland. Understand your rights under the Private Tenancies Act 2022 and create a compliant agreement.',
+          description: 'Plain-English landlord guide to Private Tenancy Agreements in Northern Ireland, including the 2022 Act duties and how to start with compliant paperwork.',
           url: getCanonicalUrl('/ni-private-tenancy-agreement'),
           datePublished: '2024-02-01',
           dateModified: '2025-01-20',
@@ -126,8 +126,8 @@ export default function NIPrivateTenancyAgreementPage() {
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         <UniversalHero
           title="Northern Ireland Private Tenancy Agreement"
-          subtitle="Create a legally validated Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording."
-          primaryCta={{ label: "Start now", href: "/products/ast" }}
+          subtitle="If you are letting in Northern Ireland, this guide explains what a private tenancy agreement needs to cover, what the 2022 Act changed, and why the paperwork matters before problems arise."
+          primaryCta={{ label: 'Create your agreement', href: '/products/ast' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -444,15 +444,15 @@ export default function NIPrivateTenancyAgreementPage() {
               Create Your NI Private Tenancy Agreement
             </h2>
             <p className="text-emerald-100 mb-6 max-w-xl mx-auto">
-              Don't risk criminal prosecution - use our intelligent wizard to create a fully compliant
-              Private Tenancy Agreement for Northern Ireland in minutes.
+              Start with a Northern Ireland agreement that matches the current legal position and gives
+              you a clearer paper trail from the first day of the tenancy.
             </p>
             <Link
               href="/products/ast"
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />
-              Create Your Agreement
+              Create your agreement
               <RiArrowRightLine className="w-5 h-5" />
             </Link>
           </section>

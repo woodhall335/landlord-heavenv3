@@ -40,7 +40,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Scotland PRT Agreement Template 2026 | Create Online',
   description:
-    'Download a legally valid PRT tenancy agreement template for Scotland. Compliant with the Private Housing (Tenancies) (Scotland) Act 2016. Tribunal-ready.',
+    'Plain-English landlord guide to creating a Scotland PRT agreement template online, with current 2016 Act wording and a tribunal-ready structure.',
   keywords: [
     'prt tenancy agreement template',
     'tenancy agreement template scotland',
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'PRT Tenancy Agreement Template Scotland 2026 | Landlord Heaven',
     description:
-      'Download a legally valid PRT template for Scotland. Compliant with the 2016 Act and ready for the First-tier Tribunal.',
+      'Landlord guide to creating a Scotland PRT template with current 2016 Act wording and a tribunal-ready structure.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/prt-tenancy-agreement-template-scotland',
   },
@@ -105,8 +105,9 @@ export default function PrtTenancyAgreementTemplateScotlandPage() {
           title="PRT Tenancy Agreement Template"
           subtitle={
             <>
-              Download a <strong>legally valid</strong> Private Residential Tenancy template for
-              Scotland. Fully compliant with the 2016 Act and ready for the First-tier Tribunal.
+              Create a <strong>Scotland-specific Private Residential Tenancy template</strong>
+              with current 2016 Act wording and a structure landlords can rely on if the
+              tenancy later reaches the tribunal stage.
             </>
           }
           primaryCta={{

@@ -37,7 +37,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Joint Occupation Contract Wales | Multiple Contract-Holders',
   description:
-    'Create a joint occupation contract for multiple contract-holders in Wales. Joint and several liability, adding/removing holders under Welsh law.',
+    'Plain-English landlord guide to joint occupation contracts in Wales, including multiple contract-holders, joint liability, and adding or removing holders.',
   keywords: [
     'joint occupation contract wales',
     'joint tenancy wales',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Joint Occupation Contract Wales | Landlord Heaven',
     description:
-      'Create a valid joint occupation contract for multiple contract-holders in Wales. Full compliance with Renting Homes Act 2016.',
+      'Landlord guide to joint occupation contracts for multiple contract-holders in Wales, with current Renting Homes Act compliance.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/joint-occupation-contract-wales',
   },
@@ -105,8 +105,8 @@ export default function JointOccupationContractWalesPage() {
           subtitle={
             <>
               Create an occupation contract for <strong>multiple contract-holders</strong> in
-              Wales. Establish joint and several liability, understand adding and removing
-              holders, and comply with the Renting Homes (Wales) Act 2016.
+              Wales, understand how joint liability works in practice, and handle adding or
+              removing holders under the Renting Homes (Wales) Act 2016.
             </>
           }
           primaryCta={{

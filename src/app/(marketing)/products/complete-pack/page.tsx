@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
@@ -441,7 +441,7 @@ export default async function CompleteEvictionPackPage() {
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Get Complete Eviction Case Bundle - {price} →
+                Get Complete Eviction Case Bundle - {price} ?
               </Link>
             </div>
           </div>
@@ -468,13 +468,13 @@ export default async function CompleteEvictionPackPage() {
                       href="/wizard?product=money_claim&src=complete_pack_crosssell"
                       className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#692ED4] px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#5a21be]"
                     >
-                      Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice}
+                      Get Money Claim Pack � {PRODUCTS.money_claim.displayPrice}
                     </Link>
                     <Link
                       href="/money-claim-unpaid-rent"
                       className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#CDB8F6] px-5 py-2.5 font-medium text-[#692ED4] transition-colors hover:bg-[#F3EEFF]"
                     >
-                      Learn about money claims →
+                      Learn about money claims ?
                     </Link>
                   </div>
                 </div>
@@ -485,7 +485,7 @@ export default async function CompleteEvictionPackPage() {
       </section>
 
       <FAQSection
-        title="Frequently Asked Questions"
+        title="FAQs For Landlords"
         faqs={faqs}
         showContactCTA={false}
         variant="white"

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Court Possession Order Guide | What Happens After a Possession Hearing | LandlordHeaven',
   description:
-    'A landlord guide to court possession orders in England.',
+    'Plain-English landlord guide to court possession orders in England, including what the order means, what happens next, and when enforcement is needed.',
   alternates: {
     canonical,
   },
@@ -145,7 +145,7 @@ export default function Page() {
 
       <UniversalHero
         title="Court Possession Order Guide"
-        subtitle="Understand what happens after a possession hearing and how landlords move from court decision to recovered possession."
+        subtitle="If the court grants possession, this guide explains what the order means in practice, what happens before the leave date, and how landlords move into enforcement if the tenant stays."
         primaryCta={{ label: 'Start Notice Only', href: '/products/notice-only' }}
         secondaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/09-court.png"
@@ -557,13 +557,13 @@ export default function Page() {
       </section>
 
       <section id="faqs">
-        <FAQSection faqs={faqs} title="Possession Order FAQs" />
+        <FAQSection faqs={faqs} title="Possession order FAQs for landlords" />
       </section>
 
       <section id="final-cta" className="bg-white py-14">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
 
             <p className="mt-4 leading-7 text-gray-700">
               The possession order stage is where the eviction process moves from

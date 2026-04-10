@@ -1,7 +1,7 @@
 {
   "name": "Landlord Heaven",
   "short_name": "Landlord Heaven",
-  "description": "Generate court-ready eviction case bundles for UK landlords",
+  "description": "Guided eviction, arrears, rent increase, and tenancy paperwork for UK landlords",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#130c2b",
@@ -25,3 +25,4 @@
     }
   ]
 }
+

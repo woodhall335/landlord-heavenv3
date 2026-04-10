@@ -33,7 +33,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Warrant of Possession UK — Bailiff Eviction Guide (2026)',
-  description: 'How to apply for a warrant of possession after getting a court order. County court bailiffs, High Court enforcement, and what to expect on eviction day.',
+  description: 'Plain-English landlord guide to applying for a warrant of possession after a court order, including county court bailiffs, High Court enforcement, and what to expect on eviction day.',
   keywords: [
     'warrant of possession',
     'bailiff eviction',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Warrant of Possession UK — Bailiff Eviction Guide | Landlord Heaven',
-    description: 'Apply for bailiff enforcement after getting a possession order. County court vs High Court options explained.',
+    description: 'Landlord guide to bailiff enforcement after a possession order, including county court and High Court options.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/warrant-of-possession',
   },
@@ -97,7 +97,7 @@ export default function WarrantOfPossessionPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'Warrant of Possession UK - Bailiff Eviction Guide',
-    description: 'Guide to applying for warrant of possession and bailiff enforcement in England.',
+    description: 'Plain-English landlord guide to applying for a warrant of possession and moving into bailiff enforcement in England.',
     url: 'https://landlordheaven.co.uk/warrant-of-possession',
   };
 
@@ -114,8 +114,8 @@ export default function WarrantOfPossessionPage() {
         <HeaderConfig mode="autoOnScroll" />
         <UniversalHero
           title="Warrant of Possession Guide"
-          subtitle="Understand when to apply for a warrant and prepare enforcement paperwork correctly."
-          primaryCta={{ label: 'Get Complete Pack', href: completePackHref }}
+          subtitle="If the tenant still has not left after the possession date, this guide explains when landlords apply for a warrant, how the bailiff stage works, and what to organise before enforcement day."
+          primaryCta={{ label: 'Start Complete Pack', href: completePackHref }}
           secondaryCta={{ label: 'Jump to key steps', href: '#when-to-apply' }}
           showTrustPositioningBar
           hideMedia
@@ -395,8 +395,8 @@ export default function WarrantOfPossessionPage() {
                 pageType="court"
                 variant="section"
                 jurisdiction="england"
-                title="Need All Court Documents?"
-                description="Our Complete Pack includes guides for warrant applications plus all earlier documents (notices, possession claim forms, witness statements)."
+                title="Need all the court documents together?"
+                description="Our Complete Pack covers the earlier notice and court stages as well as the documents landlords usually rely on before enforcement."
               />
             </div>
           </div>
@@ -506,8 +506,8 @@ export default function WarrantOfPossessionPage() {
                 pageType="court"
                 variant="final"
                 jurisdiction="england"
-                title="Get All Your Eviction Documents"
-                description="Complete Eviction Pack covers every stage from notice to possession. Court-ready format with step-by-step guidance."
+                title="Get your eviction documents in one place"
+                description="Use one workflow from notice through to possession so the enforcement stage is built on a cleaner file."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

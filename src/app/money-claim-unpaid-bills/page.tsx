@@ -107,7 +107,7 @@ const faqs = [
 export default function MoneyClaimUnpaidBillsPage() {
   const hero = {
     ...moneyClaimSupportHeroConfig,
-    trustText: 'Solicitor-grade | Compliance-checked | Court-ready',
+    trustText: 'Landlord-focused | Evidence-led | Plain-English guidance',
     primaryCta: {
       label: 'View money claim guide ->',
       href: '/money-claim',
@@ -118,7 +118,7 @@ export default function MoneyClaimUnpaidBillsPage() {
     },
     title: 'Claim Unpaid Tenant Bills with Confidence',
     subtitle:
-      'Build a compliance-checked, court-ready claim for unpaid water, broadband, and tenancy-linked bills.',
+      'If you have had to pick up water, broadband, or other tenancy-linked bills yourself, this guide helps you work out what can be claimed back and how to present it clearly.',
   };
 
   return (
@@ -432,7 +432,7 @@ export default function MoneyClaimUnpaidBillsPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Unpaid bills FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -463,6 +463,5 @@ export default function MoneyClaimUnpaidBillsPage() {
     </>
   );
 }
-
 
 

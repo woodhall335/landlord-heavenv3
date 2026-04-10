@@ -41,7 +41,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Joint PRT Tenancy Agreement Scotland | Multiple Tenants PRT 2026',
   description:
-    'Create a joint PRT agreement for multiple tenants in Scotland. Joint and several liability and shared responsibilities explained.',
+    'Plain-English landlord guide to joint PRT agreements in Scotland, including multiple tenants, joint liability, and shared responsibilities.',
   keywords: [
     'joint prt tenancy agreement',
     'multiple tenants prt',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Joint PRT Tenancy Agreement Scotland | Landlord Heaven',
     description:
-      'Create a legally valid joint PRT for multiple tenants in Scotland. Includes joint and several liability protection.',
+      'Landlord guide to joint PRT agreements for multiple tenants in Scotland, including joint liability protection.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/joint-prt-tenancy-agreement-scotland',
   },
@@ -106,8 +106,8 @@ export default function JointPrtTenancyAgreementScotlandPage() {
           title="Joint PRT Tenancy Agreement"
           subtitle={
             <>
-              Create a <strong>legally valid</strong> joint PRT for multiple tenants in Scotland.
-              Includes joint and several liability protection for full rent recovery.
+              Create a <strong>joint PRT for multiple tenants in Scotland</strong>, with the
+              right joint liability structure and clearer wording for shared occupation.
             </>
           }
           primaryCta={{

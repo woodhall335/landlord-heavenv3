@@ -38,7 +38,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement Northern Ireland | Multiple Tenants NI',
   description:
-    'Create a joint tenancy agreement for multiple tenants in Northern Ireland. Understand joint and several liability under NI law.',
+    'Plain-English landlord guide to joint tenancy agreements in Northern Ireland, including joint and several liability and the risks of multiple tenants on one agreement.',
   keywords: [
     'joint tenancy agreement northern ireland',
     'joint tenancy ni',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Joint Tenancy Agreement Northern Ireland | Landlord Heaven',
     description:
-      'Create a joint tenancy agreement for multiple tenants in Northern Ireland. Understand joint and several liability under NI law.',
+      'Landlord guide to joint tenancy agreements in Northern Ireland, including how joint and several liability works in practice.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/joint-tenancy-agreement-northern-ireland',
   },
@@ -67,7 +67,7 @@ export default function JointTenancyAgreementNorthernIrelandPage() {
     '@type': 'WebPage',
     name: 'Joint Tenancy Agreement Northern Ireland',
     description:
-      'Create a joint tenancy agreement for multiple tenants in Northern Ireland. Understand joint and several liability under NI law.',
+      'Plain-English landlord guide to joint tenancy agreements in Northern Ireland, including joint and several liability and practical setup points.',
     url: 'https://landlordheaven.co.uk/joint-tenancy-agreement-northern-ireland',
   };
 
@@ -103,17 +103,17 @@ export default function JointTenancyAgreementNorthernIrelandPage() {
           title="Joint Tenancy Agreement Northern Ireland"
           subtitle={
             <>
-              Create a <strong>joint tenancy agreement</strong> for multiple tenants in Northern
-              Ireland. Include joint and several liability to protect your rental income when
-              letting to couples, sharers, or groups.
+              If you are letting to a couple, sharers, or a group, this guide explains how a
+              <strong> joint tenancy agreement</strong> works in Northern Ireland and why the liability
+              wording matters so much when one tenant stops paying.
             </>
           }
           primaryCta={{
-            label: `Create Joint Tenancy — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create joint tenancy - ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Agreement with Guarantor',
+            label: 'View tenancy agreement options',
             href: astProductHref,
           }}
         >

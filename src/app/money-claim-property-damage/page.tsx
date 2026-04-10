@@ -129,7 +129,7 @@ export default function MoneyClaimPropertyDamagePage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim for Property Damage"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If a tenant has left real damage behind, this guide helps you document it properly, separate it from fair wear, and recover the repair costs in a clearer claim."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_property_damage' }}
           showTrustPositioningBar
@@ -527,8 +527,8 @@ export default function MoneyClaimPropertyDamagePage() {
                 Ready to Claim for Property Damage?
               </h2>
               <p className="text-xl text-orange-100 mb-8">
-                Our Money Claim Pack (England only) walks you through documenting damage, calculating
-                costs, sending the letter before action, and making your court claim.
+                Our Money Claim Pack (England only) helps you turn the damage schedule, quotes,
+                and evidence you already have into a structured claim you can issue with more confidence.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -596,7 +596,7 @@ export default function MoneyClaimPropertyDamagePage() {
 
         {/* FAQ Section */}
         <FAQSection
-          title="Property Damage Claims: Frequently Asked Questions"
+          title="Property damage FAQs for landlords"
           faqs={faqs}
           showContactCTA={false}
           variant="white"

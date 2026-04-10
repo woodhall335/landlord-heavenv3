@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Evict Tenant Not Paying Rent | Landlord Rent Arrears Guide | LandlordHeaven',
   description:
-    'A plain-English guide for landlords in England dealing with tenants not paying rent.',
+    'Plain-English landlord guide to dealing with tenants who stop paying rent in England, including route choice, arrears evidence, and possession planning.',
   alternates: {
     canonical,
   },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title:
       'Evict Tenant Not Paying Rent | Landlord Rent Arrears Guide | LandlordHeaven',
     description:
-      'Learn how landlords usually deal with serious rent arrears, choose the right route, prepare the evidence file, and move toward possession with fewer delays.',
+      'Landlord guide to dealing with serious rent arrears, choosing the right route, preparing the evidence file, and moving toward possession with fewer delays.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',

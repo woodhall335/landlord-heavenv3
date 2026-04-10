@@ -38,7 +38,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Update Tenancy Agreement Northern Ireland | Renew NI Tenancy',
   description:
-    'Update or renew your tenancy agreement in Northern Ireland. Understand how to change terms, increase rent, and comply with the 2022 Act.',
+    'Plain-English landlord guide to updating a tenancy agreement in Northern Ireland, including renewals, rent changes, and when a fresh agreement is the cleaner option.',
   keywords: [
     'update tenancy agreement northern ireland',
     'renew tenancy ni',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Update Tenancy Agreement Northern Ireland | Landlord Heaven',
     description:
-      'Update or renew your tenancy agreement in Northern Ireland. Understand how to change terms and increase rent.',
+      'Landlord guide to updating or renewing a Northern Ireland tenancy agreement without creating avoidable paperwork problems.',
     type: 'website',
   },
 };
@@ -66,7 +66,7 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
     '@type': 'WebPage',
     name: 'Update Tenancy Agreement Northern Ireland',
     description:
-      'Update or renew your tenancy agreement in Northern Ireland. Understand how to change terms, increase rent, and comply with the 2022 Act.',
+      'Plain-English landlord guide to updating a tenancy agreement in Northern Ireland, including renewals, rent changes, and 2022 Act paperwork requirements.',
     url: 'https://landlordheaven.co.uk/update-tenancy-agreement-northern-ireland',
   };
 
@@ -101,17 +101,17 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
           title="Update Tenancy Agreement Northern Ireland"
           subtitle={
             <>
-              Need to <strong>update, renew, or change</strong> your Northern Ireland tenancy
-              agreement? Understand how to modify terms, increase rent, or create a new agreement
-              while complying with the 2022 Act.
+              If your current agreement no longer reflects the tenancy, this guide helps you decide
+              whether to vary the existing terms, issue a fresh agreement, or renew on cleaner
+              paperwork that fits the current Northern Ireland position.
             </>
           }
           primaryCta={{
-            label: `Create New Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create new agreement - ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Agreement with Extras',
+            label: 'View tenancy agreement options',
             href: astProductHref,
           }}
           variant="pastel"
@@ -156,7 +156,7 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
                 When Should You Update Your NI Tenancy Agreement?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Common situations that require updating or renewing your tenancy documentation.
+                The situations where landlords usually need clearer tenancy paperwork.
               </p>
 
               <div className="prose prose-lg max-w-none text-gray-600">
@@ -368,7 +368,7 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-amber-900 mb-2">
-                    Important: 2022 Act Compliance
+                    Important: keep the paperwork clear
                   </h2>
                   <p className="text-amber-800 mb-4">
                     Under the Private Tenancies Act (NI) 2022, any changes to the tenancy agreement
@@ -409,8 +409,8 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
                 variant="section"
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
-                title="Create an Updated NI Tenancy Agreement"
-                description="The cleanest way to update terms is a new agreement. 2022 Act compliant and ready in minutes."
+                title="Create an updated NI tenancy agreement"
+                description="Where the tenancy has changed significantly, a fresh agreement is often the cleanest way to show what now applies."
               />
             </div>
           </div>
@@ -609,7 +609,7 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
         {/* FAQ Section */}
         <FAQSection
           faqs={updateNITenancyFAQs}
-          title="Update NI Tenancy FAQ"
+          title="Updating an NI tenancy agreement FAQs for landlords"
           showContactCTA={false}
           variant="gray"
         />
@@ -623,8 +623,8 @@ export default function UpdateTenancyAgreementNorthernIrelandPage() {
                 variant="final"
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
-                title="Create Your Updated NI Agreement Today"
-                description="Fresh 2022 Act compliant agreement. Updated terms. Ready in minutes."
+                title="Create your updated NI agreement"
+                description="Use one clear set of current terms rather than relying on old paperwork plus piecemeal changes."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

@@ -49,7 +49,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
   description:
-    `Complete guide to evicting a tenant in Scotland. Notice to Leave, 18 eviction grounds, First-tier Tribunal process. Get court-ready documents from ${noticeOnlyPrice}.`,
+    `Plain-English landlord guide to the eviction process in Scotland, including Notice to Leave, tribunal steps, and the main grounds landlords need to understand. Get court-ready documents from ${noticeOnlyPrice}.`,
   keywords: [
     'eviction process scotland landlord',
     'eviction tribunal scotland',
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
     description:
-      'Complete guide to evicting a tenant in Scotland. Notice to Leave, eviction grounds, and tribunal process.',
+      'Landlord guide to the eviction process in Scotland, including Notice to Leave, eviction grounds, and tribunal process.',
     type: 'article',
     url: getCanonicalUrl('/eviction-process-scotland'),
     siteName: 'Landlord Heaven',
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Eviction Process Scotland | Landlord Heaven',
-    description: 'Complete guide to evicting a tenant in Scotland.',
+    description: 'Plain-English landlord guide to the eviction process in Scotland.',
   },
   alternates: {
     canonical: getCanonicalUrl('/eviction-process-scotland'),
@@ -116,8 +116,8 @@ export default function EvictionProcessScotlandPage() {
         <HeaderConfig mode="autoOnScroll" />
         <UniversalHero
           title="Eviction Process Scotland"
-          subtitle="Follow the legal Scottish route from Notice to Leave through tribunal and enforcement."
-          primaryCta={{ label: 'Start Scotland Notice Only', href: noticeOnlyLink }}
+          subtitle="If you need possession in Scotland, this guide helps you move from Notice to Leave through tribunal and enforcement without relying on England-style assumptions."
+          primaryCta={{ label: 'Start Scotland notice only', href: noticeOnlyLink }}
           secondaryCta={{ label: 'Need tribunal-ready support? Complete Pack', href: completePackLink }}
           showTrustPositioningBar
           hideMedia

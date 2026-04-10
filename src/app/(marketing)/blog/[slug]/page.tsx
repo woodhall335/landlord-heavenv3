@@ -953,7 +953,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </div>
 
               <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
-                <span className="rounded-full border border-[#e3d3ff] bg-[#f8f1ff] px-3 py-1 text-[#692ed4]">Court-ready guidance</span>
+                <span className="rounded-full border border-[#e3d3ff] bg-[#f8f1ff] px-3 py-1 text-[#692ed4]">Landlord action guide</span>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{post.author.role}</span>
               </div>
 
@@ -1081,7 +1081,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <NextSteps slug={post.slug} category={post.category} tags={post.tags} />
 
               <section className="mt-10 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Core eviction guides">
-                <h2 className="text-xl font-bold text-gray-900">Core eviction guides for next steps</h2>
+                <h2 className="text-xl font-bold text-gray-900">Core eviction guides to keep your case moving</h2>
                 <p className="mt-2 text-sm text-gray-700">
                   Keep your case connected with the core possession guides most landlords need during arrears and notice problems.
                 </p>
@@ -1111,8 +1111,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               )}
 
               {sanitizedFaqs.length > 0 && (
-                <section className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Frequently asked questions">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+                <section className="mt-12 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="FAQs for landlords">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">FAQs for landlords</h2>
                   <FAQInline faqs={sanitizedFaqs} className="rounded-2xl border border-[#e7d9ff] bg-white p-5 md:p-6" />
                 </section>
               )}
@@ -1176,3 +1176,4 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
     </>
   );
 }
+

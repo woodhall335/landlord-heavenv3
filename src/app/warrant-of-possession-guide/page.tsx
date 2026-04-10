@@ -184,7 +184,7 @@ export default function WarrantOfPossessionGuidePage() {
 
       <UniversalHero
         title="Warrant of Possession Guide"
-        subtitle="Understand what landlords usually do after a possession order if the tenant still does not leave."
+        subtitle="If the tenant stays after the possession date, this guide explains when landlords move into the warrant stage, what enforcement involves, and how to prepare for the final handover."
         primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
         secondaryCta={{ label: 'Need notice help first?', href: '/products/notice-only' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
@@ -389,7 +389,7 @@ export default function WarrantOfPossessionGuidePage() {
               primaryHref="/products/complete-pack"
               primaryLabel="Start Complete Eviction Pack"
               secondaryHref="/products/notice-only"
-              secondaryLabel="Need Notice Only First?"
+              secondaryLabel="Start Notice Only"
             />
 
             <Card
@@ -629,13 +629,13 @@ export default function WarrantOfPossessionGuidePage() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Warrant of Possession FAQs" />
+        <FAQSection faqs={faqs} title="Warrant of possession FAQs for landlords" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               The warrant stage works best when it is planned before it becomes urgent.
               Landlords who treat enforcement as part of one continuous legal workflow
@@ -663,7 +663,7 @@ export default function WarrantOfPossessionGuidePage() {
                 href="/products/notice-only"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Need Notice Only First?
+                Start Notice Only
               </Link>
             </div>
           </div>

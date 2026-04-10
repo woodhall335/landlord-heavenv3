@@ -130,7 +130,7 @@ export default function MoneyClaimCarpetDamagePage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim for Carpet Damage Costs"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If a tenant has left burns, stains, pet damage, or heavy soiling behind, this guide helps you separate fair wear from real damage and claim the right amount back."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_carpet_damage' }}
           showTrustPositioningBar
@@ -482,7 +482,7 @@ export default function MoneyClaimCarpetDamagePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Carpet damage FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -513,5 +513,4 @@ export default function MoneyClaimCarpetDamagePage() {
     </>
   );
 }
-
 

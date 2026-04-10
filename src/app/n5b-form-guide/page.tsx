@@ -71,7 +71,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'N5B Form Guide 2026 | Accelerated Possession for Landlords',
   description:
-    'Complete guide to Form N5B for accelerated possession in England.',
+    'Plain-English landlord guide to Form N5B, when the accelerated possession route fits, and what paperwork the court will expect.',
   keywords: [
     'n5b form',
     'form n5b',
@@ -100,7 +100,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'N5B Form Guide 2026 | Accelerated Possession for Landlords',
     description:
-      'How landlords use Form N5B for accelerated possession in England.',
+      'How landlords use Form N5B for accelerated possession in England and what to check before filing.',
   },
 };
 
@@ -110,7 +110,7 @@ export default function N5BFormGuidePage() {
     '@type': 'WebPage',
     name: 'N5B Form Guide - Accelerated Possession',
     description:
-      'Guide to using Form N5B for accelerated possession in England.',
+      'Plain-English landlord guide to using Form N5B for accelerated possession in England.',
     url: 'https://landlordheaven.co.uk/n5b-form-guide',
   };
 
@@ -134,11 +134,11 @@ export default function N5BFormGuidePage() {
           title="N5B Form Guide"
           subtitle="Use the accelerated possession route correctly after the notice stage. This guide explains when landlords use Form N5B, when they should not, and what the court stage usually looks like."
           primaryCta={{
-            label: `Get Complete Pack — ${PRODUCTS.complete_pack.displayPrice}`,
+            label: `Get Complete Pack - ${PRODUCTS.complete_pack.displayPrice}`,
             href: completePackHref,
           }}
           secondaryCta={{
-            label: 'Need Section 21 First?',
+            label: 'Start with Section 21 first',
             href: '/section-21-notice-template',
           }}
           variant="pastel"
@@ -219,7 +219,7 @@ export default function N5BFormGuidePage() {
                 </p>
 
                 <p>
-                  That is why this page should not just tell landlords that N5B is “faster.” The real
+                  That is why this page should not just tell landlords that N5B is "faster." The real
                   issue is whether the accelerated route is actually suitable for the case in front of
                   you.
                 </p>
@@ -311,7 +311,7 @@ export default function N5BFormGuidePage() {
                     <p className="text-gray-700 text-sm">
                       Use N5B where the accelerated possession route truly fits. Use the standard route
                       where the case is broader, more disputed, or tied to arrears or grounds. Speed is
-                      not the only consideration — route suitability matters more.
+                      not the only consideration - route suitability matters more.
                     </p>
                   </div>
                 </div>
@@ -387,7 +387,7 @@ export default function N5BFormGuidePage() {
                 How to fill in Form N5B
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-                The biggest risk is not one dramatic mistake — it is a series of small errors across
+                The biggest risk is not one dramatic mistake - it is a series of small errors across
                 dates, names, service details and supporting documents.
               </p>
 
@@ -487,8 +487,8 @@ export default function N5BFormGuidePage() {
                 pageType="court"
                 variant="section"
                 jurisdiction="england"
-                title="Get Form N5B Ready to File"
-                description="Our complete pack includes the N5B route, supporting paperwork and clearer filing guidance for the court stage."
+                title="Get Form N5B ready to file"
+                description="Our Complete Pack helps you keep the accelerated route, supporting documents, and filing stage under better control."
               />
             </div>
           </div>
@@ -586,7 +586,7 @@ export default function N5BFormGuidePage() {
             <div className="max-w-3xl mx-auto">
               <FAQSection
                 faqs={faqs}
-                title="N5B Form FAQ"
+                title="N5B form FAQs for landlords"
                 showContactCTA={false}
                 variant="white"
               />
@@ -603,8 +603,8 @@ export default function N5BFormGuidePage() {
                 pageType="court"
                 variant="final"
                 jurisdiction="england"
-                title="Get Your N5B Route Ready"
-                description="Complete pack includes the N5B route, supporting documents and clearer filing instructions for England landlords."
+                title="Get your N5B route ready"
+                description="Use a cleaner court file so the accelerated route is easier to follow if the case moves under pressure."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

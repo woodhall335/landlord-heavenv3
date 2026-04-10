@@ -558,7 +558,7 @@ export default function MoneyClaimN1ClaimFormPage() {
                     href="/products/money-claim?topic=debt&src=seo_money_claim_n1_claim_form"
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 font-semibold text-white hover:bg-primary/90 transition-colors"
                   >
-                    Generate your documents — {PRODUCTS.money_claim.displayPrice}
+                    Generate your documents - {PRODUCTS.money_claim.displayPrice}
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                   <p className="mt-3 text-sm text-gray-500">
@@ -573,7 +573,7 @@ export default function MoneyClaimN1ClaimFormPage() {
         <section className="py-12 lg:py-16 bg-white">
           <Container>
             <div className="mx-auto max-w-5xl">
-              <FAQSection faqs={faqs} />
+              <FAQSection faqs={faqs} title="N1 claim form FAQs for landlords" />
             </div>
           </Container>
         </section>

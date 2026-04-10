@@ -20,14 +20,14 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Rent Arrears Landlord Guide | Recovery, Notices, Section 8 and Next Steps | LandlordHeaven',
   description:
-    'A complete rent arrears landlord guide covering what to do when tenants fall behind, how to document arrears, when to use Section 8.',
+    'Plain-English landlord guide to rent arrears, covering what to do when tenants fall behind, how to document arrears properly, and when Section 8 may fit.',
   alternates: {
     canonical,
   },
   openGraph: {
     title: 'Rent Arrears Landlord Guide | Recovery, Notices, Section 8 and Next Steps | LandlordHeaven',
     description:
-      'Learn how landlords handle rent arrears, what evidence matters most, when to use Section 8, and how to move from arrears management to possession if needed.',
+      'Landlord guide to handling rent arrears, what evidence matters most, when to use Section 8, and how to move from arrears management to possession if needed.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',

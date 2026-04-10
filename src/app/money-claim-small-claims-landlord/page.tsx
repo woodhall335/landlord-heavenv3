@@ -28,7 +28,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Small Claims Court for Landlords 2026 | Tenant Debt Recovery Guide',
   description:
-    'How the small claims track works for landlord money claims. What to expect, how to prepare, and representing yourself against tenant debtors.',
+    'Plain-English landlord guide to the small claims track, including what to expect, how hearings work, and how to prepare your tenant debt case.',
   keywords: [
     'small claims court landlord',
     'small claims tenant',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Small Claims Court for Landlords 2026 | Tenant Debt Recovery Guide',
     description:
-      'Complete guide to navigating small claims court for landlord tenant debt recovery.',
+      'Landlord guide to navigating the small claims track for tenant debt recovery and hearing preparation.',
     type: 'article',
     url: getCanonicalUrl('/money-claim-small-claims-landlord'),
   },
@@ -113,7 +113,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
         data={articleSchema({
           headline: 'Small Claims Court for Landlords: Complete UK Guide',
           description:
-            'Everything landlords need to know about the small claims track for tenant debt recovery.',
+            'Plain-English landlord guide to the small claims track for tenant debt recovery.',
           url: getCanonicalUrl('/money-claim-small-claims-landlord'),
           datePublished: '2026-01-15',
           dateModified: '2026-01-15',
@@ -132,7 +132,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Small Claims Guide for Landlords"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If your tenant debt claim is heading to the small claims track, this guide explains what the hearing usually looks like, what documents matter most, and how to prepare without overcomplicating the case."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord' }}
           showTrustPositioningBar
@@ -168,7 +168,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord"
                   className="inline-flex items-center justify-center gap-2 bg-white text-emerald-800 font-semibold py-4 px-8 rounded-xl hover:bg-emerald-50 transition-colors"
                 >
-                  Start Money Claim
+                  Start money claim
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -438,7 +438,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Start Your Money Claim
+                Start your money claim
               </h2>
               <p className="text-gray-600 mb-8">
                 Get professionally drafted court documents ready for small claims.
@@ -448,7 +448,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — {PRODUCTS.money_claim.displayPrice}
+                Start your claim - {PRODUCTS.money_claim.displayPrice}
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -471,7 +471,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Small claims FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} />
             </div>
@@ -515,5 +515,4 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
     </>
   );
 }
-
 

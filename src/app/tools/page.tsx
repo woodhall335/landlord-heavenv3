@@ -25,13 +25,14 @@ export const metadata = generateMetadata({
 const featuredTools = freeTools.filter((tool) => tool.featured);
 const otherTools = freeTools.filter((tool) => !tool.featured);
 
-// Analyze page for commercial linking - tools pages relate to eviction/rent arrears products
 const commercialLinkingResult = analyzeContent({
   pathname: '/tools',
   title: 'Free Landlord Tools UK | Calculators, Letters & Checkers',
-  description: 'Free tools for UK landlords: rent arrears calculator, rent demand letters, HMO licence checks, and Ask Heaven guidance.',
+  description:
+    'Free tools for UK landlords: rent arrears calculator, rent demand letters, HMO licence checks, and Ask Heaven guidance.',
   heading: 'Free Tools for UK Landlords',
-  bodyText: 'rent arrears calculator rent demand letter hmo checker ask heaven landlord help money claim',
+  bodyText:
+    'rent arrears calculator rent demand letter hmo checker ask heaven landlord help money claim',
 });
 
 export default function ToolsHubPage() {
@@ -40,9 +41,9 @@ export default function ToolsHubPage() {
       <StandardHero
         badge="Free Tools"
         title="Free Tools for UK Landlords"
-        subtitle="Use our free generators, calculators, and validators to get clarity fast — upgrade only when you need court-ready documents."
-        primaryCTA={{ label: "Explore Free Tools →", href: "#tools" }}
-        secondaryCTA={{ label: "Ask Heaven →", href: "/ask-heaven" }}
+        subtitle="Use our free calculators, letter builders, and checks to understand your position quickly, then move into a full landlord pack if you need the paperwork for the next step."
+        primaryCTA={{ label: 'Explore Free Tools ->', href: '#tools' }}
+        secondaryCTA={{ label: 'Ask Heaven ->', href: '/ask-heaven' }}
         variant="pastel"
       />
 
@@ -71,7 +72,7 @@ export default function ToolsHubPage() {
                     className="hero-btn-primary block text-center"
                     aria-label={`Try ${tool.label}`}
                   >
-                    Try Free Tool →
+                    Try Free Tool ->
                   </Link>
                 </div>
               ))}
@@ -80,7 +81,6 @@ export default function ToolsHubPage() {
         </section>
       )}
 
-      {/* Commercial Wizard Links - Automated CTAs to core products */}
       <section className="py-8 bg-gray-50">
         <Container>
           <div className="max-w-4xl mx-auto">
@@ -93,7 +93,6 @@ export default function ToolsHubPage() {
           </div>
         </Container>
       </section>
-
 
       <section className="py-10 md:py-14 bg-white">
         <Container>
@@ -129,7 +128,7 @@ export default function ToolsHubPage() {
                   className="hero-btn-secondary text-center"
                   aria-label={`Try ${tool.label}`}
                 >
-                  Try Free Tool →
+                  Try Free Tool ->
                 </Link>
               </div>
             ))}

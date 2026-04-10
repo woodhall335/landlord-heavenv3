@@ -398,16 +398,16 @@ export default function HMOLicenseChecker() {
       <UniversalHero
         badge="Free Tool"
         title="HMO License Checker"
-        subtitle="Check if Your Rental Property Requires HMO Licensing"
+        subtitle="Check whether your property is likely to need an HMO licence before the council catches a problem."
         align="center"
         hideMedia
         showReviewPill={false}
         showTrustPositioningBar
         showUsageCounter
-        primaryCta={{ label: 'Start Free Checker →', href: '#checker' }}
-        secondaryCta={{ label: 'Get HMO Tenancy Agreement →', href: '/products/ast' }}
+        primaryCta={{ label: 'Start Free Checker ->', href: '#checker' }}
+        secondaryCta={{ label: 'See HMO Tenancy Agreements ->', href: '/products/ast' }}
       >
-        <p className="mt-4 text-sm text-white/90">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+        <p className="mt-4 text-sm text-white/90">Instant assessment � HMO guidance � Built to help landlords avoid licensing mistakes</p>
       </UniversalHero>
 
       {/* Legal Disclaimer Banner */}
@@ -431,7 +431,7 @@ export default function HMOLicenseChecker() {
                 Legal Disclaimer
               </p>
               <p className="text-sm text-warning-800">
-                This free version is not court-ready and is provided for general informational use only. It is not legal advice. For legally validated, court-ready documents, upgrade to the paid version.
+                This free version is a practical HMO check for general guidance only. It is not legal advice, and you should still confirm the position with the local council before relying on it.
               </p>
             </div>
           </div>
@@ -594,7 +594,7 @@ export default function HMOLicenseChecker() {
         {generated && (
           <div className="rounded-lg bg-success-50 border border-success-200 p-4">
             <p className="text-sm text-success-800 font-medium">
-              ✓ Assessment generated successfully! Your PDF has been downloaded.
+              Your assessment has been generated and downloaded successfully.
             </p>
           </div>
         )}
@@ -619,7 +619,7 @@ export default function HMOLicenseChecker() {
               safety and management standards.
             </p>
             <p className="text-error-700 font-semibold">
-              ⚠️ Penalties for unlicensed HMOs can include:
+              Penalties for unlicensed HMOs can include:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
               <li>Unlimited fines (commonly £30,000 or more)</li>
@@ -660,8 +660,7 @@ export default function HMOLicenseChecker() {
             </p>
 
             <p className="mt-4 text-primary-700 font-semibold">
-              💡 Always check with your local council to confirm whether your property requires
-              licensing. Each council has different requirements and schemes.
+              Always check with your local council to confirm whether your property requires licensing. Each council has different requirements and schemes.
             </p>
           </div>
         </div>
@@ -673,7 +672,7 @@ export default function HMOLicenseChecker() {
       </div>
 
       <FAQSection
-        title="Frequently Asked Questions"
+        title="HMO Licence FAQs For Landlords"
         faqs={faqs}
         includeSchema={false}
         showContactCTA={false}
@@ -703,3 +702,6 @@ export default function HMOLicenseChecker() {
     </div>
   );
 }
+
+
+

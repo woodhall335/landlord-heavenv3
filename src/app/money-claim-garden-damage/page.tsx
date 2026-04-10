@@ -130,7 +130,7 @@ export default function MoneyClaimGardenDamagePage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim for Garden Damage Costs"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If a tenant has left the garden overgrown, damaged, or full of waste, this guide helps you check responsibility, gather proof, and recover the restoration costs properly."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_garden_damage' }}
           showTrustPositioningBar
@@ -521,7 +521,7 @@ export default function MoneyClaimGardenDamagePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Garden damage FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -552,5 +552,4 @@ export default function MoneyClaimGardenDamagePage() {
     </>
   );
 }
-
 

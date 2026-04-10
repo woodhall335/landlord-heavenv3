@@ -32,7 +32,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Money Claim Online (MCOL) Guide for Landlords | Claim Unpaid Rent',
   description:
-    'Money Claim Online (MCOL) guide for landlords recovering unpaid rent and tenant debt. Learn fees, timelines, evidence, and how to submit a stronger claim.',
+    'Plain-English landlord guide to Money Claim Online, including fees, timelines, evidence, and when MCOL fits your tenant debt case.',
   keywords: [
     'money claim online',
     'MCOL',
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Money Claim Online (MCOL) Guide for Landlords | Claim Unpaid Rent',
     description:
-      'Complete guide to using the Money Claim Online system for landlord tenant debt recovery.',
+      'Landlord guide to using Money Claim Online for tenant debt recovery and preparing the file behind the claim.',
     type: 'article',
     url: getCanonicalUrl('/money-claim-online-mcol'),
   },
@@ -121,7 +121,7 @@ const faqs = [
 ];
 
 const ownerGuideCta = {
-  label: 'View money claim guide ->',
+  label: 'View money claim guide',
   href: '/money-claim',
 };
 
@@ -133,14 +133,14 @@ const downstreamProductCta = {
 export default function MoneyClaimOnlineMCOLPage() {
   const hero = {
     ...moneyClaimSupportHeroConfig,
-    trustText: 'MCOL-ready | England & Wales (County Court)',
+    trustText: 'MCOL guidance | England & Wales county court',
     title: 'Money Claim Online (MCOL)',
-    highlightTitle: 'done properly',
+    highlightTitle: 'with a clear file',
     subtitle:
       'Understand where Money Claim Online fits the broader landlord money claim route before you move into filing and pack generation.',
     primaryCta: ownerGuideCta,
     secondaryCta: {
-      label: 'Compare MCOL with N1 ->',
+      label: 'Compare MCOL with N1',
       href: '/money-claim-n1-claim-form',
     },
     feature: 'Letter Before Action + Particulars + interest calc + filing guide (MCOL-ready)',
@@ -203,7 +203,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   <div>
                     <h2 className="text-lg font-semibold text-charcoal">Process-first, not template-first</h2>
                     <p className="text-sm text-gray-600">
-                      We align letter → particulars → interest → filing steps so your story matches end-to-end.
+                      We align letter, particulars, interest, and filing steps so your story matches from start to finish.
                     </p>
                   </div>
                 </div>
@@ -233,8 +233,8 @@ export default function MoneyClaimOnlineMCOLPage() {
                   What is Money Claim Online (MCOL)?
                 </h2>
                 <p className="mt-4 text-lg text-gray-700">
-                  MCOL is the government’s online system for issuing county court money claims in
-                  England &amp; Wales — used by landlords to recover unpaid rent, damages, and other
+                  MCOL is the government&apos;s online system for issuing county court money claims in
+                  England and Wales, used by landlords to recover unpaid rent, damages, and other
                   tenancy debts.
                 </p>
 
@@ -328,13 +328,13 @@ export default function MoneyClaimOnlineMCOLPage() {
                     href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                     className="hero-btn-primary"
                   >
-                    Prepare my claim pack →
+                    Prepare my claim pack
                   </Link>
                   <Link
                     href="/products/money-claim"
                     className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#CDB8F6] bg-white px-5 py-3 font-medium text-[#692ED4] transition-colors hover:bg-[#F3EEFF]"
                   >
-                    View what’s included <ArrowRight className="h-4 w-4" />
+                    View what&apos;s included <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
               </div>
@@ -382,7 +382,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   </table>
                 </div>
                 <p className="px-6 py-4 text-xs text-gray-500">
-                  Fees shown reflect your on-page table (“correct as of January 2026”). Additional fees may apply if a case proceeds to hearing or enforcement.
+                  Fees shown reflect the page table and may change. Additional fees can apply if a case moves to a hearing or enforcement.
                 </p>
               </div>
             </div>
@@ -396,7 +396,7 @@ export default function MoneyClaimOnlineMCOLPage() {
               <div className="mb-10 text-center">
                 <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What your Money Claim Pack includes</h2>
                 <p className="mt-3 text-gray-700">
-                  Everything you need to move from “tenant owes money” to a clean MCOL submission.
+                  Everything you need to move from "tenant owes money" to a cleaner MCOL submission.
                 </p>
               </div>
 
@@ -441,7 +441,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                   className="hero-btn-primary"
                 >
-                  Prepare my claim — {PRODUCTS.money_claim.displayPrice} →
+                  Prepare my claim - {PRODUCTS.money_claim.displayPrice}
                 </Link>
                 <p className="text-sm text-gray-600">
                   Court fees are extra (paid directly to MCOL). You can usually claim them back.
@@ -464,7 +464,7 @@ export default function MoneyClaimOnlineMCOLPage() {
         <section className="py-12 md:py-16 bg-white">
           <Container>
             <div className="mx-auto max-w-4xl">
-              <FAQSection title="Frequently Asked Questions" faqs={faqs} includeSchema={false} showContactCTA={false} variant="white" />
+              <FAQSection title="Money Claim Online FAQs for landlords" faqs={faqs} includeSchema={false} showContactCTA={false} variant="white" />
             </div>
           </Container>
         </section>
@@ -492,7 +492,7 @@ export default function MoneyClaimOnlineMCOLPage() {
             <div className="mx-auto max-w-3xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_22px_60px_rgba(105,46,212,0.35)] md:p-12">
               <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to file MCOL with confidence?</h2>
               <p className="mb-8 text-xl text-white/90">
-                Generate your Letter Before Action, Particulars, and interest output — aligned end-to-end.
+                Generate your Letter Before Action, particulars, and interest output with one clear story behind the claim.
               </p>
 
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -500,7 +500,7 @@ export default function MoneyClaimOnlineMCOLPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_online_mcol"
                   className="hero-btn-primary"
                 >
-                  Prepare my MCOL claim pack →
+                  Prepare my MCOL claim pack
                 </Link>
               </div>
 
@@ -508,10 +508,10 @@ export default function MoneyClaimOnlineMCOLPage() {
                 className="mt-6 flex flex-col items-center gap-2 text-sm text-white/90 md:flex-row md:justify-center md:gap-6"
                 aria-label="Purchase reassurance"
               >
-                <li>✓ Preview before paying</li>
+                <li>Preview before paying</li>
                 <li>✓ Unlimited regenerations</li>
                 <li>✓ Stored 12+ months</li>
-                <li>✓ One-time payment — no subscription</li>
+                <li>One-time payment, no subscription</li>
               </ul>
             </div>
           </Container>
@@ -536,5 +536,4 @@ export default function MoneyClaimOnlineMCOLPage() {
     </>
   );
 }
-
 

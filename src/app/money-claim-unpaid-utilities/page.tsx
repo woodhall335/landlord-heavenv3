@@ -28,7 +28,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Claim Unpaid Utilities from Tenant 2026 | Bills & Energy Recovery',
   description:
-    'Recover unpaid gas, electricity, water bills from tenants. When landlords are liable and how to make a court claim.',
+    'Plain-English landlord guide to recovering unpaid gas, electricity, water, and other utility bills from tenants, including when you are liable and how to build the claim.',
   keywords: [
     'tenant unpaid utilities',
     'landlord utility bills',
@@ -109,18 +109,18 @@ const faqs = [
 export default function MoneyClaimUnpaidUtilitiesPage() {
   const hero = {
     ...moneyClaimSupportHeroConfig,
-    trustText: 'Solicitor-grade | Compliance-checked | Court-ready',
+    trustText: 'Landlord-focused | Liability checks | Clear evidence guidance',
     primaryCta: {
-      label: 'View money claim guide ->',
+      label: 'View money claim guide',
       href: '/money-claim',
     },
     secondaryCta: {
-      label: 'Check unpaid bills support ->',
+      label: 'Check unpaid bills support',
       href: '/money-claim-unpaid-bills',
     },
     title: 'Recover Unpaid Utilities from Tenants',
     subtitle:
-      'Prepare a legally validated, court-ready utility debt claim with clear evidence and figures.',
+      'Work out who is actually liable first, then use this guide to pull together a clearer utility claim with the right figures and supporting evidence.',
   };
 
   return (
@@ -650,7 +650,7 @@ export default function MoneyClaimUnpaidUtilitiesPage() {
 
         {/* FAQ Section */}
         <FAQSection
-          title="Unpaid Utilities: Frequently Asked Questions"
+          title="Unpaid utilities FAQs for landlords"
           faqs={faqs}
           showContactCTA={false}
           variant="white"

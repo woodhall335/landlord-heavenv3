@@ -77,7 +77,7 @@ export default function MoneyClaimScheduleOfDebtPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Schedule of Debt for Money Claims"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If you want your claim to read clearly from the start, a proper schedule of debt helps you show exactly what the tenant owes and how you have calculated it."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Review pre-action letter', href: '/money-claim-letter-before-action' }}
           showTrustPositioningBar
@@ -140,7 +140,7 @@ export default function MoneyClaimScheduleOfDebtPage() {
                 <p className="text-lg text-gray-600">
                   A Schedule of Debt is your evidence that you&apos;ve calculated the claim
                   correctly. Judges expect to see clear, itemised breakdowns. A well-prepared
-                  schedule shows professionalism and makes your claim harder to dispute.
+                  schedule shows the court how you reached the figure and makes the claim easier for a tenant to follow and harder to dispute.
                 </p>
               </div>
 
@@ -429,5 +429,4 @@ export default function MoneyClaimScheduleOfDebtPage() {
     </>
   );
 }
-
 

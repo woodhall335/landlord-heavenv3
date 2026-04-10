@@ -36,7 +36,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Occupation Contract Template Wales | Welsh Written Statement Template',
   description:
-    'Get an occupation contract template for Wales. Renting Homes Act 2016 compliant with all fundamental and supplementary terms.',
+    'Plain-English landlord guide to getting a Wales occupation contract template with written statement wording and the core Renting Homes Act terms.',
   keywords: [
     'occupation contract template wales',
     'welsh tenancy agreement template',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Occupation Contract Template Wales | Landlord Heaven',
     description:
-      'Get a legally compliant occupation contract template for Wales. Written statement included with all required terms.',
+      'Landlord guide to getting a Wales occupation contract template with written statement wording and current Welsh compliance.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/occupation-contract-template-wales',
   },
@@ -103,9 +103,9 @@ export default function OccupationContractTemplateWalesPage() {
           title="Occupation Contract Template Wales"
           subtitle={
             <>
-              Get a <strong>legally compliant</strong> occupation contract template for Wales.
-              Includes written statement format with all fundamental and supplementary terms
-              required by the Renting Homes (Wales) Act 2016.
+              Get a <strong>Wales-specific occupation contract template</strong> with the
+              written statement format and the main terms landlords need under the Renting
+              Homes (Wales) Act 2016.
             </>
           }
           primaryCta={{

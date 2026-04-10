@@ -25,7 +25,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Landlord Letter Before Action 2026 | Pre-Action Compliance',
   description:
-    'Solicitor-grade guidance to prepare a compliant Letter Before Action for tenant debt claims, with Pre-Action Protocol requirements.',
+    'Plain-English landlord guide to writing a compliant Letter Before Action for tenant debt claims and following the pre-action debt steps properly.',
   keywords: [
     'letter before action',
     'letter before action template',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Landlord Letter Before Action 2026 | Pre-Action Compliance',
     description:
-      'Complete guide to Letter Before Action for landlord money claims against tenants.',
+      'Landlord guide to the Letter Before Action stage before issuing a tenant debt claim.',
     type: 'article',
     url: getCanonicalUrl('/money-claim-letter-before-action'),
   },
@@ -110,7 +110,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
         data={articleSchema({
           headline: 'Letter Before Action Template for Landlords (Pre-Action Protocol Guide)',
           description:
-            'How to write a Letter Before Action for tenant debt claims that complies with Pre-Action Protocol.',
+            'Plain-English landlord guide to writing a Letter Before Action for tenant debt claims that follows the pre-action debt steps.',
           url: getCanonicalUrl('/money-claim-letter-before-action'),
           datePublished: '2026-01-15',
           dateModified: '2026-01-15',
@@ -129,7 +129,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Letter Before Action for Money Claim"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="Before you issue a court claim, you need to set out the debt clearly and give the tenant a proper chance to respond. This guide explains what the letter should include and how landlords usually handle the pre-action stage."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Review schedule of debt', href: '/money-claim-schedule-of-debt' }}
           showTrustPositioningBar
@@ -165,7 +165,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_letter_before_action"
                   className="inline-flex items-center justify-center gap-2 bg-white text-orange-800 font-semibold py-4 px-8 rounded-xl hover:bg-orange-50 transition-colors"
                 >
-                  Generate Your Letter
+                  Generate your letter
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -392,7 +392,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Get Your Letter Before Action
+                Get your Letter Before Action
               </h2>
               <p className="text-gray-600 mb-8">
                 Our Money Claim Pack includes a professionally drafted Letter Before
@@ -403,7 +403,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_letter_before_action"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Generate Your Documents — {PRODUCTS.money_claim.displayPrice}
+                Generate your documents - {PRODUCTS.money_claim.displayPrice}
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -418,7 +418,7 @@ export default function MoneyClaimLetterBeforeActionPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Letter Before Action FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -449,5 +449,4 @@ export default function MoneyClaimLetterBeforeActionPage() {
     </>
   );
 }
-
 

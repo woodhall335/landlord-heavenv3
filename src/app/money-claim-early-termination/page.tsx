@@ -130,7 +130,7 @@ export default function MoneyClaimEarlyTerminationPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim for Early Termination Losses"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If a tenant has walked away before the fixed term ended, this guide helps you work out what rent and re-letting costs you can still recover and what evidence matters most."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_early_termination' }}
           showTrustPositioningBar
@@ -420,7 +420,7 @@ export default function MoneyClaimEarlyTerminationPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Early termination FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -451,5 +451,4 @@ export default function MoneyClaimEarlyTerminationPage() {
     </>
   );
 }
-
 

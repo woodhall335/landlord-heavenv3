@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Section 8 Grounds Explained | Eviction Grounds Guide for Landlords | LandlordHeaven',
   description:
-    'A plain-English guide to Section 8 eviction grounds for landlords in England.',
+    'Plain-English landlord guide to Section 8 grounds in England, including when landlords use them and how they fit into the possession process.',
   alternates: {
     canonical,
   },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title:
       'Section 8 Grounds Explained | Eviction Grounds Guide for Landlords',
     description:
-      'Understand Section 8 eviction grounds, when landlords can use them, and how the possession process usually works.',
+      'Landlord guide to Section 8 grounds, when landlords can use them, and how the possession process usually works.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -606,7 +606,7 @@ export default function Page() {
       <section id="final-cta" className="bg-white py-14">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
 
             <p className="mt-4 leading-7 text-gray-700">
               If you need to start a Section 8 eviction, the most important step is making

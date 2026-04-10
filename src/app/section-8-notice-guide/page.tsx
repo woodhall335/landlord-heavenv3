@@ -20,7 +20,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = generateMetadata({
   title: 'Section 8 Notice Guide | Grounds, Arrears & Next Steps',
   description:
-    'Section 8 notice guide for landlords in England covering Form 3, grounds for possession, rent arrears, service, evidence, and court next steps.',
+    'Plain-English landlord guide to Section 8 notices in England, covering Form 3, grounds for possession, rent arrears, service, evidence, and court next steps.',
   path: '/section-8-notice-guide',
   type: 'article',
   keywords: [
@@ -178,9 +178,9 @@ export default function Page() {
       />
       <UniversalHero
         title="Section 8 Notice Guide"
-        subtitle="Grounds, timing, evidence, rent arrears, and what landlords should do next."
-        primaryCta={{ label: 'Start Notice Only', href: '/products/notice-only' }}
-        secondaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
+        subtitle="If you are considering the Section 8 route, this guide explains the grounds, notice stage, evidence, and what landlords should do next if the tenancy problem continues."
+        primaryCta={{ label: 'Start notice only', href: '/products/notice-only' }}
+        secondaryCta={{ label: 'Start complete eviction pack', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Section 8 notice guide icon"
         showReviewPill
@@ -593,7 +593,7 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="scroll-mt-24 py-2">
-        <FAQSection faqs={faqs} title="Section 8 Notice FAQs" />
+        <FAQSection faqs={faqs} title="Section 8 notice FAQs" />
       </section>
 
       <section className="bg-white py-12">
@@ -633,7 +633,7 @@ export default function Page() {
               </div>
             </Card>
 
-            <Card id="final-cta" title="Next Steps">
+      <Card id="final-cta" title="What to do next">
               <p className="mt-4 leading-7 text-gray-700">
                 Before serving a Section 8 notice, confirm the grounds, validate the
                 notice period, organise the evidence bundle, and plan proof of service.

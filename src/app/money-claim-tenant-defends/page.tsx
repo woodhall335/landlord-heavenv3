@@ -25,7 +25,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'What If Tenant Defends Money Claim? 2026 | Landlord Guide',
   description:
-    'What happens when a tenant defends your money claim. Common defences, how to respond, and preparing for a contested hearing.',
+    'Plain-English landlord guide to what happens when a tenant defends your money claim, including common defences, counterclaims, and hearing preparation.',
   keywords: [
     'tenant defends claim',
     'tenant defence',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'What If Tenant Defends Money Claim? 2026 | Landlord Guide',
     description:
-      'How to handle a defended money claim and common tenant defences landlords face.',
+      'Landlord guide to handling a defended money claim and preparing a clearer response to common tenant defences.',
     type: 'article',
     url: getCanonicalUrl('/money-claim-tenant-defends'),
   },
@@ -106,18 +106,18 @@ const faqs = [
 export default function MoneyClaimTenantDefendsPage() {
   const hero = {
     ...moneyClaimSupportHeroConfig,
-    trustText: 'Solicitor-grade | Compliance-checked | Court-ready',
+    trustText: 'Defended claim guidance | hearing preparation',
     primaryCta: {
-      label: 'View money claim guide ->',
+      label: 'View money claim guide',
       href: '/money-claim',
     },
     secondaryCta: {
-      label: 'Review the N1 route ->',
+      label: 'Review the N1 route',
       href: '/money-claim-n1-claim-form',
     },
     title: 'Tenant Defended Your Money Claim?',
     subtitle:
-      'Respond with a legally validated, solicitor-grade strategy and evidence plan for a stronger hearing position.',
+      'If the tenant has defended the claim, this guide helps you understand what they are really disputing, what evidence now matters most, and how to prepare for the hearing stage.',
   };
 
   return (
@@ -175,7 +175,7 @@ export default function MoneyClaimTenantDefendsPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_tenant_defends"
                   className="inline-flex items-center justify-center gap-2 bg-white text-rose-800 font-semibold py-4 px-8 rounded-xl hover:bg-rose-50 transition-colors"
                 >
-                  Start Money Claim
+                  Start money claim
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -473,7 +473,7 @@ export default function MoneyClaimTenantDefendsPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Starting a New Money Claim?
+                Starting a new money claim?
               </h2>
               <p className="text-gray-600 mb-8">
                 Build a strong case from the start. Our Money Claim Pack includes
@@ -483,7 +483,7 @@ export default function MoneyClaimTenantDefendsPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_tenant_defends"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Claim — {PRODUCTS.money_claim.displayPrice}
+                Start your claim - {PRODUCTS.money_claim.displayPrice}
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -498,7 +498,7 @@ export default function MoneyClaimTenantDefendsPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Defended money claim FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -529,6 +529,5 @@ export default function MoneyClaimTenantDefendsPage() {
     </>
   );
 }
-
 
 

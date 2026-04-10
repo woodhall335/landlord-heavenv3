@@ -53,7 +53,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
   description:
-    `Create a Northern Ireland tenancy agreement online. Written agreement wording for NI private tenancies, updated for current legislation, ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
+    `Plain-English landlord guide to creating a Northern Ireland tenancy agreement online, with NI-specific wording, current legislation, and pricing ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
   keywords: [
     'tenancy agreement northern ireland',
     'northern ireland tenancy agreement',
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
     description:
-      'Create a Northern Ireland tenancy agreement online with current NI-compliant wording and instant download.',
+      'Landlord guide to creating a Northern Ireland tenancy agreement online with current NI wording and clearer route choice.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
   },
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
     description:
-      'Create a Northern Ireland tenancy agreement online with current NI-compliant wording and instant download.',
+      'Create a Northern Ireland tenancy agreement online with current NI wording and clearer landlord guidance.',
   },
 };
 
@@ -157,8 +157,8 @@ export default function TenancyAgreementNorthernIrelandPage() {
           subtitle={
             <>
               Create a <strong>Northern Ireland tenancy agreement</strong> with wording designed for
-              <strong> NI private tenancies</strong>. Built for current NI landlord requirements,
-              with instant download from <strong>{standardPrice}</strong>.
+              <strong> NI private tenancies</strong>. Built for current landlord requirements in
+              Northern Ireland, with the option to start from <strong>{standardPrice}</strong>.
             </>
           }
           primaryCta={{

@@ -289,7 +289,7 @@ export default async function NoticeOnlyPage() {
       </section>
 
       <FAQSection
-        title="Frequently Asked Questions"
+        title="Notice pack FAQs for landlords"
         faqs={faqs}
         includeSchema={false}
         showContactCTA={false}

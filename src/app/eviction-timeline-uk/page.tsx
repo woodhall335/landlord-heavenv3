@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title:
     'Eviction Timeline UK | How Long the Eviction Process Takes for Landlords | LandlordHeaven',
   description:
-    'A detailed eviction timeline for UK landlords explaining how long each stage of the eviction process usually takes.',
+    'Plain-English landlord guide to how long eviction usually takes in England, where delays happen, and what you can do to keep the case moving.',
   alternates: {
     canonical,
   },
@@ -185,7 +185,7 @@ export default function Page() {
 
       <UniversalHero
         title="Eviction Timeline UK"
-        subtitle="A realistic breakdown of how long each stage of eviction usually takes for landlords."
+        subtitle="If you need the property back, this guide shows how long the notice, court, possession order, and enforcement stages usually take and where landlords most often lose time."
         primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
         secondaryCta={{
           label: 'Still at notice stage? Start Notice Only',
@@ -606,13 +606,13 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Eviction Timeline UK FAQs" />
+        <FAQSection faqs={faqs} title="Eviction timeline FAQs for landlords" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 text-gray-700 leading-7">
               Eviction timelines work best when landlords treat the process as a connected
               workflow rather than a sequence of rushed documents. Confirm the route,

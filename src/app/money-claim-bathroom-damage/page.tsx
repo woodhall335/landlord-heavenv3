@@ -130,7 +130,7 @@ export default function MoneyClaimBathroomDamagePage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim for Bathroom Damage"
-          subtitle="Recover bathroom damage costs through a legally validated, compliance-checked and court-ready claim process."
+          subtitle="If a tenant has left mould, broken fixtures, or avoidable bathroom damage behind, use this guide to work out what you can fairly claim and what proof you will need."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?reason=property_damage&src=seo_money_claim_bathroom_damage&topic=debt' }}
           showTrustPositioningBar
@@ -488,7 +488,7 @@ export default function MoneyClaimBathroomDamagePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Bathroom damage FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -519,5 +519,4 @@ export default function MoneyClaimBathroomDamagePage() {
     </>
   );
 }
-
 

@@ -636,13 +636,13 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Serve Section 21 Notice FAQs" />
+        <FAQSection faqs={faqs} title="Serving a Section 21 notice FAQs for landlords" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Section 21 service usually works best when the landlord treats the notice as
               part of one controlled possession file rather than as a one-off delivery
@@ -672,7 +672,7 @@ export default function Page() {
                 href={noticeOnlyProductLink}
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Legacy notice route only
+                Start Notice Only
               </Link>
             </div>
           </div>

@@ -20,7 +20,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = generateMetadata({
   title: 'Section 21 Notice Guide | Validity, Timing & Next Steps',
   description:
-    'Section 21 notice guide for landlords in England covering Form 6A, notice periods, validity checks, service, and possession next steps.',
+    'Plain-English landlord guide to Section 21 notices in England, covering Form 6A, notice periods, validity checks, service, and possession next steps.',
   path: '/section-21-notice-guide',
   type: 'article',
   keywords: [

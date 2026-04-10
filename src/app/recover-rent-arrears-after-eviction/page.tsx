@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Recover Rent Arrears After Eviction | Landlord Guide to Post-Eviction Debt Recovery | LandlordHeaven',
   description:
-    'A plain-English guide for landlords in England on recovering rent arrears after eviction.',
+    'Plain-English landlord guide to recovering rent arrears after eviction in England, including final balance checks, evidence, and debt recovery planning.',
   alternates: {
     canonical,
   },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title:
       'Recover Rent Arrears After Eviction | Landlord Guide to Post-Eviction Debt Recovery | LandlordHeaven',
     description:
-      'Understand what landlords usually do to recover rent arrears after eviction, what paperwork matters, and how to avoid weak post-eviction debt recovery files.',
+      'Landlord guide to recovering rent arrears after eviction, what paperwork matters, and how to avoid weak post-eviction debt recovery files.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -184,9 +184,9 @@ export default function Page() {
 
       <UniversalHero
         title="Recover Rent Arrears After Eviction"
-        subtitle="A practical landlord guide to what happens to the debt after possession is back and how to approach recovery with a cleaner file."
-        primaryCta={{ label: 'Start Money Claim Pack', href: '/products/money-claim' }}
-        secondaryCta={{ label: 'Need Complete Pack instead?', href: '/products/complete-pack' }}
+        subtitle="Once you have possession back, this guide helps you work out what happens to the debt next and how to approach recovery with a cleaner final arrears file."
+        primaryCta={{ label: 'Start money claim pack', href: '/products/money-claim' }}
+        secondaryCta={{ label: 'Need complete pack instead?', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Post-eviction rent arrears recovery timeline guide icon"
         showReviewPill
@@ -626,13 +626,13 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Recover Rent Arrears After Eviction FAQs" />
+        <FAQSection faqs={faqs} title="Recover rent arrears after eviction FAQs" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Post-eviction arrears recovery usually works best when the landlord pauses
               long enough to convert the possession file into a clean debt file. That

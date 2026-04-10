@@ -12,7 +12,7 @@ const premiumWizardHref = '/wizard?product=ast_premium&src=assured_shorthold_ten
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement 2026 | England Agreement Updated',
   description:
-    'Create the updated 2026 England tenancy agreement online. Built for landlords searching for an assured shorthold tenancy agreement.',
+    'Plain-English landlord guide for assured shorthold tenancy agreement searches, routing landlords into the updated 2026 England tenancy agreement flow.',
   keywords: [
     'assured shorthold tenancy agreement',
     'ast agreement england',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Assured Shorthold Tenancy Agreement 2026 | England Agreement Updated',
     description:
-      'Use the updated 2026 England tenancy agreement flow for assured shorthold tenancy agreement searches, with wording designed for the assured periodic framework from 1 May 2026.',
+      'Landlord guide to the updated 2026 England tenancy agreement flow for assured shorthold tenancy agreement searches.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Assured Shorthold Tenancy Agreement 2026 | England Agreement Updated',
     description:
-      "Use the updated 2026 England tenancy agreement flow for assured shorthold tenancy agreement searches.",
+      'Landlord guide to the updated England tenancy agreement flow for AST-related searches.',
   },
 };
 
@@ -127,8 +127,7 @@ export default function AssuredShortholdTenancyAgreementPage() {
 
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
                 This page keeps legacy AST search demand while moving landlords into the newer England
-                agreement flow with stronger positioning, broader copy and a more competitive 2026
-                landing page structure.
+                agreement flow with clearer landlord guidance and a more up-to-date 2026 landing page.
               </p>
 
               <div className="flex gap-4 justify-center flex-wrap">

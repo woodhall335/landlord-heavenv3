@@ -825,7 +825,7 @@ export default function HowToEvictTenantPage() {
         </section>
 
         <FAQSection
-          title="Frequently asked questions"
+          title="FAQs for landlords"
           faqs={howToEvictTenantFAQs}
           showContactCTA={false}
           variant="white"
@@ -834,6 +834,7 @@ export default function HowToEvictTenantPage() {
     </>
   );
 }
+
 
 
 

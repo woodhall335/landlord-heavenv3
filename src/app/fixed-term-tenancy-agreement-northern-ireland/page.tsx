@@ -37,7 +37,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Fixed Term Tenancy Agreement Northern Ireland | NI Fixed Term Tenancy',
   description:
-    'Create a fixed term tenancy agreement for Northern Ireland. Understand the differences between fixed term and periodic tenancies under NI law.',
+    'Plain-English landlord guide to creating a fixed term tenancy agreement in Northern Ireland and choosing between a fixed term and a periodic tenancy.',
   keywords: [
     'fixed term tenancy agreement northern ireland',
     'fixed term tenancy ni',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Fixed Term Tenancy Agreement Northern Ireland | Landlord Heaven',
     description:
-      'Create a fixed term tenancy agreement for Northern Ireland. Understand fixed term vs periodic tenancies under NI law.',
+      'Landlord guide to fixed term tenancy agreements in Northern Ireland and when a fixed term is a better fit than a periodic tenancy.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-northern-ireland',
   },
@@ -66,7 +66,7 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
     '@type': 'WebPage',
     name: 'Fixed Term Tenancy Agreement Northern Ireland',
     description:
-      'Create a fixed term tenancy agreement for Northern Ireland. Understand the differences between fixed term and periodic tenancies under NI law.',
+      'Plain-English landlord guide to fixed term tenancy agreements in Northern Ireland and the difference between fixed term and periodic arrangements.',
     url: 'https://landlordheaven.co.uk/fixed-term-tenancy-agreement-northern-ireland',
   };
 
@@ -102,17 +102,17 @@ export default function FixedTermTenancyAgreementNorthernIrelandPage() {
           title="Fixed Term Tenancy Agreement Northern Ireland"
           subtitle={
             <>
-              Create a <strong>fixed term tenancy agreement</strong> for Northern Ireland with a
-              defined end date. Understand when fixed term is better than periodic, and how NI law
-              affects your options.
+              If you want a tenancy with a clear start point and a defined end date, this guide
+              explains how landlords usually use a <strong>fixed term tenancy agreement</strong> in
+              Northern Ireland and when it is a better fit than letting the tenancy roll.
             </>
           }
           primaryCta={{
-            label: `Create Fixed Term Tenancy — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create fixed term tenancy - ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Agreement with Break Clause',
+            label: 'View tenancy agreement options',
             href: astProductHref,
           }}
         >

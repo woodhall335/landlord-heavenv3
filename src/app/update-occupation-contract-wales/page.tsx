@@ -37,7 +37,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Update Occupation Contract Wales | Changing Terms and Rent',
   description:
-    'How to update an occupation contract in Wales. Rent increases, term variations, and written statements under the Renting Homes Act 2016.',
+    'Plain-English landlord guide to updating an occupation contract in Wales, including rent increases, term changes, and written statement updates.',
   keywords: [
     'update occupation contract wales',
     'change occupation contract wales',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Update Occupation Contract Wales | Landlord Heaven',
     description:
-      'Update your Welsh occupation contract correctly. Rent increases, term changes, and written statement updates explained.',
+      'Landlord guide to updating a Welsh occupation contract correctly, including rent changes, term variations, and written statement updates.',
     type: 'website',
   },
 };
@@ -103,8 +103,8 @@ export default function UpdateOccupationContractWalesPage() {
           subtitle={
             <>
               Learn how to <strong>update your occupation contract</strong> correctly in
-              Wales. Understand the procedures for rent increases, changing terms, and
-              updating written statements under the Renting Homes (Wales) Act 2016.
+              Wales, including when landlords need to change rent, vary terms, or issue an
+              updated written statement under the Renting Homes (Wales) Act 2016.
             </>
           }
           primaryCta={{

@@ -5,7 +5,7 @@ import { generateMetadata } from '@/lib/seo';
 export const metadata: Metadata = generateMetadata({
   title: 'Free Rent Demand Letter Generator | UK Landlords',
   description:
-    'Create a professional rent demand letter for arrears, prompt payment clearly, and move into the right court-ready route if the tenant still does not pay.',
+    'Create a clear rent demand letter for arrears, prompt payment properly, and move into the right landlord claim route if the tenant still does not pay.',
   path: '/tools/free-rent-demand-letter',
   keywords: [
     'rent demand letter generator',
@@ -20,3 +20,4 @@ export default function FreeRentDemandLetterLayout({
 }: Readonly<{ children: ReactNode }>) {
   return children;
 }
+

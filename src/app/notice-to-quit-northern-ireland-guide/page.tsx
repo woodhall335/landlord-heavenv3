@@ -32,7 +32,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
-  description: 'Guide to Notice to Quit in Northern Ireland. Notice periods, valid grounds, and correct service under the Private Tenancies Act 2022.',
+  description: 'Plain-English landlord guide to the Notice to Quit route in Northern Ireland, including notice periods, valid grounds, and correct service under the Private Tenancies Act (NI) 2022.',
   keywords: [
     'notice to quit Northern Ireland',
     'NI eviction notice',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
-    description: 'Complete NI Notice to Quit guide. Learn notice periods, valid grounds, and avoid common mistakes.',
+    description: 'Landlord guide to Notice to Quit in Northern Ireland, including notice periods, service, and the common mistakes that cause delay.',
     type: 'article',
     url: getCanonicalUrl('/notice-to-quit-northern-ireland-guide'),
   },
@@ -68,7 +68,7 @@ export default function NoticeToQuitNIGuidePage() {
       <StructuredData
         data={articleSchema({
           headline: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
-          description: 'Complete guide to Notice to Quit in Northern Ireland. Understand notice periods, valid grounds, correct service, and how to avoid invalid notices under the Private Tenancies Act 2022.',
+          description: 'Plain-English landlord guide to Notice to Quit in Northern Ireland, including notice periods, valid grounds, service, and how to avoid invalid notices.',
           url: getCanonicalUrl('/notice-to-quit-northern-ireland-guide'),
           datePublished: '2024-03-01',
           dateModified: '2025-01-20',
@@ -88,8 +88,8 @@ export default function NoticeToQuitNIGuidePage() {
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         <UniversalHero
           title="Notice to Quit (Northern Ireland)"
-          subtitle="Follow a legally validated, solicitor-grade and compliance-checked route for serving a Northern Ireland Notice to Quit."
-          primaryCta={{ label: "Start now", href: noticeOnlyProductHref }}
+          subtitle="If you need to end a tenancy in Northern Ireland, this guide explains when a Notice to Quit is used, how landlords usually calculate the notice period, and what needs to be right before service."
+          primaryCta={{ label: 'Start Notice Only', href: noticeOnlyProductHref }}
           showTrustPositioningBar
           hideMedia
         />

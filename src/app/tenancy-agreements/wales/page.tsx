@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { TenancyPackSection } from '@/components/value-proposition';
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `Wales Occupation Contract 2026 | Tenancy Agreement Template from ${TENANCY_AGREEMENT_FROM_PRICE}`,
     description:
-      'Create a Wales Occupation Contract template online with written statement wording and instant download.',
+      'Create a Wales Occupation Contract online with written statement wording, current Welsh compliance, and clearer landlord guidance.',
   },
   alternates: {
     canonical: getCanonicalUrl('/wales-tenancy-agreement-template'),
@@ -187,7 +187,7 @@ export default function WalesOccupationContractPage() {
             </div>
 
             <div className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-800 mb-5">
-              Updated for 2026 • Renting Homes (Wales) Act 2016 compliant
+              Updated for 2026 � Renting Homes (Wales) Act 2016 compliant
             </div>
 
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -221,7 +221,7 @@ export default function WalesOccupationContractPage() {
             </div>
 
             <p className="mt-4 text-sm text-gray-600">
-              Instant download • Written statement included • No subscription required
+              Instant download � Written statement included � No subscription required
             </p>
           </div>
         </section>
@@ -611,11 +611,11 @@ export default function WalesOccupationContractPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Standard Contract</h3>
                 <p className="text-4xl font-bold text-red-600 mb-4">{standardPrice}</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>✓ Renting Homes (Wales) Act 2016 compliant wording</li>
-                  <li>✓ Written statement included</li>
-                  <li>✓ Fundamental and supplementary terms</li>
-                  <li>✓ Deposit wording</li>
-                  <li>✓ Suitable for most private Welsh landlords</li>
+                  <li>? Renting Homes (Wales) Act 2016 compliant wording</li>
+                  <li>? Written statement included</li>
+                  <li>? Fundamental and supplementary terms</li>
+                  <li>? Deposit wording</li>
+                  <li>? Suitable for most private Welsh landlords</li>
                 </ul>
                 <Link
                   href="/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_hub&topic=tenancy"
@@ -632,12 +632,12 @@ export default function WalesOccupationContractPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Contract</h3>
                 <p className="text-4xl font-bold text-red-700 mb-4">{premiumPrice}</p>
                 <ul className="space-y-2 text-gray-700 mb-6">
-                  <li>✓ Everything in Standard plus</li>
-                  <li>✓ Comprehensive inventory section</li>
-                  <li>✓ Additional supplementary terms</li>
-                  <li>✓ Enhanced compliance information</li>
+                  <li>? Everything in Standard plus</li>
+                  <li>? Comprehensive inventory section</li>
+                  <li>? Additional supplementary terms</li>
+                  <li>? Enhanced compliance information</li>
                   <li className="font-semibold text-red-700">
-                    ✓ Helpful for more complex lets and HMOs
+                    ? Helpful for more complex lets and HMOs
                   </li>
                 </ul>
                 <Link
@@ -654,7 +654,7 @@ export default function WalesOccupationContractPage() {
         {/* FAQ Section */}
         <FAQSection
           showTrustPositioningBar
-          title="Frequently Asked Questions"
+          title="FAQs For Landlords"
           faqs={[
             {
               question: 'What tenancy agreement do I need for a property in Wales?',
@@ -797,7 +797,7 @@ export default function WalesOccupationContractPage() {
               </Link>
             </div>
             <p className="mt-6 text-sm text-red-100">
-              Instant download • Legally compliant • No subscription required
+              Instant download � Legally compliant � No subscription required
             </p>
           </div>
         </section>
@@ -805,3 +805,4 @@ export default function WalesOccupationContractPage() {
     </>
   );
 }
+

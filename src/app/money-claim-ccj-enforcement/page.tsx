@@ -27,7 +27,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'CCJ Enforcement Options for Landlords 2026 | Recover Judgment Debt',
   description:
-    'How to enforce a County Court Judgment against a tenant. Bailiffs, attachment of earnings, charging orders, and other enforcement methods.',
+    'Plain-English landlord guide to enforcing a County Court Judgment against a tenant, including warrants, attachment of earnings, charging orders, and what to try next.',
   keywords: [
     'CCJ enforcement',
     'enforce CCJ',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'CCJ Enforcement Options for Landlords 2026 | Recover Judgment Debt',
     description:
-      'Complete guide to enforcing CCJs against tenants who won\'t pay.',
+      'Landlord guide to turning a CCJ into actual recovery where the tenant still does not pay.',
     type: 'article',
     url: getCanonicalUrl('/money-claim-ccj-enforcement'),
   },
@@ -112,7 +112,7 @@ export default function MoneyClaimCCJEnforcementPage() {
         data={articleSchema({
           headline: 'CCJ Enforcement Options for Landlords (UK Guide)',
           description:
-            'How to enforce a County Court Judgment against a tenant who won\'t pay.',
+            'Plain-English landlord guide to enforcing a County Court Judgment against a tenant who still has not paid.',
           url: getCanonicalUrl('/money-claim-ccj-enforcement'),
           datePublished: '2026-01-15',
           dateModified: '2026-01-15',
@@ -131,7 +131,7 @@ export default function MoneyClaimCCJEnforcementPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim CCJ Enforcement Support"
-          subtitle="Build a legally validated, solicitor-grade, compliance-checked and court-ready debt claim package."
+          subtitle="If you already have a CCJ and the tenant still has not paid, this guide explains the enforcement routes landlords usually consider next and what each one is really for."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Review MCOL and N1 routes', href: '/money-claim-online-mcol' }}
           showTrustPositioningBar
@@ -167,7 +167,7 @@ export default function MoneyClaimCCJEnforcementPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_ccj_enforcement"
                   className="inline-flex items-center justify-center gap-2 bg-white text-slate-800 font-semibold py-4 px-8 rounded-xl hover:bg-slate-50 transition-colors"
                 >
-                  Start Money Claim
+                  Start money claim
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -211,7 +211,7 @@ export default function MoneyClaimCCJEnforcementPage() {
               </div>
 
               <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                <h3 className="font-bold text-gray-900 mb-4">Before Enforcing, Consider:</h3>
+                <h3 className="font-bold text-gray-900 mb-4">Before you enforce, consider:</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
@@ -419,7 +419,7 @@ export default function MoneyClaimCCJEnforcementPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Need to Start a Money Claim First?
+                Need to start a money claim first?
               </h2>
               <p className="text-gray-600 mb-8">
                 Before you can enforce, you need a CCJ. Our Money Claim Pack includes
@@ -429,7 +429,7 @@ export default function MoneyClaimCCJEnforcementPage() {
                 href="/products/money-claim?topic=debt&src=seo_money_claim_ccj_enforcement"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Start Your Money Claim — {PRODUCTS.money_claim.displayPrice}
+                Start your money claim - {PRODUCTS.money_claim.displayPrice}
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-sm text-gray-500 mt-3">
@@ -444,7 +444,7 @@ export default function MoneyClaimCCJEnforcementPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                CCJ enforcement FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -475,5 +475,4 @@ export default function MoneyClaimCCJEnforcementPage() {
     </>
   );
 }
-
 

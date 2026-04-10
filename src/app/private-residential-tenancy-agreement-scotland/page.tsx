@@ -38,7 +38,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Private Residential Tenancy Agreement (Scotland) | Create PRT Online',
   description:
-    'Create a legally valid Private Residential Tenancy (PRT) agreement for Scotland. Compliant with the Private Housing (Tenancies) (Scotland) Act 2016.',
+    'Plain-English landlord guide to creating a Private Residential Tenancy agreement in Scotland, with the terms and statutory framework a Scottish tenancy needs.',
   keywords: [
     'private residential tenancy agreement',
     'prt tenancy agreement scotland',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Private Residential Tenancy Agreement (Scotland) | Landlord Heaven',
     description:
-      'Create a legally valid PRT for Scotland. Compliant with Scottish tenancy law and enforceable at the First-tier Tribunal.',
+      'Landlord guide to creating the right PRT agreement for Scotland and avoiding English AST wording that does not fit Scottish law.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/private-residential-tenancy-agreement-scotland',
   },
@@ -68,7 +68,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
     '@type': 'WebPage',
     name: 'Private Residential Tenancy Agreement (Scotland)',
     description:
-      'Create a legally valid Private Residential Tenancy agreement for Scotland. Compliant with the Private Housing (Tenancies) (Scotland) Act 2016.',
+      'Plain-English landlord guide to creating a Private Residential Tenancy agreement in Scotland under the Private Housing (Tenancies) (Scotland) Act 2016.',
     url: 'https://landlordheaven.co.uk/private-residential-tenancy-agreement-scotland',
   };
 
@@ -104,16 +104,17 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
           title="Private Residential Tenancy Agreement"
           subtitle={
             <>
-              Create a <strong>legally valid</strong> PRT for Scotland. Compliant with the Private
-              Housing (Tenancies) (Scotland) Act 2016 and enforceable at the First-tier Tribunal.
+              If you are letting in Scotland, you need a tenancy written for the Scottish PRT
+              system. This guide explains what a proper PRT needs, how it differs from an English
+              AST, and how to give yourself a cleaner paper trail from the start.
             </>
           }
           primaryCta={{
-            label: `Create PRT Agreement — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create PRT agreement - ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Agreement with Extras',
+            label: 'View tenancy agreement options',
             href: astProductHref,
           }}
         >
@@ -149,7 +150,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
                 What Is a Private Residential Tenancy?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Understanding Scotland&apos;s unique tenancy framework introduced in 2016.
+                A quick landlord-friendly explanation of how the Scottish PRT system works.
               </p>
 
               <div className="prose prose-lg max-w-none text-gray-600">
@@ -212,19 +213,19 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
                         Problems with English Templates
                       </h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>• Reference wrong legislation (Housing Act 1988)</li>
-                        <li>• Include Section 21/Section 8 terms</li>
-                        <li>• Missing mandatory Scottish terms</li>
-                        <li>• Invalid eviction procedures</li>
+                        <li>Reference the wrong legislation</li>
+                        <li>Use Section 21 or Section 8 wording that does not apply</li>
+                        <li>Miss mandatory Scottish terms</li>
+                        <li>Point landlords toward the wrong possession route</li>
                       </ul>
                     </div>
                     <div className="bg-white rounded-lg p-4 border border-amber-200">
                       <h3 className="font-semibold text-amber-900 mb-2">Consequences</h3>
                       <ul className="text-sm text-amber-800 space-y-1">
-                        <li>• Notice to Leave may be invalid</li>
-                        <li>• Tribunal may refuse eviction</li>
-                        <li>• Tenant could challenge agreement</li>
-                        <li>• Potential financial penalties</li>
+                        <li>Your Notice to Leave can be challenged</li>
+                        <li>The Tribunal may not accept the paperwork you rely on</li>
+                        <li>The tenant can dispute terms more easily</li>
+                        <li>You can create avoidable cost and delay later</li>
                       </ul>
                     </div>
                   </div>
@@ -618,7 +619,7 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
         {/* FAQ Section */}
         <FAQSection
           faqs={prtTenancyAgreementFAQs}
-          title="PRT Tenancy Agreement FAQ"
+          title="PRT tenancy agreement FAQs for landlords"
           showContactCTA={false}
           variant="gray"
         />
@@ -632,8 +633,8 @@ export default function PrivateResidentialTenancyAgreementScotlandPage() {
                 variant="final"
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
-                title="Create Your PRT Agreement Today"
-                description="Legally valid. Tribunal-ready. Compliant with the 2016 Act. Ready in minutes."
+                title="Create your PRT agreement"
+                description="Use a Scottish tenancy agreement that matches the PRT system and gives you a clearer starting point if problems arise later."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

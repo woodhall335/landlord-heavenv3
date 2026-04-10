@@ -31,8 +31,8 @@ const moneyClaimProductHref = '/products/money-claim';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'County Court Claim Form Guide UK 2026 — N1, N5, N5B Forms Explained',
-  description: 'Guide to county court claim forms for UK landlords. N1 for money claims, N5 for possession, N5B for accelerated. Fees and process explained.',
+  title: 'County Court Claim Form Guide UK 2026 | N1, N5, N5B Forms Explained',
+  description: 'Plain-English landlord guide to choosing between N1, N5, and N5B, including what each form is for, what the court expects, and how the routes differ.',
   keywords: [
     'county court claim form',
     'n1 claim form',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'County Court Claim Form Guide UK 2026 | Landlord Heaven',
-    description: 'Which court form do you need? Complete guide to N1, N5, and N5B forms for landlord claims.',
+    description: 'Which court form fits your case? Landlord guide to N1, N5, and N5B for money claims, possession claims, and accelerated possession.',
     type: 'website',
   },
 };
@@ -95,7 +95,7 @@ export default function CountyCourtClaimFormGuidePage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'County Court Claim Form Guide UK',
-    description: 'Complete guide to county court claim forms for UK landlords. N1, N5, and N5B forms explained.',
+    description: 'Plain-English landlord guide to county court claim forms, including when landlords use N1, N5, and N5B.',
     url: 'https://landlordheaven.co.uk/county-court-claim-form-guide',
   };
 
@@ -121,7 +121,7 @@ export default function CountyCourtClaimFormGuidePage() {
           badge="England & Wales"
           badgeIcon={<Scale className="w-4 h-4" />}
           title="County Court Claim Form Guide UK"
-          subtitle={<>Not sure which <strong>county court claim form</strong> to use? This guide explains Form N1, N5, and N5B — so you file the right claim the first time.</>}
+          subtitle={<>Not sure which <strong>county court claim form</strong> fits your case? This guide explains when landlords use N1, N5, or N5B and what usually matters before you file.</>}
           primaryCta={{ label: 'Start Complete Eviction Pack', href: completePackProductHref }}
           secondaryCta={{ label: 'Debt-only case? Start Money Claim', href: moneyClaimProductHref }}
           variant="pastel"
@@ -130,15 +130,15 @@ export default function CountyCourtClaimFormGuidePage() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              All Forms Pre-Filled
+              Form route explained
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Court-Ready Documents
+              Landlord-focused guidance
             </span>
             <span className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-green-500" />
-              Step-by-Step Guidance
+              Clear filing workflow
             </span>
           </div>
         </UniversalHero>
@@ -207,7 +207,7 @@ export default function CountyCourtClaimFormGuidePage() {
                 <div className="bg-green-50 rounded-xl p-6 border border-green-200 relative">
                   <div className="absolute -top-3 right-4">
                     <span className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                      FASTEST
+                      OFTEN CLEANER
                     </span>
                   </div>
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
@@ -332,7 +332,7 @@ export default function CountyCourtClaimFormGuidePage() {
               </h3>
 
               <p className="text-gray-700 mb-4">
-                Form N5B is the fastest route to possession — but it&apos;s only available for Section 21
+                Form N5B is often the cleaner route to possession in the right case - but it&apos;s only available for Section 21
                 (no-fault) evictions. Key characteristics:
               </p>
 
@@ -506,8 +506,8 @@ export default function CountyCourtClaimFormGuidePage() {
         <SeoCtaBlock
           pageType="court"
           variant="final"
-          title="Get Court-Ready Documents"
-          description="Our packs include pre-filled court forms, evidence checklists, and step-by-step filing instructions."
+          title="Get the right court documents in place"
+          description="Use the right workflow for the route you are taking, with clearer form support, evidence checklists, and filing guidance."
           jurisdiction="england"
         />
 

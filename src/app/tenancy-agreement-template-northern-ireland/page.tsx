@@ -36,7 +36,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement Template 2026',
   description:
-    'Download a tenancy agreement template for Northern Ireland. Compliant with the Private Tenancies Act 2022. Court-ready documents.',
+    'Plain-English landlord guide to Northern Ireland tenancy agreement templates, including what a valid NI agreement needs and why generic templates often cause problems.',
   keywords: [
     'tenancy agreement template northern ireland',
     'ni tenancy agreement template',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Tenancy Agreement Template Northern Ireland | Landlord Heaven',
     description:
-      'Download a legally valid tenancy agreement template for Northern Ireland. Court-ready and compliant with NI legislation.',
+      'Landlord guide to Northern Ireland tenancy agreement templates and the clauses landlords usually need to get right from the start.',
     type: 'website',
   },
 };
@@ -64,7 +64,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
     '@type': 'WebPage',
     name: 'Tenancy Agreement Template Northern Ireland',
     description:
-      'Download a legally valid tenancy agreement template for Northern Ireland. Compliant with the Private Tenancies Act 2022 and 2006 Order.',
+      'Plain-English landlord guide to Northern Ireland tenancy agreement templates, including the 2006 Order, the 2022 Act, and the practical clauses landlords usually need.',
     url: 'https://landlordheaven.co.uk/tenancy-agreement-template-northern-ireland',
   };
 
@@ -99,17 +99,17 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
           title="Tenancy Agreement Template Northern Ireland"
           subtitle={
             <>
-              Get a <strong>professionally drafted</strong> tenancy agreement template for Northern
-              Ireland. Fully compliant with the Private Tenancies Act (NI) 2022 and ready for
-              immediate use.
+              If you need a tenancy agreement for Northern Ireland, this guide explains what a good
+              template should cover, what the 2022 Act requires, and why NI landlords should avoid
+              relying on generic paperwork from other parts of the UK.
             </>
           }
           primaryCta={{
-            label: `Get NI Template — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Get NI template - ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Template with Extras',
+            label: 'View tenancy agreement options',
             href: astProductHref,
           }}
           variant="pastel"
@@ -126,7 +126,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Court-Ready
+              Landlord-ready
             </span>
           </div>
         </UniversalHero>
@@ -463,8 +463,8 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
                 variant="section"
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
-                title="Get Your NI Tenancy Template Now"
-                description="Professionally drafted. 2022 Act compliant. Ready to use in minutes."
+                title="Get your NI tenancy template now"
+                description="Start with a Northern Ireland agreement that reflects the current legal position and is easier to rely on later."
               />
             </div>
           </div>
@@ -627,7 +627,7 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
         {/* FAQ Section */}
         <FAQSection
           faqs={niTenancyTemplateFAQs}
-          title="NI Tenancy Template FAQ"
+          title="NI tenancy template FAQs for landlords"
           showContactCTA={false}
           variant="gray"
         />
@@ -641,8 +641,8 @@ export default function TenancyAgreementTemplateNorthernIrelandPage() {
                 variant="final"
                 pagePath={PAGE_PATH}
                 jurisdiction="northern-ireland"
-                title="Download Your NI Tenancy Template Today"
-                description="Legally valid. 2022 Act compliant. Instant download. Ready in minutes."
+                title="Get your NI tenancy template"
+                description="Use a Northern Ireland template that matches the current rules instead of piecing together the paperwork from generic downloads."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

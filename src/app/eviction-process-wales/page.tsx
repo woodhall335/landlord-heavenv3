@@ -42,7 +42,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process',
   description:
-    'Complete guide to the eviction process in Wales for landlords.',
+    'Plain-English landlord guide to the eviction process in Wales, including Section 173, breach notices, court steps, and next actions under the Welsh framework.',
   keywords: [
     'eviction process wales',
     'how to evict a tenant in wales',
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Eviction Process Wales | Landlord Heaven',
     description:
-      'Section 173, breach-based possession routes, court process, and timelines for Welsh landlords.',
+      'Plain-English landlord guide to Welsh possession routes, court process, and timelines.',
   },
   alternates: {
     canonical: getCanonicalUrl('/eviction-process-wales'),

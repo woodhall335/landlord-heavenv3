@@ -36,7 +36,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'How Much Does Eviction Cost UK? Full Breakdown (2026)',
-  description: 'Complete breakdown of UK eviction costs in 2026. Court fees, bailiff costs, solicitor fees, and DIY options compared. Budget for your eviction.',
+  description: 'Plain-English landlord guide to eviction costs in 2026, including court fees, bailiff costs, solicitor costs, DIY options, and the hidden cost of delay.',
   keywords: [
     'eviction cost uk',
     'how much does eviction cost',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'How Much Does Eviction Cost UK? Full Breakdown | Landlord Heaven',
-    description: 'Complete UK eviction cost breakdown for 2026. Court fees, bailiffs, and full court-fee and process cost outlook for eviction.',
+    description: 'Landlord guide to eviction costs in 2026, including court fees, bailiffs, solicitors, and the wider cost of time lost during the process.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/eviction-cost-uk',
   },
@@ -100,7 +100,7 @@ export default function EvictionCostUkPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'Eviction Cost UK - Full Breakdown',
-    description: 'Complete guide to eviction costs in the UK including court fees, bailiff costs, and solicitor fees.',
+    description: 'Plain-English landlord guide to eviction costs in the UK, including court fees, bailiff costs, and solicitor fees.',
     url: 'https://landlordheaven.co.uk/eviction-cost-uk',
   };
 
@@ -135,7 +135,7 @@ export default function EvictionCostUkPage() {
           badge="2026 Prices"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="How Much Does Eviction Cost UK?"
-          subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on your approach. Here&apos;s the full breakdown with full statutory process cost breakdown.</>}
+          subtitle={<>Budget between <strong>£500 and £3,000+</strong> depending on the route you take. This guide breaks down the real costs landlords usually face from notice through to enforcement.</>}
           primaryCTA={{ label: 'Start Complete Eviction Pack', href: completePackProductHref }}
           secondaryCTA={{ label: 'Tenant already left? Start Money Claim', href: moneyClaimProductHref }}
           variant="pastel"
@@ -144,15 +144,15 @@ export default function EvictionCostUkPage() {
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              80% Cheaper Than Solicitors
+              Often far cheaper than solicitors
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Court-Ready Format
+              Clear route comparison
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />
-              Same Day Documents
+              Faster decision-making
             </span>
           </div>
         </StandardHero>
@@ -267,8 +267,8 @@ export default function EvictionCostUkPage() {
 
               <div className="mt-8 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
                 <p className="text-green-900">
-                  <strong>Save £1,000-1,500</strong> by using our DIY packs instead of a solicitor.
-                  Same court-ready documents, fraction of the cost.
+                  <strong>You can often save a substantial amount</strong> by using the right DIY route
+                  instead of handing the whole case to a solicitor from the start.
                 </p>
               </div>
             </div>
@@ -419,8 +419,8 @@ export default function EvictionCostUkPage() {
                 pageType="general"
                 variant="section"
                 jurisdiction="england"
-                title="Keep Costs Low — Use Our DIY Packs"
-                description={`Court-ready documents at a fraction of solicitor costs. Notice Only from ${noticeOnlyPrice}, Complete Pack ${completePackPrice}.`}
+                title="Keep costs low with the right route"
+                description={`Notice Only starts from ${noticeOnlyPrice} and Complete Pack from ${completePackPrice}, so you can compare the document route against solicitor costs more clearly.`}
               />
             </div>
           </div>

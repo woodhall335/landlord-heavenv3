@@ -131,7 +131,7 @@ export default function MoneyClaimAbandonedGoodsPage() {
       <main className="min-h-screen bg-gray-50">
         <UniversalHero
           title="Money Claim for Abandoned Goods Costs"
-          subtitle="Recover abandoned goods and clearance costs using a legally validated, court-ready money claim route."
+          subtitle="If a tenant has left belongings behind, follow the right notice process first and then recover your clearance, storage, and disposal costs in a clearer money claim."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
           secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt' }}
           showTrustPositioningBar
@@ -550,7 +550,7 @@ export default function MoneyClaimAbandonedGoodsPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                Frequently Asked Questions
+                Abandoned goods FAQs for landlords
               </h2>
               <FAQSection faqs={faqs} 
                 showTrustPositioningBar
@@ -581,5 +581,4 @@ export default function MoneyClaimAbandonedGoodsPage() {
     </>
   );
 }
-
 

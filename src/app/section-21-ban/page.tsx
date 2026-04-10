@@ -584,7 +584,7 @@ export default function Section21BanPage() {
           <Container>
             <div className="mx-auto max-w-3xl">
               <FAQSection
-                title="Frequently Asked Questions"
+                title="Section 21 transition FAQs for landlords"
                 faqs={faqs}
                 showContactCTA={false}
                 variant="white"
@@ -596,7 +596,7 @@ export default function Section21BanPage() {
         <section id="final-cta" className="bg-white pb-14 pt-2">
           <Container>
             <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-              <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+              <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
               <p className="mt-4 leading-7 text-gray-700">
                 Section 21 deadline pages work best when they do two jobs at once: create enough
                 urgency to move the landlord forward, and still make clear that a valid notice
