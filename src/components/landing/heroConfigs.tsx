@@ -52,7 +52,7 @@ function withPreset(
 export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('home'),
-  trustText: 'Built for landlords under pressure | Updated for current housing law',
+  trustText: 'Built for landlords under pressure | Renters Right Act Compliant 2026',
   title: 'Tenant Not Paying or',
   highlightTitle: 'Refusing to Leave?',
   subtitle: (
@@ -81,7 +81,7 @@ export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('ast'),
   mediaSrc: '/images/tenancy_agreements.webp',
-  trustText: 'Updated for current housing law | England agreement comparison',
+  trustText: 'Renters Right Act Compliant 2026 | England agreement comparison',
   title: 'Need to Create the Right',
   highlightTitle: 'England Agreement Routes',
   subtitle: astSubtitle,
@@ -105,7 +105,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('notice_only'),
   mediaSrc: '/images/notice_bundles.webp',
-  trustText: 'Updated for current housing law | Notice route checks before you serve',
+  trustText: 'Renters Right Act Compliant 2026 | Notice route checks before you serve',
   title: 'Need to Create the Right',
   highlightTitle: 'Notice Pack?',
   subtitle:
@@ -125,7 +125,7 @@ export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('complete_pack'),
   mediaSrc: '/images/eviction_packs.webp',
-  trustText: 'Updated for current housing law | England-only',
+  trustText: 'Renters Right Act Compliant 2026 | England-only',
   title: 'Need to Evict a Tenant',
   highlightTitle: 'Complete Eviction Pack',
   subtitle:
@@ -145,7 +145,7 @@ export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('money_claim'),
   mediaSrc: '/images/money_claims.webp',
-  trustText: 'Updated for current housing law | England-only',
+  trustText: 'Renters Right Act Compliant 2026 | England-only',
   title: 'Ready to Start a',
   highlightTitle: 'Landlord Money Claim Pack?',
   subtitle:

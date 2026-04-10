@@ -686,7 +686,7 @@ export default function ASTProductPage() {
       <div className="pointer-events-none absolute left-[18%] top-[95rem] h-56 w-56 rounded-full bg-[#ECE6FF] opacity-55 blur-3xl" />
 
       <UniversalHero
-        trustText="Updated for current housing law"
+                trustText="Renters Right Act Compliant 2026"
         title="Choose the right England agreement type"
         subtitle="Use this page to compare the five live England agreement routes so you can choose the agreement that actually fits the occupier setup, the property, and how you plan to manage the let."
         actionsSlot={

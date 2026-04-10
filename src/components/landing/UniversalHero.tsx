@@ -118,7 +118,7 @@ export function UniversalHero({
   const shouldRenderHeading = Boolean(title || highlightTitle);
   const shouldShowReviewPill = showReviewPill ?? true;
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);
-  const resolvedTrustText = trustText ?? 'Updated for current housing law';
+  const resolvedTrustText = trustText ?? 'Renters Right Act Compliant 2026';
   const trustTextLooksLikeReview = Boolean(
     resolvedTrustText &&
       /(\*{3,}|\bstars?\b|\breviews?\b|\/5\b|\brated\b)/i.test(resolvedTrustText)
