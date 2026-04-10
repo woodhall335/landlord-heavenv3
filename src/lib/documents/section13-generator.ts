@@ -225,6 +225,11 @@ export const SECTION13_DEFENSIVE_DOCUMENT_TYPES = [
   'section13_negotiation_email_template',
 ] as const;
 
+export const SECTION13_PREVIEWABLE_DOCUMENT_TYPES = SECTION13_DEFENSIVE_DOCUMENT_TYPES;
+
+export type Section13PreviewableDocumentType =
+  typeof SECTION13_PREVIEWABLE_DOCUMENT_TYPES[number];
+
 export const SECTION13_BUNDLE_DOCUMENT_TYPES = [
   'section13_tribunal_bundle',
   'section13_tribunal_bundle_zip',
@@ -242,6 +247,12 @@ export const SECTION13_BUNDLE_SOURCE_DOCUMENT_TYPES = [
   'section13_evidence_checklist',
   'section13_negotiation_email_template',
 ] as const;
+
+export function isSection13PreviewableDocumentType(
+  documentType: string
+): documentType is Section13PreviewableDocumentType {
+  return (SECTION13_PREVIEWABLE_DOCUMENT_TYPES as readonly string[]).includes(documentType);
+}
 
 type SectionBlock = {
   heading?: string;
@@ -2079,6 +2090,171 @@ async function createZipBundle(
   return zip.generateAsync({ type: 'uint8array' });
 }
 
+export async function generateSection13PreviewableDocument(params: {
+  caseId: string;
+  documentType: Section13PreviewableDocumentType;
+  productType: Section13ProductSku;
+  state: Section13State;
+  comparables: Section13Comparable[];
+  evidenceFiles?: Section13EvidenceFile[];
+  snapshot?: Section13OutputSnapshot | null;
+}): Promise<Section13PersistableDocument> {
+  const {
+    caseId,
+    documentType,
+    productType,
+    state,
+    comparables,
+    evidenceFiles = [],
+    snapshot,
+  } = params;
+  const resolvedState = getSnapshotState(state, snapshot);
+  const resolvedComparables = getSnapshotComparables(comparables, snapshot);
+
+  if (
+    productType !== 'section13_defensive' &&
+    !SECTION13_CORE_DOCUMENT_TYPES.includes(
+      documentType as (typeof SECTION13_CORE_DOCUMENT_TYPES)[number]
+    )
+  ) {
+    throw new Error(`Document type ${documentType} requires the Section 13 Defensive Pack`);
+  }
+
+  switch (documentType) {
+    case 'section13_form_4a': {
+      const pdfBytes = await generateSection13Form4A(resolvedState, snapshot);
+      return {
+        title: 'Form 4A rent increase notice',
+        description: 'Official Form 4A completed from your Section 13 wizard answers.',
+        document_type: 'section13_form_4a',
+        file_name: `section13-form-4a-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_justification_report': {
+      const pdfBytes = await buildJustificationReportPdf(
+        resolvedState,
+        resolvedComparables,
+        snapshot
+      );
+      return {
+        title: 'Rent increase justification report',
+        description: 'Comparable rent evidence and adjusted market analysis.',
+        document_type: 'section13_justification_report',
+        file_name: `section13-justification-report-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_proof_of_service_record': {
+      const pdfBytes = await generateProofOfServicePDF({
+        landlord_name: resolvedState.landlord.landlordName,
+        tenant_name: resolvedState.tenancy.tenantNames.join(', '),
+        property_address: buildPropertyAddress(resolvedState),
+        document_served: "Form 4A - Landlord's notice proposing a new rent",
+        served_date: resolvedState.proposal.serviceDate || undefined,
+        expiry_date: resolvedState.proposal.proposedStartDate || undefined,
+        service_address: buildPropertyAddress(resolvedState),
+        service_method:
+          resolvedState.proposal.serviceMethod === 'hand_delivered'
+            ? 'hand_delivery'
+            : resolvedState.proposal.serviceMethod === 'post'
+              ? 'first_class_post'
+              : resolvedState.proposal.serviceMethod === 'registered_post'
+                ? 'recorded_delivery'
+                : resolvedState.proposal.serviceMethod === 'email'
+                  ? 'email'
+                  : undefined,
+        footer_branding: SECTION13_PROOF_OF_SERVICE_BRAND,
+      });
+      return {
+        title: 'Proof of service record',
+        description: 'Service method record for the Section 13 notice.',
+        document_type: 'section13_proof_of_service_record',
+        file_name: `section13-proof-of-service-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_cover_letter': {
+      const pdfBytes = await buildCoverLetterPdf(resolvedState, snapshot);
+      return {
+        title: 'Rent increase cover letter',
+        description: 'Plain-English cover letter to accompany the notice.',
+        document_type: 'section13_cover_letter',
+        file_name: `section13-cover-letter-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_tribunal_argument_summary': {
+      const pdfBytes = await buildTribunalArgumentSummaryPdf(
+        resolvedState,
+        resolvedComparables,
+        snapshot
+      );
+      return {
+        title: 'Tribunal Argument Summary',
+        description:
+          'One-page case-specific summary of the landlord position and consistent argument points.',
+        document_type: 'section13_tribunal_argument_summary',
+        file_name: `section13-tribunal-argument-summary-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_tribunal_defence_guide': {
+      const pdfBytes = await buildDefenceGuidePdf(resolvedState);
+      return {
+        title: 'Tribunal defence guide',
+        description: 'Step-by-step preparation guide for a challenged rent increase.',
+        document_type: 'section13_tribunal_defence_guide',
+        file_name: `section13-tribunal-defence-guide-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_landlord_response_template': {
+      const pdfBytes = await buildLandlordResponseTemplatePdf(resolvedState);
+      return {
+        title: 'Landlord response template',
+        description: 'Template response aligned to the current rent determination process.',
+        document_type: 'section13_landlord_response_template',
+        file_name: `section13-landlord-response-template-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_legal_briefing': {
+      const pdfBytes = await buildLegalBriefingPdf(resolvedState);
+      return {
+        title: 'Tribunal legal briefing',
+        description: 'Short legal and practical hearing briefing.',
+        document_type: 'section13_legal_briefing',
+        file_name: `section13-legal-briefing-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_evidence_checklist': {
+      const pdfBytes = await buildEvidenceChecklistPdf(
+        resolvedState,
+        evidenceFiles.map((item) => item.upload)
+      );
+      return {
+        title: 'Evidence checklist',
+        description: 'Checklist of the evidence to prepare or upload.',
+        document_type: 'section13_evidence_checklist',
+        file_name: `section13-evidence-checklist-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_negotiation_email_template': {
+      const pdfBytes = await buildNegotiationEmailTemplatePdf(resolvedState);
+      return {
+        title: 'Negotiation email template',
+        description: 'Pre-hearing negotiation wording for the tenant.',
+        document_type: 'section13_negotiation_email_template',
+        file_name: `section13-negotiation-email-template-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+  }
+}
+
 export async function generateSection13CoreDocuments(params: {
   caseId: string;
   productType: Section13ProductSku;
@@ -2088,128 +2264,23 @@ export async function generateSection13CoreDocuments(params: {
   snapshot?: Section13OutputSnapshot | null;
 }): Promise<Section13PersistableDocument[]> {
   const { caseId, productType, state, comparables, evidenceFiles = [], snapshot } = params;
-  const resolvedState = getSnapshotState(state, snapshot);
-  const resolvedComparables = getSnapshotComparables(comparables, snapshot);
-
-  const form4ABytes = await generateSection13Form4A(resolvedState, snapshot);
-  const justificationReportBytes = await buildJustificationReportPdf(
-    resolvedState,
-    resolvedComparables,
-    snapshot
+  const documentTypes =
+    productType === 'section13_defensive'
+      ? SECTION13_DEFENSIVE_DOCUMENT_TYPES
+      : SECTION13_CORE_DOCUMENT_TYPES;
+  const documents = await Promise.all(
+    documentTypes.map((documentType) =>
+      generateSection13PreviewableDocument({
+        caseId,
+        documentType,
+        productType,
+        state,
+        comparables,
+        evidenceFiles,
+        snapshot,
+      })
+    )
   );
-  const proofOfServiceBytes = await generateProofOfServicePDF({
-    landlord_name: resolvedState.landlord.landlordName,
-    tenant_name: resolvedState.tenancy.tenantNames.join(', '),
-    property_address: buildPropertyAddress(resolvedState),
-    document_served: "Form 4A - Landlord's notice proposing a new rent",
-    served_date: resolvedState.proposal.serviceDate || undefined,
-    expiry_date: resolvedState.proposal.proposedStartDate || undefined,
-    service_address: buildPropertyAddress(resolvedState),
-    service_method:
-      resolvedState.proposal.serviceMethod === 'hand_delivered'
-        ? 'hand_delivery'
-        : resolvedState.proposal.serviceMethod === 'post'
-          ? 'first_class_post'
-          : resolvedState.proposal.serviceMethod === 'registered_post'
-            ? 'recorded_delivery'
-            : resolvedState.proposal.serviceMethod === 'email'
-              ? 'email'
-              : undefined,
-    footer_branding: SECTION13_PROOF_OF_SERVICE_BRAND,
-  });
-  const coverLetterBytes = await buildCoverLetterPdf(resolvedState, snapshot);
-
-  const documents: Section13PersistableDocument[] = [
-    {
-      title: 'Form 4A rent increase notice',
-      description: 'Official Form 4A completed from your Section 13 wizard answers.',
-      document_type: 'section13_form_4a',
-      file_name: `section13-form-4a-${caseId}.pdf`,
-      pdf: Buffer.from(form4ABytes),
-    },
-    {
-      title: 'Rent increase justification report',
-      description: 'Comparable rent evidence and adjusted market analysis.',
-      document_type: 'section13_justification_report',
-      file_name: `section13-justification-report-${caseId}.pdf`,
-      pdf: Buffer.from(justificationReportBytes),
-    },
-    {
-      title: 'Proof of service record',
-      description: 'Service method record for the Section 13 notice.',
-      document_type: 'section13_proof_of_service_record',
-      file_name: `section13-proof-of-service-${caseId}.pdf`,
-      pdf: Buffer.from(proofOfServiceBytes),
-    },
-    {
-      title: 'Rent increase cover letter',
-      description: 'Plain-English cover letter to accompany the notice.',
-      document_type: 'section13_cover_letter',
-      file_name: `section13-cover-letter-${caseId}.pdf`,
-      pdf: Buffer.from(coverLetterBytes),
-    },
-  ];
-
-  if (productType === 'section13_defensive') {
-    const argumentSummaryBytes = await buildTribunalArgumentSummaryPdf(
-      resolvedState,
-      resolvedComparables,
-      snapshot
-    );
-    const defenceGuideBytes = await buildDefenceGuidePdf(resolvedState);
-    const responseTemplateBytes = await buildLandlordResponseTemplatePdf(resolvedState);
-    const legalBriefingBytes = await buildLegalBriefingPdf(resolvedState);
-    const evidenceChecklistBytes = await buildEvidenceChecklistPdf(
-      resolvedState,
-      evidenceFiles.map((item) => item.upload)
-    );
-    const negotiationEmailBytes = await buildNegotiationEmailTemplatePdf(resolvedState);
-
-    documents.push(
-      {
-        title: 'Tribunal Argument Summary',
-        description: 'One-page case-specific summary of the landlord position and consistent argument points.',
-        document_type: 'section13_tribunal_argument_summary',
-        file_name: `section13-tribunal-argument-summary-${caseId}.pdf`,
-        pdf: Buffer.from(argumentSummaryBytes),
-      },
-      {
-        title: 'Tribunal defence guide',
-        description: 'Step-by-step preparation guide for a challenged rent increase.',
-        document_type: 'section13_tribunal_defence_guide',
-        file_name: `section13-tribunal-defence-guide-${caseId}.pdf`,
-        pdf: Buffer.from(defenceGuideBytes),
-      },
-      {
-        title: 'Landlord response template',
-        description: 'Template response aligned to the current rent determination process.',
-        document_type: 'section13_landlord_response_template',
-        file_name: `section13-landlord-response-template-${caseId}.pdf`,
-        pdf: Buffer.from(responseTemplateBytes),
-      },
-      {
-        title: 'Tribunal legal briefing',
-        description: 'Short legal and practical hearing briefing.',
-        document_type: 'section13_legal_briefing',
-        file_name: `section13-legal-briefing-${caseId}.pdf`,
-        pdf: Buffer.from(legalBriefingBytes),
-      },
-      {
-        title: 'Evidence checklist',
-        description: 'Checklist of the evidence to prepare or upload.',
-        document_type: 'section13_evidence_checklist',
-        file_name: `section13-evidence-checklist-${caseId}.pdf`,
-        pdf: Buffer.from(evidenceChecklistBytes),
-      },
-      {
-        title: 'Negotiation email template',
-        description: 'Pre-hearing negotiation wording for the tenant.',
-        document_type: 'section13_negotiation_email_template',
-        file_name: `section13-negotiation-email-template-${caseId}.pdf`,
-        pdf: Buffer.from(negotiationEmailBytes),
-      }
-    );
-  }
 
   return [...documents].sort((left, right) => {
     const leftIndex = SECTION13_BUNDLE_SOURCE_DOCUMENT_TYPES.indexOf(left.document_type as any);

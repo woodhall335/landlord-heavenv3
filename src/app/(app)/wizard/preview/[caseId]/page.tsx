@@ -56,6 +56,7 @@ import {
   type ProductSku,
 } from '@/lib/pricing/products';
 import { normalizeEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
+import { getSection13CheckoutThumbnailUrl } from '@/lib/previews/section13CheckoutPreview';
 
 interface CaseData {
   id: string;
@@ -1055,8 +1056,7 @@ export default function WizardPreviewPage() {
               doc.id.replace(/-/g, '_') === gd.document_type
       );
 
-      // For notice_only and money_claim products, use dedicated thumbnail endpoints
-      // This allows thumbnails without requiring database document records
+      // For pre-purchase flows with in-memory previews, use dedicated thumbnail endpoints.
       let thumbnailUrl: string | undefined;
       if (product === 'notice_only') {
         // Map config IDs to document_type for the thumbnail API
@@ -1066,12 +1066,14 @@ export default function WizardPreviewPage() {
         // Map config IDs to document_type for the money claim thumbnail API
         const docTypeForThumbnail = possibleTypes[0] || doc.id;
         thumbnailUrl = `/api/money-claim/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
+      } else if (product === 'section13_standard' || product === 'section13_defensive') {
+        thumbnailUrl = getSection13CheckoutThumbnailUrl(caseId, doc.id);
       }
 
       return {
         ...doc,
         documentId: matchingGenDoc?.id,
-        // For notice_only and money_claim, use the dedicated thumbnail endpoints
+        // For products with dedicated preview routes, use those thumbnail endpoints.
         // For other products, DocumentCard will use documentId to fetch from /api/documents/thumbnail
         thumbnailUrl: thumbnailUrl,
       };
