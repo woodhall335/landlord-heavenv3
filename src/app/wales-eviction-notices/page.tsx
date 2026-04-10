@@ -38,7 +38,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
   description:
-    'Landlord guide to Wales eviction notices under the Renting Homes (Wales) Act.',
+    'Plain-English landlord guide to Wales eviction notices under the Renting Homes (Wales) Act, including notice routes, terminology, and next legal steps.',
   keywords: [
     'wales eviction notice',
     'eviction notice wales landlord',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Wales Eviction Notices | Landlord Guide to Possession Routes',
     description:
-      'Wales landlord guide to occupation contract possession notices and next legal steps.',
+      'Plain-English landlord guide to Welsh possession notices and the next legal steps.',
   },
   alternates: {
     canonical: canonicalUrl,
@@ -98,10 +98,10 @@ export default function WalesEvictionNoticesPage() {
 
         <UniversalHero
           title="Wales Eviction Notices"
-          subtitle="Use this Wales landlord guide to understand occupation contract possession routes, contract-holder terminology, Welsh notice logic, and the right next step before court action."
-          primaryCta={{ label: 'Start Wales Notice', href: noticeOnlyHref }}
+          subtitle="If your property is in Wales, start with the Welsh possession framework rather than England assumptions. This guide helps you choose the right notice route and prepare the next step properly."
+          primaryCta={{ label: 'Start Wales notice', href: noticeOnlyHref }}
           secondaryCta={{
-            label: 'Wales Occupation Contracts',
+            label: 'Wales occupation contracts',
             href: '/wales-tenancy-agreement-template',
           }}
           showTrustPositioningBar

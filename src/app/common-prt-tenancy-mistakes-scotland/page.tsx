@@ -42,7 +42,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Common PRT Tenancy Mistakes Scotland | Landlord PRT Obligations 2026',
   description:
-    'Avoid costly PRT tenancy mistakes in Scotland. Learn about landlord registration, deposit protection, Notice to Leave errors, and Tribunal requirements.',
+    'Plain-English landlord guide to the common PRT mistakes in Scotland, including registration, deposits, Notice to Leave errors, and tribunal-related risks.',
   keywords: [
     'prt tenancy mistakes',
     'landlord prt obligations',
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Common PRT Tenancy Mistakes Scotland | Landlord Heaven',
     description:
-      'Avoid the most common PRT mistakes Scottish landlords make. Protect your ability to evict and claim rent.',
+      'Landlord guide to the common PRT mistakes Scottish landlords make and how to avoid problems later in the tenancy or tribunal process.',
     type: 'website',
   },
 };
@@ -105,8 +105,9 @@ export default function CommonPrtTenancyMistakesScotlandPage() {
           title="Common PRT Tenancy Mistakes"
           subtitle={
             <>
-              Avoid the <strong>costly errors</strong> that prevent Scottish landlords from evicting
-              tenants and recovering rent. Essential compliance guidance for PRTs.
+              If you are letting in Scotland, this guide helps you avoid the PRT mistakes
+              that usually come back later in deposit disputes, Notice to Leave problems,
+              and tribunal delays.
             </>
           }
           primaryCta={{

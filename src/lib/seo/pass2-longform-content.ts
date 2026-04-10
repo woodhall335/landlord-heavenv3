@@ -30,7 +30,7 @@ const sectionTemplates = [
 ];
 
 function longParagraph(focus: string, heading: string, angle: string): string {
-  return `${focus} should be managed as a structured project, not a one-off letter exercise. In the ${heading.toLowerCase()} stage, landlords get better outcomes when every action has a clear legal purpose, a dated evidence source, and a fallback route if the tenant disputes facts or delays cooperation. ${angle} Build one master timeline that aligns tenancy terms, service events, payment events, and communication records, then reuse that timeline in notices, witness statements, and court bundles so contradictions do not appear later. This disciplined approach improves credibility, protects hearing momentum, and keeps your conversion path aligned to product page first, wizard second, and checkout only after route confidence is established.`;
+  return `${focus} should be managed as a structured landlord project, not as a one-off letter exercise. In the ${heading.toLowerCase()} stage, landlords usually get better outcomes when every action has a clear legal purpose, a dated evidence source, and a fallback route if the tenant disputes facts or delays cooperation. ${angle} Build one master timeline that lines up tenancy terms, service events, payment events, and communication records, then reuse that timeline in notices, witness statements, and court bundles so contradictions do not appear later. This more disciplined approach improves credibility, protects hearing momentum, and keeps the next commercial step grounded in route confidence rather than panic.`;
 }
 
 function buildSections(focus: string): IntentSection[] {
@@ -58,10 +58,10 @@ function buildSections(focus: string): IntentSection[] {
 
 function buildFaqs(focus: string): FAQItem[] {
   return [
-    { question: `Is ${focus.toLowerCase()} mainly about forms or strategy?`, answer: `Both. ${focus} works best when document accuracy and route strategy are planned together from day one.` },
-    { question: 'Should I move straight to the wizard?', answer: 'Use the product page first to pick the correct route and package, then continue into the wizard with clearer inputs.' },
-    { question: 'Can I combine possession and money recovery?', answer: 'Often yes, but sequence matters. Preserve possession momentum while preparing debt evidence in parallel.' },
-    { question: 'What causes most landlord delays?', answer: 'Date inconsistencies, weak service evidence, and unclear fallback planning cause most avoidable resets.' },
+    { question: `Is ${focus.toLowerCase()} mainly about forms or strategy?`, answer: `Both. ${focus} works best when the paperwork and the route strategy are planned together from the start.` },
+    { question: 'What should I do first?', answer: 'Start with the product route that matches the case, then move into the workflow with clearer facts and cleaner expectations.' },
+    { question: 'Can I combine possession and money recovery?', answer: 'Often yes, but the sequence still matters. Protect possession momentum while preparing the debt evidence in parallel.' },
+    { question: 'What causes most landlord delays?', answer: 'Date inconsistencies, weak service evidence, and unclear fallback planning usually cause the most avoidable resets.' },
   ];
 }
 
@@ -74,7 +74,7 @@ function makePage(seed: PageSeed): HighIntentPageContent {
     heroSubtitle: seed.heroSubtitle,
     icon: seed.icon,
     heroBullets: [
-      'Product-first funnel routing to reduce dead-end sessions',
+      'Direct landlord guidance from route choice to next action',
       'Court and service risk controls integrated into each stage',
       'Internal links to related guides, tools, and landlord problem pages',
     ],

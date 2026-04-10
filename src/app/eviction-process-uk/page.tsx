@@ -25,12 +25,12 @@ const content: PillarPageContent = {
   description: metadata.description as string,
   heroTitle: 'Eviction Process UK',
   heroSubtitle:
-    'A route-first guide for landlords who need the next legal step, not generic advice that skips the notice, court, or enforcement sequence.',
+    'A route-first guide for landlords who need the next legal step, not vague advice that skips over the notice, court, or enforcement sequence.',
   icon: '/images/wizard-icons/07-review-finish.png',
   heroBullets: [
     'Understand the notice-to-court sequence before deadlines are missed.',
-    'Know when Section 8, debt recovery, or regional routes change the process.',
-    'Move from information to a product-first landlord workflow when you are ready.',
+    'See when Section 8, debt recovery, or regional rules change the process.',
+    'Move from information into the landlord workflow that fits your case when you are ready.',
   ],
   quickAnswer: [
     <>
@@ -56,10 +56,10 @@ const content: PillarPageContent = {
     </>,
   ],
   routeExplanation: [
-    'The process is not identical across England, Wales, Scotland, and Northern Ireland, so landlords should treat this page as a UK intent hub that routes them into the correct jurisdiction-specific sequence.',
+    'The process is not identical across England, Wales, Scotland, and Northern Ireland, so landlords should use this page as a UK-wide hub and then move into the jurisdiction-specific route that matches the property.',
     'In England, the post-1 May 2026 position is more Section 8-led because Section 21 has ended. That makes evidence quality, grounds selection, and court-readiness more important earlier in the workflow.',
-    'Once notice expires, most delays come from inconsistencies between the tenancy facts, service proof, rent schedule, and court forms. The fastest process is the one that is least likely to be restarted.',
-    'Enforcement should be planned before judgment. If the tenant is likely to stay past the possession date, landlords should already know which warrant or bailiff step follows and what documents will be needed.',
+    'Once notice expires, most delay comes from inconsistencies between the tenancy facts, service proof, rent schedule, and court forms. The quickest process is usually the one least likely to be restarted.',
+    'Enforcement should be planned before judgment. If the tenant is likely to stay past the possession date, landlords should already know which warrant or bailiff step follows and what documents they will need.',
   ],
   processSteps: [
     { title: 'Confirm jurisdiction and tenancy facts', detail: 'Identify whether the property is in England, Wales, Scotland, or Northern Ireland, then confirm the tenancy type, compliance position, and main commercial objective.' },
@@ -165,14 +165,14 @@ const content: PillarPageContent = {
     { label: 'Eviction notice pack', href: '/eviction-notice-template' },
     { label: 'Rent arrears calculator', href: '/tools/rent-arrears-calculator' },
   ],
-  productLink: { label: 'Complete eviction pack for England', href: '/products/complete-pack' },
-  primaryCta: { label: 'Get Complete Eviction Pack', href: '/products/complete-pack' },
-  secondaryCta: { label: 'Read Section 8 Notice Guide', href: '/section-8-notice' },
+  productLink: { label: 'Full eviction support for England', href: '/products/complete-pack' },
+  primaryCta: { label: 'Start your full eviction pack', href: '/products/complete-pack' },
+  secondaryCta: { label: 'Read the Section 8 notice guide', href: '/section-8-notice' },
   faqs: [
     { question: 'What is the first step in the eviction process UK?', answer: 'Confirm the jurisdiction, tenancy facts, and correct notice route before serving anything.' },
     { question: 'What replaces Section 21 in England?', answer: 'England landlords now need a Section 8-led possession plan in most post-1 May 2026 cases.' },
     { question: 'When should landlords prepare court forms?', answer: 'Prepare the court bundle before notice expiry so the file is ready if the tenant stays.' },
-    { question: 'Which product fits process-led eviction cases?', answer: 'Most notice-to-court cases fit the Complete Eviction Pack because the workflow runs beyond notice drafting alone.' },
+    { question: 'Which product fits process-led eviction cases?', answer: 'Most notice-to-court cases fit the Complete Eviction Pack because the workflow goes beyond drafting the starting notice alone.' },
   ],
 };
 

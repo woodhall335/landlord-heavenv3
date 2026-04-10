@@ -79,7 +79,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Section 21 Expired: What Next If Tenant Stays? | England Guide 2026',
   description:
-    "Section 21 expired but the tenant is still in the property?",
+    'Plain-English landlord guide to what happens after a Section 21 expires if the tenant is still in the property, including court and enforcement next steps.',
   keywords: [
     'section 21 expired what next',
     'tenant ignored section 21',
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Section 21 Expired: What Next If Tenant Stays?',
     description:
-      'Your Section 21 notice has expired but the tenant has not left. Learn the next steps.',
+      'Landlord guide to what to do next when a Section 21 has expired and the tenant is still in place.',
   },
   alternates: {
     canonical: getCanonicalUrl('/section-21-expired-what-next'),

@@ -66,7 +66,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant | UK Landlord Guide by Jurisdiction',
   description:
-    'Landlord guide to evicting a tenant in England, Wales, Scotland, or Northern Ireland.',
+    'Plain-English landlord guide to evicting a tenant in England, Wales, Scotland, or Northern Ireland, with the right route for each jurisdiction.',
   keywords: [
     'how to evict a tenant',
     'evict tenant UK',
@@ -126,8 +126,8 @@ export default function HowToEvictTenantPage() {
 
         <UniversalHero
           title="How to Evict a Tenant in the UK"
-          subtitle="Use this landlord guide to compare the eviction process in England, Wales, Scotland, and Northern Ireland, understand which notice route may apply, and avoid the mistakes that most often invalidate an eviction."
-          primaryCta={{ label: `Get Complete Pack - ${completePackPrice}`, href: primaryProductHref }}
+          subtitle="Use this guide when you need to work out the right eviction route for your property, understand what changes by jurisdiction, and avoid the mistakes that most often slow landlords down."
+          primaryCta={{ label: `Start full eviction support - ${completePackPrice}`, href: primaryProductHref }}
           secondaryCta={{ label: 'Jump to jurisdiction guide', href: '#jurisdiction-guide' }}
           showTrustPositioningBar
           hideMedia
@@ -153,7 +153,7 @@ export default function HowToEvictTenantPage() {
             <div className="mx-auto max-w-5xl rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
               <h2 className="mb-4 text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-primary" />
-                Jump to your jurisdiction
+                Go to your jurisdiction
               </h2>
               <div className="flex flex-wrap gap-3">
                 <a
@@ -188,35 +188,34 @@ export default function HowToEvictTenantPage() {
         <section className="py-12 lg:py-16">
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-              <h2 className="text-3xl font-bold text-gray-900">Quick answer</h2>
+              <h2 className="text-3xl font-bold text-gray-900">Quick answer for landlords</h2>
               <div className="mt-6 space-y-5 text-gray-700">
                 <p className="leading-7">
-                  Evicting a tenant in the UK is never a single universal process. The
-                  correct route depends first on <strong>where the property is located</strong>,
-                  then on <strong>why possession is being sought</strong>, and then on whether
-                  the landlord has handled the compliance and notice stage correctly before
-                  starting any court or tribunal application.
+                  Evicting a tenant in the UK is never one universal process. The right route
+                  depends first on <strong>where the property is located</strong>, then on{' '}
+                  <strong>why you want possession</strong>, and then on whether you have handled
+                  the compliance and notice stage properly before any court or tribunal
+                  application starts.
                 </p>
                 <p className="leading-7">
-                  The most common mistake landlords make is searching for "how to evict a
-                  tenant" and then following the first article they find as though the same
-                  steps apply everywhere. They do not. England, Wales, Scotland, and Northern
-                  Ireland each use different tenancy frameworks, different notice language,
-                  and different possession routes. England landlords may be comparing no-fault
-                  and grounds-based language. Wales landlords need to think in terms of
-                  occupation contracts. Scotland landlords need to work with Private
+                  The most common mistake is searching for "how to evict a tenant" and then
+                  following the first article you find as if the same steps apply everywhere.
+                  They do not. England, Wales, Scotland, and Northern Ireland each use
+                  different tenancy frameworks, notice language, and possession routes.
+                  England landlords are usually dealing with the current post-1 May 2026
+                  possession framework. Wales uses occupation contracts. Scotland uses Private
                   Residential Tenancy rules and a Notice to Leave. Northern Ireland uses its
-                  own notice and possession framework again.
+                  own notice and possession system again.
                 </p>
                 <p className="leading-7">
                   This page is therefore a <strong>UK comparison and routing guide</strong>,
-                  not a one-size-fits-all legal article. Its purpose is to help landlords
-                  identify the right jurisdiction, understand the broad route that may apply,
-                  check the main validity points that often cause delay, and then move into
-                  the correct next document or guidance page. It is not designed to encourage
-                  risky shortcuts or informal removals. A lawful eviction starts with the
-                  correct notice strategy and ends, if necessary, with the correct court or
-                  tribunal enforcement route.
+                  not a one-size-fits-all legal article. Its purpose is to help you identify
+                  the right jurisdiction, understand the broad route that may apply, check the
+                  main validity points that often cause delay, and then move into the correct
+                  next document or guidance page. It is not here to encourage risky shortcuts
+                  or informal removals. A lawful eviction starts with the right notice
+                  strategy and ends, if necessary, with the proper court or tribunal
+                  enforcement route.
                 </p>
               </div>
 
@@ -225,7 +224,7 @@ export default function HowToEvictTenantPage() {
                   <span className="text-2xl">Info</span>
                   <div>
                     <p className="font-semibold text-gray-900 mb-1">
-                      Not sure which eviction route applies?
+                      Not sure which route fits your case?
                     </p>
                     <p className="text-sm text-gray-600">
                       Use our free{' '}
@@ -235,7 +234,7 @@ export default function HowToEvictTenantPage() {
                       >
                         Ask Heaven landlord Q&amp;A
                       </Link>{' '}
-                      tool for help with compliance, notice choice, and document checks.
+                      tool for help with compliance, notice choice, and document checks before you serve anything.
                     </p>
                   </div>
                 </div>
@@ -277,22 +276,22 @@ export default function HowToEvictTenantPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-5xl">
               <h2 className="text-3xl font-bold text-gray-900">
-                UK eviction process overview
+                How the UK eviction process works at a high level
               </h2>
               <p className="mt-4 max-w-4xl leading-7 text-gray-700">
-                A strong landlord guide needs to explain the structure before it explains the
+                A useful landlord guide should explain the structure before it explains the
                 detail. In most cases, the process looks broadly like this: identify the
-                correct jurisdiction and tenancy type, decide the correct notice route, check
-                whether your compliance and document history support that route, serve the
-                notice correctly, wait for the notice period to expire, and only then move to
-                the correct court or tribunal stage if the tenant does not leave voluntarily.
+                correct jurisdiction and tenancy type, choose the notice route that fits the
+                facts, check whether your compliance and documents support that route, serve
+                the notice properly, wait for the notice period to expire, and only then move
+                to the correct court or tribunal stage if the tenant does not leave.
               </p>
 
               <div className="mt-8 grid gap-6 md:grid-cols-2">
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="mb-3 text-lg font-bold text-gray-900 flex items-center gap-2">
                     <Clock className="h-5 w-5 text-primary" />
-                    Typical timeline shape
+                    What the timeline usually looks like
                   </h3>
                   <ul className="space-y-2 text-gray-700">
                     <li>- Notice periods vary by jurisdiction and ground.</li>
@@ -305,7 +304,7 @@ export default function HowToEvictTenantPage() {
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="mb-3 text-lg font-bold text-gray-900 flex items-center gap-2">
                     <Shield className="h-5 w-5 text-primary" />
-                    Validity issues that often matter
+                    Problems that often invalidate the route
                   </h3>
                   <ul className="space-y-2 text-gray-700">
                     <li>- Using the wrong notice for the jurisdiction.</li>
@@ -325,11 +324,11 @@ export default function HowToEvictTenantPage() {
                     </h3>
                     <p className="mt-2 leading-7 text-amber-900/90">
                       This page is a routing and comparison guide. It should help you choose
-                      the correct next step, but it should not be read as permission to take
-                      shortcuts. Landlords should never try to remove tenants informally,
-                      change locks without the lawful process, or assume that a notice alone
-                      finishes the eviction. In many cases, lawful possession still requires
-                      a court or tribunal order and, if needed, enforcement.
+                      the correct next step, but it is not permission to take shortcuts.
+                      Landlords should never try to remove tenants informally, change locks
+                      without the lawful process, or assume that a notice alone finishes the
+                      eviction. In many cases, lawful possession still requires a court or
+                      tribunal order and, if needed, enforcement.
                     </p>
                   </div>
                 </div>
@@ -350,47 +349,44 @@ export default function HowToEvictTenantPage() {
 
               <div className="rounded-xl border-l-4 border-amber-500 bg-amber-50 p-4 mb-8">
                 <p className="text-sm text-amber-900">
-                  <strong>England transition point:</strong> this is the part of the UK where
-                  landlords most often search for Section 21 and Section 8 routes. The wider
-                  legal and business messaging around no-fault possession is changing, so the
-                  safest public-facing approach is to treat Section 21 as transition-sensitive
-                  and to check the current route before serving notice rather than relying on
-                  old assumptions or outdated blog posts.
+                  <strong>England update:</strong> this is the part of the UK where landlords
+                  most often search for Section 21 and Section 8 routes. Since the post-1 May
+                  2026 framework changed the live route, the safest approach is to check the
+                  current position before serving notice instead of relying on old blog posts
+                  or recycled template language.
                 </p>
               </div>
 
               <div className="space-y-6 text-gray-700">
                 <p className="leading-7">
-                  In England, landlords usually begin by asking whether they are looking at a
-                  route traditionally treated as no-fault possession or whether they need a
-                  grounds-based route. That distinction still drives a large amount of search
-                  traffic, but it is also where the most confusion happens. A page that is
-                  meant to convert well should not just list Section 21 and Section 8. It
-                  should explain what they are for, when they are used, and why compliance and
-                  service details matter so much before any possession claim is issued.
+                  In England, landlords usually begin by asking whether they are dealing with
+                  older no-fault wording or a live grounds-based route. That distinction still
+                  drives a lot of search traffic, but it is also where the most confusion now
+                  happens. A useful page should not just list Section 21 and Section 8. It
+                  should explain what changed, what is current, and why compliance and service
+                  details matter so much before any possession claim is issued.
                 </p>
                 <p className="leading-7">
                   Grounds-based possession remains important where the tenant is in rent
-                  arrears, in breach of the tenancy, or where the landlord has a route that
-                  depends on specific facts and evidence. No-fault language is still part of
-                  search behaviour, but landlords should be careful not to assume that older
-                  England eviction guidance remains current in every detail. The stronger
-                  commercial position is to route landlords into the correct notice workflow,
-                  check compliance, and then move into the right possession step with evidence
-                  rather than guesswork.
+                  arrears, in breach of the tenancy, or where the route depends on specific
+                  facts and evidence. Older no-fault language is still part of search
+                  behaviour, but landlords should be careful not to assume that older England
+                  eviction guidance is still current in every detail. The safer route is to
+                  move into the right notice workflow, check compliance, and then take the
+                  next possession step with evidence rather than guesswork.
                 </p>
               </div>
 
               <div className="mt-8 grid gap-6 md:grid-cols-2">
                 <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    Section 21-style no-fault route
+                    Section 21 transition route
                   </h3>
                   <p className="text-gray-700 leading-7 mb-4">
                     This is the route many England landlords still search for when they want
                     possession without relying on tenant fault. It is also the route most
-                    affected by changing reform language, so landlords should check current
-                    validity before acting rather than assuming old timelines still apply.
+                    affected by reform, so landlords should check the current position before
+                    acting rather than assuming old timelines still apply.
                   </p>
                   <ul className="space-y-2 text-gray-700 mb-4">
                     <li>- Most sensitive to compliance and document-history mistakes.</li>
@@ -402,13 +398,13 @@ export default function HowToEvictTenantPage() {
                       href="/section-21-ban-uk"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 template {'->'}
+                      Section 21 transition guide {'->'}
                     </Link>
                     <Link
                       href="/section-21-notice"
                       className="text-sm font-medium text-primary hover:underline"
                     >
-                      Section 21 guide {'->'}
+                      Section 21 notice page {'->'}
                     </Link>
                   </div>
                 </div>
@@ -418,10 +414,10 @@ export default function HowToEvictTenantPage() {
                     Section 8 grounds-based route
                   </h3>
                   <p className="text-gray-700 leading-7 mb-4">
-                    This is the main England route where the landlord relies on a specific
-                    ground, such as arrears, breach, or other behaviour-based reasons. The
-                    strength of the case depends not only on the notice but on the facts,
-                    evidence, and the ground being used.
+                    This is the main England route where you rely on a specific ground, such
+                    as arrears, breach, or other behaviour-based reasons. The strength of the
+                    case depends not only on the notice but on the facts, the evidence, and
+                    the ground you are using.
                   </p>
                   <ul className="space-y-2 text-gray-700 mb-4">
                     <li>- Common for arrears, breach, or anti-social behaviour cases.</li>
@@ -446,21 +442,21 @@ export default function HowToEvictTenantPage() {
               </div>
 
               <div className="mt-8 rounded-2xl border border-primary/20 bg-primary/5 p-6">
-                <h4 className="font-bold text-gray-900 mb-3">England eviction products</h4>
+                <h4 className="font-bold text-gray-900 mb-3">England landlord products</h4>
                 <div className="flex flex-wrap gap-4">
                   <Link
                     href={productLinks.noticeOnly.href}
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
                   >
                     <FileText className="h-4 w-4" />
-                    Notice Only - {noticeOnlyPrice}
+                    Start notice only - {noticeOnlyPrice}
                   </Link>
                   <Link
                     href={productLinks.completePack.href}
                     className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
                   >
                     <FileText className="h-4 w-4" />
-                    Complete Pack - {completePackPrice}
+                    Start full eviction pack - {completePackPrice}
                   </Link>
                 </div>
               </div>

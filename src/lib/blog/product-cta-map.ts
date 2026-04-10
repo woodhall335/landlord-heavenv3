@@ -25,11 +25,11 @@ export interface ProductCtaConfig {
 const DEFAULT_CONFIG: ProductCtaConfig = {
   primaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
   secondaryProductHref: BLOG_PRODUCT_ROUTES.completePack,
-  eyebrow: 'Next step',
+  eyebrow: 'Next step for landlords',
   heading: 'Need to act on this tonight?',
   intro:
     'Work out the right notice, avoid the mistakes that slow the case down, and move to the next step without guessing.',
-  ctaLabel: 'Find out which notice you need ->',
+  ctaLabel: 'Find out which notice you need',
   bullets: [
     'Choose the right route before you serve anything.',
     'Answer plain-English questions. We handle the legal logic.',
@@ -67,7 +67,7 @@ export function getBlogProductCta(
       heading: 'Ready to start recovering the money?',
       intro:
         'If the arrears keep growing, move from reading to action with the documents you need for the claim.',
-      ctaLabel: 'Start recovering your rent ->',
+      ctaLabel: 'Start recovering your rent',
       bullets: [
         'Set out what is owed clearly before the numbers get harder to untangle.',
         'Build the claim in plain English.',
@@ -86,7 +86,7 @@ export function getBlogProductCta(
       heading: 'Need the agreement sorted tonight?',
       intro:
         'Use the right agreement for the property now so you are not fixing an old template later.',
-      ctaLabel: 'Create your tenancy agreement ->',
+      ctaLabel: 'Create your tenancy agreement',
       bullets: [
         'Use the right agreement for England, Wales, Scotland, or Northern Ireland.',
         'Avoid old wording that causes problems later.',
@@ -105,7 +105,7 @@ export function getBlogProductCta(
       heading: 'Need more than just the notice?',
       intro:
         'If the case is moving toward court, keep your notice, forms, and evidence lined up from the start.',
-      ctaLabel: 'Start your court pack ->',
+      ctaLabel: 'Start your court pack',
       bullets: [
         'Keep the notice and court forms consistent.',
         'Avoid paying court fees on a weak file.',

@@ -31,7 +31,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
-  description: 'Generate a Northern Ireland tenancy agreement with solicitor-grade terms and compliance checks for private tenancies.',
+  description: 'Plain-English landlord guide to creating a Northern Ireland tenancy agreement with current wording, compliance checks, and clearer route choice for private tenancies.',
   keywords: [
     'Northern Ireland tenancy agreement template',
     'NI tenancy agreement',
@@ -145,9 +145,9 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         <UniversalHero
           title="Northern Ireland Tenancy Agreement"
-          subtitle="Generate a legally validated tenancy agreement for Northern Ireland with current private-tenancy wording and clearer Standard or Premium purchase routes."
-          primaryCta={{ label: 'Start Standard NI agreement', href: standardWizardHref }}
-          secondaryCta={{ label: 'Start Premium NI agreement', href: premiumWizardHref }}
+          subtitle="Create a Northern Ireland tenancy agreement with current private-tenancy wording, then choose the Standard or Premium route based on how much drafting support you need."
+          primaryCta={{ label: 'Start standard NI agreement', href: standardWizardHref }}
+          secondaryCta={{ label: 'Start premium NI agreement', href: premiumWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -181,7 +181,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               Northern Ireland Tenancy Agreement Template (NI)
             </h2>
             <p className="text-xl text-emerald-100 mb-8 max-w-2xl">
-              Need a Northern Ireland tenancy agreement template that meets current law? Build a compliant NI agreement with the prescribed terms required by the Private Tenancies Act (NI) 2022, including rent, deposit, and notice clauses.
+              If you are letting in Northern Ireland, start with an agreement that reflects the current rules properly. This template covers the prescribed terms landlords need to deal with rent, deposits, notice, and the wider compliance setup more clearly.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -189,7 +189,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
                 className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiFileTextLine className="w-5 h-5" />
-                Create Standard Agreement
+                Create standard agreement
                 <RiArrowRightLine className="w-5 h-5" />
               </Link>
               <Link
@@ -197,7 +197,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-lg transition-colors"
               >
                 <RiQuestionLine className="w-5 h-5" />
-                Create Premium Agreement
+                Create premium agreement
               </Link>
             </div>
             <p className="mt-4 text-sm text-emerald-100">
@@ -698,7 +698,7 @@ export default function NorthernIrelandTenancyAgreementTemplatePage() {
               className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-lg transition-colors"
             >
               <RiDownloadLine className="w-5 h-5" />
-              Create Standard Agreement
+                Create standard agreement
               <RiArrowRightLine className="w-5 h-5" />
             </Link>
           </section>

@@ -83,16 +83,16 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
             <h2 className="text-2xl font-semibold text-[#2a2161]">Quick answer</h2>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Question</p>
-            <p className="mt-1 text-lg font-semibold text-[#2a2161]">{`How should landlords handle ${props.heroTitle.toLowerCase()} quickly and safely?`}</p>
+            <p className="mt-1 text-lg font-semibold text-[#2a2161]">{`If you are dealing with ${props.heroTitle.toLowerCase()}, what should you do first to protect your position and keep the case moving?`}</p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Short answer</p>
-            <p className="mt-1 text-gray-700">Landlords usually move faster when they verify route eligibility, serve the right notice with clear proof, and build a court-ready timeline before filing. That approach reduces contradictory paperwork, lowers delay risk, and keeps the case ready for possession and enforcement if the tenant still does not comply.</p>
+            <p className="mt-1 text-gray-700">Most landlords move faster when they slow down just enough to choose the right route, serve the right notice with proof, and keep the dates and evidence consistent before filing anything. That reduces avoidable contradictions, cuts the risk of delay, and gives you a cleaner file if the tenant still does not comply.</p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Numbered steps</p>
             <ol className="mt-3 list-decimal space-y-2 pl-5 text-gray-700">
-              <li>Confirm tenancy facts and choose the safest legal route.</li>
-              <li>Serve the correct notice and record proof of service.</li>
-              <li>Track deadlines and tenant responses in one chronology.</li>
-              <li>Submit possession paperwork with consistent evidence.</li>
-              <li>Escalate to warrant or bailiff enforcement if required.</li>
+              <li>Confirm the tenancy facts and choose the route that actually fits what has gone wrong.</li>
+              <li>Serve the correct notice and record proof of service straight away.</li>
+              <li>Track the deadlines, responses, and key evidence in one clear chronology.</li>
+              <li>File the court paperwork only once the story and supporting documents line up.</li>
+              <li>Move to enforcement if needed without having to rebuild the file from scratch.</li>
             </ol>
           </div>
         </Container>
@@ -144,8 +144,8 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
         <section className="py-10 bg-white border-y border-[#E6DBFF]">
           <Container>
             <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
-              <h2 className="text-2xl font-semibold text-[#2a2161]">Eviction process quick actions</h2>
-              <p className="mt-3 text-gray-700">Move from notice to possession claim with stronger internal pathways: canonical parent, supporting pages, tool support, and product action.</p>
+              <h2 className="text-2xl font-semibold text-[#2a2161]">Next landlord actions</h2>
+              <p className="mt-3 text-gray-700">Use these links when you want to move from reading into the right next step without losing the thread of the case.</p>
               <div className="mt-4 grid gap-3 md:grid-cols-2 text-sm">
                 <Link href={authorityLinks.parent} className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]">Canonical parent: {authorityLinks.parent}</Link>
                 {authorityLinks.supporting.map((href) => <Link key={href} href={href} className="rounded-lg border border-[#E6DBFF] bg-white px-4 py-3 text-primary hover:bg-[#F8F4FF]">Supporting page: {href}</Link>)}

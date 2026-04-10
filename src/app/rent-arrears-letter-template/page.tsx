@@ -41,7 +41,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Rent Arrears Letter Template UK | Free Demand Letter + Legal Next Steps',
   description:
-    'Use a rent arrears letter template UK landlords can rely on.',
+    'Plain-English landlord guide to writing a rent arrears letter, asking for payment clearly, and deciding when to escalate to a money claim or Section 8 notice.',
   keywords: [
     'rent arrears letter template',
     'rent arrears letter uk',
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Rent Arrears Letter Template UK | Free Demand Letter + Legal Next Steps',
     description:
-      'Free rent arrears letter guidance for landlords, plus the next steps for unpaid rent, money claims, and Section 8 action.',
+      'Landlord guide to writing a rent arrears letter properly and deciding when to move into a money claim or Section 8 route.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/rent-arrears-letter-template',
   },
@@ -146,7 +146,7 @@ export default function RentArrearsLetterTemplatePage() {
           badge="Rent Arrears Recovery"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Rent Arrears Letter Template UK"
-          subtitle="Use a clear, professional rent arrears letter before escalating to a money claim or Section 8 action. This guide shows landlords what to send, when to send it, and what to do next if the tenant still does not pay."
+          subtitle="If a tenant has fallen behind, start with a letter that sets out the arrears clearly, asks for payment properly, and leaves you in a stronger position if you need to escalate."
           primaryCta={{ label: 'Start money claim', href: moneyClaimProductHref }}
           secondaryCta={{ label: 'Start Section 8 notice', href: noticeOnlyProductHref }}
           showTrustPositioningBar
@@ -180,8 +180,8 @@ export default function RentArrearsLetterTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <FunnelCta
-                title="Turn arrears letters into recovery action"
-                subtitle="Use Money Claim if payment is still outstanding, or choose eviction support if possession is also needed."
+                title="Turn arrears letters into the right next step"
+                subtitle="If the tenant still does not pay, move into a money claim for debt recovery or choose eviction support if you also need possession."
                 primaryHref={moneyClaimProductHref}
                 primaryText="Recover unpaid rent"
                 primaryDataCta="money-claim"
@@ -915,7 +915,7 @@ export default function RentArrearsLetterTemplatePage() {
             <div className="max-w-3xl mx-auto">
               <FAQSection
                 faqs={faqs}
-                title="Rent Arrears Letter Template FAQ"
+                title="Rent arrears letter FAQs for landlords"
                 showContactCTA={false}
                 variant="white"
               />

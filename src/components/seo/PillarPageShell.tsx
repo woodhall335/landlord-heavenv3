@@ -86,14 +86,14 @@ export function PillarPageShell(content: PillarPageContent) {
           <div className="mx-auto max-w-5xl space-y-8">
             <SeoPageContextPanel pathname={`/${content.slug}`} className="border border-[#CAB6FF] bg-[#FBF8FF]" />
             <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
-              <h2 className="text-2xl font-semibold text-[#2a2161]">Eviction route explanation</h2>
+              <h2 className="text-2xl font-semibold text-[#2a2161]">What this route means for you as a landlord</h2>
               <div className="mt-4 space-y-4 text-gray-700 leading-7">
                 {content.routeExplanation.map((paragraph, index) => <p key={`route-${index}`}>{paragraph}</p>)}
               </div>
             </article>
 
             <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
-              <h2 className="text-2xl font-semibold text-[#2a2161]">Process steps</h2>
+              <h2 className="text-2xl font-semibold text-[#2a2161]">How the process usually unfolds</h2>
               <ol className="mt-4 space-y-4">
                 {content.processSteps.map((step, index) => (
                   <li key={step.title} className="rounded-xl border border-[#E6DBFF] bg-white p-4">
@@ -105,7 +105,7 @@ export function PillarPageShell(content: PillarPageContent) {
             </article>
 
             <article className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-8">
-              <h2 className="text-2xl font-semibold text-[#2a2161]">Comparison table: selecting the right route</h2>
+              <h2 className="text-2xl font-semibold text-[#2a2161]">Comparison table: choosing the right route</h2>
               <div className="mt-4 overflow-x-auto">
                 <table className="w-full min-w-[760px] border-collapse text-left text-sm">
                   <thead>
@@ -176,7 +176,7 @@ export function PillarPageShell(content: PillarPageContent) {
       <section className="py-12">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Core supporting pages</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">Keep reading in the right order</h2>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               {content.supportingLinks.map((link) => (
                 <Link key={link.href} href={link.href} className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">

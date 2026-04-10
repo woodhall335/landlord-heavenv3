@@ -21,7 +21,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Section 8 Eviction Process 2026 | Step-by-Step Guide for Landlords',
   description:
-    'A practical Section 8 eviction process guide for landlords in England.',
+    'Plain-English landlord guide to the Section 8 eviction process in England, from notice choice and evidence through to hearing and enforcement.',
   alternates: {
     canonical,
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Section 8 Eviction Process 2026 | LandlordHeaven',
     description:
-      'A practical guide to the Section 8 eviction process in England.',
+      'Plain-English landlord guide to the Section 8 eviction process in England.',
   },
 };
 

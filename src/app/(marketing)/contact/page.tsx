@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = generateMetadata({
   title: 'Contact Landlord Heaven | Landlord Document Support',
   description:
-    "Contact the Landlord Heaven team for help with Section 8 notices, tenancy agreements, money claims, and landlord document support.",
+    "Contact the Landlord Heaven team for help with eviction notices, Section 13 rent increases, money claims, tenancy agreements, and landlord document support.",
   path: '/contact',
   keywords: [
     'contact landlord heaven',
@@ -60,9 +60,9 @@ export default function ContactPage() {
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span className="text-sm font-semibold text-primary">Get In Touch</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Contact Us</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Contact us</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We're here to help. Tell us what you need and we will point you to the right next step.
+              Tell us what has gone wrong with the tenancy, what paperwork you are trying to sort out, or where you are stuck, and we will point you to the right next step.
             </p>
           </div>
         </Container>
@@ -77,9 +77,9 @@ export default function ContactPage() {
             <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
               <MessageCircle className="w-7 h-7 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-charcoal mb-3">General Support</h2>
+            <h2 className="text-2xl font-bold text-charcoal mb-3">General support</h2>
             <p className="text-gray-700 mb-6">
-              Questions about using our services, documents, account issues, or technical problems.
+              Use this for questions about the wizard, your documents, account issues, Section 13 products, or technical problems.
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
@@ -113,9 +113,9 @@ export default function ContactPage() {
             <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
               <Building2 className="w-7 h-7 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-charcoal mb-3">Our Office</h2>
+            <h2 className="text-2xl font-bold text-charcoal mb-3">Our office</h2>
             <p className="text-gray-700 mb-6">
-              Our registered business address and telephone number for general inquiries.
+              Our registered business address and telephone number for general enquiries.
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-start gap-3">
@@ -153,10 +153,9 @@ export default function ContactPage() {
             <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
               <Briefcase className="w-7 h-7 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-charcoal mb-3">Sales & Partnerships</h2>
+            <h2 className="text-2xl font-bold text-charcoal mb-3">Sales and partnerships</h2>
             <p className="text-gray-700 mb-6">
-              Bulk pricing for portfolio landlords, letting agent partnerships, white-label solutions, or custom
-              integrations.
+              Use this if you need volume pricing for a portfolio, a letting-agent partnership, white-label support, or a custom integration discussion.
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
@@ -190,9 +189,9 @@ export default function ContactPage() {
             <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
               <ShieldCheck className="w-7 h-7 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-charcoal mb-3">Privacy & Legal</h2>
+            <h2 className="text-2xl font-bold text-charcoal mb-3">Privacy and legal</h2>
             <p className="text-gray-700 mb-6">
-              Data protection requests (GDPR), privacy concerns, data deletion, or legal compliance questions.
+              Use this for data protection requests, privacy concerns, deletion requests, or formal compliance questions.
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
@@ -224,9 +223,9 @@ export default function ContactPage() {
 
         {/* FAQ Link */}
         <div className="bg-primary-subtle border border-primary/20 rounded-lg p-8 text-center mb-12">
-          <h2 className="text-2xl font-bold text-charcoal mb-3">Check Our Help Center First</h2>
+          <h2 className="text-2xl font-bold text-charcoal mb-3">Check the help centre first</h2>
           <p className="text-gray-700 mb-6">
-            Most questions are answered in our comprehensive FAQ. Save time by checking there first.
+            Many common landlord questions are already answered there, including notices, arrears, rent increases, agreements, billing, and what to do next.
           </p>
           <Link
             href="/help"

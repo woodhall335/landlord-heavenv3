@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title:
     'Accelerated Possession Guide | Section 21 Court Process for Landlords | LandlordHeaven',
   description:
-    'A complete accelerated possession guide for landlords in England covering when it applies, how the court process works, required documents, timelines.',
+    'Plain-English accelerated possession guide for England landlords, covering when the route fits, what paperwork matters, and how to avoid delay in court.',
   alternates: {
     canonical,
   },
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     title:
       'Accelerated Possession Guide | Section 21 Court Process for Landlords | LandlordHeaven',
     description:
-      'Learn when accelerated possession applies, what landlords need before filing, how long it takes, and what happens if the tenant still does not leave.',
+      'A landlord guide to accelerated possession in England, covering when it fits, what the court expects, how long it may take, and what happens if the tenant stays put.',
     url: canonical,
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -181,9 +181,9 @@ export default function Page() {
       />
       <UniversalHero
         title="Accelerated Possession Guide"
-        subtitle="When landlords can use it, what documents matter, and how the court process usually works."
-        primaryCta={{ label: 'Start Notice Only', href: '/products/notice-only' }}
-        secondaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
+        subtitle="If you are relying on the Section 21 route and mainly want possession, this guide explains when accelerated possession fits and what the court will expect from your file."
+        primaryCta={{ label: 'Start notice only', href: '/products/notice-only' }}
+        secondaryCta={{ label: 'Start complete eviction pack', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Accelerated possession guide icon"
         showReviewPill
@@ -227,7 +227,7 @@ export default function Page() {
               pathname="/accelerated-possession-guide"
               className="border border-[#E6DBFF] bg-[#FBF8FF]"
             />
-            <Card title="Quick Answer">
+            <Card title="Quick answer for landlords">
               <p className="mt-4 leading-7 text-gray-700">
                 Accelerated possession is a court route landlords in England often use
                 after serving a valid Section 21 notice where the main goal is possession
@@ -763,18 +763,18 @@ export default function Page() {
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
-              Accelerated possession works best when the Section 21 route is validated
-              early, the compliance file is clean, and the documents are ready before the
-              claim is filed. The route may be more streamlined, but it still rewards
-              careful preparation.
+              Accelerated possession only feels straightforward when the groundwork has
+              already been done. That means a valid Section 21 route, a clean compliance
+              file, and paperwork that matches the tenancy record before you issue the
+              claim.
             </p>
             <p className="mt-4 leading-7 text-gray-700">
-              If your Section 21 route is already clear and you mainly need the notice,
-              start with Notice Only. If you want broader support from validation through
-              possession planning and enforcement readiness, start with the Complete
-              Eviction Pack.
+              If you are still at notice stage and want the notice prepared properly, start
+              with Notice Only. If your aim is to move from route-checking to possession
+              claim and enforcement planning with more support, the Complete Eviction Pack
+              is the better fit.
             </p>
             <p className="mt-4 leading-7 text-gray-700">
               The biggest gains usually come from acting before the file becomes messy.

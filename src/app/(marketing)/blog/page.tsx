@@ -103,7 +103,7 @@ export default function BlogPage() {
             <div className="max-w-3xl">
               <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
               <h2 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Landlord help that tells you what to do next</h2>
-              <p className="mt-4 text-lg text-slate-600">Start with the problem in plain English, then move to the right next step when you are ready.</p>
+              <p className="mt-4 text-lg text-slate-600">Start with the problem in plain English, understand the route, and then move into the right landlord product when you are ready.</p>
             </div>
           </div>
         </section>
@@ -115,8 +115,7 @@ export default function BlogPage() {
               Browse Guides by Jurisdiction
             </h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              UK tenancy laws vary significantly between England, Scotland, Wales, and Northern Ireland.
-              Find guides specific to your property location.
+              The rules change depending on where the property is. Start with the jurisdiction that matches the tenancy so you are not reading guidance built for somewhere else.
             </p>
 
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
@@ -196,7 +195,7 @@ export default function BlogPage() {
           <section className="bg-white py-10 lg:py-14">
             <div className="container mx-auto px-4">
               <h2 className="mb-2 text-2xl font-bold text-gray-900">All Guides</h2>
-              <p className="mb-8 max-w-2xl text-gray-600">Browse practical, court-focused guides designed to help you pick the right product path faster.</p>
+              <p className="mb-8 max-w-2xl text-gray-600">Browse practical landlord guides designed to help you understand the issue quickly, then choose the route or product that actually fits.</p>
               <BlogFilteredList posts={postsForFilter} categories={categories} />
             </div>
           </section>
@@ -210,7 +209,7 @@ export default function BlogPage() {
                 Need help choosing your next landlord step?
               </h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Start with the route that matches your problem: serve the right notice, prepare the court stage, or recover unpaid rent.
+                Start with the route that matches the problem: serve the right notice, prepare the court stage, recover unpaid rent, or move into the right tenancy paperwork.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">

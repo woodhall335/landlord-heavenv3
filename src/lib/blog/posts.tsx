@@ -93,7 +93,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-red-800 text-lg mb-2">Critical Action Required</p>
+          <p className="font-semibold text-red-800 text-lg mb-2">Key date for landlords</p>
           <p className="text-red-700">
             <strong>Section 21 no-fault evictions end on 1 May 2026.</strong> If you have any tenancies where you may
             need to regain possession, you must serve your Section 21 notice before <strong>30 April 2026</strong>.
@@ -251,12 +251,12 @@ const allBlogPosts: BlogPost[] = [
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-amber-800 text-lg mb-2">Why You Must Serve Section 21 Now</p>
+          <p className="font-semibold text-amber-800 text-lg mb-2">Why landlords are reviewing Section 21 cases now</p>
           <p className="text-amber-700">
             If you have <strong>any doubt</strong> about whether you may need to regain possession of a property
             in the next 12-18 months, serve Section 21 now. A served notice remains valid for 6 months after
             it expires. By serving in early 2026, you preserve your options even if the ban takes effect.
-            Once the ban is in place, this option is gone forever.
+            Once the ban is in place, that route will no longer be available for new use.
           </p>
         </div>
 
@@ -468,11 +468,11 @@ const allBlogPosts: BlogPost[] = [
           will make it impossible to evict tenants.
         </p>
 
-        <h2 id="why-act-now" className="scroll-mt-24">Why You Must Act Now: The Urgency Explained</h2>
+        <h2 id="why-act-now" className="scroll-mt-24">Why landlords need to review cases now</h2>
 
         <p>
-          If you&apos;ve read this far, the message should be clear: the rules are changing fundamentally, and
-          landlords who don&apos;t prepare will suffer the consequences. Here&apos;s why immediate action is essential:
+          If you&apos;ve read this far, the main point is straightforward: the rules are changing, and
+          landlords need to review live tenancies early enough to choose the right route with a clear head.
         </p>
 
         <h3>The Section 21 Window Is Closing</h3>
@@ -39650,7 +39650,4 @@ export const blogPosts: BlogPost[] = allBlogPosts.filter(
 export function getBlogPost(slug: string): BlogPost | undefined {
   return blogPosts.find((post) => post.slug === slug);
 }
-
-
-
 

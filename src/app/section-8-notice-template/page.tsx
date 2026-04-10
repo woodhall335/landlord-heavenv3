@@ -56,7 +56,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Section 8 Notice Template | Form 3 Guide for Landlords in England',
   description:
-    'Section 8 notice template and Form 3 landlord guide for England.',
+    'Plain-English Section 8 notice template and Form 3 landlord guide for England, covering grounds, service, evidence, and next steps.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',
@@ -186,8 +186,8 @@ export default function Section8NoticeTemplatePage() {
         <UniversalHero
           title="Section 8 Notice Template"
           subtitle="Learn how Section 8 Form 3 works, what a valid grounds-based notice should include, and when to use a court-ready Notice Only workflow instead of relying on a generic template."
-          primaryCta={{ label: `Start Notice Only — ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
-          secondaryCta={{ label: `Complete eviction path — ${completePackPrice}`, href: completePackProductHref }}
+          primaryCta={{ label: `Start Notice Only - ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
+          secondaryCta={{ label: `Start full eviction support - ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
           hideMedia
           variant="pastel"
@@ -203,7 +203,7 @@ export default function Section8NoticeTemplatePage() {
               className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
             >
               <h2 id="section-8-links-heading" className="text-2xl font-semibold text-[#2a2161]">
-                On This Page
+                On this page
               </h2>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 <a href="#quick-answer" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Quick answer</a>

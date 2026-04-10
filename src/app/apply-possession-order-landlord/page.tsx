@@ -81,7 +81,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Apply for Possession Order | N5B, N5 and Court Process Explained',
   description:
-    'How to apply for a possession order in England, including N5B and N5 routes.',
+    'Plain-English landlord guide to applying for a possession order in England, including N5B, N5, paperwork, timings, and what happens after notice expiry.',
   keywords: [
     'apply for possession order landlord',
     'possession order landlord england',
@@ -98,7 +98,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Apply for Possession Order | N5B, N5 and Court Process Explained',
     description:
-      'How to apply for a possession order in England, including N5B and N5 routes, timelines, court fees and what happens after the order.',
+      'Landlord guide to moving from expired notice to court possession, with N5B and N5 routes, timings, court fees, and enforcement steps explained clearly.',
     type: 'article',
     url: getCanonicalUrl('/apply-possession-order-landlord'),
     siteName: 'Landlord Heaven',
@@ -108,7 +108,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Apply for Possession Order | Landlord Heaven',
     description:
-      'How to apply for a possession order in England, including N5B and N5 routes.',
+      'Landlord guide to applying for possession after a notice has expired.',
   },
   alternates: {
     canonical: getCanonicalUrl('/apply-possession-order-landlord'),
@@ -153,7 +153,7 @@ export default function ApplyPossessionOrderPage() {
           badge="England"
           badgeIcon={<Gavel className="w-4 h-4" />}
           title="Apply for a Possession Order"
-          subtitle="Your notice has expired but the tenant is still in the property. Here is how England landlords move from notice stage to court possession using the correct claim route."
+          subtitle="If your notice has expired and the tenant is still in the property, this is the point where your paperwork and route choice start to matter even more."
           primaryCta={{
             label: `Start Complete Eviction Pack — ${PRODUCTS.complete_pack.displayPrice}`,
             href: completePackProductHref,
@@ -185,8 +185,8 @@ export default function ApplyPossessionOrderPage() {
             <div className="max-w-4xl mx-auto">
               <SeoPageContextPanel pathname="/apply-possession-order-landlord" className="mb-6" />
               <FunnelCta
-                title="Apply for possession with full support"
-                subtitle="If your notice has expired, move straight to the court stage with the complete pack."
+                title="Move from expired notice to court with the right file"
+                subtitle="If you are past the notice stage, use the complete pack to prepare the possession claim properly instead of stitching the court paperwork together under pressure."
                 primaryHref={completePackProductHref}
                 primaryText="Start complete pack"
                 primaryDataCta="complete-pack"
@@ -789,8 +789,8 @@ export default function ApplyPossessionOrderPage() {
                 variant="final"
                 jurisdiction="england"
                 pagePath="/apply-possession-order-landlord"
-                title="Get Your Possession Claim Documents"
-                description="Move from expired notice to court possession with the right paperwork, clearer guidance and practical next steps."
+                title="Get your possession claim documents"
+                description="Move from expired notice to court possession with clearer paperwork, better route guidance, and a stronger filing plan."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

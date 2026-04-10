@@ -9,12 +9,12 @@ const canonical = getCanonicalUrl('/section-21-notice');
 export const metadata: Metadata = {
   title: 'Section 21 Notice | Historical-Only Transition Guide for England',
   description:
-    'Historical-only England transition page for Section 21 search intent, explaining that the route ended and that current cases now follow the Renters’ Rights Act possession framework.',
+    'England landlord guide for Section 21 search intent, explaining that the route ended on 1 May 2026 and what landlords should do instead under the current possession framework.',
   alternates: { canonical },
   openGraph: {
     title: 'Section 21 Notice | Historical-Only Transition Guide for England',
     description:
-      'Understand what happened to Section 21 in England, the exact dates that mattered, and which current possession route landlords now need instead.',
+      'Understand what happened to Section 21 in England, the exact dates that mattered, and the current possession route landlords now need instead.',
     url: canonical,
     type: 'article',
   },
@@ -26,31 +26,30 @@ const content: PillarPageContent = {
   description: metadata.description as string,
   heroTitle: 'Section 21 Notice',
   heroSubtitle:
-    'A historical-only bridge page for landlords still searching Section 21 terms after England moved to the Renters’ Rights Act framework.',
+    'If you are still searching for Section 21, this page explains in plain English that the route has ended in England and shows you what to do next.',
   icon: '/images/wizard-icons/01-tenancy.png',
   heroBullets: [
-    'Explains plainly that Section 21 is no longer part of the current England framework.',
-    'Uses exact dates instead of vague transition wording.',
-    'Routes landlords back to the current England possession and notice path.',
+    'Explains clearly that Section 21 is no longer part of the live England framework.',
+    'Uses the exact dates that matter instead of vague transition wording.',
+    'Points landlords back to the current England notice and possession route.',
   ],
   quickAnswer: [
     <>
       Section 21 ended in England on <strong>1 May 2026</strong>. If a landlord had already served a qualifying
       Section 21 notice before that date, court proceedings needed to begin by <strong>31 July 2026</strong>. For
-      current England cases, the legal framework now follows the Renters&apos; Rights Act and the current possession
-      route explained in{' '}
+      current England cases, the live route now sits under the current possession framework explained in{' '}
       <Link href="/section-21-ban-uk" className="text-primary font-medium hover:underline">
         our England transition guide
       </Link>{' '}
-      and then the practical workflow in{' '}
+      and then in practical terms through{' '}
       <Link href="/section-8-notice" className="text-primary font-medium hover:underline">
         the current England notice guide
       </Link>
       .
     </>,
     <>
-      Use this page as a transition page for legacy search intent, not as a live “serve it now” page. If you are
-      dealing with a current England case, start with{' '}
+      Use this page as a transition guide, not as a live "serve it now" page. If you are dealing with a current
+      England case, start with{' '}
       <Link href="/eviction-notice-template" className="text-primary font-medium hover:underline">
         the England notice hub
       </Link>{' '}
@@ -62,36 +61,36 @@ const content: PillarPageContent = {
     </>,
   ],
   routeExplanation: [
-    'Section 21 used to be the familiar no-fault route for many England landlords, which is why search demand for the phrase remains strong even after the legal change.',
-    'This page exists to catch that legacy search intent and turn it into accurate transition guidance: explain the end of the route, explain the key dates, and then direct landlords into the current England possession framework.',
-    'That is why the page still exists. It answers the historical query honestly, but it does not pretend Section 21 is still the live route for current England cases.',
-    'For most present-day England scenarios, the real question is no longer “how do I serve a Section 21?” but “which current possession route applies, and what evidence and process do I need?”',
+    'Section 21 used to be the route many England landlords knew best, which is why people still search for it now.',
+    'The job of this page is to answer that search honestly, explain the key dates clearly, and then move landlords into the current possession framework instead of leaving them stuck in old wording.',
+    'That is why this page still matters. It deals with the historical query properly, but it does not pretend Section 21 is still a live option for current England cases.',
+    'For most current England cases, the real question is no longer "how do I serve a Section 21?" but "which possession route applies now, and what documents do I need to support it?"',
   ],
   processSteps: [
     {
-      title: 'Check whether the query is historical or current',
+      title: 'Check whether the search is historical or current',
       detail:
-        'Most Section 21 searches are now legacy-intent searches. Start by making clear that the route ended in England on 1 May 2026.',
+        'Most Section 21 searches are now landlords trying to make sense of old wording. Start by making clear that the route ended in England on 1 May 2026.',
     },
     {
       title: 'Use the exact dates',
       detail:
-        'Where older notices are being discussed, explain the 31 July 2026 court-start cutoff clearly rather than relying on vague timing language.',
+        'Where older notices are being discussed, explain the 31 July 2026 court-start cutoff clearly rather than relying on loose deadline wording.',
     },
     {
       title: 'Return to the main England notice page',
       detail:
-        'Broad England notice users should go back to the main notice owner page for route hierarchy, notice examples, and service-stage orientation before choosing a product.',
+        'Landlords with a live case should go back to the main England notice page for route clarity, notice examples, and service-stage guidance before choosing a product.',
     },
     {
       title: 'Move into the current England possession route',
       detail:
-        'Most current cases now need the live England possession route and a grounds-based plan supported by the right notice and evidence.',
+        'Most current cases now need the live England possession route and a grounds-based plan backed by the right notice and evidence.',
     },
     {
       title: 'Choose a product only after the route is clear',
       detail:
-        'Use Notice Only when the current route is already settled. Use Complete Pack when the case is already moving toward court continuity.',
+        'Use Notice Only when the route is already clear. Use Complete Pack when the case is likely to move into court and you need continuity from the start.',
     },
   ],
   checklists: [
@@ -100,26 +99,26 @@ const content: PillarPageContent = {
       items: [
         'Explains clearly that Section 21 is now historical-only in England.',
         'Uses exact dates rather than vague countdown wording.',
-        'Acknowledges legacy Section 21 search intent directly.',
+        'Acknowledges why landlords still search for Section 21 directly.',
         'Links back into the current England notice framework.',
       ],
     },
     {
       title: 'Supporting links checklist',
       items: [
-        'Links to the England notice hub as the broad owner page.',
+        'Links to the England notice hub as the broad starting page.',
         'Links to the current England notice guide as the live route.',
-        'Links to the England transition guide as the authority explainer.',
+        'Links to the England transition guide as the main explainer.',
         'Links to the wider England eviction process for next-stage planning.',
       ],
     },
     {
       title: 'Commercial handoff checklist',
       items: [
-        'Primary CTA returns to the broad owner page first.',
-        'Secondary CTA moves users to the current live route.',
+        'Primary CTA returns the landlord to the broad England notice page first.',
+        'Secondary CTA moves the landlord to the current live route.',
         'Commercial products sit below route clarity, not above it.',
-        'Copy stays readable, accurate, and non-spammy.',
+        'Copy stays readable, accurate, and calm.',
       ],
     },
   ],
@@ -161,7 +160,7 @@ const content: PillarPageContent = {
         'Move next to the England notice hub and then into the current England notice guide.',
     },
     {
-      question: 'Is the user still comparing notice options?',
+      question: 'Is the landlord still comparing notice options?',
       recommendation:
         'Explain that the old Section 21 comparison no longer applies and that current England cases must follow the current possession route instead.',
     },
@@ -182,7 +181,7 @@ const content: PillarPageContent = {
         <>
           This page exists because Section 21 is still one of the most searched landlord terms in England, even after
           the route changed. The right approach is not to ignore that search intent. It is to explain clearly that the
-          route ended in England on <strong>1 May 2026</strong>, then send the user back to{' '}
+          route ended in England on <strong>1 May 2026</strong>, then send the landlord back to{' '}
           <Link href="/eviction-notice-template" className="text-primary font-medium hover:underline">
             the main England notice page
           </Link>
@@ -202,18 +201,18 @@ const content: PillarPageContent = {
       ],
     },
     {
-      title: 'Why this page still exists',
+      title: 'Why this page still matters',
       paragraphs: [
-        'Many landlords still search for Section 21 out of habit, because it was the best-known route for years. That makes this page useful as a bridge, even though it is no longer the place to start a live possession workflow.',
-        'Its job is simple: answer the historical query accurately, explain the dates that mattered, and move people into the current framework without confusion.',
+        'Many landlords still search for Section 21 out of habit because it was the best-known route for years. That makes this page useful as a bridge, even though it is no longer the place to start a live possession workflow.',
+        'Its job is simple: answer the historical question properly, explain the dates that mattered, and move landlords into the current framework without confusion.',
         'That means the page should stay factual and transitional. It should not behave like a live service page for a route that no longer exists.',
       ],
     },
     {
-      title: 'The practical question landlords now need to ask',
+      title: 'The practical question you need to ask now',
       paragraphs: [
-        'For current England cases, the key issue is no longer whether Section 21 can be used. It is which current possession route applies, what grounds are available, and what evidence needs to support the case.',
-        'That is why the best next step for most landlords is to re-enter the current route through the England notice hub, then move into the live notice and possession workflow that now replaces the old Section 21 mindset.',
+        'For current England cases, the key issue is no longer whether Section 21 can be used. It is which possession route now applies, what grounds are available, and what evidence needs to support the case.',
+        'That is why the best next step for most landlords is to re-enter the current route through the England notice hub, then move into the live notice and possession workflow that replaced the old Section 21 mindset.',
       ],
     },
   ],
@@ -231,11 +230,11 @@ const content: PillarPageContent = {
     { label: 'Current England notice guide', href: '/section-8-notice' },
   ],
   productLink: {
-    label: 'Complete pack for the current England route',
+    label: 'Full eviction support for the current England route',
     href: '/products/complete-pack',
   },
-  primaryCta: { label: 'View England notice template', href: '/eviction-notice-template' },
-  secondaryCta: { label: 'See the current England route', href: '/section-8-notice' },
+  primaryCta: { label: 'See the current England notice options', href: '/eviction-notice-template' },
+  secondaryCta: { label: 'Read the current England notice guide', href: '/section-8-notice' },
   faqs: [
     {
       question: 'Did Section 21 end in England?',
@@ -248,12 +247,12 @@ const content: PillarPageContent = {
     {
       question: 'What replaces Section 21 in current England cases?',
       answer:
-        'For most live possession scenarios in England, landlords now need to follow the current Renters’ Rights Act possession framework, supported by the correct route, evidence, and notice process.',
+        'For most live possession scenarios in England, landlords now need to follow the current possession framework, supported by the right route, evidence, and notice process.',
     },
     {
       question: 'Can I still use this page to start a live case?',
       answer:
-        'No. This page is a historical-only transition page. For live England cases, start with the England notice hub and then move into the current notice route.',
+        'No. This page is a historical-only transition page. For a live England case, start with the England notice hub and then move into the current notice route.',
     },
     {
       question: 'Why is this page still live?',

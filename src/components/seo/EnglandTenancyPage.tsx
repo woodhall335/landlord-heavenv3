@@ -110,11 +110,11 @@ export function EnglandTenancyPage({
           <section className="mb-12 rounded-[2rem] border border-[#E6E0D5] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
             <div className="max-w-3xl">
               <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                People often land here looking for
+                Landlords often land here looking for
               </h2>
               <p className="mt-3 text-base leading-7 text-[#546075]">
                 We keep the page easy to find using the terms landlords actually search for, then
-                point you to the agreement that matches the let in real life.
+                point you to the agreement that matches the way the property is really being let.
               </p>
             </div>
             <div className="mt-5 flex flex-wrap gap-3">
@@ -132,9 +132,9 @@ export function EnglandTenancyPage({
 
         <section className="mb-12 grid gap-8 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
-            <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-              What this route covers
-            </h2>
+              <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                What this agreement route covers
+              </h2>
             <ul className="mt-5 space-y-3 text-[#465066]">
               {highlights.map((item) => (
                 <li key={item} className="flex items-start gap-3 leading-7">
@@ -146,9 +146,9 @@ export function EnglandTenancyPage({
           </div>
 
           <div className="rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)]">
-            <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-              How this lines up with the current England rules
-            </h2>
+              <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                How this lines up with the current England rules
+              </h2>
             <ul className="mt-5 space-y-3 text-[#465066]">
               {compliancePoints.map((item) => (
                 <li key={item} className="flex items-start gap-3 leading-7">
@@ -200,7 +200,7 @@ export function EnglandTenancyPage({
               </h2>
               <p className="mt-3 text-base leading-7 text-[#546075]">
                 The agreement is the main document, but we also include the practical paperwork a
-                landlord usually needs around it.
+                landlord usually needs around it so the tenancy starts on a cleaner footing.
               </p>
             </div>
             <div className="mt-6 grid gap-5 md:grid-cols-2">
@@ -234,7 +234,7 @@ export function EnglandTenancyPage({
               </h2>
               <p className="mt-3 text-base leading-7 text-[#546075]">
                 Pick the route that matches the way the property is actually being let. That matters
-                more than old AST language or a vague idea of what sounds more "premium".
+                more than old AST wording or a vague idea of what sounds more "premium".
               </p>
             </div>
             <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">

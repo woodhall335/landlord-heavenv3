@@ -82,7 +82,7 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
         <Container>
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              Current England framework
+              Current England position
             </p>
             <p className="mt-4 text-lg leading-8 text-slate-700">{config.currentFrameworkNote}</p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -90,19 +90,19 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
                 href="/products/notice-only"
                 className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
               >
-                Start Notice Only
+                Start your notice
               </Link>
               <Link
                 href="/products/complete-pack"
                 className="rounded-lg border border-[#e6dbff] bg-white px-5 py-3 font-semibold text-primary hover:bg-[#fcfaff]"
               >
-                Review Complete Pack
+                View full eviction support
               </Link>
               <Link
                 href="/n5-n119-possession-claim"
                 className="rounded-lg border border-[#e6dbff] bg-white px-5 py-3 font-semibold text-primary hover:bg-[#fcfaff]"
               >
-                See N5 and N119 claim stage
+                See the claim-stage forms
               </Link>
             </div>
           </div>
@@ -153,11 +153,9 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
       <section className="bg-[#f7f2ff] py-12">
         <Container>
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#e6dbff] bg-white p-6 md:p-8">
-            <h2 className="text-3xl font-bold text-[#2a2161]">Choose the next current step</h2>
+            <h2 className="text-3xl font-bold text-[#2a2161]">Choose the next step for your case</h2>
             <p className="mt-4 max-w-3xl leading-8 text-gray-700">
-              Move from guidance into the current England workflow that fits your case. If the route is
-              already settled, start the notice. If the case already needs court continuity, review the
-              fuller possession support and the claim-stage guidance.
+              Move from guidance into the current England workflow that fits your case. If you already know the route, start the notice. If the case is likely to continue into court, use the fuller possession support and claim-stage guidance instead of piecing it together later.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
@@ -187,11 +185,10 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
       <section className="bg-[#f3eeff] py-12">
         <Container>
           <div className="mx-auto max-w-5xl">
-            <RelatedLinks title="Related current England resources" links={config.relatedLinks} />
+            <RelatedLinks title="Related England resources for landlords" links={config.relatedLinks} />
           </div>
         </Container>
       </section>
     </div>
   );
 }
-

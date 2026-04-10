@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   title:
     'Section 21 Validity Checklist | Landlord Compliance and Proof Guide | LandlordHeaven',
   description:
-    'A practical Section 21 validity checklist for landlords in England.',
+    'A plain-English Section 21 validity checklist for landlords in England, covering compliance, timing, proof, and common failure points.',
   alternates: {
     canonical,
   },
@@ -188,7 +188,7 @@ export default function Page() {
 
       <UniversalHero
         title="Section 21 Validity Checklist"
-        subtitle="Audit your compliance file before service so you do not lose time, money, and possession momentum to an avoidable invalid notice."
+        subtitle="Check the compliance file before you serve so you do not lose time, money, and possession momentum to an avoidable invalid notice."
         primaryCta={{ label: 'View post-ban possession support', href: completePackProductLink }}
         secondaryCta={{ label: 'Read the Section 21 transition guide', href: '/section-21-ban-uk' }}
         mediaSrc="/images/wizard-icons/07-review-finish.png"
@@ -199,7 +199,7 @@ export default function Page() {
         <p className="mt-6 text-sm text-white/90 md:text-base">
           This guide explains what landlords in England usually check before serving
           Form 6A, which compliance records matter most, what commonly makes a Section 21
-          notice invalid, and how to turn a messy tenancy file into a cleaner possession file.
+          notice fail, and how to turn a messy tenancy file into a cleaner possession file.
         </p>
       </UniversalHero>
 
@@ -209,8 +209,8 @@ export default function Page() {
             aria-labelledby="guide-links-heading"
             className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-white p-6"
           >
-            <h2 id="guide-links-heading" className="text-2xl font-semibold text-[#2a2161]">
-              In This Guide
+              <h2 id="guide-links-heading" className="text-2xl font-semibold text-[#2a2161]">
+              In this guide
             </h2>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               {jumpLinks.map((link) => (
@@ -238,7 +238,7 @@ export default function Page() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
-            <Card id="quick-answer" title="Quick Answer">
+            <Card id="quick-answer" title="Quick answer">
               <p className="mt-4 leading-7 text-gray-700">
                 A valid Section 21 notice is usually not won or lost on Form 6A alone. In
                 practical terms, landlords need the whole file to line up. That usually means
@@ -248,11 +248,11 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                The mistake many landlords make is treating validity as a box-ticking task
-                that happens after they have already decided to serve. The stronger approach
-                is the opposite. Audit validity first. If the route is safe, then generate
-                and serve the notice. If the route is not safe, fix the problem or rethink the
-                wider possession strategy before the notice goes out.
+                The mistake many landlords make is treating validity as a last-minute
+                box-ticking task after they have already decided to serve. The stronger
+                approach is the opposite. Audit validity first. If the route is safe, then
+                generate and serve the notice. If the route is not safe, fix the problem or
+                rethink the wider possession strategy before the notice goes out.
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
@@ -271,7 +271,7 @@ export default function Page() {
 
             <Card
               id="what-section-21-validity-really-means"
-              title="What Section 21 Validity Really Means"
+              title="What Section 21 validity really means"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 Section 21 validity is often talked about as though it were a single yes or
@@ -292,7 +292,7 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                Good landlords therefore treat validity in two layers. The first layer is
+                Good landlords usually treat validity in two layers. The first layer is
                 route availability: can Section 21 actually be used on these facts? The
                 second layer is route reliability: if it can be used, is the file clean
                 enough that the notice is likely to stand up later?
@@ -306,7 +306,7 @@ export default function Page() {
 
             <Card
               id="before-you-even-think-about-serving"
-              title="Before You Even Think About Serving"
+              title="Before you even think about serving"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 Before a landlord even starts looking at Form 6A, the first question should
@@ -343,7 +343,7 @@ export default function Page() {
 
             <Card
               id="section-21-validity-checklist-core"
-              title="Core Section 21 Validity Checklist"
+              title="Core Section 21 validity checklist"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 A strong Section 21 validity audit usually works best when it is reduced to
@@ -380,7 +380,7 @@ export default function Page() {
 
             <Card
               id="deposit-and-prescribed-information"
-              title="Deposit and Prescribed Information"
+              title="Deposit and prescribed information"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 Deposit issues are one of the most common reasons landlords discover that a
@@ -410,7 +410,7 @@ export default function Page() {
 
             <Card
               id="gas-safety-epc-how-to-rent"
-              title="Gas Safety, EPC and How to Rent"
+              title="Gas safety, EPC and How to Rent"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 Another common validity problem is assuming that compliance documents only
@@ -443,7 +443,7 @@ export default function Page() {
               primaryHref={completePackProductLink}
               primaryLabel="View post-ban possession support"
               secondaryHref={noticeOnlyProductLink}
-              secondaryLabel="Legacy notice route only"
+              secondaryLabel="Start legacy notice support"
             />
 
             <Card
@@ -477,7 +477,7 @@ export default function Page() {
 
             <Card
               id="service-and-proof"
-              title="Service and Proof"
+              title="Service and proof"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 A Section 21 notice can be legally sound on paper and still cause delay if
@@ -504,7 +504,7 @@ export default function Page() {
 
             <Card
               id="how-landlords-usually-audit-the-file"
-              title="How Landlords Usually Audit the File"
+              title="How landlords usually audit the file"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 Good validity checking usually works like an audit rather than like a rushed
@@ -531,7 +531,7 @@ export default function Page() {
 
             <Card
               id="common-failure-points"
-              title="Common Failure Points"
+              title="Common failure points"
             >
               <p className="mt-4 leading-7 text-gray-700">
                 Most invalid Section 21 notices do not fail because of one dramatic mistake
@@ -621,13 +621,13 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Section 21 Validity Checklist FAQs" />
+        <FAQSection faqs={faqs} title="Section 21 validity checklist FAQs" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">Next steps</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Before serving a Section 21 notice, audit the route, check the compliance
               file, confirm the dates, and plan proof of service. That preparation usually
@@ -655,13 +655,13 @@ export default function Page() {
                 href={noticeOnlyProductLink}
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Legacy notice route only
+                Start legacy notice support
               </Link>
               <Link
                 href="/eviction-notice-template"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Start eviction notice pack
+                Go to the England notice hub
               </Link>
             </div>
           </div>

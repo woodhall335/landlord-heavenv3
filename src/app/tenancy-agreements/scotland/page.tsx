@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   title:
     'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
   description:
-    'Create a Scotland Private Residential Tenancy agreement online.',
+    'Plain-English landlord guide to creating a Scotland Private Residential Tenancy agreement online, with the right PRT wording for straightforward and more complex lets.',
   keywords: [
     'private residential tenancy agreement',
     'PRT agreement Scotland',
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     title:
       'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
     description:
-      'Create a Scotland PRT agreement with current Scottish wording, instant download, and clear guidance on registration, deposits, notice, and compliance.',
+      'Landlord guide to building a Scotland PRT agreement with current wording, clearer route choice, and practical guidance on registration, deposits, notice, and compliance.',
     type: 'article',
     url: canonicalUrl,
     siteName: 'Landlord Heaven',
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
     title:
       'Private Residential Tenancy Agreement Scotland | Create a PRT Online',
     description:
-      'Create a Scotland PRT agreement online with current Scottish wording and instant download.',
+      'Create a Scotland PRT agreement online with current Scottish wording and clearer landlord guidance.',
   },
   robots: {
     index: true,
@@ -183,8 +183,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
             <>
               Create a <strong>Scotland-specific Private Residential Tenancy agreement</strong>{' '}
               online. Compare <strong>standard</strong> and <strong>premium</strong>{' '}
-              PRT routes, understand key Scottish rules, and choose the right agreement
-              for a straightforward or more complex let.
+              routes, understand the main Scottish rules that affect your let, and pick
+              the agreement that fits the property and tenancy you are actually setting up.
             </>
           }
           primaryCta={{
@@ -979,7 +979,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
         </section>
 
         <FAQSection
-          title="Private Residential Tenancy agreement FAQ"
+          title="Private Residential Tenancy agreement FAQs for landlords"
           faqs={faqs}
           showTrustPositioningBar
           showContactCTA={false}
@@ -995,7 +995,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 pagePath={PAGE_PATH}
                 jurisdiction="scotland"
                 title="Ready to create your Scotland PRT?"
-                description={`Choose the right Scottish tenancy agreement route and generate your document online from ${standardPrice}.`}
+                description={`Choose the Scottish tenancy agreement route that fits your let and generate the document online from ${standardPrice}.`}
               />
               <SeoDisclaimer className="mx-auto max-w-4xl" />
             </div>

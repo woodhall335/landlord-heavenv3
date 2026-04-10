@@ -50,9 +50,9 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
         : 'Start My Case Bundle';
 
   const heroHelperCopy = isCompletePackEnglandPage
-    ? 'Avoid wasted court fees — file correctly the first time.'
+    ? 'Avoid wasted court fees by getting the route and paperwork lined up before you file.'
     : isNoticeOnlyPage
-      ? 'Serve correctly. Avoid invalid notices. Move your case forward.'
+      ? 'Serve the right notice, avoid easy mistakes, and move the case forward with more confidence.'
       : null;
 
   return (
@@ -131,7 +131,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
         <Container>
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
-              What You Get
+              What you get
             </h2>
 
             {isCompletePackEnglandPage ? (
@@ -197,10 +197,10 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
-              How Validation Works
+              How the checks work
             </h2>
             <p className="text-center text-gray-600 mb-8">
-              Our system performs systematic validation to ensure documents are correctly generated
+              We check the details that usually trip landlords up, so the generated documents are easier to trust before you serve or file them.
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               {content.howValidationWorks.map((item, index) => (
@@ -222,7 +222,7 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
         <Container>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">
-              Who This Is For
+              Who this is for
             </h2>
             <ul className="space-y-4 max-w-2xl mx-auto">
               {content.whoThisIsFor.map((item, index) => (
@@ -254,8 +254,8 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
                 variant="banner"
                 source="seo"
                 product={content.product}
-                title="Have questions?"
-                description="Ask Heaven can help you understand your options and requirements."
+                title="Still unsure what to do?"
+                description="Ask Heaven can help you work through the route, the paperwork, and the next step in plain English."
               />
             </div>
           </Container>
@@ -268,9 +268,9 @@ export function WizardLandingPage({ content, structuredDataUrl, showAskHeavenWid
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Started?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to get started?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Solicitor-grade procedural checks and court-ready documents, designed to reduce rejected claims.
+              Clear landlord guidance, stronger procedural checks, and documents that are easier to rely on when the tenancy problem needs action.
             </p>
             <div className="mx-auto w-full max-w-md">
               <IntentProductCTA

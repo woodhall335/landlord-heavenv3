@@ -20,7 +20,7 @@ interface Seed {
 }
 
 function paragraph(focus: string, scenario: string, heading: string, angle: string) {
-  return `${focus} is most effective when the landlord treats the case as a governed timeline rather than a single notice event. In ${heading.toLowerCase()}, start by stating the legal objective, the tenancy status, and the commercial objective for the property so every action has a measurable reason. ${angle} Build one chronology that captures rent due dates, breach events, communications, and service evidence, then use the same chronology in notices, claim forms, witness statements, and hearing notes to remove contradictions. Landlords in ${scenario} usually lose momentum when they rely on memory or disconnected files, so keep one indexed evidence pack with dated screenshots, certificates, bank extracts, and policy confirmations before each escalation point.`;
+  return `${focus} works best when the landlord treats the case as a controlled timeline rather than as a single notice event. In ${heading.toLowerCase()}, start by stating the legal objective, the tenancy status, and the commercial objective for the property so every action has a reason. ${angle} Build one chronology that captures rent due dates, breach events, communications, and service evidence, then reuse that chronology in notices, claim forms, witness statements, and hearing notes to remove contradictions. Landlords dealing with ${scenario} usually lose momentum when they rely on memory or disconnected files, so keep one indexed evidence pack with dated screenshots, certificates, bank extracts, and policy confirmations before each escalation point.`;
 }
 
 const deepSectionTitles = [
@@ -54,16 +54,16 @@ function buildDeepSections(seed: Seed): PillarSection[] {
 
 function buildFaqs(topic: string): FAQItem[] {
   return [
-    { question: `What is the first step in a ${topic} case?`, answer: 'Start by confirming tenancy type, current compliance position, and the commercial objective for possession or debt recovery before serving anything.' },
-    { question: 'Should I use Section 21 or Section 8 first?', answer: 'Choose the route that matches your legal facts: Section 21 for no-fault possession where requirements are met, Section 8 for breach-based possession.' },
-    { question: 'Can I recover rent arrears during eviction?', answer: 'Yes, but sequence matters. Protect possession momentum first and prepare arrears evidence in parallel so both objectives can progress.' },
-    { question: 'How do I reduce risk of notice invalidity?', answer: 'Use the correct form, verify dates carefully, and retain robust service proof including certificates and communication records.' },
-    { question: 'What documents should be in my court bundle?', answer: 'Include tenancy agreement, notice, proof of service, rent schedule, relevant certificates, correspondence, and a clear chronology.' },
-    { question: 'What if the tenant raises a defence?', answer: 'Map likely defence themes in advance and prepare fact-based rebuttals linked directly to your documents and timeline.' },
-    { question: 'When should I apply for a warrant?', answer: 'If the possession date passes and the tenant remains in occupation, progress to enforcement promptly with complete supporting documents.' },
-    { question: 'Is accelerated possession always faster?', answer: 'It can be faster where Section 21 compliance is strong, but errors in forms or evidence can remove that advantage quickly.' },
-    { question: 'Should I use landlord tools before filing?', answer: 'Yes. A current paid notice route plus landlord tools reduce drafting errors and improve consistency before court documents are issued.' },
-    { question: 'When should I choose full managed support?', answer: 'Choose full support when the case is complex, heavily defended, or commercially critical and you need route confidence and document control.' },
+    { question: `What is the first step in a ${topic} case?`, answer: 'Start by confirming the tenancy type, the current compliance position, and the commercial objective for possession or debt recovery before you serve anything.' },
+    { question: 'Should I use Section 21 or Section 8 first?', answer: 'Choose the route that matches the legal facts: Section 21 for no-fault possession where the requirements are met, Section 8 for breach-based possession.' },
+    { question: 'Can I recover rent arrears during eviction?', answer: 'Yes, but sequence matters. Protect possession momentum first and prepare the arrears evidence in parallel so both objectives can progress.' },
+    { question: 'How do I reduce the risk of notice invalidity?', answer: 'Use the correct form, verify the dates carefully, and keep robust proof of service including certificates and communication records.' },
+    { question: 'What documents should be in the court bundle?', answer: 'Include the tenancy agreement, notice, proof of service, rent schedule, relevant certificates, correspondence, and a clear chronology.' },
+    { question: 'What if the tenant raises a defence?', answer: 'Map the likely defence themes in advance and prepare factual rebuttals linked directly to your documents and timeline.' },
+    { question: 'When should I apply for a warrant?', answer: 'If the possession date passes and the tenant remains in occupation, move into enforcement promptly with complete supporting documents.' },
+    { question: 'Is accelerated possession always faster?', answer: 'It can be faster where Section 21 compliance is strong, but mistakes in forms or evidence can remove that advantage quickly.' },
+    { question: 'Should I use landlord tools before filing?', answer: 'Yes. A current paid notice route plus landlord tools can reduce drafting errors and improve consistency before court documents are issued.' },
+    { question: 'When should I choose fuller support?', answer: 'Choose fuller support when the case is complex, heavily defended, or commercially critical and you need more route confidence and document control.' },
   ];
 }
 

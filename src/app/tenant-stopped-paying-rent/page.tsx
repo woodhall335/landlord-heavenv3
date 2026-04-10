@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Tenant Stopped Paying Rent 2026 | Landlord Action Plan for Arrears and Possession | LandlordHeaven',
   description:
-    'A high-intent landlord guide for when a tenant stops paying rent.',
+    'Plain-English landlord guide to what to do when a tenant stops paying rent, including arrears evidence, route choice, possession planning, and next steps.',
   alternates: {
     canonical,
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tenant Stopped Paying Rent 2026 | LandlordHeaven',
     description:
-      'What landlords usually do when a tenant stops paying rent and arrears start building.',
+      'Plain-English landlord guide to handling rent arrears before they turn into a mess.',
   },
 };
 
@@ -191,9 +191,9 @@ export default function Page() {
 
       <UniversalHero
         title="Tenant Stopped Paying Rent"
-        subtitle="A practical landlord playbook for arrears evidence, route selection, and possession planning without avoidable resets."
-        primaryCta={{ label: 'Start Notice Only for arrears', href: '/products/notice-only' }}
-        secondaryCta={{ label: 'Need court-ready bundle? Complete Pack', href: '/products/complete-pack' }}
+        subtitle="If rent has stopped coming in, the first job is to control the arrears file properly so you can choose the right route and avoid losing time later."
+        primaryCta={{ label: 'Start notice only for arrears', href: '/products/notice-only' }}
+        secondaryCta={{ label: 'Need the court-ready bundle?', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Rent arrears eviction timeline guide icon"
         showReviewPill
@@ -762,13 +762,13 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
-        <FAQSection faqs={faqs} title="Tenant Stopped Paying Rent FAQs" />
+        <FAQSection faqs={faqs} title="Tenant stopped paying rent FAQs" />
       </section>
 
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Rent arrears cases usually become easier to manage when the landlord decides
               early that the file will be treated as one controlled workflow rather than a

@@ -9,7 +9,7 @@ const canonical = getCanonicalUrl('/section-21-ban-uk');
 export const metadata: Metadata = {
   title: 'Section 21 Ban UK: Renters’ Rights Act Transition Guide for England',
   description:
-    'England landlord guide to the end of Section 21, the move into the Renters’ Rights Act framework, and the exact dates that matter for older notices.',
+    'England landlord guide to the end of Section 21, the move into the current possession framework, and the exact dates that matter for older notices.',
   alternates: { canonical },
   openGraph: {
     title: 'Section 21 Ban UK: Renters’ Rights Act Transition Guide for England',
@@ -26,7 +26,7 @@ const content: PillarPageContent = {
   description: metadata.description as string,
   heroTitle: 'Section 21 Ban UK',
   heroSubtitle:
-    'What landlords must do now that Section 21 has ended in England, what replaced it, and how to move into the current Renters’ Rights Act possession route without guesswork.',
+    'What landlords need to do now that Section 21 has ended in England, what replaced it, and how to move into the current possession route without guesswork.',
   icon: '/images/wizard-icons/11-calendar-timeline.png',
   heroBullets: [
     'Uses exact England dates and transition rules, not vague countdown copy.',
@@ -37,7 +37,7 @@ const content: PillarPageContent = {
     <>
       Section 21 ended in England on <strong>1 May 2026</strong>. If a landlord had already served a qualifying Section 21
       notice before that date, court proceedings needed to begin by <strong>31 July 2026</strong>. That means most current
-      England possession cases now need the Renters&apos; Rights Act framework and the current route explained in{' '}
+      England possession cases now need the current possession framework and the route explained in{' '}
       <Link href="/section-8-notice" className="text-primary font-medium hover:underline">
         the current England notice guide
       </Link>{' '}
@@ -48,9 +48,9 @@ const content: PillarPageContent = {
       .
     </>,
     <>
-      Landlords should treat this page as the authority hub for the transition. Use it when the search intent is about
-      the ban, what replaces Section 21, or how to evict after Section 21 is gone. Then move into the supporting page
-      that matches the live scenario, such as{' '}
+      Landlords should treat this page as the main transition hub. Use it when the search intent is about the ban, what
+      replaces Section 21, or how to evict after Section 21 is gone. Then move into the supporting page that matches the
+      live scenario, such as{' '}
       <Link href="/tenant-not-paying-rent" className="text-primary font-medium hover:underline">
         tenant not paying rent in the UK
       </Link>{' '}
@@ -58,17 +58,17 @@ const content: PillarPageContent = {
     </>,
   ],
   routeExplanation: [
-    'The Section 21 ban matters because it removed the familiar no-fault route that many England landlords relied on. The replacement conversation is now more evidence-driven, more structured, and more clearly tied to the current possession rules.',
-    'That is why this page needs to do more than repeat the headline. It should explain what changed, the exact dates, what replaces Section 21, and the practical actions landlords should take next.',
-    'For most live cases, the key next step is not another Section 21 explainer. It is choosing the right current possession route, preparing the evidence bundle, and planning the court sequence before deadlines are missed.',
-    'This page therefore acts as the authority hub for the transition, with the supporting routes handling arrears, service, possession claims, and enforcement detail.',
+    'The end of Section 21 matters because it removed the route many England landlords used to know best. The replacement conversation is now more evidence-led, more structured, and more closely tied to the current possession rules.',
+    'That means this page has to do more than repeat a headline. It needs to explain what changed, the exact dates, what replaced Section 21, and the practical steps landlords should take next.',
+    'For most live cases, the next step is not another Section 21 explainer. It is choosing the right current possession route, preparing the evidence bundle, and planning the court sequence before deadlines are missed.',
+    'This page therefore works as the main transition hub, with the supporting pages covering arrears, service, possession claims, and enforcement detail.',
   ],
   processSteps: [
     { title: 'Understand the change and the dates', detail: 'Use 1 May 2026 as the end date for Section 21 in England and 31 July 2026 as the court-start cutoff for qualifying older notices.' },
-    { title: 'Stop treating Section 21 as the default live route', detail: 'For most current England possession cases, landlords now need to think in terms of the current possession grounds, evidence, and process continuity.' },
+    { title: 'Stop treating Section 21 as the default live route', detail: 'For most current England possession cases, landlords now need to think in terms of the live possession grounds, evidence, and process continuity.' },
     { title: 'Match the case to the right supporting guide', detail: 'Use the current England notice guide, the rent arrears pillar, or the wider England eviction guide depending on the scenario.' },
-    { title: 'Choose the right product-first route', detail: 'Use Complete Pack when the landlord needs broader possession support, or Notice Only when the route is already settled and the need is narrower.' },
-    { title: 'Avoid panic and low-quality shortcuts', detail: 'Landlords benefit most from clarity and file quality, not fear-based rushing.' },
+    { title: 'Choose the right product-first route', detail: 'Use Complete Pack when you need broader possession support, or Notice Only when the route is already settled and the task is narrower.' },
+    { title: 'Avoid panic and low-quality shortcuts', detail: 'You are usually better off with clarity and a clean file than with rushed shortcuts that create more delay later.' },
   ],
   checklists: [
     {
@@ -86,13 +86,13 @@ const content: PillarPageContent = {
         'Identify whether the case is live or legacy.',
         'Move into the current England possession planning for current cases.',
         'Use supporting pages for arrears, court, and enforcement detail.',
-        'Choose a product-first route rather than a wizard-first entry point.',
+        'Choose the product route that fits the case rather than reacting in a panic.',
       ],
     },
     {
       title: 'Common mistakes to avoid',
       items: [
-        'Using vague “deadline” language without exact dates.',
+        'Using vague "deadline" language without exact dates.',
         'Treating the transition page like a simple news post.',
         'Leaving landlords without a clear next possession route.',
         'Over-linking legacy Section 21 tools instead of the replacement workflow.',
@@ -109,7 +109,7 @@ const content: PillarPageContent = {
     { question: 'Is the user asking what replaces Section 21?', recommendation: 'Move them next to the current England notice guide because that is the live route they now need in most England cases.' },
     { question: 'Is the problem mainly rent arrears?', recommendation: 'Pair the transition page with the tenant-not-paying-rent pillar so possession and recovery stay aligned.' },
     { question: 'Is the landlord still thinking in Section 21 terms?', recommendation: 'Use the Section 21 notice bridge page to answer the query, then bring them back here and into Section 8.' },
-    { question: 'Which product should this page prioritize?', recommendation: 'Use Complete Pack first because this is a transition and route-planning page rather than a narrow drafting page.' },
+    { question: 'Which product should this page prioritise?', recommendation: 'Use Complete Pack first because this is a transition and route-planning page rather than a narrow drafting page.' },
   ],
   sections: [
     {
@@ -134,7 +134,7 @@ const content: PillarPageContent = {
           <Link href="/tenant-not-paying-rent" className="text-primary font-medium hover:underline">
             tenant not paying rent in the UK
           </Link>
-          . If the user wants the wider possession sequence after the notice stage, move them to{' '}
+          . If you need the wider possession sequence after the notice stage, move next to{' '}
           <Link href="/eviction-process-england" className="text-primary font-medium hover:underline">
             eviction process in England
           </Link>
@@ -143,13 +143,13 @@ const content: PillarPageContent = {
       ],
     },
     {
-      title: 'How to evict after the ban',
+      title: 'How landlords should plan after the ban',
       paragraphs: [
         <>
           After the Section 21 change, landlords generally need a more structured possession workflow: identify the live
-          ground, prepare evidence, serve the notice correctly, then move into a standard claim if the tenant stays.
-          This is why the transition hub needs clear internal links into the Section 8 and process pillars instead of
-          trying to answer every sub-scenario on one page.
+          ground, prepare the evidence, serve the notice correctly, then move into a standard claim if the tenant stays.
+          That is why this transition hub should point landlords into the Section 8 and process guides instead of trying
+          to answer every sub-scenario on one page.
         </>,
         <>
           When the route is already clear, the fastest commercial handoff is usually{' '}
@@ -177,14 +177,14 @@ const content: PillarPageContent = {
     { label: 'Eviction notice pack', href: '/eviction-notice-template' },
     { label: 'Rent arrears calculator', href: '/tools/rent-arrears-calculator' },
   ],
-  productLink: { label: 'Complete pack for post-ban possession', href: '/products/complete-pack' },
-  primaryCta: { label: 'Get Complete Eviction Pack', href: '/products/complete-pack' },
+  productLink: { label: 'Full eviction support for post-ban possession', href: '/products/complete-pack' },
+  primaryCta: { label: 'Start your full eviction pack', href: '/products/complete-pack' },
   secondaryCta: { label: 'Read the current England notice guide', href: '/section-8-notice' },
   faqs: [
     { question: 'When did Section 21 end in England?', answer: 'Section 21 ended in England on 1 May 2026.' },
     { question: 'What was the court-start cutoff for older notices?', answer: 'Court proceedings on qualifying older Section 21 notices needed to start by 31 July 2026.' },
-    { question: 'What replaces Section 21?', answer: 'For most current England cases, landlords now need the Renters’ Rights Act possession framework, the current notice route, and stronger evidence planning.' },
-    { question: 'What should landlords do now?', answer: 'Move into the current England notice guide, the England eviction-process guide, and the product-first route that fits the complexity of the case.' },
+    { question: 'What replaces Section 21?', answer: 'For most current England cases, landlords now need the current possession framework, the live notice route, and stronger evidence planning.' },
+    { question: 'What should landlords do now?', answer: 'Move into the current England notice guide, the England eviction-process guide, and the product route that matches how complex the case has become.' },
   ],
 };
 

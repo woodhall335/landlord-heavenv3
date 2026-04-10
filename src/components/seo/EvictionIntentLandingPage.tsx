@@ -23,14 +23,14 @@ const AREA_SERVED_BY_JURISDICTION = {
   uk: 'UK',
 } as const;
 const PRODUCT_CTA_LABELS = {
-  '/products/notice-only': 'Start notice only',
-  '/products/complete-pack': 'Start complete eviction pack',
-  '/products/money-claim': 'Start money claim',
-  '/products/ast': 'Start tenancy agreement',
+  '/products/notice-only': 'Start your notice',
+  '/products/complete-pack': 'Start your full eviction pack',
+  '/products/money-claim': 'Start your money claim',
+  '/products/ast': 'Start your tenancy agreement',
 } as const;
 
 function getProductCtaLabel(route: string) {
-  return PRODUCT_CTA_LABELS[route as keyof typeof PRODUCT_CTA_LABELS] ?? 'Start guided workflow';
+  return PRODUCT_CTA_LABELS[route as keyof typeof PRODUCT_CTA_LABELS] ?? 'Start the guided workflow';
 }
 
 function labelMatchesProduct(label: string, route: string) {
@@ -329,18 +329,18 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section className="py-12 bg-white border-y border-[#EDE2FF]">
         <Container>
           <div className="mx-auto max-w-6xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-bold text-charcoal">Quick answer</h2>
+            <h2 className="text-2xl font-bold text-charcoal">Quick answer for landlords</h2>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Question</p>
-            <p className="mt-1 text-lg font-semibold text-charcoal">{`What is the fastest safe way for landlords to handle ${config.keyword}?`}</p>
+            <p className="mt-1 text-lg font-semibold text-charcoal">{`What is the safest practical way to deal with ${config.keyword}?`}</p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Short answer</p>
-            <p className="mt-1 text-gray-700">Landlords usually get better outcomes by confirming the right route first, serving a valid notice with provable service, and preparing court-ready chronology before deadlines. This reduces avoidable resets, protects evidence continuity, and keeps possession progression moving from notice through claim and enforcement when tenants still refuse to leave.</p>
+            <p className="mt-1 text-gray-700">Most landlords get a better outcome when they slow down just enough to choose the right route, serve the notice properly, and keep one clean evidence trail from the start. That usually saves far more time than rushing ahead with the wrong wording, the wrong dates, or service that you cannot prove later.</p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-primary">Numbered steps</p>
             <ol className="mt-4 list-decimal space-y-2 pl-5 text-gray-700">
-              <li>Confirm whether the user is dealing with historical Section 21 language or a current England case.</li>
-              <li>Serve the right notice and keep service proof usable for court.</li>
-              <li>Wait for the notice period and log all tenant responses.</li>
-              <li>Progress to possession claim paperwork only when chronology is consistent.</li>
-              <li>Use warrant or bailiff enforcement if the tenant still refuses to leave.</li>
+              <li>Work out whether you are dealing with old Section 21 wording or a live current-law England case.</li>
+              <li>Serve the notice that fits the facts and keep proof of service you can rely on later.</li>
+              <li>Track the notice period properly and keep a record of every tenant response.</li>
+              <li>Only move to court paperwork once your dates, documents, and chronology all line up.</li>
+              <li>If the tenant still will not leave, move on to the possession and enforcement stage without breaking the file trail.</li>
             </ol>
           </div>
         </Container>
@@ -349,13 +349,13 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section id="eviction-process-overview" className="py-14 bg-white">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal">Eviction process overview</h2>
+            <h2 className="text-3xl font-bold text-charcoal">What this means for your case</h2>
             <p className="mt-4 text-lg text-gray-700">{config.problemIntro}</p>
             <p className="mt-4 text-gray-700">{config.intentDeepDive}</p>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               {config.landlordScenarios.map((scenario) => (
                 <article key={scenario} className="rounded-2xl border border-[#E6DBFF] bg-white p-5 text-sm text-gray-700">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">Landlord scenario</p>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">Landlord situation</p>
                   {LANDLORD_SCENARIO_IMAGE_MAP[scenario] ? (
                     <Image
                       src={LANDLORD_SCENARIO_IMAGE_MAP[scenario].src}
@@ -385,22 +385,21 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section id="section-21-vs-section-8-explainer" className="py-14">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal">Historical Section 21 searches vs the current England route</h2>
+            <h2 className="text-3xl font-bold text-charcoal">Old Section 21 wording versus the current England route</h2>
             <p className="mt-4 text-gray-700">
-              A cheap template becomes expensive quickly if it sends you down the wrong route. If
-              you are still translating older Section 21 language, use the{' '}
+              A cheap template can become the expensive option if it sends you down the wrong route. If
+              you are still trying to translate older Section 21 wording, use the{' '}
               <Link href="/section-21-vs-section-8" className="text-primary hover:underline">historical comparison guide</Link>{' '}
-              before serving anything. If you already know your current route, jump straight into
-              the matching workflow.
+              before you serve anything. If you already know the live route, move straight into the workflow that matches your case.
             </p>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <Link href="/section-21-notice" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
-                <p className="font-semibold text-charcoal">Historical Section 21 transition</p>
-                <p className="mt-2 text-sm">Best when the user needs a calm explanation that Section 21 is historical only and what replaced it.</p>
+                <p className="font-semibold text-charcoal">Section 21 transition guide</p>
+                <p className="mt-2 text-sm">Use this when you need a clear explanation of what changed, the key dates, and what replaced Section 21 in England.</p>
               </Link>
               <Link href="/section-8-notice-template" className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
                 <p className="font-semibold text-charcoal">Current England possession route</p>
-                <p className="mt-2 text-sm">Best for live cases where grounds, notice timing, evidence, and the current court path need to align.</p>
+                <p className="mt-2 text-sm">Use this when the case is live and you need your grounds, notice timing, evidence, and court path to line up properly.</p>
               </Link>
             </div>
           </div>
@@ -411,8 +410,8 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <Container>
           <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.2fr_0.8fr]">
             <div className="rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-8">
-              <h2 className="text-3xl font-bold text-charcoal">Compliance requirements and why notices fail</h2>
-              <p className="mt-4 text-gray-700">Most failed eviction workflows are not caused by obscure legal points; they are caused by missing basics. Generic form sites rarely validate these details.</p>
+              <h2 className="text-3xl font-bold text-charcoal">Why notices fail in real landlord cases</h2>
+              <p className="mt-4 text-gray-700">Most notices fail for simple reasons: the wrong route, the wrong dates, missing compliance documents, or service that cannot be proved later. Generic template sites rarely stop you before those mistakes happen.</p>
               <ul className="mt-4 space-y-2 text-gray-700">
                 {config.templateRisks.map((risk) => <li key={risk}>• {risk}</li>)}
               </ul>
@@ -423,11 +422,11 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             </div>
             <div className="rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
               <Image src={config.icon} alt="wizard icon" width={220} height={220} className="mx-auto h-auto w-full max-w-[220px]" />
-              <h3 className="mt-4 text-xl font-semibold text-charcoal">Checklist prompts</h3>
+              <h3 className="mt-4 text-xl font-semibold text-charcoal">Checks worth making before you serve</h3>
               <ul className="mt-3 space-y-2 text-sm text-gray-700">
                 {config.compliance.map((item) => <li key={item}>✓ {item}</li>)}
               </ul>
-              <p className="mt-4 text-sm text-gray-700">If your notice is invalid, the court can reject your claim and you may need to start again.</p>
+              <p className="mt-4 text-sm text-gray-700">If the notice is invalid, the court can reject the claim and you may lose more rent while you start again.</p>
             </div>
           </div>
         </Container>
@@ -436,10 +435,10 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section id="court-forms-explained" className="py-14">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal">Court forms explained and route continuity</h2>
+            <h2 className="text-3xl font-bold text-charcoal">If the tenant still stays, keep the court stage joined up</h2>
             <p className="mt-4 text-gray-700">
-              If the tenant does not leave, route continuity matters. For current England
-              possession claims, use <Link href="/n5-n119-possession-claim" className="text-primary hover:underline">N5 and N119 possession claim guidance</Link>.
+              If the tenant does not leave after the notice period, the next stage works best when your notice file already makes sense. For current England
+              possession claims, use <Link href="/n5-n119-possession-claim" className="text-primary hover:underline">the N5 and N119 possession claim guide</Link>.
               For the wider notice-to-court sequence, use <Link href="/eviction-process-england" className="text-primary hover:underline">the England eviction process guide</Link>.
             </p>
             <div className="mt-6 overflow-x-auto">
@@ -469,8 +468,8 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section id="eviction-timeline" className="py-14 bg-white">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal">Eviction timeline and common delay points</h2>
-            <p className="mt-4 text-gray-700">For timing expectations, use the <Link href="/eviction-timeline-england" className="text-primary hover:underline">eviction timeline England guide</Link>. Court backlogs are outside your control, but notice validity and service quality are not.</p>
+            <h2 className="text-3xl font-bold text-charcoal">Where delays usually happen</h2>
+            <p className="mt-4 text-gray-700">For timing expectations, use the <Link href="/eviction-timeline-england" className="text-primary hover:underline">eviction timeline England guide</Link>. Court backlogs are outside your control, but notice validity, service quality, and evidence consistency are not.</p>
             <div className="mt-6 overflow-hidden rounded-2xl border border-[#E6DBFF] bg-white">
               <div className="relative w-full">
                 <Image
@@ -490,15 +489,13 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section className="py-14">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal">Evidence quality checklist before issuing a claim</h2>
+            <h2 className="text-3xl font-bold text-charcoal">What to check before you issue a claim</h2>
             <p className="mt-4 text-gray-700">
-              Possession files rarely fail because landlords did nothing. They fail because the evidence trail is fragmented, dates do not align,
-              or key service facts are missing. Build your file as one coherent chronology from tenancy start through to notice service.
-              If every major event has a date and supporting document, your court-stage admin is much easier.
+              Possession files rarely fail because a landlord did nothing at all. They usually fail because the evidence trail is broken, dates do not match, or key service facts are missing. Build the file as one clear timeline from the start of the tenancy through to notice service and the court stage becomes much easier to manage.
             </p>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <article className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5">
-                <h3 className="text-lg font-semibold text-charcoal">Documents to check before filing</h3>
+                <h3 className="text-lg font-semibold text-charcoal">Documents worth checking before you file</h3>
                 <ul className="mt-3 space-y-2 text-sm text-gray-700">
                   <li>• Signed tenancy agreement plus any renewal/variation records.</li>
                   <li>• Deposit protection evidence and prescribed information delivery records.</li>
@@ -509,7 +506,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
                 </ul>
               </article>
               <article className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5">
-                <h3 className="text-lg font-semibold text-charcoal">Mistakes that create avoidable delay</h3>
+                <h3 className="text-lg font-semibold text-charcoal">Mistakes that waste time and rent</h3>
                 <ul className="mt-3 space-y-2 text-sm text-gray-700">
                   <li>• Contradictory dates between notice, witness narrative, and court forms.</li>
                   <li>• Missing proof that mandatory documents were served to the tenant.</li>
@@ -562,7 +559,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section className="py-14">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal">Common eviction mistakes landlords make</h2>
+            <h2 className="text-3xl font-bold text-charcoal">Mistakes that slow landlords down</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {commonMistakes.map((mistake) => (
                 <article key={mistake} className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-sm text-gray-700">
@@ -585,7 +582,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
       <section className="py-14 bg-white">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal">Real landlord scenarios and route recommendations</h2>
+            <h2 className="text-3xl font-bold text-charcoal">Typical landlord situations and the route that usually fits</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               {routeScenarios.map((scenario) => (
                 <Link key={scenario.title} href={scenario.link} className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-5 text-gray-700 hover:shadow-sm">
@@ -602,8 +599,8 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <Container>
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-white shadow-[0_22px_60px_rgba(105,46,212,0.32)] md:p-10">
             <p className="text-sm font-semibold uppercase tracking-wide text-white/80">Next step</p>
-            <h2 className="mt-2 text-2xl font-bold md:text-3xl">Do not let avoidable paperwork errors add more lost rent</h2>
-            <p className="mt-3 text-white/90">A generic template can look cheap at the start, but if route, dates, or service are wrong you can lose months and restart. Use the guided workflow now and keep your case moving.</p>
+            <h2 className="mt-2 text-2xl font-bold md:text-3xl">Do not let avoidable paperwork errors cost you more rent</h2>
+            <p className="mt-3 text-white/90">A generic template can feel cheaper at the start, but if the route, dates, or service are wrong you can lose months and end up restarting. Use the guided workflow now and keep the case moving in the right order.</p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link href={primaryHref} className="hero-btn-primary">{primaryCtaLabel}</Link>
               {heroSecondaryHref && heroSecondaryLabel ? (
@@ -620,8 +617,8 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <Container>
           <div className="mx-auto max-w-6xl grid gap-6 md:grid-cols-2">
             <article className="rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
-              <h2 className="text-2xl font-bold text-charcoal">Related eviction scenarios landlords face</h2>
-              <p className="mt-3 text-gray-700">Use these deeper guides when your eviction process escalates from notice to Possession Order, Warrant of Possession, and Bailiff Eviction stages.</p>
+              <h2 className="text-2xl font-bold text-charcoal">Related landlord problems</h2>
+              <p className="mt-3 text-gray-700">Use these deeper guides when your case moves from the notice stage into possession orders, warrants, and bailiff action.</p>
               <ul className="mt-4 space-y-2 text-sm text-gray-700">
                 <li>• <Link href="/section-8-grounds-explained" className="text-primary hover:underline">Common Section 8 grounds</Link> for breach and Rent Arrears files.</li>
                 <li>• <Link href="/accelerated-possession-guide" className="text-primary hover:underline">Accelerated Possession</Link> pathway after valid Section 21 service.</li>
@@ -630,11 +627,11 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
             </article>
             <article className="rounded-3xl border border-[#E6DBFF] bg-white p-6">
               <h2 className="text-2xl font-bold text-charcoal">What most landlords do next</h2>
-              <p className="mt-3 text-gray-700">If your tenant situation matches this scenario, most landlords take a staged route: valid notice first, then court continuity, then enforcement support.</p>
+              <p className="mt-3 text-gray-700">If your situation matches this page, most landlords move in stages: valid notice first, then court continuity if needed, then enforcement support if the tenant still stays.</p>
               <div className="mt-4 space-y-2 text-sm">
-                <Link href="/products/notice-only" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Fastest route landlords usually take: start Notice Only</Link>
-                <Link href="/products/complete-pack" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Need court continuity? Move to Complete Pack</Link>
-                <Link href="/products/money-claim" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Recover rent arrears in parallel with Money Claim</Link>
+                <Link href="/products/notice-only" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">If the route is clear, start with Notice Only</Link>
+                <Link href="/products/complete-pack" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">If the case may go to court, move into Complete Pack</Link>
+                <Link href="/products/money-claim" className="block rounded-xl border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">If arrears are building, recover unpaid rent with Money Claim</Link>
               </div>
             </article>
           </div>
@@ -645,26 +642,26 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <section className="py-12">
           <Container>
             <div className="mx-auto max-w-6xl rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-charcoal">Cluster authority links: {authorityLinks.clusterLabel}</h2>
-              <p className="mt-3 text-gray-700">Every guide links to its canonical parent, two supporting guides, one tool, and one product page to strengthen crawl paths and internal authority flow.</p>
+              <h2 className="text-2xl font-bold text-charcoal">Useful next pages in this guide cluster</h2>
+              <p className="mt-3 text-gray-700">These links help you move from the question you searched for into the wider landlord guidance, tool, and product pages that fit the next stage of the case.</p>
               <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3 text-sm">
-                <Link href={authorityLinks.parent} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Canonical parent: {authorityLinks.parent}</Link>
+                <Link href={authorityLinks.parent} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Main guide: {authorityLinks.parent}</Link>
                 {authorityLinks.supporting.map((href) => (
-                  <Link key={href} href={href} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Supporting page: {href}</Link>
+                  <Link key={href} href={href} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Supporting guide: {href}</Link>
                 ))}
-                <Link href={authorityLinks.tool} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Tool page: {authorityLinks.tool}</Link>
-                <Link href={authorityLinks.product} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Product page: {authorityLinks.product}</Link>
+                <Link href={authorityLinks.tool} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Tool: {authorityLinks.tool}</Link>
+                <Link href={authorityLinks.product} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-3 text-primary hover:underline">Product: {authorityLinks.product}</Link>
               </div>
             </div>
           </Container>
-        </section>
+      </section>
       ) : null}
 
       <section className="py-10 bg-white">
         <Container>
           <div className="mx-auto max-w-6xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6">
-            <h2 className="text-2xl font-bold text-charcoal">Entity map across this guide cluster</h2>
-            <p className="mt-3 text-gray-700">This page reinforces the core landlord entities used across high-intent pages, FAQs, and schema to improve topical consistency.</p>
+            <h2 className="text-2xl font-bold text-charcoal">Topics covered on this guide cluster</h2>
+            <p className="mt-3 text-gray-700">These are the core landlord issues and legal topics connected to this guide, so you can move to the next relevant page more quickly.</p>
             <div className="mt-4 grid gap-2 md:grid-cols-3 text-sm text-gray-700">
               {EVICTION_ENTITIES.map((entity) => <p key={entity} className="rounded-lg bg-white border border-[#E6DBFF] px-3 py-2">{entity}</p>)}
             </div>
@@ -672,13 +669,13 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         </Container>
       </section>
 
-      <FAQSection title="Frequently asked questions" faqs={config.faqs} showContactCTA={false} variant="gray" includeSchema={false} />
+      <FAQSection title="Questions landlords often ask" faqs={config.faqs} showContactCTA={false} variant="gray" includeSchema={false} />
 
       <section className="py-14 bg-white">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-10">
             <h2 className="text-2xl font-bold text-charcoal">Related eviction guides</h2>
-            <p className="mt-3 text-gray-700">Use these guides to move from notice choice to court progression with fewer mistakes.</p>
+            <p className="mt-3 text-gray-700">Use these guides to move from the notice stage to court progression with fewer false starts.</p>
             <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
               {config.relatedLinks.map((link) => (
                 <Link key={link.href} href={link.href} className="rounded-xl border border-[#E6DBFF] bg-white p-4 text-primary hover:underline">
@@ -696,7 +693,7 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
         <Container>
           <div className="mx-auto max-w-4xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_22px_60px_rgba(105,46,212,0.35)] md:p-12">
             <h2 className="text-3xl font-bold">{config.finalCta}</h2>
-            <p className="mt-4 text-white/90">For many straightforward cases, landlords do not need to pay a solicitor hundreds or thousands just to get the starting paperwork in place. Use the guided route and move now.</p>
+            <p className="mt-4 text-white/90">For many straightforward cases, landlords do not need to pay a solicitor hundreds or thousands just to get the starting paperwork in place. Use the guided route, keep your documents consistent, and move the case forward with more confidence.</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href={primaryHref} className="hero-btn-primary">{config.heroCta}</Link>
               {secondaryActionHref && secondaryActionLabel ? (

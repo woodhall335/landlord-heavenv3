@@ -21,7 +21,7 @@ import {
 export const metadata: Metadata = generateMetadata({
   title: "About Landlord Heaven | UK Landlord Document Platform",
   description:
-    "Learn how Landlord Heaven helps UK landlords create eviction notices, tenancy agreements, money claims, and court paperwork faster.",
+    "Learn how Landlord Heaven helps landlords handle eviction notices, court paperwork, money claims, rent increases, and tenancy agreements in plain English.",
   path: "/about",
   keywords: [
     "about landlord heaven",
@@ -68,8 +68,7 @@ export default function AboutPage() {
 
               <p className="text-xl leading-relaxed">
                 Landlord Heaven generates court-ready document packs for the right region in minutes, not hours. We've made
-                professional-quality eviction notices, tenancy agreements, and court claims accessible to every UK
-                landlord - at a fraction of solicitor costs.
+                clearer eviction notices, tenancy agreements, rent increase files, and court claims accessible to landlords who need to move quickly without paying solicitor rates just to get started.
               </p>
             </div>
           </div>
@@ -89,8 +88,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Too Expensive</h3>
                 <p className="text-gray-700">
-                  Solicitors charge £300-600 for eviction documents. For many landlords, this is unaffordable -
-                  especially when dealing with rent arrears.
+                  Solicitors often charge £300-600 for eviction documents alone. For many landlords, that is a hard cost to justify when the immediate need is understanding the route, getting the paperwork started, and keeping the case moving.
                 </p>
               </div>
 

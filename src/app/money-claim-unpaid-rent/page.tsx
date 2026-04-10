@@ -22,7 +22,7 @@ const moneyClaimProductLink = '/products/money-claim';
 const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 
 const moneyClaimPackCta = {
-  label: `View Money Claim Pack - ${moneyClaimPrice}`,
+  label: `View money claim pack - ${moneyClaimPrice}`,
   href: moneyClaimProductLink,
 };
 
@@ -31,7 +31,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Money Claim for Unpaid Rent | Landlord Court Recovery Guide',
   description:
-    'Landlord guide to making a money claim for unpaid rent in England.',
+    'Plain-English landlord guide to making a money claim for unpaid rent in England, from pre-action letters and arrears schedules to judgment and enforcement.',
   keywords: [
     'money claim unpaid rent',
     'money claim for unpaid rent',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Money Claim for Unpaid Rent | Landlord Court Recovery Guide',
     description:
-      'Practical landlord guide to recovering unpaid rent through a county court money claim, from pre-action steps to judgment and enforcement.',
+      'Landlord guide to recovering unpaid rent through a county court money claim, with the key pre-action, issuing, and enforcement steps explained clearly.',
     type: 'article',
     url: canonical,
     siteName: 'Landlord Heaven',
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Money Claim for Unpaid Rent | Landlord Court Recovery Guide',
     description:
-      'Landlord guide to rent arrears money claims, MCOL, judgment, and enforcement.',
+      'Plain-English landlord guide to rent arrears money claims, MCOL, judgment, and enforcement.',
   },
   robots: {
     index: true,
@@ -220,9 +220,9 @@ export default function MoneyClaimUnpaidRentPage() {
       <UniversalHero
         badge="Debt Recovery"
         title="Money Claim for Unpaid Rent"
-        subtitle="A practical landlord guide to turning rent arrears into a court-ready debt claim with cleaner paperwork, stronger pre-action steps, and a more realistic plan for judgment and enforcement."
-        primaryCta={{ label: 'View Money Claim Guide', href: '/money-claim' }}
-        secondaryCta={{ label: "Calculate What You're Owed", href: '/tools/rent-arrears-calculator' }}
+        subtitle="If your main goal is recovering the debt rather than possession, this guide shows how to turn rent arrears into a cleaner county court claim with fewer avoidable weaknesses."
+        primaryCta={{ label: 'View money claim pack', href: '/money-claim' }}
+        secondaryCta={{ label: "Calculate what you're owed", href: '/tools/rent-arrears-calculator' }}
         variant="pastel"
         showTrustPositioningBar
       >
@@ -267,7 +267,7 @@ export default function MoneyClaimUnpaidRentPage() {
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-10">
-            <Card id="quick-answer" title="Quick Answer">
+            <Card id="quick-answer" title="Quick answer for landlords">
               <p className="mt-4 leading-7 text-gray-700">
                 A money claim for unpaid rent is the county court route landlords use to recover
                 arrears as a debt rather than as a possession issue. In simple terms, it is the
@@ -745,18 +745,18 @@ export default function MoneyClaimUnpaidRentPage() {
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
-              A money claim for unpaid rent usually works best when the landlord treats the case
-              as a debt file first and a filing exercise second. That means one clean arrears
-              schedule, one clear chronology, proper pre-action steps, and a realistic view of
-              what enforcement may look like later.
+              A money claim usually works best when you treat the case as a debt file first
+              and a court form exercise second. That means one clear arrears schedule, one
+              tidy chronology, proper pre-action steps, and a realistic plan for what
+              enforcement may look like later.
             </p>
             <p className="mt-4 leading-7 text-gray-700">
-              The strongest outcomes normally come from landlords who do not rush to issue just
-              because the debt is frustrating. They pause long enough to make the claim clear,
-              consistent, and easy to support. That usually creates a better route from Letter
-              Before Claim through to judgment.
+              The landlords who get the cleanest outcomes usually do not issue in anger.
+              They stop long enough to make the figures clear, line up the supporting
+              documents, and make the claim easier to prove from Letter Before Claim through
+              to judgment.
             </p>
             <p className="mt-4 leading-7 text-gray-700">
               If you are ready to move from arrears frustration into a structured debt claim

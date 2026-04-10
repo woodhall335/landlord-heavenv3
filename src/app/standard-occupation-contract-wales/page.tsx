@@ -37,7 +37,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Standard Occupation Contract Wales | Create Welsh Tenancy Agreement',
   description:
-    'Create a Standard Occupation Contract for Wales. Renting Homes Act 2016 compliant with written statement included.',
+    'Plain-English landlord guide to creating a Standard Occupation Contract for Wales, with written statement wording and current Renting Homes Act compliance.',
   keywords: [
     'standard occupation contract',
     'occupation contract wales',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Standard Occupation Contract Wales | Landlord Heaven',
     description:
-      'Create a legally valid occupation contract for Wales. Fully compliant with the Renting Homes (Wales) Act 2016.',
+      'Landlord guide to creating a Wales occupation contract with the right written statement and current Renting Homes Act wording.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/standard-occupation-contract-wales',
   },
@@ -104,17 +104,17 @@ export default function StandardOccupationContractWalesPage() {
           title="Standard Occupation Contract Wales"
           subtitle={
             <>
-              Create a <strong>legally valid</strong> occupation contract for Wales.
-              Compliant with the Renting Homes (Wales) Act 2016, with written statement
-              and all fundamental terms included.
+              Create a <strong>Wales-specific occupation contract</strong> with the written
+              statement and core terms landlords need under the Renting Homes (Wales) Act,
+              without relying on an outdated England-style tenancy template.
             </>
           }
           primaryCta={{
-            label: `Create Occupation Contract — ${PRODUCTS.ast_standard.displayPrice}`,
+            label: `Create occupation contract - ${PRODUCTS.ast_standard.displayPrice}`,
             href: astProductHref,
           }}
           secondaryCta={{
-            label: 'Premium Contract with Extra Protection',
+            label: 'Premium contract with extra protection',
             href: astProductHref,
           }}
         >

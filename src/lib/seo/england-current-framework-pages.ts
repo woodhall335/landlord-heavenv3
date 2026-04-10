@@ -675,9 +675,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     ],
     heroTitle: 'How to Evict a Tenant in England After 1 May 2026',
     heroSubtitle:
-      'Use this page if you want the current step-by-step route for England possession work, from the first fact check through notice, court claim, and enforcement planning.',
+      'Use this page if you want the current step-by-step route for getting possession back in England, from the first fact check through notice, court claim, and enforcement planning.',
     heroBullets: [
-      'Normalised to the 1 May 2026 England framework.',
+      'Written for the post-1 May 2026 England framework.',
       'Explains the process in the order landlords actually need it.',
       'Moves you into current notice and claim support only.',
     ],
@@ -957,10 +957,10 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     ],
     heroTitle: 'Eviction Notice Template for England',
     heroSubtitle:
-      'This is the current England notice hub for landlords who want to understand the live route, the notice bundle, and the right next action before they serve.',
+      'This is the current England notice hub for landlords who want to understand the live route, the notice bundle, and the right next step before they serve anything.',
     heroBullets: [
-      'Acts as the broad owner page for current England notice intent.',
-      'Explains the bundle, service checks, and route hierarchy.',
+      'Acts as the broad landing page for current England notice intent.',
+      'Explains the bundle, service checks, and route hierarchy in plain English.',
       'Routes into Notice Only, Complete Pack, and claim guidance only.',
     ],
     pageType: 'notice',

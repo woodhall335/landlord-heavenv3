@@ -51,7 +51,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Section 8 vs Section 21 | Which Notice to Use',
   description:
-    `Section 8 vs Section 21: which eviction notice should you use? Compare notice periods, court process, grounds, and costs. Get court-ready notices from ${noticeOnlyPrice}.`,
+    `Section 8 vs Section 21 explained in plain English, so landlords can choose the right notice, avoid wasted time, and start with the right paperwork from ${noticeOnlyPrice}.`,
   keywords: [
     'section 8 vs section 21',
     'should i use section 8 or section 21',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Section 8 vs Section 21 | Which Notice to Use',
     description:
-      'Section 8 vs Section 21: which eviction notice should you use? Complete comparison guide.',
+      'Landlord guide to choosing between Section 8 and Section 21, with the key route, timing, and evidence differences explained clearly.',
     type: 'article',
     url: getCanonicalUrl('/section-8-vs-section-21'),
     siteName: 'Landlord Heaven',
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Section 8 vs Section 21 | Landlord Heaven',
-    description: 'Section 8 vs Section 21: which eviction notice should you use?',
+    description: 'Plain-English landlord guide to choosing between Section 8 and Section 21.',
   },
   alternates: {
     canonical: getCanonicalUrl('/section-8-vs-section-21'),
@@ -615,11 +615,12 @@ export default function Section8VsSection21Page() {
                 <div className="flex items-start gap-4">
                   <Shield className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">What This Means for You</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">What this means for you</h4>
                     <p className="text-gray-600 text-sm">
-                      If you are considering eviction, act now while Section 21 is still
-                      available. After abolition, you will need valid Section 8 grounds. Our
-                      Notice Only Pack includes both Section 21 and Section 8 notices.
+                      If you are dealing with a live tenancy problem, the safest approach is
+                      to choose the route that actually matches the facts now, not the route
+                      that sounds quickest. Our Notice Only Pack includes both Section 21 and
+                      Section 8 notices so you can start with the form that fits your case.
                     </p>
                   </div>
                 </div>
@@ -760,7 +761,7 @@ export default function Section8VsSection21Page() {
         {/* FAQ Section */}
         <FAQSection
           faqs={section8VsSection21FAQs}
-          title="Section 8 vs Section 21: Frequently Asked Questions"
+          title="Section 8 vs Section 21 FAQs for landlords"
           showContactCTA={false}
           variant="gray"
         />

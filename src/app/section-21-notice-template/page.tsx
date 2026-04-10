@@ -35,7 +35,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Section 21 Notice Template | Form 6A Download & Court-Ready Builder',
-  description: 'Section 21 notice template with Form 6A wording, service guidance, and compliance checks. Download free or generate a court-ready notice in minutes.',
+  description: 'Plain-English Section 21 notice template guidance with Form 6A wording, service guidance, and compliance checks for landlords in England.',
   keywords: [
     'section 21 notice template',
     'section 21 template',
@@ -99,7 +99,7 @@ export default function Section21NoticeTemplatePage() {
         <HeaderConfig mode="autoOnScroll" />
         <UniversalHero
           title="Section 21 Notice Guide for Landlords"
-          subtitle="Build a solicitor-grade Section 21 notice workflow with compliance checks before service."
+          subtitle="Build a landlord-ready Section 21 notice workflow with the compliance checks you need before service."
           primaryCta={{ label: 'Start Notice Only', href: noticeOnlyProductHref }}
           secondaryCta={{ label: 'Jump to key steps', href: '#checklist' }}
           showTrustPositioningBar
@@ -112,7 +112,7 @@ export default function Section21NoticeTemplatePage() {
               <SeoPageContextPanel pathname="/section-21-notice-template" className="mb-6" />
               <FunnelCta
                 title="Ready to serve a compliant Section 21 notice?"
-                subtitle="Start with Notice Only, or move straight to full possession support if you expect court action."
+                subtitle="Start with Notice Only if the route is clear, or move straight to full possession support if you expect court action."
                 primaryHref={noticeOnlyProductHref}
                 primaryText="Start Notice Only"
                 primaryDataCta="notice-only"
@@ -137,8 +137,8 @@ export default function Section21NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <FunnelCta
-                title="Got the steps? Generate a compliance-checked bundle with service guidance."
-                subtitle="Reduce rejection risk with a compliant notice flow and clear next steps if the tenant does not leave."
+                title="Got the steps clear? Generate a compliance-checked bundle with service guidance."
+                subtitle="Reduce rejection risk with a compliant notice flow and clearer next steps if the tenant does not leave."
                 primaryHref={noticeOnlyProductHref}
                 primaryText="Generate my notice"
                 primaryDataCta="notice-only"
@@ -156,11 +156,10 @@ export default function Section21NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Free Starter Document vs Court-Ready Notice
+                Free starter document vs court-ready notice
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Our free Section 21 template is great for understanding the <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault eviction process</Link>, but for
-                proper compliance with current requirements, choose our court-ready version.
+                Our free Section 21 template is useful for understanding the <Link href="/no-fault-eviction" className="text-primary hover:underline">no-fault eviction process</Link>, but if you are dealing with a live case, the stronger option is the court-ready version with the compliance checks built in.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8">

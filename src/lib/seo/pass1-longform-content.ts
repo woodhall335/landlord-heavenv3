@@ -18,34 +18,34 @@ export interface Pass1LongformPage {
 
 function buildSections(topic: string, points: string[], extra: string): IntentSection[] {
   const intro: IntentSection = {
-    title: `${topic}: start with a controlled case strategy`,
+    title: `${topic}: start with a clear landlord plan`,
     paragraphs: [
-      `Landlords usually lose time on ${topic.toLowerCase()} files because they jump to the next legal step before building a coherent chronology. In practical terms, the file needs one working timeline, one evidence index, and one route logic note that explains why each action was taken. That discipline matters for every stage: notice, claim issue, witness statement, hearing, and enforcement. A coherent file is faster to manage, easier to defend, and less likely to be delayed by contradictions that were avoidable at the start.`,
-      `The commercial objective should be explicit. You are deciding how to recover control of the property, reduce ongoing loss, and protect against future challenge. When this objective is written down at the beginning, every decision can be tested against it: does this step improve legal position, improve recoverability, or reduce procedural risk? If the answer is no, do not do it. ${extra}`,
-      `This guide is structured as an execution blueprint rather than a checklist. Each section explains what evidence to gather, what mistakes commonly break momentum, and how to align product choice with case stage. Use Notice Only when your route is clear and you need compliant first-step documentation quickly. Use Complete Pack when you need continuity through court and want one workflow from notice through hearing prep.`
+      `Landlords usually lose time on ${topic.toLowerCase()} cases because they jump to the next legal step before the file is properly under control. In practice, you want one working timeline, one organised evidence pack, and one clear note explaining why the route you are taking fits the facts. That discipline matters at every stage: notice, claim issue, witness statement, hearing, and enforcement. A cleaner file is easier to run, easier to explain, and far less likely to unravel because of contradictions that could have been avoided at the start.`,
+      `It also helps to be honest about the commercial objective from day one. Are you trying to get the property back quickly, recover money, or do both in parallel? Once that is written down, each next step becomes easier to judge: does it improve your legal position, improve recoverability, or reduce procedural risk? If the answer is no, stop and rethink it. ${extra}`,
+      `This guide is written as a practical landlord workflow rather than a vague checklist. Each section explains what to gather, what usually goes wrong, and when to use a narrower notice route instead of fuller court-stage support. Use Notice Only when the route is clear and you mainly need the first legal documents prepared properly. Use Complete Pack when the case is already heading towards court and you want one joined-up workflow from notice through hearing preparation.`
     ]
   };
 
   const body = points.map((point) => ({
     title: point,
     paragraphs: [
-      `${point} should be treated as a decision gateway, not a box-tick. The practical question is what must be true before you move forward. That means recording facts, preserving service evidence, and noting what could challenge your position later. Good landlords make this explicit in writing: current facts, missing evidence, and next action deadline. This avoids reactive case management and creates a defensible narrative if the tenant disputes the chronology.`,
-      `At this stage, combine legal and operational controls. Legal controls include route eligibility checks, service method confirmation, and date integrity. Operational controls include diary triggers, document naming standards, contractor coordination where relevant, and communication templates that stay factual. If there is any change in tenant behaviour, such as partial payment or last-minute cooperation, update the file immediately and reassess route strength before advancing.`,
-      `Most failed files do not fail because the issue was weak; they fail because the story became inconsistent between documents. Keep one master version of events and reconcile all letters, schedules, and statements to it. When you present the file later, the decision trail should show proportionate conduct, clear warnings, and practical opportunities for resolution before escalation.`
+      `${point} should be treated as a decision point, not a box to tick. The real question is what needs to be true before you move forward. That usually means writing down the facts, preserving service evidence, and noting anything that could weaken your position later. The landlords who handle this best tend to be explicit: current facts, missing evidence, and the deadline for the next action. That avoids reactive case management and gives you a cleaner story if the tenant later disputes the chronology.`,
+      `At this stage, combine legal checks with practical ones. Legal checks include route eligibility, service method, and date accuracy. Practical checks include diary reminders, document naming, contractor coordination where relevant, and communications that stay calm and factual. If anything changes, such as a partial payment or a sudden offer of cooperation, update the file the same day and reassess the strength of the route before you take the next step.`,
+      `Most weak files do not fail because the original problem was small. They fail because the story becomes inconsistent across letters, schedules, forms, and witness notes. Keep one master version of events and reconcile everything to it. If the case later reaches court, the file should show proportionate conduct, clear warnings, and sensible opportunities for resolution before escalation.`
     ]
   }));
 
   const close: IntentSection = {
-    title: `Execution model for ${topic.toLowerCase()} cases`,
+    title: `A practical landlord model for ${topic.toLowerCase()} cases`,
     paragraphs: [
-      `Run every case through a simple stage model: detection, verification, route decision, compliant service, monitoring, court readiness, and enforcement planning. Each stage should have an owner, a deadline, and a quality check. This turns eviction work from ad hoc problem-solving into a repeatable process. Portfolio landlords benefit most because multiple active files can be triaged consistently instead of being handled by urgency alone.`,
-      `Before moving to court, perform a contradiction audit. Confirm names, dates, tenancy terms, arrears or loss calculations, notice details, and service proof. If anything changed after notice, explain it transparently and update schedules. This one review step prevents a large proportion of hearing-day setbacks.`,
-      `After possession or resolution, close the loop: final account reconciliation, recovery decision, lessons learned, and process update. The goal of this page is not only to help with one dispute, but to reduce repeat losses across future tenancies by improving standards at each stage.`
+      `Run every case through a simple stage model: identify the problem, verify the facts, choose the route, serve compliantly, monitor what changes, prepare for court, and plan enforcement if needed. Each stage should have an owner, a deadline, and a quick quality check. That turns eviction work from ad hoc firefighting into something you can repeat more reliably. Portfolio landlords benefit most because several live files can then be managed consistently instead of purely by urgency.`,
+      `Before moving to court, carry out one contradiction audit. Check names, dates, tenancy terms, arrears or loss calculations, notice details, and proof of service. If anything changed after service, explain it clearly and update the schedules. This one review step prevents a surprising number of hearing-day problems.`,
+      `After possession or resolution, close the loop properly: final account reconciliation, debt-recovery decision, lessons learned, and a process update for the next tenancy. The point of this page is not only to help with one dispute. It is to help you reduce repeat losses across future tenancies by improving standards at each stage.`
     ],
     bullets: [
       'Use product-first routing: Notice Only for clear route starts, Complete Pack for end-to-end continuity.',
-      'Keep communication factual, dated, and linked to evidence in your chronology.',
-      'Treat every service or filing step as evidence generation, not mere administration.'
+      'Keep communication factual, dated, and tied back to the chronology.',
+      'Treat every service or filing step as evidence creation, not just admin.'
     ]
   };
 

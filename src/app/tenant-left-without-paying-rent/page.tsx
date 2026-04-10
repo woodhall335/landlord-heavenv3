@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title:
     'Tenant Left Without Paying Rent | Recover Rent Arrears After a Tenant Leaves',
   description:
-    'Landlord guide to recovering unpaid rent after a tenant leaves. Confirm the final arrears balance, organise the evidence, and decide whether to pursue a money claim.',
+    'Plain-English landlord guide to recovering unpaid rent after a tenant leaves, including final balance checks, evidence, and money-claim decisions.',
   alternates: {
     canonical,
   },
@@ -191,9 +191,9 @@ export default function Page() {
 
       <UniversalHero
         title="Tenant Left Without Paying Rent"
-        subtitle="Confirm what is still owed, separate rent arrears from end-of-tenancy issues, and decide whether to pursue recovery with a stronger money-claim file."
+        subtitle="Confirm what is still owed, separate pure rent arrears from end-of-tenancy issues, and decide whether it makes sense to pursue recovery with a stronger money-claim file."
         primaryCta={{
-          label: 'Recover unpaid rent',
+          label: 'Start recovering unpaid rent',
           href: '/products/money-claim',
         }}
         secondaryCta={{
@@ -209,7 +209,7 @@ export default function Page() {
           This guide explains how landlords usually approach unpaid rent after a
           tenant leaves, how to confirm the final arrears balance, what documents
           matter most, and when it makes sense to turn the file into a money
-          claim rather than treat it as a leftover tenancy dispute.
+          claim instead of treating it as a vague leftover tenancy dispute.
         </p>
       </UniversalHero>
 

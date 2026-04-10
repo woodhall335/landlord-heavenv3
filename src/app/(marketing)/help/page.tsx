@@ -12,9 +12,9 @@ import {
 import { formatPrice, PRICING } from "@/lib/pricing";
 
 export const metadata: Metadata = generateMetadata({
-  title: "Landlord Help Centre | Eviction, Arrears & Tenancy FAQs",
+  title: "Landlord Help Centre | Eviction, Rent Increase, Arrears and Tenancy FAQs",
   description:
-    "Get help with Section 8 notices, rent arrears claims, tenancy agreements, billing, and common landlord document questions.",
+    "Get help with eviction notices, Section 13 rent increases, rent arrears claims, tenancy agreements, billing, and common landlord document questions.",
   path: "/help",
   keywords: [
     "landlord help centre",
@@ -48,7 +48,7 @@ export default function HelpPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Help Centre</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Find quick answers about notices, arrears, tenancy agreements, billing, and what to do next.
+              Find quick answers about notices, rent increases, arrears, tenancy agreements, billing, and what to do next.
             </p>
           </div>
         </Container>
@@ -103,7 +103,7 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <ol className="list-decimal pl-5 space-y-2">
-                        <li>Choose your product category (Notices, Money Claims, Tenancy Agreements, etc.) or click "Start Wizard"</li>
+                        <li>Choose the route that matches the problem: notices, Section 13, money claims, tenancy agreements, or start the wizard.</li>
                         <li>Answer questions about your case (property, tenant, dates, grounds)</li>
                         <li>Review the generated document preview</li>
                         <li>Complete payment ({LANDLORD_DOCUMENT_PRICE_RANGE} depending on product)</li>
@@ -139,10 +139,10 @@ export default function HelpPage() {
                         <strong>Notices ({PRODUCTS.notice_only.displayPrice}):</strong> You need the notice itself, plus service steps and checks, before you go anywhere near court.
                       </li>
                       <li>
-                        <strong>Money Claims ({PRODUCTS.money_claim.displayPrice}):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
+                        <strong>Money Claims ({PRODUCTS.money_claim.displayPrice}):</strong> Use this when the tenant owes rent arrears or other tenancy debt and you need the claim paperwork in one place.
                       </li>
                       <li>
-                        <strong>Standard Residential Tenancy Agreement ({PRODUCTS.ast_standard.displayPrice}):</strong> Updated England residential tenancy agreement for standard lettings.
+                        <strong>Standard Residential Tenancy Agreement ({PRODUCTS.ast_standard.displayPrice}):</strong> Use this when you need the main agreement route for a straightforward residential let.
                       </li>
                       <li>
                         <strong>Premium Residential Tenancy Agreement ({PRODUCTS.ast_premium.displayPrice}):</strong> Fuller ordinary-residential drafting with enhanced management options. Student, HMO / Shared House, and Lodger are separate England products.

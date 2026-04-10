@@ -25,7 +25,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'How to Sue a Tenant for Unpaid Rent 2026 | Landlord Debt Claim Guide',
   description:
-    'A practical guide for landlords in England on suing a tenant for unpaid rent.',
+    'Plain-English landlord guide to suing a tenant for unpaid rent in England, from pre-action steps and court issue through to judgment and enforcement.',
   keywords: [
     'how to sue tenant for unpaid rent',
     'sue tenant for rent arrears',
@@ -202,9 +202,9 @@ export default function SueTenantUnpaidRentPage() {
       <UniversalHero
         badge="Legal Action"
         title="How to Sue a Tenant for Unpaid Rent"
-        subtitle="A practical landlord guide for England on turning rent arrears into a county court money claim, with better preparation before issue and clearer thinking after judgment."
-        primaryCta={{ label: 'View Money Claim Pack', href: moneyClaimProductLink }}
-        secondaryCta={{ label: "Calculate What You're Owed", href: '/tools/rent-arrears-calculator' }}
+        subtitle="If the tenant still has not paid, this guide shows how landlords turn arrears into a county court debt claim without rushing into a weak or muddled file."
+        primaryCta={{ label: 'View money claim pack', href: moneyClaimProductLink }}
+        secondaryCta={{ label: "Calculate what you're owed", href: '/tools/rent-arrears-calculator' }}
         variant="pastel"
         showTrustPositioningBar
       >
@@ -752,7 +752,7 @@ export default function SueTenantUnpaidRentPage() {
       <section id="faqs" className="py-2">
         <FAQSection
           faqs={sueTenantUnpaidRentFAQs?.length ? sueTenantUnpaidRentFAQs : pageFaqs}
-          title="How to Sue a Tenant for Unpaid Rent FAQs"
+          title="How to sue a tenant for unpaid rent FAQs"
           showContactCTA={false}
           variant="white"
         />
@@ -761,7 +761,7 @@ export default function SueTenantUnpaidRentPage() {
       <section id="final-cta" className="bg-white pb-14 pt-6">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Suing a tenant for unpaid rent usually works best when the landlord treats
               the case as a debt file first and a court form second. That means one clean

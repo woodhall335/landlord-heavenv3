@@ -688,7 +688,7 @@ export default function ASTProductPage() {
       <UniversalHero
         trustText="Updated for current housing law"
         title="Choose the right England agreement type"
-        subtitle="Use this page to compare the five live England agreement routes. Start with Standard or Premium for ordinary residential lets, then move into Student, HMO / Shared House, or Lodger when the occupier setup needs a specialist route."
+        subtitle="Use this page to compare the five live England agreement routes so you can choose the agreement that actually fits the occupier setup, the property, and how you plan to manage the let."
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
@@ -1165,7 +1165,7 @@ export default function ASTProductPage() {
       </Container>
 
       <FAQSection
-        title="Tenancy agreement FAQs"
+        title="Tenancy agreement FAQs for landlords"
         intro="Clear answers on what a tenancy agreement includes, which regions are supported, and how to choose the right route for the property."
         faqs={faqs}
         showContactCTA={false}

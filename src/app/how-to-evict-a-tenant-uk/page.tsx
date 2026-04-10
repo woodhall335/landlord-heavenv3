@@ -18,14 +18,14 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in the UK | Complete Landlord Guide | LandlordHeaven',
   description:
-    'Learn how to evict a tenant in the UK with a clear, legal step-by-step process covering Section 21, Section 8, possession orders, timelines, bailiffs.',
+    'Plain-English landlord guide to evicting a tenant in the UK, including notice choice, possession orders, timelines, bailiffs, and the steps that matter most.',
   alternates: {
     canonical: 'https://landlordheaven.co.uk/how-to-evict-a-tenant-uk',
   },
   openGraph: {
     title: 'How to Evict a Tenant in the UK | Complete Landlord Guide | LandlordHeaven',
     description:
-      'A practical landlord guide covering Section 21, Section 8, possession orders, eviction timelines, bailiffs, and common mistakes.',
+      'A clear landlord guide to choosing the right eviction route, preparing the file properly, and moving from notice to possession without avoidable mistakes.',
     url: 'https://landlordheaven.co.uk/how-to-evict-a-tenant-uk',
     siteName: 'LandlordHeaven',
     type: 'article',
@@ -123,9 +123,9 @@ export default function HowToEvictTenantUkPage() {
       />
       <UniversalHero
         title="How to Evict a Tenant in the UK"
-        subtitle="A step-by-step landlord guide covering Section 21, Section 8, court possession orders, and bailiff enforcement."
+        subtitle="If you need your property back, the key is choosing the right route early, serving the notice properly, and keeping the court file clean from day one."
         primaryCta={{ label: 'Start complete eviction pack', href: '/products/complete-pack' }}
-        secondaryCta={{ label: 'Validate your route first', href: '/eviction-notice-template' }}
+        secondaryCta={{ label: 'Check which route fits', href: '/eviction-notice-template' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="How to Evict a Tenant in the UK icon"
         showReviewPill
@@ -142,7 +142,7 @@ export default function HowToEvictTenantUkPage() {
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
             <SeoPageContextPanel pathname="/how-to-evict-a-tenant-uk" />
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Quick Answer</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">Quick answer for landlords</h2>
             <p className="mt-4 text-gray-700">
               The legal eviction process in the UK normally involves five main stages.
             </p>
@@ -777,16 +777,17 @@ export default function HowToEvictTenantUkPage() {
       <section id="final-cta" className="pb-14">
         <Container>
           <div className="mx-auto max-w-5xl rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-[#2a2161]">Next Steps for Landlords</h2>
+            <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 text-gray-700 leading-7">
-              Before serving any eviction notice form, confirm your tenancy facts,
-              compliance documents, evidence file, and service method so your case starts
-              on the strongest legal footing.
+              Before you serve anything, pause and check the basics: the tenancy type, the
+              route you are relying on, the compliance documents you should already have
+              given the tenant, and how you will prove service.
             </p>
             <p className="mt-4 text-gray-700 leading-7">
-              A carefully prepared file can reduce avoidable delays, improve possession
-              order outcomes, and keep your eviction process route compliant from notice
-              through enforcement.
+              Landlords usually lose time in court because the file is rushed rather than
+              because the problem is unclear. A better-prepared notice and evidence bundle
+              makes the whole possession process feel more predictable from notice through
+              to enforcement.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link

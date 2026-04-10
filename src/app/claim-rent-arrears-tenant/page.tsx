@@ -50,7 +50,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
   description:
-    'How to claim unpaid rent from a tenant through the county court. Letter Before Action, MCOL process, and CCJ enforcement.',
+    'Plain-English landlord guide to claiming unpaid rent through the county court, from the Letter Before Action and MCOL stage to judgment and enforcement.',
   keywords: [
     'claim rent arrears tenant',
     'money claim rent arrears',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Claim Rent Arrears from Tenant | Solicitor-Style Money Claim Guide',
     description:
-      'How to claim unpaid rent from a tenant through the county court. Complete landlord guide.',
+      'Landlord guide to recovering unpaid rent through the county court, with pre-action steps, MCOL, judgment, and enforcement explained clearly.',
     type: 'article',
     url: getCanonicalUrl('/claim-rent-arrears-tenant'),
     siteName: 'Landlord Heaven',
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Claim Rent Arrears from Tenant | Landlord Heaven',
-    description: 'How to claim unpaid rent from a tenant through the county court.',
+    description: 'Landlord guide to recovering unpaid rent through the county court.',
   },
   alternates: {
     canonical: getCanonicalUrl('/claim-rent-arrears-tenant'),
@@ -110,7 +110,7 @@ export default function ClaimRentArrearsTenantPage() {
           badge="England Only"
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Claim Rent Arrears from Your Tenant"
-          subtitle="Recover unpaid rent through the county court with Money Claim Online (MCOL). Add 8% statutory interest. Get a CCJ if they do not pay."
+          subtitle="If the tenant owes you rent and payment has still not arrived, this guide shows how landlords turn the arrears file into a county court claim that is actually ready to issue."
           primaryCta={{
             label: `Start Money Claim — ${PRODUCTS.money_claim.displayPrice}`,
             href: moneyClaimLink,
@@ -697,7 +697,7 @@ export default function ClaimRentArrearsTenantPage() {
         {/* FAQ Section */}
         <FAQSection
           faqs={claimRentArrearsFAQs}
-          title="Claiming Rent Arrears: Frequently Asked Questions"
+          title="Claiming rent arrears FAQs for landlords"
           showContactCTA={false}
           variant="gray"
         />

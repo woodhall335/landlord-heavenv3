@@ -62,7 +62,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Scotland Eviction Notices | Notice to Leave & PRT Landlord Guide',
   description:
-    'Landlord guide to Scotland eviction notices, Notice to Leave requirements, PRT grounds, tribunal steps, notice logic.',
+    'Plain-English landlord guide to Scotland eviction notices, including Notice to Leave rules, PRT grounds, tribunal steps, and the mistakes that cause delay.',
   keywords: [
     'notice to leave scotland',
     'scotland eviction notice',
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Scotland Eviction Notices | Notice to Leave & PRT Landlord Guide',
     description:
-      'Use the correct Scotland Notice to Leave route, understand PRT eviction grounds, and prepare for the First-tier Tribunal process.',
+      'Landlord guide to using the correct Scotland Notice to Leave route, understanding PRT grounds, and preparing for the First-tier Tribunal process.',
     type: 'article',
     url: canonicalUrl,
     siteName: 'Landlord Heaven',
@@ -88,7 +88,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Scotland Eviction Notices | Notice to Leave & PRT Landlord Guide',
     description:
-      'Landlord guide to Scottish Notice to Leave rules, eviction grounds, and tribunal steps.',
+      'Plain-English landlord guide to Scottish Notice to Leave rules, eviction grounds, and tribunal steps.',
   },
   alternates: {
     canonical: canonicalUrl,
@@ -131,8 +131,8 @@ export default function ScotlandEvictionNoticesPage() {
 
         <UniversalHero
           title="Scotland Eviction Notices"
-          subtitle="Use this Scotland landlord guide to understand Notice to Leave rules, Private Residential Tenancy possession grounds, tribunal routing, and the mistakes that most often delay or weaken a Scottish eviction."
-          primaryCta={{ label: 'Start Scotland Notice', href: noticeOnlyHref }}
+          subtitle="If you need possession in Scotland, this guide helps you match the problem to the right Notice to Leave ground and prepare for the tribunal route more carefully."
+          primaryCta={{ label: 'Start Scotland notice', href: noticeOnlyHref }}
           secondaryCta={{
             label: 'Scotland PRT Agreements',
             href: '/private-residential-tenancy-agreement-template',
@@ -873,7 +873,7 @@ export default function ScotlandEvictionNoticesPage() {
 
         <FAQSection
           showTrustPositioningBar
-          title="Scottish Eviction FAQ"
+          title="Scottish eviction FAQs for landlords"
           faqs={scotlandEvictionFAQs}
           showContactCTA={false}
           variant="white"
