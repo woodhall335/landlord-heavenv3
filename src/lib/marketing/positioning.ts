@@ -4,6 +4,7 @@ export type PositioningPreset =
   | 'notice_only'
   | 'complete_pack'
   | 'money_claim'
+  | 'section13'
   | 'ast'
   | 'blog'
   | 'ask_heaven';
@@ -57,6 +58,15 @@ export const POSITIONING_CONTENT: Record<PositioningPreset, PositioningContent> 
       'Get the pre-action and court documents you need in one pack for England claims.',
       'Update figures quickly if arrears grow or new losses come to light.',
       'Move from unpaid rent to a money claim without paying a solicitor just to draft the paperwork.',
+    ],
+  },
+  section13: {
+    headline: "You want to raise the rent properly. We help you check the timing, explain the figure, and keep the file ready if the tenant challenges it.",
+    bullets: [
+      'Check the Section 13 timing before you serve anything, so you do not trip over avoidable date mistakes.',
+      'Build Form 4A, the support report, and proof of service as one coherent landlord file.',
+      'Use market comparables to explain the figure in plain English instead of relying on guesswork.',
+      'Upgrade into the defence route when challenge risk or tribunal preparation becomes part of the job.',
     ],
   },
   ast: {

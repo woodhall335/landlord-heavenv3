@@ -99,5 +99,5 @@ export const rentIncreaseChallengePage: RentIncreaseGuidePage = {
     'Generate a consistent core pack first, then use that same narrative for tenant responses and escalation preparation.',
   finalCtaTitle: 'Generate your Section 13 notice pack',
   finalCtaBody:
-    'Use the Standard wizard as your baseline so any challenge response starts from a coherent file.',
+    'Use the Standard wizard as your baseline so any challenge response starts from a coherent file, with the notice, the evidence, and your explanation already saying the same thing.',
 };

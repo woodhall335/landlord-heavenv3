@@ -9,14 +9,16 @@ import { generateMetadata } from '@/lib/seo';
 import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 
 export const metadata = generateMetadata({
-  title: 'Evict a Tenant, Recover Rent Arrears | UK Landlords',
+  title: 'Landlord Help for Eviction, Rent Increases, Arrears and Tenancy Documents',
   description:
-    'Use Landlord Heaven to work out the right notice, recover rent arrears, and prepare landlord documents.',
+    'Use Landlord Heaven to handle eviction notices, court paperwork, rent increases, money claims, and tenancy agreements with clearer landlord guidance.',
   path: '/',
   keywords: [
     'evict a tenant',
     'eviction notice',
     'section 8',
+    'rent increase landlord',
+    'section 13 rent increase',
     'recover rent arrears',
     'money claim',
     'landlord eviction help',

@@ -97,5 +97,5 @@ export const marketRentCalculationPage: RentIncreaseGuidePage = {
     'Use the Standard wizard to compute market position and generate a coherent notice pack from the same evidence base.',
   finalCtaTitle: 'Generate your Section 13 notice',
   finalCtaBody:
-    'Turn comparable analysis into service-ready documents with one deterministic workflow.',
+    'Turn comparable analysis into service-ready documents with one deterministic workflow, so the figure you propose is easier to explain in plain English if it is challenged.',
 };

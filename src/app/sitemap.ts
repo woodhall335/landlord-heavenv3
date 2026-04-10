@@ -107,6 +107,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/products/notice-only', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/complete-pack', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/money-claim', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/products/section-13-standard', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/products/section-13-defence', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/ast', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];

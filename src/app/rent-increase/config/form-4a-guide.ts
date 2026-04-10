@@ -96,5 +96,5 @@ export const form4aGuidePage: RentIncreaseGuidePage = {
     'Use the Standard wizard to keep form fields, timeline checks, and report language aligned from one data source.',
   finalCtaTitle: 'Generate your Form 4A pack',
   finalCtaBody:
-    'Create a service-ready Section 13 notice package with consistent fields and evidence framing.',
+    'Create a service-ready Section 13 notice package with consistent fields and evidence framing, so the file still reads clearly when the tenant asks why the figure was chosen.',
 };

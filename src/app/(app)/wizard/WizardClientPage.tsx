@@ -108,8 +108,8 @@ function getHeroContent(product: string | null, jurisdiction: string | null): He
       return {
         title: 'Section 13 Rent Increase Wizard',
         subtitle:
-          'England-only Form 4A workflow with post-1 May 2026 date validation, comparable-rent analysis, and a tribunal-ready upgrade path.',
-        eyebrow: product === 'section13_defensive' ? 'Defensive Pack' : 'Section 13',
+          'England-only workflow for landlords who want to check the timing, explain the figure clearly, and prepare a cleaner Form 4A file before serving it.',
+        eyebrow: product === 'section13_defensive' ? 'Section 13 Defence Pack' : 'Section 13 Rent Increase Pack',
       };
     default:
       if (product && isResidentialLettingProductSku(product)) {
@@ -178,7 +178,7 @@ const documentOptions: DocumentOption[] = [
   {
     type: 'rent_increase',
     title: 'Section 13 Rent Increase',
-    description: 'England-only Form 4A wizard with market comparables, date rules, and a tribunal-ready defensive pack',
+    description: 'England-only rent increase route with Form 4A, market comparables, date checks, and an optional defence pack if the tenant challenges the increase',
     icon: RiAlertLine,
     price: `From ${PRODUCTS.section13_standard.displayPrice}`,
     regionBadge: 'England only',

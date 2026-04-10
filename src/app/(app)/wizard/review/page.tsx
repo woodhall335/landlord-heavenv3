@@ -3133,7 +3133,7 @@ function TenancyReviewContent({
     { title: inventoryTitle, included: true, description: inventoryDescription },
     { title: 'Check-in/Check-out Form', included: true },
     { title: 'Premium Management Schedule', included: true, description: 'Operational notes for access, repairs, keys, and management arrangements' },
-    { title: 'Section 13 Rent Increase Guidance', included: true, description: 'England rent increases are handled through the section 13 statutory process rather than CPI, RPI or fixed review clauses.' },
+                    { title: 'Section 13 Rent Increase Guidance', included: true, description: 'This file helps you follow the England Section 13 route properly, with the notice, the timing, and the support explanation reading as one joined-up landlord file.' },
     { title: 'Maintenance Reporting Form', included: true },
     { title: 'Tenancy Variation Record', included: true },
     { title: 'Notice Templates Pack', included: true },
@@ -3323,7 +3323,7 @@ function TenancyReviewContent({
                 <RiCheckboxCircleLine className="w-5 h-5 text-purple-600 mt-0.5 shrink-0" />
                 <div>
                   <p className="font-medium text-gray-900">Section 13 Rent Increase Process</p>
-                  <p className="text-sm text-gray-600">Uses the England statutory rent increase route instead of CPI, RPI or fixed review clauses</p>
+                  <p className="text-sm text-gray-600">Uses the current England statutory rent increase route so the date, the figure, and the Form 4A notice stay aligned before you serve</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">

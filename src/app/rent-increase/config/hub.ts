@@ -7,11 +7,11 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
   title: 'Rent Increase Guide',
   heroTitle: 'Rent Increase Guide for England Landlords',
   heroSubtitle:
-    'Understand Section 13, Form 4A, market-rent evidence, and challenge risk as one connected workflow before you serve notice.',
+    'If you need to increase the rent, this guide helps you understand the full England Section 13 route before you serve anything.',
   heroBullets: [
-    'Built for the current England assured tenancy route from 1 May 2026.',
-    'Covers notice drafting, date validation, comparables, and dispute preparation.',
-    'Routes into the Section 13 wizard when you are ready to generate the pack.',
+    'Built for the current England route from 1 May 2026.',
+    'Covers timing, Form 4A, comparables, and what to do if the tenant pushes back.',
+    'Routes into the Standard or Defence Section 13 packs when you are ready to act.',
   ],
   metaTitle: 'Rent Increase Guide UK: Section 13, Form 4A, Rules and Tribunal Risk',
   metaDescription:
@@ -19,39 +19,41 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
   primaryKeyword: 'rent increase UK',
   intentLabel: 'hub / cluster overview',
   introAngle:
-    'Map the full process first so you do not serve a notice before checking dates, evidence quality, and challenge exposure.',
+    'Read the route properly first so you do not serve a rent increase notice before checking the date, the figure, and the challenge risk.',
   heroImage: '/images/wizard-icons/41-rent.png',
   heroAlt: 'Rent increase process overview illustration',
   secondaryCta: RENT_INCREASE_LINKS.section13,
   quickAnswer: [
-    "This hub is the control panel for the Section 13 topic cluster. Instead of treating a rent increase as a single-form task, it shows the landlord workflow as a sequence: confirm tenancy facts, calculate the earliest valid date, set a defensible figure from comparables, complete Form 4A, serve correctly, and keep the service and evidence trail ready. The practical benefit is fewer reworks, fewer avoidable disputes, and clearer internal consistency if the tenant asks for reasons or challenges the proposal.",
-    'The pages are split by intent so you can go straight to the question you actually have. One page explains the Section 13 notice role, one focuses on Form 4A completion, one clarifies rules and jurisdiction boundaries, one focuses on market-rent method, and two pages handle challenge and tribunal paths. That separation matters because these topics overlap heavily and landlords need a clear reading route, not the same content rewritten under different titles.',
-    'If you only remember one principle, use this one: serve a notice only after the underlying case file is coherent. A polished form with weak evidence is fragile. A coherent evidence file with an accurate form is durable. The Standard Section 13 wizard is designed around that order so landlords can make decisions before checkout, not discover weaknesses after service.',
+    'This hub is here to help you read the whole rent increase process in the right order. Instead of treating a rent increase like a one-form task, it shows you the landlord workflow from start to finish: check the tenancy facts, work out the earliest valid date, look at the local comparables, decide the figure, complete Form 4A, serve it properly, and keep the file together if the tenant challenges the increase.',
+    'Each page in this guide answers a different landlord question. One explains what a Section 13 notice is. One focuses on Form 4A. One covers the rules. One helps you think about market rent. The challenge and tribunal pages pick up the next stage if the tenant pushes back. That makes the guide easier to read naturally because each page has a clear job.',
+    'If you remember one thing from this hub, make it this: do not serve the notice until the story behind it is clear. A neat form with weak reasoning is fragile. A clear date, a sensible figure, and a joined-up evidence file are much easier to stand behind later.',
+    'That is also why the guide separates “how do I increase the rent?” from “how do I defend the increase?” Those are related questions, but they are not the same job. Landlords usually make better decisions when they can read the standard route first and then move into the challenge route only when the case really needs it.',
   ],
   sections: sections({
     whatIsIt: [
-      'The rent increase hub is a practical landlord reference for the England process. It is not a law-school summary and it is not a sales page disguised as advice. The objective is to give a clear, search-intent-based route through the topics that actually decide quality: legal timing, notice completion, evidence depth, and challenge response. When those elements are handled together, the notice pack reads like a coherent case file rather than separate documents created on different days.',
-      'This hub also solves a common SEO and user problem: overlapping pages that say the same thing. Each sub-page in this cluster has a distinct role and a distinct primary keyword. That means a landlord can begin with broad guidance, then move into deeper pages as needed, without reading repetitive text or conflicting recommendations. It also helps search engines understand intent boundaries, reducing cannibalisation and improving relevance.',
+      'This guide is a practical landlord reference for the England Section 13 route. It is not written like a law-school summary and it is not trying to turn one answer into ten pages of repeated text. The aim is to help you understand the route in plain English, then move to the exact page that answers the next question you actually have.',
+      'That matters because most landlords do not need abstract commentary. They need to know whether the date works, whether the figure makes sense, what Form 4A actually does, and what to do if the tenant says no. When those points are handled together, the final file reads more naturally and is easier to rely on.',
     ],
     legalRules: [
-      'For England assured tenancies, the detailed process below is England-specific. Form 4A is the notice instrument from 1 May 2026 for section 13 rent proposals. The landlord must still satisfy notice-period and date-alignment requirements, and should preserve a clear service record. A valid process starts with accurate chronology, not with a guessed proposed date inserted into a form.',
-      'The UK-wide search phrase "rent increase rules UK" is broad, but legal mechanics are jurisdiction-specific. Scotland, Wales, and Northern Ireland use different frameworks. This hub gives detailed operational guidance for England only and explicitly signposts that distinction to avoid false confidence. Trust is improved when the page is precise about scope rather than pretending to cover every jurisdiction in full procedural depth.',
+      'The detailed process in this hub is for England. From 1 May 2026, the prescribed notice form for the Section 13 route is Form 4A. That does not mean the form is the whole job. You still need the timing to work, the dates to line up, and the service record to be clear enough that you can explain it later.',
+      'Search phrases like "rent increase rules UK" are broad, but the legal mechanics are not. Scotland, Wales, and Northern Ireland each use different frameworks. This hub stays clear about that so you do not leave with false confidence from reading the wrong process page.',
     ],
     stepByStep: [
-      'Use this sequence for most cases. First, confirm tenancy and increase-history facts. Second, calculate the earliest valid date. Third, gather local comparables and normalize rent frequency. Fourth, decide the proposed figure with a clear position statement. Fifth, complete Form 4A and prepare service. Sixth, retain proof of service and justification materials in one folder. This order gives you a stable narrative before tenant communication starts.',
-      'In operational terms, this sequence reduces panic edits. Landlords who skip directly to form completion often need to revisit dates or numbers, then issue mixed explanations in emails and documents. A pre-validated process avoids that drift. The Section 13 wizard follows this same logic by showing preview metrics before final output generation so decisions are made with context rather than after-the-fact corrections.',
+      'For most landlords, the safest order is simple. First confirm the tenancy facts and the recent rent history. Then calculate the earliest valid date. After that, look at local comparables and work out what figure you can explain with a straight face. Only then should you complete Form 4A and prepare service.',
+      'That order matters because it cuts out the panic edits that happen when the form gets filled in too early. If you decide the date and the figure first, the finished notice, report, and service record read like one deliberate file instead of a form that had to be corrected afterwards.',
     ],
     commonMistakes: [
-      'Landlords often mix up procedural confidence with evidential confidence. Procedural confidence means the form appears complete. Evidential confidence means the figure is supportable and the explanation is coherent. Another mistake is using stale comparables from too wide an area to justify an aggressive rent jump. These shortcuts are exactly what make a proposal look reverse-engineered when challenged.',
-      'A second class of mistakes sits in record-keeping: missing service details, disconnected comparables, and inconsistent narrative between notice, report, and correspondence. These are avoidable quality defects. A premium pack should read as one authored file with one line of reasoning. The documents do not need legal theatre; they need consistency, specificity, and a traceable chain from evidence to figure.',
+      'A common landlord mistake is thinking the file is strong because the form looks complete. That is procedural confidence, not evidential confidence. The stronger question is whether the figure is supportable and whether the explanation still makes sense when someone reads the notice, the report, and your follow-up emails together.',
+      'Another mistake is poor record-keeping. Missing service details, weak comparables, and inconsistent wording between the notice and the report make the file harder to defend than it needs to be. The documents do not need legal theatre. They just need to tell one clear story from start to finish.',
     ],
     tribunalRisks: [
-      'If challenged, weak preparation usually appears quickly. The tenant side does not need to prove your pack is poor in abstract terms; it only needs to highlight inconsistencies, stale evidence, or unclear adjustments. The more your proposed figure sits above the middle of the range, the more carefully your evidence choices and assumptions will be examined. Tribunal risk is therefore partly a pricing decision and partly a documentation-quality decision.',
-      'Risk also increases when landlords treat correspondence casually. Statements in emails can conflict with statements in the report, and that inconsistency reduces credibility. The safer pattern is to keep the explanation stable from preview through final output and through any follow-up communications. This is why the hub emphasizes a single source of truth for figures and positioning language.',
+      'If the tenant challenges the increase, weak preparation shows up quickly. It is often enough for the challenge to highlight inconsistent dates, weak comparables, stale evidence, or a figure that feels detached from the local market. The higher and more ambitious the proposed increase looks, the more carefully the file is likely to be read.',
+      'Risk also increases when landlords start changing the explanation as the conversation goes on. If the report says one thing and your emails say another, the file becomes harder to defend. The safer pattern is to settle the explanation early and repeat it consistently.',
     ],
     avoidChallenges: [
-      'Challenge avoidance starts with readability. A tenant is less likely to escalate if the proposal is clear, the timing is correct, and the market reasoning is specific. Clarity is persuasive. Vague claims such as "market conditions have changed" are weaker than concrete statements tied to comparable count, distance, recency, and adjusted range position.',
-      'Use the pages below in the order that matches your question. Start with the section-13-notice page if you need the big picture, the Form 4A page if you are checking the form itself, the market-rent page if you are still deciding the figure, and the tribunal pages if challenge risk is active. Then generate the Standard pack once the core file is stable.',
+      'Challenge avoidance usually starts with readability. A tenant may still disagree with the increase, but a clear file gives them less room to argue that the proposal is confused, inconsistent, or impossible to follow. Specific reasons tied to local comparables are much stronger than generic statements about costs or market conditions.',
+      'Use the pages below in the order that matches your question. Start with the Section 13 notice page if you need the big picture, the Form 4A page if you are checking the form, the market-rent page if you are still deciding the figure, and the challenge or tribunal pages if the risk has already moved up a level. Then choose the Standard or Defence pack once the file is clear.',
+      'A landlord usually gets the best result when the paperwork reads as though one person thought the route through from start to finish. That is the real purpose of this guide cluster: helping you turn a stressful decision into a calmer, more readable file before the tenant ever reads the notice.',
     ],
   }),
   faqs: [
@@ -73,7 +75,7 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
     {
       question: 'When is the Defensive pack mentioned?',
       answer:
-        'Only in contextual tribunal or dispute sections. The primary CTA across this cluster remains the Standard wizard.',
+        'When challenge or tribunal risk becomes part of the picture. The Standard pack is the main starting point, while the Defence Pack is there for stronger landlord preparation when the file is likely to be tested.',
     },
   ],
   relatedLinks: [
@@ -82,12 +84,12 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
     RENT_INCREASE_LINKS.rules,
     RENT_INCREASE_LINKS.market,
     RENT_INCREASE_LINKS.wizard,
+    RENT_INCREASE_LINKS.standardProduct,
   ],
   midCtaTitle: 'Generate a compliant Section 13 notice with built-in checks',
   midCtaBody:
-    'Use the Standard wizard to validate timeline rules, set a defensible figure, and produce a coherent notice pack ready for service.',
+    'Use the Standard pack when you are ready to turn the dates, the figure, and the explanation into a cleaner landlord file.',
   finalCtaTitle: 'Generate your Section 13 notice',
   finalCtaBody:
-    'Move from guidance to action with one deterministic workflow that keeps your figures, dates, and explanation aligned.',
+    'Move from reading to action with one workflow that keeps your figures, dates, and explanation aligned before you serve, so the whole rent increase file feels deliberate and easier to defend.',
 };
-

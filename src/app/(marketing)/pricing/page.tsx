@@ -6,7 +6,7 @@ import { FAQSection } from "@/components/seo/FAQSection";
 import { StructuredData, pricingItemListSchema } from "@/lib/seo/structured-data";
 import { StandardHero } from "@/components/marketing/StandardHero";
 import { HeaderConfig } from "@/components/layout/HeaderConfig";
-import { LANDLORD_DOCUMENT_PRICE_RANGE, PRODUCTS } from "@/lib/pricing/products";
+import { LANDLORD_DOCUMENT_PRICE_RANGE } from "@/lib/pricing/products";
 import { getDynamicReviewCount, REVIEW_RATING } from "@/lib/reviews/reviewStats";
 import {
   PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
@@ -15,101 +15,28 @@ import {
   getResidentialLandingHref,
   getResidentialWizardHref,
 } from "@/lib/residential-letting/products";
+import {
+  ENGLAND_POST_MAY_2026_POSITION,
+  LANDLORD_HEAVEN_PURPOSE,
+} from "@/lib/marketing/landlord-messaging";
+import { PRICING_PACKAGE_CARDS, PRICING_SCHEMA_ITEMS } from "@/lib/marketing/pricing-page";
 
 export const metadata: Metadata = generateMetadata({
-  title: "Pricing | UK Eviction and Landlord Document Packs",
+  title: "Pricing | Eviction, Rent Increase, Money Claim and Tenancy Packs",
   description:
-    "Compare eviction notice, money claim, tenancy agreement, and complete pack pricing for UK landlords.",
+    "Compare eviction, Section 13 rent increase, money claim, and tenancy agreement pricing for landlords using current Landlord Heaven product routes.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
     "eviction notice cost",
     "section 8 notice price",
+    "section 13 price",
+    "rent increase pack price",
     "tenancy agreement price",
     "money claim pack price",
     "complete eviction pack",
   ],
 });
-
-type PackageCard = {
-  name: string;
-  price: string;
-  coverage: string;
-  bestFor: string;
-  points: string[];
-  href: string;
-  cta: string;
-  featured?: boolean;
-};
-
-const packageCards: PackageCard[] = [
-  {
-    name: "Eviction Notice Pack",
-    price: PRODUCTS.notice_only.displayPrice,
-    coverage: "England, Wales, and Scotland",
-    bestFor: "You need the right notice in place tonight.",
-    points: [
-      "Notice pack, service instructions, and validity checklist",
-      "Preview before you pay",
-      "Useful when you need to start the case without paying for court paperwork yet",
-    ],
-    href: "/wizard?product=notice_only&src=pricing&topic=eviction",
-    cta: "Find out which notice you need →",
-  },
-  {
-    name: "Complete Pack",
-    price: PRODUCTS.complete_pack.displayPrice,
-    coverage: "England only",
-    bestFor: "You need the notice, court forms, and filing guidance together.",
-    points: [
-      "Built for landlords already thinking about court",
-      "Includes the notice, core court forms, and filing guidance",
-      "Helps you avoid piecing the case together across multiple documents",
-    ],
-    href: "/wizard?product=complete_pack&src=pricing&topic=eviction",
-    cta: "Start your court pack →",
-    featured: true,
-  },
-  {
-    name: "Money Claim Pack",
-    price: PRODUCTS.money_claim.displayPrice,
-    coverage: "England only",
-    bestFor: "You need to recover unpaid rent.",
-    points: [
-      "Built for unpaid rent and arrears claims",
-      "Includes claim paperwork and arrears support documents",
-      "Useful when the property issue and the money issue need separate action",
-    ],
-    href: "/wizard?product=money_claim&src=pricing&topic=arrears",
-    cta: "Start recovering your rent →",
-  },
-  {
-    name: "Standard Tenancy Agreement",
-    price: PRODUCTS.ast_standard.displayPrice,
-    coverage: "UK-wide ordinary residential route",
-    bestFor: "You need the baseline agreement for a straightforward whole-property let.",
-    points: [
-      "Built around where the property is",
-      "England wording updated for the law from 1 May 2026",
-      "Best for most ordinary residential lets",
-    ],
-    href: "/wizard?product=ast_standard&src=pricing&topic=tenancy",
-    cta: "Create your tenancy agreement →",
-  },
-  {
-    name: "Premium Tenancy Agreement",
-    price: PRODUCTS.ast_premium.displayPrice,
-    coverage: "UK-wide ordinary residential premium route",
-    bestFor: "You need fuller drafting and extra management detail for an ordinary residential let.",
-    points: [
-      "Designed for ordinary residential lets that need more detail than Standard",
-      "Adds broader drafting and extra support documents",
-      "England specialist Student, HMO / Shared House, and Lodger products are listed below",
-    ],
-    href: "/wizard?product=ast_premium&src=pricing&topic=tenancy",
-    cta: "See the premium agreement →",
-  },
-];
 
 const solicitorComparison = [
   {
@@ -145,18 +72,7 @@ export default function PricingPage() {
     (sku) => RESIDENTIAL_LETTING_PRODUCTS[sku]
   );
 
-  const pricingSchema = pricingItemListSchema([
-    { sku: "notice_only", name: "Eviction Notice Pack", url: "/products/notice-only" },
-    { sku: "complete_pack", name: "Complete Eviction Pack", url: "/products/complete-pack" },
-    { sku: "money_claim", name: "Money Claim Pack", url: "/products/money-claim" },
-    { sku: "ast_standard", name: "Standard Residential Tenancy Agreement", url: "/products/ast" },
-    { sku: "ast_premium", name: "Premium Residential Tenancy Agreement", url: "/products/ast" },
-    { sku: "england_standard_tenancy_agreement", name: "England Standard Tenancy Agreement", url: "/standard-tenancy-agreement" },
-    { sku: "england_premium_tenancy_agreement", name: "England Premium Tenancy Agreement", url: "/premium-tenancy-agreement" },
-    { sku: "england_student_tenancy_agreement", name: "England Student Tenancy Agreement", url: "/student-tenancy-agreement" },
-    { sku: "england_hmo_shared_house_tenancy_agreement", name: "England HMO / Shared House Tenancy Agreement", url: "/hmo-shared-house-tenancy-agreement" },
-    { sku: "england_lodger_agreement", name: "England Lodger Agreement", url: "/lodger-agreement" },
-  ]);
+  const pricingSchema = pricingItemListSchema([...PRICING_SCHEMA_ITEMS]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -165,23 +81,35 @@ export default function PricingPage() {
 
       <StandardHero
         badge="Transparent Pricing"
-        title="See what each pack costs before you commit"
-        subtitle="Compare the packs side by side, see what each one includes, and choose the one that fits your problem tonight."
+        title="See the price, the route, and what each pack helps you do"
+        subtitle="If you need to serve notice, recover rent, raise the rent properly, defend a challenged increase, or put the right tenancy paperwork in place, this page shows the current Landlord Heaven pricing in one place."
         variant="pastel"
       >
         <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-white/60 bg-white/15 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm">
           <span aria-hidden="true">★★★★★</span>
           <span>{`${REVIEW_RATING}/5 | ${reviewCount} reviews`}</span>
         </div>
-        <p className="text-sm text-white">All prices are one-time payments</p>
+        <p className="text-sm text-white">All prices are one-time payments.</p>
         <p className="mt-2 text-sm text-white">
-          Notices: England, Wales, and Scotland. Complete Pack and Money Claims: England only. Tenancy agreements: UK-wide plus dedicated England Standard, Premium, Student, HMO / Shared House, and Lodger routes below.
+          {LANDLORD_HEAVEN_PURPOSE}
+        </p>
+        <p className="mt-2 text-sm text-white">
+          Notices: England, Wales, and Scotland. Complete Pack, Money Claims, and Section 13 products: England only. Tenancy agreements: UK-wide plus dedicated England Standard, Premium, Student, HMO / Shared House, and Lodger routes below.
+        </p>
+        <p className="mt-2 text-sm text-white">
+          {ENGLAND_POST_MAY_2026_POSITION}
         </p>
       </StandardHero>
 
       <Container size="large" className="py-12">
+        <div className="mb-8 max-w-4xl">
+          <h2 className="text-3xl font-bold text-charcoal">Choose the pack that matches the problem in front of you</h2>
+          <p className="mt-3 text-base text-gray-700">
+            Read this page the same way you would think about the case. If you need possession, start with the eviction products. If the tenant owes you money, move to the money claim route. If you need to increase the rent, use the Section 13 packs. If you are putting a tenancy in place, use the agreement routes.
+          </p>
+        </div>
         <div className="grid gap-6 xl:grid-cols-2">
-          {packageCards.map((card) => (
+          {PRICING_PACKAGE_CARDS.map((card) => (
             <section
               key={card.name}
               className={`rounded-2xl border p-6 shadow-sm ${card.featured ? "border-primary bg-[#faf6ff]" : "border-gray-200 bg-white"}`}
@@ -220,7 +148,7 @@ export default function PricingPage() {
             <div>
               <h2 className="text-2xl font-bold text-charcoal">Residential landlord documents</h2>
               <p className="mt-2 max-w-3xl text-sm text-gray-600">
-                Need one specific residential document instead of a full pack? These pages include the new dedicated England tenancy routes alongside other standalone residential documents.
+                If you only need one specific agreement or residential document instead of a full pack, these pages let you go straight to the route that fits the property and the tenancy setup.
               </p>
             </div>
             <p className="text-sm text-gray-500">Per-document pricing {RESIDENTIAL_LETTING_PRICE_RANGE}</p>
@@ -254,6 +182,9 @@ export default function PricingPage() {
       <Container size="large" className="pb-12">
         <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-charcoal">Why landlords compare us with a solicitor</h2>
+          <p className="mt-2 max-w-3xl text-sm text-gray-600">
+            Many landlords are not trying to replace specialist advice in a genuinely complex case. They are trying to get the right paperwork moving tonight, keep the route clear, and avoid paying solicitor rates just to prepare the first set of documents.
+          </p>
           <div className="mt-6 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -298,11 +229,15 @@ export default function PricingPage() {
           },
           {
             question: "How much do solicitors charge for similar work?",
-            answer: "Typical solicitor pricing is often several hundred pounds per case. That is why many landlords use Landlord Heaven when they want to get the paperwork moving without paying solicitor rates upfront.",
+            answer: "Typical solicitor pricing is often several hundred pounds per case. Many landlords use Landlord Heaven when they want to get the paperwork moving, understand the route, and prepare the documents before deciding whether a solicitor is still needed later.",
           },
           {
             question: "Can I buy another product later?",
             answer: "Yes. You can buy another product whenever your situation changes.",
+          },
+          {
+            question: "Do you list Section 13 pricing here too?",
+            answer: "Yes. The pricing page includes both the Standard Section 13 rent increase pack and the Defence Pack, with prices pulled from the same central product pricing used across the site.",
           },
         ]}
         showContactCTA={false}
@@ -314,7 +249,7 @@ export default function PricingPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Still not sure which pack fits?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Tell us what has gone wrong, and we will help you narrow the next step.
+              Tell us what has gone wrong with the tenancy, and we will help you narrow the next step in plain English.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/contact" className="hero-btn-primary">

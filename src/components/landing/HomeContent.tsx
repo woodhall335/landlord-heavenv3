@@ -35,19 +35,19 @@ const evictionWizardHref = `/wizard?product=notice_only&topic=eviction&src=${SEO
 
 const primaryPaths = [
   {
-    label: "Start Eviction",
+    label: "Start eviction or possession action",
     href: evictionWizardHref,
     imageSrc: "/images/start-eviction.webp",
     imageAlt: "Landlord starting the eviction process",
   },
   {
-    label: "Recover Unpaid Rent",
+    label: "Recover unpaid rent or bills",
     href: `/wizard?product=money_claim&topic=debt&src=${SEO_SRC}`,
     imageSrc: "/images/recover-unpaid-rent.webp",
     imageAlt: "Landlord recovering unpaid rent",
   },
   {
-    label: "Create Tenancy Agreement",
+    label: "Create or update a tenancy agreement",
     href: `/wizard?product=ast_standard&topic=tenancy&src=${SEO_SRC}`,
     imageSrc: "/images/create-tenancy-agreements.webp",
     imageAlt: "Create a tenancy agreement",
@@ -61,7 +61,7 @@ const homeQuickLinks = [
     icon: RiHome6Line,
   },
   {
-    label: "Section 8 and eviction routes",
+    label: "Eviction routes and notice help",
     href: "#section-21-vs-section-8",
     icon: RiFileTextLine,
   },
@@ -71,7 +71,7 @@ const homeQuickLinks = [
     icon: RiMoneyPoundCircleLine,
   },
   {
-    label: "Notice and court help",
+    label: "Rent increase and court help",
     href: "#landlord-eviction-help",
     icon: RiShieldCheckLine,
   },
@@ -89,7 +89,7 @@ const whyLandlordsUseCards = [
   {
     title: "Know your route before you serve anything",
     body:
-      "If your tenant has stopped paying rent, breached the tenancy, or left you unsure which notice you need, we help you move quickly without losing time on the wrong route.",
+      "If the tenant has stopped paying rent, will not leave, is challenging a rent increase, or you are unsure which route applies, we help you work out the next step before you commit to the wrong paperwork.",
     imageSrc: "/images/decision_image.webp",
     imageAlt: "Landlord notice route decision illustration",
     icon: RiFlashlightLine,
@@ -97,15 +97,15 @@ const whyLandlordsUseCards = [
   {
     title: "Avoid invalid notices and expensive possession delays",
     body:
-      "We flag the problems that can kill your case before you generate, so you do not end up serving again and losing more time.",
+      "We flag the problems that can derail the case before you generate anything, so you are less likely to end up serving again, redoing the file, or losing more time.",
     imageSrc: "/images/validation_image.webp",
     imageAlt: "Landlord notice validation illustration",
     icon: RiShieldCheckLine,
   },
   {
-    title: "Generate the right landlord documents for the route you need first",
+    title: "Generate the documents that match the problem you actually need to solve",
     body:
-      "Build eviction notices, rent arrears documents, and supporting paperwork with England-first route guidance, while still keeping separate jurisdiction support where it is genuinely needed.",
+      "Build eviction notices, full eviction packs, Section 13 rent increase files, money claim paperwork, and tenancy agreements with current England guidance while still keeping the jurisdictions separate where they need different rules.",
     imageSrc: "/images/jurisdiction_image.webp",
     imageAlt: "UK jurisdiction landlord document illustration",
     icon: RiGlobalLine,
@@ -167,7 +167,7 @@ export default function HomeContent() {
               What needs sorting first?
             </h2>
             <p className="mt-4 max-w-4xl text-1xl leading-relaxed text-[#3b3b4f]">
-              Your tenant is not paying, will not leave, or you need a fresh tenancy agreement. Pick the route that matches the problem and keep things moving.
+              If the tenant is not paying, will not leave, is disputing the tenancy, or you need to put the right agreement in place, start with the route that matches the real problem and keep the case moving.
             </p>
 
             <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
@@ -261,7 +261,7 @@ export default function HomeContent() {
                 What do you need help with tonight?
               </h2>
               <p className="text-gray-500 text-lg">
-                Free UK landlord guidance - no sign-up required
+                Free landlord guidance on eviction, rent arrears, rent increases, tenancy agreements, and compliance
               </p>
             </div>
 
@@ -290,7 +290,7 @@ export default function HomeContent() {
                     <input
                       type="text"
                       className="flex-1 py-4 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none text-base"
-                      placeholder="Ask about evictions, rent arrears, deposits..."
+                      placeholder="Ask about eviction, arrears, Section 13, tenancy agreements..."
                       value={askQuestion}
                       onChange={(e) => setAskQuestion(e.target.value)}
                       disabled={isLoading}
@@ -333,9 +333,9 @@ export default function HomeContent() {
                     prompt: "How do I recover unpaid rent from a tenant?",
                   },
                   {
-                    label: "Deposit protection rules",
+                    label: "Rent increase challenge",
 
-                    prompt: "What are the deposit protection requirements?",
+                    prompt: "How do I increase the rent properly and what happens if the tenant challenges it?",
                   },
                 ].map((item) => (
                   <button
@@ -391,33 +391,29 @@ export default function HomeContent() {
             <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
               <div>
                 <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
-                  <span className="text-sm font-semibold text-primary">
-                    Section 8 and rent arrears help for landlords under pressure
+                <span className="text-sm font-semibold text-primary">
+                    Help for landlords dealing with eviction, arrears, rent increases, and tenancy paperwork
                   </span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                  Your tenant still is not paying or leaving. Here is how you avoid making it worse.
+                  When the tenancy starts going wrong, the first job is getting the next step right.
                 </h2>
                 <p className="text-lg text-gray-600">
-                  If your tenant has stopped paying rent, ignored warnings, or
-                  left you unsure what to do next, you need a clear route fast.
-                  We help you work out whether Section 8, a money claim, or a
-                  new tenancy agreement is the right move, then generate the
-                  paperwork without burying you in legal language.
+                  If the tenant has stopped paying, will not leave, is challenging a rent increase, or has left you needing clearer paperwork, you need a route you can trust quickly. We help you work out whether that is an eviction notice, a full court pack, a Section 13 rent increase file, a money claim, or a tenancy agreement, then build the documents without burying you in legal language.
                 </p>
 
                 <ul className="mt-8 space-y-3 text-gray-700">
                   <li className="flex items-start gap-3">
                     <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Work out the right eviction route before you lose time on the wrong one</span>
+                    <span>Work out the right route before you lose time on the wrong notice, claim, or rent increase process</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Flag the mistakes that can invalidate a notice and cost you months</span>
+                    <span>Flag the mistakes that can invalidate a notice, weaken a claim, or make a rent increase harder to defend</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Answer plain-English questions and get the paperwork that fits your case</span>
+                    <span>Answer plain-English questions and get paperwork that matches the tenancy problem in front of you</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
@@ -451,8 +447,7 @@ export default function HomeContent() {
               Ready to get the next step clear?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Choose the route that fits the problem, answer guided questions,
-              and generate the documents you need to act with confidence. <span className="font-semibold text-gray-800">Start in under 2 minutes.</span>
+              Choose the route that fits the tenancy problem, answer guided questions, and generate the documents you need to act with more confidence. <span className="font-semibold text-gray-800">Start in under 2 minutes.</span>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
@@ -494,6 +489,13 @@ export default function HomeContent() {
                   className="text-primary hover:underline font-medium"
                 >
                   money claim unpaid rent guide
+                </Link>
+                {" | "}
+                <Link
+                  href="/rent-increase"
+                  className="text-primary hover:underline font-medium"
+                >
+                  Section 13 rent increase guide
                 </Link>
                 {" | "}
                 <Link
@@ -598,8 +600,8 @@ function getAskHeavenPromptIcon(label: string) {
       return <RiFileTextLine className="h-5 w-5" />;
     case "Rent arrears recovery":
       return <RiMoneyPoundCircleLine className="h-5 w-5" />;
-    case "Deposit protection rules":
-      return <RiShieldCheckLine className="h-5 w-5" />;
+    case "Rent increase challenge":
+      return <RiFlashlightLine className="h-5 w-5" />;
     default:
       return <RiFlashlightLine className="h-5 w-5" />;
   }

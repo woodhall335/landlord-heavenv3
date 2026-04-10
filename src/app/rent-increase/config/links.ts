@@ -2,6 +2,8 @@ import type { RentIncreaseGuideLink } from './types';
 
 export const RENT_INCREASE_WIZARD_HREF =
   '/wizard?product=section13_standard&jurisdiction=england';
+export const RENT_INCREASE_DEFENCE_WIZARD_HREF =
+  '/wizard?product=section13_defensive&jurisdiction=england';
 
 export const RENT_INCREASE_HUB_PATH = '/rent-increase';
 
@@ -37,7 +39,18 @@ export const RENT_INCREASE_LINKS = {
   },
   wizard: {
     href: RENT_INCREASE_WIZARD_HREF,
-    label: 'Generate your Section 13 notice',
+    label: 'Start the Standard Section 13 pack',
+  },
+  standardProduct: {
+    href: '/products/section-13-standard',
+    label: 'Section 13 Rent Increase Pack',
+  },
+  defenceProduct: {
+    href: '/products/section-13-defence',
+    label: 'Section 13 Defence Pack',
+  },
+  defenceWizard: {
+    href: RENT_INCREASE_DEFENCE_WIZARD_HREF,
+    label: 'Start the Section 13 Defence Pack',
   },
 } as const satisfies Record<string, RentIncreaseGuideLink>;
-

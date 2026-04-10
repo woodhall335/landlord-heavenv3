@@ -97,5 +97,5 @@ export const section13TribunalPage: RentIncreaseGuidePage = {
     'Generate a consistent Section 13 pack first, then escalate to dispute preparation with stable documents and deterministic bundle structure.',
   finalCtaTitle: 'Generate your Section 13 notice pack',
   finalCtaBody:
-    'Start with the Standard wizard, then use tribunal-focused guidance only when challenge context appears.',
+    'Start with the Standard wizard, then use tribunal-focused guidance only when challenge context appears, so you do not overbuild the case before you know a dispute is really underway.',
 };

@@ -174,9 +174,9 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
             </article>
 
             <CtaBand
-              title="Generate your Section 13 notice"
-              body="Move from reading to action with the Standard wizard. It keeps timeline checks, evidence framing, and output generation aligned from one deterministic flow."
-              primaryLabel="Generate your Section 13 notice"
+              title="Ready to turn this into a cleaner landlord file?"
+              body="Move from reading to action with the Standard Section 13 pack. It keeps the timeline checks, the comparables, and the notice outputs lined up before you serve."
+              primaryLabel="Start the Standard Section 13 pack"
             />
 
             {config.sections.map((section, index) => (
@@ -186,7 +186,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
                   <CtaBand
                     title={config.midCtaTitle}
                     body={config.midCtaBody}
-                    primaryLabel="Generate your Section 13 notice"
+                    primaryLabel="Start the Standard Section 13 pack"
                   />
                 ) : null}
               </div>
@@ -196,7 +196,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
               <CtaBand
                 title={config.finalCtaTitle}
                 body={config.finalCtaBody}
-                primaryLabel="Generate your Section 13 notice"
+                primaryLabel="Start the Standard Section 13 pack"
               />
             </section>
           </div>
@@ -235,4 +235,3 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
     </div>
   );
 }
-
