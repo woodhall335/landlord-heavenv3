@@ -217,7 +217,7 @@ export default function Page() {
               <Link href="/tenant-not-paying-rent" className="font-medium text-primary hover:underline">
                 tenant not paying rent
               </Link>{' '}
-              as the main hub, move to{' '}
+              as the main guide, move to{' '}
               <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
                 Section 8 notice guidance
               </Link>{' '}
@@ -579,13 +579,13 @@ export default function Page() {
               </p>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 <Link
-                  href="/section-8-notice-guide"
+                  href="/section-8-notice"
                   className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
                 >
                   Section 8 notice guide: grounds, timing, and evidence
                 </Link>
                 <Link
-                  href="/how-to-evict-a-tenant-uk"
+                  href="/how-to-evict-tenant"
                   className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]"
                 >
                   How to evict a tenant in the UK: full landlord guide

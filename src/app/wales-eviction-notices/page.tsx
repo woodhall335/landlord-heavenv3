@@ -247,7 +247,7 @@ export default function WalesEvictionNoticesPage() {
                 </p>
                 <p className="leading-7">
                   That matters for both SEO and conversion. SEO improves because the page serves
-                  the actual Welsh search cluster more precisely. Conversion improves because the
+                  the actual Welsh search intent more precisely. Conversion improves because the
                   user lands on a page that sounds like it belongs to the jurisdiction they are
                   dealing with, rather than a generic UK article with a few cosmetic edits.
                 </p>

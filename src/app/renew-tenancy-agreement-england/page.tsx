@@ -5,8 +5,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/renew-tenancy-agreement-england');
-const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
+const standardAgreementHref = '/standard-tenancy-agreement';
+const premiumAgreementHref = '/premium-tenancy-agreement';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -45,9 +45,9 @@ export default function RenewTenancyAgreementEnglandPage() {
         title="Renew Tenancy Agreement England"
         subtitle="Use this guide when you are updating England tenancy paperwork for an existing tenant, reviewing auto-rolling written tenancies, or deciding whether you need fresh paperwork designed for the current framework."
         primaryCtaLabel="Start Standard England agreement"
-        primaryCtaHref={standardWizardHref}
+        primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
-        secondaryCtaHref={premiumWizardHref}
+        secondaryCtaHref={premiumAgreementHref}
         introTitle="Existing written tenancies and the current England model"
         introBody={[
           'Existing written England tenancies generally auto-roll rather than needing a wholesale reissue, so this page explains the transition position instead of pushing landlords into a new AST or fixed-term sale.',

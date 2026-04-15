@@ -10,15 +10,15 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
+import { guideLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'How to Evict a Tenant in the UK | Complete Landlord Guide | LandlordHeaven',
+  title: 'How to Evict a Tenant in the UK | Comparison Guide for England and Other Jurisdictions',
   description:
-    'Plain-English landlord guide to evicting a tenant in the UK, including notice choice, possession orders, timelines, bailiffs, and the steps that matter most.',
+    'UK comparison guide for landlords, routing England cases into the current post-1 May 2026 framework and summarising how other jurisdictions differ.',
   alternates: {
     canonical: 'https://landlordheaven.co.uk/how-to-evict-a-tenant-uk',
   },
@@ -70,7 +70,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Is Section 21 being abolished?',
     answer:
-      'Changes have been proposed, but Section 21 is still currently in force in England unless and until new legislation is enacted and brought into effect.',
+      'As of 15 April 2026, Section 21 is still due to end in England on 1 May 2026. England landlords should already be using current-framework pages to plan live cases.',
   },
   {
     question: 'What is a possession order UK landlords apply for?',
@@ -123,18 +123,16 @@ export default function HowToEvictTenantUkPage() {
       />
       <UniversalHero
         title="How to Evict a Tenant in the UK"
-        subtitle="If you need your property back, the key is choosing the right route early, serving the notice properly, and keeping the court file clean from day one."
-        primaryCta={{ label: 'Start complete eviction pack', href: '/products/complete-pack' }}
-        secondaryCta={{ label: 'Check which route fits', href: '/eviction-notice-template' }}
+        subtitle="Use this page as a UK comparison and routing guide. For England, move into the current post-1 May 2026 framework instead of relying on older Section 21-era summaries."
+        primaryCta={{ label: 'Read current England rules', href: '/renters-rights-act-eviction-rules' }}
+        secondaryCta={{ label: 'See England landlord steps', href: '/how-to-evict-a-tenant-england' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="How to Evict a Tenant in the UK icon"
         showReviewPill
         showTrustPositioningBar
       >
         <p className="mt-6 text-sm text-white/90 md:text-base">
-          Understand the legal eviction process landlords in England usually follow, from
-          choosing the right notice to applying for a possession order and, where needed,
-          arranging bailiff enforcement.
+          Start with jurisdiction. England landlords should route into the live rules, Section 8, Form 3A, and possession-process pages that now own current-framework intent.
         </p>
       </UniversalHero>
 
@@ -144,24 +142,34 @@ export default function HowToEvictTenantUkPage() {
             <SeoPageContextPanel pathname="/how-to-evict-a-tenant-uk" />
             <h2 className="text-2xl font-semibold text-[#2a2161]">Quick answer for landlords</h2>
             <p className="mt-4 text-gray-700">
-              The legal eviction process in the UK normally involves five main stages.
+              The legal eviction process in the UK normally starts with jurisdiction and route selection, then moves into the live notice and court path for that jurisdiction.
             </p>
             <ol className="mt-4 list-decimal space-y-2 pl-5 text-gray-700">
-              <li>Confirm the tenancy type and eviction route.</li>
-              <li>Serve the correct eviction notice (Section 21 or Section 8).</li>
-              <li>Wait for the notice period to expire.</li>
-              <li>Apply to the county court for a possession order.</li>
-              <li>Request bailiff enforcement if the tenant does not leave.</li>
+              <li>Confirm the jurisdiction, tenancy type, and live possession route.</li>
+              <li>For England, start with the current rules, Section 8 route, and Form 3A where relevant.</li>
+              <li>Serve the correct current notice and preserve proof of service.</li>
+              <li>Move into the possession claim route if the tenant does not leave.</li>
+              <li>Plan for enforcement if possession is still refused.</li>
             </ol>
             <p className="mt-4 text-gray-700">
-              Most eviction cases fail or get delayed because of incorrect notices, missing
-              documents, or poor record-keeping. Preparing a clear timeline and evidence
-              pack before serving notice significantly improves success rates.
+              Most cases fail or get delayed because of incorrect notice choice, outdated route assumptions, missing documents, or poor record-keeping. Preparing a clear timeline and evidence pack before serving notice significantly improves the file.
             </p>
             <p className="mt-4 text-gray-700">
               For the main authority route, start with{' '}
               <Link href="/how-to-evict-tenant" className="font-medium text-primary hover:underline">
                 how to evict a tenant
+              </Link>
+              . If the property is in England, move next to{' '}
+              <Link href="/renters-rights-act-eviction-rules" className="font-medium text-primary hover:underline">
+                the current England eviction rules
+              </Link>
+              , then to the{' '}
+              <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
+                Section 8 notice guide
+              </Link>
+              , and the{' '}
+              <Link href="/form-3-section-8" className="font-medium text-primary hover:underline">
+                Form 3A page
               </Link>
               . If you want the stage-by-stage version next, move to the{' '}
               <Link href="/eviction-process-uk" className="font-medium text-primary hover:underline">
@@ -173,6 +181,24 @@ export default function HowToEvictTenantUkPage() {
               </Link>{' '}
               when the case is moving beyond basic research into notice, court, and enforcement planning.
             </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {[
+                guideLinks.rentersRightsActEvictionRules,
+                guideLinks.section8Notice,
+                guideLinks.form3aSection8,
+                guideLinks.howToEvictTenantEngland,
+                guideLinks.evictionProcessEngland,
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-xl border border-[#E6DBFF] bg-white p-4 hover:bg-[#F8F4FF]"
+                >
+                  <p className="font-semibold text-[#2a2161]">{link.title}</p>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">{link.description}</p>
+                </Link>
+              ))}
+            </div>
           </div>
         </Container>
       </section>

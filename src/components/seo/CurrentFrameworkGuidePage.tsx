@@ -14,6 +14,7 @@ import {
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import type { CurrentFrameworkPageConfig } from '@/lib/seo/england-current-framework-pages';
+import { getCurrentEnglandFrameworkLinks } from '@/lib/seo/internal-links';
 
 export function getCurrentFrameworkMetadata(config: CurrentFrameworkPageConfig): Metadata {
   const canonical = getCanonicalUrl(`/${config.slug}`);
@@ -34,6 +35,7 @@ export function getCurrentFrameworkMetadata(config: CurrentFrameworkPageConfig):
 
 export function CurrentFrameworkGuidePage({ config }: { config: CurrentFrameworkPageConfig }) {
   const canonical = getCanonicalUrl(`/${config.slug}`);
+  const frameworkLinks = getCurrentEnglandFrameworkLinks(`/${config.slug}`);
 
   return (
     <div className="min-h-screen bg-[#fcfaff]">
@@ -87,22 +89,16 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
             <p className="mt-4 text-lg leading-8 text-slate-700">{config.currentFrameworkNote}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="/products/notice-only"
+                href={config.primaryCta.href}
                 className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
               >
-                Start your notice
+                {config.primaryCta.label}
               </Link>
               <Link
-                href="/products/complete-pack"
+                href={config.secondaryCta.href}
                 className="rounded-lg border border-[#e6dbff] bg-white px-5 py-3 font-semibold text-primary hover:bg-[#fcfaff]"
               >
-                View full eviction support
-              </Link>
-              <Link
-                href="/n5-n119-possession-claim"
-                className="rounded-lg border border-[#e6dbff] bg-white px-5 py-3 font-semibold text-primary hover:bg-[#fcfaff]"
-              >
-                See the claim-stage forms
+                {config.secondaryCta.label}
               </Link>
             </div>
           </div>
@@ -119,6 +115,29 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
                   <p key={paragraph} className="leading-8">
                     {paragraph}
                   </p>
+                ))}
+              </div>
+            </article>
+
+            <article className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
+              <h2 className="text-3xl font-bold text-[#2a2161]">
+                Current England eviction framework
+              </h2>
+              <p className="mt-4 max-w-3xl leading-8 text-gray-700">
+                Use this England authority bundle to move from the current rule summary into the
+                exact notice, Form 3A, landlord action guide, and possession-process pages that
+                fit the post-1 May 2026 route.
+              </p>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {frameworkLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="rounded-2xl border border-[#d8caff] bg-white p-5 transition hover:border-primary hover:bg-[#fcfaff]"
+                  >
+                    <p className="text-lg font-semibold text-[#2a2161]">{link.title}</p>
+                    <p className="mt-2 leading-7 text-gray-700">{link.description}</p>
+                  </Link>
                 ))}
               </div>
             </article>

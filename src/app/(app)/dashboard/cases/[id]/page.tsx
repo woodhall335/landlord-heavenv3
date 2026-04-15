@@ -532,9 +532,9 @@ export default function CaseDetailPage() {
 
       if (shouldAutoRetry) {
         autoRetryAttemptedRef.current = true;
-        retryFulfillment().then(() => {
-          // Whether success or not, start polling to check for completion
-          if (!retryErrorFatal) {
+        retryFulfillment().then((retryStartedSuccessfully) => {
+          // Only keep polling if the retry actually started document generation
+          if (retryStartedSuccessfully && !retryErrorFatal) {
             startPolling();
           }
         });

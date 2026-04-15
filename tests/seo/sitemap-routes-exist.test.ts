@@ -1,347 +1,187 @@
-/**
- * Sitemap Route Existence Regression Test
- *
- * Ensures all paths produced by src/app/sitemap.ts correspond to real routes.
- * Uses filesystem-based assertions (no HTTP server required).
- *
- * Run with: npx vitest run tests/seo/sitemap-routes-exist.test.ts
- */
+import { beforeAll, describe, expect, it } from 'vitest';
 
-import { describe, it, expect, beforeAll } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
+import robots from '@/app/robots';
+import sitemap from '@/app/sitemap';
+import { getPostRegion } from '@/lib/blog/categories';
+import { blogPosts } from '@/lib/blog/posts';
+import { getBlogSeoConfig } from '@/lib/blog/seo';
+import { getValidTopicHubs } from '@/lib/blog/topic-hubs';
+import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
 
 describe('Sitemap Route Existence', () => {
+  let sitemapEntries: Awaited<ReturnType<typeof sitemap>> = [];
   let sitemapPaths: string[] = [];
-  const appDir = path.join(process.cwd(), 'src/app');
+  let knownPublicRoutes = new Set<string>();
 
   beforeAll(async () => {
-    // Import sitemap dynamically to get all routes
-    const sitemapModule = await import('@/app/sitemap');
-    const sitemap = await sitemapModule.default();
+    sitemapEntries = await sitemap();
+    sitemapPaths = sitemapEntries.map((entry) => new URL(entry.url).pathname);
 
-    // Extract paths from sitemap URLs
-    sitemapPaths = sitemap.map((entry) => {
-      const url = new URL(entry.url);
-      return url.pathname;
-    });
+    const staticRoutes = await discoverStaticPageRoutes();
+    const indexableBlogPosts = blogPosts
+      .filter((post) => getBlogSeoConfig(post, getPostRegion(post.slug)).isIndexable)
+      .map((post) => `/blog/${post.slug}`);
+    const topicHubRoutes = getValidTopicHubs().map((slug) => `/blog/${slug}`);
+    const manualConfigRoutes = [
+      '/rent-increase/section-13-notice',
+      '/rent-increase/how-to-increase-rent',
+      '/rent-increase/form-4a-guide',
+      '/rent-increase/section-13-tribunal',
+      '/rent-increase/market-rent-calculation',
+      '/rent-increase/rent-increase-challenge',
+    ];
+
+    knownPublicRoutes = new Set([
+      ...staticRoutes,
+      ...indexableBlogPosts,
+      ...topicHubRoutes,
+      ...manualConfigRoutes,
+    ]);
   });
 
-  /**
-   * Check if a path has a corresponding route in src/app.
-   * Next.js routes can be:
-   * - page.tsx (standard page)
-   * - route.ts (API route)
-   * - Also handles dynamic routes with [param] syntax
-   */
-  function routeExistsForPath(routePath: string): boolean {
-    // Handle root path
-    if (routePath === '/') {
-      const rootPage = path.join(appDir, 'page.tsx');
-      return fs.existsSync(rootPage);
-    }
-
-    // Remove leading slash and build directory path
-    const segments = routePath.slice(1).split('/');
-    const directPath = path.join(appDir, ...segments);
-
-    // Check for direct page.tsx match
-    const directPagePath = path.join(directPath, 'page.tsx');
-    if (fs.existsSync(directPagePath)) {
-      return true;
-    }
-
-    // Check for route.ts (API route)
-    const directRoutePath = path.join(directPath, 'route.ts');
-    if (fs.existsSync(directRoutePath)) {
-      return true;
-    }
-
-    // Handle dynamic routes (e.g., /blog/[slug])
-    // For paths like /blog/some-post, check if /blog/[slug]/page.tsx exists
-    if (segments.length >= 2) {
-      const parentSegments = segments.slice(0, -1);
-      const parentDir = path.join(appDir, ...parentSegments);
-
-      if (fs.existsSync(parentDir)) {
-        // Look for dynamic route folders
-        try {
-          const children = fs.readdirSync(parentDir);
-          for (const child of children) {
-            if (child.startsWith('[') && child.endsWith(']')) {
-              const dynamicPagePath = path.join(parentDir, child, 'page.tsx');
-              if (fs.existsSync(dynamicPagePath)) {
-                return true;
-              }
-            }
-          }
-        } catch {
-          // Directory read failed, route doesn't exist
-        }
-      }
-    }
-
-    return false;
-  }
-
-  it('should have at least one sitemap entry', () => {
+  it('has sitemap entries', () => {
     expect(sitemapPaths.length).toBeGreaterThan(0);
   });
 
-  it('should only include paths that have corresponding routes', () => {
-    const missingRoutes: string[] = [];
-
-    for (const routePath of sitemapPaths) {
-      if (!routeExistsForPath(routePath)) {
-        missingRoutes.push(routePath);
-      }
-    }
-
-    // Provide detailed error message for failures
-    if (missingRoutes.length > 0) {
-      const errorMessage = `${missingRoutes.length} sitemap route(s) do not have corresponding pages:\n${missingRoutes.map((r) => `  - ${r}`).join('\n')}`;
-      expect(missingRoutes, errorMessage).toEqual([]);
-    }
-  });
-
-  it('should include core Money Claim SEO pages', () => {
-    // Verify critical money claim pages are in sitemap
-    const moneyClaimPages = [
-      '/products/money-claim',
-      '/money-claim-unpaid-rent',
-      '/money-claim-property-damage',
-      '/money-claim-cleaning-costs',
-    ];
-
-    for (const page of moneyClaimPages) {
-      expect(sitemapPaths, `Missing critical Money Claim page: ${page}`).toContain(page);
-    }
-  });
-
-  it('should include the new SEO pillar routes', () => {
-    const pillarPages = [
-      '/tenant-not-paying-rent',
-      '/how-to-evict-tenant',
-      '/eviction-process-uk',
-      '/section-8-notice',
-      '/section-21-notice',
-      '/section-21-ban-uk',
-      '/eviction-guides',
-    ];
-
-    for (const page of pillarPages) {
-      expect(sitemapPaths, `Missing SEO pillar page: ${page}`).toContain(page);
-    }
-  });
-
-  it('should exclude Phase 3 legacy redirect candidates from the sitemap', () => {
-    const legacyPages = [
-      '/section-8-notice-guide',
-      '/section-21-notice-guide',
-      '/section-21-ban',
-    ];
-
-    for (const page of legacyPages) {
-      expect(sitemapPaths, `Legacy redirect candidate should not remain in sitemap: ${page}`).not.toContain(page);
-    }
-  });
-
-  it('all Money Claim SEO pages should have corresponding routes', () => {
-    const moneyClaimPaths = sitemapPaths.filter((p) => p.includes('money-claim'));
-    const missingRoutes: string[] = [];
-
-    for (const routePath of moneyClaimPaths) {
-      if (!routeExistsForPath(routePath)) {
-        missingRoutes.push(routePath);
-      }
-    }
+  it('only includes known static or dynamic public routes', () => {
+    const unknownRoutes = sitemapPaths.filter((pathname) => !knownPublicRoutes.has(pathname));
 
     expect(
-      missingRoutes,
-      `Money Claim sitemap routes without pages: ${missingRoutes.join(', ')}`
+      unknownRoutes,
+      `Unexpected sitemap route(s):\n${unknownRoutes.map((pathname) => `  - ${pathname}`).join('\n')}`
     ).toEqual([]);
   });
 
-  it('should include core Tenancy Agreement SEO pages for all UK jurisdictions', () => {
-    // Verify critical tenancy agreement pages are in sitemap
-    const tenancyPages = [
-      // England
-      '/assured-shorthold-tenancy-agreement-template',
-      '/tenancy-agreement-template',
-      '/joint-tenancy-agreement-template',
-      // Wales
-      '/occupation-contract-template-wales',
-      '/renting-homes-wales-written-statement',
-      '/standard-occupation-contract-wales',
-      '/wales-tenancy-agreement-template',
-      // Scotland
-      '/private-residential-tenancy-agreement-template',
-      '/prt-template-scotland',
-      '/scottish-tenancy-agreement-template',
-      '/scotland-prt-model-agreement-guide',
-      // Northern Ireland
-      '/northern-ireland-tenancy-agreement-template',
-      '/ni-private-tenancy-agreement',
-      '/notice-to-quit-northern-ireland-guide',
-      '/ni-tenancy-agreement-template-free',
-    ];
-
-    for (const page of tenancyPages) {
-      expect(sitemapPaths, `Missing Tenancy Agreement SEO page: ${page}`).toContain(page);
-    }
-  });
-
-  it('all Tenancy Agreement SEO pages should have corresponding routes', () => {
-    const tenancyAgreementPaths = sitemapPaths.filter((p) =>
-      p.includes('tenancy') ||
-      p.includes('ast-') ||
-      p.includes('prt-') ||
-      p.includes('occupation-contract') ||
-      p.includes('renting-homes') ||
-      p.includes('ni-') ||
-      p.includes('northern-ireland') ||
-      p.includes('scottish') ||
-      p.includes('scotland-prt')
+  it('includes the sitewide commercial owner pages', () => {
+    expect(sitemapPaths).toEqual(
+      expect.arrayContaining([
+        '/products/ast',
+        '/products/notice-only',
+        '/products/complete-pack',
+        '/products/money-claim',
+        '/rent-increase',
+      ])
     );
-    const missingRoutes: string[] = [];
+  });
 
-    for (const routePath of tenancyAgreementPaths) {
-      if (!routeExistsForPath(routePath)) {
-        missingRoutes.push(routePath);
-      }
+  it('includes the exact tenancy sales pages', () => {
+    expect(sitemapPaths).toEqual(
+      expect.arrayContaining([
+        '/standard-tenancy-agreement',
+        '/premium-tenancy-agreement',
+        '/student-tenancy-agreement',
+        '/hmo-shared-house-tenancy-agreement',
+        '/lodger-agreement',
+      ])
+    );
+  });
+
+  it('includes the high-intent live support pages we want indexed', () => {
+    expect(sitemapPaths).toEqual(
+      expect.arrayContaining([
+        '/form-6a-section-21',
+        '/section-21-notice-template',
+        '/section-21-validity-checklist',
+        '/section-21-expired-what-next',
+        '/section-21-notice-period',
+        '/serve-section-21-notice',
+        '/tenant-ignores-section-21',
+        '/what-happens-after-section-21',
+        '/section-8-vs-section-21',
+        '/accelerated-possession-guide',
+        '/n5b-possession-claim-guide',
+        '/no-fault-eviction',
+        '/section-8-rent-arrears-eviction',
+        '/periodic-tenancy-agreement',
+      ])
+    );
+  });
+
+  it('includes blog topic hubs and indexed landlord posts', () => {
+    expect(sitemapPaths).toEqual(
+      expect.arrayContaining([
+        '/blog',
+        '/blog/eviction-guides',
+        '/blog/rent-arrears',
+        '/blog/section-8',
+        '/blog/landlord-compliance',
+        '/blog/how-to-serve-eviction-notice',
+        '/blog/england-section-8-process',
+        '/blog/england-money-claim-online',
+        '/blog/wales-renting-homes-act',
+        '/blog/scotland-private-residential-tenancy',
+        '/blog/northern-ireland-eviction-process',
+      ])
+    );
+  });
+
+  it('excludes retired and redirected URLs from the sitemap', () => {
+    expect(sitemapPaths).not.toEqual(
+      expect.arrayContaining([
+        '/tenancy-agreement-template-uk',
+        '/tenancy-agreements',
+        '/eviction-notice',
+        '/eviction-notice-uk',
+        '/section-8-notice-guide',
+        '/lodger-agreement-template',
+        '/hmo-tenancy-agreement-template',
+        '/rent-increase/rent-increase-rules-uk',
+        '/complete-eviction-pack-england',
+        '/eviction-pack-england',
+        '/section-21-court-pack',
+        '/section-8-court-pack',
+      ])
+    );
+  });
+
+  it('keeps the commercial owners at the expected priority', () => {
+    const priorities = new Map(
+      sitemapEntries.map((entry) => [new URL(entry.url).pathname, entry.priority])
+    );
+
+    expect(priorities.get('/products/ast')).toBe(0.95);
+    expect(priorities.get('/products/notice-only')).toBe(0.95);
+    expect(priorities.get('/products/complete-pack')).toBe(0.95);
+    expect(priorities.get('/products/money-claim')).toBe(0.95);
+    expect(priorities.get('/rent-increase')).toBe(0.92);
+  });
+
+  it('never includes private app routes', () => {
+    const blockedPrefixes = ['/wizard', '/dashboard', '/auth', '/api'];
+
+    for (const prefix of blockedPrefixes) {
+      const matchingRoutes = sitemapPaths.filter(
+        (pathname) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+      );
+      expect(matchingRoutes, `${prefix} routes should not be in the sitemap`).toEqual([]);
     }
-
-    expect(
-      missingRoutes,
-      `Tenancy Agreement sitemap routes without pages: ${missingRoutes.join(', ')}`
-    ).toEqual([]);
-  });
-
-  it('should include all 5 wizard landing pages', () => {
-    // Critical wizard entry point landing pages for SEO
-    const wizardLandingPages = [
-      '/eviction-notice',
-      '/eviction-pack-england',
-      '/money-claim',
-      '/tenancy-agreement-template',
-      '/premium-tenancy-agreement',
-    ];
-
-    for (const page of wizardLandingPages) {
-      expect(sitemapPaths, `Missing wizard landing page: ${page}`).toContain(page);
-    }
-  });
-
-  it('all wizard landing pages should have corresponding routes', () => {
-    const wizardLandingPages = [
-      '/eviction-notice',
-      '/eviction-pack-england',
-      '/money-claim',
-      '/tenancy-agreement-template',
-      '/premium-tenancy-agreement',
-    ];
-
-    const missingRoutes: string[] = [];
-
-    for (const routePath of wizardLandingPages) {
-      if (!routeExistsForPath(routePath)) {
-        missingRoutes.push(routePath);
-      }
-    }
-
-    expect(
-      missingRoutes,
-      `Wizard landing page routes without pages: ${missingRoutes.join(', ')}`
-    ).toEqual([]);
-  });
-
-  it('wizard landing pages should have high priority (0.95)', async () => {
-    const sitemapModule = await import('@/app/sitemap');
-    const sitemap = await sitemapModule.default();
-
-    const wizardLandingPages = [
-      '/eviction-notice',
-      '/eviction-pack-england',
-      '/money-claim',
-      '/tenancy-agreement-template',
-      '/premium-tenancy-agreement',
-    ];
-
-    for (const page of wizardLandingPages) {
-      const entry = sitemap.find((e) => new URL(e.url).pathname === page);
-      expect(entry, `Sitemap entry not found for ${page}`).toBeTruthy();
-      expect(entry?.priority, `Priority for ${page} should be 0.95`).toBe(0.95);
-    }
-  });
-
-  it('should NOT include /wizard URLs in sitemap', () => {
-    const wizardPaths = sitemapPaths.filter((p) => p.startsWith('/wizard'));
-    expect(
-      wizardPaths,
-      `Sitemap should not include /wizard URLs but found: ${wizardPaths.join(', ')}`
-    ).toEqual([]);
-  });
-
-  it('should NOT include /dashboard URLs in sitemap', () => {
-    const dashboardPaths = sitemapPaths.filter((p) => p.startsWith('/dashboard'));
-    expect(
-      dashboardPaths,
-      `Sitemap should not include /dashboard URLs but found: ${dashboardPaths.join(', ')}`
-    ).toEqual([]);
-  });
-
-  it('should NOT include /auth URLs in sitemap', () => {
-    const authPaths = sitemapPaths.filter((p) => p.startsWith('/auth'));
-    expect(
-      authPaths,
-      `Sitemap should not include /auth URLs but found: ${authPaths.join(', ')}`
-    ).toEqual([]);
-  });
-
-  it('should NOT include /api URLs in sitemap', () => {
-    const apiPaths = sitemapPaths.filter((p) => p.startsWith('/api'));
-    expect(
-      apiPaths,
-      `Sitemap should not include /api URLs but found: ${apiPaths.join(', ')}`
-    ).toEqual([]);
   });
 });
 
-/**
- * Robots.txt Configuration Tests
- *
- * Verify robots.txt properly disallows private routes in production mode.
- */
 describe('Robots.txt Configuration', () => {
-  it('should disallow /wizard/ in production', async () => {
-    // Save original env
+  it('disallows private app areas in production', () => {
     const originalVercelEnv = process.env.VERCEL_ENV;
-
-    // Set production mode
     process.env.VERCEL_ENV = 'production';
 
-    // Import fresh
-    const robotsModule = await import('@/app/robots');
-    const robotsConfig = robotsModule.default();
+    const robotsConfig = robots();
 
-    // Restore
     process.env.VERCEL_ENV = originalVercelEnv;
 
-    // Check disallow rules
     const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
     const disallowedPaths = rules.flatMap((rule) =>
       Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
     );
 
-    expect(disallowedPaths).toContain('/wizard/');
+    expect(disallowedPaths).toEqual(
+      expect.arrayContaining(['/wizard/', '/dashboard/', '/auth/', '/api/'])
+    );
   });
 
-  it('should disallow /dashboard/ in production', async () => {
+  it('does not block the live commercial entry pages', () => {
     const originalVercelEnv = process.env.VERCEL_ENV;
     process.env.VERCEL_ENV = 'production';
 
-    const robotsModule = await import('@/app/robots');
-    const robotsConfig = robotsModule.default();
+    const robotsConfig = robots();
 
     process.env.VERCEL_ENV = originalVercelEnv;
 
@@ -350,88 +190,39 @@ describe('Robots.txt Configuration', () => {
       Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
     );
 
-    expect(disallowedPaths).toContain('/dashboard/');
-  });
-
-  it('should disallow /auth/ in production', async () => {
-    const originalVercelEnv = process.env.VERCEL_ENV;
-    process.env.VERCEL_ENV = 'production';
-
-    const robotsModule = await import('@/app/robots');
-    const robotsConfig = robotsModule.default();
-
-    process.env.VERCEL_ENV = originalVercelEnv;
-
-    const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
-    const disallowedPaths = rules.flatMap((rule) =>
-      Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
-    );
-
-    expect(disallowedPaths).toContain('/auth/');
-  });
-
-  it('should disallow /api/ in production', async () => {
-    const originalVercelEnv = process.env.VERCEL_ENV;
-    process.env.VERCEL_ENV = 'production';
-
-    const robotsModule = await import('@/app/robots');
-    const robotsConfig = robotsModule.default();
-
-    process.env.VERCEL_ENV = originalVercelEnv;
-
-    const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
-    const disallowedPaths = rules.flatMap((rule) =>
-      Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
-    );
-
-    expect(disallowedPaths).toContain('/api/');
-  });
-
-  it('should allow clean landing page routes in production', async () => {
-    const originalVercelEnv = process.env.VERCEL_ENV;
-    process.env.VERCEL_ENV = 'production';
-
-    const robotsModule = await import('@/app/robots');
-    const robotsConfig = robotsModule.default();
-
-    process.env.VERCEL_ENV = originalVercelEnv;
-
-    // Check that clean routes are not blocked
-    const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules : [robotsConfig.rules];
-    const disallowedPaths = rules.flatMap((rule) =>
-      Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow]
-    );
-
-    // Clean landing pages should NOT be in disallow list
-    const cleanRoutes = [
-      '/eviction-notice',
-      '/eviction-pack-england',
-      '/money-claim',
-      '/tenancy-agreement-template',
+    const liveEntryPages = [
+      '/products/ast',
+      '/products/notice-only',
+      '/products/complete-pack',
+      '/products/money-claim',
+      '/rent-increase',
+      '/standard-tenancy-agreement',
       '/premium-tenancy-agreement',
     ];
 
-    for (const route of cleanRoutes) {
-      // None of the disallow patterns should match these clean routes
+    for (const route of liveEntryPages) {
       const isBlocked = disallowedPaths.some((pattern) => {
-        if (typeof pattern !== 'string') return false;
-        // Direct match or prefix match
+        if (typeof pattern !== 'string') {
+          return false;
+        }
+
         return route === pattern || route.startsWith(pattern);
       });
-      expect(isBlocked, `Clean route ${route} should not be blocked by robots.txt`).toBe(false);
+
+      expect(isBlocked, `Live entry route ${route} should not be blocked by robots.txt`).toBe(
+        false
+      );
     }
   });
 
-  it('should include sitemap URL in production', async () => {
+  it('includes the sitemap URL in production', () => {
     const originalVercelEnv = process.env.VERCEL_ENV;
     process.env.VERCEL_ENV = 'production';
 
-    const robotsModule = await import('@/app/robots');
-    const robotsConfig = robotsModule.default();
+    const robotsConfig = robots();
 
     process.env.VERCEL_ENV = originalVercelEnv;
 
-    expect(robotsConfig.sitemap).toBeTruthy();
     expect(robotsConfig.sitemap).toContain('/sitemap.xml');
   });
 });

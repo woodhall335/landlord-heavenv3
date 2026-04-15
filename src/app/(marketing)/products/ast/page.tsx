@@ -149,7 +149,7 @@ const explainerPoints: ExplainerPoint[] = [
 const productOptions: ProductCardData[] = [
   {
     sku: 'england_standard_tenancy_agreement',
-    name: 'Assured Periodic Tenancy Agreement',
+    name: 'Standard Tenancy Agreement',
     price: PRODUCTS.england_standard_tenancy_agreement.displayPrice,
     kicker: 'Best for straightforward lets',
     bestFor:
@@ -168,7 +168,7 @@ const productOptions: ProductCardData[] = [
   },
   {
     sku: 'england_premium_tenancy_agreement',
-    name: 'Premium Assured Periodic Tenancy Agreement',
+    name: 'Premium Tenancy Agreement',
     price: PRODUCTS.england_premium_tenancy_agreement.displayPrice,
     kicker: 'Fuller ordinary-residential route',
     bestFor:
@@ -224,7 +224,7 @@ const productOptions: ProductCardData[] = [
   },
   {
     sku: 'england_lodger_agreement',
-    name: 'Room Let / Lodger Agreement',
+    name: 'Lodger Agreement',
     price: PRODUCTS.england_lodger_agreement.displayPrice,
     kicker: 'Resident-landlord route',
     bestFor:
@@ -376,12 +376,12 @@ const comparisonRows: ComparisonRow[] = [
 const englandTenancyPricingItems = [
   {
     sku: 'england_standard_tenancy_agreement' as const,
-    name: 'Assured Periodic Tenancy Agreement',
+    name: 'Standard Tenancy Agreement',
     url: '/standard-tenancy-agreement',
   },
   {
     sku: 'england_premium_tenancy_agreement' as const,
-    name: 'Premium Assured Periodic Tenancy Agreement',
+    name: 'Premium Tenancy Agreement',
     url: '/premium-tenancy-agreement',
   },
   {
@@ -396,7 +396,7 @@ const englandTenancyPricingItems = [
   },
   {
     sku: 'england_lodger_agreement' as const,
-    name: 'Room Let / Lodger Agreement',
+    name: 'Lodger Agreement',
     url: '/lodger-agreement',
   },
 ];
@@ -405,17 +405,17 @@ const faqs: FAQItem[] = [
   {
     question: 'What does this England page help me compare?',
     answer:
-      'This page helps you compare the five live England agreement routes: Standard, Premium, Student, HMO / Shared House, and Lodger. Its job is to help you choose the route that fits the property and occupier setup, not to act as the main template example page.',
+      'This page helps you compare and start the five live England tenancy agreement routes: Standard, Premium, Student, HMO / Shared House, and Lodger. Its job is to help you choose the route that fits the property and occupier setup, then move straight into the right product.',
   },
   {
-    question: 'When should I use this page instead of the main template hub?',
+    question: 'When should I use this page?',
     answer:
-      'Use the main England template hub if you want to inspect the agreement structure first. Use this page once you are ready to compare agreement types and decide whether the tenancy belongs in Standard, Premium, Student, HMO / Shared House, or Lodger.',
+      'Use this page when you are ready to choose or buy the right England tenancy agreement for a new let. If you already know the route, jump straight into Standard, Premium, Student, HMO / Shared House, or Lodger from here.',
   },
   {
-    question: 'Is /products/ast the main England template hub?',
+    question: 'Is /products/ast the main England page for choosing an agreement?',
     answer:
-      'No. The main template hub is /tenancy-agreement-template. /products/ast now works as the England route-selection page where all five agreement types are compared side by side.',
+      'Yes. /products/ast is the main England page for comparing broad tenancy-agreement routes and starting the right product. If you want a support page with an example agreement, you can still read /tenancy-agreement-template, but this page is the commercial owner for choosing the right England route.',
   },
   {
     question: 'Do the agreements match where the property is?',
@@ -463,27 +463,27 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title:
-    'Choose the Right England Agreement Type | Standard, Premium, Student, HMO and Lodger',
+    'Tenancy Agreement England | Compare Standard, Premium, Student, HMO and Lodger',
   description:
-    'Compare the five England agreement routes in one place. Review Standard, Premium, Student, HMO / Shared House, and Lodger options before choosing the route that fits the property.',
+    'Compare and start the right England tenancy agreement for your let. Choose Standard, Premium, Student, HMO / Shared House, or Lodger and generate the route that fits the property.',
   keywords: [
-    'england agreement types',
+    'tenancy agreement england',
     'standard tenancy agreement england',
     'premium tenancy agreement england',
     'student tenancy agreement england',
     'hmo shared house tenancy agreement england',
     'lodger agreement england',
-    'england tenancy route comparison',
-    'assured periodic tenancy agreement england',
-    'renters rights act tenancy agreement england',
+    'england tenancy agreement comparison',
+    'landlord tenancy agreement england',
+    'england tenancy agreements for landlords',
     'england landlord agreement routes',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title:
-      'Choose the Right England Agreement Type | Standard, Premium, Student, HMO and Lodger',
+      'Tenancy Agreement England | Compare Standard, Premium, Student, HMO and Lodger',
     description:
-      'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes in one place before choosing the England agreement type that fits the property.',
+      'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes in one place before starting the England tenancy agreement that fits the property.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -635,8 +635,8 @@ function TenancyFunnelGrid({
         <div className="max-w-3xl">
           <h3 className="text-2xl font-bold tracking-tight text-[#141B2D]">{title}</h3>
           <p className="mt-3 text-base leading-7 text-[#546075]">
-            Compare the main England tenancy-agreement routes and the supporting explainer pages in
-            one place.
+            Compare the main England tenancy agreement routes, then move straight into the
+            right product for the let.
           </p>
         </div>
 
@@ -686,9 +686,9 @@ export default function ASTProductPage() {
       <div className="pointer-events-none absolute left-[18%] top-[95rem] h-56 w-56 rounded-full bg-[#ECE6FF] opacity-55 blur-3xl" />
 
       <UniversalHero
-                trustText="Renters Right Act Compliant 2026"
-        title="Choose the right England agreement type"
-        subtitle="Use this page to compare the five live England agreement routes so you can choose the agreement that actually fits the occupier setup, the property, and how you plan to manage the let."
+        trustText="England tenancy agreements for landlords"
+        title="Choose the right tenancy agreement for your England let"
+        subtitle="Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes so you can start the agreement that actually fits the occupier setup, the property, and how you plan to manage the let."
         actionsSlot={
           <div className="grid w-full gap-3 sm:grid-cols-2 lg:max-w-2xl">
             <div className="rounded-2xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
@@ -1169,6 +1169,7 @@ export default function ASTProductPage() {
         intro="Clear answers on what a tenancy agreement includes, which regions are supported, and how to choose the right route for the property."
         faqs={faqs}
         showContactCTA={false}
+        includeSchema={false}
         variant="gray"
       />
 

@@ -903,10 +903,10 @@ describe('Wizard Landing Pages - Money Claim England-Only Scope', () => {
  */
 describe('Wizard Landing Pages - SEO Route Configuration', () => {
   it('should have correct SEO landing routes defined', () => {
-    expect(SEO_LANDING_ROUTES.notice_only).toBe('/eviction-notice-template');
+    expect(SEO_LANDING_ROUTES.notice_only).toBe('/products/notice-only');
     expect(SEO_LANDING_ROUTES.complete_pack).toBe('/products/complete-pack');
-    expect(SEO_LANDING_ROUTES.money_claim).toBe('/money-claim');
-    expect(SEO_LANDING_ROUTES.ast_standard).toBe('/tenancy-agreement-template');
+    expect(SEO_LANDING_ROUTES.money_claim).toBe('/products/money-claim');
+    expect(SEO_LANDING_ROUTES.ast_standard).toBe('/products/ast');
     expect(SEO_LANDING_ROUTES.ast_premium).toBe('/premium-tenancy-agreement');
   });
 

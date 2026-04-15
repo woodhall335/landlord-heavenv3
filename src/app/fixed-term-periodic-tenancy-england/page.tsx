@@ -5,8 +5,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/fixed-term-periodic-tenancy-england');
-const wizardHref = '/wizard?product=ast_standard&src=fixed_term_periodic_tenancy_england&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=fixed_term_periodic_tenancy_england&topic=tenancy';
+const standardAgreementHref = '/standard-tenancy-agreement';
+const premiumAgreementHref = '/premium-tenancy-agreement';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -45,9 +45,9 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
         title="Fixed Term vs Periodic Tenancy England"
         subtitle="Use this page if you are comparing fixed-term and periodic tenancy wording in England. If you need the plain-English definition first, start with the periodic tenancy guide, then come back when you are ready to compare routes."
         primaryCtaLabel="Start Standard England agreement"
-        primaryCtaHref={wizardHref}
+        primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
-        secondaryCtaHref={premiumWizardHref}
+        secondaryCtaHref={premiumAgreementHref}
         legacyNotice="Landlords still search for fixed-term and rolling tenancy language, but Landlord Heaven no longer sells a new fixed-term AST as the core England product route."
         introTitle="Compare the older wording without getting stuck in it"
         introBody={[
@@ -100,7 +100,7 @@ export default function FixedTermPeriodicTenancyEnglandPage() {
           {
             question: 'Where do I start the current England agreement flow?',
             answer:
-              'Use the CTA on this page to open the live England tenancy wizard and then choose the Standard or Premium route that matches the let.',
+              'Use the CTA on this page to move into the live England Standard or Premium route that matches the let.',
           },
         ]}
       />

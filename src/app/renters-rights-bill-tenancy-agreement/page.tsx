@@ -5,8 +5,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/renters-rights-bill-tenancy-agreement');
-const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
+const standardAgreementHref = '/standard-tenancy-agreement';
+const premiumAgreementHref = '/premium-tenancy-agreement';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -44,9 +44,9 @@ export default function RentersRightsBillTenancyAgreementPage() {
         title="Renters Rights Bill Tenancy Agreement"
         subtitle="Landlords still search using Bill phrasing, but from 1 May 2026 new England agreements generally move into the assured periodic framework. This page captures the old search language and directs it into the current England agreement routes."
         primaryCtaLabel="Start Standard England agreement"
-        primaryCtaHref={standardWizardHref}
+        primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
-        secondaryCtaHref={premiumWizardHref}
+        secondaryCtaHref={premiumAgreementHref}
         introTitle="Bill keyword, current England route"
         introBody={[
           'This page intentionally targets the phrase renters rights bill tenancy agreement because that remains a live search term used by landlords.',

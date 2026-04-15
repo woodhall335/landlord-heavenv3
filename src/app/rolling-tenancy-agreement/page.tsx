@@ -5,8 +5,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/rolling-tenancy-agreement');
-const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
+const standardAgreementHref = '/standard-tenancy-agreement';
+const premiumAgreementHref = '/premium-tenancy-agreement';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -37,9 +37,9 @@ export default function RollingTenancyAgreementPage() {
         title="Rolling Tenancy Agreement"
         subtitle="Rolling tenancy is the everyday phrase many landlords use for a periodic tenancy. This page explains that wording in plain English, then points you to the current England agreement routes if you need to create a new let."
         primaryCtaLabel="Start Standard periodic agreement"
-        primaryCtaHref={standardWizardHref}
+        primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium periodic agreement"
-        secondaryCtaHref={premiumWizardHref}
+        secondaryCtaHref={premiumAgreementHref}
         introTitle="Rolling tenancy is the everyday name for a periodic tenancy"
         introBody={[
           'When landlords say rolling tenancy, they usually mean a tenancy that continues from one rental period to the next instead of ending automatically after a fixed term.',

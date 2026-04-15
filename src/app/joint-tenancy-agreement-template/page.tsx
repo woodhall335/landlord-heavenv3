@@ -5,7 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/joint-tenancy-agreement-template');
-const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
+const standardAgreementHref = '/standard-tenancy-agreement';
 const chooserHref = '/products/ast';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
@@ -45,7 +45,7 @@ export default function JointTenancyAgreementTemplatePage() {
         title="Joint Tenancy Agreement England"
         subtitle="Create England tenancy paperwork for couples, flatmates, and multi-tenant households through the current England agreement routes."
         primaryCtaLabel="Start Standard joint agreement"
-        primaryCtaHref={standardWizardHref}
+        primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Compare England joint routes"
         secondaryCtaHref={chooserHref}
         introTitle="Multiple tenants, current England wording"

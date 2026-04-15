@@ -13,6 +13,7 @@ import {
   JurisdictionResolutionError,
 } from '@/lib/tenancy/jurisdiction';
 import { safeUpdateOrderWithMetadata } from '@/lib/payments/safe-order-metadata';
+import { resolveFulfillmentProductForCase } from '@/lib/payments/fulfillment-routing';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
 import { doesDocumentTypeMatch, toCanonicalDocumentKey } from '@/lib/documents/dashboard-document-display';
 import {
@@ -842,7 +843,7 @@ export async function fulfillOrder({
   userId,
 }: FulfillOrderInput): Promise<FulfillmentResult> {
   const supabase = createAdminClient();
-  const fulfillmentProducts = Array.from(new Set([productType, ...addOns].filter(Boolean)));
+  const requestedFulfillmentProducts = Array.from(new Set([productType, ...addOns].filter(Boolean)));
 
   // First, get case data to determine jurisdiction and route
   const { data: caseData, error: caseError } = await supabase
@@ -858,6 +859,7 @@ export async function fulfillOrder({
   const wizardFacts = (caseData as any).collected_facts || {};
   const route = wizardFacts.selected_notice_route || wizardFacts.eviction_route;
   const hasArrears = wizardFacts.has_arrears || wizardFacts.arrears_claimed;
+  const caseType = (caseData as any).case_type || null;
 
   // ===========================================================================
   // CANONICAL JURISDICTION RESOLUTION - SINGLE SOURCE OF TRUTH
@@ -896,6 +898,21 @@ export async function fulfillOrder({
     }
     throw error;
   }
+
+  const fulfillmentProducts = Array.from(
+    new Set(
+      requestedFulfillmentProducts
+        .map((sku) =>
+          resolveFulfillmentProductForCase({
+            productType: sku,
+            jurisdiction,
+            caseType,
+          }) || sku
+        )
+        .filter(Boolean)
+    )
+  );
+  const primaryFulfillmentProduct = fulfillmentProducts[0] || productType;
 
   // ==========================================================================
   // SECTION 8 COMPLETE PACK: Auto-normalize signature_date to notice_expiry_date
@@ -1135,12 +1152,13 @@ export async function fulfillOrder({
       sku === 'england_standard_tenancy_agreement' ||
       sku === 'england_premium_tenancy_agreement' ||
       sku === 'england_student_tenancy_agreement' ||
-      sku === 'england_hmo_shared_house_tenancy_agreement'
+      sku === 'england_hmo_shared_house_tenancy_agreement' ||
+      sku === 'england_lodger_agreement'
   );
   if (isTenancyAgreementProduct) {
     const tenancyValidation = validateTenancyRequiredFacts(wizardFacts as Record<string, unknown>, {
       jurisdiction: jurisdiction as any,
-      product: productType,
+      product: primaryFulfillmentProduct,
     });
     const missingTenancyFields = [
       ...tenancyValidation.missing_fields,
@@ -1156,7 +1174,7 @@ export async function fulfillOrder({
         {
           orderId,
           caseId,
-          productType,
+          productType: primaryFulfillmentProduct,
           missing_fields: missingTenancyFields,
         }
       );
@@ -1254,7 +1272,7 @@ export async function fulfillOrder({
       await safeUpdateOrderWithMetadata(
         supabase,
         orderId,
-        { fulfillment_status: 'processing' }, // Keep as processing for retry
+        { fulfillment_status: 'failed' },
         {
           total_documents: postValidation.actualCount,
           expected_documents: postValidation.expectedCount,

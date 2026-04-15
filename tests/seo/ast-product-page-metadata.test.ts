@@ -5,33 +5,36 @@ const asText = (value: unknown): string =>
   typeof value === 'string' ? value : value?.toString?.() ?? '';
 
 describe('/products/ast metadata', () => {
-  it('uses the refreshed title and description positioning', () => {
+  it('uses the England tenancy comparison positioning for landlord intent', () => {
     expect(asText(metadata.title)).toBe(
-      'Choose the Right England Agreement Type | Standard, Premium, Student, HMO and Lodger',
+      'Tenancy Agreement England | Compare Standard, Premium, Student, HMO and Lodger',
     );
 
-    expect(asText(metadata.description)).toContain('Compare the five England agreement routes');
-    expect(asText(metadata.description)).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
+    expect(asText(metadata.description)).toContain(
+      'Choose Standard, Premium, Student, HMO / Shared House, or Lodger',
+    );
     expect(asText(metadata.description)).toContain('England');
-    expect(asText(metadata.description)).not.toContain('ensure legal compliance');
+    expect(asText(metadata.description)).toContain(
+      'Compare and start the right England tenancy agreement',
+    );
   });
 
-  it('uses the refreshed Open Graph positioning', () => {
+  it('uses matching Open Graph positioning for the same broad tenancy theme', () => {
     const openGraph = metadata.openGraph ?? {};
 
     expect(asText(openGraph.title)).toBe(
-      'Choose the Right England Agreement Type | Standard, Premium, Student, HMO and Lodger',
+      'Tenancy Agreement England | Compare Standard, Premium, Student, HMO and Lodger',
     );
     expect(asText(openGraph.description)).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
-    expect(asText(openGraph.description)).toContain('England agreement type');
+    expect(asText(openGraph.description)).toContain('England');
   });
 
-  it('keeps the keywords focused on route selection rather than broad head terms', () => {
+  it('keeps the keywords focused on England tenancy agreement comparison intent', () => {
     const keywords = metadata.keywords ?? [];
     const text = Array.isArray(keywords) ? keywords.join(' ') : asText(keywords);
 
-    expect(text).toContain('england agreement types');
-    expect(text).toContain('assured periodic tenancy agreement england');
-    expect(text).not.toContain('tenancy contract');
+    expect(text).toContain('tenancy agreement england');
+    expect(text).toContain('landlord tenancy agreement england');
+    expect(text).toContain('standard tenancy agreement england');
   });
 });

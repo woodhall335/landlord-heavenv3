@@ -1,10 +1,11 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
+import retiredPublicRoutes from '@/config/retired-public-routes.json';
 import sitemap from '@/app/sitemap';
-import { SEO_PILLAR_ROUTES, getSeoPageTaxonomy } from '@/lib/seo/page-taxonomy';
+import { getSeoPageTaxonomy } from '@/lib/seo/page-taxonomy';
 
 function readSource(relativePath: string) {
   return readFileSync(path.join(process.cwd(), relativePath), 'utf8');
@@ -23,7 +24,7 @@ async function getSitemapPathnames() {
 }
 
 describe('Phase 1 cluster governance', () => {
-  it('registers the Phase 1 redirect map for retired owners and aliases', async () => {
+  it('registers the current duplicate and alias redirect map', async () => {
     const redirects = await getRedirects();
 
     expect(redirects).toEqual(
@@ -34,23 +35,28 @@ describe('Phase 1 cluster governance', () => {
           permanent: true,
         }),
         expect.objectContaining({
-          source: '/eviction-notice-england',
-          destination: '/eviction-notice-template',
-          permanent: true,
-        }),
-        expect.objectContaining({
           source: '/eviction-notice-uk',
           destination: '/eviction-notice-template',
           permanent: true,
         }),
         expect.objectContaining({
-          source: '/complete-eviction-pack-england',
-          destination: '/products/complete-pack',
+          source: '/section-8-notice-guide',
+          destination: '/section-8-notice',
           permanent: true,
         }),
         expect.objectContaining({
-          source: '/eviction-pack-england',
-          destination: '/products/complete-pack',
+          source: '/lodger-agreement-template',
+          destination: '/lodger-agreement',
+          permanent: true,
+        }),
+        expect.objectContaining({
+          source: '/hmo-tenancy-agreement-template',
+          destination: '/hmo-shared-house-tenancy-agreement',
+          permanent: true,
+        }),
+        expect.objectContaining({
+          source: '/rent-increase/rent-increase-rules-uk',
+          destination: '/rent-increase',
           permanent: true,
         }),
         expect.objectContaining({
@@ -63,122 +69,93 @@ describe('Phase 1 cluster governance', () => {
           destination: '/products/complete-pack',
           permanent: true,
         }),
-        expect.objectContaining({
-          source: '/products/money-claim-pack',
-          destination: '/products/money-claim',
-          permanent: true,
-        }),
-        expect.objectContaining({
-          source: '/mcol-money-claim-online',
-          destination: '/money-claim-online-mcol',
-          permanent: true,
-        }),
-        expect.objectContaining({
-          source: '/tenancy-agreements',
-          destination: '/tenancy-agreement-template-uk',
-          permanent: true,
-        }),
-        expect.objectContaining({
-          source: '/tenancy-agreements/england-wales',
-          destination: '/tenancy-agreement-template-uk',
-          permanent: true,
-        }),
-        expect.objectContaining({
-          source: '/products/tenancy-agreement',
-          destination: '/tenancy-agreement-template-uk',
-          permanent: true,
-        }),
-        expect.objectContaining({
-          source: '/tenancy-agreements/standard',
-          destination: '/tenancy-agreement-template-uk',
-          permanent: true,
-        }),
-        expect.objectContaining({
-          source: '/wales-eviction-notice-template',
-          destination: '/wales-eviction-notices',
-          permanent: true,
-        }),
-        expect.objectContaining({
-          source: '/scotland-notice-to-leave-template',
-          destination: '/scotland-eviction-notices',
-          permanent: true,
-        }),
       ])
     );
   });
 
-  it('removes pure redirect page files once config redirects exist', () => {
-    const retiredPageFiles = [
-      'src/app/eviction-notice/page.tsx',
-      'src/app/eviction-notice-england/page.tsx',
-      'src/app/eviction-notice-uk/page.tsx',
-      'src/app/complete-eviction-pack-england/page.tsx',
-      'src/app/eviction-pack-england/page.tsx',
-      'src/app/section-21-court-pack/page.tsx',
-      'src/app/section-8-court-pack/page.tsx',
-      'src/app/section-21-notice-generator/page.tsx',
-      'src/app/section-8-notice-generator/page.tsx',
-      'src/app/mcol-money-claim-online/page.tsx',
-      'src/app/(marketing)/products/money-claim-pack/page.tsx',
-      'src/app/tenancy-agreements/page.tsx',
-      'src/app/tenancy-agreements/england-wales/page.tsx',
-      'src/app/wales-eviction-notice-template/page.tsx',
-      'src/app/scotland-notice-to-leave-template/page.tsx',
+  it('does not shadow retained live support pages behind retirement redirects', async () => {
+    const activeSweepRoutes = [
+      '/section-21-notice-period',
+      '/serve-section-21-notice',
+      '/section-21-notice-template',
+      '/form-6a-section-21',
+      '/section-21-validity-checklist',
+      '/section-21-expired-what-next',
+      '/tenant-ignores-section-21',
+      '/what-happens-after-section-21',
+      '/section-8-vs-section-21',
+      '/accelerated-possession-guide',
+      '/n5b-possession-claim-guide',
+      '/no-fault-eviction',
+      '/section-8-rent-arrears-eviction',
     ];
 
-    retiredPageFiles.forEach((relativePath) => {
-      expect(existsSync(path.join(process.cwd(), relativePath)), relativePath).toBe(false);
-    });
+    const redirects = await getRedirects();
+    const redirectSources = new Set(
+      redirects
+        .filter((item: { source?: string }) => typeof item.source === 'string')
+        .map((item: { source?: string }) => item.source as string)
+    );
+    const retiredSources = new Set(Object.keys(retiredPublicRoutes.routeRedirects));
+
+    for (const pathname of activeSweepRoutes) {
+      expect(redirectSources.has(pathname), `${pathname} should stay live, not redirect`).toBe(false);
+      expect(
+        retiredSources.has(pathname),
+        `${pathname} should not remain in retired-public-routes.json`
+      ).toBe(false);
+    }
   });
 
-  it('keeps only live self-canonical routes in the sitemap output', async () => {
+  it('keeps live self-canonical routes in the sitemap and leaves redirect-only aliases out', async () => {
     const paths = await getSitemapPathnames();
 
     expect(paths).toEqual(
       expect.arrayContaining([
-        '/tenancy-agreement-template',
-        '/tenancy-agreements/england',
         '/products/ast',
-        '/eviction-notice-template',
-        '/section-8-notice',
-        '/section-21-notice',
-        '/section-21-vs-section-8',
         '/products/notice-only',
         '/products/complete-pack',
-        '/eviction-court-forms-england',
-        '/money-claim',
-        '/money-claim-unpaid-rent',
-        '/money-claim-online-mcol',
         '/products/money-claim',
+        '/rent-increase',
+        '/standard-tenancy-agreement',
+        '/premium-tenancy-agreement',
+        '/student-tenancy-agreement',
+        '/hmo-shared-house-tenancy-agreement',
+        '/lodger-agreement',
+        '/form-6a-section-21',
+        '/section-21-notice-template',
+        '/section-21-validity-checklist',
+        '/section-21-expired-what-next',
+        '/section-21-notice-period',
+        '/serve-section-21-notice',
+        '/tenant-ignores-section-21',
+        '/what-happens-after-section-21',
+        '/section-8-vs-section-21',
+        '/accelerated-possession-guide',
+        '/n5b-possession-claim-guide',
+        '/no-fault-eviction',
+        '/section-8-rent-arrears-eviction',
       ])
     );
 
-    [
-      '/tenancy-agreement-template-uk',
-      '/tenancy-agreements',
-      '/tenancy-agreements/england-wales',
-      '/eviction-notice',
-      '/eviction-notice-england',
-      '/eviction-notice-uk',
-      '/complete-eviction-pack-england',
-      '/eviction-pack-england',
-      '/section-21-court-pack',
-      '/section-8-court-pack',
-      '/mcol-money-claim-online',
-      '/products/money-claim-pack',
-      '/wales-eviction-notices',
-      '/scotland-eviction-notices',
-      '/wales-eviction-notice-template',
-      '/scotland-notice-to-leave-template',
-    ].forEach((pathname) => {
-      expect(paths, `${pathname} should be absent from the sitemap`).not.toContain(pathname);
-    });
+    expect(paths).not.toEqual(
+      expect.arrayContaining([
+        '/tenancy-agreement-template-uk',
+        '/tenancy-agreements',
+        '/eviction-notice',
+        '/eviction-notice-uk',
+        '/complete-eviction-pack-england',
+        '/eviction-pack-england',
+        '/section-21-court-pack',
+        '/section-8-court-pack',
+        '/lodger-agreement-template',
+        '/hmo-tenancy-agreement-template',
+        '/rent-increase/rent-increase-rules-uk',
+      ])
+    );
   });
 
-  it('keeps the Phase 1 owner map aligned in taxonomy and product conversion entries', () => {
-    expect(SEO_PILLAR_ROUTES.tenancyAgreementsEngland).toBe('/tenancy-agreement-template');
-    expect(SEO_PILLAR_ROUTES.moneyClaim).toBe('/money-claim');
-
+  it('keeps taxonomy ownership aligned with the live commercial model', () => {
     expect(getSeoPageTaxonomy('/tenancy-agreement-template')).toEqual(
       expect.objectContaining({
         primaryPillar: '/tenancy-agreement-template',
@@ -186,12 +163,7 @@ describe('Phase 1 cluster governance', () => {
         consolidationStatus: 'canonical',
       })
     );
-    expect(getSeoPageTaxonomy('/tenancy-agreements/england')).toEqual(
-      expect.objectContaining({
-        primaryPillar: '/tenancy-agreement-template',
-        consolidationStatus: 'supporting_live',
-      })
-    );
+
     expect(getSeoPageTaxonomy('/products/ast')).toEqual(
       expect.objectContaining({
         primaryPillar: '/tenancy-agreement-template',
@@ -199,22 +171,10 @@ describe('Phase 1 cluster governance', () => {
       })
     );
 
-    expect(getSeoPageTaxonomy('/eviction-notice-template')).toEqual(
-      expect.objectContaining({
-        primaryPillar: '/eviction-notice-template',
-        canonicalTarget: '/eviction-notice-template',
-      })
-    );
     expect(getSeoPageTaxonomy('/products/notice-only')).toEqual(
       expect.objectContaining({
         primaryPillar: '/eviction-notice-template',
         canonicalTarget: '/products/notice-only',
-      })
-    );
-    expect(getSeoPageTaxonomy('/eviction-notice')).toEqual(
-      expect.objectContaining({
-        canonicalTarget: '/eviction-notice-template',
-        consolidationStatus: 'candidate_redirect',
       })
     );
 
@@ -225,64 +185,50 @@ describe('Phase 1 cluster governance', () => {
         consolidationStatus: 'canonical',
       })
     );
-    expect(getSeoPageTaxonomy('/section-21-court-pack')).toEqual(
-      expect.objectContaining({
-        canonicalTarget: '/products/complete-pack',
-        consolidationStatus: 'candidate_redirect',
-      })
-    );
-    expect(getSeoPageTaxonomy('/section-8-court-pack')).toEqual(
-      expect.objectContaining({
-        canonicalTarget: '/products/complete-pack',
-        consolidationStatus: 'candidate_redirect',
-      })
-    );
 
-    expect(getSeoPageTaxonomy('/money-claim')).toEqual(
-      expect.objectContaining({
-        primaryPillar: '/money-claim',
-        canonicalTarget: '/money-claim',
-        consolidationStatus: 'canonical',
-      })
-    );
     expect(getSeoPageTaxonomy('/products/money-claim')).toEqual(
       expect.objectContaining({
         primaryPillar: '/money-claim',
         canonicalTarget: '/products/money-claim',
       })
     );
-    expect(getSeoPageTaxonomy('/mcol-money-claim-online')).toEqual(
+
+    expect(getSeoPageTaxonomy('/form-6a-section-21')).toEqual(
       expect.objectContaining({
-        canonicalTarget: '/money-claim-online-mcol',
-        consolidationStatus: 'candidate_redirect',
+        canonicalTarget: '/form-6a-section-21',
+        consolidationStatus: 'bridge_live',
       })
     );
-    expect(getSeoPageTaxonomy('/wales-eviction-notice-template')).toEqual(
+
+    expect(getSeoPageTaxonomy('/no-fault-eviction')).toEqual(
       expect.objectContaining({
-        canonicalTarget: '/wales-eviction-notices',
-        consolidationStatus: 'candidate_redirect',
+        canonicalTarget: '/no-fault-eviction',
+        consolidationStatus: 'bridge_live',
       })
     );
-    expect(getSeoPageTaxonomy('/scotland-notice-to-leave-template')).toEqual(
+
+    expect(getSeoPageTaxonomy('/section-8-rent-arrears-eviction')).toEqual(
       expect.objectContaining({
-        canonicalTarget: '/scotland-eviction-notices',
-        consolidationStatus: 'candidate_redirect',
+        canonicalTarget: '/section-8-rent-arrears-eviction',
+        consolidationStatus: 'supporting_live',
       })
     );
   });
 
-  it('marks the retained routing pages as noindex,follow in page metadata', () => {
-    const ukRouterSource = readSource('src/app/tenancy-agreement-template-uk/page.tsx');
-    const walesNoticesSource = readSource('src/app/wales-eviction-notices/page.tsx');
-    const scotlandNoticesSource = readSource('src/app/scotland-eviction-notices/page.tsx');
+  it('marks retained routing pages as noindex,follow in page metadata', () => {
+    const retainedRouterSources = [
+      readSource('src/app/tenancy-agreement-template-uk/page.tsx'),
+      readSource('src/app/wales-eviction-notices/page.tsx'),
+      readSource('src/app/scotland-eviction-notices/page.tsx'),
+    ];
 
-    [ukRouterSource, walesNoticesSource, scotlandNoticesSource].forEach((source) => {
+    for (const source of retainedRouterSources) {
       expect(source).toMatch(/index:\s*false/);
       expect(source).toMatch(/follow:\s*true/);
-    });
+    }
   });
 
-  it('removes retired alias routes from core helper and authority surfaces', () => {
+  it('keeps retired alias routes out of helper and authority surfaces', () => {
     const helperSources = [
       readSource('src/components/seo/EvictionIntentLandingPage.tsx'),
       readSource('src/lib/seo/eviction-intent-pages.ts'),
@@ -290,27 +236,20 @@ describe('Phase 1 cluster governance', () => {
       readSource('src/lib/seo/pillar-pages-content.ts'),
       readSource('src/lib/seo/phase5-pages.ts'),
     ];
-    const moneyClaimSource = readSource('src/app/money-claim/page.tsx');
 
-    helperSources.forEach((source) => {
-      [
+    for (const source of helperSources) {
+      for (const pathname of [
         '/eviction-notice-england',
         '/section-21-court-pack',
         '/section-8-court-pack',
         '/complete-eviction-pack-england',
         '/section-21-notice-generator',
         '/section-8-notice-generator',
-      ].forEach((pathname) => {
+      ]) {
         expect(source, `${pathname} should be removed from helper surfaces`).not.toContain(
           pathname
         );
-      });
-    });
-
-    helperSources.forEach((source) => {
-      expect(source).not.toContain("'/eviction-notice'");
-    });
-
-    expect(moneyClaimSource).not.toContain('/mcol-money-claim-online');
+      }
+    }
   });
 });

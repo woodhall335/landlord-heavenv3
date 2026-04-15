@@ -256,15 +256,6 @@ function daysInclusive(startDate: Date, endDate: Date): number {
   return diffDays + 1; // +1 because both start and end are inclusive
 }
 
-/**
- * Get the number of days in a calendar month.
- */
-function getDaysInMonth(date: Date): number {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  return new Date(year, month + 1, 0).getDate();
-}
-
 // ============================================================================
 // ARREARS COMPUTATION
 // ============================================================================
@@ -492,14 +483,12 @@ export function validateGround8Eligibility(params: {
   if (jurisdiction === 'england') {
     explanation = is_eligible
       ? `Ground 8 threshold MET: ${computed.arrears_in_months.toFixed(2)} months of arrears ` +
-        `(threshold: ${threshold_label}). Total arrears: Â£${computed.total_arrears.toFixed(2)}.`
+        `(threshold: ${threshold_label}). Total arrears: GBP ${computed.total_arrears.toFixed(2)}.`
       : `Ground 8 threshold NOT MET: ${computed.arrears_in_months.toFixed(2)} months of arrears ` +
-        `(threshold: ${threshold_label}). Current arrears: Â£${computed.total_arrears.toFixed(2)}. ` +
+        `(threshold: ${threshold_label}). Current arrears: GBP ${computed.total_arrears.toFixed(2)}. ` +
         `Additional arrears are required before Ground 8 can be relied on.`;
   }
-
-  explanation = explanation.replace(/Ã‚Â£|Â£/g, 'GBP ');
-
+  explanation = explanation.replace(/\\u00A3/g, 'GBP ');
   return {
     is_eligible,
     arrears_in_months: computed.arrears_in_months,

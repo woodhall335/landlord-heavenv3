@@ -520,15 +520,15 @@ export default function MoneyClaimOnlineMCOLPage() {
         <section className="py-10 bg-white">
           <Container>
             <div className="mx-auto max-w-4xl">
-              <FunnelCta
-                title="Need the right route for your case?"
-                subtitle="Continue your money claim or go back to the decision hub."
-                primaryHref="/products/money-claim"
-                primaryText="Continue with money claim"
-                primaryDataCta="money-claim"
-                location="bottom"
-                secondaryLinks={[{ href: '/tenant-not-paying-rent', text: 'Back to tenant not paying rent hub' }]}
-              />
+                <FunnelCta
+                  title="Need the right route for your case?"
+                  subtitle="Continue your money claim or go back to the decision guide."
+                  primaryHref="/products/money-claim"
+                  primaryText="Continue with money claim"
+                  primaryDataCta="money-claim"
+                  location="bottom"
+                  secondaryLinks={[{ href: '/tenant-not-paying-rent', text: 'Back to tenant not paying rent guide' }]}
+                />
             </div>
           </Container>
         </section>
@@ -536,4 +536,3 @@ export default function MoneyClaimOnlineMCOLPage() {
     </>
   );
 }
-

@@ -4,7 +4,6 @@ import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import {
   StructuredData,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -15,17 +14,17 @@ const faqs = [
   {
     question: 'What is this England tenancy agreement guide for now?',
     answer:
-      'It is a support page for landlords who want context on the England routes and the terminology shift from older AST wording. If you want the actual example-led template experience, move to the main England template hub first.',
+      'It is a support page for landlords who want context on the England routes and the terminology shift from older AST wording. If you want to inspect a real agreement example first, move to /tenancy-agreement-template.',
   },
   {
-    question: 'Does this page replace the tenancy agreement template hub?',
+    question: 'Does this page replace the England agreement example page?',
     answer:
-      'No. The broad England owner is /tenancy-agreement-template. This guide stays live to support broader agreement-intent searches without competing with the template-first hub.',
+      'No. The broad England example page is /tenancy-agreement-template. This guide stays live to support broader agreement-intent searches without competing with the example page.',
   },
   {
     question: 'Should I go to /products/ast first from here?',
     answer:
-      'Not for broad template intent. Broad users should move to the England template hub first. The comparison page is a downstream option for landlords who need every route shown side by side after they have seen the main hub.',
+      'Only if you already know you want to compare all five England routes. If you want to inspect a real agreement example first, start with /tenancy-agreement-template and then move to /products/ast when you are ready to compare routes side by side.',
   },
 ] as const;
 
@@ -34,7 +33,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'England Tenancy Agreement Guide | Support Page',
   description:
-    'Support guide for landlords using England tenancy agreement wording, with the main route back to the England tenancy agreement template hub.',
+    'Support guide for landlords using England tenancy agreement wording, with clear routes into the England agreement example page and comparison page.',
   keywords: [
     'england tenancy agreement guide',
     'england tenancy agreement',
@@ -46,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'England Tenancy Agreement Guide | Support Page',
     description:
-      'Support page explaining England tenancy agreement wording and routing landlords back to the main template-first hub.',
+      'Support page explaining England tenancy agreement wording and routing landlords into the example page or comparison page.',
     url: canonicalUrl,
     type: 'website',
     locale: 'en_GB',
@@ -56,7 +55,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'England Tenancy Agreement Guide | Support Page',
     description:
-      'Support page for England tenancy agreement terminology and next steps back to the main template hub.',
+      'Support page for England tenancy agreement terminology and next steps into the example page or comparison page.',
   },
   robots: {
     index: true,
@@ -74,33 +73,31 @@ export default function EnglandTenancyAgreementsPage() {
           { name: 'England Tenancy Agreement Guide', url: canonicalUrl },
         ])}
       />
-      <StructuredData data={faqPageSchema([...faqs])} />
-
       <EnglandTenancyPage
         pagePath={pagePath}
         title="England Tenancy Agreement Guide"
-        subtitle="Use this page as a support guide for England terminology and route context, then move to the England template hub first if you want the real agreement example and the main template-led journey."
-        primaryCtaLabel="View the England tenancy agreement template"
+        subtitle="Use this page as a support guide for England terminology and route context, then move to the England agreement example or comparison page when you are ready to choose the right route."
+        primaryCtaLabel="View the England agreement example"
         primaryCtaHref="/tenancy-agreement-template"
         secondaryCtaLabel="Start Standard Tenancy Agreement"
         secondaryCtaHref="/standard-tenancy-agreement"
-        legacyNotice="This page stays live as a support guide. It captures broader England tenancy-agreement searches and older AST-led wording, but the template-first owner remains /tenancy-agreement-template."
+        legacyNotice="This page stays live as a support guide. It captures broader England tenancy-agreement searches and older AST-led wording, while the main example page remains /tenancy-agreement-template."
         introTitle="Why this England guide still exists"
         introBody={[
-          'Landlords do not always arrive with clean template-first intent. Some want the document example immediately, while others want context on the wording shift from older AST terminology or reassurance that they are still in the right England cluster.',
-          'That is why this page remains live as support content. Its job is to explain the route landscape, keep England-specific terminology straight, and move users to the England template hub first instead of pushing broad users straight into a comparison or checkout surface.',
-          'Once the main hub has satisfied the broad template question, landlords can branch into Standard, Premium, the specialist routes, or the full route-selection page if they still need side-by-side comparison.',
+          'Landlords do not always arrive with clean template-first intent. Some want the document example immediately, while others want context on the wording shift from older AST terminology or reassurance that they are still on the right England route.',
+          'That is why this page remains live as support content. Its job is to explain the route landscape, keep England-specific terminology straight, and move users to the England agreement example or comparison page instead of leaving them with a vague overview.',
+          'Once the example page has satisfied the broad template question, landlords can branch into Standard, Premium, the specialist routes, or the full comparison page if they still need side-by-side help.',
         ]}
         highlights={[
-          'Keeps the England agreement cluster discoverable without trying to replace the main template-first hub',
+          'Keeps the England agreement pages discoverable without trying to replace the main example page',
           'Explains how Standard and Premium fit the default mainstream England journey',
           'Keeps Student, HMO / Shared House, and Lodger as separate specialist branches when the facts demand them',
-          'Routes AST and assured periodic terminology back into the main template destination instead of letting support pages compete',
+          'Routes AST and assured periodic terminology back into the main agreement pages instead of letting support pages compete',
         ]}
         compliancePoints={[
-          'Broad England template intent now belongs to /tenancy-agreement-template, not this support page',
+          'Broad England example intent now belongs to /tenancy-agreement-template, not this support page',
           'The page is careful with current England wording while still acknowledging older AST search behaviour',
-          'Primary user journey moves back to the main template hub before any side-by-side product comparison',
+          'Primary user journey moves into the agreement example page before any side-by-side product comparison',
         ]}
         keywordTargets={[
           'england tenancy agreement',
@@ -111,11 +108,11 @@ export default function EnglandTenancyAgreementsPage() {
         faqs={[...faqs]}
         routeComparison={[
           {
-            title: 'Main England template hub',
+            title: 'England agreement example',
             description:
               'See the sample agreement preview first, then move into Standard or Premium once the template intent has been satisfied.',
             href: '/tenancy-agreement-template',
-            ctaLabel: 'Open the hub',
+            ctaLabel: 'View agreement example',
           },
           {
             title: 'Standard tenancy agreement',
@@ -129,7 +126,7 @@ export default function EnglandTenancyAgreementsPage() {
             description:
               'Use the comparison page only if you still need Standard, Premium, Student, HMO / Shared House, and Lodger shown side by side.',
             href: '/products/ast',
-            ctaLabel: 'Compare routes',
+            ctaLabel: 'Compare England routes',
           },
         ]}
       />

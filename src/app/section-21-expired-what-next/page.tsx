@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import {
   StructuredData,
   breadcrumbSchema,
@@ -14,22 +13,28 @@ import { SeoCtaBlock, SeoDisclaimer } from '@/components/seo/SeoCtaBlock';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
-import { evictionRelatedLinks } from '@/lib/seo/internal-links';
+import { currentEnglandFrameworkLinks, evictionRelatedLinks } from '@/lib/seo/internal-links';
 import { FunnelCta } from '@/components/funnels';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   CheckCircle,
   AlertTriangle,
-  ArrowRight,
   FileText,
   Shield,
   Gavel,
   AlertCircle,
-  XCircle,
 } from 'lucide-react';
 
 const completePackProductHref = '/products/complete-pack';
 const noticeOnlyProductHref = '/products/notice-only';
+const currentEnglandRouteLinks = currentEnglandFrameworkLinks.filter((link) =>
+  [
+    '/renters-rights-act-eviction-rules',
+    '/section-8-notice',
+    '/form-3-section-8',
+    '/eviction-process-england',
+  ].includes(link.href)
+);
 
 const faqs = [
   {
@@ -180,6 +185,17 @@ export default function Section21ExpiredPage() {
                   },
                   { href: '/n5b-form-guide', text: 'Accelerated possession (N5B)' },
                 ]}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="pb-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <RelatedLinks
+                title="Current England route after Section 21 search intent"
+                links={currentEnglandRouteLinks}
               />
             </div>
           </div>

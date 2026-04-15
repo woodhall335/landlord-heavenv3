@@ -114,7 +114,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   // === HEADER ===
   drawText('CERTIFICATE OF SERVICE', margin, y, helveticaBold, 18);
   y -= 10;
-  drawText('(Proof of Service)', margin, y, helvetica, 12, gray);
+  drawText('(Proof of Service - support record only, not a prescribed court form)', margin, y, helvetica, 12, gray);
   y -= 30;
 
   // Header line
@@ -124,7 +124,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   // === WARNING BOX ===
   page.drawRectangle({ x: margin, y: y - 55, width: width - margin * 2, height: 55, color: warningYellow, borderColor: warningBorder, borderWidth: 2 });
   y -= 10;
-  drawText('⚠ IMPORTANT: You must complete all service details yourself', margin + 10, y, helveticaBold, 10);
+  drawText('IMPORTANT: This is a support record, not an official prescribed form', margin + 10, y, helveticaBold, 10);
   y -= 15;
   drawText('This form has been pre-filled with case information. You MUST:', margin + 10, y, helvetica, 9);
   y -= 12;

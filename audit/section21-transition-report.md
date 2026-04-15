@@ -1,10 +1,10 @@
 # Section 21 Transition Audit
 
-Generated: 2026-04-05T18:20:08.297Z
+Generated: 2026-04-15T10:56:26.379Z
 
 ## Summary
-- Files scanned: 2192
-- Legacy-term matches: 8832
+- Files scanned: 2397
+- Legacy-term matches: 8911
 - Active current-facing violations: 0
 - Form 3 terminology violations: 0
 - Marketing pages below 1200 words: 0
@@ -19,13 +19,13 @@ Generated: 2026-04-05T18:20:08.297Z
 - /eviction-notice-template
 
 ## Marketing Word Counts
-- form-3-section-8: 2076 words
-- section-8-notice: 1910 words
-- renters-rights-act-eviction-rules: 1866 words
+- form-3-section-8: 2083 words
+- section-8-notice: 1930 words
+- renters-rights-act-eviction-rules: 1873 words
 - eviction-notice-england: 1738 words
-- how-to-evict-a-tenant-england: 1688 words
-- eviction-process-england: 1576 words
-- eviction-notice-template: 1616 words
+- how-to-evict-a-tenant-england: 1703 words
+- eviction-process-england: 1585 words
+- eviction-notice-template: 1627 words
 
 ## Redirects Applied
 - /guarantor-agreement-england -> /tenancy-agreement-template
@@ -45,10 +45,10 @@ Generated: 2026-04-05T18:20:08.297Z
 - /tools/free-section-8-notice-generator -> /eviction-notice-england
 - /section-21-ban -> /section-21-ban-uk
 - /section-21-notice-guide -> /section-21-notice
+- /section-21-notice-generator -> /section-21-notice
 - /section-21-notice-period -> /section-21-notice
 - /serve-section-21-notice -> /section-21-notice
 - /section-21-notice-template -> /section-21-notice
-- /section-21-notice-generator -> /section-21-notice
 - /form-6a-section-21 -> /section-21-notice
 - /section-21-validity-checklist -> /section-21-notice
 - /section-21-checklist -> /section-21-notice

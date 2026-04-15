@@ -7,19 +7,26 @@
  * each cluster. Product links stay transactional.
  */
 
+const dedupeLinksByHref = <T extends { href: string }>(links: readonly T[]): T[] =>
+  links.filter(
+    (link, index) => links.findIndex((candidate) => candidate.href === link.href) === index
+  );
+
 
 export const productLinks = {
   noticeOnly: {
     href: '/products/notice-only',
-    title: 'Notice Only Pack',
-    description: 'Create and check the notice pack for the route you are serving.',
+    title: 'Eviction Notice Pack for Landlords',
+    description:
+      'Evict a tenant legally with the right notice pack for the route you are serving.',
     icon: 'document' as const,
     type: 'product' as const,
   },
   completePack: {
     href: '/products/complete-pack',
-    title: 'Complete Eviction Bundle',
-    description: 'Full eviction package with court forms and guidance.',
+    title: 'Complete Eviction Pack for Landlords',
+    description:
+      'Evict a tenant through court with the notice, court forms, and guidance in one pack.',
     icon: 'legal' as const,
     type: 'product' as const,
   },
@@ -32,8 +39,8 @@ export const productLinks = {
   },
   tenancyAgreement: {
     href: '/products/ast',
-    title: 'England Agreement Type Comparison',
-    description: 'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes.',
+    title: 'England Tenancy Agreements for Landlords',
+    description: 'Compare and start the right England tenancy agreement route for the let.',
     icon: 'document' as const,
     type: 'product' as const,
   },
@@ -138,16 +145,16 @@ export const blogLinks = {
 
 export const landingPageLinks = {
   section21Template: {
-    href: '/eviction-notice-template',
-    title: 'England Notice Hub',
-    description: 'Current England notice owner with route guidance and next steps',
+    href: '/products/notice-only',
+    title: 'Eviction Notice Pack for Landlords',
+    description: 'Broad England notice owner for landlords who need to evict a tenant legally.',
     icon: 'document' as const,
     type: 'page' as const,
   },
   evictionTemplate: {
-    href: '/eviction-notice-template',
-    title: 'Eviction Notice Template',
-    description: 'England notice owner with the broad route and next steps',
+    href: '/products/notice-only',
+    title: 'Eviction Notice Pack',
+    description: 'Broad pre-court eviction owner for landlords who need the right notice.',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -167,8 +174,8 @@ export const landingPageLinks = {
   },
   tenancyTemplate: {
     href: '/tenancy-agreement-template',
-    title: 'Tenancy Agreement Template for England',
-    description: 'Real England tenancy agreement example with a route into Standard and Premium',
+    title: 'England Tenancy Agreement Example',
+    description: 'Support page with a real England example and a route into the product pages.',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -203,21 +210,49 @@ export const guideLinks = {
   howToEvictTenant: {
     href: '/how-to-evict-tenant',
     title: 'How to Evict a Tenant UK',
-    description: 'Complete UK eviction guide',
+    description: 'UK comparison guide that routes England landlords into the current framework.',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
   evictionProcessUk: {
     href: '/eviction-process-uk',
     title: 'Eviction Process UK',
-    description: 'Step-by-step eviction process guide',
+    description: 'UK process overview that routes England cases into the post-1 May 2026 workflow.',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  rentersRightsActEvictionRules: {
+    href: '/renters-rights-act-eviction-rules',
+    title: "Renters' Rights Act Eviction Rules",
+    description: 'Main England owner page for eviction rules after 1 May 2026.',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
   section8Notice: {
     href: '/section-8-notice',
-    title: 'Section 8 Notice Guide',
-    description: 'Current grounds-based possession notice guide for England',
+    title: 'Section 8 Notice',
+    description: 'Main England owner page for Section 8 notice intent, grounds, and evidence.',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  form3aSection8: {
+    href: '/form-3-section-8',
+    title: 'Form 3A',
+    description: 'Exact England owner page for Form 3A and Section 8 notice-form intent.',
+    icon: 'document' as const,
+    type: 'guide' as const,
+  },
+  howToEvictTenantEngland: {
+    href: '/how-to-evict-a-tenant-england',
+    title: 'How to Evict a Tenant in England',
+    description: 'Current England step-by-step guide for landlords after 1 May 2026.',
+    icon: 'legal' as const,
+    type: 'guide' as const,
+  },
+  evictionProcessEngland: {
+    href: '/eviction-process-england',
+    title: 'Eviction Process in England',
+    description: 'Current England notice-to-court possession process for landlords.',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
@@ -250,9 +285,10 @@ export const guideLinks = {
     type: 'guide' as const,
   },
   moneyClaimGuide: {
-    href: '/money-claim',
-    title: 'Money Claim Guide',
-    description: 'England landlord guide to starting a money claim',
+    href: '/products/money-claim',
+    title: 'Landlord Money Claim Pack',
+    description:
+      'Recover unpaid rent, damage, and tenant debt with the landlord money claim pack.',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
@@ -299,6 +335,18 @@ export const guideLinks = {
     type: 'guide' as const,
   },
 };
+
+export const currentEnglandFrameworkLinks = dedupeLinksByHref([
+  guideLinks.rentersRightsActEvictionRules,
+  guideLinks.section8Notice,
+  guideLinks.form3aSection8,
+  guideLinks.howToEvictTenantEngland,
+  guideLinks.evictionProcessEngland,
+]);
+
+export function getCurrentEnglandFrameworkLinks(currentPathname?: string) {
+  return currentEnglandFrameworkLinks.filter((link) => link.href !== currentPathname);
+}
 
 // Money Claim SEO Landing Pages (Q1 2026 Expansion)
 export const moneyClaimGuides = {
@@ -570,50 +618,50 @@ export const moneyClaimBlogs = {
 };
 
 // Pre-built link groups for common use cases
-export const evictionRelatedLinks = [
+export const evictionRelatedLinks = dedupeLinksByHref([
+  productLinks.noticeOnly,
+  ...currentEnglandFrameworkLinks,
   landingPageLinks.evictionTemplate,
-  guideLinks.section8Notice,
   guideLinks.section21Notice,
   guideLinks.howToEvictTenant,
-  productLinks.noticeOnly,
   productLinks.completePack,
   guideLinks.walesEviction,
   guideLinks.scotlandEviction,
-];
+]);
 
-export const section21RelatedLinks = [
+export const section21RelatedLinks = dedupeLinksByHref([
+  productLinks.noticeOnly,
+  ...currentEnglandFrameworkLinks,
   landingPageLinks.evictionTemplate,
-  guideLinks.section8Notice,
   guideLinks.section21Notice,
   guideLinks.section21BanUk,
-  productLinks.noticeOnly,
   blogLinks.whatIsSection21,
   productLinks.completePack,
-];
+]);
 
-export const section8RelatedLinks = [
-  landingPageLinks.evictionTemplate,
-  guideLinks.section8Notice,
-  guideLinks.section21Notice,
+export const section8RelatedLinks = dedupeLinksByHref([
   productLinks.noticeOnly,
+  ...currentEnglandFrameworkLinks,
+  landingPageLinks.evictionTemplate,
+  guideLinks.section21Notice,
   productLinks.completePack,
   toolLinks.section8Validator,
   toolLinks.section8Generator,
   blogLinks.rentArrearsEviction,
-];
+]);
 
-export const rentArrearsRelatedLinks = [
+export const rentArrearsRelatedLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.unpaidRent,
   productLinks.moneyClaim,
   toolLinks.rentDemandLetter,
   toolLinks.rentArrearsCalculator,
   landingPageLinks.rentArrearsTemplate,
-];
+]);
 
 export const tenancyRelatedLinks = [
-  landingPageLinks.tenancyTemplate,
   productLinks.tenancyAgreement,
+  landingPageLinks.tenancyTemplate,
 ];
 
 // Ask Heaven - Free Q&A tool (defined early so it can be used in jurisdiction link groups)
@@ -642,7 +690,7 @@ export const scotlandRelatedLinks = [
   productLinks.noticeOnly,
 ];
 
-export const moneyClaimRelatedLinks = [
+export const moneyClaimRelatedLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.unpaidRent,
   moneyClaimForms.letterBeforeAction,
@@ -650,7 +698,7 @@ export const moneyClaimRelatedLinks = [
   productLinks.moneyClaim,
   toolLinks.rentArrearsCalculator,
   toolLinks.rentDemandLetter,
-];
+]);
 
 // Ask Heaven related links group
 export const askHeavenRelatedLinks = [
@@ -677,14 +725,14 @@ export const evictionWithAdviceLinks = [
 ];
 
 // Updated rent arrears links to include Ask Heaven
-export const rentArrearsWithAdviceLinks = [
+export const rentArrearsWithAdviceLinks = dedupeLinksByHref([
   askHeavenLink,
   guideLinks.moneyClaimGuide,
   productLinks.moneyClaim,
   toolLinks.rentDemandLetter,
   toolLinks.rentArrearsCalculator,
   landingPageLinks.rentArrearsTemplate,
-];
+]);
 
 // SEO page related link groups (Q1/Q2 2026)
 export const tenantWontLeaveRelatedLinks = [
@@ -698,7 +746,7 @@ export const tenantWontLeaveRelatedLinks = [
   guideLinks.possessionClaimGuide,
 ];
 
-export const tenantNotPayingRentRelatedLinks = [
+export const tenantNotPayingRentRelatedLinks = dedupeLinksByHref([
   guideLinks.tenantNotPayingRent,
   guideLinks.section8Notice,
   guideLinks.section21BanUk,
@@ -708,18 +756,18 @@ export const tenantNotPayingRentRelatedLinks = [
   toolLinks.section8Generator,
   toolLinks.rentDemandLetter,
   toolLinks.rentArrearsCalculator,
-];
+]);
 
-export const possessionClaimRelatedLinks = [
+export const possessionClaimRelatedLinks = dedupeLinksByHref([
   productLinks.completePack,
   productLinks.noticeOnly,
   guideLinks.n5bFormGuide,
   guideLinks.warrantOfPossession,
   landingPageLinks.section21Template,
   landingPageLinks.section8Template,
-];
+]);
 
-export const evictionCostRelatedLinks = [
+export const evictionCostRelatedLinks = dedupeLinksByHref([
   guideLinks.howToEvictTenant,
   guideLinks.evictionProcessUk,
   guideLinks.section8Notice,
@@ -728,15 +776,15 @@ export const evictionCostRelatedLinks = [
   guideLinks.possessionClaimGuide,
   guideLinks.moneyClaimGuide,
   toolLinks.rentArrearsCalculator,
-];
+]);
 
-export const n5bFormRelatedLinks = [
+export const n5bFormRelatedLinks = dedupeLinksByHref([
   productLinks.completePack,
   guideLinks.possessionClaimGuide,
   guideLinks.warrantOfPossession,
   landingPageLinks.section21Template,
   toolLinks.section21Validator,
-];
+]);
 
 export const warrantOfPossessionRelatedLinks = [
   productLinks.completePack,
@@ -751,7 +799,7 @@ export const warrantOfPossessionRelatedLinks = [
 // ============================================
 
 // General money claim links (for hub pages)
-export const moneyClaimHubLinks = [
+export const moneyClaimHubLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.unpaidRent,
   moneyClaimGuides.unpaidBills,
@@ -762,10 +810,10 @@ export const moneyClaimHubLinks = [
   moneyClaimGuides.unpaidUtilities,
   toolLinks.rentArrearsCalculator,
   toolLinks.rentDemandLetter,
-];
+]);
 
 // Property damage focused links
-export const moneyClaimDamageLinks = [
+export const moneyClaimDamageLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.propertyDamage,
   moneyClaimGuides.carpetDamage,
@@ -776,10 +824,10 @@ export const moneyClaimDamageLinks = [
   moneyClaimGuides.depositShortfall,
   productLinks.moneyClaim,
   moneyClaimBlogs.fairWearAndTear,
-];
+]);
 
 // Cleaning focused links
-export const moneyClaimCleaningLinks = [
+export const moneyClaimCleaningLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.cleaningCosts,
   moneyClaimGuides.abandonedGoods,
@@ -788,10 +836,10 @@ export const moneyClaimCleaningLinks = [
   productLinks.moneyClaim,
   moneyClaimBlogs.fairWearAndTear,
   // moneyClaimBlogs.evidenceGuide, // Blog post not yet published
-];
+]);
 
 // Utilities and bills focused links
-export const moneyClaimUtilitiesLinks = [
+export const moneyClaimUtilitiesLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.unpaidBills,
   moneyClaimGuides.unpaidUtilities,
@@ -799,10 +847,10 @@ export const moneyClaimUtilitiesLinks = [
   productLinks.moneyClaim,
   moneyClaimGuides.councilTax,
   // moneyClaimBlogs.evidenceGuide, // Blog post not yet published
-];
+]);
 
 // Rent arrears focused links
-export const moneyClaimRentLinks = [
+export const moneyClaimRentLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.unpaidRent,
   moneyClaimGuides.formerTenant,
@@ -814,10 +862,10 @@ export const moneyClaimRentLinks = [
   moneyClaimGuides.breakClause,
   toolLinks.rentDemandLetter,
   moneyClaimBlogs.interestCalculation,
-];
+]);
 
 // Court process focused links
-export const moneyClaimProcessLinks = [
+export const moneyClaimProcessLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.mcolProcess,
   moneyClaimForms.n1Form,
@@ -827,10 +875,10 @@ export const moneyClaimProcessLinks = [
   moneyClaimGuides.smallClaimsCourt,
   moneyClaimGuides.defendedClaims,
   moneyClaimBlogs.courtHearingPrep,
-];
+]);
 
 // Enforcement focused links
-export const moneyClaimEnforcementLinks = [
+export const moneyClaimEnforcementLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.ccjEnforcement,
   moneyClaimGuides.formerTenant,
@@ -838,10 +886,10 @@ export const moneyClaimEnforcementLinks = [
   // moneyClaimBlogs.enforcingJudgment, // Blog post not yet published
   moneyClaimBlogs.ccjConsequences,
   // moneyClaimBlogs.tenantTracingGuide, // Blog post not yet published
-];
+]);
 
 // Form page focused links
-export const moneyClaimFormLinks = [
+export const moneyClaimFormLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimForms.letterBeforeAction,
   moneyClaimForms.scheduleOfDebt,
@@ -850,10 +898,10 @@ export const moneyClaimFormLinks = [
   productLinks.moneyClaim,
   moneyClaimForms.financialStatement,
   moneyClaimBlogs.letterBeforeActionGuide,
-];
+]);
 
 // Blog post sidebar links
-export const moneyClaimBlogSidebarLinks = [
+export const moneyClaimBlogSidebarLinks = dedupeLinksByHref([
   guideLinks.moneyClaimGuide,
   moneyClaimGuides.unpaidRent,
   moneyClaimGuides.propertyDamage,
@@ -862,7 +910,7 @@ export const moneyClaimBlogSidebarLinks = [
   productLinks.moneyClaim,
   toolLinks.rentArrearsCalculator,
   moneyClaimForms.letterBeforeAction,
-];
+]);
 
 // ============================================
 // TENANCY AGREEMENT SEO LINK GROUPS (Q1 2026)
@@ -887,7 +935,7 @@ export const tenancyAgreementPageLinks = {
   },
   tenancyAgreementFree: {
     href: '/tenancy-agreement-template',
-    title: 'England Template Hub',
+    title: 'England Agreement Example',
     description: 'Real example and guide for the main England tenancy route',
     icon: 'legal' as const,
     type: 'guide' as const,
@@ -990,7 +1038,7 @@ export const tenancyAgreementPageLinks = {
 
 // England tenancy agreement links
 export const tenancyAgreementEnglandLinks = [
-  landingPageLinks.tenancyTemplate,
+  productLinks.tenancyAgreement,
   {
     href: '/standard-tenancy-agreement',
     title: 'Standard Tenancy Agreement',
@@ -1029,6 +1077,7 @@ export const tenancyAgreementEnglandLinks = [
     type: 'page' as const,
   },
   tenancyAgreementPageLinks.astTemplate,
+  landingPageLinks.tenancyTemplate,
   {
     href: '/assured-periodic-tenancy-agreement',
     title: 'Assured Periodic Guide',
@@ -1036,7 +1085,6 @@ export const tenancyAgreementEnglandLinks = [
     icon: 'document' as const,
     type: 'page' as const,
   },
-  productLinks.tenancyAgreement,
   askHeavenLink,
 ];
 
@@ -1081,7 +1129,7 @@ export const tenancySeoEnglandPages = {
   astMain: {
     href: '/assured-shorthold-tenancy-agreement-template',
     title: 'AST Legacy Guide',
-    description: 'Legacy AST terminology routed into the main England template hub',
+    description: 'Legacy AST terminology routed into the main England agreement example page',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -1117,9 +1165,10 @@ export const tenancySeoEnglandPages = {
 
 export const tenancyFunnelPages = {
   englandHub: {
-    href: '/tenancy-agreement-template',
-    title: 'England Tenancy Agreement Template',
-    description: 'Main England template hub with the sample agreement preview and Standard / Premium journey.',
+    href: '/products/ast',
+    title: 'England Tenancy Agreements for Landlords',
+    description:
+      'Broad commercial owner for choosing and starting the right England tenancy agreement.',
     icon: 'document' as const,
     type: 'page' as const,
   },
@@ -1161,7 +1210,7 @@ export const tenancyFunnelPages = {
   astAgreementTemplate: {
     href: '/assured-shorthold-tenancy-agreement-template',
     title: 'AST Legacy Guide',
-    description: 'Legacy AST search intent routed into the main England template hub.',
+    description: 'Legacy AST search intent routed into the main England agreement example page.',
     icon: 'document' as const,
     type: 'page' as const,
   },

@@ -4,9 +4,7 @@ import {
   CheckCircle,
   FileText,
   Shield,
-  Clock,
   ArrowRight,
-  Download,
   AlertTriangle,
   X,
   Gavel,
@@ -23,7 +21,6 @@ import {
   buildProductAggregateRating,
   breadcrumbSchema,
   articleSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 import { PRODUCT_PRICE_AMOUNT_STRINGS, PRODUCTS } from '@/lib/pricing/products';
@@ -241,9 +238,9 @@ export default function Section8NoticeTemplatePage() {
                 </p>
                 <p className="leading-7">
                   For that reason, the strongest commercial push on this page should not be
-                  â€œdownload a free form and hope for the best.â€ It should be â€œuse the Notice Only
+                  "download a free form and hope for the best." It should be "use the Notice Only
                   workflow if you want the correct Section 8 notice built around your facts before
-                  service.â€
+                  service."
                 </p>
               </div>
 
@@ -352,7 +349,7 @@ export default function Section8NoticeTemplatePage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">What a valid Section 8 notice should usually include</h2>
               <p className="text-gray-700 leading-7 mb-8">
                 This is the educational core many landlords actually need. A Section 8 notice is
-                not just â€œForm 3 filled in.â€ A stronger notice usually includes the correct party
+                not just "Form 3A filled in." A stronger notice usually includes the correct party
                 details, the correct property details, the correct grounds, the correct dates, and
                 the correct service logic. If any of those are wrong, the case can become weaker
                 before court even starts.
@@ -380,7 +377,7 @@ export default function Section8NoticeTemplatePage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 mt-0.5 text-primary" />
-                      Ground facts linked to the tenantâ€™s conduct or arrears position
+                      Ground facts linked to the tenant's conduct or arrears position
                     </li>
                   </ul>
                 </div>
@@ -633,7 +630,7 @@ export default function Section8NoticeTemplatePage() {
                     href="/how-to-evict-tenant"
                     className="text-primary text-sm font-medium hover:underline inline-flex mt-3"
                   >
-                    See the full eviction process â†’
+                    See the full eviction process -&gt;
                   </Link>
                 </div>
               </div>
@@ -664,7 +661,7 @@ export default function Section8NoticeTemplatePage() {
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="p-4 text-gray-700">Reason required?</td>
-                      <td className="p-4 text-center text-gray-700">Yes â€” grounds must be stated</td>
+                      <td className="p-4 text-center text-gray-700">Yes - grounds must be stated</td>
                       <td className="p-4 text-center text-gray-700">No-fault logic where available</td>
                     </tr>
                     <tr>
@@ -882,7 +879,7 @@ export default function Section8NoticeTemplatePage() {
                 title="Ready to move this forward?"
                 subtitle="Serve the right Section 8 notice now and keep your court options open."
                 primaryHref="/products/notice-only"
-                primaryText={`Create Section 8 notice â€” ${noticeOnlyPrice}`}
+                primaryText={`Create Section 8 notice - ${noticeOnlyPrice}`}
                 primaryDataCta="notice-only"
                 location="bottom"
                 secondaryLinks={[
@@ -1132,8 +1129,8 @@ export default function Section8NoticeTemplatePage() {
                 that preserves options instead of forcing a weak single-ground strategy too early.
               </p>
               <p>
-                In rent arrears cases, the commercial question is often not â€œCan I use Section 8?â€
-                but â€œWhich grounds make the notice more resilient if the arrears move before hearing?â€
+                In rent arrears cases, the commercial question is often not "Can I use Section 8?"
+                but "Which grounds make the notice more resilient if the arrears move before hearing?"
                 In breach cases, the question is often whether the breach is clear enough to justify
                 the route and whether the evidence file is strong enough to support it.
               </p>
@@ -1215,7 +1212,7 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4">
-                <span className="text-4xl">âœ…</span>
+                <span className="text-4xl">OK</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
                     Already have a Section 8 notice?
@@ -1237,7 +1234,7 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4">
-                <span className="text-4xl">â˜ï¸</span>
+                <span className="text-4xl">?</span>
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">
                     Not sure which eviction ground applies?

@@ -62,21 +62,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/section-8-court-pack',
     '/section-21-notice-generator',
     '/section-8-notice-generator',
+    '/hmo-tenancy-agreement-template',
+    '/lodger-agreement-template',
+    '/rent-increase/rent-increase-rules-uk',
     '/section-21-notice-guide',
-    '/section-21-notice-period',
-    '/serve-section-21-notice',
-    '/section-21-notice-template',
-    '/form-6a-section-21',
-    '/section-21-validity-checklist',
     '/section-21-checklist',
-    '/section-21-expired-what-next',
-    '/tenant-ignores-section-21',
-    '/what-happens-after-section-21',
-    '/section-8-vs-section-21',
-    '/accelerated-possession-guide',
     '/n5b-form-guide',
     '/n5b-possession-claim-form',
-    '/n5b-possession-claim-guide',
     '/mcol-money-claim-online',
     '/wales-eviction-notice-template',
     '/scotland-notice-to-leave-template',
@@ -104,12 +96,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Product pages
   const productPages = [
-    { path: '/products/notice-only', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/products/complete-pack', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/products/money-claim', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/products/notice-only', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/products/complete-pack', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/products/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/products/section-13-standard', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/section-13-defence', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/products/ast', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/products/ast', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
@@ -127,7 +119,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/rent-increase', priority: 0.92, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/section-13-notice', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/how-to-increase-rent', priority: 0.88, changeFrequency: 'weekly' as const },
-    { path: '/rent-increase/rent-increase-rules-uk', priority: 0.88, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/form-4a-guide', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/section-13-tribunal', priority: 0.88, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/market-rent-calculation', priority: 0.88, changeFrequency: 'weekly' as const },
@@ -140,7 +131,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Long-tail landing pages - SEO targeted
   const landingPages = [
     { path: '/how-to-evict-a-tenant-uk', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/section-8-notice-guide', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/rent-arrears-landlord-guide', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-england', priority: 0.95, changeFrequency: 'weekly' as const },
     { path: '/eviction-process-uk', priority: 0.95, changeFrequency: 'weekly' as const },
@@ -202,7 +192,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/assured-shorthold-tenancy-agreement-template', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreement-england-2026', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/assured-periodic-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/hmo-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/renters-rights-act-information-sheet-2026', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/joint-tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     // Tenancy Agreement SEO Pages - Wales (Q1 2026)
@@ -218,7 +207,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/renew-tenancy-agreement-england', priority: 0.8, changeFrequency: 'weekly' as const },
     // High-Intent SEO Landing Pages (Jan 2026)
     { path: '/form-3-section-8', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/lodger-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/money-claim-online-mcol', priority: 0.85, changeFrequency: 'weekly' as const },
     { path: '/rolling-tenancy-agreement', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/how-to-rent-guide', priority: 0.8, changeFrequency: 'weekly' as const },

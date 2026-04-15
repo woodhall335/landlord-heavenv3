@@ -14,6 +14,7 @@ import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/se
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 import { getEditWindowStatus } from '@/lib/payments/edit-window';
+import { deriveVisibleFulfillmentState } from '@/lib/payments/fulfillment-routing';
 import {
   isMetadataColumnMissingError,
   setMetadataColumnExists,
@@ -151,7 +152,12 @@ export async function GET(request: Request) {
 
     // Extract metadata using safe helper (handles missing metadata gracefully)
     const orderMetadata = extractOrderMetadata(order);
-    const fulfillmentError: string | null = orderMetadata?.error || null;
+    const visibleFulfillmentState = deriveVisibleFulfillmentState({
+      fulfillmentStatus: order?.fulfillment_status || null,
+      hasFinalDocuments: documentCount > 0,
+      metadata: orderMetadata || null,
+      productType: order?.product_type || null,
+    });
 
     // Calculate edit window status
     const editWindow = getEditWindowStatus(order?.paid_at || null);
@@ -160,8 +166,8 @@ export async function GET(request: Request) {
     const response: OrderStatusResponse = {
       paid: order?.payment_status === 'paid',
       payment_status: order?.payment_status || 'pending',
-      fulfillment_status: order?.fulfillment_status || null,
-      fulfillment_error: fulfillmentError,
+      fulfillment_status: visibleFulfillmentState.fulfillmentStatus,
+      fulfillment_error: visibleFulfillmentState.fulfillmentError,
       paid_at: order?.paid_at || null,
       order_id: order?.id || null,
       stripe_session_id: order?.stripe_session_id || null,

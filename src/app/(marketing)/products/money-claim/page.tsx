@@ -24,11 +24,11 @@ const product = PRODUCTS.money_claim;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Start a Landlord Money Claim Pack 2026 | England Only | ${price}`,
+  title: `Landlord Money Claim Pack | Recover Unpaid Rent, Damage, and Bills | ${price}`,
   description:
-    `Start a landlord money claim pack for unpaid rent, property damage, cleaning costs, and other tenant debts through the England county court route.`,
+    `Start a landlord money claim pack for unpaid rent, property damage, cleaning costs, bills, and other tenant debts through the England county court route.`,
   openGraph: {
-    title: `Money Claim Pack 2026 for England Landlords | ${price}`,
+    title: `Landlord Money Claim Pack | Recover Unpaid Rent and Tenant Debt | ${price}`,
     description:
       "Money claim pack for England landlords to recover rent arrears, property damage, cleaning costs, and other tenant debts. Includes Form N1, a Letter Before Claim, an interest calculator, and practical guidance on issuing the claim.",
     url: getCanonicalUrl('/products/money-claim'),
@@ -103,9 +103,9 @@ export default async function MoneyClaimPage() {
 
       <StructuredData
         data={productSchema({
-          name: "Money Claim Pack - Recover Rent Arrears",
+          name: "Landlord Money Claim Pack",
           description:
-            "Recover unpaid rent arrears through the County Court in England. Includes structured claim documents, PAP-DEBT support, Form N1, interest calculation, and filing guidance.",
+            "Recover unpaid rent, property damage, cleaning costs, bills, and other tenant debt through the County Court in England. Includes structured claim documents, PAP-DEBT support, Form N1, interest calculation, and filing guidance.",
           price: product.price.toString(),
           url: "https://landlordheaven.co.uk/products/money-claim",
         })}
@@ -114,7 +114,7 @@ export default async function MoneyClaimPage() {
         data={breadcrumbSchema([
           { name: "Home", url: "https://landlordheaven.co.uk" },
           { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
-          { name: "Money Claim Pack", url: "https://landlordheaven.co.uk/products/money-claim" },
+          { name: "Landlord Money Claim Pack", url: "https://landlordheaven.co.uk/products/money-claim" },
         ])}
       />
 
@@ -135,7 +135,7 @@ export default async function MoneyClaimPage() {
               How it works
             </Link>
             <Link href="#start-your-pack" className="font-medium text-primary hover:underline">
-              Start your pack
+              Start your money claim pack
             </Link>
           </nav>
         </Container>
@@ -322,7 +322,7 @@ export default async function MoneyClaimPage() {
                 href="/wizard?product=money_claim&src=product_page"
                 className="hero-btn-primary"
               >
-                Start Money Claim - {price} →
+                Start your money claim pack - {price} →
               </Link>
             </div>
           </div>
@@ -530,7 +530,7 @@ export default async function MoneyClaimPage() {
               href="/wizard?product=money_claim&src=product_page"
               className="hero-btn-primary"
             >
-              Start Money Claim - {price} →
+              Start your money claim pack - {price} →
             </Link>
             <p className="mt-4 text-sm text-gray-600">
               One-time payment • Unlimited regenerations • No subscription

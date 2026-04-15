@@ -150,11 +150,11 @@ export default function StudentTenancyAgreementPage() {
             ctaLabel: 'Compare Standard',
           },
           {
-            title: 'England tenancy agreement hub',
+            title: 'England tenancy agreement comparison',
             description:
-              'Still deciding between Standard, Premium, Student, HMO, or Lodger? Use the main England hub to compare the routes properly.',
+              'Still deciding between Standard, Premium, Student, HMO, or Lodger? Use the main England comparison page to choose the right route.',
             href: '/products/ast',
-            ctaLabel: 'Open England hub',
+            ctaLabel: 'Compare England routes',
           },
         ]}
         faqs={[
@@ -194,7 +194,7 @@ export default function StudentTenancyAgreementPage() {
               'Yes. One of the key benefits of this route is clearer wording around hand-back, key return, and end-of-term expectations, which are often more important in student lets than in ordinary residential tenancies.',
           },
         ]}
-        finalCtaBody="Use the Student route when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this is usually the better fit than a general residential agreement. If you are still deciding, compare it against the other England routes on the main hub."
+        finalCtaBody="Use the Student route when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this is usually the better fit than a general residential agreement. If you are still deciding, compare it against the other England routes on the main comparison page."
       />
     </div>
   );

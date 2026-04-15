@@ -52,12 +52,12 @@ export default function HMOLicenseChecker() {
     {
       question: 'What happens if I operate an unlicensed HMO?',
       answer:
-        "Operating an unlicensed HMO is a criminal offence. You can face unlimited fines (commonly Â£30,000+), rent repayment orders forcing you to repay up to 12 months' rent to your tenants, and you cannot serve Section 21 notices to end tenancies. You may also be prosecuted and end up with a criminal record.",
+        "Operating an unlicensed HMO is a criminal offence. You can face unlimited fines (commonly GBP 30,000+), rent repayment orders forcing you to repay up to 12 months' rent to your tenants, and you cannot serve Section 21 notices to end tenancies. You may also be prosecuted and end up with a criminal record.",
     },
     {
       question: 'How much does an HMO license cost?',
       answer:
-        "HMO license fees vary significantly by council, typically ranging from Â£500 to Â£1,500+ per property. The license usually lasts for 5 years. Contact your local council for exact fees. While this may seem expensive, it's far less than the penalties for operating without one.",
+        "HMO license fees vary significantly by council, typically ranging from GBP 500 to GBP 1,500+ per property. The license usually lasts for 5 years. Contact your local council for exact fees. While this may seem expensive, it's far less than the penalties for operating without one.",
     },
     {
       question: 'Can I convert my property to an HMO?',
@@ -243,9 +243,9 @@ export default function HMOLicenseChecker() {
 
       const hmoDefinition = [
         'A House in Multiple Occupation (HMO) is a property where:',
-        'â€¢ 3 or more tenants live together',
-        'â€¢ They form 2 or more separate households',
-        'â€¢ They share kitchen, bathroom, or toilet facilities',
+        '- 3 or more tenants live together',
+        '- They form 2 or more separate households',
+        '- They share kitchen, bathroom, or toilet facilities',
         '',
         'Standard Test: 5+ people, 2+ households = HMO license required',
         'Additional Test: Some councils require licensing for 3+ people',
@@ -318,10 +318,10 @@ export default function HMOLicenseChecker() {
       yPosition -= 20;
 
       const penalties = [
-        'â€¢ Unlimited fines (up to Â£30,000+)',
-        'â€¢ Rent repayment orders (up to 12 months rent)',
-        'â€¢ Cannot serve Section 21 notices',
-        'â€¢ Criminal prosecution possible',
+        '- Unlimited fines (up to GBP 30,000+)',
+        '- Rent repayment orders (up to 12 months rent)',
+        '- Cannot serve Section 21 notices',
+        '- Criminal prosecution possible',
       ];
 
       penalties.forEach((line) => {
@@ -622,7 +622,7 @@ export default function HMOLicenseChecker() {
               Penalties for unlicensed HMOs can include:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Unlimited fines (commonly Â£30,000 or more)</li>
+              <li>Unlimited fines (commonly GBP 30,000 or more)</li>
               <li>Rent repayment orders forcing you to repay up to 12 months' rent</li>
               <li>Inability to serve Section 21 notices (no-fault evictions)</li>
               <li>Criminal prosecution and record</li>

@@ -10,7 +10,7 @@ import { HeaderConfig } from "@/components/layout/HeaderConfig";
 import { completePackHeroConfig } from "@/components/landing/heroConfigs";
 import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
-import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
+import { productLinks, toolLinks, blogLinks, landingPageLinks, guideLinks } from "@/lib/seo/internal-links";
 import { getCanonicalUrl } from "@/lib/seo";
 import { PRODUCTS } from "@/lib/pricing/products";
 import { FAQSection } from "@/components/seo/FAQSection";
@@ -29,12 +29,12 @@ const product = PRODUCTS.complete_pack;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
-  description: `Full possession bundle for England landlords with notice-to-court continuity: Form 3A, N5/N119 court forms, evidence checklists, and filing guidance. ${price} one-time.`,
+  title: `Evict a Tenant Through Court | Complete Eviction Pack England | ${price}`,
+  description: `Complete eviction pack for England landlords who need to evict a tenant through court. Includes court forms Form 3A, N5, N119, evidence checklists, and filing guidance in one workflow.`,
   openGraph: {
-    title: `Complete Eviction Case Bundle 2026 for England | Court Forms ${price}`,
+    title: `Complete Eviction Pack England | Evict a Tenant Through Court | ${price}`,
     description:
-      "Complete possession pack for England landlords. Includes Form 3A, N5, N119, evidence checklists, and court filing guidance.",
+      "Complete eviction pack for England landlords. Includes court forms Form 3A, N5, N119, evidence checklists, and court filing guidance.",
     url: getCanonicalUrl("/products/complete-pack"),
   },
   alternates: {
@@ -97,9 +97,9 @@ export default async function CompleteEvictionPackPage() {
 
       <StructuredData
         data={productSchema({
-          name: "Complete Eviction Case Bundle",
+          name: "Complete Eviction Pack for Landlords",
           description:
-            "Complete possession bundle with the court forms needed from notice through to possession order. Includes Form 3A, N5, N119, and step-by-step guidance.",
+            "Complete eviction pack with the court forms needed from notice through to possession order. Includes court forms Form 3A, N5, N119, and step-by-step guidance.",
           price: product.price.toString(),
           url: "https://landlordheaven.co.uk/products/complete-pack",
         })}
@@ -108,7 +108,7 @@ export default async function CompleteEvictionPackPage() {
         data={breadcrumbSchema([
           { name: "Home", url: "https://landlordheaven.co.uk" },
           { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
-          { name: "Complete Eviction Case Bundle", url: "https://landlordheaven.co.uk/products/complete-pack" },
+          { name: "Complete Eviction Pack", url: "https://landlordheaven.co.uk/products/complete-pack" },
         ])}
       />
 
@@ -129,7 +129,7 @@ export default async function CompleteEvictionPackPage() {
               How it works
             </Link>
             <Link href="#start-your-pack" className="font-medium text-primary hover:underline">
-              Start your pack
+              Start your court pack
             </Link>
           </nav>
         </Container>
@@ -140,7 +140,7 @@ export default async function CompleteEvictionPackPage() {
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Who this is for</h2>
             <p className="mt-4 text-lg text-gray-700">
-              This pack is for landlords whose case is heading towards court and who do not want to piece the paperwork together themselves. It is designed to give you a smoother path from the first notice through to filing.
+              This pack is for landlords who need to evict a tenant through court and do not want to piece the paperwork together themselves. It is designed to give you a smoother path from the first notice through to filing.
             </p>
             <ul className="mt-6 grid gap-3 text-gray-700 md:grid-cols-2">
               <li>Your tenant is in arrears or refusing to leave, and you need to move from notice towards court.</li>
@@ -154,6 +154,30 @@ export default async function CompleteEvictionPackPage() {
             <div className="mt-8">
               <h3 className="mb-4 text-xl font-semibold text-charcoal">Route timing and compliance still matter</h3>
               <Section21ComplianceTimingPanel />
+              <div className="mt-6">
+                <h4 className="text-lg font-semibold text-charcoal">
+                  Working through the England court route?
+                </h4>
+                <p className="mt-2 text-gray-700">
+                  Check the live England rules, the landlord action guide, and the possession timeline before you generate the full court bundle.
+                </p>
+                <div className="mt-4 grid gap-4 md:grid-cols-3">
+                  {[
+                    guideLinks.rentersRightsActEvictionRules,
+                    guideLinks.howToEvictTenantEngland,
+                    guideLinks.evictionProcessEngland,
+                  ].map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-4 hover:bg-white"
+                    >
+                      <p className="font-semibold text-charcoal">{link.title}</p>
+                      <p className="mt-2 text-sm leading-6 text-gray-700">{link.description}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </Container>
@@ -190,9 +214,9 @@ export default async function CompleteEvictionPackPage() {
             />
           </div>
           <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your pack</h2>
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your court pack</h2>
             <p className="mt-4 text-gray-700">
-              If you need a fuller eviction solution, this is the practical next step. Generate the key documents in one flow and move from problem to action quickly, with the notice, the core court forms, and filing guidance all aligned within one England route.
+              If you need to evict a tenant through court, this is the practical next step. Generate the key documents in one flow and move from problem to action quickly, with the notice, the core court forms, and filing guidance all aligned within one England route.
             </p>
             <div className="mt-6">
               <WhyLandlordHeaven variant="full" />
@@ -232,7 +256,7 @@ export default async function CompleteEvictionPackPage() {
               href="/wizard?product=complete_pack&src=product_page&topic=eviction"
               className="hero-btn-primary"
             >
-              Start your court pack -&gt;
+              Start your complete eviction pack -&gt;
             </Link>
           </div>
         </Container>
@@ -441,7 +465,7 @@ export default async function CompleteEvictionPackPage() {
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Get Complete Eviction Case Bundle - {price} ?
+                Get Complete Eviction Pack - {price}
               </Link>
             </div>
           </div>
@@ -511,7 +535,7 @@ export default async function CompleteEvictionPackPage() {
       <section className="py-16 md:py-20">
         <Container>
           <div className="mx-auto max-w-3xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_24px_60px_rgba(105,46,212,0.35)] md:p-12">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to start your complete eviction pack?</h2>
+            <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to evict a tenant through court?</h2>
             <p className="mb-8 text-xl text-white/90">
               If you need the notice, the court forms, and the filing guidance working together, this is the fastest practical next step.
             </p>
@@ -520,7 +544,7 @@ export default async function CompleteEvictionPackPage() {
                 href="/wizard?product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Start your court pack - {price} -&gt;
+                Start your complete eviction pack - {price} -&gt;
               </Link>
               <Link href="/products/notice-only" className="hero-btn-secondary">
                 Only need the notice? - {PRODUCTS.notice_only.displayPrice}

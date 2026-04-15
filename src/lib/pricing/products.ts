@@ -72,19 +72,19 @@ export const ALLOWED_SEO_PRICES = new Set([
  * not to /wizard?product=X. The landing pages then CTA into the wizard.
  */
 export const SEO_LANDING_ROUTES = {
-  notice_only: '/eviction-notice-template',
+  notice_only: '/products/notice-only',
   complete_pack: '/products/complete-pack',
-  money_claim: '/money-claim',
+  money_claim: '/products/money-claim',
   section13_standard: '/products/section-13-standard',
   section13_defensive: '/products/section-13-defence',
-  ast_standard: '/tenancy-agreement-template',
+  ast_standard: '/products/ast',
   ast_premium: '/premium-tenancy-agreement',
   england_standard_tenancy_agreement: '/standard-tenancy-agreement',
   england_premium_tenancy_agreement: '/premium-tenancy-agreement',
   england_student_tenancy_agreement: '/student-tenancy-agreement',
   england_hmo_shared_house_tenancy_agreement: '/hmo-shared-house-tenancy-agreement',
   england_lodger_agreement: '/lodger-agreement',
-  residential_tenancy_application: '/tenancy-agreement-template',
+  residential_tenancy_application: '/products/ast',
 } as const;
 
 export type ProductSku =

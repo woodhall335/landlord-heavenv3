@@ -262,7 +262,7 @@ export const GROUND_DEFINITIONS: Record<number | '1A' | '14A', Omit<Section8Grou
   },
   8: {
     code: 8,
-    title: 'Serious rent arrears (8 weeks/2 months)',
+    title: 'Serious rent arrears',
     legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
     mandatory: true,
   },
@@ -346,7 +346,7 @@ export function determineNoticePeriod(grounds: Section8Ground[]): number {
   const hasMandatory = grounds.some((g) => g.mandatory);
   if (hasMandatory) return 14;
 
-  // Discretionary grounds: 2 months (60 days) recommended
+  // Legacy helper only. Do not rely on this for post-1 May 2026 England notice periods.
   return 60;
 }
 

@@ -4,29 +4,29 @@ import { sections, type RentIncreaseGuidePage } from './types';
 export const rentIncreaseHubPage: RentIncreaseGuidePage = {
   slug: 'hub',
   path: RENT_INCREASE_HUB_PATH,
-  title: 'Rent Increase Guide',
-  heroTitle: 'Rent Increase Guide for England Landlords',
+  title: 'Increase Rent in England',
+  heroTitle: 'Increase Rent in England Using Section 13 / Form 4A',
   heroSubtitle:
-    'If you need to increase the rent, this guide helps you understand the full England Section 13 route before you serve anything.',
+    'Use this landlord workflow to increase rent lawfully in England, check the dates, and generate the Section 13 / Form 4A paperwork before you serve anything.',
   heroBullets: [
     'Built for the current England route from 1 May 2026.',
-    'Covers timing, Form 4A, comparables, and what to do if the tenant pushes back.',
-    'Routes into the Standard or Defence Section 13 packs when you are ready to act.',
+    'Covers timing, Form 4A, market-rent evidence, and challenge risk.',
+    'Lets landlords move from guidance to a service-ready Section 13 pack.',
   ],
-  metaTitle: 'Rent Increase Guide UK: Section 13, Form 4A, Rules and Tribunal Risk',
+  metaTitle: 'Increase Rent in England | Section 13 / Form 4A Pack for Landlords',
   metaDescription:
-    'Authoritative landlord guide to increasing rent in England using Section 13 and Form 4A. Learn legal rules, market-rent evidence, challenge risk, and practical next steps.',
-  primaryKeyword: 'rent increase UK',
-  intentLabel: 'hub / cluster overview',
+    'Increase rent lawfully in England using Section 13 and Form 4A. Check notice timing, market-rent evidence, challenge risk, and practical next steps before you serve.',
+  primaryKeyword: 'increase rent england',
+  intentLabel: 'rent increase / section 13 landlord pack',
   introAngle:
-    'Read the route properly first so you do not serve a rent increase notice before checking the date, the figure, and the challenge risk.',
+    'Check the England route properly first so you do not serve a rent increase notice before validating the date, the figure, and the challenge risk.',
   heroImage: '/images/wizard-icons/41-rent.png',
   heroAlt: 'Rent increase process overview illustration',
   secondaryCta: RENT_INCREASE_LINKS.section13,
   quickAnswer: [
-    'This hub is here to help you read the whole rent increase process in the right order. Instead of treating a rent increase like a one-form task, it shows you the landlord workflow from start to finish: check the tenancy facts, work out the earliest valid date, look at the local comparables, decide the figure, complete Form 4A, serve it properly, and keep the file together if the tenant challenges the increase.',
-    'Each page in this guide answers a different landlord question. One explains what a Section 13 notice is. One focuses on Form 4A. One covers the rules. One helps you think about market rent. The challenge and tribunal pages pick up the next stage if the tenant pushes back. That makes the guide easier to read naturally because each page has a clear job.',
-    'If you remember one thing from this hub, make it this: do not serve the notice until the story behind it is clear. A neat form with weak reasoning is fragile. A clear date, a sensible figure, and a joined-up evidence file are much easier to stand behind later.',
+    'This page helps landlords increase rent in the right order. Instead of treating a rent increase like a one-form task, it shows the England workflow from start to finish: check the tenancy facts, work out the earliest valid date, review the local comparables, decide the figure, complete Form 4A, serve it properly, and keep the file together if the tenant challenges the increase.',
+    'Each linked page answers a different landlord question. One explains what a Section 13 notice is. One focuses on Form 4A. One helps you think about market rent. The challenge and tribunal pages pick up the next stage if the tenant pushes back. That keeps the content aligned to what landlords are actually searching for at each step.',
+    'If you remember one thing from this page, make it this: do not serve the notice until the story behind it is clear. A neat form with weak reasoning is fragile. A clear date, a sensible figure, and a joined-up evidence file are much easier to stand behind later.',
     'That is also why the guide separates “how do I increase the rent?” from “how do I defend the increase?” Those are related questions, but they are not the same job. Landlords usually make better decisions when they can read the standard route first and then move into the challenge route only when the case really needs it.',
   ],
   sections: sections({
@@ -35,8 +35,8 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
       'That matters because most landlords do not need abstract commentary. They need to know whether the date works, whether the figure makes sense, what Form 4A actually does, and what to do if the tenant says no. When those points are handled together, the final file reads more naturally and is easier to rely on.',
     ],
     legalRules: [
-      'The detailed process in this hub is for England. From 1 May 2026, the prescribed notice form for the Section 13 route is Form 4A. That does not mean the form is the whole job. You still need the timing to work, the dates to line up, and the service record to be clear enough that you can explain it later.',
-      'Search phrases like "rent increase rules UK" are broad, but the legal mechanics are not. Scotland, Wales, and Northern Ireland each use different frameworks. This hub stays clear about that so you do not leave with false confidence from reading the wrong process page.',
+      'The detailed process on this page is for England. From 1 May 2026, the prescribed notice form for the Section 13 route is Form 4A. That does not mean the form is the whole job. You still need the timing to work, the dates to line up, and the service record to be clear enough that you can explain it later.',
+      'Search phrases like "rent increase rules UK" are broad, but the legal mechanics are not. Scotland, Wales, and Northern Ireland each use different frameworks. This page stays clear about that so you do not leave with false confidence from reading the wrong process page.',
     ],
     stepByStep: [
       'For most landlords, the safest order is simple. First confirm the tenancy facts and the recent rent history. Then calculate the earliest valid date. After that, look at local comparables and work out what figure you can explain with a straight face. Only then should you complete Form 4A and prepare service.',
@@ -53,17 +53,17 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
     avoidChallenges: [
       'Challenge avoidance usually starts with readability. A tenant may still disagree with the increase, but a clear file gives them less room to argue that the proposal is confused, inconsistent, or impossible to follow. Specific reasons tied to local comparables are much stronger than generic statements about costs or market conditions.',
       'Use the pages below in the order that matches your question. Start with the Section 13 notice page if you need the big picture, the Form 4A page if you are checking the form, the market-rent page if you are still deciding the figure, and the challenge or tribunal pages if the risk has already moved up a level. Then choose the Standard or Defence pack once the file is clear.',
-      'A landlord usually gets the best result when the paperwork reads as though one person thought the route through from start to finish. That is the real purpose of this guide cluster: helping you turn a stressful decision into a calmer, more readable file before the tenant ever reads the notice.',
+      'A landlord usually gets the best result when the paperwork reads as though one person thought the route through from start to finish. That is the real purpose of this rent increase page: helping you turn a stressful decision into a calmer, more readable file before the tenant ever reads the notice.',
     ],
   }),
   faqs: [
     {
-      question: 'What is the best first page to read in this cluster?',
+      question: 'What is the best first page to read before increasing rent?',
       answer:
         'If you are starting from scratch, begin with the Section 13 notice page, then move to Form 4A and market-rent calculation before finalising the figure.',
     },
     {
-      question: 'Does this hub provide detailed process steps for all UK nations?',
+      question: 'Does this page provide detailed process steps for all UK nations?',
       answer:
         'No. Detailed process guidance here is for England. Other UK nations use different legal frameworks and should be treated separately.',
     },

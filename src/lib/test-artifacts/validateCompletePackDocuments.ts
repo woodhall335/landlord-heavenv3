@@ -21,35 +21,43 @@ export function validateCompletePackDocuments(
     jurisdiction: input.jurisdiction,
     route: input.route,
   });
-  const expectsN119 = packContents.some((item) => item.key === 'n119_particulars');
+  const expectedKeys = new Set(packContents.map((item) => item.key));
+  const assertPresent = (key: string, label: string) => {
+    if (expectedKeys.has(key) && !docKeys.has(key)) {
+      return { ok: false, error: `Canonical pack contents expect ${label} (${key}), but it is missing.` };
+    }
+    return null;
+  };
+  const assertAbsent = (key: string, label: string) => {
+    if (!expectedKeys.has(key) && docKeys.has(key)) {
+      return { ok: false, error: `Canonical pack contents do not include ${label} (${key}), but it was generated.` };
+    }
+    return null;
+  };
 
-  if (input.route === 'section_8') {
-    if (!docKeys.has('n5_claim')) {
-      return { ok: false, error: 'Section 8 complete pack is missing N5 (n5_claim).' };
+  for (const [key, label] of [
+    ['n5_claim', 'N5'],
+    ['n119_particulars', 'N119'],
+    ['n5b_claim', 'N5B'],
+    ['proof_of_service', 'supporting proof-of-service record'],
+    ['court_filing_guide', 'court filing guide'],
+  ] as const) {
+    const presentResult = assertPresent(key, label);
+    if (presentResult) {
+      return presentResult;
     }
-    if (!docKeys.has('n119_particulars')) {
-      return { ok: false, error: 'Section 8 complete pack is missing N119 (n119_particulars).' };
-    }
-    if (docKeys.has('n5b_claim')) {
-      return { ok: false, error: 'Section 8 complete pack should not include N5B (n5b_claim).' };
+
+    const absentResult = assertAbsent(key, label);
+    if (absentResult) {
+      return absentResult;
     }
   }
 
-  if (input.route === 'section_21') {
-    if (!docKeys.has('n5b_claim')) {
-      return { ok: false, error: 'Section 21 complete pack is missing N5B (n5b_claim).' };
-    }
-    if (docKeys.has('n5_claim')) {
-      return { ok: false, error: 'Section 21 complete pack should not include N5 (n5_claim).' };
-    }
-  }
-
-  if (expectsN119 && !docKeys.has('n119_particulars')) {
-    return { ok: false, error: 'Canonical pack contents expect N119, but it is missing.' };
-  }
-
-  if (!expectsN119 && docKeys.has('n119_particulars')) {
-    return { ok: false, error: 'Canonical pack contents do not include N119, but it was generated.' };
+  if (docKeys.has('proof_of_service') && !expectedKeys.has('proof_of_service')) {
+    return {
+      ok: false,
+      error: 'A proof-of-service record was generated outside the canonical complete-pack contents.',
+    };
   }
 
   return { ok: true };

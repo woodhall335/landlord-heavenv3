@@ -1,0 +1,66 @@
+{
+  "generatedAt": "2026-04-11T13:04:12.315Z",
+  "scenario": "student-occupation-ground",
+  "grounds": [
+    "4A"
+  ],
+  "product": "complete_pack",
+  "documents": [
+    {
+      "title": "Form 3A notice",
+      "file": "notice.pdf"
+    },
+    {
+      "title": "service-instructions.html",
+      "file": "service-instructions.html"
+    },
+    {
+      "title": "cover-letter.html",
+      "file": "cover-letter.html"
+    },
+    {
+      "title": "service-checklist.html",
+      "file": "service-checklist.html"
+    },
+    {
+      "title": "evidence-checklist.html",
+      "file": "evidence-checklist.html"
+    },
+    {
+      "title": "case-summary.html",
+      "file": "case-summary.html"
+    },
+    {
+      "title": "roadmap.html",
+      "file": "roadmap.html"
+    },
+    {
+      "title": "Proof of service",
+      "file": "proof-of-service.pdf"
+    },
+    {
+      "title": "Form N5",
+      "file": "n5-claim.pdf"
+    },
+    {
+      "title": "Form N119",
+      "file": "n119-particulars.pdf"
+    },
+    {
+      "title": "court-filing-guide.html",
+      "file": "court-filing-guide.html"
+    },
+    {
+      "title": "hearing-checklist.html",
+      "file": "hearing-checklist.html"
+    },
+    {
+      "title": "court-bundle-index.html",
+      "file": "court-bundle-index.html"
+    },
+    {
+      "title": "Witness statement",
+      "file": "witness-statement.html"
+    }
+  ]
+}

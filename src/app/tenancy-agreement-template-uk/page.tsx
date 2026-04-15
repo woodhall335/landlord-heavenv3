@@ -13,7 +13,7 @@ const jurisdictions = [
     name: 'England',
     href: '/tenancy-agreement-template',
     summary:
-      'Use the England template hub for the sample agreement preview and the Standard / Premium journey.',
+      'Use the England agreement example page for the sample agreement preview and the Standard / Premium journey.',
   },
   {
     name: 'Wales',
@@ -93,4 +93,3 @@ export default function TenancyAgreementTemplateUkPage() {
     </div>
   );
 }
-

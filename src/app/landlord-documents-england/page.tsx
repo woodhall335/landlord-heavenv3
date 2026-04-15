@@ -19,7 +19,7 @@ const GROUPS = [
         href: '/tenancy-agreement-template',
         label: 'England tenancy agreement template',
         description:
-          'Start with the main England template hub, inspect the sample agreement, then move into the right route.',
+          'Start with the England agreement example page, inspect the sample agreement, then move into the right route.',
       },
       {
         href: '/premium-tenancy-agreement',
@@ -45,8 +45,8 @@ const GROUPS = [
       'Arrears-focused retired pages now roll into the current claim and demand-letter paths.',
     links: [
       {
-        href: '/money-claim',
-        label: 'Money claim pack',
+        href: '/products/money-claim',
+        label: 'Landlord money claim pack',
         description: 'Recover unpaid rent and other tenancy debts through the live commercial arrears route.',
       },
       {
@@ -64,17 +64,17 @@ const GROUPS = [
   {
     title: 'Supporting landlord resources',
     description:
-      'Use the live hubs and guides below instead of the retired standalone England document landings.',
+      'Use the live pages and guides below instead of the retired standalone England document landings.',
     links: [
       {
         href: '/tenancy-agreements',
-        label: 'Tenancy agreements hub',
+        label: 'Tenancy agreement guides',
         description: 'Compare the live UK agreement routes from one place.',
       },
       {
         href: '/tenancy-agreement-template',
         label: 'Compare tenancy products',
-        description: 'Start with the main England template hub before comparing the live agreement routes.',
+        description: 'Start with the England agreement example page before comparing the live agreement routes.',
       },
       {
         href: '/money-claim-unpaid-rent',
@@ -115,9 +115,9 @@ export default function LandlordDocumentsEnglandPage() {
       <main>
         <UniversalHero
           title="England landlord documents"
-          subtitle="This bridge page now routes older England document intent into the smaller set of live tenancy and arrears destinations that remain part of the public site."
+          subtitle="This bridge page routes older England document searches into the live tenancy and arrears pages landlords now need."
           primaryCta={{ label: 'Browse live routes', href: '#documents' }}
-          secondaryCta={{ label: 'View England template hub', href: '/tenancy-agreement-template' }}
+          secondaryCta={{ label: 'View England agreement example', href: '/tenancy-agreement-template' }}
           align="center"
         />
 
@@ -125,7 +125,7 @@ export default function LandlordDocumentsEnglandPage() {
           <div className="mx-auto max-w-5xl rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Bridge page</p>
             <p className="mt-3 text-lg leading-8 text-slate-700">
-              The older standalone England document pages have been retired. Use the live routes below to reach the current public entry points without dead ends.
+              The older standalone England document pages have been retired. Use the live routes below to reach the current public entry points without dead ends or outdated product journeys.
             </p>
           </div>
         </Container>

@@ -14,18 +14,19 @@ import Section21ComplianceTimingPanel from "@/components/products/Section21Compl
 import { getNoticeOnlyPreviewData } from "@/lib/previews/noticeOnlyPreviews";
 import { getCanonicalUrl } from "@/lib/seo";
 import { FunnelProcessSection } from "@/components/funnels";
+import { guideLinks } from "@/lib/seo/internal-links";
 
 const product = PRODUCTS.notice_only;
 const price = product.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Notice Only Pack for Landlords | Create and Serve the Right Notice | ${price}`,
+  title: `Evict a Tenant Legally | Eviction Notice Pack for Landlords | ${price}`,
   description:
-    `Create the right notice pack for England, Wales, or Scotland, with service guidance and route checks before you serve.`,
+    `Create the right eviction notice pack for England, Wales, or Scotland, with landlord route checks, service guidance, and clearer next steps before you serve.`,
   openGraph: {
-    title: `Notice Only Pack 2026 | Generate the Right Notice | ${price}`,
+    title: `Eviction Notice Pack for Landlords | Evict a Tenant Legally | ${price}`,
     description:
-      "Notice pack for landlords in England, Wales, and Scotland. Includes the notice itself, service instructions, a validity checklist, and a preview before purchase.",
+      "Eviction notice pack for landlords in England, Wales, and Scotland. Includes the notice itself, service instructions, a validity checklist, and a preview before purchase.",
     url: getCanonicalUrl('/products/notice-only'),
   },
   alternates: {
@@ -86,8 +87,8 @@ export default async function NoticeOnlyPage() {
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData
         data={productSchema({
-          name: "AI-Validated Eviction Case Bundle",
-          description: "Eviction notice packs for landlords in England, Wales, and Scotland, with checks before you serve.",
+          name: "Eviction Notice Pack for Landlords",
+          description: "Eviction notice pack for landlords in England, Wales, and Scotland, with route checks, service guidance, and a preview before you serve.",
           price: product.price.toString(),
           url: "https://landlordheaven.co.uk/products/notice-only",
         })}
@@ -117,7 +118,7 @@ export default async function NoticeOnlyPage() {
               How it works
             </Link>
             <Link href="#start-your-pack" className="font-medium text-primary hover:underline">
-              Start your pack
+              Start your notice pack
             </Link>
           </nav>
         </Container>
@@ -128,7 +129,7 @@ export default async function NoticeOnlyPage() {
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Who this is for</h2>
             <p className="mt-4 text-lg text-gray-700">
-              This pack is for landlords dealing with a live tenant issue who need to get the right first step in place quickly.
+              This pack is for landlords who need to evict a tenant legally and want to get the right first step in place quickly.
             </p>
             <ul className="mt-6 grid gap-3 text-gray-700 md:grid-cols-2">
               <li>Your tenant is not paying rent and you need to start the rent arrears route.</li>
@@ -137,13 +138,29 @@ export default async function NoticeOnlyPage() {
               <li>You want the notice, service steps, and checks lined up before you press print.</li>
             </ul>
             <p className="mt-6 text-gray-700">
-              Serving the correct notice is what starts the eviction process. A mistake at this stage can delay the whole case, so this page is designed to help you avoid invalid notice mistakes before you serve.
+              Serving the correct notice is what starts the eviction process. A mistake at this stage can delay the whole case, so this page is designed to help you avoid invalid notice mistakes before you serve and lose more time.
             </p>
             <div className="mt-8">
               <h3 className="mb-4 text-xl font-semibold text-charcoal">Need help working out the England route?</h3>
               <p className="mb-4 text-gray-700">
-                Start by checking the route, then generate the notice that matches your case and region. The aim is simple: better route checks, clearer service guidance, and fewer re-serves.
+                Start by checking the route, then generate the eviction notice that matches your case and region. The aim is simple: better route checks, clearer service guidance, and fewer re-serves.
               </p>
+              <div className="grid gap-4 md:grid-cols-3">
+                {[
+                  guideLinks.rentersRightsActEvictionRules,
+                  guideLinks.section8Notice,
+                  guideLinks.form3aSection8,
+                ].map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-4 hover:bg-white"
+                  >
+                    <p className="font-semibold text-charcoal">{link.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-gray-700">{link.description}</p>
+                  </Link>
+                ))}
+              </div>
             </div>
             <Section21ComplianceTimingPanel />
           </div>
@@ -196,7 +213,7 @@ export default async function NoticeOnlyPage() {
             </div>
             <div className="mt-8 text-center">
               <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">
-                Find out which notice you need →
+                Start your eviction notice pack →
               </Link>
             </div>
           </div>
@@ -206,16 +223,16 @@ export default async function NoticeOnlyPage() {
       <section id="start-your-pack" className="scroll-mt-24 py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your pack</h2>
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your notice pack</h2>
             <p className="mt-4 text-gray-700">
-              If your tenant is not paying or will not leave, the next step is making sure the right notice is in place. This pack gives you the key starting documents so you can move forward without relying on generic wording or guesswork.
+              If your tenant is not paying or will not leave, the next step is making sure the right eviction notice is in place. This pack gives you the key starting documents so you can move forward without relying on generic wording or guesswork.
             </p>
             <div className="mt-6">
               <WhyLandlordHeaven variant="full" />
             </div>
             <div className="mt-8 text-center">
               <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">
-                Find out which notice you need →
+                Start your eviction notice pack →
               </Link>
             </div>
           </div>
@@ -305,7 +322,7 @@ export default async function NoticeOnlyPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/wizard?product=notice_only&src=product_page&topic=eviction" className="hero-btn-primary">
-                Find out which notice you need →
+                Start your eviction notice pack →
               </Link>
             </div>
             <ul

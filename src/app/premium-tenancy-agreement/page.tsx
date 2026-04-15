@@ -37,9 +37,9 @@ const premiumPackHighlights = [
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Premium Assured Periodic Tenancy Agreement England | Fuller Residential Drafting',
+  title: 'Premium Tenancy Agreement England | Fuller Residential Drafting',
   description:
-    'Create a Premium Assured Periodic Tenancy Agreement for an ordinary residential let that needs fuller drafting and more day-to-day detail, updated for the post-Renters Rights Act framework with a guided tenancy agreement generator.',
+    'Create a Premium Tenancy Agreement for an ordinary residential let in England that needs fuller drafting, more day-to-day detail, and stronger management wording.',
   keywords: [
     'premium assured periodic tenancy agreement england',
     'england premium assured periodic tenancy agreement',
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Premium Assured Periodic Tenancy Agreement England | Fuller Residential Drafting',
+    title: 'Premium Tenancy Agreement England | Fuller Residential Drafting',
     description:
-      'Premium assured periodic tenancy agreement for ordinary residential lets that need fuller drafting and more day-to-day detail, updated for the post-Renters Rights Act framework with a guided tenancy agreement generator.',
+      'Premium tenancy agreement for ordinary residential lets in England that need fuller drafting, more day-to-day detail, and stronger management wording.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -69,12 +69,12 @@ export default function PremiumTenancyAgreementPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Premium Assured Periodic Tenancy Agreement', url: canonicalUrl },
+          { name: 'Premium Tenancy Agreement', url: canonicalUrl },
         ])}
       />
       <StructuredData
         data={productSchema({
-          name: 'Premium Assured Periodic Tenancy Agreement',
+          name: 'Premium Tenancy Agreement',
           description: PRODUCTS.england_premium_tenancy_agreement.description,
           price: PRODUCTS.england_premium_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
@@ -82,13 +82,13 @@ export default function PremiumTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/premium-tenancy-agreement"
-        title="Premium Assured Periodic Tenancy Agreement England"
-        subtitle="Use this more detailed England tenancy agreement generator when the tenancy is still a standard residential let, but you want fuller wording around access, repairs, handover, keys, and day-to-day management than the standard assured periodic route provides."
-        primaryCtaLabel="Start premium assured periodic tenancy agreement"
+        title="Premium Tenancy Agreement England"
+        subtitle="Use this more detailed England tenancy agreement when the tenancy is still a standard residential let, but you want fuller wording around access, repairs, handover, keys, and day-to-day management than the standard route provides."
+        primaryCtaLabel="Start premium tenancy agreement"
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for an updated AST replacement, a Renters Rights Act tenancy agreement, or a new tenancy agreement generator for England, this is the more detailed assured periodic route for ordinary residential lets that need stronger management and handover wording."
+        legacyNotice="If you were searching for a premium tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator with fuller drafting, this is the more detailed route for ordinary residential lets that need stronger management and handover wording."
         introTitle="For a standard residential let with more detail built in"
         introBody={[
           'This page is for landlords who need more than the standard assured periodic agreement but do not need a separate Student, HMO / Shared House, or Lodger product. It is the more detailed England tenancy agreement route under the post-Renters Rights Act framework.',

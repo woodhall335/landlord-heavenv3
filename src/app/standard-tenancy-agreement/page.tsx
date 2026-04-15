@@ -37,9 +37,9 @@ const standardPackHighlights = [
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Assured Periodic Tenancy Agreement England | Standard Residential Route',
+  title: 'Standard Tenancy Agreement England | Straightforward Whole-Property Let',
   description:
-    'Create an England Assured Periodic Tenancy Agreement for a straightforward whole-property residential let, updated for the post-Renters Rights Act framework and guided step by step.',
+    'Create a Standard Tenancy Agreement for a straightforward whole-property let in England, using current assured periodic wording and the practical supporting documents landlords usually need.',
   keywords: [
     'assured periodic tenancy agreement england',
     'england assured periodic tenancy agreement',
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Assured Periodic Tenancy Agreement England | Standard Residential Route',
+    title: 'Standard Tenancy Agreement England | Straightforward Whole-Property Let',
     description:
-      'Create an England Assured Periodic Tenancy Agreement for a straightforward whole-property residential let, updated for the post-Renters Rights Act framework and guided step by step.',
+      'Create a Standard Tenancy Agreement for a straightforward whole-property let in England, using current assured periodic wording and the practical supporting documents landlords usually need.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -69,12 +69,12 @@ export default function StandardTenancyAgreementPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Assured Periodic Tenancy Agreement', url: canonicalUrl },
+          { name: 'Standard Tenancy Agreement', url: canonicalUrl },
         ])}
       />
       <StructuredData
         data={productSchema({
-          name: 'Assured Periodic Tenancy Agreement',
+          name: 'Standard Tenancy Agreement',
           description: PRODUCTS.england_standard_tenancy_agreement.description,
           price: PRODUCTS.england_standard_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
@@ -82,13 +82,13 @@ export default function StandardTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Assured Periodic Tenancy Agreement England"
-        subtitle="Use this standard England tenancy agreement generator if you are letting a whole property on a straightforward residential tenancy and want the current assured periodic route, without student, HMO, lodger, or Premium-level detail."
-        primaryCtaLabel="Start assured periodic tenancy agreement"
+        title="Standard Tenancy Agreement England"
+        subtitle="Use this standard England tenancy agreement if you are letting a whole property on a straightforward residential tenancy and want current assured periodic wording without student, HMO, lodger, or Premium-level detail."
+        primaryCtaLabel="Start standard tenancy agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for an updated AST replacement, a Renters Rights Act tenancy agreement, or a new tenancy agreement generator for England, this is the standard assured periodic route for a straightforward whole-property let."
+        legacyNotice="If you were searching for a standard tenancy agreement, a basic tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator, this is the standard route for a straightforward whole-property let."
         introTitle="For a straightforward whole-property let"
         introBody={[
           'This is the standard route for a new England tenancy agreement where the tenancy is a straightforward whole-property let. Use it when you want current assured periodic wording under the post-Renters Rights Act framework, without the extra operational detail included in the Premium route or the specialist products.',

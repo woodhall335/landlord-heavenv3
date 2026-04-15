@@ -241,6 +241,13 @@ export default function MoneyClaimN1ClaimFormPage() {
                     Compare with MCOL
                   </Link>
                 </div>
+                <p className="mt-4 text-sm leading-6 text-gray-700">
+                  Need the broader debt-recovery walkthrough first?{' '}
+                  <Link href="/money-claim" className="font-semibold text-primary hover:underline">
+                    Read the money claim guide
+                  </Link>
+                  .
+                </p>
               </div>
             </div>
           </Container>
@@ -573,7 +580,11 @@ export default function MoneyClaimN1ClaimFormPage() {
         <section className="py-12 lg:py-16 bg-white">
           <Container>
             <div className="mx-auto max-w-5xl">
-              <FAQSection faqs={faqs} title="N1 claim form FAQs for landlords" />
+              <FAQSection
+                faqs={faqs}
+                title="N1 claim form FAQs for landlords"
+                includeSchema={false}
+              />
             </div>
           </Container>
         </section>

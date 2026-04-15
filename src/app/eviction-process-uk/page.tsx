@@ -6,9 +6,9 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonical = getCanonicalUrl('/eviction-process-uk');
 
 export const metadata: Metadata = {
-  title: 'Eviction Process UK: What Landlords Must Do Step by Step',
+  title: 'Eviction Process UK: Comparison Guide and England Routing Page',
   description:
-    'UK landlord guide to the eviction process, including route selection, notice stage, court progression, Section 8 after the Section 21 ban, and enforcement planning.',
+    'UK comparison guide to the eviction process, with England landlords routed into the current post-1 May 2026 framework, notice path, and possession timeline.',
   alternates: { canonical },
   openGraph: {
     title: 'Eviction Process UK: What Landlords Must Do Step by Step',
@@ -25,7 +25,7 @@ const content: PillarPageContent = {
   description: metadata.description as string,
   heroTitle: 'Eviction Process UK',
   heroSubtitle:
-    'A route-first guide for landlords who need the next legal step, not vague advice that skips over the notice, court, or enforcement sequence.',
+    'A UK comparison guide for landlords who need the next legal step and want England cases routed into the current post-1 May 2026 framework.',
   icon: '/images/wizard-icons/07-review-finish.png',
   heroBullets: [
     'Understand the notice-to-court sequence before deadlines are missed.',
@@ -36,7 +36,11 @@ const content: PillarPageContent = {
     <>
       The eviction process in the UK starts with route selection, not form filling. Landlords usually move faster
       when they confirm jurisdiction first, then choose the safest notice route, then prepare the court file before
-      the notice expires. For England cases, that often means using{' '}
+      the notice expires. For England cases, that means starting with{' '}
+      <Link href="/renters-rights-act-eviction-rules" className="text-primary font-medium hover:underline">
+        the current England eviction rules
+      </Link>{' '}
+      and then using{' '}
       <Link href="/section-8-notice" className="text-primary font-medium hover:underline">
         the Section 8 notice guide
       </Link>{' '}
@@ -52,11 +56,15 @@ const content: PillarPageContent = {
       <Link href="/tenant-not-paying-rent" className="text-primary font-medium hover:underline">
         tenant not paying rent in the UK
       </Link>
-      . If the issue is possession after notice expiry, move into the court-stage pages and enforcement workflow.
+      . If the issue is possession after notice expiry, move into{' '}
+      <Link href="/eviction-process-england" className="text-primary font-medium hover:underline">
+        the England possession process
+      </Link>{' '}
+      and the wider enforcement workflow.
     </>,
   ],
   routeExplanation: [
-    'The process is not identical across England, Wales, Scotland, and Northern Ireland, so landlords should use this page as a UK-wide hub and then move into the jurisdiction-specific route that matches the property.',
+    'The process is not identical across England, Wales, Scotland, and Northern Ireland, so landlords should use this page as a UK-wide guide and then move into the jurisdiction-specific route that matches the property.',
     'In England, the post-1 May 2026 position is more Section 8-led because Section 21 has ended. That makes evidence quality, grounds selection, and court-readiness more important earlier in the workflow.',
     'Once notice expires, most delay comes from inconsistencies between the tenancy facts, service proof, rent schedule, and court forms. The quickest process is usually the one least likely to be restarted.',
     'Enforcement should be planned before judgment. If the tenant is likely to stay past the possession date, landlords should already know which warrant or bailiff step follows and what documents they will need.',
@@ -107,7 +115,7 @@ const content: PillarPageContent = {
     { question: 'Is the property in England and the route now grounds-led?', recommendation: 'Start with the Section 8 guide and the Section 21 transition page before serving notice.' },
     { question: 'Is unpaid rent the main issue?', recommendation: 'Pair this page with the tenant-not-paying-rent pillar so notice and money-claim sequencing stay aligned.' },
     { question: 'Has the tenant stayed after notice expiry?', recommendation: 'Move to the court-stage and enforcement guides rather than relying on notice-stage content alone.' },
-    { question: 'Are you still comparing jurisdictions?', recommendation: 'Use this page as the hub, then move into the regional guide that matches the property location.' },
+    { question: 'Are you still comparing jurisdictions?', recommendation: 'Use this page as the guide, then move into the regional guide that matches the property location.' },
   ],
   sections: [
     {
@@ -116,6 +124,10 @@ const content: PillarPageContent = {
         <>
           England landlords now need a clearer possession plan because the old Section 21 route has ended. That is why
           the process overview needs to point landlords toward{' '}
+          <Link href="/renters-rights-act-eviction-rules" className="text-primary font-medium hover:underline">
+            the current England eviction rules
+          </Link>{' '}
+          first, then toward{' '}
           <Link href="/section-8-notice" className="text-primary font-medium hover:underline">
             Section 8 notice for rent arrears and breach-based possession
           </Link>{' '}
@@ -155,19 +167,22 @@ const content: PillarPageContent = {
   ],
   supportingLinks: [
     { label: 'How to evict a tenant in the UK', href: '/how-to-evict-tenant' },
+    { label: 'Current England eviction rules', href: '/renters-rights-act-eviction-rules' },
     { label: 'Section 8 notice guide', href: '/section-8-notice' },
+    { label: 'How to evict a tenant in England', href: '/how-to-evict-a-tenant-england' },
     { label: 'Section 21 ban UK guide', href: '/section-21-ban-uk' },
+    { label: 'Eviction process in England', href: '/eviction-process-england' },
     { label: 'Tenant not paying rent in the UK', href: '/tenant-not-paying-rent' },
     { label: 'Possession order timeline', href: '/possession-order-timeline' },
     { label: 'Bailiff eviction process', href: '/bailiff-eviction-process' },
   ],
   toolLinks: [
-    { label: 'Eviction notice pack', href: '/eviction-notice-template' },
+    { label: 'Eviction notice pack', href: '/products/notice-only' },
     { label: 'Rent arrears calculator', href: '/tools/rent-arrears-calculator' },
   ],
   productLink: { label: 'Full eviction support for England', href: '/products/complete-pack' },
-  primaryCta: { label: 'Start your full eviction pack', href: '/products/complete-pack' },
-  secondaryCta: { label: 'Read the Section 8 notice guide', href: '/section-8-notice' },
+  primaryCta: { label: 'Read the current England rules', href: '/renters-rights-act-eviction-rules' },
+  secondaryCta: { label: 'See the England possession process', href: '/eviction-process-england' },
   faqs: [
     { question: 'What is the first step in the eviction process UK?', answer: 'Confirm the jurisdiction, tenancy facts, and correct notice route before serving anything.' },
     { question: 'What replaces Section 21 in England?', answer: 'England landlords now need a Section 8-led possession plan in most post-1 May 2026 cases.' },

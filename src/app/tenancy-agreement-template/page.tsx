@@ -113,14 +113,14 @@ const supportRoutes = [
     title: 'Assured Shorthold Tenancy Agreement Template',
     href: '/assured-shorthold-tenancy-agreement-template',
     summary:
-      'Use this legacy AST guide when older terminology is driving the search. It explains the wording shift and routes you back to the main England template hub.',
+      'Use this legacy AST guide when older terminology is driving the search. It explains the wording shift and routes you back to the England agreement example page.',
     ctaLabel: 'Read AST legacy guide',
   },
   {
     title: 'Assured Periodic Tenancy Agreement',
     href: '/assured-periodic-tenancy-agreement',
     summary:
-      'Use this support page when you need the newer England terminology explained in plain English before returning to the main template and route-selection journey.',
+      'Use this support page when you need the newer England terminology explained in plain English before returning to the England agreement example and comparison journey.',
     ctaLabel: 'Read assured periodic guide',
   },
 ] as const;
@@ -157,14 +157,14 @@ const faqs: FAQItem[] = [
       'Because they are the default mainstream England routes for ordinary residential lets. Specialist routes are still available, but they should appear after the main template and comparison journey instead of interrupting it.',
   },
   {
-    question: 'Why do AST and assured periodic wording both appear in the cluster?',
+    question: 'Why do AST and assured periodic wording both appear here?',
     answer:
-      'Because landlords still search with AST terminology, while the current England route is better explained through assured periodic language. The legacy AST support page and the assured periodic support page both point back to this main England template hub.',
+      'Because landlords still search with AST terminology, while the current England route is better explained through assured periodic language. The legacy AST support page and the assured periodic support page both point back to this England agreement example page.',
   },
   {
     question: 'What is the difference between this page and /products/ast?',
     answer:
-      'This page is the England template and example hub for broad searches such as tenancy agreement template, rent agreement, and tenancy contract. /products/ast is the downstream comparison page for landlords who want every England route shown side by side after they have seen the template-first hub.',
+      'This page is the England agreement example page for broad searches such as tenancy agreement template, rent agreement, and tenancy contract. /products/ast is the downstream comparison page for landlords who want every England route shown side by side after they have seen the example page first.',
   },
   {
     question: 'Does this page apply outside England?',
@@ -365,7 +365,7 @@ export default function TenancyAgreementTemplatePage() {
                   assured periodic guide
                 </Link>{' '}
                 stay available lower in the journey, but this page remains the main England
-                template destination.
+                agreement example page.
               </p>
             </div>
           </Container>
@@ -466,8 +466,8 @@ export default function TenancyAgreementTemplatePage() {
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
                 These pages stay live so landlords using older or transitional terminology can
-                understand the wording shift, then return to the main template-first hub without
-                mistaking the support pages for the broad owner.
+                understand the wording shift, then return to the England agreement example page
+                without mistaking the support pages for the broad owner.
               </p>
             </div>
 
@@ -509,6 +509,7 @@ export default function TenancyAgreementTemplatePage() {
               intro="Clear answers for landlords comparing a static template with the live England agreement routes."
               faqs={faqs}
               showContactCTA={false}
+              includeSchema={false}
               variant="gray"
             />
           </div>
@@ -519,10 +520,10 @@ export default function TenancyAgreementTemplatePage() {
                 Secondary comparison path
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Need route-selection help?
+                Need route-comparison help?
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
-                Use the England comparison page only after the template-first hub if you want
+                Use the England comparison page only after the example page if you want
                 every England route shown side by side before you choose what to do next.
               </p>
             </div>

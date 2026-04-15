@@ -19,12 +19,27 @@ export const EVICTION_ENTITIES = [
 ] as const;
 
 export type EvictionCluster =
+  | 'current-england-framework'
   | 'tenant-problems'
   | 'eviction-notices'
   | 'court-process'
   | 'rent-arrears'
   | 'possession-enforcement'
   | 'section-21-transition';
+
+const CURRENT_ENGLAND_FRAMEWORK_ROUTE_ORDER = [
+  '/renters-rights-act-eviction-rules',
+  '/section-8-notice',
+  '/form-3-section-8',
+  '/how-to-evict-a-tenant-england',
+  '/eviction-process-england',
+] as const;
+
+function isCurrentEnglandFrameworkPath(pathname: string): boolean {
+  return CURRENT_ENGLAND_FRAMEWORK_ROUTE_ORDER.includes(
+    pathname as (typeof CURRENT_ENGLAND_FRAMEWORK_ROUTE_ORDER)[number]
+  );
+}
 
 export interface ClusterDefinition {
   key: EvictionCluster;
@@ -36,7 +51,14 @@ export interface ClusterDefinition {
   pages: string[];
 }
 
-function mapSeoClusterToAuthorityCluster(cluster: SeoCluster): EvictionCluster {
+function mapSeoClusterToAuthorityCluster(
+  cluster: SeoCluster,
+  pathname?: string
+): EvictionCluster {
+  if (pathname && isCurrentEnglandFrameworkPath(pathname)) {
+    return 'current-england-framework';
+  }
+
   switch (cluster) {
     case 'rent-arrears':
     case 'money-claim':
@@ -65,6 +87,15 @@ const CLUSTER_CONFIG: Record<
   EvictionCluster,
   Omit<ClusterDefinition, 'pages'>
 > = {
+  'current-england-framework': {
+    key: 'current-england-framework',
+    label: 'Current England eviction framework',
+    description:
+      'Authority bundle for England landlords covering the post-1 May 2026 rules, Section 8 route, Form 3A, landlord action guide, and possession process.',
+    parent: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
+    tool: SEO_PILLAR_ROUTES.section8Notice,
+    product: SEO_PRODUCT_ROUTES.noticeOnly,
+  },
   'tenant-problems': {
     key: 'tenant-problems',
     label: 'Tenant problems',
@@ -117,10 +148,16 @@ const CLUSTER_CONFIG: Record<
 
 export const EVICTION_CLUSTERS: ClusterDefinition[] = Object.values(CLUSTER_CONFIG).map(
   (config) => {
-    const pages = getAllSeoPageTaxonomyEntries()
-      .filter((entry) => mapSeoClusterToAuthorityCluster(entry.cluster) === config.key)
-      .map((entry) => entry.pathname)
-      .filter((pathname) => pathname !== config.parent);
+    const pages =
+      config.key === 'current-england-framework'
+        ? CURRENT_ENGLAND_FRAMEWORK_ROUTE_ORDER.filter((pathname) => pathname !== config.parent)
+        : getAllSeoPageTaxonomyEntries()
+            .filter(
+              (entry) =>
+                mapSeoClusterToAuthorityCluster(entry.cluster, entry.pathname) === config.key
+            )
+            .map((entry) => entry.pathname)
+            .filter((pathname) => pathname !== config.parent);
 
     return {
       ...config,
@@ -135,7 +172,7 @@ export function getClusterForSlug(slug: string): ClusterDefinition | null {
     return null;
   }
 
-  const clusterKey = mapSeoClusterToAuthorityCluster(entry.cluster);
+  const clusterKey = mapSeoClusterToAuthorityCluster(entry.cluster, entry.pathname);
   return EVICTION_CLUSTERS.find((cluster) => cluster.key === clusterKey) ?? null;
 }
 

@@ -194,7 +194,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               'That is usually a Lodger or resident-landlord arrangement rather than an HMO / Shared House tenancy route, so it is usually better to compare the Lodger product instead.',
           },
         ]}
-        finalCtaBody="Use the HMO / Shared House route when the real complexity is shared occupation, communal areas, and day-to-day house management. If the tenants are sharers and you want the agreement to reflect how shared-house living actually works in practice, this is usually a better fit than a general residential agreement. If you are still deciding, compare it against the other England tenancy routes on the main hub."
+        finalCtaBody="Use the HMO / Shared House route when the real complexity is shared occupation, communal areas, and day-to-day house management. If the tenants are sharers and you want the agreement to reflect how shared-house living actually works in practice, this is usually a better fit than a general residential agreement. If you are still deciding, compare it against the other England tenancy routes on the main comparison page."
       />
     </div>
   );

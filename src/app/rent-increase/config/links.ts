@@ -8,7 +8,7 @@ export const RENT_INCREASE_DEFENCE_WIZARD_HREF =
 export const RENT_INCREASE_HUB_PATH = '/rent-increase';
 
 export const RENT_INCREASE_LINKS = {
-  hub: { href: RENT_INCREASE_HUB_PATH, label: 'Rent Increase Guide hub' },
+  hub: { href: RENT_INCREASE_HUB_PATH, label: 'Increase rent in England' },
   section13: {
     href: `${RENT_INCREASE_HUB_PATH}/section-13-notice`,
     label: 'Section 13 notice guide',
@@ -18,8 +18,8 @@ export const RENT_INCREASE_LINKS = {
     label: 'How to increase rent in England',
   },
   rules: {
-    href: `${RENT_INCREASE_HUB_PATH}/rent-increase-rules-uk`,
-    label: 'Rent increase rules UK overview',
+    href: RENT_INCREASE_HUB_PATH,
+    label: 'Rent increase rules for landlords',
   },
   form4a: {
     href: `${RENT_INCREASE_HUB_PATH}/form-4a-guide`,

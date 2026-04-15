@@ -44,9 +44,6 @@ const breadcrumbs = [
   { name: 'Claim Rent Arrears from Tenant', url: '/money-claim-rent-arrears' },
 ];
 
-
-const moneyClaimProductLink = '/products/money-claim';
-
 export default function MoneyClaimRentArrearsPage() {
   return (
     <>
@@ -287,7 +284,7 @@ export default function MoneyClaimRentArrearsPage() {
                 schedule of arrears, interest calculations, and step-by-step filing guidance.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href={moneyClaimProductLink} className="hero-btn-primary">
+                <Link href="/products/money-claim" className="hero-btn-primary">
                   Get Money Claim Pack
                 </Link>
                 <Link href="/money-claim-online-mcol" className="hero-btn-secondary">

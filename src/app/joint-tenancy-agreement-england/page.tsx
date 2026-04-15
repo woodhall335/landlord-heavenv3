@@ -5,7 +5,7 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/joint-tenancy-agreement-england');
-const standardHref = '/wizard?product=ast_standard&src=joint_tenancy_agreement_england&topic=tenancy';
+const standardHref = '/standard-tenancy-agreement';
 const chooserHref = '/products/ast';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
@@ -63,7 +63,7 @@ export default function JointTenancyAgreementEnglandPage() {
         compliancePoints={[
           'Aligned to the current England tenancy rollout after 1 May 2026',
           'Avoids presenting a new fixed-term AST as the default England route',
-          'Keeps shared-house search demand connected to the live wizard',
+          'Keeps shared-house search demand connected to the live England product routes',
         ]}
         keywordTargets={[
           'joint tenancy agreement england',

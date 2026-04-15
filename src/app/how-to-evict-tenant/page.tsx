@@ -17,8 +17,6 @@ import { howToEvictTenantFAQs } from '@/data/faqs';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   AlertTriangle,
-  ArrowRight,
-  CheckCircle,
   Clock,
   FileText,
   MapPin,
@@ -29,7 +27,7 @@ import {
 
 const canonicalUrl = getCanonicalUrl('/how-to-evict-tenant');
 
-const primaryProductHref = '/products/complete-pack';
+const primaryProductHref = '/renters-rights-act-eviction-rules';
 
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 const completePackPrice = PRODUCTS.complete_pack.displayPrice;
@@ -127,7 +125,7 @@ export default function HowToEvictTenantPage() {
         <UniversalHero
           title="How to Evict a Tenant in the UK"
           subtitle="Use this guide when you need to work out the right eviction route for your property, understand what changes by jurisdiction, and avoid the mistakes that most often slow landlords down."
-          primaryCta={{ label: `Start full eviction support - ${completePackPrice}`, href: primaryProductHref }}
+          primaryCta={{ label: 'Check current England rules', href: primaryProductHref }}
           secondaryCta={{ label: 'Jump to jurisdiction guide', href: '#jurisdiction-guide' }}
           showTrustPositioningBar
           hideMedia
@@ -217,6 +215,25 @@ export default function HowToEvictTenantPage() {
                   strategy and ends, if necessary, with the proper court or tribunal
                   enforcement route.
                 </p>
+                <p className="leading-7">
+                  For England landlords, the main owner pages are now{' '}
+                  <Link href={guideLinks.rentersRightsActEvictionRules.href} className="font-medium text-primary hover:underline">
+                    Renters&apos; Rights Act Eviction Rules
+                  </Link>
+                  ,{' '}
+                  <Link href={guideLinks.section8Notice.href} className="font-medium text-primary hover:underline">
+                    Section 8 Notice
+                  </Link>
+                  ,{' '}
+                  <Link href={guideLinks.form3aSection8.href} className="font-medium text-primary hover:underline">
+                    Form 3A
+                  </Link>
+                  , and{' '}
+                  <Link href={guideLinks.evictionProcessEngland.href} className="font-medium text-primary hover:underline">
+                    Eviction Process in England
+                  </Link>
+                  . Use this UK page to route into that bundle, not to replace it.
+                </p>
               </div>
 
               <div className="mt-8 rounded-2xl border border-purple-200 bg-purple-50 p-5">
@@ -257,6 +274,32 @@ export default function HowToEvictTenantPage() {
                   >
                     EPC requirements {'->'}
                   </Link>
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-2xl border border-purple-200 bg-purple-50 p-6">
+                <h3 className="text-xl font-semibold text-gray-900">
+                  Current England eviction framework
+                </h3>
+                <p className="mt-2 text-gray-700">
+                  If the property is in England, start with the live post-1 May 2026 bundle rather than older UK-wide summaries.
+                </p>
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
+                  {[
+                    guideLinks.rentersRightsActEvictionRules,
+                    guideLinks.section8Notice,
+                    guideLinks.form3aSection8,
+                    guideLinks.evictionProcessEngland,
+                  ].map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="rounded-xl border border-purple-200 bg-white p-4 hover:border-primary"
+                    >
+                      <p className="font-semibold text-gray-900">{link.title}</p>
+                      <p className="mt-2 text-sm leading-6 text-gray-700">{link.description}</p>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>

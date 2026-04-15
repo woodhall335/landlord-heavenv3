@@ -224,7 +224,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
               links={config.relatedLinks.map((link) => ({
                 href: link.href,
                 title: link.label,
-                description: 'Read the next page in the Section 13 rent increase guide cluster.',
+                description: 'Read the next page in the Section 13 rent increase journey.',
                 icon: 'legal',
                 type: 'guide',
               }))}

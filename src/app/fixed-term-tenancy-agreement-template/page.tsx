@@ -5,8 +5,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/fixed-term-tenancy-agreement-template');
-const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
+const standardAgreementHref = '/standard-tenancy-agreement';
+const premiumAgreementHref = '/premium-tenancy-agreement';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -37,9 +37,9 @@ export default function FixedTermTenancyAgreementTemplatePage() {
         title="Fixed Term Tenancy Agreement Template"
         subtitle="This is now a legacy England explainer page. From 1 May 2026 new England agreements generally move into the assured periodic framework, so the live self-serve routes no longer sell fixed-term AST paperwork as the core product."
         primaryCtaLabel="Start Standard England agreement"
-        primaryCtaHref={standardWizardHref}
+        primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
-        secondaryCtaHref={premiumWizardHref}
+        secondaryCtaHref={premiumAgreementHref}
         legacyNotice="Landlord Heaven keeps this fixed-term page live for search demand, but new England self-serve agreements are now routed into current Standard and Premium flows designed for the assured periodic framework."
         introTitle="From fixed-term demand to the current England route"
         introBody={[

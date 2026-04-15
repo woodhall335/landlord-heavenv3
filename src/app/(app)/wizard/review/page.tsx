@@ -94,6 +94,7 @@ import {
   buildMoneyClaimAddOnRecommendation,
   isMoneyClaimAddOnEligible,
 } from '@/lib/wizard-crosssell';
+import { getSelectedRouteBlockingIssues } from '@/lib/decision-engine/routeScopedBlockingIssues';
 
 interface ReviewAddOnRecommendation {
   sku: string;
@@ -177,14 +178,16 @@ function ReviewPageInner() {
   const reviewRecommendations = isTenancyFlow
     ? residentialRecommendations
     : evictionAddOnRecommendations;
+  const evictionBlockingIssues =
+    analysis && !isMoneyClaimFlow
+      ? getSelectedRouteBlockingIssues(analysis.decision_engine, analysis.recommended_route)
+      : [];
 
   // Compute hasBlockingIssues safely (false when analysis is null)
   const hasBlockingIssues = analysis
     ? isMoneyClaimFlow
       ? (analysis.case_health?.blockers?.length ?? 0) > 0
-      : analysis.decision_engine?.blocking_issues?.some(
-          (issue: any) => issue.severity === 'blocking'
-        )
+      : evictionBlockingIssues.length > 0
     : false;
 
   // All useEffect hooks must be called unconditionally BEFORE any returns
@@ -488,6 +491,7 @@ function ReviewPageInner() {
       readinessBadge={readinessBadge}
       redFlags={redFlags}
       complianceIssues={complianceIssues}
+      blockingIssues={evictionBlockingIssues}
       hasBlockingIssues={hasBlockingIssues}
       hasAcknowledgedBlockers={hasAcknowledgedBlockers}
       onAcknowledgeBlockers={setHasAcknowledgedBlockers}
@@ -550,6 +554,7 @@ function ReviewPageInner() {
     redFlags={redFlags}
     complianceIssues={complianceIssues}
     evidence={evidence}
+    blockingIssues={evictionBlockingIssues}
     hasBlockingIssues={hasBlockingIssues}
     hasAcknowledgedBlockers={hasAcknowledgedBlockers}
     onAcknowledgeBlockers={setHasAcknowledgedBlockers}
@@ -1130,6 +1135,7 @@ interface EvictionReviewContentProps {
   redFlags: string[];
   complianceIssues: string[];
   evidence: any;
+  blockingIssues: any[];
   hasBlockingIssues: boolean;
   hasAcknowledgedBlockers: boolean;
   onAcknowledgeBlockers: (acknowledged: boolean) => void;
@@ -1163,6 +1169,7 @@ function EvictionReviewContent({
   redFlags,
   complianceIssues,
   evidence,
+  blockingIssues,
   hasBlockingIssues,
   hasAcknowledgedBlockers,
   onAcknowledgeBlockers,
@@ -1289,7 +1296,7 @@ function EvictionReviewContent({
       <div className="grid md:grid-cols-2 gap-4">
         <JurisdictionExplainer jurisdiction={jurisdiction} product={product} />
         <ChecksSummaryBox
-          blockingIssues={analysis.decision_engine?.blocking_issues || []}
+          blockingIssues={blockingIssues}
           warnings={analysis.decision_engine?.warnings || []}
           positives={analysis.decision_engine?.positives || []}
           product={product}
@@ -1309,9 +1316,7 @@ function EvictionReviewContent({
                 These issues may stop a judge granting possession unless they are fixed. Your
                 pack will include a procedural guide explaining how to deal with them.
               </p>
-              {analysis.decision_engine?.blocking_issues
-                ?.filter((issue: any) => issue.severity === 'blocking')
-                .map((issue: any, i: number) => (
+              {blockingIssues.map((issue: any, i: number) => (
                   <div key={i} className="mb-2 p-3 bg-white rounded border border-red-200">
                     <p className="font-medium text-red-900">
                       {issue.route?.toUpperCase?.() || 'ROUTE'}: {issue.description}
@@ -1888,6 +1893,7 @@ interface NoticeOnlyReviewContentProps {
   readinessBadge: React.ReactNode;
   redFlags: string[];
   complianceIssues: string[];
+  blockingIssues: any[];
   hasBlockingIssues: boolean;
   hasAcknowledgedBlockers: boolean;
   onAcknowledgeBlockers: (acknowledged: boolean) => void;
@@ -1909,6 +1915,7 @@ function NoticeOnlyReviewContent({
   readinessBadge,
   redFlags,
   complianceIssues,
+  blockingIssues,
   hasBlockingIssues,
   hasAcknowledgedBlockers,
   onAcknowledgeBlockers,
@@ -1924,7 +1931,6 @@ function NoticeOnlyReviewContent({
 }: NoticeOnlyReviewContentProps) {
   // Extract decision engine data
   const decisionEngine = analysis?.decision_engine;
-  const blockingIssues = decisionEngine?.blocking_issues?.filter((i: any) => i.severity === 'blocking') || [];
   const warnings = decisionEngine?.warnings || [];
   const recommendedRoute = analysis?.recommended_route;
 

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-05T18:20:08.297Z",
-  "scannedFiles": 2192,
+  "generatedAt": "2026-04-15T10:56:26.379Z",
+  "scannedFiles": 2397,
   "updatedPages": [
     "/form-3-section-8",
     "/section-8-notice",
@@ -13,17 +13,17 @@
   "wordCounts": [
     {
       "slug": "form-3-section-8",
-      "visibleWordCount": 2076,
+      "visibleWordCount": 2083,
       "passes": true
     },
     {
       "slug": "section-8-notice",
-      "visibleWordCount": 1910,
+      "visibleWordCount": 1930,
       "passes": true
     },
     {
       "slug": "renters-rights-act-eviction-rules",
-      "visibleWordCount": 1866,
+      "visibleWordCount": 1873,
       "passes": true
     },
     {
@@ -33,17 +33,17 @@
     },
     {
       "slug": "how-to-evict-a-tenant-england",
-      "visibleWordCount": 1688,
+      "visibleWordCount": 1703,
       "passes": true
     },
     {
       "slug": "eviction-process-england",
-      "visibleWordCount": 1576,
+      "visibleWordCount": 1585,
       "passes": true
     },
     {
       "slug": "eviction-notice-template",
-      "visibleWordCount": 1616,
+      "visibleWordCount": 1627,
       "passes": true
     }
   ],
@@ -4119,6 +4119,10 @@
       "destination": "/section-21-notice"
     },
     {
+      "source": "/section-21-notice-generator",
+      "destination": "/section-21-notice"
+    },
+    {
       "source": "/section-21-notice-period",
       "destination": "/section-21-notice"
     },
@@ -4128,10 +4132,6 @@
     },
     {
       "source": "/section-21-notice-template",
-      "destination": "/section-21-notice"
-    },
-    {
-      "source": "/section-21-notice-generator",
       "destination": "/section-21-notice"
     },
     {
@@ -4273,6 +4273,10 @@
       "destination": "/section-21-notice"
     },
     {
+      "source": "/section-21-notice-generator",
+      "destination": "/section-21-notice"
+    },
+    {
       "source": "/section-21-notice-period",
       "destination": "/section-21-notice"
     },
@@ -4282,10 +4286,6 @@
     },
     {
       "source": "/section-21-notice-template",
-      "destination": "/section-21-notice"
-    },
-    {
-      "source": "/section-21-notice-generator",
       "destination": "/section-21-notice"
     },
     {
@@ -4360,17 +4360,17 @@
   "itemsNeedingLegalReview": [],
   "form3TerminologyViolations": [],
   "summary": {
-    "totalLegacyMatches": 8832,
+    "totalLegacyMatches": 8911,
     "activeViolations": 0,
     "form3Violations": 0,
     "wordCountFailures": 0,
     "classificationCounts": {
-      "internal_compatibility": 3287,
-      "test_or_audit": 3102,
-      "approved_transition_hub": 1174,
+      "internal_compatibility": 3276,
+      "test_or_audit": 3177,
+      "approved_transition_hub": 1188,
       "approved_redirect_metadata": 3,
       "inactive_retired_runtime_support": 4,
-      "deprecated_historical": 1238,
+      "deprecated_historical": 1239,
       "devolved_historical_note": 24
     }
   }

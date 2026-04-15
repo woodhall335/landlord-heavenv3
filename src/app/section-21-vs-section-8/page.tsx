@@ -12,9 +12,11 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
+import { SECTION21_COURT_CUTOFF_DATE, SECTION21_END_DATE } from '@/lib/seo/section21-transition-copy';
 
 const canonical = 'https://landlordheaven.co.uk/section-21-vs-section-8';
-const ownerPageLink = '/eviction-notice-template';
+const ownerPageLink = '/products/notice-only';
+const currentRulesLink = '/renters-rights-act-eviction-rules';
 const currentGuideLink = '/section-8-notice';
 const currentProcessLink = '/eviction-process-england';
 
@@ -49,7 +51,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Where should broad notice users go first?',
     answer:
-      'Broad notice users should go to the England notice owner page first so they can see the example bundle, service guidance, and route hierarchy before they commit to a specific workflow.',
+      'Broad notice users should go to the eviction notice pack first so they can see the current route, service guidance, and notice-stage workflow before they commit to a specific path.',
   },
   {
     question: 'When does Notice Only become the right next step?',
@@ -107,7 +109,7 @@ export default function Page() {
         title="Section 21 vs Section 8"
         subtitle="A practical England guide for translating historical Section 21 intent into the current Renters’ Rights Act framework and the current notice path landlords now need."
         primaryCta={{
-          label: 'View England notice template',
+          label: 'Start eviction notice pack',
           href: ownerPageLink,
         }}
         secondaryCta={{
@@ -121,7 +123,7 @@ export default function Page() {
       >
         <p className="mt-6 text-sm text-white/90 md:text-base">
           Section 21 is now historical-only language in England. This page exists to convert that
-          older terminology into the live possession route, the England notice owner page, and the
+          older terminology into the live possession route, the eviction notice pack, and the
           current notice-stage workflow.
         </p>
       </UniversalHero>
@@ -141,18 +143,38 @@ export default function Page() {
               <p>
                 Broad notice users should start with the{' '}
                 <Link href={ownerPageLink} className="font-medium text-primary hover:underline">
-                  England notice owner page
+                  eviction notice pack
                 </Link>{' '}
                 first. That page shows the example bundle, service instructions, validity checks,
                 and the current route hierarchy before you move into a transactional flow.
               </p>
+              <div className="grid gap-4 md:grid-cols-2">
+                <Link
+                  href={currentRulesLink}
+                  className="rounded-xl border border-[#E6DBFF] bg-white p-4 hover:bg-[#F8F4FF]"
+                >
+                  <p className="font-semibold text-[#2a2161]">Renters&apos; Rights Act Eviction Rules</p>
+                  <p className="mt-2 text-sm text-gray-700">
+                    Use the main England rules page for the post-1 May 2026 framework.
+                  </p>
+                </Link>
+                <Link
+                  href="/form-3-section-8"
+                  className="rounded-xl border border-[#E6DBFF] bg-white p-4 hover:bg-[#F8F4FF]"
+                >
+                  <p className="font-semibold text-[#2a2161]">Form 3A</p>
+                  <p className="mt-2 text-sm text-gray-700">
+                    Review the live England notice form that now sits inside the Section 8 route.
+                  </p>
+                </Link>
+              </div>
             </SupportCard>
 
-            <SupportCard title="What changed after Section 21 ended">
+            <SupportCard title="What changes when Section 21 ends">
               <p>
-                Section 21 ended in England on <strong>1 May 2026</strong>. Older qualifying
-                notices needed court proceedings to begin by <strong>31 July 2026</strong>. That
-                means most live possession scenarios now need the current England notice and court
+                Section 21 is due to end in England on <strong>{SECTION21_END_DATE}</strong>. If a
+                qualifying notice is served before then, court proceedings must begin by <strong>{SECTION21_COURT_CUTOFF_DATE}</strong>. That
+                means landlords should already be planning around the current England notice and court
                 route rather than a Section 21-first workflow.
               </p>
               <p>
@@ -186,7 +208,13 @@ export default function Page() {
                   href={ownerPageLink}
                   className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                 >
-                  View England notice template
+                  Start eviction notice pack
+                </Link>
+                <Link
+                  href={currentRulesLink}
+                  className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
+                >
+                  Read current England rules
                 </Link>
                 <Link
                   href={currentGuideLink}
@@ -250,7 +278,7 @@ export default function Page() {
                 href={ownerPageLink}
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                View England notice template
+                Start eviction notice pack
               </Link>
               <Link
                 href={currentGuideLink}
@@ -269,7 +297,11 @@ export default function Page() {
         </Container>
       </section>
 
-      <FAQSection faqs={faqs} title="Section 21 vs Current England Route FAQs" />
+      <FAQSection
+        faqs={faqs}
+        title="Section 21 vs Current England Route FAQs"
+        includeSchema={false}
+      />
     </div>
   );
 }

@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
+import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { Container } from '@/components/ui/Container';
 import { StructuredData, breadcrumbSchema, faqPageSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/periodic-tenancy-agreement');
-const wizardHref = '/wizard?product=ast_standard&src=periodic_tenancy_agreement&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=periodic_tenancy_agreement&topic=tenancy';
+const standardAgreementHref = '/standard-tenancy-agreement';
+const premiumAgreementHref = '/premium-tenancy-agreement';
 
 const faqs = [
   {
@@ -72,13 +73,14 @@ export default function PeriodicTenancyPage() {
         <UniversalHero
           title="What Is a Periodic Tenancy?"
           subtitle="A periodic tenancy is a tenancy that rolls from one rental period to the next. Landlords often call it a rolling tenancy. This page explains the phrase in plain English, then points you to the current England agreement routes if you need to create a new let."
-          primaryCta={{ label: 'Start Standard Tenancy Agreement', href: wizardHref }}
-          secondaryCta={{ label: 'Start Premium Tenancy Agreement', href: premiumWizardHref }}
+          primaryCta={{ label: 'Start Standard Tenancy Agreement', href: standardAgreementHref }}
+          secondaryCta={{ label: 'Start Premium Tenancy Agreement', href: premiumAgreementHref }}
           showTrustPositioningBar
           hideMedia
         />
 
         <Container className="py-12">
+          <SeoPageContextPanel pathname="/periodic-tenancy-agreement" className="mb-8" />
           <div className="max-w-4xl space-y-10">
             <section className="space-y-5">
               <h2 className="text-3xl font-bold tracking-tight text-slate-900">
@@ -136,11 +138,11 @@ export default function PeriodicTenancyPage() {
             </section>
 
             <div className="flex flex-wrap gap-3">
-              <Link href={wizardHref} className="hero-btn-primary">
-                Build Standard periodic agreement
+              <Link href={standardAgreementHref} className="hero-btn-primary">
+                Start Standard periodic agreement
               </Link>
-              <Link href={premiumWizardHref} className="hero-btn-secondary">
-                Build Premium periodic agreement
+              <Link href={premiumAgreementHref} className="hero-btn-secondary">
+                Start Premium periodic agreement
               </Link>
               <Link href="/rolling-tenancy-agreement" className="hero-btn-secondary">
                 Read the rolling tenancy guide
@@ -152,6 +154,7 @@ export default function PeriodicTenancyPage() {
               intro="Straight answers on what periodic tenancy means, how it relates to rolling tenancies, and where to start if you need a new England agreement."
               faqs={faqs}
               showContactCTA={false}
+              includeSchema={false}
               variant="gray"
             />
           </div>

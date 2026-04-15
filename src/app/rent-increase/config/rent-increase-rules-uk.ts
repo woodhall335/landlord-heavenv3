@@ -7,11 +7,11 @@ export const rentIncreaseRulesUkPage: RentIncreaseGuidePage = {
   title: 'Rent Increase Rules UK (England Detailed Guide)',
   heroTitle: 'Rent Increase Rules UK: England Process Explained',
   heroSubtitle:
-    'A rules-overview page for UK search intent with explicit England process detail, jurisdiction boundaries, and practical landlord safeguards.',
+    'An England-focused guide for landlords who need Section 13 and Form 4A explained clearly, with short notes on where other UK jurisdictions differ.',
   heroBullets: [
-    'Rules-overview intent with clear jurisdiction boundaries.',
-    'Above-the-fold notice that detailed process below is for England.',
-    'Short jurisdiction-difference section to avoid false UK coverage claims.',
+    'Clear England process guidance with honest jurisdiction boundaries.',
+    'Plain-English explanation of Section 13 and Form 4A steps.',
+    'Short jurisdiction-difference section so landlords do not apply England rules elsewhere.',
   ],
   metaTitle: 'Rent Increase Rules UK: England Landlord Guide to Section 13 and Form 4A',
   metaDescription:
@@ -35,7 +35,7 @@ export const rentIncreaseRulesUkPage: RentIncreaseGuidePage = {
   sections: sections({
     whatIsIt: [
       'This page is a jurisdiction-clarification guide for UK-intent queries. Its primary job is to stop scope confusion. It explains the operational rules landlords actually need in England while clearly acknowledging that other UK nations differ. That prevents the common and risky assumption that one rule set applies nationwide.',
-      'From an SEO perspective, this page acts as a boundary marker within the cluster. From a landlord perspective, it acts as a legal context page before process execution. It should be read before serving notice, not after errors are discovered.',
+      'From a landlord perspective, this page acts as a legal context page before process execution. It should be read before serving notice, not after errors are discovered.',
       'The practical value is confidence in direction. Once jurisdiction and route are clear, every next step becomes simpler: date validation, form population, evidence framing, and tenant communication all follow the same legal track. Without that certainty, even good operational work can end up applied to the wrong framework.',
     ],
     legalRules: [

@@ -26,7 +26,7 @@ export const marketRentCalculationPage: RentIncreaseGuidePage = {
   quickAnswer: [
     'Market-rent calculation for a Section 13 proposal is an evidence method, not a percentage formula. Start with relevant local comparables, normalize rents to a common basis, apply consistent adjustments, and position your proposed figure against the adjusted range. This produces a rationale that can be explained and defended. Percentage uplift logic alone is weak because it references your current rent history, not current market evidence.',
     'A robust method uses comparable count, source quality, recency, and distance discipline. It also distinguishes raw listing values from adjusted equivalents and makes overrides explicit. Landlords gain credibility when they can show how the figure was built, not just what the final number is. That is the difference between "I think this is fair" and "this is where local evidence places the property."',
-    'This page is the evidence engine of the cluster. Use it before finalising Form 4A so your notice is anchored to a coherent pricing method from the start.',
+    'This page is the evidence guide for the rent-increase journey. Use it before finalising Form 4A so your notice is anchored to a coherent pricing method from the start.',
     'If evidence is mixed quality, acknowledge that openly and adjust confidence language rather than forcing certainty. Honest evidence-strength framing tends to be more persuasive than confident claims built on weak data. Transparent method limits the chance of disputes driven by perceived overstatement.',
   ],
   sections: sections({

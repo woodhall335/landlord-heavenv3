@@ -23,11 +23,9 @@ import {
   CheckCircle,
   Clock,
   FileText,
-  Gavel,
   Home,
   Scale,
   Shield,
-  Users,
   XCircle,
 } from 'lucide-react';
 
@@ -1024,19 +1022,19 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                   href="/assured-shorthold-tenancy-agreement-template"
                   className="font-semibold text-blue-600 hover:underline"
                 >
-                  England tenancy agreements â†’
+                  England tenancy agreements -&gt;
                 </Link>
                 <Link
                   href="/wales-tenancy-agreement-template"
                   className="font-semibold text-blue-600 hover:underline"
                 >
-                  Wales occupation contracts â†’
+                  Wales occupation contracts -&gt;
                 </Link>
                 <Link
                   href="/tenancy-agreement-northern-ireland"
                   className="font-semibold text-blue-600 hover:underline"
                 >
-                  Northern Ireland tenancy agreements â†’
+                  Northern Ireland tenancy agreements -&gt;
                 </Link>
               </div>
             </div>

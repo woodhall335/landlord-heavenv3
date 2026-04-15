@@ -65,7 +65,7 @@ export default function LodgerAgreementEnglandPage() {
       />
       <StructuredData
         data={productSchema({
-          name: PRODUCTS.england_lodger_agreement.label,
+          name: 'Lodger Agreement',
           description: PRODUCTS.england_lodger_agreement.description,
           price: PRODUCTS.england_lodger_agreement.price.toFixed(2),
           url: canonicalUrl,
@@ -74,13 +74,13 @@ export default function LodgerAgreementEnglandPage() {
 
       <EnglandTenancyPage
         pagePath="/lodger-agreement"
-        title="Room Let / Lodger Agreement England"
-        subtitle="Use this England lodger agreement generator when you live in the property and are taking in a lodger. It is designed for resident-landlord room lets, with clearer wording on shared living, house rules, and notice than a standard tenancy agreement would usually provide."
+        title="Lodger Agreement England"
+        subtitle="Use this England lodger agreement when you live in the property and are taking in a lodger. It is designed for resident-landlord room lets, with clearer wording on shared living, house rules, and notice than a standard tenancy agreement would usually provide."
         primaryCtaLabel="Start lodger agreement"
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for a lodger agreement, a room let agreement, or a resident landlord agreement in England, this is the dedicated route for a room let in your own home rather than a standard tenancy agreement adapted after the fact."
+        legacyNotice="If you were searching for a lodger agreement, a room let agreement, a lodger agreement template, or a resident landlord agreement in England, this is the dedicated route for a room let in your own home rather than a standard tenancy agreement adapted after the fact."
         introTitle="Built for room lets in the landlord’s home"
         introBody={[
           'This route is for room lets where the landlord lives at the property and the occupier is sharing the home. It is intentionally separate from the standard residential, student, and HMO / shared-house routes because a resident-landlord arrangement works differently in practice.',
@@ -97,7 +97,7 @@ export default function LodgerAgreementEnglandPage() {
           'Captures shared-facility, notice, and house-rule expectations directly in the guided flow.',
           'Helps avoid treating a lodger arrangement like a standard whole-property tenancy.',
           'Includes practical support documents for room-let setup and handover.',
-          'Use the England hub if you are unsure whether the arrangement is really a lodger setup.',
+          'Use the main England comparison page if you are unsure whether the arrangement is really a lodger setup.',
         ]}
         keywordTargets={[
           'lodger agreement england',
@@ -124,9 +124,9 @@ export default function LodgerAgreementEnglandPage() {
           {
             title: 'England tenancy chooser',
             description:
-              'If you are not sure whether the arrangement is really a lodger setup, compare it against the full England tenancy-agreement hub first.',
+              'If you are not sure whether the arrangement is really a lodger setup, compare it against the full England tenancy-agreement comparison page first.',
             href: '/products/ast',
-            ctaLabel: 'Open England hub',
+            ctaLabel: 'Compare England routes',
           },
           {
             title: 'HMO / Shared House',
@@ -179,7 +179,7 @@ export default function LodgerAgreementEnglandPage() {
           {
             question: 'What if I am unsure whether my setup is lodger, HMO, or standard tenancy?',
             answer:
-              'That is exactly where route confusion tends to happen. If you are unsure, compare the products on the main England hub first so the arrangement can be matched more closely to how the property is actually occupied.',
+              'That is exactly where route confusion tends to happen. If you are unsure, compare the products on the main England comparison page first so the arrangement can be matched more closely to how the property is actually occupied.',
           },
           {
             question: 'Is this suitable for licence-style room lets?',

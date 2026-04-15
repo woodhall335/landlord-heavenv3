@@ -140,7 +140,7 @@ const BLOG_STICKY_TOP_OFFSET = '7rem';
 
 
 const CORE_EVICTION_GUIDES = [
-  { href: '/eviction-notice-template', label: 'England notice hub' },
+  { href: '/products/notice-only', label: 'Eviction notice pack for landlords' },
   { href: '/section-8-notice', label: 'Section 8 notice guide' },
   { href: '/how-to-evict-a-tenant-england', label: 'How to evict a tenant in England' },
   { href: '/evict-tenant-not-paying-rent', label: 'Evicting a tenant not paying rent' },
@@ -330,12 +330,14 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
         : region === 'northern-ireland'
         ? '/northern-ireland-tenancy-agreement-template'
         : '/tenancy-agreement-template';
-    const primaryTenancyHref = region === 'england' ? '/tenancy-agreement-template' : '/products/ast';
+    const primaryTenancyHref = '/products/ast';
     const primaryTenancyLabel =
-      region === 'england' ? 'View the England tenancy agreement template' : 'Get the Tenancy Agreement Pack';
-    const secondaryTenancyHref = region === 'england' ? '/products/ast' : tenancyLink;
+      region === 'england'
+        ? 'Compare England tenancy agreements'
+        : 'Get the Tenancy Agreement Pack';
+    const secondaryTenancyHref = region === 'england' ? '/tenancy-agreement-template' : tenancyLink;
     const secondaryTenancyLabel =
-      region === 'england' ? 'Compare England agreement types' : 'Download the template';
+      region === 'england' ? 'See an England agreement example' : 'Download the template';
 
     return {
       jurisdictionLabel: `${jurisdictionName} tenancy agreements`,
@@ -352,21 +354,21 @@ const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
         {
           href: primaryTenancyHref,
           title:
-            region === 'england' ? 'England Tenancy Agreement Template' : 'Tenancy Agreement Pack',
+            region === 'england' ? 'England tenancy agreements for landlords' : 'Tenancy Agreement Pack',
           description:
             region === 'england'
-              ? 'Main England template hub with a real sample agreement preview.'
+              ? 'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes on the main England comparison page.'
               : 'Standard and Premium agreements with compliance checks.',
         },
         {
           href: secondaryTenancyHref,
           title:
             region === 'england'
-              ? 'Compare England agreement types'
+              ? 'England tenancy agreement example'
               : `${jurisdictionName} tenancy agreement template`,
           description:
             region === 'england'
-              ? 'Route-selection page for Standard, Premium, Student, HMO / Shared House, and Lodger.'
+              ? 'Support page showing a real England agreement example before you choose the route.'
               : 'Jurisdiction-specific tenancy requirements.',
         },
       ],
@@ -736,9 +738,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 py-10 lg:py-14"> 
-          <h2 className="text-2xl font-bold text-gray-900">Posts in this cluster</h2>
-          <p className="mb-8 mt-2 text-gray-600">{topicHub.description}</p>
+          <section className="container mx-auto px-4 py-10 lg:py-14"> 
+            <h2 className="text-2xl font-bold text-gray-900">Related posts in this topic</h2>
+            <p className="mb-8 mt-2 text-gray-600">{topicHub.description}</p>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3"> 
             {postsForDisplay.map((post) => (
               <BlogCard key={post.slug} {...post} />

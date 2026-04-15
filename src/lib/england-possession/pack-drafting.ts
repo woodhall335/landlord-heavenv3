@@ -1172,12 +1172,16 @@ function buildCourtFilingGuideSection(params: {
 }): EnglandPossessionDraftingModel['courtFilingGuide'] {
   const { data, groundCodes, groundsLeadParagraph, groundDrafts, evidenceItems } = params;
   const courtName = getFirstString(data, 'court_name') || 'the County Court';
+  const rentArrearsOnly = groundCodes.length > 0 && groundCodes.every((code) => ['8', '10', '11'].includes(code));
 
   return {
     overviewParagraphs: dedupeParagraphs([
       groundsLeadParagraph,
       buildNoticeTimelineSentence(data),
       `If the matter is not resolved after service of the ${ENGLAND_SECTION8_NOTICE_NAME}, the claim should be prepared for filing in ${courtName} using the same factual basis and dates as the notice pack.`,
+      rentArrearsOnly
+        ? 'The default route in this pack remains the paper county court claim using Form N5 and Form N119. Possession Claim Online may be available only for eligible rent-arrears-only Section 8 claims, so treat that as a limited alternative rather than the general rule.'
+        : 'For this claim type, the working assumption is the paper county court route using Form N5 and Form N119.',
     ]),
     preparationItems: dedupeList([
       'Review the notice, proof of service, witness statement, and claim forms together before issue.',
@@ -1187,7 +1191,7 @@ function buildCourtFilingGuideSection(params: {
         : 'Check that the evidence still proves the statutory ground on the date proceedings are issued.',
     ]),
     filingItems: dedupeList([
-      'File Form N5, Form N119, the notice, and proof of service together with any required fee or fee-remission material.',
+      'File Form N5, Form N119, the notice, and the supporting proof-of-service record together with any required fee or fee-remission material.',
       'Prepare an indexed bundle containing the tenancy documents, the served notice, service evidence, and the ground-specific documents relied on.',
       ...evidenceItems,
     ]),
@@ -1198,6 +1202,9 @@ function buildCourtFilingGuideSection(params: {
     ]),
     warningParagraphs: dedupeParagraphs([
       ...groundDrafts.flatMap((draft) => draft.hearingWarnings),
+      rentArrearsOnly
+        ? 'Only treat Possession Claim Online as potentially available if the claim is genuinely confined to eligible rent-arrears-only Section 8 grounds. Mixed-ground or non-arrears claims should stay on the paper N5 and N119 route.'
+        : 'Do not assume Possession Claim Online is available for every claim. If the case is not an eligible rent-arrears-only Section 8 claim, keep to the paper N5 and N119 route.',
       groundCodes.some((code) => ['8', '10', '11'].includes(code))
         ? 'Do not rely on a stale arrears figure or assume that a mandatory arrears ground still applies if payments have reduced the balance.'
         : 'Keep the pleaded grounds fact-specific and ensure the same evidence-led account is carried through the claim forms, witness material, and bundle.',

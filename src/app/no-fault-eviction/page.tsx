@@ -62,7 +62,7 @@ const faqs = [
   {
     question: 'Where should I go next for a live case?',
     answer:
-      'Start with the England notice hub if you still need route clarity, then move into the current notice pack or complete pack once the route and evidence are clear.',
+      'Start with the current England notice guide if you still need route clarity, then move into the current notice pack or complete pack once the route and evidence are clear.',
   },
 ];
 
@@ -115,14 +115,10 @@ export default function NoFaultEvictionPage() {
                 <h2>What you should do instead</h2>
                 <p>
                   Start with the{' '}
-                  <Link href="/eviction-notice-template" className="font-medium text-primary hover:underline">
-                    England notice hub
-                  </Link>{' '}
-                  if you still need route clarity. Then move into the{' '}
                   <Link href="/section-8-notice" className="font-medium text-primary hover:underline">
                     current England notice guide
                   </Link>{' '}
-                  and the wider{' '}
+                  if you still need route clarity. Then move into the wider{' '}
                   <Link href="/eviction-process-england" className="font-medium text-primary hover:underline">
                     England eviction process
                   </Link>{' '}
@@ -178,6 +174,7 @@ export default function NoFaultEvictionPage() {
                 faqs={faqs}
                 title="No-Fault Eviction FAQ"
                 showContactCTA={false}
+                includeSchema={false}
                 variant="white"
               />
             </div>

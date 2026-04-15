@@ -14,6 +14,11 @@ import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
+import {
+  augmentDecisionOutputWithRouteScope,
+  formatBlockingIssueAsRedFlag,
+  type RouteScopedDecisionOutput,
+} from '@/lib/decision-engine/routeScopedBlockingIssues';
 import { getLawProfile } from '@/lib/law-profile';
 import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import { getSelectedGrounds } from '@/lib/grounds';
@@ -733,7 +738,6 @@ export async function POST(request: Request) {
 
     // RUN DECISION ENGINE for eviction cases (Audit B2: integrate decision engine)
     let decisionEngineOutput: DecisionOutput | null = null;
-    let decisionEngineRecommendedRoute: string | null = null;
     if (caseData.case_type === 'eviction') {
       try {
         decisionEngineOutput = runDecisionEngine({
@@ -741,18 +745,6 @@ export async function POST(request: Request) {
           product: facts.meta.product as any || 'notice_only',
           case_type: 'eviction',
           facts,
-        });
-
-        // Decision engine recommendation (may be overridden by user intent for notice_only)
-        if (decisionEngineOutput.recommended_routes.length > 0) {
-          decisionEngineRecommendedRoute = decisionEngineOutput.recommended_routes[0];
-        }
-
-        // Merge decision engine blocking issues into red_flags
-        decisionEngineOutput.blocking_issues.forEach(block => {
-          if (block.severity === 'blocking') {
-            red_flags.push(`${block.route.toUpperCase()} BLOCKED: ${block.description} - ${block.action_required}`);
-          }
         });
 
         // Merge decision engine warnings into compliance
@@ -964,6 +956,15 @@ export async function POST(request: Request) {
       finalRecommendedRoute = route;
     }
 
+    const routeScopedDecisionEngineOutput: RouteScopedDecisionOutput | null =
+      caseData.case_type === 'eviction'
+        ? augmentDecisionOutputWithRouteScope(decisionEngineOutput, finalRecommendedRoute || route)
+        : null;
+
+    routeScopedDecisionEngineOutput?.selected_route_blocking_issues.forEach((issue) => {
+      red_flags.push(formatBlockingIssueAsRedFlag(issue));
+    });
+
     await adminSupabase
       .from('cases')
       .update({
@@ -1135,10 +1136,8 @@ export async function POST(request: Request) {
     }
 
     // Readiness flags - NEVER used to block generation or payment, only for messaging
-    if (caseData.case_type === 'eviction' && decisionEngineOutput) {
-      const hasBlocking = decisionEngineOutput.blocking_issues?.some(
-        (block) => block.severity === 'blocking'
-      );
+    if (caseData.case_type === 'eviction' && routeScopedDecisionEngineOutput) {
+      const hasBlocking = routeScopedDecisionEngineOutput.selected_route_has_blockers;
       is_court_ready = !hasBlocking;
 
       if (hasBlocking) {
@@ -1214,7 +1213,7 @@ export async function POST(request: Request) {
       // Check both flat and nested locations for arrears_items (notice_only stores in nested location)
       arrears_items: wf?.arrears_items ||
                      wf?.issues?.rent_arrears?.arrears_items || [],
-      recommended_grounds: decisionEngineOutput?.recommended_grounds || [],
+      recommended_grounds: routeScopedDecisionEngineOutput?.recommended_grounds || decisionEngineOutput?.recommended_grounds || [],
       jurisdiction: canonicalJurisdiction,
       eviction_route: wf?.eviction_route || null,
       selected_notice_route: wf?.selected_notice_route || null,
@@ -1323,7 +1322,7 @@ export async function POST(request: Request) {
       ask_heaven_answer: askHeavenAnswer,
       case_health: caseHealth,
       // Decision engine output (for eviction cases)
-      decision_engine: decisionEngineOutput,
+      decision_engine: routeScopedDecisionEngineOutput || decisionEngineOutput,
       // Legal change framework metadata
       law_profile,
       // Case facts for review page - contains persisted wizard data

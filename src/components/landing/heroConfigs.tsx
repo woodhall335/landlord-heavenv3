@@ -81,20 +81,20 @@ export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('ast'),
   mediaSrc: '/images/tenancy_agreements.webp',
-  trustText: 'Renters Right Act Compliant 2026 | England agreement comparison',
-  title: 'Need to Create the Right',
-  highlightTitle: 'England Agreement Routes',
+  trustText: 'England tenancy agreements for landlords | Standard, Premium, Student, HMO, and Lodger',
+  title: 'Create the Right',
+  highlightTitle: 'Tenancy Agreement for Your England Let',
   subtitle: astSubtitle,
   primaryCta: {
-    label: 'Create your tenancy agreement ->',
+    label: 'Choose your England agreement ->',
     href: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
   },
   secondaryCta: {
-    label: `See the Premium agreement - ${astPremiumPrice}`,
+    label: `Compare Premium agreement - ${astPremiumPrice}`,
     href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
   },
   feature:
-    'Use the right agreement now so you do not have to fix it when the tenancy goes wrong.',
+    'Pick the route that matches the property, occupiers, and management setup before problems start.',
 };
 
 /* ============================================================
@@ -105,16 +105,16 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('notice_only'),
   mediaSrc: '/images/notice_bundles.webp',
-  trustText: 'Renters Right Act Compliant 2026 | Notice route checks before you serve',
-  title: 'Need to Create the Right',
-  highlightTitle: 'Notice Pack?',
+  trustText: 'Evict a tenant legally | Landlord notice pack with route checks before you serve',
+  title: 'Eviction Notice Pack',
+  highlightTitle: 'for Landlords',
   subtitle:
-    'Your tenant is still in the property and you need to act. We help you choose, generate, and serve the right notice route for the property so you do not lose time on the wrong path.',
+    'If your tenant is still in the property and you need to act, we help you choose, generate, and serve the right eviction notice for England, Wales, or Scotland so you do not lose time on the wrong route.',
   primaryCta: {
-    label: 'Generate your eviction notice ->',
+    label: 'Start your eviction notice pack ->',
     href: '/wizard?product=notice_only&src=product_page&topic=eviction',
   },
-  feature: 'We flag problems before you serve anything, so you do not have to start again.',
+  feature: 'We help landlords evict tenants legally by lining up the notice route, dates, and service steps first.',
 };
 
 /* ============================================================
@@ -125,16 +125,16 @@ export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('complete_pack'),
   mediaSrc: '/images/eviction_packs.webp',
-  trustText: 'Renters Right Act Compliant 2026 | England-only',
-  title: 'Need to Evict a Tenant',
-  highlightTitle: 'Complete Eviction Pack',
+  trustText: 'Evict a tenant through court | England possession pack',
+  title: 'Complete Eviction Pack',
+  highlightTitle: 'for England Landlords',
   subtitle:
-    'Section 21 is gone in England from 1 May 2026. If you need the full section 8 eviction route, this pack helps you move from notice to court without piecing the whole case together yourself.',
+    'If you need to evict a tenant for rent arrears or because they still will not leave after notice, this England pack brings together the notice, court forms, and filing guidance in one workflow.',
   primaryCta: {
-    label: 'Start your section 8 pack ->',
+    label: 'Start your England court pack ->',
     href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
   },
-  feature: 'Keep your notice, court forms, and evidence lined up from the start.',
+  feature: 'Generate Form 3A, N5, N119, and the supporting steps in one court-ready flow.',
 };
 
 /* ============================================================
@@ -145,36 +145,36 @@ export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('money_claim'),
   mediaSrc: '/images/money_claims.webp',
-  trustText: 'Renters Right Act Compliant 2026 | England-only',
-  title: 'Ready to Start a',
-  highlightTitle: 'Landlord Money Claim Pack?',
+  trustText: 'Recover unpaid rent and tenant debt | England county court pack',
+  title: 'Recover Unpaid Rent',
+  highlightTitle: 'and Start Your Money Claim Pack',
   subtitle:
-    'If the arrears keep rising, this helps you start a landlord money claim pack for unpaid rent, bills, or damage and get the paperwork ready tonight.',
+    'If your tenant owes rent, damage, bills, or other tenancy debt, this England pack helps you prepare the Letter Before Claim, Form N1, debt schedule, and supporting paperwork tonight.',
   primaryCta: {
-    label: 'Start recovering your rent ->',
+    label: 'Start your money claim pack ->',
     href: '/wizard?product=money_claim&topic=debt&src=product_page',
   },
-  feature: 'Set out what is owed clearly before the numbers get harder to untangle.',
+  feature: 'Set out what is owed clearly before the debt file becomes harder to prove and recover.',
 };
 
 export const moneyClaimSupportHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('money_claim'),
   mediaSrc: '/images/money_claims.webp',
-  trustText: 'England landlord debt-recovery support | Broad guide first',
+  trustText: 'England landlord debt-recovery support | Product owner plus scenario guides',
   title: 'Need help with a',
   highlightTitle: 'landlord money claim?',
   subtitle:
-    'Start with the broad England money claim guide first, then move into the support route or transactional pack that fits the debt file you already have.',
+    'Start with the landlord money claim pack, then use the support guides when you need help with a specific filing, evidence, or enforcement question.',
   primaryCta: {
-    label: 'View money claim guide ->',
-    href: '/money-claim',
-  },
-  secondaryCta: {
     label: 'Start money claim pack ->',
     href: '/products/money-claim',
   },
-  feature: 'Use the support page to solve the specific filing or evidence question without losing the broad claim route.',
+  secondaryCta: {
+    label: 'View money claim guide ->',
+    href: '/money-claim',
+  },
+  feature: 'Use the support guides to solve a specific filing or evidence question without losing the main claim route.',
 };
 
 /* ============================================================

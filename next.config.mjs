@@ -140,6 +140,21 @@ const nextConfig = {
         destination: '/section-8-notice',
         permanent: true,
       },
+      {
+        source: '/lodger-agreement-template',
+        destination: '/lodger-agreement',
+        permanent: true,
+      },
+      {
+        source: '/hmo-tenancy-agreement-template',
+        destination: '/hmo-shared-house-tenancy-agreement',
+        permanent: true,
+      },
+      {
+        source: '/rent-increase/rent-increase-rules-uk',
+        destination: '/rent-increase',
+        permanent: true,
+      },
 
       // Money claim canonicalization
       {

@@ -59,15 +59,16 @@ const NORMALISED_NOTICE_BATCH = [
   '/wales-eviction-notice-template',
 ] as const;
 const RETAINED_NOTICE_BATCH = [
-  '/eviction-notice',
-  '/eviction-notice-template',
   '/eviction-notice-england',
   '/notice-to-quit-northern-ireland-guide',
   '/section-21-notice-period',
   '/section-8-vs-section-21',
+] as const;
+const NOTICE_REDIRECT_CANDIDATES = [
+  '/eviction-notice',
+  '/eviction-notice-uk',
   '/wales-eviction-notice-template',
 ] as const;
-const NOTICE_REDIRECT_CANDIDATES = ['/eviction-notice-uk'] as const;
 const NORMALISED_COMPLIANCE_BATCH = [
   '/eicr-landlord-requirements',
   '/how-to-evict-a-tenant-england',
@@ -83,12 +84,12 @@ const RETAINED_COMPLIANCE_BATCH = [
   '/eicr-landlord-requirements',
   '/how-to-evict-a-tenant-england',
   '/rent-arrears-letter-template',
-  '/scotland-notice-to-leave-template',
   '/tenant-breach-of-tenancy',
   '/tenant-refuses-to-leave-after-notice',
   '/tenant-subletting-without-permission',
 ] as const;
 const COMPLIANCE_REDIRECT_CANDIDATES = [
+  '/scotland-notice-to-leave-template',
   '/tenant-refusing-inspection',
   '/tenant-wont-leave',
 ] as const;
@@ -147,7 +148,6 @@ const EXCLUDED_ROUTE_PREFIXES = [
   '/auth',
   '/checkout',
   '/dashboard',
-  '/products',
   '/success',
   '/tools',
   '/wizard',
@@ -201,7 +201,6 @@ const FINAL_RETAINED_GUIDE_LINK_BATCH = [
 const FAQ_DUPLICATE_AFFECTED_ROUTES = [
   '/pricing',
   '/tenancy-agreement-template',
-  '/eviction-notice-template',
   '/tools/rent-arrears-calculator',
   '/rent-arrears-letter-template',
   '/how-long-does-eviction-take',
@@ -699,18 +698,11 @@ describe('Public content gap audit', () => {
         '/tenant-wont-leave',
       ])
     );
-    expect(unresolvedRedirects).toEqual(
-      expect.arrayContaining([
-        '/eviction-timeline-uk',
-        '/form-3-section-8',
-        '/form-6a-section-21',
-        '/no-fault-eviction',
-        '/periodic-tenancy-agreement',
-        '/section-21-court-pack',
-        '/section-8-court-pack',
-        '/section-8-rent-arrears-eviction',
-      ])
-    );
+    expect(unresolvedRedirects).toEqual([
+      '/eviction-timeline-uk',
+      '/tenancy-agreement',
+      '/tenancy-agreement-template-free',
+    ]);
   });
 
   it('removes the final closeout batch from the remaining wizard-first and contextual-link inventories', async () => {

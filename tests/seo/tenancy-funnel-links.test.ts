@@ -24,21 +24,21 @@ describe('tenancy funnel sitemap and internal links', () => {
     expect(paths).not.toContain('/tenancy-agreement-template-uk');
   });
 
-  it('keeps the England hub first in funnel link groups and moves /products/ast downstream', () => {
+  it('keeps /products/ast first in the England tenancy funnel and treats the template page as support content', () => {
     expect(landingPageLinks.tenancyTemplate.href).toBe('/tenancy-agreement-template');
-    expect(tenancyFunnelPages.englandHub.href).toBe('/tenancy-agreement-template');
+    expect(tenancyFunnelPages.englandHub.href).toBe('/products/ast');
     expect(productLinks.tenancyAgreement.href).toBe('/products/ast');
 
     expect(tenancyAgreementEnglandLinks.map((link) => link.href)).toEqual([
-      '/tenancy-agreement-template',
+      '/products/ast',
       '/standard-tenancy-agreement',
       '/premium-tenancy-agreement',
       '/student-tenancy-agreement',
       '/hmo-shared-house-tenancy-agreement',
       '/lodger-agreement',
       '/assured-shorthold-tenancy-agreement-template',
+      '/tenancy-agreement-template',
       '/assured-periodic-tenancy-agreement',
-      '/products/ast',
       '/ask-heaven',
     ]);
   });

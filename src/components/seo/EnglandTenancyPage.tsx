@@ -71,7 +71,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        trustText="Built for landlords using the current England rules from 1 May 2026."
+        trustText="Built for England landlords creating the right agreement for the way the property is actually being let."
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
@@ -89,7 +89,7 @@ export function EnglandTenancyPage({
       <Container className="py-12 md:py-16">
         {legacyNotice ? (
           <div className="mb-10 rounded-[1.8rem] border border-[#E8DCC0] bg-[#FFF8EA] p-6 text-[#5A4720] shadow-[0_12px_28px_rgba(43,33,12,0.06)]">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em]">Search intent note</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.12em]">If you searched using older wording</p>
             <p className="mt-2 text-base leading-7">{legacyNotice}</p>
           </div>
         ) : null}
@@ -110,11 +110,12 @@ export function EnglandTenancyPage({
           <section className="mb-12 rounded-[2rem] border border-[#E6E0D5] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
             <div className="max-w-3xl">
               <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                Landlords often land here looking for
+                Common landlord searches this route covers
               </h2>
               <p className="mt-3 text-base leading-7 text-[#546075]">
-                We keep the page easy to find using the terms landlords actually search for, then
-                point you to the agreement that matches the way the property is really being let.
+                These are the phrases landlords usually use when they are trying to find the right
+                agreement for this setup. The important part is making sure the product and the let
+                match each other cleanly.
               </p>
             </div>
             <div className="mt-5 flex flex-wrap gap-3">

@@ -101,6 +101,12 @@ const normalizeMetaDescription = (value: string, jurisdictionLabel: string) => {
 
 const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
   if (intent === 'money_claim') {
+    if (jurisdictionLabel === 'England') {
+      return {
+        href: '/products/money-claim',
+        label: 'Landlord money claim pack (England only)',
+      };
+    }
     return {
       href: '/money-claim',
       label: 'Money claim guide (England only)',
@@ -110,8 +116,8 @@ const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
   if (intent === 'tenancy_agreement') {
     if (jurisdictionLabel === 'England') {
       return {
-        href: '/tenancy-agreement-template',
-        label: 'England tenancy agreement template',
+        href: '/products/ast',
+        label: 'England tenancy agreements for landlords',
       };
     }
     if (jurisdictionLabel === 'Wales') {
@@ -141,8 +147,8 @@ const buildPillarLink = (intent: string, jurisdictionLabel: string) => {
   if (intent === 'eviction_notice') {
     if (jurisdictionLabel === 'England') {
       return {
-        href: '/eviction-notice-template',
-        label: 'England eviction notice guide',
+        href: '/products/notice-only',
+        label: 'Eviction notice pack for landlords',
       };
     }
     if (jurisdictionLabel === 'Wales') {
@@ -198,6 +204,15 @@ const buildSupportingLinks = (intent: string, jurisdictionLabel: string) => {
   const pillar = buildPillarLink(intent, jurisdictionLabel);
 
   if (intent === 'money_claim') {
+    if (jurisdictionLabel === 'England') {
+      return [
+        pillar,
+        {
+          href: '/money-claim-unpaid-rent',
+          label: 'Recover unpaid rent guide',
+        },
+      ];
+    }
     return [
       pillar,
       {
@@ -212,8 +227,8 @@ const buildSupportingLinks = (intent: string, jurisdictionLabel: string) => {
       return [
         pillar,
         {
-          href: '/products/ast',
-          label: 'Compare England agreement types',
+          href: '/standard-tenancy-agreement',
+          label: 'Start a standard tenancy agreement',
         },
       ];
     }
@@ -232,12 +247,18 @@ const buildSupportingLinks = (intent: string, jurisdictionLabel: string) => {
     return [
       pillar,
       {
-        href: jurisdictionLabel === 'England' && intent === 'eviction_pack'
-          ? '/products/complete-pack'
-          : '/products/notice-only',
-        label: jurisdictionLabel === 'England' && intent === 'eviction_pack'
-          ? 'Get the complete eviction pack'
-          : 'Create an eviction notice',
+        href:
+          jurisdictionLabel === 'England' && intent === 'eviction_pack'
+            ? '/eviction-process-england'
+            : jurisdictionLabel === 'England'
+              ? '/section-8-notice'
+              : '/how-to-evict-tenant',
+        label:
+          jurisdictionLabel === 'England' && intent === 'eviction_pack'
+            ? 'Read the England court-stage guide'
+            : jurisdictionLabel === 'England'
+              ? 'Read the Section 8 notice guide'
+              : 'Read the eviction guide',
       },
     ];
   }

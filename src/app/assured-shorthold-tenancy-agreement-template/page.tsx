@@ -11,7 +11,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement Template | AST Legacy Guide',
   description:
-    'Legacy AST explainer for landlords still searching assured shorthold tenancy agreement template, with a clear route into the main England tenancy agreement template hub.',
+    'Legacy AST guide for landlords still searching assured shorthold tenancy agreement template, with a clear route into the current England agreement example page.',
   keywords: [
     'assured shorthold tenancy agreement template',
     'ast template england',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Assured Shorthold Tenancy Agreement Template | AST Legacy Guide',
     description:
-      'Understand AST as legacy England terminology, see how APT wording now fits the current route, and move into the main tenancy agreement template hub.',
+      'Understand AST as legacy England terminology, see how newer England wording fits, and move into the current agreement example page.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -47,28 +47,28 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
       <EnglandTenancyPage
         pagePath="/assured-shorthold-tenancy-agreement-template"
         title="Assured Shorthold Tenancy Agreement Template"
-        subtitle="AST is now legacy search terminology for many England landlords. Keep this page as your bridge into the modern England tenancy agreement template hub rather than treating it as the final document destination."
-        primaryCtaLabel="View the England tenancy agreement template"
+        subtitle="AST is now legacy search wording for many England landlords. Use this page to translate that search into the current England agreement route, then move to the agreement example or comparison page."
+        primaryCtaLabel="View the England agreement example"
         primaryCtaHref="/tenancy-agreement-template"
         secondaryCtaLabel="Read the assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"
-        legacyNotice="This page stays live because landlords still search for AST wording. The live England cluster now treats AST as a legacy search entry point and routes the main template intent through the England tenancy agreement template hub."
+        legacyNotice="This page stays live because landlords still search for AST wording. It works as a legacy search entry point and then routes landlords into the current England agreement example or comparison page."
         introTitle="Why this AST page still exists"
         introBody={[
           'Many landlords still search for assured shorthold tenancy agreement template because AST was the familiar label for years. That search behaviour matters, but it should now lead into the current England agreement structure rather than leaving landlords anchored to outdated wording.',
-          'The main England template hub shows a real agreement example first, then explains how Standard and Premium fit the ordinary-residential route. This AST page works as an educational bridge for legacy terminology, not as the primary owner of broad tenancy agreement searches.',
-          'If you are comparing the wording shift itself, the assured periodic guide explains why the newer framework matters. If you are trying to inspect the actual agreement structure, move to the England template hub instead.',
+          'The England agreement example page shows a real agreement preview first, then explains how Standard and Premium fit the ordinary-residential route. This AST page works as an educational bridge for legacy terminology, not as the primary owner of broad tenancy agreement searches.',
+          'If you are comparing the wording shift itself, the assured periodic guide explains why the newer framework matters. If you are trying to inspect the actual agreement structure, move to the England agreement example page instead.',
         ]}
         highlights={[
           'Captures legacy AST template demand without treating AST as the main England destination',
-          'Explains why the broad England template hub now owns the primary tenancy agreement journey',
+          'Explains why the broader England agreement journey now lives on the example and comparison pages',
           'Introduces assured periodic wording as the newer framing for current England lets',
-          'Keeps the path simple: legacy AST term first, real template example next',
+          'Keeps the path simple: legacy AST term first, real agreement example next',
         ]}
         compliancePoints={[
           'AST is treated here as legacy search language rather than the live public-facing England product position',
           'Current England terminology is introduced carefully so landlords can understand the transition without losing the route into the right agreement',
-          'Primary internal journey now points to /tenancy-agreement-template instead of trying to make this page compete for broad head terms',
+          'Primary internal journey now points to /tenancy-agreement-template and /products/ast instead of trying to make this page compete for broad head terms',
         ]}
         keywordTargets={[
           'assured shorthold tenancy agreement template',
@@ -80,44 +80,43 @@ export default function AssuredShortholdTenancyAgreementTemplatePage() {
           {
             question: 'Is AST still the main England tenancy product?',
             answer:
-              'No. AST remains important as legacy search language, but the broad England tenancy agreement template journey now sits on the main hub so landlords can see a real example and then choose the right route.',
+              'No. AST remains important as legacy search language, but the broader England tenancy agreement journey now sits on the example and comparison pages so landlords can inspect a real agreement and then choose the right route.',
           },
           {
-            question: 'Why does this page link to the tenancy agreement template hub first?',
+            question: 'Why does this page link to the England agreement example first?',
             answer:
-              'Because the hub is now the primary England template destination. It satisfies the broad template query directly, while this page exists to capture older AST wording and explain the transition.',
+              'Because the example page satisfies the broad template query directly. This page exists to capture older AST wording, explain the transition, and then move landlords into the current route.',
           },
           {
             question: 'Where does assured periodic fit?',
             answer:
-              'Assured periodic wording is the newer framing for the current England route. The assured periodic support page explains that terminology, but the main template example still lives on the England hub.',
+              'Assured periodic wording is the newer framing for the current England route. The assured periodic support page explains that terminology, while the England agreement example page shows the sample document itself.',
           },
         ]}
         routeComparison={[
           {
-            title: 'Main England template hub',
+            title: 'England agreement example',
             description:
               'See the sample agreement preview, inspect the clause structure, and then choose Standard or Premium for an ordinary residential let.',
             href: '/tenancy-agreement-template',
-            ctaLabel: 'Open main hub',
+            ctaLabel: 'View agreement example',
           },
           {
             title: 'Assured periodic guide',
             description:
-              'Read the support page that explains periodic terminology and the broader wording shift without trying to replace the main hub.',
+              'Read the support page that explains periodic terminology and the broader wording shift without trying to replace the main agreement pages.',
             href: '/assured-periodic-tenancy-agreement',
             ctaLabel: 'Read APT guide',
           },
           {
-            title: 'England route selection',
+            title: 'Compare England agreement routes',
             description:
               'Compare Standard, Premium, Student, HMO / Shared House, and Lodger once you are ready to choose the route that fits the property.',
             href: '/products/ast',
-            ctaLabel: 'Compare routes',
+            ctaLabel: 'Compare England routes',
           },
         ]}
       />
     </div>
   );
 }
-

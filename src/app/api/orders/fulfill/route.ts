@@ -14,6 +14,12 @@ import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/se
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
+import { resolveFulfillmentProductForCase } from '@/lib/payments/fulfillment-routing';
+import {
+  extractOrderMetadata,
+  isMetadataColumnMissingError,
+  setMetadataColumnExists,
+} from '@/lib/payments/safe-order-metadata';
 import {
   sanitizeComplianceIssues,
   type ComplianceTimingBlockResponse,
@@ -45,7 +51,7 @@ export async function POST(request: Request) {
     // Verify case ownership
     const { data: caseData, error: caseError } = await supabase
       .from('cases')
-      .select('id, user_id')
+      .select('id, user_id, jurisdiction, case_type')
       .eq('id', case_id)
       .single();
 
@@ -64,17 +70,40 @@ export async function POST(request: Request) {
     }
 
     // Find the order for this case
-    let orderQuery = adminClient
+    const ORDER_SELECT_WITH_METADATA =
+      'id, payment_status, fulfillment_status, product_type, user_id, metadata';
+    const ORDER_SELECT_WITHOUT_METADATA =
+      'id, payment_status, fulfillment_status, product_type, user_id';
+
+    let orderQueryWithMetadata = adminClient
       .from('orders')
-      .select('id, payment_status, fulfillment_status, product_type, user_id')
+      .select(ORDER_SELECT_WITH_METADATA)
       .eq('case_id', case_id)
       .order('created_at', { ascending: false });
 
     if (product) {
-      orderQuery = orderQuery.eq('product_type', product);
+      orderQueryWithMetadata = orderQueryWithMetadata.eq('product_type', product);
     }
 
-    const { data: orders, error: orderError } = await orderQuery.limit(1);
+    let { data: orders, error: orderError } = await orderQueryWithMetadata.limit(1);
+
+    if (orderError && isMetadataColumnMissingError(orderError)) {
+      setMetadataColumnExists(false);
+
+      let orderQueryWithoutMetadata = adminClient
+        .from('orders')
+        .select(ORDER_SELECT_WITHOUT_METADATA)
+        .eq('case_id', case_id)
+        .order('created_at', { ascending: false });
+
+      if (product) {
+        orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('product_type', product);
+      }
+
+      const fallbackResult = await orderQueryWithoutMetadata.limit(1);
+      orders = fallbackResult.data as any;
+      orderError = fallbackResult.error;
+    }
 
     if (orderError) {
       console.error('Failed to fetch order:', orderError);
@@ -169,20 +198,52 @@ export async function POST(request: Request) {
 
     try {
       // Call fulfillOrder
+      const fulfillmentProduct =
+        resolveFulfillmentProductForCase({
+          productType: product || order.product_type,
+          order: {
+            product_type: order.product_type,
+            metadata: extractOrderMetadata(order),
+          },
+          jurisdiction: caseData.jurisdiction,
+          caseType: caseData.case_type,
+        }) || order.product_type;
+
       const result = await fulfillOrder({
         orderId: order.id,
         caseId: case_id,
-        productType: order.product_type,
+        productType: fulfillmentProduct,
         userId: resolvedUserId,
       });
 
+      if (result.status === 'already_fulfilled' || result.status === 'fulfilled' || result.status === 'processing') {
+        const response: FulfillOrderResponse = {
+          success: true,
+          status: result.status,
+          documents: result.documents,
+        };
+
+        return NextResponse.json(response, { status: 200 });
+      }
+
+      if (result.status === 'requires_action') {
+        return NextResponse.json(
+          {
+            success: false,
+            error: result.error || 'Document generation needs more information before it can continue.',
+            message: result.error || 'Document generation needs more information before it can continue.',
+          } satisfies FulfillOrderResponse,
+          { status: 409 }
+        );
+      }
+
       return NextResponse.json(
         {
-          success: true,
-          status: result.status === 'already_fulfilled' ? 'already_fulfilled' : 'fulfilled',
-          documents: result.documents,
-        },
-        { status: 200 }
+          success: false,
+          error: 'Document generation did not complete',
+          message: result.error || 'Document generation did not complete. Please try again.',
+        } satisfies FulfillOrderResponse,
+        { status: 409 }
       );
     } catch (fulfillmentError: any) {
       // Mark order as failed

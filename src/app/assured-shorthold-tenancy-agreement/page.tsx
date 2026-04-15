@@ -551,10 +551,10 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     Suitable for many straightforward England lets using the updated 2026 agreement flow.
                   </p>
                   <ul className="space-y-3 text-gray-700 mb-6">
-                    <li>âœ“ Updated England agreement route</li>
-                    <li>âœ“ AST search capture with modern product language</li>
-                    <li>âœ“ Core landlord wording for many standard lets</li>
-                    <li>âœ“ Stronger than a thin legacy AST landing page</li>
+                    <li>Updated England agreement route</li>
+                    <li>AST search capture with modern product language</li>
+                    <li>Core landlord wording for many standard lets</li>
+                    <li>Stronger than a thin legacy AST landing page</li>
                   </ul>
                   <Link
                     href={wizardHref}
@@ -574,10 +574,10 @@ export default function AssuredShortholdTenancyAgreementPage() {
                     drafting for real-world scenarios.
                   </p>
                   <ul className="space-y-3 text-gray-700 mb-6">
-                    <li>âœ“ Everything in the standard route</li>
-                    <li>âœ“ More detailed commercial coverage</li>
-                    <li>âœ“ Broader drafting for practical landlord situations</li>
-                    <li>âœ“ Stronger premium positioning for 2026</li>
+                    <li>Everything in the standard route</li>
+                    <li>More detailed commercial coverage</li>
+                    <li>Broader drafting for practical landlord situations</li>
+                    <li>Stronger premium positioning for 2026</li>
                   </ul>
                   <Link
                     href={premiumWizardHref}

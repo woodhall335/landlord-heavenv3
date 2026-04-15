@@ -118,9 +118,12 @@ export const SEO_PILLAR_ROUTES = {
 
 export const EXPLICIT_TAXONOMY_EXEMPTIONS = [
   '/cookies',
+  '/hmo-tenancy-agreement-template',
   '/landlord-documents-england',
   '/lodger-agreement-template',
   '/privacy',
+  '/products/section-13-defence',
+  '/products/section-13-standard',
   '/refunds',
   '/tenancy-agreements/england-wales',
   '/terms',
@@ -192,7 +195,7 @@ const anchorSets = {
   tenancyPillar: [
     'England tenancy agreements for landlords',
     'Residential Tenancy Agreement route for England',
-    'England tenancy agreement hub',
+    'England tenancy agreement comparison',
   ],
   tenancySupporting: [
     'updated England tenancy agreement route',
@@ -872,7 +875,7 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'england',
     cluster: 'section-21-transition',
     primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
-    supportingPage: '/section-21-notice-template',
+    supportingPage: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     primaryProductByScenario: {
@@ -883,8 +886,8 @@ const LONGTAIL_LIVE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     anchorVariants: {
       pillar: [...anchorSets.section21TransitionPillar],
       supporting: [
-        'Section 21 notice template',
-        'Section 21 validity checklist',
+        'current England eviction rules',
+        'Section 8 notice after Section 21',
         'next steps after a Section 21 expires',
       ],
       product: [...anchorSets.completePackProduct],
@@ -1498,17 +1501,29 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/form-6a-section-21': makeEntry('/form-6a-section-21', {
     ...section21TemplateEntry('/form-6a-section-21', '/section-21-validity-checklist', {
-      canonicalTarget: '/section-21-notice-template',
+      canonicalTarget: '/form-6a-section-21',
     }),
-    pageRole: 'product-adjacent',
-    consolidationStatus: 'candidate_redirect',
+    pageRole: 'bridge',
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
   }),
   '/form-3-section-8': makeEntry('/form-3-section-8', {
-    ...section8TemplateEntry('/form-3-section-8', '/section-8-eviction-process', {
+    ...section8TemplateEntry('/form-3-section-8', SEO_PILLAR_ROUTES.section8Notice, {
       canonicalTarget: '/form-3-section-8',
+      anchorVariants: {
+        pillar: [...anchorSets.section8Pillar],
+        supporting: [
+          'Form 3A for England landlords',
+          'current England Section 8 notice form',
+          'Form 3A notice after 1 May 2026',
+        ],
+        product: [...anchorSets.section8NoticeProduct],
+      },
     }),
-    pageRole: 'supporting',
-    consolidationStatus: 'supporting_live',
+    primaryPillar: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
+    pageRole: 'bridge',
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
   }),
   '/section-21-court-pack': productAdjacentRedirectEntry(
     '/section-21-court-pack',
@@ -1551,11 +1566,11 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   ),
   '/section-8-rent-arrears-eviction': makeEntry('/section-8-rent-arrears-eviction', {
     ...section8Entry('/section-8-rent-arrears-eviction', '/section-8-eviction-process', {
-      canonicalTarget: '/section-8-eviction-process',
+      canonicalTarget: '/section-8-rent-arrears-eviction',
     }),
     pageType: 'court',
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
-    consolidationStatus: 'candidate_redirect',
+    consolidationStatus: 'supporting_live',
   }),
   '/complete-eviction-pack-england': productAdjacentRedirectEntry(
     '/complete-eviction-pack-england',
@@ -1587,11 +1602,12 @@ const LONGTAIL_REDIRECT_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/no-fault-eviction': makeEntry('/no-fault-eviction', {
     ...section21TemplateEntry('/no-fault-eviction', '/section-21-notice-template', {
-      canonicalTarget: SEO_PILLAR_ROUTES.section21BanUk,
+      canonicalTarget: '/no-fault-eviction',
     }),
     pageType: 'guide',
-    pageRole: 'product-adjacent',
-    consolidationStatus: 'candidate_redirect',
+    pageRole: 'bridge',
+    freshnessRequired: true,
+    consolidationStatus: 'bridge_live',
   }),
 };
 
@@ -1775,16 +1791,16 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'uk',
     cluster: 'how-to-evict',
     primaryPillar: SEO_PILLAR_ROUTES.howToEvictTenant,
-    supportingPage: SEO_PILLAR_ROUTES.evictionGuides,
+    supportingPage: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     canonicalTarget: SEO_PILLAR_ROUTES.howToEvictTenant,
     anchorVariants: {
       pillar: [...anchorSets.evictionProcessPillar],
       supporting: [
-        'browse the eviction guides hub',
-        'linked eviction guides for landlords',
-        'authority hub for eviction notices and court steps',
+        'current England eviction rules',
+        'how to evict a tenant in England after 1 May 2026',
+        'England possession framework guide',
       ],
       product: [...anchorSets.completePackProduct],
     },
@@ -1805,9 +1821,9 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     anchorVariants: {
       pillar: [...anchorSets.howToEvictPillar],
       supporting: [
-        'England eviction process guide',
-        'England notice-to-bailiff timeline',
-        'England possession process',
+        'current England eviction process',
+        'England possession timeline after 1 May 2026',
+        'England notice-to-court process',
       ],
       product: [...anchorSets.completePackProduct],
     },
@@ -1821,7 +1837,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'england',
     cluster: 'section-8',
     primaryPillar: SEO_PILLAR_ROUTES.section8Notice,
-    supportingPage: '/section-8-grounds-explained',
+    supportingPage: '/form-3-section-8',
     primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
     primaryProductByScenario: {
@@ -1829,11 +1845,11 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
     canonicalTarget: SEO_PILLAR_ROUTES.section8Notice,
     anchorVariants: {
-      pillar: [...anchorSets.rentArrearsPillar],
+      pillar: [...anchorSets.section8Pillar],
       supporting: [
-        'Section 8 grounds explained',
-        'grounds for possession under Section 8',
-        'mandatory and discretionary grounds',
+        'Form 3A for England landlords',
+        'current England possession grounds',
+        'Section 8 notice after 1 May 2026',
       ],
       product: [...anchorSets.section8NoticeProduct],
     },
@@ -1847,7 +1863,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'england',
     cluster: 'section-21-transition',
     primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
-    supportingPage: SEO_PILLAR_ROUTES.section21Notice,
+    supportingPage: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     primaryProductByScenario: {
@@ -1856,11 +1872,11 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
     canonicalTarget: SEO_PILLAR_ROUTES.section21BanUk,
     anchorVariants: {
-      pillar: [...anchorSets.section8Pillar],
+      pillar: [...anchorSets.section21TransitionPillar],
       supporting: [
-        'Section 21 notice legacy route guide',
-        'when older Section 21 notices still mattered',
-        'Section 21 notice transition guide',
+        'current England eviction rules',
+        'what replaced Section 21 in England',
+        'Section 8 notice after the ban',
       ],
       product: [
         'complete eviction pack for post-ban possession',
@@ -1878,7 +1894,7 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'england',
     cluster: 'section-21-legacy',
     primaryPillar: SEO_PILLAR_ROUTES.section21BanUk,
-    supportingPage: SEO_PILLAR_ROUTES.section8Notice,
+    supportingPage: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     primaryProductByScenario: {
@@ -1889,9 +1905,9 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     anchorVariants: {
       pillar: [...anchorSets.section21TransitionPillar],
       supporting: [
+        'current England eviction rules',
         'Section 8 notice after Section 21',
-        'grounds-based possession notice',
-        'Section 8 notice guide for landlords',
+        'current England possession route',
       ],
       product: [
         'complete pack for post-ban possession',
@@ -1985,13 +2001,17 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     jurisdiction: 'uk',
     cluster: 'how-to-evict',
     primaryPillar: SEO_PILLAR_ROUTES.howToEvictTenant,
-    supportingPage: SEO_PILLAR_ROUTES.evictionProcessUk,
+    supportingPage: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     canonicalTarget: '/how-to-evict-a-tenant-uk',
     anchorVariants: {
       pillar: [...anchorSets.howToEvictPillar],
-      supporting: [...anchorSets.evictionProcessPillar],
+      supporting: [
+        'current England eviction rules',
+        'England eviction process after 1 May 2026',
+        'UK comparison guide for England landlords',
+      ],
       product: [...anchorSets.completePackProduct],
     },
     section21TransitionEligible: false,
@@ -2000,10 +2020,10 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/how-to-evict-a-tenant-england': makeEntry('/how-to-evict-a-tenant-england', {
     pageType: 'guide',
-    pageRole: 'supporting',
+    pageRole: 'bridge',
     jurisdiction: 'england',
     cluster: 'how-to-evict',
-    primaryPillar: SEO_PILLAR_ROUTES.howToEvictTenant,
+    primaryPillar: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
     supportingPage: '/eviction-process-england',
     primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
@@ -2013,13 +2033,21 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
     },
     canonicalTarget: '/how-to-evict-a-tenant-england',
     anchorVariants: {
-      pillar: [...anchorSets.howToEvictPillar],
-      supporting: [...anchorSets.evictionProcessPillar],
+      pillar: [
+        'how to evict a tenant in England',
+        'evict tenant England after 1 May 2026',
+        'England landlord eviction steps',
+      ],
+      supporting: [
+        'Eviction process in England',
+        'Section 8 notice for England',
+        'current England eviction framework',
+      ],
       product: [...anchorSets.noticeOnlyProduct],
     },
     section21TransitionEligible: false,
     freshnessRequired: true,
-    consolidationStatus: 'supporting_live',
+    consolidationStatus: 'bridge_live',
   }),
   '/how-to-rent-guide': makeEntry('/how-to-rent-guide', {
     pageType: 'guide',
@@ -2054,11 +2082,11 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
   }),
   '/renters-rights-act-eviction-rules': makeEntry('/renters-rights-act-eviction-rules', {
     pageType: 'guide',
-    pageRole: 'supporting',
+    pageRole: 'pillar',
     jurisdiction: 'england',
     cluster: 'legal-updates',
-    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
-    supportingPage: '/eviction-process-england',
+    primaryPillar: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
+    supportingPage: SEO_PILLAR_ROUTES.section8Notice,
     primaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     secondaryProduct: SEO_PRODUCT_ROUTES.completePack,
     primaryProductByScenario: {
@@ -2073,34 +2101,42 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
         'England possession rules 2026',
       ],
       supporting: [
-        'England eviction process guide',
-        'current possession notice route',
-        'Renters Rights Act landlord guide',
+        'Section 8 notice for England',
+        'Eviction process in England',
+        'how to evict a tenant in England',
       ],
       product: [...anchorSets.noticeOnlyProduct],
     },
     section21TransitionEligible: false,
     freshnessRequired: true,
-    consolidationStatus: 'supporting_live',
+    consolidationStatus: 'canonical',
   }),
   '/eviction-process-england': makeEntry('/eviction-process-england', {
     pageType: 'court',
-    pageRole: 'supporting',
+    pageRole: 'bridge',
     jurisdiction: 'england',
     cluster: 'eviction-process',
-    primaryPillar: SEO_PILLAR_ROUTES.evictionProcessUk,
+    primaryPillar: SEO_PILLAR_ROUTES.rentersRightsActEvictionRules,
     supportingPage: SEO_PILLAR_ROUTES.section8Notice,
     primaryProduct: SEO_PRODUCT_ROUTES.completePack,
     secondaryProduct: SEO_PRODUCT_ROUTES.noticeOnly,
     canonicalTarget: '/eviction-process-england',
     anchorVariants: {
-      pillar: [...anchorSets.evictionProcessPillar],
-      supporting: [...anchorSets.section8Pillar],
+      pillar: [
+        'eviction process in England',
+        'England possession timeline',
+        'N5 and N119 process England',
+      ],
+      supporting: [
+        'current England eviction rules',
+        'Section 8 notice for England',
+        'how to evict a tenant in England',
+      ],
       product: [...anchorSets.completePackProduct],
     },
     section21TransitionEligible: false,
     freshnessRequired: true,
-    consolidationStatus: 'supporting_live',
+    consolidationStatus: 'bridge_live',
   }),
   '/section-8-grounds-explained': section8Entry('/section-8-grounds-explained', SEO_PILLAR_ROUTES.tenantNotPayingRent, {
     canonicalTarget: '/section-8-grounds-explained',
@@ -3116,7 +3152,7 @@ export function getFreshnessPolicy(entry: SeoPageTaxonomyEntry): FreshnessPolicy
 
   if (entry.cluster === 'tenancy-england') {
     legalContextNote =
-      'England tenancy pages should reflect the post-Renters Rights Act 2025 wording used for new agreements, the current Residential Tenancy Agreement positioning, and the wider shift away from older Section 21-led AST sales language.';
+      'England tenancy pages should reflect the transition to the post-Renters Rights Act 2025 wording used for new agreements, with Section 21 due to end in England on 1 May 2026 and court proceedings on qualifying older notices needing to begin by 31 July 2026.';
   } else if (entry.cluster === 'tenancy-wales') {
     legalContextNote =
       'Wales tenancy pages should reflect the Renting Homes (Wales) Act 2016, occupation contract terminology, the written statement deadline, and the distinct Welsh possession notice framework.';
@@ -3131,10 +3167,10 @@ export function getFreshnessPolicy(entry: SeoPageTaxonomyEntry): FreshnessPolicy
       'Debt recovery is separate from possession. Landlords should review the current pre-action protocol, keep a reconciled debt schedule, and make sure any county court claim matches the evidence file and the amount being claimed.';
   } else if (entry.cluster === 'notice-templates') {
     legalContextNote =
-      'Template-led notice pages should be read with the current statutory form version, route-specific validity checks, and the wider landlord workflow needed if the case moves into court.';
+      'Template-led notice pages should be read with the current statutory form version, route-specific validity checks, and the wider landlord workflow needed if the case moves into court. Section 21 is due to end in England on 1 May 2026, and court proceedings on qualifying older notices must begin by 31 July 2026.';
   } else if (entry.section21TransitionEligible) {
     legalContextNote =
-      'Section 21 ended in England on 1 May 2026, and court proceedings on qualifying older Section 21 notices had to begin by 31 July 2026. Landlords now need a Section 8-led possession plan unless a transitional legacy route is clearly available.';
+      'Section 21 is due to end in England on 1 May 2026, and court proceedings on qualifying older Section 21 notices must begin by 31 July 2026. Landlords should already be planning around a Section 8-led possession route unless a transitional legacy case is clearly available.';
   } else if (entry.jurisdiction === 'uk') {
     legalContextNote =
       'This page targets UK search intent, but possession rules differ across England, Wales, Scotland, and Northern Ireland.';

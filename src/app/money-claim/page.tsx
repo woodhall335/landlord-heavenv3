@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Money Claim for Landlords (England) - Example & Guide',
     description:
-      'England-first money claim hub with a real claim workflow example, evidence guidance, and the next step after the broad guide layer.',
+      'England-first money claim guide with a real claim workflow example, evidence guidance, and the next step after the broad guide layer.',
     url: canonicalUrl,
     type: 'article',
   },
@@ -74,9 +74,9 @@ const pageFaqs: FAQItem[] = [
       'Because broad money-claim users usually need route clarity first. They need to see what the paperwork looks like, understand the pre-action and evidence steps, and decide whether the debt file is ready before they move into a transactional workflow.',
   },
   {
-    question: 'Is unpaid rent still the strongest support route under this hub?',
+    question: 'Is unpaid rent still the strongest support route under this guide?',
     answer:
-      'Yes. Unpaid rent remains the strongest support route because it is the most common landlord debt claim. It stays visible here, but it does not replace the broad owner page for wider money-claim intent.',
+      'Yes. Unpaid rent remains the strongest support route because it is the most common landlord debt claim. It stays visible here, but it does not replace the commercial owner page for wider money-claim intent.',
   },
   {
     question: 'What documents matter before issuing a claim?',
@@ -145,7 +145,7 @@ export default async function MoneyClaimPage() {
           <Container>
             <div className="mx-auto max-w-5xl">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#692ed4]">
-                England landlord debt-recovery owner
+                England landlord debt-recovery guide
               </p>
               <h1 className="mt-4 text-4xl font-bold tracking-tight text-[#2a2161] md:text-5xl">
                 Money Claim for Landlords (England)
@@ -154,7 +154,7 @@ export default async function MoneyClaimPage() {
                 <p>
                   This page is built to satisfy broad money-claim intent first. It shows what a
                   landlord claim file actually looks like, explains the supporting routes that sit
-                  underneath the hub, and only then hands the user into the transactional claim-pack
+                  underneath this guide, and only then hands the user into the transactional claim-pack
                   workflow.
                 </p>
                 <p>
@@ -216,9 +216,9 @@ export default async function MoneyClaimPage() {
                 Choose the right money claim support route
               </h2>
               <p className="mt-4 max-w-3xl text-lg text-gray-700">
-                The broad owner stays above the support estate. Unpaid rent remains the strongest
+                The broad guide stays above the support estate. Unpaid rent remains the strongest
                 support route, scenario pages stay scenario-specific, and process pages help with
-                the filing and evidence layers without replacing the hub.
+                the filing and evidence layers without replacing this guide.
               </p>
 
               <div className="mt-8 grid gap-5 md:grid-cols-3">
@@ -230,7 +230,8 @@ export default async function MoneyClaimPage() {
                   <p className="mt-4 text-gray-700">
                     Use this route when the main debt is arrears and the landlord needs clearer
                     rent-led examples, arrears file structure, and judgment planning. It stays
-                    strongest underneath the broad hub, but it is still a support page, not the owner.
+                    strongest underneath the broad guide, but it is still a support page, not the
+                    commercial owner.
                   </p>
                   <Link
                     href="/money-claim-unpaid-rent"
@@ -249,7 +250,7 @@ export default async function MoneyClaimPage() {
                   <p className="mt-4 text-gray-700">
                     Use the scenario pages when the landlord already knows the debt type and needs
                     route-specific details, such as unpaid bills, guarantor liability, former tenant
-                    tracing, property damage, or cleaning costs. They support the hub instead of competing
+                    tracing, property damage, or cleaning costs. They support this guide instead of competing
                     with it.
                   </p>
                   <div className="mt-5 flex flex-wrap gap-3 text-sm">
@@ -375,7 +376,7 @@ export default async function MoneyClaimPage() {
                     amount do not all say the same thing.
                   </p>
                   <p>
-                    The broad owner page exists to make those moving parts visible before anyone
+                    The broad guide page exists to make those moving parts visible before anyone
                     starts a pack. The better the file is organised now, the less rework is needed
                     if the claim is defended or later enforced.
                   </p>

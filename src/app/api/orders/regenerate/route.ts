@@ -15,6 +15,12 @@ import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
+import { resolveFulfillmentProductForCase } from '@/lib/payments/fulfillment-routing';
+import {
+  extractOrderMetadata,
+  isMetadataColumnMissingError,
+  setMetadataColumnExists,
+} from '@/lib/payments/safe-order-metadata';
 import {
   sanitizeComplianceIssues,
   type ComplianceTimingBlockResponse,
@@ -73,21 +79,48 @@ export async function POST(request: Request) {
     }
 
     // Build order query - find the paid order for this case
-    let orderQuery = adminClient
+    const ORDER_SELECT_WITH_METADATA =
+      'id, payment_status, product_type, user_id, paid_at, metadata';
+    const ORDER_SELECT_WITHOUT_METADATA =
+      'id, payment_status, product_type, user_id, paid_at';
+
+    let orderQueryWithMetadata = adminClient
       .from('orders')
-      .select('id, payment_status, product_type, user_id, paid_at')
+      .select(ORDER_SELECT_WITH_METADATA)
       .eq('case_id', case_id)
       .eq('payment_status', 'paid');
 
     // If product is specified, validate it matches the order
     if (product) {
-      orderQuery = orderQuery.eq('product_type', product);
+      orderQueryWithMetadata = orderQueryWithMetadata.eq('product_type', product);
     }
 
-    const { data: order, error: orderError } = await orderQuery
+    let { data: order, error: orderError } = await orderQueryWithMetadata
       .order('paid_at', { ascending: false })
       .limit(1)
       .maybeSingle();
+
+    if (orderError && isMetadataColumnMissingError(orderError)) {
+      setMetadataColumnExists(false);
+
+      let orderQueryWithoutMetadata = adminClient
+        .from('orders')
+        .select(ORDER_SELECT_WITHOUT_METADATA)
+        .eq('case_id', case_id)
+        .eq('payment_status', 'paid');
+
+      if (product) {
+        orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('product_type', product);
+      }
+
+      const fallbackResult = await orderQueryWithoutMetadata
+        .order('paid_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      order = fallbackResult.data as any;
+      orderError = fallbackResult.error;
+    }
 
     if (orderError) {
       console.error('Failed to fetch order:', orderError);
@@ -223,12 +256,36 @@ export async function POST(request: Request) {
       }
 
       // Now regenerate using the fulfillment logic
+      const fulfillmentProduct =
+        resolveFulfillmentProductForCase({
+          productType: product || order.product_type,
+          order: {
+            product_type: order.product_type,
+            metadata: extractOrderMetadata(order),
+          },
+          jurisdiction: caseData.jurisdiction,
+          caseType: caseData.case_type,
+        }) || order.product_type;
+
       const result = await fulfillOrder({
         orderId: order.id,
         caseId: case_id,
-        productType: order.product_type,
+        productType: fulfillmentProduct,
         userId: resolvedUserId,
       });
+
+      if (result.status === 'incomplete' || result.status === 'requires_action') {
+        const response: RegenerateOrderResponse = {
+          ok: false,
+          error:
+            result.status === 'requires_action'
+              ? 'Document regeneration needs more information before it can continue.'
+              : 'Document regeneration did not complete.',
+          message: result.error || undefined,
+        };
+
+        return NextResponse.json(response, { status: 409 });
+      }
 
       // Get the newly created document IDs
       const { data: newDocs } = await adminClient

@@ -2246,7 +2246,7 @@ export async function generateSection13PreviewableDocument(params: {
       const pdfBytes = await buildNegotiationEmailTemplatePdf(resolvedState);
       return {
         title: 'Negotiation email template',
-        description: 'Pre-hearing negotiation wording for the tenant.',
+        description: 'Landlord-side negotiation wording to send to the tenant before any hearing.',
         document_type: 'section13_negotiation_email_template',
         file_name: `section13-negotiation-email-template-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),

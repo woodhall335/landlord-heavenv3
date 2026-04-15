@@ -7,6 +7,7 @@ import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { EVICTION_CLUSTERS } from '@/lib/seo/eviction-authority';
 import { getCanonicalUrl } from '@/lib/seo';
+import { currentEnglandFrameworkLinks } from '@/lib/seo/internal-links';
 
 const canonical = getCanonicalUrl('/eviction-guides');
 
@@ -46,20 +47,20 @@ const COURT_PROCESS = [
 ];
 
 const TOOLS = [
-  { href: '/eviction-notice-template', label: 'Eviction Notice Pack' },
-  { href: '/eviction-notice-template', label: 'Eviction Notice Template' },
+  { href: '/products/notice-only', label: 'Eviction Notice Pack' },
+  { href: '/products/complete-pack', label: 'Complete Eviction Pack' },
   { href: '/tools/rent-arrears-calculator', label: 'Rent Arrears Calculator' },
   { href: '/tools/free-rent-demand-letter', label: 'Free Rent Demand Letter Tool' },
   { href: '/ask-heaven', label: 'Ask Heaven' },
 ];
 
 export const metadata: Metadata = {
-  title: 'Eviction Guides Hub for Landlords | Notices, Court Process, Arrears and Enforcement',
-  description: 'Central hub for landlord eviction guides, organised by tenant problems, notices, court process, rent arrears, and possession enforcement.',
+  title: 'Eviction Guides for Landlords | Notices, Court Process, Arrears and Enforcement',
+  description: 'Browse landlord eviction guides organised by tenant problems, notices, court process, rent arrears, and possession enforcement.',
   alternates: { canonical },
   openGraph: {
-    title: 'Eviction Guides Hub for Landlords',
-    description: 'Browse all eviction and landlord problem guides in one crawl-friendly index.',
+    title: 'Eviction Guides for Landlords',
+    description: 'Browse eviction and landlord problem guides in one clear index.',
     url: canonical,
     type: 'website',
   },
@@ -70,13 +71,13 @@ export default function EvictionGuidesPage() {
 
   return (
     <div className="min-h-screen bg-[#fcfaff]">
-      <SeoLandingWrapper pagePath="/eviction-guides" pageTitle="Eviction Guides Hub" pageType="guide" jurisdiction="england" />
+      <SeoLandingWrapper pagePath="/eviction-guides" pageTitle="Eviction Guides" pageType="guide" jurisdiction="england" />
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData
         data={{
           '@context': 'https://schema.org',
           '@type': 'WebPage',
-          name: 'Eviction guides hub',
+          name: 'Eviction guides for landlords',
           description: 'Central index of eviction guidance pages for England landlords.',
           url: canonical,
         }}
@@ -99,10 +100,13 @@ export default function EvictionGuidesPage() {
       <section className="py-14 bg-white border-b border-[#E6DBFF]">
         <Container>
           <div className="mx-auto max-w-6xl">
-            <h1 className="text-4xl font-bold text-charcoal">Eviction guides hub</h1>
+            <h1 className="text-4xl font-bold text-charcoal">Eviction guides for landlords</h1>
             <p className="mt-4 max-w-4xl text-gray-700">
-              Use this index to navigate tenant problems, eviction notices, court process, rent arrears, and possession enforcement guides.
+              Use this guide index to navigate tenant problems, eviction notices, court process, rent arrears, and possession enforcement pages.
               Start with <Link href="/how-to-evict-tenant" className="text-primary hover:underline">how to evict a tenant legally</Link>, follow the <Link href="/eviction-process-uk" className="text-primary hover:underline">eviction process in the UK</Link>, and use the <Link href="/section-21-ban-uk" className="text-primary hover:underline">Section 21 ending in 2026 transition guide</Link> for the England post-ban route.
+            </p>
+            <p className="mt-4 max-w-4xl text-gray-700">
+              If the property is in England and you need the live post-1 May 2026 route, start with the current England eviction framework below. That bundle is the main authority path for the current rules, Section 8, Form 3A, landlord action steps, and the England possession timeline.
             </p>
           </div>
         </Container>
@@ -120,10 +124,30 @@ export default function EvictionGuidesPage() {
       <section className="py-12">
         <Container>
           <div className="mx-auto max-w-6xl space-y-8">
+            <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
+              <h2 className="text-2xl font-semibold text-charcoal">
+                Current England eviction after 1 May 2026
+              </h2>
+              <p className="mt-2 text-gray-700">
+                Use these five England owner pages when the landlord needs the live framework, not a legacy Section 21 explanation or a generic UK summary.
+              </p>
+              <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {currentEnglandFrameworkLinks.map((guide) => (
+                  <Link
+                    key={guide.href}
+                    href={guide.href}
+                    className="rounded-xl border border-[#CDBBFF] bg-white p-4 hover:bg-[#fcfaff]"
+                  >
+                    <p className="font-semibold text-primary">{guide.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-gray-700">{guide.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </article>
 
             <article className="rounded-2xl border border-[#CAB6FF] bg-[#F8F4FF] p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-charcoal">Core Eviction Guides</h2>
-              <p className="mt-2 text-gray-700">Start with these pillar pages for route-level coverage, then drill into the supporting cluster pages below.</p>
+              <p className="mt-2 text-gray-700">Start with these main guides for route-level coverage, then drill into the supporting pages below.</p>
               <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                 {CORE_EVICTION_GUIDES.map((guide) => (
                   <Link key={guide.href} href={guide.href} className="rounded-xl border border-[#CDBBFF] bg-white p-4 text-primary font-medium hover:underline">
@@ -181,13 +205,13 @@ export default function EvictionGuidesPage() {
               </div>
             </article>
 
-            {EVICTION_CLUSTERS.map((cluster) => (
+            {EVICTION_CLUSTERS.filter((cluster) => cluster.key !== 'current-england-framework').map((cluster) => (
               <article key={cluster.key} className="rounded-2xl border border-[#E6DBFF] bg-white p-6 md:p-8">
                 <h2 className="text-2xl font-semibold text-charcoal">{cluster.label}</h2>
                 <p className="mt-2 text-gray-700">{cluster.description}</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                   <Link href={cluster.parent} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4 text-primary hover:underline">
-                    Authority hub: {cluster.parent}
+                    Main guide: {cluster.parent}
                   </Link>
                   {cluster.pages.map((page) => (
                     <Link key={page} href={page} className="rounded-xl border border-[#E6DBFF] bg-[#F8F4FF] p-4 text-primary hover:underline">

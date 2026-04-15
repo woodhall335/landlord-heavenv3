@@ -5,8 +5,8 @@ import { StructuredData, breadcrumbSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/6-month-tenancy-agreement-template');
-const standardWizardHref = '/wizard?product=ast_standard&src=england_tenancy_page&topic=tenancy';
-const premiumWizardHref = '/wizard?product=ast_premium&src=england_tenancy_page&topic=tenancy';
+const standardAgreementHref = '/standard-tenancy-agreement';
+const premiumAgreementHref = '/premium-tenancy-agreement';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -37,9 +37,9 @@ export default function SixMonthTenancyAgreementTemplatePage() {
         title="6 Month Tenancy Agreement Template"
         subtitle="This page remains live for search demand, but the current England agreement routes no longer sell a new 6-month AST as the default self-serve product."
         primaryCtaLabel="Start Standard England agreement"
-        primaryCtaHref={standardWizardHref}
+        primaryCtaHref={standardAgreementHref}
         secondaryCtaLabel="Start Premium England agreement"
-        secondaryCtaHref={premiumWizardHref}
+        secondaryCtaHref={premiumAgreementHref}
         legacyNotice="6-month AST search demand still exists, so this page stays live as an explainer. The live England product now centres on current wording designed for the assured periodic framework."
         introTitle="Short fixed-term search, modern England route"
         introBody={[

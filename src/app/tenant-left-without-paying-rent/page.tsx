@@ -773,6 +773,7 @@ export default function Page() {
         <FAQSection
           faqs={faqs}
           title="Tenant Left Without Paying Rent FAQs"
+          includeSchema={false}
         />
       </section>
 
