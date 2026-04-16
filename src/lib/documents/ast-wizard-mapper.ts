@@ -12,6 +12,7 @@
 import { ASTData, TenantInfo } from './ast-generator';
 import type { WizardFacts, CaseFacts } from '@/lib/case-facts/schema';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { getAgreementSuitabilityFacts } from '@/lib/tenancy/agreement-suitability';
 import {
   getEnglandTenancyPurpose,
   isEnglandPostReformTenancy,
@@ -281,6 +282,14 @@ export function mapWizardToASTData(
   });
   const tenancyStartDate =
     caseFacts.tenancy.start_date || getValueAtPath(wizardFacts, 'tenancy_start_date') || '';
+  const resolvedProduct =
+    getValueAtPath(wizardFacts, '__meta.product') ||
+    getValueAtPath(wizardFacts, '__meta.canonical_product') ||
+    getValueAtPath(wizardFacts, 'product') ||
+    undefined;
+  const suitability = getAgreementSuitabilityFacts(wizardFacts as Record<string, any>, {
+    product: typeof resolvedProduct === 'string' ? resolvedProduct : undefined,
+  });
 
   // Extract tenants (hybrid approach for fields not yet in CaseFacts)
   const tenants = normalizeTenants(caseFacts, wizardFacts);
@@ -305,10 +314,10 @@ export function mapWizardToASTData(
 
   const data: ASTData = {
     // AST Suitability Check (not in CaseFacts yet - use WizardFacts)
-    tenant_is_individual: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.tenant_is_individual')),
-    main_home: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.main_home')),
-    landlord_lives_at_property: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.landlord_lives_at_property')),
-    holiday_or_licence: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.holiday_or_licence')),
+    tenant_is_individual: suitability.tenantIsIndividual,
+    main_home: suitability.mainHome,
+    landlord_lives_at_property: suitability.landlordLivesAtProperty,
+    holiday_or_licence: suitability.holidayOrLicence,
 
     // Dates - use CaseFacts
     agreement_date: getValueAtPath(wizardFacts, 'agreement_date') || tenancyStartDate,

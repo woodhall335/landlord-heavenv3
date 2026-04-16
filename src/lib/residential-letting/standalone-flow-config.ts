@@ -2,6 +2,7 @@
   RESIDENTIAL_LETTING_PRODUCTS,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
+import { getAgreementSuitabilityFacts } from '@/lib/tenancy/agreement-suitability';
 import { getEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
 
 export type StandaloneFieldType =
@@ -1248,6 +1249,40 @@ function createEnglandAssuredCompletionRules(product: ResidentialLettingProductS
   return [
     COMMON_RULES.englandOnly,
     (facts) => validateStructuredTenantFacts(facts),
+    (facts) => {
+      if (isExistingWrittenEnglandTenancy(facts)) return null;
+      const suitability = getAgreementSuitabilityFacts(facts, { product });
+      return suitability.tenantIsIndividual === true
+        ? null
+        : 'Confirm the occupier is an individual rather than a company for this agreement route.';
+    },
+    (facts) => {
+      if (isExistingWrittenEnglandTenancy(facts)) return null;
+      const suitability = getAgreementSuitabilityFacts(facts, { product });
+      return suitability.mainHome === true
+        ? null
+        : 'Confirm the property will be the occupier main home for this agreement route.';
+    },
+    (facts) => {
+      if (isExistingWrittenEnglandTenancy(facts)) return null;
+      const suitability = getAgreementSuitabilityFacts(facts, { product });
+      if (suitability.landlordLivesAtProperty === true) {
+        return 'Choose the Lodger Agreement route instead if the landlord lives in the property.';
+      }
+      return suitability.landlordLivesAtProperty === false
+        ? null
+        : 'Confirm the landlord does not live in the property for this agreement route.';
+    },
+    (facts) => {
+      if (isExistingWrittenEnglandTenancy(facts)) return null;
+      const suitability = getAgreementSuitabilityFacts(facts, { product });
+      if (suitability.holidayOrLicence === true) {
+        return 'Holiday lets and licence-only arrangements need a different route.';
+      }
+      return suitability.holidayOrLicence === false
+        ? null
+        : 'Confirm this is not a holiday let or licence-only arrangement.';
+    },
     (facts) =>
       isExistingWrittenEnglandTenancy(facts)
         ? null
@@ -1361,8 +1396,8 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
         fields: [
           { id: 'tenant_is_individual', label: 'Occupier is an individual rather than a company', type: 'checkbox', required: true },
           { id: 'main_home', label: 'Property will be the occupier main home', type: 'checkbox', required: true },
-          { id: 'landlord_lives_at_property', label: 'Landlord does not live at the property', type: 'checkbox', required: true, helpText: 'Leave unticked if you actually need the lodger route.' },
-          { id: 'holiday_or_licence', label: 'This is not intended as a holiday let or licence-only arrangement', type: 'checkbox', required: true },
+          { id: 'landlord_not_resident_confirmed', label: 'Landlord does not live at the property', type: 'checkbox', required: true, helpText: 'Leave unticked if you actually need the lodger route.' },
+          { id: 'not_holiday_or_licence_confirmed', label: 'This is not intended as a holiday let or licence-only arrangement', type: 'checkbox', required: true },
         ],
       },
       {
@@ -1442,8 +1477,8 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
         fields: [
           { id: 'tenant_is_individual', label: 'Occupier is an individual rather than a company', type: 'checkbox', required: true },
           { id: 'main_home', label: 'Property will be the occupier main home', type: 'checkbox', required: true },
-          { id: 'landlord_lives_at_property', label: 'Landlord does not live at the property', type: 'checkbox', required: true, helpText: 'Choose Lodger instead if the landlord is resident.' },
-          { id: 'holiday_or_licence', label: 'This is not intended as a holiday let or bare licence arrangement', type: 'checkbox', required: true },
+          { id: 'landlord_not_resident_confirmed', label: 'Landlord does not live at the property', type: 'checkbox', required: true, helpText: 'Choose Lodger instead if the landlord is resident.' },
+          { id: 'not_holiday_or_licence_confirmed', label: 'This is not intended as a holiday let or bare licence arrangement', type: 'checkbox', required: true },
         ],
       },
       {
@@ -1657,7 +1692,8 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
         fields: [
           { id: 'tenant_is_individual', label: 'Occupiers are individuals rather than a company', type: 'checkbox', required: true },
           { id: 'main_home', label: 'Property is intended as the occupier main home', type: 'checkbox', required: true },
-          { id: 'landlord_lives_at_property', label: 'Landlord does not live at the property', type: 'checkbox', required: true },
+          { id: 'landlord_not_resident_confirmed', label: 'Landlord does not live at the property', type: 'checkbox', required: true },
+          { id: 'not_holiday_or_licence_confirmed', label: 'This is not intended as a holiday let or licence-only arrangement', type: 'checkbox', required: true },
         ],
       },
       {
@@ -1850,6 +1886,8 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
         fields: [
           { id: 'tenant_is_individual', label: 'Occupiers are individuals rather than a company', type: 'checkbox', required: true },
           { id: 'main_home', label: 'Property is intended as the occupier main home', type: 'checkbox', required: true },
+          { id: 'landlord_not_resident_confirmed', label: 'Landlord does not live at the property', type: 'checkbox', required: true },
+          { id: 'not_holiday_or_licence_confirmed', label: 'This is not intended as a holiday let or licence-only arrangement', type: 'checkbox', required: true },
           { id: 'room_by_room_occupation', label: 'Occupiers are taking rooms or sharing the house in a multi-occupier arrangement', type: 'checkbox', required: true },
           { id: 'unrelated_households', label: 'Occupiers come from separate households', type: 'checkbox', required: true },
         ],
@@ -2338,4 +2376,3 @@ export function getResidentialStandaloneCompletionErrors(
 export function getResidentialStandaloneDisplayName(product: ResidentialLettingProductSku): string {
   return RESIDENTIAL_LETTING_PRODUCTS[product].label;
 }
-

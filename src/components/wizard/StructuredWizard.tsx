@@ -18,6 +18,10 @@ import { UploadField, type EvidenceFileSummary } from '@/components/wizard/field
 import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
 import { apiUrl } from '@/lib/api';
 import { getSessionTokenHeaders } from '@/lib/session-token';
+import {
+  getAgreementSuitabilityWarnings,
+  getEnglandAssuredSuitabilityAnswer,
+} from '@/lib/tenancy/agreement-suitability';
 import { validateStepInline, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
 import { extractWizardUxIssues, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -358,6 +362,21 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       };
 
       if (question.inputType === 'group' && question.fields) {
+        const suitabilityFieldIds = new Set(question.fields.map((field: any) => field.id));
+        if (
+          question.id === 'suitability' &&
+          suitabilityFieldIds.has('landlord_not_resident_confirmed')
+        ) {
+          const suitabilityAnswer = getEnglandAssuredSuitabilityAnswer(facts, {
+            product:
+              facts?.__meta?.product ||
+              facts?.__meta?.canonical_product ||
+              facts?.product ||
+              undefined,
+          });
+          return Object.keys(suitabilityAnswer).length > 0 ? suitabilityAnswer : null;
+        }
+
         const hydrated: Record<string, any> = {};
 
         question.fields.forEach((field: any) => {
@@ -1083,27 +1102,24 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // AST suitability validation (England & Wales tenancies)
   useEffect(() => {
     if (
-      currentQuestion?.id === 'ast_suitability' &&
+      (currentQuestion?.id === 'ast_suitability' || currentQuestion?.id === 'suitability') &&
       currentAnswer &&
       caseType === 'tenancy_agreement' &&
       (jurisdiction === 'england' || jurisdiction === 'wales')
     ) {
-      const warnings: string[] = [];
-
-      if (currentAnswer.tenant_is_individual === false) {
-        warnings.push('Tenant must be an individual (not a company) for this tenancy agreement route');
-      }
-      if (currentAnswer.main_home === false) {
-        warnings.push("Property must be the tenant's main home for this tenancy agreement route");
-      }
-      if (currentAnswer.landlord_lives_at_property === true) {
-        warnings.push(
-          'If landlord lives at property, this is likely a lodger/licence arrangement, not this tenancy agreement route',
-        );
-      }
-      if (currentAnswer.holiday_or_licence === true) {
-        warnings.push('Holiday lets and licence arrangements are not covered by this tenancy agreement route');
-      }
+      const warnings = getAgreementSuitabilityWarnings(
+        {
+          ...currentAnswer,
+          __meta: caseFacts?.__meta,
+        },
+        {
+          product:
+            caseFacts?.__meta?.product ||
+            caseFacts?.__meta?.canonical_product ||
+            caseFacts?.product ||
+            undefined,
+        },
+      );
 
       if (warnings.length > 0) {
         setAstSuitabilityWarning(

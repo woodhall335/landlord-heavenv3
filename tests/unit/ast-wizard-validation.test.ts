@@ -198,6 +198,38 @@ describe('AST Wizard Validation Fix', () => {
       expect(astData.tenancy_end_date).toBe('2026-08-01');
       expect(astData.term_length).toBe('6 months');
     });
+
+    it('should normalize legacy standalone assured suitability answers for modern England products', () => {
+      const astData = mapWizardToASTData({
+        ...sampleTenancySectionFlowFacts,
+        __meta: {
+          ...sampleTenancySectionFlowFacts.__meta,
+          product: 'england_standard_tenancy_agreement',
+        },
+        landlord_lives_at_property: true,
+        holiday_or_licence: true,
+      });
+
+      expect(astData.landlord_lives_at_property).toBe(false);
+      expect(astData.holiday_or_licence).toBe(false);
+    });
+
+    it('should prefer the new standalone assured confirmation fields when present', () => {
+      const astData = mapWizardToASTData({
+        ...sampleTenancySectionFlowFacts,
+        __meta: {
+          ...sampleTenancySectionFlowFacts.__meta,
+          product: 'england_standard_tenancy_agreement',
+        },
+        landlord_lives_at_property: true,
+        holiday_or_licence: true,
+        landlord_not_resident_confirmed: false,
+        not_holiday_or_licence_confirmed: false,
+      } as WizardFacts);
+
+      expect(astData.landlord_lives_at_property).toBe(true);
+      expect(astData.holiday_or_licence).toBe(true);
+    });
   });
 
   describe('wizardFactsToCaseFacts', () => {

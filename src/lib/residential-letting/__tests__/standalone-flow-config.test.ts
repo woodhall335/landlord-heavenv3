@@ -134,6 +134,23 @@ describe('residential standalone flow config', () => {
     expect(visibleSteps.some((step) => step.id === 'england_written_information')).toBe(false);
   });
 
+  it('uses clear resident-landlord and holiday confirmation keys across the assured England tenancy products', () => {
+    ([
+      'england_standard_tenancy_agreement',
+      'england_premium_tenancy_agreement',
+      'england_student_tenancy_agreement',
+      'england_hmo_shared_house_tenancy_agreement',
+    ] as const).forEach((sku) => {
+      const config = getResidentialStandaloneFlowConfig(sku);
+      const suitabilityStep = config.steps.find((step) => step.id === 'suitability');
+      const fieldIds = (suitabilityStep?.fields || []).map((field) => field.id);
+
+      expect(fieldIds).toContain('landlord_not_resident_confirmed');
+      expect(fieldIds).toContain('not_holiday_or_licence_confirmed');
+      expect(fieldIds).not.toContain('holiday_or_licence');
+    });
+  });
+
   it('uses a structured tenant builder for the modern England tenancy products', () => {
     ([
       'england_standard_tenancy_agreement',
