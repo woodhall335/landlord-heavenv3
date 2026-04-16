@@ -12,7 +12,7 @@ export function StaticPreviewFallback() {
       <Container>
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal">What&apos;s included in your Complete Eviction Bundle (England Only)</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal">What&apos;s included in your Complete Eviction Bundle for England</h2>
             <p className="mt-3 text-gray-600">Choose Section 8 or Section 21. Preview every document before you pay.</p>
           </div>
           <div className="mt-8 grid gap-3 grid-cols-2 md:grid-cols-5" aria-label="Document category counts">

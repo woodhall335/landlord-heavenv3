@@ -77,10 +77,8 @@ export default function BlogPage() {
     tags: featuredPost.tags,
   });
 
-  // Extract unique categories sorted alphabetically
   const categories = [...new Set(publicPosts.map((post) => post.category))].sort();
 
-  // Prepare posts data for client component (without JSX content)
   const postsForFilter = remainingPosts.map((post) => {
     const manifestImages = getBlogImagesForPost({
       slug: post.slug,
@@ -108,28 +106,36 @@ export default function BlogPage() {
       <StructuredData data={blogSchema} />
 
       <main className="overflow-x-clip">
-        {/* Hero Section */}
         <UniversalHero {...blogHeroConfig} />
-
 
         <section className="border-b border-[#ede2ff] bg-[#f8f1ff]/70 py-8 lg:py-11">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl">
-              <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
-              <h2 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Landlord help that tells you what to do next</h2>
-              <p className="mt-4 text-lg text-slate-600">Start with the England landlord problem in plain English, understand the route, and then move into the right product when you are ready.</p>
+              <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">
+                LandlordHeaven Blog
+              </p>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">
+                Landlord help that tells you what to do next
+              </h2>
+              <p className="mt-4 text-lg text-slate-600">
+                Start with the England landlord problem in plain English, understand the route, and
+                then move into the right product when you are ready.
+              </p>
             </div>
           </div>
         </section>
 
-        {/* England public scope */}
-        <section id="blog-jurisdictions" className="border-b border-gray-100 bg-white py-10 lg:py-14">
+        <section
+          id="blog-jurisdictions"
+          className="border-b border-gray-100 bg-white py-10 lg:py-14"
+        >
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-              England Public Guides
+              England Landlord Guides
             </h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              Public discovery on Landlord Heaven is now England-only. Start with the England landlord route here, and use historic direct links only if you are supporting an older non-England matter.
+              These guides are written for landlords dealing with property in England. Older
+              non-England matters can still be supported through existing direct-account links.
             </p>
 
             <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
@@ -167,16 +173,20 @@ export default function BlogPage() {
           </div>
         </section>
 
-
         <section id="blog-topic-hubs" className="border-b border-gray-100 bg-white py-10 lg:py-14">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Browse by Problem</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              Pick the England landlord problem you are dealing with: Section 8, rent arrears, possession steps, or compliance that could trip your case up later.
+              Pick the England landlord problem you are dealing with: Section 8, rent arrears,
+              possession steps, or compliance that could trip your case up later.
             </p>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {publicTopicHubs.map((hub) => (
-                <Link key={hub.slug} href={`/blog/${hub.slug}`} className="rounded-xl border border-[#e3d3ff] bg-[#fdfaff] p-5 transition hover:border-[#c6a2ff] hover:shadow-sm">
+                <Link
+                  key={hub.slug}
+                  href={`/blog/${hub.slug}`}
+                  className="rounded-xl border border-[#e3d3ff] bg-[#fdfaff] p-5 transition hover:border-[#c6a2ff] hover:shadow-sm"
+                >
                   <p className="text-sm font-semibold text-[#692ed4]">{hub.name}</p>
                   <p className="mt-2 text-sm text-slate-600">{hub.description}</p>
                 </Link>
@@ -185,7 +195,6 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Featured Post */}
         <section id="featured-guide" className="bg-[#f8f1ff]/70 py-10 lg:py-14">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured Guide</h2>
@@ -203,18 +212,19 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* All Guides with Search & Filter */}
         {remainingPosts.length > 0 && (
           <section className="bg-white py-10 lg:py-14">
             <div className="container mx-auto px-4">
               <h2 className="mb-2 text-2xl font-bold text-gray-900">All Guides</h2>
-              <p className="mb-8 max-w-2xl text-gray-600">Browse practical landlord guides designed to help you understand the issue quickly, then choose the route or product that actually fits.</p>
+              <p className="mb-8 max-w-2xl text-gray-600">
+                Browse practical landlord guides designed to help you understand the issue quickly,
+                then choose the route or product that actually fits.
+              </p>
               <BlogFilteredList posts={postsForFilter} categories={categories} />
             </div>
           </section>
         )}
 
-        {/* CTA Section */}
         <section className="py-16 lg:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
@@ -222,37 +232,49 @@ export default function BlogPage() {
                 Need help choosing your next landlord step?
               </h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Start with the route that matches the problem: serve the right notice, prepare the court stage, recover unpaid rent, or move into the right tenancy paperwork.
+                Start with the route that matches the problem: serve the right notice, prepare the
+                court stage, recover unpaid rent, or move into the right tenancy paperwork.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
-                <Link
-                  href="/products/notice-only"
-                  className="hero-btn-primary"
-                >
-                  Generate your eviction notice — {PRODUCTS.notice_only.displayPrice} →
+                <Link href="/products/notice-only" className="hero-btn-primary">
+                  Generate your eviction notice - {PRODUCTS.notice_only.displayPrice} -&gt;
                 </Link>
-                <Link
-                  href="/products/complete-pack"
-                  className="hero-btn-secondary"
-                >
-                  See the court pack — {PRODUCTS.complete_pack.displayPrice} →
+                <Link href="/products/complete-pack" className="hero-btn-secondary">
+                  See the court pack - {PRODUCTS.complete_pack.displayPrice} -&gt;
                 </Link>
               </div>
 
-              {/* Trust indicators */}
               <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500">
                 <span className="flex items-center gap-2">
-                  <Image src="/images/wizard-icons/50-success.png" alt="Ready to file" width={20} height={20} className="h-5 w-5" />
+                  <Image
+                    src="/images/wizard-icons/50-success.png"
+                    alt="Ready to file"
+                    width={20}
+                    height={20}
+                    className="h-5 w-5"
+                  />
                   Ready to file
                 </span>
                 <span className="flex items-center gap-2">
-                  <Image src="/images/wizard-icons/05-compliance.png" alt="Court-ready" width={20} height={20} className="h-5 w-5" />
+                  <Image
+                    src="/images/wizard-icons/05-compliance.png"
+                    alt="Court-ready"
+                    width={20}
+                    height={20}
+                    className="h-5 w-5"
+                  />
                   Built on the forms courts expect
                 </span>
                 <span className="flex items-center gap-2">
-                  <Image src="/images/wizard-icons/46-premium.png" alt="England-only public products" width={20} height={20} className="h-5 w-5" />
-                  England-only public products
+                  <Image
+                    src="/images/wizard-icons/46-premium.png"
+                    alt="For landlords in England"
+                    width={20}
+                    height={20}
+                    className="h-5 w-5"
+                  />
+                  For landlords in England
                 </span>
               </div>
             </div>

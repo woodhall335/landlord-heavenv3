@@ -168,7 +168,7 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <p className="mb-3">
-                        <strong>Public England-Only Coverage:</strong>
+                        <strong>Public product scope:</strong>
                       </p>
                       <ul className="space-y-2">
                         <li className="flex items-start gap-2">
@@ -180,7 +180,7 @@ export default function HelpPage() {
                         </li>
                       </ul>
                       <p className="mt-3">
-                        New public starts and public product recommendations now default to England.
+                        New public starts and public product recommendations are now built around England.
                       </p>
                     </>
                   ),
@@ -222,7 +222,7 @@ export default function HelpPage() {
                       </p>
                       <p className="mt-2">
                         <strong>After download:</strong> PDFs are editable with PDF software. You can modify text, but
-                        ensure any changes comply with UK law.
+                        ensure any changes still comply with the rules for your route.
                       </p>
                       <p className="mt-2">
                         <strong>All products:</strong> Regenerate unlimited times for the same case with updated

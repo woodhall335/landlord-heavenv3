@@ -18,7 +18,7 @@ export const productLinks = {
     href: '/products/notice-only',
     title: 'Eviction Notice Generator (Section 8, May 2026)',
     description:
-      'England-only Section 8 notice product with checks on grounds, dates, and service before you serve.',
+      'Section 8 notice product for landlords in England, with checks on grounds, dates, and service before you serve.',
     icon: 'document' as const,
     type: 'product' as const,
   },
@@ -26,7 +26,7 @@ export const productLinks = {
     href: '/products/complete-pack',
     title: 'Complete Eviction Pack',
     description:
-      'England-only court possession pack with the Section 8 route, N5, N119, and filing guidance.',
+      'Court possession pack for landlords in England, with the Section 8 route, N5, N119, and filing guidance.',
     icon: 'legal' as const,
     type: 'product' as const,
   },
@@ -273,14 +273,14 @@ export const guideLinks = {
   walesEviction: {
     href: '/products/notice-only',
     title: 'England Eviction Notice Generator',
-    description: 'England-only public notice owner page.',
+    description: 'Public notice owner page for landlords in England.',
     icon: 'legal' as const,
     type: 'guide' as const,
   },
   scotlandEviction: {
     href: '/products/notice-only',
     title: 'England Eviction Notice Generator',
-    description: 'England-only public notice owner page.',
+    description: 'Public notice owner page for landlords in England.',
     icon: 'legal' as const,
     type: 'guide' as const,
   },

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Complete Eviction Pack (Court Possession - England) | ${price}`,
     description:
-      'England-only court possession pack with the Section 8 route, N5, N119, evidence prompts, and filing guidance in one workflow.',
+      'Court possession pack for landlords in England with the Section 8 route, N5, N119, evidence prompts, and filing guidance in one workflow.',
     url: canonicalUrl,
   },
 };
@@ -39,9 +39,9 @@ const faqs = [
       'It includes the England notice-to-court route: the Section 8 notice, service guidance, core court forms including N5 and N119, filing guidance, and supporting prompts for the possession claim.',
   },
   {
-    question: 'Is this England only?',
+    question: 'Who is this built for?',
     answer:
-      'Yes. The public Complete Eviction Pack now covers England only and is positioned around the current possession route.',
+      'It is built for landlords handling the court possession route for property in England.',
   },
   {
     question: 'When should I choose this instead of the notice product?',
@@ -77,7 +77,7 @@ export default async function CompleteEvictionPackPage() {
         data={productSchema({
           name: 'Complete Eviction Pack',
           description:
-            'England-only court possession pack with Section 8 notice generation, N5, N119, evidence prompts, and filing guidance.',
+            'Court possession pack for landlords in England with Section 8 notice generation, N5, N119, evidence prompts, and filing guidance.',
           price: product.price.toString(),
           url: canonicalUrl,
         })}
@@ -173,7 +173,7 @@ export default async function CompleteEvictionPackPage() {
               product="complete_pack"
               previews={previews}
               titleOverride="What&apos;s included in your Complete Eviction Pack"
-              subtitleOverride="England-only court possession pack. Preview the notice, N5, N119, and supporting documents before you buy."
+              subtitleOverride="Preview the notice, N5, N119, and supporting documents before you buy."
             />
           </div>
         </Container>

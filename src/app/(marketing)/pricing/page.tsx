@@ -94,7 +94,9 @@ export default function PricingPage() {
           {LANDLORD_HEAVEN_PURPOSE}
         </p>
         <p className="mt-2 text-sm text-white">
-          Public pricing is now England-only: Section 8 notice generation, full court possession, money claims, Section 13 rent increase products, and the five England tenancy agreement routes below.
+          This pricing page covers the products we currently sell for landlords with properties in
+          England: Section 8 notice generation, court possession, money claims, Section 13 rent
+          increase packs, and the five tenancy agreement routes below.
         </p>
         <p className="mt-2 text-sm text-white">
           {ENGLAND_POST_MAY_2026_POSITION}

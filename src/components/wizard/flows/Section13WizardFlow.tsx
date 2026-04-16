@@ -2045,7 +2045,7 @@ export function Section13WizardFlow({
           </Button>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-500">{jurisdiction === 'england' ? 'England only' : jurisdiction}</span>
+            <span className="text-xs text-gray-500">{jurisdiction === 'england' ? 'England' : jurisdiction}</span>
             <Button
               onClick={() => {
                 if (currentStep.id === 'preview' && !orderStatus?.paid) {

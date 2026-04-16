@@ -9,12 +9,15 @@ import {
   RiMoneyPoundCircleLine,
   RiScales3Line,
 } from 'react-icons/ri';
-import {
-  PUBLIC_PRODUCT_DESCRIPTORS,
-} from '@/lib/public-products';
+import { PUBLIC_PRODUCT_DESCRIPTORS } from '@/lib/public-products';
 import { TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
 
-type AskHeavenCardJurisdiction = 'england' | 'wales' | 'scotland' | 'n_ireland' | 'northern-ireland';
+type AskHeavenCardJurisdiction =
+  | 'england'
+  | 'wales'
+  | 'scotland'
+  | 'n_ireland'
+  | 'northern-ireland';
 
 interface AskHeavenNextStepsCardsProps {
   jurisdiction?: AskHeavenCardJurisdiction;
@@ -36,7 +39,7 @@ const cards: CardDefinition[] = [
     title: 'Eviction Notice Generator',
     price: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.priceLabel,
     description:
-      'England-only Section 8 route for landlords who need the notice, service guidance, and early route checks before serving.',
+      'For landlords in England who need the Section 8 notice, service guidance, and early route checks before serving.',
     ctaText: 'Open Section 8 notice product',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     ariaLabel: 'Open Eviction Notice Generator',
@@ -46,7 +49,7 @@ const cards: CardDefinition[] = [
     title: 'Complete Eviction Pack',
     price: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.priceLabel,
     description:
-      'England-only court possession route for landlords who want the notice, N5, N119, and filing guidance in one product.',
+      'For landlords in England who want the notice, N5, N119, and filing guidance in one product.',
     ctaText: 'Open court possession pack',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     ariaLabel: 'Open Complete Eviction Pack',
@@ -56,7 +59,7 @@ const cards: CardDefinition[] = [
     title: 'Money Claim Pack',
     price: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.priceLabel,
     description:
-      'England-only debt recovery route for unpaid rent, damage, bills, guarantor claims, and former-tenant debt.',
+      'For landlords in England recovering unpaid rent, damage, bills, guarantor claims, and former-tenant debt.',
     ctaText: 'Open money claim product',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
     ariaLabel: 'Open Money Claim Pack',
@@ -88,12 +91,11 @@ export function AskHeavenNextStepsCards({
         id="ask-heaven-next-steps-heading"
         className="text-center text-3xl font-bold tracking-tight text-gray-800"
       >
-        What we can help you do next in England
+        What we can help you do next
       </h2>
       <p className="mx-auto mt-3 max-w-3xl text-center text-sm leading-6 text-gray-600">
-        Public recommendations now point to England-only products. Historic non-England cases can
-        still be resumed directly through the account, but they are no longer promoted as public
-        acquisition paths.
+        These recommendations are built around the products we publicly offer for landlords in
+        England. Older non-England cases can still be resumed through an existing account.
       </p>
 
       <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -114,7 +116,7 @@ export function AskHeavenNextStepsCards({
                 {card.icon}
               </div>
               <h3 className="text-lg font-semibold leading-tight text-gray-900">
-                {card.title} <span className="font-medium text-gray-700">— {card.price}</span>
+                {card.title} <span className="font-medium text-gray-700">- {card.price}</span>
               </h3>
             </div>
 
@@ -127,7 +129,7 @@ export function AskHeavenNextStepsCards({
                 aria-hidden="true"
                 className="inline-block transition-transform duration-300 group-hover:translate-x-1"
               >
-                →
+                -&gt;
               </span>
               {card.ctaText}
               <span

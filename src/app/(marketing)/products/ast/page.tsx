@@ -29,16 +29,16 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger',
     description:
-      'England-only tenancy agreement hub with exact product routes for Standard, Premium, Student, HMO / Shared House, and Lodger use cases.',
+      'Tenancy agreement hub for landlords in England with exact product routes for Standard, Premium, Student, HMO / Shared House, and Lodger use cases.',
     url: canonicalUrl,
   },
 };
 
 const faqs = [
   {
-    question: 'Is this page England only?',
+    question: 'Who is this hub for?',
     answer:
-      'Yes. The public tenancy hub now covers England only and routes landlords into the right England agreement product.',
+      'It is for landlords putting a tenancy in place for property in England and choosing between the exact agreement products.',
   },
   {
     question: 'What changed after 1 May 2026?',
@@ -70,7 +70,7 @@ const cardCopy: TenancyCardCopy[] = [
     bullets: [
       'Baseline ordinary residential route',
       'Best for lower-complexity lets',
-      'England-only supporting pack',
+      'Supporting documents for England lets',
     ],
   },
   {
@@ -146,9 +146,9 @@ export default function EnglandTenancyHubPage() {
                 Choose the right England tenancy agreement instead of guessing from an old AST template.
               </h1>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-[#546075]">
-                This hub is now England-only. It exists to route landlords into the exact agreement
-                they want to rank for and buy: Standard, Premium, Student, HMO / Shared House, and
-                Lodger. The public copy now matches the current England framework from 1 May 2026.
+                This hub helps landlords choose the exact agreement they need for property in
+                England: Standard, Premium, Student, HMO / Shared House, and Lodger. The copy is
+                aligned to the current England framework from 1 May 2026.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href={chooserHref} className="hero-btn-primary">
@@ -163,12 +163,12 @@ export default function EnglandTenancyHubPage() {
               </div>
             </div>
             <div className="rounded-[2rem] border border-[#E6DBFF] bg-gradient-to-br from-[#F8F5FF] to-white p-8 shadow-[0_20px_50px_rgba(124,58,237,0.08)]">
-              <h2 className="text-2xl font-semibold text-[#141B2D]">What changed on the public site</h2>
+              <h2 className="text-2xl font-semibold text-[#141B2D]">How this hub helps landlords</h2>
               <ul className="mt-5 space-y-3 text-sm leading-6 text-[#546075]">
-                <li>England is now the only public tenancy jurisdiction.</li>
-                <li>Each exact agreement term now has its own owner page.</li>
-                <li>The hub is a chooser, not a mixed-jurisdiction comparison page.</li>
-                <li>Older broad AST language is supporting terminology, not the lead promise.</li>
+                <li>Each exact agreement term now has its own page.</li>
+                <li>The hub points you to the agreement that actually matches the let.</li>
+                <li>Older broad AST language is kept as supporting terminology, not the main promise.</li>
+                <li>The product pages now lead with the landlord task first.</li>
               </ul>
             </div>
           </div>

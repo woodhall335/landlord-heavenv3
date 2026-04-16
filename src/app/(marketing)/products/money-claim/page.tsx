@@ -80,7 +80,7 @@ const faqs = [
   {
     question: "Which jurisdictions do you support?",
     answer:
-      "England only. This pack uses Form N1 and a PAP-DEBT Letter Before Claim for the English court process.",
+      "This pack is built for landlords claiming through the England county court route. It uses Form N1 and a PAP-DEBT Letter Before Claim for that process.",
   },
   {
     question: "How long are documents stored?",
@@ -154,7 +154,7 @@ export default async function MoneyClaimPage() {
           product="money_claim"
           previews={previews}
           titleOverride="What's included in your money claim pack"
-          subtitleOverride="England-only pack. Preview every document before you buy."
+          subtitleOverride="Preview every document before you buy."
         />
       </section>
 

@@ -230,12 +230,12 @@ const getDefaultSubtitle = (product: WhatsIncludedInteractiveProps['product']) =
     return 'Select your jurisdiction, then preview every document in the pack.';
   }
   if (product === 'complete_pack') {
-    return 'England-only pack. Preview the current notice-to-claim workflow before you buy.';
+    return 'Preview the current England notice-to-claim workflow before you buy.';
   }
   if (product === 'ast') {
     return 'Select your jurisdiction and product level, then preview every document in the pack.';
   }
-  return 'England-only pack. Preview every document before you buy.';
+  return 'Preview every document before you buy.';
 };
 
 const getDocumentDescription = (document: PreviewDoc) => {
@@ -407,21 +407,21 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
     ? COMPLETE_PACK_VARIANTS.length > 1
     : isNoticeOnly && selectedJurisdiction !== 'scotland' && noticeVariants.length > 1;
   const lockJurisdiction = isAst ? props.lockJurisdiction ?? false : false;
-  const legalNote = isNoticeOnly ? jurisdictionConfig?.legalNote : isAst ? tenancyConfig?.legalNote : 'England only';
+  const legalNote = isNoticeOnly ? jurisdictionConfig?.legalNote : isAst ? tenancyConfig?.legalNote : 'For landlords in England';
 
   let defaultCtaHref = 'https://landlordheaven.co.uk/wizard?product=money_claim&topic=debt&src=product_page';
-  let defaultCtaLabel = 'Start my money claim pack ->';
+  let defaultCtaLabel = 'Start my money claim pack';
 
   if (product === 'notice_only') {
     defaultCtaHref = 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction';
-    defaultCtaLabel = 'Generate my notice bundle ->';
+    defaultCtaLabel = 'Start Eviction Notice Generator';
   } else if (product === 'complete_pack') {
     defaultCtaHref = 'https://landlordheaven.co.uk/wizard?product=complete_pack&src=product_page&topic=eviction';
-    defaultCtaLabel = 'Start your complete pack ->';
+    defaultCtaLabel = 'Start Complete Eviction Pack';
   } else if (product === 'ast') {
     defaultCtaHref = `https://landlordheaven.co.uk/wizard?product=${selectedTenancyTier === 'premium' ? 'ast_premium' : 'ast_standard'}&jurisdiction=${selectedJurisdiction}&src=product_page&topic=tenancy`;
     defaultCtaLabel =
-      selectedTenancyTier === 'premium' ? 'Start my premium tenancy pack ->' : 'Start my standard tenancy pack ->';
+      selectedTenancyTier === 'premium' ? 'Start Premium Tenancy Agreement' : 'Start Standard Tenancy Agreement';
   }
 
   const ctaHref = props.ctaHref ?? defaultCtaHref;

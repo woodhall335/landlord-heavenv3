@@ -136,10 +136,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Complete Eviction Pack',
     shortLabel: 'Complete Eviction Pack',
     description:
-      'England-only court-possession bundle with the Section 8 notice route, N5, N119, and filing guidance',
+      'Court-possession bundle for landlords in England with the Section 8 route, N5, N119, and filing guidance',
     price: SEO_PRICES.evictionBundle.amount,
     displayPrice: SEO_PRICES.evictionBundle.display,
-    priceNote: 'England only',
+    priceNote: 'For landlords in England',
     wizardHref: '/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction',
     productPageHref: SEO_LANDING_ROUTES.complete_pack,
   },
@@ -150,7 +150,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     description: 'Recover unpaid rent, damage, bills, and other tenant debts through the England money claim route',
     price: SEO_PRICES.moneyClaim.amount,
     displayPrice: SEO_PRICES.moneyClaim.display,
-    priceNote: 'England only',
+    priceNote: 'For landlords in England',
     wizardHref: '/wizard/flow?type=money_claim&product=money_claim&src=product_page&topic=debt',
     productPageHref: SEO_LANDING_ROUTES.money_claim,
   },
@@ -161,7 +161,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     description: 'Generate Form 4A, proof of service, and a clear rent increase report before you serve',
     price: SEO_PRICES.section13Standard.amount,
     displayPrice: SEO_PRICES.section13Standard.display,
-    priceNote: 'England only',
+    priceNote: 'For landlords in England',
     wizardHref: '/wizard/flow?type=rent_increase&product=section13_standard&src=product_page&topic=general',
     productPageHref: SEO_LANDING_ROUTES.section13_standard,
   },
@@ -172,7 +172,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     description: 'Tribunal-ready Section 13 bundle with challenge guidance, evidence tools, and response documents',
     price: SEO_PRICES.section13Defensive.amount,
     displayPrice: SEO_PRICES.section13Defensive.display,
-    priceNote: 'England only',
+    priceNote: 'For landlords in England',
     wizardHref: '/wizard/flow?type=rent_increase&product=section13_defensive&src=product_page&topic=general',
     productPageHref: SEO_LANDING_ROUTES.section13_defensive,
   },
@@ -401,19 +401,19 @@ export const REGIONAL_PRODUCT_AVAILABILITY: Record<
   },
   complete_pack: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   money_claim: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   section13_standard: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   section13_defensive: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   sc_money_claim: {
     available: [], // Discontinued
@@ -427,23 +427,23 @@ export const REGIONAL_PRODUCT_AVAILABILITY: Record<
   },
   england_standard_tenancy_agreement: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   england_premium_tenancy_agreement: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   england_student_tenancy_agreement: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   england_hmo_shared_house_tenancy_agreement: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   england_lodger_agreement: {
     available: ['england'],
-    badge: 'England only',
+    badge: 'England',
   },
   residential_tenancy_application: {
     available: [],

@@ -25,7 +25,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     name: 'Eviction Notice Generator (Section 8, May 2026)',
     productSku: 'notice_only',
     price: PRODUCTS.notice_only.displayPrice,
-    coverage: 'England only',
+    coverage: 'For landlords in England',
     bestFor: 'You need to generate the right Section 8 notice before you serve.',
     points: [
       'Section 8 route with checks on grounds, dates, service, and compliance',
@@ -40,7 +40,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     name: 'Complete Eviction Pack',
     productSku: 'complete_pack',
     price: PRODUCTS.complete_pack.displayPrice,
-    coverage: 'England only',
+    coverage: 'For landlords in England',
     bestFor: 'You need the notice, court forms, and filing guidance together.',
     points: [
       'Built for landlords already thinking about court',
@@ -55,7 +55,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     name: 'Money Claim Pack',
     productSku: 'money_claim',
     price: PRODUCTS.money_claim.displayPrice,
-    coverage: 'England only',
+    coverage: 'For landlords in England',
     bestFor: 'You need to recover unpaid rent or other tenancy debt.',
     points: [
       'Built for unpaid rent, bills, damage, and guarantor claims',
@@ -69,7 +69,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     name: 'Section 13 Rent Increase Pack',
     productSku: 'section13_standard',
     price: PRODUCTS.section13_standard.displayPrice,
-    coverage: 'England only',
+    coverage: 'For landlords in England',
     bestFor: 'You want to propose a new rent properly and keep the file clear before you serve.',
     points: [
       SECTION13_STANDARD_SUMMARY,
@@ -83,7 +83,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     name: 'Section 13 Defence Pack',
     productSku: 'section13_defensive',
     price: PRODUCTS.section13_defensive.displayPrice,
-    coverage: 'England only',
+    coverage: 'For landlords in England',
     bestFor: 'You think the tenant may challenge the increase and you want a stronger landlord file ready.',
     points: [
       SECTION13_DEFENCE_SUMMARY,
@@ -97,10 +97,10 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     name: 'Standard Tenancy Agreement',
     productSku: 'ast_standard',
     price: PRODUCTS.ast_standard.displayPrice,
-    coverage: 'England only',
+    coverage: 'For landlords in England',
     bestFor: 'You need the baseline agreement for a straightforward England whole-property let.',
     points: [
-      'Built for England only',
+      'Built for landlords letting property in England',
       'England wording updated for the law from 1 May 2026',
       'Best for most ordinary residential lets',
     ],
@@ -111,7 +111,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     name: 'Premium Tenancy Agreement',
     productSku: 'ast_premium',
     price: PRODUCTS.ast_premium.displayPrice,
-    coverage: 'England only',
+    coverage: 'For landlords in England',
     bestFor: 'You need fuller drafting and extra management detail for an England residential let.',
     points: [
       'Designed for England residential lets that need more detail than Standard',

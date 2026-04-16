@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Eviction Notice Generator (Section 8, May 2026) | England | ${price}`,
     description:
-      'England-only Section 8 notice generator with checks on grounds, dates, service, and next-step readiness under the current route.',
+      'Section 8 notice generator for landlords in England, with checks on grounds, dates, service, and next-step readiness under the current route.',
     url: canonicalUrl,
   },
 };
@@ -39,9 +39,9 @@ const faqs = [
       'It generates an England Section 8 notice pack for the post-May 2026 route, including the notice itself, service guidance, and a practical validity checklist before you serve.',
   },
   {
-    question: 'Is this England only?',
+    question: 'Who is this built for?',
     answer:
-      'Yes. The public product now covers England only and is written for the current England Section 8 route.',
+      'It is built for landlords serving a Section 8 notice for property in England under the current route.',
   },
   {
     question: 'Does this help with Form 3A?',
@@ -77,7 +77,7 @@ export default async function NoticeOnlyPage() {
         data={productSchema({
           name: 'Eviction Notice Generator (Section 8, May 2026)',
           description:
-            'England-only Section 8 notice generator with checks on grounds, dates, service, and court readiness before the notice is served.',
+            'Section 8 notice generator for landlords in England, with checks on grounds, dates, service, and court readiness before the notice is served.',
           price: product.price.toString(),
           url: canonicalUrl,
         })}
@@ -174,7 +174,7 @@ export default async function NoticeOnlyPage() {
               defaultJurisdiction="england"
               previews={previews}
               titleOverride="What&apos;s included in your Section 8 notice pack"
-              subtitleOverride="England-only notice pack. Preview the documents, then generate the final version when the route and facts look right."
+              subtitleOverride="Preview the documents, then generate the final version when the route and facts look right."
             />
           </div>
         </Container>

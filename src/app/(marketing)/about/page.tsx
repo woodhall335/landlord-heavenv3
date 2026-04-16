@@ -19,13 +19,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = generateMetadata({
-  title: "About Landlord Heaven | UK Landlord Document Platform",
+  title: "About Landlord Heaven | England Landlord Document Platform",
   description:
-    "Learn how Landlord Heaven helps landlords handle eviction notices, court paperwork, money claims, rent increases, and tenancy agreements in plain English.",
+    "Learn how Landlord Heaven helps landlords in England handle eviction notices, court paperwork, money claims, rent increases, and tenancy agreements in plain English.",
   path: "/about",
   keywords: [
     "about landlord heaven",
-    "UK landlord documents",
+    "England landlord documents",
     "section 8 notices",
     "tenancy agreements",
     "possession documents",
@@ -57,7 +57,7 @@ export default function AboutPage() {
 
             <div className="prose prose-lg max-w-none text-gray-700">
               <p className="text-xl leading-relaxed mb-6">
-                Every year, thousands of UK landlords face the daunting task of evicting problem tenants or claiming
+                Every year, thousands of landlords face the daunting task of evicting problem tenants or claiming
                 unpaid rent. They have two choices: pay solicitors £300-600, or spend hours researching complex legal
                 forms and risk getting it wrong.
               </p>
@@ -67,7 +67,7 @@ export default function AboutPage() {
               </p>
 
               <p className="text-xl leading-relaxed">
-                Landlord Heaven helps landlords put the right paperwork in place for the right region in minutes, not hours. We make eviction notices, tenancy agreements, rent increase documents, and money claims easier to start when you need a clear next step without paying solicitor rates just to begin.
+                Landlord Heaven helps landlords in England put the right paperwork in place in minutes, not hours. We make eviction notices, tenancy agreements, rent increase documents, and money claims easier to start when you need a clear next step without paying solicitor rates just to begin.
               </p>
             </div>
           </div>
@@ -145,10 +145,11 @@ export default function AboutPage() {
                 <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
                   <CheckCircle2 className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="text-2xl font-semibold text-charcoal mb-4">England-Only Public Coverage</h3>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">Built Around the England Landlord Route</h3>
                 <p className="text-gray-700 mb-4">
-                  The public site is now focused on England only, so the acquisition journey, SEO pages,
-                  and product routing all match the England rules landlords are searching for.
+                  The public site is written for landlords dealing with property in England, so the
+                  journey, search pages, and product routing all match the rules landlords are
+                  actually searching for.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li className="flex items-center gap-2">
@@ -156,10 +157,10 @@ export default function AboutPage() {
                     England: Section 8 notice generation, court possession packs, money claims, rent increases, and tenancy agreements
                   </li>
                   <li className="flex items-center gap-2">
-                    Historic non-England cases remain accessible through direct account support only
+                    Historic non-England cases remain accessible through direct account support
                   </li>
                   <li className="flex items-center gap-2">
-                    Public discovery, navigation, and recommendations now follow a single England-first product catalog
+                    Public discovery, navigation, and recommendations all follow the same England-first product catalog
                   </li>
                 </ul>
               </div>
@@ -285,8 +286,8 @@ export default function AboutPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
-                <div className="text-4xl font-bold text-primary mb-2">100%</div>
-                <p className="text-gray-700 font-semibold">UK Coverage</p>
+                <div className="text-4xl font-bold text-primary mb-2">England</div>
+                <p className="text-gray-700 font-semibold">Public Product Focus</p>
               </div>
             </div>
 
@@ -371,7 +372,7 @@ export default function AboutPage() {
                   Official Government Forms
                 </h4>
                 <p className="text-sm text-gray-700">
-                  We use actual Form 3A, N5, AT6, and other official forms - not generic document drafts. Courts require these
+                  We use actual Form 3A, N5, N119, Form N1, Form 4A, and other official forms - not generic document drafts. Courts require these
                   specific formats.
                 </p>
               </div>
@@ -420,7 +421,7 @@ export default function AboutPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Started?</h2>
             <p className="text-xl mb-8 text-gray-600">
-              Join thousands of UK landlords who've saved time and money with Landlord Heaven.
+              Join landlords across England who want to save time and money with Landlord Heaven.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link

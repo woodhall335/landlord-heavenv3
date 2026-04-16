@@ -21,7 +21,7 @@ export interface AskHeavenCtaCopy {
 
 type AskHeavenCtaKey = `${WizardProduct}:${WizardJurisdiction}:${AskHeavenCtaIntent}`;
 
-const TENANCY_PRICE_NOTE = `Standard ${SEO_PRICES.tenancyStandard.display} · Premium ${SEO_PRICES.tenancyPremium.display}`;
+const TENANCY_PRICE_NOTE = `Standard ${SEO_PRICES.tenancyStandard.display} | Premium ${SEO_PRICES.tenancyPremium.display}`;
 const NOTICE_PRICE = SEO_PRICES.evictionNotice.display;
 const MONEY_CLAIM_PRICE = SEO_PRICES.moneyClaim.display;
 const COMPLETE_PACK_PRICE = SEO_PRICES.evictionBundle.display;
@@ -96,7 +96,7 @@ const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = 
     description: `Guided bundle with your notice, possession forms, and landlord guidance (${COMPLETE_PACK_PRICE}).`,
     buttonText: 'Start complete pack',
     displayPrice: COMPLETE_PACK_PRICE,
-    priceNote: 'England only',
+    priceNote: 'For landlords in England',
   },
   'complete_pack:england:eviction': {
     product: 'complete_pack',
@@ -104,7 +104,7 @@ const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = 
     description: `Full bundle with notice, court forms, and guidance (${COMPLETE_PACK_PRICE}).`,
     buttonText: 'Get the complete pack',
     displayPrice: COMPLETE_PACK_PRICE,
-    priceNote: 'England only',
+    priceNote: 'For landlords in England',
   },
   'money_claim:england:arrears_claim': {
     product: 'money_claim',
@@ -112,7 +112,7 @@ const ASK_HEAVEN_CTA_COPY: Partial<Record<AskHeavenCtaKey, AskHeavenCtaCopy>> = 
     description: `Recover unpaid rent and tenant debts through the courts (${MONEY_CLAIM_PRICE}).`,
     buttonText: 'Start money claim',
     displayPrice: MONEY_CLAIM_PRICE,
-    priceNote: 'England only',
+    priceNote: 'For landlords in England',
   },
   'tenancy_agreement:england:tenancy': {
     product: 'tenancy_agreement',
@@ -199,7 +199,8 @@ export function getAskHeavenCtaCopy({
     return ASK_HEAVEN_CTA_COPY[key];
   }
 
-  const fallbackKey = `${normalizedProduct}:${jurisdiction}:${getDefaultIntentForProduct(normalizedProduct)}` as AskHeavenCtaKey;
+  const fallbackKey =
+    `${normalizedProduct}:${jurisdiction}:${getDefaultIntentForProduct(normalizedProduct)}` as AskHeavenCtaKey;
   return ASK_HEAVEN_CTA_COPY[fallbackKey] ?? null;
 }
 
