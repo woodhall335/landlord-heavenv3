@@ -14,6 +14,7 @@ import {
 } from '@/lib/tenancy/jurisdiction';
 import { safeUpdateOrderWithMetadata } from '@/lib/payments/safe-order-metadata';
 import { resolveFulfillmentProductForCase } from '@/lib/payments/fulfillment-routing';
+import { persistDocumentRecordWithFallback } from '@/lib/payments/document-persistence';
 import { validateTenancyRequiredFacts } from '@/lib/validation/tenancy-details-validator';
 import { doesDocumentTypeMatch, toCanonicalDocumentKey } from '@/lib/documents/dashboard-document-display';
 import {
@@ -331,37 +332,45 @@ async function persistGeneratedDocuments(
 
     const { data: publicUrlData } = supabase.storage.from('documents').getPublicUrl(fileName);
 
-    const { error: insertError } = await supabase.from('documents').upsert(
-      {
-        user_id: userId,
-        case_id: caseId,
+    const documentPayload = {
+      user_id: userId,
+      case_id: caseId,
+      order_id: orderId,
+      output_snapshot_id: outputSnapshotId || null,
+      document_type: doc.document_type,
+      document_title: doc.title,
+      jurisdiction,
+      html_content: doc.html || null,
+      pdf_url: publicUrlData.publicUrl,
+      is_preview: false,
+      qa_passed: true,
+      metadata: {
+        description: doc.description,
+        pack_type: productType,
         order_id: orderId,
         output_snapshot_id: outputSnapshotId || null,
-        document_type: doc.document_type,
-        document_title: doc.title,
-        jurisdiction,
-        html_content: doc.html || null,
-        pdf_url: publicUrlData.publicUrl,
-        is_preview: false,
-        qa_passed: true,
-        metadata: {
-          description: doc.description,
-          pack_type: productType,
-          order_id: orderId,
-          output_snapshot_id: outputSnapshotId || null,
-          ...(metadata || {}),
-        },
+        ...(metadata || {}),
       },
+    };
+
+    const { error: insertError, method } = await persistDocumentRecordWithFallback(
+      supabase as any,
+      documentPayload,
       {
-        onConflict: outputSnapshotId
-          ? 'case_id,document_type,is_preview,output_snapshot_id'
-          : 'case_id,document_type,is_preview',
+        caseId,
+        documentType: doc.document_type,
+        outputSnapshotId,
       }
     );
 
     if (insertError) {
       console.error(`[fulfillment] Failed to insert document "${doc.title}":`, insertError);
     } else {
+      if (method !== 'upsert') {
+        console.warn(
+          `[fulfillment] Document "${doc.title}" persisted via ${method} fallback instead of upsert`
+        );
+      }
       generatedDocsCount++;
     }
   }
