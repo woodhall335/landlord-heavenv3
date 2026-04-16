@@ -4,7 +4,14 @@ import { StructuredData } from '@/lib/seo/structured-data';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { BlogFilteredList } from '@/components/blog/BlogFilteredList';
 import { blogPosts } from '@/lib/blog/posts';
-import { BLOG_CATEGORIES, getPostCountsByRegion, BlogRegion } from '@/lib/blog/categories';
+import {
+  BLOG_CATEGORIES,
+  getPostCountsByRegion,
+  getPostRegion,
+  getPublicBlogRegions,
+  isPublicBlogDiscoveryRegion,
+  type BlogRegion,
+} from '@/lib/blog/categories';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { blogHeroConfig } from '@/components/landing/heroConfigs';
@@ -12,39 +19,48 @@ import { ArrowRight } from 'lucide-react';
 import { generateMetadata } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
-import { BLOG_TOPIC_HUBS } from '@/lib/blog/topic-hubs';
+import { BLOG_TOPIC_HUBS, getPublicTopicHubs } from '@/lib/blog/topic-hubs';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata = generateMetadata({
-  title: 'UK Landlord Guides | Eviction, Tenancy & Rent Arrears',
+  title: 'England Landlord Guides | Section 8, Possession & Tenancy Help',
   description:
-    'Read UK landlord guides on current England possession notices, rent arrears, tenancy agreements, possession claims, and practical compliance updates.',
+    'Read England landlord guides on Section 8 notices, possession claims, tenancy agreements, rent arrears, and practical compliance steps.',
   path: '/blog',
   keywords: [
-    'how to evict a tenant',
-    'eviction notice',
+    'how to evict a tenant in england',
+    'section 8 notice england',
     'section 8',
     'rent arrears',
-    'tenancy agreement',
-    'possession claim',
+    'tenancy agreement england',
+    'possession claim england',
     'landlord compliance',
   ],
 });
 
 export default function BlogPage() {
+  const publicPosts = blogPosts.filter((post) =>
+    isPublicBlogDiscoveryRegion(getPostRegion(post.slug))
+  );
+  const featuredPost = publicPosts[0] ?? blogPosts[0];
+  const remainingPosts = publicPosts.slice(1);
+  const postCounts = getPostCountsByRegion(publicPosts);
+  const publicTopicHubs = getPublicTopicHubs().map((slug) => BLOG_TOPIC_HUBS[slug]);
+
   const blogSchema = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
     name: 'Landlord Heaven Blog',
-    description: 'Expert guides and resources for UK landlords on evictions, tenancy law, and property management.',
+    description:
+      'Expert England landlord guides on Section 8 notices, possession claims, tenancy agreements, rent arrears, and compliance.',
     url: 'https://landlordheaven.co.uk/blog',
     publisher: {
       '@type': 'Organization',
       name: 'Landlord Heaven',
       url: 'https://landlordheaven.co.uk',
     },
-    blogPost: blogPosts.map((post) => ({
+    blogPost: publicPosts.map((post) => ({
       '@type': 'BlogPosting',
       headline: post.title,
       description: post.description,
@@ -53,7 +69,6 @@ export default function BlogPage() {
     })),
   };
 
-  const featuredPost = blogPosts[0];
   const featuredPostImages = getBlogImagesForPost({
     slug: featuredPost.slug,
     title: featuredPost.title,
@@ -61,10 +76,9 @@ export default function BlogPage() {
     category: featuredPost.category,
     tags: featuredPost.tags,
   });
-  const remainingPosts = blogPosts.slice(1);
 
   // Extract unique categories sorted alphabetically
-  const categories = [...new Set(blogPosts.map((post) => post.category))].sort();
+  const categories = [...new Set(publicPosts.map((post) => post.category))].sort();
 
   // Prepare posts data for client component (without JSX content)
   const postsForFilter = remainingPosts.map((post) => {
@@ -103,26 +117,25 @@ export default function BlogPage() {
             <div className="max-w-3xl">
               <p className="mb-3 inline-flex rounded-full border border-[#e3d3ff] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#692ed4]">LandlordHeaven Blog</p>
               <h2 className="text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">Landlord help that tells you what to do next</h2>
-              <p className="mt-4 text-lg text-slate-600">Start with the problem in plain English, understand the route, and then move into the right landlord product when you are ready.</p>
+              <p className="mt-4 text-lg text-slate-600">Start with the England landlord problem in plain English, understand the route, and then move into the right product when you are ready.</p>
             </div>
           </div>
         </section>
 
-        {/* Browse by Region */}
+        {/* England public scope */}
         <section id="blog-jurisdictions" className="border-b border-gray-100 bg-white py-10 lg:py-14">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-              Browse Guides by Jurisdiction
+              England Public Guides
             </h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              The rules change depending on where the property is. Start with the jurisdiction that matches the tenancy so you are not reading guidance built for somewhere else.
+              Public discovery on Landlord Heaven is now England-only. Start with the England landlord route here, and use historic direct links only if you are supporting an older non-England matter.
             </p>
 
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-              {Object.entries(BLOG_CATEGORIES).map(([key, config]) => {
-                const region = key as BlogRegion;
-                const postCounts = getPostCountsByRegion(blogPosts);
-                const count = postCounts[region];
+            <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
+              {getPublicBlogRegions().map((region) => {
+                const config = BLOG_CATEGORIES[region];
+                const count = postCounts[region as BlogRegion];
 
                 return (
                   <Link
@@ -159,10 +172,10 @@ export default function BlogPage() {
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Browse by Problem</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              Pick the problem you are dealing with: current possession notices, rent arrears, tenancy setup, or region-specific rules.
+              Pick the England landlord problem you are dealing with: Section 8, rent arrears, possession steps, or compliance that could trip your case up later.
             </p>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {Object.values(BLOG_TOPIC_HUBS).map((hub) => (
+              {publicTopicHubs.map((hub) => (
                 <Link key={hub.slug} href={`/blog/${hub.slug}`} className="rounded-xl border border-[#e3d3ff] bg-[#fdfaff] p-5 transition hover:border-[#c6a2ff] hover:shadow-sm">
                   <p className="text-sm font-semibold text-[#692ed4]">{hub.name}</p>
                   <p className="mt-2 text-sm text-slate-600">{hub.description}</p>

@@ -2706,8 +2706,8 @@ function buildEnglandAssuredSections(
         { label: 'Right to rent checks completed', value: formatIsoDateText(facts.right_to_rent_check_date) },
       ],
       bullets: [
-        'Section 9A of the Landlord and Tenant Act 1985 requires the landlord to ensure the property is fit for human habitation to the extent that section applies.',
-        'Section 11 of the Landlord and Tenant Act 1985 requires the landlord to keep in repair the structure and exterior and the installations for water, gas, electricity, sanitation, space heating, and hot water, to the extent that section applies.',
+        'The landlord acknowledges that section 9A of the Landlord and Tenant Act 1985 requires the property to be fit for human habitation to the extent that section applies.',
+        'The landlord acknowledges that section 11 of the Landlord and Tenant Act 1985 requires the structure and exterior, and the installations for water, gas, electricity, sanitation, space heating, and hot water, to be kept in repair to the extent that section applies.',
         'Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020 requires relevant electrical safety standards to be met during occupation, relevant electrical installations to be inspected and tested by a qualified person at least every 5 years or sooner if the most recent report requires it, and a copy of that report to be supplied to the tenant.',
         relevantGas
           ? 'Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998 requires any relevant gas fitting and flue to be kept in a safe condition, safety checks to be carried out by a Gas Safe registered engineer at intervals determined in accordance with the Regulations, and a copy of the safety record to be given to the tenant.'

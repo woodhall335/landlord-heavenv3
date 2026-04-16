@@ -916,10 +916,10 @@ function buildComparableGroundingSentence(
         : 'no source-backed entries';
 
   if (freshComparableCount === comparableCount && sourceBackedCount === comparableCount) {
-    return `This proposal is based on ${comparableCount} comparable ${descriptor} within 0.5 miles, all listed within the last 90 days and all source-backed.`;
+    return `This proposal is grounded in ${comparableCount} comparable ${descriptor} within 0.5 miles, all listed within the last 90 days and all source-backed.`;
   }
 
-  return `This proposal is based on ${comparableCount} comparable ${descriptor} within 0.5 miles, with ${freshnessFragment} and ${sourceBackedFragment}.`;
+  return `This proposal is grounded in ${comparableCount} comparable ${descriptor} within 0.5 miles, with ${freshnessFragment} and ${sourceBackedFragment}.`;
 }
 
 function getMedianPositionFragment(
@@ -989,7 +989,7 @@ function getCasePositionVariants(context: {
   }
 
   return {
-    cover: `The saved evidence base of ${grounding} places the proposed rent ${positionFragment} and makes the notice ready to serve on the recorded facts.`,
+    cover: `This proposal is grounded in ${grounding}, places the proposed rent ${positionFragment}, and makes the service pack ready to use on the recorded facts.`,
     justification: `The recorded comparables place the proposed rent ${positionFragment} and support it as a market-aligned figure for this tenancy.`,
     argument: `The proposed rent of ${proposedRent} is supported by ${grounding} and is positioned ${positionFragment}, making it a reasonable and defensible figure under section 13.`,
     defensive: `The landlord's position is that ${grounding} supports a proposed rent of ${proposedRent}, which remains ${positionFragment} and should therefore be judged against the recorded comparable market evidence rather than the size of the increase alone.`,
@@ -1167,7 +1167,7 @@ function buildComparableOverviewLines(
   }
 
   return [
-    `- ${buildComparableGroundingSentence(state, comparables, snapshot)}`,
+    `- Comparable base: ${buildComparableGrounding(state, comparables, snapshot)}`,
     `- Challenge band: ${preview?.challengeBandLabel || 'Not available'}`,
     `- Evidence band: ${preview?.evidenceBandLabel || 'Not available'}`,
   ];
@@ -1202,9 +1202,9 @@ function buildChallengeScriptLines(
   return [
     '1. Anchor to evidence',
     'Say: The proposed rent is based on comparable local properties and the recorded adjustments, not on a percentage increase alone.',
-    '2. Position',
+    '2. Position in the range',
     `Say: The figure sits ${getMedianPositionFragment(state, snapshot)} and should be judged against the adjusted comparable range recorded in the report.`,
-    '3. Strength',
+    '3. Strength of evidence',
     `Say: The proposal is supported by ${preview?.sourceBackedCount ?? 0} source-backed comparables, with ${preview?.freshComparableCount ?? 0} listings inside the 90-day freshness window.`,
     '4. Bundle integrity',
     'Say: The full bundle includes the notice, service record, justification report, Tribunal Argument Summary, and the supporting documents I rely on.',
@@ -1522,8 +1522,8 @@ async function buildCoverLetterPdf(
       {
         variant: 'intro',
         lines: [
-          'Purpose: This cover letter explains what is in the notice pack and how to use it before serving Form 4A.',
-          'This notice formally proposes a revised rent supported by current open-market evidence.',
+          'Purpose: This cover letter explains what is in the service pack and how to use it before serving Form 4A.',
+          'This pack sets out a complete and evidence-backed proposal for the revised rent.',
           `Case position: ${casePosition.cover}`,
           'Use this document: Keep it at the front of the pack so the notice, evidence, and next steps are easy to follow when you serve the increase.',
           buildComparableGroundingSentence(resolvedState, [], snapshot),
@@ -1812,7 +1812,7 @@ async function buildTribunalArgumentSummaryPdf(
         ],
       },
       {
-        heading: 'If challenged, respond clearly',
+        heading: 'If challenged, say this',
         lines: buildChallengeScriptLines(resolvedState, resolvedComparables, snapshot),
       },
       {

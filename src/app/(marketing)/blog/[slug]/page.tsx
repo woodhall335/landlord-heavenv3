@@ -16,6 +16,9 @@ import {
   getValidRegions,
   getCategoryConfig,
   BLOG_CATEGORIES,
+  getPublicBlogRegions,
+  isPublicBlogDiscoveryRegion,
+  isPublicBlogRegion,
   BlogRegion,
 } from '@/lib/blog/categories';
 import { Calendar, Clock, Tag, ChevronLeft, Share2, RefreshCw, CheckCircle } from 'lucide-react';
@@ -42,7 +45,13 @@ import { NextSteps } from '@/components/blog/NextSteps';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
-import { getPostsForTopicHub, getTopicHubConfig, getValidTopicHubs } from '@/lib/blog/topic-hubs';
+import {
+  getPostsForTopicHub,
+  getPublicTopicHubs,
+  getTopicHubConfig,
+  getValidTopicHubs,
+  isPublicTopicHub,
+} from '@/lib/blog/topic-hubs';
 import { getImagePlaceholderBlocks, getIntentRoutedLinks, getTop30QuickAnswer, getTop30Rank, getTop30SupplementalFaqs, getUpgradedPostVariant, isTop30UpgradedPost } from '@/lib/blog/top30-upgrades';
 import type { StageEstimate } from '@/lib/journey/state';
 import type { CSSProperties, ReactNode } from 'react';
@@ -57,7 +66,7 @@ function isValidCategory(slug: string): slug is BlogRegion {
   return getValidRegions().includes(slug as BlogRegion);
 }
 
-function isValidTopicHub(slug: string): boolean {
+function isValidTopicHubSlug(slug: string): boolean {
   return getValidTopicHubs().includes(slug as any);
 }
 
@@ -530,11 +539,11 @@ const getRelatedGuides = (post: BlogPost) => {
 
 export async function generateStaticParams() {
   // Include both category pages and blog posts
-  const categoryParams = getValidRegions().map((region) => ({
+  const categoryParams = getPublicBlogRegions().map((region) => ({
     slug: region,
   }));
 
-  const topicHubParams = getValidTopicHubs().map((hub) => ({
+  const topicHubParams = getPublicTopicHubs().map((hub) => ({
     slug: hub,
   }));
 
@@ -564,7 +573,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       title: pageTitle,
       description: config.metaDescription,
       keywords,
-      robots: 'index,follow',
+      robots: isPublicBlogRegion(slug) ? 'index,follow' : 'noindex,follow',
       alternates: {
         canonical: canonicalUrl,
       },
@@ -593,7 +602,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       title: pageTitle,
       description: topicHub.metaDescription,
       keywords,
-      robots: 'index,follow',
+      robots: isPublicTopicHub(slug) ? 'index,follow' : 'noindex,follow',
       alternates: { canonical: canonicalUrl },
       openGraph: {
         title: socialTitle,
@@ -700,8 +709,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   }
 
   const topicHub = getTopicHubConfig(slug);
-  if (topicHub && isValidTopicHub(slug)) {
-    const posts = getPostsForTopicHub(blogPosts, topicHub.slug).sort((a, b) => getTop30Rank(a.slug) - getTop30Rank(b.slug)).slice(0, 36);
+  if (topicHub && isValidTopicHubSlug(slug)) {
+    const topicHubPosts = getPostsForTopicHub(blogPosts, topicHub.slug);
+    const posts = (isPublicTopicHub(slug)
+      ? topicHubPosts.filter((post) => isPublicBlogDiscoveryRegion(getPostRegion(post.slug)))
+      : topicHubPosts
+    )
+      .sort((a, b) => getTop30Rank(a.slug) - getTop30Rank(b.slug))
+      .slice(0, 36);
     const postsForDisplay = posts.map((post) => ({
       slug: post.slug,
       title: post.title,

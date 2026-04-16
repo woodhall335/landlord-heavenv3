@@ -20,6 +20,13 @@ export interface BlogTopicHubConfig {
   matcher: (post: BlogPost) => boolean;
 }
 
+export const PUBLIC_BLOG_TOPIC_HUBS: readonly BlogTopicHubSlug[] = [
+  'eviction-guides',
+  'rent-arrears',
+  'section-8',
+  'landlord-compliance',
+];
+
 const includesAny = (text: string, terms: string[]): boolean => terms.some((term) => text.includes(term));
 
 const postText = (post: BlogPost): string =>
@@ -144,6 +151,14 @@ export const BLOG_TOPIC_HUBS: Record<BlogTopicHubSlug, BlogTopicHubConfig> = {
 
 export function getValidTopicHubs(): BlogTopicHubSlug[] {
   return Object.keys(BLOG_TOPIC_HUBS) as BlogTopicHubSlug[];
+}
+
+export function getPublicTopicHubs(): BlogTopicHubSlug[] {
+  return [...PUBLIC_BLOG_TOPIC_HUBS];
+}
+
+export function isPublicTopicHub(slug: string): slug is BlogTopicHubSlug {
+  return PUBLIC_BLOG_TOPIC_HUBS.includes(slug as BlogTopicHubSlug);
 }
 
 export function getTopicHubConfig(slug: string): BlogTopicHubConfig | null {

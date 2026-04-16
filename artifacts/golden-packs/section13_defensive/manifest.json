@@ -1,0 +1,193 @@
+{
+  "key": "section13_defensive",
+  "displayName": "Section 13 Defence Pack",
+  "outputDir": "section13_defensive",
+  "documentCount": 12,
+  "documents": [
+    {
+      "title": "Form 4A rent increase notice",
+      "description": "Official Form 4A completed from your Section 13 wizard answers.",
+      "documentType": "section13_form_4a",
+      "fileName": "section13-form-4a-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-form-4a-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-form-4a-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 9,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Rent increase justification report",
+      "description": "Comparable rent evidence and adjusted market analysis.",
+      "documentType": "section13_justification_report",
+      "fileName": "section13-justification-report-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-justification-report-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-justification-report-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 3,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Tribunal Argument Summary",
+      "description": "One-page case-specific summary of the landlord position and consistent argument points.",
+      "documentType": "section13_tribunal_argument_summary",
+      "fileName": "section13-tribunal-argument-summary-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-tribunal-argument-summary-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-tribunal-argument-summary-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Proof of service record",
+      "description": "Service method record for the Section 13 notice.",
+      "documentType": "section13_proof_of_service_record",
+      "fileName": "section13-proof-of-service-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-proof-of-service-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-proof-of-service-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Rent increase cover letter",
+      "description": "Plain-English cover letter to accompany the notice.",
+      "documentType": "section13_cover_letter",
+      "fileName": "section13-cover-letter-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-cover-letter-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-cover-letter-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Tribunal defence guide",
+      "description": "Step-by-step preparation guide for a challenged rent increase.",
+      "documentType": "section13_tribunal_defence_guide",
+      "fileName": "section13-tribunal-defence-guide-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-tribunal-defence-guide-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-tribunal-defence-guide-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Landlord response template",
+      "description": "Template response aligned to the current rent determination process.",
+      "documentType": "section13_landlord_response_template",
+      "fileName": "section13-landlord-response-template-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-landlord-response-template-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-landlord-response-template-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Tribunal legal briefing",
+      "description": "Short legal and practical hearing briefing.",
+      "documentType": "section13_legal_briefing",
+      "fileName": "section13-legal-briefing-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-legal-briefing-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-legal-briefing-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Evidence checklist",
+      "description": "Checklist of the evidence to prepare or upload.",
+      "documentType": "section13_evidence_checklist",
+      "fileName": "section13-evidence-checklist-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-evidence-checklist-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-evidence-checklist-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Negotiation email template",
+      "description": "Landlord-side negotiation wording to send to the tenant before any hearing.",
+      "documentType": "section13_negotiation_email_template",
+      "fileName": "section13-negotiation-email-template-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-negotiation-email-template-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-negotiation-email-template-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Merged tribunal bundle PDF",
+      "description": "Indexed hearing bundle with exhibits and supporting documents.",
+      "documentType": "section13_tribunal_bundle",
+      "fileName": "section13-tribunal-bundle-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-tribunal-bundle-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-tribunal-bundle-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 20,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Tribunal bundle ZIP",
+      "description": "ZIP export containing the merged bundle and all supporting files.",
+      "documentType": "section13_tribunal_bundle_zip",
+      "fileName": "section13-tribunal-bundle-golden-section13-defence-001.zip",
+      "files": {
+        "pdf": "section13_defensive/section13-tribunal-bundle-golden-section13-defence-001.zip"
+      }
+    }
+  ]
+}

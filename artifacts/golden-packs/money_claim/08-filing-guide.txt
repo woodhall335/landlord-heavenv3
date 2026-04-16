@@ -1,0 +1,192 @@
+Money Claims Filing Guide
+Step-by-step instructions for filing your rent arrears claim in England
+Overview of Your Claim
+Claim type: Money claim (rent arrears and damages)
+Claim amount: £2935.99
+Court fee: £205.00
+Total (claim + fee): £3140.99
+Before You File
+✅ Checklist: Have you completed these steps?
+☐ Sent a Letter Before Claim to the defendant at least 30 days ago
+☐ Enclosed the Information Sheet and Reply Form with the Letter Before Claim
+☐ Waited 30 days for the defendant to respond or pay
+☐ Considered any response or payment offer from the defendant
+☐ Gathered all supporting evidence (tenancy agreement, rent ledger, bank statements,
+photos)
+☐ Calculated interest correctly (see Interest Calculation sheet)
+⚠ IMPORTANT: If you have not sent a Letter Before Claim and waited 30 days, you must do
+this first. The court may penalize you in costs if you do not follow the Pre-Action Protocol.
+How to File Your Claim
+You have TWO options for filing a money claim in England:
+1. Online via Money Claim Online (MCOL) — Faster, cheaper, available 24/7
+2. By post to the County Court Money Claims Centre — Traditional paper method
+
+-- 1 of 7 --
+
+Option 1: File Online (Money Claim Online — MCOL)
+Advantages of MCOL:
+✅ Lower court fee: £25 cheaper than paper filing for most claims
+✅ Faster processing: Issued within 24 hours
+✅ Track your claim online: Real-time updates
+✅ Request judgment and enforcement online: No need to send forms by post
+✅ Available 24/7: File at any time
+Step-by-Step: Filing via MCOL
+Step 1: Create an account
+1. Go to www.moneyclaim.gov.uk
+2. Click "Register"
+3. You will need:
+An email address
+A debit or credit card to pay the court fee
+4. Set up a username and password
+Step 2: Start a new claim
+1. Log in to MCOL
+2. Click "Make a new money claim"
+3. Select "I am claiming as an individual" (or "as a business" if you are a company landlord)
+Step 3: Enter claimant details
+Enter your details exactly as shown below:
+Claimant name: Alice Landlord
+Address: 1 High Street London
+Postcode: E1 1AA
+Email (optional): alice@example.com
+Telephone (optional): 02070000001
+
+-- 2 of 7 --
+
+Step 4: Enter defendant details
+Defendant name: Tom Tenant
+Address: 2 High Street London
+Postcode: E1 2BB
+Step 5: Enter claim amount
+⚠ IMPORTANT: In MCOL, enter amounts as numbers only (no £ symbol). For example, enter
+2935.99, not "£2935.99".
+Claim amount: 2935.99 (enter this number)
+Court fee (paid online): £205.00 (calculated automatically by MCOL)
+Step 6: Enter brief details of claim
+In the "Brief details of claim" box, enter a short summary (maximum 1,080 characters). Always
+end with "Particulars of Claim attached" so the court knows to read your full particulars.
+Copy this text:
+Claim for unpaid rent and property damage relating to tenancy at 2 High Street
+London. The defendant occupied the property under an assured shorthold tenancy
+commencing 1 January 2024. Rent was £950.00 monthly. The defendant failed to pay
+rent as it fell due, resulting in arrears of £2430.00. The defendant also caused
+damage beyond fair wear and tear, totalling £380.00. Interest is claimed under
+section 69 County Courts Act 1984 at 8% per annum. Particulars of Claim attached.
+Tip: Select and copy the text above directly into MCOL. The character count is within MCOL limits.
+Step 7: Upload Particulars of Claim
+1. Click "Attach particulars of claim"
+2. Upload the Particulars of Claim PDF from this pack
+3. Also attach:
+Schedule of Arrears
+Interest Calculation
+Note: MCOL allows up to 10 attachments, each up to 5MB. If you have many evidence documents,
+combine them into a single PDF before uploading.
+
+-- 3 of 7 --
+
+Step 8: Choose preferred court
+Select the County Court Money Claims Centre (this is the default for all MCOL claims). You do not
+need to choose a local court.
+Step 9: Statement of Truth
+Tick the box to confirm:
+"I believe that the facts stated in this claim are true. I am authorised by the claimant to
+sign this statement."
+Step 10: Pay the court fee
+1. Review the claim summary
+2. Click "Pay and submit"
+3. Pay the court fee (£205.00) by debit or credit card
+Step 11: Claim is issued
+✅ Your claim will be issued within 24 hours. You will receive:
+A claim number (format: A12BC345)
+An email confirmation
+A copy of the sealed claim form (PDF)
+The court will serve the claim on the defendant by post.
+Option 2: File by Post (Paper Form N1)
+When to use paper filing:
+If you do not have internet access
+If you prefer to file by post
+If the claim is over £100,000 (MCOL limit)
+Step-by-Step: Filing by Post
+Step 1: Print the N1 form
+1. Print the completed Form N1 (official PDF) from this pack
+2. Print two copies (one for the court, one for your records)
+3. Do not alter the form layout or add extra pages
+
+-- 4 of 7 --
+
+Step 2: Print supporting documents
+Print and attach the following in this order:
+1. Particulars of Claim
+2. Schedule of Arrears
+3. Interest Calculation
+4. Copy of tenancy agreement
+5. Rent ledger / bank statements
+6. Photos of damage and repair quotes/invoices
+Tip: Use a stapler (top left corner) or treasury tag. Do not use paperclips.
+Step 3: Calculate the court fee
+Your claim amount is £2935.99, so the court fee is £205.00.
+Court fees are based on claim value:
+Claim Amount Court Fee (Online) Court Fee (Paper)
+Up to £300 £35 £35
+£300.01 to £500 £50 £50
+£500.01 to £1,000 £70 £80
+£1,000.01 to £1,500 £80 £115
+£1,500.01 to £3,000 £115 £205
+£3,000.01 to £5,000 £205 £455
+£5,000.01 to £10,000 £455 £680
+£10,000.01 to £200,000 5% of claim value 5% of claim value
+Step 4: Pay the court fee
+You can pay by:
+Cheque — Make payable to "HM Courts & Tribunals Service"
+Postal order — Payable to "HM Courts & Tribunals Service"
+Do NOT send cash.
+
+-- 5 of 7 --
+
+Step 5: Send to the court
+Send your claim pack to:
+County Court Money Claims Centre
+PO Box 527
+Salford
+M5 0BY
+Send by recorded delivery or special delivery to prove posting date.
+Step 6: Wait for the claim to be issued
+The court will:
+1. Check your claim form (allow 7-10 working days)
+2. Issue the claim and give it a claim number
+3. Serve the claim on the defendant by first class post
+4. Send you a Notice of Issue by post
+What Happens Next?
+Timeline after claim is issued:
+Day What Happens
+Day 0 Claim is issued and served on the defendant
+Day 14 Defendant's deadline to respond (admit, defend, or acknowledge)
+Day 15+ If defendant does not respond, you can request default judgment
+Day 28 If defendant acknowledges service, they have until Day 28 to file a
+defence
+Possible outcomes:
+1. Defendant pays in full — Claim is satisfied, no further action needed
+2. Defendant does not respond — You can request default judgment (see "Request for
+Judgment" guide)
+
+-- 6 of 7 --
+
+3. Defendant admits the claim but asks to pay by installments — You can accept or ask the
+court to decide
+4. Defendant defends the claim — The court will allocate the case to a track (small claims, fast
+track, or multi-track) and set directions for trial
+After Judgment: Enforcement Options
+If you obtain judgment but the defendant does not pay, you can enforce the judgment using:
+Warrant of Control (N323) — Bailiffs collect the debt
+Attachment of Earnings (N337) — Money deducted from defendant's wages
+Third Party Debt Order (N379) — Freeze defendant's bank account
+Charging Order (N380) — Secure the debt against defendant's property
+See the Enforcement Guide (included in this pack) for details.
+Help and Support
+MCOL Help: 0300 123 1057 (Monday to Friday, 8:30am to 5pm)
+County Court Money Claims Centre: 0300 123 1372
+HMCTS Guidance: www.gov.uk/make-money-claim
+This guide is for information only and does not constitute legal advice. If you need legal advice,
+contact a solicitor.
+Generated on 16 April 2026 • Document reference:
+
+-- 7 of 7 --

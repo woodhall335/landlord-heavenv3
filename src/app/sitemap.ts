@@ -18,8 +18,8 @@ import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
 import { freeTools } from '@/lib/tools/tools';
 import { createSupabaseAdminQuestionRepository } from '@/lib/ask-heaven/questions';
-import { getPostRegion } from '@/lib/blog/categories';
-import { getValidTopicHubs } from '@/lib/blog/topic-hubs';
+import { getPostRegion, isPublicBlogDiscoveryRegion } from '@/lib/blog/categories';
+import { getPublicTopicHubs } from '@/lib/blog/topic-hubs';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
 import { getPhase3SitemapExclusions } from '@/lib/seo/page-taxonomy';
@@ -312,7 +312,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Blog pages with explicit lastModified dates
   const blogPostPages: MetadataRoute.Sitemap = blogPosts.flatMap((post) => {
-    const seoConfig = getBlogSeoConfig(post, getPostRegion(post.slug));
+    const postRegion = getPostRegion(post.slug);
+    if (!isPublicBlogDiscoveryRegion(postRegion)) return [];
+    const seoConfig = getBlogSeoConfig(post, postRegion);
     if (!seoConfig.isIndexable) return [];
     return [
       {
@@ -349,7 +351,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Pages that always get stable dates (products, tools, etc.)
-  const blogHubPages = getValidTopicHubs().map((slug) => ({
+  const blogHubPages = getPublicTopicHubs().map((slug) => ({
     path: `/blog/${slug}`,
     priority: 0.82,
     changeFrequency: 'weekly' as const,

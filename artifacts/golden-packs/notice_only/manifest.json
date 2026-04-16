@@ -1,0 +1,98 @@
+{
+  "key": "notice_only",
+  "displayName": "Eviction Notice Generator (Section 8, May 2026)",
+  "outputDir": "notice_only",
+  "documentCount": 5,
+  "documents": [
+    {
+      "title": "Form 3A notice",
+      "description": "Official Form 3A notice for England possession proceedings",
+      "category": "notice",
+      "documentType": "section8_notice",
+      "fileName": "section8_notice.pdf",
+      "files": {
+        "pdf": "notice_only/section8_notice.pdf",
+        "text": "notice_only/section8_notice.txt",
+        "html": "notice_only/section8_notice.html"
+      },
+      "extraction": {
+        "pageCount": 10,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Service Instructions",
+      "description": "How to legally serve your Form 3A notice",
+      "category": "guidance",
+      "documentType": "service_instructions",
+      "fileName": "service_instructions_s8.pdf",
+      "files": {
+        "pdf": "notice_only/service_instructions_s8.pdf",
+        "text": "notice_only/service_instructions_s8.txt",
+        "html": "notice_only/service_instructions_s8.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Service & Validity Checklist",
+      "description": "Verify your Form 3A notice meets key service and timing requirements",
+      "category": "guidance",
+      "documentType": "validity_checklist",
+      "fileName": "validity_checklist_s8.pdf",
+      "files": {
+        "pdf": "notice_only/validity_checklist_s8.pdf",
+        "text": "notice_only/validity_checklist_s8.txt",
+        "html": "notice_only/validity_checklist_s8.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Pre-Service Compliance Declaration",
+      "description": "Evidence of your compliance with landlord obligations",
+      "category": "guidance",
+      "documentType": "compliance_declaration",
+      "fileName": "compliance_declaration.pdf",
+      "files": {
+        "pdf": "notice_only/compliance_declaration.pdf",
+        "text": "notice_only/compliance_declaration.txt",
+        "html": "notice_only/compliance_declaration.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Rent Schedule / Arrears Statement",
+      "description": "Period-by-period breakdown of rent arrears",
+      "category": "evidence_tool",
+      "documentType": "arrears_schedule",
+      "fileName": "rent_schedule_arrears_statement.pdf",
+      "files": {
+        "pdf": "notice_only/rent_schedule_arrears_statement.pdf",
+        "text": "notice_only/rent_schedule_arrears_statement.txt",
+        "html": "notice_only/rent_schedule_arrears_statement.html"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    }
+  ]
+}

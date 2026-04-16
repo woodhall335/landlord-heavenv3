@@ -103,7 +103,7 @@
     <h1>Eviction Case Summary</h1>
     <p><strong>Case ID:</strong> {{case_id}}</p>
     <p><strong>Jurisdiction:</strong> {{jurisdiction}}</p>
-    <p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>
+    {{#if generated_date}}<p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>{{/if}}
   </div>
 
   <div class="summary-grid">

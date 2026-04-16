@@ -1,0 +1,204 @@
+{
+  "key": "complete_pack",
+  "displayName": "Complete Eviction Pack",
+  "outputDir": "complete_pack",
+  "documentCount": 11,
+  "documents": [
+    {
+      "title": "Form 3A notice",
+      "description": "Official notice to tenant citing grounds for possession",
+      "category": "notice",
+      "documentType": "section8_notice",
+      "fileName": "section8_notice.pdf",
+      "files": {
+        "pdf": "complete_pack/section8_notice.pdf",
+        "text": "complete_pack/section8_notice.txt",
+        "html": "complete_pack/section8_notice.html"
+      },
+      "extraction": {
+        "pageCount": 10,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Form N5 - Claim for Possession",
+      "description": "Official court claim form for possession proceedings",
+      "category": "court_form",
+      "documentType": "n5_claim",
+      "fileName": "n5_claim_for_possession.pdf",
+      "files": {
+        "pdf": "complete_pack/n5_claim_for_possession.pdf",
+        "text": "complete_pack/n5_claim_for_possession.txt"
+      },
+      "extraction": {
+        "pageCount": 4,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Form N119 - Particulars of Claim",
+      "description": "Detailed particulars supporting your possession claim",
+      "category": "court_form",
+      "documentType": "n119_particulars",
+      "fileName": "n119_particulars_of_claim.pdf",
+      "files": {
+        "pdf": "complete_pack/n119_particulars_of_claim.pdf",
+        "text": "complete_pack/n119_particulars_of_claim.txt"
+      },
+      "extraction": {
+        "pageCount": 5,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Schedule of Arrears",
+      "description": "Detailed period-by-period breakdown of rent arrears",
+      "category": "evidence_tool",
+      "documentType": "arrears_schedule",
+      "fileName": "schedule_of_arrears.pdf",
+      "files": {
+        "pdf": "complete_pack/schedule_of_arrears.pdf",
+        "text": "complete_pack/schedule_of_arrears.txt",
+        "html": "complete_pack/schedule_of_arrears.html"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Evidence Collection Checklist",
+      "description": "Detailed checklist of all evidence you need to gather",
+      "category": "evidence_tool",
+      "documentType": "evidence_checklist",
+      "fileName": "evidence_collection_checklist.pdf",
+      "files": {
+        "pdf": "complete_pack/evidence_collection_checklist.pdf",
+        "text": "complete_pack/evidence_collection_checklist.txt",
+        "html": "complete_pack/evidence_collection_checklist.html"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Proof of Service Certificate",
+      "description": "Template for proving you served the notice correctly",
+      "category": "evidence_tool",
+      "documentType": "proof_of_service",
+      "fileName": "proof_of_service_template.pdf",
+      "files": {
+        "pdf": "complete_pack/proof_of_service_template.pdf",
+        "text": "complete_pack/proof_of_service_template.txt",
+        "html": "complete_pack/proof_of_service_template.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Witness Statement",
+      "description": "Court-ready witness statement for possession proceedings",
+      "category": "court_form",
+      "documentType": "witness_statement",
+      "fileName": "witness_statement.pdf",
+      "files": {
+        "pdf": "complete_pack/witness_statement.pdf",
+        "text": "complete_pack/witness_statement.txt",
+        "html": "complete_pack/witness_statement.html"
+      },
+      "extraction": {
+        "pageCount": 4,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Court Bundle Index",
+      "description": "Index of all documents for court filing",
+      "category": "evidence_tool",
+      "documentType": "court_bundle_index",
+      "fileName": "court_bundle_index.pdf",
+      "files": {
+        "pdf": "complete_pack/court_bundle_index.pdf",
+        "text": "complete_pack/court_bundle_index.txt",
+        "html": "complete_pack/court_bundle_index.html"
+      },
+      "extraction": {
+        "pageCount": 3,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Hearing Checklist",
+      "description": "Preparation checklist for the possession hearing",
+      "category": "guidance",
+      "documentType": "hearing_checklist",
+      "fileName": "hearing_checklist.pdf",
+      "files": {
+        "pdf": "complete_pack/hearing_checklist.pdf",
+        "text": "complete_pack/hearing_checklist.txt",
+        "html": "complete_pack/hearing_checklist.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Arrears Engagement Letter",
+      "description": "Pre-action engagement letter for rent arrears",
+      "category": "bonus",
+      "documentType": "arrears_engagement_letter",
+      "fileName": "arrears_engagement_letter.pdf",
+      "files": {
+        "pdf": "complete_pack/arrears_engagement_letter.pdf",
+        "text": "complete_pack/arrears_engagement_letter.txt",
+        "html": "complete_pack/arrears_engagement_letter.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Eviction Case Summary",
+      "description": "Complete summary of your eviction case and selected grounds",
+      "category": "guidance",
+      "documentType": "case_summary",
+      "fileName": "eviction_case_summary.pdf",
+      "files": {
+        "pdf": "complete_pack/eviction_case_summary.pdf",
+        "text": "complete_pack/eviction_case_summary.txt",
+        "html": "complete_pack/eviction_case_summary.html"
+      },
+      "extraction": {
+        "pageCount": 3,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    }
+  ]
+}

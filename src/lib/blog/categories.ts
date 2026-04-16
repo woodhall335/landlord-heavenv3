@@ -9,6 +9,8 @@ import { BlogPost } from './types';
 
 export type BlogRegion = 'england' | 'scotland' | 'wales' | 'northern-ireland' | 'uk';
 
+export const PUBLIC_BLOG_REGIONS: readonly BlogRegion[] = ['england'];
+
 export interface CategoryConfig {
   slug: BlogRegion;
   name: string;
@@ -113,6 +115,18 @@ export function getCategoryConfig(region: BlogRegion): CategoryConfig | null {
  */
 export function getValidRegions(): BlogRegion[] {
   return Object.keys(BLOG_CATEGORIES) as BlogRegion[];
+}
+
+export function getPublicBlogRegions(): BlogRegion[] {
+  return [...PUBLIC_BLOG_REGIONS];
+}
+
+export function isPublicBlogRegion(region: BlogRegion): boolean {
+  return PUBLIC_BLOG_REGIONS.includes(region);
+}
+
+export function isPublicBlogDiscoveryRegion(region: BlogRegion | null): boolean {
+  return region === null || isPublicBlogRegion(region);
 }
 
 /**

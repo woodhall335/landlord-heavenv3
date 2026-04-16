@@ -1,5 +1,5 @@
 import type { BlogPost } from './types';
-import type { BlogRegion } from './categories';
+import { isPublicBlogDiscoveryRegion, type BlogRegion } from './categories';
 import { analyzeBlogPost, isCannibalizing } from '@/lib/seo/blog-commercial-linking';
 import { COMMERCIAL_LINK_TARGETS } from '@/lib/seo/commercial-linking';
 
@@ -304,7 +304,9 @@ export const getBlogSeoConfig = (post: BlogPost, region: BlogRegion | null): Blo
   const withJurisdiction = ensureJurisdiction(baseTitle, jurisdictionLabel);
 
   // Only allow explicit noindex flags from blog metadata.
-  const shouldNoIndex = Boolean((post as { noindex?: boolean }).noindex);
+  const shouldNoIndex =
+    Boolean((post as { noindex?: boolean }).noindex) ||
+    !isPublicBlogDiscoveryRegion(region);
   const needsDeconflict = isCannibalizing(post);
 
   let metaTitleBase = withJurisdiction;

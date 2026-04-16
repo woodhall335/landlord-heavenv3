@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Financial Statement Form</title>
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4;
+  margin: 0.75in 0.75in 1in 0.75in; 
+}
+
+html {
+  font-size: 12pt; 
+}
+
+body {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.5;
+  color: #000;
+  background: #fff;
+  max-width: 8.5in;
+  margin: 0 auto;
+  padding: 0.5in;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "clig" 0;
+
+  
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+
+
+
+h1 {
+  font-size: 14pt;
+  font-weight: bold;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h1 + h1 {
+  margin-top: 0.5em; 
+}
+
+
+h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  text-align: center;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+h3 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h4 {
+  font-size: 11pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1em 0 0.5em 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+p {
+  margin: 0 0 0.75em 0;
+  line-height: 1.5;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+
+ul, ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+
+.link, a {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all; 
+}
+
+
+
+
+.info-box {
+  border: 2px solid #000;
+  padding: 1em;
+  margin: 1em 0 1.5em 0;
+  background-color: #f9f9f9;
+
+  page-break-inside: avoid;
+}
+
+.info-box h3,
+.info-box h4 {
+  margin-top: 0;
+}
+
+.info-box p:first-of-type {
+  margin-top: 0;
+}
+
+
+.section {
+  margin: 1.5em 0;
+
+  
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.field-group {
+  margin: 1em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.field-label {
+  font-weight: bold;
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  display: block;
+}
+
+.field-value {
+  margin-left: 0.25in;
+  border-bottom: 1px dotted #666;
+  min-height: 1.5em;
+  padding: 0.25em 0;
+  display: block;
+}
+
+.field-value:empty::after {
+  content: "\00a0"; 
+}
+
+
+.multiline-field {
+  margin-left: 0.25in;
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  min-height: 3em;
+  background-color: #fafafa;
+}
+
+
+.ground-block {
+  margin: 1em 0 1em 0.25in;
+  padding: 0.75em;
+  border-left: 3px solid #666;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ground-block p:first-child {
+  margin-top: 0;
+}
+
+
+.part-label {
+  font-weight: bold;
+  font-size: 11pt;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0.25em 0 0.25em 0.5em;
+  border-left: 4px solid #333;
+  background-color: #f0f0f0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+.signature-block {
+  margin-top: 2em;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.checkbox {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #000;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  background-color: #fff;
+}
+
+
+
+
+.avoid-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.keep-with-next {
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+.page-break-before {
+  page-break-before: always;
+  break-before: page;
+}
+
+
+.page-break-after {
+  page-break-after: always;
+  break-after: page;
+}
+
+
+.allow-break {
+  page-break-inside: auto;
+  break-inside: auto;
+}
+
+
+
+.guidance-section {
+  margin-top: 2em;
+  padding-top: 1.5em;
+  border-top: 2px solid #000;
+
+  
+  page-break-before: auto;
+}
+
+.guidance-section h2 {
+  text-align: left; 
+  font-size: 12pt;
+  margin: 1.5em 0 0.5em 0;
+}
+
+.guidance-section h3 {
+  font-size: 11pt;
+  margin: 1em 0 0.5em 0;
+}
+
+
+
+.mt-0 { margin-top: 0 !important; }
+.mt-1 { margin-top: 0.5em !important; }
+.mt-2 { margin-top: 1em !important; }
+.mt-3 { margin-top: 1.5em !important; }
+.mt-4 { margin-top: 2em !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: 0.5em !important; }
+.mb-2 { margin-bottom: 1em !important; }
+.mb-3 { margin-bottom: 1.5em !important; }
+.mb-4 { margin-bottom: 2em !important; }
+
+.ml-0 { margin-left: 0 !important; }
+.ml-1 { margin-left: 0.25in !important; }
+.ml-2 { margin-left: 0.5in !important; }
+
+
+
+.text-center { text-align: center !important; }
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+
+.font-small { font-size: 10pt !important; }
+.font-normal { font-size: 12pt !important; }
+.font-large { font-size: 14pt !important; }
+
+.font-italic { font-style: italic !important; }
+.font-bold { font-weight: bold !important; }
+
+
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0.5in;
+  }
+
+  
+  a[href^="http"]:after {
+    content: none; 
+  }
+
+  
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+}
+
+
+
+
+.scotland-title {
+  font-size: 18pt;
+  margin: 0.5em 0;
+}
+
+
+.scotland-ground-block {
+  margin: 1em 0;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+th, td {
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+    /* ===== PAGE SETUP FOR FINANCIAL STATEMENT ===== */
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.4;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 16pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 0 0 10px 0;
+      padding-top: 10px;
+    }
+
+    h2 {
+      font-size: 13pt;
+      font-weight: bold;
+      margin: 20px 0 10px 0;
+      border-bottom: 2px solid #1a1a1a;
+      padding-bottom: 5px;
+    }
+
+    h3 {
+      font-size: 11pt;
+      font-weight: bold;
+      margin: 15px 0 8px 0;
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+
+    table, th, td {
+      border: 1px solid #666;
+    }
+
+    th, td {
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 15px 0;
+    }
+
+    ul, ol {
+      margin: 10px 0;
+      padding-left: 25px;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    /* ===== PAGINATION CONTROL ===== */
+    /* Page 1: Cover / Instructions page */
+    .page-cover {
+      page-break-after: always;
+      break-after: page;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .page-cover h1 {
+      font-size: 24pt;
+      margin-bottom: 30px;
+    }
+
+    .page-cover .instructions {
+      text-align: left;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Page 2: Form title and Section 1 */
+    .page-title-section1 {
+      page-break-after: always;
+      break-after: page;
+    }
+
+    /* Page 3 onwards: Section 2 starts on new page */
+    .section-2-start {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    /* Prevent tables from splitting across pages */
+    table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Avoid breaks after headers */
+    h2, h3 {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    @media print {
+      .page-cover {
+        page-break-after: always;
+      }
+      .section-2-start {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE 1: COVER / INSTRUCTIONS -->
+<div class="page-cover">
+  <h1>Financial Statement Form</h1>
+  <p><strong>Pre-Action Protocol for Debt Claims</strong></p>
+  <p style="margin: 20px 0; font-size: 12pt;">
+    Use this form to show your income and outgoings<br>
+    if you want to propose a payment plan.
+  </p>
+
+  <div class="instructions">
+    <h3>Before You Complete This Form:</h3>
+    <ol>
+      <li>Gather your recent payslips, benefit letters, and bank statements</li>
+      <li>Collect your utility bills, rent agreement, and loan statements</li>
+      <li>Complete all sections honestly and accurately</li>
+      <li>Return this form with the Reply Form within 30 days</li>
+    </ol>
+
+    <p style="margin-top: 30px; font-size: 10pt; color: #666;">
+      <strong>Free Advice:</strong> If you need help, contact Citizens Advice (0800 144 8848),
+      StepChange (0800 138 1111), or National Debtline (0808 808 4000).
+    </p>
+  </div>
+</div>
+
+<!-- PAGE 2: TITLE AND SECTION 1 (YOUR DETAILS + MONTHLY INCOME) -->
+<div class="page-title-section1">
+  <h1>Financial Statement Form</h1>
+  <p style="text-align: center;"><em>Complete all sections below</em></p>
+
+  <hr>
+
+  <h2>YOUR DETAILS</h2>
+
+  <table>
+    <tr>
+      <td width="40%"><strong>Your full name:</strong></td>
+      <td width="60%">_________________________________________</td>
+    </tr>
+    <tr>
+      <td><strong>Your address:</strong></td>
+      <td>_________________________________________<br>
+          _________________________________________</td>
+    </tr>
+    <tr>
+      <td><strong>Your postcode:</strong></td>
+      <td>_________________________________________</td>
+    </tr>
+    <tr>
+      <td><strong>Your date of birth:</strong></td>
+      <td>_________________________________________</td>
+    </tr>
+    <tr>
+      <td><strong>Number of dependants:</strong></td>
+      <td>_________________________________________</td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <h2>SECTION 1: YOUR MONTHLY INCOME</h2>
+
+  <p><em>List all your income sources and how much you receive per month (after tax and deductions)</em></p>
+
+  <table>
+    <tr style="background-color: #f0f0f0;">
+      <th width="60%">Income Source</th>
+      <th width="40%">Amount per Month (&#163;)</th>
+    </tr>
+    <tr>
+      <td>Wages / Salary (after tax and National Insurance)</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Self-employment income (average monthly)</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Universal Credit</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Child Benefit / Child Tax Credit</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Housing Benefit / Local Housing Allowance (LHA)</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Pension (State or private)</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Disability Living Allowance / PIP</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Carer's Allowance</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Partner's income (if joint finances)</td>
+      <td>_________________</td>
+    </tr>
+    <tr>
+      <td>Other income (specify): ____________________</td>
+      <td>_________________</td>
+    </tr>
+    <tr style="background-color: #f0f0f0;">
+      <td><strong>TOTAL MONTHLY INCOME:</strong></td>
+      <td><strong>&#163; _____________</strong></td>
+    </tr>
+  </table>
+</div>
+
+<!-- PAGE 3 ONWARDS: SECTION 2 (MONTHLY OUTGOINGS) -->
+<div class="section-2-start">
+  <h2>SECTION 2: YOUR MONTHLY OUTGOINGS</h2>
+
+  <p><em>List all your essential living costs and how much you spend per month</em></p>
+
+  <h3>Housing Costs</h3>
+
+  <table>
+    <tr>
+      <td width="60%">Rent (current property)</td>
+      <td width="40%">&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Mortgage</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Council Tax</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Gas</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Electricity</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Water</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Buildings / Contents Insurance</td>
+      <td>&#163; _________________</td>
+    </tr>
+  </table>
+
+  <h3>Household Costs</h3>
+
+  <table>
+    <tr>
+      <td width="60%">Food and groceries</td>
+      <td width="40%">&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Toiletries and household products</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Telephone / Mobile phone</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Internet / TV licence</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Clothing and footwear</td>
+      <td>&#163; _________________</td>
+    </tr>
+  </table>
+
+  <h3>Travel and Transport</h3>
+
+  <table>
+    <tr>
+      <td width="60%">Car insurance / Road tax / MOT</td>
+      <td width="40%">&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Petrol / Diesel</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Public transport (bus, train)</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Car repairs / servicing</td>
+      <td>&#163; _________________</td>
+    </tr>
+  </table>
+
+  <h3>Childcare and Education</h3>
+
+  <table>
+    <tr>
+      <td width="60%">Childcare costs</td>
+      <td width="40%">&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>School meals / uniforms</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Child maintenance payments</td>
+      <td>&#163; _________________</td>
+    </tr>
+  </table>
+
+  <h3>Health Costs</h3>
+
+  <table>
+    <tr>
+      <td width="60%">Prescription charges</td>
+      <td width="40%">&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Dental / optical costs</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Other medical costs</td>
+      <td>&#163; _________________</td>
+    </tr>
+  </table>
+
+  <h3>Other Regular Payments</h3>
+
+  <table>
+    <tr>
+      <td width="60%">Credit card minimum payments</td>
+      <td width="40%">&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Loan repayments</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Other debts (specify): ____________________</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Other essential costs (specify): ____________________</td>
+      <td>&#163; _________________</td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table>
+    <tr style="background-color: #f0f0f0;">
+      <td width="60%"><strong>TOTAL MONTHLY OUTGOINGS:</strong></td>
+      <td width="40%"><strong>&#163; _____________</strong></td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <h2>SECTION 3: YOUR AVAILABLE INCOME</h2>
+
+  <table>
+    <tr>
+      <td width="60%">Total monthly income (from Section 1)</td>
+      <td width="40%">&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Total monthly outgoings (from Section 2)</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr style="background-color: #f0f0f0;">
+      <td><strong>Available income (income minus outgoings):</strong></td>
+      <td><strong>&#163; _____________</strong></td>
+    </tr>
+  </table>
+
+  <p>
+  <em>If your available income is negative (i.e., your outgoings are higher than your income), you should seek free debt advice urgently.</em>
+  </p>
+
+  <hr>
+
+  <h2>SECTION 4: YOUR ASSETS</h2>
+
+  <p><em>List any assets you own (e.g., property, savings, vehicles)</em></p>
+
+  <table>
+    <tr style="background-color: #f0f0f0;">
+      <th width="60%">Asset</th>
+      <th width="40%">Estimated Value (&#163;)</th>
+    </tr>
+    <tr>
+      <td>Property (home): ☐ Own ☐ Mortgage<br>
+          Less mortgage outstanding: &#163; __________</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Savings (bank / building society)</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Vehicle(s)</td>
+      <td>&#163; _________________</td>
+    </tr>
+    <tr>
+      <td>Other assets (specify): ____________________</td>
+      <td>&#163; _________________</td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <h2>SECTION 5: YOUR PAYMENT OFFER</h2>
+
+  <p>Based on the financial information above, <strong>what can you afford to pay towards this debt?</strong></p>
+
+  <table>
+    <tr>
+      <td width="70%">I can afford to pay:</td>
+      <td width="30%">&#163; _________ per _______</td>
+    </tr>
+    <tr>
+      <td>Starting from (date):</td>
+      <td>_____________________</td>
+    </tr>
+    <tr>
+      <td>I will also continue to pay my current rent in full:</td>
+      <td>☐ Yes   ☐ No</td>
+    </tr>
+  </table>
+
+  <p>
+  <strong>Note:</strong> Any payment arrangement you propose must be <em>realistic and sustainable</em>. You should also continue paying your current rent in full (if you still live at the property) to prevent further arrears.
+  </p>
+
+  <hr>
+
+  <h2>SECTION 6: ADDITIONAL INFORMATION</h2>
+
+  <p>Is there anything else you would like the claimant to know about your financial situation?</p>
+
+  <p>
+  _________________________________________________________________<br>
+  _________________________________________________________________<br>
+  _________________________________________________________________<br>
+  _________________________________________________________________<br>
+  </p>
+
+  <hr>
+
+  <h2>DECLARATION</h2>
+
+  <p>
+  I confirm that the information I have given on this form is true and complete to the best of my knowledge. I understand that if I provide false information, it may affect any agreement or court order.
+  </p>
+
+  <table border="0">
+    <tr>
+      <td width="30%"><strong>Your signature:</strong></td>
+      <td width="70%">_________________________________________</td>
+    </tr>
+    <tr>
+      <td><strong>Date:</strong></td>
+      <td>_________________________________________</td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <h2>WHAT TO DO NEXT</h2>
+
+  <ol>
+    <li><strong>Complete this form</strong> as accurately as possible.</li>
+    <li><strong>Attach proof of income</strong> (e.g., recent payslips, benefit letters, bank statements).</li>
+    <li><strong>Attach proof of outgoings</strong> (e.g., utility bills, rent agreement, loan statements).</li>
+    <li><strong>Send this form with the Reply Form</strong> to the claimant within 30 days.</li>
+  </ol>
+
+  <p><strong>Send to:</strong></p>
+
+  <p>
+  Alice Landlord<br>
+  1 High Street
+London<br>
+  E1 1AA<br>
+  Email: alice@example.com
+  </p>
+
+
+  <hr>
+
+  <h2>NEED HELP COMPLETING THIS FORM?</h2>
+
+  <p>
+  Free debt advice services can help you complete this form and negotiate with the claimant on your behalf:
+  </p>
+
+  <ul>
+    <li><strong>Citizens Advice:</strong> 0800 144 8848 or www.citizensadvice.org.uk</li>
+    <li><strong>StepChange Debt Charity:</strong> 0800 138 1111 or www.stepchange.org</li>
+    <li><strong>National Debtline:</strong> 0808 808 4000 or www.nationaldebtline.org</li>
+    <li><strong>MoneyHelper:</strong> 0800 138 7777 or www.moneyhelper.org.uk</li>
+  </ul>
+
+  <hr>
+
+  <p style="font-size: 10pt;"><em>
+  <strong>Data Protection:</strong> The claimant will use the information on this form to consider your payment offer and, if necessary, for court proceedings. Your personal data will be processed in accordance with GDPR and the Data Protection Act 2018.
+  </em></p>
+</div>
+
+</body>
+</html>
