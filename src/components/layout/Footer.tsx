@@ -196,14 +196,14 @@ export function Footer() {
         <div className="mt-16 border-t border-gray-800 pt-10">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <p className="text-center text-sm text-[#bdbdbd] md:text-left">
-              © {currentYear} Landlord Heaven. All rights reserved.
+              &copy; {currentYear} Landlord Heaven. All rights reserved.
             </p>
 
             <div className="flex items-center gap-6 text-sm text-[#bdbdbd]">
               <span className="font-medium">For Landlords in England</span>
-              <span>•</span>
+              <span>&bull;</span>
               <span className="font-medium">Court-Ready Documents</span>
-              <span>•</span>
+              <span>&bull;</span>
               <span className="font-medium">Instant Delivery</span>
             </div>
           </div>
