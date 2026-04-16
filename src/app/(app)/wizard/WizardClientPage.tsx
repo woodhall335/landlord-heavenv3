@@ -206,23 +206,23 @@ export default function WizardClientPage() {
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-            England-Only Wizard
+            Landlord Heaven Wizard
           </p>
           <div className="mt-4 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
             <div>
               <h1 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-                Start the right England landlord product without a jurisdiction chooser.
+                Start the right landlord product without a jurisdiction chooser.
               </h1>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
-                Public starts now assume England. Choose the landlord task you need, then we take
-                you straight into the matching workflow under the current England rules.
+                Public starts currently cover properties in England. Choose the landlord task you
+                need and we take you straight into the matching workflow under the current rules.
               </p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
-              <p className="text-sm font-semibold text-slate-900">Public site rules</p>
+              <p className="text-sm font-semibold text-slate-900">What to expect</p>
               <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600">
-                <li>England is the only public jurisdiction.</li>
-                <li>Historic Wales, Scotland, and Northern Ireland cases still work by direct account access.</li>
+                <li>Public starts currently cover England.</li>
+                <li>Historic Wales, Scotland, and Northern Ireland cases still work through direct account access.</li>
                 <li>Eviction entry starts with two clear routes: notice or full court pack.</li>
               </ul>
             </div>

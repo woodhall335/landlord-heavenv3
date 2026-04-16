@@ -37,7 +37,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     return {
       title: 'England Landlord Products | Landlord Heaven',
       description:
-        'Public Landlord Heaven products now start in England only. Historic non-England cases remain available through direct account access.',
+        'Public Landlord Heaven starts currently cover England. Historic non-England cases remain available through direct account access.',
       alternates: {
         canonical,
       },

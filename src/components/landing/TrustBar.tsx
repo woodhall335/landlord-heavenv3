@@ -53,7 +53,7 @@ const trustBadges = [
   },
   {
     icon: <RiMapPinLine className="h-5 w-5" />,
-    label: 'England-Only Public Experience',
+    label: 'Built for England Landlords',
   },
 ];
 

@@ -35,11 +35,13 @@ export function Footer() {
               />
             </div>
             <p className="mb-4 text-sm leading-relaxed text-[#bdbdbd]">
-              England-only landlord document workflows for Section 8 notices, court possession, debt recovery, rent increases, and tenancy agreements.
+              Landlord document workflows for properties in England, including Section 8
+              notices, court possession, debt recovery, rent increases, and tenancy
+              agreements.
             </p>
             <div className="flex items-center gap-2 text-xs text-[#bdbdbd]">
               <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="h-3 w-4" />
-              <span>Public products and SEO now focus on England only.</span>
+              <span>Built for landlords letting property in England.</span>
             </div>
           </div>
 
@@ -198,7 +200,7 @@ export function Footer() {
             </p>
 
             <div className="flex items-center gap-6 text-sm text-[#bdbdbd]">
-              <span className="font-medium">England-Only Public Site</span>
+              <span className="font-medium">For Landlords in England</span>
               <span>•</span>
               <span className="font-medium">Court-Ready Documents</span>
               <span>•</span>
