@@ -1,92 +1,71 @@
-import type { Metadata } from "next";
-import { Container } from "@/components/ui";
-import Link from "next/link";
-import Image from "next/image";
-import { RiCheckboxCircleLine, RiCloseLine, RiAlertLine } from "react-icons/ri";
-import { BadgePoundSterling } from "lucide-react";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { completePackHeroConfig } from '@/components/landing/heroConfigs';
+import { Container } from '@/components/ui';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
+import { PRODUCTS } from '@/lib/pricing/products';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getCompletePackPreviewData } from '@/lib/previews/completePackPreviews';
+import { WhatsIncludedInteractive } from '@/components/value-proposition';
+import { FunnelProcessSection } from '@/components/funnels';
+import { guideLinks, productLinks } from '@/lib/seo/internal-links';
 
-import { UniversalHero } from "@/components/landing/UniversalHero";
-import { HeaderConfig } from "@/components/layout/HeaderConfig";
-import { completePackHeroConfig } from "@/components/landing/heroConfigs";
-import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
-import { RelatedLinks } from "@/components/seo/RelatedLinks";
-import { productLinks, toolLinks, blogLinks, landingPageLinks, guideLinks } from "@/lib/seo/internal-links";
-import { getCanonicalUrl } from "@/lib/seo";
-import { PRODUCTS } from "@/lib/pricing/products";
-import { FAQSection } from "@/components/seo/FAQSection";
-import {
-  WhyLandlordHeaven,
-  VsSolicitorComparison,
-  VsFreeTemplateComparison,
-  WhatsIncludedInteractive,
-} from "@/components/value-proposition";
-import { getCompletePackPreviewData } from "@/lib/previews/completePackPreviews";
-import { Section21ComplianceTimingPanel } from "@/components/products/Section21ComplianceTimingPanel";
-import { FunnelProcessSection } from "@/components/funnels";
-
-// Get price from single source of truth
 const product = PRODUCTS.complete_pack;
 const price = product.displayPrice;
+const canonicalUrl = getCanonicalUrl('/products/complete-pack');
 
 export const metadata: Metadata = {
-  title: `Evict a Tenant Through Court | Complete Eviction Pack England | ${price}`,
-  description: `Complete eviction pack for England landlords who need to evict a tenant through court. Includes court forms Form 3A, N5, N119, evidence checklists, and filing guidance in one workflow.`,
-  openGraph: {
-    title: `Complete Eviction Pack England | Evict a Tenant Through Court | ${price}`,
-    description:
-      "Complete eviction pack for England landlords. Includes court forms Form 3A, N5, N119, evidence checklists, and court filing guidance.",
-    url: getCanonicalUrl("/products/complete-pack"),
-  },
+  title: `Complete Eviction Pack (Court Possession - England) | ${price}`,
+  description:
+    'Prepare the England court-possession route with a Section 8 notice, N5, N119, possession claim drafting, and filing guidance in one workflow.',
   alternates: {
-    canonical: getCanonicalUrl("/products/complete-pack"),
+    canonical: canonicalUrl,
+  },
+  openGraph: {
+    title: `Complete Eviction Pack (Court Possession - England) | ${price}`,
+    description:
+      'England-only court possession pack with the Section 8 route, N5, N119, evidence prompts, and filing guidance in one workflow.',
+    url: canonicalUrl,
   },
 };
 
-export const runtime = "nodejs";
-
-// FAQ data for structured data
 const faqs = [
   {
-    question: "What documents do I get?",
+    question: 'What does the Complete Eviction Pack include?',
     answer:
-      "You receive an England-only case bundle that includes Form 3A, service instructions, a service and validity checklist, N5 and N119 court forms, a filing guide, an evidence checklist, and a proof of service certificate.",
+      'It includes the England notice-to-court route: the Section 8 notice, service guidance, core court forms including N5 and N119, filing guidance, and supporting prompts for the possession claim.',
   },
   {
-    question: "Can I preview before I pay?",
+    question: 'Is this England only?',
     answer:
-      "Yes. You can preview all documents with a watermark before paying, so you can check everything before you commit.",
+      'Yes. The public Complete Eviction Pack now covers England only and is positioned around the current possession route.',
   },
   {
-    question: "What if I need to make changes?",
+    question: 'When should I choose this instead of the notice product?',
     answer:
-      "You can edit your answers and regenerate your case bundle instantly at no extra cost. Unlimited regenerations are included.",
+      'Choose this pack when you want the full court-possession route rather than the notice alone. If you only need to serve the notice first, the Eviction Notice Generator is the better fit.',
   },
   {
-    question: "Which region does this pack cover?",
+    question: 'Does this include N5 and N119?',
     answer:
-      "England only. This pack includes the notice and court forms used for possession claims in England.",
+      'Yes. N5 and N119 are part of the court-stage pack for England possession claims, alongside the notice and filing guidance.',
   },
   {
-    question: "Are these genuine official court forms?",
+    question: 'Can I preview before I pay?',
     answer:
-      "Yes. We use the official HMCTS possession forms for England that apply to the post-1 May 2026 route, including N5 and N119, completed with your case details.",
+      'Yes. You can review the generated pack before purchase, then regenerate after edits if your facts, dates, or evidence notes change.',
   },
   {
-    question: "How long does the eviction process take?",
+    question: 'Does this replace legal advice?',
     answer:
-      "Timelines vary depending on the route and whether the claim is defended. We include England-specific filing and timeline guidance so you have a clearer picture of what usually happens next.",
-  },
-  {
-    question: "How long are documents stored?",
-    answer:
-      "Your documents are stored in your portal for at least 12 months. You can download and save them at any time.",
-  },
-  {
-    question: "Do you provide legal advice?",
-    answer:
-      "No. We provide document generation and practical guidance, not legal advice. Ask Heaven helps you understand the process, but it is not a solicitor and does not provide legal representation.",
+      'No. It is a document-generation and workflow product, not a solicitor. It helps you prepare the route and paperwork more clearly, but it does not provide representation or legal advice.',
   },
 ];
+
+export const runtime = 'nodejs';
 
 export default async function CompleteEvictionPackPage() {
   const previews = await getCompletePackPreviewData();
@@ -94,468 +73,175 @@ export default async function CompleteEvictionPackPage() {
   return (
     <div className="min-h-screen bg-[#fcfaff]">
       <HeaderConfig mode="autoOnScroll" />
-
       <StructuredData
         data={productSchema({
-          name: "Complete Eviction Pack for Landlords",
+          name: 'Complete Eviction Pack',
           description:
-            "Complete eviction pack with the court forms needed from notice through to possession order. Includes court forms Form 3A, N5, N119, and step-by-step guidance.",
+            'England-only court possession pack with Section 8 notice generation, N5, N119, evidence prompts, and filing guidance.',
           price: product.price.toString(),
-          url: "https://landlordheaven.co.uk/products/complete-pack",
+          url: canonicalUrl,
         })}
       />
       <StructuredData
         data={breadcrumbSchema([
-          { name: "Home", url: "https://landlordheaven.co.uk" },
-          { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
-          { name: "Complete Eviction Pack", url: "https://landlordheaven.co.uk/products/complete-pack" },
+          { name: 'Home', url: 'https://landlordheaven.co.uk' },
+          { name: 'Products', url: 'https://landlordheaven.co.uk/pricing' },
+          { name: 'Complete Eviction Pack', url: canonicalUrl },
         ])}
       />
 
       <UniversalHero {...completePackHeroConfig} showTrustPositioningBar />
-
       <FunnelProcessSection product="complete_pack" completePackPreviews={previews} />
 
-      <section className="bg-white border-y border-[#EDE2FF]">
+      <section className="border-y border-[#EDE2FF] bg-white">
         <Container>
-          <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Complete Pack quick links">
+          <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Complete Eviction Pack quick links">
             <Link href="#who-this-is-for" className="font-medium text-primary hover:underline">
               Who this is for
             </Link>
             <Link href="#whats-included" className="font-medium text-primary hover:underline">
-              What's included
+              What&apos;s included
             </Link>
-            <Link href="#how-it-works" className="font-medium text-primary hover:underline">
-              How it works
+            <Link href="#england-route" className="font-medium text-primary hover:underline">
+              England route guides
             </Link>
-            <Link href="#start-your-pack" className="font-medium text-primary hover:underline">
-              Start your court pack
+            <Link href="#start-now" className="font-medium text-primary hover:underline">
+              Start now
             </Link>
           </nav>
         </Container>
       </section>
 
-      <section id="who-this-is-for" className="scroll-mt-24 py-10 md:py-14">
+      <section id="who-this-is-for" className="scroll-mt-24 py-12 md:py-16">
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Who this is for</h2>
-            <p className="mt-4 text-lg text-gray-700">
-              This pack is for landlords who need to evict a tenant through court and do not want to piece the paperwork together themselves. It is designed to give you a smoother path from the first notice through to filing.
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
+              The full England route from Section 8 notice to court possession
+            </h2>
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-700">
+              This page is for landlords who already know they want more than the notice. It is the
+              court-possession route for England, bringing the Section 8 notice together with N5,
+              N119, evidence prompts, and filing guidance in one workflow.
             </p>
-            <ul className="mt-6 grid gap-3 text-gray-700 md:grid-cols-2">
-              <li>Your tenant is in arrears or refusing to leave, and you need to move from notice towards court.</li>
-              <li>You want the notice, court forms, and evidence guidance together in one pack.</li>
-              <li>You want more confidence before filing, without late-night guesswork.</li>
-              <li>You want to reduce errors, avoid rework, and keep the case moving.</li>
-            </ul>
-            <p className="mt-6 text-gray-700">
-              This pack is built for landlords who want a fuller, practical eviction solution from the first notice through court preparation, helping reduce the risk of missed forms or filing mistakes once the case becomes more serious.
-            </p>
-            <div className="mt-8">
-              <h3 className="mb-4 text-xl font-semibold text-charcoal">Route timing and compliance still matter</h3>
-              <Section21ComplianceTimingPanel />
-              <div className="mt-6">
-                <h4 className="text-lg font-semibold text-charcoal">
-                  Working through the England court route?
-                </h4>
-                <p className="mt-2 text-gray-700">
-                  Check the live England rules, the landlord action guide, and the possession timeline before you generate the full court bundle.
-                </p>
-                <div className="mt-4 grid gap-4 md:grid-cols-3">
-                  {[
-                    guideLinks.rentersRightsActEvictionRules,
-                    guideLinks.howToEvictTenantEngland,
-                    guideLinks.evictionProcessEngland,
-                  ].map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="rounded-2xl border border-[#E6DBFF] bg-[#FCFAFF] p-4 hover:bg-white"
-                    >
-                      <p className="font-semibold text-charcoal">{link.title}</p>
-                      <p className="mt-2 text-sm leading-6 text-gray-700">{link.description}</p>
-                    </Link>
-                  ))}
-                </div>
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl bg-[#F7F3FF] p-5">
+                <h3 className="text-lg font-semibold text-charcoal">Best fit</h3>
+                <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
+                  <li>You need the notice and the court-stage possession paperwork together.</li>
+                  <li>You want the N5 and N119 route prepared in the same workflow as the notice.</li>
+                  <li>You want a clearer handoff from notice expiry into filing.</li>
+                </ul>
               </div>
+              <div className="rounded-2xl bg-[#FFF7ED] p-5">
+                <h3 className="text-lg font-semibold text-charcoal">Choose a different product if</h3>
+                <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
+                  <li>You only need to serve the Section 8 notice first.</li>
+                  <li>You are recovering debt rather than preparing possession paperwork.</li>
+                  <li>You need a tenancy agreement or rent increase product instead.</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction"
+                className="hero-btn-primary"
+              >
+                Start Complete Eviction Pack
+              </Link>
+              <Link
+                href={productLinks.noticeOnly.href}
+                className="inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white px-5 py-3 text-sm font-semibold text-[#2A3550] transition hover:border-[#BDAFE8]"
+              >
+                Only need the notice?
+              </Link>
             </div>
           </div>
         </Container>
       </section>
 
-      <section id="whats-included" className="scroll-mt-24 py-10 md:py-14">
+      <section id="whats-included" className="scroll-mt-24 py-12 md:py-16">
         <Container>
           <div className="mx-auto mb-6 max-w-6xl">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What's included</h2>
-            <p className="mt-3 text-gray-700">
-              You get a full England eviction document set: the notice, the core court forms, and filing guidance together in one place, so you can move forward with fewer gaps and less risk of delay.
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What&apos;s included</h2>
+            <p className="mt-3 max-w-3xl text-gray-700">
+              You get the England court-possession pack in one place: the notice stage, the court
+              forms, and the guidance that helps you move cleanly from notice expiry into filing.
             </p>
           </div>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
             <WhatsIncludedInteractive
               product="complete_pack"
               previews={previews}
-              titleOverride="What's included in your eviction pack"
-              subtitleOverride="England-only pack. Check the route, then preview every document before you file."
+              titleOverride="What&apos;s included in your Complete Eviction Pack"
+              subtitleOverride="England-only court possession pack. Preview the notice, N5, N119, and supporting documents before you buy."
             />
           </div>
         </Container>
       </section>
 
-      <section id="start-your-pack" className="scroll-mt-24 py-16 md:py-20">
+      <section id="england-route" className="scroll-mt-24 bg-white py-12 md:py-16">
         <Container>
-          <div className="mb-10 flex justify-center">
-            <Image
-              src="/images/why_this_bundle.webp"
-              alt="Why this bundle illustration"
-              width={340}
-              height={340}
-              className="h-auto w-full max-w-[340px] object-contain"
-            />
+          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
+              Check the England court route before you file
+            </h2>
+            <p className="mt-4 max-w-3xl text-gray-700">
+              These guides support the possession route and help this page own the right court-stage
+              intent without drifting back into mixed-jurisdiction wording.
+            </p>
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {[
+                guideLinks.rentersRightsActEvictionRules,
+                guideLinks.howToEvictTenantEngland,
+                guideLinks.evictionProcessEngland,
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-2xl border border-[#E6DBFF] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-sm"
+                >
+                  <p className="text-lg font-semibold text-charcoal">{link.title}</p>
+                  <p className="mt-3 text-sm leading-6 text-gray-700">{link.description}</p>
+                </Link>
+              ))}
+            </div>
           </div>
-          <div className="max-w-4xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">Start your court pack</h2>
+        </Container>
+      </section>
+
+      <section id="start-now" className="scroll-mt-24 bg-[#F3EEFF] py-12 md:py-16">
+        <Container>
+          <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
+            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
+              Prepare the full England possession route now
+            </h2>
             <p className="mt-4 text-gray-700">
-              If you need to evict a tenant through court, this is the practical next step. Generate the key documents in one flow and move from problem to action quickly, with the notice, the core court forms, and filing guidance all aligned within one England route.
+              Start with the court-stage product if you want the Section 8 notice, N5, N119, and
+              filing guidance aligned in one England workflow from the beginning.
             </p>
-            <div className="mt-6">
-              <WhyLandlordHeaven variant="full" />
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section id="how-it-works" className="scroll-mt-24 py-16 md:py-20 bg-[#F3EEFF]">
-        <Container>
-          <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">How it works</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <div className="rounded-2xl bg-[#F3EEFF] p-5">
-                <h3 className="font-semibold">1) Tell us what has happened</h3>
-                <p className="mt-2 text-sm text-gray-700">
-                  We shape the pack around the route your case actually needs.
-                </p>
-              </div>
-              <div className="rounded-2xl bg-[#F3EEFF] p-5">
-                <h3 className="font-semibold">2) Answer plain-English questions</h3>
-                <p className="mt-2 text-sm text-gray-700">
-                  We collect the details needed for the notice, court forms, and supporting documents.
-                </p>
-              </div>
-              <div className="rounded-2xl bg-[#F3EEFF] p-5">
-                <h3 className="font-semibold">3) Preview, generate, and file</h3>
-                <p className="mt-2 text-sm text-gray-700">
-                  Check everything, download your pack, and use the filing guidance to keep moving.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <Link
-              href="/wizard?product=complete_pack&src=product_page&topic=eviction"
-              className="hero-btn-primary"
-            >
-              Start your complete eviction pack -&gt;
-            </Link>
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-8 text-center lg:text-left">
-              How We Compare
-            </h2>
-            <div className="space-y-8">
-              <VsSolicitorComparison product="complete_pack" />
-              <VsFreeTemplateComparison product="complete_pack" />
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-16 md:py-20 bg-white">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-12 text-center">
-              Typical Eviction Timeline
-            </h2>
-            <p className="text-center text-gray-600 mb-12">
-              England-only timeline guidance. Actual timings vary depending on the route, court capacity, and whether the claim is defended.
-            </p>
-
-            <div className="space-y-6">
-              <div className="flex items-start gap-4 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
-                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#692ED4] font-bold border border-[#E6DBFF]">
-                  1
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-charcoal mb-2">Serve notice (Day 0)</h3>
-                  <p className="text-gray-600">
-                    Deliver the possession notice to the tenant. The notice period depends on the route and the grounds you are relying on.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
-                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#692ED4] font-bold border border-[#E6DBFF]">
-                  2
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-charcoal mb-2">File with the court (after the notice period ends)</h3>
-                  <p className="text-gray-600">
-                    Submit the claim through the appropriate England County Court route after the notice expires. Rent-only arrears claims may use PCOL, while other possession claims use N5 and N119 with the court fee.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
-                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#692ED4] font-bold border border-[#E6DBFF]">
-                  3
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-charcoal mb-2">Hearing (often 4-12 weeks later)</h3>
-                  <p className="text-gray-600">
-                    Attend the possession hearing and bring your evidence, such as the tenancy agreement, notice, and arrears statement. The judge reviews the case and decides whether to make a possession order.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
-                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#692ED4] font-bold border border-[#E6DBFF]">
-                  4
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-charcoal mb-2">Enforcement (if needed)</h3>
-                  <p className="text-gray-600">
-                    If the tenant does not leave by the date in the order, you can apply for a warrant of possession. Bailiffs then arrange the eviction.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 rounded-2xl border border-[#E6DBFF] bg-[#F3EEFF] p-6">
-              <div className="flex items-start gap-3">
-                <RiAlertLine className="h-6 w-6 shrink-0 text-[#692ED4]" />
-                <div>
-                  <h4 className="font-semibold text-charcoal mb-2">Timeline estimates</h4>
-                  <p className="text-gray-700">
-                    <strong>England:</strong> straightforward possession cases often take around 3-6 months, while defended claims can take longer.
-                    <br />
-                    These are only estimates. Actual timelines depend on court backlogs, the route chosen, and whether the claim is defended.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-5xl mx-auto rounded-3xl border border-[#E6DBFF] bg-white p-6 shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
-              Complete Pack vs Notice Only
-            </h2>
-            <p className="text-center text-gray-600 mb-12">Which option is right for you?</p>
-
-            <div className="overflow-x-auto">
-              <table className="w-full overflow-hidden rounded-2xl border border-[#E6DBFF] bg-white">
-                <thead className="bg-[#F3EEFF]">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-charcoal border-b border-gray-200">
-                      Feature
-                    </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-charcoal border-b border-gray-200">
-                      Notice Only
-                      <br />
-                      {PRODUCTS.notice_only.displayPrice}
-                    </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-[#692ED4] border-b border-[#E6DBFF] bg-[#F3EEFF]">
-                      Complete Pack
-                      <br />
-                      {price}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Eviction notice</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">
-                      Service instructions + checklist
-                    </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">County Court forms (N5, N119)</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
-                    </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">AI witness statement</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
-                    </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Court filing guide</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
-                    </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Evidence checklist</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
-                    </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Proof of service certificate</td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
-                    </td>
-                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-[#F3EEFF]">
-                      <RiCheckboxCircleLine className="mx-auto h-5 w-5 text-[#692ED4]" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-sm font-semibold text-charcoal">Best for</td>
-                    <td className="px-6 py-4 text-center text-sm text-gray-600">
-                      Simpler cases, early-stage action, or landlords who want to start with the notice
-                    </td>
-                    <td className="px-6 py-4 text-center text-sm font-semibold text-primary bg-[#F3EEFF]">
-                      Landlords preparing for court who want a more complete DIY solution
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="mt-12 text-center">
-              <p className="text-gray-600 mb-6">Need the full solution to take your case to court?</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link
-                href="/wizard?product=complete_pack&src=product_page&topic=eviction"
+                href="/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction"
                 className="hero-btn-primary"
               >
-                Get Complete Eviction Pack - {price}
+                Start Complete Eviction Pack
               </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-12 md:py-16 bg-[#F3EEFF]">
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl border border-[#E6DBFF] bg-white p-6 shadow-[0_12px_28px_rgba(105,46,212,0.1)] md:p-8">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#E6DBFF] bg-[#F3EEFF]">
-                  <BadgePoundSterling className="h-6 w-6 text-[#692ED4]" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-charcoal mb-2">
-                    Also need to recover unpaid rent?
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Eviction helps you recover possession, but if your tenant also owes rent arrears, you may want to pursue a money claim as well. Many landlords do both: eviction for possession and a money claim to recover what they are owed.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Link
-                      href="/wizard?product=money_claim&src=complete_pack_crosssell"
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#692ED4] px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#5a21be]"
-                    >
-                      Get Money Claim Pack — {PRODUCTS.money_claim.displayPrice}
-                    </Link>
-                    <Link
-                      href="/money-claim-unpaid-rent"
-                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#CDB8F6] px-5 py-2.5 font-medium text-[#692ED4] transition-colors hover:bg-[#F3EEFF]"
-                    >
-                      Learn about money claims ?
-                    </Link>
-                  </div>
-                </div>
-              </div>
+              <Link
+                href="/wizard/flow?type=eviction&product=notice_only&src=product_page&topic=eviction"
+                className="inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white px-5 py-3 text-sm font-semibold text-[#2A3550] transition hover:border-[#BDAFE8]"
+              >
+                Switch to Eviction Notice Generator
+              </Link>
             </div>
           </div>
         </Container>
       </section>
 
       <FAQSection
-        title="FAQs For Landlords"
+        title="Complete Eviction Pack FAQs"
         faqs={faqs}
-        showContactCTA={false}
-        variant="white"
+        className="bg-white py-12 md:py-16"
       />
-
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <RelatedLinks
-              title="Related Resources"
-              links={[
-                productLinks.noticeOnly,
-                productLinks.moneyClaim,
-                toolLinks.section8Generator,
-                blogLinks.evictionTimeline,
-                landingPageLinks.section8Template,
-              ]}
-            />
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="mx-auto max-w-3xl rounded-3xl border border-[#E6DBFF] bg-gradient-to-br from-[#692ED4] via-[#7A3BE5] to-[#5a21be] p-8 text-center text-white shadow-[0_24px_60px_rgba(105,46,212,0.35)] md:p-12">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to evict a tenant through court?</h2>
-            <p className="mb-8 text-xl text-white/90">
-              If you need the notice, the court forms, and the filing guidance working together, this is the fastest practical next step.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/wizard?product=complete_pack&src=product_page&topic=eviction"
-                className="hero-btn-primary"
-              >
-                Start your complete eviction pack - {price} -&gt;
-              </Link>
-              <Link href="/products/notice-only" className="hero-btn-secondary">
-                Only need the notice? - {PRODUCTS.notice_only.displayPrice}
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-white/80">
-              One-time payment - Unlimited regenerations - No subscription
-            </p>
-          </div>
-        </Container>
-      </section>
     </div>
   );
 }

@@ -42,6 +42,10 @@ import {
   ENGLAND_STANDARD_ASSURED_PERIODIC_TIER_LABEL,
 } from '@/lib/tenancy/england-agreement-constants';
 import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
+import {
+  getPublicProductOwnerHref,
+  isPubliclyStartableProduct,
+} from '@/lib/public-products';
 
 const RESIDENTIAL_PRODUCTS = [...RESIDENTIAL_LETTING_PRODUCT_SKUS] as const;
 type ResidentialProduct = (typeof RESIDENTIAL_PRODUCTS)[number];
@@ -224,6 +228,28 @@ export async function POST(request: Request) {
     const originalRequestedProduct = requested_product ?? product;
     const legacyRequestedProduct =
       originalRequestedProduct !== storedProduct ? originalRequestedProduct : null;
+
+    if (!case_id && effectiveJurisdiction !== 'england') {
+      return NextResponse.json(
+        {
+          error: 'Public wizard starts are available for England only.',
+          reason: 'public_england_only',
+          redirect_to: getPublicProductOwnerHref(product, resolvedCaseType),
+        },
+        { status: 409 }
+      );
+    }
+
+    if (!case_id && !isPubliclyStartableProduct(storedProduct)) {
+      return NextResponse.json(
+        {
+          error: 'This product is not publicly startable.',
+          reason: 'legacy_only_product',
+          redirect_to: getPublicProductOwnerHref(storedProduct, resolvedCaseType),
+        },
+        { status: 409 }
+      );
+    }
 
     if (
       isResidentialStandaloneProduct(product) &&

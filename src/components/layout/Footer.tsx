@@ -1,9 +1,9 @@
 'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { buildAskHeavenLink } from "@/lib/ask-heaven/buildAskHeavenLink";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import { buildAskHeavenLink } from '@/lib/ask-heaven/buildAskHeavenLink';
 
 export function Footer() {
   const pathname = usePathname();
@@ -16,14 +16,14 @@ export function Footer() {
   if (isImmersiveWizardRoute) {
     return null;
   }
+
   const askHeavenLink = buildAskHeavenLink({ source: 'footer' });
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-6">
-          {/* Column 1: About */}
+      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="mb-6">
               <Image
@@ -34,181 +34,156 @@ export function Footer() {
                 className="h-8 w-auto"
               />
             </div>
-            <p className="text-sm leading-relaxed mb-4" style={{ color: '#bdbdbd' }}>
-              Court-ready, jurisdiction-specific case bundles for UK landlords.
+            <p className="mb-4 text-sm leading-relaxed text-[#bdbdbd]">
+              England-only landlord document workflows for Section 8 notices, court possession, debt recovery, rent increases, and tenancy agreements.
             </p>
-            <div className="flex flex-wrap gap-3 text-xs">
-              <div className="flex items-center gap-1">
-                <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-3" />
-                <span style={{ color: '#bdbdbd' }}></span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-3" />
-                <span style={{ color: '#bdbdbd' }}></span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-3" />
-                <span style={{ color: '#bdbdbd' }}></span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-3" />
-                <span style={{ color: '#bdbdbd' }}></span>
-              </div>
+            <div className="flex items-center gap-2 text-xs text-[#bdbdbd]">
+              <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="h-3 w-4" />
+              <span>Public products and SEO now focus on England only.</span>
             </div>
           </div>
 
-          {/* Column 2: Products */}
           <div>
-            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Products</u></h5>
+            <h5 className="mb-4 text-sm font-bold text-[#bdbdbd]">
+              <u>Products</u>
+            </h5>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/products/complete-pack" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/products/notice-only" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Eviction Notice Generator
+                </Link>
+              </li>
+              <li>
+                <Link href="/products/complete-pack" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Complete Eviction Pack
                 </Link>
               </li>
               <li>
-                <Link href="/products/notice-only" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Notice Only Pack
-                </Link>
-              </li>
-              <li>
-                <Link href="/products/money-claim" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/products/money-claim" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Money Claim Pack
                 </Link>
               </li>
               <li>
-                <Link href={askHeavenLink} className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Ask Heaven AI
+                <Link href="/rent-increase" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Rent Increase
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/pricing" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Pricing
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Landlord Guides */}
           <div>
-            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Landlord Guides</u></h5>
+            <h5 className="mb-4 text-sm font-bold text-[#bdbdbd]">
+              <u>Tenancy Agreements</u>
+            </h5>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/blog" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  All Landlord Guides
+                <Link href="/products/ast" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  England agreement hub
                 </Link>
               </li>
               <li>
-                <Link href="/blog/england" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  England Guides
+                <Link href="/standard-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Standard
                 </Link>
               </li>
               <li>
-                <Link href="/blog/uk" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  UK-Wide Guides
+                <Link href="/premium-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Premium
+                </Link>
+              </li>
+              <li>
+                <Link href="/student-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Student
+                </Link>
+              </li>
+              <li>
+                <Link href="/hmo-shared-house-tenancy-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  HMO / Shared House
+                </Link>
+              </li>
+              <li>
+                <Link href="/lodger-agreement" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Lodger
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Tools & Templates */}
           <div>
-            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Tools & Templates</u></h5>
+            <h5 className="mb-4 text-sm font-bold text-[#bdbdbd]">
+              <u>Guides & Tools</u>
+            </h5>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/tools" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Free Tools
+                <Link href="/blog" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Landlord guides
                 </Link>
               </li>
               <li>
-                <Link href="/section-21-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Section 21 Template
+                <Link href="/eviction-guides" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Eviction guides
                 </Link>
               </li>
               <li>
-                <Link href="/section-8-notice-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Section 8 Template
+                <Link href="/tools" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Free tools
                 </Link>
               </li>
               <li>
-                <Link href="/tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Tenancy Agreement Template
+                <Link href="/section-8-notice" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Section 8 guide
                 </Link>
               </li>
               <li>
-                <Link href="/rent-arrears-letter-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Rent Arrears Letter
+                <Link href={askHeavenLink} className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Ask Heaven AI
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 5: Tenancy Agreements */}
           <div>
-            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Tenancy Agreements</u></h5>
+            <h5 className="mb-4 text-sm font-bold text-[#bdbdbd]">
+              <u>Company</u>
+            </h5>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  England Template
-                </Link>
-              </li>
-              <li>
-                <Link href="/wales-tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Wales
-                </Link>
-              </li>
-              <li>
-                <Link href="/private-residential-tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Scotland
-                </Link>
-              </li>
-              <li>
-                <Link href="/northern-ireland-tenancy-agreement-template" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
-                  Northern Ireland
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 6: Company & Legal */}
-          <div>
-            <h5 className="text-sm font-bold mb-4" style={{ color: '#bdbdbd' }}><u>Company</u></h5>
-            <ul className="space-y-2.5">
-              <li>
-                <Link href="/about" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/about" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/contact" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/help" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Help Centre
                 </Link>
               </li>
-            </ul>
-            <h5 className="text-sm font-bold mb-4 mt-6" style={{ color: '#bdbdbd' }}><u>Legal</u></h5>
-            <ul className="space-y-2.5">
               <li>
-                <Link href="/terms" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/terms" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/privacy" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/cookies" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Cookie Policy
                 </Link>
               </li>
               <li>
-                <Link href="/refunds" className="text-xs transition-colors inline-block hover:text-white" style={{ color: '#bdbdbd' }}>
+                <Link href="/refunds" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Refund Policy
                 </Link>
               </li>
@@ -216,18 +191,17 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Row */}
-        <div className="mt-16 pt-10 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-sm text-center md:text-left" style={{ color: '#bdbdbd' }}>
+        <div className="mt-16 border-t border-gray-800 pt-10">
+          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+            <p className="text-center text-sm text-[#bdbdbd] md:text-left">
               © {currentYear} Landlord Heaven. All rights reserved.
             </p>
 
-            <div className="flex items-center gap-6 text-sm" style={{ color: '#bdbdbd' }}>
-              <span className="font-medium">UK-Wide Coverage</span>
-              <span style={{ color: '#bdbdbd' }}>•</span>
+            <div className="flex items-center gap-6 text-sm text-[#bdbdbd]">
+              <span className="font-medium">England-Only Public Site</span>
+              <span>•</span>
               <span className="font-medium">Court-Ready Documents</span>
-              <span style={{ color: '#bdbdbd' }}>•</span>
+              <span>•</span>
               <span className="font-medium">Instant Delivery</span>
             </div>
           </div>
@@ -237,4 +211,4 @@ export function Footer() {
   );
 }
 
-
+export default Footer;

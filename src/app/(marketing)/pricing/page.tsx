@@ -94,7 +94,7 @@ export default function PricingPage() {
           {LANDLORD_HEAVEN_PURPOSE}
         </p>
         <p className="mt-2 text-sm text-white">
-          Notices: England, Wales, and Scotland. Complete Pack, Money Claims, and Section 13 products: England only. Tenancy agreements: UK-wide plus dedicated England Standard, Premium, Student, HMO / Shared House, and Lodger routes below.
+          Public pricing is now England-only: Section 8 notice generation, full court possession, money claims, Section 13 rent increase products, and the five England tenancy agreement routes below.
         </p>
         <p className="mt-2 text-sm text-white">
           {ENGLAND_POST_MAY_2026_POSITION}
@@ -146,9 +146,9 @@ export default function PricingPage() {
         <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-charcoal">Residential landlord documents</h2>
+              <h2 className="text-2xl font-bold text-charcoal">England tenancy agreement products</h2>
               <p className="mt-2 max-w-3xl text-sm text-gray-600">
-                If you only need one specific agreement or residential document instead of a full pack, these pages let you go straight to the route that fits the property and the tenancy setup.
+                If you only need one exact England agreement instead of a broader pack, these pages take you straight to the Standard, Premium, Student, HMO / Shared House, or Lodger route that fits the tenancy.
               </p>
             </div>
             <p className="text-sm text-gray-500">Per-document pricing {RESIDENTIAL_LETTING_PRICE_RANGE}</p>

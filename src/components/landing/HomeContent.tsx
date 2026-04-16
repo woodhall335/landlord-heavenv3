@@ -31,7 +31,7 @@ import {
 } from "react-icons/ri";
 
 const SEO_SRC = "seo_homepage";
-const evictionWizardHref = `/wizard?product=notice_only&topic=eviction&src=${SEO_SRC}`;
+const evictionWizardHref = `/wizard?topic=eviction&src=${SEO_SRC}`;
 
 const primaryPaths = [
   {
@@ -48,7 +48,7 @@ const primaryPaths = [
   },
   {
     label: "Create or update a tenancy agreement",
-    href: `/wizard?product=ast_standard&topic=tenancy&src=${SEO_SRC}`,
+    href: `/wizard?product=tenancy_agreement&topic=tenancy&src=${SEO_SRC}`,
     imageSrc: "/images/create-tenancy-agreements.webp",
     imageAlt: "Create a tenancy agreement",
   },
@@ -105,9 +105,9 @@ const whyLandlordsUseCards = [
   {
     title: "Generate the documents that match the problem you actually need to solve",
     body:
-      "Build eviction notices, full eviction packs, Section 13 rent increase files, money claim paperwork, and tenancy agreements with current England guidance while still keeping the jurisdictions separate where they need different rules.",
+      "Build England eviction notices, full court possession packs, Section 13 rent increase files, money claim paperwork, and tenancy agreements with one clear England-first product path.",
     imageSrc: "/images/jurisdiction_image.webp",
-    imageAlt: "UK jurisdiction landlord document illustration",
+    imageAlt: "England landlord document route illustration",
     icon: RiGlobalLine,
   },
 ] satisfies WhyLandlordsUseCard[];
@@ -169,11 +169,6 @@ export default function HomeContent() {
             <p className="mt-4 max-w-4xl text-1xl leading-relaxed text-[#3b3b4f]">
               If the tenant is not paying, will not leave, is disputing the tenancy, or you need to put the right agreement in place, start with the route that matches the real problem and keep the case moving.
             </p>
-
-            <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-              Northern Ireland properties currently support tenancy agreements only. Eviction notices and money claim packs are not currently live for NI.
-            </div>
-
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {primaryPaths.map((path) => (
                 <Link

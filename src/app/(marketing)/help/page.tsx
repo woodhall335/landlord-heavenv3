@@ -168,26 +168,19 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <p className="mb-3">
-                        <strong>UK-Wide Coverage:</strong>
+                        <strong>Public England-Only Coverage:</strong>
                       </p>
                       <ul className="space-y-2">
                         <li className="flex items-start gap-2">
                           <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-4 mt-0.5" />
-                          <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-4 mt-0.5" />
-                          <span><strong>England & Wales:</strong> Section 8 and other possession notices, tenancy agreements, court forms, and MCOL support where available</span>
+                          <span><strong>England:</strong> Section 8 notice generation, court possession packs, tenancy agreements, money claims, and Section 13 rent increase products</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-4 mt-0.5" />
-                          <span><strong>Scotland:</strong> Notice to Leave, PRTs, First-tier Tribunal forms</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-4 mt-0.5" />
-                          <span><strong>Northern Ireland:</strong> Tenancy agreements only (eviction notices planned for 2026)</span>
+                          <span><strong>Historic non-England records:</strong> Older Wales, Scotland, and Northern Ireland cases can still be resumed directly in an account if they already exist</span>
                         </li>
                       </ul>
                       <p className="mt-3">
-                        Our system automatically detects the property region and generates the correct
-                        documents.
+                        New public starts and public product recommendations now default to England.
                       </p>
                     </>
                   ),
@@ -210,12 +203,7 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <p>
-                        <strong>Yes.</strong> Our documents are based on the official government forms and prescribed notice formats used in England,
-                        Scotland, and Wales, and are accepted by UK courts and tribunals. Thousands of landlords have
-                        successfully used them.
-                      </p>
-                      <p className="mt-2 text-sm text-gray-600">
-                        <strong>Note for Wales:</strong> Our Welsh notice forms (RHW16/17/23) are currently English-only. For bilingual versions, obtain official forms from gov.wales.
+                        <strong>Yes.</strong> Our public documents are based on the official England forms and prescribed formats used for the routes we now sell, and thousands of landlords have used Landlord Heaven to generate their paperwork.
                       </p>
                       <p className="mt-3 bg-warning/10 border-l-4 border-warning p-3 rounded-r">
                         <strong>Important:</strong> We are NOT a law firm and don't provide legal advice. For complex cases
@@ -335,13 +323,13 @@ export default function HelpPage() {
                         valid. Our documents:
                       </p>
                       <ul className="mt-3 space-y-2">
-                        <li>- Use official government forms (Form 3A, AT6, N5, etc.)</li>
-                        <li>- Follow current legislation (Housing Act 1988, 2016 Scotland Act, etc.)</li>
+                        <li>- Use the official England government forms we publicly support (Form 3A, N5, N119, etc.)</li>
+                        <li>- Follow the current England legislation and route requirements reflected in the product</li>
                         <li>- Include all required information and clauses</li>
                         <li>- Are identical to what solicitors produce</li>
                       </ul>
                       <p className="mt-3">
-                        Thousands of landlords have successfully used our documents in UK courts and tribunals.
+                        Thousands of landlords have successfully used our documents for England landlord workflows.
                       </p>
                     </>
                   ),

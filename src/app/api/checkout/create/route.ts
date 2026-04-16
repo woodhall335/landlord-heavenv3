@@ -40,6 +40,7 @@ import {
 } from '@/lib/residential-letting/products';
 import { isMoneyClaimAddOnEligible } from '@/lib/wizard-crosssell';
 import { isEnglandModernTenancyProductSku } from '@/lib/tenancy/england-product-model';
+import { getPublicProductOwnerHref } from '@/lib/public-products';
 
 /**
  * Normalize display SKUs to payment SKUs for order storage
@@ -58,6 +59,18 @@ function normalizeToPaymentSku(productType: string): string {
     ni_premium: 'ast_premium',
   };
   return displayToPayment[productType] || productType;
+}
+
+function isLegacyOnlyPublicCheckoutSku(productType: string): boolean {
+  return [
+    'sc_money_claim',
+    'prt_standard',
+    'prt_premium',
+    'occupation_standard',
+    'occupation_premium',
+    'ni_standard',
+    'ni_premium',
+  ].includes(productType);
 }
 
 function isSection13ProductSku(productType: string): boolean {
@@ -295,6 +308,26 @@ export async function POST(request: Request) {
     const adminSupabase = createAdminClient();
 
     const normalizedProductType = normalizeToPaymentSku(String(product_type));
+    if (!case_id && isLegacyOnlyPublicCheckoutSku(String(product_type))) {
+      const fallbackCaseType =
+        product_type.startsWith('prt_') ||
+        product_type.startsWith('occupation_') ||
+        product_type.startsWith('ni_')
+          ? 'tenancy_agreement'
+          : normalizedProductType === 'sc_money_claim'
+            ? 'money_claim'
+            : null;
+
+      return NextResponse.json(
+        {
+          error: 'This product is no longer publicly available outside England.',
+          reason: 'public_england_only',
+          redirect_to: getPublicProductOwnerHref(normalizedProductType, fallbackCaseType),
+        },
+        { status: 409 }
+      );
+    }
+
     const requestedAddOnSkus = Array.from(
       new Set(
         (add_ons || [])

@@ -122,34 +122,36 @@ export interface ProductConfig {
 export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   notice_only: {
     sku: 'notice_only',
-    label: 'Eviction Notice Pack',
-    shortLabel: 'Notice Only',
-    description: 'Create the current England Form 3A notice, Wales notice, or Scotland Notice to Leave with service guidance',
+    label: 'Eviction Notice Generator (Section 8, May 2026)',
+    shortLabel: 'Eviction Notice Generator',
+    description:
+      'Generate a Section 8 notice for England under the post-May 2026 rules, with landlord checks on grounds, dates, service, and compliance before you serve',
     price: SEO_PRICES.evictionNotice.amount,
     displayPrice: SEO_PRICES.evictionNotice.display,
-    wizardHref: '/wizard?product=notice_only',
+    wizardHref: '/wizard/flow?type=eviction&product=notice_only&src=product_page&topic=eviction',
     productPageHref: SEO_LANDING_ROUTES.notice_only,
   },
   complete_pack: {
     sku: 'complete_pack',
     label: 'Complete Eviction Pack',
-    shortLabel: 'Complete Pack',
-    description: 'England-only court bundle with Form 3A notice, N5, N119, and filing guidance',
+    shortLabel: 'Complete Eviction Pack',
+    description:
+      'England-only court-possession bundle with the Section 8 notice route, N5, N119, and filing guidance',
     price: SEO_PRICES.evictionBundle.amount,
     displayPrice: SEO_PRICES.evictionBundle.display,
     priceNote: 'England only',
-    wizardHref: '/wizard?product=complete_pack',
+    wizardHref: '/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction',
     productPageHref: SEO_LANDING_ROUTES.complete_pack,
   },
   money_claim: {
     sku: 'money_claim',
     label: 'Money Claim Pack',
-    shortLabel: 'Money Claim',
-    description: 'Recover unpaid rent, damage, cleaning and other tenant debts',
+    shortLabel: 'Money Claim Pack',
+    description: 'Recover unpaid rent, damage, bills, and other tenant debts through the England money claim route',
     price: SEO_PRICES.moneyClaim.amount,
     displayPrice: SEO_PRICES.moneyClaim.display,
     priceNote: 'England only',
-    wizardHref: '/wizard?product=money_claim',
+    wizardHref: '/wizard/flow?type=money_claim&product=money_claim&src=product_page&topic=debt',
     productPageHref: SEO_LANDING_ROUTES.money_claim,
   },
   section13_standard: {
@@ -160,7 +162,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.section13Standard.amount,
     displayPrice: SEO_PRICES.section13Standard.display,
     priceNote: 'England only',
-    wizardHref: '/wizard?product=section13_standard&jurisdiction=england&src=product_page&topic=general',
+    wizardHref: '/wizard/flow?type=rent_increase&product=section13_standard&src=product_page&topic=general',
     productPageHref: SEO_LANDING_ROUTES.section13_standard,
   },
   section13_defensive: {
@@ -171,7 +173,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.section13Defensive.amount,
     displayPrice: SEO_PRICES.section13Defensive.display,
     priceNote: 'England only',
-    wizardHref: '/wizard?product=section13_defensive&jurisdiction=england&src=product_page&topic=general',
+    wizardHref: '/wizard/flow?type=rent_increase&product=section13_defensive&src=product_page&topic=general',
     productPageHref: SEO_LANDING_ROUTES.section13_defensive,
   },
   sc_money_claim: {
@@ -190,10 +192,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Standard Tenancy Agreement',
     shortLabel: 'Standard',
     description:
-      'Migration-safe standard tenancy agreement entry route for England, Wales, Scotland, and Northern Ireland',
+      'Legacy tenancy-agreement entry route retained for existing cases and older links',
     price: SEO_PRICES.tenancyStandard.amount,
     displayPrice: SEO_PRICES.tenancyStandard.display,
-    wizardHref: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
+    wizardHref: '/wizard/flow?type=tenancy_agreement&product=tenancy_agreement&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.ast_standard,
   },
   ast_premium: {
@@ -201,10 +203,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Premium Tenancy Agreement',
     shortLabel: 'Premium',
     description:
-      'Migration-safe premium tenancy agreement entry route for England and premium-tier tenancy flows in the rest of the UK',
+      'Legacy premium tenancy-agreement entry route retained for existing cases and older links',
     price: SEO_PRICES.tenancyPremium.amount,
     displayPrice: SEO_PRICES.tenancyPremium.display,
-    wizardHref: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
+    wizardHref: '/wizard/flow?type=tenancy_agreement&product=england_premium_tenancy_agreement&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.ast_premium,
   },
   england_standard_tenancy_agreement: {
@@ -216,7 +218,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.tenancyStandard.amount,
     displayPrice: SEO_PRICES.tenancyStandard.display,
     wizardHref:
-      '/wizard?product=england_standard_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+      '/wizard/flow?type=tenancy_agreement&product=england_standard_tenancy_agreement&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.england_standard_tenancy_agreement,
   },
   england_premium_tenancy_agreement: {
@@ -228,7 +230,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.tenancyPremium.amount,
     displayPrice: SEO_PRICES.tenancyPremium.display,
     wizardHref:
-      '/wizard?product=england_premium_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+      '/wizard/flow?type=tenancy_agreement&product=england_premium_tenancy_agreement&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.england_premium_tenancy_agreement,
   },
   england_student_tenancy_agreement: {
@@ -240,7 +242,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.tenancyStudent.amount,
     displayPrice: SEO_PRICES.tenancyStudent.display,
     wizardHref:
-      '/wizard?product=england_student_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+      '/wizard/flow?type=tenancy_agreement&product=england_student_tenancy_agreement&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.england_student_tenancy_agreement,
   },
   england_hmo_shared_house_tenancy_agreement: {
@@ -252,7 +254,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.tenancyHmoShared.amount,
     displayPrice: SEO_PRICES.tenancyHmoShared.display,
     wizardHref:
-      '/wizard?product=england_hmo_shared_house_tenancy_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+      '/wizard/flow?type=tenancy_agreement&product=england_hmo_shared_house_tenancy_agreement&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.england_hmo_shared_house_tenancy_agreement,
   },
   england_lodger_agreement: {
@@ -264,7 +266,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.tenancyLodger.amount,
     displayPrice: SEO_PRICES.tenancyLodger.display,
     wizardHref:
-      '/wizard?product=england_lodger_agreement&jurisdiction=england&src=product_page&topic=tenancy',
+      '/wizard/flow?type=tenancy_agreement&product=england_lodger_agreement&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.england_lodger_agreement,
   },
   residential_tenancy_application: {
@@ -275,7 +277,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     price: SEO_PRICES.residentialLettingStandard.amount,
     displayPrice: SEO_PRICES.residentialLettingStandard.display,
     priceNote: 'Legacy product',
-    wizardHref: '/wizard?product=residential_tenancy_application&jurisdiction=england',
+    wizardHref: '/wizard/flow?type=tenancy_agreement&product=residential_tenancy_application&src=product_page&topic=tenancy',
     productPageHref: SEO_LANDING_ROUTES.residential_tenancy_application,
   },
 };

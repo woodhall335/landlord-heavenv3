@@ -30,9 +30,9 @@ interface NavBarProps {
 type EffectiveHeaderState = 'solid' | 'transparent';
 
 const primaryLinks: NavItem[] = [
-  { href: "/products/notice-only", label: "Notice Only" },
-  { href: "/products/complete-pack", label: "Eviction Pack" },
-  { href: "/products/money-claim", label: "Money Claims" },
+  { href: "/products/notice-only", label: "Section 8 Notice" },
+  { href: "/products/complete-pack", label: "Complete Eviction Pack" },
+  { href: "/products/money-claim", label: "Money Claim Pack" },
   { href: "/rent-increase", label: "Rent Increase Guide" },
 ];
 

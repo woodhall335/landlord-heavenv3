@@ -238,8 +238,8 @@ export default function BlogPage() {
                   Built on the forms courts expect
                 </span>
                 <span className="flex items-center gap-2">
-                  <Image src="/images/wizard-icons/46-premium.png" alt="All UK jurisdictions" width={20} height={20} className="h-5 w-5" />
-                  All UK jurisdictions
+                  <Image src="/images/wizard-icons/46-premium.png" alt="England-only public products" width={20} height={20} className="h-5 w-5" />
+                  England-only public products
                 </span>
               </div>
             </div>

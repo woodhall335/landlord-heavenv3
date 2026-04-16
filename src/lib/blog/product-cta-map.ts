@@ -88,7 +88,7 @@ export function getBlogProductCta(
         'Use the right agreement for the property now so you are not fixing an old template later.',
       ctaLabel: 'Create your tenancy agreement',
       bullets: [
-        'Use the right agreement for England, Wales, Scotland, or Northern Ireland.',
+        'Choose the right England agreement route for the tenancy you are setting up.',
         'Avoid old wording that causes problems later.',
         'Preview it before you pay.',
       ],

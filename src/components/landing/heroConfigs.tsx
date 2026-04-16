@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { HeaderMode } from '@/components/layout/HeaderModeContext';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { PUBLIC_PRODUCT_DESCRIPTORS } from '@/lib/public-products';
 import type { UniversalHeroProps } from './UniversalHero';
 
 export type HeroConfig = Pick<
@@ -26,10 +27,9 @@ const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 const astSubtitle: ReactNode = (
   <>
-    Create the right tenancy agreement for your property tonight. Use a tenancy
-    agreement for England, an occupation contract for Wales, a PRT for Scotland,
-    or a private tenancy agreement for Northern Ireland without digging through
-    old templates.
+    Create the right tenancy agreement for your England let tonight. Choose the
+    correct Standard, Premium, Student, HMO / Shared House, or Lodger route
+    without digging through outdated templates.
   </>
 );
 
@@ -64,7 +64,7 @@ export const homeHeroConfig: HeroConfig = {
   ),
   primaryCta: {
     label: 'Find out which notice you need ->',
-    href: '/wizard?product=notice_only&topic=eviction&src=seo_homepage',
+    href: '/wizard?topic=eviction&src=seo_homepage',
   },
   secondaryCta: {
     label: 'Start recovering your rent ->',
@@ -87,11 +87,11 @@ export const astHeroConfig: HeroConfig = {
   subtitle: astSubtitle,
   primaryCta: {
     label: 'Choose your England agreement ->',
-    href: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.ast.wizardHref,
   },
   secondaryCta: {
     label: `Compare Premium agreement - ${astPremiumPrice}`,
-    href: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.england_premium_tenancy_agreement.wizardHref,
   },
   feature:
     'Pick the route that matches the property, occupiers, and management setup before problems start.',
@@ -105,16 +105,16 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('notice_only'),
   mediaSrc: '/images/notice_bundles.webp',
-  trustText: 'Evict a tenant legally | Landlord notice pack with route checks before you serve',
-  title: 'Eviction Notice Pack',
-  highlightTitle: 'for Landlords',
+  trustText: 'England Section 8 notice generator | Landlord checks before you serve',
+  title: 'Eviction Notice Generator',
+  highlightTitle: '(Section 8, May 2026)',
   subtitle:
-    'If your tenant is still in the property and you need to act, we help you choose, generate, and serve the right eviction notice for England, Wales, or Scotland so you do not lose time on the wrong route.',
+    'Generate the current England Section 8 notice with clearer checks on grounds, dates, service, and compliance before you serve anything.',
   primaryCta: {
-    label: 'Start your eviction notice pack ->',
-    href: '/wizard?product=notice_only&src=product_page&topic=eviction',
+    label: 'Start your eviction notice generator ->',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.wizardHref,
   },
-  feature: 'We help landlords evict tenants legally by lining up the notice route, dates, and service steps first.',
+  feature: 'We help landlords line up the Section 8 route, dates, and service steps before they serve.',
 };
 
 /* ============================================================
@@ -132,7 +132,7 @@ export const completePackHeroConfig: HeroConfig = {
     'If you need to evict a tenant for rent arrears or because they still will not leave after notice, this England pack brings together the notice, court forms, and filing guidance in one workflow.',
   primaryCta: {
     label: 'Start your England court pack ->',
-    href: '/wizard?product=complete_pack&src=product_page&topic=eviction',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.wizardHref,
   },
   feature: 'Generate Form 3A, N5, N119, and the supporting steps in one court-ready flow.',
 };
@@ -152,7 +152,7 @@ export const moneyClaimHeroConfig: HeroConfig = {
     'If your tenant owes rent, damage, bills, or other tenancy debt, this England pack helps you prepare the Letter Before Claim, Form N1, debt schedule, and supporting paperwork tonight.',
   primaryCta: {
     label: 'Start your money claim pack ->',
-    href: '/wizard?product=money_claim&topic=debt&src=product_page',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.wizardHref,
   },
   feature: 'Set out what is owed clearly before the debt file becomes harder to prove and recover.',
 };

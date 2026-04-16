@@ -386,54 +386,34 @@ JURISDICTION-SPECIFIC CONTEXT (Northern Ireland):
 }
 
 /**
- * Returns region-aware product availability guidance.
- * Used to inform AI responses about what products are available in each jurisdiction.
- *
- * Regional Product Availability (January 2026):
- * - England: All products (notice_only, complete_pack, money_claim, tenancy_agreement)
- * - Wales: notice_only, tenancy_agreement only
- * - Scotland: notice_only, tenancy_agreement only
- * - Northern Ireland: tenancy_agreement only
+ * Returns public product availability guidance.
+ * Public discovery is England-only. Historic non-England cases may still
+ * exist internally, but they should not be promoted as acquisition routes.
  */
 export function getRegionalProductGuidance(jurisdiction: string, product?: string): string {
   const normalizedJurisdiction = jurisdiction.toLowerCase();
 
-  // If product is specified, check if it's available
+  if (normalizedJurisdiction && normalizedJurisdiction !== 'england') {
+    return 'Public Landlord Heaven products are now England-only. Historic non-England cases may still be accessed directly through the account, but new public recommendations should point to the England product pages.';
+  }
+
   if (product) {
-    const englandOnlyProducts = ['complete_pack', 'eviction_pack', 'money_claim'];
-    const notAvailableInNI = ['notice_only', ...englandOnlyProducts];
-
-    if (normalizedJurisdiction === 'northern-ireland' && notAvailableInNI.includes(product)) {
-      return `⚠️ ${product} is not available in Northern Ireland. Only Tenancy Agreement is available for this jurisdiction.`;
-    }
-
-    if ((normalizedJurisdiction === 'wales' || normalizedJurisdiction === 'scotland') && englandOnlyProducts.includes(product)) {
-      const regionName = normalizedJurisdiction === 'wales' ? 'Wales' : 'Scotland';
-      const alternative = product === 'money_claim'
-        ? `Consider using Notice Only (${PRODUCTS.notice_only.displayPrice}) for rent arrears eviction notices instead.`
-        : `Consider using Notice Only (${PRODUCTS.notice_only.displayPrice}) for eviction notices instead.`;
-      return `⚠️ ${product} is only available in England, not ${regionName}. ${alternative}`;
+    switch (product) {
+      case 'notice_only':
+        return `Public product: Eviction Notice Generator (${PRODUCTS.notice_only.displayPrice}) for the England Section 8 route.`;
+      case 'complete_pack':
+      case 'eviction_pack':
+        return `Public product: Complete Eviction Pack (${PRODUCTS.complete_pack.displayPrice}) for the England court possession route.`;
+      case 'money_claim':
+        return `Public product: Money Claim Pack (${PRODUCTS.money_claim.displayPrice}) for England debt recovery.`;
+      case 'tenancy_agreement':
+        return 'Public product: England Tenancy Agreements hub with Standard, Premium, Student, HMO / Shared House, and Lodger routes.';
+      default:
+        break;
     }
   }
 
-  // General guidance by jurisdiction
-  switch (normalizedJurisdiction) {
-    case 'england':
-      return 'All products are available in England: Notice Only, Complete Pack, Money Claim Pack, and Tenancy Agreement.';
-
-    case 'wales':
-      return `In Wales, only Notice Only (${PRODUCTS.notice_only.displayPrice}) and Tenancy Agreement are available. Complete Pack and Money Claim Pack are England-only.`;
-
-    case 'scotland':
-      return `In Scotland, only Notice Only (${PRODUCTS.notice_only.displayPrice}) and Tenancy Agreement are available. Complete Pack and Money Claim Pack are England-only.`;
-
-    case 'northern-ireland':
-    case 'northern ireland':
-      return 'In Northern Ireland, only Tenancy Agreement is available. Eviction notices and Money Claim Pack are not currently supported.';
-
-    default:
-      return '';
-  }
+  return 'Public product availability is England-only across eviction, money claim, rent increase, and tenancy agreement acquisition routes.';
 }
 
 /**

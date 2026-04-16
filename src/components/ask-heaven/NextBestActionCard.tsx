@@ -69,19 +69,9 @@ function determineCTAMode(
 ): NextBestActionMode | null {
   if (!topic) return null;
 
-  // NI special handling - only tenancy mode allowed
-  if (jurisdiction === 'northern-ireland') {
-    if (topic === 'eviction' || topic === 'arrears') {
-      return null; // No CTA for eviction/arrears in NI
-    }
-    if (topic === 'tenancy' || topic === 'deposit') {
-      return 'tenancy';
-    }
-    // For compliance topics in NI, show checklist
-    if (isComplianceTopic(topic)) {
-      return 'checklist';
-    }
-    return null;
+  // Public product discovery is now England-only.
+  if (jurisdiction !== 'england') {
+    return isComplianceTopic(topic) ? 'checklist' : null;
   }
 
   // If API suggested a specific next step, respect it
@@ -129,26 +119,11 @@ function getEvictionCopy(jurisdiction: WizardJurisdiction): {
   description: string;
   buttonText: string;
 } {
-  switch (jurisdiction) {
-    case 'wales':
-      return {
-        title: 'Serve a Section 173 Notice',
-        description: 'Generate a Renting Homes Act compliant notice for Wales',
-        buttonText: 'Start Section 173 Wizard',
-      };
-    case 'scotland':
-      return {
-        title: 'Serve a Notice to Leave',
-        description: 'Create a compliant Notice to Leave for PRT tenancies',
-        buttonText: 'Start Notice to Leave Wizard',
-      };
-    default:
-      return {
-        title: 'Serve an Eviction Notice',
-        description: 'Create a compliant current England notice',
-        buttonText: 'Start England Notice Wizard',
-      };
-  }
+  return {
+    title: 'Serve a Section 8 Notice',
+    description: 'Create a compliant current England notice',
+    buttonText: 'Start England Notice Wizard',
+  };
 }
 
 /**
@@ -159,32 +134,11 @@ function getTenancyCopy(jurisdiction: WizardJurisdiction): {
   description: string;
   buttonText: string;
 } {
-  switch (jurisdiction) {
-    case 'wales':
-      return {
-        title: 'Create an Occupation Contract',
-        description: 'Generate a Renting Homes Act compliant occupation contract',
-        buttonText: 'Start Contract Wizard',
-      };
-    case 'scotland':
-      return {
-        title: 'Create a PRT Agreement',
-        description: 'Generate a compliant Private Residential Tenancy agreement',
-        buttonText: 'Start PRT Wizard',
-      };
-    case 'northern-ireland':
-      return {
-        title: 'Create a Tenancy Agreement',
-        description: 'Generate a compliant tenancy agreement for Northern Ireland',
-        buttonText: 'Start Agreement Wizard',
-      };
-    default:
-      return {
-        title: 'Create an England tenancy agreement',
-        description: 'Generate an England tenancy agreement designed for the assured periodic framework',
-        buttonText: 'Start Agreement Wizard',
-      };
-  }
+  return {
+    title: 'Create an England tenancy agreement',
+    description: 'Generate an England tenancy agreement designed for the assured periodic framework',
+    buttonText: 'Start Agreement Wizard',
+  };
 }
 
 /**
@@ -266,41 +220,6 @@ export function NextBestActionCard({
 
   // No mode determined - nothing to show
   if (!mode) {
-    // Special NI handling for eviction/arrears - show informational notice
-    if (jurisdiction === 'northern-ireland' && (topic === 'eviction' || topic === 'arrears')) {
-      return (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 mt-4">
-          <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100">
-              <RiCheckboxCircleLine className="h-5 w-5 text-amber-600" />
-            </div>
-            <div>
-              <h4 className="text-sm font-semibold text-amber-800">Northern Ireland Notice</h4>
-              <p className="text-xs text-amber-700 mt-1">
-                Eviction and money claim packs are not currently available for Northern Ireland.
-                We recommend consulting with a local solicitor for possession proceedings.
-              </p>
-              <Link
-                href={buildWizardLink({
-                  product: 'ast_standard',
-                  jurisdiction: 'northern-ireland',
-                  src: 'ask_heaven',
-                  topic: 'tenancy',
-                  utm_source: attribution?.utm_source,
-                  utm_medium: attribution?.utm_medium,
-                  utm_campaign: attribution?.utm_campaign,
-                })}
-                className="inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 bg-amber-100 text-amber-800 text-xs font-medium rounded-lg hover:bg-amber-200 transition-colors"
-                onClick={() => onCtaClick?.('wizard', '/wizard?product=ast_standard&jurisdiction=northern-ireland', 'NI Tenancy Agreement')}
-              >
-                Need a tenancy agreement instead?
-                <RiArrowRightLine className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      );
-    }
     return null;
   }
 

@@ -145,24 +145,21 @@ export default function AboutPage() {
                 <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
                   <CheckCircle2 className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="text-2xl font-semibold text-charcoal mb-4">UK-Wide Coverage</h3>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">England-Only Public Coverage</h3>
                 <p className="text-gray-700 mb-4">
-                  We support England & Wales, Scotland, AND Northern Ireland. Different
-                  jurisdictions have different laws - we handle all of them.
+                  The public site is now focused on England only, so the acquisition journey, SEO pages,
+                  and product routing all match the England rules landlords are searching for.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li className="flex items-center gap-2">
                     <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-4" />
-                    <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-4" />
-                    England & Wales: current possession notices, tenancy agreements, and court forms
+                    England: Section 8 notice generation, court possession packs, money claims, rent increases, and tenancy agreements
                   </li>
                   <li className="flex items-center gap-2">
-                    <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-4" />
-                    Scotland: Notice to Leave, PRTs, AT6
+                    Historic non-England cases remain accessible through direct account support only
                   </li>
                   <li className="flex items-center gap-2">
-                    <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-4" />
-                    Northern Ireland: Tenancy agreements (eviction notices coming 2026)
+                    Public discovery, navigation, and recommendations now follow a single England-first product catalog
                   </li>
                 </ul>
               </div>
@@ -190,13 +187,13 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Documents Built for the Real Process</h3>
                 <p className="text-gray-700 mb-4">
-                  Our documents use the official forms and formats landlords are expected to rely on across the UK. The goal is to help you start with the right paperwork and avoid obvious errors that slow cases down.
+                  Our documents use the official forms and formats landlords are expected to rely on for the England routes we publicly support. The goal is to help you start with the right paperwork and avoid obvious errors that slow cases down.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>Official Form 3A, N5, AT6, and related court formats</li>
+                  <li>Official Form 3A, N5, N119, and related England court formats</li>
                   <li>Comply with latest legislation</li>
                   <li>Smart validation before generation</li>
-                  <li>Accepted by all UK courts</li>
+                  <li>Built for the England possession and tenancy routes we publicly sell</li>
                 </ul>
               </div>
             </div>
@@ -244,9 +241,9 @@ export default function AboutPage() {
                 <div>
                   <h3 className="text-xl font-semibold text-charcoal mb-2">Continuous Improvement</h3>
                   <p className="text-gray-700">
-                    UK tenancy law changes constantly. We update our templates and logic every time
-                    legislation changes. Recent updates: Renters Reform Bill monitoring, Scotland rent controls, NI
-                    tenancy deposit changes.
+                    England landlord law changes constantly. We update our public templates and logic
+                    every time the live England routes change, including the post-1 May 2026 eviction
+                    and tenancy framework updates.
                   </p>
                 </div>
               </div>

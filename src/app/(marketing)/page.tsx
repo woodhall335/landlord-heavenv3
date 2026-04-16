@@ -22,7 +22,7 @@ export const metadata = generateMetadata({
     'recover rent arrears',
     'money claim',
     'landlord eviction help',
-    'UK landlord documents',
+    'england landlord documents',
   ],
 });
 

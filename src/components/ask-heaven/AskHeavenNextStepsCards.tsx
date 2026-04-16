@@ -2,10 +2,17 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { PRODUCTS, TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
 import { cn } from '@/lib/utils';
-import { productLinks } from '@/lib/seo/internal-links';
-import { RiFileList3Line, RiScales3Line, RiMoneyPoundCircleLine, RiFileTextLine } from 'react-icons/ri';
+import {
+  RiFileCheckLine,
+  RiFileList3Line,
+  RiMoneyPoundCircleLine,
+  RiScales3Line,
+} from 'react-icons/ri';
+import {
+  PUBLIC_PRODUCT_DESCRIPTORS,
+} from '@/lib/public-products';
+import { TENANCY_AGREEMENT_FROM_PRICE } from '@/lib/pricing/products';
 
 type AskHeavenCardJurisdiction = 'england' | 'wales' | 'scotland' | 'n_ireland' | 'northern-ireland';
 
@@ -21,66 +28,56 @@ interface CardDefinition {
   ctaText: string;
   href: string;
   ariaLabel: string;
-  detail?: string;
   icon: React.ReactNode;
 }
 
-export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }: AskHeavenNextStepsCardsProps) {
-  const allCards: CardDefinition[] = [
-    {
-      title: 'Notice Only Pack',
-      price: PRODUCTS.notice_only.displayPrice,
-      description:
-        'Best if you need to serve or check the current notice route for your jurisdiction.',
-      ctaText: 'Generate a compliant notice',
-      href: productLinks.noticeOnly.href,
-      ariaLabel: 'Open Notice Only Pack',
-      icon: <RiFileList3Line className="h-8 w-8 text-violet-500" aria-hidden="true" />,
-    },
-    {
-      title: 'Complete Eviction Pack',
-      price: PRODUCTS.complete_pack.displayPrice,
-      detail: '(England)',
-      description: "Best if you're going to court and want a full, court-ready eviction bundle.",
-      ctaText: 'Prepare your eviction case',
-      href: productLinks.completePack.href,
-      ariaLabel: 'Open Complete Eviction Pack',
-      icon: <RiScales3Line className="h-8 w-8 text-violet-500" aria-hidden="true" />,
-    },
-    {
-      title: 'Money Claims Pack',
-      price: PRODUCTS.money_claim.displayPrice,
-      description: 'Best for claiming back rent arrears, damage costs, or unpaid invoices.',
-      ctaText: 'Prepare a money claim',
-      href: productLinks.moneyClaim.href,
-      ariaLabel: 'Open Money Claims Pack',
-      icon: <RiMoneyPoundCircleLine className="h-8 w-8 text-emerald-500" aria-hidden="true" />,
-    },
-    {
-      title: 'Tenancy Agreements',
-      price: TENANCY_AGREEMENT_FROM_PRICE,
-      description: 'Best for creating or updating a legally compliant tenancy agreement.',
-      ctaText: 'Create a tenancy agreement',
-      href: productLinks.tenancyAgreement.href,
-      ariaLabel: 'Open Tenancy Agreements',
-      icon: <RiFileTextLine className="h-8 w-8 text-violet-500" aria-hidden="true" />,
-    },
-  ];
+const cards: CardDefinition[] = [
+  {
+    title: 'Eviction Notice Generator',
+    price: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.priceLabel,
+    description:
+      'England-only Section 8 route for landlords who need the notice, service guidance, and early route checks before serving.',
+    ctaText: 'Open Section 8 notice product',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
+    ariaLabel: 'Open Eviction Notice Generator',
+    icon: <RiFileList3Line className="h-8 w-8 text-violet-500" aria-hidden="true" />,
+  },
+  {
+    title: 'Complete Eviction Pack',
+    price: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.priceLabel,
+    description:
+      'England-only court possession route for landlords who want the notice, N5, N119, and filing guidance in one product.',
+    ctaText: 'Open court possession pack',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
+    ariaLabel: 'Open Complete Eviction Pack',
+    icon: <RiScales3Line className="h-8 w-8 text-violet-500" aria-hidden="true" />,
+  },
+  {
+    title: 'Money Claim Pack',
+    price: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.priceLabel,
+    description:
+      'England-only debt recovery route for unpaid rent, damage, bills, guarantor claims, and former-tenant debt.',
+    ctaText: 'Open money claim product',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
+    ariaLabel: 'Open Money Claim Pack',
+    icon: <RiMoneyPoundCircleLine className="h-8 w-8 text-emerald-500" aria-hidden="true" />,
+  },
+  {
+    title: 'England Tenancy Agreements',
+    price: TENANCY_AGREEMENT_FROM_PRICE,
+    description:
+      'Choose the right England agreement for Standard, Premium, Student, HMO / Shared House, or Lodger use.',
+    ctaText: 'Open tenancy agreement hub',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
+    ariaLabel: 'Open England Tenancy Agreements',
+    icon: <RiFileCheckLine className="h-8 w-8 text-violet-500" aria-hidden="true" />,
+  },
+];
 
-  const normalizedJurisdiction =
-    jurisdiction === 'n_ireland' ? 'northern-ireland' : jurisdiction;
-
-  const cards = allCards.filter((card) => {
-    if (normalizedJurisdiction === 'england') return true;
-    if (normalizedJurisdiction === 'wales' || normalizedJurisdiction === 'scotland') {
-      return card.title === 'Notice Only Pack' || card.title === 'Tenancy Agreements';
-    }
-    if (normalizedJurisdiction === 'northern-ireland') {
-      return card.title === 'Tenancy Agreements';
-    }
-    return true;
-  });
-
+export function AskHeavenNextStepsCards({
+  jurisdiction = 'england',
+  className,
+}: AskHeavenNextStepsCardsProps) {
   return (
     <section
       className={cn('overflow-visible', className)}
@@ -91,8 +88,13 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
         id="ask-heaven-next-steps-heading"
         className="text-center text-3xl font-bold tracking-tight text-gray-800"
       >
-        What we can help you do next
+        What we can help you do next in England
       </h2>
+      <p className="mx-auto mt-3 max-w-3xl text-center text-sm leading-6 text-gray-600">
+        Public recommendations now point to England-only products. Historic non-England cases can
+        still be resumed directly through the account, but they are no longer promoted as public
+        acquisition paths.
+      </p>
 
       <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {cards.map((card) => (
@@ -112,8 +114,7 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
                 {card.icon}
               </div>
               <h3 className="text-lg font-semibold leading-tight text-gray-900">
-                {card.title} <span className="font-medium text-gray-700">— {card.price}</span>{' '}
-                {card.detail && <span className="text-gray-600">{card.detail}</span>}
+                {card.title} <span className="font-medium text-gray-700">— {card.price}</span>
               </h3>
             </div>
 
@@ -142,4 +143,3 @@ export function AskHeavenNextStepsCards({ jurisdiction = 'england', className }:
 }
 
 export default AskHeavenNextStepsCards;
-

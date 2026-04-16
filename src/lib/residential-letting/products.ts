@@ -1,4 +1,3 @@
-import { buildWizardLink } from '@/lib/wizard/buildWizardLink';
 import { isRetiredPublicSku } from '@/lib/public-retirements';
 import {
   formatFromPriceLabel,
@@ -239,12 +238,14 @@ export function isPublicResidentialLettingProductSku(
 }
 
 export function getResidentialWizardHref(product: ResidentialLettingProductSku): string {
-  return buildWizardLink({
+  const params = new URLSearchParams({
+    type: 'tenancy_agreement',
     product,
-    jurisdiction: 'england',
     src: 'product_page',
     topic: RESIDENTIAL_LETTING_PRODUCTS[product].topic,
   });
+
+  return `/wizard/flow?${params.toString()}`;
 }
 
 export function getResidentialLandingHref(product: ResidentialLettingProductSku): string {

@@ -1,8 +1,9 @@
 /**
  * Wizard Flow Page
  *
- * The main structured wizard experience
- * Receives document type and jurisdiction from URL params
+ * The main structured wizard experience.
+ * Public starts are England-only; hidden legacy resumes can still carry
+ * historic non-England jurisdiction context through direct case access.
  */
 
 'use client';
@@ -41,6 +42,11 @@ import {
   getRetiredPublicSkuRedirectDestination,
   isRetiredPublicSku,
 } from '@/lib/public-retirements';
+import {
+  PUBLIC_PRODUCT_DESCRIPTORS,
+  getPublicProductOwnerHref,
+  isPubliclyStartableProduct,
+} from '@/lib/public-products';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
@@ -76,7 +82,7 @@ function WizardFlowContent() {
   const hasStartedRef = useRef(false);
 
   const type = searchParams.get('type') as CaseType | null;
-  const jurisdiction = searchParams.get('jurisdiction') as Jurisdiction;
+  const rawJurisdiction = searchParams.get('jurisdiction') as Jurisdiction;
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
   const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
@@ -90,6 +96,9 @@ function WizardFlowContent() {
     .map((field) => field.trim())
     .filter(Boolean)
     .map((field) => TENANCY_FIELD_TO_SECTION[field] || field);
+  const publicJurisdictionBlocked =
+    !editCaseId && Boolean(rawJurisdiction && rawJurisdiction !== 'england');
+  const jurisdiction = (editCaseId ? rawJurisdiction : rawJurisdiction ?? 'england') as Jurisdiction;
 
   // SAFETY GUARD: For editing paid cases, use order's product_type to prevent downgrade
   const [effectiveProduct, setEffectiveProduct] = useState<string | null>(product);
@@ -137,6 +146,7 @@ function WizardFlowContent() {
   useEffect(() => {
     if (
       editCaseId ||
+      publicJurisdictionBlocked ||
       type !== 'tenancy_agreement' ||
       jurisdiction !== 'england' ||
       !product
@@ -151,19 +161,30 @@ function WizardFlowContent() {
 
     const params = new URLSearchParams(searchParams.toString());
     params.set('product', canonicalProduct);
+    params.delete('jurisdiction');
     router.replace(`/wizard/flow?${params.toString()}`);
-  }, [editCaseId, jurisdiction, product, router, searchParams, type]);
+  }, [editCaseId, jurisdiction, product, publicJurisdictionBlocked, router, searchParams, type]);
 
   useEffect(() => {
+    if (publicJurisdictionBlocked) {
+      router.replace(getPublicProductOwnerHref(product, type));
+      return;
+    }
+
     if (!editCaseId && product && isRetiredPublicSku(product)) {
-      router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement-template');
+      router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/products/ast');
+      return;
+    }
+
+    if (!editCaseId && product && product !== 'tenancy_agreement' && !isPubliclyStartableProduct(product)) {
+      router.replace(getPublicProductOwnerHref(product, type));
       return;
     }
 
     if (!hasRequiredParams) {
       router.push('/wizard');
     }
-  }, [editCaseId, hasRequiredParams, product, router]);
+  }, [editCaseId, hasRequiredParams, product, publicJurisdictionBlocked, router, type]);
 
   // Normalize product for Ask Heaven / wizard - use effectiveProduct (order-aware)
   const isPaidLegacyEnglandTenancy =
@@ -272,8 +293,13 @@ function WizardFlowContent() {
     setStartError(null);
 
     try {
+      if (publicJurisdictionBlocked) {
+        router.replace(getPublicProductOwnerHref(product, type));
+        return;
+      }
+
       if (!editCaseId && product && isRetiredPublicSku(product)) {
-        router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/tenancy-agreement-template');
+        router.replace(getRetiredPublicSkuRedirectDestination(product) ?? '/products/ast');
         return;
       }
 
@@ -389,7 +415,7 @@ function WizardFlowContent() {
     } finally {
       setLoading(false);
     }
-  }, [editCaseId, jurisdiction, product, productVariant, recoveryToken, router, searchParams, type]);
+  }, [editCaseId, jurisdiction, product, productVariant, publicJurisdictionBlocked, recoveryToken, router, searchParams, type]);
 
   useEffect(() => {
     if (!hasRequiredParams) {
@@ -464,10 +490,78 @@ function WizardFlowContent() {
   const handleSelectEnglandProduct = (selectedProduct: EnglandModernTenancyProductSku) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('type', 'tenancy_agreement');
-    params.set('jurisdiction', 'england');
     params.set('product', selectedProduct);
+    params.delete('jurisdiction');
     params.delete('case_id');
     router.push(`/wizard/flow?${params.toString()}`);
+  };
+
+  const renderEnglandEvictionSwitcher = () => {
+    if (type !== 'eviction' || jurisdiction !== 'england') {
+      return null;
+    }
+
+    const activeProduct = askHeavenProduct === 'notice_only' ? 'notice_only' : 'complete_pack';
+    const productChoices = [
+      {
+        key: 'notice_only' as const,
+        title: 'Eviction Notice Generator',
+        subtitle: 'Section 8, May 2026',
+      },
+      {
+        key: 'complete_pack' as const,
+        title: 'Complete Eviction Pack',
+        subtitle: 'Notice through court possession',
+      },
+    ];
+
+    return (
+      <div className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+              England Eviction Products
+            </p>
+            <p className="mt-1 text-sm text-slate-600">
+              Switch between the Section 8 notice generator and the full court possession pack without restarting.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {productChoices.map((choice) => {
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('type', 'eviction');
+              params.set('product', PUBLIC_PRODUCT_DESCRIPTORS[choice.key].productType);
+              params.delete('jurisdiction');
+              params.delete('case_id');
+
+              const isActive = activeProduct === choice.key;
+
+              return (
+                <button
+                  key={choice.key}
+                  type="button"
+                  onClick={() => {
+                    if (!isActive) {
+                      router.push(`/wizard/flow?${params.toString()}`);
+                    }
+                  }}
+                  className={`rounded-2xl border px-4 py-3 text-left transition ${
+                    isActive
+                      ? 'border-slate-900 bg-slate-900 text-white'
+                      : 'border-slate-200 bg-slate-50 text-slate-900 hover:border-slate-300 hover:bg-white'
+                  }`}
+                >
+                  <div className="text-sm font-semibold">{choice.title}</div>
+                  <div className={`mt-1 text-xs ${isActive ? 'text-slate-300' : 'text-slate-500'}`}>
+                    {choice.subtitle}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   // Show loading state while initializing or checking order status
@@ -500,7 +594,6 @@ function WizardFlowContent() {
     // Get reason param for SEO landing page pre-selection (e.g. reason=property_damage,cleaning)
     const reasonParam = searchParams.get('reason') || undefined;
 
-    // We support money claims for England, Wales, and Scotland
     return (
       <MoneyClaimSectionFlow
         caseId={caseId}
@@ -538,10 +631,13 @@ function WizardFlowContent() {
     (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
-      <EvictionSectionFlow
-        caseId={caseId}
-        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
-      />
+      <>
+        {renderEnglandEvictionSwitcher()}
+        <EvictionSectionFlow
+          caseId={caseId}
+          jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
+        />
+      </>
     );
   }
 
@@ -554,10 +650,13 @@ function WizardFlowContent() {
     (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
-      <NoticeOnlySectionFlow
-        caseId={caseId}
-        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
-      />
+      <>
+        {renderEnglandEvictionSwitcher()}
+        <NoticeOnlySectionFlow
+          caseId={caseId}
+          jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
+        />
+      </>
     );
   }
 

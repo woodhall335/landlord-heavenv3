@@ -86,7 +86,7 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
     },
     {
       href: '/products/notice-only',
-      label: 'Notice Only Bundle',
+      label: 'Eviction Notice Generator',
       priority: 3,
     },
   ],
@@ -472,7 +472,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     });
     steps.push({
       href: SEO_PRODUCT_ROUTES.noticeOnly,
-      label: 'Notice Only Bundle',
+      label: 'Eviction Notice Generator',
       priority: 3,
     });
   }
@@ -498,7 +498,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     });
     steps.push({
       href: SEO_PRODUCT_ROUTES.noticeOnly,
-      label: 'Notice Only Bundle',
+      label: 'Eviction Notice Generator',
       priority: 3,
     });
   }
@@ -540,7 +540,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
         steps.push(getNonEnglandArrearsStep(jurisdiction));
         steps.push({
           href: SEO_PRODUCT_ROUTES.noticeOnly,
-          label: 'Notice Only Bundle',
+          label: 'Eviction Notice Generator',
           priority: 3,
         });
       } else {
@@ -587,7 +587,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     if (!steps.some((s) => s.href.includes('notice-only'))) {
       steps.push({
         href: SEO_PRODUCT_ROUTES.noticeOnly,
-        label: 'Notice Only Bundle',
+        label: 'Eviction Notice Generator',
         priority: 3,
       });
     }
@@ -614,7 +614,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     if (!steps.some((s) => s.href.includes('notice-only'))) {
       steps.push({
         href: SEO_PRODUCT_ROUTES.noticeOnly,
-        label: 'Notice Only Bundle',
+        label: 'Eviction Notice Generator',
         priority: 3,
       });
     }
