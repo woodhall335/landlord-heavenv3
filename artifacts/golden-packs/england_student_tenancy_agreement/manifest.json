@@ -52,7 +52,7 @@
         "html": "england_student_tenancy_agreement/england-keys-handover-record.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -137,15 +137,7 @@
       "documentType": "tenancy_deposit_information",
       "fileName": "prescribed_information_pack.pdf",
       "files": {
-        "pdf": "england_student_tenancy_agreement/prescribed_information_pack.pdf",
-        "text": "england_student_tenancy_agreement/prescribed_information_pack.txt",
         "html": "england_student_tenancy_agreement/prescribed_information_pack.html"
-      },
-      "extraction": {
-        "pageCount": 5,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
       }
     },
     {
@@ -155,15 +147,7 @@
       "documentType": "guarantor_agreement",
       "fileName": "guarantor-agreement.pdf",
       "files": {
-        "pdf": "england_student_tenancy_agreement/guarantor-agreement.pdf",
-        "text": "england_student_tenancy_agreement/guarantor-agreement.txt",
         "html": "england_student_tenancy_agreement/guarantor-agreement.html"
-      },
-      "extraction": {
-        "pageCount": 7,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
       }
     },
     {

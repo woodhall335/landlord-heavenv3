@@ -174,8 +174,11 @@ function toText(value: unknown): string {
 }
 
 function yesNoText(value: unknown, trueLabel = 'Yes', falseLabel = 'No'): string {
+  const normalized = toText(value).toLowerCase();
   if (value === true) return trueLabel;
   if (value === false) return falseLabel;
+  if (normalized === 'yes' || normalized === 'true') return trueLabel;
+  if (normalized === 'no' || normalized === 'false') return falseLabel;
   return toText(value);
 }
 
@@ -211,7 +214,7 @@ function formatIsoDateText(value: unknown): string {
   return `${Number(day)} ${monthNames[Number(month) - 1]} ${year}`;
 }
 
-function formatMoney(value: unknown): string {
+function legacyFormatMoney(value: unknown): string {
   if (typeof value === 'string' && value.trim().startsWith('£')) {
     return value.trim();
   }
@@ -219,6 +222,21 @@ function formatMoney(value: unknown): string {
   const numeric = Number(value);
   if (!Number.isFinite(numeric) || numeric <= 0) return '';
   return `£${numeric.toFixed(2)}`;
+}
+
+function formatMoney(value: unknown): string {
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (trimmed.startsWith('£')) {
+      return trimmed;
+    }
+    if (trimmed.startsWith('Â£')) {
+      return trimmed.replace(/^Â£/, '£');
+    }
+  }
+
+  const legacyFormatted = legacyFormatMoney(value);
+  return legacyFormatted.replace(/^Â£/, '£');
 }
 
 function splitEntries(value: unknown): string[] {
@@ -246,10 +264,74 @@ const PREMIUM_VALUE_LABELS: Record<string, string> = {
   reasonable_notice_flexible: 'Flexible timing with reasonable notice',
 };
 
+const RENT_FREQUENCY_LABELS: Record<string, string> = {
+  month: 'Monthly',
+  monthly: 'Monthly',
+  week: 'Weekly',
+  weekly: 'Weekly',
+  fortnightly: 'Fortnightly',
+  quarterly: 'Quarterly',
+  yearly: 'Yearly',
+};
+
+const INSPECTION_FREQUENCY_LABELS: Record<string, string> = {
+  quarterly: 'Quarterly',
+  every_6_months: 'Every 6 months',
+  annually: 'Annually',
+  as_needed: 'As needed',
+};
+
+const SMOKING_POLICY_LABELS: Record<string, string> = {
+  no: 'No',
+  yes: 'Yes',
+  vaping_only: 'Vaping only',
+};
+
+const SUBLETTING_POLICY_LABELS: Record<string, string> = {
+  not_allowed: 'Not allowed',
+  written_consent: 'Only with written consent',
+  allowed: 'Allowed',
+};
+
+const HMO_LICENCE_STATUS_LABELS: Record<string, string> = {
+  not_required: 'Not required',
+  currently_licensed: 'Currently licensed',
+  applied_awaiting: 'Applied / awaiting',
+};
+
+const COMMUNAL_CLEANING_LABELS: Record<string, string> = {
+  professional_cleaner: 'Professional cleaner',
+  tenants_share: 'Tenants share',
+  landlord: 'Landlord',
+  not_applicable: 'Not applicable',
+};
+
+const RESIDENTIAL_DOCUMENT_REFERENCE_CODES: Partial<Record<ResidentialLettingProductSku, string>> = {
+  england_standard_tenancy_agreement: 'ENGLAND-STANDARD-TA',
+  england_premium_tenancy_agreement: 'ENGLAND-PREMIUM-TA',
+  england_student_tenancy_agreement: 'ENGLAND-STUDENT-TA',
+  england_hmo_shared_house_tenancy_agreement: 'ENGLAND-HMO-SHARED-HOUSE-TA',
+  england_lodger_agreement: 'ENGLAND-LODGER-AGREEMENT',
+};
+
+function toTitleCaseWords(text: string): string {
+  return text.replace(/\b([a-z])/g, (match) => match.toUpperCase());
+}
+
+function formatSelectionValue(value: unknown, labels: Record<string, string> = {}): string {
+  const text = toText(value);
+  if (!text) return '';
+
+  const direct = labels[text] || labels[text.toLowerCase()];
+  if (direct) return direct;
+
+  return toTitleCaseWords(text.replace(/_/g, ' '));
+}
+
 function formatPremiumOption(value: unknown): string {
   const text = toText(value);
   if (!text) return '';
-  return PREMIUM_VALUE_LABELS[text] || text.replace(/_/g, ' ');
+  return PREMIUM_VALUE_LABELS[text] || formatSelectionValue(text);
 }
 
 function buildLabeledObservation(label: string, value: unknown): string | undefined {
@@ -1119,9 +1201,9 @@ function getTemplateSections(
           rows: [
             { label: 'Tenancy start date', value: shared.tenancy_start_date },
             { label: 'Rent', value: rentDisplay },
-            { label: 'Rent frequency', value: facts.rent_frequency },
+            { label: 'Rent frequency', value: buildEnglandRentFrequencyText(facts.rent_frequency) },
             { label: 'Rent due day', value: facts.rent_due_day },
-            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Payment method', value: buildEnglandPaymentMethodText(facts) },
             { label: 'Deposit', value: depositDisplay },
             { label: 'Included bills', value: facts.included_bills_notes },
           ],
@@ -1139,10 +1221,10 @@ function getTemplateSections(
         createSection({
           heading: 'Property Rules and Practical Management',
           rows: [
-            { label: 'Pets at the start', value: facts.pets_allowed },
-            { label: 'Smoking inside', value: facts.smoking_allowed },
-            { label: 'Subletting / Airbnb policy', value: facts.subletting_allowed },
-            { label: 'Inspection frequency', value: facts.inspection_frequency },
+            { label: 'Pets at the start', value: yesNoText(facts.pets_allowed) },
+            { label: 'Smoking inside', value: buildEnglandSmokingPolicyText(facts.smoking_allowed) },
+            { label: 'Subletting / Airbnb policy', value: buildEnglandSublettingPolicyText(facts.subletting_allowed) },
+            { label: 'Inspection frequency', value: buildEnglandInspectionFrequencyText(facts.inspection_frequency) },
           ],
           bullets: [
             'The Tenant must keep the Property reasonably clean, ventilated, and heated and must report defects or disrepair promptly.',
@@ -1172,9 +1254,9 @@ function getTemplateSections(
           rows: [
             { label: 'Tenancy start date', value: shared.tenancy_start_date },
             { label: 'Rent', value: rentDisplay },
-            { label: 'Rent frequency', value: facts.rent_frequency },
+            { label: 'Rent frequency', value: buildEnglandRentFrequencyText(facts.rent_frequency) },
             { label: 'Rent due day', value: facts.rent_due_day },
-            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Payment method', value: buildEnglandPaymentMethodText(facts) },
             { label: 'Deposit', value: depositDisplay },
             { label: 'Rent increase wording', value: facts.rent_increase_method },
             { label: 'Guarantor expected', value: facts.guarantor_expected },
@@ -1232,10 +1314,10 @@ function getTemplateSections(
         createSection({
           heading: 'Property Rules and Occupation Controls',
           rows: [
-            { label: 'Pets at the start', value: facts.pets_allowed },
-            { label: 'Smoking inside', value: facts.smoking_allowed },
-            { label: 'Subletting / Airbnb policy', value: facts.subletting_allowed },
-            { label: 'Inspection frequency', value: facts.inspection_frequency },
+            { label: 'Pets at the start', value: yesNoText(facts.pets_allowed) },
+            { label: 'Smoking inside', value: buildEnglandSmokingPolicyText(facts.smoking_allowed) },
+            { label: 'Subletting / Airbnb policy', value: buildEnglandSublettingPolicyText(facts.subletting_allowed) },
+            { label: 'Inspection frequency', value: buildEnglandInspectionFrequencyText(facts.inspection_frequency) },
           ],
           bullets: [
             ...splitEntries(facts.additional_terms),
@@ -1252,10 +1334,10 @@ function getTemplateSections(
             { label: 'Property', value: shared.property_address },
             { label: 'Landlord', value: shared.landlord_name },
             { label: 'Tenant(s)', value: tenantNames },
-            { label: 'All full-time students', value: facts.all_tenants_full_time_students },
-            { label: 'Joint agreement', value: facts.joint_tenancy },
-            { label: 'Guarantor required', value: facts.guarantor_required },
-            { label: 'Tenant replacement procedure', value: facts.student_replacement_procedure },
+            { label: 'All full-time students', value: yesNoText(facts.all_tenants_full_time_students) },
+            { label: 'Joint agreement', value: yesNoText(facts.joint_tenancy) },
+            { label: 'Guarantor required', value: yesNoText(facts.guarantor_required) },
+            { label: 'Tenant replacement procedure', value: yesNoText(facts.student_replacement_procedure) },
           ],
         }),
         createSection({
@@ -1263,9 +1345,9 @@ function getTemplateSections(
           rows: [
             { label: 'Tenancy start date', value: shared.tenancy_start_date },
             { label: 'Rent', value: rentDisplay },
-            { label: 'Rent frequency', value: facts.rent_frequency },
+            { label: 'Rent frequency', value: buildEnglandRentFrequencyText(facts.rent_frequency) },
             { label: 'Rent due day', value: facts.rent_due_day },
-            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Payment method', value: buildEnglandPaymentMethodText(facts) },
             { label: 'Deposit', value: depositDisplay },
           ],
           bullets: [
@@ -1310,10 +1392,10 @@ function getTemplateSections(
             { label: 'Property', value: shared.property_address },
             { label: 'Landlord', value: shared.landlord_name },
             { label: 'Tenant(s)', value: tenantNames },
-            { label: 'HMO or licensable shared house', value: facts.is_hmo },
+            { label: 'HMO or licensable shared house', value: yesNoText(facts.is_hmo) },
             { label: 'Number of sharers / rooms', value: facts.number_of_sharers },
-            { label: 'Unrelated households', value: facts.unrelated_households },
-            { label: 'Room-by-room / shared occupation', value: facts.room_by_room_occupation },
+            { label: 'Unrelated households', value: yesNoText(facts.unrelated_households) },
+            { label: 'Room-by-room / shared occupation', value: yesNoText(facts.room_by_room_occupation) },
           ],
         }),
         createSection({
@@ -1321,18 +1403,18 @@ function getTemplateSections(
           rows: [
             { label: 'Tenancy start date', value: shared.tenancy_start_date },
             { label: 'Rent', value: rentDisplay },
-            { label: 'Rent frequency', value: facts.rent_frequency },
+            { label: 'Rent frequency', value: buildEnglandRentFrequencyText(facts.rent_frequency) },
             { label: 'Rent due day', value: facts.rent_due_day },
-            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Payment method', value: buildEnglandPaymentMethodText(facts) },
             { label: 'Deposit', value: depositDisplay },
-            { label: 'HMO licence status', value: facts.hmo_licence_status },
+            { label: 'HMO licence status', value: buildEnglandHmoLicenceStatusText(facts.hmo_licence_status) },
           ],
         }),
         createSection({
           heading: 'Communal Areas and Shared Facilities',
           rows: [
             { label: 'Communal areas', value: facts.communal_areas },
-            { label: 'Communal cleaning', value: facts.communal_cleaning },
+            { label: 'Communal cleaning', value: buildEnglandCommunalCleaningText(facts.communal_cleaning) },
           ],
           bullets: [
             'The communal areas should be used reasonably and kept in a condition that reflects shared occupation.',
@@ -1359,8 +1441,8 @@ function getTemplateSections(
             { label: 'Property', value: shared.property_address },
             { label: 'Resident landlord', value: shared.landlord_name },
             { label: 'Lodger', value: tenantNames },
-            { label: 'Resident landlord confirmed', value: facts.resident_landlord_confirmed },
-            { label: 'Shared kitchen or bathroom', value: facts.shared_kitchen_or_bathroom },
+            { label: 'Resident landlord confirmed', value: yesNoText(facts.resident_landlord_confirmed) },
+            { label: 'Shared kitchen or bathroom', value: yesNoText(facts.shared_kitchen_or_bathroom) },
             { label: 'Occupation start date', value: shared.tenancy_start_date },
           ],
         }),
@@ -1368,7 +1450,7 @@ function getTemplateSections(
           heading: 'Room Let Terms',
           rows: [
             { label: 'Rent', value: rentDisplay },
-            { label: 'Payment frequency', value: facts.rent_frequency },
+            { label: 'Payment frequency', value: buildEnglandRentFrequencyText(facts.rent_frequency) },
             { label: 'Deposit', value: depositDisplay },
             { label: 'Licence notice period', value: facts.licence_notice_period },
             { label: 'Services included', value: facts.services_included },
@@ -1514,7 +1596,17 @@ function getTemplateSections(
             { label: 'Rent due day', value: firstNonEmpty(facts.sublet_rent_due_day, facts.rent_due_day) },
             { label: 'Deposit', value: subletDepositDisplay },
             { label: 'Bills / utilities arrangement', value: firstNonEmpty(facts.sublet_bills_arrangement, facts.utilities_responsibility) },
-            { label: 'Payment method', value: firstNonEmpty(facts.payment_method, facts.sublet_payment_method) },
+            {
+              label: 'Payment method',
+              value: formatSelectionValue(
+                firstNonEmpty(facts.payment_method, facts.sublet_payment_method).toLowerCase().replace(/\s+/g, '_'),
+                {
+                  standing_order: 'Bank transfer',
+                  bank_transfer: 'Bank transfer',
+                  cash: 'Cash',
+                }
+              ),
+            },
           ],
           bullets: [
             'The Subtenant must pay rent and any agreed utility contribution on the due dates stated above.',
@@ -1976,7 +2068,7 @@ function getTemplateSections(
             { label: 'Instalment amount', value: instalmentAmount },
             { label: 'Instalment frequency', value: facts.repayment_frequency },
             { label: 'Final settlement date', value: firstNonEmpty(facts.final_deadline, facts.repayment_end_date) },
-            { label: 'Payment method', value: facts.payment_method },
+            { label: 'Payment method', value: buildEnglandPaymentMethodText(facts) },
           ],
         }),
         createSection({
@@ -2105,11 +2197,34 @@ function buildDocumentReference(
   product: ResidentialLettingProductSku,
   shared: SharedResidentialData
 ): string {
-  const suffix = toText(shared.facts.case_id)
-    ? toText(shared.facts.case_id).slice(-8).toUpperCase()
-    : toText(shared.current_date).replace(/-/g, '');
+  const suffix = buildDocumentReferenceSuffix(shared);
 
-  return `RL-${product.replace(/_/g, '-').toUpperCase()}-${suffix}`;
+  const referenceCode =
+    RESIDENTIAL_DOCUMENT_REFERENCE_CODES[product] || product.replace(/_/g, '-').toUpperCase();
+
+  return `RL-${referenceCode}-${suffix}`;
+}
+
+function buildDocumentReferenceSuffix(shared: SharedResidentialData): string {
+  const caseId = toText(shared.facts.case_id);
+  if (!caseId) return toText(shared.current_date).replace(/-/g, '');
+
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(caseId)) {
+    return caseId.replace(/-/g, '').slice(-8).toUpperCase();
+  }
+
+  const segments = caseId
+    .replace(/[^A-Za-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toUpperCase()
+    .split('-')
+    .filter(Boolean);
+
+  if (segments.length >= 2) {
+    return segments.slice(-2).join('-');
+  }
+
+  return segments[0] || toText(shared.current_date).replace(/-/g, '');
 }
 
 function buildTemplateData(
@@ -2203,7 +2318,9 @@ function buildRentArrearsLetterData(
   const paymentDeadlineText = formatIsoDateText(paymentDeadline);
   const responseDeadline = firstNonEmpty(facts.response_deadline, facts.final_deadline, paymentDeadline);
   const responseDeadlineText = formatIsoDateText(responseDeadline);
-  const paymentMethod = firstNonEmpty(facts.payment_method, 'Bank transfer');
+  const paymentMethod = buildEnglandPaymentMethodText({
+    payment_method: firstNonEmpty(facts.payment_method, 'bank_transfer'),
+  });
   const paymentDetails = firstNonEmpty(
     facts.payment_details,
     facts.payment_reference_override,
@@ -2391,14 +2508,40 @@ function buildEnglandRentDueDayText(facts: Record<string, any>): string {
 }
 
 function buildEnglandPaymentMethodText(facts: Record<string, any>): string {
-  const text = toText(facts.payment_method).toLowerCase().replace(/\s+/g, '_');
-  if (text === 'standing_order' || text === 'bank_transfer') {
-    return 'Bank transfer';
-  }
-  if (text === 'cash') {
-    return 'Cash';
-  }
-  return toText(facts.payment_method);
+  return formatSelectionValue(toText(facts.payment_method).toLowerCase().replace(/\s+/g, '_'), {
+    standing_order: 'Bank transfer',
+    bank_transfer: 'Bank transfer',
+    cash: 'Cash',
+  });
+}
+
+function buildEnglandRentFrequencyText(value: unknown): string {
+  return formatSelectionValue(value, RENT_FREQUENCY_LABELS);
+}
+
+function buildEnglandInspectionFrequencyText(value: unknown): string {
+  return formatSelectionValue(value, INSPECTION_FREQUENCY_LABELS);
+}
+
+function buildEnglandSmokingPolicyText(value: unknown): string {
+  return formatSelectionValue(value, SMOKING_POLICY_LABELS);
+}
+
+function buildEnglandSublettingPolicyText(value: unknown): string {
+  return formatSelectionValue(value, SUBLETTING_POLICY_LABELS);
+}
+
+function buildEnglandHmoLicenceStatusText(value: unknown): string {
+  return formatSelectionValue(value, HMO_LICENCE_STATUS_LABELS);
+}
+
+function buildEnglandCommunalCleaningText(value: unknown): string {
+  return formatSelectionValue(value, COMMUNAL_CLEANING_LABELS);
+}
+
+function buildStatementLine(label: string, value: unknown): string {
+  const text = toText(value);
+  return text ? `${label}: ${text}.` : '';
 }
 
 function buildEnglandIncludedBillsText(facts: Record<string, any>): string {
@@ -2620,7 +2763,7 @@ function buildEnglandAssuredSections(
       heading: 'Rent, Payment Method, and Bill Treatment',
       rows: [
         { label: 'Rent', value: formatMoney(shared.rent_amount) || shared.rent_amount },
-        { label: 'Rent period', value: firstNonEmpty(facts.rent_frequency, facts.rent_period, 'month') },
+        { label: 'Rent period', value: buildEnglandRentFrequencyText(firstNonEmpty(facts.rent_frequency, facts.rent_period, 'month')) },
         { label: 'Rent due day', value: buildEnglandRentDueDayText(facts) },
         { label: 'Payment method', value: buildEnglandPaymentMethodText(facts) },
         { label: 'Bills included in rent', value: yesNoText(facts.bills_included_in_rent) },
@@ -2735,9 +2878,9 @@ function buildEnglandAssuredSections(
         isTruthySelection(facts.england_no_bidding_confirmed)
           ? 'The landlord confirms that the tenancy was not granted through a prohibited bidding process in the recorded answers.'
           : '',
-        `Pets authorised at the start: ${yesNoText(facts.pets_allowed)}.`,
-        `Smoking policy: ${firstNonEmpty(facts.smoking_allowed, 'Not stated')}.`,
-        `Subletting / short-let policy: ${firstNonEmpty(facts.subletting_allowed, 'Not stated')}.`,
+        buildStatementLine('Pets authorised at the start', yesNoText(facts.pets_allowed)),
+        buildStatementLine('Smoking policy', buildEnglandSmokingPolicyText(facts.smoking_allowed)),
+        buildStatementLine('Subletting / short-let policy', buildEnglandSublettingPolicyText(facts.subletting_allowed)),
       ],
     }),
     createSection({
@@ -2749,12 +2892,12 @@ function buildEnglandAssuredSections(
         product === 'england_standard_tenancy_agreement'
           ? [
               'This standard product is intended for an ordinary whole-property residential let and records the core occupation, payment, access, and house-rule terms without the wider operational clauses used in the premium route.',
-              `Inspection frequency recorded: ${firstNonEmpty(facts.inspection_frequency, 'Not stated')}.`,
+              buildStatementLine('Inspection frequency recorded', buildEnglandInspectionFrequencyText(facts.inspection_frequency)),
             ]
           : product === 'england_premium_tenancy_agreement'
             ? [
                 'This premium product is still an ordinary residential tenancy route, but it records fuller operational detail for inspections, reporting lines, keys, hand-back expectations, and management arrangements.',
-                `Inspection frequency recorded: ${firstNonEmpty(facts.inspection_frequency, 'Not stated')}.`,
+                buildStatementLine('Inspection frequency recorded', buildEnglandInspectionFrequencyText(facts.inspection_frequency)),
                 firstNonEmpty(
                   facts.management_contact_channel
                     ? `Primary management contact channel: ${formatPremiumOption(facts.management_contact_channel)}.`
@@ -2814,9 +2957,9 @@ function buildEnglandAssuredSections(
                 ].filter(Boolean)
               : [
                   'This HMO / shared-house route records communal-area arrangements, sharer responsibilities, and HMO-related operational detail in the main agreement.',
-                  `HMO licence status recorded: ${firstNonEmpty(facts.hmo_licence_status, 'Not stated')}.`,
-                  `Communal areas: ${firstNonEmpty(facts.communal_areas, 'Not stated')}.`,
-                  `Communal cleaning: ${firstNonEmpty(facts.communal_cleaning, 'Not stated')}.`,
+                  buildStatementLine('HMO licence status recorded', buildEnglandHmoLicenceStatusText(facts.hmo_licence_status)),
+                  buildStatementLine('Communal areas', facts.communal_areas),
+                  buildStatementLine('Communal cleaning', buildEnglandCommunalCleaningText(facts.communal_cleaning)),
                   firstNonEmpty(
                     facts.visitor_policy ? `Visitor policy: ${facts.visitor_policy}` : '',
                     ''
@@ -2859,7 +3002,7 @@ function buildEnglandAssuredSections(
                 { label: 'Number of sharers / rooms', value: facts.number_of_sharers },
                 { label: 'Communal areas', value: facts.communal_areas },
                 { label: 'Shared facilities schedule', value: facts.shared_facilities_schedule },
-                { label: 'Communal cleaning', value: facts.communal_cleaning },
+                { label: 'Communal cleaning', value: buildEnglandCommunalCleaningText(facts.communal_cleaning) },
                 { label: 'Visitor policy', value: facts.visitor_policy },
                 { label: 'Quiet hours', value: facts.quiet_hours },
                 { label: 'Waste and recycling arrangements', value: facts.waste_collection_arrangements },
@@ -2868,7 +3011,7 @@ function buildEnglandAssuredSections(
             : cleanRows([
                 { label: 'House rules / additional operational notes', value: facts.house_rules_notes || facts.additional_terms },
                 { label: 'Access notice expectation', value: facts.landlord_access_notice },
-                { label: 'Inspection frequency', value: facts.inspection_frequency },
+                { label: 'Inspection frequency', value: buildEnglandInspectionFrequencyText(facts.inspection_frequency) },
               ]),
     }),
     createSection({
@@ -2987,9 +3130,9 @@ function buildEnglandLodgerAgreementSections(shared: SharedResidentialData): Tem
       heading: 'Licence Fee, Bills, and Included Services',
       rows: [
         { label: 'Licence fee / rent', value: formatMoney(shared.rent_amount) || shared.rent_amount },
-        { label: 'Payment frequency', value: facts.rent_period || 'month' },
+        { label: 'Payment frequency', value: buildEnglandRentFrequencyText(facts.rent_period || 'month') },
         { label: 'Payment due day', value: facts.rent_due_day },
-        { label: 'Payment method', value: facts.payment_method },
+        { label: 'Payment method', value: buildEnglandPaymentMethodText(facts) },
         { label: 'Bills included', value: buildEnglandBillCoverageText(facts) },
       ],
       paragraphs: [
@@ -3003,7 +3146,7 @@ function buildEnglandLodgerAgreementSections(shared: SharedResidentialData): Tem
         { label: 'Guest policy', value: facts.guest_policy },
         { label: 'Quiet hours', value: facts.quiet_hours },
         { label: 'Shared-space cleaning arrangements', value: facts.shared_space_cleaning },
-        { label: 'Smoking policy', value: facts.smoking_allowed },
+        { label: 'Smoking policy', value: buildEnglandSmokingPolicyText(facts.smoking_allowed) },
         { label: 'Pets authorised at start', value: yesNoText(facts.pets_allowed) },
       ],
       bullets: [
@@ -3146,7 +3289,7 @@ function buildEnglandPetRequestAddendumSections(shared: SharedResidentialData): 
         { label: 'Property', value: shared.property_address },
         { label: 'Tenant(s)', value: shared.tenant_names },
         { label: 'Pets authorised at the start', value: yesNoText(facts.pets_allowed) },
-        { label: 'Current smoking policy', value: facts.smoking_allowed },
+        { label: 'Current smoking policy', value: buildEnglandSmokingPolicyText(facts.smoking_allowed) },
       ],
       paragraphs: [
         'Use this addendum to record a tenant pet request, the landlord response, any conditions attached to consent, and the date the request was considered.',
@@ -3187,7 +3330,7 @@ function buildEnglandPremiumManagementScheduleSections(shared: SharedResidential
         { label: 'Primary management contact channel', value: formatPremiumOption(facts.management_contact_channel) },
         { label: 'Repairs reporting contact', value: facts.repair_reporting_contact },
         { label: 'Repairs response expectation', value: formatPremiumOption(facts.repair_response_timeframe) },
-        { label: 'Inspection frequency', value: facts.inspection_frequency },
+        { label: 'Inspection frequency', value: buildEnglandInspectionFrequencyText(facts.inspection_frequency) },
         { label: 'Routine inspection window', value: formatPremiumOption(facts.routine_inspection_window) },
         { label: 'Keys and access devices', value: facts.key_holders_summary },
         { label: 'Contractor access procedure', value: facts.contractor_access_procedure },
@@ -3239,7 +3382,7 @@ function buildEnglandHmoHouseRulesSections(shared: SharedResidentialData): Templ
       rows: [
         { label: 'Communal areas', value: facts.communal_areas },
         { label: 'Shared facilities schedule', value: facts.shared_facilities_schedule },
-        { label: 'Communal cleaning', value: facts.communal_cleaning },
+        { label: 'Communal cleaning', value: buildEnglandCommunalCleaningText(facts.communal_cleaning) },
         { label: 'Visitor policy', value: facts.visitor_policy },
         { label: 'Quiet hours', value: facts.quiet_hours },
         { label: 'Waste and recycling arrangements', value: facts.waste_collection_arrangements },

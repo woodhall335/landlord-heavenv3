@@ -119,15 +119,7 @@
       "documentType": "deposit_protection_certificate",
       "fileName": "deposit_protection_certificate.pdf",
       "files": {
-        "pdf": "england_premium_tenancy_agreement/deposit_protection_certificate.pdf",
-        "text": "england_premium_tenancy_agreement/deposit_protection_certificate.txt",
         "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html"
-      },
-      "extraction": {
-        "pageCount": 4,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
       }
     },
     {
@@ -137,15 +129,7 @@
       "documentType": "tenancy_deposit_information",
       "fileName": "prescribed_information_pack.pdf",
       "files": {
-        "pdf": "england_premium_tenancy_agreement/prescribed_information_pack.pdf",
-        "text": "england_premium_tenancy_agreement/prescribed_information_pack.txt",
         "html": "england_premium_tenancy_agreement/prescribed_information_pack.html"
-      },
-      "extraction": {
-        "pageCount": 5,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
       }
     },
     {
@@ -160,7 +144,7 @@
         "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

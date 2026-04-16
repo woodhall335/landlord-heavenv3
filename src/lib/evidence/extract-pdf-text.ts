@@ -121,6 +121,21 @@ const METADATA_PATTERNS = [
   /^created\s+by/im,
 ];
 
+const EXTRACTED_TEXT_MOJIBAKE_REPLACEMENTS: Array<[RegExp, string]> = [
+  [/Â£/g, '£'],
+  [/Ã¢ËœÂ/g, '[ ]'],
+  [/â˜/g, '[ ]'],
+  [/âœ…/g, '[x]'],
+  [/âš ï¸/g, 'IMPORTANT:'],
+  [/âš /g, 'IMPORTANT:'],
+  [/â€¢/g, '•'],
+  [/â€“|â€”/g, '-'],
+  [/â€œ|â€�/g, '"'],
+  [/â€˜|â€™/g, "'"],
+  [/â€¦/g, '...'],
+  [/Â©/g, '©'],
+];
+
 export interface PdfExtractionResult {
   /** Extracted text content */
   text: string;
@@ -165,7 +180,13 @@ function isMetadataOnlyText(text: string): boolean {
  * Clean extracted text by removing excessive whitespace and control characters.
  */
 function cleanExtractedText(text: string): string {
-  return text
+  let cleaned = text;
+
+  for (const [pattern, replacement] of EXTRACTED_TEXT_MOJIBAKE_REPLACEMENTS) {
+    cleaned = cleaned.replace(pattern, replacement);
+  }
+
+  return cleaned
     // Replace multiple newlines with double newline
     .replace(/\n{3,}/g, '\n\n')
     // Replace multiple spaces with single space

@@ -8,6 +8,7 @@ vi.mock('@/lib/documents/official-forms-filler', () => ({
 
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import * as forms from '@/lib/documents/official-forms-filler';
+import { generateDocument } from '@/lib/documents/generator';
 
 // Mock the PDF filler to avoid pdf-lib issues in vitest
 vi.mock('@/lib/documents/official-forms-filler', async () => {
@@ -219,5 +220,25 @@ describe('Money claim pack generator', () => {
       expect(interestDoc?.category).toBe('guidance');
       expect(interestDoc?.description).toContain('Section 69');
     });
+  });
+
+  it('falls back claimant reference to the case id when none is provided', async () => {
+    const mockedGenerateDocument = vi.mocked(generateDocument);
+    mockedGenerateDocument.mockClear();
+
+    await generateMoneyClaimPack({
+      ...sampleCase,
+      case_id: 'claim-ref-fallback-001',
+      claimant_reference: undefined,
+    });
+
+    const filingGuideCall = mockedGenerateDocument.mock.calls.find(
+      ([args]) => args.templatePath.includes('money_claims/filing_guide.hbs')
+    );
+
+    expect(filingGuideCall?.[0].data.claimant_reference).toBe('claim-ref-fallback-001');
+    expect((forms.fillN1Form as any).mock.calls.at(-1)?.[0]?.claimant_reference).toBe(
+      'claim-ref-fallback-001'
+    );
   });
 });

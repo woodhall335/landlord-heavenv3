@@ -353,8 +353,13 @@ function buildPreActionSummary(claim: MoneyClaimCase): string {
   return segments.join(' ');
 }
 
+function resolveClaimantReference(claim: MoneyClaimCase): string {
+  return claim.claimant_reference?.trim() || claim.case_id?.trim() || 'LANDLORD-HEAVEN-MC';
+}
+
 function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseData {
   const service = buildServiceContact(claim);
+  const claimantReference = resolveClaimantReference(claim);
 
   return {
     // Landlord / claimant core details
@@ -388,7 +393,7 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
     total_claim_amount: totals.total_claim_amount,
     court_fee: totals.court_fee,
     solicitor_costs: totals.solicitor_costs,
-    claimant_reference: claim.claimant_reference,
+    claimant_reference: claimantReference,
     court_name: claim.court_name,
 
     // Money claim line items (for N1 brief details detection)
@@ -455,9 +460,11 @@ async function generateEnglandMoneyClaimPack(
   const formattedSignatureDate = formatUKLegalDate(claim.signature_date || generationDate);
   const formattedTenancyStartDate = formatUKLegalDate(claim.tenancy_start_date);
   const formattedInterestStartDate = formatUKLegalDate(claim.interest_start_date);
+  const claimantReference = resolveClaimantReference(claim);
 
   const baseTemplateData = {
     ...claim,
+    claimant_reference: claimantReference,
     ...totals,
     // All dates pre-formatted as UK legal format (DD Month YYYY)
     generation_date: formattedGenerationDate,

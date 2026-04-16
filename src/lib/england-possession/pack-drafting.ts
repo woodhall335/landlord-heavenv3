@@ -227,7 +227,23 @@ function extractNarrativeCandidates(data: DraftingInput): string[] {
     data.case_summary,
   ]
     .map((value) => String(value || '').trim())
+    .filter((value) => !isGeneratedArrearsSummary(value))
     .filter(Boolean);
+}
+
+function isGeneratedArrearsSummary(text: string): boolean {
+  if (!text) return false;
+
+  const normalized = text
+    .replace(/\s+/g, ' ')
+    .replace(/Â£/g, '£')
+    .trim()
+    .toLowerCase();
+
+  return (
+    /^total arrears[:\s]+£?\d[\d,.]*(?:\.\d{2})?$/.test(normalized) ||
+    /^total arrears[:\s]+gbp\s*\d[\d,.]*(?:\.\d{2})?$/.test(normalized)
+  );
 }
 
 export function isThinEnglandNarrative(text: string): boolean {

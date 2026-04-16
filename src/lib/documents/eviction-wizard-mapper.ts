@@ -317,7 +317,7 @@ function buildEvictionCaseFromFacts(
     case_id: caseId,
     jurisdiction: jurisdiction as any,
     case_type: caseType,
-    case_summary: facts.court.particulars_of_claim || facts.issues.section8_grounds.arrears_breakdown || '',
+    case_summary: facts.court.particulars_of_claim || '',
     landlord_full_name: facts.parties.landlord.name || '',
     landlord_2_name: facts.parties.landlord.co_claimant || undefined,
     landlord_address: landlordAddress || '',

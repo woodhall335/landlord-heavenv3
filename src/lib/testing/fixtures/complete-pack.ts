@@ -43,7 +43,7 @@ export function buildEnglandSection8CompletePackFacts(options: BuildSection8Opti
   const period2Start = toIsoDate(oneMonthAgo);
   const period2End = toIsoDate(new Date(oneMonthAgo.getFullYear(), oneMonthAgo.getMonth() + 1, 0));
 
-  return {
+  const baseFacts = {
     __meta: { case_id: 'EVICT-CLI-SEC8', jurisdiction: 'england' },
     landlord_name: 'Alex Landlord',
     landlord_address_line1: '1 High Street',
@@ -97,8 +97,21 @@ export function buildEnglandSection8CompletePackFacts(options: BuildSection8Opti
         rent_arrears_amount: 2400,
       },
     },
+  } as any;
+
+  const mergedFacts = {
+    ...baseFacts,
     ...overrides,
   } as any;
+
+  if (!overrides.arrears_breakdown) {
+    const totalArrears = Number(mergedFacts.total_arrears ?? mergedFacts.rent_arrears_amount ?? 0);
+    if (Number.isFinite(totalArrears) && totalArrears > 0) {
+      mergedFacts.arrears_breakdown = `Total arrears £${totalArrears.toFixed(0)}`;
+    }
+  }
+
+  return mergedFacts;
 }
 
 export function buildEnglandSection21CompletePackFacts(options: BuildSection21Options = {}) {

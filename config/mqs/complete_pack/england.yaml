@@ -187,7 +187,7 @@ questions:
     helperText: "Current rent amount and payment frequency"
     fields:
       - id: rent_amount
-        label: "Monthly rent amount (Â£)"
+            label: "Monthly rent amount (£)"
         inputType: number
         validation:
           required: true
@@ -285,7 +285,7 @@ questions:
       questionId: eviction_route
       value: "section_8"
     helperText: "Describe the facts supporting each ground, including dates, arrears, prior notices, specialist-landlord eligibility, and evidence."
-    placeholder: "E.g., Ground 8: Rent arrears currently stand at Â£3,200, representing 10 weeks of unpaid rent. Last payment received 15/10/2025."
+            placeholder: "E.g., Ground 8: Rent arrears currently stand at £3,200, representing 10 weeks of unpaid rent. Last payment received 15/10/2025."
     validation:
       required: true
     maps_to:
@@ -388,14 +388,14 @@ questions:
     helperText: "Enter the total arrears for Forms N5 and N119. Required for arrears grounds (8, 10, 11)."
     fields:
       - id: total_arrears
-        label: "Total arrears outstanding (Â£)"
+            label: "Total arrears outstanding (£)"
         inputType: number
         validation:
           required: true
         width: half
         maps_to: total_arrears
       - id: arrears_at_notice_date
-        label: "Arrears at date of notice (Â£)"
+            label: "Arrears at date of notice (£)"
         inputType: number
         helperText: "Amount outstanding when notice was served"
         width: half
@@ -434,13 +434,13 @@ questions:
           label: "Period end"
           type: date
         - id: rent_due
-          label: "Rent due (Â£)"
+                label: "Rent due (£)"
           type: number
         - id: rent_paid
-          label: "Rent paid (Â£)"
+                label: "Rent paid (£)"
           type: number
         - id: amount_owed
-          label: "Amount owed (Â£)"
+                label: "Amount owed (£)"
           type: calculated
           formula: "rent_due - rent_paid"
     maps_to:
@@ -1649,13 +1649,13 @@ questions:
     helperText: "Ground 8 is MANDATORY if arrears are 13+ weeks (weekly) or 3+ months (monthly) at both the notice date and the hearing date."
     fields:
       - id: g8_arrears_at_notice
-        label: "Arrears when notice was served (Â£)"
+            label: "Arrears when notice was served (£)"
         inputType: number
         validation:
           required: true
         width: half
       - id: g8_arrears_current
-        label: "Current arrears (Â£)"
+            label: "Current arrears (£)"
         inputType: number
         validation:
           required: true
@@ -1665,7 +1665,7 @@ questions:
         inputType: date
         width: half
       - id: g8_last_payment_amount
-        label: "Amount of last payment (Â£)"
+            label: "Amount of last payment (£)"
         inputType: number
         width: half
       - id: g8_payment_demands_sent
@@ -1701,7 +1701,7 @@ questions:
     helperText: "Ground 10 is DISCRETIONARY - some rent is owed. Court considers reasonableness."
     fields:
       - id: g10_arrears_amount
-        label: "Current arrears (Â£)"
+            label: "Current arrears (£)"
         inputType: number
         validation:
           required: true
@@ -1846,7 +1846,7 @@ questions:
           required: true
         width: half
       - id: g13_damage_cost
-        label: "Estimated cost to repair (Â£)"
+            label: "Estimated cost to repair (£)"
         inputType: number
         width: half
       - id: g13_evidence_available
@@ -1993,7 +1993,7 @@ questions:
           required: true
         width: full
       - id: g15_damage_cost
-        label: "Estimated cost of damage (Â£)"
+            label: "Estimated cost of damage (£)"
         inputType: number
         width: half
       - id: g15_inventory_available
@@ -2079,7 +2079,7 @@ questions:
         label: "Communication log"
         inputType: textarea
         helperText: "For each communication, include: DATE | METHOD (email/letter/phone/in-person) | SUMMARY | TENANT'S RESPONSE"
-        placeholder: "Example:\n15/01/2025 | Email | Sent rent demand for Â£1,200 | Tenant promised to pay by 20th\n22/01/2025 | Phone | Called re unpaid rent | No answer\n25/01/2025 | Letter | Formal written warning | Tenant replied saying would pay in February"
+            placeholder: "Example:\n15/01/2025 | Email | Sent rent demand for £1,200 | Tenant promised to pay by 20th\n22/01/2025 | Phone | Called re unpaid rent | No answer\n25/01/2025 | Letter | Formal written warning | Tenant replied saying would pay in February"
         validation:
           required: false
         width: full

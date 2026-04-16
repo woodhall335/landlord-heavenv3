@@ -920,6 +920,88 @@ describe('generateResidentialLettingDocuments', () => {
       hmoPack.documents.find((document) => document.document_type === 'england_hmo_house_rules_appendix')?.html
     ).toContain('HMO / Shared House Rules Appendix');
   });
+  test('cleans fallback wording and raw codes from England tenancy outputs', async () => {
+    const standardPack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      createBaseEnglandAssuredFacts(),
+      { outputFormat: 'html' }
+    );
+
+    const hmoPack = await generateResidentialLettingDocuments(
+      'england_hmo_shared_house_tenancy_agreement',
+      createBaseEnglandAssuredFacts({
+        is_hmo: 'yes',
+        number_of_sharers: 5,
+        communal_areas: 'Kitchen, lounge, bathroom, and garden',
+        hmo_licence_status: 'currently_licensed',
+        communal_cleaning: 'professional_cleaner',
+      }),
+      { outputFormat: 'html' }
+    );
+
+    const lodgerPack = await generateResidentialLettingDocuments(
+      'england_lodger_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        rent_period: 'month',
+        payment_method: 'bank_transfer',
+        rent_amount: 850,
+        resident_landlord_confirmed: true,
+        shared_kitchen_or_bathroom: true,
+        house_rules_notes: 'No overnight guests without prior agreement.',
+      },
+      { outputFormat: 'html' }
+    );
+
+    const standardHtml = standardPack.documents[0].html.replace(/&#163;/g, '£');
+    const hmoHtml = hmoPack.documents[0].html.replace(/&#163;/g, '£');
+    const lodgerHtml = lodgerPack.documents[0].html.replace(/&#163;/g, '£');
+
+    expect(standardHtml).not.toContain('Pets authorised at the start: .');
+    expect(standardHtml).not.toContain('Smoking policy: Not stated.');
+    expect(standardHtml).not.toContain('Subletting / short-let policy: Not stated.');
+    expect(standardHtml).not.toContain('Inspection frequency recorded: Not stated.');
+    expect(standardHtml).toContain('RL-ENGLAND-STANDARD-TA-55555555');
+
+    expect(hmoHtml).toContain('Currently licensed');
+    expect(hmoHtml).toContain('Professional cleaner');
+    expect(hmoHtml).not.toContain('currently_licensed');
+    expect(hmoHtml).not.toContain('professional_cleaner');
+
+    expect(lodgerHtml).toContain('Bank transfer');
+    expect(lodgerHtml).toContain('Monthly');
+    expect(lodgerHtml).toContain('RL-ENGLAND-LODGER-AGREEMENT-55555555');
+  });
+  test('uses readable suffixes for human-friendly case ids in England tenancy references', async () => {
+    const standardPack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      createBaseEnglandAssuredFacts({
+        case_id: 'golden-standard-tenancy-001',
+      }),
+      { outputFormat: 'html' }
+    );
+
+    const lodgerPack = await generateResidentialLettingDocuments(
+      'england_lodger_agreement',
+      {
+        ...baseFacts,
+        case_id: 'golden-lodger-001',
+        tenancy_start_date: '2026-05-02',
+        resident_landlord_confirmed: true,
+        shared_kitchen_or_bathroom: true,
+      },
+      { outputFormat: 'html' }
+    );
+
+    const standardHtml = standardPack.documents[0].html.replace(/&#163;/g, '£');
+    const lodgerHtml = lodgerPack.documents[0].html.replace(/&#163;/g, '£');
+
+    expect(standardHtml).toContain('RL-ENGLAND-STANDARD-TA-TENANCY-001');
+    expect(standardHtml).not.toContain('RL-ENGLAND-STANDARD-TA-ANCY-001');
+    expect(lodgerHtml).toContain('RL-ENGLAND-LODGER-AGREEMENT-LODGER-001');
+    expect(lodgerHtml).not.toContain('RL-ENGLAND-LODGER-AGREEMENT-DGER-001');
+  });
 });
 
 

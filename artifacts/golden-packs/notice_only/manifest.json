@@ -29,15 +29,7 @@
       "documentType": "service_instructions",
       "fileName": "service_instructions_s8.pdf",
       "files": {
-        "pdf": "notice_only/service_instructions_s8.pdf",
-        "text": "notice_only/service_instructions_s8.txt",
         "html": "notice_only/service_instructions_s8.html"
-      },
-      "extraction": {
-        "pageCount": 2,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
       }
     },
     {
@@ -47,15 +39,7 @@
       "documentType": "validity_checklist",
       "fileName": "validity_checklist_s8.pdf",
       "files": {
-        "pdf": "notice_only/validity_checklist_s8.pdf",
-        "text": "notice_only/validity_checklist_s8.txt",
         "html": "notice_only/validity_checklist_s8.html"
-      },
-      "extraction": {
-        "pageCount": 2,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
       }
     },
     {

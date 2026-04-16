@@ -228,6 +228,7 @@ describe('Section 8 document hardening', () => {
       expect(checklistText).toContain('Earliest proceedings date');
       expect(caseSummaryText).toContain('Notice expiry date');
       expect(caseSummaryText).toContain('Earliest proceedings date');
+      expect(caseSummaryText).not.toContain('Additional case detail supplied by the landlord: Total arrears');
 
       expectNoDebugLeakage(letterHtml);
     },

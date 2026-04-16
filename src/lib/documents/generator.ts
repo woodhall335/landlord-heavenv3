@@ -19,12 +19,37 @@ const PDF_RENDER_NON_BREAKING_HYPHENS = /\u2011/g;
 const PDF_RENDER_LINE_SEPARATOR_CHARS = /[\u2028\u2029]/g;
 const PDF_RENDER_CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 
+const PDF_RENDER_MOJIBAKE_REPLACEMENTS: Array<[RegExp, string]> = [
+  [/Â£/g, '£'],
+  [/Ã¢ËœÂ/g, '[ ]'],
+  [/â˜/g, '[ ]'],
+  [/âœ…/g, '[x]'],
+  [/âš ï¸/g, 'IMPORTANT:'],
+  [/âš /g, 'IMPORTANT:'],
+  [/â€¢/g, '•'],
+  [/â€“|â€”/g, '-'],
+  [/â€œ|â€�/g, '"'],
+  [/â€˜|â€™/g, "'"],
+  [/â€¦/g, '...'],
+  [/Â©/g, '©'],
+];
+
+function normalizePdfRenderMojibake(input: string): string {
+  let result = input;
+
+  for (const [pattern, replacement] of PDF_RENDER_MOJIBAKE_REPLACEMENTS) {
+    result = result.replace(pattern, replacement);
+  }
+
+  return result;
+}
+
 export function sanitizeTextForPdfRendering(input: string): string {
   if (!input || typeof input !== 'string') {
     return '';
   }
 
-  return input
+  return normalizePdfRenderMojibake(input)
     .normalize('NFC')
     .replace(PDF_RENDER_INVISIBLE_BREAK_CHARS, '')
     .replace(PDF_RENDER_NON_BREAKING_SPACES, ' ')
