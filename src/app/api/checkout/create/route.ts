@@ -74,14 +74,14 @@ const ADD_ON_ELIGIBLE_PRODUCTS = [
  * Map product types to configured Stripe Price IDs
  * These IDs are validated for configuration safety, while charged amounts still
  * come from src/lib/pricing/products.ts via price_data.
- * Note: money_claim and sc_money_claim (discontinued) share the same Stripe price ID.
+ * Note: Scotland money-claim checkout has been discontinued and is intentionally
+ * excluded from active checkout validation.
  * Jurisdiction-specific display SKUs (prt_*, occupation_*, ni_*) map to the same prices as ast_*
  */
 const PRODUCT_TO_PRICE_ID: Record<string, string> = {
   notice_only: PRICE_IDS.NOTICE_ONLY,
   complete_pack: PRICE_IDS.EVICTION_PACK,
   money_claim: PRICE_IDS.MONEY_CLAIM,
-  sc_money_claim: PRICE_IDS.MONEY_CLAIM, // Same price as England/Wales money claim
   section13_standard: PRICE_IDS.SECTION13_STANDARD,
   section13_defensive: PRICE_IDS.SECTION13_DEFENSIVE,
   ast_standard: PRICE_IDS.STANDARD_AST,
@@ -265,6 +265,13 @@ export async function POST(request: Request) {
       ga_client_id,
     } = validationResult.data;
 
+    if (product_type === 'sc_money_claim') {
+      return NextResponse.json(
+        { error: 'Scotland Money Claim Pack has been discontinued and is no longer available for purchase.' },
+        { status: 400 }
+      );
+    }
+
     // CRITICAL: Ensure user profile exists before creating order
     // This prevents foreign key constraint violations on orders table
     const profileResult = await ensureUserProfileExists({
@@ -345,8 +352,7 @@ export async function POST(request: Request) {
     }
 
     // Get product details from source of truth (products.ts)
-    // Map sc_money_claim to money_claim for product config lookup
-    const productSku: ProductSku = normalizedProductType === 'sc_money_claim' ? 'sc_money_claim' : normalizedProductType as ProductSku;
+    const productSku: ProductSku = normalizedProductType as ProductSku;
     const product = PRODUCTS[productSku];
     let permittedAddOnSkus = requestedAddOnSkus.filter((sku) =>
       (ADD_ON_ELIGIBLE_PRODUCTS as readonly string[]).includes(sku)
@@ -469,23 +475,9 @@ export async function POST(request: Request) {
         }
 
         // Check money claim jurisdiction restrictions
-        if (product_type === 'money_claim' && !['england', 'wales'].includes(caseData.jurisdiction)) {
+        if (product_type === 'money_claim' && caseData.jurisdiction !== 'england') {
           return NextResponse.json(
-            { error: 'England & Wales Money Claim Pack can only be purchased for England & Wales cases' },
-            { status: 400 }
-          );
-        }
-
-        if (product_type === 'sc_money_claim' && caseData.jurisdiction !== 'scotland') {
-          return NextResponse.json(
-            { error: 'Scotland Simple Procedure Pack can only be purchased for Scotland cases' },
-            { status: 400 }
-          );
-        }
-
-        if ((product_type === 'money_claim' || product_type === 'sc_money_claim') && caseData.jurisdiction === 'northern-ireland') {
-          return NextResponse.json(
-            { error: 'Money claim packs are not available for Northern Ireland' },
+            { error: 'Money Claim Pack is currently available for England cases only.' },
             { status: 400 }
           );
         }

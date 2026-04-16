@@ -448,7 +448,7 @@ export default function CaseDetailPage() {
 
       // Determine product from case_type
       const product = caseDetails.case_type === 'money_claim'
-        ? (caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim')
+        ? 'money_claim'
         : caseDetails.case_type === 'eviction'
           ? (facts.__meta?.product || 'complete_pack')
         : caseDetails.case_type === 'rent_increase'
@@ -791,7 +791,7 @@ export default function CaseDetailPage() {
       // Map case_type to product if not explicitly set
       if (!product) {
         if (caseDetails.case_type === 'money_claim') {
-          product = caseDetails.jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
+          product = 'money_claim';
         } else if (caseDetails.case_type === 'rent_increase') {
           product = facts.section13?.selectedPlan || 'section13_standard';
         } else if (caseDetails.case_type === 'tenancy_agreement') {

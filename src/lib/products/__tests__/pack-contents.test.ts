@@ -196,7 +196,7 @@ describe('getPackContents', () => {
   });
 
   describe('money_claim product', () => {
-    describe('england/wales', () => {
+    describe('england only', () => {
       it('returns England money claim items with Form N1', () => {
         const args: GetPackContentsArgs = {
           product: 'money_claim',
@@ -210,42 +210,25 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'enforcement_guide')).toBeDefined();
       });
 
-      it('returns same items for Wales (uses County Court)', () => {
+      it('returns no money claim items for Wales because the product is England only', () => {
         const args: GetPackContentsArgs = {
           product: 'money_claim',
           jurisdiction: 'wales',
         };
         const items = getPackContents(args);
 
-        expect(items.find(i => i.key === 'n1_claim')).toBeDefined();
+        expect(items).toEqual([]);
       });
     });
 
-    describe('scotland (sc_money_claim)', () => {
-      it('returns Scotland money claim items with Form 3A (Simple Procedure)', () => {
-        const args: GetPackContentsArgs = {
-          product: 'sc_money_claim',
-          jurisdiction: 'scotland',
-        };
-        const items = getPackContents(args);
+    it('returns no money claim items for Scotland because the Scotland pack is discontinued', () => {
+      const args: GetPackContentsArgs = {
+        product: 'money_claim',
+        jurisdiction: 'scotland',
+      };
+      const items = getPackContents(args);
 
-        expect(items.find(i => i.key === 'form_3a')).toBeDefined();
-        expect(items.find(i => i.key === 'statement_of_claim')).toBeDefined();
-        expect(items.find(i => i.key === 'pre_action_letter')).toBeDefined();
-        expect(items.find(i => i.description?.includes('Sheriff Court'))).toBeDefined();
-        // No County Court forms
-        expect(items.find(i => i.key === 'n1_claim')).toBeUndefined();
-      });
-
-      it('falls back to sc_money_claim for generic money_claim in Scotland', () => {
-        const args: GetPackContentsArgs = {
-          product: 'money_claim',
-          jurisdiction: 'scotland',
-        };
-        const items = getPackContents(args);
-
-        expect(items.find(i => i.key === 'form_3a')).toBeDefined();
-      });
+      expect(items).toEqual([]);
     });
   });
 
@@ -977,15 +960,15 @@ describe('isProductSupported', () => {
     expect(isProductSupported('complete_pack', 'northern-ireland')).toBe(false);
   });
 
-  it('supports money_claim in England and Wales only', () => {
+  it('supports money_claim in England only', () => {
     expect(isProductSupported('money_claim', 'england')).toBe(true);
-    expect(isProductSupported('money_claim', 'wales')).toBe(true);
+    expect(isProductSupported('money_claim', 'wales')).toBe(false);
     expect(isProductSupported('money_claim', 'scotland')).toBe(false);
     expect(isProductSupported('money_claim', 'northern-ireland')).toBe(false);
   });
 
-  it('supports sc_money_claim in Scotland only', () => {
-    expect(isProductSupported('sc_money_claim', 'scotland')).toBe(true);
+  it('does not support sc_money_claim in any jurisdiction', () => {
+    expect(isProductSupported('sc_money_claim', 'scotland')).toBe(false);
     expect(isProductSupported('sc_money_claim', 'england')).toBe(false);
     expect(isProductSupported('sc_money_claim', 'wales')).toBe(false);
     expect(isProductSupported('sc_money_claim', 'northern-ireland')).toBe(false);

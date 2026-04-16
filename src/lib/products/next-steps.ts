@@ -28,17 +28,17 @@ export interface GetNextStepsArgs {
 // =============================================================================
 
 function getEnglandNoticeOnlySteps(route: string | null | undefined, noticeDays: number | null | undefined): NextStepsResult {
-  const defaultDays = route === 'section_21' ? 'two months' : 'your notice period';
+  const defaultDays = 'your Form 3A notice period';
   const period = noticeDays ? `${noticeDays} days` : defaultDays;
 
   if (route === 'section_21') {
     return {
       title: 'What to do next',
       steps: [
-        'Print and sign two copies of the Section 21 Notice.',
-        `Serve the notice on your tenant using the service instructions provided.`,
-        `Wait for the ${period} notice period to expire.`,
-        'If the tenant does not vacate, you can apply for accelerated possession using your Complete Pack (if purchased) or start court proceedings.',
+        'Use the current England possession route and print two copies of the Form 3A notice in this pack.',
+        'Serve the Form 3A notice on the tenant using the service instructions provided.',
+        `Wait for the ${period} to expire.`,
+        'If the tenant does not vacate or remedy the breach, continue through the standard possession route with N5 and N119.',
       ],
     };
   }
@@ -47,7 +47,7 @@ function getEnglandNoticeOnlySteps(route: string | null | undefined, noticeDays:
     return {
       title: 'What to do next',
       steps: [
-        'Print and sign two copies of the Section 8 Notice.',
+        'Print and sign two copies of the Form 3A possession notice.',
         'Serve the notice on your tenant using the service instructions provided.',
         `Wait for the ${period} notice period to expire.`,
         'If the tenant does not vacate or remedy the breach, you can apply for possession using your Complete Pack (if purchased) or start court proceedings.',
@@ -58,7 +58,7 @@ function getEnglandNoticeOnlySteps(route: string | null | undefined, noticeDays:
   return {
     title: 'What to do next',
     steps: [
-      'Print and sign two copies of your notice.',
+      'Print and sign two copies of your Form 3A notice.',
       'Serve the notice on your tenant using the service instructions provided.',
       'Wait for the notice period to expire.',
       'If the tenant does not vacate, consider purchasing the Complete Pack to proceed with court action.',
@@ -71,11 +71,11 @@ function getEnglandCompletePackSteps(route: string | null | undefined): NextStep
     return {
       title: 'What to do next',
       steps: [
-        'Serve your Section 21 Notice and wait for the notice period to expire.',
-        'Complete and sign Form N5B (Accelerated Possession Claim).',
-        'File your claim online via Possession Claim Online or at your local County Court.',
-        'Pay the court fee (currently £355 for accelerated claims).',
-        'The court will send you a hearing date or possession order by post.',
+        'Use the current England possession route and serve Form 3A, then wait for the notice period to expire.',
+        'Complete Forms N5 and N119 with your witness statement and supporting evidence.',
+        'File your claim at your local County Court, or use PCOL only where the claim is suitable for the rent-only arrears route.',
+        'Pay the court fee and await directions or a hearing date from the court.',
+        'Keep the notice timeline, service evidence, and arrears figures aligned across the whole bundle.',
       ],
     };
   }
@@ -252,7 +252,7 @@ function getScotlandMoneyClaimSteps(): NextStepsResult {
       'Send the Pre-Action Letter to the tenant and wait at least 14 days for response.',
       'Complete Form 3A (Simple Procedure Claim) with your statement of claim.',
       'Lodge your claim at your local Sheriff Court.',
-      'Pay the court fee (£21-£145 depending on claim amount).',
+      'Pay the court fee (GBP 21-GBP 145 depending on claim amount).',
       'If the respondent does not respond, request a decision in your favour.',
       'If decree is granted, use the Enforcement Guide to pursue diligence options.',
     ],
@@ -309,19 +309,19 @@ export function getNextSteps(args: GetNextStepsArgs): NextStepsResult {
 
   // ENGLAND
   if (jur === 'england') {
-      switch (product) {
-        case 'notice_only':
-          return getEnglandNoticeOnlySteps(route, notice_period_days);
-        case 'complete_pack':
-          return getEnglandCompletePackSteps(route);
-        case 'money_claim':
-          return getEnglandMoneyClaimSteps();
-        case 'section13_standard':
-        case 'section13_defensive':
-          return getEnglandSection13Steps(product);
-        case 'ast_standard':
-        case 'ast_premium':
-          return getEnglandASTSteps();
+    switch (product) {
+      case 'notice_only':
+        return getEnglandNoticeOnlySteps(route, notice_period_days);
+      case 'complete_pack':
+        return getEnglandCompletePackSteps(route);
+      case 'money_claim':
+        return getEnglandMoneyClaimSteps();
+      case 'section13_standard':
+      case 'section13_defensive':
+        return getEnglandSection13Steps(product);
+      case 'ast_standard':
+      case 'ast_premium':
+        return getEnglandASTSteps();
       default:
         return { title: 'What to do next', steps: ['Review your documents and follow the included instructions.'] };
     }
@@ -334,9 +334,6 @@ export function getNextSteps(args: GetNextStepsArgs): NextStepsResult {
         return getWalesNoticeOnlySteps(route, notice_period_days);
       case 'complete_pack':
         return getWalesCompletePackSteps();
-      case 'money_claim':
-        // Wales uses same court system as England
-        return getEnglandMoneyClaimSteps();
       case 'ast_standard':
       case 'ast_premium':
         return getWalesSOCSteps();
@@ -353,7 +350,6 @@ export function getNextSteps(args: GetNextStepsArgs): NextStepsResult {
       case 'complete_pack':
         return getScotlandCompletePackSteps();
       case 'sc_money_claim':
-      case 'money_claim':
         return getScotlandMoneyClaimSteps();
       case 'ast_standard':
       case 'ast_premium':

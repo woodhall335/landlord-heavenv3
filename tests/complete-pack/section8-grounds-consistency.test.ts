@@ -3,7 +3,7 @@ import { generateCompleteEvictionPack } from '../../src/lib/documents/eviction-p
 import { buildEnglandSection8CompletePackFacts } from '../../src/lib/testing/fixtures/complete-pack';
 
 const NOTICE_DATE = '2025-01-15';
-const NOTICE_EXPIRY_DATE = '2025-01-29';
+const NOTICE_EXPIRY_DATE = '2025-02-12';
 
 const buildArrearsItems = (entries: Array<{ owed: number; paid?: number }>) =>
   entries.map((entry, index) => {
@@ -53,13 +53,13 @@ describe('Section 8 grounds consistency across pack documents', () => {
       aboveThresholdFixture.notice_served_date = NOTICE_DATE;
       aboveThresholdFixture.notice_expiry_date = NOTICE_EXPIRY_DATE;
       aboveThresholdFixture.signature_date = NOTICE_EXPIRY_DATE;
-      aboveThresholdFixture.section8_grounds = ['Ground 8 - 8+ weeks rent arrears', 'Ground 10 - Rent arrears'];
-      aboveThresholdFixture.total_arrears = 2500;
-      aboveThresholdFixture.rent_arrears_amount = 2500;
+      aboveThresholdFixture.section8_grounds = ['Ground 8 - 3+ months rent arrears', 'Ground 10 - Rent arrears'];
+      aboveThresholdFixture.total_arrears = 3600;
+      aboveThresholdFixture.rent_arrears_amount = 3600;
       aboveThresholdFixture.arrears_items = buildArrearsItems([
         { owed: 1200 },
         { owed: 1200 },
-        { owed: 100, paid: 1100 },
+        { owed: 1200 },
       ]);
 
       const belowPack = await generateCompleteEvictionPack(belowThresholdFixture);
@@ -114,12 +114,12 @@ describe('Section 8 grounds consistency across pack documents', () => {
 
       const aboveThresholdWizardFacts = {
         ...baseWizardFacts,
-        section8_grounds: ['Ground 8 - 8+ weeks rent arrears', 'Ground 10 - Rent arrears'],
-        total_arrears: 2500,
+        section8_grounds: ['Ground 8 - 3+ months rent arrears', 'Ground 10 - Rent arrears'],
+        total_arrears: 3600,
         arrears_items: buildArrearsItems([
           { owed: 1200 },
           { owed: 1200 },
-          { owed: 100, paid: 1100 },
+          { owed: 1200 },
         ]),
       };
 

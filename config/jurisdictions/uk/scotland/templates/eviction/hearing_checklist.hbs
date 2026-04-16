@@ -1,0 +1,209 @@
+{{!--
+  ============================================================================
+  HEARING CHECKLIST - SCOTLAND
+  ============================================================================
+  Tribunal-facing preparation checklist for Scotland possession cases.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tribunal Hearing Checklist</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      margin: 0 auto;
+      padding: 0;
+      color: #1a1a1a;
+      font-size: 10pt;
+      line-height: 1.55;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .header h1 {
+      margin: 0 0 0.35em 0;
+      font-size: 16pt;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 11pt;
+      color: #555;
+      font-weight: 400;
+    }
+
+    .summary-box,
+    .timeline-box,
+    .section,
+    .warning-box {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .summary-box,
+    .timeline-box,
+    .warning-box {
+      margin-bottom: 1.25em;
+      padding: 1em;
+      border: 1px solid #d8d8d8;
+      background: #fafafa;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 0.45em 1em;
+    }
+
+    .summary-grid dt {
+      font-weight: 600;
+    }
+
+    .summary-grid dd {
+      margin: 0;
+    }
+
+    .section {
+      margin-bottom: 1.4em;
+    }
+
+    .section h3 {
+      margin: 0 0 0.75em 0;
+      padding: 0.6em 0.9em;
+      background: #1a1a1a;
+      color: white;
+      font-size: 11pt;
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checklist li {
+      position: relative;
+      padding: 0.6em 0 0.6em 1.8em;
+      border-bottom: 1px solid #ececec;
+    }
+
+    .checklist li::before {
+      content: "[ ]";
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      font-weight: 700;
+    }
+
+    .notes {
+      margin-top: 0.25em;
+      color: #555;
+      font-size: 9pt;
+    }
+
+    .warning-box {
+      background: #fff7ed;
+      border-color: #b45309;
+    }
+
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #d8d8d8;
+      font-size: 9pt;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Tribunal Hearing Checklist</h1>
+    <h2>First-tier Tribunal for Scotland (Housing and Property Chamber)</h2>
+  </div>
+
+  <div class="summary-box">
+    <dl class="summary-grid">
+      <dt>Property</dt>
+      <dd>{{property_address}}</dd>
+      {{#if (hasValue tenant_full_name)}}
+      <dt>Tenant</dt>
+      <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      {{/if}}
+      <dt>Hearing date</dt>
+      <dd><em>To be notified by tribunal</em></dd>
+    </dl>
+  </div>
+
+  <div class="timeline-box">
+    <p><strong>Route summary:</strong> make sure the Notice to Leave, service evidence, tribunal application, and bundle index all use the same dates and supporting facts.</p>
+    <dl class="summary-grid">
+      {{#if (hasValue notice_service_date)}}
+      <dt>Notice service date</dt>
+      <dd>{{format_date notice_service_date "long"}}</dd>
+      {{/if}}
+      {{#if (hasValue notice_expiry_date)}}
+      <dt>Notice expiry date</dt>
+      <dd>{{format_date notice_expiry_date "long"}}</dd>
+      {{/if}}
+      {{#if (hasValue earliest_proceedings_date)}}
+      <dt>Earliest lodging date</dt>
+      <dd>{{format_date earliest_proceedings_date "long"}}</dd>
+      {{/if}}
+    </dl>
+  </div>
+
+  <div class="section">
+    <h3>Before the hearing</h3>
+    <ul class="checklist">
+      <li>Check the tribunal directions and confirm when the bundle must be lodged and served.</li>
+      <li>Update any arrears schedule, chronology, and correspondence bundle to the latest practical date.</li>
+      <li>Review the Notice to Leave, proof of service, witness statement, and Form E together so the same timeline appears throughout the pack.</li>
+      <li>Prepare a short note of the orders you want the tribunal to make.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Documents to bring</h3>
+    <ul class="checklist">
+      <li>Your indexed tribunal bundle.</li>
+      <li>The signed tenancy agreement and any variations.</li>
+      <li>The original Notice to Leave and proof of service.</li>
+      <li>Any updated arrears records, payment logs, or supporting correspondence.</li>
+      <li>Photo ID and any notes you need for the hearing.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>At the hearing</h3>
+    <ul class="checklist">
+      <li>Arrive early and check in with tribunal staff or the clerk.</li>
+      <li>Answer questions clearly and stick to the documents in the bundle.</li>
+      <li>If the respondent raises any defence or proposal, explain what you accept, what you dispute, and where the supporting papers are.</li>
+      <li>Make a note of any directions, deadlines, or orders made by the tribunal.</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <p><strong>Reminder:</strong> Scotland possession cases are tribunal matters, not County Court claims. Keep the terminology and route consistent throughout the bundle.</p>
+  </div>
+
+  <div class="footer">
+    <p>This checklist is part of the Scotland complete eviction pack and should be reviewed alongside any tribunal directions issued in the case.</p>
+  </div>
+</body>
+</html>

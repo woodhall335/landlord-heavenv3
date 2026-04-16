@@ -228,15 +228,20 @@ function sumLineItems(items?: ClaimLineItem[]): number {
   return (items || []).reduce((total, item) => total + (item.amount || 0), 0);
 }
 
+function roundMoney(value: number): number {
+  return Number(value.toFixed(2));
+}
+
 function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
-  const arrears_total =
+  const arrears_total = roundMoney(
     claim.arrears_total ||
-    (claim.arrears_schedule || []).reduce((total, entry) => total + (entry.arrears || 0), 0);
+    (claim.arrears_schedule || []).reduce((total, entry) => total + (entry.arrears || 0), 0)
+  );
 
-  const damages_total = sumLineItems(claim.damage_items);
-  const other_total = sumLineItems(claim.other_charges);
+  const damages_total = roundMoney(sumLineItems(claim.damage_items));
+  const other_total = roundMoney(sumLineItems(claim.other_charges));
 
-  const basePrincipal = arrears_total + damages_total + other_total;
+  const basePrincipal = roundMoney(arrears_total + damages_total + other_total);
 
   // INTEREST: Only calculate if user EXPLICITLY opted in via claim_interest === true
   // No default 8% rate - user must confirm they want to claim interest
@@ -252,7 +257,7 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
     // Note: The rate should have been explicitly confirmed in the wizard
     interest_rate = claim.interest_rate ?? 8;
     daily_interest =
-      claim.daily_interest ?? Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
+      claim.daily_interest ?? roundMoney((basePrincipal * (interest_rate / 100)) / 365);
 
     // Calculate actual days from interest_start_date to today for accurate interest
     // Default to 90 days only if no interest_start_date provided
@@ -266,7 +271,7 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
     }
 
     interest_to_date =
-      claim.interest_to_date ?? Number((daily_interest * interest_days).toFixed(2));
+      claim.interest_to_date ?? roundMoney(daily_interest * interest_days);
 
     console.log(
       `[money-claim] Interest claimed at ${interest_rate}% (user opted in). ` +
@@ -279,8 +284,8 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
   const court_fee = claim.court_fee ?? 355;
   const solicitor_costs = claim.solicitor_costs ?? 0;
 
-  const total_claim_amount = basePrincipal + (interest_to_date ?? 0);
-  const total_with_fees = total_claim_amount + court_fee + solicitor_costs;
+  const total_claim_amount = roundMoney(basePrincipal + (interest_to_date ?? 0));
+  const total_with_fees = roundMoney(total_claim_amount + court_fee + solicitor_costs);
 
   return {
     arrears_total,

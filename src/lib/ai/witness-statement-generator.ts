@@ -37,6 +37,8 @@ export interface WitnessStatementContext {
   tenant_name: string;
   property_address: string;
   tenancy_start_date?: string;
+  notice_served_date?: string;
+  notice_expiry_date?: string;
   rent_amount?: number;
   rent_frequency?: string;
   grounds: string[]; // e.g., ["Ground 8", "Ground 10"] or ["non-payment", "asb"]
@@ -117,11 +119,11 @@ JURISDICTION: ${isScotland ? 'Scotland (First-tier Tribunal)' : 'England & Wales
 
 TENANCY DETAILS:
 - Start Date: ${context.tenancy_start_date || 'Not provided'}
-- Rent: ${context.rent_amount ? `£${context.rent_amount} ${context.rent_frequency}` : 'Not provided'}
+- Rent: ${context.rent_amount ? `GBP ${context.rent_amount} ${context.rent_frequency}` : 'Not provided'}
 
 GROUNDS FOR POSSESSION: ${context.grounds.join(', ')}
 
-${context.has_arrears ? `RENT ARREARS: £${context.arrears_total || 0}` : ''}
+${context.has_arrears ? `RENT ARREARS: GBP ${context.arrears_total || 0}` : ''}
 
 ${context.has_conduct_issues ? `CONDUCT ISSUES: Yes (anti-social behavior, breach of tenancy, damage, etc.)` : ''}
 
@@ -263,55 +265,81 @@ function generateFallbackWitnessStatement(
   context: WitnessStatementContext
 ): WitnessStatementJSON {
   const isScotland = context.legalFramework === 'scotland';
+  const tenancyStartDescription =
+    context.tenancy_start_date || 'the tenancy start date recorded in the tenancy documents';
+  const rentDescription =
+    context.rent_amount && context.rent_frequency
+      ? `GBP ${context.rent_amount} ${context.rent_frequency}`
+      : 'the rent set out in the tenancy records';
+  const noticeDescription = isScotland ? 'Notice to Leave' : 'Form 3A possession notice';
+  const noticeServedDescription =
+    context.notice_served_date || 'the notice service date recorded in the possession documents';
+  const noticeExpiryDescription =
+    context.notice_expiry_date || 'the notice expiry date recorded in the possession documents';
 
   // Introduction
   const introduction = `I, ${context.landlord_name}, am the landlord of the property at ${context.property_address}. I make this statement in support of my application for possession of the property. The contents of this statement are true to the best of my knowledge and belief.`;
 
   // Tenancy History
-  const tenancy_history = `The tenancy commenced on ${context.tenancy_start_date || '[date]'} when I let the property to ${context.tenant_name}. The rent was agreed at ${context.rent_amount ? `£${context.rent_amount} ${context.rent_frequency}` : '[rent amount and frequency]'}, payable ${context.rent_frequency === 'monthly' ? 'monthly in advance' : 'in advance'}.`;
+  const tenancy_history = `The tenancy commenced on ${tenancyStartDescription} when I let the property to ${context.tenant_name}. The rent was agreed at ${rentDescription}, payable ${context.rent_frequency === 'monthly' ? 'monthly in advance' : 'in advance'}.`;
 
   // Rent Arrears (if applicable)
   let rent_arrears = undefined;
   if (context.has_arrears) {
-    rent_arrears = `The tenant has failed to pay rent as required under the tenancy agreement. As at the date of this statement, the total arrears amount to £${context.arrears_total || 0}. I have made numerous attempts to recover the arrears, including sending letters and speaking with the tenant, but the arrears remain unpaid. A full schedule of arrears is attached as Exhibit 2.`;
+    rent_arrears = `The tenant has failed to pay rent as required under the tenancy agreement. As at the date of this statement, the total arrears amount to GBP ${context.arrears_total || 0}. I have made attempts to recover the arrears, but the arrears remain unpaid. A full schedule of arrears is attached as an exhibit.`;
   }
 
   // Conduct Issues (if applicable)
   let conduct_issues = undefined;
   if (context.has_conduct_issues) {
-    conduct_issues = `The tenant has breached the terms of the tenancy agreement through [describe conduct issues - e.g., anti-social behavior, damage to property, use for unlawful purposes]. Full details of these breaches are set out in the attached documentation.`;
+    conduct_issues = `The tenant has breached the terms of the tenancy agreement in the ways recorded in the case documents. Full details of those breaches and the supporting records are exhibited with this statement.`;
   }
 
   // Grounds Summary
   const grounds_summary = isScotland
     ? `I am seeking possession on the following grounds under the Housing (Scotland) Act 2006: ${context.grounds.join(', ')}. The tenant has been served with a valid Notice to Leave and the required notice period has expired.`
-    : `I am seeking possession under ${context.grounds.join(' and ')} of Schedule 2 to the Housing Act 1988. The tenant has been served with a valid ${context.grounds.some(g => g.includes('Section 21')) ? 'Section 21 notice' : 'Section 8 notice'} and the required notice period has expired.`;
+    : `I am seeking possession under ${context.grounds.join(' and ')} of Schedule 2 to the Housing Act 1988. The tenant has been served with the prescribed possession notice relied on for this claim and the required notice period has expired.`;
 
   // Timeline
-  const timeline = `
-- ${context.tenancy_start_date || '[Date]'}: Tenancy commenced
-${context.has_arrears ? `- [Date]: First missed rent payment
-- [Date]: Letter sent to tenant regarding arrears
-- [Date]: Further attempts to contact tenant` : ''}
-${context.has_conduct_issues ? `- [Date]: First incident of [issue]
-- [Date]: Written warning sent to tenant
-- [Date]: Further incidents occurred` : ''}
-- [Date]: Notice served on tenant
-- [Date]: Notice period expired
-- [Date]: Claim form issued
-  `.trim();
+  const timelineItems = [
+    `- ${tenancyStartDescription}: Tenancy commenced.`,
+    ...(context.has_arrears
+      ? [
+          '- Rent arrears accrued and remained outstanding.',
+          '- Recovery correspondence and payment requests were sent to the tenant.',
+        ]
+      : []),
+    ...(context.has_conduct_issues
+      ? [
+          '- Conduct and breach concerns were recorded during the tenancy.',
+          '- Warnings or follow-up communications were sent to the tenant.',
+        ]
+      : []),
+    `- ${noticeServedDescription}: ${noticeDescription} served on the tenant.`,
+    `- ${noticeExpiryDescription}: Notice period expired or the earliest claim date was reached.`,
+    '- Claim form prepared or issued.',
+  ];
+  const timeline = timelineItems.join('\n');
 
   // Evidence References
-  const evidence_references = `
-I refer to the following exhibits in support of this statement:
-- Exhibit 1: Tenancy Agreement dated ${context.tenancy_start_date || '[date]'}
-${context.has_arrears ? `- Exhibit 2: Schedule of rent arrears
-- Exhibit 3: Correspondence with tenant regarding arrears` : ''}
-${context.has_conduct_issues ? `- Exhibit 4: Evidence of conduct issues (photos, witness accounts, etc.)
-- Exhibit 5: Correspondence with tenant regarding breaches` : ''}
-- Exhibit ${context.has_arrears || context.has_conduct_issues ? '6' : '2'}: Copy of ${isScotland ? 'Notice to Leave' : 'Section 8/21 Notice'}
-- Exhibit ${context.has_arrears || context.has_conduct_issues ? '7' : '3'}: Proof of service
-  `.trim();
+  const evidence_references = [
+    'I refer to the following exhibits in support of this statement:',
+    `- Exhibit 1: Tenancy agreement or written statement of terms dated ${tenancyStartDescription}`,
+    ...(context.has_arrears
+      ? [
+          '- Exhibit 2: Schedule of rent arrears.',
+          '- Exhibit 3: Correspondence with the tenant regarding arrears.',
+        ]
+      : []),
+    ...(context.has_conduct_issues
+      ? [
+          '- Exhibit 4: Evidence of the conduct or tenancy breaches relied on.',
+          '- Exhibit 5: Correspondence with the tenant regarding those breaches.',
+        ]
+      : []),
+    `- Exhibit ${context.has_arrears || context.has_conduct_issues ? '6' : '2'}: Copy of the ${noticeDescription}.`,
+    `- Exhibit ${context.has_arrears || context.has_conduct_issues ? '7' : '3'}: Proof of service for the ${noticeDescription}.`,
+  ].join('\n');
 
   // Conclusion
   const conclusion = `I believe that the facts stated in this witness statement are true. I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.`;
@@ -410,12 +438,22 @@ export function extractWitnessStatementContext(caseFacts: CaseFacts): WitnessSta
 
   const rentFrequency =
     typeof tenancy?.rent_frequency === 'string' ? tenancy.rent_frequency : undefined;
+  const noticeServedDate =
+    typeof eviction?.notice_served_date === 'string'
+      ? eviction.notice_served_date
+      : typeof eviction?.notice_date === 'string'
+      ? eviction.notice_date
+      : undefined;
+  const noticeExpiryDate =
+    typeof eviction?.notice_expiry_date === 'string' ? eviction.notice_expiry_date : undefined;
 
   return {
     landlord_name: landlordName,
     tenant_name: tenantName,
     property_address: propertyAddress,
     tenancy_start_date: tenancyStartDate,
+    notice_served_date: noticeServedDate,
+    notice_expiry_date: noticeExpiryDate,
     rent_amount: rentAmount,
     rent_frequency: rentFrequency,
     grounds: grounds.length > 0 ? grounds : ['Not specified'],
@@ -425,3 +463,4 @@ export function extractWitnessStatementContext(caseFacts: CaseFacts): WitnessSta
     legalFramework,
   };
 }
+

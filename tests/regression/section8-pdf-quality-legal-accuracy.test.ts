@@ -238,7 +238,7 @@ describe('Section 8 PDF Layout - Page Break Controls', () => {
 
 describe('Section 8 Checklist - Legal Accuracy', () => {
   describe('Notice Period Statements', () => {
-    it('should state 60 days for Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16', () => {
+    it('should state 4 months for Grounds 1, 1A, 2, 2ZA, 2ZB, 2ZC, 2ZD, 4A, 6, 6B', () => {
       const checklistPath = path.join(
         process.cwd(),
         'config/jurisdictions/uk/england/templates/eviction/checklist_section_8.hbs'
@@ -246,12 +246,11 @@ describe('Section 8 Checklist - Legal Accuracy', () => {
 
       const templateContent = fs.readFileSync(checklistPath, 'utf-8');
 
-      // CRITICAL: These grounds require 60 days (2 months), NOT 2 weeks
-      expect(templateContent).toContain('60 days (2 months) minimum');
-      expect(templateContent).toContain('Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16');
+      expect(templateContent).toContain('4 months minimum');
+      expect(templateContent).toContain('Grounds 1, 1A, 2, 2ZA, 2ZB, 2ZC, 2ZD, 4A, 6, 6B');
     });
 
-    it('should state 14 days for Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17', () => {
+    it('should state 2 months for Grounds 5, 5A, 5B, 5C, 5H, 7, 9', () => {
       const checklistPath = path.join(
         process.cwd(),
         'config/jurisdictions/uk/england/templates/eviction/checklist_section_8.hbs'
@@ -259,12 +258,11 @@ describe('Section 8 Checklist - Legal Accuracy', () => {
 
       const templateContent = fs.readFileSync(checklistPath, 'utf-8');
 
-      // These grounds require 14 days (2 weeks)
-      expect(templateContent).toContain('14 days (2 weeks) minimum');
-      expect(templateContent).toContain('Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17');
+      expect(templateContent).toContain('2 months minimum');
+      expect(templateContent).toContain('Grounds 5, 5A, 5B, 5C, 5H, 7, 9');
     });
 
-    it('should state immediate for Ground 14A and serious ASB', () => {
+    it('should state 4 weeks for Grounds 5E, 5F, 5G, 8, 10, 11, 18', () => {
       const checklistPath = path.join(
         process.cwd(),
         'config/jurisdictions/uk/england/templates/eviction/checklist_section_8.hbs'
@@ -272,9 +270,32 @@ describe('Section 8 Checklist - Legal Accuracy', () => {
 
       const templateContent = fs.readFileSync(checklistPath, 'utf-8');
 
-      // Immediate notice for Ground 14A and serious ASB
+      expect(templateContent).toContain('4 weeks (28 days) minimum');
+      expect(templateContent).toContain('Grounds 5E, 5F, 5G, 8, 10, 11, 18');
+    });
+
+    it('should state 2 weeks for Grounds 4, 7B, 12, 13, 14A, 14ZA, 15, 17', () => {
+      const checklistPath = path.join(
+        process.cwd(),
+        'config/jurisdictions/uk/england/templates/eviction/checklist_section_8.hbs'
+      );
+
+      const templateContent = fs.readFileSync(checklistPath, 'utf-8');
+
+      expect(templateContent).toContain('2 weeks (14 days) minimum');
+      expect(templateContent).toContain('Grounds 4, 7B, 12, 13, 14A, 14ZA, 15, 17');
+    });
+
+    it('should state immediate for Grounds 7A and 14', () => {
+      const checklistPath = path.join(
+        process.cwd(),
+        'config/jurisdictions/uk/england/templates/eviction/checklist_section_8.hbs'
+      );
+
+      const templateContent = fs.readFileSync(checklistPath, 'utf-8');
+
       expect(templateContent).toContain('Immediate (0 days)');
-      expect(templateContent).toContain('Ground 14A');
+      expect(templateContent).toContain('Grounds 7A and 14');
     });
 
     it('should state multi-ground notices use maximum period', () => {
@@ -323,16 +344,16 @@ describe('Section 8 Checklist - Legal Accuracy', () => {
       const { calculateSection8NoticePeriod } = await import('../../src/lib/documents/notice-date-calculator');
 
       // Test each category of grounds
-      const twoMonthGrounds = [1, 2, 5, 6, 7, 9, 10, 11, 16];
-      const twoWeekGrounds = [3, 4, 8, 12, 13, 14, 15, 17];
+      const fourMonthGrounds = [1, 2, 6];
+      const twoWeekGrounds = [4, 7, 12, 13, 15, 17];
 
-      // All 2-month grounds should return 60 days
-      for (const code of twoMonthGrounds) {
+      // All 4-month grounds should return 120 days
+      for (const code of fourMonthGrounds) {
         const result = calculateSection8NoticePeriod({
           grounds: [{ code, mandatory: code <= 8 }],
           jurisdiction: 'england',
         });
-        expect(result.minimum_legal_days).toBe(60);
+        expect(result.minimum_legal_days).toBe(120);
       }
 
       // All 2-week grounds should return 14 days
@@ -563,10 +584,10 @@ describe('Config Source Consistency', () => {
 
     const yamlContent = fs.readFileSync(decisionRulesPath, 'utf-8');
 
-    // Ground 10 should be 60 days (2 months), NOT 14 days
-    expect(yamlContent).toMatch(/ground_10:[\s\S]*?notice_period_days:\s*60/);
+    // Ground 10 should be 28 days (4 weeks)
+    expect(yamlContent).toMatch(/ground_10:[\s\S]*?notice_period_days:\s*28/);
 
-    // Ground 11 should be 60 days (2 months), NOT 14 days
-    expect(yamlContent).toMatch(/ground_11:[\s\S]*?notice_period_days:\s*60/);
+    // Ground 11 should be 28 days (4 weeks)
+    expect(yamlContent).toMatch(/ground_11:[\s\S]*?notice_period_days:\s*28/);
   });
 });

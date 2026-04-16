@@ -93,7 +93,7 @@ describe("England Complete Pack Data Flow", () => {
     });
   });
 
-  describe("Section 21 Route (No-Fault)", () => {
+  describe("Legacy Section 21 Inputs (normalized to current England route)", () => {
     const section21WizardFacts = {
       // Route selection
       eviction_route: "Section 21 (no-fault)",
@@ -114,7 +114,7 @@ describe("England Complete Pack Data Flow", () => {
       epc_gas_cert_served: true,
       no_retaliatory_notice: true,
 
-      // Deposit details (from MQS) - needed for N5B
+      // Deposit details may still be captured on legacy cases
       deposit_amount: 1200,
       deposit_protection_date: "2023-01-15",
       deposit_scheme_name: "DPS",
@@ -138,7 +138,7 @@ describe("England Complete Pack Data Flow", () => {
       tenancy_start_date: "2023-01-01",
     };
 
-    it("maps notice dates to CaseData for N5B", () => {
+    it("maps notice dates to CaseData for the normalized possession route", () => {
       const { caseData } = wizardFactsToEnglandWalesEviction("test-case-7", section21WizardFacts);
 
       expect(caseData.notice_served_date).toBe("2025-11-01");
@@ -146,7 +146,7 @@ describe("England Complete Pack Data Flow", () => {
       expect(caseData.notice_expiry_date).toBe("2026-01-01");
     });
 
-    it("maps deposit details to CaseData for N5B", () => {
+    it("maps legacy deposit details through for record completeness", () => {
       const { caseData } = wizardFactsToEnglandWalesEviction("test-case-8", section21WizardFacts);
 
       expect(caseData.deposit_amount).toBe(1200);
@@ -155,10 +155,10 @@ describe("England Complete Pack Data Flow", () => {
       expect(caseData.deposit_reference).toBe("DEP123456");
     });
 
-    it("sets claim_type to section_21", () => {
+    it("sets claim_type to section_8 for England post-May 2026 cases", () => {
       const { caseData } = wizardFactsToEnglandWalesEviction("test-case-9", section21WizardFacts);
 
-      expect(caseData.claim_type).toBe("section_21");
+      expect(caseData.claim_type).toBe("section_8");
     });
   });
 

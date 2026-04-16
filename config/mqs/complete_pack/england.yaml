@@ -1636,7 +1636,7 @@ questions:
   # Detailed questions for each ground to improve witness statement quality
   # ============================================================
 
-  # GROUND 8 - Serious Rent Arrears (2+ months)
+  # GROUND 8 - Serious Rent Arrears (3+ months / 13+ weeks)
   - id: ground_8_details
     section: Ground 8 Details
     question: "Ground 8 - Serious rent arrears details"
@@ -1646,7 +1646,7 @@ questions:
     dependsOn:
       questionId: section8_grounds
       contains: "Ground 8"
-    helperText: "Ground 8 is MANDATORY if arrears are 8+ weeks (weekly/fortnightly) or 2+ months (monthly) at both notice date AND court hearing."
+    helperText: "Ground 8 is MANDATORY if arrears are 13+ weeks (weekly) or 3+ months (monthly) at both the notice date and the hearing date."
     fields:
       - id: g8_arrears_at_notice
         label: "Arrears when notice was served (Â£)"

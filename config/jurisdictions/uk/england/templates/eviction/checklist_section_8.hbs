@@ -26,6 +26,11 @@
       line-height: 1.55;
     }
 
+    h2 {
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
     .doc-header {
       text-align: center;
       margin-bottom: 1.5em;
@@ -88,6 +93,20 @@
       border-bottom: 2px solid #1a1a1a;
       font-size: 12pt;
       font-weight: 700;
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
+    .section-header-block,
+    .callout-section,
+    .checklist-section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .section {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     .checklist-box .heading {
@@ -97,6 +116,8 @@
       color: white;
       font-size: 11pt;
       font-weight: 700;
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
 
     .checklist-box .content {
@@ -105,6 +126,11 @@
 
     ul {
       margin: 0.4em 0 0 1.2em;
+    }
+
+    .checklist {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     li {
@@ -143,7 +169,7 @@
     <span class="doc-badge">{{notice_name}}</span>
   </div>
 
-  <div class="callout">
+  <div class="callout callout-section">
     <p><strong>Purpose:</strong> Use this checklist to verify that the {{notice_name}} is internally consistent across the notice and support documents, has been served using a defensible method, and is ready for evidence use if a claim is issued.</p>
     {{#if drafting_model.validityChecklist.overviewParagraphs.length}}
       {{#each drafting_model.validityChecklist.overviewParagraphs}}
@@ -152,7 +178,7 @@
     {{/if}}
   </div>
 
-  <div class="summary-box">
+  <div class="summary-box checklist-section">
     <dl class="summary-grid">
       {{#if (hasValue landlord_full_name)}}
       <dt>Landlord</dt>
@@ -191,74 +217,92 @@
     </dl>
   </div>
 
-  <h2 class="section-title">Service Evidence</h2>
-  <div class="checklist-box">
-    <div class="heading">Keep With The Pack</div>
-    <div class="content">
-      <ul>
-        {{#if drafting_model.validityChecklist.serviceEvidenceItems.length}}
-          {{#each drafting_model.validityChecklist.serviceEvidenceItems}}
-        <li>{{this}}</li>
-          {{/each}}
-        {{else}}
-        <li>A copy of the completed {{notice_name}} that was served.</li>
-        <li>A note of the service date, time, place, and method.</li>
-        <li>Proof of posting, tracking, witness details, or photographs, depending on the service method used.</li>
-        <li>Any follow-up correspondence showing the tenant received or responded to the notice.</li>
-        {{/if}}
-      </ul>
+  <div class="callout warning callout-section">
+    <p><strong>Current England notice periods after 1 May 2026:</strong> use the longest period that applies where multiple grounds are included.</p>
+    <ul>
+      <li>4 months minimum: Grounds 1, 1A, 2, 2ZA, 2ZB, 2ZC, 2ZD, 4A, 6, 6B.</li>
+      <li>2 months minimum: Grounds 5, 5A, 5B, 5C, 5H, 7, 9.</li>
+      <li>4 weeks (28 days) minimum: Grounds 5E, 5F, 5G, 8, 10, 11, 18.</li>
+      <li>2 weeks (14 days) minimum: Grounds 4, 7B, 12, 13, 14A, 14ZA, 15, 17.</li>
+      <li>Immediate (0 days): Grounds 7A and 14.</li>
+      <li>Where multiple grounds are relied on, use the MAXIMUM notice period.</li>
+    </ul>
+  </div>
+
+  <div class="section checklist-section">
+    <h2 class="section-title section-header-block">Service Evidence</h2>
+    <div class="checklist-box checklist-section">
+      <div class="heading">Keep With The Pack</div>
+      <div class="content">
+        <ul class="checklist">
+          {{#if drafting_model.validityChecklist.serviceEvidenceItems.length}}
+            {{#each drafting_model.validityChecklist.serviceEvidenceItems}}
+          <li>{{this}}</li>
+            {{/each}}
+          {{else}}
+          <li>A copy of the completed {{notice_name}} that was served.</li>
+          <li>A note of the service date, time, place, and method.</li>
+          <li>Proof of posting, tracking, witness details, or photographs, depending on the service method used.</li>
+          <li>Any follow-up correspondence showing the tenant received or responded to the notice.</li>
+          {{/if}}
+        </ul>
+      </div>
     </div>
   </div>
 
-  <h2 class="section-title">Validity Checks</h2>
-  <div class="checklist-box">
-    <div class="heading">Before You Rely On The Notice</div>
-    <div class="content">
-      <ul>
-        {{#if drafting_model.validityChecklist.validityItems.length}}
-          {{#each drafting_model.validityChecklist.validityItems}}
-        <li>{{this}}</li>
-          {{/each}}
-        {{else}}
-        <li>The pack uses the same canonical notice timeline across the notice, proof of service, summary, and bundle documents.</li>
-        <li>The correct prescribed notice form is used for the case.</li>
-        <li>The landlord, tenant, and property details are complete and match the tenancy records.</li>
-        <li>Each ground relied on is identified clearly and supported with particulars.</li>
-        <li>The notice period has been checked against the grounds relied on, using the longest period that applies where multiple grounds are included.</li>
-        <li>The earliest proceedings date shown in the pack is the date you intend to rely on if the claim is issued.</li>
-        <li>The notice is signed and dated by the landlord or an authorised agent.</li>
-        {{#if has_mandatory_ground}}
-        <li>Where a mandatory ground is relied on, the evidence is still sufficient to prove the ground and any prerequisite facts at the hearing.</li>
-        {{else}}
-        <li>Where only discretionary grounds are relied on, the evidence explains why possession is reasonable in all the circumstances.</li>
-        {{/if}}
-        {{/if}}
-      </ul>
+  <div class="section checklist-section">
+    <h2 class="section-title section-header-block">Validity Checks</h2>
+    <div class="checklist-box checklist-section">
+      <div class="heading">Before You Rely On The Notice</div>
+      <div class="content">
+        <ul class="checklist">
+          {{#if drafting_model.validityChecklist.validityItems.length}}
+            {{#each drafting_model.validityChecklist.validityItems}}
+          <li>{{this}}</li>
+            {{/each}}
+          {{else}}
+          <li>The pack uses the same canonical notice timeline across the notice, proof of service, summary, and bundle documents.</li>
+          <li>The correct prescribed notice form is used for the case.</li>
+          <li>The landlord, tenant, and property details are complete and match the tenancy records.</li>
+          <li>Each ground relied on is identified clearly and supported with particulars.</li>
+          <li>The notice period has been checked against the grounds relied on, using the longest period that applies where multiple grounds are included.</li>
+          <li>The earliest proceedings date shown in the pack is the date you intend to rely on if the claim is issued.</li>
+          <li>The notice is signed and dated by the landlord or an authorised agent.</li>
+          {{#if has_mandatory_ground}}
+          <li>Where a mandatory ground is relied on, the evidence is still sufficient to prove the ground and any prerequisite facts at the hearing.</li>
+          {{else}}
+          <li>Where only discretionary grounds are relied on, the evidence explains why possession is reasonable in all the circumstances.</li>
+          {{/if}}
+          {{/if}}
+        </ul>
+      </div>
     </div>
   </div>
 
-  <div class="callout warning">
+  <div class="callout warning callout-section">
     <p><strong>Notice periods:</strong> The required notice period depends on the grounds relied on and can change. If you alter the grounds, the service method, or the intended service date, regenerate the pack so every document uses the same recalculated dates.</p>
   </div>
 
-  <h2 class="section-title">After Service</h2>
-  <div class="checklist-box">
-    <div class="heading">Do Not Do These Things</div>
-    <div class="content">
-      <ul>
-        {{#if drafting_model.validityChecklist.afterServiceItems.length}}
-          {{#each drafting_model.validityChecklist.afterServiceItems}}
-        <li>{{this}}</li>
-          {{/each}}
-        {{else}}
-        {{#if (hasValue earliest_proceedings_date_formatted)}}
-        <li>Do not issue possession proceedings before {{earliest_proceedings_date_formatted}}.</li>
-        {{/if}}
-        <li>Do not change locks or remove belongings without a court order and lawful enforcement.</li>
-        <li>Do not leave the service method or service evidence undocumented.</li>
-        <li>Do not let one court-facing document use a different court name or notice timeline from the others.</li>
-        {{/if}}
-      </ul>
+  <div class="section checklist-section">
+    <h2 class="section-title section-header-block">After Service</h2>
+    <div class="checklist-box checklist-section">
+      <div class="heading">Do Not Do These Things</div>
+      <div class="content">
+        <ul class="checklist">
+          {{#if drafting_model.validityChecklist.afterServiceItems.length}}
+            {{#each drafting_model.validityChecklist.afterServiceItems}}
+          <li>{{this}}</li>
+            {{/each}}
+          {{else}}
+          {{#if (hasValue earliest_proceedings_date_formatted)}}
+          <li>Do not issue possession proceedings before {{earliest_proceedings_date_formatted}}.</li>
+          {{/if}}
+          <li>Do not change locks or remove belongings without a court order and lawful enforcement.</li>
+          <li>Do not leave the service method or service evidence undocumented.</li>
+          <li>Do not let one court-facing document use a different court name or notice timeline from the others.</li>
+          {{/if}}
+        </ul>
+      </div>
     </div>
   </div>
 

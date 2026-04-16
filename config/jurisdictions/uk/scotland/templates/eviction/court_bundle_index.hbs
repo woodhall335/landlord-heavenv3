@@ -1,0 +1,238 @@
+{{!--
+  ============================================================================
+  COURT BUNDLE INDEX - SCOTLAND
+  ============================================================================
+  Tribunal-facing bundle index for Notice to Leave / Form E possession cases.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tribunal Bundle Index</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      margin: 0 auto;
+      padding: 0;
+      color: #1a1a1a;
+      font-size: 10pt;
+      line-height: 1.5;
+    }
+
+    .bundle-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .bundle-header h1 {
+      margin: 0 0 0.35em 0;
+      font-size: 16pt;
+    }
+
+    .bundle-header h2 {
+      margin: 0;
+      font-size: 11pt;
+      color: #555;
+      font-weight: 400;
+    }
+
+    .case-details,
+    .notes-section,
+    .index-table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .case-details,
+    .notes-section {
+      margin-bottom: 1.5em;
+      padding: 1em;
+      border: 1px solid #d8d8d8;
+      background: #fafafa;
+    }
+
+    .case-details-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0.45em 1em;
+    }
+
+    .case-details-grid dt {
+      font-weight: 600;
+    }
+
+    .case-details-grid dd {
+      margin: 0;
+    }
+
+    .index-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5em;
+    }
+
+    .index-table th,
+    .index-table td {
+      padding: 8px 10px;
+      border: 1px solid #1a1a1a;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .index-table th {
+      background: #1a1a1a;
+      color: white;
+      font-weight: 700;
+    }
+
+    .section-header td {
+      background: #efefef;
+      font-weight: 700;
+    }
+
+    .tab-number,
+    .page-ref,
+    .checkbox-col {
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .checkbox {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 1px solid #1a1a1a;
+      background: white;
+    }
+
+    .footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #d8d8d8;
+      font-size: 9pt;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="bundle-header">
+    <h1>Tribunal Bundle Index</h1>
+    <h2>First-tier Tribunal for Scotland (Housing and Property Chamber)</h2>
+  </div>
+
+  <div class="case-details">
+    {{#if drafting_model.bundleIndex.overviewParagraphs.length}}
+      {{#each drafting_model.bundleIndex.overviewParagraphs}}
+    <p>{{this}}</p>
+      {{/each}}
+    {{/if}}
+    <dl class="case-details-grid">
+      <dt>Tribunal reference</dt>
+      <dd><em>To be assigned by tribunal</em></dd>
+      {{#if (hasValue landlord_full_name)}}
+      <dt>Applicant</dt>
+      <dd>{{landlord_full_name}}</dd>
+      {{/if}}
+      {{#if (hasValue tenant_full_name)}}
+      <dt>Respondent</dt>
+      <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      {{/if}}
+      <dt>Property</dt>
+      <dd>{{property_address}}</dd>
+      {{#if (hasValue notice_service_date)}}
+      <dt>Notice service date</dt>
+      <dd>{{format_date notice_service_date "long"}}</dd>
+      {{/if}}
+      {{#if (hasValue notice_expiry_date)}}
+      <dt>Notice expiry date</dt>
+      <dd>{{format_date notice_expiry_date "long"}}</dd>
+      {{/if}}
+      <dt>Bundle prepared</dt>
+      <dd>{{format_date generated_date "long"}}</dd>
+    </dl>
+  </div>
+
+  <table class="index-table">
+    <thead>
+      <tr>
+        <th class="checkbox-col">Done</th>
+        <th class="tab-number">Tab</th>
+        <th>Document</th>
+        <th>Description</th>
+        <th class="page-ref">Exhibit</th>
+        <th class="page-ref">Pages</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-header">
+        <td colspan="6">A. Tribunal application</td>
+      </tr>
+      <tr>
+        <td class="checkbox-col"><span class="checkbox"></span></td>
+        <td class="tab-number">A1</td>
+        <td>Form E</td>
+        <td>Application to the First-tier Tribunal for Scotland</td>
+        <td class="page-ref"></td>
+        <td class="page-ref"></td>
+      </tr>
+
+      <tr class="section-header">
+        <td colspan="6">B. Notice documents</td>
+      </tr>
+      <tr>
+        <td class="checkbox-col"><span class="checkbox"></span></td>
+        <td class="tab-number">B1</td>
+        <td>{{notice_name}}</td>
+        <td>Notice to Leave or tribunal notice relied on for the application</td>
+        <td class="page-ref">{{bundle_exhibit_notice}}</td>
+        <td class="page-ref"></td>
+      </tr>
+      <tr>
+        <td class="checkbox-col"><span class="checkbox"></span></td>
+        <td class="tab-number">B2</td>
+        <td>Proof of service</td>
+        <td>Service record for the tribunal notice</td>
+        <td class="page-ref">{{bundle_exhibit_proof_of_service}}</td>
+        <td class="page-ref"></td>
+      </tr>
+
+      <tr class="section-header">
+        <td colspan="6">C. Supporting evidence</td>
+      </tr>
+      <tr>
+        <td class="checkbox-col"><span class="checkbox"></span></td>
+        <td class="tab-number">C1</td>
+        <td>Witness statement</td>
+        <td>{{#if (hasValue landlord_full_name)}}Witness statement of {{landlord_full_name}}{{else}}Witness statement supporting the application{{/if}}</td>
+        <td class="page-ref"></td>
+        <td class="page-ref"></td>
+      </tr>
+      <tr>
+        <td class="checkbox-col"><span class="checkbox"></span></td>
+        <td class="tab-number">C2</td>
+        <td>Tenancy agreement and rent records</td>
+        <td>Core tenancy documents, arrears records, and any relevant correspondence</td>
+        <td class="page-ref"></td>
+        <td class="page-ref"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="notes-section">
+    <p><strong>Filing note:</strong> keep one indexed bundle for the tribunal, one for the respondent, and one working copy for the hearing or case-management discussion.</p>
+  </div>
+
+  <div class="footer">
+    <p>This template is part of the Scotland complete eviction pack and should be checked against the latest tribunal directions before lodging.</p>
+  </div>
+</body>
+</html>

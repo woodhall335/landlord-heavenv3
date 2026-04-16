@@ -26,6 +26,16 @@
       line-height: 1.55;
     }
 
+    h2 {
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
+    h3 {
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
     .doc-header {
       text-align: center;
       margin-bottom: 1.5em;
@@ -95,11 +105,22 @@
     .callout.warning {
       border-color: #b45309;
       background: #fff7ed;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     .callout.critical {
       border-color: #b91c1c;
       background: #fef2f2;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .callout.success {
+      border-color: #15803d;
+      background: #f0fdf4;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     .section-title {
@@ -108,6 +129,30 @@
       border-bottom: 2px solid #1a1a1a;
       font-size: 12pt;
       font-weight: 700;
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
+    .section-header-block,
+    .callout-section,
+    .checklist-section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .section-header-block {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .callout-section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .section {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     .method-card .heading,
@@ -118,6 +163,8 @@
       color: white;
       font-size: 11pt;
       font-weight: 700;
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
 
     .method-card.recommended .heading {
@@ -147,7 +194,8 @@
     <span class="doc-badge">{{notice_name}}</span>
   </div>
 
-  <div class="callout">
+  <div class="section callout-section">
+    <div class="callout">
     <p><strong>Purpose:</strong> Use these instructions to serve the {{notice_name}} consistently and preserve evidence of when, where, and how service took place.</p>
     {{#if drafting_model.serviceInstructions.overviewParagraphs.length}}
       {{#each drafting_model.serviceInstructions.overviewParagraphs}}
@@ -156,6 +204,7 @@
     {{else}}
       <p>This guidance is general information only. It does not replace legal advice or the need to check the tenancy agreement and the latest official guidance before serving notice.</p>
     {{/if}}
+    </div>
   </div>
 
   <div class="details-box">
@@ -185,7 +234,7 @@
     </dl>
   </div>
 
-  <h2 class="section-title">Recommended Service Method</h2>
+  <h2 class="section-title section-header-block">Recommended Service Method</h2>
 
   {{#if (eq service_method "post")}}
   <div class="method-card">
@@ -225,7 +274,7 @@
   {{/if}}
 
   {{#if drafting_model.serviceInstructions.methodNotes.length}}
-  <div class="checklist-box">
+  <div class="checklist-box checklist-section">
     <div class="heading">Practical Method Notes</div>
     <div class="content">
       <ul>
@@ -237,27 +286,31 @@
   </div>
   {{/if}}
 
-  <div class="callout warning">
+  <div class="section callout-section">
+    <div class="callout warning">
     <p><strong>Electronic service:</strong> Do not rely on email or text alone unless the tenancy terms clearly permit electronic service and you are satisfied the clause applies to notices of this kind.</p>
+    </div>
   </div>
 
-  <h2 class="section-title">Evidence To Keep</h2>
+  <div class="section callout-section">
+    <h2 class="section-title section-header-block">Evidence To Keep</h2>
 
-  <div class="checklist-box">
-    <div class="heading">Service Evidence Checklist</div>
-    <div class="content">
-      <ul>
-        {{#if drafting_model.serviceInstructions.evidenceItems.length}}
-          {{#each drafting_model.serviceInstructions.evidenceItems}}
-        <li>{{this}}</li>
-          {{/each}}
-        {{else}}
-        <li>A copy of the completed {{notice_name}} that was served.</li>
-        <li>Proof of posting, tracking, or witness details, depending on the service method used.</li>
-        <li>A contemporaneous note of the service date, time, location, and method.</li>
-        <li>Any tenant acknowledgement or later correspondence that refers to receipt of the notice.</li>
-        {{/if}}
-      </ul>
+    <div class="checklist-box checklist-section">
+      <div class="heading">Service Evidence Checklist</div>
+      <div class="content">
+        <ul>
+          {{#if drafting_model.serviceInstructions.evidenceItems.length}}
+            {{#each drafting_model.serviceInstructions.evidenceItems}}
+          <li>{{this}}</li>
+            {{/each}}
+          {{else}}
+          <li>A copy of the completed {{notice_name}} that was served.</li>
+          <li>Proof of posting, tracking, or witness details, depending on the service method used.</li>
+          <li>A contemporaneous note of the service date, time, location, and method.</li>
+          <li>Any tenant acknowledgement or later correspondence that refers to receipt of the notice.</li>
+          {{/if}}
+        </ul>
+      </div>
     </div>
   </div>
 

@@ -1296,9 +1296,6 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
         return getWalesNoticeOnlyContents(args);
       case 'complete_pack':
         return getWalesCompletePackContents(args);
-      case 'money_claim':
-        // Wales uses same forms as England
-        return getEnglandMoneyClaimContents();
       case 'ast_standard':
         return getWalesSOCContents('standard', hasInventoryData);
       case 'ast_premium':
@@ -1316,7 +1313,6 @@ export function getPackContents(args: GetPackContentsArgs): PackItem[] {
       case 'complete_pack':
         return getScotlandCompletePackContents(args);
       case 'sc_money_claim':
-      case 'money_claim': // Fallback for generic money_claim in Scotland
         return getScotlandMoneyClaimContents();
       case 'ast_standard':
         return getScotlandPRTContents('standard', hasInventoryData);
@@ -1368,11 +1364,11 @@ export function isProductSupported(product: string, jurisdiction: string): boole
 
   // Money claim
   if (product === 'money_claim') {
-    return jur === 'england' || jur === 'wales';
+    return jur === 'england';
   }
 
   if (product === 'sc_money_claim') {
-    return jur === 'scotland';
+    return false;
   }
 
   if (getEnglandResidentialLettingContents({ product, jurisdiction: jur }).length > 0) {

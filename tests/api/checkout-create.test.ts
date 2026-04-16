@@ -358,13 +358,13 @@ describe('Checkout Create Flow', () => {
       };
 
       const productType = 'money_claim';
-      const validJurisdictions = ['england', 'wales'];
+      const validJurisdictions = ['england'];
 
       const isValid = validJurisdictions.includes(mockCaseData.jurisdiction);
       expect(isValid).toBe(false);
     });
 
-    it('should reject sc_money_claim for England cases', async () => {
+    it('should reject sc_money_claim because the Scotland pack is discontinued', async () => {
       mockCaseData = {
         jurisdiction: 'england',
         case_type: 'money_claim',
@@ -372,7 +372,7 @@ describe('Checkout Create Flow', () => {
       };
 
       const productType = 'sc_money_claim';
-      const validJurisdiction = 'scotland';
+      const validJurisdiction = null;
 
       const isValid = mockCaseData.jurisdiction === validJurisdiction;
       expect(isValid).toBe(false);

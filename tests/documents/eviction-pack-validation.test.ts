@@ -134,7 +134,7 @@ describe('Complete eviction pack validation', () => {
   });
 
   describe('Ground 8 threshold enforcement', () => {
-    it('throws EVICTION_PACK_VALIDATION_FAILED if Ground 8 arrears < 2 months', async () => {
+    it('throws EVICTION_PACK_VALIDATION_FAILED if Ground 8 arrears are below the 3-month threshold', async () => {
       const ground8BelowThreshold = {
         __meta: { case_id: 'TEST-G8-001', jurisdiction: 'england' },
         landlord_name: 'Test Landlord',
@@ -164,7 +164,7 @@ describe('Complete eviction pack validation', () => {
       );
     });
 
-    it('passes validation if Ground 8 arrears >= 2 months with authoritative schedule', () => {
+    it('passes validation if Ground 8 arrears meet the 3-month threshold with an authoritative schedule', () => {
       // Ground 8 validation requires authoritative arrears_items schedule, not just flat totals.
       // The arrears engine treats flat totals as non-authoritative for court proceedings.
       const outcome = validateCompletePackBeforeGeneration({
@@ -172,7 +172,7 @@ describe('Complete eviction pack validation', () => {
         facts: {
           rent_amount: 1200,
           rent_frequency: 'monthly',
-          arrears_amount: 2500, // Legacy flat total (backup, but not authoritative)
+          arrears_amount: 3600, // Legacy flat total (backup, but not authoritative)
           section8_grounds: ['Ground 8'],
           // AUTHORITATIVE: arrears_items schedule provides period-by-period breakdown
           arrears_items: [
@@ -194,8 +194,8 @@ describe('Complete eviction pack validation', () => {
               period_start: '2024-06-01',
               period_end: '2024-06-30',
               rent_due: 1200,
-              rent_paid: 1100,
-              amount_owed: 100,
+              rent_paid: 0,
+              amount_owed: 1200,
             },
           ],
         },
@@ -203,7 +203,7 @@ describe('Complete eviction pack validation', () => {
         caseType: 'rent_arrears',
       });
 
-      // Should not have the threshold blocker (2500/1200 = 2.08 months)
+      // Should not have the threshold blocker (3600/1200 = 3 months)
       const ground8Blocker = outcome.blocking.find(b => b.code === 'GROUND_8_THRESHOLD_NOT_MET');
       expect(ground8Blocker).toBeUndefined();
     });
@@ -297,59 +297,55 @@ describe('Complete eviction pack validation', () => {
   // ============================================================================
   describe('Section 8 expiry date validation', () => {
     describe('calculateSection8ExpiryDate', () => {
-      it('calculates 14-day notice period for Ground 8 only', () => {
+      it('calculates 28-day notice period for Ground 8 only', () => {
         const today = new Date().toISOString().split('T')[0];
         const result = calculateSection8ExpiryDate({
           service_date: today,
           grounds: [{ code: 8, mandatory: true }],
         });
 
-        expect(result.notice_period_days).toBe(14);
-        expect(result.minimum_legal_days).toBe(14);
-        expect(result.explanation).toContain('14 days');
+        expect(result.notice_period_days).toBe(28);
+        expect(result.minimum_legal_days).toBe(28);
+        expect(result.explanation).toContain('28 days');
       });
 
-      // SKIP: pre-existing failure - investigate later
-      it.skip('calculates 60-day notice period for Ground 10', () => {
+      it('calculates 28-day notice period for Ground 10', () => {
         const today = new Date().toISOString().split('T')[0];
         const result = calculateSection8ExpiryDate({
           service_date: today,
           grounds: [{ code: 10, mandatory: false }],
         });
 
-        expect(result.notice_period_days).toBe(60);
-        expect(result.minimum_legal_days).toBe(60);
-        expect(result.explanation).toContain('60 days');
+        expect(result.notice_period_days).toBe(28);
+        expect(result.minimum_legal_days).toBe(28);
+        expect(result.explanation).toContain('28 days');
       });
 
-      // SKIP: pre-existing failure - investigate later
-      it.skip('calculates 60-day notice period for Ground 11', () => {
+      it('calculates 28-day notice period for Ground 11', () => {
         const today = new Date().toISOString().split('T')[0];
         const result = calculateSection8ExpiryDate({
           service_date: today,
           grounds: [{ code: 11, mandatory: false }],
         });
 
-        expect(result.notice_period_days).toBe(60);
-        expect(result.minimum_legal_days).toBe(60);
-        expect(result.explanation).toContain('60 days');
+        expect(result.notice_period_days).toBe(28);
+        expect(result.minimum_legal_days).toBe(28);
+        expect(result.explanation).toContain('28 days');
       });
 
-      // SKIP: pre-existing failure - investigate later
-      it.skip('uses MAXIMUM period when multiple grounds selected (Ground 8 + Ground 10 = 60 days)', () => {
+      it('uses the shared 28-day period when multiple grounds selected (Ground 8 + Ground 10)', () => {
         const today = new Date().toISOString().split('T')[0];
         const result = calculateSection8ExpiryDate({
           service_date: today,
           grounds: [
-            { code: 8, mandatory: true },   // 14 days
-            { code: 10, mandatory: false }, // 60 days
+            { code: 8, mandatory: true },   // 28 days
+            { code: 10, mandatory: false }, // 28 days
           ],
         });
 
-        // Should use maximum: 60 days
-        expect(result.notice_period_days).toBe(60);
-        expect(result.minimum_legal_days).toBe(60);
-        expect(result.explanation).toContain('60 days');
+        expect(result.notice_period_days).toBe(28);
+        expect(result.minimum_legal_days).toBe(28);
+        expect(result.explanation).toContain('28 days');
         expect(result.explanation).toContain('Ground 10');
       });
 
@@ -360,15 +356,15 @@ describe('Complete eviction pack validation', () => {
           grounds: [{ code: 8, mandatory: true }],
         });
 
-        // 14 days from 2025-01-15 = 2025-01-29
-        expect(result.earliest_valid_date).toBe('2025-01-29');
+        // 28 days from 2025-01-15 = 2025-02-12
+        expect(result.earliest_valid_date).toBe('2025-02-12');
       });
     });
 
     describe('validateSection8ExpiryDate', () => {
       it('returns valid=true for dates on or after earliest valid date', () => {
         const serviceDate = '2025-01-15';
-        const validExpiry = '2025-01-30'; // 15 days after service (> 14 days minimum for Ground 8)
+        const validExpiry = '2025-02-13'; // 29 days after service (> 28 days minimum for Ground 8)
 
         const result = validateSection8ExpiryDate(validExpiry, {
           service_date: serviceDate,
@@ -381,7 +377,7 @@ describe('Complete eviction pack validation', () => {
 
       it('returns valid=false with suggestedDate for dates too early', () => {
         const serviceDate = '2025-01-15';
-        const invalidExpiry = '2025-01-20'; // Only 5 days (< 14 days minimum for Ground 8)
+        const invalidExpiry = '2025-01-20'; // Only 5 days (< 28 days minimum for Ground 8)
 
         const result = validateSection8ExpiryDate(invalidExpiry, {
           service_date: serviceDate,
@@ -391,26 +387,24 @@ describe('Complete eviction pack validation', () => {
         expect(result.valid).toBe(false);
         expect(result.errors.length).toBeGreaterThan(0);
         expect(result.errors[0]).toContain('too early');
-        expect(result.suggested_date).toBe('2025-01-29'); // Correct earliest date
+        expect(result.suggested_date).toBe('2025-02-12'); // Correct earliest date
       });
 
-      // SKIP: pre-existing failure - investigate later
-      it.skip('returns valid=false when Ground 10 requires 60 days but given only 14', () => {
+      it('returns valid=false when Ground 10 requires 28 days but given only 14', () => {
         const serviceDate = '2025-01-15';
-        const invalidExpiry = '2025-01-29'; // 14 days (valid for Ground 8, NOT for Ground 10)
+        const invalidExpiry = '2025-01-29'; // Too early for the shared 28-day minimum
 
         const result = validateSection8ExpiryDate(invalidExpiry, {
           service_date: serviceDate,
           grounds: [
-            { code: 8, mandatory: true },   // 14 days
-            { code: 10, mandatory: false }, // 60 days - this drives the requirement!
+            { code: 8, mandatory: true },   // 28 days
+            { code: 10, mandatory: false }, // 28 days
           ],
         });
 
         expect(result.valid).toBe(false);
         expect(result.errors[0]).toContain('too early');
-        // 60 days from 2025-01-15 = 2025-03-16
-        expect(result.suggested_date).toBe('2025-03-16');
+        expect(result.suggested_date).toBe('2025-02-12');
       });
 
       it('includes suggestedDate in validation response', () => {
@@ -464,7 +458,7 @@ describe('Complete eviction pack validation', () => {
           notice_service_method: 'first_class_post',
           court_name: 'Central London County Court',
           arrears_breakdown: 'Total arrears £2400',
-          total_arrears: 2400,
+          total_arrears: 3600,
           arrears_items: [
             {
               period_start: twoMonthsAgo.toISOString().split('T')[0],
@@ -480,6 +474,13 @@ describe('Complete eviction pack validation', () => {
               rent_paid: 0,
               amount_owed: 1200,
             },
+            {
+              period_start: todayStr,
+              period_end: new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0],
+              rent_due: 1200,
+              rent_paid: 0,
+              amount_owed: 1200,
+            },
           ],
         };
 
@@ -488,8 +489,10 @@ describe('Complete eviction pack validation', () => {
         expect(pack.jurisdiction).toBe('england');
         expect(pack.documents.length).toBeGreaterThan(0);
 
-        // Should include Section 8 notice
-        const s8Notice = pack.documents.find(d => d.title.includes('Section 8'));
+        // Should include the current England Form 3A notice
+        const s8Notice = pack.documents.find(
+          (d) => d.document_type === 'section8_notice' || d.title.includes('Form 3')
+        );
         expect(s8Notice).toBeDefined();
       }, 30000);
     });

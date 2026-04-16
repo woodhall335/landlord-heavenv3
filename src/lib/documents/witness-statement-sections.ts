@@ -643,7 +643,7 @@ function buildTimeline(input: WitnessStatementSectionsInput): string {
   events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   // Format as bullet points
-  const bullets = events.map(e => `• ${formatUKDate(e.date)}: ${e.description}`);
+  const bullets = events.map((e) => `- ${formatUKDate(e.date)}: ${e.description}`);
 
   return bullets.join('\n');
 }
@@ -676,19 +676,19 @@ function buildSupportingEvidence(
 
   // Court forms (always included in court pack)
   lines.push('Court Forms:');
-  lines.push('• Form N5 - Claim for Possession of Property');
-  lines.push('• Form N119 - Particulars of Claim for Possession');
+  lines.push('- Form N5 - Claim for Possession of Property');
+  lines.push('- Form N119 - Particulars of Claim for Possession');
   lines.push('');
 
   lines.push('Witness Exhibits:');
   if (scheduleExhibit) {
-    lines.push(`• Exhibit ${scheduleExhibit.label}: ${scheduleExhibit.title} - ${scheduleExhibit.description}`);
+    lines.push(`- Exhibit ${scheduleExhibit.label}: ${scheduleExhibit.title} - ${scheduleExhibit.description}`);
   }
   if (section8NoticeExhibit) {
-    lines.push(`• Exhibit ${section8NoticeExhibit.label}: ${section8NoticeExhibit.title} - ${section8NoticeExhibit.description}`);
+    lines.push(`- Exhibit ${section8NoticeExhibit.label}: ${section8NoticeExhibit.title} - ${section8NoticeExhibit.description}`);
   }
   if (proofOfServiceExhibit) {
-    lines.push(`• Exhibit ${proofOfServiceExhibit.label}: ${proofOfServiceExhibit.title} - ${proofOfServiceExhibit.description}`);
+    lines.push(`- Exhibit ${proofOfServiceExhibit.label}: ${proofOfServiceExhibit.title} - ${proofOfServiceExhibit.description}`);
   }
   lines.push('');
 
@@ -696,7 +696,7 @@ function buildSupportingEvidence(
   if (verifiedDocs.length > 0) {
     lines.push('Verified Documents Available:');
     verifiedDocs.forEach((doc) => {
-      lines.push(`• Exhibit ${doc.label}: ${doc.title}`);
+      lines.push(`- Exhibit ${doc.label}: ${doc.title}`);
     });
     lines.push('');
   }
@@ -722,8 +722,8 @@ function buildSupportingEvidence(
     supplementaryDocs.push('Energy Performance Certificate (EPC)');
   }
 
-  supplementaryDocs.forEach(doc => {
-    lines.push(`• ${doc}`);
+  supplementaryDocs.forEach((doc) => {
+    lines.push(`- ${doc}`);
   });
 
   return lines.join('\n');
@@ -801,6 +801,7 @@ export function buildWitnessStatementSections(
   input: WitnessStatementSectionsInput
 ): WitnessStatementJSON {
   const exhibits = buildWitnessExhibits(input);
+  const hasVerifiedEvidence = getVerifiedSupportingDocuments(input).length > 0;
   const draftSource = {
     ...(input.source_data || {}),
     rent_amount: input.source_data?.rent_amount ?? input.tenancy.rent_amount,
@@ -828,10 +829,11 @@ export function buildWitnessStatementSections(
     buildRentArrearsNarrative(input, exhibits);
   const conductIssuesHtml = paragraphsToHtml(draftingModel.witness.conductParagraphs);
   const timelineHtml = bulletsToHtml(draftingModel.witness.timelineItems) || buildTimeline(input);
-  const evidenceHtml =
-    [paragraphsToHtml(draftingModel.witness.evidenceParagraphs), bulletsToHtml(draftingModel.witness.evidenceItems)]
-      .filter(Boolean)
-      .join('\n') || buildSupportingEvidence(input, exhibits);
+  const evidenceHtml = hasVerifiedEvidence
+    ? buildSupportingEvidence(input, exhibits)
+    : [paragraphsToHtml(draftingModel.witness.evidenceParagraphs), bulletsToHtml(draftingModel.witness.evidenceItems)]
+        .filter(Boolean)
+        .join('\n') || buildSupportingEvidence(input, exhibits);
   const conclusionHtml =
     paragraphsToHtml(draftingModel.witness.conclusionParagraphs) || buildConclusion();
 
@@ -1081,3 +1083,4 @@ export function extractWitnessStatementSectionsInput(
     source_data: data,
   };
 }
+

@@ -7,7 +7,8 @@
  * and the canonical arrears engine. DO NOT create a new arrears UI.
  *
  * Ground 8 Requirements:
- * - Minimum 2 months' rent arrears at BOTH notice date AND hearing date
+ * - Minimum 3 months' rent arrears at BOTH notice date AND hearing date for monthly rents
+ * - Minimum 13 weeks' rent arrears at BOTH notice date AND hearing date for weekly rents
  * - Period-by-period breakdown required for court
  * - validateGround8Eligibility() MUST pass before proceeding
  *
@@ -536,3 +537,4 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
 };
 
 export default Section8ArrearsSection;
+
