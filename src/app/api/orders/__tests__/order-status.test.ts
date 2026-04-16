@@ -542,12 +542,11 @@ describe('Backward Compatibility (42703 Error)', () => {
 describe('Product/Jurisdiction Coverage', () => {
   // Ensure the API supports all products across jurisdictions
   const products = [
-    { type: 'notice_only', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
-    { type: 'complete_pack', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
-    { type: 'money_claim', jurisdictions: ['england', 'wales'] },
-    { type: 'sc_money_claim', jurisdictions: ['scotland'] },
-    { type: 'ast_standard', jurisdictions: ['england', 'wales', 'northern-ireland'] },
-    { type: 'ast_premium', jurisdictions: ['england', 'wales', 'northern-ireland'] },
+    { type: 'notice_only', jurisdictions: ['england', 'wales', 'scotland'] },
+    { type: 'complete_pack', jurisdictions: ['england'] },
+    { type: 'money_claim', jurisdictions: ['england'] },
+    { type: 'ast_standard', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
+    { type: 'ast_premium', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
   ];
 
   products.forEach(({ type, jurisdictions }) => {

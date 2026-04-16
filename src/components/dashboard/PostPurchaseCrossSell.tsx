@@ -10,8 +10,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { RiArrowRightLine } from 'react-icons/ri';
-import { BadgePoundSterling, FileText, Home } from 'lucide-react';
+import { BadgePoundSterling, FileText } from 'lucide-react';
 import { PRODUCTS } from '@/lib/pricing/products';
+import {
+  isProductSupportedInJurisdiction,
+  type WizardJurisdiction,
+  type WizardProduct,
+} from '@/lib/wizard/buildWizardLink';
 
 interface CrossSellItem {
   product: string;
@@ -26,6 +31,8 @@ interface CrossSellItem {
 interface PostPurchaseCrossSellProps {
   /** The product that was just purchased */
   purchasedProduct: string;
+  /** Case jurisdiction so we do not recommend unsupported products */
+  jurisdiction?: string | null;
   /** The case ID for tracking */
   caseId?: string;
   /** Additional CSS classes */
@@ -110,10 +117,27 @@ const CROSS_SELL_MAP: Record<string, CrossSellItem[]> = {
 
 export function PostPurchaseCrossSell({
   purchasedProduct,
+  jurisdiction = null,
   caseId,
   className = '',
 }: PostPurchaseCrossSellProps) {
-  const crossSellItems = CROSS_SELL_MAP[purchasedProduct];
+  const normalizedJurisdiction =
+    jurisdiction === 'england' ||
+    jurisdiction === 'wales' ||
+    jurisdiction === 'scotland' ||
+    jurisdiction === 'northern-ireland'
+      ? (jurisdiction as WizardJurisdiction)
+      : null;
+  const crossSellItems = (CROSS_SELL_MAP[purchasedProduct] || []).filter((item) => {
+    if (!normalizedJurisdiction) {
+      return true;
+    }
+
+    return isProductSupportedInJurisdiction(
+      item.product as WizardProduct,
+      normalizedJurisdiction
+    );
+  });
 
   // No cross-sell items for this product
   if (!crossSellItems || crossSellItems.length === 0) {

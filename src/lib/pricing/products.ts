@@ -134,7 +134,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     sku: 'complete_pack',
     label: 'Complete Eviction Pack',
     shortLabel: 'Complete Pack',
-    description: 'Full bundle with notice, court forms, and guidance',
+    description: 'England-only court bundle with Form 3A notice, N5, N119, and filing guidance',
     price: SEO_PRICES.evictionBundle.amount,
     displayPrice: SEO_PRICES.evictionBundle.display,
     priceNote: 'England only',

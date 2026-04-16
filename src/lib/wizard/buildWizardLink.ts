@@ -128,6 +128,12 @@ export function isProductSupportedInJurisdiction(
   product: WizardProduct,
   jurisdiction: WizardJurisdiction
 ): boolean {
+  const englandOnlyProducts: WizardProduct[] = [
+    'complete_pack',
+    'money_claim',
+    'section13_standard',
+    'section13_defensive',
+  ];
   const englandOnlyResidentialProducts: WizardProduct[] = [
     'guarantor_agreement',
     'england_standard_tenancy_agreement',
@@ -147,17 +153,27 @@ export function isProductSupportedInJurisdiction(
     'renewal_tenancy_agreement',
   ];
 
-  if (englandOnlyResidentialProducts.includes(product)) {
+  if (englandOnlyProducts.includes(product)) {
     return jurisdiction === 'england';
   }
 
-  if (product === 'section13_standard' || product === 'section13_defensive') {
+  if (englandOnlyResidentialProducts.includes(product)) {
     return jurisdiction === 'england';
   }
 
   if (jurisdiction === 'northern-ireland') {
     return product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium';
   }
+
+  if (jurisdiction === 'wales' || jurisdiction === 'scotland') {
+    return (
+      product === 'notice_only' ||
+      product === 'tenancy_agreement' ||
+      product === 'ast_standard' ||
+      product === 'ast_premium'
+    );
+  }
+
   return true;
 }
 
@@ -172,6 +188,13 @@ export function getFallbackProduct(
     // Northern Ireland only supports tenancy agreement flows
     if (jurisdiction === 'northern-ireland') {
       return 'ast_standard';
+    }
+
+    if (
+      (jurisdiction === 'wales' || jurisdiction === 'scotland') &&
+      (product === 'complete_pack' || product === 'money_claim')
+    ) {
+      return 'notice_only';
     }
   }
   return product;
@@ -218,7 +241,15 @@ export function getUnsupportedProductMessage(
       return `${productNames[product]} are not currently available for Northern Ireland. We support standard and premium tenancy agreement flows for Northern Ireland properties.`;
   }
 
-  if (jurisdiction !== 'england') {
+  if (jurisdiction === 'wales' || jurisdiction === 'scotland') {
+    if (product === 'complete_pack') {
+      return `The Complete Eviction Pack is currently available for England only. For ${jurisdiction === 'wales' ? 'Wales' : 'Scotland'}, use the Notice Only pack for the live notice route.`;
+    }
+
+    if (product === 'money_claim') {
+      return `The Money Claim Pack is currently available for England only. For ${jurisdiction === 'wales' ? 'Wales' : 'Scotland'}, this product is not currently sold.`;
+    }
+
     return 'This residential landlord document is currently available for England properties only.';
   }
 
@@ -254,14 +285,15 @@ export const WIZARD_LINKS = {
     src: 'nav',
     topic: 'eviction',
   }),
+  // Legacy convenience aliases route unsupported jurisdictions into the live notice flow.
   completePackWales: buildWizardLink({
-    product: 'complete_pack',
+    product: 'notice_only',
     jurisdiction: 'wales',
     src: 'nav',
     topic: 'eviction',
   }),
   completePackScotland: buildWizardLink({
-    product: 'complete_pack',
+    product: 'notice_only',
     jurisdiction: 'scotland',
     src: 'nav',
     topic: 'eviction',
@@ -275,10 +307,10 @@ export const WIZARD_LINKS = {
     topic: 'money_claim',
   }),
   moneyClaimScotland: buildWizardLink({
-    product: 'money_claim',
+    product: 'notice_only',
     jurisdiction: 'scotland',
     src: 'nav',
-    topic: 'money_claim',
+    topic: 'eviction',
   }),
   section13Standard: buildWizardLink({
     product: 'section13_standard',

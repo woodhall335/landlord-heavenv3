@@ -474,7 +474,14 @@ export async function POST(request: Request) {
           }
         }
 
-        // Check money claim jurisdiction restrictions
+        // Check product jurisdiction restrictions
+        if (product_type === 'complete_pack' && caseData.jurisdiction !== 'england') {
+          return NextResponse.json(
+            { error: 'Complete Eviction Pack is currently available for England cases only.' },
+            { status: 400 }
+          );
+        }
+
         if (product_type === 'money_claim' && caseData.jurisdiction !== 'england') {
           return NextResponse.json(
             { error: 'Money Claim Pack is currently available for England cases only.' },

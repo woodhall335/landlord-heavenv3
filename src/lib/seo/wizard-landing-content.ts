@@ -112,10 +112,10 @@ export interface WizardLandingContent {
  */
 export const noticeOnlyContent: WizardLandingContent = {
   slug: 'eviction-notice-template',
-  title: `Eviction Notice Generator 2026 | England, Wales & Scotland | ${SEO_PRICES.evictionNotice.display}`,
+  title: `Eviction Notice Generator 2026 | Form 3A, Wales Notices & Scotland Notice to Leave | ${SEO_PRICES.evictionNotice.display}`,
   description:
-    'Generate procedurally correct eviction notices for England (Section 21, Section 8), Wales (Section 173/181 under Renting Homes Wales Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.',
-  h1: 'Need a Section 21 or Section 8 Notice?',
+    'Generate procedurally correct eviction notices for England (Form 3A current possession route), Wales (Section 173/181 under Renting Homes (Wales) Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.',
+  h1: 'Need a Form 3A, Wales Notice, or Notice to Leave?',
   subheading:
     'Jurisdiction-specific eviction notices for England, Wales & Scotland — compliance-checked with watermarked previews before you pay.',
 
@@ -127,17 +127,10 @@ export const noticeOnlyContent: WizardLandingContent = {
 
   noticeTypes: [
     {
-      name: 'Section 21 Notice',
+      name: 'England Form 3A Possession Notice',
       jurisdiction: 'England',
       description:
-        'No-fault eviction notice requiring 2 months notice. Uses official Form 6A. Tenant must receive valid notice after deposit protection, gas safety, EPC, and How to Rent requirements are met.',
-      legalBasis: 'Housing Act 1988, s.21',
-    },
-    {
-      name: 'Section 8 Notice',
-      jurisdiction: 'England',
-      description:
-        'Fault-based eviction notice citing specific grounds (e.g., rent arrears, antisocial behaviour). Uses official Form 3A. Notice periods vary by ground (14 days to 4 months depending on the ground).',
+        'Current England possession notice citing Schedule 2 grounds on Form 3A. Notice periods vary by ground, and this is the live England notice route in the post-1 May 2026 framework.',
       legalBasis: 'Housing Act 1988, s.8, Schedule 2',
     },
     {
@@ -165,7 +158,7 @@ export const noticeOnlyContent: WizardLandingContent = {
 
   whatYouGet: [
     'Eviction notice in the correct legal format for your jurisdiction',
-    'Official government forms: Form 6A (Section 21), Form 3A (England possession notice), RHW forms (Wales), Notice to Leave (Scotland)',
+    'Official government forms: Form 3A (England possession notice), RHW forms (Wales), Notice to Leave (Scotland)',
     'Correct statutory wording required by each jurisdiction\'s legislation',
     'Service Instructions explaining how to legally serve the notice',
     'Service & Validity Checklist to verify compliance before serving',
@@ -179,10 +172,10 @@ export const noticeOnlyContent: WizardLandingContent = {
     intro:
       'Incorrect eviction notices are a leading cause of failed or delayed possession claims. A single error in notice type, wording, grounds, or notice period can result in your case being struck out. Our generator reduces this risk by ensuring your notice is procedurally correct from the start.',
     benefits: [
-      'Correct notice type for your jurisdiction — Section 21/8 (England), Section 173/181 (Wales), or Notice to Leave (Scotland)',
+      'Correct notice type for your jurisdiction — Form 3A (England), Section 173/181 (Wales), or Notice to Leave (Scotland)',
       'Statutory wording that matches current legislation — not outdated template language',
       'Correct notice period calculated automatically based on tenancy start date and chosen grounds',
-      'Grounds selection (Section 8/Section 181/Notice to Leave) with required wording for each ground cited',
+      'Grounds selection with required wording for each ground cited',
       'Pre-flight compliance checks flag common blockers before you serve — deposit protection, gas safety, EPC, How to Rent',
       'Prepared in the correct format for service — reduces the risk of procedural rejection at court or tribunal',
     ],
@@ -193,7 +186,7 @@ export const noticeOnlyContent: WizardLandingContent = {
     'Ensures the correct notice type is selected for your property location and tenancy type',
     'Applies the correct notice period based on tenancy length and chosen grounds',
     'Uses statutory wording required by Housing Act 1988, Renting Homes (Wales) Act 2016, or Private Housing (Tenancies) (Scotland) Act 2016',
-    'Generates official prescribed forms: Form 6A, Form 3A, RHW forms, or Notice to Leave',
+    'Generates official prescribed forms: Form 3A, RHW forms, or Notice to Leave',
     'Flags compliance issues (deposit, gas, EPC, How to Rent) that could invalidate your notice',
     'Creates documents in the correct format for filing or service',
   ],
@@ -232,7 +225,7 @@ export const noticeOnlyContent: WizardLandingContent = {
     {
       question: 'What eviction notices do you generate?',
       answer:
-        'We generate procedurally correct notices for three jurisdictions: England (Section 21 no-fault using Form 6A, England possession route using Form 3A), Wales (Section 173 no-fault and Section 181 fault-based under Renting Homes Wales Act 2016), and Scotland (Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016).',
+        'We generate procedurally correct notices for three jurisdictions: England (current possession route using Form 3A), Wales (Section 173 no-fault and Section 181 fault-based under Renting Homes (Wales) Act 2016), and Scotland (Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016).',
     },
     {
       question: 'What does "procedurally correct" mean?',
@@ -242,7 +235,7 @@ export const noticeOnlyContent: WizardLandingContent = {
     {
       question: 'Are these official government forms?',
       answer:
-        'Yes. We use official prescribed forms: Form 6A for Section 21 (England), Form 3A for the England possession route, official RHW forms for Wales, and the prescribed Notice to Leave format for Scotland. These are the forms required by courts and tribunals.',
+        'Yes. We use official prescribed forms: Form 3A for the live England possession route, official RHW forms for Wales, and the prescribed Notice to Leave format for Scotland. These are the forms required by courts and tribunals.',
     },
     {
       question: 'What compliance checks are performed?',
@@ -281,12 +274,12 @@ export const noticeOnlyContent: WizardLandingContent = {
  */
 export const completePackContent: WizardLandingContent = {
   slug: 'products/complete-pack',
-  title: `Complete Eviction Bundle 2026 – England | N5, N5B, N119 + Particulars of Claim | ${SEO_PRICES.evictionBundle.display}`,
+  title: `Complete Eviction Bundle 2026 – England | Form 3A, N5 & N119 Possession Pack | ${SEO_PRICES.evictionBundle.display}`,
   description:
-    'End-to-end eviction paperwork for England: Section 21 notice + N5B, or Section 8 notice + N5 + N119 Particulars of Claim. We create the full court route — not just the notice. All forms mapped and validated.',
-  h1: 'Taking Your Tenant to Court? Complete Section 21 / Section 8 Eviction Pack (England)',
+    'End-to-end England eviction paperwork for the current possession route: Form 3A notice, N5 claim form, N119 particulars of claim, and filing guidance. We create the full court route, not just the notice.',
+  h1: 'Taking Your Tenant to Court? Complete England Form 3A Eviction Pack',
   subheading:
-    'Notice + N5/N5B + N119 + witness statement + filing guide — generated, validated, and internally consistent to reduce rejected possession claims.',
+    'Form 3A notice + N5 + N119 + witness statement + filing guide — generated, validated, and internally consistent to reduce rejected possession claims.',
 
   product: 'complete_pack',
   wizardUrl: '/wizard?product=complete_pack&src=product_page&topic=eviction',
@@ -296,43 +289,30 @@ export const completePackContent: WizardLandingContent = {
 
   courtForms: [
     {
-      name: 'Section 21 Notice',
-      formNumber: 'Form 6A',
-      description: 'No-fault eviction notice using official prescribed form. Required before filing N5B accelerated possession.',
-      route: 'section21',
-    },
-    {
-      name: 'N5B Accelerated Possession',
-      formNumber: 'N5B',
-      description:
-        'Accelerated possession claim form for undefended Section 21 cases. Paper-only procedure — no hearing required if undefended. Faster than standard N5 route.',
-      route: 'section21',
-    },
-    {
-      name: 'Section 8 Notice',
+      name: 'England Form 3A Possession Notice',
       formNumber: 'Form 3A',
       description: 'England possession notice citing grounds from Schedule 2. Grounds are mapped to your specific situation (rent arrears, breach, antisocial behaviour, sale, etc.).',
-      route: 'section8',
+      route: 'current_england_route',
     },
     {
       name: 'N5 Claim for Possession',
       formNumber: 'N5',
       description:
-        'Standard possession claim form for Section 8 cases or defended Section 21 cases. Filed at county court with N119.',
-      route: 'section8',
+        'Standard possession claim form for the live England possession route. Filed at county court with N119.',
+      route: 'current_england_route',
     },
     {
       name: 'N119 Particulars of Claim',
       formNumber: 'N119',
       description:
         'Particulars of Claim for possession of property — the detailed statement of your case. Includes: grounds cited, rent arrears history with dates and amounts, tenancy details, and breach specifics. This document sets out the legal basis of your claim, including grounds and arrears schedule.',
-      route: 'section8',
+      route: 'current_england_route',
     },
   ],
 
   whatYouGet: [
-    'Eviction notice (Section 21 Form 6A or England Form 3A) with correct statutory wording',
-    'Court claim forms: N5B for accelerated possession OR N5 + N119 for standard possession',
+    'England Form 3A possession notice with correct statutory wording',
+    'Court claim forms: N5 + N119 for the standard possession route',
     'Particulars of Claim (N119) — professionally structured case statement drafted in the correct legal format',
     'AI-drafted witness statement with your case details',
     'Service instructions and validity checklist',
@@ -348,7 +328,7 @@ export const completePackContent: WizardLandingContent = {
     intro:
       'Most eviction failures happen at the court filing stage, not the notice stage. An incomplete or inconsistent court submission leads to rejected claims, wasted fees, and months of delay. This bundle prepares the FULL court route — from notice to filed claim — ensuring your documents work together.',
     benefits: [
-      'We map your situation to the correct possession route: Section 21 → N5B accelerated, or Section 8 → N5 + N119 standard',
+      'We prepare the live England possession route: Form 3A notice followed by N5 + N119 for county court possession proceedings',
       'We draft your Particulars of Claim in the correct legal format, ensuring grounds, dates, and amounts are clearly structured.',
       'For rent arrears: we itemise amounts, dates, and running totals in the particulars — exactly what the court requires',
       'For breach grounds: we detail the specific ground(s) and supporting facts in the correct legal format',
@@ -360,7 +340,7 @@ export const completePackContent: WizardLandingContent = {
   // NEW: Procedural benefits with Particulars of Claim emphasis
   proceduralBenefits: [
     'Generates the Particulars of Claim (N119) — the statement of case that sets out your grounds, arrears history, and facts in detail',
-    'Maps your route: Section 21 cases get Form 6A + N5B; England possession cases get Form 3A + N5 + N119',
+    'Builds the live England route: Form 3A + N5 + N119',
     'Ensures internal consistency: notice grounds, claim form, and particulars align and reference each other correctly',
     'Pre-fills official HMCTS forms with your case details — court-ready format',
     'Calculates notice periods, court deadlines, and earliest filing dates',
@@ -371,8 +351,8 @@ export const completePackContent: WizardLandingContent = {
   // NEW: Legal validation explainer
   legalValidationExplainer: {
     whatItMeans: [
-      'Maps your situation to the correct possession route (Section 21 vs Section 8)',
-      'Generates the correct forms for your route (N5B or N5 + N119)',
+      'Maps your situation to the live England possession route',
+      'Generates the correct court forms for your route (Form 3A + N5 + N119)',
       'Pre-fills all mandatory court form fields',
       'Creates Particulars of Claim with grounds, arrears history, and case details',
       'Validates internal consistency between notice, claim form, and particulars',
@@ -383,7 +363,7 @@ export const completePackContent: WizardLandingContent = {
   },
 
   howValidationWorks: [
-    'Route mapping: Section 21 → N5B accelerated route; Section 8 → N5 + N119 standard route',
+    'Route mapping: current England possession route → Form 3A + N5 + N119',
     'Form generation: Official HMCTS forms pre-filled with your case details',
     'Particulars of Claim: Grounds, arrears history, dates, and amounts drafted in legal format',
     'Compliance validation: Checks deposit, gas safety, EPC, How to Rent before generating',
@@ -393,16 +373,16 @@ export const completePackContent: WizardLandingContent = {
 
   whoThisIsFor: [
     'England landlords who need the complete eviction journey from notice to possession order',
-    'Landlords with rent arrears seeking Section 8 possession with properly drafted particulars',
-    'Landlords seeking no-fault Section 21 possession with N5B accelerated claim',
+    'Landlords with rent arrears seeking the live England possession route with properly drafted particulars',
+    'Landlords who want Form 3A, N5, and N119 prepared as one consistent court pack',
     'Property managers handling court filings who need consistent, court-ready documents',
   ],
 
   faqs: [
     {
-      question: 'What is the difference between Section 21 and Section 8 routes?',
+      question: 'What court route does this bundle cover?',
       answer:
-        'Section 21 (no-fault): 2 months notice, then N5B accelerated possession (no hearing if undefended). Section 8 (fault-based): Notice period varies by ground (14 days for rent arrears), then N5 + N119 for standard possession (hearing required). We map your situation to the correct route and generate the appropriate forms.',
+        'This bundle covers the live England possession route using Form 3A, N5, and N119. It is designed for the post-1 May 2026 framework and does not sell or generate the old accelerated possession route in the public England flow.',
     },
     {
       question: 'What is the N119 Particulars of Claim?',
@@ -417,7 +397,7 @@ export const completePackContent: WizardLandingContent = {
     {
       question: 'What court forms are included?',
       answer:
-        'For Section 21: Form 6A notice + N5B accelerated possession claim. For the England possession route: Form 3A notice + N5 claim for possession + N119 particulars of claim. All are official HMCTS forms, pre-filled with your case details.',
+        'This pack includes the England Form 3A possession notice, Form N5 claim for possession, and Form N119 particulars of claim. All are official HMCTS forms, pre-filled with your case details.',
     },
     {
       question: 'Is this available for Wales or Scotland?',
@@ -442,8 +422,8 @@ export const completePackContent: WizardLandingContent = {
   ],
 
   relatedProducts: ['notice_only', 'money_claim'],
-  relatedTools: ['section-21-generator', 'section-8-generator'],
-  relatedBlogPosts: ['n5b-form-guide', 'possession-claim-guide', 'eviction-cost-uk'],
+  relatedTools: ['section-8-generator'],
+  relatedBlogPosts: ['possession-claim-guide', 'eviction-cost-uk'],
 };
 
 /**

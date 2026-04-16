@@ -178,7 +178,7 @@ describe('getPackContents', () => {
     });
 
     describe('scotland', () => {
-      it('returns complete pack with First-tier Tribunal Form E', () => {
+      it('retains legacy Scotland complete-pack contents for historic orders', () => {
         const args: GetPackContentsArgs = {
           product: 'complete_pack',
           jurisdiction: 'scotland',
@@ -947,12 +947,12 @@ describe('isProductSupported', () => {
   });
 
   it('supports eviction products in England, Wales, Scotland', () => {
-    expect(isProductSupported('notice_only', 'england')).toBe(true);
-    expect(isProductSupported('notice_only', 'wales')).toBe(true);
-    expect(isProductSupported('notice_only', 'scotland')).toBe(true);
-    expect(isProductSupported('complete_pack', 'england')).toBe(true);
-    expect(isProductSupported('complete_pack', 'wales')).toBe(true);
-    expect(isProductSupported('complete_pack', 'scotland')).toBe(true);
+      expect(isProductSupported('notice_only', 'england')).toBe(true);
+      expect(isProductSupported('notice_only', 'wales')).toBe(true);
+      expect(isProductSupported('notice_only', 'scotland')).toBe(true);
+      expect(isProductSupported('complete_pack', 'england')).toBe(true);
+      expect(isProductSupported('complete_pack', 'wales')).toBe(false);
+      expect(isProductSupported('complete_pack', 'scotland')).toBe(false);
   });
 
   it('does not support eviction products in Northern Ireland', () => {

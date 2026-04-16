@@ -1358,8 +1358,12 @@ export function isProductSupported(product: string, jurisdiction: string): boole
   }
 
   // Eviction products
-  if (product === 'notice_only' || product === 'complete_pack') {
+  if (product === 'notice_only') {
     return jur !== 'northern-ireland';
+  }
+
+  if (product === 'complete_pack') {
+    return jur === 'england';
   }
 
   // Money claim

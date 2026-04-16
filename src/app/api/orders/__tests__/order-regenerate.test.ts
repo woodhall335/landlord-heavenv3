@@ -220,9 +220,8 @@ describe('Regression: Old bug with invalid document_type', () => {
 describe('Product/Jurisdiction Coverage', () => {
   const productJurisdictionMatrix = [
     { product: 'notice_only', jurisdictions: ['england', 'wales', 'scotland'] },
-    { product: 'complete_pack', jurisdictions: ['england', 'wales', 'scotland'] },
-    { product: 'money_claim', jurisdictions: ['england', 'wales'] },
-    { product: 'sc_money_claim', jurisdictions: ['scotland'] },
+    { product: 'complete_pack', jurisdictions: ['england'] },
+    { product: 'money_claim', jurisdictions: ['england'] },
     { product: 'ast_standard', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
     { product: 'ast_premium', jurisdictions: ['england', 'wales', 'scotland', 'northern-ireland'] },
     { product: 'england_standard_tenancy_agreement', jurisdictions: ['england'] },

@@ -1697,6 +1697,7 @@ export default function CaseDetailPage() {
             {orderStatus?.paid && (
               <PostPurchaseCrossSell
                 purchasedProduct={getEffectiveProduct()}
+                jurisdiction={caseDetails?.jurisdiction}
                 caseId={caseId}
               />
             )}

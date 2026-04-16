@@ -46,17 +46,17 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(noticeOnlyContent.jurisdictions).toContain('Scotland');
     });
 
-    it('should list Section 21 notice type for England', () => {
-      const section21Notice = noticeOnlyContent.noticeTypes?.find(
-        (n) => n.name.includes('Section 21') && n.jurisdiction === 'England'
+    it('should list the Form 3A possession notice for England', () => {
+      const englandForm3A = noticeOnlyContent.noticeTypes?.find(
+        (n) => n.name.includes('Form 3A') && n.jurisdiction === 'England'
       );
-      expect(section21Notice).toBeTruthy();
-      expect(section21Notice?.legalBasis).toContain('Housing Act 1988');
+      expect(englandForm3A).toBeTruthy();
+      expect(englandForm3A?.legalBasis).toContain('Housing Act 1988');
     });
 
-    it('should list Section 8 notice type for England', () => {
+    it('should list the live England possession notice for England', () => {
       const section8Notice = noticeOnlyContent.noticeTypes?.find(
-        (n) => n.name.includes('Section 8') && n.jurisdiction === 'England'
+        (n) => n.name.includes('Form 3A') && n.jurisdiction === 'England'
       );
       expect(section8Notice).toBeTruthy();
     });
@@ -99,24 +99,24 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(completePackContent.h1.toLowerCase()).toContain('england');
     });
 
-    it('should mention Section 21', () => {
+    it('should not advertise Section 21 in the live England complete-pack content', () => {
       const combinedText = [
         completePackContent.description,
         ...completePackContent.whatYouGet,
         ...completePackContent.faqs.map((f) => f.answer),
       ].join(' ');
 
-      expect(combinedText).toContain('Section 21');
+      expect(combinedText).not.toContain('Section 21');
     });
 
-    it('should mention Section 8', () => {
+    it('should mention Form 3A', () => {
       const combinedText = [
         completePackContent.description,
         ...completePackContent.whatYouGet,
         ...completePackContent.faqs.map((f) => f.answer),
       ].join(' ');
 
-      expect(combinedText).toContain('Section 8');
+      expect(combinedText).toContain('Form 3A');
     });
 
     it('should mention N5 form', () => {
@@ -125,9 +125,9 @@ describe('Wizard Landing Pages - Content Configuration', () => {
       expect(n5Form?.name).toContain('N5');
     });
 
-    it('should mention N5B form', () => {
+    it('should not include the legacy N5B form', () => {
       const n5bForm = completePackContent.courtForms?.find((f) => f.formNumber === 'N5B');
-      expect(n5bForm).toBeTruthy();
+      expect(n5bForm).toBeFalsy();
     });
 
     it('should mention N119 form', () => {
