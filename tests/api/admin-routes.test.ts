@@ -340,6 +340,49 @@ describe('Admin API Routes', () => {
   });
 
   // =========================================================================
+  // POST /api/admin/orders/retry-fulfillment
+  // =========================================================================
+  describe('POST /api/admin/orders/retry-fulfillment', () => {
+    it('should return 401 for unauthenticated requests', async () => {
+      mockAuthError = true;
+
+      const { POST } = await import('@/app/api/admin/orders/retry-fulfillment/route');
+      const request = createMockRequest('POST', { orderId: MOCK_ORDER_ID });
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(401);
+      expect(data).toHaveProperty('error');
+      expect(data.error).toBe('Unauthorized');
+    });
+
+    it('should return 403 for non-admin users', async () => {
+      mockUserId = MOCK_REGULAR_USER_ID;
+      mockIsAdmin = false;
+
+      const { POST } = await import('@/app/api/admin/orders/retry-fulfillment/route');
+      const request = createMockRequest('POST', { orderId: MOCK_ORDER_ID });
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(403);
+      expect(data).toHaveProperty('error');
+      expect(data.error).toContain('Admin access required');
+    });
+
+    it('should return 400 for invalid order ID format', async () => {
+      const { POST } = await import('@/app/api/admin/orders/retry-fulfillment/route');
+      const request = createMockRequest('POST', { orderId: 'invalid-uuid' });
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(data).toHaveProperty('error', 'Validation failed');
+      expect(data).toHaveProperty('details');
+    });
+  });
+
+  // =========================================================================
   // GET /api/admin/users
   // =========================================================================
   describe('GET /api/admin/users', () => {
@@ -512,6 +555,7 @@ describe('Admin Pages Endpoint Dependencies', () => {
     '/api/admin/leads',
     '/api/admin/orders/refund',
     '/api/admin/orders/resend-email',
+    '/api/admin/orders/retry-fulfillment',
     '/api/admin/legal-change/cron-runs',
     '/api/admin/legal-change/events',
     '/api/admin/legal-change/check-now',
