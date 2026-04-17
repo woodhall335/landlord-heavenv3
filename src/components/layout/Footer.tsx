@@ -21,7 +21,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-[linear-gradient(180deg,#1f1234_0%,#140b22_100%)] text-white">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
           <div className="sm:col-span-2 lg:col-span-1">
@@ -35,13 +35,13 @@ export function Footer() {
               />
             </div>
             <p className="mb-4 text-sm leading-relaxed text-[#bdbdbd]">
-              Landlord document workflows for properties in England, including Section 8
-              notices, court possession, debt recovery, rent increases, and tenancy
-              agreements.
+              Landlord document workflows for properties in England, covering
+              Section 8 notices, court possession, debt recovery, rent increases,
+              and tenancy agreements.
             </p>
             <div className="flex items-center gap-2 text-xs text-[#bdbdbd]">
               <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="h-3 w-4" />
-              <span>Built for landlords letting property in England.</span>
+              <span>Built for landlords with property in England.</span>
             </div>
           </div>
 
@@ -202,9 +202,9 @@ export function Footer() {
             <div className="flex items-center gap-6 text-sm text-[#bdbdbd]">
               <span className="font-medium">For Landlords in England</span>
               <span>&bull;</span>
-              <span className="font-medium">Court-Ready Documents</span>
+              <span className="font-medium">Guided Document Workflows</span>
               <span>&bull;</span>
-              <span className="font-medium">Instant Delivery</span>
+              <span className="font-medium">Ready to Print</span>
             </div>
           </div>
         </div>

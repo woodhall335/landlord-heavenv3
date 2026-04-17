@@ -701,7 +701,7 @@ questions:
     helperText: "We need these details to validate Ground 8 (mandatory) threshold and calculate notice periods."
     fields:
       - id: arrears_total
-            label: "Total arrears amount (£)"
+        label: "Total arrears amount (£)"
         inputType: currency
         validation:
           required: true
@@ -988,7 +988,7 @@ questions:
         label: "Or summarize key terms"
         inputType: textarea
         helperText: "If unable to upload, describe: start date, rent amount, key terms"
-            placeholder: "E.g., AST started 01/01/2024, rent £1,200pcm due 1st of each month..."
+        placeholder: "E.g., AST started 01/01/2024, rent £1,200pcm due 1st of each month..."
         width: full
     maps_to:
       - evidence.tenancy_agreement_uploads

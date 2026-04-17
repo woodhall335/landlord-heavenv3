@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { questionIsApplicable, deriveRoutesFromFacts } from '../mqs-loader';
+import { loadMQS, questionIsApplicable, deriveRoutesFromFacts } from '../mqs-loader';
 import type { MasterQuestionSet } from '../mqs-loader';
 import type { ExtendedWizardQuestion } from '../types';
 
@@ -106,6 +106,14 @@ const mockWalesMQS: MasterQuestionSet = {
 };
 
 describe('MQS Route Filtering', () => {
+  it('loads the England notice-only MQS config from disk', () => {
+    const mqs = loadMQS('notice_only', 'england');
+
+    expect(mqs).not.toBeNull();
+    expect(Array.isArray(mqs?.questions)).toBe(true);
+    expect(mqs?.questions.some((question) => question.id === 'arrears_details')).toBe(true);
+  });
+
   describe('deriveRoutesFromFacts', () => {
     it('should derive section_8 route from selected_notice_route fact', () => {
       const routes = deriveRoutesFromFacts(

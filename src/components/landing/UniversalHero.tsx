@@ -8,6 +8,10 @@ import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
+import {
+  PUBLIC_HERO_PRESET_STYLES,
+  type PublicHeroPreset,
+} from '@/lib/public-brand';
 import { clsx } from 'clsx';
 
 type HeroCta = {
@@ -27,6 +31,7 @@ const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-c
 const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 
 export type UniversalHeroProps = {
+  preset?: PublicHeroPreset;
   variant?: 'pastel';
   trustText?: string;
   badge?: string;
@@ -75,6 +80,7 @@ function warnOnce(message: string) {
 }
 
 export function UniversalHero({
+  preset = 'product_owner',
   trustText,
   badge,
   badgeIcon,
@@ -112,6 +118,7 @@ export function UniversalHero({
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
   const HeadingTag = isValidHeading ? headingAs : 'h1';
   const reviewCount = getDynamicReviewCount();
+  const presetStyles = PUBLIC_HERO_PRESET_STYLES[preset];
   const resolvedMediaSrc = mediaSrc ?? mascotSrc ?? '/images/laptop.webp';
   const resolvedMediaAlt =
     mediaAlt ?? mascotAlt ?? 'Laptop showing legal workflow dashboard';
@@ -151,7 +158,11 @@ export function UniversalHero({
   ]);
 
   return (
-    <section className={SECTION_WRAP_CLASSES} aria-label={ariaLabel} id={id}>
+    <section
+      className={clsx(SECTION_WRAP_CLASSES, presetStyles.section)}
+      aria-label={ariaLabel}
+      id={id}
+    >
       <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden="true">
         <Image
           src={backgroundImageSrc}
@@ -162,8 +173,9 @@ export function UniversalHero({
           className="object-cover object-center"
         />
       </div>
+      <div className={clsx('pointer-events-none absolute inset-0 -z-10', presetStyles.overlay)} aria-hidden="true" />
       <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/25 via-black/15 to-black/30"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-[linear-gradient(180deg,rgba(15,6,31,0)_0%,rgba(15,6,31,0.24)_100%)]"
         aria-hidden="true"
       />
 
@@ -185,6 +197,7 @@ export function UniversalHero({
               <div
                 className={clsx(
                   'mb-4 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm',
+                  presetStyles.badge,
                   isCenter && 'mx-auto'
                 )}
               >
@@ -215,6 +228,7 @@ export function UniversalHero({
               <p
                 className={clsx(
                   'hidden w-full max-w-xl flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm lg:flex',
+                  presetStyles.reviewPill,
                   isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left'
                 )}
               >
@@ -272,16 +286,21 @@ export function UniversalHero({
                 className={MOBILE_MEDIA_WRAP_CLASSES}
                 aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
               >
-                <Image
-                  src={resolvedMediaSrc}
-                  alt={mascotDecorativeOnMobile ? '' : resolvedMediaAlt}
+                <div
+                  className={clsx('overflow-hidden rounded-[1.8rem] p-3', presetStyles.mediaPanel)}
                   aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
-                  width={980}
-                  height={650}
-                  priority={mediaPriority}
-                  sizes="(max-width: 1024px) 95vw, 46vw"
-                  className="relative z-0 h-auto w-full"
-                />
+                >
+                  <Image
+                    src={resolvedMediaSrc}
+                    alt={mascotDecorativeOnMobile ? '' : resolvedMediaAlt}
+                    aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
+                    width={980}
+                    height={650}
+                    priority={mediaPriority}
+                    sizes="(max-width: 1024px) 95vw, 46vw"
+                    className="relative z-0 h-auto w-full rounded-[1.2rem]"
+                  />
+                </div>
               </div>
             )}
 
@@ -353,7 +372,7 @@ export function UniversalHero({
             {children}
 
             {shouldShowUsageCounter && (
-              <div className="mt-5 w-full text-white/90">
+              <div className={clsx('mt-5 w-full', presetStyles.usageText)}>
                 <UsageTodayCounter />
               </div>
             )}
@@ -364,16 +383,21 @@ export function UniversalHero({
               className="relative z-10 hidden h-full items-center justify-end lg:flex"
               aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
             >
-              <Image
-                src={resolvedMediaSrc}
-                alt={mascotDecorativeOnDesktop ? '' : resolvedMediaAlt}
+              <div
+                className={clsx('w-full max-w-[680px] overflow-hidden rounded-[2.25rem] p-4', presetStyles.mediaPanel)}
                 aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-                width={980}
-                height={650}
-                priority={mediaPriority}
-                sizes="(max-width: 1024px) 92vw, 46vw"
-                className="h-auto w-full max-w-[680px]"
-              />
+              >
+                <Image
+                  src={resolvedMediaSrc}
+                  alt={mascotDecorativeOnDesktop ? '' : resolvedMediaAlt}
+                  aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
+                  width={980}
+                  height={650}
+                  priority={mediaPriority}
+                  sizes="(max-width: 1024px) 92vw, 46vw"
+                  className="h-auto w-full rounded-[1.5rem]"
+                />
+              </div>
             </div>
           )}
         </div>

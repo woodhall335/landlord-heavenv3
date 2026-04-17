@@ -9,9 +9,9 @@ import { generateMetadata } from '@/lib/seo';
 import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 
 export const metadata = generateMetadata({
-  title: 'Landlord Help for Eviction, Rent Increases, Arrears and Tenancy Documents',
+  title: 'Landlord documents for England | Eviction, rent increases, arrears, and tenancy agreements',
   description:
-    'Use Landlord Heaven to handle eviction notices, court paperwork, rent increases, money claims, and tenancy agreements with clearer landlord guidance.',
+    'Use Landlord Heaven to handle eviction notices, court paperwork, rent increases, money claims, and tenancy agreements for landlords with property in England.',
   path: '/',
   keywords: [
     'evict a tenant',
@@ -21,7 +21,7 @@ export const metadata = generateMetadata({
     'section 13 rent increase',
     'recover rent arrears',
     'money claim',
-    'landlord eviction help',
+    'landlord eviction help england',
     'england landlord documents',
   ],
 });

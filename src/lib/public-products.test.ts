@@ -17,6 +17,23 @@ describe('public-products', () => {
     expect(publicProducts.every((product) => product.jurisdiction === 'england')).toBe(true);
   });
 
+  it('keeps presentation metadata populated for every public product', () => {
+    const publicProducts = [...getPublicCatalogProducts(), ...getPublicTenancyProducts()];
+
+    expect(
+      publicProducts.every(
+        (product) =>
+          Boolean(product.heroPreset) &&
+          Boolean(product.themeKey) &&
+          Boolean(product.eyebrow) &&
+          Boolean(product.heroBadge) &&
+          Boolean(product.proofLabel) &&
+          Boolean(product.cardAccent) &&
+          Boolean(product.primaryCtaLabel)
+      )
+    ).toBe(true);
+  });
+
   it('does not expose legacy non-England products as publicly startable', () => {
     expect(isPubliclyStartableProduct('notice_only')).toBe(true);
     expect(isPubliclyStartableProduct('complete_pack')).toBe(true);

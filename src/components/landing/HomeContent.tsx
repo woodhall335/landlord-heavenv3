@@ -1,83 +1,48 @@
 /**
  * HomeContent - Client Component
  *
- * Contains all the interactive homepage content.
- * Extracted from page.tsx to allow server component with metadata export.
+ * Premium England-first homepage content.
  */
 
-"use client";
+'use client';
 
-import { useState } from "react";
-import type { ComponentType } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Container } from "@/components/ui";
-import { Hero, TrustBar } from "@/components/landing";
-import { HeaderConfig } from "@/components/layout/HeaderConfig";
-import { HowItWorksThreeStep } from "@/components/marketing/HowItWorksThreeStep";
+import Link from 'next/link';
+import Image from 'next/image';
+import type { ComponentType } from 'react';
+import { Container } from '@/components/ui';
+import { Hero, TrustBar } from '@/components/landing';
+import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import {
-  RiFileTextLine,
-  RiMoneyPoundCircleLine,
-  RiCheckLine,
+  getPublicCardAccentClasses,
+  PUBLIC_LAYOUT_CLASSES,
+} from '@/lib/public-brand';
+import { PUBLIC_PRODUCT_DESCRIPTORS } from '@/lib/public-products';
+import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
+import {
   RiArrowRightLine,
-  RiShieldCheckLine,
-  RiGlobalLine,
+  RiCheckLine,
+  RiFileCheckLine,
+  RiFileTextLine,
   RiFlashlightLine,
-  RiSendPlaneFill,
-  RiAddLine,
-  RiMicLine,
   RiHome6Line,
-} from "react-icons/ri";
+  RiMoneyPoundCircleLine,
+  RiScales3Line,
+  RiShieldCheckLine,
+} from 'react-icons/ri';
+import { clsx } from 'clsx';
 
-const SEO_SRC = "seo_homepage";
-const evictionWizardHref = `/wizard?topic=eviction&src=${SEO_SRC}`;
+type RouteCard = {
+  title: string;
+  eyebrow: string;
+  description: string;
+  outcome: string;
+  href: string;
+  imageSrc: string;
+  imageAlt: string;
+  accent: keyof typeof accentIconByType;
+};
 
-const primaryPaths = [
-  {
-    label: "Start eviction or possession action",
-    href: evictionWizardHref,
-    imageSrc: "/images/start-eviction.webp",
-    imageAlt: "Landlord starting the eviction process",
-  },
-  {
-    label: "Recover unpaid rent or bills",
-    href: `/wizard?product=money_claim&topic=debt&src=${SEO_SRC}`,
-    imageSrc: "/images/recover-unpaid-rent.webp",
-    imageAlt: "Landlord recovering unpaid rent",
-  },
-  {
-    label: "Create or update a tenancy agreement",
-    href: `/wizard?product=tenancy_agreement&topic=tenancy&src=${SEO_SRC}`,
-    imageSrc: "/images/create-tenancy-agreements.webp",
-    imageAlt: "Create a tenancy agreement",
-  },
-];
-
-const homeQuickLinks = [
-  {
-    label: "How to evict a tenant",
-    href: "#evict-tenant",
-    icon: RiHome6Line,
-  },
-  {
-    label: "Eviction routes and notice help",
-    href: "#section-21-vs-section-8",
-    icon: RiFileTextLine,
-  },
-  {
-    label: "Recover rent arrears",
-    href: "#recover-rent-arrears",
-    icon: RiMoneyPoundCircleLine,
-  },
-  {
-    label: "Rent increase and court help",
-    href: "#landlord-eviction-help",
-    icon: RiShieldCheckLine,
-  },
-];
-
-type WhyLandlordsUseCard = {
+type ValueCard = {
   title: string;
   body: string;
   imageSrc: string;
@@ -85,520 +50,597 @@ type WhyLandlordsUseCard = {
   icon: ComponentType<{ className?: string }>;
 };
 
-const whyLandlordsUseCards = [
+type PreviewCard = {
+  title: string;
+  body: string;
+  imageSrc: string;
+  imageAlt: string;
+  bullets: string[];
+};
+
+type WorkflowStep = {
+  step: string;
+  title: string;
+  body: string;
+  imageSrc: string;
+  imageAlt: string;
+};
+
+const reviewCount = getDynamicReviewCount();
+
+const accentIconByType = {
+  amethyst: RiFileTextLine,
+  plum: RiScales3Line,
+  emerald: RiMoneyPoundCircleLine,
+  amber: RiFlashlightLine,
+  lavender: RiHome6Line,
+};
+
+const routeSelectionCards: RouteCard[] = [
   {
-    title: "Know your route before you serve anything",
+    title: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.shortName,
+    eyebrow: 'Serve the notice first',
+    description:
+      'Generate the current England Section 8 notice with checks on grounds, dates, service, and compliance before you serve anything.',
+    outcome: 'Best when the immediate job is getting the notice right.',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
+    imageSrc: '/images/notice_bundles.webp',
+    imageAlt: 'Section 8 notice document preview',
+    accent: 'amethyst',
+  },
+  {
+    title: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.shortName,
+    eyebrow: 'Prepare for court',
+    description:
+      'Move from notice to N5, N119, and the possession claim route in one workflow built for landlords in England.',
+    outcome: 'Best when you want the notice and court paperwork joined up.',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
+    imageSrc: '/images/eviction_packs.webp',
+    imageAlt: 'Complete eviction pack preview',
+    accent: 'plum',
+  },
+  {
+    title: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.shortName,
+    eyebrow: 'Recover what is owed',
+    description:
+      'Recover unpaid rent, bills, damage, and guarantor debt with a clearer England money claim route.',
+    outcome: 'Best when the money issue needs dealing with separately from possession.',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
+    imageSrc: '/images/money_claims.webp',
+    imageAlt: 'Money claim pack preview',
+    accent: 'emerald',
+  },
+  {
+    title: 'Rent Increase',
+    eyebrow: 'Increase the rent properly',
+    description:
+      'Use the Section 13 and Form 4A route with clearer support notes, timing checks, and landlord-facing guidance.',
+    outcome: 'Best when you need a lawful England rent increase file.',
+    href: '/rent-increase',
+    imageSrc: '/images/Statutory-change.webp',
+    imageAlt: 'Rent increase support illustration',
+    accent: 'amber',
+  },
+  {
+    title: PUBLIC_PRODUCT_DESCRIPTORS.ast.shortName,
+    eyebrow: 'Put the right agreement in place',
+    description:
+      'Choose the right England tenancy agreement for Standard, Premium, Student, HMO / Shared House, or Lodger use.',
+    outcome: 'Best when you want the paperwork sorted before problems start.',
+    href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
+    imageSrc: '/images/tenancy_agreements.webp',
+    imageAlt: 'England tenancy agreement product preview',
+    accent: 'lavender',
+  },
+];
+
+const whyLandlordsUseCards: ValueCard[] = [
+  {
+    title: 'Start with the route that matches the real problem',
     body:
-      "If the tenant has stopped paying rent, will not leave, is challenging a rent increase, or you are unsure which route applies, we help you work out the next step before you commit to the wrong paperwork.",
-    imageSrc: "/images/decision_image.webp",
-    imageAlt: "Landlord notice route decision illustration",
+      'If the tenant is not paying, will not leave, is disputing the rent, or you need new paperwork in place, we help you choose the right England route before you lose time on the wrong document.',
+    imageSrc: '/images/decision_image.webp',
+    imageAlt: 'Landlord deciding the right route',
     icon: RiFlashlightLine,
   },
   {
-    title: "Avoid invalid notices and expensive possession delays",
+    title: 'Catch the issues that can slow the case down',
     body:
-      "We flag the problems that can derail the case before you generate anything, so you are less likely to end up serving again, redoing the file, or losing more time.",
-    imageSrc: "/images/validation_image.webp",
-    imageAlt: "Landlord notice validation illustration",
+      'We surface the points that commonly derail notices, court packs, claims, and rent increase files so you are less likely to redo the work after serving or filing.',
+    imageSrc: '/images/validation_image.webp',
+    imageAlt: 'Landlord validation illustration',
     icon: RiShieldCheckLine,
   },
   {
-    title: "Generate the documents that match the problem you actually need to solve",
+    title: 'Keep the paperwork joined up from the start',
     body:
-      "Build England eviction notices, full court possession packs, Section 13 rent increase files, money claim paperwork, and tenancy agreements with one clear England-first product path.",
-    imageSrc: "/images/jurisdiction_image.webp",
-    imageAlt: "England landlord document route illustration",
-    icon: RiGlobalLine,
+      'The strongest landlord journeys are the ones where the notice, court papers, money claim, rent increase file, or agreement all match the task in front of you and are ready to print.',
+    imageSrc: '/images/what_you_get.webp',
+    imageAlt: 'Generated landlord documents and workflow preview',
+    icon: RiFileCheckLine,
   },
-] satisfies WhyLandlordsUseCard[];
+];
 
-export default function HomeContent() {
-  const router = useRouter();
-  const [askQuestion, setAskQuestion] = useState("");
-  const [isLoading] = useState(false);
+const previewCards: PreviewCard[] = [
+  {
+    title: 'Eviction notice output that stays focused on Section 8',
+    body:
+      'The notice route is written for landlords who need to serve now, with supporting guidance kept close to the document instead of scattered across separate pages.',
+    imageSrc: '/images/notice_bundles.webp',
+    imageAlt: 'Eviction notice generator preview',
+    bullets: [
+      'Section 8-led wording and checks',
+      'Grounds, dates, and service surfaced early',
+      'Designed to be ready to print tonight',
+    ],
+  },
+  {
+    title: 'Court possession workflow with the next documents in view',
+    body:
+      'The court route is for landlords who want the notice, forms, and next filing steps working together instead of being pieced together manually.',
+    imageSrc: '/images/complete pack.png',
+    imageAlt: 'Court possession pack preview',
+    bullets: [
+      'Notice, N5, and N119 in one flow',
+      'Built for the current England route',
+      'Clearer handoff from notice to court',
+    ],
+  },
+  {
+    title: 'Agreement, rent, and debt routes built around real landlord jobs',
+    body:
+      'Not every problem is possession. The rest of the product set stays just as practical, whether you need a money claim, a rent increase file, or the right agreement for a new let.',
+    imageSrc: '/images/laptop.webp',
+    imageAlt: 'Landlord Heaven product previews on a laptop',
+    bullets: [
+      'Money claims for rent, damage, and bills',
+      'Section 13 support for England rent increases',
+      'Five live tenancy agreement routes',
+    ],
+  },
+];
 
-  const handleAskQuestion = async () => {
-    if (!askQuestion.trim()) return;
+const workflowSteps: WorkflowStep[] = [
+  {
+    step: '01',
+    title: 'Choose the landlord task',
+    body:
+      'Start with the job in front of you: serve notice, prepare for court, recover debt, increase the rent, or create the right agreement.',
+    imageSrc: '/images/start-eviction.webp',
+    imageAlt: 'Landlord starting the right route',
+  },
+  {
+    step: '02',
+    title: 'Answer guided questions in plain English',
+    body:
+      'The questions are there to keep the route clear and reduce the risk of missing something important before you pay or print.',
+    imageSrc: '/images/eviction-timeline.webp',
+    imageAlt: 'Guided landlord workflow timeline',
+  },
+  {
+    step: '03',
+    title: 'Generate documents that match the route',
+    body:
+      'You end up with paperwork that matches the task, speaks to the right process, and is easier to rely on when you need to act quickly.',
+    imageSrc: '/images/create-tenancy-agreements.webp',
+    imageAlt: 'Generated landlord documents and agreements',
+  },
+];
 
-    // Navigate to Ask Heaven page with the question as a query parameter
-    router.push(`/ask-heaven?q=${encodeURIComponent(askQuestion)}`);
-  };
+function RouteSelectionCard({
+  title,
+  eyebrow,
+  description,
+  outcome,
+  href,
+  imageSrc,
+  imageAlt,
+  accent,
+}: RouteCard) {
+  const accentStyles = getPublicCardAccentClasses(accent);
+  const Icon = accentIconByType[accent];
 
   return (
-    <div className="bg-white">
+    <Link
+      href={href}
+      className={clsx(
+        'group overflow-hidden rounded-[2rem] border transition duration-200',
+        accentStyles.card,
+        accentStyles.borderGlow,
+        PUBLIC_LAYOUT_CLASSES.card
+      )}
+    >
+      <div className="relative aspect-[16/11] overflow-hidden border-b border-black/5">
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          className="object-cover transition duration-300 group-hover:scale-[1.03]"
+        />
+      </div>
+      <div className="p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <span className={clsx('inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-[0.16em] uppercase', accentStyles.chip)}>
+              {eyebrow}
+            </span>
+            <h3 className="mt-4 text-2xl font-semibold leading-tight">{title}</h3>
+          </div>
+          <span className={clsx('inline-flex h-12 w-12 items-center justify-center rounded-2xl', accentStyles.icon)}>
+            <Icon className="h-6 w-6" />
+          </span>
+        </div>
+        <p className="mt-4 text-[15px] leading-7 text-[#5a516d]">{description}</p>
+        <div className="mt-5 flex items-start gap-2 text-sm font-semibold text-[#2f2148]">
+          <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-[#7c3aed]" />
+          <span>{outcome}</span>
+        </div>
+        <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#4f2a96]">
+          View route
+          <RiArrowRightLine className="h-4 w-4 transition group-hover:translate-x-1" />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export default function HomeContent() {
+  return (
+    <div className={PUBLIC_LAYOUT_CLASSES.page}>
       <HeaderConfig mode="autoOnScroll" />
       <Hero />
+      <TrustBar />
 
-      <section className="border-b border-gray-100 bg-white">
+      <section className="py-14 md:py-18">
         <Container>
-          <nav
-            className="grid grid-cols-2 gap-3 py-4 md:grid-cols-4"
-            aria-label="Homepage quick links"
-          >
-            {homeQuickLinks.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="group flex min-h-[6.25rem] flex-col rounded-2xl border border-[#ece8ff] bg-[#faf8ff] px-4 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[#d8cdfa] hover:bg-white hover:shadow-[0_10px_24px_rgba(91,53,179,0.08)]"
-              >
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
-                  <item.icon className="h-5 w-5" />
-                </span>
-                <span className="mt-3 flex items-center justify-between gap-3">
-                  <span className="text-sm font-semibold leading-snug text-[#2d2152] sm:text-[15px]">
-                    {item.label}
-                  </span>
-                  <RiArrowRightLine className="h-5 w-5 shrink-0 text-primary transition group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            ))}
-          </nav>
-        </Container>
-      </section>
+          <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'public-subtle-grid px-6 py-8 md:px-10 md:py-10')}>
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-3xl">
+                <span className="public-eyebrow">Choose the landlord route</span>
+                <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
+                  Start with the task that needs sorting now
+                </h2>
+                <p className="mt-4 text-lg leading-8 text-[#5d5672]">
+                  The homepage is built to help landlords move quickly: choose the
+                  route that fits the tenancy problem, see what the product helps
+                  you do, and go straight into the workflow when you are ready.
+                </p>
+              </div>
+              <div className="public-stat-card px-5 py-4">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
+                  Trusted proof
+                </p>
+                <p className="mt-2 text-3xl font-bold text-[#1c1431]">
+                  {REVIEW_RATING}/5
+                </p>
+                <p className="mt-1 text-sm text-[#5d5672]">
+                  Based on {reviewCount}+ landlord reviews
+                </p>
+              </div>
+            </div>
 
-      {/* LEGAL DECISION GATEWAY (adds 3-lane routing without removing existing hero visuals) */}
-      <section id="evict-tenant" className="py-10 bg-[#f7f7fb]">
-        <Container>
-          <div className="rounded-[2rem] border border-[#ddddea] bg-[#f8f8fd] p-6 md:p-10 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-              Start the right landlord action tonight
-            </p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-bold tracking-tight text-[#16163f]">
-              What needs sorting first?
-            </h2>
-            <p className="mt-4 max-w-4xl text-1xl leading-relaxed text-[#3b3b4f]">
-              If the tenant is not paying, will not leave, is disputing the tenancy, or you need to put the right agreement in place, start with the route that matches the real problem and keep the case moving.
-            </p>
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {primaryPaths.map((path) => (
-                <Link
-                  key={path.label}
-                  href={path.href}
-                  className="group flex overflow-hidden rounded-3xl border border-[#e2e2f0] bg-white text-center shadow-[0_4px_14px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:border-[#cfcff0] hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
-                >
-                  <div className="flex w-full flex-col">
-                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f5f4fb]">
-                      <Image
-                        src={path.imageSrc}
-                        alt={path.imageAlt}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover transition duration-300 group-hover:scale-[1.02]"
-                      />
-                    </div>
-                    <div className="flex flex-1 items-center justify-center px-6 py-5">
-                      <span className="text-[1rem] font-semibold leading-tight text-[#18184d]">
-                        {path.label}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
+            <div className="mt-8 grid gap-6 xl:grid-cols-3 md:grid-cols-2">
+              {routeSelectionCards.map((card) => (
+                <RouteSelectionCard key={card.title} {...card} />
               ))}
             </div>
           </div>
         </Container>
       </section>
 
-      {/* TRUST BAR */}
-      <TrustBar />
-
-      {/* HOW IT WORKS */}
-      <section id="section-21-vs-section-8" className="py-20 md:py-24 bg-gray-50">
+      <section className="py-8">
         <Container>
-          <HowItWorksThreeStep />
-
-          <div className="max-w-5xl mx-auto">
-            <div className="mt-14 text-center">
-
-
-
-
-
-
-
-
-              <Link href={evictionWizardHref} className="hero-btn-primary">
-                Find out which notice you need &rarr;
-              </Link>
-              <p className="mt-4 text-sm text-gray-500">
-                Free to start &bull; Pay only when you're ready
-              </p>
-            </div>
-          </div>
+          <div className={PUBLIC_LAYOUT_CLASSES.divider} />
         </Container>
       </section>
 
-      {/* ASK HEAVEN */}
-      <section id="recover-rent-arrears" className="py-20 md:py-24 relative overflow-hidden">
-        {/* Gradient background matching Ask Heaven page */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-cyan-50 opacity-70" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-200/30 via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-pink-200/30 via-transparent to-transparent" />
-
-        <Container className="relative z-10">
-          <div className="max-w-3xl mx-auto">
-            {/* Ask Heaven Branding */}
-            <div className="flex items-center justify-center gap-3 mb-8">
-              <Image
-                src="/favicon.png"
-                alt="Ask Heaven"
-                width={48}
-                height={48}
-                className="rounded-xl"
-              />
-              <span className="text-2xl font-bold text-gray-900">
-                Ask Heaven
-              </span>
-            </div>
-
-            <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-                What do you need help with tonight?
-              </h2>
-              <p className="text-gray-500 text-lg">
-                Free landlord guidance on eviction, rent arrears, rent increases, tenancy agreements, and compliance
-              </p>
-            </div>
-
-            {/* Main Chat Card */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden p-6 md:p-8">
-              {/* Main Input */}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!isLoading && askQuestion.trim()) {
-                    handleAskQuestion();
-                  }
-                }}
-                className="mb-8"
-              >
-                <div className="relative">
-                  <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl shadow-lg hover:border-primary/30 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
-                    <button
-                      type="button"
-                      className="p-4 text-gray-400 hover:text-gray-600 transition-colors"
-                      aria-label="Add attachment"
-                      disabled
-                    >
-                      <RiAddLine className="w-5 h-5" />
-                    </button>
-                    <input
-                      type="text"
-                      className="flex-1 py-4 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none text-base"
-                      placeholder="Ask about eviction, arrears, Section 13, tenancy agreements..."
-                      value={askQuestion}
-                      onChange={(e) => setAskQuestion(e.target.value)}
-                      disabled={isLoading}
-                    />
-                    <button
-                      type="button"
-                      className="p-4 text-gray-400 hover:text-gray-600 transition-colors"
-                      aria-label="Voice input"
-                      disabled
-                    >
-                      <RiMicLine className="w-5 h-5" />
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={isLoading || !askQuestion.trim()}
-                      className="m-2 p-3 bg-primary hover:bg-primary-700 text-white rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                      aria-label="Send message"
-                    >
-                      {isLoading ? (
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      ) : (
-                        <RiSendPlaneFill className="w-5 h-5" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </form>
-
-              {/* Quick Prompt Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {[
-                  {
-                    label: "Eviction notice help",
-
-                    prompt: "How do I serve an eviction notice to my tenant?",
-                  },
-                  {
-                    label: "Rent arrears recovery",
-
-                    prompt: "How do I recover unpaid rent from a tenant?",
-                  },
-                  {
-                    label: "Rent increase challenge",
-
-                    prompt: "How do I increase the rent properly and what happens if the tenant challenges it?",
-                  },
-                ].map((item) => (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={() => setAskQuestion(item.prompt)}
-                    className="group p-4 bg-white rounded-2xl border border-gray-200 hover:border-primary/30 hover:shadow-lg text-left transition-all duration-200"
-                  >
-                    <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                      {getAskHeavenPromptIcon(item.label)}
-                    </span>
-                    <p className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                      {item.label}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                      {item.prompt}
-                    </p>
-                  </button>
-                ))}
-              </div>
-
-              {/* Trust indicators */}
-              <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm text-gray-500">
-                <span className="flex items-center gap-2">
-                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
-                  Free to use
-                </span>
-                <span className="flex items-center gap-2">
-                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
-                  No sign-up required
-                </span>
-                <span className="flex items-center gap-2">
-                  <RiShieldCheckLine className="w-4 h-4 text-green-500" />
-                  UK law focused
-                </span>
-              </div>
-
-              <p className="mt-6 text-center text-xs text-gray-400">
-                For guidance only, not legal advice.{" "}
-                <Link href="/terms" className="text-primary hover:underline">
-                  Terms apply
-                </Link>
-              </p>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* BUILT FOR CHANGING HOUSING LAW */}
-      <section id="landlord-eviction-help" className="py-20 md:py-24 bg-gray-50">
+      <section className="pb-16 pt-4 md:pb-20">
         <Container>
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
-              <div>
-                <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
-                <span className="text-sm font-semibold text-primary">
-                    Help for landlords dealing with eviction, arrears, rent increases, and tenancy paperwork
-                  </span>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                  When the tenancy starts going wrong, the first job is getting the next step right.
-                </h2>
-                <p className="text-lg text-gray-600">
-                  If the tenant has stopped paying, will not leave, is challenging a rent increase, or has left you needing clearer paperwork, you need a route you can trust quickly. We help you work out whether that is an eviction notice, a full court pack, a Section 13 rent increase file, a money claim, or a tenancy agreement, then build the documents without burying you in legal language.
-                </p>
-
-                <ul className="mt-8 space-y-3 text-gray-700">
-                  <li className="flex items-start gap-3">
-                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Work out the right route before you lose time on the wrong notice, claim, or rent increase process</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Flag the mistakes that can invalidate a notice, weaken a claim, or make a rent increase harder to defend</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Answer plain-English questions and get paperwork that matches the tenancy problem in front of you</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <RiCheckLine className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>Move tonight, not next week, without paying a solicitor just to get started</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="flex justify-center md:justify-end">
-                <Image
-                  src="/images/Statutory-change.webp"
-                  alt="Eviction support for landlords under pressure"
-                  width={720}
-                  height={720}
-                  className="w-full max-w-[520px] h-auto object-contain"
-                />
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* WHY LANDLORDS USE LANDLORD HEAVEN */}
-      <WhyLandlordsUseSection />
-
-      {/* FINAL CTA */}
-      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Ready to get the next step clear?
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="public-eyebrow">Why landlords use us</span>
+            <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
+              Clear next steps matter most when the tenancy is under pressure
             </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Choose the route that fits the tenancy problem, answer guided questions, and generate the documents you need to act with more confidence. <span className="font-semibold text-gray-800">Start in under 2 minutes.</span>
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
-
-
-
-
-
-              <Link href={evictionWizardHref} className="hero-btn-primary">
-                Find out which notice you need &rarr;
-              </Link>
-            </div>
-
-            {/* Final trust indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500">
-              <span className="flex items-center gap-2">
-                <RiFlashlightLine className="w-5 h-5 text-primary" />
-                Preview before you pay
-              </span>
-              <span className="flex items-center gap-2">
-                <RiShieldCheckLine className="w-5 h-5 text-primary" />
-                Mistakes flagged early
-              </span>
-            </div>
-
-            {/* Section 8 CTA - SEO Internal Linking */}
-            <div className="mt-8 pt-6 border-t border-gray-300/30">
-              <p className="text-gray-600">
-                Start with the{" "}
-                <Link
-                  href="/eviction-notice-template"
-                  className="text-primary hover:underline font-medium"
-                >
-                  eviction notice template
-                </Link>{" "}
-                if you need to serve notice. Chasing unpaid rent? Use the{" "}
-                <Link
-                  href="/money-claim-unpaid-rent"
-                  className="text-primary hover:underline font-medium"
-                >
-                  money claim unpaid rent guide
-                </Link>
-                {" | "}
-                <Link
-                  href="/rent-increase"
-                  className="text-primary hover:underline font-medium"
-                >
-                  Section 13 rent increase guide
-                </Link>
-                {" | "}
-                <Link
-                  href="/section-8-notice-template"
-                  className="text-primary hover:underline font-medium"
-                >
-                  Section 8 notice guide
-                </Link>
-                {" | "}
-                <Link
-                  href="/products/notice-only"
-                  className="text-primary hover:underline font-medium"
-                >
-                  Generate your notice
-                </Link>
-              </p>
-            </div>
-          </div>
-        </Container>
-      </section>
-    </div>
-  );
-}
-
-export function WhyLandlordsUseSection() {
-  return (
-    <section className="py-20 md:py-24 bg-[#f7f7fb]">
-      <Container>
-        <div className="mx-auto max-w-6xl rounded-[2.5rem] border border-[#e6e1fb] bg-[linear-gradient(180deg,#fbfaff_0%,#f8f6ff_100%)] px-6 py-8 shadow-[0_18px_60px_rgba(121,83,214,0.08)] md:px-10 md:py-10">
-          <div className="text-center mb-12 md:mb-14">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2.5 mb-5">
-              <RiShieldCheckLine className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold text-primary">
-                Why landlords use Landlord Heaven when the case is getting stressful
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#0f172a] mb-5">
-              When one wrong step could cost you weeks, you need a clearer path
-            </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              Work out the right route, avoid invalid notice mistakes, and generate
-              the documents you need without getting buried in legal jargon.
+            <p className="mt-4 text-lg leading-8 text-[#5d5672]">
+              The strongest public journey is one that tells landlords what to do
+              next, builds the right paperwork, and makes the product feel calm and
+              usable even when the situation is not.
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+          <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {whyLandlordsUseCards.map((card) => {
               const Icon = card.icon;
 
               return (
                 <article
                   key={card.title}
-                  className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#e5def8] bg-[linear-gradient(180deg,#ffffff_0%,#faf8ff_100%)] shadow-[0_10px_30px_rgba(115,90,196,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(115,90,196,0.12)]"
+                  className={clsx(
+                    'overflow-hidden rounded-[2rem] border p-6',
+                    PUBLIC_LAYOUT_CLASSES.card
+                  )}
                 >
-                  <div className="relative px-7 pt-7">
-                    <div className="absolute left-7 top-7 z-10 inline-flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-primary/10 text-primary shadow-[0_10px_24px_rgba(139,92,246,0.14)] backdrop-blur-sm">
-                      <Icon className="h-7 w-7" />
-                    </div>
-                    <div className="relative overflow-hidden rounded-[1.75rem] bg-[radial-gradient(circle_at_top,_rgba(190,172,255,0.24),_rgba(255,255,255,0.96)_65%)] px-4 pb-1 pt-4">
-                      <div className="relative mx-auto aspect-[4/3] w-full max-w-[18rem]">
-                        <Image
-                          src={card.imageSrc}
-                          alt={card.imageAlt}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 30vw"
-                          className="object-contain object-center"
-                        />
-                      </div>
-                    </div>
+                  <div className="relative aspect-[16/11] overflow-hidden rounded-[1.7rem] public-image-frame">
+                    <Image
+                      src={card.imageSrc}
+                      alt={card.imageAlt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      className="object-cover"
+                    />
                   </div>
-
-                  <div className="flex flex-1 flex-col px-8 pb-8 pt-6">
-                    <h3 className="mb-4 text-2xl font-bold leading-tight text-[#18184d]">
-                      {card.title}
-                    </h3>
-                    <p className="text-lg leading-relaxed text-[#4b4b63]">
-                      {card.body}
-                    </p>
+                  <div className="mt-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f4ebff] text-[#7c3aed]">
+                    <Icon className="h-6 w-6" />
                   </div>
+                  <h3 className="mt-5 text-2xl font-semibold leading-tight text-[#1d1532]">
+                    {card.title}
+                  </h3>
+                  <p className="mt-4 text-[15px] leading-7 text-[#5a516d]">{card.body}</p>
                 </article>
               );
             })}
           </div>
+        </Container>
+      </section>
 
-          <div className="mt-12 text-center">
-            <Link href={evictionWizardHref} className="hero-btn-primary">
-              Find out which notice you need &rarr;
-            </Link>
-            <p className="mt-4 text-sm text-gray-500">
-              Start with the right eviction route before notice mistakes slow the case down
+      <section className="py-8">
+        <Container>
+          <div className={PUBLIC_LAYOUT_CLASSES.divider} />
+        </Container>
+      </section>
+
+      <section className="pb-16 pt-4 md:pb-20">
+        <Container>
+          <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-10 md:py-10')}>
+            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+              <div>
+                <span className="public-eyebrow">What the product feels like</span>
+                <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
+                  One product family, not a stitched-together set of pages
+                </h2>
+                <p className="mt-4 text-lg leading-8 text-[#5d5672]">
+                  The public experience should feel polished and consistent from the
+                  first click: richer purple surfaces, stronger imagery, cleaner
+                  cards, and routes that say exactly what they help landlords do.
+                </p>
+                <div className="mt-6 space-y-4">
+                  {[
+                    'Section 8-led notice generation for the current England route',
+                    'Complete court possession workflow when you need more than the notice',
+                    'Debt, rent increase, and tenancy routes that stay commercially clear',
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-3 text-[#2c2143]">
+                      <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#7c3aed]" />
+                      <span className="text-[15px] leading-7">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid gap-5 md:grid-cols-3">
+                {previewCards.map((card) => (
+                  <article
+                    key={card.title}
+                    className={clsx(
+                      'overflow-hidden rounded-[1.8rem] border',
+                      PUBLIC_LAYOUT_CLASSES.card
+                    )}
+                  >
+                    <div className="relative aspect-[16/12] overflow-hidden border-b border-[#efe5ff]">
+                      <Image
+                        src={card.imageSrc}
+                        alt={card.imageAlt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 30vw"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-xl font-semibold leading-tight text-[#1d1532]">
+                        {card.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-[#5a516d]">{card.body}</p>
+                      <ul className="mt-4 space-y-2 text-sm text-[#2e2443]">
+                        {card.bullets.map((bullet) => (
+                          <li key={bullet} className="flex items-start gap-2">
+                            <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-[#7c3aed]" />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-8">
+        <Container>
+          <div className={PUBLIC_LAYOUT_CLASSES.divider} />
+        </Container>
+      </section>
+
+      <section className="pb-16 pt-4 md:pb-20">
+        <Container>
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
+              <span className="public-eyebrow">How it works in England</span>
+              <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
+                Notice, court, debt, rent, and agreement work in a clearer order
+              </h2>
+              <div className="mt-8 space-y-5">
+                {workflowSteps.map((step) => (
+                  <div
+                    key={step.step}
+                    className="grid gap-4 rounded-[1.8rem] border border-[#efe5ff] bg-white/85 p-4 md:grid-cols-[0.28fr_0.72fr]"
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-[1.3rem] public-image-frame">
+                      <Image
+                        src={step.imageSrc}
+                        alt={step.imageAlt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 30vw"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
+                        Step {step.step}
+                      </p>
+                      <h3 className="mt-2 text-xl font-semibold text-[#1d1532]">
+                        {step.title}
+                      </h3>
+                      <p className="mt-3 text-[15px] leading-7 text-[#5a516d]">{step.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'px-6 py-8 md:px-8')}>
+              <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
+                Built for landlords in England
+              </span>
+              <h2 className="mt-5 text-3xl font-bold tracking-tight text-white">
+                The goal is simple: make the next step obvious and the paperwork easier to trust
+              </h2>
+              <p className="mt-4 text-base leading-8 text-white/78">
+                Landlords do not come here for vague legal content. They come here
+                because they need to act. The public site should make it easy to see
+                the route, understand the promise, and move into the product without
+                second-guessing what page does what.
+              </p>
+              <div className="mt-8 grid gap-4">
+                {[
+                  'Commercial names that match what landlords actually search for',
+                  'Hero copy, cards, and CTAs that promise one clear outcome per page',
+                  'Product flows that feel premium without becoming harder to use',
+                ].map((item) => (
+                  <div key={item} className="rounded-[1.4rem] border border-white/10 bg-white/7 px-4 py-4">
+                    <div className="flex items-start gap-3 text-white">
+                      <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#d7c2ff]" />
+                      <span className="text-sm leading-6 text-white/82">{item}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-8">
+        <Container>
+          <div className={PUBLIC_LAYOUT_CLASSES.divider} />
+        </Container>
+      </section>
+
+      <section className="pb-16 pt-4 md:pb-20">
+        <Container>
+          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+            <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
+              <span className="public-eyebrow">Proof and trust</span>
+              <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-4xl">
+                Landlords stay when the experience feels direct, calm, and ready to use
+              </h2>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                <div className="public-stat-card px-5 py-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
+                    Review score
+                  </p>
+                  <p className="mt-3 text-4xl font-bold text-[#1c1431]">
+                    {REVIEW_RATING}/5
+                  </p>
+                  <p className="mt-2 text-sm text-[#5d5672]">
+                    Visible proof that landlords trust the product enough to buy and
+                    recommend it.
+                  </p>
+                </div>
+                <div className="public-stat-card px-5 py-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
+                    Reviews
+                  </p>
+                  <p className="mt-3 text-4xl font-bold text-[#1c1431]">{reviewCount}+</p>
+                  <p className="mt-2 text-sm text-[#5d5672]">
+                    Stronger than generic trust copy because the number stays visible
+                    across the public journey.
+                  </p>
+                </div>
+              </div>
+              <p className="mt-6 text-[15px] leading-7 text-[#5d5672]">
+                The premium pass is not about making the site flashy. It is about
+                helping landlords feel that the route is credible, the copy matches
+                the product, and the documents will be worth printing.
+              </p>
+            </div>
+
+            <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-8')}>
+              <div className="grid gap-6 md:grid-cols-[0.48fr_0.52fr] md:items-center">
+                <div className="relative aspect-[5/6] overflow-hidden rounded-[2rem] public-image-frame">
+                  <Image
+                    src="/images/laptop.webp"
+                    alt="Landlord Heaven product dashboard and documents"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#1d1532]">
+                    The public site should sell the product by making the outcome feel obvious
+                  </h3>
+                  <div className="mt-5 space-y-4">
+                    {[
+                      'Each page should say what it helps the landlord do within the first few lines.',
+                      'The imagery should show product, documents, or workflow instead of empty decoration.',
+                      'The call to action should feel like the next sensible step, not a hard sell.',
+                    ].map((item) => (
+                      <div key={item} className="flex items-start gap-3">
+                        <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#7c3aed]" />
+                        <p className="text-[15px] leading-7 text-[#5d5672]">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="pb-18 pt-4 md:pb-24">
+        <Container>
+          <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'px-6 py-10 text-center md:px-12 md:py-12')}>
+            <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
+              Start tonight
+            </span>
+            <h2 className="mt-5 text-3xl font-bold tracking-tight text-white md:text-5xl">
+              Choose the route that fits the tenancy problem and move forward
+            </h2>
+            <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-white/78">
+              Whether you need a Section 8 notice, the full court possession route,
+              a money claim, a rent increase file, or the right agreement for a new
+              let, the next step should feel clear from the first screen.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link href="/wizard?topic=eviction&src=seo_homepage" className="hero-btn-primary">
+                Start with the right route
+              </Link>
+              <Link href="/pricing" className="hero-btn-secondary">
+                View pricing
+              </Link>
+            </div>
+            <p className="mt-5 text-sm text-white/66">
+              Built for landlords with property in England. Clearer routes, stronger
+              checks, and documents ready to print.
             </p>
           </div>
-        </div>
-      </Container>
-    </section>
+        </Container>
+      </section>
+    </div>
   );
 }
-
-function getAskHeavenPromptIcon(label: string) {
-  switch (label) {
-    case "Eviction notice help":
-      return <RiFileTextLine className="h-5 w-5" />;
-    case "Rent arrears recovery":
-      return <RiMoneyPoundCircleLine className="h-5 w-5" />;
-    case "Rent increase challenge":
-      return <RiFlashlightLine className="h-5 w-5" />;
-    default:
-      return <RiFlashlightLine className="h-5 w-5" />;
-  }
-}
-

@@ -27,6 +27,7 @@ import {
   RETIRED_PUBLIC_ROUTES,
   isRetiredPublicRoute,
 } from '@/lib/public-retirements';
+import { getPublicCatalogProducts, getPublicTenancyProducts } from '@/lib/public-products';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
 
 // Force this metadata route to run dynamically (avoids static render + fetch cache issues).
@@ -40,6 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Update this quarterly when making significant site-wide changes
   const STABLE_PRODUCT_DATE = new Date('2026-01-01');
   const phase3SitemapExclusions = new Set(getPhase3SitemapExclusions());
+  const publicOwnerPages = [...getPublicCatalogProducts(), ...getPublicTenancyProducts()];
 
   // Explicit legacy routes that have been retired and should never reappear in sitemap.
   // These have previously generated 404 coverage issues in Google Search Console.
@@ -106,12 +108,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Product pages
   const productPages = [
-    { path: '/products/notice-only', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/products/complete-pack', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/products/money-claim', priority: 0.95, changeFrequency: 'weekly' as const },
-    { path: '/products/section-13-standard', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/products/section-13-defence', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/products/ast', priority: 0.95, changeFrequency: 'weekly' as const },
+    ...publicOwnerPages.map((product) => ({
+      path: product.landingHref,
+      priority: product.category === 'tenancy' ? 0.9 : 0.95,
+      changeFrequency: 'weekly' as const,
+    })),
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
@@ -377,6 +378,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/scotland-eviction-notices',
     '/refunds',
   ];
+  const englandOnlyDiscoveryExclusions = new Set<string>([
+    '/how-to-evict-a-tenant-uk',
+    '/eviction-process-uk',
+    '/eviction-cost-uk',
+    '/eviction-timeline-uk',
+  ]);
 
   // Keep intentional static exclusions here for any indexable route we explicitly want omitted.
   const intentionalStaticRouteExclusions = new Set<string>(sitemapAllowlist.intentionallyExcludedRoutes);
@@ -384,6 +391,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const isIndexablePath = (path: string) =>
     !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
     !noindexPaths.includes(path) &&
+    !englandOnlyDiscoveryExclusions.has(path) &&
     !retiredPaths.has(path) &&
     !isRetiredPublicRoute(path) &&
     !intentionalStaticRouteExclusions.has(path);

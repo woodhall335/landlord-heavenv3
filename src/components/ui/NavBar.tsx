@@ -30,14 +30,14 @@ interface NavBarProps {
 type EffectiveHeaderState = 'solid' | 'transparent';
 
 const primaryLinks: NavItem[] = [
-  { href: "/products/notice-only", label: "Section 8 Notice" },
+  { href: "/products/notice-only", label: "Eviction Notice Generator" },
   { href: "/products/complete-pack", label: "Complete Eviction Pack" },
   { href: "/products/money-claim", label: "Money Claim Pack" },
   { href: "/rent-increase", label: "Rent Increase Guide" },
 ];
 
 const tenancyAgreementLinks: NavItem[] = [
-  { href: '/products/ast', label: 'All England Agreement Routes' },
+  { href: '/products/ast', label: 'England Tenancy Agreements' },
   { href: '/standard-tenancy-agreement', label: 'Standard Tenancy Agreement' },
   { href: '/premium-tenancy-agreement', label: 'Premium Tenancy Agreement' },
   { href: '/student-tenancy-agreement', label: 'Student Tenancy Agreement' },
@@ -219,7 +219,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
         useWizardDarkHeader
           ? 'bg-[rgba(20,8,48,0.84)] border-b border-white/15 backdrop-blur-md'
           : isSolid
-            ? 'bg-white border-b border-[#E5EE7B]'
+            ? 'bg-white/96 border-b border-[#efe5ff] backdrop-blur-md'
             : 'bg-transparent border-b border-transparent',
       )}
     >
@@ -270,7 +270,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
               className={clsx(
                 'text-sm font-semibold transition-colors relative py-2 flex items-center gap-1',
                 isTenancyMenuActive
-                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#73AEED]')
+                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
                   : clsx(secondaryTextClass, hoverTextClass)
               )}
               aria-label="Tenancy agreements"
@@ -303,7 +303,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
               className={clsx(
                 'text-sm font-semibold transition-colors relative py-2',
                 pathname === item.href
-                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#73AEED]')
+                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
                   : clsx(secondaryTextClass, hoverTextClass)
               )}
             >
@@ -329,10 +329,10 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
             <Link
               href="/auth/login"
               className={clsx(
-                'inline-flex items-center justify-center rounded-lg px-6 py-2.5 text-sm font-semibold transition-all duration-200 border-2',
+                'inline-flex items-center justify-center rounded-xl px-6 py-2.5 text-sm font-semibold transition-all duration-200 border',
                 isSolid
-                  ? 'border-primary text-primary bg-white hover:bg-primary/5'
-                  : 'border-primary bg-primary text-white hover:bg-primary-dark'
+                  ? 'border-[#e4d7ff] text-primary bg-white shadow-[0_14px_30px_rgba(58,28,103,0.08)] hover:bg-[#faf6ff]'
+                  : 'border-white/15 bg-[linear-gradient(135deg,#8a46e6_0%,#6f33cb_55%,#5223a0_100%)] text-white shadow-[0_18px_38px_rgba(74,32,146,0.24)]'
               )}
             >
               Login
@@ -408,7 +408,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                 </div>
 
                 <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
-                  <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Validated Eviction Processes</div>
+                  <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Landlord Products</div>
                   {primaryLinks.map((item) => (
                     <Link
                       key={item.href}
@@ -416,7 +416,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                       className={clsx(
                         'block py-2 text-sm font-semibold relative',
                         pathname === item.href
-                          ? clsx(isSolid ? 'text-[#111827]' : 'text-white', 'after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-16 after:bg-[#73AEED]')
+                          ? clsx(isSolid ? 'text-[#111827]' : 'text-white', 'after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-16 after:bg-[#7c3aed]')
                           : isSolid ? 'text-charcoal' : 'text-white'
                       )}
                       onClick={() => setOpen(false)}

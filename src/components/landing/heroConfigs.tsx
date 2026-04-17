@@ -7,6 +7,8 @@ import type { UniversalHeroProps } from './UniversalHero';
 
 export type HeroConfig = Pick<
   UniversalHeroProps,
+  | 'preset'
+  | 'badge'
   | 'trustText'
   | 'trustPositioningPreset'
   | 'title'
@@ -52,25 +54,28 @@ function withPreset(
 export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('home'),
-  trustText: 'Built for landlords under pressure | Renters Right Act Compliant 2026',
+  preset: 'home',
+  badge: 'For landlords in England',
+  trustText: 'Current England routes for notice, court, debt, rent increases, and tenancy agreements',
   title: 'Tenant Not Paying or',
   highlightTitle: 'Refusing to Leave?',
   subtitle: (
     <>
-      Work out tonight whether you need a <strong>section 8 notice</strong>, a{' '}
-      <strong>money claim</strong> for unpaid rent, or a new tenancy agreement,
-      then generate the right documents without guessing.
+      Work out tonight whether you need a <strong>Section 8 notice</strong>, a{' '}
+      <strong>court possession pack</strong>, a <strong>money claim</strong>,
+      a <strong>rent increase pack</strong>, or the right tenancy agreement for
+      your property in England.
     </>
   ),
   primaryCta: {
-    label: 'Find out which notice you need ->',
+    label: 'Start with the right route',
     href: '/wizard?topic=eviction&src=seo_homepage',
   },
   secondaryCta: {
-    label: 'Start recovering your rent ->',
-    href: '/wizard?product=money_claim&topic=debt&src=seo_homepage',
+    label: 'See pricing',
+    href: '/pricing',
   },
-  feature: 'Answer plain-English questions. We handle the legal logic.',
+  feature: 'Landlord-first guidance, stronger checks, and documents ready to print.',
 };
 
 /* ============================================================
@@ -80,6 +85,8 @@ export const homeHeroConfig: HeroConfig = {
 export const astHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('ast'),
+  preset: 'product_owner',
+  badge: PUBLIC_PRODUCT_DESCRIPTORS.ast.heroBadge,
   mediaSrc: '/images/tenancy_agreements.webp',
   trustText: 'England tenancy agreements for landlords | Standard, Premium, Student, HMO, and Lodger',
   title: 'Create the Right',
@@ -104,6 +111,8 @@ export const astHeroConfig: HeroConfig = {
 export const noticeOnlyHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('notice_only'),
+  preset: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.heroPreset,
+  badge: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.heroBadge,
   mediaSrc: '/images/notice_bundles.webp',
   trustText: 'England Section 8 notice generator | Landlord checks before you serve',
   title: 'Eviction Notice Generator',
@@ -111,8 +120,12 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   subtitle:
     'Generate the current England Section 8 notice with clearer checks on grounds, dates, service, and compliance before you serve anything.',
   primaryCta: {
-    label: 'Start your eviction notice generator ->',
+    label: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.primaryCtaLabel,
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.wizardHref,
+  },
+  secondaryCta: {
+    label: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.secondaryCtaLabel!,
+    href: '/section-8-notice',
   },
   feature: 'We help landlords line up the Section 8 route, dates, and service steps before they serve.',
 };
@@ -124,6 +137,8 @@ export const noticeOnlyHeroConfig: HeroConfig = {
 export const completePackHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('complete_pack'),
+  preset: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.heroPreset,
+  badge: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.heroBadge,
   mediaSrc: '/images/eviction_packs.webp',
   trustText: 'Evict a tenant through court | England possession pack',
   title: 'Complete Eviction Pack',
@@ -131,8 +146,12 @@ export const completePackHeroConfig: HeroConfig = {
   subtitle:
     'If you need to evict a tenant for rent arrears or because they still will not leave after notice, this England pack brings together the notice, court forms, and filing guidance in one workflow.',
   primaryCta: {
-    label: 'Start your England court pack ->',
+    label: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.primaryCtaLabel,
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.wizardHref,
+  },
+  secondaryCta: {
+    label: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.secondaryCtaLabel!,
+    href: '/eviction-process-england',
   },
   feature: 'Generate Form 3A, N5, N119, and the supporting steps in one court-ready flow.',
 };
@@ -144,6 +163,8 @@ export const completePackHeroConfig: HeroConfig = {
 export const moneyClaimHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('money_claim'),
+  preset: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.heroPreset,
+  badge: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.heroBadge,
   mediaSrc: '/images/money_claims.webp',
   trustText: 'Recover unpaid rent and tenant debt | England county court pack',
   title: 'Recover Unpaid Rent',
@@ -151,7 +172,7 @@ export const moneyClaimHeroConfig: HeroConfig = {
   subtitle:
     'If your tenant owes rent, damage, bills, or other tenancy debt, this England pack helps you prepare the Letter Before Claim, Form N1, debt schedule, and supporting paperwork tonight.',
   primaryCta: {
-    label: 'Start your money claim pack ->',
+    label: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.primaryCtaLabel,
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.wizardHref,
   },
   feature: 'Set out what is owed clearly before the debt file becomes harder to prove and recover.',
@@ -160,6 +181,8 @@ export const moneyClaimHeroConfig: HeroConfig = {
 export const moneyClaimSupportHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('money_claim'),
+  preset: 'content_index',
+  badge: 'For landlords in England',
   mediaSrc: '/images/money_claims.webp',
   trustText: 'England landlord debt-recovery support | Product owner plus scenario guides',
   title: 'Need help with a',
@@ -184,6 +207,8 @@ export const moneyClaimSupportHeroConfig: HeroConfig = {
 export const blogHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('blog'),
+  preset: 'content_index',
+  badge: 'Landlord guides for England',
   trustText: 'Plain-English landlord guides',
   title: 'How to Evict a Tenant,',
   highlightTitle: 'Deal With Arrears, and Act Faster',
