@@ -67,6 +67,7 @@ type WorkflowStep = {
 };
 
 const reviewCount = getDynamicReviewCount();
+const reviewSummary = `${REVIEW_RATING}/5 | ${reviewCount} reviews`;
 
 const accentIconByType = {
   amethyst: RiFileTextLine,
@@ -297,25 +298,25 @@ export default function HomeContent() {
           <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'public-subtle-grid px-6 py-8 md:px-10 md:py-10')}>
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
-                <span className="public-eyebrow">Choose the landlord route</span>
+                <span className="public-eyebrow">Choose what you need help with</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                  Start with the task that needs sorting now
+                  Start with the problem you need to sort out
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  The homepage is built to help landlords move quickly: choose the
-                  route that fits the tenancy problem, see what the product helps
-                  you do, and go straight into the workflow when you are ready.
+                  Whether you need to serve notice, go to court, recover money,
+                  increase the rent, or put a new agreement in place, you can start
+                  with the right product here.
                 </p>
               </div>
               <div className="public-stat-card px-5 py-4">
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                  Trusted proof
+                  Rated by landlords
                 </p>
                 <p className="mt-2 text-3xl font-bold text-[#1c1431]">
-                  {REVIEW_RATING}/5
+                  {reviewSummary}
                 </p>
                 <p className="mt-1 text-sm text-[#5d5672]">
-                  Based on {reviewCount}+ landlord reviews
+                  The same live review count shown across the site.
                 </p>
               </div>
             </div>
@@ -340,12 +341,12 @@ export default function HomeContent() {
           <div className="mx-auto max-w-3xl text-center">
             <span className="public-eyebrow">Why landlords use us</span>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-              Clear next steps matter most when the tenancy is under pressure
+              Clear next steps matter when a tenancy starts going wrong
             </h2>
             <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-              The strongest public journey is one that tells landlords what to do
-              next, builds the right paperwork, and makes the product feel calm and
-              usable even when the situation is not.
+              When a tenant stops paying, refuses to leave, or the paperwork needs
+              sorting, landlords want to know what to do next and how to get the
+              documents right first time.
             </p>
           </div>
 
@@ -395,20 +396,20 @@ export default function HomeContent() {
           <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-10 md:py-10')}>
             <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
               <div>
-                <span className="public-eyebrow">What the product feels like</span>
+                <span className="public-eyebrow">What you get</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                  One product family, not a stitched-together set of pages
+                  Everything should feel clear from the first click
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  The public experience should feel polished and consistent from the
-                  first click: richer purple surfaces, stronger imagery, cleaner
-                  cards, and routes that say exactly what they help landlords do.
+                  You should be able to see what each product does, what paperwork
+                  it gives you, and what to do next without second-guessing which
+                  page you are on.
                 </p>
                 <div className="mt-6 space-y-4">
                   {[
-                    'Section 8-led notice generation for the current England route',
-                    'Complete court possession workflow when you need more than the notice',
-                    'Debt, rent increase, and tenancy routes that stay commercially clear',
+                    'Section 8 notice generation with the key checks up front',
+                    'A full court pack when you need to move beyond the notice',
+                    'Money claim, rent increase, and tenancy products that stay easy to understand',
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3 text-[#2c2143]">
                       <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#7c3aed]" />
@@ -470,7 +471,7 @@ export default function HomeContent() {
             <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
               <span className="public-eyebrow">How it works in England</span>
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                Notice, court, debt, rent, and agreement work in a clearer order
+                Choose the job, answer a few questions, and get the right paperwork
               </h2>
               <div className="mt-8 space-y-5">
                 {workflowSteps.map((step) => (
@@ -506,19 +507,18 @@ export default function HomeContent() {
                 Built for landlords in England
               </span>
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-white">
-                The goal is simple: make the next step obvious and the paperwork easier to trust
+                Make the next step clear and the paperwork easier to trust
               </h2>
               <p className="mt-4 text-base leading-8 text-white/78">
-                Landlords do not come here for vague legal content. They come here
-                because they need to act. The public site should make it easy to see
-                the route, understand the promise, and move into the product without
-                second-guessing what page does what.
+                If you need to act tonight, you should be able to find the right
+                product quickly, understand what it does, and move straight into it
+                without second-guessing yourself.
               </p>
               <div className="mt-8 grid gap-4">
                 {[
-                  'Commercial names that match what landlords actually search for',
-                  'Hero copy, cards, and CTAs that promise one clear outcome per page',
-                  'Product flows that feel premium without becoming harder to use',
+                  'Straightforward product names that match what landlords search for',
+                  'Page copy and calls to action that promise one clear outcome',
+                  'A polished experience that still feels quick and easy to use',
                 ].map((item) => (
                   <div key={item} className="rounded-[1.4rem] border border-white/10 bg-white/7 px-4 py-4">
                     <div className="flex items-start gap-3 text-white">
@@ -545,36 +545,35 @@ export default function HomeContent() {
             <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
               <span className="public-eyebrow">Proof and trust</span>
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-4xl">
-                Landlords stay when the experience feels direct, calm, and ready to use
+                Landlords buy when the product feels clear and dependable
               </h2>
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 <div className="public-stat-card px-5 py-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                    Review score
+                    Live rating
                   </p>
                   <p className="mt-3 text-4xl font-bold text-[#1c1431]">
-                    {REVIEW_RATING}/5
+                    {reviewSummary}
                   </p>
                   <p className="mt-2 text-sm text-[#5d5672]">
-                    Visible proof that landlords trust the product enough to buy and
-                    recommend it.
+                    The same rating and review count shown in the hero trust pill.
                   </p>
                 </div>
                 <div className="public-stat-card px-5 py-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
                     Reviews
                   </p>
-                  <p className="mt-3 text-4xl font-bold text-[#1c1431]">{reviewCount}+</p>
+                  <p className="mt-3 text-4xl font-bold text-[#1c1431]">{reviewCount}</p>
                   <p className="mt-2 text-sm text-[#5d5672]">
-                    Stronger than generic trust copy because the number stays visible
-                    across the public journey.
+                    A live count pulled from the same review counter used across the
+                    rest of the site.
                   </p>
                 </div>
               </div>
               <p className="mt-6 text-[15px] leading-7 text-[#5d5672]">
-                The premium pass is not about making the site flashy. It is about
-                helping landlords feel that the route is credible, the copy matches
-                the product, and the documents will be worth printing.
+                Good trust copy should reassure landlords quickly: the product looks
+                credible, the wording matches the job they need done, and the
+                documents feel worth paying for.
               </p>
             </div>
 
@@ -591,13 +590,13 @@ export default function HomeContent() {
                 </div>
                 <div>
                   <h3 className="text-2xl font-semibold text-[#1d1532]">
-                    The public site should sell the product by making the outcome feel obvious
+                    Landlords should know what they will get within a few seconds
                   </h3>
                   <div className="mt-5 space-y-4">
                     {[
-                      'Each page should say what it helps the landlord do within the first few lines.',
-                      'The imagery should show product, documents, or workflow instead of empty decoration.',
-                      'The call to action should feel like the next sensible step, not a hard sell.',
+                      'Each page should say what it helps you do within the first few lines.',
+                      'The imagery should show the product, the documents, or the workflow.',
+                      'The call to action should feel like the sensible next step, not a hard sell.',
                     ].map((item) => (
                       <div key={item} className="flex items-start gap-3">
                         <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#7c3aed]" />
