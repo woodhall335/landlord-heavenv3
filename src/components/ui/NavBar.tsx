@@ -14,6 +14,7 @@ import type { HeaderMode } from '@/components/layout/HeaderModeContext';
 interface NavItem {
   href: string;
   label: string;
+  desktopClassName?: string;
 }
 
 interface NavBarUser {
@@ -30,10 +31,26 @@ interface NavBarProps {
 type EffectiveHeaderState = 'solid' | 'transparent';
 
 const primaryLinks: NavItem[] = [
-  { href: "/products/notice-only", label: "Eviction Notice Generator" },
-  { href: "/products/complete-pack", label: "Complete Eviction Pack" },
-  { href: "/products/money-claim", label: "Money Claim Pack" },
-  { href: "/rent-increase", label: "Increase Rent Section 13" },
+  {
+    href: "/products/notice-only",
+    label: "Eviction Notice Generator",
+    desktopClassName: "w-[8.75rem]",
+  },
+  {
+    href: "/products/complete-pack",
+    label: "Complete Eviction Pack",
+    desktopClassName: "w-[8.5rem]",
+  },
+  {
+    href: "/products/money-claim",
+    label: "Money Claim Pack",
+    desktopClassName: "w-[7.5rem]",
+  },
+  {
+    href: "/rent-increase",
+    label: "Increase Rent Section 13",
+    desktopClassName: "w-[8.5rem]",
+  },
 ];
 
 const tenancyAgreementLinks: NavItem[] = [
@@ -236,12 +253,16 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
           />
         </Link>
 
-        <div className="ml-auto hidden items-center gap-5 lg:flex xl:gap-6">
-          <nav className="flex items-center gap-3 xl:gap-4">
+        <div className="ml-12 hidden flex-1 items-center justify-end gap-5 lg:flex xl:ml-16 xl:gap-6">
+          <nav className="flex items-center justify-end gap-1 xl:gap-1.5">
             <div className="relative" onMouseEnter={() => setShowFreeTools(true)} onMouseLeave={() => setShowFreeTools(false)}>
               <Link
                 href="/tools"
-                className={clsx('relative flex items-center gap-1 whitespace-nowrap py-2 text-sm font-semibold transition-colors', secondaryTextClass, hoverTextClass)}
+                className={clsx(
+                  'relative flex min-h-[2.75rem] w-[6.5rem] items-center justify-center gap-1 px-2 py-2 text-center text-sm font-semibold leading-tight transition-colors',
+                  secondaryTextClass,
+                  hoverTextClass
+                )}
                 aria-label="Free tools hub"
               >
                 Free Tools
@@ -269,7 +290,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
               <Link
                 href="/products/ast"
                 className={clsx(
-                  'relative flex items-center gap-1 whitespace-nowrap py-2 text-sm font-semibold transition-colors',
+                  'relative flex min-h-[2.75rem] w-[8.5rem] items-center justify-center gap-1 px-2 py-2 text-center text-sm font-semibold leading-tight transition-colors',
                   isTenancyMenuActive
                     ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
                     : clsx(secondaryTextClass, hoverTextClass)
@@ -302,7 +323,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                 key={item.href}
                 href={item.href}
                 className={clsx(
-                  'relative whitespace-nowrap py-2 text-sm font-semibold transition-colors',
+                  'relative flex min-h-[2.75rem] items-center justify-center px-2 py-2 text-center text-sm font-semibold leading-tight transition-colors',
+                  item.desktopClassName,
                   pathname === item.href
                     ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
                     : clsx(secondaryTextClass, hoverTextClass)
