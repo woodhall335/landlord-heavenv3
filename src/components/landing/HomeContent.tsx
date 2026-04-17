@@ -36,6 +36,7 @@ type RouteCard = {
   eyebrow: string;
   description: string;
   outcome: string;
+  ctaLabel: string;
   href: string;
   imageSrc: string;
   imageAlt: string;
@@ -85,6 +86,7 @@ const routeSelectionCards: RouteCard[] = [
     description:
       'Prepare a Section 8 notice for property in England with checks on grounds, dates, service, and compliance before you serve it.',
     outcome: 'Use this when you need to serve notice.',
+    ctaLabel: 'Start Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     imageSrc: '/images/notice_bundles.webp',
     imageAlt: 'Section 8 notice document preview',
@@ -96,6 +98,7 @@ const routeSelectionCards: RouteCard[] = [
     description:
       'Prepare your notice, N5, N119, and possession claim paperwork together when the case needs to move beyond notice.',
     outcome: 'Use this when you need the full notice-to-court route.',
+    ctaLabel: 'Start court pack',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     imageSrc: '/images/eviction_packs.webp',
     imageAlt: 'Complete eviction pack preview',
@@ -107,6 +110,7 @@ const routeSelectionCards: RouteCard[] = [
     description:
       'Recover unpaid rent, bills, damage, and guarantor debt with documents built for an England money claim.',
     outcome: 'Use this when you need to recover money owed.',
+    ctaLabel: 'Start money claim',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
     imageSrc: '/images/money_claims.webp',
     imageAlt: 'Money claim pack preview',
@@ -118,6 +122,7 @@ const routeSelectionCards: RouteCard[] = [
     description:
       'Prepare a Section 13 / Form 4A rent increase for property in England with guidance on dates, notice periods, and supporting steps.',
     outcome: 'Use this when you need to increase the rent lawfully.',
+    ctaLabel: 'Increase rent',
     href: '/rent-increase',
     imageSrc: '/images/Statutory-change.webp',
     imageAlt: 'Rent increase support illustration',
@@ -129,6 +134,7 @@ const routeSelectionCards: RouteCard[] = [
     description:
       'Choose the right agreement for a standard, premium, student, HMO / shared house, or lodger let in England.',
     outcome: 'Use this when you are setting up a tenancy or replacing old paperwork.',
+    ctaLabel: 'Choose agreement',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
     imageSrc: '/images/tenancy_agreements.webp',
     imageAlt: 'England tenancy agreement product preview',
@@ -234,6 +240,7 @@ function RouteSelectionCard({
   eyebrow,
   description,
   outcome,
+  ctaLabel,
   href,
   imageSrc,
   imageAlt,
@@ -279,7 +286,7 @@ function RouteSelectionCard({
           <span>{outcome}</span>
         </div>
         <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#4f2a96]">
-          View route
+          {ctaLabel}
           <RiArrowRightLine className="h-4 w-4 transition group-hover:translate-x-1" />
         </div>
       </div>

@@ -61,43 +61,33 @@ const noticePreviews: NoticeOnlyPreviewData = {
 };
 
 describe('FunnelProcessSection', () => {
-  it('shows CTA link, arrows, and route-selected carousel content for notice-only', () => {
+  it('renders the notice-only product as an England-only Section 8 funnel', () => {
     render(<FunnelProcessSection product="notice_only" noticePreviews={noticePreviews} />);
 
-    expect(screen.getByText('Understand Why Each Notice Document Matters')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'Generate your notice now' })).not.toBeInTheDocument();
+    expect(screen.getByText('Understand Why Each Section 8 Notice Document Matters')).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'England' })).toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: 'Wales' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: 'Scotland' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Section 8 notice pack/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Section 21/i })).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /Section 21 \(No-fault\)/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Section 8 notice pack/i }));
 
-    const cta = screen.getByRole('link', { name: 'Generate your notice now' });
+    const cta = screen.getByRole('link', { name: 'Start Eviction Notice Generator →' });
     expect(cta).toHaveAttribute(
       'href',
       'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
     );
-
-    expect(screen.getByLabelText('Previous slide desktop')).toBeInTheDocument();
-    expect(screen.getByLabelText('Next slide desktop')).toBeInTheDocument();
-    expect(screen.getByLabelText('Previous slide mobile')).toBeInTheDocument();
-    expect(screen.getByLabelText('Next slide mobile')).toBeInTheDocument();
-
-    expect(screen.getAllByText('Section 21 Form 6A Eviction Notice').length).toBeGreaterThan(0);
-
-    fireEvent.click(screen.getByRole('button', { name: /Section 8 \(Fault-based\)/i }));
     expect(screen.getAllByText('Section 8 Eviction Notice').length).toBeGreaterThan(0);
   });
 
-  it('renders complete-pack under an England tab with both route cards and the correct CTA URL', () => {
+  it('renders complete-pack under an England tab with the correct CTA URL', () => {
     render(<FunnelProcessSection product="complete_pack" />);
 
     expect(screen.getByRole('tab', { name: 'England' })).toBeInTheDocument();
-    expect(screen.queryByRole('tab', { name: 'Section 21 Route' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('tab', { name: 'Section 8 Route' })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Section 21 -> N5B/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Section 8 -> N5 \+ N119/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Current England route -> N5 \+ N119/i })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /Section 21 -> N5B/i }));
-
-    const cta = screen.getByRole('link', { name: 'Generate your complete eviction pack now' });
+    const cta = screen.getByRole('link', { name: 'Generate my complete pack →' });
     expect(cta).toHaveAttribute(
       'href',
       'https://landlordheaven.co.uk/wizard?product=complete_pack&src=product_page&topic=eviction',
@@ -111,15 +101,10 @@ describe('FunnelProcessSection', () => {
     expect(screen.getAllByText('What it does').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Why this matters').length).toBeGreaterThan(0);
 
-    const cta = screen.getByRole('link', { name: 'Start your money claim now' });
+    const cta = screen.getByRole('link', { name: 'Start my money claim pack →' });
     expect(cta).toHaveAttribute(
       'href',
       'https://landlordheaven.co.uk/wizard?product=money_claim&topic=debt&src=product_page',
     );
-
-    expect(screen.getByLabelText('Previous slide desktop')).toBeInTheDocument();
-    expect(screen.getByLabelText('Next slide desktop')).toBeInTheDocument();
-    expect(screen.getByLabelText('Previous slide mobile')).toBeInTheDocument();
-    expect(screen.getByLabelText('Next slide mobile')).toBeInTheDocument();
   });
 });

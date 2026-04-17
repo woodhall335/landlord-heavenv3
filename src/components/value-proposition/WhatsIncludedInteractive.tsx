@@ -23,6 +23,7 @@ type WhatsIncludedInteractiveProps =
   | {
       product: 'notice_only';
       defaultJurisdiction?: JurisdictionKey;
+      lockJurisdiction?: boolean;
       previews: NoticeOnlyPreviewData;
       titleOverride?: string;
       subtitleOverride?: string;
@@ -406,7 +407,8 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
   const showNoticeTypeSelector = isCompletePack
     ? COMPLETE_PACK_VARIANTS.length > 1
     : isNoticeOnly && selectedJurisdiction !== 'scotland' && noticeVariants.length > 1;
-  const lockJurisdiction = isAst ? props.lockJurisdiction ?? false : false;
+  const lockJurisdiction =
+    isAst || isNoticeOnly ? props.lockJurisdiction ?? false : false;
   const legalNote = isNoticeOnly ? jurisdictionConfig?.legalNote : isAst ? tenancyConfig?.legalNote : 'For landlords in England';
 
   let defaultCtaHref = 'https://landlordheaven.co.uk/wizard?product=money_claim&topic=debt&src=product_page';
@@ -461,7 +463,7 @@ export const WhatsIncludedInteractive = (props: WhatsIncludedInteractiveProps) =
 
           <div className="grid items-start gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
             <div className="min-w-0 space-y-5 rounded-2xl border border-[#E9E2FF] bg-white p-4 md:p-6">
-              {isNoticeOnly ? (
+              {isNoticeOnly && !lockJurisdiction ? (
                 <div>
                   <h3 className="text-sm font-semibold uppercase tracking-wide text-[#5b4b7a]">Jurisdiction</h3>
                   <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">

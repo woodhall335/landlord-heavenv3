@@ -172,6 +172,7 @@ export default async function NoticeOnlyPage() {
             <WhatsIncludedInteractive
               product="notice_only"
               defaultJurisdiction="england"
+              lockJurisdiction
               previews={previews}
               titleOverride="What&apos;s included in your Section 8 notice pack"
               subtitleOverride="Preview the documents, then generate the final version when the route and facts look right."

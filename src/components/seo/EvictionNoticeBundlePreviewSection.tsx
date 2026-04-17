@@ -52,12 +52,18 @@ export function EvictionNoticeBundlePreviewSection({ previews }: EvictionNoticeB
       <Container>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal">What&apos;s included in your eviction notice bundle</h2>
-            <p className="mt-3 text-gray-600">Select your jurisdiction, then preview every document before you pay.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal">What&apos;s included in your Section 8 notice pack</h2>
+            <p className="mt-3 text-gray-600">Preview the England documents first, then generate the final version when the facts look right.</p>
           </div>
 
           {isActivated ? (
-            <WhatsIncludedInteractive product="notice_only" defaultJurisdiction="england" previews={previews} showIntro={false} />
+            <WhatsIncludedInteractive
+              product="notice_only"
+              defaultJurisdiction="england"
+              lockJurisdiction
+              previews={previews}
+              showIntro={false}
+            />
           ) : (
             <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-6 py-20 text-center">
               <p className="text-sm font-semibold text-charcoal">Preview section loading</p>

@@ -87,31 +87,38 @@ const completePackPreviews: CompletePackPreviewData = {
 };
 
 describe('buildFunnelProcessSectionModel', () => {
-  it('preserves preview order and applies purpose mapping for notice-only routes', () => {
+  it('builds the notice-only model as an England-only Section 8 route', () => {
     const model = buildFunnelProcessSectionModel({
       product: 'notice_only',
       noticePreviews,
+    });
+
+    expect(model.heading).toBe('Understand Why Each Section 8 Notice Document Matters');
+    expect(model.tabs.map((tab) => tab.id)).toEqual(['england']);
+
+    const englandTab = model.tabs[0];
+    expect(englandTab?.routes.map((route) => route.id)).toEqual(['section8']);
+    expect(englandTab?.routes[0].label).toBe('Section 8 notice pack');
+    expect(englandTab?.routes[0].steps[0].docTitle).toBe('Section 8 Eviction Notice');
+    expect(englandTab?.routes[0].steps[0].whatItDoes).toContain('current England route');
+  });
+
+  it('uses fallback document steps when England previews are missing', () => {
+    const model = buildFunnelProcessSectionModel({
+      product: 'notice_only',
+      noticePreviews: {
+        ...noticePreviews,
+        england: {
+          ...emptyNoticeVariantSet,
+        },
+      },
     });
 
     const englandTab = model.tabs.find((tab) => tab.id === 'england');
-    const section21Route = englandTab?.routes.find((route) => route.id === 'section21');
-
-    expect(section21Route?.steps[0].docTitle).toBe('Service Instructions');
-    expect(section21Route?.steps[1].docTitle).toBe('Section 21 Form 6A Eviction Notice');
-    expect(section21Route?.steps[1].whatItDoes).toContain('no-fault possession notice');
-    expect(section21Route?.steps[1].whyItMatters).toContain('invalid notice');
-  });
-
-  it('uses fallback document steps when previews are missing', () => {
-    const model = buildFunnelProcessSectionModel({
-      product: 'notice_only',
-      noticePreviews,
-    });
-
-    const scotlandTab = model.tabs.find((tab) => tab.id === 'scotland');
-    const route = scotlandTab?.routes[0];
+    const route = englandTab?.routes[0];
 
     expect(route?.steps.length).toBeGreaterThan(0);
+    expect(route?.steps[0].docTitle).toBe('England Form 3A Possession Notice');
     for (const step of route?.steps ?? []) {
       expect(step.whatItDoes.length).toBeGreaterThan(0);
       expect(step.whyItMatters.length).toBeGreaterThan(0);
@@ -124,8 +131,8 @@ describe('buildFunnelProcessSectionModel', () => {
       completePackPreviews,
     });
 
-    const section8Tab = model.tabs.find((tab) => tab.id === 'section8');
-    const steps = section8Tab?.routes[0].steps ?? [];
+    const englandTab = model.tabs.find((tab) => tab.id === 'england');
+    const steps = englandTab?.routes[0].steps ?? [];
 
     expect(steps.map((step) => step.docKey)).toEqual(['n5', 'n119']);
     expect(steps[0].whatItDoes).toContain('standard possession proceedings');

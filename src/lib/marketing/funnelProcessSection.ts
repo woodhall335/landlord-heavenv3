@@ -406,58 +406,18 @@ const hydrateSteps = (product: FunnelProduct, routeId: string, docs: PreviewDoc[
 
 const noticeOnlyTabs = (previews?: NoticeOnlyPreviewData): FunnelProcessTab[] => {
   const section8Docs = previews?.england?.section8 ?? [];
-  const section173Docs = previews?.wales?.section173 ?? [];
-  const rhw23Docs = previews?.wales?.rhw23 ?? [];
-  const noticeToLeaveDocs = previews?.scotland?.['notice-to-leave'] ?? [];
 
   return [
     {
       id: 'england',
       label: 'England',
-      description: 'Current possession route with notice, claim, and evidence workflow.',
+      description: 'Current Section 8 notice route for landlords in England.',
       routes: [
         {
           id: 'section8',
-          label: 'Current England possession route',
-          subtitle: 'Use the current notice, evidence, and claim workflow for live England cases.',
+          label: 'Section 8 notice pack',
+          subtitle: 'Notice, service guidance, and validation documents for the current England route.',
           steps: hydrateSteps('notice_only', 'section8', section8Docs, NOTICE_FALLBACK_DOCS.section8),
-        },
-      ],
-    },
-    {
-      id: 'wales',
-      label: 'Wales',
-      description: 'Renting Homes (Wales) routes with no-fault and fault-based options.',
-      routes: [
-        {
-          id: 'section173',
-          label: 'Section 173 (No-fault)',
-          subtitle: 'Use for no-fault possession under occupation contract rules.',
-          steps: hydrateSteps('notice_only', 'section173', section173Docs, NOTICE_FALLBACK_DOCS.section173),
-        },
-        {
-          id: 'rhw23',
-          label: 'RHW23 (Fault-based)',
-          subtitle: 'Use when possession is based on breach grounds in Wales.',
-          steps: hydrateSteps('notice_only', 'rhw23', rhw23Docs, NOTICE_FALLBACK_DOCS.rhw23),
-        },
-      ],
-    },
-    {
-      id: 'scotland',
-      label: 'Scotland',
-      description: 'Private Residential Tenancy route using Notice to Leave.',
-      routes: [
-        {
-          id: 'notice-to-leave',
-          label: 'Notice to Leave',
-          subtitle: 'Use for Scottish private residential tenancy possession grounds.',
-          steps: hydrateSteps(
-            'notice_only',
-            'notice-to-leave',
-            noticeToLeaveDocs,
-            NOTICE_FALLBACK_DOCS['notice-to-leave'],
-          ),
         },
       ],
     },
@@ -499,9 +459,9 @@ const moneyClaimTabs = (previews?: MoneyClaimPreviewData): FunnelProcessTab[] =>
 export const buildFunnelProcessSectionModel = (input: BuildFunnelProcessSectionInput): FunnelProcessSectionModel => {
   if (input.product === 'notice_only') {
     return {
-      heading: 'Understand Why Each Notice Document Matters',
+      heading: 'Understand Why Each Section 8 Notice Document Matters',
       subheading:
-        'This is not a template bundle. You get a fully validated, court-ready workflow that follows the correct legal framework, with every document placed in the right sequence as a practical alternative to solicitor drafting costs.',
+        'Preview the England notice pack, see what each document does, and understand why it matters before you generate the final version.',
       tabs: noticeOnlyTabs(input.noticePreviews),
       defaultTabId: 'england',
     };

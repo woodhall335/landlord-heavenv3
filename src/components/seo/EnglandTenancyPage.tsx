@@ -254,7 +254,7 @@ export function EnglandTenancyPage({
                     href={route.href}
                     className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
                   >
-                    {route.ctaLabel || 'View route'}
+                    {route.ctaLabel || 'See agreement'}
                   </Link>
                 </div>
               ))}

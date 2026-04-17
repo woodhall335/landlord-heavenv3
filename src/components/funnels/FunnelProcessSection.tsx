@@ -27,7 +27,7 @@ const CAROUSEL_PAUSE_AFTER_INTERACTION_MS = 9000;
 
 const CTA_BY_PRODUCT: Record<FunnelProduct, { label: string; href: string }> = {
   notice_only: {
-    label: 'Generate my notice bundle \u2192',
+    label: 'Start Eviction Notice Generator \u2192',
     href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
   },
   complete_pack: {
