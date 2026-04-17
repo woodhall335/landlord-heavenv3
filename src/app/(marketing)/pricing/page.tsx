@@ -77,7 +77,7 @@ const packageImages: Record<
   },
   section13_standard: {
     src: '/images/Statutory-change.webp',
-    alt: 'Section 13 rent increase workflow preview',
+    alt: 'Section 13 rent increase pack preview',
     accent: 'section13_standard',
   },
   section13_defensive: {
@@ -139,12 +139,12 @@ export default function PricingPage() {
       <UniversalHero
         preset="content_index"
         badge="Transparent pricing for landlords in England"
-        trustText="One-time prices across eviction, debt, rent increase, and tenancy routes"
-        title="See the price, the route,"
+        trustText="One-time prices across eviction, debt, rent increase, and tenancy agreements"
+        title="See the price"
         highlightTitle="and what each pack helps you do"
-        subtitle="If you need to serve notice, prepare for court, recover rent, increase the rent properly, or put the right tenancy agreement in place, this page shows the public pricing in one England-first view."
+        subtitle="If you need to serve notice, prepare for court, recover rent, increase the rent properly, or put the right tenancy agreement in place, this page shows the prices in one place for landlords in England."
         primaryCta={{
-          label: 'Start with the right route',
+          label: 'Choose the right product',
           href: '/wizard?topic=eviction&src=pricing_page',
         }}
         secondaryCta={{ label: 'Contact support', href: '/contact' }}
@@ -173,11 +173,12 @@ export default function PricingPage() {
               Choose the pack that matches the problem in front of you
             </h2>
             <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-              Read this page the same way you would think about the case. If you
-              need possession, start with the eviction products. If the tenant owes
-              you money, move to the money claim route. If you need to increase the
-              rent, use the Section 13 packs. If you are putting a tenancy in
-              place, use the agreement routes.
+              Read this page the same way you would think about the problem in
+              front of you. If you need possession, start with the eviction
+              products. If the tenant owes you money, use the money claim pack.
+              If you need to increase the rent, choose the Section 13 packs. If
+              you are putting a tenancy in place, choose the agreement that fits
+              the let.
             </p>
           </div>
 
@@ -267,14 +268,14 @@ export default function PricingPage() {
           <section className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <span className="public-eyebrow">Exact agreement routes</span>
+                <span className="public-eyebrow">Exact agreement options</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431]">
                   England tenancy agreement products
                 </h2>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5d5672]">
                   If you only need one exact England agreement instead of the hub,
                   these pages take you straight to the Standard, Premium, Student,
-                  HMO / Shared House, or Lodger route that fits the tenancy.
+                  HMO / Shared House, or Lodger agreement you need.
                 </p>
               </div>
               <p className="text-sm text-[#6b6480]">
@@ -307,7 +308,7 @@ export default function PricingPage() {
                       href={getResidentialLandingHref(product.sku)}
                       className="hero-btn-secondary flex-1 text-center"
                     >
-                      View page
+                      See details
                     </Link>
                     <Link
                       href={getResidentialWizardHref(product.sku)}
@@ -329,8 +330,8 @@ export default function PricingPage() {
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5d5672]">
               Many landlords are not trying to replace specialist advice in a
               genuinely complex case. They are trying to get the right paperwork
-              moving tonight, keep the route clear, and avoid paying solicitor
-              rates just to prepare the first set of documents.
+              started tonight and avoid paying solicitor rates just to prepare
+              the first documents.
             </p>
             <div className="mt-6 overflow-x-auto">
               <table className="w-full text-sm">
@@ -394,7 +395,7 @@ export default function PricingPage() {
           {
             question: 'How much do solicitors charge for similar work?',
             answer:
-              'Typical solicitor pricing is often several hundred pounds per case. Many landlords use Landlord Heaven when they want to get the paperwork moving, understand the route, and prepare the documents before deciding whether a solicitor is still needed later.',
+              'Typical solicitor pricing is often several hundred pounds per case. Many landlords use Landlord Heaven when they want to get the paperwork moving and prepare the documents before deciding whether a solicitor is still needed later.',
           },
           {
             question: 'Can I buy another product later?',

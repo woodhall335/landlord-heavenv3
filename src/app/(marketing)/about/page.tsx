@@ -87,7 +87,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Too Expensive</h3>
                 <p className="text-gray-700">
-                  Solicitors often charge £300-600 for eviction documents alone. For many landlords, that is a hard cost to justify when the immediate need is understanding the route, getting the paperwork started, and keeping the case moving.
+                  Solicitors often charge £300-600 for eviction documents alone. For many landlords, that is a hard cost to justify when the immediate need is understanding the problem, getting the paperwork started, and keeping the case moving.
                 </p>
               </div>
 
@@ -130,8 +130,8 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Smart Document Generation</h3>
                 <p className="text-gray-700 mb-4">
-                  Our system analyzes your case, selects the correct notice type, calculates notice periods,
-                  and prepares the documents you need for the route you are taking.
+                  Our system analyses your case, selects the right notice or document, checks the dates that matter,
+                  and prepares the paperwork you need.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li>Analyzes 18 eviction grounds in seconds</li>
@@ -145,11 +145,10 @@ export default function AboutPage() {
                 <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
                   <CheckCircle2 className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="text-2xl font-semibold text-charcoal mb-4">Built Around the England Landlord Route</h3>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">Built for landlords with property in England</h3>
                 <p className="text-gray-700 mb-4">
-                  The public site is written for landlords dealing with property in England, so the
-                  journey, search pages, and product routing all match the rules landlords are
-                  actually searching for.
+                  Everything a new customer sees is written for landlords with property in England,
+                  so the products, pages, and recommendations match the rules they are actually dealing with.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li className="flex items-center gap-2">
@@ -160,7 +159,7 @@ export default function AboutPage() {
                     Historic non-England cases remain accessible through direct account support
                   </li>
                   <li className="flex items-center gap-2">
-                    Public discovery, navigation, and recommendations all follow the same England-first product catalog
+                    Product pages, navigation, and recommendations all follow the same England-only catalogue
                   </li>
                 </ul>
               </div>
@@ -188,13 +187,13 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-semibold text-charcoal mb-4">Documents Built for the Real Process</h3>
                 <p className="text-gray-700 mb-4">
-                  Our documents use the official forms and formats landlords are expected to rely on for the England routes we publicly support. The goal is to help you start with the right paperwork and avoid obvious errors that slow cases down.
+                  Our documents use the official forms and formats landlords are expected to rely on for the England products we support. The goal is to help you start with the right paperwork and avoid obvious errors that slow cases down.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li>Official Form 3A, N5, N119, and related England court formats</li>
                   <li>Comply with latest legislation</li>
                   <li>Smart validation before generation</li>
-                  <li>Built for the England possession and tenancy routes we publicly sell</li>
+                  <li>Built for the England possession and tenancy products we sell</li>
                 </ul>
               </div>
             </div>
@@ -240,12 +239,12 @@ export default function AboutPage() {
                   3
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-charcoal mb-2">Continuous Improvement</h3>
-                  <p className="text-gray-700">
-                    England landlord law changes constantly. We update our public templates and logic
-                    every time the live England routes change, including the post-1 May 2026 eviction
-                    and tenancy framework updates.
-                  </p>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Continuous Improvement</h3>
+                <p className="text-gray-700">
+                  England landlord law changes constantly. We update our public templates and logic
+                  every time the live England rules change, including the post-1 May 2026 eviction
+                  and tenancy changes.
+                </p>
                 </div>
               </div>
 
@@ -335,7 +334,7 @@ export default function AboutPage() {
                 </h4>
                 <p className="text-sm text-gray-700">
                   Advanced technology for legal reasoning. Analyzes your case, validates inputs, and generates
-                  documents with the right structure and language for the route you are following.
+                  documents with the right structure and language for the paperwork you are preparing.
                 </p>
               </div>
 

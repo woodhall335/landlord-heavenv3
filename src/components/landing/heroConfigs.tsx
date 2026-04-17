@@ -30,7 +30,7 @@ const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
 const astSubtitle: ReactNode = (
   <>
     Create the right tenancy agreement for your England let tonight. Choose the
-    correct Standard, Premium, Student, HMO / Shared House, or Lodger route
+    correct Standard, Premium, Student, HMO / Shared House, or Lodger agreement
     without digging through outdated templates.
   </>
 );
@@ -67,14 +67,14 @@ export const homeHeroConfig: HeroConfig = {
     </>
   ),
   primaryCta: {
-    label: 'Start with the right route',
+    label: 'Find the right product',
     href: '/wizard?topic=eviction&src=seo_homepage',
   },
   secondaryCta: {
-    label: 'See pricing',
+    label: 'See prices',
     href: '/pricing',
   },
-  feature: 'Landlord-first guidance, stronger checks, and documents ready to print.',
+  feature: 'Documents built for landlords who need to act quickly.',
 };
 
 /* ============================================================
@@ -92,7 +92,7 @@ export const astHeroConfig: HeroConfig = {
   highlightTitle: 'Tenancy Agreement for Your England Let',
   subtitle: astSubtitle,
   primaryCta: {
-    label: 'Choose your England agreement ->',
+    label: 'Choose your agreement ->',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.wizardHref,
   },
   secondaryCta: {
@@ -100,7 +100,7 @@ export const astHeroConfig: HeroConfig = {
     href: PUBLIC_PRODUCT_DESCRIPTORS.england_premium_tenancy_agreement.wizardHref,
   },
   feature:
-    'Pick the route that matches the property, occupiers, and management setup before problems start.',
+    'Start with the agreement that matches the property, occupiers, and management setup.',
 };
 
 /* ============================================================
@@ -117,7 +117,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   title: 'Eviction Notice Generator',
   highlightTitle: '(Section 8, May 2026)',
   subtitle:
-    'Generate the current England Section 8 notice with clearer checks on grounds, dates, service, and compliance before you serve anything.',
+    'Generate the current England Section 8 notice with checks on grounds, dates, service, and compliance before you serve anything.',
   primaryCta: {
     label: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.primaryCtaLabel,
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.wizardHref,
@@ -126,7 +126,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
     label: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.secondaryCtaLabel!,
     href: '/section-8-notice',
   },
-  feature: 'We help landlords line up the Section 8 route, dates, and service steps before they serve.',
+  feature: 'We help landlords get the Section 8 notice, dates, and service details right before they serve.',
 };
 
 /* ============================================================
@@ -143,7 +143,7 @@ export const completePackHeroConfig: HeroConfig = {
   title: 'Complete Eviction Pack',
   highlightTitle: 'for England Landlords',
   subtitle:
-    'If you need to evict a tenant for rent arrears or because they still will not leave after notice, this England pack brings together the notice, court forms, and filing guidance in one workflow.',
+    'If you need to evict a tenant for rent arrears or because they still will not leave after notice, this England pack brings together the notice, court forms, and filing guidance in one place.',
   primaryCta: {
     label: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.primaryCtaLabel,
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.wizardHref,
@@ -152,7 +152,7 @@ export const completePackHeroConfig: HeroConfig = {
     label: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.secondaryCtaLabel!,
     href: '/eviction-process-england',
   },
-  feature: 'Generate Form 3A, N5, N119, and the supporting steps in one court-ready flow.',
+  feature: 'Prepare Form 3A, N5, N119, and the supporting paperwork in one pack.',
 };
 
 /* ============================================================
@@ -196,7 +196,7 @@ export const moneyClaimSupportHeroConfig: HeroConfig = {
     label: 'View money claim guide ->',
     href: '/money-claim',
   },
-  feature: 'Use the support guides to solve a specific filing or evidence question without losing the main claim route.',
+  feature: 'Use the support guides to solve a specific filing or evidence question without losing sight of the main claim.',
 };
 
 /* ============================================================

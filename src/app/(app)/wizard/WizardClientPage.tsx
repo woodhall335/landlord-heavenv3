@@ -61,11 +61,11 @@ const routeImages: Record<string, { src: string; alt: string }> = {
   },
   section13_standard: {
     src: '/images/Statutory-change.webp',
-    alt: 'Rent increase workflow preview',
+    alt: 'Rent increase pack preview',
   },
   ast: {
     src: '/images/tenancy_agreements.webp',
-    alt: 'England tenancy agreement routes preview',
+    alt: 'England tenancy agreement preview',
   },
   england_standard_tenancy_agreement: {
     src: '/images/standard_tenancy.webp',
@@ -306,18 +306,18 @@ export default function WizardClientPage() {
                   Landlord Heaven Wizard
                 </p>
                 <h1 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                  Start the right landlord workflow for your property in England
+                  Choose the landlord product you need
                 </h1>
                 <p className="mt-5 max-w-2xl text-lg leading-8 text-white/76">
-                  Choose the product that matches the task in front of you and go
-                  straight into the guided workflow. Public starts are built for
-                  landlords with property in England, while historic non-England
-                  cases still stay available through direct account access.
+                  Choose the product that matches the job in front of you and
+                  start answering the questions straight away. This wizard is for
+                  landlords with property in England, while older non-England
+                  cases stay available through direct account access.
                 </p>
               </div>
 
               <div className="rounded-[2rem] border border-white/10 bg-white/8 p-6 backdrop-blur-sm">
-                <p className="text-sm font-semibold text-white">What to expect</p>
+                <p className="text-sm font-semibold text-white">Before you start</p>
                 <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
                   <li className="flex items-start gap-3">
                     <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
@@ -325,11 +325,11 @@ export default function WizardClientPage() {
                   </li>
                   <li className="flex items-start gap-3">
                     <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
-                    <span>Eviction entry starts with two clear routes: notice or full court pack.</span>
+                    <span>Eviction starts with two choices: Section 8 notice or the full court pack.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
-                    <span>Older Wales, Scotland, and Northern Ireland records still remain accessible through the dashboard.</span>
+                    <span>Older Wales, Scotland, and Northern Ireland cases can still be opened from the dashboard.</span>
                   </li>
                 </ul>
               </div>
@@ -345,10 +345,9 @@ export default function WizardClientPage() {
             <h2 className="text-2xl font-semibold text-[#1d1532]">Eviction in England</h2>
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5a516d]">
-            Start with the route you actually need. The notice product is for
-            serving a Section 8 notice under the post-May 2026 rules. The court
-            pack takes you from notice through N5, N119, and the possession claim
-            route.
+            Choose the eviction product that fits what you need to do. The notice
+            product is for serving a Section 8 notice under the post-May 2026
+            rules. The court pack adds N5, N119, and the possession paperwork.
           </p>
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <ProductCard
@@ -364,7 +363,7 @@ export default function WizardClientPage() {
             <ProductCard
               href={PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.wizardHref}
               title={PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.shortName}
-              description="Prepare the full England possession route with notice, N5, N119, evidence prompts, and a clearer court handoff."
+              description="Prepare the full England possession case with the notice, N5, N119, evidence prompts, and court paperwork together."
               price={PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.priceLabel}
               eyebrow="Step 2: Court"
               accent={PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.cardAccent}
@@ -378,9 +377,9 @@ export default function WizardClientPage() {
       <section className="mx-auto max-w-6xl px-4 pb-6 pt-2 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-3">
           <ProductCard
-            href={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.wizardHref}
-            title={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.shortName}
-            description="Recover unpaid rent, damage, bills, and former-tenant debt through the England money claim route."
+              href={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.wizardHref}
+              title={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.shortName}
+              description="Recover unpaid rent, damage, bills, and former-tenant debt through the England county court process."
             price={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.priceLabel}
             eyebrow="Debt recovery"
             accent={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.cardAccent}
@@ -388,9 +387,9 @@ export default function WizardClientPage() {
             imageAlt={routeImages.money_claim.alt}
           />
           <ProductCard
-            href={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.wizardHref}
-            title="Rent Increase"
-            description="Increase rent in England using the Section 13 and Form 4A route without mixing in eviction or debt copy."
+              href={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.wizardHref}
+              title="Rent Increase"
+              description="Increase rent in England using Section 13 and Form 4A without mixing in eviction or debt paperwork."
             price={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.priceLabel}
             eyebrow="Rent increase"
             accent={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.cardAccent}
@@ -418,7 +417,7 @@ export default function WizardClientPage() {
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5a516d]">
             If you already know the exact agreement you need, jump straight in
-            below. If you want help choosing between the five routes, start from
+            below. If you want help choosing between the five agreement options, start from
             the England tenancy hub.
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
@@ -445,12 +444,12 @@ export default function WizardClientPage() {
             <RiFileTextLine className="mt-1 h-6 w-6 shrink-0 text-white/72" />
             <div>
               <h2 className="text-2xl font-semibold text-white">
-                Want to read the route first?
+                Prefer to read about the product first?
               </h2>
               <p className="mt-3 max-w-3xl text-sm leading-7 text-white/72">
-                Use the public product pages if you want the commercial overview and
-                supporting guide links first, or go straight into the wizard if you
-                already know which route you need.
+                Use the product pages if you want the overview and supporting
+                guides first, or go straight into the wizard if you already know
+                what you need.
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link

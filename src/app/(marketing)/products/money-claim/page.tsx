@@ -26,7 +26,7 @@ const price = product.displayPrice;
 export const metadata: Metadata = {
   title: `Landlord Money Claim Pack | Recover Unpaid Rent, Damage, and Bills | ${price}`,
   description:
-    `Start a landlord money claim pack for unpaid rent, property damage, cleaning costs, bills, and other tenant debts through the England county court route.`,
+    `Start a landlord money claim pack for unpaid rent, property damage, cleaning costs, bills, and other tenant debts through the England county court process.`,
   openGraph: {
     title: `Landlord Money Claim Pack | Recover Unpaid Rent and Tenant Debt | ${price}`,
     description:
@@ -80,7 +80,7 @@ const faqs = [
   {
     question: "Which jurisdictions do you support?",
     answer:
-      "This pack is built for landlords claiming through the England county court route. It uses Form N1 and a PAP-DEBT Letter Before Claim for that process.",
+      "This pack is built for landlords claiming through the England county court process. It uses Form N1 and a PAP-DEBT Letter Before Claim for that process.",
   },
   {
     question: "How long are documents stored?",
@@ -183,7 +183,7 @@ export default async function MoneyClaimPage() {
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                 <h3 className="font-semibold text-gray-900 mb-3">Court fees</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
-                  <li>Fees vary depending on claim value and filing route.</li>
+                  <li>Fees vary depending on claim value and how you file.</li>
                   <li>In many cases, court fees can be added to the claim.</li>
                   <li>The pack includes County Court fee guidance for England.</li>
                 </ul>
@@ -196,7 +196,7 @@ export default async function MoneyClaimPage() {
                   <li>Demand letters and any tenant responses.</li>
                 </ul>
                 <Link href="/money-claim-unpaid-rent" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
-                  See the landlord money claim guide →
+                  See the landlord money claim guide ->
                 </Link>
               </div>
             </div>
@@ -260,7 +260,7 @@ export default async function MoneyClaimPage() {
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
-                    <span>PAP-DEBT compliance for the England route</span>
+                    <span>PAP-DEBT compliance for England</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
@@ -465,25 +465,25 @@ export default async function MoneyClaimPage() {
                     Need to evict the tenant as well?
                   </h3>
                   <p className="text-gray-600 mb-4">
-                    A money claim helps you recover what you are owed. If you also need the tenant to leave the property, you will need an eviction notice too. Many landlords run both routes: eviction for possession and a money claim for the debt.
+                    A money claim helps you recover what you are owed. If you also need the tenant to leave the property, you will need an eviction notice too. Many landlords run both products: eviction for possession and a money claim for the debt.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link
                       href="/wizard?product=notice_only&src=money_claim_crosssell"
                       className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors"
                     >
-                      Get Notice Only — {PRODUCTS.notice_only.displayPrice}
+                      Start Eviction Notice Generator - {PRODUCTS.notice_only.displayPrice}
                     </Link>
                     <Link
                       href="/wizard?product=complete_pack&src=money_claim_crosssell"
                       className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-purple-300 text-primary font-medium rounded-lg hover:bg-purple-50 transition-colors"
                     >
-                      Get Complete Pack — {PRODUCTS.complete_pack.displayPrice}
+                      Start Complete Eviction Pack - {PRODUCTS.complete_pack.displayPrice}
                     </Link>
                   </div>
                   <p className="text-sm text-gray-500 mt-3">
                     <Link href="/how-to-evict-tenant" className="text-primary hover:underline">
-                      Learn about the eviction process →
+                      Learn about the eviction process ->
                     </Link>
                   </p>
                 </div>

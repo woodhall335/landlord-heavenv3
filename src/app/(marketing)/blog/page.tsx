@@ -218,7 +218,7 @@ export default function BlogPage() {
               <h2 className="mb-2 text-2xl font-bold text-gray-900">All Guides</h2>
               <p className="mb-8 max-w-2xl text-gray-600">
                 Browse practical landlord guides designed to help you understand the issue quickly,
-                then choose the route or product that actually fits.
+                then choose the product that actually fits.
               </p>
               <BlogFilteredList posts={postsForFilter} categories={categories} />
             </div>
@@ -232,8 +232,8 @@ export default function BlogPage() {
                 Need help choosing your next landlord step?
               </h2>
               <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                Start with the route that matches the problem: serve the right notice, prepare the
-                court stage, recover unpaid rent, or move into the right tenancy paperwork.
+                Start with what you need to do: serve the notice, prepare for court, recover unpaid
+                rent, or sort out the tenancy paperwork.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">

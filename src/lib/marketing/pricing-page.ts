@@ -28,13 +28,13 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     coverage: 'For landlords in England',
     bestFor: 'You need to generate the right Section 8 notice before you serve.',
     points: [
-      'Section 8 route with checks on grounds, dates, service, and compliance',
-      'Built for the current England route after 1 May 2026',
+      'Section 8 notice with checks on grounds, dates, service, and compliance',
+      'Built for England after 1 May 2026',
       'Preview before you pay',
       'Best when you want to start with the notice before paying for court paperwork',
     ],
     href: getProductLandingHref('notice_only'),
-    cta: 'View the eviction notice generator ->',
+    cta: 'See notice details ->',
   },
   {
     name: 'Complete Eviction Pack',
@@ -44,11 +44,11 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     bestFor: 'You need the notice, court forms, and filing guidance together.',
     points: [
       'Built for landlords already thinking about court',
-      'Includes the Section 8 notice route, core court forms, and filing guidance',
+      'Includes the Section 8 notice, core court forms, and filing guidance',
       'Helps you avoid piecing the case together across multiple documents',
     ],
     href: getProductLandingHref('complete_pack'),
-    cta: 'View the complete eviction pack ->',
+    cta: 'See pack details ->',
     featured: true,
   },
   {
@@ -63,7 +63,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Useful when the property issue and the money issue need separate action',
     ],
     href: getProductLandingHref('money_claim'),
-    cta: 'View the money claim pack ->',
+    cta: 'See pack details ->',
   },
   {
     name: 'Section 13 Rent Increase Pack',
@@ -73,11 +73,11 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     bestFor: 'You want to propose a new rent properly and keep the file clear before you serve.',
     points: [
       SECTION13_STANDARD_SUMMARY,
-      'Includes Form 4A, a clearer support report, and proof of service',
+      'Includes Form 4A, a support report, and proof of service',
       'Best when you want to explain the figure naturally and keep the paperwork joined up',
     ],
     href: getProductLandingHref('section13_standard'),
-    cta: 'View the Standard Section 13 pack ->',
+    cta: 'See pack details ->',
   },
   {
     name: 'Section 13 Defence Pack',
@@ -91,7 +91,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when tribunal readiness and a more complete evidence story matter',
     ],
     href: getProductLandingHref('section13_defensive'),
-    cta: 'View the Defence Pack ->',
+    cta: 'See pack details ->',
   },
   {
     name: 'Standard Tenancy Agreement',
@@ -105,7 +105,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best for most ordinary residential lets',
     ],
     href: getProductLandingHref('ast_standard'),
-    cta: 'View England tenancy agreements ->',
+    cta: 'See agreement options ->',
   },
   {
     name: 'Premium Tenancy Agreement',
@@ -119,7 +119,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Student, HMO / Shared House, and Lodger routes now sit on separate England product pages',
     ],
     href: getProductLandingHref('ast_premium'),
-    cta: 'View England tenancy agreements ->',
+    cta: 'See agreement options ->',
   },
 ];
 

@@ -20,14 +20,14 @@ const canonicalUrl = getCanonicalUrl('/products/complete-pack');
 export const metadata: Metadata = {
   title: `Complete Eviction Pack (Court Possession - England) | ${price}`,
   description:
-    'Prepare the England court-possession route with a Section 8 notice, N5, N119, possession claim drafting, and filing guidance in one workflow.',
+    'Prepare the England court-possession paperwork with a Section 8 notice, N5, N119, possession claim drafting, and filing guidance in one pack.',
   alternates: {
     canonical: canonicalUrl,
   },
   openGraph: {
     title: `Complete Eviction Pack (Court Possession - England) | ${price}`,
     description:
-      'Court possession pack for landlords in England with the Section 8 route, N5, N119, evidence prompts, and filing guidance in one workflow.',
+      'Court possession pack for landlords in England with a Section 8 notice, N5, N119, evidence prompts, and filing guidance in one pack.',
     url: canonicalUrl,
   },
 };
@@ -36,17 +36,17 @@ const faqs = [
   {
     question: 'What does the Complete Eviction Pack include?',
     answer:
-      'It includes the England notice-to-court route: the Section 8 notice, service guidance, core court forms including N5 and N119, filing guidance, and supporting prompts for the possession claim.',
+      'It includes the England notice-to-court paperwork: the Section 8 notice, service guidance, core court forms including N5 and N119, filing guidance, and supporting prompts for the possession claim.',
   },
   {
     question: 'Who is this built for?',
     answer:
-      'It is built for landlords handling the court possession route for property in England.',
+      'It is built for landlords handling a court possession claim for property in England.',
   },
   {
     question: 'When should I choose this instead of the notice product?',
     answer:
-      'Choose this pack when you want the full court-possession route rather than the notice alone. If you only need to serve the notice first, the Eviction Notice Generator is the better fit.',
+      'Choose this pack when you want the full court-possession paperwork rather than the notice alone. If you only need to serve the notice first, the Eviction Notice Generator is the better fit.',
   },
   {
     question: 'Does this include N5 and N119?',
@@ -61,7 +61,7 @@ const faqs = [
   {
     question: 'Does this replace legal advice?',
     answer:
-      'No. It is a document-generation and workflow product, not a solicitor. It helps you prepare the route and paperwork more clearly, but it does not provide representation or legal advice.',
+      'No. It is a document-generation pack, not a solicitor service. It helps you prepare the papers and keep the case organised, but it does not provide representation or legal advice.',
   },
 ];
 
@@ -103,7 +103,7 @@ export default async function CompleteEvictionPackPage() {
               What&apos;s included
             </Link>
             <Link href="#england-route" className="font-medium text-primary hover:underline">
-              England route guides
+              England guides
             </Link>
             <Link href="#start-now" className="font-medium text-primary hover:underline">
               Start now
@@ -116,20 +116,20 @@ export default async function CompleteEvictionPackPage() {
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
-              The full England route from Section 8 notice to court possession
+              The full England possession pack from Section 8 notice to court
             </h2>
             <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-700">
-              This page is for landlords who already know they want more than the notice. It is the
-              court-possession route for England, bringing the Section 8 notice together with N5,
-              N119, evidence prompts, and filing guidance in one workflow.
+              This page is for landlords who already know they want more than the notice. It brings
+              together the Section 8 notice, N5, N119, evidence prompts, and filing guidance for an
+              England possession claim.
             </p>
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl bg-[#F7F3FF] p-5">
                 <h3 className="text-lg font-semibold text-charcoal">Best fit</h3>
                 <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
                   <li>You need the notice and the court-stage possession paperwork together.</li>
-                  <li>You want the N5 and N119 route prepared in the same workflow as the notice.</li>
-                  <li>You want a clearer handoff from notice expiry into filing.</li>
+                  <li>You want N5 and N119 prepared alongside the notice.</li>
+                  <li>You want the notice and court paperwork kept together from the start.</li>
                 </ul>
               </div>
               <div className="rounded-2xl bg-[#FFF7ED] p-5">
@@ -165,7 +165,7 @@ export default async function CompleteEvictionPackPage() {
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What&apos;s included</h2>
             <p className="mt-3 max-w-3xl text-gray-700">
               You get the England court-possession pack in one place: the notice stage, the court
-              forms, and the guidance that helps you move cleanly from notice expiry into filing.
+              forms, and the guidance that helps you move from notice expiry into filing.
             </p>
           </div>
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
@@ -183,11 +183,11 @@ export default async function CompleteEvictionPackPage() {
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
-              Check the England court route before you file
+              Read the England possession guides before you file
             </h2>
             <p className="mt-4 max-w-3xl text-gray-700">
-              These guides support the possession route and help this page own the right court-stage
-              intent without drifting back into mixed-jurisdiction wording.
+              These guides help if you want more detail on the rules, the court papers, and the
+              steps after service before you buy the pack.
             </p>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {[
@@ -213,11 +213,11 @@ export default async function CompleteEvictionPackPage() {
         <Container>
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
-              Prepare the full England possession route now
+              Prepare the full England possession pack now
             </h2>
             <p className="mt-4 text-gray-700">
-              Start with the court-stage product if you want the Section 8 notice, N5, N119, and
-              filing guidance aligned in one England workflow from the beginning.
+              Start here if you want the Section 8 notice, N5, N119, and filing guidance prepared
+              together from the start.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link

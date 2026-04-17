@@ -103,7 +103,7 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <ol className="list-decimal pl-5 space-y-2">
-                        <li>Choose the route that matches the problem: notices, Section 13, money claims, tenancy agreements, or start the wizard.</li>
+                        <li>Choose the product that matches the job: a Section 8 notice, court pack, money claim, rent increase pack, tenancy agreement, or free tool.</li>
                         <li>Answer questions about your case (property, tenant, dates, grounds)</li>
                         <li>Review the generated document preview</li>
                         <li>Complete payment ({LANDLORD_DOCUMENT_PRICE_RANGE} depending on product)</li>
@@ -136,13 +136,16 @@ export default function HelpPage() {
                   answer: (
                     <ul className="space-y-3">
                       <li>
-                        <strong>Notices ({PRODUCTS.notice_only.displayPrice}):</strong> You need the notice itself, plus service steps and checks, before you go anywhere near court.
+                        <strong>Eviction Notice Generator ({PRODUCTS.notice_only.displayPrice}):</strong> You need the Section 8 notice itself, plus service steps and checks, before you go anywhere near court.
                       </li>
                       <li>
-                        <strong>Money Claims ({PRODUCTS.money_claim.displayPrice}):</strong> Use this when the tenant owes rent arrears or other tenancy debt and you need the claim paperwork in one place.
+                        <strong>Complete Eviction Pack ({PRODUCTS.complete_pack.displayPrice}):</strong> You want the notice, court forms, and filing guidance together from the start.
                       </li>
                       <li>
-                        <strong>Standard Residential Tenancy Agreement ({PRODUCTS.ast_standard.displayPrice}):</strong> Use this when you need the main agreement route for a straightforward residential let.
+                        <strong>Money Claim Pack ({PRODUCTS.money_claim.displayPrice}):</strong> Use this when the tenant owes rent arrears or other tenancy debt and you need the claim paperwork in one place.
+                      </li>
+                      <li>
+                        <strong>Standard Residential Tenancy Agreement ({PRODUCTS.ast_standard.displayPrice}):</strong> Use this when you need the main agreement for a straightforward residential let.
                       </li>
                       <li>
                         <strong>Premium Residential Tenancy Agreement ({PRODUCTS.ast_premium.displayPrice}):</strong> Fuller ordinary-residential drafting with enhanced management options. Student, HMO / Shared House, and Lodger are separate England products.
@@ -168,7 +171,7 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <p className="mb-3">
-                        <strong>Public product scope:</strong>
+                        <strong>Our public products are for property in England:</strong>
                       </p>
                       <ul className="space-y-2">
                         <li className="flex items-start gap-2">
@@ -180,7 +183,7 @@ export default function HelpPage() {
                         </li>
                       </ul>
                       <p className="mt-3">
-                        New public starts and public product recommendations are now built around England.
+                        Older non-England cases can still be opened through an existing account if they already exist.
                       </p>
                     </>
                   ),
@@ -203,7 +206,7 @@ export default function HelpPage() {
                   answer: (
                     <>
                       <p>
-                        <strong>Yes.</strong> Our public documents are based on the official England forms and prescribed formats used for the routes we now sell, and thousands of landlords have used Landlord Heaven to generate their paperwork.
+                        <strong>Yes.</strong> Our public documents are based on the official England forms and prescribed formats used for the products we now sell, and thousands of landlords have used Landlord Heaven to generate their paperwork.
                       </p>
                       <p className="mt-3 bg-warning/10 border-l-4 border-warning p-3 rounded-r">
                         <strong>Important:</strong> We are NOT a law firm and don't provide legal advice. For complex cases
@@ -222,7 +225,7 @@ export default function HelpPage() {
                       </p>
                       <p className="mt-2">
                         <strong>After download:</strong> PDFs are editable with PDF software. You can modify text, but
-                        ensure any changes still comply with the rules for your route.
+                        ensure any changes still comply with the rules for your document.
                       </p>
                       <p className="mt-2">
                         <strong>All products:</strong> Regenerate unlimited times for the same case with updated
@@ -324,12 +327,12 @@ export default function HelpPage() {
                       </p>
                       <ul className="mt-3 space-y-2">
                         <li>- Use the official England government forms we publicly support (Form 3A, N5, N119, etc.)</li>
-                        <li>- Follow the current England legislation and route requirements reflected in the product</li>
+                        <li>- Follow the current England legislation and the requirements reflected in the product</li>
                         <li>- Include all required information and clauses</li>
                         <li>- Are identical to what solicitors produce</li>
                       </ul>
                       <p className="mt-3">
-                        Thousands of landlords have successfully used our documents for England landlord workflows.
+                        Thousands of landlords have used our England documents to prepare their paperwork.
                       </p>
                     </>
                   ),

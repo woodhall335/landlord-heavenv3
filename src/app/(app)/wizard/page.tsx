@@ -21,7 +21,7 @@ type Props = {
 const DEFAULT_SEO = {
   title: 'England Landlord Document Wizard',
   description:
-    'Start an England landlord workflow for Section 8 notices, court possession, money claims, rent increases, and tenancy agreements.',
+    'Start with the England landlord product you need for Section 8 notices, court possession, money claims, rent increases, and tenancy agreements.',
   canonicalRoute: '/wizard',
 };
 
@@ -37,7 +37,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     return {
       title: 'England Landlord Products | Landlord Heaven',
       description:
-        'Public Landlord Heaven starts currently cover England. Historic non-England cases remain available through direct account access.',
+        'Landlord Heaven public products are for landlords in England. Historic non-England cases remain available through direct account access.',
       alternates: {
         canonical,
       },

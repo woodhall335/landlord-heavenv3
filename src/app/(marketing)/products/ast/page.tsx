@@ -20,14 +20,14 @@ const tenancyProducts = getPublicTenancyProducts();
 export const metadata: Metadata = {
   title: 'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger',
   description:
-    'Choose the right England tenancy agreement for Standard, Premium, Student, HMO / Shared House, and Lodger arrangements under the current framework.',
+    'Choose the right England tenancy agreement for Standard, Premium, Student, HMO / Shared House, and Lodger arrangements.',
   alternates: {
     canonical: canonicalUrl,
   },
   openGraph: {
     title: 'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger',
     description:
-      'Tenancy agreement hub for landlords in England with exact product routes for Standard, Premium, Student, HMO / Shared House, and Lodger use cases.',
+      'Tenancy agreement hub for landlords in England with exact product pages for Standard, Premium, Student, HMO / Shared House, and Lodger agreements.',
     url: canonicalUrl,
   },
 };
@@ -41,7 +41,7 @@ const faqs = [
   {
     question: 'What changed after 1 May 2026?',
     answer:
-      'The England tenancy framing on the public site has been updated to reflect the current assured periodic starting point rather than older AST-first wording as the lead message.',
+      'The public wording now reflects the current England starting point for new tenancies rather than leading with older AST terminology.',
   },
   {
     question: 'Why are there separate Standard, Premium, Student, HMO, and Lodger products?',
@@ -51,7 +51,7 @@ const faqs = [
   {
     question: 'Should I still use this if I searched for AST?',
     answer:
-      'Yes. This is the England tenancy hub that replaces broad AST-style public positioning with a clearer chooser for the exact agreement you need.',
+      'Yes. If you searched for AST, this is the best place to choose the exact agreement you need for an England let.',
   },
 ];
 
@@ -66,7 +66,7 @@ const cardCopy: TenancyCardCopy[] = [
     key: 'england_standard_tenancy_agreement',
     bestFor: 'Straightforward whole-property England lets.',
     bullets: [
-      'Baseline ordinary residential route',
+      'Baseline ordinary residential agreement',
       'Best for lower-complexity lets',
       'Supporting documents for England lets',
     ],
@@ -77,7 +77,7 @@ const cardCopy: TenancyCardCopy[] = [
     bullets: [
       'Broader operational wording',
       'Useful where controls and schedules matter more',
-      'Still an ordinary England tenancy route',
+      'Still an ordinary England tenancy agreement',
     ],
   },
   {
@@ -102,7 +102,7 @@ const cardCopy: TenancyCardCopy[] = [
     key: 'england_lodger_agreement',
     bestFor: 'Resident-landlord room lets and lodger arrangements.',
     bullets: [
-      'Lodger-specific route',
+      'Lodger-specific agreement',
       'Avoids forcing the setup into a whole-property tenancy',
       'Cleaner fit for resident-landlord use',
     ],
@@ -138,10 +138,11 @@ export default function EnglandTenancyHubPage() {
       <section className="py-12 md:py-16">
         <Container>
           <div className="mx-auto mb-8 max-w-3xl text-center">
-            <h2 className="text-3xl font-bold text-[#141B2D] md:text-5xl">Five England agreement routes</h2>
+            <h2 className="text-3xl font-bold text-[#141B2D] md:text-5xl">Five England agreement options</h2>
             <p className="mt-4 text-lg leading-8 text-[#546075]">
-              Pick the exact product that matches the landlord task. That keeps the page intent,
-              hero promise, and product output aligned all the way through checkout.
+              Pick the exact agreement that matches the let. That keeps the page
+              promise and the paperwork aligned from the first click through to
+              checkout.
             </p>
           </div>
 
@@ -181,13 +182,13 @@ export default function EnglandTenancyHubPage() {
                   </div>
                   <div className="mt-6 flex flex-wrap gap-3">
                     <Link href={product.landingHref} className="hero-btn-primary">
-                      View product page
+                      See details
                     </Link>
                     <Link
                       href={product.wizardHref}
                       className="inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white px-5 py-3 text-sm font-semibold text-[#2A3550] transition hover:border-[#BDAFE8]"
                     >
-                      Start wizard
+                      Start now
                     </Link>
                   </div>
                 </article>
@@ -201,28 +202,28 @@ export default function EnglandTenancyHubPage() {
         <Container>
           <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-10">
             <h2 className="text-3xl font-bold text-[#141B2D] md:text-4xl">
-              Keep the page promise aligned with the agreement you sell
+              Choose the agreement that fits the let
             </h2>
             <div className="mt-8 grid gap-5 md:grid-cols-3">
               <div className="rounded-2xl bg-white p-5">
-                <h3 className="text-lg font-semibold text-[#141B2D]">Search term first</h3>
+                <h3 className="text-lg font-semibold text-[#141B2D]">Choose the exact agreement</h3>
                 <p className="mt-3 text-sm leading-6 text-[#546075]">
-                  Landlords searching for a Standard, Premium, Student, HMO, or Lodger agreement
-                  should land on the exact product page, not on a broad UK comparison.
+                  If you need a Standard, Premium, Student, HMO, or Lodger
+                  agreement, go straight to that product page.
                 </p>
               </div>
               <div className="rounded-2xl bg-white p-5">
-                <h3 className="text-lg font-semibold text-[#141B2D]">England-first framing</h3>
+                <h3 className="text-lg font-semibold text-[#141B2D]">Built for landlords in England</h3>
                 <p className="mt-3 text-sm leading-6 text-[#546075]">
-                  The public hub is now explicit about England, the post-1 May 2026 framework, and
-                  the landlord task the agreement solves.
+                  Every agreement on this page is written for lets in England and
+                  matched to the kind of property or occupier you are dealing with.
                 </p>
               </div>
               <div className="rounded-2xl bg-white p-5">
-                <h3 className="text-lg font-semibold text-[#141B2D]">Cleaner product ownership</h3>
+                <h3 className="text-lg font-semibold text-[#141B2D]">Start without guessing</h3>
                 <p className="mt-3 text-sm leading-6 text-[#546075]">
-                  The hub chooses. The exact product pages own the head terms. That reduces
-                  cannibalisation and keeps the CTA path cleaner.
+                  The hub helps you choose. The product pages explain what each
+                  agreement covers and let you start straight away.
                 </p>
               </div>
             </div>

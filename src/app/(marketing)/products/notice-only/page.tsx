@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Eviction Notice Generator (Section 8, May 2026) | England | ${price}`,
     description:
-      'Section 8 notice generator for landlords in England, with checks on grounds, dates, service, and next-step readiness under the current route.',
+      'Section 8 notice generator for landlords in England, with checks on grounds, dates, service, and next-step readiness before you serve.',
     url: canonicalUrl,
   },
 };
@@ -36,12 +36,12 @@ const faqs = [
   {
     question: 'What does this product generate?',
     answer:
-      'It generates an England Section 8 notice pack for the post-May 2026 route, including the notice itself, service guidance, and a practical validity checklist before you serve.',
+      'It generates an England Section 8 notice pack for the post-May 2026 rules, including the notice itself, service guidance, and a practical validity checklist before you serve.',
   },
   {
     question: 'Who is this built for?',
     answer:
-      'It is built for landlords serving a Section 8 notice for property in England under the current route.',
+      'It is built for landlords serving a Section 8 notice for property in England.',
   },
   {
     question: 'Does this help with Form 3A?',
@@ -51,7 +51,7 @@ const faqs = [
   {
     question: 'What does the wizard check before I buy?',
     answer:
-      'The wizard checks the landlord route, selected grounds, key dates, service details, and obvious case-readiness issues so you can spot problems before serving the notice.',
+      'The wizard checks the selected grounds, key dates, service details, and obvious case-readiness issues so you can spot problems before serving the notice.',
   },
   {
     question: 'Can I preview before I pay?',
@@ -61,7 +61,7 @@ const faqs = [
   {
     question: 'When should I choose the Complete Eviction Pack instead?',
     answer:
-      'Choose the Complete Eviction Pack if you want the court-stage route as well as the notice. That product is for landlords moving from notice into N5, N119, and the possession claim process.',
+      'Choose the Complete Eviction Pack if you want the court-stage paperwork as well as the notice. That product is for landlords moving from notice into N5, N119, and the possession claim process.',
   },
 ];
 
@@ -103,7 +103,7 @@ export default async function NoticeOnlyPage() {
               What&apos;s included
             </Link>
             <Link href="#england-route" className="font-medium text-primary hover:underline">
-              England route guides
+              England guides
             </Link>
             <Link href="#start-now" className="font-medium text-primary hover:underline">
               Start now
@@ -121,15 +121,15 @@ export default async function NoticeOnlyPage() {
             <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-700">
               This page is for England landlords who need to increase pressure on an eviction case
               by serving a Section 8 notice under the post-May 2026 rules. The goal is to get the
-              notice route, grounds, dates, and service steps right before you buy or serve.
+              notice, grounds, dates, and service steps right before you buy or serve.
             </p>
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl bg-[#F7F3FF] p-5">
                 <h3 className="text-lg font-semibold text-charcoal">Best fit</h3>
                 <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
                   <li>You need a Section 8 notice for rent arrears, breach, or another valid ground.</li>
-                  <li>You want the landlord route checked before you serve anything.</li>
-                  <li>You want clearer wording on dates, service, and next steps.</li>
+                  <li>You want the key details checked before you serve anything.</li>
+                  <li>You want help with dates, service, and what to do next.</li>
                 </ul>
               </div>
               <div className="rounded-2xl bg-[#FFF7ED] p-5">
@@ -137,7 +137,7 @@ export default async function NoticeOnlyPage() {
                 <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
                   <li>You also need N5, N119, and the court-stage possession pack.</li>
                   <li>You are trying to recover debt rather than serve an eviction notice.</li>
-                  <li>You need a tenancy agreement or rent increase workflow instead of possession paperwork.</li>
+                  <li>You need a tenancy agreement or rent increase pack instead of possession paperwork.</li>
                 </ul>
               </div>
             </div>
@@ -175,7 +175,7 @@ export default async function NoticeOnlyPage() {
               lockJurisdiction
               previews={previews}
               titleOverride="What&apos;s included in your Section 8 notice pack"
-              subtitleOverride="Preview the documents, then generate the final version when the route and facts look right."
+              subtitleOverride="Preview the documents, then generate the final version when the details look right."
             />
           </div>
         </Container>
@@ -185,12 +185,11 @@ export default async function NoticeOnlyPage() {
         <Container>
           <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
-              Check the England route before you serve
+              Read the England Section 8 guides before you serve
             </h2>
             <p className="mt-4 max-w-3xl text-gray-700">
-              These England guides support the notice route. They explain the current framework,
-              broad Section 8 intent, and exact Form 3A terminology without weakening the product
-              CTA on this page.
+              These England guides help if you want more background on Section 8, Form 3A, and the
+              rules after 1 May 2026 before you generate the notice.
             </p>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {[
@@ -216,12 +215,12 @@ export default async function NoticeOnlyPage() {
         <Container>
           <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
             <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
-              Start the England Section 8 notice route now
+              Start your England Section 8 notice now
             </h2>
             <p className="mt-4 text-gray-700">
-              The wizard keeps the route focused on England, checks the details that matter, and
-              lets you switch to the Complete Eviction Pack if you decide you want the court-stage
-              paperwork as well.
+              The wizard keeps the questions focused on England, checks the details that matter,
+              and lets you switch to the Complete Eviction Pack if you also want the court
+              paperwork.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link

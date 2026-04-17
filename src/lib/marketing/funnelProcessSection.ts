@@ -75,7 +75,7 @@ const toTitleCase = (value: string) =>
 const fallbackPurposeCopy: PurposeCopy = {
   whatItDoes: 'Captures key case information in a structured legal document.',
   whyItMatters: 'Clear and complete paperwork helps avoid delays, disputes, and re-filing.',
-  whenUsed: 'Used during your generated case pack workflow.',
+  whenUsed: 'Used as part of the generated case pack.',
 };
 
 const noticeOnlyPurposeMatchers: PurposeMatcher[] = [
@@ -90,9 +90,9 @@ const noticeOnlyPurposeMatchers: PurposeMatcher[] = [
   {
     pattern: /section-8|form-3a|form-3/,
     copy: {
-      whatItDoes: 'Sets out the possession grounds relied on for the current England route.',
+      whatItDoes: 'Sets out the possession grounds relied on for the current England Section 8 case.',
       whyItMatters: 'Grounds and notice period errors can undermine the possession claim later in court.',
-      whenUsed: 'Served first when proceeding on the current England possession route.',
+      whenUsed: 'Served first when proceeding on a current England possession case.',
     },
   },
   {
@@ -100,7 +100,7 @@ const noticeOnlyPurposeMatchers: PurposeMatcher[] = [
     copy: {
       whatItDoes: 'Generates the no-fault possession notice for occupation contracts in Wales.',
       whyItMatters: 'Correct Welsh statutory wording and timelines reduce rejection risk later.',
-      whenUsed: 'Served before possession action under the no-fault Wales route.',
+      whenUsed: 'Served before possession action under the no-fault Wales notice process.',
     },
   },
   {
@@ -157,15 +157,15 @@ const completePackPurposeMatchers: PurposeMatcher[] = [
   {
     pattern: /notice/,
     copy: {
-      whatItDoes: 'Generates the route-specific possession notice that starts the legal pathway.',
+      whatItDoes: 'Generates the possession notice that starts the case.',
       whyItMatters: 'If the notice stage is defective, downstream court forms can fail.',
-      whenUsed: 'Generated and served at the start of the eviction route.',
+      whenUsed: 'Generated and served at the start of the eviction case.',
     },
   },
   {
     pattern: /n5b/,
     copy: {
-      whatItDoes: 'Flags a historical legacy claim form that is no longer part of the current England route.',
+      whatItDoes: 'Flags a historical legacy claim form that is no longer part of the current England process.',
       whyItMatters: 'This prevents users from relying on an outdated filing path for live cases.',
       whenUsed: 'Used only when reviewing a historical legacy file.',
     },
@@ -174,7 +174,7 @@ const completePackPurposeMatchers: PurposeMatcher[] = [
     pattern: /n5$/,
     copy: {
       whatItDoes: 'Builds the claim form used to open standard possession proceedings.',
-      whyItMatters: 'This form initiates the court route and must align with your notice case.',
+      whyItMatters: 'This form opens the court claim and must align with your notice case.',
       whenUsed: 'Filed once the current England notice period has expired.',
     },
   },
@@ -240,7 +240,7 @@ const moneyClaimPurposeMatchers: PurposeMatcher[] = [
   {
     pattern: /form-n1|n1|claim-form/,
     copy: {
-      whatItDoes: 'Builds the primary claim form to issue a debt claim through county court routes.',
+      whatItDoes: 'Builds the main claim form used to issue the debt claim in county court.',
       whyItMatters: 'Correct claimant, defendant, and amount details are essential to issue the claim.',
       whenUsed: 'Used at claim issue stage.',
     },
@@ -250,7 +250,7 @@ const moneyClaimPurposeMatchers: PurposeMatcher[] = [
     copy: {
       whatItDoes: 'Sets out the legal and factual basis of the debt claim in structured narrative form.',
       whyItMatters: 'Specific particulars reduce ambiguity and help the court assess the claim.',
-      whenUsed: 'Filed with or shortly after claim issue, depending on filing route.',
+      whenUsed: 'Filed with or shortly after claim issue, depending on how you submit the claim.',
     },
   },
   {
@@ -411,12 +411,12 @@ const noticeOnlyTabs = (previews?: NoticeOnlyPreviewData): FunnelProcessTab[] =>
     {
       id: 'england',
       label: 'England',
-      description: 'Current Section 8 notice route for landlords in England.',
+      description: 'Current Section 8 notice for landlords in England.',
       routes: [
         {
           id: 'section8',
           label: 'Section 8 notice pack',
-          subtitle: 'Notice, service guidance, and validation documents for the current England route.',
+          subtitle: 'Notice, service guidance, and validation documents for the current England rules.',
           steps: hydrateSteps('notice_only', 'section8', section8Docs, NOTICE_FALLBACK_DOCS.section8),
         },
       ],
@@ -428,12 +428,12 @@ const completePackTabs = (previews?: CompletePackPreviewData): FunnelProcessTab[
   {
     id: 'england',
     label: 'England',
-    description: 'Notice-to-claim bundle for the current England possession workflow.',
+    description: 'Section 8 notice, court forms, and filing paperwork for England possession cases.',
     routes: [
       {
         id: 'section8',
-        label: 'Current England route -> N5 + N119',
-        subtitle: 'Notice stage to the standard possession claim bundle.',
+        label: 'Section 8 notice, N5 and N119',
+        subtitle: 'Notice, court forms, and the main papers for a standard possession claim.',
         steps: hydrateSteps('complete_pack', 'section8', previews?.section8 ?? [], COMPLETE_PACK_FALLBACK_DOCS.section8),
       },
     ],
@@ -448,8 +448,8 @@ const moneyClaimTabs = (previews?: MoneyClaimPreviewData): FunnelProcessTab[] =>
     routes: [
       {
         id: 'money-claim-route',
-        label: 'Money Claim Workflow',
-        subtitle: 'Pre-action compliance, claim issue, and enforcement preparation.',
+        label: 'Money claim pack',
+        subtitle: 'Letter before claim, court papers, and enforcement preparation.',
         steps: hydrateSteps('money_claim', 'money-claim-route', previews ?? [], MONEY_CLAIM_FALLBACK_DOCS),
       },
     ],
@@ -471,7 +471,7 @@ export const buildFunnelProcessSectionModel = (input: BuildFunnelProcessSectionI
     return {
       heading: 'Understand Why Each Court Pack Document Matters',
       subheading:
-        'Not generic templates. This complete workflow validates your route, aligns notice and court stages, and produces court-ready outputs under the correct legal framework as a strong alternative to high solicitor fees.',
+        'Preview the pack, see what each document is for, and understand why it matters before you buy.',
       tabs: completePackTabs(input.completePackPreviews),
       defaultTabId: 'england',
     };
@@ -480,7 +480,7 @@ export const buildFunnelProcessSectionModel = (input: BuildFunnelProcessSectionI
   return {
     heading: 'Understand Why Each Money Claim Document Matters',
     subheading:
-      'Beyond templates, this is a fully validated debt-recovery workflow covering pre-action compliance, filing, and enforcement with court-ready documents built to the correct legal framework as an alternative to solicitor-led drafting.',
+      'Preview the debt documents, see what each one is for, and understand when you will use it.',
     tabs: moneyClaimTabs(input.moneyClaimPreviews),
     defaultTabId: 'england',
   };

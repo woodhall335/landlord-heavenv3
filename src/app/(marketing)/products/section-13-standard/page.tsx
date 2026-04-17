@@ -83,7 +83,7 @@ export default function Section13StandardProductPage() {
             <article className="rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-8">
               <h2 className="text-3xl font-bold text-[#2a2161]">What you get</h2>
               <p className="mt-4 text-gray-700 leading-8">
-                This pack is built to help you read the whole rent increase file naturally from start to finish. You are not just getting a form. You are getting the notice, the supporting explanation, and the record of service in one guided workflow.
+                This pack is built to help you read the whole rent increase file naturally from start to finish. You are not just getting a form. You are getting the notice, the supporting explanation, and the proof of service in one joined-up pack.
               </p>
               <ul className="mt-5 space-y-3 text-gray-700">
                 {config.included.map((item) => (
@@ -108,11 +108,11 @@ export default function Section13StandardProductPage() {
             <article className="rounded-3xl border border-[#E6DBFF] bg-[#f7f2ff] p-6 md:p-8">
               <h2 className="text-3xl font-bold text-[#2a2161]">Next step if the tenant pushes back</h2>
               <p className="mt-4 text-gray-700 leading-8">
-                If you think the tenant is likely to challenge the increase, move into the Defence Pack before the file starts to drift. That route is built for landlords who need a stronger explanation, a fuller evidence bundle, and better preparation for what comes after service.
+                If you think the tenant is likely to challenge the increase, move into the Defence Pack before the file starts to drift. It is built for landlords who need a stronger explanation, a fuller evidence bundle, and better preparation for what comes after service.
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link href="/products/section-13-defence" className="hero-btn-secondary text-center">
-                  View the Defence Pack
+                  See the Defence Pack
                 </Link>
                 <Link href={product.wizardHref} className="hero-btn-primary text-center">
                   {config.ctaLabel}

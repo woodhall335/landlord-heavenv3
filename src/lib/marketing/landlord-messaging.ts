@@ -1,14 +1,14 @@
 export const LANDLORD_HEAVEN_PURPOSE =
-  'Landlord Heaven helps landlords handle eviction notices, court paperwork, rent increases, tenant challenges, money claims, and tenancy agreements without having to piece the process together alone.';
+  'Landlord Heaven helps landlords handle eviction notices, court paperwork, rent increases, tenant challenges, money claims, and tenancy agreements without having to piece everything together alone.';
 
 export const ENGLAND_POST_MAY_2026_POSITION =
   "Built around the current England position from 1 May 2026, including the Renters' Rights changes that affect possession, tenancy setup, and Section 13 rent increases.";
 
 export const LANDLORD_GUIDANCE_DISCLAIMER =
-  'Guided document preparation and practical process support for landlords. Not a solicitor service or legal representation.';
+  'Guided document preparation and practical support for landlords. Not a solicitor service or legal representation.';
 
 export const SECTION13_STANDARD_SUMMARY =
-  'Use the Standard Section 13 pack when you want to propose a new rent properly, check the timing first, and serve a clearer Form 4A backed by market evidence.';
+  'Use the Standard Section 13 pack when you want to propose a new rent properly, check the timing first, and serve a Form 4A backed by market evidence.';
 
 export const SECTION13_DEFENCE_SUMMARY =
   'Use the Section 13 Defence Pack when the tenant is likely to challenge the increase and you want a more complete tribunal-ready file, guidance, and response tools.';
