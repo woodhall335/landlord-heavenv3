@@ -286,21 +286,16 @@ export function UniversalHero({
                 className={MOBILE_MEDIA_WRAP_CLASSES}
                 aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
               >
-                <div
-                  className={clsx('overflow-hidden rounded-[1.8rem] p-3', presetStyles.mediaPanel)}
+                <Image
+                  src={resolvedMediaSrc}
+                  alt={mascotDecorativeOnMobile ? '' : resolvedMediaAlt}
                   aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
-                >
-                  <Image
-                    src={resolvedMediaSrc}
-                    alt={mascotDecorativeOnMobile ? '' : resolvedMediaAlt}
-                    aria-hidden={mascotDecorativeOnMobile ? 'true' : undefined}
-                    width={980}
-                    height={650}
-                    priority={mediaPriority}
-                    sizes="(max-width: 1024px) 95vw, 46vw"
-                    className="relative z-0 h-auto w-full rounded-[1.2rem]"
-                  />
-                </div>
+                  width={980}
+                  height={650}
+                  priority={mediaPriority}
+                  sizes="(max-width: 1024px) 95vw, 46vw"
+                  className="relative z-0 h-auto w-full rounded-[1.2rem] shadow-[0_34px_90px_rgba(16,7,35,0.3)]"
+                />
               </div>
             )}
 
@@ -383,21 +378,16 @@ export function UniversalHero({
               className="relative z-10 hidden h-full items-center justify-end lg:flex"
               aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
             >
-              <div
-                className={clsx('w-full max-w-[680px] overflow-hidden rounded-[2.25rem] p-4', presetStyles.mediaPanel)}
+              <Image
+                src={resolvedMediaSrc}
+                alt={mascotDecorativeOnDesktop ? '' : resolvedMediaAlt}
                 aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-              >
-                <Image
-                  src={resolvedMediaSrc}
-                  alt={mascotDecorativeOnDesktop ? '' : resolvedMediaAlt}
-                  aria-hidden={mascotDecorativeOnDesktop ? 'true' : undefined}
-                  width={980}
-                  height={650}
-                  priority={mediaPriority}
-                  sizes="(max-width: 1024px) 92vw, 46vw"
-                  className="h-auto w-full rounded-[1.5rem]"
-                />
-              </div>
+                width={980}
+                height={650}
+                priority={mediaPriority}
+                sizes="(max-width: 1024px) 92vw, 46vw"
+                className="h-auto w-full max-w-[680px] rounded-[1.5rem] shadow-[0_34px_90px_rgba(16,7,35,0.3)]"
+              />
             </div>
           )}
         </div>

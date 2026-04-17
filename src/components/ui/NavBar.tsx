@@ -33,7 +33,7 @@ const primaryLinks: NavItem[] = [
   { href: "/products/notice-only", label: "Eviction Notice Generator" },
   { href: "/products/complete-pack", label: "Complete Eviction Pack" },
   { href: "/products/money-claim", label: "Money Claim Pack" },
-  { href: "/rent-increase", label: "Rent Increase Guide" },
+  { href: "/rent-increase", label: "Increase Rent Section 13" },
 ];
 
 const tenancyAgreementLinks: NavItem[] = [
@@ -236,7 +236,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
           />
         </Link>
 
-        <nav className="items-center gap-9 lg:flex hidden">
+        <nav className="ml-10 hidden items-center gap-6 lg:flex xl:ml-12 xl:gap-7">
           <div className="relative" onMouseEnter={() => setShowFreeTools(true)} onMouseLeave={() => setShowFreeTools(false)}>
             <Link
               href="/tools"

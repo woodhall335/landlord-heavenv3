@@ -5,5 +5,5 @@ import { homeHeroConfig } from './heroConfigs';
 // /app/(marketing)/help/page.tsx, /app/(marketing)/contact/page.tsx,
 // and /app/section-21-ban/page.tsx to UniversalHero + heroConfigs.
 export function Hero() {
-  return <UniversalHero {...homeHeroConfig} showTrustPositioningBar />;
+  return <UniversalHero {...homeHeroConfig} />;
 }

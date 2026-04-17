@@ -55,8 +55,7 @@ export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('home'),
   preset: 'home',
-  badge: 'For landlords in England',
-  trustText: 'Current England routes for notice, court, debt, rent increases, and tenancy agreements',
+  trustText: 'Renters Right Act Compliant Landlord Documents May 2026',
   title: 'Tenant Not Paying or',
   highlightTitle: 'Refusing to Leave?',
   subtitle: (
