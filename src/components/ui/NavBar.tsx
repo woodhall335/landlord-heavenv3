@@ -236,7 +236,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
           />
         </Link>
 
-        <nav className="ml-10 hidden items-center gap-6 lg:flex xl:ml-12 xl:gap-7">
+        <nav className="ml-8 hidden items-center gap-4 lg:flex xl:ml-10 xl:gap-5">
           <div className="relative" onMouseEnter={() => setShowFreeTools(true)} onMouseLeave={() => setShowFreeTools(false)}>
             <Link
               href="/tools"

@@ -294,7 +294,7 @@ export function UniversalHero({
                   height={650}
                   priority={mediaPriority}
                   sizes="(max-width: 1024px) 95vw, 46vw"
-                  className="relative z-0 h-auto w-full rounded-[1.2rem] shadow-[0_34px_90px_rgba(16,7,35,0.3)]"
+                  className="relative z-0 h-auto w-full rounded-[1.2rem]"
                 />
               </div>
             )}
@@ -386,7 +386,7 @@ export function UniversalHero({
                 height={650}
                 priority={mediaPriority}
                 sizes="(max-width: 1024px) 92vw, 46vw"
-                className="h-auto w-full max-w-[680px] rounded-[1.5rem] shadow-[0_34px_90px_rgba(16,7,35,0.3)]"
+                className="h-auto w-full max-w-[680px] rounded-[1.5rem]"
               />
             </div>
           )}
