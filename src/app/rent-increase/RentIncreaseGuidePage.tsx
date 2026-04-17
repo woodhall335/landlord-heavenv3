@@ -211,6 +211,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
               title="FAQs for landlords"
               showContactCTA={false}
               variant="white"
+              includeSchema={false}
             />
           </div>
         </Container>

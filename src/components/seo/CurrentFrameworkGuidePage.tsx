@@ -199,6 +199,7 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
         title={config.faqTitle}
         showContactCTA={false}
         variant="white"
+        includeSchema={false}
       />
 
       <section className="bg-[#f3eeff] py-12">

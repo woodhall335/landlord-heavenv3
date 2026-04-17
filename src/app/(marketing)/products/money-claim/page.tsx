@@ -196,7 +196,7 @@ export default async function MoneyClaimPage() {
                   <li>Demand letters and any tenant responses.</li>
                 </ul>
                 <Link href="/money-claim-unpaid-rent" className="text-primary text-sm font-medium hover:underline inline-flex mt-3">
-                  See the landlord money claim guide ->
+                  Read the landlord money claim guide
                 </Link>
               </div>
             </div>
@@ -483,7 +483,7 @@ export default async function MoneyClaimPage() {
                   </div>
                   <p className="text-sm text-gray-500 mt-3">
                     <Link href="/how-to-evict-tenant" className="text-primary hover:underline">
-                      Learn about the eviction process ->
+                      Read the eviction process guide
                     </Link>
                   </p>
                 </div>

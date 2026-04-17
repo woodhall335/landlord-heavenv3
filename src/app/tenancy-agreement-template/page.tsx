@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { SampleAgreementPreview } from '@/components/tenancy/SampleAgreementPreview';
 import { Container } from '@/components/ui/Container';
@@ -311,7 +312,7 @@ function SupportRouteCard({ title, href, summary, ctaLabel }: (typeof supportRou
 
 export default function TenancyAgreementTemplatePage() {
   return (
-    <div className="min-h-screen bg-[#F6F2EB] text-[#141B2D]">
+    <div className="min-h-screen bg-[#fcfaff] text-[#141B2D]">
       <HeaderConfig mode="autoOnScroll" />
 
       <StructuredData
@@ -324,49 +325,71 @@ export default function TenancyAgreementTemplatePage() {
       <StructuredData data={faqPageSchema(faqs)} />
 
       <main>
-        <section className="relative overflow-hidden border-b border-[#E7E0D4] bg-gradient-to-b from-[#FBF8F2] via-[#F7F3EC] to-[#F6F2EB] pt-24 pb-16 md:pt-28 md:pb-20">
-          <div className="pointer-events-none absolute left-[-8rem] top-[8rem] h-56 w-56 rounded-full bg-[#E7DBFF] opacity-60 blur-3xl" />
-          <div className="pointer-events-none absolute right-[-7rem] top-[22rem] h-56 w-56 rounded-full bg-[#FFEFD6] opacity-70 blur-3xl" />
+        <UniversalHero
+          preset="content_index"
+          trustText="Real England tenancy agreement example | Compare Standard, Premium, Student, HMO, and Lodger routes"
+          mediaSrc="/images/tenancy_agreements.webp"
+          mediaAlt="Preview of England tenancy agreement documents"
+          title="Tenancy Agreement Template"
+          highlightTitle="(England)"
+          subtitle={
+            <>
+              See how a real England tenancy agreement reads before you choose the{' '}
+              <strong>Standard</strong>, <strong>Premium</strong>, <strong>Student</strong>,{' '}
+              <strong>HMO / Shared House</strong>, or <strong>Lodger</strong> route for your let.
+            </>
+          }
+          primaryCta={{
+            label: 'Compare agreement options',
+            href: '/products/ast',
+          }}
+          secondaryCta={{
+            label: 'See Standard agreement',
+            href: '/standard-tenancy-agreement',
+          }}
+          feature="Preview the structure first, then move into the agreement route that fits the property and occupiers."
+        />
 
+        <section className="py-12 md:py-16">
           <Container>
-            <div className="max-w-4xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#7C3AED]">
-                England example and guide
-              </p>
-              <h1 className="mt-4 text-4xl font-bold tracking-tight text-[#141B2D] md:text-6xl">
-                Tenancy Agreement Template (England)
-              </h1>
-            </div>
+            <div className="rounded-[2.3rem] border border-[#E7E0F6] bg-white p-6 shadow-[0_22px_60px_rgba(43,37,61,0.08)] md:p-8">
+              <div className="max-w-4xl">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#7C3AED]">
+                  England example and guide
+                </p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
+                  See how the agreement reads before you choose
+                </h2>
+                <div className="mt-5 space-y-4 text-base leading-8 text-[#556177] md:text-lg">
+                  <p>
+                    Landlords searching for a tenancy agreement, rent agreement, or tenancy
+                    contract usually want to inspect the wording first. This page starts with a
+                    real England example so you can see the structure before choosing the route
+                    that fits the let.
+                  </p>
+                  <p>
+                    If older terminology is still shaping the search, the{' '}
+                    <Link
+                      href="/assured-shorthold-tenancy-agreement-template"
+                      className="font-semibold text-[#4A46C8] underline-offset-4 hover:underline"
+                    >
+                      AST legacy guide
+                    </Link>{' '}
+                    and the{' '}
+                    <Link
+                      href="/assured-periodic-tenancy-agreement"
+                      className="font-semibold text-[#4A46C8] underline-offset-4 hover:underline"
+                    >
+                      assured periodic guide
+                    </Link>{' '}
+                    are still available, but this remains the main England agreement example page.
+                  </p>
+                </div>
+              </div>
 
-            <div className="mt-8 md:mt-10">
-              <SampleAgreementPreview />
-            </div>
-
-            <div className="mt-8 max-w-4xl space-y-4 text-lg leading-8 text-[#556177]">
-              <p>
-                Landlords searching for a tenancy agreement, rent agreement, or tenancy contract
-                usually want to see the structure first. That is why this page starts with a real
-                England template example before moving into the agreement routes that fit a live
-                tenancy.
-              </p>
-              <p>
-                If older terminology is still shaping the search, the{' '}
-                <Link
-                  href="/assured-shorthold-tenancy-agreement-template"
-                  className="font-semibold text-[#4A46C8] underline-offset-4 hover:underline"
-                >
-                  AST legacy guide
-                </Link>{' '}
-                and the{' '}
-                <Link
-                  href="/assured-periodic-tenancy-agreement"
-                  className="font-semibold text-[#4A46C8] underline-offset-4 hover:underline"
-                >
-                  assured periodic guide
-                </Link>{' '}
-                stay available lower in the journey, but this page remains the main England
-                agreement example page.
-              </p>
+              <div className="mt-8 md:mt-10">
+                <SampleAgreementPreview />
+              </div>
             </div>
           </Container>
         </section>
