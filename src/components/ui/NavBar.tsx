@@ -236,83 +236,84 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
           />
         </Link>
 
-        <nav className="ml-8 hidden items-center gap-4 lg:flex xl:ml-10 xl:gap-5">
-          <div className="relative" onMouseEnter={() => setShowFreeTools(true)} onMouseLeave={() => setShowFreeTools(false)}>
-            <Link
-              href="/tools"
-              className={clsx('text-sm font-semibold transition-colors relative py-2 flex items-center gap-1', secondaryTextClass, hoverTextClass)}
-              aria-label="Free tools hub"
-            >
-              Free Tools
-              <RiArrowDownSLine className={clsx('h-4 w-4', isSolid ? 'text-[#692ED4]' : 'text-white')} />
-            </Link>
+        <div className="ml-auto hidden items-center gap-5 lg:flex xl:gap-6">
+          <nav className="flex items-center gap-3 xl:gap-4">
+            <div className="relative" onMouseEnter={() => setShowFreeTools(true)} onMouseLeave={() => setShowFreeTools(false)}>
+              <Link
+                href="/tools"
+                className={clsx('relative flex items-center gap-1 whitespace-nowrap py-2 text-sm font-semibold transition-colors', secondaryTextClass, hoverTextClass)}
+                aria-label="Free tools hub"
+              >
+                Free Tools
+                <RiArrowDownSLine className={clsx('h-4 w-4', isSolid ? 'text-[#692ED4]' : 'text-white')} />
+              </Link>
 
-            {showFreeTools && (
-              <div className="absolute left-0 top-full pt-2 w-56 z-50">
-                <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2">
-                  {freeToolsLinks.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
+              {showFreeTools && (
+                <div className="absolute left-0 top-full pt-2 w-56 z-50">
+                  <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2">
+                    {freeToolsLinks.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-
-          <div className="relative" onMouseEnter={() => setShowTenancyAgreements(true)} onMouseLeave={() => setShowTenancyAgreements(false)}>
-            <Link
-              href="/products/ast"
-              className={clsx(
-                'text-sm font-semibold transition-colors relative py-2 flex items-center gap-1',
-                isTenancyMenuActive
-                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
-                  : clsx(secondaryTextClass, hoverTextClass)
               )}
-              aria-label="Tenancy agreements"
-            >
-              Tenancy Agreements
-              <RiArrowDownSLine className={clsx('h-4 w-4', isSolid ? 'text-[#692ED4]' : 'text-white')} />
-            </Link>
+            </div>
 
-            {showTenancyAgreements && (
-              <div className="absolute left-0 top-full pt-2 w-80 z-50">
-                <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2 max-h-[28rem] overflow-auto">
-                  {tenancyAgreementLinks.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
+            <div className="relative" onMouseEnter={() => setShowTenancyAgreements(true)} onMouseLeave={() => setShowTenancyAgreements(false)}>
+              <Link
+                href="/products/ast"
+                className={clsx(
+                  'relative flex items-center gap-1 whitespace-nowrap py-2 text-sm font-semibold transition-colors',
+                  isTenancyMenuActive
+                    ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
+                    : clsx(secondaryTextClass, hoverTextClass)
+                )}
+                aria-label="Tenancy agreements"
+              >
+                Tenancy Agreements
+                <RiArrowDownSLine className={clsx('h-4 w-4', isSolid ? 'text-[#692ED4]' : 'text-white')} />
+              </Link>
+
+              {showTenancyAgreements && (
+                <div className="absolute left-0 top-full pt-2 w-80 z-50">
+                  <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2 max-h-[28rem] overflow-auto">
+                    {tenancyAgreementLinks.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-
-          {primaryLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={clsx(
-                'text-sm font-semibold transition-colors relative py-2',
-                pathname === item.href
-                  ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
-                  : clsx(secondaryTextClass, hoverTextClass)
               )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+            </div>
 
-        <div className="items-center gap-4 lg:flex hidden">
+            {primaryLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={clsx(
+                  'relative whitespace-nowrap py-2 text-sm font-semibold transition-colors',
+                  pathname === item.href
+                    ? clsx(textClass, 'after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px] after:bg-[#7c3aed]')
+                    : clsx(secondaryTextClass, hoverTextClass)
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-4">
           {user ? (
             <div className={clsx('flex items-center gap-2 rounded-full px-3 py-2 text-sm', isSolid ? 'bg-gray-100 text-charcoal' : 'bg-white/20 text-white backdrop-blur-sm')}>
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
@@ -338,6 +339,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
               Login
             </Link>
           )}
+        </div>
         </div>
 
         <button
