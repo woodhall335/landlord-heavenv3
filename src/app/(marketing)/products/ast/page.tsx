@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { astHeroConfig } from '@/components/landing/heroConfigs';
 import { Container } from '@/components/ui/Container';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { StructuredData, breadcrumbSchema, pricingItemListSchema } from '@/lib/seo/structured-data';
@@ -10,13 +12,9 @@ import {
   ENGLAND_TENANCY_PRODUCT_IMAGES,
   type EnglandModernTenancyProductSku,
 } from '@/lib/tenancy/england-product-model';
-import {
-  PUBLIC_PRODUCT_DESCRIPTORS,
-  getPublicTenancyProducts,
-} from '@/lib/public-products';
+import { getPublicTenancyProducts } from '@/lib/public-products';
 
 const canonicalUrl = getCanonicalUrl('/products/ast');
-const chooserHref = '/wizard/flow?type=tenancy_agreement&product=tenancy_agreement&src=product_page&topic=tenancy';
 const tenancyProducts = getPublicTenancyProducts();
 
 export const metadata: Metadata = {
@@ -135,45 +133,7 @@ export default function EnglandTenancyHubPage() {
         )}
       />
 
-      <section className="border-b border-[#EDE2FF] bg-white">
-        <Container className="py-14 md:py-20">
-          <div className="grid gap-10 lg:grid-cols-[1.35fr_0.95fr] lg:items-center">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#7C3AED]">
-                England Tenancy Hub
-              </p>
-              <h1 className="mt-4 max-w-4xl text-4xl font-bold tracking-tight text-[#141B2D] md:text-6xl">
-                Choose the right England tenancy agreement instead of guessing from an old AST template.
-              </h1>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-[#546075]">
-                This hub helps landlords choose the exact agreement they need for property in
-                England: Standard, Premium, Student, HMO / Shared House, and Lodger. The copy is
-                aligned to the current England framework from 1 May 2026.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={chooserHref} className="hero-btn-primary">
-                  Choose my England agreement
-                </Link>
-                <Link
-                  href={PUBLIC_PRODUCT_DESCRIPTORS.england_standard_tenancy_agreement.landingHref}
-                  className="inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white px-5 py-3 text-sm font-semibold text-[#2A3550] transition hover:border-[#BDAFE8]"
-                >
-                  Start with Standard
-                </Link>
-              </div>
-            </div>
-            <div className="rounded-[2rem] border border-[#E6DBFF] bg-gradient-to-br from-[#F8F5FF] to-white p-8 shadow-[0_20px_50px_rgba(124,58,237,0.08)]">
-              <h2 className="text-2xl font-semibold text-[#141B2D]">How this hub helps landlords</h2>
-              <ul className="mt-5 space-y-3 text-sm leading-6 text-[#546075]">
-                <li>Each exact agreement term now has its own page.</li>
-                <li>The hub points you to the agreement that actually matches the let.</li>
-                <li>Older broad AST language is kept as supporting terminology, not the main promise.</li>
-                <li>The product pages now lead with the landlord task first.</li>
-              </ul>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero {...astHeroConfig} />
 
       <section className="py-12 md:py-16">
         <Container>

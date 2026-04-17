@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
-import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 import {
@@ -82,8 +81,6 @@ function warnOnce(message: string) {
 export function UniversalHero({
   preset = 'product_owner',
   trustText,
-  badge,
-  badgeIcon,
   title,
   highlightTitle,
   subtitle,
@@ -107,9 +104,6 @@ export function UniversalHero({
   showReviewPill,
   showUsageCounter,
   backgroundImageSrc = '/images/bg.webp',
-  showTrustPositioningBar = false,
-  trustPositioningPreset = 'default',
-  trustPositioningHeadline,
 }: UniversalHeroProps) {
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
@@ -193,19 +187,6 @@ export function UniversalHero({
               hideMedia && 'max-w-3xl mx-auto'
             )}
           >
-            {badge && (
-              <div
-                className={clsx(
-                  'mb-4 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm',
-                  presetStyles.badge,
-                  isCenter && 'mx-auto'
-                )}
-              >
-                {badgeIcon}
-                <span className="text-white">{badge}</span>
-              </div>
-            )}
-
             {shouldShowReviewPill && (
               <p
                 className={clsx(
@@ -354,15 +335,6 @@ export function UniversalHero({
                 <span className="text-white/85">{feature}</span>
               </div>
             )}
-
-            {showTrustPositioningBar ? (
-              <TrustPositioningBar
-                variant="compact"
-                preset={trustPositioningPreset}
-                headline={trustPositioningHeadline}
-                className="mx-auto mt-6 max-w-5xl"
-              />
-            ) : null}
 
             {children}
 
