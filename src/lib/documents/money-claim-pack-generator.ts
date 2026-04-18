@@ -87,6 +87,10 @@ export interface MoneyClaimCase {
   landlord_postcode?: string;
   landlord_email?: string;
   landlord_phone?: string;
+  payment_account_name?: string;
+  payment_sort_code?: string;
+  payment_account_number?: string;
+  payment_reference?: string;
   claimant_reference?: string;
 
   // Defendant / tenant (Defendant 1)
@@ -230,6 +234,18 @@ function sumLineItems(items?: ClaimLineItem[]): number {
 
 function roundMoney(value: number): number {
   return Number(value.toFixed(2));
+}
+
+function resolvePaymentReference(claim: MoneyClaimCase): string {
+  if (claim.payment_reference?.trim()) {
+    return claim.payment_reference.trim();
+  }
+
+  if (claim.property_postcode?.trim()) {
+    return `${claim.property_postcode.trim()} arrears`;
+  }
+
+  return 'Rent arrears payment';
 }
 
 function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
@@ -461,10 +477,19 @@ async function generateEnglandMoneyClaimPack(
   const formattedTenancyStartDate = formatUKLegalDate(claim.tenancy_start_date);
   const formattedInterestStartDate = formatUKLegalDate(claim.interest_start_date);
   const claimantReference = resolveClaimantReference(claim);
+  const paymentAccountName = claim.payment_account_name?.trim() || claim.landlord_full_name;
+  const paymentSortCode = claim.payment_sort_code?.trim() || '';
+  const paymentAccountNumber = claim.payment_account_number?.trim() || '';
+  const hasBankTransferDetails = paymentSortCode.length > 0 && paymentAccountNumber.length > 0;
 
   const baseTemplateData = {
     ...claim,
     claimant_reference: claimantReference,
+    payment_account_name: paymentAccountName,
+    payment_sort_code: paymentSortCode,
+    payment_account_number: paymentAccountNumber,
+    payment_reference: resolvePaymentReference(claim),
+    has_bank_transfer_details: hasBankTransferDetails,
     ...totals,
     // All dates pre-formatted as UK legal format (DD Month YYYY)
     generation_date: formattedGenerationDate,

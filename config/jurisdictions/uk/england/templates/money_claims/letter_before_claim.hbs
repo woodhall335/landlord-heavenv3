@@ -31,7 +31,7 @@ Reference: {{claimant_reference}}
 
 <hr>
 
-<h2>LETTER OF CLAIM — UNPAID RENT AND ARREARS</h2>
+<h2>LETTER OF CLAIM - UNPAID RENT AND ARREARS</h2>
 
 <p>Dear {{tenant_full_name}},</p>
 
@@ -100,7 +100,7 @@ You have failed to pay rent as it fell due. The arrears have accumulated over mu
 <p>In addition to rent arrears, you are liable for the following:</p>
 <ul>
   {{#each damage_items}}
-  <li>{{description}} — {{currency amount}}</li>
+  <li>{{description}} - {{currency amount}}</li>
   {{/each}}
 </ul>
 {{/if}}
@@ -109,7 +109,7 @@ You have failed to pay rent as it fell due. The arrears have accumulated over mu
 <h4>Other Recoverable Charges</h4>
 <ul>
   {{#each other_charges}}
-  <li>{{description}} — {{currency amount}}</li>
+  <li>{{description}} - {{currency amount}}</li>
   {{/each}}
 </ul>
 {{/if}}
@@ -139,17 +139,24 @@ You have <strong>30 days from the date of this letter</strong> (i.e., until {{re
 
 <h4>Payment Methods</h4>
 <p>
-If you wish to pay the debt in full, please arrange payment by bank transfer to:
+If you wish to pay the debt in full, please arrange payment by bank transfer using the details below.
 </p>
+{{#if has_bank_transfer_details}}
 <ul>
-  <li>Account name: {{landlord_full_name}}</li>
-  <li>Sort code: [INSERT SORT CODE]</li>
-  <li>Account number: [INSERT ACCOUNT NUMBER]</li>
-  <li>Payment reference: {{property_postcode}} ARREARS</li>
+  <li>Account name: {{payment_account_name}}</li>
+  <li>Sort code: {{payment_sort_code}}</li>
+  <li>Account number: {{payment_account_number}}</li>
+  <li>Payment reference: {{payment_reference}}</li>
 </ul>
+{{else}}
+<p>
+Please contact me using the details shown at the top of this letter to obtain the bank transfer details. Quote
+<strong>{{payment_reference}}</strong> when making payment.
+</p>
+{{/if}}
 
 <p>
-Alternatively, contact me at {{landlord_phone}} or {{landlord_email}} to discuss payment.
+If you need to discuss payment, use the contact details shown at the top of this letter.
 </p>
 
 <h4>Payment Plans</h4>

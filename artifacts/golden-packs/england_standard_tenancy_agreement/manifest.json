@@ -16,7 +16,7 @@
         "html": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.html"
       },
       "extraction": {
-        "pageCount": 8,
+        "pageCount": 7,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -124,7 +124,7 @@
         "html": "england_standard_tenancy_agreement/deposit_protection_certificate.html"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 6,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -142,7 +142,7 @@
         "html": "england_standard_tenancy_agreement/prescribed_information_pack.html"
       },
       "extraction": {
-        "pageCount": 5,
+        "pageCount": 9,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

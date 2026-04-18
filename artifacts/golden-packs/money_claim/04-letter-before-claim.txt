@@ -1,5 +1,5 @@
 Letter Before Claim
-Date: 16 April 2026
+Date: 17 April 2026
 To:
 Tom Tenant
 2 High Street London
@@ -8,7 +8,7 @@ From:
 Alice Landlord
 1 High Street London
 E1 1AA
-LETTER OF CLAIM — UNPAID RENT AND ARREARS
+LETTER OF CLAIM - UNPAID RENT AND ARREARS
 Dear Tom Tenant,
 Re: Property at 2 High Street London
 I am writing to you about the money you owe me in respect of the above property. This letter is sent
@@ -26,8 +26,8 @@ What will happen if you do not pay or respond.
 Rent arrears: £2430.00
 Property damage / other costs: £380.00
 Other charges: £80.00
-Interest to date (8% per annum): £45.99
-TOTAL AMOUNT OWED: £2935.99
+Interest to date (8% per annum): £46.62
+TOTAL AMOUNT OWED: £2936.62
 Interest continues to accrue at £0.63 per day until the debt is paid in full.
 2. Breakdown of the Debt
 Rent Arrears
@@ -38,31 +38,31 @@ detailed schedule showing each period, the amount due, what you paid, and the ba
 as Appendix 1.
 Property Damage and Other Costs
 In addition to rent arrears, you are liable for the following:
-Broken internal door — £200.00
-Professional clean due to excessive staining — £180.00
+Broken internal door - £200.00
+Professional clean due to excessive staining - £180.00
 Other Recoverable Charges
-Locksmith call-out — £80.00
+Locksmith call-out - £80.00
 Interest
 I am entitled to claim interest on the outstanding rent and costs pursuant to section 69 of the
 County Courts Act 1984. Interest is calculated at 8% per annum from 2 February 2026 and
 continues to accrue at £0.63 per day until payment.
-The interest calculation to 16 April 2026 is £45.99. The full working is attached as Appendix 2.
+The interest calculation to 17 April 2026 is £46.62. The full working is attached as Appendix 2.
 3. What You Must Do Now
-You have 30 days from the date of this letter (i.e., until 16 May 2026) to do ONE of the
+You have 30 days from the date of this letter (i.e., until 17 May 2026) to do ONE of the
 following:
 
 -- 2 of 5 --
 
-1. Pay the full amount owed (£2935.99) to avoid court proceedings.
+1. Pay the full amount owed (£2936.62) to avoid court proceedings.
 2. Contact me to discuss a payment arrangement if you cannot pay in full.
 3. Complete the enclosed Reply Form if you dispute the debt or need time to seek advice.
 Payment Methods
-If you wish to pay the debt in full, please arrange payment by bank transfer to:
+If you wish to pay the debt in full, please arrange payment by bank transfer using the details below.
 Account name: Alice Landlord
-Sort code: [INSERT SORT CODE]
-Account number: [INSERT ACCOUNT NUMBER]
-Payment reference: E1 2BB ARREARS
-Alternatively, contact me at 02070000001 or alice@example.com to discuss payment.
+Sort code: 10-20-30
+Account number: 12345678
+Payment reference: E1 2BB arrears
+If you need to discuss payment, use the contact details shown at the top of this letter.
 Payment Plans
 If you cannot pay the full amount but can make regular payments, I may be willing to accept a
 payment arrangement. You must contact me within 30 days to propose a realistic payment plan. Any
@@ -86,7 +86,7 @@ If I issue a court claim:
 
 -- 3 of 5 --
 
-The claim will be for the full amount owed (£2935.99) plus court fees and legal costs.
+The claim will be for the full amount owed (£2936.62) plus court fees and legal costs.
 You will have to pay a court fee of approximately £205.00.
 Interest will continue to accrue at £0.63 per day.
 If judgment is entered against you, it will damage your credit rating for six years.

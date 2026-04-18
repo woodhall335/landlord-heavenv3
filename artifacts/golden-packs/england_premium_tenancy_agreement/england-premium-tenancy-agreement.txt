@@ -85,7 +85,7 @@ DEPOSIT
 PROTECTION
 SCHEME
 DPS
-DEPOSIT REFERENCE To be completed from the scheme confirmation
+DEPOSIT REFERENCE DPS-EXAMPLE-2026-0001
 If a deposit is taken, it should be protected in an authorised England scheme within the statutory
 timeframe and the prescribed information should be served in time. The support documents in this
 pack are intended to help record those details.
@@ -236,8 +236,6 @@ Additional notes
 This document is intended to record the written terms for an England assured periodic tenancy
 and should be read with any deposit, guarantor, and pre-tenancy checklist documents in the
 pack.
-Deposit protection reference: use the placeholder wording in the support documents until the
-final scheme reference is available, then update the served pack within the statutory deadline.
 The Premium pack is intended to travel with its management schedule, keys handover record,
 utilities handover sheet, pet-request addendum, and tenancy variation record.
 

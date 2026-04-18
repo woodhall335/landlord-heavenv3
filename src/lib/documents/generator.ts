@@ -805,10 +805,37 @@ function markdownToHtml(markdown: string): string {
   html = paragraphs.map(para => {
     para = para.trim();
     if (!para) return '';
-    // Don't wrap if already has HTML tags
-    if (para.startsWith('<h') || para.startsWith('<hr') || para.startsWith('<div') || para.startsWith('<p') || para.startsWith('<table')) {
+
+    const lines = para
+      .split('\n')
+      .map(line => line.trim())
+      .filter(Boolean);
+
+    if (lines.length > 0 && lines.every(line => line.startsWith('- '))) {
+      return `<ul>${lines.map(line => `<li>${line.slice(2).trim()}</li>`).join('')}</ul>`;
+    }
+
+    if (lines.length > 0 && lines.every(line => /^\d+\.\s+/.test(line))) {
+      return `<ol>${lines.map(line => `<li>${line.replace(/^\d+\.\s+/, '').trim()}</li>`).join('')}</ol>`;
+    }
+
+    if (lines.length > 1) {
+      const [firstLine, ...remainingLines] = lines;
+
+      if (remainingLines.every(line => line.startsWith('- '))) {
+        return `<p>${firstLine}</p><ul>${remainingLines.map(line => `<li>${line.slice(2).trim()}</li>`).join('')}</ul>`;
+      }
+
+      if (remainingLines.every(line => /^\d+\.\s+/.test(line))) {
+        return `<p>${firstLine}</p><ol>${remainingLines.map(line => `<li>${line.replace(/^\d+\.\s+/, '').trim()}</li>`).join('')}</ol>`;
+      }
+    }
+
+    const containsBlockHtml = /<(h\d|hr|div|p|table|ul|ol|li|section|article|blockquote|address)\b|<\/(p|table|ul|ol|li|div|section|article|blockquote|address)>/i.test(para);
+    if (containsBlockHtml) {
       return para;
     }
+
     // Don't wrap standalone --- lines
     if (para === '---' || para === '<hr />') {
       return para;
@@ -1126,12 +1153,18 @@ export async function htmlToPdf(
 ): Promise<Buffer> {
   let browser;
   const sanitizedInputHtml = sanitizeHtmlForPdfRendering(normalizeCurrencySymbolsInHtml(html));
+  const isFullHtml = isFullHtmlDocument(sanitizedInputHtml);
+
+  const isNavigationTimeoutError = (error: unknown): boolean => {
+    const message = error instanceof Error ? error.message : String(error);
+    return /navigation timeout/i.test(message) || /timeout of \d+\s*ms exceeded/i.test(message);
+  };
 
   if (PDF_DEBUG) {
     console.log('[PDF_DEBUG] htmlToPdf() called');
     console.log('[PDF_DEBUG] Input HTML length:', sanitizedInputHtml.length);
     console.log('[PDF_DEBUG] Input HTML first 300 chars:', sanitizedInputHtml.substring(0, 300));
-    console.log('[PDF_DEBUG] isFullHtmlDocument in htmlToPdf:', isFullHtmlDocument(sanitizedInputHtml));
+    console.log('[PDF_DEBUG] isFullHtmlDocument in htmlToPdf:', isFullHtml);
   }
 
   try {
@@ -1142,7 +1175,7 @@ export async function htmlToPdf(
     // Determine what HTML to use for PDF generation
     let finalHtml: string;
 
-    if (isFullHtmlDocument(sanitizedInputHtml)) {
+    if (isFullHtml) {
       if (PDF_DEBUG) {
         console.log('[PDF_DEBUG] Full HTML document detected - passing through without wrapper');
       }
@@ -1393,15 +1426,30 @@ ${sanitizedInputHtml}
     // Use networkidle2 instead of networkidle0 for more resilient waiting
     // networkidle2 waits for ≤2 network connections vs 0, preventing timeout
     // on complex templates like Form 6A with embedded resources
-    await page.setContent(finalHtml, {
-      waitUntil: 'networkidle2',
-      timeout: 45000  // Explicit 45s timeout (up from default 30s)
-    });
-    await page.evaluate(async () => {
-      if (typeof document !== 'undefined' && 'fonts' in document && document.fonts?.ready) {
-        await document.fonts.ready;
+    const loadContent = async (
+      waitUntil: 'networkidle2' | 'domcontentloaded',
+      timeout: number
+    ) => {
+      await page.setContent(finalHtml, {
+        waitUntil,
+        timeout,
+      });
+      await page.evaluate(async () => {
+        if (typeof document !== 'undefined' && 'fonts' in document && document.fonts?.ready) {
+          await document.fonts.ready;
+        }
+      });
+    };
+
+    try {
+      await loadContent('networkidle2', 45000);
+    } catch (error) {
+      if (!isNavigationTimeoutError(error)) {
+        throw error;
       }
-    });
+
+      await loadContent('domcontentloaded', 15000);
+    }
 
     // ====================================================================================
     // WATERMARK REMOVED - Simplified UX Change
@@ -1414,8 +1462,6 @@ ${sanitizedInputHtml}
 
     // For full HTML templates, prefer CSS @page rules so template controls margins
     // For non-full HTML (wrapped content), use format option
-    const isFullHtml = isFullHtmlDocument(sanitizedInputHtml);
-
     // IMPORTANT: For full HTML templates, do NOT pass margin option at all.
     // Let the template's @page CSS rules control margins entirely.
     // Only pass margin for non-full-HTML where we inject our own @page rules.

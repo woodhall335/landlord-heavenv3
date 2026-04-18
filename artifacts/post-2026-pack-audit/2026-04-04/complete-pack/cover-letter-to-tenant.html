@@ -11,33 +11,7 @@ filename: cover_letter_to_tenant.pdf
   <meta charset="UTF-8">
   <title>Cover Letter to Tenant</title>
   <style>
-    /**
- * ============================================================================
- * LANDLORD HEAVEN - PRINT DESIGN SYSTEM
- * Central stylesheet for Notice Only PDFs (England, Wales, Scotland)
- * ============================================================================
- *
- * PURPOSE:
- * - Consistent typography, spacing, and page-break rules across all jurisdictions
- * - Professional layout that renders consistently in Puppeteer PDF generation
- * - Responsive to legal form requirements while maintaining visual excellence
- *
- * USAGE:
- * - Include in <head> of notice.hbs templates
- * - Supplement with jurisdiction-specific overrides if needed (rare)
- * - Do NOT inline style attributes; use utility classes instead
- *
- * IMPORTANT:
- * - This stylesheet governs LAYOUT ONLY - legal wording is NEVER changed
- * - Page breaks prevent orphaned headings and split sections
- * - All spacing uses consistent vertical rhythm (0.5em increments)
- */
-
-/* ============================================================================
-   DOCUMENT FOUNDATION
-   ============================================================================ */
-
-* {
+    * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -45,11 +19,11 @@ filename: cover_letter_to_tenant.pdf
 
 @page {
   size: A4;
-  margin: 0.75in 0.75in 1in 0.75in; /* Top, Right, Bottom, Left */
+  margin: 0.75in 0.75in 1in 0.75in; 
 }
 
 html {
-  font-size: 12pt; /* Base font size for all calculations */
+  font-size: 12pt; 
 }
 
 body {
@@ -64,7 +38,7 @@ body {
   font-variant-ligatures: none;
   font-feature-settings: "liga" 0, "clig" 0;
 
-  /* Prevent text overflow */
+  
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: normal;
@@ -72,11 +46,9 @@ body {
   -webkit-hyphens: none;
 }
 
-/* ============================================================================
-   TYPOGRAPHY
-   ============================================================================ */
 
-/* Main Headings */
+
+
 h1 {
   font-size: 14pt;
   font-weight: bold;
@@ -86,16 +58,16 @@ h1 {
   margin: 0 0 1em 0;
   padding: 0;
 
-  /* Prevent orphan headings at bottom of page */
+  
   page-break-after: avoid;
   break-after: avoid-page;
 }
 
 h1 + h1 {
-  margin-top: 0.5em; /* Tighter spacing for consecutive h1s when documents stack headings */
+  margin-top: 0.5em; 
 }
 
-/* Subheadings */
+
 h2 {
   font-size: 12pt;
   font-weight: bold;
@@ -108,7 +80,7 @@ h2 {
   break-after: avoid-page;
 }
 
-/* Section Headings */
+
 h3 {
   font-size: 12pt;
   font-weight: bold;
@@ -130,7 +102,7 @@ h4 {
   break-after: avoid-page;
 }
 
-/* Paragraphs */
+
 p {
   margin: 0 0 0.75em 0;
   line-height: 1.5;
@@ -140,7 +112,7 @@ p:last-child {
   margin-bottom: 0;
 }
 
-/* Lists */
+
 ul, ol {
   margin: 0.75em 0;
   padding-left: 1.5em;
@@ -155,7 +127,7 @@ li:last-child {
   margin-bottom: 0;
 }
 
-/* Emphasis */
+
 strong {
   font-weight: bold;
 }
@@ -164,18 +136,16 @@ em {
   font-style: italic;
 }
 
-/* Links (for URLs in notices) */
+
 .link, a {
   color: #0066cc;
   text-decoration: underline;
-  word-break: break-all; /* Prevent long URLs from overflowing */
+  word-break: break-all; 
 }
 
-/* ============================================================================
-   LAYOUT COMPONENTS
-   ============================================================================ */
 
-/* Info Box (e.g., "Information for the Tenant") */
+
+
 .info-box {
   border: 2px solid #000;
   padding: 1em;
@@ -194,16 +164,16 @@ em {
   margin-top: 0;
 }
 
-/* Section Block (logical grouping) */
+
 .section {
   margin: 1.5em 0;
 
-  /* Prevent splitting key sections across pages */
+  
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
-/* Field Groups (label + value pairs) */
+
 .field-group {
   margin: 1em 0;
 
@@ -227,10 +197,10 @@ em {
 }
 
 .field-value:empty::after {
-  content: "\00a0"; /* Non-breaking space to maintain height */
+  content: "\00a0"; 
 }
 
-/* Multiline field (for particulars, evidence, etc.) */
+
 .multiline-field {
   margin-left: 0.25in;
   border: 1px solid #ccc;
@@ -239,7 +209,7 @@ em {
   background-color: #fafafa;
 }
 
-/* Ground Block (for Section 8 grounds, eviction grounds, etc.) */
+
 .ground-block {
   margin: 1em 0 1em 0.25in;
   padding: 0.75em;
@@ -254,7 +224,7 @@ em {
   margin-top: 0;
 }
 
-/* Part Label (for Wales RHW forms: Part A, Part B, etc.) */
+
 .part-label {
   font-weight: bold;
   font-size: 11pt;
@@ -267,7 +237,7 @@ em {
   break-after: avoid-page;
 }
 
-/* Signature Block */
+
 .signature-block {
   margin-top: 2em;
 
@@ -275,7 +245,7 @@ em {
   break-inside: avoid;
 }
 
-/* Checkbox (for forms with tick boxes) */
+
 .checkbox {
   display: inline-block;
   width: 1em;
@@ -286,55 +256,51 @@ em {
   background-color: #fff;
 }
 
-/* ============================================================================
-   PAGE BREAK UTILITIES
-   ============================================================================ */
 
-/* Prevent breaking inside element */
+
+
 .avoid-break {
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
-/* Keep element with next sibling (prevent orphan headings) */
+
 .keep-with-next {
   page-break-after: avoid;
   break-after: avoid-page;
 }
 
-/* Force page break before element */
+
 .page-break-before {
   page-break-before: always;
   break-before: page;
 }
 
-/* Force page break after element */
+
 .page-break-after {
   page-break-after: always;
   break-after: page;
 }
 
-/* Allow auto page breaks (override avoid rules) */
+
 .allow-break {
   page-break-inside: auto;
   break-inside: auto;
 }
 
-/* ============================================================================
-   GUIDANCE SECTIONS (usually at end of notice)
-   ============================================================================ */
+
 
 .guidance-section {
   margin-top: 2em;
   padding-top: 1.5em;
   border-top: 2px solid #000;
 
-  /* Optionally force new page for long guidance */
+  
   page-break-before: auto;
 }
 
 .guidance-section h2 {
-  text-align: left; /* Override center alignment for guidance headings */
+  text-align: left; 
   font-size: 12pt;
   margin: 1.5em 0 0.5em 0;
 }
@@ -344,9 +310,7 @@ em {
   margin: 1em 0 0.5em 0;
 }
 
-/* ============================================================================
-   SPACING UTILITIES
-   ============================================================================ */
+
 
 .mt-0 { margin-top: 0 !important; }
 .mt-1 { margin-top: 0.5em !important; }
@@ -364,9 +328,7 @@ em {
 .ml-1 { margin-left: 0.25in !important; }
 .ml-2 { margin-left: 0.5in !important; }
 
-/* ============================================================================
-   TEXT UTILITIES
-   ============================================================================ */
+
 
 .text-center { text-align: center !important; }
 .text-left { text-align: left !important; }
@@ -379,9 +341,7 @@ em {
 .font-italic { font-style: italic !important; }
 .font-bold { font-weight: bold !important; }
 
-/* ============================================================================
-   PRINT-SPECIFIC OPTIMIZATIONS
-   ============================================================================ */
+
 
 @media print {
   body {
@@ -389,34 +349,32 @@ em {
     padding: 0.5in;
   }
 
-  /* Ensure links are visible when printed */
+  
   a[href^="http"]:after {
-    content: none; /* Don't show URLs after links (they're already visible) */
+    content: none; 
   }
 
-  /* Prevent widows and orphans */
+  
   p, li {
     orphans: 3;
     widows: 3;
   }
 
-  /* Ensure headings stay with following content */
+  
   h1, h2, h3, h4 {
     page-break-after: avoid;
   }
 }
 
-/* ============================================================================
-   SCOTLAND-SPECIFIC STYLING
-   ============================================================================ */
 
-/* Scotland Notice to Leave uses larger title */
+
+
 .scotland-title {
   font-size: 18pt;
   margin: 0.5em 0;
 }
 
-/* Scotland ground blocks with border */
+
 .scotland-ground-block {
   margin: 1em 0;
   padding: 0.75em;
@@ -427,9 +385,7 @@ em {
   break-inside: avoid;
 }
 
-/* ============================================================================
-   TABLE SUPPORT (if needed for complex data)
-   ============================================================================ */
+
 
 table {
   width: 100%;
@@ -452,25 +408,20 @@ th {
   background-color: #f0f0f0;
 }
 
-/* ============================================================================
-   END OF PRINT DESIGN SYSTEM
-   ============================================================================ */
-
-
     body {
       font-family: Arial, sans-serif;
       font-size: 10.5pt;
-      line-height: 1.55;
-      color: #222;
-      max-width: 760px;
+      line-height: 1.6;
+      color: #1a1a1a;
       margin: 0 auto;
-      padding: 20px;
+      max-width: 760px;
+      padding: 0;
     }
 
     .letterhead {
       margin-bottom: 2em;
-      border-bottom: 2px solid #1a1a1a;
       padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
     }
 
     .sender,
@@ -483,36 +434,42 @@ th {
     }
 
     .subject {
+      margin: 1.25em 0 0.85em 0;
       font-weight: 700;
-      margin: 1.5em 0 0.75em 0;
       text-transform: uppercase;
     }
 
-    .notice-box {
-      border: 1px solid #1a1a1a;
-      background: #f6f6f6;
-      padding: 1em;
+    .notice-box,
+    .callout {
       margin: 1em 0 1.5em 0;
+      padding: 1em;
+      border: 1px solid #d8d8d8;
+      background: #fafafa;
     }
 
-    .notice-box p {
+    .notice-box p,
+    .callout p {
       margin: 0.35em 0;
     }
 
     ul {
-      margin: 0.75em 0 0.75em 1.2em;
+      margin: 0.5em 0 0 1.2em;
+    }
+
+    li {
+      margin: 0.35em 0;
     }
 
     .closing {
-      margin-top: 2em;
+      margin-top: 1.75em;
     }
 
     .small-note {
+      margin-top: 1.5em;
+      padding-top: 0.8em;
+      border-top: 1px solid #d8d8d8;
       font-size: 9pt;
       color: #555;
-      margin-top: 1.75em;
-      border-top: 1px solid #ddd;
-      padding-top: 0.75em;
     }
   </style>
 </head>
@@ -534,43 +491,54 @@ LS28 7HF
   </div>
 
   <div class="meta">
-    <p><strong>Date:</strong> 05/04/2026</p>
+    <p><strong>Date:</strong> 17/04/2026</p>
     <p><strong>Property:</strong> 35 Woodhall Park Avenue
 Pudsey
 West Yorkshire
 LS28 7HF</p>
   </div>
 
-  <div class="subject">Enclosed: Form 3A Notice Seeking Possession</div>
+  <div class="subject">Enclosed: Form 3A notice</div>
 
   <p>Dear Sonia Shezadi,</p>
 
-  <p>Please find enclosed a Form 3A Notice Seeking Possession relating to the above property.</p>
+  <p>Please find enclosed the Form 3A notice relating to 35 Woodhall Park Avenue
+Pudsey
+West Yorkshire
+LS28 7HF.</p>
+  <p>The claimant seeks possession of 35 Woodhall Park Avenue
+Pudsey
+West Yorkshire
+LS28 7HF relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears), Ground 11 (Persistent arrears).</p>
+  <p>Form 3A notice served on 1 June 2026, expiring on 29 June 2026, with proceedings not intended before 29 June 2026.</p>
+  <p>This accompanying letter records the intended service date as 1 June 2026, but the legal effect comes from the enclosed notice itself.</p>
 
   <div class="notice-box">
-    <p><strong>This letter is not the notice itself.</strong> The legal notice is the enclosed Form 3A.</p>
-    <p><strong>Date served:</strong> 01/06/2026</p>
-    <p><strong>Earliest date court action may be started:</strong> 29/06/2026</p>
-    <p><strong>Grounds relied on:</strong> Ground 8, Ground 10, Ground 11</p>
+    <p><strong>This letter is not the notice itself.</strong> The legal notice is the enclosed Form 3A notice.</p>
+    <p><strong>Notice service date:</strong> 1 June 2026</p>
+    <p><strong>Notice expiry date:</strong> 29/06/2026</p>
+    <p><strong>Earliest proceedings date:</strong> 29/06/2026</p>
+    
+    <p><strong>Grounds relied on:</strong> Ground 8 – Rent arrears, Ground 10 – Any rent arrears, Ground 11 – Persistent arrears</p>
   </div>
 
-  <p>Please read the enclosed notice carefully. It explains the possession grounds being relied on and the earliest date on which court proceedings may be started if the matter is not resolved first.</p>
+  <div class="callout">
+    <p><strong>Practical next steps:</strong></p>
+    <ul>
+      <li>Read the enclosed notice carefully and keep a copy of everything served.</li>
+      <li>If the notice relies on rent arrears, contact the landlord or agent promptly if you wish to discuss payment, dispute the rent account, or explain any change in circumstances.</li>
+      <li>Seek independent housing advice promptly if you need assistance.</li>
+    </ul>
+  </div>
 
-  <p>If this notice includes rent arrears grounds, you should contact the landlord or agent promptly if you wish to discuss payment, make a proposal, or explain any issue affecting the rent account.</p>
-
-  <p>You may wish to seek independent advice as soon as possible. Sources of help can include Shelter, Citizens Advice, a housing adviser, your local authority housing team, or a solicitor.</p>
-
-  <ul>
-    <li>Keep a copy of the enclosed notice and this letter.</li>
-    <li>Take advice promptly if you disagree with the notice or need housing assistance.</li>
-    <li>If you want to discuss the matter directly, use the contact details on the notice or any existing agreed contact route.</li>
-  </ul>
+  <p>This letter is a support document only and does not replace the enclosed notice.</p>
+  <p>If court proceedings are later started, the claimant will still need to prove the statutory ground or grounds relied on.</p>
 
   <div class="closing">
     <p>Yours sincerely,</p>
     <p>Tariq Ahmed Mohammed</p>
   </div>
 
-  <p class="small-note">This covering letter is a support document provided for clarity. It is not itself a legal notice and does not replace the enclosed Form 3A.</p>
+  <p class="small-note">This covering letter is a support document provided for clarity. It does not replace the enclosed Form 3A notice and is not itself a statutory notice.</p>
 </body>
 </html>

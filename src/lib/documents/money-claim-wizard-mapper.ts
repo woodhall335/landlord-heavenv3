@@ -52,6 +52,7 @@ function normaliseFrequency(freq: CaseFacts['tenancy']['rent_frequency']): Money
 }
 
 export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
+  const rawFacts = facts as CaseFacts & Record<string, any>;
   const landlordAddress = buildAddress(
     facts.parties.landlord.address_line1,
     facts.parties.landlord.address_line2,
@@ -75,6 +76,10 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     landlord_postcode: facts.parties.landlord.postcode || undefined,
     landlord_email: facts.parties.landlord.email || undefined,
     landlord_phone: facts.parties.landlord.phone || undefined,
+    payment_account_name: rawFacts.payment_account_name || rawFacts.bank_account_name || undefined,
+    payment_sort_code: rawFacts.payment_sort_code || rawFacts.bank_sort_code || undefined,
+    payment_account_number: rawFacts.payment_account_number || rawFacts.bank_account_number || undefined,
+    payment_reference: rawFacts.payment_reference || undefined,
     claimant_reference: facts.court.claimant_reference || undefined,
 
     tenant_full_name: facts.parties.tenants[0]?.name || '',

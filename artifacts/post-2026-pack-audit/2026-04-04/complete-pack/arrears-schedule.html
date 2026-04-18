@@ -5,33 +5,7 @@
   <meta charset="UTF-8">
   <title>Schedule of Rent Arrears</title>
   <style>
-    /**
- * ============================================================================
- * LANDLORD HEAVEN - PRINT DESIGN SYSTEM
- * Central stylesheet for Notice Only PDFs (England, Wales, Scotland)
- * ============================================================================
- *
- * PURPOSE:
- * - Consistent typography, spacing, and page-break rules across all jurisdictions
- * - Professional layout that renders consistently in Puppeteer PDF generation
- * - Responsive to legal form requirements while maintaining visual excellence
- *
- * USAGE:
- * - Include in <head> of notice.hbs templates
- * - Supplement with jurisdiction-specific overrides if needed (rare)
- * - Do NOT inline style attributes; use utility classes instead
- *
- * IMPORTANT:
- * - This stylesheet governs LAYOUT ONLY - legal wording is NEVER changed
- * - Page breaks prevent orphaned headings and split sections
- * - All spacing uses consistent vertical rhythm (0.5em increments)
- */
-
-/* ============================================================================
-   DOCUMENT FOUNDATION
-   ============================================================================ */
-
-* {
+    * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -39,11 +13,11 @@
 
 @page {
   size: A4;
-  margin: 0.75in 0.75in 1in 0.75in; /* Top, Right, Bottom, Left */
+  margin: 0.75in 0.75in 1in 0.75in; 
 }
 
 html {
-  font-size: 12pt; /* Base font size for all calculations */
+  font-size: 12pt; 
 }
 
 body {
@@ -58,7 +32,7 @@ body {
   font-variant-ligatures: none;
   font-feature-settings: "liga" 0, "clig" 0;
 
-  /* Prevent text overflow */
+  
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: normal;
@@ -66,11 +40,9 @@ body {
   -webkit-hyphens: none;
 }
 
-/* ============================================================================
-   TYPOGRAPHY
-   ============================================================================ */
 
-/* Main Headings */
+
+
 h1 {
   font-size: 14pt;
   font-weight: bold;
@@ -80,16 +52,16 @@ h1 {
   margin: 0 0 1em 0;
   padding: 0;
 
-  /* Prevent orphan headings at bottom of page */
+  
   page-break-after: avoid;
   break-after: avoid-page;
 }
 
 h1 + h1 {
-  margin-top: 0.5em; /* Tighter spacing for consecutive h1s when documents stack headings */
+  margin-top: 0.5em; 
 }
 
-/* Subheadings */
+
 h2 {
   font-size: 12pt;
   font-weight: bold;
@@ -102,7 +74,7 @@ h2 {
   break-after: avoid-page;
 }
 
-/* Section Headings */
+
 h3 {
   font-size: 12pt;
   font-weight: bold;
@@ -124,7 +96,7 @@ h4 {
   break-after: avoid-page;
 }
 
-/* Paragraphs */
+
 p {
   margin: 0 0 0.75em 0;
   line-height: 1.5;
@@ -134,7 +106,7 @@ p:last-child {
   margin-bottom: 0;
 }
 
-/* Lists */
+
 ul, ol {
   margin: 0.75em 0;
   padding-left: 1.5em;
@@ -149,7 +121,7 @@ li:last-child {
   margin-bottom: 0;
 }
 
-/* Emphasis */
+
 strong {
   font-weight: bold;
 }
@@ -158,18 +130,16 @@ em {
   font-style: italic;
 }
 
-/* Links (for URLs in notices) */
+
 .link, a {
   color: #0066cc;
   text-decoration: underline;
-  word-break: break-all; /* Prevent long URLs from overflowing */
+  word-break: break-all; 
 }
 
-/* ============================================================================
-   LAYOUT COMPONENTS
-   ============================================================================ */
 
-/* Info Box (e.g., "Information for the Tenant") */
+
+
 .info-box {
   border: 2px solid #000;
   padding: 1em;
@@ -188,16 +158,16 @@ em {
   margin-top: 0;
 }
 
-/* Section Block (logical grouping) */
+
 .section {
   margin: 1.5em 0;
 
-  /* Prevent splitting key sections across pages */
+  
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
-/* Field Groups (label + value pairs) */
+
 .field-group {
   margin: 1em 0;
 
@@ -221,10 +191,10 @@ em {
 }
 
 .field-value:empty::after {
-  content: "\00a0"; /* Non-breaking space to maintain height */
+  content: "\00a0"; 
 }
 
-/* Multiline field (for particulars, evidence, etc.) */
+
 .multiline-field {
   margin-left: 0.25in;
   border: 1px solid #ccc;
@@ -233,7 +203,7 @@ em {
   background-color: #fafafa;
 }
 
-/* Ground Block (for Section 8 grounds, eviction grounds, etc.) */
+
 .ground-block {
   margin: 1em 0 1em 0.25in;
   padding: 0.75em;
@@ -248,7 +218,7 @@ em {
   margin-top: 0;
 }
 
-/* Part Label (for Wales RHW forms: Part A, Part B, etc.) */
+
 .part-label {
   font-weight: bold;
   font-size: 11pt;
@@ -261,7 +231,7 @@ em {
   break-after: avoid-page;
 }
 
-/* Signature Block */
+
 .signature-block {
   margin-top: 2em;
 
@@ -269,7 +239,7 @@ em {
   break-inside: avoid;
 }
 
-/* Checkbox (for forms with tick boxes) */
+
 .checkbox {
   display: inline-block;
   width: 1em;
@@ -280,55 +250,51 @@ em {
   background-color: #fff;
 }
 
-/* ============================================================================
-   PAGE BREAK UTILITIES
-   ============================================================================ */
 
-/* Prevent breaking inside element */
+
+
 .avoid-break {
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
-/* Keep element with next sibling (prevent orphan headings) */
+
 .keep-with-next {
   page-break-after: avoid;
   break-after: avoid-page;
 }
 
-/* Force page break before element */
+
 .page-break-before {
   page-break-before: always;
   break-before: page;
 }
 
-/* Force page break after element */
+
 .page-break-after {
   page-break-after: always;
   break-after: page;
 }
 
-/* Allow auto page breaks (override avoid rules) */
+
 .allow-break {
   page-break-inside: auto;
   break-inside: auto;
 }
 
-/* ============================================================================
-   GUIDANCE SECTIONS (usually at end of notice)
-   ============================================================================ */
+
 
 .guidance-section {
   margin-top: 2em;
   padding-top: 1.5em;
   border-top: 2px solid #000;
 
-  /* Optionally force new page for long guidance */
+  
   page-break-before: auto;
 }
 
 .guidance-section h2 {
-  text-align: left; /* Override center alignment for guidance headings */
+  text-align: left; 
   font-size: 12pt;
   margin: 1.5em 0 0.5em 0;
 }
@@ -338,9 +304,7 @@ em {
   margin: 1em 0 0.5em 0;
 }
 
-/* ============================================================================
-   SPACING UTILITIES
-   ============================================================================ */
+
 
 .mt-0 { margin-top: 0 !important; }
 .mt-1 { margin-top: 0.5em !important; }
@@ -358,9 +322,7 @@ em {
 .ml-1 { margin-left: 0.25in !important; }
 .ml-2 { margin-left: 0.5in !important; }
 
-/* ============================================================================
-   TEXT UTILITIES
-   ============================================================================ */
+
 
 .text-center { text-align: center !important; }
 .text-left { text-align: left !important; }
@@ -373,9 +335,7 @@ em {
 .font-italic { font-style: italic !important; }
 .font-bold { font-weight: bold !important; }
 
-/* ============================================================================
-   PRINT-SPECIFIC OPTIMIZATIONS
-   ============================================================================ */
+
 
 @media print {
   body {
@@ -383,34 +343,32 @@ em {
     padding: 0.5in;
   }
 
-  /* Ensure links are visible when printed */
+  
   a[href^="http"]:after {
-    content: none; /* Don't show URLs after links (they're already visible) */
+    content: none; 
   }
 
-  /* Prevent widows and orphans */
+  
   p, li {
     orphans: 3;
     widows: 3;
   }
 
-  /* Ensure headings stay with following content */
+  
   h1, h2, h3, h4 {
     page-break-after: avoid;
   }
 }
 
-/* ============================================================================
-   SCOTLAND-SPECIFIC STYLING
-   ============================================================================ */
 
-/* Scotland Notice to Leave uses larger title */
+
+
 .scotland-title {
   font-size: 18pt;
   margin: 0.5em 0;
 }
 
-/* Scotland ground blocks with border */
+
 .scotland-ground-block {
   margin: 1em 0;
   padding: 0.75em;
@@ -421,9 +379,7 @@ em {
   break-inside: avoid;
 }
 
-/* ============================================================================
-   TABLE SUPPORT (if needed for complex data)
-   ============================================================================ */
+
 
 table {
   width: 100%;
@@ -445,11 +401,6 @@ th {
   font-weight: bold;
   background-color: #f0f0f0;
 }
-
-/* ============================================================================
-   END OF PRINT DESIGN SYSTEM
-   ============================================================================ */
-
 
     /* ===== @PAGE OVERRIDE ===== */
     @page {
@@ -661,7 +612,7 @@ th {
     <dt>Claim Reference:</dt>
     <dd>audit-complete-pack</dd>
     <dt>Schedule Date:</dt>
-    <dd>5 April 2026</dd>
+    <dd>17 April 2026</dd>
   </dl>
 </div>
 
@@ -675,7 +626,7 @@ th {
     </div>
     <div class="summary-item">
       <dt>Due Day</dt>
-      <dd>1 of each monthly period</dd>
+      <dd>1st of each month</dd>
     </div>
     <div class="summary-item">
       <dt>Tenancy Start Date</dt>
@@ -759,7 +710,7 @@ th {
 
 <!-- Footer -->
 <div class="doc-footer">
-  <p><strong>Generated:</strong> 5 April 2026</p>
+  <p><strong>Generated:</strong> 17 April 2026</p>
   <p><strong>Landlord Heaven Money Claim Pack</strong> | England</p>
   <p><em>This schedule supports the particulars of claim and demonstrates the calculation of arrears owed.</em></p>
 </div>

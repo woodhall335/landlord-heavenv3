@@ -3498,7 +3498,7 @@ function buildEnglandDepositSupportData(shared: SharedResidentialData): Record<s
     scheme_dispute_phone: 'See scheme website',
     scheme_dispute_email: 'See scheme website',
     scheme_dispute_website: schemeDetails.schemeWebsite,
-    dispute_deadline: 'the deadline set by your deposit scheme',
+    dispute_deadline: 'the deadline set by your deposit scheme after the tenancy ends',
   };
 }
 

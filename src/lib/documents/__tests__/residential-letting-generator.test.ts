@@ -1002,6 +1002,61 @@ describe('generateResidentialLettingDocuments', () => {
     expect(lodgerHtml).toContain('RL-ENGLAND-LODGER-AGREEMENT-LODGER-001');
     expect(lodgerHtml).not.toContain('RL-ENGLAND-LODGER-AGREEMENT-DGER-001');
   });
+  test('keeps key England tenancy support documents available as PDFs', async () => {
+    const standardPack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      createBaseEnglandAssuredFacts(),
+      { outputFormat: 'both' }
+    );
+
+    const premiumPack = await generateResidentialLettingDocuments(
+      'england_premium_tenancy_agreement',
+      createBaseEnglandAssuredFacts(),
+      { outputFormat: 'both' }
+    );
+
+    const studentPack = await generateResidentialLettingDocuments(
+      'england_student_tenancy_agreement',
+      createBaseEnglandAssuredFacts({
+        tenants: [
+          {
+            full_name: 'Alice Tenant',
+            email: 'alice@example.com',
+            phone: '07000 111111',
+            address: '12 Example Street, London, SW1A 1AA',
+          },
+          {
+            full_name: 'Ben Tenant',
+            email: 'ben@example.com',
+            phone: '07000 222222',
+            address: '12 Example Street, London, SW1A 1AA',
+          },
+        ],
+        guarantor_required: 'yes',
+        guarantor_full_name: 'Greg Guarantor',
+        guarantor_address: '77 Support Avenue, Bristol, BS1 4AB',
+        guarantor_email: 'greg@example.com',
+        guarantor_phone: '07000 333333',
+      }),
+      { outputFormat: 'both' }
+    );
+
+    expect(
+      standardPack.documents.find((document) => document.document_type === 'england_utilities_handover_sheet')?.pdf
+    ).toBeTruthy();
+    expect(
+      premiumPack.documents.find((document) => document.document_type === 'pre_tenancy_checklist_england')?.pdf
+    ).toBeTruthy();
+    expect(
+      premiumPack.documents.find((document) => document.document_type === 'deposit_protection_certificate')?.pdf
+    ).toBeTruthy();
+    expect(
+      premiumPack.documents.find((document) => document.document_type === 'tenancy_deposit_information')?.pdf
+    ).toBeTruthy();
+    expect(
+      studentPack.documents.find((document) => document.document_type === 'england_tenancy_variation_record')?.pdf
+    ).toBeTruthy();
+  }, 120000);
 });
 
 
