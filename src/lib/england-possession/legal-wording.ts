@@ -18,6 +18,7 @@ export interface EnglandGroundLegalWording {
 }
 
 let cachedGroundWordingPromise: Promise<Record<EnglandGroundCode, EnglandGroundLegalWording>> | null = null;
+let cachedLandlordGuidanceNoticePeriodsPromise: Promise<EnglandForm3ALandlordGuidanceNoticePeriods> | null = null;
 
 const LEGAL_WORDING_PATH = path.join(
   process.cwd(),
@@ -25,6 +26,20 @@ const LEGAL_WORDING_PATH = path.join(
   'update',
   'Form_3A_legal_wording_for_possession_grounds.pdf',
 );
+const LANDLORD_GUIDANCE_PATH = path.join(
+  process.cwd(),
+  'artifacts',
+  'update',
+  'Form_3A_guidance_for_landlords.pdf',
+);
+
+export interface EnglandForm3ALandlordGuidanceNoticePeriods {
+  fourMonths: string[];
+  twoMonths: string[];
+  fourWeeks: string[];
+  twoWeeks: string[];
+  immediate: string[];
+}
 
 function cleanGroundText(text: string): string {
   return text
@@ -41,6 +56,42 @@ function normaliseMatches(rawText: string): string {
     .replace(/\n\d+\n/g, '\n')
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n');
+}
+
+function parseGroundCodes(value: string): EnglandGroundCode[] {
+  return value
+    .split(',')
+    .map((entry) => normalizeEnglandGroundCode(entry))
+    .filter((entry): entry is EnglandGroundCode => Boolean(entry));
+}
+
+function normalizeGuidanceText(rawText: string): string {
+  return rawText
+    .replace(/\u2019/g, "'")
+    .replace(/\u2018/g, "'")
+    .replace(/\u2013/g, '-')
+    .replace(/\u2014/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function extractGuidanceGroundList(normalizedText: string, heading: string): EnglandGroundCode[] {
+  const escapedHeading = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`${escapedHeading}\\s+Grounds\\s+([^•]+?)\\s+• notice period:`, 'i');
+  const match = normalizedText.match(regex);
+  return match?.[1] ? parseGroundCodes(match[1]) : [];
+}
+
+function extractLandlordGuidanceNoticePeriods(rawText: string): EnglandForm3ALandlordGuidanceNoticePeriods {
+  const normalizedText = normalizeGuidanceText(rawText);
+
+  return {
+    fourMonths: extractGuidanceGroundList(normalizedText, 'Four-month notice period'),
+    twoMonths: extractGuidanceGroundList(normalizedText, 'Two-month notice period'),
+    fourWeeks: extractGuidanceGroundList(normalizedText, "Four weeks' notice period"),
+    twoWeeks: extractGuidanceGroundList(normalizedText, "Two weeks' notice period"),
+    immediate: extractGuidanceGroundList(normalizedText, 'No notice period'),
+  };
 }
 
 function extractLegalWordingBlocks(rawText: string): Record<EnglandGroundCode, EnglandGroundLegalWording> {
@@ -99,6 +150,24 @@ export async function getEnglandGroundLegalWordings(): Promise<
   }
 
   return cachedGroundWordingPromise;
+}
+
+export async function getEnglandForm3ALandlordGuidanceNoticePeriods(): Promise<EnglandForm3ALandlordGuidanceNoticePeriods> {
+  if (!cachedLandlordGuidanceNoticePeriodsPromise) {
+    cachedLandlordGuidanceNoticePeriodsPromise = (async () => {
+      const bytes = await fs.readFile(LANDLORD_GUIDANCE_PATH);
+      const parser = new PDFParse({ data: bytes });
+
+      try {
+        const { text } = await parser.getText();
+        return extractLandlordGuidanceNoticePeriods(text);
+      } finally {
+        await parser.destroy();
+      }
+    })();
+  }
+
+  return cachedLandlordGuidanceNoticePeriodsPromise;
 }
 
 export async function getEnglandGroundLegalWording(

@@ -12,6 +12,8 @@ export const SECTION13_CHALLENGE_EXPLAINER =
   'Based on where your proposed rent sits within the adjusted comparable rent range.';
 export const SECTION13_EVIDENCE_EXPLAINER =
   'Based on how many comparables you have, how recent they are, and how many are source-backed rather than manual or heavily overridden.';
+export const SECTION13_MINIMUM_NOTICE_MONTHS = 2 as const;
+export const SECTION13_MINIMUM_INTERVAL_WEEKS = 52 as const;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -334,7 +336,11 @@ export function validateSection13StartDate(input: {
     issues.push('The first rent increase after 11 February 2003 cannot be later than the most recent rent increase date.');
   }
 
-  const serviceFloor = serviceDate ? toUtcDate(addCalendarMonths(formatDate(serviceDate) || '', 2)) : null;
+  const serviceFloor = serviceDate
+    ? toUtcDate(
+        addCalendarMonths(formatDate(serviceDate) || '', SECTION13_MINIMUM_NOTICE_MONTHS)
+      )
+    : null;
   const cadenceFloor = input.lastRentIncreaseDate
     ? toUtcDate(
         addDays(
@@ -355,7 +361,7 @@ export function validateSection13StartDate(input: {
             ) * 7
           )
         )
-      : toUtcDate(addDays(formatDate(tenancyStart) || '', 52 * 7));
+      : toUtcDate(addDays(formatDate(tenancyStart) || '', SECTION13_MINIMUM_INTERVAL_WEEKS * 7));
   const increaseAnchor = input.lastRentIncreaseDate || input.firstIncreaseAfter2003Date || null;
 
   const statutoryFloor = [serviceFloor, cadenceFloor]
@@ -372,7 +378,9 @@ export function validateSection13StartDate(input: {
   const earliestValidStartDate = formatDate(alignedDate);
 
   if (!input.serviceDate) {
-    issues.push('Enter the date served to apply the minimum 2-month notice rule.');
+    issues.push(
+      `Enter the date served to apply the minimum ${SECTION13_MINIMUM_NOTICE_MONTHS}-month notice rule.`
+    );
   }
 
   if (proposedStart) {
@@ -380,12 +388,14 @@ export function validateSection13StartDate(input: {
       issues.push('The proposed start date must be after the notice is served.');
     }
     if (serviceFloor && proposedStart.getTime() < serviceFloor.getTime()) {
-      issues.push('The proposed start date must be at least 2 months after the notice is served.');
+      issues.push(
+        `The proposed start date must be at least ${SECTION13_MINIMUM_NOTICE_MONTHS} months after the notice is served.`
+      );
     }
     if (cadenceFloor && proposedStart.getTime() < cadenceFloor.getTime()) {
       issues.push(increaseAnchor
         ? 'The proposed start date is too early based on the previous increase and the 52/53-week anti-drift rule.'
-        : 'The proposed start date must be at least 52 weeks after the tenancy start date.');
+        : `The proposed start date must be at least ${SECTION13_MINIMUM_INTERVAL_WEEKS} weeks after the tenancy start date.`);
     }
     if (earliestValidStartDate && formatDate(proposedStart) !== earliestValidStartDate) {
       issues.push('The proposed start date must fall on the first day of a tenancy period.');
