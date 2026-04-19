@@ -1,67 +1,66 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { UniversalHero } from '@/components/landing/UniversalHero';
-import { noticeOnlyHeroConfig } from '@/components/landing/heroConfigs';
-import { Container } from '@/components/ui';
-import { FAQSection } from '@/components/seo/FAQSection';
-import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
-import { PRODUCTS } from '@/lib/pricing/products';
-import { getCanonicalUrl } from '@/lib/seo';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
+import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
+import type { FAQItem } from '@/components/seo/FAQSection';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { WhatsIncludedInteractive } from '@/components/value-proposition';
+import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
+import { PRODUCTS } from '@/lib/pricing/products';
 import { getNoticeOnlyPreviewData } from '@/lib/previews/noticeOnlyPreviews';
-import { FunnelProcessSection } from '@/components/funnels';
-import { guideLinks, productLinks } from '@/lib/seo/internal-links';
+import { getPublicProductDescriptor } from '@/lib/public-products';
+import { getCanonicalUrl } from '@/lib/seo';
+import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
+const descriptor = getPublicProductDescriptor('notice_only')!;
 const product = PRODUCTS.notice_only;
-const price = product.displayPrice;
-const canonicalUrl = getCanonicalUrl('/products/notice-only');
+const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 
 export const metadata: Metadata = {
-  title: `Eviction Notice Generator (Section 8, May 2026) | England | ${price}`,
-  description:
-    'Generate a Section 8 notice for England under the post-May 2026 rules, with landlord checks on grounds, dates, service, and court readiness before you serve.',
+  title: `${descriptor.seoTitle} | England | ${product.displayPrice}`,
+  description: descriptor.metaDescription,
+  keywords: [
+    'evict a tenant legally',
+    'eviction notice',
+    'landlord',
+    'Section 8 notice',
+    'England eviction notice',
+  ],
   alternates: {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: `Eviction Notice Generator (Section 8, May 2026) | England | ${price}`,
-    description:
-      'Section 8 notice generator for landlords in England, with checks on grounds, dates, service, and next-step readiness before you serve.',
+    title: `${descriptor.seoTitle} | England | ${product.displayPrice}`,
+    description: descriptor.metaDescription,
     url: canonicalUrl,
   },
 };
 
-const faqs = [
+const faqs: FAQItem[] = [
   {
     question: 'What does this product generate?',
     answer:
-      'It generates an England Section 8 notice pack for the post-May 2026 rules, including the notice itself, service guidance, and a practical validity checklist before you serve.',
+      'It generates an England Section 8 notice pack for the post-May 2026 rules, including the notice itself, arrears support, service guidance, and a validity checklist before you serve.',
   },
   {
-    question: 'Who is this built for?',
+    question: 'Why is the arrears schedule included?',
     answer:
-      'It is built for landlords serving a Section 8 notice for property in England.',
+      'Because a Section 8 rent arrears case is stronger when the arrears are set out clearly from the start. The schedule helps show how the debt built up and why the grounds are being relied on.',
   },
   {
     question: 'Does this help with Form 3A?',
     answer:
-      'Yes. Form 3A is the supporting prescribed form terminology, but the product is led as a Section 8 eviction notice generator for landlords.',
+      'Yes. Form 3A is the prescribed notice behind the current England Section 8 route, and this pack builds that official notice from your answers.',
   },
   {
-    question: 'What does the wizard check before I buy?',
+    question: 'What if I also need the court paperwork?',
     answer:
-      'The wizard checks the selected grounds, key dates, service details, and obvious case-readiness issues so you can spot problems before serving the notice.',
+      'Choose the Complete Eviction Pack if you want the Section 8 notice, N5, N119, and the court-stage possession paperwork together in one workflow.',
   },
   {
-    question: 'Can I preview before I pay?',
+    question: 'Can I preview the pack before I pay?',
     answer:
-      'Yes. You can preview the generated documents before purchase, then regenerate after edits if you need to correct facts or dates.',
-  },
-  {
-    question: 'When should I choose the Complete Eviction Pack instead?',
-    answer:
-      'Choose the Complete Eviction Pack if you want the court-stage paperwork as well as the notice. That product is for landlords moving from notice into N5, N119, and the possession claim process.',
+      'Yes. You can preview the generated documents before purchase and regenerate them after edits if your facts or dates change.',
   },
 ];
 
@@ -69,182 +68,222 @@ export const runtime = 'nodejs';
 
 export default async function NoticeOnlyPage() {
   const previews = await getNoticeOnlyPreviewData();
+  const sampleProof = getGoldenPackProofData('notice_only', {
+    previewDocs: previews.england.section8,
+  });
+
+  const content: ProductSalesPageContent = {
+    hero: {
+      preset: descriptor.heroPreset,
+      badge: descriptor.heroBadge,
+      trustText: 'England Section 8 notice generator | landlord checks before you serve',
+      title: descriptor.displayName,
+      subtitle:
+        'Start the eviction process correctly under the current England rules so the case does not fall apart before it even reaches court.',
+      primaryCta: {
+        label: descriptor.primaryCtaLabel,
+        href: descriptor.wizardHref,
+      },
+      secondaryCta: {
+        label: 'See the Complete Eviction Pack',
+        href: '/products/complete-pack',
+      },
+      feature:
+        'Built for landlords who need the notice, the grounds, and the service steps to line up before anything is served.',
+      mediaSrc: '/images/notice_bundles.webp',
+      mediaAlt: 'Preview of the England Section 8 notice pack',
+      showTrustPositioningBar: true,
+      trustPositioningPreset: 'notice_only',
+    },
+    whatYouGet: {
+      title: 'What you get in the Section 8 notice pack',
+      intro:
+        'This is not just a notice template. It is a structured notice file where each part exists to start possession on the right footing and reduce the risk of the case failing over avoidable mistakes.',
+      items: [
+        {
+          name: 'Form 3A (Section 8 Notice)',
+          plainEnglish:
+            'The official legal notice required to begin a Section 8 possession case in England.',
+          function:
+            'Sets out the grounds for possession and gives the tenant formal notice that court action may follow.',
+          riskIfMissing:
+            'Without a valid notice, the possession claim can be rejected before the judge even gets to the substance of the case.',
+          landlordOutcome:
+            'Ensures the eviction starts on a legally valid footing instead of falling at the first procedural step.',
+          includedByDefault: true,
+        },
+        {
+          name: 'Arrears Schedule',
+          plainEnglish:
+            'A detailed rent breakdown showing what is owed and how the arrears built up over time.',
+          function:
+            'Supports the possession grounds by showing the arrears position clearly and consistently.',
+          riskIfMissing:
+            'If the arrears are vague or poorly recorded, rent arrears grounds are much harder to prove cleanly.',
+          landlordOutcome:
+            'Strengthens the case from the notice stage and leaves you with better evidence if the matter goes to court.',
+          includedByDefault: true,
+        },
+        {
+          name: 'Grounds Explanation',
+          plainEnglish:
+            "A written explanation linking the tenant's breach to the legal grounds relied on in the notice.",
+          function:
+            'Shows why the notice is being served and how the facts match the grounds used.',
+          riskIfMissing:
+            'If the case theory is unclear, the notice can feel weaker and the judge has more work to do later to understand your position.',
+          landlordOutcome:
+            'Helps the whole file read more clearly from the first page instead of looking like a form issued without explanation.',
+          includedByDefault: true,
+        },
+        {
+          name: 'Service Instructions',
+          plainEnglish:
+            'Step-by-step guidance on how to serve the notice and what proof to keep.',
+          function:
+            'Explains the delivery methods, timing, and evidence needed so the notice is served properly.',
+          riskIfMissing:
+            'Incorrect service is one of the easiest ways for a possession case to be delayed or challenged.',
+          landlordOutcome:
+            'Protects the notice from being undermined by an avoidable service mistake.',
+          includedByDefault: true,
+        },
+        {
+          name: 'Validity Checklist',
+          plainEnglish:
+            'A practical checklist covering the key points that should be right before the notice is served.',
+          function:
+            'Checks the notice, grounds, dates, and supporting details for obvious errors before you act.',
+          riskIfMissing:
+            'A small mistake in dates, grounds, or paperwork can invalidate the notice completely.',
+          landlordOutcome:
+            'Gives you more confidence that the notice will stand up when the tenant or the court looks at it closely.',
+          includedByDefault: true,
+        },
+      ],
+      preview: (
+        <div className="overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_16px_40px_rgba(24,11,49,0.06)]">
+          <WhatsIncludedInteractive
+            product="notice_only"
+            defaultJurisdiction="england"
+            lockJurisdiction
+            previews={previews}
+            showIntro={false}
+            titleOverride="Preview the Section 8 notice pack"
+            subtitleOverride="Review the document set before you buy, then generate the final version when the facts look right."
+          />
+        </div>
+      ),
+      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+    },
+    whyYouNeedThis: {
+      title: 'Why a Section 8 case needs more than a blank notice',
+      intro:
+        'Most notice-stage failures are not dramatic. They come from small gaps in the grounds, the arrears record, or the way the notice was served. This pack is built to stop those gaps from creeping in.',
+      cards: [
+        {
+          title: 'The court looks at the notice first',
+          body:
+            "If the notice is wrong, the case can stall before the judge even gets to the tenant's breach or the arrears position.",
+        },
+        {
+          title: 'Arrears cases are only as clear as the paperwork',
+          body:
+            "If the numbers are inconsistent or the grounds are not explained properly, the landlord's position becomes harder to follow and easier to challenge.",
+        },
+        {
+          title: 'Service mistakes undo good cases',
+          body:
+            'A strong notice can still fail if you cannot show it was served correctly and on time.',
+        },
+      ],
+    },
+    howThisHelps: {
+      title: 'How this puts you in a stronger position',
+      intro:
+        'The pack is designed to reduce procedural risk now and make the case easier to carry forward if the tenant does not leave after notice.',
+      cards: [
+        {
+          title: 'It makes the notice file easier to trust',
+          body:
+            'The notice, the arrears support, and the service steps all say the same thing in the same direction instead of pulling apart under scrutiny.',
+        },
+        {
+          title: 'It improves court readiness later',
+          body:
+            'Even if you only need the notice today, the supporting paperwork leaves you in a stronger position if the case later moves into N5 and N119.',
+        },
+        {
+          title: 'It helps you act quickly without guessing',
+          body:
+            'You do not need to piece the route together from scattered guidance because the pack keeps the practical steps close to the notice itself.',
+        },
+      ],
+    },
+    howItWorks: {
+      title: 'How it works',
+      intro:
+        'The workflow keeps the notice route focused on the facts that matter for a current England Section 8 case.',
+      steps: [
+        {
+          step: 'Step 01',
+          title: 'Answer the Section 8 questions',
+          body:
+            'Add the tenancy details, the grounds you are relying on, and the arrears or breach facts that matter to the notice.',
+        },
+        {
+          step: 'Step 02',
+          title: 'Check the legal weak spots',
+          body:
+            'Review the dates, service points, and notice details before you buy or print anything.',
+        },
+        {
+          step: 'Step 03',
+          title: 'Generate the full notice pack',
+          body:
+            'Download the completed notice, arrears support, and service guidance so the case starts with the right paperwork in place.',
+        },
+      ],
+    },
+    cta: {
+      title: 'Prepare the Section 8 notice with more confidence',
+      body:
+        'If you need to serve notice now, start here so the grounds, dates, arrears, and service steps are prepared as one joined-up England landlord file.',
+      primary: {
+        label: descriptor.primaryCtaLabel,
+        href: descriptor.wizardHref,
+      },
+      secondary: {
+        label: 'Switch to Complete Eviction Pack',
+        href: '/products/complete-pack',
+      },
+      guideLinks: descriptor.defaultGuideLinks,
+    },
+    faq: {
+      title: 'Eviction Notice Generator FAQs',
+      items: faqs,
+    },
+  };
 
   return (
-    <div className="min-h-screen bg-[#fcfaff]">
+    <div className="min-h-screen bg-[#FCFAFF]">
       <HeaderConfig mode="autoOnScroll" />
       <StructuredData
         data={productSchema({
-          name: 'Eviction Notice Generator (Section 8, May 2026)',
-          description:
-            'Section 8 notice generator for landlords in England, with checks on grounds, dates, service, and court readiness before the notice is served.',
+          name: descriptor.displayName,
+          description: descriptor.metaDescription,
           price: product.price.toString(),
           url: canonicalUrl,
         })}
       />
       <StructuredData
         data={breadcrumbSchema([
-          { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Products', url: 'https://landlordheaven.co.uk/pricing' },
-          { name: 'Eviction Notice Generator (Section 8, May 2026)', url: canonicalUrl },
+          { name: 'Home', url: getCanonicalUrl('/') },
+          { name: 'Products', url: getCanonicalUrl('/pricing') },
+          { name: descriptor.displayName, url: canonicalUrl },
         ])}
       />
-
-      <UniversalHero {...noticeOnlyHeroConfig} showTrustPositioningBar />
-      <FunnelProcessSection product="notice_only" noticePreviews={previews} />
-
-      <section className="border-y border-[#EDE2FF] bg-white">
-        <Container>
-          <nav className="flex flex-wrap items-center gap-3 py-4 text-sm" aria-label="Section 8 quick links">
-            <Link href="#who-this-is-for" className="font-medium text-primary hover:underline">
-              Who this is for
-            </Link>
-            <Link href="#whats-included" className="font-medium text-primary hover:underline">
-              What&apos;s included
-            </Link>
-            <Link href="#england-route" className="font-medium text-primary hover:underline">
-              England guides
-            </Link>
-            <Link href="#start-now" className="font-medium text-primary hover:underline">
-              Start now
-            </Link>
-          </nav>
-        </Container>
-      </section>
-
-      <section id="who-this-is-for" className="scroll-mt-24 py-12 md:py-16">
-        <Container>
-          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-white p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
-              Generate the Section 8 notice landlords actually need to serve
-            </h2>
-            <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-700">
-              This page is for England landlords who need to increase pressure on an eviction case
-              by serving a Section 8 notice under the post-May 2026 rules. The goal is to get the
-              notice, grounds, dates, and service steps right before you buy or serve.
-            </p>
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl bg-[#F7F3FF] p-5">
-                <h3 className="text-lg font-semibold text-charcoal">Best fit</h3>
-                <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
-                  <li>You need a Section 8 notice for rent arrears, breach, or another valid ground.</li>
-                  <li>You want the key details checked before you serve anything.</li>
-                  <li>You want help with dates, service, and what to do next.</li>
-                </ul>
-              </div>
-              <div className="rounded-2xl bg-[#FFF7ED] p-5">
-                <h3 className="text-lg font-semibold text-charcoal">Choose a different product if</h3>
-                <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
-                  <li>You also need N5, N119, and the court-stage possession pack.</li>
-                  <li>You are trying to recover debt rather than serve an eviction notice.</li>
-                  <li>You need a tenancy agreement or rent increase pack instead of possession paperwork.</li>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/wizard/flow?type=eviction&product=notice_only&src=product_page&topic=eviction"
-                className="hero-btn-primary"
-              >
-                Start Eviction Notice Generator
-              </Link>
-              <Link
-                href={productLinks.completePack.href}
-                className="inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white px-5 py-3 text-sm font-semibold text-[#2A3550] transition hover:border-[#BDAFE8]"
-              >
-                Need the full court pack instead?
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section id="whats-included" className="scroll-mt-24 py-12 md:py-16">
-        <Container>
-          <div className="mx-auto mb-6 max-w-6xl">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">What&apos;s included</h2>
-            <p className="mt-3 max-w-3xl text-gray-700">
-              You get an England notice pack focused on serving a Section 8 case properly: the
-              notice itself, practical service guidance, and a validity checklist before you serve.
-            </p>
-          </div>
-          <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-[#E6DBFF] bg-white shadow-[0_14px_36px_rgba(15,23,42,0.06)]">
-            <WhatsIncludedInteractive
-              product="notice_only"
-              defaultJurisdiction="england"
-              lockJurisdiction
-              previews={previews}
-              titleOverride="What&apos;s included in your Section 8 notice pack"
-              subtitleOverride="Preview the documents, then generate the final version when the details look right."
-            />
-          </div>
-        </Container>
-      </section>
-
-      <section id="england-route" className="scroll-mt-24 bg-white py-12 md:py-16">
-        <Container>
-          <div className="mx-auto max-w-6xl rounded-3xl border border-[#E6DBFF] bg-[#FCFAFF] p-6 md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
-              Read the England Section 8 guides before you serve
-            </h2>
-            <p className="mt-4 max-w-3xl text-gray-700">
-              These England guides help if you want more background on Section 8, Form 3A, and the
-              rules after 1 May 2026 before you generate the notice.
-            </p>
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {[
-                guideLinks.rentersRightsActEvictionRules,
-                guideLinks.section8Notice,
-                guideLinks.form3aSection8,
-              ].map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-2xl border border-[#E6DBFF] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-sm"
-                >
-                  <p className="text-lg font-semibold text-charcoal">{link.title}</p>
-                  <p className="mt-3 text-sm leading-6 text-gray-700">{link.description}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section id="start-now" className="scroll-mt-24 bg-[#F3EEFF] py-12 md:py-16">
-        <Container>
-          <div className="mx-auto max-w-5xl rounded-3xl border border-[#E6DBFF] bg-white p-6 text-center shadow-[0_14px_36px_rgba(15,23,42,0.06)] md:p-10">
-            <h2 className="text-3xl font-bold text-charcoal md:text-4xl">
-              Start your England Section 8 notice now
-            </h2>
-            <p className="mt-4 text-gray-700">
-              The wizard keeps the questions focused on England, checks the details that matter,
-              and lets you switch to the Complete Eviction Pack if you also want the court
-              paperwork.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link
-                href="/wizard/flow?type=eviction&product=notice_only&src=product_page&topic=eviction"
-                className="hero-btn-primary"
-              >
-                Start Eviction Notice Generator
-              </Link>
-              <Link
-                href="/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction"
-                className="inline-flex items-center justify-center rounded-xl border border-[#D9D4EA] bg-white px-5 py-3 text-sm font-semibold text-[#2A3550] transition hover:border-[#BDAFE8]"
-              >
-                Switch to Complete Eviction Pack
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <FAQSection
-        title="Eviction Notice Generator FAQs"
-        faqs={faqs}
-        className="bg-white py-12 md:py-16"
-      />
+      <PublicProductSalesPage content={content} />
     </div>
   );
 }

@@ -237,7 +237,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
     seoTitle: 'England Tenancy Agreements',
     metaDescription:
       'Choose the right England tenancy agreement for Standard, Premium, Student, HMO / Shared House, and Lodger arrangements.',
-    eyebrow: 'England tenancy hub',
+    eyebrow: 'England tenancy agreements',
     heroBadge: 'For landlords in England',
     proofLabel: 'Five agreement options for England lets',
     cardAccent: 'lavender',
@@ -283,7 +283,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
       topic: 'tenancy',
     }),
     defaultGuideLinks: [
-      { label: 'England tenancy hub', href: '/products/ast' },
+      { label: 'England tenancy agreements', href: '/products/ast' },
       { label: 'Premium agreement', href: '/premium-tenancy-agreement' },
     ],
   },
@@ -314,7 +314,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
       topic: 'tenancy',
     }),
     defaultGuideLinks: [
-      { label: 'England tenancy hub', href: '/products/ast' },
+      { label: 'England tenancy agreements', href: '/products/ast' },
       { label: 'Standard agreement', href: '/standard-tenancy-agreement' },
     ],
   },
@@ -345,7 +345,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
       topic: 'tenancy',
     }),
     defaultGuideLinks: [
-      { label: 'England tenancy hub', href: '/products/ast' },
+      { label: 'England tenancy agreements', href: '/products/ast' },
       { label: 'HMO / Shared House agreement', href: '/hmo-shared-house-tenancy-agreement' },
     ],
   },
@@ -376,7 +376,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
       topic: 'tenancy',
     }),
     defaultGuideLinks: [
-      { label: 'England tenancy hub', href: '/products/ast' },
+      { label: 'England tenancy agreements', href: '/products/ast' },
       { label: 'Student agreement', href: '/student-tenancy-agreement' },
     ],
   },
@@ -407,7 +407,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
       topic: 'tenancy',
     }),
     defaultGuideLinks: [
-      { label: 'England tenancy hub', href: '/products/ast' },
+      { label: 'England tenancy agreements', href: '/products/ast' },
       { label: 'HMO / Shared House agreement', href: '/hmo-shared-house-tenancy-agreement' },
     ],
   },

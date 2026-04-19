@@ -31,12 +31,12 @@ export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTab
     },
     {
       feature: 'Speed',
-      landlordHeaven: 'Start tonight',
+      landlordHeaven: 'Start now',
       competitor: 'Usually slower to get moving',
     },
     {
       feature: 'Availability',
-      landlordHeaven: 'Use it at 9pm if that is when you have time',
+      landlordHeaven: 'Use it whenever you have time',
       competitor: 'Usually tied to office hours',
     },
     {
@@ -55,8 +55,8 @@ export function VsSolicitorComparison({ product = 'notice_only' }: ComparisonTab
       competitor: 'Depends on the firm',
     },
     {
-      feature: 'England, Wales, Scotland support',
-      landlordHeaven: true,
+      feature: 'England landlord routes',
+      landlordHeaven: 'Public products focused on England',
       competitor: 'Depends on the firm',
     },
     {

@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { buildTenancyPackBreakdown } from '@/lib/marketing/tenancy-pack-breakdowns';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -10,29 +12,8 @@ const canonicalUrl = getCanonicalUrl('/premium-tenancy-agreement');
 const premiumWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=england_tenancy_page&topic=tenancy';
 const englandHubHref = '/products/ast';
-const premiumPackDocuments = getResidentialDocumentList('england_premium_tenancy_agreement', {
-  englandTenancyPurpose: 'new_agreement',
-  depositTaken: true,
-  includeGuarantorDeed: true,
-});
-
-function getPackDocument(documentId: string) {
-  return premiumPackDocuments.find((document) => document.id === documentId);
-}
-
-const premiumPackHighlights = [
-  getPackDocument('england_premium_tenancy_agreement'),
-  getPackDocument('england_premium_management_schedule'),
-  getPackDocument('england_keys_handover_record'),
-  getPackDocument('england_utilities_handover_sheet'),
-  getPackDocument('england_tenancy_variation_record'),
-]
-  .filter((document): document is NonNullable<(typeof premiumPackDocuments)[number]> => Boolean(document))
-  .map((document) => ({
-    title: document.title,
-    description: document.description,
-    supportingLabel: document.pages,
-  }));
+const premiumPackBreakdown = buildTenancyPackBreakdown('england_premium_tenancy_agreement');
+const premiumSampleProof = getGoldenPackProofData('england_premium_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -104,7 +85,7 @@ export default function PremiumTenancyAgreementPage() {
           'Built on the same current England assured periodic route as Standard from 1 May 2026.',
           'Designed for users looking for an updated England tenancy agreement, without suggesting Premium is a separate statutory form.',
           'Adds more depth without treating HMO, student, or lodger arrangements as if they were all the same thing.',
-          'Includes the practical written information and support documents that sit alongside the agreement.',
+          'Includes the practical written information and file paperwork that sit alongside the agreement.',
           'Not positioned as an old fixed-term AST shortcut product.',
         ]}
         keywordTargets={[
@@ -122,7 +103,7 @@ export default function PremiumTenancyAgreementPage() {
           'the let is still a standard whole-property tenancy in England, but you want fuller drafting than the standard assured periodic route',
           'you want a new tenancy agreement generator for the current England route, but need more management detail than Standard provides',
           'you want clearer wording around repairs reporting, access, contractor attendance, key control, and hand-back expectations',
-          'you want a stronger supporting pack with a management schedule and handover paperwork',
+          'you want a stronger pack with a management schedule and handover records',
         ]}
         notFor={[
           'the real issue is student occupation, student turnover, or student letting with multiple guarantors',
@@ -130,7 +111,6 @@ export default function PremiumTenancyAgreementPage() {
           'the landlord lives at the property and the arrangement is really a lodger room let',
           'you only need the simpler standard residential route',
         ]}
-        packHighlights={premiumPackHighlights}
         routeComparison={[
           {
             title: 'Assured Periodic Tenancy Agreement',
@@ -161,6 +141,88 @@ export default function PremiumTenancyAgreementPage() {
             ctaLabel: 'View Lodger route',
           },
         ]}
+        salesContent={{
+          packIntro:
+            'The Premium pack is for ordinary residential lets that need more detail than the Standard route provides. It gives you the main agreement plus the management schedule, handover records, and pack paperwork that stop the file from feeling too light for a more involved tenancy.',
+          defaultPackItems: premiumPackBreakdown.defaultItems,
+          conditionalPackItems: premiumPackBreakdown.conditionalItems,
+          conditionalTitle: 'Included when your answers require it',
+          conditionalIntro:
+            'Where the tenancy includes a deposit or guarantor support, the pack adds the relevant documents so those risks are covered properly rather than being left outside the main file.',
+          sampleProof: premiumSampleProof ? <GoldenPackProof data={premiumSampleProof} /> : undefined,
+          whyYouNeedThis: {
+            title: 'Why landlords choose Premium',
+            intro:
+              'Some lets are still ordinary residential tenancies, but the management reality is more involved. That is where a lighter agreement starts to feel too thin and the Premium pack becomes the better fit.',
+            cards: [
+              {
+                title: 'The main agreement often needs more operational detail',
+                body:
+                  'Access, reporting, contractor attendance, key handling, and hand-back expectations are easier to manage when they are written down properly from the outset.',
+              },
+              {
+                title: 'Stronger drafting prevents avoidable arguments',
+                body:
+                  'If the paperwork is too light, practical management disputes start because the tenancy never set expectations clearly enough.',
+              },
+                {
+                  title: 'The extra pack paperwork matters more on involved lets',
+                  body:
+                    'The more moving parts the tenancy has, the more important it becomes to keep the agreement, schedules, and handover records aligned.',
+                },
+            ],
+          },
+          howThisHelps: {
+            title: 'How this helps you',
+            intro:
+              'Premium gives you more detail where landlords usually need it without pushing the tenancy into the wrong specialist product.',
+            cards: [
+              {
+                title: 'It strengthens day-to-day control',
+                body:
+                  'The management schedule and support records make it easier to handle inspections, repairs, access, and hand-back consistently.',
+              },
+              {
+                title: 'It keeps the file joined up',
+                body:
+                  'The agreement and supporting paperwork are built to read together instead of feeling like separate documents added later.',
+              },
+              {
+                title: 'It stays on the right legal route',
+                body:
+                  'You get a fuller England tenancy pack for an ordinary residential let without pretending the case is really student, HMO, or lodger by nature.',
+              },
+            ],
+          },
+          howItWorks: {
+            title: 'How it works',
+            intro:
+              'The Premium workflow starts the same way as a standard tenancy, then adds the extra management detail that a more involved let actually needs.',
+            steps: [
+              {
+                step: 'Step 01',
+                title: 'Add the tenancy and property details',
+                body:
+                  'Enter the core landlord, tenant, rent, and property facts that shape the main agreement.',
+              },
+              {
+                step: 'Step 02',
+                title: 'Answer the management and setup questions',
+                body:
+                  'Work through the access, repairs, keys, deposit, and other practical points that determine which Premium pack items are included.',
+              },
+              {
+                step: 'Step 03',
+                title: 'Generate the full Premium pack',
+                body:
+                  'Download the agreement, schedules, and pack paperwork as one England tenancy file built for a more detailed residential let.',
+              },
+            ],
+          },
+          ctaTitle: 'Start the Premium agreement pack',
+          ctaBody:
+            'Use this route when the tenancy is still an ordinary residential let, but the paperwork needs more drafting depth and stronger day-to-day management support than Standard provides.',
+        }}
         faqs={[
           {
             question: 'When should I choose Premium over the standard assured periodic route?',

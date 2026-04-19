@@ -26,7 +26,7 @@ const DEFAULT_CONFIG: ProductCtaConfig = {
   primaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
   secondaryProductHref: BLOG_PRODUCT_ROUTES.completePack,
   eyebrow: 'Next step for landlords',
-  heading: 'Need to act on this tonight?',
+  heading: 'Need to act on this now?',
   intro:
     'Work out the right notice, avoid the mistakes that slow the case down, and move to the next step without guessing.',
   ctaLabel: 'Find out which notice you need',
@@ -83,7 +83,7 @@ export function getBlogProductCta(
       primaryProductHref: BLOG_PRODUCT_ROUTES.ast,
       secondaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
       eyebrow: 'New tenancy',
-      heading: 'Need the agreement sorted tonight?',
+      heading: 'Need the agreement sorted now?',
       intro:
         'Use the right agreement for the property now so you are not fixing an old template later.',
       ctaLabel: 'Create your tenancy agreement',

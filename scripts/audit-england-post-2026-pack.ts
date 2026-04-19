@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { PDFDocument } from 'pdf-lib';
 import { PDFParse } from 'pdf-parse';
@@ -33,12 +34,34 @@ type GeneratedArtifact = {
 
 type ScenarioAudit = {
   name: string;
+  purpose: string;
   route: string;
   product: 'notice_only' | 'eviction_pack';
   selectedGrounds: string[];
   mappedGrounds: string[];
   noticeOnlyValidator?: ReturnType<typeof validateNoticeOnlyCase>;
   stages: Record<string, FlowValidationResult>;
+  expectedBlockingCodes: string[];
+  expectedWarningCodes: string[];
+  expectedNoticeOnlyErrorCodes: string[];
+  expectedNoticeOnlyWarningCodes: string[];
+  observedBlockingCodes: string[];
+  observedWarningCodes: string[];
+  observedNoticeOnlyErrorCodes: string[];
+  observedNoticeOnlyWarningCodes: string[];
+  matchedExpectations: boolean;
+  mismatches: string[];
+};
+
+type ScenarioDefinition = {
+  name: string;
+  purpose: string;
+  product: 'notice_only' | 'eviction_pack';
+  facts: WizardFacts;
+  expectedBlockingCodes?: string[];
+  expectedWarningCodes?: string[];
+  expectedNoticeOnlyErrorCodes?: string[];
+  expectedNoticeOnlyWarningCodes?: string[];
 };
 
 const FORM3A_LEGAL_WORDING_PATH = path.join(
@@ -49,6 +72,52 @@ const FORM3A_LEGAL_WORDING_PATH = path.join(
 );
 
 let cachedLegalWording: Promise<Record<string, { title: string; legalWording: string }>> | null = null;
+
+function sortedUnique(values: string[]): string[] {
+  return [...new Set(values.filter(Boolean))].sort();
+}
+
+function formatCodeList(codes: string[]): string {
+  return codes.length > 0 ? codes.join(', ') : 'none';
+}
+
+function compareExpectedCodes(label: string, expected: string[], observed: string[]): string[] {
+  const expectedNormalized = sortedUnique(expected);
+  const observedNormalized = sortedUnique(observed);
+
+  const matches =
+    expectedNormalized.length === observedNormalized.length &&
+    expectedNormalized.every((code, index) => code === observedNormalized[index]);
+
+  if (matches) {
+    return [];
+  }
+
+  return [
+    `${label}: expected ${formatCodeList(expectedNormalized)}; observed ${formatCodeList(observedNormalized)}`,
+  ];
+}
+
+export function formatAuditRunDate(now: Date = new Date()): string {
+  return now.toISOString().split('T')[0];
+}
+
+export function getAuditOutputPaths(now: Date = new Date()) {
+  const runDate = formatAuditRunDate(now);
+  const baseRoot = path.join(process.cwd(), 'artifacts', 'post-2026-pack-audit');
+  const auditRoot = path.join(baseRoot, runDate);
+
+  return {
+    runDate,
+    baseRoot,
+    auditRoot,
+    latestRoot: path.join(baseRoot, 'latest'),
+    noticeDir: path.join(auditRoot, 'notice-only'),
+    completeDir: path.join(auditRoot, 'complete-pack'),
+    reportPath: path.join(auditRoot, 'audit-report.md'),
+    manifestPath: path.join(auditRoot, 'audit-manifest.json'),
+  };
+}
 
 function normalizeGroundCodeForAudit(code: string | number): string {
   return String(code).toUpperCase().replace(/^GROUND[\s_]*/i, '').trim();
@@ -570,6 +639,202 @@ function createComplianceIssueFacts(): WizardFacts {
   return base;
 }
 
+function createTenantInBreathingSpaceFacts(): WizardFacts {
+  const base = createNoticeOnlyFacts();
+  base.tenant_in_breathing_space = true;
+  return base;
+}
+
+function createSection16EMissingFacts(): WizardFacts {
+  const base = createNoticeOnlyFacts();
+  base.section_16e_duties_checked = false;
+  return base;
+}
+
+function createCompletePackEvidenceIncompleteFacts(): WizardFacts {
+  const base = createCompletePackFacts();
+  base.evidence_bundle_ready = false;
+  return base;
+}
+
+function createDepositProtectedLateFacts(): WizardFacts {
+  const base = createNoticeOnlyFacts();
+  base.deposit_protected = true;
+  base.deposit_protected_within_30_days = false;
+  base.prescribed_info_served = true;
+  return base;
+}
+
+function createPrescribedInformationMissingFacts(): WizardFacts {
+  const base = createNoticeOnlyFacts();
+  base.deposit_protected = true;
+  base.deposit_protected_within_30_days = true;
+  base.prescribed_info_served = false;
+  return base;
+}
+
+function createGround4APriorNoticeMissingFacts(): WizardFacts {
+  const base = createNoticeOnlyFacts();
+  base.selected_grounds = ['Ground 4A'];
+  base.section8_grounds = ['Ground 4A'];
+  base.ground_codes = ['Ground 4A'];
+  base.ground_prerequisite_notice_served = false;
+  base.section8_details =
+    'Ground 4A: The property is student accommodation required for occupation by students and the prior written notice requirement has not been met.';
+  base.ground_particulars = base.section8_details;
+  base['case_facts.issues.section8_grounds.selected_grounds[0]'] = 'Ground 4A';
+  return base;
+}
+
+function createImmediateGround14Facts(): WizardFacts {
+  const base = createNoticeOnlyFacts();
+  base.selected_grounds = ['Ground 14'];
+  base.section8_grounds = ['Ground 14'];
+  base.ground_codes = ['Ground 14'];
+  base.notice_expiry_date = base.notice_served_date;
+  base.section8_details =
+    'Ground 14: The tenant has engaged in anti-social behaviour and the landlord needs to move to the immediate application route.';
+  base.ground_particulars = base.section8_details;
+  base['case_facts.issues.section8_grounds.selected_grounds[0]'] = 'Ground 14';
+  base['case_facts.notice.expiry_date'] = base.notice_served_date;
+  return base;
+}
+
+function createGround1ARelttingWarningFacts(): WizardFacts {
+  const base = createNoticeOnlyFacts();
+  base.ground_1a_reletting_acknowledged = false;
+  return base;
+}
+
+export function buildScenarioDefinitions(): ScenarioDefinition[] {
+  return [
+    {
+      name: 'valid_notice_only_sale',
+      purpose: 'Baseline valid Form 3A notice-only sale route.',
+      facts: createNoticeOnlyFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: [],
+      expectedWarningCodes: [],
+      expectedNoticeOnlyErrorCodes: [],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'valid_complete_pack_arrears',
+      purpose: 'Baseline valid complete-pack arrears claim with Ground 8, 10, and 11.',
+      facts: createCompletePackFacts(),
+      product: 'eviction_pack',
+      expectedBlockingCodes: [],
+      expectedWarningCodes: [],
+    },
+    {
+      name: 'ground8_below_threshold',
+      purpose: 'Ground 8 must be excluded when the arrears do not meet the post-May 2026 threshold.',
+      facts: createGround8BelowThresholdFacts(),
+      product: 'eviction_pack',
+      expectedBlockingCodes: ['GROUND_8_THRESHOLD_NOT_MET'],
+      expectedWarningCodes: [],
+    },
+    {
+      name: 'notice_too_short_for_ground_1A',
+      purpose: 'Ground 1A should fail if the notice expiry date is shorter than the required notice period.',
+      facts: createShortNoticeFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: ['NOTICE_PERIOD_TOO_SHORT'],
+      expectedWarningCodes: [],
+      expectedNoticeOnlyErrorCodes: ['NOTICE_PERIOD_TOO_SHORT'],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'deposit_unprotected',
+      purpose: 'A protected-deposit blocker should stop Form 3A progression when the deposit remains unresolved.',
+      facts: createComplianceIssueFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: ['DEPOSIT_PROTECTION_REQUIRED'],
+      expectedWarningCodes: [],
+      expectedNoticeOnlyErrorCodes: ['DEPOSIT_PROTECTION_REQUIRED'],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'deposit_protected_late',
+      purpose: 'Late deposit protection should remain a blocker for affected Form 3A grounds.',
+      facts: createDepositProtectedLateFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: ['DEPOSIT_REQUIREMENTS_NOT_COMPLIED_WITH'],
+      expectedWarningCodes: [],
+      expectedNoticeOnlyErrorCodes: ['DEPOSIT_REQUIREMENTS_NOT_COMPLIED_WITH'],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'prescribed_information_missing',
+      purpose: 'Missing prescribed information should be surfaced as a possession blocker.',
+      facts: createPrescribedInformationMissingFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: ['PRESCRIBED_INFORMATION_REQUIRED'],
+      expectedWarningCodes: [],
+      expectedNoticeOnlyErrorCodes: ['PRESCRIBED_INFORMATION_REQUIRED'],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'tenant_in_breathing_space',
+      purpose: 'Active breathing-space restrictions should block service and filing.',
+      facts: createTenantInBreathingSpaceFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: ['TENANT_IN_BREATHING_SPACE'],
+      expectedWarningCodes: [],
+      expectedNoticeOnlyErrorCodes: ['TENANT_IN_BREATHING_SPACE'],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'section16e_confirmation_missing',
+      purpose: 'The section 16E duty confirmation should remain mandatory for England post-May 2026 cases.',
+      facts: createSection16EMissingFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: ['SECTION_16E_CONFIRMATION_REQUIRED'],
+      expectedWarningCodes: [],
+      expectedNoticeOnlyErrorCodes: ['SECTION_16E_CONFIRMATION_REQUIRED'],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'complete_pack_evidence_bundle_incomplete',
+      purpose: 'The complete pack should block when the evidence bundle is not ready.',
+      facts: createCompletePackEvidenceIncompleteFacts(),
+      product: 'eviction_pack',
+      expectedBlockingCodes: ['EVIDENCE_BUNDLE_INCOMPLETE'],
+      expectedWarningCodes: [],
+    },
+    {
+      name: 'ground_4A_prior_notice_missing',
+      purpose: 'Ground 4A should fail when the prior written notice prerequisite has not been confirmed.',
+      facts: createGround4APriorNoticeMissingFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: ['GROUND_PRIOR_NOTICE_MISSING'],
+      expectedWarningCodes: ['DECISION_ENGINE_WARNING'],
+      expectedNoticeOnlyErrorCodes: ['GROUND_PRIOR_NOTICE_MISSING'],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'immediate_ground14_route',
+      purpose: 'Ground 14 should allow the immediate-application route without a long notice period.',
+      facts: createImmediateGround14Facts(),
+      product: 'notice_only',
+      expectedBlockingCodes: [],
+      expectedWarningCodes: [],
+      expectedNoticeOnlyErrorCodes: [],
+      expectedNoticeOnlyWarningCodes: [],
+    },
+    {
+      name: 'ground_1A_reletting_warning',
+      purpose: 'Ground 1A should warn when the landlord has not acknowledged the re-letting restriction.',
+      facts: createGround1ARelttingWarningFacts(),
+      product: 'notice_only',
+      expectedBlockingCodes: [],
+      expectedWarningCodes: ['GROUND_1A_RELETTING_RESTRICTION_AWARENESS'],
+      expectedNoticeOnlyErrorCodes: [],
+      expectedNoticeOnlyWarningCodes: ['GROUND_1A_RELETTING_RESTRICTION_AWARENESS'],
+    },
+  ];
+}
+
 function getStagesForScenario(
   facts: WizardFacts,
   product: 'notice_only' | 'eviction_pack',
@@ -831,22 +1096,60 @@ function getMissingPackKeys(
   return expected.filter((item) => item.required && !generatedKeys.has(item.key)).map((item) => item.key);
 }
 
-function runScenarioAudit(
-  name: string,
-  facts: WizardFacts,
-  product: 'notice_only' | 'eviction_pack',
-): ScenarioAudit {
+function runScenarioAudit(definition: ScenarioDefinition): ScenarioAudit {
+  const {
+    name,
+    purpose,
+    facts,
+    product,
+    expectedBlockingCodes = [],
+    expectedWarningCodes = [],
+    expectedNoticeOnlyErrorCodes = [],
+    expectedNoticeOnlyWarningCodes = [],
+  } = definition;
   const route = 'section_8';
   const { evictionCase } = wizardFactsToEnglandWalesEviction(`scenario-${name}`, facts);
+  const stages = getStagesForScenario(facts, product, route);
+  const noticeOnlyValidator = product === 'notice_only' ? validateNoticeOnlyCase(facts) : undefined;
+  const observedBlockingCodes = sortedUnique(
+    Object.values(stages).flatMap((result) => result.blocking_issues.map((issue) => issue.code)),
+  );
+  const observedWarningCodes = sortedUnique(
+    Object.values(stages).flatMap((result) => result.warnings.map((issue) => issue.code)),
+  );
+  const observedNoticeOnlyErrorCodes = noticeOnlyValidator
+    ? sortedUnique(noticeOnlyValidator.errors.map((error) => error.code))
+    : [];
+  const observedNoticeOnlyWarningCodes = noticeOnlyValidator
+    ? sortedUnique(noticeOnlyValidator.warnings.map((warning) => warning.code))
+    : [];
+
+  const mismatches = [
+    ...compareExpectedCodes('blocking codes', expectedBlockingCodes, observedBlockingCodes),
+    ...compareExpectedCodes('warning codes', expectedWarningCodes, observedWarningCodes),
+    ...compareExpectedCodes('notice-only validator errors', expectedNoticeOnlyErrorCodes, observedNoticeOnlyErrorCodes),
+    ...compareExpectedCodes('notice-only validator warnings', expectedNoticeOnlyWarningCodes, observedNoticeOnlyWarningCodes),
+  ];
 
   return {
     name,
+    purpose,
     route,
     product,
     selectedGrounds: getSelectedGrounds(facts),
     mappedGrounds: evictionCase.grounds.map((ground) => ground.code),
-    noticeOnlyValidator: product === 'notice_only' ? validateNoticeOnlyCase(facts) : undefined,
-    stages: getStagesForScenario(facts, product, route),
+    noticeOnlyValidator,
+    stages,
+    expectedBlockingCodes: sortedUnique(expectedBlockingCodes),
+    expectedWarningCodes: sortedUnique(expectedWarningCodes),
+    expectedNoticeOnlyErrorCodes: sortedUnique(expectedNoticeOnlyErrorCodes),
+    expectedNoticeOnlyWarningCodes: sortedUnique(expectedNoticeOnlyWarningCodes),
+    observedBlockingCodes,
+    observedWarningCodes,
+    observedNoticeOnlyErrorCodes,
+    observedNoticeOnlyWarningCodes,
+    matchedExpectations: mismatches.length === 0,
+    mismatches,
   };
 }
 
@@ -865,9 +1168,16 @@ function formatScenarioAudit(scenario: ScenarioAudit): string {
 
   return [
     `### ${scenario.name}`,
+    `- purpose: ${scenario.purpose}`,
     `- product: ${scenario.product}`,
     `- selected grounds: ${scenario.selectedGrounds.join(', ') || 'none'}`,
     `- mapped grounds: ${scenario.mappedGrounds.join(', ') || 'none'}`,
+    `- expected blocking: ${formatCodeList(scenario.expectedBlockingCodes)}`,
+    `- observed blocking: ${formatCodeList(scenario.observedBlockingCodes)}`,
+    `- expected warnings: ${formatCodeList(scenario.expectedWarningCodes)}`,
+    `- observed warnings: ${formatCodeList(scenario.observedWarningCodes)}`,
+    `- expectation match: ${scenario.matchedExpectations ? 'yes' : 'no'}`,
+    ...(scenario.mismatches.length > 0 ? scenario.mismatches.map((mismatch) => `- mismatch: ${mismatch}`) : []),
     noticeOnlySummary,
     stageLines,
   ]
@@ -875,18 +1185,17 @@ function formatScenarioAudit(scenario: ScenarioAudit): string {
     .join('\n');
 }
 
-async function main(): Promise<void> {
-  const auditRoot = path.join(process.cwd(), 'artifacts', 'post-2026-pack-audit', '2026-04-04');
-  const noticeDir = path.join(auditRoot, 'notice-only');
-  const completeDir = path.join(auditRoot, 'complete-pack');
-  await ensureDir(noticeDir);
-  await ensureDir(completeDir);
+export async function runAudit(now: Date = new Date()): Promise<void> {
+  const paths = getAuditOutputPaths(now);
+  await fs.rm(paths.auditRoot, { recursive: true, force: true });
+  await ensureDir(paths.noticeDir);
+  await ensureDir(paths.completeDir);
 
   const noticeFacts = createNoticeOnlyFacts();
   const completeFacts = createCompletePackFacts();
 
-  const noticeArtifacts = await generateNoticeOnlyPack(noticeDir, noticeFacts);
-  const completeArtifacts = await generateCompletePack(completeDir, completeFacts);
+  const noticeArtifacts = await generateNoticeOnlyPack(paths.noticeDir, noticeFacts);
+  const completeArtifacts = await generateCompletePack(paths.completeDir, completeFacts);
 
   const noticeMissing = getMissingPackKeys('notice_only', noticeFacts, noticeArtifacts);
   const completeMissing = getMissingPackKeys('complete_pack', completeFacts, completeArtifacts);
@@ -896,22 +1205,21 @@ async function main(): Promise<void> {
   const wizardCatalogCodes = new Set(listEnglandGroundDefinitions().map((ground) => ground.code));
   const activeGroundCoverage = Array.from(wizardCatalogCodes).sort();
 
-  const scenarios: ScenarioAudit[] = [
-    runScenarioAudit('valid_notice_only_sale', noticeFacts, 'notice_only'),
-    runScenarioAudit('valid_complete_pack_arrears', completeFacts, 'eviction_pack'),
-    runScenarioAudit('ground8_below_threshold', createGround8BelowThresholdFacts(), 'eviction_pack'),
-    runScenarioAudit('notice_too_short_for_ground_1A', createShortNoticeFacts(), 'notice_only'),
-    runScenarioAudit('deposit_unprotected', createComplianceIssueFacts(), 'notice_only'),
-  ];
+  const scenarios = buildScenarioDefinitions().map((scenario) => runScenarioAudit(scenario));
+  const matchedScenarioCount = scenarios.filter((scenario) => scenario.matchedExpectations).length;
+  const scenarioMismatchCount = scenarios.length - matchedScenarioCount;
 
   const legacyFindings = [...noticeArtifacts, ...completeArtifacts]
     .filter((artifact) => artifact.legacyFlags && artifact.legacyFlags.length > 0)
     .map((artifact) => `- ${artifact.key}: ${artifact.legacyFlags?.join(', ')}`);
 
+  const generatedAt = now.toISOString();
   const report = [
     '# England post-1 May 2026 pack audit',
     '',
-    `Generated at: ${new Date().toISOString()}`,
+    `Generated at: ${generatedAt}`,
+    `Run date folder: ${paths.runDate}`,
+    `Audit root: ${paths.auditRoot}`,
     '',
     '## Generated outputs',
     '',
@@ -940,6 +1248,11 @@ async function main(): Promise<void> {
     '## Active wizard ground coverage',
     `- active UI catalog codes: ${activeGroundCoverage.join(', ')}`,
     '',
+    '## Scenario coverage summary',
+    `- total scenarios: ${scenarios.length}`,
+    `- expectation matches: ${matchedScenarioCount}`,
+    `- expectation mismatches: ${scenarioMismatchCount}`,
+    '',
     '## Validation scenarios',
     ...scenarios.map((scenario) => formatScenarioAudit(scenario)),
     '',
@@ -949,20 +1262,75 @@ async function main(): Promise<void> {
     '## Initial assessment',
     `- Notice-only pack completeness: ${noticeMissing.length === 0 ? 'complete on artifact count' : `missing ${noticeMissing.length} required item(s)`}`,
     `- Complete-pack completeness: ${completeMissing.length === 0 ? 'complete on artifact count' : `missing ${completeMissing.length} required item(s)`}`,
+    `- Scenario expectation coverage: ${matchedScenarioCount}/${scenarios.length} matched`,
     `- Value proposition score: ${legacyFindings.length === 0 && noticeMissing.length === 0 && completeMissing.length === 0 ? '8.5/10' : '6/10'}`,
     '- Solicitor-grade status: closer, but still not a blanket zero-shortcoming claim. The audited England Form 3A and N5/N119 flows are fully populated and blocker-enforced for the tested scenarios, but edge-case possession claims should still be reviewed carefully.',
     '- Post-1 May 2026 alignment: aligned on the active England wizard route, official-form mapping, support documents, and blocker enforcement for the audited scenarios.',
   ].join('\n');
 
-  const reportPath = path.join(auditRoot, 'audit-report.md');
-  await fs.writeFile(reportPath, report, 'utf8');
+  const manifest = {
+    generatedAt,
+    runDate: paths.runDate,
+    auditRoot: paths.auditRoot,
+    latestRoot: paths.latestRoot,
+    scenarioCount: scenarios.length,
+    matchedScenarioCount,
+    scenarioMismatchCount,
+    noticeArtifacts: noticeArtifacts.map((artifact) => ({
+      key: artifact.key,
+      type: artifact.type,
+      outputPath: artifact.outputPath,
+    })),
+    completeArtifacts: completeArtifacts.map((artifact) => ({
+      key: artifact.key,
+      type: artifact.type,
+      outputPath: artifact.outputPath,
+    })),
+    scenarios: scenarios.map((scenario) => ({
+      name: scenario.name,
+      purpose: scenario.purpose,
+      product: scenario.product,
+      matchedExpectations: scenario.matchedExpectations,
+      mismatches: scenario.mismatches,
+      expectedBlockingCodes: scenario.expectedBlockingCodes,
+      expectedWarningCodes: scenario.expectedWarningCodes,
+      observedBlockingCodes: scenario.observedBlockingCodes,
+      observedWarningCodes: scenario.observedWarningCodes,
+      expectedNoticeOnlyErrorCodes: scenario.expectedNoticeOnlyErrorCodes,
+      expectedNoticeOnlyWarningCodes: scenario.expectedNoticeOnlyWarningCodes,
+      observedNoticeOnlyErrorCodes: scenario.observedNoticeOnlyErrorCodes,
+      observedNoticeOnlyWarningCodes: scenario.observedNoticeOnlyWarningCodes,
+    })),
+  };
 
-  console.log(`Audit report written to ${reportPath}`);
+  await fs.writeFile(paths.reportPath, report, 'utf8');
+  await fs.writeFile(paths.manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
+  await fs.rm(paths.latestRoot, { recursive: true, force: true });
+  await fs.cp(paths.auditRoot, paths.latestRoot, { recursive: true });
+
+  console.log(`Audit report written to ${paths.reportPath}`);
+  console.log(`Audit manifest written to ${paths.manifestPath}`);
+  console.log(`Latest audit mirrored to ${paths.latestRoot}`);
   console.log(`Notice-only artifacts: ${noticeArtifacts.length}`);
   console.log(`Complete-pack artifacts: ${completeArtifacts.length}`);
+
+  if (scenarioMismatchCount > 0) {
+    const mismatchSummary = scenarios
+      .filter((scenario) => !scenario.matchedExpectations)
+      .map((scenario) => `${scenario.name}: ${scenario.mismatches.join(' | ')}`)
+      .join('; ');
+
+    throw new Error(`Scenario expectation mismatches found: ${mismatchSummary}`);
+  }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+const isDirectRun =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+
+if (isDirectRun) {
+  runAudit().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { buildTenancyPackBreakdown } from '@/lib/marketing/tenancy-pack-breakdowns';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -10,36 +12,15 @@ const canonicalUrl = getCanonicalUrl('/standard-tenancy-agreement');
 const standardWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=standard_tenancy_page&topic=tenancy';
 const englandHubHref = '/products/ast';
-
-const standardPackDocuments = getResidentialDocumentList('england_standard_tenancy_agreement', {
-  englandTenancyPurpose: 'new_agreement',
-  depositTaken: true,
-});
-
-function getPackDocument(documentId: string) {
-  return standardPackDocuments.find((document) => document.id === documentId);
-}
-
-const standardPackHighlights = [
-  getPackDocument('england_standard_tenancy_agreement'),
-  getPackDocument('pre_tenancy_checklist_england'),
-  getPackDocument('england_keys_handover_record'),
-  getPackDocument('england_utilities_handover_sheet'),
-  getPackDocument('england_pet_request_addendum'),
-]
-  .filter((document): document is NonNullable<(typeof standardPackDocuments)[number]> => Boolean(document))
-  .map((document) => ({
-    title: document.title,
-    description: document.description,
-    supportingLabel: document.pages,
-  }));
+const standardPackBreakdown = buildTenancyPackBreakdown('england_standard_tenancy_agreement');
+const standardSampleProof = getGoldenPackProofData('england_standard_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Standard Tenancy Agreement England | Straightforward Whole-Property Let',
   description:
-    'Create a Standard Tenancy Agreement for a straightforward whole-property let in England, using current assured periodic wording and the practical supporting documents landlords usually need.',
+    'Create a Standard Tenancy Agreement for a straightforward whole-property let in England, using current assured periodic wording and the practical setup paperwork landlords usually need.',
   keywords: [
     'assured periodic tenancy agreement england',
     'england assured periodic tenancy agreement',
@@ -56,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Standard Tenancy Agreement England | Straightforward Whole-Property Let',
     description:
-      'Create a Standard Tenancy Agreement for a straightforward whole-property let in England, using current assured periodic wording and the practical supporting documents landlords usually need.',
+      'Create a Standard Tenancy Agreement for a straightforward whole-property let in England, using current assured periodic wording and the practical setup paperwork landlords usually need.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -96,7 +77,7 @@ export default function StandardTenancyAgreementPage() {
         ]}
         highlights={[
           'England assured periodic agreement for a straightforward whole-property residential let',
-          'Keeps the wording and supporting documents practical and proportionate',
+          'Keeps the wording and pack paperwork practical and proportionate',
           'Separate from the Premium assured periodic, Student, HMO / Shared House, and Lodger routes',
           'Guided generator with a preview before payment',
         ]}
@@ -125,9 +106,8 @@ export default function StandardTenancyAgreementPage() {
         notFor={[
           'you want fuller wording on inspections, repairs, key handling, contractor access, and handover from the outset',
           'the main issue is student occupation, guarantors, or end-of-term student turnover',
-          'the property is really a shared house / HMO or a room let in the landlord’s home',
+          "the property is really a shared house / HMO or a room let in the landlord's home",
         ]}
-        packHighlights={standardPackHighlights}
         routeComparison={[
           {
             title: 'Premium Assured Periodic Tenancy Agreement',
@@ -158,6 +138,88 @@ export default function StandardTenancyAgreementPage() {
             ctaLabel: 'Compare Lodger',
           },
         ]}
+        salesContent={{
+          packIntro:
+            'The Standard pack is built for a straightforward whole-property let. It gives you the main agreement plus the practical setup documents that stop the tenancy file from feeling thin or disorganised from day one.',
+          defaultPackItems: standardPackBreakdown.defaultItems,
+          conditionalPackItems: standardPackBreakdown.conditionalItems,
+          conditionalTitle: 'Included when your answers require it',
+          conditionalIntro:
+            'Some pack items depend on how the let is being set up. Where a deposit is taken or a guarantor is used, the pack expands to cover those points properly instead of leaving you to deal with them separately.',
+          sampleProof: standardSampleProof ? <GoldenPackProof data={standardSampleProof} /> : undefined,
+          whyYouNeedThis: {
+            title: 'Why you need more than the main agreement',
+            intro:
+              'Even a simple tenancy creates risk if the paperwork stops at the agreement itself. Handover, deposit handling, later changes, and everyday setup details are where many avoidable disputes begin.',
+            cards: [
+              {
+                title: 'The tenancy file needs evidence as well as terms',
+                body:
+                  'A signed agreement is essential, but it does not prove what was handed over, what changed later, or whether the key setup steps were handled properly.',
+              },
+              {
+                title: 'Deposit compliance creates its own risk',
+                body:
+                  'If a deposit is taken, the supporting paperwork matters just as much as the main agreement because deposit mistakes can create financial and procedural problems later.',
+              },
+              {
+                title: 'Simple lets still need clean records',
+                body:
+                  'Straightforward tenancies often get the least admin, which is exactly why smaller missing documents become harder to reconstruct when a dispute appears.',
+              },
+            ],
+          },
+          howThisHelps: {
+            title: 'How this helps you',
+            intro:
+              'The Standard pack is designed to make an ordinary let easier to start, easier to evidence, and easier to manage without loading it up with specialist wording it does not need.',
+            cards: [
+              {
+                title: 'It keeps the file practical',
+                body:
+                  'The pack covers the day-one paperwork landlords usually need without turning a straightforward tenancy into an over-engineered process.',
+              },
+              {
+                title: 'It strengthens your position later',
+                body:
+                  'The handover records, checklist, and variation record give you something to point back to if the facts are disputed later.',
+              },
+              {
+                title: 'It stays proportionate',
+                body:
+                  'You get the core agreement route for England without paying for the extra management detail that belongs in Premium or the specialist products.',
+              },
+            ],
+          },
+          howItWorks: {
+            title: 'How it works',
+            intro:
+              'The workflow is built for landlords who want to get a straightforward tenancy in place properly without drafting everything from scratch.',
+            steps: [
+              {
+                step: 'Step 01',
+                title: 'Add the property and tenancy details',
+                body:
+                  'Enter the landlord, tenant, rent, and property details that drive the main agreement and the supporting records.',
+              },
+              {
+                step: 'Step 02',
+                title: 'Answer the setup questions',
+                body:
+                  'Confirm the deposit, pets, keys, and other practical points so the pack includes the documents that fit the way the let is actually being started.',
+              },
+              {
+                step: 'Step 03',
+                title: 'Generate the full Standard pack',
+                body:
+                  'Download the agreement and the supporting paperwork as one joined-up England tenancy file that is ready to print and use.',
+              },
+            ],
+          },
+          ctaTitle: 'Start the Standard agreement pack',
+          ctaBody:
+            'Use this route when the let is straightforward and you want the agreement, the setup checklist, and the supporting records prepared together from the start.',
+        }}
         faqs={[
           {
             question: 'When should I choose this instead of the Premium assured periodic route?',
@@ -177,7 +239,7 @@ export default function StandardTenancyAgreementPage() {
           {
             question: 'What does this assured periodic pack include?',
             answer:
-              'The pack centres on the main agreement and includes the England pre-tenancy checklist, along with practical handover and support documents for the tenancy file.',
+              'The pack centres on the main agreement and includes the England pre-tenancy checklist, along with the handover records and file paperwork landlords usually need around the tenancy.',
           },
           {
             question: 'Should I use this for a student or HMO let?',

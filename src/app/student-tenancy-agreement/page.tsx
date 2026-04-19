@@ -1,39 +1,19 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { buildTenancyPackBreakdown } from '@/lib/marketing/tenancy-pack-breakdowns';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
-import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
+import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
 const canonicalUrl = getCanonicalUrl('/student-tenancy-agreement');
 const englandHubHref = '/products/ast';
 const studentWizardHref =
   '/wizard?product=england_student_tenancy_agreement&src=student_tenancy_page&topic=tenancy';
-
-const studentPackDocuments = getResidentialDocumentList('england_student_tenancy_agreement', {
-  englandTenancyPurpose: 'new_agreement',
-  depositTaken: true,
-  includeGuarantorDeed: true,
-});
-
-function getPackDocument(documentId: string) {
-  return studentPackDocuments.find((document) => document.id === documentId);
-}
-
-const studentPackHighlights = [
-  getPackDocument('england_student_tenancy_agreement'),
-  getPackDocument('england_student_move_out_schedule'),
-  getPackDocument('guarantor_agreement'),
-  getPackDocument('england_keys_handover_record'),
-  getPackDocument('england_tenancy_variation_record'),
-]
-  .filter((document): document is NonNullable<(typeof studentPackDocuments)[number]> => Boolean(document))
-  .map((document) => ({
-    title: document.title,
-    description: document.description,
-    supportingLabel: document.pages,
-  }));
+const studentPackBreakdown = buildTenancyPackBreakdown('england_student_tenancy_agreement');
+const studentSampleProof = getGoldenPackProofData('england_student_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -103,7 +83,7 @@ export default function StudentTenancyAgreementPage() {
         compliancePoints={[
           'Built around the current England route from 1 May 2026 for the main tenancy wording.',
           'Lets student households be handled as student households instead of being forced into a generic residential route.',
-          'Includes the practical support documents that usually matter around student handover and variation.',
+          'Includes the practical file paperwork that usually matters around student handover and variation.',
           'If the real issue is shared-house management, communal controls, or resident-landlord occupation, compare the HMO / Shared House or Lodger routes instead.',
         ]}
         keywordTargets={[
@@ -126,7 +106,6 @@ export default function StudentTenancyAgreementPage() {
           'the landlord lives at the property and the arrangement is really a lodger room let',
           'the let is an ordinary non-student whole-property tenancy and Standard or Premium would be more proportionate',
         ]}
-        packHighlights={studentPackHighlights}
         routeComparison={[
           {
             title: 'Premium Tenancy Agreement',
@@ -157,6 +136,88 @@ export default function StudentTenancyAgreementPage() {
             ctaLabel: 'Compare England routes',
           },
         ]}
+        salesContent={{
+          packIntro:
+            'The Student pack is built for landlords who need the paperwork to reflect how student lets actually work. It gives you the main agreement plus the schedules and extra pack paperwork that deal with sharers, guarantors, replacements, and end-of-term hand-back more clearly.',
+          defaultPackItems: studentPackBreakdown.defaultItems,
+          conditionalPackItems: studentPackBreakdown.conditionalItems,
+          conditionalTitle: 'Included when your answers require it',
+          conditionalIntro:
+            'Where the tenancy takes a deposit or relies on a guarantor, the pack expands to include the extra paperwork needed for those risks as well.',
+          sampleProof: studentSampleProof ? <GoldenPackProof data={studentSampleProof} /> : undefined,
+          whyYouNeedThis: {
+            title: 'Why student lets need their own pack',
+            intro:
+              'Student households create pressure points that do not usually show up in an ordinary residential tenancy. That is why this route goes beyond the main agreement and deals with the student-specific admin around it.',
+            cards: [
+              {
+                title: 'Guarantor support needs proper paperwork',
+                body:
+                  "If the guarantor position is vague or left outside the main file, the landlord's fallback protection becomes much harder to rely on.",
+              },
+              {
+                title: 'Student sharers create more change over time',
+                body:
+                  'Replacement requests, key returns, end-of-term move-out, and tenancy variations need more structure in a student household than in a typical ordinary let.',
+              },
+              {
+                title: 'The hand-back stage matters from day one',
+                body:
+                  'Student lets often become most difficult at the end of the tenancy, which is why the move-out and return expectations need to be set clearly at the start.',
+              },
+            ],
+          },
+          howThisHelps: {
+            title: 'How this helps you',
+            intro:
+              'The pack gives landlords a student-focused file that is easier to manage while the tenancy is running and easier to rely on when students move out or the setup changes.',
+            cards: [
+              {
+                title: 'It keeps the student rules in writing',
+                body:
+                  'The agreement and the student schedule work together so guarantor, sharer, and hand-back points are not left hanging in separate emails.',
+              },
+              {
+                title: 'It makes turnover easier to manage',
+                body:
+                  'The pack helps you prepare for the practical issues that usually arise at the end of the academic cycle.',
+              },
+              {
+                title: 'It gives you a better evidence trail',
+                body:
+                  'The file records and conditional guarantor paperwork make it easier to show what was agreed if the tenancy later becomes contentious.',
+              },
+            ],
+          },
+          howItWorks: {
+            title: 'How it works',
+            intro:
+              'The workflow is built for student households and the extra points landlords usually need to capture before the tenancy starts.',
+            steps: [
+              {
+                step: 'Step 01',
+                title: 'Add the student tenancy details',
+                body:
+                  'Enter the occupiers, the property, the rent, and the student-specific setup that drives the agreement.',
+              },
+              {
+                step: 'Step 02',
+                title: 'Answer the guarantor and hand-back questions',
+                body:
+                  'Work through the guarantor, key, deposit, and move-out details so the pack includes the right extra paperwork.',
+              },
+              {
+                step: 'Step 03',
+                title: 'Generate the full Student pack',
+                body:
+                  'Download the agreement, the student schedule, and the file records as one joined-up England student tenancy pack.',
+              },
+            ],
+          },
+          ctaTitle: 'Start the Student agreement pack',
+          ctaBody:
+            'Use this route when the occupiers are students and you want the agreement, the student hand-back wording, and the extra paperwork prepared as one coherent file.',
+        }}
         faqs={[
           {
             question: 'Why use a student tenancy agreement instead of a general residential agreement?',

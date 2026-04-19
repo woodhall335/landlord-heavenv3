@@ -25,12 +25,12 @@ export const POSITIONING_CONTENT: Record<PositioningPreset, PositioningContent> 
     ],
   },
   home: {
-    headline: 'Your tenant is not paying or will not leave. We help you choose the right next step tonight.',
+    headline: 'Your tenant is not paying or will not leave. We help you choose the right next step without guessing.',
     bullets: [
       'Work out whether you need a Section 8 notice, a money claim, or a new tenancy document without guessing.',
       'We flag the mistakes that can kill your case before you serve anything.',
       'Answer plain-English questions and get the paperwork that fits your situation.',
-      'Move tonight, not next week, without paying a solicitor just to get started.',
+      'Move quickly without paying a solicitor just to get the first paperwork drafted.',
     ],
   },
   notice_only: {
@@ -72,7 +72,7 @@ export const POSITIONING_CONTENT: Record<PositioningPreset, PositioningContent> 
   ast: {
     headline: 'Starting a new tenancy? Use the right agreement for the property now, not an old template that causes problems later.',
     bullets: [
-      'Use the right agreement for England, Wales, Scotland, or Northern Ireland from the start.',
+      'Use the right agreement for your England tenancy from the start.',
       'Avoid outdated wording that can create confusion when the tenancy goes wrong.',
       'Choose Standard for straightforward lets or Premium when the setup is more complex.',
       'Preview before you pay, then keep the finished agreement in your account.',
@@ -84,7 +84,7 @@ export const POSITIONING_CONTENT: Record<PositioningPreset, PositioningContent> 
       'Guides written for landlords under pressure, not for legal teams.',
       'Clear route guidance for eviction notices, court action, rent arrears, and tenancy agreements.',
       'Plain-English explanations first, action when you are ready.',
-      'Built to help you decide what to do tonight, not next week.',
+      'Built to help you decide what to do next, not leave you stuck in research mode.',
     ],
   },
   ask_heaven: {

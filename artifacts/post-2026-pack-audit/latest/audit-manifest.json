@@ -1,0 +1,366 @@
+{
+  "generatedAt": "2026-04-18T02:17:34.579Z",
+  "runDate": "2026-04-18",
+  "auditRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18",
+  "latestRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\latest",
+  "scenarioCount": 13,
+  "matchedScenarioCount": 13,
+  "scenarioMismatchCount": 0,
+  "noticeArtifacts": [
+    {
+      "key": "section8_notice",
+      "type": "pdf",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\notice-only\\form3a-notice.pdf"
+    },
+    {
+      "key": "service_instructions",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\notice-only\\service-instructions.html"
+    },
+    {
+      "key": "cover_letter_to_tenant",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\notice-only\\cover-letter-to-tenant.html"
+    },
+    {
+      "key": "service_checklist",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\notice-only\\service-checklist.html"
+    },
+    {
+      "key": "evidence_checklist",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\notice-only\\evidence-checklist.html"
+    },
+    {
+      "key": "proof_of_service",
+      "type": "pdf",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\notice-only\\proof-of-service.pdf"
+    }
+  ],
+  "completeArtifacts": [
+    {
+      "key": "section8_notice",
+      "type": "pdf",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\form3a-notice.pdf"
+    },
+    {
+      "key": "service_instructions",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\service-instructions.html"
+    },
+    {
+      "key": "cover_letter_to_tenant",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\cover-letter-to-tenant.html"
+    },
+    {
+      "key": "service_checklist",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\service-checklist.html"
+    },
+    {
+      "key": "evidence_checklist",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\evidence-checklist.html"
+    },
+    {
+      "key": "proof_of_service",
+      "type": "pdf",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\proof-of-service.pdf"
+    },
+    {
+      "key": "n5_claim",
+      "type": "pdf",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\n5-claim.pdf"
+    },
+    {
+      "key": "n119_particulars",
+      "type": "pdf",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\n119-particulars.pdf"
+    },
+    {
+      "key": "court_filing_guide",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\court-filing-guide.html"
+    },
+    {
+      "key": "arrears_schedule",
+      "type": "html",
+      "outputPath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\post-2026-pack-audit\\2026-04-18\\complete-pack\\arrears-schedule.html"
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "valid_notice_only_sale",
+      "purpose": "Baseline valid Form 3A notice-only sale route.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "valid_complete_pack_arrears",
+      "purpose": "Baseline valid complete-pack arrears claim with Ground 8, 10, and 11.",
+      "product": "eviction_pack",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "ground8_below_threshold",
+      "purpose": "Ground 8 must be excluded when the arrears do not meet the post-May 2026 threshold.",
+      "product": "eviction_pack",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "GROUND_8_THRESHOLD_NOT_MET"
+      ],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [
+        "GROUND_8_THRESHOLD_NOT_MET"
+      ],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "notice_too_short_for_ground_1A",
+      "purpose": "Ground 1A should fail if the notice expiry date is shorter than the required notice period.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "NOTICE_PERIOD_TOO_SHORT"
+      ],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [
+        "NOTICE_PERIOD_TOO_SHORT"
+      ],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [
+        "NOTICE_PERIOD_TOO_SHORT"
+      ],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [
+        "NOTICE_PERIOD_TOO_SHORT"
+      ],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "deposit_unprotected",
+      "purpose": "A protected-deposit blocker should stop Form 3A progression when the deposit remains unresolved.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "DEPOSIT_PROTECTION_REQUIRED"
+      ],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [
+        "DEPOSIT_PROTECTION_REQUIRED"
+      ],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [
+        "DEPOSIT_PROTECTION_REQUIRED"
+      ],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [
+        "DEPOSIT_PROTECTION_REQUIRED"
+      ],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "deposit_protected_late",
+      "purpose": "Late deposit protection should remain a blocker for affected Form 3A grounds.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "DEPOSIT_REQUIREMENTS_NOT_COMPLIED_WITH"
+      ],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [
+        "DEPOSIT_REQUIREMENTS_NOT_COMPLIED_WITH"
+      ],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [
+        "DEPOSIT_REQUIREMENTS_NOT_COMPLIED_WITH"
+      ],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [
+        "DEPOSIT_REQUIREMENTS_NOT_COMPLIED_WITH"
+      ],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "prescribed_information_missing",
+      "purpose": "Missing prescribed information should be surfaced as a possession blocker.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "PRESCRIBED_INFORMATION_REQUIRED"
+      ],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [
+        "PRESCRIBED_INFORMATION_REQUIRED"
+      ],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [
+        "PRESCRIBED_INFORMATION_REQUIRED"
+      ],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [
+        "PRESCRIBED_INFORMATION_REQUIRED"
+      ],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "tenant_in_breathing_space",
+      "purpose": "Active breathing-space restrictions should block service and filing.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "TENANT_IN_BREATHING_SPACE"
+      ],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [
+        "TENANT_IN_BREATHING_SPACE"
+      ],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [
+        "TENANT_IN_BREATHING_SPACE"
+      ],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [
+        "TENANT_IN_BREATHING_SPACE"
+      ],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "section16e_confirmation_missing",
+      "purpose": "The section 16E duty confirmation should remain mandatory for England post-May 2026 cases.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "SECTION_16E_CONFIRMATION_REQUIRED"
+      ],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [
+        "SECTION_16E_CONFIRMATION_REQUIRED"
+      ],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [
+        "SECTION_16E_CONFIRMATION_REQUIRED"
+      ],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [
+        "SECTION_16E_CONFIRMATION_REQUIRED"
+      ],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "complete_pack_evidence_bundle_incomplete",
+      "purpose": "The complete pack should block when the evidence bundle is not ready.",
+      "product": "eviction_pack",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "EVIDENCE_BUNDLE_INCOMPLETE"
+      ],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [
+        "EVIDENCE_BUNDLE_INCOMPLETE"
+      ],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "ground_4A_prior_notice_missing",
+      "purpose": "Ground 4A should fail when the prior written notice prerequisite has not been confirmed.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [
+        "GROUND_PRIOR_NOTICE_MISSING"
+      ],
+      "expectedWarningCodes": [
+        "DECISION_ENGINE_WARNING"
+      ],
+      "observedBlockingCodes": [
+        "GROUND_PRIOR_NOTICE_MISSING"
+      ],
+      "observedWarningCodes": [
+        "DECISION_ENGINE_WARNING"
+      ],
+      "expectedNoticeOnlyErrorCodes": [
+        "GROUND_PRIOR_NOTICE_MISSING"
+      ],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [
+        "GROUND_PRIOR_NOTICE_MISSING"
+      ],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "immediate_ground14_route",
+      "purpose": "Ground 14 should allow the immediate-application route without a long notice period.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [],
+      "expectedWarningCodes": [],
+      "observedBlockingCodes": [],
+      "observedWarningCodes": [],
+      "expectedNoticeOnlyErrorCodes": [],
+      "expectedNoticeOnlyWarningCodes": [],
+      "observedNoticeOnlyErrorCodes": [],
+      "observedNoticeOnlyWarningCodes": []
+    },
+    {
+      "name": "ground_1A_reletting_warning",
+      "purpose": "Ground 1A should warn when the landlord has not acknowledged the re-letting restriction.",
+      "product": "notice_only",
+      "matchedExpectations": true,
+      "mismatches": [],
+      "expectedBlockingCodes": [],
+      "expectedWarningCodes": [
+        "GROUND_1A_RELETTING_RESTRICTION_AWARENESS"
+      ],
+      "observedBlockingCodes": [],
+      "observedWarningCodes": [
+        "GROUND_1A_RELETTING_RESTRICTION_AWARENESS"
+      ],
+      "expectedNoticeOnlyErrorCodes": [],
+      "expectedNoticeOnlyWarningCodes": [
+        "GROUND_1A_RELETTING_RESTRICTION_AWARENESS"
+      ],
+      "observedNoticeOnlyErrorCodes": [],
+      "observedNoticeOnlyWarningCodes": [
+        "GROUND_1A_RELETTING_RESTRICTION_AWARENESS"
+      ]
+    }
+  ]
+}

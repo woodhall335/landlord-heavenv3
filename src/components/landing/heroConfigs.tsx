@@ -29,7 +29,7 @@ const astPremiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 const astSubtitle: ReactNode = (
   <>
-    Create the right tenancy agreement for your England let tonight. Choose the
+    Create the right tenancy agreement for your England let. Choose the
     correct Standard, Premium, Student, HMO / Shared House, or Lodger agreement
     without digging through outdated templates.
   </>
@@ -60,7 +60,7 @@ export const homeHeroConfig: HeroConfig = {
   highlightTitle: 'Refusing to Leave?',
   subtitle: (
     <>
-      Work out tonight whether you need a <strong>Section 8 notice</strong>, a{' '}
+      Find out whether you need a <strong>Section 8 notice</strong>, a{' '}
       <strong>court possession pack</strong>, a <strong>money claim</strong>,
       a <strong>rent increase pack</strong>, or the right tenancy agreement for
       your property in England.
@@ -92,7 +92,7 @@ export const astHeroConfig: HeroConfig = {
   highlightTitle: 'Tenancy Agreement for Your England Let',
   subtitle: astSubtitle,
   primaryCta: {
-    label: 'Choose your agreement ->',
+    label: 'Choose your agreement',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.wizardHref,
   },
   secondaryCta: {
@@ -169,7 +169,7 @@ export const moneyClaimHeroConfig: HeroConfig = {
   title: 'Recover Unpaid Rent',
   highlightTitle: 'and Start Your Money Claim Pack',
   subtitle:
-    'If your tenant owes rent, damage, bills, or other tenancy debt, this England pack helps you prepare the Letter Before Claim, Form N1, debt schedule, and supporting paperwork tonight.',
+    'If your tenant owes rent, damage, bills, or other tenancy debt, this England pack helps you prepare the Letter Before Claim, Form N1, debt schedule, and supporting paperwork in one place.',
   primaryCta: {
     label: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.primaryCtaLabel,
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.wizardHref,
@@ -189,11 +189,11 @@ export const moneyClaimSupportHeroConfig: HeroConfig = {
   subtitle:
     'Start with the landlord money claim pack, then use the support guides when you need help with a specific filing, evidence, or enforcement question.',
   primaryCta: {
-    label: 'Start money claim pack ->',
+    label: 'Start money claim pack',
     href: '/products/money-claim',
   },
   secondaryCta: {
-    label: 'View money claim guide ->',
+    label: 'View money claim guide',
     href: '/money-claim',
   },
   feature: 'Use the support guides to solve a specific filing or evidence question without losing sight of the main claim.',

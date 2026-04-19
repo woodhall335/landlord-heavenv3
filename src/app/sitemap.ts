@@ -30,6 +30,24 @@ import {
 import { getPublicCatalogProducts, getPublicTenancyProducts } from '@/lib/public-products';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
 
+const NON_ENGLAND_PUBLIC_DISCOVERY_PATTERNS = [
+  'scotland',
+  'wales',
+  'northern-ireland',
+  '/ni-',
+  '/occupation-contract',
+  '/written-statement',
+  '/private-residential-tenancy',
+  '/scottish-',
+  '/prt-',
+  '/joint-prt',
+  '/common-prt',
+] as const;
+
+function isNonEnglandPublicDiscoveryPath(path: string): boolean {
+  return NON_ENGLAND_PUBLIC_DISCOVERY_PATTERNS.some((pattern) => path.includes(pattern));
+}
+
 // Force this metadata route to run dynamically (avoids static render + fetch cache issues).
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -390,6 +408,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const isIndexablePath = (path: string) =>
     !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
+    !isNonEnglandPublicDiscoveryPath(path) &&
     !noindexPaths.includes(path) &&
     !englandOnlyDiscoveryExclusions.has(path) &&
     !retiredPaths.has(path) &&

@@ -19,7 +19,7 @@ const steps = [
     iconSrc: "/images/howitworks3.webp",
     title: "Generate and Act",
     description:
-      "Generate the documents, service guidance, and next-step checklist you need to move the case forward tonight.",
+      "Generate the documents, service guidance, and next-step checklist you need to move the case forward.",
     time: "Instant",
   },
 ];

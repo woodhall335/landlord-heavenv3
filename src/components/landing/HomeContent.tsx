@@ -85,8 +85,8 @@ const routeSelectionCards: RouteCard[] = [
     eyebrow: 'Serve the notice first',
     description:
       'Prepare a Section 8 notice for property in England with checks on grounds, dates, service, and compliance before you serve it.',
-    outcome: 'Use this when you need to serve notice.',
-    ctaLabel: 'Start Section 8 notice',
+    outcome: 'Best when you need to serve notice before you can move toward possession.',
+    ctaLabel: 'Prepare Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     imageSrc: '/images/notice_bundles.webp',
     imageAlt: 'Section 8 notice document preview',
@@ -97,8 +97,8 @@ const routeSelectionCards: RouteCard[] = [
     eyebrow: 'Prepare for court',
     description:
       'Prepare your notice, N5, N119, and possession claim paperwork together when the case needs to move beyond notice.',
-    outcome: 'Use this when you need the full notice-to-court route.',
-    ctaLabel: 'Start court pack',
+    outcome: 'Best when you need the notice and court paperwork working together.',
+    ctaLabel: 'Prepare court pack',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     imageSrc: '/images/eviction_packs.webp',
     imageAlt: 'Complete eviction pack preview',
@@ -109,8 +109,8 @@ const routeSelectionCards: RouteCard[] = [
     eyebrow: 'Recover what is owed',
     description:
       'Recover unpaid rent, bills, damage, and guarantor debt with documents built for an England money claim.',
-    outcome: 'Use this when you need to recover money owed.',
-    ctaLabel: 'Start money claim',
+    outcome: 'Best when the debt needs dealing with separately from possession.',
+    ctaLabel: 'Recover unpaid rent',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
     imageSrc: '/images/money_claims.webp',
     imageAlt: 'Money claim pack preview',
@@ -121,8 +121,8 @@ const routeSelectionCards: RouteCard[] = [
     eyebrow: 'Increase the rent properly',
     description:
       'Prepare a Section 13 / Form 4A rent increase for property in England with guidance on dates, notice periods, and supporting steps.',
-    outcome: 'Use this when you need to increase the rent lawfully.',
-    ctaLabel: 'Increase rent',
+    outcome: 'Best when you need to raise the rent lawfully with the right notice.',
+    ctaLabel: 'Prepare rent increase',
     href: '/rent-increase',
     imageSrc: '/images/Statutory-change.webp',
     imageAlt: 'Rent increase support illustration',
@@ -133,8 +133,8 @@ const routeSelectionCards: RouteCard[] = [
     eyebrow: 'Put the right agreement in place',
     description:
       'Choose the right agreement for a standard, premium, student, HMO / shared house, or lodger let in England.',
-    outcome: 'Use this when you are setting up a tenancy or replacing old paperwork.',
-    ctaLabel: 'Choose agreement',
+    outcome: 'Best when you are starting a tenancy or replacing old paperwork.',
+    ctaLabel: 'Choose tenancy agreement',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
     imageSrc: '/images/tenancy_agreements.webp',
     imageAlt: 'England tenancy agreement product preview',
@@ -144,25 +144,25 @@ const routeSelectionCards: RouteCard[] = [
 
 const whyLandlordsUseCards: ValueCard[] = [
   {
-    title: 'Choose the right legal step first',
+    title: 'Start with the step that fits the problem',
     body:
-      'We help you work out whether you need a Section 8 notice, court papers, a money claim, a rent increase, or a new tenancy agreement.',
+      'We help you work out whether you need a Section 8 notice, court papers, a money claim, a rent increase, or a new tenancy agreement before you lose time on the wrong route.',
     imageSrc: '/images/decision_image.webp',
     imageAlt: 'Landlord deciding the right route',
     icon: RiFlashlightLine,
   },
   {
-    title: 'Catch problems before they cost you time',
+    title: 'Catch weak spots before they slow you down',
     body:
-      'We flag the details that often cause notices, claims, court forms, and rent increase paperwork to go wrong so you can fix them early.',
+      'We flag the details that often cause notices, claims, court forms, and rent increase paperwork to go wrong so you can fix them before you serve, file, or send anything.',
     imageSrc: '/images/validation_image.webp',
     imageAlt: 'Landlord validation illustration',
     icon: RiShieldCheckLine,
   },
   {
-    title: 'Get documents that match the job',
+    title: 'Get paperwork that holds together',
     body:
-      'Your paperwork should match the problem you are dealing with, whether that is possession, arrears, a rent increase, or a new tenancy.',
+      'Your paperwork should match the problem you are dealing with, whether that is possession, arrears, a rent increase, or a new tenancy, and it should read like one joined-up file.',
     imageSrc: '/images/what_you_get.webp',
     imageAlt: 'Generated landlord documents and workflow preview',
     icon: RiFileCheckLine,
@@ -171,9 +171,9 @@ const whyLandlordsUseCards: ValueCard[] = [
 
 const previewCards: PreviewCard[] = [
   {
-    title: 'Section 8 notice documents ready to review and print',
+    title: 'Section 8 notice file ready to review',
     body:
-      'If you need to serve notice, you can work through the key details and generate the paperwork without jumping between different guides and forms.',
+      'If you need to serve notice, you can work through the key details and prepare the paperwork without jumping between guides, forms, and checklists.',
     imageSrc: '/images/notice_bundles.webp',
     imageAlt: 'Eviction notice generator preview',
     bullets: [
@@ -183,7 +183,7 @@ const previewCards: PreviewCard[] = [
     ],
   },
   {
-    title: 'Court paperwork for the next stage',
+    title: 'Court possession paperwork in one file',
     body:
       'When the case has moved beyond notice, you can prepare the main possession forms and keep the next steps together in one place.',
     imageSrc: '/images/complete pack.png',
@@ -195,9 +195,9 @@ const previewCards: PreviewCard[] = [
     ],
   },
   {
-    title: 'Other landlord documents when possession is not the issue',
+    title: 'Debt, rent, and tenancy paperwork from the same account',
     body:
-      'You can also prepare money claim documents, rent increase paperwork, and tenancy agreements from the same account.',
+      'You can also prepare money claim documents, rent increase paperwork, and tenancy agreements without switching to a different tool.',
     imageSrc: '/images/laptop.webp',
     imageAlt: 'Landlord Heaven product previews on a laptop',
     bullets: [
@@ -211,7 +211,7 @@ const previewCards: PreviewCard[] = [
 const workflowSteps: WorkflowStep[] = [
   {
     step: '01',
-    title: 'Choose what you need',
+    title: 'Pick the landlord job you need done',
     body:
       'Start with a Section 8 notice, a court pack, a money claim, a rent increase, or a tenancy agreement.',
     imageSrc: '/images/start-eviction.webp',
@@ -219,7 +219,7 @@ const workflowSteps: WorkflowStep[] = [
   },
   {
     step: '02',
-    title: 'Answer a few straightforward questions',
+    title: 'Answer the key details',
     body:
       'We ask for the details needed to prepare the right documents and flag issues before you pay or print.',
     imageSrc: '/images/eviction-timeline.webp',
@@ -227,7 +227,7 @@ const workflowSteps: WorkflowStep[] = [
   },
   {
     step: '03',
-    title: 'Download paperwork that matches the job',
+    title: 'Review and download the paperwork',
     body:
       'You get documents that match the task in front of you and are ready to review, save, and print.',
     imageSrc: '/images/create-tenancy-agreements.webp',
@@ -306,14 +306,14 @@ export default function HomeContent() {
           <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'public-subtle-grid px-6 py-8 md:px-10 md:py-10')}>
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
-                <span className="public-eyebrow">Choose what you need</span>
+                <span className="public-eyebrow">Choose the landlord job</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                  Get the right landlord documents without guessing
+                  Start with the right product for the problem
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  Whether you need to serve a Section 8 notice, start court action,
-                  recover money, increase the rent, or set up a new tenancy, you
-                  can start with the right paperwork here.
+                  Serve notice, prepare for court, recover debt, increase the rent,
+                  or put the right agreement in place. The job should be obvious
+                  from the first screen.
                 </p>
               </div>
               <div className="public-stat-card px-5 py-4">
@@ -324,7 +324,7 @@ export default function HomeContent() {
                   {reviewSummary}
                 </p>
                 <p className="mt-1 text-sm text-[#5d5672]">
-                  Reviews from landlords using Landlord Heaven.
+                  Based on landlord reviews across the product.
                 </p>
               </div>
             </div>
@@ -346,16 +346,16 @@ export default function HomeContent() {
 
       <section className="pb-16 pt-4 md:pb-20">
         <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <span className="public-eyebrow">Why landlords use us</span>
-            <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-              Clear answers matter when something has gone wrong
-            </h2>
-            <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-              If a tenant stops paying, will not leave, or your paperwork needs
-              updating, you need to know what to do next and which documents to use.
-            </p>
-          </div>
+            <div className="mx-auto max-w-3xl text-center">
+              <span className="public-eyebrow">Why landlords use us</span>
+              <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
+                When the paperwork matters, clarity matters
+              </h2>
+              <p className="mt-4 text-lg leading-8 text-[#5d5672]">
+                If a tenant stops paying, will not leave, or the paperwork needs
+                updating, you need to know what to do next and which documents to use.
+              </p>
+            </div>
 
           <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {whyLandlordsUseCards.map((card) => {
@@ -405,17 +405,17 @@ export default function HomeContent() {
               <div>
                 <span className="public-eyebrow">What you get</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                  See what each product gives you
+                  See what you will actually get
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  Each product should make it clear what it helps with, what
-                  documents are included, and what to do next.
+                  Each product page should make it clear what it helps with, what
+                  the pack includes, and what to do next.
                 </p>
                 <div className="mt-6 space-y-4">
                   {[
                     'Section 8 notices with the key checks up front',
-                    'Court forms and guidance when you need to go beyond notice',
-                    'Money claim, rent increase, and tenancy paperwork for other landlord jobs',
+                    'Court forms and guidance when the case needs to move beyond notice',
+                    'Money claim, rent increase, and tenancy paperwork for the rest of the landlord job',
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3 text-[#2c2143]">
                       <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#7c3aed]" />
@@ -477,7 +477,7 @@ export default function HomeContent() {
             <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
               <span className="public-eyebrow">How it works</span>
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                Tell us what you need and get the right paperwork
+                Choose the job and get the paperwork moving
               </h2>
               <div className="mt-8 space-y-5">
                 {workflowSteps.map((step) => (
@@ -551,7 +551,7 @@ export default function HomeContent() {
             <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
               <span className="public-eyebrow">Landlord reviews</span>
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-4xl">
-                Trusted by landlords who need documents quickly
+                Trusted by landlords who want the paperwork right first time
               </h2>
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 <div className="public-stat-card px-5 py-5">
@@ -562,7 +562,7 @@ export default function HomeContent() {
                     {reviewSummary}
                   </p>
                   <p className="mt-2 text-sm text-[#5d5672]">
-                    Average rating from landlords using Landlord Heaven.
+                    Average landlord rating across the product.
                   </p>
                 </div>
                 <div className="public-stat-card px-5 py-5">
@@ -576,8 +576,8 @@ export default function HomeContent() {
                 </div>
               </div>
               <p className="mt-6 text-[15px] leading-7 text-[#5d5672]">
-                When time matters, landlords want to know the product is
-                straightforward, reliable, and worth paying for.
+                When something has gone wrong, landlords want a product that feels
+                clear, current, and worth paying for.
               </p>
             </div>
 
@@ -594,13 +594,13 @@ export default function HomeContent() {
                 </div>
                 <div>
                   <h3 className="text-2xl font-semibold text-[#1d1532]">
-                    See the product before you start
+                    See the product before you commit
                   </h3>
                   <div className="mt-5 space-y-4">
                     {[
+                      'Real sample packs and previews before you buy',
                       'Clear product pages that explain what is included',
-                      'Document and screen previews before you commit',
-                      'A next step that feels obvious from the first page',
+                      'A next step that feels obvious from the first screen',
                     ].map((item) => (
                       <div key={item} className="flex items-start gap-3">
                         <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#7c3aed]" />
@@ -619,15 +619,15 @@ export default function HomeContent() {
         <Container>
           <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'px-6 py-10 text-center md:px-12 md:py-12')}>
             <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
-              Start tonight
+              Start now
             </span>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-white md:text-5xl">
-              Choose the route that fits the tenancy problem and move forward
+              Pick the right product and get moving
             </h2>
             <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-white/78">
-              Whether you need a Section 8 notice, the full court possession route,
-              a money claim, a rent increase file, or the right agreement for a new
-              let, the next step should feel clear from the first screen.
+              If the tenant is not paying, will not leave, or you need to sort the
+              tenancy paperwork, you should be able to find the right product and
+              start it in a few minutes.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href="/wizard?topic=eviction&src=seo_homepage" className="hero-btn-primary">
@@ -638,8 +638,8 @@ export default function HomeContent() {
               </Link>
             </div>
             <p className="mt-5 text-sm text-white/66">
-              Built for landlords with property in England. Clearer routes, stronger
-              checks, and documents ready to print.
+              For landlords with property in England. Clear routes, strong checks,
+              and documents ready to review and print.
             </p>
           </div>
         </Container>

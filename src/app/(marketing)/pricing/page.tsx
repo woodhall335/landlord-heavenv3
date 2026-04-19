@@ -330,7 +330,7 @@ export default function PricingPage() {
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5d5672]">
               Many landlords are not trying to replace specialist advice in a
               genuinely complex case. They are trying to get the right paperwork
-              started tonight and avoid paying solicitor rates just to prepare
+              started now and avoid paying solicitor rates just to prepare
               the first documents.
             </p>
             <div className="mt-6 overflow-x-auto">

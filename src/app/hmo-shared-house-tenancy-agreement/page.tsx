@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { buildTenancyPackBreakdown } from '@/lib/marketing/tenancy-pack-breakdowns';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -10,29 +12,8 @@ const canonicalUrl = getCanonicalUrl('/hmo-shared-house-tenancy-agreement');
 const englandHubHref = '/products/ast';
 const hmoWizardHref =
   '/wizard?product=england_hmo_shared_house_tenancy_agreement&src=hmo_shared_page&topic=tenancy';
-
-const hmoPackDocuments = getResidentialDocumentList('england_hmo_shared_house_tenancy_agreement', {
-  englandTenancyPurpose: 'new_agreement',
-  depositTaken: true,
-});
-
-function getPackDocument(documentId: string) {
-  return hmoPackDocuments.find((document) => document.id === documentId);
-}
-
-const hmoPackHighlights = [
-  getPackDocument('england_hmo_shared_house_tenancy_agreement'),
-  getPackDocument('england_hmo_house_rules_appendix'),
-  getPackDocument('england_keys_handover_record'),
-  getPackDocument('england_utilities_handover_sheet'),
-  getPackDocument('england_tenancy_variation_record'),
-]
-  .filter((document): document is NonNullable<(typeof hmoPackDocuments)[number]> => Boolean(document))
-  .map((document) => ({
-    title: document.title,
-    description: document.description,
-    supportingLabel: document.pages,
-  }));
+const hmoPackBreakdown = buildTenancyPackBreakdown('england_hmo_shared_house_tenancy_agreement');
+const hmoSampleProof = getGoldenPackProofData('england_hmo_shared_house_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -103,7 +84,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           'Built around the current England route from 1 May 2026 for the main tenancy wording.',
           'Captures shared-house and HMO-style occupation more directly in the guided flow.',
           'Keeps communal-living wording separate from ordinary residential drafting.',
-          'Includes practical support documents for shared-house setup, handover, and ongoing variation.',
+          'Includes practical file paperwork for shared-house setup, handover, and ongoing variation.',
           'If the landlord lives in the property and shares the home with the occupier, compare the Lodger route instead.',
         ]}
         keywordTargets={[
@@ -126,7 +107,6 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           'the let is a straightforward whole-property residential tenancy and does not need communal-area or sharer wording',
           'the real issue is a student-focused household with guarantors, replacement requests, and end-of-term turnover rather than shared-house management itself',
         ]}
-        packHighlights={hmoPackHighlights}
         routeComparison={[
           {
             title: 'Premium Tenancy Agreement',
@@ -157,6 +137,88 @@ export default function HmoSharedHouseTenancyAgreementPage() {
             ctaLabel: 'Compare Lodger',
           },
         ]}
+        salesContent={{
+          packIntro:
+            'The HMO / Shared House pack is built for communal occupation. It gives you the main agreement plus the rules, handover, and support paperwork that shared houses need if the landlord wants the file to match how the property is really run.',
+          defaultPackItems: hmoPackBreakdown.defaultItems,
+          conditionalPackItems: hmoPackBreakdown.conditionalItems,
+          conditionalTitle: 'Included when your answers require it',
+          conditionalIntro:
+            'Where the tenancy includes a deposit or guarantor support, the pack adds the extra pack paperwork needed to keep those points properly covered as well.',
+          sampleProof: hmoSampleProof ? <GoldenPackProof data={hmoSampleProof} /> : undefined,
+          whyYouNeedThis: {
+            title: 'Why shared houses need a fuller file',
+            intro:
+              'A shared-house let does not just need a main agreement. It also needs rules and records that deal with the communal reality of the property, otherwise the paperwork misses the part of the tenancy that usually causes the most friction.',
+            cards: [
+              {
+                title: 'Communal occupation needs written rules',
+                body:
+                  'If shared spaces, visitors, cleaning, waste, and quiet hours are left unwritten, the landlord has less to point back to when the house starts drifting into conflict.',
+              },
+              {
+                title: 'Shared houses create more everyday evidence points',
+                body:
+                  'Keys, handover, utilities, and later changes matter more because multiple occupiers are using the property at the same time.',
+              },
+              {
+                title: 'Standard paperwork is often too broad for a shared house',
+                body:
+                  'If a communal let is documented like a simple whole-property tenancy, the file can miss the rules that make shared living manageable in practice.',
+              },
+            ],
+          },
+          howThisHelps: {
+            title: 'How this helps you',
+            intro:
+              'The pack gives the landlord a shared-house file that is clearer for occupiers, easier to manage day to day, and easier to rely on when communal issues appear.',
+            cards: [
+              {
+                title: 'It makes the house rules visible',
+                body:
+                  'The appendix keeps the shared-living expectations where everyone can see them instead of relying on informal messages or assumptions.',
+              },
+              {
+                title: 'It keeps the practical records together',
+                body:
+                  'The handover, utilities, and variation documents help the landlord keep the communal tenancy file in one place.',
+              },
+              {
+                title: 'It matches the reality of shared occupation',
+                body:
+                  'The pack is built for sharers and communal areas, not for an ordinary household being forced into a standard template.',
+              },
+            ],
+          },
+          howItWorks: {
+            title: 'How it works',
+            intro:
+              'The workflow captures the shared-house details that need to be on the file before the occupiers move in.',
+            steps: [
+              {
+                step: 'Step 01',
+                title: 'Add the property and sharer details',
+                body:
+                  'Enter the key tenancy facts, the shared-house setup, and the way the property will be occupied.',
+              },
+              {
+                step: 'Step 02',
+                title: 'Answer the communal-living questions',
+                body:
+                  'Work through the rules, keys, utilities, deposit, and other shared-house points so the pack includes the right supporting paperwork.',
+              },
+              {
+                step: 'Step 03',
+                title: 'Generate the full HMO / Shared House pack',
+                body:
+                  'Download the agreement, the shared-house appendix, and the pack paperwork as one England communal-living file.',
+              },
+            ],
+          },
+          ctaTitle: 'Start the HMO / Shared House agreement pack',
+          ctaBody:
+            'Use this route when the property is being shared and you want the agreement, the communal rules, and the supporting records prepared together from the start.',
+        }}
         faqs={[
           {
             question: 'Why use an HMO / Shared House agreement instead of a general residential agreement?',

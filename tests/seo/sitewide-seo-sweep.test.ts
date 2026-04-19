@@ -47,6 +47,22 @@ async function getSitemapPathnames(): Promise<string[]> {
 }
 
 describe('sitewide SEO sweep coverage', () => {
+  it('keeps non-England public acquisition routes out of the sitemap', async () => {
+    const sitemapPaths = await getSitemapPathnames();
+
+    [
+      '/wales-tenancy-agreement-template',
+      '/private-residential-tenancy-agreement-template',
+      '/northern-ireland-tenancy-agreement-template',
+      '/eviction-process-wales',
+      '/eviction-process-scotland',
+      '/occupation-contract-template-wales',
+      '/ni-tenancy-agreement-template-free',
+    ].forEach((pathname) => {
+      expect(sitemapPaths).not.toContain(pathname);
+    });
+  });
+
   it('classifies every sweepable static public route with taxonomy, an owner contract, or a supplemental route contract', async () => {
     const routes = await discoverSweepableStaticSeoRoutes();
     const outsideSweep = await getUnclassifiedSweepableStaticSeoRoutes();
