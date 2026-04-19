@@ -5,7 +5,7 @@ a significant litigation risk, and matters that are primarily advisory or good p
 Property 16 Willow Mews York YO24 3HX
 Tenancy start date 1 January 2024
 Notice type Form 3A notice
-Generated 17 April 2026
+Generated 19 April 2026
 CRITICAL BLOCKER
 Typically blocks a Section 21 route
 unless corrected first.
@@ -44,6 +44,6 @@ Practical Summary
 Section 8 route: Compliance issues do not all carry the same consequence. Some do not automatically invalidate
 the notice, but they can still weaken the claim, increase costs exposure, or create separate landlord liability. Resolve
 what you can and keep the file evidence clear.
-Generated: 17 April 2026
+Generated: 19 April 2026
 
 -- 2 of 2 --

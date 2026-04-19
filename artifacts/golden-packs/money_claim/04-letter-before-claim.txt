@@ -1,5 +1,5 @@
 Letter Before Claim
-Date: 17 April 2026
+Date: 19 April 2026
 To:
 Tom Tenant
 2 High Street London
@@ -26,8 +26,8 @@ What will happen if you do not pay or respond.
 Rent arrears: £2430.00
 Property damage / other costs: £380.00
 Other charges: £80.00
-Interest to date (8% per annum): £46.62
-TOTAL AMOUNT OWED: £2936.62
+Interest to date (8% per annum): £47.88
+TOTAL AMOUNT OWED: £2937.88
 Interest continues to accrue at £0.63 per day until the debt is paid in full.
 2. Breakdown of the Debt
 Rent Arrears
@@ -46,14 +46,14 @@ Interest
 I am entitled to claim interest on the outstanding rent and costs pursuant to section 69 of the
 County Courts Act 1984. Interest is calculated at 8% per annum from 2 February 2026 and
 continues to accrue at £0.63 per day until payment.
-The interest calculation to 17 April 2026 is £46.62. The full working is attached as Appendix 2.
+The interest calculation to 19 April 2026 is £47.88. The full working is attached as Appendix 2.
 3. What You Must Do Now
-You have 30 days from the date of this letter (i.e., until 17 May 2026) to do ONE of the
+You have 30 days from the date of this letter (i.e., until 19 May 2026) to do ONE of the
 following:
 
 -- 2 of 5 --
 
-1. Pay the full amount owed (£2936.62) to avoid court proceedings.
+1. Pay the full amount owed (£2937.88) to avoid court proceedings.
 2. Contact me to discuss a payment arrangement if you cannot pay in full.
 3. Complete the enclosed Reply Form if you dispute the debt or need time to seek advice.
 Payment Methods
@@ -86,7 +86,7 @@ If I issue a court claim:
 
 -- 3 of 5 --
 
-The claim will be for the full amount owed (£2936.62) plus court fees and legal costs.
+The claim will be for the full amount owed (£2937.88) plus court fees and legal costs.
 You will have to pay a court fee of approximately £205.00.
 Interest will continue to accrue at £0.63 per day.
 If judgment is entered against you, it will damage your credit rating for six years.

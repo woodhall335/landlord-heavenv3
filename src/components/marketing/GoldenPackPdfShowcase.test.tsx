@@ -66,7 +66,7 @@ describe('GoldenPackPdfShowcase', () => {
     ).toHaveAttribute('src', '/sample/arrears/embed');
     expect(screen.getAllByText(/Period-by-period breakdown of rent arrears\./i).length).toBeGreaterThan(0);
     expect(
-      screen.getByText(/Schedule of arrears showing each missed rent period and running balance\./i)
-    ).toBeInTheDocument();
+      screen.queryByText(/Schedule of arrears showing each missed rent period and running balance\./i)
+    ).not.toBeInTheDocument();
   });
 });

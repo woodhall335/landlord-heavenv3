@@ -1,6 +1,6 @@
 CERTIFICATE OF SERVICE
 Proof of notice service for possession proceedings
-Reference: POS-golden-complete-pack-001-20260417
+Reference: POS-golden-complete-pack-001-20260419
 I, Daniel Mercer, certify that the notice described below was served in the manner indicated
 on the tenant at:
 16 Willow Mews York YO24 3HX
@@ -8,9 +8,9 @@ Notice details
 Notice type Form 3A notice
 Tenant name(s) Ivy Carleton
 Service address 16 Willow Mews York YO24 3HX
-Date of service 17 April 2026
-Notice expiry date 15 May 2026
-Earliest proceedings date 15 May 2026
+Date of service 19 April 2026
+Notice expiry date 17 May 2026
+Earliest proceedings date 17 May 2026
 Method of service
 Hand delivery through the letterbox or directly to the tenant
 First class post
@@ -30,6 +30,6 @@ Landlord / agent
 Signature
 Print name
 Date
-Generated: 17 April 2026
+Generated: 19 April 2026
 
 -- 2 of 2 --

@@ -4,7 +4,7 @@ Property: 16 Willow Mews York YO24 3HX
 Defendant: Ivy Carleton
 Claimant: Daniel Mercer
 Claim Reference: golden-notice-only-001
-Schedule Date: 17 April 2026
+Schedule Date: 19 April 2026
 Arrears Summary
 Rent Amount
 £1200.00 monthly
@@ -24,6 +24,6 @@ payments to the oldest outstanding rent periods first. This is the standard cour
 allocation.
 Evidence Requirements: Attach proof of payments received, bank statements, and rent ledgers behind this
 schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
-Generated: 17 April 2026
+Generated: 19 April 2026
 
 -- 1 of 1 --

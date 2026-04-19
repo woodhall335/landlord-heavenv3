@@ -143,17 +143,6 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
               </p>
             </div>
 
-            {selectedEntry.excerpt ? (
-              <div className="mb-3 rounded-[1rem] border border-[#E3DBFF] bg-white px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6F54C8]">
-                  Sample text preview
-                </p>
-                <blockquote className="mt-2 text-sm leading-7 text-[#4F3B7A] md:text-base">
-                  "{selectedEntry.excerpt}"
-                </blockquote>
-              </div>
-            ) : null}
-
             <div className="overflow-hidden rounded-[1.1rem] border border-[#E3DBFF] bg-white">
               {selectedEntry.embedHref ? (
                 <iframe

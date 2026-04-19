@@ -21,7 +21,7 @@ Deposit ID/Reference: DPS-EXAMPLE-2026-0001
 Type of Protection: Insured
 (Insured - deposit held by landlord, insured by scheme)
 
--- 1 of 6 --
+-- 1 of 7 --
 
 SCHEME INFORMATION
 Scheme Name: DPS
@@ -33,37 +33,54 @@ Website: https://www.depositprotection.com/
 Scheme Registration Number: DPS-EXAMPLE-2026-0001
 DEPOSIT PROTECTION CONFIRMATION
 This certificate confirms that:
-1. The deposit of £1500.00 has been protected in DPS
-1. The deposit was protected on 2 May 2026 (within 30 days of receipt)
-1. The tenant(s) have been provided with the prescribed information as required by law
-1. The deposit reference number is DPS-EXAMPLE-2026-0001
+The deposit of £1500.00 has been protected in DPS
+The deposit was protected on 2 May 2026 (within 30 days of receipt)
+The tenant(s) have been provided with the prescribed information as required by law
+The deposit reference number is DPS-EXAMPLE-2026-0001
 WHAT THIS MEANS
 Protection
-Your deposit is protected in a government-approved scheme. This means: - Your deposit is safe -
-You can challenge unfair deductions - There is a free dispute resolution service - The landlord faces
-penalties if they do not protect your deposit
+Your deposit is protected in a government-approved scheme. This means:
+Your deposit is safe
+You can challenge unfair deductions
+There is a free dispute resolution service
+The landlord faces penalties if they do not protect your deposit
 At End of Tenancy
-When the tenancy ends: 1. You and the landlord will agree deposit deductions (if any) 2. If you
-agree, the deposit will be returned (minus agreed deductions) 3. If you disagree, you can use the
-free Alternative Dispute Resolution (ADR) service 4. The ADR decision is binding on both parties
+When the tenancy ends:
+1. You and the landlord will agree deposit deductions (if any)
+2. If you agree, the deposit will be returned (minus agreed deductions)
+3. If you disagree, you can use the free Alternative Dispute Resolution (ADR) service
+4. The ADR decision is binding on both parties
+
+-- 2 of 7 --
+
 Disputes
-If there is a dispute about deductions: - Contact the scheme's ADR service - Submit evidence
-(photos, inventory, receipts) - An independent adjudicator will decide - The decision is usually made
-within 28 days - Both parties must accept the decision
-
--- 2 of 6 --
-
+If there is a dispute about deductions:
+Contact the scheme's ADR service
+Submit evidence (photos, inventory, receipts)
+An independent adjudicator will decide
+The decision is usually made within 28 days
+Both parties must accept the decision
 IMPORTANT INFORMATION
 Landlord's Obligations
-The landlord must: - Protect your deposit within 30 days - Provide prescribed information within 30
-days - Return your deposit within 10 days of agreement - Use ADR if there is a dispute - Provide
-evidence for any deductions claimed
+The landlord must:
+Protect your deposit within 30 days
+Provide prescribed information within 30 days
+Return your deposit within 10 days of agreement
+Use ADR if there is a dispute
+Provide evidence for any deductions claimed
 Your Rights
-You have the right to: - Know your deposit is protected - Receive prescribed information -
-Challenge unfair deductions - Use the free ADR service - Receive your deposit back promptly
+You have the right to:
+Know your deposit is protected
+Receive prescribed information
+Challenge unfair deductions
+Use the free ADR service
+Receive your deposit back promptly
 Penalties for Non-Protection
 If a landlord fails to protect your deposit: - You can claim 1-3x the deposit value - The landlord may
 face deposit-compliance issues in later possession proceedings - The landlord may face court action
+
+-- 3 of 7 --
+
 SCHEME CONTACT FOR DISPUTES
 If you have a dispute about deposit deductions at the end of the tenancy:
 DPS ADR Service
@@ -80,9 +97,6 @@ How the deposit is protected
 Amount of deposit
 Address of the property
 Why deductions might be made
-
--- 3 of 6 --
-
 How to apply for the return of the deposit
 What to do if a dispute arises
 ADR service information
@@ -95,6 +109,9 @@ The deposit may be used at the end of the tenancy for:
 - Fixtures and fittings
 - Furnishings
 3. Cleaning costs if the property is not returned reasonably clean
+
+-- 4 of 7 --
+
 4. Loss of keys or other security devices
 5. Other breaches of the tenancy agreement
 Fair wear and tear is excluded - normal deterioration from ordinary use over time.
@@ -109,9 +126,6 @@ Step 6: Provide a forwarding address
 Step 7: Attend the check-out inspection if possible
 Step 8: Agree deductions with the landlord if any are proposed
 Step 9: Receive the deposit return (usually within 10 days)
-
--- 4 of 6 --
-
 IF YOU DISAGREE WITH DEDUCTIONS
 Step 1: Raise your objection with the landlord in writing
 Step 2: Provide your evidence (photos, inventory, receipts for cleaning)
@@ -122,6 +136,9 @@ Step 6: The adjudicator reviews both parties' evidence
 Step 7: A decision is made (usually within 28 days)
 Step 8: The scheme releases the deposit according to the decision
 The ADR service is free and binding.
+
+-- 5 of 7 --
+
 CERTIFICATE
 This certifies that the deposit paid by the above-named tenant(s) has been protected in accordance
 with the Housing Act 2004.
@@ -135,14 +152,11 @@ I/We confirm receipt of:
 2. The prescribed information
 3. Details of how my/our deposit is protected
 I/We understand:
-- My/our deposit is protected in DPS
-- I/we can challenge deductions using free ADR
-- I/we must provide evidence for any dispute
-- The deposit will be returned promptly if no valid deductions apply
+My/our deposit is protected in DPS
+I/we can challenge deductions using free ADR
+I/we must provide evidence for any dispute
+The deposit will be returned promptly if no valid deductions apply
 Tenant 1:
-
--- 5 of 6 --
-
 Signed: _________________________
 Name: Alice Tenant
 Date: _________________________
@@ -150,10 +164,13 @@ KEEP THIS CERTIFICATE SAFE
 You will need this information when your tenancy ends. Keep it with your tenancy agreement.
 If you lose it, you can contact the scheme directly using your deposit reference: DPS-EXAMPLE-
 2026-0001
+
+-- 6 of 7 --
+
 Generated by Landlord Heaven
-Document Reference: DOC-MO3CRVGX-ODHCGU
-Generated: 2026-04-17T20:20:40.592Z
+Document Reference: DOC-MO5OC63Q-JSXE4Y
+Generated: 2026-04-19T11:19:55.622Z
 LEGAL BASIS: Housing Act 2004, The Housing (Tenancy Deposits) (Prescribed Information)
 Order 2007
 
--- 6 of 6 --
+-- 7 of 7 --

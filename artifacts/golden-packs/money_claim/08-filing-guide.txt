@@ -2,9 +2,9 @@ Money Claims Filing Guide
 Step-by-step instructions for filing your rent arrears claim in England
 Overview of Your Claim
 Claim type: Money claim (rent arrears and damages)
-Claim amount: £2936.62
+Claim amount: £2937.88
 Court fee: £205.00
-Total (claim + fee): £3141.62
+Total (claim + fee): £3142.88
 Before You File
 ✅ Checklist: Have you completed these steps?
 ☐ Sent a Letter Before Claim to the defendant at least 30 days ago
@@ -58,8 +58,8 @@ Address: 2 High Street London
 Postcode: E1 2BB
 Step 5: Enter claim amount
 ⚠ IMPORTANT: In MCOL, enter amounts as numbers only (no £ symbol). For example, enter
-2936.62, not "£2936.62".
-Claim amount: 2936.62 (enter this number)
+2937.88, not "£2937.88".
+Claim amount: 2937.88 (enter this number)
 Court fee (paid online): £205.00 (calculated automatically by MCOL)
 Step 6: Enter brief details of claim
 In the "Brief details of claim" box, enter a short summary (maximum 1,080 characters). Always
@@ -123,7 +123,7 @@ Print and attach the following in this order:
 6. Photos of damage and repair quotes/invoices
 Tip: Use a stapler (top left corner) or treasury tag. Do not use paperclips.
 Step 3: Calculate the court fee
-Your claim amount is £2936.62, so the court fee is £205.00.
+Your claim amount is £2937.88, so the court fee is £205.00.
 Court fees are based on claim value:
 Claim Amount Court Fee (Online) Court Fee (Paper)
 Up to £300 £35 £35
@@ -187,6 +187,6 @@ County Court Money Claims Centre: 0300 123 1372
 HMCTS Guidance: www.gov.uk/make-money-claim
 This guide is for information only and does not constitute legal advice. If you need legal advice,
 contact a solicitor.
-Generated on 17 April 2026 • Document reference: golden-money-claim-001
+Generated on 19 April 2026 • Document reference: golden-money-claim-001
 
 -- 7 of 7 --

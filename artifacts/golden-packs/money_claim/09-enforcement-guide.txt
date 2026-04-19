@@ -3,7 +3,7 @@ What to Do After Obtaining a County Court Judgment
 Money Claim – Post-Judgment
 Claimant: Alice Landlord
 Defendant: Tom Tenant
-Claim Amount: £2936.62
+Claim Amount: £2937.88
 Important Notice: This guide provides general information only. It is NOT legal advice and does not constitute a
 substitute for advice from a regulated solicitor or legal professional. Enforcement options depend on your specific
 circumstances, the defendant's financial situation, and judicial decisions. Always consider taking independent legal
@@ -149,7 +149,7 @@ If one method fails, you can try another. For example, if Attachment of Earnings
 employed, try a Charging Order if they own property.
 Next Steps
 Recommended Action Plan
-Based on your claim for £2936.62 against Tom Tenant:
+Based on your claim for £2937.88 against Tom Tenant:
 1. Wait 14 days from judgment to allow voluntary payment
 
 -- 4 of 5 --
@@ -175,7 +175,7 @@ https://www.citizensadvice.org.uk
 Money Claims Online (MCOL):
 https://www.moneyclaim.gov.uk
 This guide is for information only and does not constitute legal advice. If you need legal advice, contact a solicitor.
-Generated: 17 April 2026
+Generated: 19 April 2026
 Landlord Heaven Money Claim Pack | England
 This guide supports enforcement action following a County Court Judgment.
 

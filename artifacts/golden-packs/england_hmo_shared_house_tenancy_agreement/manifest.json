@@ -142,7 +142,7 @@
         "html": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.html"
       },
       "extraction": {
-        "pageCount": 9,
+        "pageCount": 10,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

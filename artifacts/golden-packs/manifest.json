@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-17T20:22:43.542Z",
+  "generatedAt": "2026-04-19T11:35:18.210Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -882,7 +882,7 @@
             "html": "england_standard_tenancy_agreement/deposit_protection_certificate.html"
           },
           "extraction": {
-            "pageCount": 6,
+            "pageCount": 7,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1034,7 +1034,7 @@
             "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html"
           },
           "extraction": {
-            "pageCount": 6,
+            "pageCount": 7,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1204,7 +1204,7 @@
             "html": "england_student_tenancy_agreement/deposit_protection_certificate.html"
           },
           "extraction": {
-            "pageCount": 6,
+            "pageCount": 7,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1410,7 +1410,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.html"
           },
           "extraction": {
-            "pageCount": 9,
+            "pageCount": 10,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"

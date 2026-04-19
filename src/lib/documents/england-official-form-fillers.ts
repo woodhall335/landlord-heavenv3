@@ -140,6 +140,32 @@ function splitAddress(address?: string | null): string[] {
     .filter(Boolean);
 }
 
+const UK_POSTCODE_REGEX = /\b([A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2})\b/i;
+
+function normalizePostcode(postcode?: string | null): string {
+  if (!postcode) return '';
+  const compact = String(postcode).toUpperCase().replace(/\s+/g, '');
+  if (compact.length < 5) {
+    return compact;
+  }
+  return `${compact.slice(0, -3)} ${compact.slice(-3)}`;
+}
+
+function extractPostcodeFromLines(lines: string[]): string {
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    const match = lines[index]?.match(UK_POSTCODE_REGEX);
+    if (match?.[1]) {
+      return normalizePostcode(match[1]);
+    }
+  }
+  return '';
+}
+
+function stripPostcodeFromLine(line: string, postcode: string): string {
+  if (!line || !postcode) return line;
+  return line.replace(UK_POSTCODE_REGEX, '').replace(/\s{2,}/g, ' ').trim().replace(/,$/, '').trim();
+}
+
 function getAddressParts(data: OfficialFormData, prefix: 'property' | 'landlord'): {
   line1: string;
   line2: string;
@@ -163,14 +189,23 @@ function getAddressParts(data: OfficialFormData, prefix: 'property' | 'landlord'
     prefix === 'property'
       ? data.property_address
       : data.landlord_address || data.service_address || '';
-  const lines = splitAddress(fallbackAddress);
+  const rawLines = splitAddress(fallbackAddress);
+  const explicitPostcode = normalizePostcode(data[`${prefix}_postcode`] || data[`${prefix}_address_postcode`]);
+  const detectedPostcode = explicitPostcode || extractPostcodeFromLines(rawLines);
+  const lines = rawLines
+    .map((line, index) => (
+      index === rawLines.length - 1 || line.match(UK_POSTCODE_REGEX)
+        ? stripPostcodeFromLine(line, detectedPostcode)
+        : line
+    ))
+    .filter(Boolean);
 
   return {
     line1: lines[0] || '',
     line2: lines[1] || '',
     city: lines[2] || '',
     county: lines[3] || '',
-    postcode: data[`${prefix}_postcode`] || lines[4] || '',
+    postcode: detectedPostcode || lines[4] || '',
   };
 }
 
