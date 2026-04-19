@@ -28,6 +28,8 @@ describe('GoldenPackPdfShowcase', () => {
             title: 'Form 3A Notice',
             categoryLabel: 'Official notice',
             pageCount: 6,
+            description: 'Official Form 3A notice for England possession proceedings.',
+            excerpt: 'Form 3A Notice seeking possession of a property let on an assured tenancy.',
             pdfHref: '/sample/form-3a.pdf',
             embedHref: '/sample/form-3a/embed',
             thumbnailHref: '/sample/form-3a-thumb.jpg',
@@ -36,6 +38,8 @@ describe('GoldenPackPdfShowcase', () => {
             title: 'Arrears Schedule',
             categoryLabel: 'Supporting record',
             pageCount: 3,
+            description: 'Period-by-period breakdown of rent arrears.',
+            excerpt: 'Schedule of arrears showing each missed rent period and running balance.',
             pdfHref: '/sample/arrears.pdf',
             embedHref: '/sample/arrears/embed',
             thumbnailHref: '/sample/arrears-thumb.jpg',
@@ -51,11 +55,18 @@ describe('GoldenPackPdfShowcase', () => {
     expect(
       screen.getByTitle('Form 3A Notice embedded sample preview')
     ).toHaveAttribute('src', '/sample/form-3a/embed');
+    expect(
+      screen.getAllByText(/Official Form 3A notice for England possession proceedings\./i).length
+    ).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole('button', { name: /Arrears Schedule/i }));
 
     expect(
       screen.getByTitle('Arrears Schedule embedded sample preview')
     ).toHaveAttribute('src', '/sample/arrears/embed');
+    expect(screen.getAllByText(/Period-by-period breakdown of rent arrears\./i).length).toBeGreaterThan(0);
+    expect(
+      screen.getByText(/Schedule of arrears showing each missed rent period and running balance\./i)
+    ).toBeInTheDocument();
   });
 });

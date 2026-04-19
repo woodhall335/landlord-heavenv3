@@ -319,6 +319,10 @@ function buildGoldenPackSampleUrl(
   return `${pathname}?v=${encodeURIComponent(versionToken)}`;
 }
 
+function isPdfFilePath(relativePath?: string): relativePath is string {
+  return Boolean(relativePath && relativePath.toLowerCase().endsWith('.pdf'));
+}
+
 export function isGoldenPackKey(value: string): value is GoldenPackKey {
   return GOLDEN_PACK_KEYS.includes(value as GoldenPackKey);
 }
@@ -406,11 +410,11 @@ export function getGoldenPackProofData(
   }
 
   const rootManifest = getRootManifest();
-  const featuredLimit = options?.featuredLimit ?? 4;
   const versionToken = buildVersionToken(rootManifest?.generatedAt);
 
   const entries = packManifest.documents.map((document) => {
     const preview = findPreviewForDocument(packKey, document, options?.previewDocs);
+    const hasPreviewablePdf = isPdfFilePath(document.files.pdf);
 
     return {
       documentType: document.documentType,
@@ -421,17 +425,20 @@ export function getGoldenPackProofData(
       excerpt: buildExcerpt(document.files.text),
       previewSrc: preview?.src,
       previewAlt: preview?.alt,
-      pdfHref: document.files.pdf
+      pdfHref: hasPreviewablePdf
         ? buildGoldenPackSampleUrl(packKey, document.documentType, 'pdf', versionToken)
         : undefined,
-      thumbnailHref: document.files.pdf
+      thumbnailHref: hasPreviewablePdf
         ? buildGoldenPackSampleUrl(packKey, document.documentType, 'thumbnail', versionToken)
         : undefined,
-      embedHref: document.files.pdf
+      embedHref: hasPreviewablePdf
         ? buildGoldenPackSampleUrl(packKey, document.documentType, 'embed', versionToken)
         : undefined,
     } satisfies GoldenPackProofEntry;
   });
+
+  const previewableEntries = entries.filter((entry) => Boolean(entry.pdfHref));
+  const featuredLimit = options?.featuredLimit ?? previewableEntries.length;
 
   return {
     key: packManifest.key,
@@ -443,7 +450,9 @@ export function getGoldenPackProofData(
       (sum, document) => sum + (document.extraction?.pageCount ?? 0),
       0
     ),
-    featuredEntries: entries.slice(0, featuredLimit),
-    remainingTitles: entries.slice(featuredLimit).map((entry) => entry.title),
+    featuredEntries: previewableEntries.slice(0, featuredLimit),
+    remainingTitles: entries
+      .filter((entry) => !entry.pdfHref)
+      .map((entry) => entry.title),
   };
 }

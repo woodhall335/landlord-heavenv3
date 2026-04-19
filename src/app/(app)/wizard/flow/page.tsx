@@ -582,26 +582,26 @@ function WizardFlowContent() {
                     onClick={() => handleStartEnglandEvictionFlow(choice.key)}
                     className={`group rounded-[1.75rem] border p-5 text-left transition ${
                       isActive
-                        ? 'border-slate-900 bg-slate-900 text-white shadow-[0_20px_50px_rgba(15,23,42,0.2)]'
-                        : 'border-slate-200 bg-slate-50 text-slate-900 hover:border-slate-300 hover:bg-white'
+                        ? 'border-violet-500 bg-[linear-gradient(135deg,#7C3AED_0%,#5B21B6_100%)] text-white shadow-[0_20px_50px_rgba(91,33,182,0.3)]'
+                        : 'border-slate-200 bg-slate-50 text-slate-900 hover:border-violet-300 hover:bg-violet-50/50'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <div className="text-lg font-semibold">{choice.title}</div>
-                        <div className={`mt-1 text-sm ${isActive ? 'text-slate-300' : 'text-slate-500'}`}>
+                        <div className={`mt-1 text-sm ${isActive ? 'text-violet-100' : 'text-slate-500'}`}>
                           {choice.subtitle}
                         </div>
                       </div>
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
-                          isActive ? 'bg-white/12 text-white' : 'bg-slate-200 text-slate-700'
+                          isActive ? 'bg-white/15 text-white' : 'bg-violet-100 text-violet-700'
                         }`}
                       >
                         {isActive ? 'Selected' : 'Choose'}
                       </span>
                     </div>
-                    <p className={`mt-4 text-sm leading-6 ${isActive ? 'text-slate-200' : 'text-slate-600'}`}>
+                    <p className={`mt-4 text-sm leading-6 ${isActive ? 'text-violet-50' : 'text-slate-600'}`}>
                       {choice.description}
                     </p>
                     <div

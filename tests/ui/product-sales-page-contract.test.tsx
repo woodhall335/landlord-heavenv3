@@ -140,7 +140,6 @@ const pageContracts: PageContract[] = [
     load: () => import('@/app/(marketing)/products/notice-only/page'),
     h1: /Eviction Notice Generator \(Section 8, May 2026\)/i,
     sectionTitles: [
-      'What you get in the Section 8 notice pack',
       'Why a Section 8 case needs more than a blank notice',
       'How this puts you in a stronger position',
       'How it works',
@@ -148,11 +147,11 @@ const pageContracts: PageContract[] = [
       'Eviction Notice Generator FAQs',
     ],
     requiredItems: [
-      'Form 3A (Section 8 Notice)',
-      'Arrears Schedule',
-      'Grounds Explanation',
+      'Form 3A notice',
       'Service Instructions',
-      'Validity Checklist',
+      'Service & Validity Checklist',
+      'Pre-Service Compliance Declaration',
+      'Rent Schedule / Arrears Statement',
     ],
   },
   {
@@ -160,7 +159,6 @@ const pageContracts: PageContract[] = [
     load: () => import('@/app/(marketing)/products/complete-pack/page'),
     h1: /Complete Eviction Pack/i,
     sectionTitles: [
-      'What you get in the Complete Eviction Pack',
       'Why you need the full pack instead of isolated forms',
       'How the full pack improves the landlord outcome',
       'How it works',
@@ -168,12 +166,12 @@ const pageContracts: PageContract[] = [
       'Complete Eviction Pack FAQs',
     ],
     requiredItems: [
-      'Form 3A (Section 8 Notice)',
-      'Form N5 (Claim for Possession)',
-      'Form N119 (Particulars of Claim)',
-      'Arrears Schedule',
-      'Evidence Bundle',
-      'Court Filing Guide',
+      'Form 3A notice',
+      'Form N5 - Claim for Possession',
+      'Form N119 - Particulars of Claim',
+      'Schedule of Arrears',
+      'Evidence Collection Checklist',
+      'Proof of Service Certificate',
     ],
   },
   {
@@ -181,7 +179,6 @@ const pageContracts: PageContract[] = [
     load: () => import('@/app/(marketing)/products/money-claim/page'),
     h1: /Money Claim Pack/i,
     sectionTitles: [
-      'What you get in the Money Claim Pack',
       'Why a landlord money claim needs more than one form',
       'How this improves the landlord outcome',
       'How it works',
@@ -189,13 +186,15 @@ const pageContracts: PageContract[] = [
       'Money Claim Pack FAQs',
     ],
     requiredItems: [
-      'Letter Before Claim',
-      'Reply Form & Financial Statement',
-      'Particulars of Claim',
-      'Arrears Schedule',
-      'Interest Calculation',
-      'Filing Guide (MCOL)',
+      'Letter Before Claim (PAP-DEBT)',
+      'Reply Form',
+      'Financial Statement Form',
+      'Particulars of claim',
+      'Schedule of arrears',
+      'Interest calculation',
+      'Money Claims Filing Guide',
       'Enforcement Guide',
+      'Form N1 (official PDF)',
     ],
   },
   {
@@ -203,7 +202,6 @@ const pageContracts: PageContract[] = [
     load: () => import('@/app/(marketing)/products/section-13-standard/page'),
     h1: /Section 13 Rent Increase Pack for England landlords/i,
     sectionTitles: [
-      'What you get',
       'Why you need this',
       'How this helps you',
       'How it works',
@@ -211,11 +209,10 @@ const pageContracts: PageContract[] = [
       'Section 13 Rent Increase FAQs',
     ],
     requiredItems: [
-      'Form 4A (Legal Rent Increase Notice)',
-      'Rent Justification Report',
-      'Comparable Market Data',
-      'Cover Letter',
-      'Service Record / Certificate',
+      'Form 4A rent increase notice',
+      'Rent increase justification report',
+      'Proof of service record',
+      'Rent increase cover letter',
     ],
   },
   {
@@ -223,7 +220,6 @@ const pageContracts: PageContract[] = [
     load: () => import('@/app/(marketing)/products/section-13-defence/page'),
     h1: /Section 13 Defence Pack for England landlords/i,
     sectionTitles: [
-      'What you get',
       'Why you need this',
       'How this helps you',
       'How it works',
@@ -231,14 +227,17 @@ const pageContracts: PageContract[] = [
       'Section 13 Defence Pack FAQs',
     ],
     requiredItems: [
-      'Full Tribunal Bundle (Indexed Exhibits)',
+      'Form 4A rent increase notice',
       'Tribunal Argument Summary',
-      'Justification Report (Comparables Analysis)',
-      'Defence Guide',
-      'Landlord Response Template',
-      'Legal Briefing',
-      'Evidence Checklist',
-      'Negotiation Email Template',
+      'Rent increase justification report',
+      'Proof of service record',
+      'Rent increase cover letter',
+      'Tribunal defence guide',
+      'Landlord response template',
+      'Tribunal legal briefing',
+      'Evidence checklist',
+      'Negotiation email template',
+      'Merged tribunal bundle PDF',
     ],
   },
 ];
@@ -272,6 +271,9 @@ describe('public product sales page contract', () => {
       expect(screen.getByRole('heading', { level: 1, name: contract.h1 })).toBeInTheDocument();
       expect(screen.getByText('Sample pack proof')).toBeInTheDocument();
       expect(screen.getByText(/See a real sample pack before you pay/i)).toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { level: 2, name: /What you get/i })
+      ).not.toBeInTheDocument();
 
       const orderedHeadings = contract.sectionTitles.map((title) =>
         screen.getByRole('heading', { level: 2, name: title })
@@ -283,11 +285,15 @@ describe('public product sales page contract', () => {
         expect(screen.getAllByText(item).length).toBeGreaterThan(0);
       }
 
+      const text = document.body.textContent ?? '';
+
       expect(screen.queryByText(/Preview the Section 8 notice pack/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/Preview the court possession pack/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/Preview the money claim pack/i)).not.toBeInTheDocument();
-
-      const text = document.body.textContent ?? '';
+      expect(text).not.toContain('What it is');
+      expect(text).not.toContain('What it does');
+      expect(text).not.toContain('Why it is needed');
+      expect(text).not.toContain('How it helps you');
       expect(text).not.toContain('View route');
       expect(text).not.toContain('Wales');
       expect(text).not.toContain('Scotland');

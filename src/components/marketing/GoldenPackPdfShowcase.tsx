@@ -6,7 +6,14 @@ import type { GoldenPackProofEntry } from '@/lib/marketing/golden-pack-proof';
 
 type PdfEntry = Pick<
   GoldenPackProofEntry,
-  'title' | 'categoryLabel' | 'pageCount' | 'pdfHref' | 'thumbnailHref' | 'embedHref'
+  | 'title'
+  | 'categoryLabel'
+  | 'pageCount'
+  | 'description'
+  | 'excerpt'
+  | 'pdfHref'
+  | 'thumbnailHref'
+  | 'embedHref'
 >;
 
 export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
@@ -37,8 +44,8 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                 Read the full sample documents on the page
               </h4>
               <p className="mt-2 text-sm leading-7 text-[#ECE8FF] md:text-base">
-                These previews render the full current QA sample inside the page, with the browser
-                PDF download controls stripped out and the viewer kept focused on reading.
+                Read the full sample documents inside the page and switch between them without
+                leaving the product. The viewer stays focused on reading, not downloading.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -98,6 +105,17 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                     >
                       {entry.pageCount ? `${entry.pageCount} pages in sample` : 'Sample document'}
                     </p>
+                    {entry.description ? (
+                      <p
+                        className={
+                          isSelected
+                            ? 'mt-2 text-sm leading-6 text-[#4F3B7A]'
+                            : 'mt-2 text-sm leading-6 text-[#D9D1F8]'
+                        }
+                      >
+                        {entry.description}
+                      </p>
+                    ) : null}
                   </button>
                 );
               })}
@@ -113,12 +131,28 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                 <h5 className="mt-1 text-lg font-semibold tracking-tight text-[#261544] md:text-xl">
                   {selectedEntry.title}
                 </h5>
+                {selectedEntry.description ? (
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5E498E] md:text-base">
+                    {selectedEntry.description}
+                  </p>
+                ) : null}
               </div>
               <p className="text-sm text-[#5E498E]">
                 {selectedEntry.categoryLabel}
                 {selectedEntry.pageCount ? ` | ${selectedEntry.pageCount} pages` : ''}
               </p>
             </div>
+
+            {selectedEntry.excerpt ? (
+              <div className="mb-3 rounded-[1rem] border border-[#E3DBFF] bg-white px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6F54C8]">
+                  Sample text preview
+                </p>
+                <blockquote className="mt-2 text-sm leading-7 text-[#4F3B7A] md:text-base">
+                  "{selectedEntry.excerpt}"
+                </blockquote>
+              </div>
+            ) : null}
 
             <div className="overflow-hidden rounded-[1.1rem] border border-[#E3DBFF] bg-white">
               {selectedEntry.embedHref ? (

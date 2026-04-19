@@ -125,6 +125,11 @@ function InfoCards({
 
 export function PublicProductSalesPage({ content }: { content: ProductSalesPageContent }) {
   const { hero, whatYouGet, whyYouNeedThis, howThisHelps, howItWorks, cta, faq } = content;
+  const hasRouteCards = Boolean(whatYouGet.routeCards?.length);
+  const hasProofBlock = Boolean(whatYouGet.preview || whatYouGet.sampleProof);
+  const shouldShowProofAsPrimaryWhatYouGet = hasProofBlock && !hasRouteCards;
+  const hasFallbackBreakdown =
+    Boolean(whatYouGet.items?.length) || Boolean(whatYouGet.conditionalItems?.length);
 
   return (
     <>
@@ -133,32 +138,47 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
       <section id="what-you-get" className="scroll-mt-24 bg-[#FCFAFF] py-12 md:py-16">
         <Container>
           <div className="mx-auto max-w-6xl">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
-                {whatYouGet.title}
-              </h2>
-              <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
-                {whatYouGet.intro}
-              </div>
-            </div>
+            {hasRouteCards ? (
+              <>
+                <div className="max-w-3xl">
+                  <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+                    {whatYouGet.title}
+                  </h2>
+                  <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
+                    {whatYouGet.intro}
+                  </div>
+                </div>
 
-            {whatYouGet.items?.length ? (
-              <div className="mt-8 grid gap-5 lg:grid-cols-2">
-                {whatYouGet.items.map((item) => (
-                  <BreakdownCard key={item.name} item={item} />
-                ))}
-              </div>
+                <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+                  {whatYouGet.routeCards?.map((item) => (
+                    <RouteCard key={item.name} item={item} />
+                  ))}
+                </div>
+              </>
             ) : null}
 
-            {whatYouGet.routeCards?.length ? (
-              <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
-                {whatYouGet.routeCards.map((item) => (
-                  <RouteCard key={item.name} item={item} />
-                ))}
-              </div>
+            {hasFallbackBreakdown && !shouldShowProofAsPrimaryWhatYouGet ? (
+              <>
+                <div className="max-w-3xl">
+                  <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+                    {whatYouGet.title}
+                  </h2>
+                  <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
+                    {whatYouGet.intro}
+                  </div>
+                </div>
+
+                {whatYouGet.items?.length ? (
+                  <div className="mt-8 grid gap-5 lg:grid-cols-2">
+                    {whatYouGet.items.map((item) => (
+                      <BreakdownCard key={item.name} item={item} />
+                    ))}
+                  </div>
+                ) : null}
+              </>
             ) : null}
 
-            {whatYouGet.conditionalItems?.length ? (
+            {whatYouGet.conditionalItems?.length && !shouldShowProofAsPrimaryWhatYouGet ? (
               <div className="mt-10 rounded-[2rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.05)] md:p-8">
                 <div className="max-w-3xl">
                   <h3 className="text-2xl font-semibold tracking-tight text-[#17142B]">
@@ -178,8 +198,8 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
               </div>
             ) : null}
 
-            {whatYouGet.preview || whatYouGet.sampleProof ? (
-              <div className="mt-10 space-y-8">
+            {hasProofBlock ? (
+              <div className={hasRouteCards || hasFallbackBreakdown ? 'mt-10 space-y-8' : ''}>
                 {whatYouGet.preview ? <div>{whatYouGet.preview}</div> : null}
                 {whatYouGet.sampleProof ? <div>{whatYouGet.sampleProof}</div> : null}
               </div>

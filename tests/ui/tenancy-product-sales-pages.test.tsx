@@ -111,13 +111,13 @@ const tenancyPageContracts: TenancyPageContract[] = [
     howTitle: 'How this helps you',
     ctaTitle: 'Start the Standard agreement pack',
     requiredItems: [
-      'Tenancy Agreement',
-      'Pre-Tenancy Checklist',
+      'Standard Tenancy Agreement',
+      'Pre-Tenancy Checklist (England)',
       'Keys & Handover Record',
       'Utilities & Meter Handover Sheet',
-      'Pet Request Addendum',
+      'Pet Request / Consent Addendum',
       'Tenancy Variation Record',
-      'Deposit Certificate',
+      'Deposit Protection Certificate',
       'Prescribed Information Pack',
     ],
   },
@@ -129,12 +129,14 @@ const tenancyPageContracts: TenancyPageContract[] = [
     howTitle: 'How this helps you',
     ctaTitle: 'Start the Premium agreement pack',
     requiredItems: [
-      'Tenancy Agreement',
-      'Pre-Tenancy Checklist',
+      'Premium Tenancy Agreement',
+      'Pre-Tenancy Checklist (England)',
       'Premium Management Schedule',
       'Keys & Handover Record',
       'Utilities & Meter Handover Sheet',
-      'Deposit Certificate',
+      'Pet Request / Consent Addendum',
+      'Tenancy Variation Record',
+      'Deposit Protection Certificate',
       'Prescribed Information Pack',
     ],
   },
@@ -146,10 +148,14 @@ const tenancyPageContracts: TenancyPageContract[] = [
     howTitle: 'How this helps you',
     ctaTitle: 'Start the Student agreement pack',
     requiredItems: [
-      'Tenancy Agreement',
-      'Student Move-Out Schedule',
-      'Pre-Tenancy Checklist',
-      'Deposit Certificate',
+      'Student Tenancy Agreement',
+      'Student Move-Out & Guarantor Schedule',
+      'Pre-Tenancy Checklist (England)',
+      'Keys & Handover Record',
+      'Utilities & Meter Handover Sheet',
+      'Pet Request / Consent Addendum',
+      'Tenancy Variation Record',
+      'Deposit Protection Certificate',
       'Prescribed Information Pack',
       'Guarantor Agreement',
     ],
@@ -162,10 +168,14 @@ const tenancyPageContracts: TenancyPageContract[] = [
     howTitle: 'How this helps you',
     ctaTitle: 'Start the HMO / Shared House agreement pack',
     requiredItems: [
-      'Tenancy Agreement',
-      'House Rules Appendix',
-      'Pre-Tenancy Checklist',
-      'Deposit Certificate',
+      'HMO / Shared House Tenancy Agreement',
+      'HMO / Shared House Rules Appendix',
+      'Pre-Tenancy Checklist (England)',
+      'Keys & Handover Record',
+      'Utilities & Meter Handover Sheet',
+      'Pet Request / Consent Addendum',
+      'Tenancy Variation Record',
+      'Deposit Protection Certificate',
       'Prescribed Information Pack',
     ],
   },
@@ -177,8 +187,9 @@ const tenancyPageContracts: TenancyPageContract[] = [
     howTitle: 'How this helps you',
     ctaTitle: 'Start the Lodger agreement pack',
     requiredItems: [
-      'Lodger Agreement',
-      'Lodger Checklist',
+      'Room Let / Lodger Agreement',
+      'Room Let / Lodger Checklist',
+      'Keys & Handover Record',
       'Lodger House Rules Appendix',
     ],
   },
@@ -204,8 +215,9 @@ describe('exact tenancy product sales pages', () => {
       expect(screen.getByRole('heading', { level: 1, name: contract.h1 })).toBeInTheDocument();
       expect(screen.getByText('Sample pack proof')).toBeInTheDocument();
       expect(screen.getByText(/See a real sample pack before you pay/i)).toBeInTheDocument();
-
-      expect(screen.getByRole('heading', { level: 2, name: 'What you get' })).toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { level: 2, name: /What you get/i })
+      ).not.toBeInTheDocument();
       expect(
         screen.getByRole('heading', { level: 2, name: contract.whyTitle })
       ).toBeInTheDocument();
@@ -224,15 +236,12 @@ describe('exact tenancy product sales pages', () => {
         expect(screen.getAllByText(item).length).toBeGreaterThan(0);
       }
 
-      if (contract.name !== 'lodger agreement') {
-        expect(
-          screen.getByRole('heading', { level: 3, name: 'Included when your answers require it' })
-        ).toBeInTheDocument();
-      }
-
       const text = document.body.textContent ?? '';
       expect(text).not.toContain('View route');
       expect(text).not.toContain('supporting documents');
+      expect(text).not.toContain('What it is');
+      expect(text).not.toContain('What it does');
+      expect(text).not.toContain('Why it is needed');
       expect(text).not.toContain('Wales');
       expect(text).not.toContain('Scotland');
       expect(text).not.toContain('Northern Ireland');

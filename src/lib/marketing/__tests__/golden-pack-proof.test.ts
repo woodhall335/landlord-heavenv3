@@ -7,14 +7,26 @@ describe('getGoldenPackProofData', () => {
 
     expect(data).not.toBeNull();
     expect(data?.documentCount).toBe(5);
-    expect(data?.featuredEntries.length).toBeGreaterThan(0);
+    expect(data?.featuredEntries).toHaveLength(5);
     expect(data?.featuredEntries[0]?.title).toMatch(/Form 3A notice/i);
+    expect(data?.featuredEntries.map((entry) => entry.title)).toContain(
+      'Rent Schedule / Arrears Statement'
+    );
     expect(data?.totalPages).toBeGreaterThan(0);
     expect(data?.versionToken).toMatch(/\S+/);
     expect(data?.featuredEntries.some((entry) => Boolean(entry.excerpt))).toBe(true);
     expect(data?.featuredEntries.some((entry) => Boolean(entry.pdfHref))).toBe(true);
     expect(data?.featuredEntries.some((entry) => Boolean(entry.thumbnailHref))).toBe(true);
     expect(data?.featuredEntries.some((entry) => Boolean(entry.embedHref))).toBe(true);
+  });
+
+  it('excludes non-pdf bundle assets from the previewable section', () => {
+    const data = getGoldenPackProofData('section13_defensive');
+
+    expect(data).not.toBeNull();
+    expect(data?.featuredEntries.every((entry) => Boolean(entry.pdfHref))).toBe(true);
+    expect(data?.remainingTitles).toContain('Tribunal bundle ZIP');
+    expect(data?.featuredEntries.map((entry) => entry.title)).not.toContain('Tribunal bundle ZIP');
   });
 
   it('loads the standard tenancy golden pack summary from artifacts', () => {
