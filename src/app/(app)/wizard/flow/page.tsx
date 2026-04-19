@@ -202,6 +202,12 @@ function WizardFlowContent() {
     jurisdiction === 'england' &&
     !editCaseId &&
     effectiveProduct === 'tenancy_agreement';
+  const showEnglandEvictionProductChooser =
+    type === 'eviction' &&
+    jurisdiction === 'england' &&
+    !editCaseId &&
+    mode !== 'edit' &&
+    searchParams.get('entry') !== 'steps';
   const tenancyFlowProduct: TenancyFlowProduct =
     normalizedProduct === 'ast_standard' ||
     normalizedProduct === 'ast_premium' ||
@@ -236,6 +242,7 @@ function WizardFlowContent() {
     // Only track once per component mount AND per session
     if (hasTrackedStartRef.current) return;
     if (!hasRequiredParams || !jurisdiction) return;
+    if (showEnglandEvictionProductChooser) return;
 
     const trackingProduct = normalizedProduct || product;
     if (!trackingProduct) return;
@@ -280,7 +287,16 @@ function WizardFlowContent() {
     // Mark as started to prevent duplicates
     markWizardStarted(flowTrackingContext);
     hasTrackedStartRef.current = true;
-  }, [editCaseId, hasRequiredParams, jurisdiction, normalizedProduct, product, searchParams, type]);
+  }, [
+    editCaseId,
+    hasRequiredParams,
+    jurisdiction,
+    normalizedProduct,
+    product,
+    searchParams,
+    showEnglandEvictionProductChooser,
+    type,
+  ]);
 
   // Initialize case for structured wizard / section flows
   const startStructuredWizard = useCallback(async () => {
@@ -424,7 +440,7 @@ function WizardFlowContent() {
     }
 
     // All supported case types now use structured / section flows
-    if (showEnglandTenancyChooser) {
+    if (showEnglandTenancyChooser || showEnglandEvictionProductChooser) {
       setLoading(false);
       return;
     }
@@ -437,7 +453,14 @@ function WizardFlowContent() {
     } else {
       setLoading(false);
     }
-  }, [editCaseId, hasRequiredParams, showEnglandTenancyChooser, startStructuredWizard, type]);
+  }, [
+    editCaseId,
+    hasRequiredParams,
+    showEnglandEvictionProductChooser,
+    showEnglandTenancyChooser,
+    startStructuredWizard,
+    type,
+  ]);
 
   // Validate params
   if (!hasRequiredParams) {
@@ -496,7 +519,17 @@ function WizardFlowContent() {
     router.push(`/wizard/flow?${params.toString()}`);
   };
 
-  const renderEnglandEvictionSwitcher = () => {
+  const handleStartEnglandEvictionFlow = (selectedProduct: 'notice_only' | 'complete_pack') => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('type', 'eviction');
+    params.set('product', PUBLIC_PRODUCT_DESCRIPTORS[selectedProduct].productType);
+    params.set('entry', 'steps');
+    params.delete('jurisdiction');
+    params.delete('case_id');
+    router.push(`/wizard/flow?${params.toString()}`);
+  };
+
+  const renderEnglandEvictionChooser = () => {
     if (type !== 'eviction' || jurisdiction !== 'england') {
       return null;
     }
@@ -507,57 +540,89 @@ function WizardFlowContent() {
         key: 'notice_only' as const,
         title: 'Eviction Notice Generator',
         subtitle: 'Section 8, May 2026',
+        description:
+          'Choose this if you need to serve the current England Section 8 notice and want the grounds, dates, and service checks before you send anything.',
       },
       {
         key: 'complete_pack' as const,
         title: 'Complete Eviction Pack',
         subtitle: 'Notice through court possession',
+        description:
+          'Choose this if you want the notice, court forms, and possession paperwork working together from the start.',
       },
     ];
 
     return (
-      <div className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              England Eviction Products
+      <div className="min-h-screen bg-slate-50">
+        <div className="mx-auto flex min-h-screen max-w-5xl items-center px-4 py-12 sm:px-6 lg:px-8">
+          <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_28px_80px_rgba(15,23,42,0.08)] sm:p-8 lg:p-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+              England eviction wizard
             </p>
-            <p className="mt-1 text-sm text-slate-600">
-              Switch between the Section 8 notice generator and the full court possession pack without restarting.
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+              Choose the pack you want to start with
+            </h1>
+            <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600">
+              Pick the Section 8 notice generator if you need to serve notice now, or go straight
+              into the full court possession pack if you want the notice and court paperwork joined
+              up from the start.
             </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {productChoices.map((choice) => {
-              const params = new URLSearchParams(searchParams.toString());
-              params.set('type', 'eviction');
-              params.set('product', PUBLIC_PRODUCT_DESCRIPTORS[choice.key].productType);
-              params.delete('jurisdiction');
-              params.delete('case_id');
+            <p className="mt-3 text-sm font-medium text-slate-500">
+              Your questions start on Case Basics after you choose a product.
+            </p>
 
-              const isActive = activeProduct === choice.key;
+            <div className="mt-8 grid gap-4 lg:grid-cols-2">
+              {productChoices.map((choice) => {
+                const isActive = activeProduct === choice.key;
 
-              return (
-                <button
-                  key={choice.key}
-                  type="button"
-                  onClick={() => {
-                    if (!isActive) {
-                      router.push(`/wizard/flow?${params.toString()}`);
-                    }
-                  }}
-                  className={`rounded-2xl border px-4 py-3 text-left transition ${
-                    isActive
-                      ? 'border-slate-900 bg-slate-900 text-white'
-                      : 'border-slate-200 bg-slate-50 text-slate-900 hover:border-slate-300 hover:bg-white'
-                  }`}
-                >
-                  <div className="text-sm font-semibold">{choice.title}</div>
-                  <div className={`mt-1 text-xs ${isActive ? 'text-slate-300' : 'text-slate-500'}`}>
-                    {choice.subtitle}
-                  </div>
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={choice.key}
+                    type="button"
+                    onClick={() => handleStartEnglandEvictionFlow(choice.key)}
+                    className={`group rounded-[1.75rem] border p-5 text-left transition ${
+                      isActive
+                        ? 'border-slate-900 bg-slate-900 text-white shadow-[0_20px_50px_rgba(15,23,42,0.2)]'
+                        : 'border-slate-200 bg-slate-50 text-slate-900 hover:border-slate-300 hover:bg-white'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="text-lg font-semibold">{choice.title}</div>
+                        <div className={`mt-1 text-sm ${isActive ? 'text-slate-300' : 'text-slate-500'}`}>
+                          {choice.subtitle}
+                        </div>
+                      </div>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
+                          isActive ? 'bg-white/12 text-white' : 'bg-slate-200 text-slate-700'
+                        }`}
+                      >
+                        {isActive ? 'Selected' : 'Choose'}
+                      </span>
+                    </div>
+                    <p className={`mt-4 text-sm leading-6 ${isActive ? 'text-slate-200' : 'text-slate-600'}`}>
+                      {choice.description}
+                    </p>
+                    <div
+                      className={`mt-6 inline-flex items-center text-sm font-semibold ${
+                        isActive ? 'text-white' : 'text-slate-900'
+                      }`}
+                    >
+                      {isActive ? 'Continue to Case Basics' : 'Start with this pack'}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <p className="text-sm font-semibold text-slate-900">What changes next</p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                The wizard will move into the real questions after this screen, starting with Case
+                Basics. The product switcher will not keep following you through every step.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -568,6 +633,10 @@ function WizardFlowContent() {
   if (loading || !caseId || !orderCheckDone) {
     if (showEnglandTenancyChooser && !editCaseId) {
       return <EnglandTenancyProductChooser onSelect={handleSelectEnglandProduct} />;
+    }
+
+    if (showEnglandEvictionProductChooser) {
+      return renderEnglandEvictionChooser();
     }
 
     return (
@@ -585,6 +654,10 @@ function WizardFlowContent() {
 
   if (showEnglandTenancyChooser) {
     return <EnglandTenancyProductChooser onSelect={handleSelectEnglandProduct} />;
+  }
+
+  if (showEnglandEvictionProductChooser) {
+    return renderEnglandEvictionChooser();
   }
 
   // 🟦 NEW: For money_claim, use the section-based premium flow
@@ -631,13 +704,10 @@ function WizardFlowContent() {
     (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
-      <>
-        {renderEnglandEvictionSwitcher()}
-        <EvictionSectionFlow
-          caseId={caseId}
-          jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
-        />
-      </>
+      <EvictionSectionFlow
+        caseId={caseId}
+        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
+      />
     );
   }
 
@@ -650,13 +720,10 @@ function WizardFlowContent() {
     (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
-      <>
-        {renderEnglandEvictionSwitcher()}
-        <NoticeOnlySectionFlow
-          caseId={caseId}
-          jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
-        />
-      </>
+      <NoticeOnlySectionFlow
+        caseId={caseId}
+        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
+      />
     );
   }
 

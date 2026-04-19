@@ -53,80 +53,34 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
           </div>
         </div>
 
-        <div className="grid gap-6 px-5 py-5 md:grid-cols-[minmax(0,1.4fr)_minmax(260px,0.85fr)] md:px-6">
-          <div className="overflow-hidden rounded-[1.45rem] border border-[#D9D1FF] bg-[#F8F5FF] p-3 shadow-[0_16px_40px_rgba(31,20,59,0.12)]">
-            <div className="overflow-hidden rounded-[1.1rem] border border-[#E3DBFF] bg-white">
-              {selectedEntry.embedHref ? (
-                <iframe
-                  key={selectedEntry.embedHref}
-                  src={selectedEntry.embedHref}
-                  title={`${selectedEntry.title} embedded sample preview`}
-                  className="h-[720px] w-full bg-white"
-                  loading="lazy"
-                  sandbox="allow-scripts allow-same-origin"
-                />
-              ) : (
-                <div className="flex h-[520px] items-center justify-center bg-white text-sm text-slate-500">
-                  Preview unavailable
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between rounded-[1.45rem] border border-white/12 bg-white/8 p-5">
-            <div>
+        <div className="grid gap-6 px-5 py-5 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.6fr)] md:px-6">
+          <div className="rounded-[1.45rem] border border-white/12 bg-white/8 p-4 md:p-5">
+            <div className="mb-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#CFC4FF]">
-                Selected sample
+                Documents in this sample pack
               </p>
-              <h5 className="mt-3 text-2xl font-semibold tracking-tight text-white">
-                {selectedEntry.title}
-              </h5>
-              <p className="mt-3 text-sm leading-7 text-[#ECE8FF] md:text-base">
-                {selectedEntry.categoryLabel}
-                {selectedEntry.pageCount ? ` | ${selectedEntry.pageCount} pages` : ''}
-              </p>
-              <p className="mt-4 text-sm leading-7 text-[#D9D1F8] md:text-base">
-                Use the filmstrip below to switch between the main sample documents in this pack.
-                The larger preview opens the same embedded reader in a bigger frame.
+              <p className="mt-2 text-sm leading-7 text-[#D9D1F8] md:text-base">
+                Choose a document from the list to load its full sample preview in the main viewer.
               </p>
             </div>
-          </div>
-        </div>
 
-        <div className="border-t border-white/10 px-5 py-5 md:px-6">
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {pdfEntries.map((entry) => {
-              const isSelected = entry.title === selectedEntry.title;
+            <div className="space-y-3 lg:max-h-[760px] lg:overflow-y-auto lg:pr-1">
+              {pdfEntries.map((entry) => {
+                const isSelected = entry.title === selectedEntry.title;
 
-              return (
-                <button
-                  key={entry.title}
-                  type="button"
-                  onClick={() => setSelectedTitle(entry.title)}
-                  className={[
-                    'overflow-hidden rounded-[1.2rem] border text-left transition',
-                    isSelected
-                      ? 'border-[#CDBBFF] bg-white text-[#261544] shadow-[0_16px_40px_rgba(255,255,255,0.12)]'
-                      : 'border-white/12 bg-white/8 text-white hover:bg-white/12',
-                  ].join(' ')}
-                >
-                  <div className="bg-[#F6F2FF] p-2">
-                    <div className="overflow-hidden rounded-[0.95rem] border border-[#E1D8FF] bg-white">
-                      {entry.thumbnailHref ? (
-                        <img
-                          src={entry.thumbnailHref}
-                          alt={`${entry.title} thumbnail`}
-                          className="h-[180px] w-full bg-white object-cover object-top"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="flex h-[180px] items-center justify-center bg-white text-sm text-slate-500">
-                          Preview unavailable
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="p-4">
+                return (
+                  <button
+                    key={entry.title}
+                    type="button"
+                    onClick={() => setSelectedTitle(entry.title)}
+                    className={[
+                      'w-full rounded-[1.15rem] border px-4 py-4 text-left transition',
+                      isSelected
+                        ? 'border-[#CDBBFF] bg-white text-[#261544] shadow-[0_16px_40px_rgba(255,255,255,0.1)]'
+                        : 'border-white/12 bg-white/6 text-white hover:bg-white/12',
+                    ].join(' ')}
+                    aria-pressed={isSelected}
+                  >
                     <p
                       className={
                         isSelected
@@ -144,10 +98,44 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                     >
                       {entry.pageCount ? `${entry.pageCount} pages in sample` : 'Sample document'}
                     </p>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-[1.45rem] border border-[#D9D1FF] bg-[#F8F5FF] p-3 shadow-[0_16px_40px_rgba(31,20,59,0.12)]">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-[1rem] border border-[#E3DBFF] bg-white px-4 py-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6F54C8]">
+                  Selected sample
+                </p>
+                <h5 className="mt-1 text-lg font-semibold tracking-tight text-[#261544] md:text-xl">
+                  {selectedEntry.title}
+                </h5>
+              </div>
+              <p className="text-sm text-[#5E498E]">
+                {selectedEntry.categoryLabel}
+                {selectedEntry.pageCount ? ` | ${selectedEntry.pageCount} pages` : ''}
+              </p>
+            </div>
+
+            <div className="overflow-hidden rounded-[1.1rem] border border-[#E3DBFF] bg-white">
+              {selectedEntry.embedHref ? (
+                <iframe
+                  key={selectedEntry.embedHref}
+                  src={selectedEntry.embedHref}
+                  title={`${selectedEntry.title} embedded sample preview`}
+                  className="h-[760px] w-full bg-white"
+                  loading="lazy"
+                  sandbox="allow-scripts allow-same-origin"
+                />
+              ) : (
+                <div className="flex h-[520px] items-center justify-center bg-white text-sm text-slate-500">
+                  Preview unavailable
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
