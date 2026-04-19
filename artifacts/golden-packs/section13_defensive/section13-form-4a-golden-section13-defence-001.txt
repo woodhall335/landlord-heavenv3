@@ -64,15 +64,6 @@ Second line of address
 Town or city
 County (optional)
 Postcode
-Alex Tenant
-Jordan Tenant
-10 Sample Road
-Leeds
-LS1 1AA
-Taylor Landlord
-1 Landlord Terrace
-Leeds
-LS2 2BB
 
 -- 2 of 9 --
 
@@ -108,8 +99,6 @@ address, you agree that the
 tenant and the tribunal may
 use this address to serve
 documents on you.
-01130000000
-landlord@example.com
 
 -- 3 of 9 --
 
@@ -194,16 +183,6 @@ internet, cable TV and
 Satellite TV.
 Follow the guidance in Note
 B at the end of this notice.
-1200.00 Monthly
-01 03 2025
-01 04 2025
-1285.00 Monthly
-01 06 2026
-nil nil
-nil nil
-nil nil
-nil nil
-nil nil
 
 -- 4 of 9 --
 
@@ -226,12 +205,6 @@ Additional signatures for joint landlords
 1. Signature, full name, address, and capacity of signatory (landlord).
 2. Signature, full name, address, and capacity of signatory (landlord).
 3. Signature, full name, address, and capacity of signatory (landlord).
-Taylor Landlord
-1 Landlord Terrace, Leeds, LS2 2BB
-01130000000
-landlord@example.com
-First class post
-25 03 2026
 
 -- 5 of 9 --
 
@@ -348,8 +321,5 @@ separate sheet, remembering
 to sign and date it.
 Date
 Day Month Year
-Section 4.7 and supporting justification report
-Taylor Landlord
-25 03 2026
 
 -- 9 of 9 --

@@ -4,11 +4,15 @@ import path from 'path';
 
 import JSZip from 'jszip';
 import {
+  PDFCheckBox,
   PDFDocument,
   PDFFont,
+  PDFForm,
   PDFImage,
   PDFPage,
+  PDFTextField,
   StandardFonts,
+  TextAlignment,
   rgb,
 } from 'pdf-lib';
 
@@ -113,6 +117,31 @@ type Section13FormOverlayMap = {
   finalSignatureDay: OverlayField;
   finalSignatureMonth: OverlayField;
   finalSignatureYear: OverlayField;
+  };
+
+type EditableForm4AFieldDefinition =
+  | {
+      name: string;
+      kind: 'text';
+      field: OverlayField;
+      multiline?: boolean;
+    }
+  | {
+      name: string;
+      kind: 'checkbox';
+      field: OverlayField;
+    };
+
+const FORM4A_SIGN_AS_LANDLORD_FIELD: EditableForm4AFieldDefinition = {
+  name: 'form4a_sign_as_landlord',
+  kind: 'checkbox',
+  field: { pageIndex: 4, x: 56, y: 661, width: 12, height: 12 },
+};
+
+const FORM4A_SIGN_AS_AGENT_FIELD: EditableForm4AFieldDefinition = {
+  name: 'form4a_sign_as_agent',
+  kind: 'checkbox',
+  field: { pageIndex: 4, x: 56, y: 641, width: 12, height: 12 },
 };
 
 export const FORM_4A_OVERLAY_MAP: Record<string, Record<string, Section13FormOverlayMap>> = {
@@ -603,6 +632,142 @@ function drawCheck(page: PDFPage, x: number, y: number): void {
     thickness: 1.5,
     color: rgb(0.15, 0.15, 0.15),
   });
+}
+
+function buildEditableForm4AFieldDefinitions(
+  overlay: Section13FormOverlayMap
+): EditableForm4AFieldDefinition[] {
+  return [
+    { name: 'form4a_tenant_names', kind: 'text', field: overlay.tenantNames, multiline: true },
+    { name: 'form4a_property_address_line1', kind: 'text', field: overlay.propertyAddressLine1 },
+    { name: 'form4a_property_address_line2', kind: 'text', field: overlay.propertyAddressLine2 },
+    { name: 'form4a_property_town_city', kind: 'text', field: overlay.propertyTownCity },
+    { name: 'form4a_property_county', kind: 'text', field: overlay.propertyCounty },
+    { name: 'form4a_property_postcode', kind: 'text', field: overlay.propertyPostcode },
+    { name: 'form4a_landlord_name', kind: 'text', field: overlay.landlordName },
+    { name: 'form4a_landlord_address_line1', kind: 'text', field: overlay.landlordAddressLine1 },
+    { name: 'form4a_landlord_address_line2', kind: 'text', field: overlay.landlordAddressLine2 },
+    { name: 'form4a_landlord_town_city', kind: 'text', field: overlay.landlordTownCity },
+    { name: 'form4a_landlord_county', kind: 'text', field: overlay.landlordCounty },
+    { name: 'form4a_landlord_postcode', kind: 'text', field: overlay.landlordPostcode },
+    { name: 'form4a_landlord_phone', kind: 'text', field: overlay.landlordPhone },
+    { name: 'form4a_landlord_email', kind: 'text', field: overlay.landlordEmail },
+    { name: 'form4a_agent_name', kind: 'text', field: overlay.agentName },
+    { name: 'form4a_agent_address_line1', kind: 'text', field: overlay.agentAddressLine1 },
+    { name: 'form4a_agent_address_line2', kind: 'text', field: overlay.agentAddressLine2 },
+    { name: 'form4a_agent_town_city', kind: 'text', field: overlay.agentTownCity },
+    { name: 'form4a_agent_county', kind: 'text', field: overlay.agentCounty },
+    { name: 'form4a_agent_postcode', kind: 'text', field: overlay.agentPostcode },
+    { name: 'form4a_agent_phone', kind: 'text', field: overlay.agentPhone },
+    { name: 'form4a_agent_email', kind: 'text', field: overlay.agentEmail },
+    { name: 'form4a_current_rent_amount', kind: 'text', field: overlay.currentRentAmount },
+    { name: 'form4a_current_rent_frequency', kind: 'text', field: overlay.currentRentFrequency },
+    { name: 'form4a_tenancy_start_day', kind: 'text', field: overlay.tenancyStartDay },
+    { name: 'form4a_tenancy_start_month', kind: 'text', field: overlay.tenancyStartMonth },
+    { name: 'form4a_tenancy_start_year', kind: 'text', field: overlay.tenancyStartYear },
+    { name: 'form4a_last_increase_day', kind: 'text', field: overlay.lastIncreaseDay },
+    { name: 'form4a_last_increase_month', kind: 'text', field: overlay.lastIncreaseMonth },
+    { name: 'form4a_last_increase_year', kind: 'text', field: overlay.lastIncreaseYear },
+    { name: 'form4a_first_increase_day', kind: 'text', field: overlay.firstIncreaseDay },
+    { name: 'form4a_first_increase_month', kind: 'text', field: overlay.firstIncreaseMonth },
+    { name: 'form4a_first_increase_year', kind: 'text', field: overlay.firstIncreaseYear },
+    { name: 'form4a_proposed_rent_amount', kind: 'text', field: overlay.proposedRentAmount },
+    { name: 'form4a_proposed_rent_frequency', kind: 'text', field: overlay.proposedRentFrequency },
+    { name: 'form4a_proposed_start_day', kind: 'text', field: overlay.proposedStartDay },
+    { name: 'form4a_proposed_start_month', kind: 'text', field: overlay.proposedStartMonth },
+    { name: 'form4a_proposed_start_year', kind: 'text', field: overlay.proposedStartYear },
+    { name: 'form4a_signatory_name_address', kind: 'text', field: overlay.signatoryNameAndAddress, multiline: true },
+    { name: 'form4a_signatory_phone', kind: 'text', field: overlay.signatoryPhone },
+    { name: 'form4a_signatory_email', kind: 'text', field: overlay.signatoryEmail },
+    { name: 'form4a_service_method', kind: 'text', field: overlay.serviceMethod },
+    { name: 'form4a_service_date_day', kind: 'text', field: overlay.serviceDateDay },
+    { name: 'form4a_service_date_month', kind: 'text', field: overlay.serviceDateMonth },
+    { name: 'form4a_service_date_year', kind: 'text', field: overlay.serviceDateYear },
+    { name: 'form4a_supporting_reference', kind: 'text', field: overlay.supportingReference },
+    { name: 'form4a_final_signature', kind: 'text', field: overlay.finalSignature },
+    { name: 'form4a_final_signature_day', kind: 'text', field: overlay.finalSignatureDay },
+    { name: 'form4a_final_signature_month', kind: 'text', field: overlay.finalSignatureMonth },
+    { name: 'form4a_final_signature_year', kind: 'text', field: overlay.finalSignatureYear },
+    ...overlay.includedChargeRows.flatMap((chargeRow, index) => ([
+      { name: `form4a_included_charge_${index + 1}_current`, kind: 'text' as const, field: chargeRow.current },
+      { name: `form4a_included_charge_${index + 1}_proposed`, kind: 'text' as const, field: chargeRow.proposed },
+    ])),
+    FORM4A_SIGN_AS_LANDLORD_FIELD,
+    FORM4A_SIGN_AS_AGENT_FIELD,
+  ];
+}
+
+function applyEditableFieldLayout(
+  textField: PDFTextField,
+  definition: Extract<EditableForm4AFieldDefinition, { kind: 'text' }>
+) {
+  if (definition.multiline) {
+    textField.enableMultiline();
+  }
+
+  if (definition.field.align === 'center') {
+    textField.setAlignment(TextAlignment.Center);
+  } else if (definition.field.align === 'right') {
+    textField.setAlignment(TextAlignment.Right);
+  } else {
+    textField.setAlignment(TextAlignment.Left);
+  }
+
+  if (definition.field.fontSize) {
+    textField.setFontSize(definition.field.fontSize);
+  }
+}
+
+function createEditableForm4AOverlay(
+  form: PDFForm,
+  pdfDoc: PDFDocument,
+  overlay: Section13FormOverlayMap
+) {
+  const pages = pdfDoc.getPages();
+  for (const definition of buildEditableForm4AFieldDefinitions(overlay)) {
+    const page = pages[definition.field.pageIndex];
+    if (!page) continue;
+
+    if (definition.kind === 'text') {
+      const field = form.createTextField(definition.name);
+      field.addToPage(page, {
+        x: definition.field.x,
+        y: definition.field.y,
+        width: definition.field.width,
+        height: definition.field.height,
+        borderWidth: 0,
+      });
+      applyEditableFieldLayout(field, definition);
+      continue;
+    }
+
+    const field = form.createCheckBox(definition.name);
+    field.addToPage(page, {
+      x: definition.field.x,
+      y: definition.field.y,
+      width: definition.field.width,
+      height: definition.field.height,
+      borderWidth: 0,
+    });
+  }
+}
+
+function setEditableTextFieldValue(form: PDFForm, fieldName: string, value: string) {
+  const field = form.getFieldMaybe(fieldName);
+  if (field instanceof PDFTextField) {
+    field.setText(safeText(value));
+  }
+}
+
+function setEditableCheckboxValue(form: PDFForm, fieldName: string, checked: boolean) {
+  const field = form.getFieldMaybe(fieldName);
+  if (field instanceof PDFCheckBox) {
+    if (checked) {
+      field.check();
+    } else {
+      field.uncheck();
+    }
+  }
 }
 
 async function pageCount(bytes: Uint8Array): Promise<number> {
@@ -1256,6 +1421,11 @@ async function generateSection13Form4A(
   const bold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
   const pages = pdfDoc.getPages();
   const overlay = getForm4AOverlayMap(resolvedState.rulesVersion);
+  const form = pdfDoc.getForm();
+
+  if (form.getFields().length === 0) {
+    createEditableForm4AOverlay(form, pdfDoc, overlay);
+  }
 
   const tenantNames = resolvedState.tenancy.tenantNames.filter(Boolean).join('\n');
   const propertyPostcode =
@@ -1285,218 +1455,73 @@ async function generateSection13Form4A(
     ? resolvedState.landlord.agentEmail || resolvedState.landlord.landlordEmail || ''
     : resolvedState.landlord.landlordEmail || '';
 
-  drawOverlayText(pages[overlay.tenantNames.pageIndex], overlay.tenantNames, tenantNames, font);
-  drawOverlayText(
-    pages[overlay.propertyAddressLine1.pageIndex],
-    overlay.propertyAddressLine1,
-    resolvedState.tenancy.propertyAddressLine1,
-    font
-  );
-  drawOverlayText(
-    pages[overlay.propertyAddressLine2.pageIndex],
-    overlay.propertyAddressLine2,
-    resolvedState.tenancy.propertyAddressLine2 || '',
-    font
-  );
-  drawOverlayText(
-    pages[overlay.propertyTownCity.pageIndex],
-    overlay.propertyTownCity,
-    resolvedState.tenancy.propertyTownCity,
-    font
-  );
-  drawOverlayText(
-    pages[overlay.propertyCounty.pageIndex],
-    overlay.propertyCounty,
-    '',
-    font
-  );
-  drawOverlayText(
-    pages[overlay.propertyPostcode.pageIndex],
-    overlay.propertyPostcode,
-    propertyPostcode,
-    font
-  );
-  drawOverlayText(
-    pages[overlay.landlordName.pageIndex],
-    overlay.landlordName,
-    resolvedState.landlord.landlordName,
-    font
-  );
-  drawOverlayText(
-    pages[overlay.landlordAddressLine1.pageIndex],
-    overlay.landlordAddressLine1,
-    resolvedState.landlord.landlordAddressLine1,
-    font
-  );
-  drawOverlayText(
-    pages[overlay.landlordAddressLine2.pageIndex],
-    overlay.landlordAddressLine2,
-    resolvedState.landlord.landlordAddressLine2 || '',
-    font
-  );
-  drawOverlayText(
-    pages[overlay.landlordTownCity.pageIndex],
-    overlay.landlordTownCity,
-    resolvedState.landlord.landlordTownCity,
-    font
-  );
-  drawOverlayText(
-    pages[overlay.landlordCounty.pageIndex],
-    overlay.landlordCounty,
-    '',
-    font
-  );
-  drawOverlayText(
-    pages[overlay.landlordPostcode.pageIndex],
-    overlay.landlordPostcode,
-    landlordPostcode,
-    font
-  );
+  setEditableTextFieldValue(form, 'form4a_tenant_names', tenantNames);
+  setEditableTextFieldValue(form, 'form4a_property_address_line1', resolvedState.tenancy.propertyAddressLine1);
+  setEditableTextFieldValue(form, 'form4a_property_address_line2', resolvedState.tenancy.propertyAddressLine2 || '');
+  setEditableTextFieldValue(form, 'form4a_property_town_city', resolvedState.tenancy.propertyTownCity);
+  setEditableTextFieldValue(form, 'form4a_property_county', '');
+  setEditableTextFieldValue(form, 'form4a_property_postcode', propertyPostcode || '');
+  setEditableTextFieldValue(form, 'form4a_landlord_name', resolvedState.landlord.landlordName);
+  setEditableTextFieldValue(form, 'form4a_landlord_address_line1', resolvedState.landlord.landlordAddressLine1);
+  setEditableTextFieldValue(form, 'form4a_landlord_address_line2', resolvedState.landlord.landlordAddressLine2 || '');
+  setEditableTextFieldValue(form, 'form4a_landlord_town_city', resolvedState.landlord.landlordTownCity);
+  setEditableTextFieldValue(form, 'form4a_landlord_county', '');
+  setEditableTextFieldValue(form, 'form4a_landlord_postcode', landlordPostcode);
+  setEditableTextFieldValue(form, 'form4a_landlord_phone', resolvedState.landlord.landlordPhone || '');
+  setEditableTextFieldValue(form, 'form4a_landlord_email', resolvedState.landlord.landlordEmail || '');
+  setEditableTextFieldValue(form, 'form4a_agent_name', resolvedState.landlord.agentName || '');
+  setEditableTextFieldValue(form, 'form4a_agent_address_line1', resolvedState.landlord.agentAddressLine1 || '');
+  setEditableTextFieldValue(form, 'form4a_agent_address_line2', resolvedState.landlord.agentAddressLine2 || '');
+  setEditableTextFieldValue(form, 'form4a_agent_town_city', resolvedState.landlord.agentTownCity || '');
+  setEditableTextFieldValue(form, 'form4a_agent_county', '');
+  setEditableTextFieldValue(form, 'form4a_agent_postcode', agentPostcode);
+  setEditableTextFieldValue(form, 'form4a_agent_phone', resolvedState.landlord.agentPhone || '');
+  setEditableTextFieldValue(form, 'form4a_agent_email', resolvedState.landlord.agentEmail || '');
+  setEditableTextFieldValue(form, 'form4a_current_rent_amount', formatCurrencyFieldValue(resolvedState.tenancy.currentRentAmount));
+  setEditableTextFieldValue(form, 'form4a_current_rent_frequency', toTitleFrequency(resolvedState.tenancy.currentRentFrequency));
+  setEditableTextFieldValue(form, 'form4a_tenancy_start_day', startDate.day);
+  setEditableTextFieldValue(form, 'form4a_tenancy_start_month', startDate.month);
+  setEditableTextFieldValue(form, 'form4a_tenancy_start_year', startDate.year);
+  setEditableTextFieldValue(form, 'form4a_last_increase_day', lastIncreaseDate.day);
+  setEditableTextFieldValue(form, 'form4a_last_increase_month', lastIncreaseDate.month);
+  setEditableTextFieldValue(form, 'form4a_last_increase_year', lastIncreaseDate.year);
+  setEditableTextFieldValue(form, 'form4a_first_increase_day', firstIncreaseDate.day);
+  setEditableTextFieldValue(form, 'form4a_first_increase_month', firstIncreaseDate.month);
+  setEditableTextFieldValue(form, 'form4a_first_increase_year', firstIncreaseDate.year);
+  setEditableTextFieldValue(form, 'form4a_proposed_rent_amount', formatCurrencyFieldValue(resolvedState.proposal.proposedRentAmount));
+  setEditableTextFieldValue(form, 'form4a_proposed_rent_frequency', toTitleFrequency(resolvedState.tenancy.currentRentFrequency));
+  setEditableTextFieldValue(form, 'form4a_proposed_start_day', proposedStartDate.day);
+  setEditableTextFieldValue(form, 'form4a_proposed_start_month', proposedStartDate.month);
+  setEditableTextFieldValue(form, 'form4a_proposed_start_year', proposedStartDate.year);
 
-  drawOverlayText(
-    pages[overlay.landlordPhone.pageIndex],
-    overlay.landlordPhone,
-    resolvedState.landlord.landlordPhone || '',
-    font
-  );
-  drawOverlayText(
-    pages[overlay.landlordEmail.pageIndex],
-    overlay.landlordEmail,
-    resolvedState.landlord.landlordEmail || '',
-    font
-  );
-  drawOverlayText(pages[overlay.agentName.pageIndex], overlay.agentName, resolvedState.landlord.agentName || '', font);
-  drawOverlayText(
-    pages[overlay.agentAddressLine1.pageIndex],
-    overlay.agentAddressLine1,
-    resolvedState.landlord.agentAddressLine1 || '',
-    font
-  );
-  drawOverlayText(
-    pages[overlay.agentAddressLine2.pageIndex],
-    overlay.agentAddressLine2,
-    resolvedState.landlord.agentAddressLine2 || '',
-    font
-  );
-  drawOverlayText(
-    pages[overlay.agentTownCity.pageIndex],
-    overlay.agentTownCity,
-    resolvedState.landlord.agentTownCity || '',
-    font
-  );
-  drawOverlayText(pages[overlay.agentCounty.pageIndex], overlay.agentCounty, '', font);
-  drawOverlayText(
-    pages[overlay.agentPostcode.pageIndex],
-    overlay.agentPostcode,
-    agentPostcode,
-    font
-  );
-  drawOverlayText(
-    pages[overlay.agentPhone.pageIndex],
-    overlay.agentPhone,
-    resolvedState.landlord.agentPhone || '',
-    font
-  );
-  drawOverlayText(
-    pages[overlay.agentEmail.pageIndex],
-    overlay.agentEmail,
-    resolvedState.landlord.agentEmail || '',
-    font
-  );
-
-  drawOverlayText(
-    pages[overlay.currentRentAmount.pageIndex],
-    overlay.currentRentAmount,
-    formatCurrencyFieldValue(resolvedState.tenancy.currentRentAmount),
-    font
-  );
-  drawOverlayText(
-    pages[overlay.currentRentFrequency.pageIndex],
-    overlay.currentRentFrequency,
-    toTitleFrequency(resolvedState.tenancy.currentRentFrequency),
-    font
-  );
-  drawOverlayText(pages[overlay.tenancyStartDay.pageIndex], overlay.tenancyStartDay, startDate.day, font);
-  drawOverlayText(pages[overlay.tenancyStartMonth.pageIndex], overlay.tenancyStartMonth, startDate.month, font);
-  drawOverlayText(pages[overlay.tenancyStartYear.pageIndex], overlay.tenancyStartYear, startDate.year, font);
-  drawOverlayText(pages[overlay.lastIncreaseDay.pageIndex], overlay.lastIncreaseDay, lastIncreaseDate.day, font);
-  drawOverlayText(pages[overlay.lastIncreaseMonth.pageIndex], overlay.lastIncreaseMonth, lastIncreaseDate.month, font);
-  drawOverlayText(pages[overlay.lastIncreaseYear.pageIndex], overlay.lastIncreaseYear, lastIncreaseDate.year, font);
-  drawOverlayText(pages[overlay.firstIncreaseDay.pageIndex], overlay.firstIncreaseDay, firstIncreaseDate.day, font);
-  drawOverlayText(pages[overlay.firstIncreaseMonth.pageIndex], overlay.firstIncreaseMonth, firstIncreaseDate.month, font);
-  drawOverlayText(pages[overlay.firstIncreaseYear.pageIndex], overlay.firstIncreaseYear, firstIncreaseDate.year, font);
-  drawOverlayText(
-    pages[overlay.proposedRentAmount.pageIndex],
-    overlay.proposedRentAmount,
-    formatCurrencyFieldValue(resolvedState.proposal.proposedRentAmount),
-    font
-  );
-  drawOverlayText(
-    pages[overlay.proposedRentFrequency.pageIndex],
-    overlay.proposedRentFrequency,
-    toTitleFrequency(resolvedState.tenancy.currentRentFrequency),
-    font
-  );
-  drawOverlayText(pages[overlay.proposedStartDay.pageIndex], overlay.proposedStartDay, proposedStartDate.day, font);
-  drawOverlayText(pages[overlay.proposedStartMonth.pageIndex], overlay.proposedStartMonth, proposedStartDate.month, font);
-  drawOverlayText(pages[overlay.proposedStartYear.pageIndex], overlay.proposedStartYear, proposedStartDate.year, font);
-
-  overlay.includedChargeRows.forEach((fields, index) => {
-    const charge = resolvedState.includedCharges[index];
-    const existing = charge?.included ? formatCurrencyFieldValue(charge.currentAmount) : 'nil';
-    const proposed = charge?.included ? formatCurrencyFieldValue(charge.proposedAmount) : 'nil';
-    drawOverlayText(pages[fields.current.pageIndex], fields.current, existing, font);
-    drawOverlayText(pages[fields.proposed.pageIndex], fields.proposed, proposed, font);
-  });
-
-  if (pages[4]) {
-    drawTextBox({
-      page: pages[4],
-      text: `${signatoryName}\n${signatoryAddress}`,
-      x: overlay.signatoryNameAndAddress.x,
-      y: overlay.signatoryNameAndAddress.y,
-      width: overlay.signatoryNameAndAddress.width,
-      height: overlay.signatoryNameAndAddress.height,
-      font,
-      fontSize: overlay.signatoryNameAndAddress.fontSize || 10,
+    overlay.includedChargeRows.forEach((fields, index) => {
+      const charge = resolvedState.includedCharges[index];
+      const existing = charge?.included ? formatCurrencyFieldValue(charge.currentAmount) : 'nil';
+      const proposed = charge?.included ? formatCurrencyFieldValue(charge.proposedAmount) : 'nil';
+      setEditableTextFieldValue(form, `form4a_included_charge_${index + 1}_current`, existing);
+      setEditableTextFieldValue(form, `form4a_included_charge_${index + 1}_proposed`, proposed);
     });
-    if (signAsAgent) {
-      drawCheck(pages[4], 56, 641);
-    } else {
-      drawCheck(pages[4], 56, 661);
-    }
-    drawOverlayText(pages[overlay.signatoryPhone.pageIndex], overlay.signatoryPhone, signatoryPhone, font);
-    drawOverlayText(pages[overlay.signatoryEmail.pageIndex], overlay.signatoryEmail, signatoryEmail, font);
-    drawOverlayText(
-      pages[overlay.serviceMethod.pageIndex],
-      overlay.serviceMethod,
-      buildServiceMethodLabel(resolvedState),
-      font
-    );
-    drawOverlayText(pages[overlay.serviceDateDay.pageIndex], overlay.serviceDateDay, serviceDate.day, font);
-    drawOverlayText(pages[overlay.serviceDateMonth.pageIndex], overlay.serviceDateMonth, serviceDate.month, font);
-    drawOverlayText(pages[overlay.serviceDateYear.pageIndex], overlay.serviceDateYear, serviceDate.year, font);
-  }
 
-  if (pages[8]) {
-    drawOverlayText(
-      pages[overlay.supportingReference.pageIndex],
-      overlay.supportingReference,
-      'Section 4.7 and supporting justification report',
-      font
-    );
-    drawOverlayText(
-      pages[overlay.finalSignature.pageIndex],
-      overlay.finalSignature,
-      signAsAgent
-        ? resolvedState.landlord.agentName || resolvedState.landlord.landlordName
-        : resolvedState.landlord.landlordName,
-      font
-    );
-    drawOverlayText(pages[overlay.finalSignatureDay.pageIndex], overlay.finalSignatureDay, serviceDate.day, font);
-    drawOverlayText(pages[overlay.finalSignatureMonth.pageIndex], overlay.finalSignatureMonth, serviceDate.month, font);
-    drawOverlayText(pages[overlay.finalSignatureYear.pageIndex], overlay.finalSignatureYear, serviceDate.year, font);
-  }
+  setEditableTextFieldValue(form, 'form4a_signatory_name_address', `${signatoryName}\n${signatoryAddress}`);
+  setEditableCheckboxValue(form, 'form4a_sign_as_landlord', !signAsAgent);
+  setEditableCheckboxValue(form, 'form4a_sign_as_agent', signAsAgent);
+  setEditableTextFieldValue(form, 'form4a_signatory_phone', signatoryPhone);
+  setEditableTextFieldValue(form, 'form4a_signatory_email', signatoryEmail);
+  setEditableTextFieldValue(form, 'form4a_service_method', buildServiceMethodLabel(resolvedState));
+  setEditableTextFieldValue(form, 'form4a_service_date_day', serviceDate.day);
+  setEditableTextFieldValue(form, 'form4a_service_date_month', serviceDate.month);
+  setEditableTextFieldValue(form, 'form4a_service_date_year', serviceDate.year);
+  setEditableTextFieldValue(form, 'form4a_supporting_reference', 'Section 4.7 and supporting justification report');
+  setEditableTextFieldValue(
+    form,
+    'form4a_final_signature',
+    signAsAgent
+      ? resolvedState.landlord.agentName || resolvedState.landlord.landlordName
+      : resolvedState.landlord.landlordName
+  );
+  setEditableTextFieldValue(form, 'form4a_final_signature_day', serviceDate.day);
+  setEditableTextFieldValue(form, 'form4a_final_signature_month', serviceDate.month);
+  setEditableTextFieldValue(form, 'form4a_final_signature_year', serviceDate.year);
 
   pages[0].drawText(safeText(`Prepared using ${SECTION13_BRAND_LABEL}`), {
     x: 38,
@@ -1506,8 +1531,10 @@ async function generateSection13Form4A(
     color: rgb(0.32, 0.12, 0.55),
   });
 
+  form.updateFieldAppearances(font);
+
   return pdfDoc.save();
-}
+  }
 
 async function buildCoverLetterPdf(
   state: Section13State,

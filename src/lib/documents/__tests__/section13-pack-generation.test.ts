@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 import { describe, expect, it } from 'vitest';
-import { PDFDocument } from 'pdf-lib';
+import { PDFCheckBox, PDFDocument, PDFTextField } from 'pdf-lib';
 
 import {
   FORM_4A_OVERLAY_MAP,
@@ -17,12 +17,6 @@ import { extractPdfText } from '@/lib/evidence/extract-pdf-text';
 import { createEmptySection13State } from '@/lib/section13/facts';
 import { computeSection13Preview } from '@/lib/section13/rules';
 import type { Section13Comparable } from '@/lib/section13/types';
-
-type PageTextDraw = {
-  x: number;
-  y: number;
-  text: string;
-};
 
 function buildComparable(index: number, monthlyEquivalent: number): Section13Comparable {
   return {
@@ -89,41 +83,23 @@ function buildState() {
   return { state, comparables };
 }
 
-async function extractPageTextDraws(pdfBytes: Uint8Array, pageIndex: number): Promise<PageTextDraw[]> {
-  const pdf = await PDFDocument.load(pdfBytes);
-  const page = pdf.getPage(pageIndex);
-  const { PDFArray, PDFName, decodePDFRawStream } = require('pdf-lib/cjs/core');
-
-  const contents = page.node.get(PDFName.of('Contents'));
-  const streamRefs = contents instanceof PDFArray
-    ? Array.from({ length: contents.size() }, (_, index) => contents.get(index))
-    : [contents];
-
-  const draws: PageTextDraw[] = [];
-  const pattern = /1 0 0 1 ([0-9.]+) ([0-9.]+) Tm\s*<([0-9A-F]*)> Tj/gi;
-
-  for (const ref of streamRefs) {
-    const stream = pdf.context.lookup(ref);
-    const decoded = decodePDFRawStream(stream).decode();
-    const text = Buffer.from(decoded).toString('latin1');
-
-    for (const match of text.matchAll(pattern)) {
-      draws.push({
-        x: Number(match[1]),
-        y: Number(match[2]),
-        text: Buffer.from(match[3], 'hex').toString('utf8'),
-      });
-    }
-  }
-
-  return draws;
+function getFieldRectangle(pdfDoc: PDFDocument, fieldName: string) {
+  const form = pdfDoc.getForm();
+  const field = form.getField(fieldName) as PDFTextField | PDFCheckBox;
+  const widget = field.acroField.getWidgets()[0];
+  return widget.getRectangle();
 }
 
-function expectDrawWithin(draw: PageTextDraw, region: { x: number; y: number; width: number; height: number }) {
-  expect(draw.x).toBeGreaterThanOrEqual(region.x);
-  expect(draw.x).toBeLessThanOrEqual(region.x + region.width);
-  expect(draw.y).toBeGreaterThanOrEqual(region.y);
-  expect(draw.y).toBeLessThanOrEqual(region.y + region.height);
+function expectFieldWithin(
+  pdfDoc: PDFDocument,
+  fieldName: string,
+  region: { x: number; y: number; width: number; height: number }
+) {
+  const rect = getFieldRectangle(pdfDoc, fieldName);
+  expect(rect.x).toBeGreaterThanOrEqual(region.x);
+  expect(rect.x).toBeLessThanOrEqual(region.x + region.width);
+  expect(rect.y).toBeGreaterThanOrEqual(region.y);
+  expect(rect.y).toBeLessThanOrEqual(region.y + region.height);
 }
 
 function extractCasePosition(text: string): string {
@@ -421,7 +397,7 @@ describe('Section 13 document generation hardening', () => {
     expect(pack.workflowStatus).toBe('fulfilled');
   });
 
-  it('renders Form 4A with the expected page count and injected case text', async () => {
+  it('renders Form 4A with the expected page count, editable fields, and injected case text', async () => {
     const { state, comparables } = buildState();
     const sourcePath = path.join(process.cwd(), 'public', 'official-forms', 'Form_4A.pdf');
     const sourceBytes = await fs.readFile(sourcePath);
@@ -438,22 +414,26 @@ describe('Section 13 document generation hardening', () => {
     const form4A = docs.find((doc) => doc.document_type === 'section13_form_4a');
     expect(form4A).toBeDefined();
 
-    const renderedPdf = await PDFDocument.load(form4A!.pdf);
-    expect(renderedPdf.getPageCount()).toBe(sourcePdf.getPageCount());
+      const renderedPdf = await PDFDocument.load(form4A!.pdf);
+      expect(renderedPdf.getPageCount()).toBe(sourcePdf.getPageCount());
+      expect(renderedPdf.getForm().getFields().length).toBeGreaterThan(40);
 
-    const extracted = await extractPdfText(form4A!.pdf);
-    const normalizedText = extracted.text.replace(/\s+/g, ' ').trim();
+      const form = renderedPdf.getForm();
+      expect(form.getTextField('form4a_tenant_names').getText()).toContain('Alex Tenant');
+      expect(form.getTextField('form4a_tenant_names').getText()).toContain('Jordan Tenant');
+      expect(form.getTextField('form4a_property_address_line1').getText()).toBe('10 Sample Road');
+      expect(form.getTextField('form4a_property_postcode').getText()).toBe('LS1 1AA');
+      expect(form.getTextField('form4a_landlord_name').getText()).toBe('Taylor Landlord');
+      expect(form.getTextField('form4a_current_rent_amount').getText()).toBe('1200.00');
+      expect(form.getTextField('form4a_proposed_rent_amount').getText()).toBe('1285.00');
+      expect(form.getTextField('form4a_service_method').getText()).toBe('First class post');
 
-    expect(normalizedText).toContain('Alex Tenant');
-    expect(normalizedText).toContain('10 Sample Road');
-    expect(normalizedText).toContain('Taylor Landlord');
-    expect(normalizedText).toContain('LS1 1AA');
   }, 120000);
 
-  it('keeps page 4 rendered text inside the intended amount, date, and charges cells', async () => {
-    const { state, comparables } = buildState();
-    const overlay =
-      FORM_4A_OVERLAY_MAP['england_assured_section13_2026-05-01'][SECTION13_FORM_4A_VERSION];
+  it('keeps editable Form 4A field widgets inside the intended amount, date, and charges cells', async () => {
+      const { state, comparables } = buildState();
+      const overlay =
+        FORM_4A_OVERLAY_MAP['england_assured_section13_2026-05-01'][SECTION13_FORM_4A_VERSION];
 
     const docs = await generateSection13CoreDocuments({
       caseId: 'case-section13-page4-validation',
@@ -463,40 +443,30 @@ describe('Section 13 document generation hardening', () => {
       evidenceFiles: [],
     });
 
-    const form4A = docs.find((doc) => doc.document_type === 'section13_form_4a');
-    expect(form4A).toBeDefined();
+      const form4A = docs.find((doc) => doc.document_type === 'section13_form_4a');
+      expect(form4A).toBeDefined();
 
-    const draws = await extractPageTextDraws(form4A!.pdf, 3);
-    const findDraw = (text: string, occurrence: number = 0) => {
-      const matches = draws.filter((draw) => draw.text === text);
-      expect(matches.length).toBeGreaterThan(occurrence);
-      return matches[occurrence]!;
-    };
+      const renderedPdf = await PDFDocument.load(form4A!.pdf);
 
-    expectDrawWithin(findDraw('1200.00'), overlay.currentRentAmount);
-    expectDrawWithin(findDraw('Monthly', 0), overlay.currentRentFrequency);
-    expectDrawWithin(findDraw('01', 0), overlay.tenancyStartDay);
-    expectDrawWithin(findDraw('03'), overlay.tenancyStartMonth);
-    expectDrawWithin(findDraw('2025', 0), overlay.tenancyStartYear);
-    expectDrawWithin(findDraw('01', 1), overlay.lastIncreaseDay);
-    expectDrawWithin(findDraw('04'), overlay.lastIncreaseMonth);
-    expectDrawWithin(findDraw('2025', 1), overlay.lastIncreaseYear);
-    expectDrawWithin(findDraw('1285.00'), overlay.proposedRentAmount);
-    expectDrawWithin(findDraw('Monthly', 1), overlay.proposedRentFrequency);
-    expectDrawWithin(findDraw('01', 2), overlay.proposedStartDay);
-    expectDrawWithin(findDraw('06'), overlay.proposedStartMonth);
-    expectDrawWithin(findDraw('2026'), overlay.proposedStartYear);
+      expectFieldWithin(renderedPdf, 'form4a_current_rent_amount', overlay.currentRentAmount);
+      expectFieldWithin(renderedPdf, 'form4a_current_rent_frequency', overlay.currentRentFrequency);
+      expectFieldWithin(renderedPdf, 'form4a_tenancy_start_day', overlay.tenancyStartDay);
+      expectFieldWithin(renderedPdf, 'form4a_tenancy_start_month', overlay.tenancyStartMonth);
+      expectFieldWithin(renderedPdf, 'form4a_tenancy_start_year', overlay.tenancyStartYear);
+      expectFieldWithin(renderedPdf, 'form4a_last_increase_day', overlay.lastIncreaseDay);
+      expectFieldWithin(renderedPdf, 'form4a_last_increase_month', overlay.lastIncreaseMonth);
+      expectFieldWithin(renderedPdf, 'form4a_last_increase_year', overlay.lastIncreaseYear);
+      expectFieldWithin(renderedPdf, 'form4a_proposed_rent_amount', overlay.proposedRentAmount);
+      expectFieldWithin(renderedPdf, 'form4a_proposed_rent_frequency', overlay.proposedRentFrequency);
+      expectFieldWithin(renderedPdf, 'form4a_proposed_start_day', overlay.proposedStartDay);
+      expectFieldWithin(renderedPdf, 'form4a_proposed_start_month', overlay.proposedStartMonth);
+      expectFieldWithin(renderedPdf, 'form4a_proposed_start_year', overlay.proposedStartYear);
 
-    const nilDraws = draws.filter((draw) => draw.text === 'nil');
-    expect(nilDraws).toHaveLength(10);
-    nilDraws.forEach((draw, index) => {
-      const rowIndex = Math.floor(index / 2);
-      const cell = index % 2 === 0
-        ? overlay.includedChargeRows[rowIndex].current
-        : overlay.includedChargeRows[rowIndex].proposed;
-      expectDrawWithin(draw, cell);
-    });
-  }, 120000);
+      overlay.includedChargeRows.forEach((fields, index) => {
+        expectFieldWithin(renderedPdf, `form4a_included_charge_${index + 1}_current`, fields.current);
+        expectFieldWithin(renderedPdf, `form4a_included_charge_${index + 1}_proposed`, fields.proposed);
+      });
+    }, 120000);
 
   it('uses tribunal-ready empty-evidence wording and Section 13 proof-of-service branding', async () => {
     const { state, comparables } = buildState();
