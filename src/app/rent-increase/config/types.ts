@@ -1,5 +1,7 @@
 import type { FAQItem } from '@/components/seo/FAQSection';
 
+export type RentIncreaseSamplePackKey = 'section13_standard' | 'section13_defensive';
+
 export type RentIncreaseGuideSlug =
   | 'section-13-notice'
   | 'how-to-increase-rent'
@@ -55,6 +57,7 @@ export type RentIncreaseGuidePage = {
   sections: RentIncreaseGuideSection[];
   faqs: FAQItem[];
   relatedLinks: RentIncreaseGuideLink[];
+  samplePackKey?: RentIncreaseSamplePackKey;
   midCtaTitle: string;
   midCtaBody: string;
   finalCtaTitle: string;
@@ -78,4 +81,3 @@ export function sections(input: {
     { id: 'how-to-avoid-challenges', title: 'How to avoid challenges', paragraphs: input.avoidChallenges },
   ];
 }
-

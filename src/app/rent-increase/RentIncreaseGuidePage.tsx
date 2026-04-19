@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
 import { Container } from '@/components/ui/Container';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { getCanonicalUrl } from '@/lib/seo';
 import { articleSchema, breadcrumbSchema, faqPageSchema, StructuredData } from '@/lib/seo/structured-data';
 import { RENT_INCREASE_WIZARD_HREF } from './content';
@@ -70,6 +72,7 @@ function SectionCard({ section }: { section: RentIncreaseGuideSection }) {
 
 export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuidePage }) {
   const canonical = getCanonicalUrl(config.path);
+  const sampleProof = config.samplePackKey ? getGoldenPackProofData(config.samplePackKey) : null;
   const jumpLinks = [
     { href: '#quick-answer', label: 'Quick answer' },
     ...config.sections.map((section) => ({ href: `#${section.id}`, label: section.title })),
@@ -178,6 +181,8 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
               body="Move from reading to action with the Standard Section 13 pack. It keeps the timeline checks, the comparables, and the notice outputs lined up before you serve."
               primaryLabel="Start the Standard Section 13 pack"
             />
+
+            {sampleProof ? <GoldenPackProof data={sampleProof} /> : null}
 
             {config.sections.map((section, index) => (
               <div key={section.id} className="space-y-8">

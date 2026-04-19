@@ -4,10 +4,8 @@ import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
-import { WhatsIncludedInteractive } from '@/components/value-proposition';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { getMoneyClaimPreviewData } from '@/lib/previews/moneyClaimPreviews';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
@@ -65,11 +63,8 @@ const faqs: FAQItem[] = [
 
 export const runtime = 'nodejs';
 
-export default async function MoneyClaimPage() {
-  const previews = await getMoneyClaimPreviewData();
-  const sampleProof = getGoldenPackProofData('money_claim', {
-    previewDocs: previews,
-  });
+export default function MoneyClaimPage() {
+  const sampleProof = getGoldenPackProofData('money_claim');
 
   const content: ProductSalesPageContent = {
     hero: {
@@ -182,17 +177,6 @@ export default async function MoneyClaimPage() {
           includedByDefault: true,
         },
       ],
-      preview: previews.length ? (
-        <div className="overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_16px_40px_rgba(24,11,49,0.06)]">
-          <WhatsIncludedInteractive
-            product="money_claim"
-            previews={previews}
-            showIntro={false}
-            titleOverride="Preview the money claim pack"
-            subtitleOverride="Review the demand letter, claim paperwork, and debt schedules before you buy."
-          />
-        </div>
-      ) : undefined,
       sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {

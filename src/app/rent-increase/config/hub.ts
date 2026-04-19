@@ -86,6 +86,7 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
     RENT_INCREASE_LINKS.wizard,
     RENT_INCREASE_LINKS.standardProduct,
   ],
+  samplePackKey: 'section13_standard',
   midCtaTitle: 'Generate a compliant Section 13 notice with built-in checks',
   midCtaBody:
     'Use the Standard pack when you are ready to turn the dates, the figure, and the explanation into a cleaner landlord file.',

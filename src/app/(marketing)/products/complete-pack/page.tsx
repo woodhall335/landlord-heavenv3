@@ -4,10 +4,8 @@ import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
-import { WhatsIncludedInteractive } from '@/components/value-proposition';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { getCompletePackPreviewData } from '@/lib/previews/completePackPreviews';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
@@ -67,11 +65,8 @@ const faqs: FAQItem[] = [
 
 export const runtime = 'nodejs';
 
-export default async function CompleteEvictionPackPage() {
-  const previews = await getCompletePackPreviewData();
-  const sampleProof = getGoldenPackProofData('complete_pack', {
-    previewDocs: previews.section8,
-  });
+export default function CompleteEvictionPackPage() {
+  const sampleProof = getGoldenPackProofData('complete_pack');
 
   const content: ProductSalesPageContent = {
     hero: {
@@ -174,17 +169,6 @@ export default async function CompleteEvictionPackPage() {
           includedByDefault: true,
         },
       ],
-      preview: (
-        <div className="overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_16px_40px_rgba(24,11,49,0.06)]">
-          <WhatsIncludedInteractive
-            product="complete_pack"
-            previews={previews}
-            showIntro={false}
-            titleOverride="Preview the court possession pack"
-            subtitleOverride="Review the notice, N5, N119, and the court filing paperwork before you buy."
-          />
-        </div>
-      ),
       sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {

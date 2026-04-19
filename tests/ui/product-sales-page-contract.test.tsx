@@ -283,6 +283,10 @@ describe('public product sales page contract', () => {
         expect(screen.getAllByText(item).length).toBeGreaterThan(0);
       }
 
+      expect(screen.queryByText(/Preview the Section 8 notice pack/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Preview the court possession pack/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Preview the money claim pack/i)).not.toBeInTheDocument();
+
       const text = document.body.textContent ?? '';
       expect(text).not.toContain('View route');
       expect(text).not.toContain('Wales');

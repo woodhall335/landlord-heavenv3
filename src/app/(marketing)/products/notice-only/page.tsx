@@ -4,10 +4,8 @@ import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
-import { WhatsIncludedInteractive } from '@/components/value-proposition';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
-import { getNoticeOnlyPreviewData } from '@/lib/previews/noticeOnlyPreviews';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
@@ -66,11 +64,8 @@ const faqs: FAQItem[] = [
 
 export const runtime = 'nodejs';
 
-export default async function NoticeOnlyPage() {
-  const previews = await getNoticeOnlyPreviewData();
-  const sampleProof = getGoldenPackProofData('notice_only', {
-    previewDocs: previews.england.section8,
-  });
+export default function NoticeOnlyPage() {
+  const sampleProof = getGoldenPackProofData('notice_only');
 
   const content: ProductSalesPageContent = {
     hero: {
@@ -161,19 +156,6 @@ export default async function NoticeOnlyPage() {
           includedByDefault: true,
         },
       ],
-      preview: (
-        <div className="overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_16px_40px_rgba(24,11,49,0.06)]">
-          <WhatsIncludedInteractive
-            product="notice_only"
-            defaultJurisdiction="england"
-            lockJurisdiction
-            previews={previews}
-            showIntro={false}
-            titleOverride="Preview the Section 8 notice pack"
-            subtitleOverride="Review the document set before you buy, then generate the final version when the facts look right."
-          />
-        </div>
-      ),
       sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
