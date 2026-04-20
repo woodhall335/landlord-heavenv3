@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Move-Out &amp; Guarantor Schedule</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 24mm 18mm 22mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11pt;
+      line-height: 1.58;
+      color: #18181b;
+      background: #fff;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      page-break-after: avoid;
+      color: #111827;
+    }
+
+    .cover {
+      border: 1.5pt solid #1f2937;
+      padding: 22pt 24pt;
+      margin-bottom: 20pt;
+    }
+
+    .cover-topline {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 8.25pt;
+      color: #4b5563;
+      margin-bottom: 10pt;
+    }
+
+    .cover h1 {
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 20pt;
+      line-height: 1.2;
+    }
+
+    .cover-subtitle {
+      margin-top: 8pt;
+      font-size: 11pt;
+      color: #374151;
+    }
+
+    .cover-intro {
+      margin-top: 14pt;
+      padding: 12pt 14pt;
+      border-left: 3pt solid #374151;
+      background: #f8fafc;
+      color: #1f2937;
+      text-align: justify;
+    }
+
+    .cover-meta,
+    .parties-table,
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14pt;
+      font-size: 10pt;
+    }
+
+    .cover-meta td,
+    .parties-table td,
+    .detail-table td {
+      border: 0.75pt solid #9ca3af;
+      padding: 8pt 10pt;
+      vertical-align: top;
+    }
+
+    .cover-meta .label,
+    .parties-table .role,
+    .detail-table .label {
+      width: 28%;
+      background: #f3f4f6;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #374151;
+    }
+
+    .section-title {
+      font-size: 12.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1pt solid #111827;
+      padding-bottom: 5pt;
+      margin: 18pt 0 12pt;
+    }
+
+    .opening,
+    .clause p,
+    .clause-intro,
+    .execution-copy {
+      margin: 0 0 8pt 0;
+      text-align: justify;
+    }
+
+    .party-name {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .party-detail {
+      margin-top: 3pt;
+    }
+
+    .recitals {
+      margin: 0 0 8pt 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: recital;
+    }
+
+    .recitals li {
+      margin: 0 0 7pt 0;
+      padding-left: 28pt;
+      position: relative;
+      text-align: justify;
+    }
+
+    .recitals li::before {
+      counter-increment: recital;
+      content: counter(recital, upper-alpha) ".";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    .clause {
+      margin: 14pt 0 0;
+      page-break-inside: avoid;
+    }
+
+    .clause-heading {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11.25pt;
+      font-weight: 700;
+      margin-bottom: 6pt;
+      color: #111827;
+    }
+
+    .subpoints {
+      margin: 6pt 0 8pt 18pt;
+      padding: 0;
+    }
+
+    .subpoints li {
+      margin: 0 0 6pt 0;
+      text-align: justify;
+    }
+
+    .note-panel {
+      margin-top: 14pt;
+      padding: 11pt 13pt;
+      border: 0.75pt solid #9ca3af;
+      background: #f9fafb;
+    }
+
+    .note-panel p {
+      margin: 6pt 0 0;
+      white-space: pre-line;
+      text-align: justify;
+    }
+
+    .deed-warning {
+      margin-top: 12pt;
+      padding: 10pt 12pt;
+      border: 0.75pt solid #92400e;
+      background: #fff7ed;
+      color: #7c2d12;
+      page-break-inside: avoid;
+    }
+
+    .execution {
+      margin-top: 24pt;
+      page-break-inside: avoid;
+    }
+
+    .signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14pt;
+    }
+
+    .signature-card {
+      border: 0.75pt solid #9ca3af;
+      padding: 12pt;
+      min-height: 176pt;
+      page-break-inside: avoid;
+    }
+
+    .signature-role {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4b5563;
+    }
+
+    .signature-name {
+      margin-top: 5pt;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .signature-line {
+      margin-top: 28pt;
+      border-bottom: 1pt solid #1f2937;
+      height: 18pt;
+    }
+
+    .signature-meta {
+      margin-top: 8pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      color: #4b5563;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12pt;
+    }
+
+    .witness-block {
+      margin-top: 14pt;
+      padding-top: 10pt;
+      border-top: 0.75pt dashed #9ca3af;
+    }
+
+    .witness-label {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #4b5563;
+    }
+
+    .witness-note {
+      margin-top: 6pt;
+      font-size: 8.9pt;
+      color: #374151;
+      text-align: justify;
+    }
+
+    .footer {
+      margin-top: 18pt;
+      padding-top: 10pt;
+      border-top: 0.75pt solid #9ca3af;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 10pt;
+    }
+
+    @media print {
+      .section-title,
+      .clause-heading,
+      .signature-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div class="cover-topline">
+      England residential document
+    </div>
+    <h1>Student Move-Out &amp; Guarantor Schedule</h1>
+    <div class="cover-subtitle">Student move-out, replacement, and guarantor support schedule</div>
+    <div class="cover-intro">This schedule records the practical end-of-term, guarantor, and replacement details selected in the student wizard.</div>
+
+    <table class="cover-meta">
+      <tr>
+        <td class="label">Document date</td>
+        <td>16 April 2026</td>
+        <td class="label">Reference</td>
+        <td>RL-ENGLAND-STUDENT-TA-TENANCY-001</td>
+      </tr>
+      <tr>
+        <td class="label">Effective date</td>
+        <td>2 May 2026</td>
+        <td class="label">Nature</td>
+        <td>Student move-out schedule</td>
+      </tr>
+      <tr>
+        <td class="label">Property</td>
+        <td colspan="3">12 Example Street, London, SW1A 1AA</td>
+      </tr>
+      <tr>
+        <td class="label">Tenant(s)</td>
+        <td>Aisha Student, Ben Student, Cara Student</td>
+        <td class="label">Term / dates</td>
+        <td>
+          2 May 2026
+           to 1 May 2027
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Rent</td>
+        <td>&#163;1500.00</td>
+        <td class="label">Deposit</td>
+        <td>&#163;1500.00</td>
+      </tr>
+    </table>
+  </section>
+
+  <h2 class="section-title">Parties</h2>
+  <p class="opening">
+      This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+  </p>
+
+  <table class="parties-table">
+      <tr>
+        <td class="role">Landlord</td>
+        <td>
+          <div class="party-name">Jane Landlord</div>
+          <div class="party-detail">3 Owner Road, London, SW1A 2BB</div>
+          <div class="party-detail">Email: jane@example.com</div>
+          <div class="party-detail">Telephone: 07123 456789</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Tenant 1</td>
+        <td>
+          <div class="party-name">Aisha Student</div>
+          <div class="party-detail">12 Example Street, London, SW1A 1AA</div>
+          <div class="party-detail">Email: aisha@example.com</div>
+          <div class="party-detail">Telephone: 07000 200001</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Tenant 2</td>
+        <td>
+          <div class="party-name">Ben Student</div>
+          <div class="party-detail">12 Example Street, London, SW1A 1AA</div>
+          <div class="party-detail">Email: ben@example.com</div>
+          <div class="party-detail">Telephone: 07000 200002</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Tenant 3</td>
+        <td>
+          <div class="party-name">Cara Student</div>
+          <div class="party-detail">12 Example Street, London, SW1A 1AA</div>
+          <div class="party-detail">Email: cara@example.com</div>
+          <div class="party-detail">Telephone: 07000 200003</div>
+        </td>
+      </tr>
+  </table>
+
+
+    <h2 class="section-title">Defined Terms</h2>
+    <table class="detail-table">
+        <tr>
+          <td class="label">Property</td>
+          <td>12 Example Street, London, SW1A 1AA</td>
+        </tr>
+        <tr>
+          <td class="label">Landlord</td>
+          <td>Jane Landlord</td>
+        </tr>
+        <tr>
+          <td class="label">Tenant</td>
+          <td>Aisha Student</td>
+        </tr>
+    </table>
+
+  <h2 class="section-title">Operative Provisions</h2>
+    <section class="clause">
+      <div class="clause-heading">1. Student Move-Out and Guarantor Schedule</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Guarantor required</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td class="label">Guarantor scope</td>
+              <td>rent_and_all_tenant_obligations</td>
+            </tr>
+            <tr>
+              <td class="label">Replacement request notice window</td>
+              <td>21_days</td>
+            </tr>
+            <tr>
+              <td class="label">Replacement costs</td>
+              <td>outgoing_tenant</td>
+            </tr>
+            <tr>
+              <td class="label">Move-out keys and return process</td>
+              <td>Keys to be returned to the managing agent office.</td>
+            </tr>
+            <tr>
+              <td class="label">Cleaning and room hand-back standard</td>
+              <td>Professional-clean standard for kitchen and bathrooms.</td>
+            </tr>
+            <tr>
+              <td class="label">End-of-term return standard</td>
+              <td>Rooms to be returned clean and with all keys.</td>
+            </tr>
+        </table>
+
+
+
+    </section>
+
+
+
+  <section class="execution">
+    <h2 class="section-title">Execution</h2>
+    <p class="execution-copy">Keep this schedule with the student agreement, any guarantor deed, and the check-out file.</p>
+    <div class="signatures">
+        <div class="signature-card">
+          <div class="signature-role">Prepared by</div>
+          <div class="signature-name">Jane Landlord</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+        </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>Generated by Landlord Heaven</span>
+    <span>RL-ENGLAND-STUDENT-TA-TENANCY-001</span>
+  </div>
+</body>
+</html>

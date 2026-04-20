@@ -105,19 +105,11 @@ type Section13FormOverlayMap = {
     current: OverlayField;
     proposed: OverlayField;
   }>;
-  signatoryNameAndAddress: OverlayField;
-  signatoryPhone: OverlayField;
-  signatoryEmail: OverlayField;
-  serviceMethod: OverlayField;
-  serviceDateDay: OverlayField;
-  serviceDateMonth: OverlayField;
-  serviceDateYear: OverlayField;
-  supportingReference: OverlayField;
-  finalSignature: OverlayField;
-  finalSignatureDay: OverlayField;
-  finalSignatureMonth: OverlayField;
-  finalSignatureYear: OverlayField;
-  };
+  printName: OverlayField;
+  signatureDateDay: OverlayField;
+  signatureDateMonth: OverlayField;
+  signatureDateYear: OverlayField;
+};
 
 type EditableForm4AFieldDefinition =
   | {
@@ -189,18 +181,10 @@ export const FORM_4A_OVERLAY_MAP: Record<string, Record<string, Section13FormOve
         current: { pageIndex: 3, x: 173, y, width: 74, height: 14, fontSize: 9, align: 'center' },
         proposed: { pageIndex: 3, x: 277, y, width: 74, height: 14, fontSize: 9, align: 'center' },
       })),
-      signatoryNameAndAddress: { pageIndex: 4, x: 56, y: 671, width: 328, height: 86 },
-      signatoryPhone: { pageIndex: 4, x: 56, y: 552, width: 155, height: 16 },
-      signatoryEmail: { pageIndex: 4, x: 56, y: 487, width: 325, height: 16, fontSize: 10 },
-      serviceMethod: { pageIndex: 4, x: 56, y: 354, width: 240, height: 16 },
-      serviceDateDay: { pageIndex: 4, x: 69, y: 282, width: 16, height: 14 },
-      serviceDateMonth: { pageIndex: 4, x: 111, y: 282, width: 16, height: 14 },
-      serviceDateYear: { pageIndex: 4, x: 156, y: 282, width: 38, height: 14 },
-      supportingReference: { pageIndex: 8, x: 56, y: 700, width: 300, height: 18, fontSize: 10 },
-      finalSignature: { pageIndex: 8, x: 56, y: 119, width: 188, height: 18 },
-      finalSignatureDay: { pageIndex: 8, x: 70, y: 57, width: 16, height: 14 },
-      finalSignatureMonth: { pageIndex: 8, x: 113, y: 57, width: 16, height: 14 },
-      finalSignatureYear: { pageIndex: 8, x: 156, y: 57, width: 38, height: 14 },
+      printName: { pageIndex: 4, x: 56, y: 634, width: 240, height: 18 },
+      signatureDateDay: { pageIndex: 4, x: 56, y: 558, width: 20, height: 14, fontSize: 10, align: 'center' },
+      signatureDateMonth: { pageIndex: 4, x: 102, y: 558, width: 30, height: 14, fontSize: 10, align: 'center' },
+      signatureDateYear: { pageIndex: 4, x: 147, y: 558, width: 38, height: 14, fontSize: 10, align: 'center' },
     },
   },
 };
@@ -676,18 +660,10 @@ function buildEditableForm4AFieldDefinitions(
     { name: 'form4a_proposed_start_day', kind: 'text', field: overlay.proposedStartDay },
     { name: 'form4a_proposed_start_month', kind: 'text', field: overlay.proposedStartMonth },
     { name: 'form4a_proposed_start_year', kind: 'text', field: overlay.proposedStartYear },
-    { name: 'form4a_signatory_name_address', kind: 'text', field: overlay.signatoryNameAndAddress, multiline: true },
-    { name: 'form4a_signatory_phone', kind: 'text', field: overlay.signatoryPhone },
-    { name: 'form4a_signatory_email', kind: 'text', field: overlay.signatoryEmail },
-    { name: 'form4a_service_method', kind: 'text', field: overlay.serviceMethod },
-    { name: 'form4a_service_date_day', kind: 'text', field: overlay.serviceDateDay },
-    { name: 'form4a_service_date_month', kind: 'text', field: overlay.serviceDateMonth },
-    { name: 'form4a_service_date_year', kind: 'text', field: overlay.serviceDateYear },
-    { name: 'form4a_supporting_reference', kind: 'text', field: overlay.supportingReference },
-    { name: 'form4a_final_signature', kind: 'text', field: overlay.finalSignature },
-    { name: 'form4a_final_signature_day', kind: 'text', field: overlay.finalSignatureDay },
-    { name: 'form4a_final_signature_month', kind: 'text', field: overlay.finalSignatureMonth },
-    { name: 'form4a_final_signature_year', kind: 'text', field: overlay.finalSignatureYear },
+    { name: 'form4a_print_name', kind: 'text', field: overlay.printName },
+    { name: 'form4a_signature_date_day', kind: 'text', field: overlay.signatureDateDay },
+    { name: 'form4a_signature_date_month', kind: 'text', field: overlay.signatureDateMonth },
+    { name: 'form4a_signature_date_year', kind: 'text', field: overlay.signatureDateYear },
     ...overlay.includedChargeRows.flatMap((chargeRow, index) => ([
       { name: `form4a_included_charge_${index + 1}_current`, kind: 'text' as const, field: chargeRow.current },
       { name: `form4a_included_charge_${index + 1}_proposed`, kind: 'text' as const, field: chargeRow.proposed },
@@ -1445,15 +1421,6 @@ async function generateSection13Form4A(
   const signatoryName = signAsAgent
     ? resolvedState.landlord.agentName || resolvedState.landlord.landlordName
     : resolvedState.landlord.landlordName;
-  const signatoryAddress = signAsAgent
-    ? buildAgentAddress(resolvedState) || buildLandlordAddress(resolvedState)
-    : buildLandlordAddress(resolvedState);
-  const signatoryPhone = signAsAgent
-    ? resolvedState.landlord.agentPhone || resolvedState.landlord.landlordPhone || ''
-    : resolvedState.landlord.landlordPhone || '';
-  const signatoryEmail = signAsAgent
-    ? resolvedState.landlord.agentEmail || resolvedState.landlord.landlordEmail || ''
-    : resolvedState.landlord.landlordEmail || '';
 
   setEditableTextFieldValue(form, 'form4a_tenant_names', tenantNames);
   setEditableTextFieldValue(form, 'form4a_property_address_line1', resolvedState.tenancy.propertyAddressLine1);
@@ -1502,26 +1469,12 @@ async function generateSection13Form4A(
       setEditableTextFieldValue(form, `form4a_included_charge_${index + 1}_proposed`, proposed);
     });
 
-  setEditableTextFieldValue(form, 'form4a_signatory_name_address', `${signatoryName}\n${signatoryAddress}`);
   setEditableCheckboxValue(form, 'form4a_sign_as_landlord', !signAsAgent);
   setEditableCheckboxValue(form, 'form4a_sign_as_agent', signAsAgent);
-  setEditableTextFieldValue(form, 'form4a_signatory_phone', signatoryPhone);
-  setEditableTextFieldValue(form, 'form4a_signatory_email', signatoryEmail);
-  setEditableTextFieldValue(form, 'form4a_service_method', buildServiceMethodLabel(resolvedState));
-  setEditableTextFieldValue(form, 'form4a_service_date_day', serviceDate.day);
-  setEditableTextFieldValue(form, 'form4a_service_date_month', serviceDate.month);
-  setEditableTextFieldValue(form, 'form4a_service_date_year', serviceDate.year);
-  setEditableTextFieldValue(form, 'form4a_supporting_reference', 'Section 4.7 and supporting justification report');
-  setEditableTextFieldValue(
-    form,
-    'form4a_final_signature',
-    signAsAgent
-      ? resolvedState.landlord.agentName || resolvedState.landlord.landlordName
-      : resolvedState.landlord.landlordName
-  );
-  setEditableTextFieldValue(form, 'form4a_final_signature_day', serviceDate.day);
-  setEditableTextFieldValue(form, 'form4a_final_signature_month', serviceDate.month);
-  setEditableTextFieldValue(form, 'form4a_final_signature_year', serviceDate.year);
+  setEditableTextFieldValue(form, 'form4a_print_name', signatoryName);
+  setEditableTextFieldValue(form, 'form4a_signature_date_day', serviceDate.day);
+  setEditableTextFieldValue(form, 'form4a_signature_date_month', serviceDate.month);
+  setEditableTextFieldValue(form, 'form4a_signature_date_year', serviceDate.year);
 
   pages[0].drawText(safeText(`Prepared using ${SECTION13_BRAND_LABEL}`), {
     x: 38,

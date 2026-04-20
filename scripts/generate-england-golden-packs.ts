@@ -62,6 +62,29 @@ const LIVE_PACK_PRODUCT_KEYS: LivePackProductKey[] = [
   'england_lodger_agreement',
 ];
 
+function parseOnlyKeys(argv: string[]): LivePackProductKey[] | null {
+  const onlyArg = argv.find((arg) => arg.startsWith('--only='));
+  if (!onlyArg) {
+    return null;
+  }
+
+  const rawKeys = onlyArg
+    .slice('--only='.length)
+    .split(',')
+    .map((key) => key.trim())
+    .filter(Boolean);
+
+  const invalidKeys = rawKeys.filter(
+    (key) => !LIVE_PACK_PRODUCT_KEYS.includes(key as LivePackProductKey)
+  );
+
+  if (invalidKeys.length > 0) {
+    throw new Error(`Unknown golden-pack product key(s): ${invalidKeys.join(', ')}`);
+  }
+
+  return rawKeys as LivePackProductKey[];
+}
+
 const jsonClientStub = {
   async jsonCompletion() {
     return {
@@ -109,6 +132,7 @@ function buildSection13State(productType: 'section13_standard' | 'section13_defe
   state.tenancy.currentRentAmount = 1200;
   state.tenancy.currentRentFrequency = 'monthly';
   state.tenancy.lastRentIncreaseDate = '2025-04-01';
+  state.tenancy.firstIncreaseAfter2003Date = '2025-04-01';
   state.landlord.landlordName = 'Taylor Landlord';
   state.landlord.landlordAddressLine1 = '1 Landlord Terrace';
   state.landlord.landlordTownCity = 'Leeds';
@@ -607,13 +631,40 @@ function buildScorecardTemplate(manifest: {
   return lines.join('\n');
 }
 
+async function collectExistingPackRecords(baseDir: string): Promise<GoldenPackRecord[]> {
+  try {
+    const entries = await fs.readdir(baseDir, { withFileTypes: true });
+    const packs: GoldenPackRecord[] = [];
+
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+
+      const manifestPath = path.join(baseDir, entry.name, 'manifest.json');
+      try {
+        const manifestRaw = await fs.readFile(manifestPath, 'utf8');
+        packs.push(JSON.parse(manifestRaw) as GoldenPackRecord);
+      } catch {
+        // Ignore folders that are not complete golden-pack directories.
+      }
+    }
+
+    return packs.sort((a, b) => a.displayName.localeCompare(b.displayName));
+  } catch {
+    return [];
+  }
+}
+
 async function main() {
   __setTestJsonAIClient(jsonClientStub);
+  const selectedKeys = parseOnlyKeys(process.argv.slice(2)) ?? LIVE_PACK_PRODUCT_KEYS;
+  const shouldClean = !process.argv.includes('--no-clean');
 
-  await fs.rm(OUTPUT_ROOT, { recursive: true, force: true });
+  if (shouldClean) {
+    await fs.rm(OUTPUT_ROOT, { recursive: true, force: true });
+  }
   await fs.mkdir(OUTPUT_ROOT, { recursive: true });
-
-  const packs: GoldenPackRecord[] = [];
 
   const generators: Record<LivePackProductKey, () => Promise<GoldenPackDocumentInput[]>> = {
     notice_only: generateNoticeOnlyGolden,
@@ -628,18 +679,19 @@ async function main() {
     england_lodger_agreement: generateLodgerGolden,
   };
 
-  for (const key of LIVE_PACK_PRODUCT_KEYS) {
+  for (const key of selectedKeys) {
     const descriptor = PUBLIC_PRODUCT_DESCRIPTORS[key];
     console.log(`\nGenerating golden pack: ${descriptor.displayName}`);
     const documents = await generators[key]();
-    const record = await saveGoldenPack({
+    await saveGoldenPack({
       baseDir: OUTPUT_ROOT,
       key,
       displayName: descriptor.displayName,
       documents,
     });
-    packs.push(record);
   }
+
+  const packs = await collectExistingPackRecords(OUTPUT_ROOT);
 
   const manifest = {
     generatedAt: new Date().toISOString(),

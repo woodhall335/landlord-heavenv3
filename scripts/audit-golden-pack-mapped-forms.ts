@@ -284,7 +284,20 @@ async function auditN1Claim(pack: string, title: string, pdfPath: string): Promi
 async function auditForm4A(pack: string, title: string, pdfPath: string): Promise<AuditResult> {
   const pdfBytes = await fs.readFile(pdfPath);
   const pdfDoc = await PDFDocument.load(pdfBytes);
-  const extraction = await extractPdfText(pdfBytes, 20);
+  const form = pdfDoc.getForm();
+  const fieldValues = new Map(
+    form.getFields().map((field) => [
+      field.getName(),
+      'getText' in field && typeof field.getText === 'function'
+        ? String(field.getText() || '')
+        : 'isChecked' in field && typeof field.isChecked === 'function'
+          ? (field.isChecked() ? 'CHECKED' : 'UNCHECKED')
+          : '',
+    ])
+  );
+  const flattened = await PDFDocument.load(pdfBytes);
+  flattened.getForm().flatten();
+  const extraction = await extractPdfText(Buffer.from(await flattened.save()), 20);
   const findings: AuditFinding[] = [];
   const text = extraction.text.replace(/\s+/g, ' ');
 
@@ -307,11 +320,31 @@ async function auditForm4A(pack: string, title: string, pdfPath: string): Promis
     }
   }
 
-  if (!/post/i.test(text)) {
+  if (fieldValues.get('form4a_first_increase_day') !== '01'
+    || fieldValues.get('form4a_first_increase_month') !== '04'
+    || fieldValues.get('form4a_first_increase_year') !== '2025') {
     findings.push({
-      level: 'warning',
-      message: 'Form 4A text extraction did not clearly show the recorded service method.',
+      level: 'error',
+      message: 'Form 4A should populate question 4.4 with the first increase after 11 February 2003 in the golden sample.',
     });
+  }
+
+  const nonOfficialFields = [
+    'form4a_service_method',
+    'form4a_supporting_reference',
+    'form4a_final_signature',
+    'form4a_signatory_phone',
+    'form4a_signatory_email',
+    'form4a_signatory_name_address',
+  ];
+
+  for (const fieldName of nonOfficialFields) {
+    if (fieldValues.has(fieldName)) {
+      findings.push({
+        level: 'error',
+        message: `Form 4A should not contain non-official overlay field "${fieldName}".`,
+      });
+    }
   }
 
   return {
@@ -320,8 +353,8 @@ async function auditForm4A(pack: string, title: string, pdfPath: string): Promis
     title,
     pdfPath,
     pageCount: pdfDoc.getPageCount(),
-    fieldCount: 0,
-    filledFieldCount: 0,
+    fieldCount: form.getFields().length,
+    filledFieldCount: [...fieldValues.values()].filter((value) => value.trim().length > 0).length,
     findings,
   };
 }

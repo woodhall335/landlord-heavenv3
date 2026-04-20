@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guarantor Agreement</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 24mm 18mm 22mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11pt;
+      line-height: 1.58;
+      color: #18181b;
+      background: #fff;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      page-break-after: avoid;
+      color: #111827;
+    }
+
+    .cover {
+      border: 1.5pt solid #1f2937;
+      padding: 22pt 24pt;
+      margin-bottom: 20pt;
+    }
+
+    .cover-topline {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 8.25pt;
+      color: #4b5563;
+      margin-bottom: 10pt;
+    }
+
+    .cover h1 {
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 20pt;
+      line-height: 1.2;
+    }
+
+    .cover-subtitle {
+      margin-top: 8pt;
+      font-size: 11pt;
+      color: #374151;
+    }
+
+    .cover-intro {
+      margin-top: 14pt;
+      padding: 12pt 14pt;
+      border-left: 3pt solid #374151;
+      background: #f8fafc;
+      color: #1f2937;
+      text-align: justify;
+    }
+
+    .cover-meta,
+    .parties-table,
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14pt;
+      font-size: 10pt;
+    }
+
+    .cover-meta td,
+    .parties-table td,
+    .detail-table td {
+      border: 0.75pt solid #9ca3af;
+      padding: 8pt 10pt;
+      vertical-align: top;
+    }
+
+    .cover-meta .label,
+    .parties-table .role,
+    .detail-table .label {
+      width: 28%;
+      background: #f3f4f6;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #374151;
+    }
+
+    .section-title {
+      font-size: 12.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1pt solid #111827;
+      padding-bottom: 5pt;
+      margin: 18pt 0 12pt;
+    }
+
+    .opening,
+    .clause p,
+    .clause-intro,
+    .execution-copy {
+      margin: 0 0 8pt 0;
+      text-align: justify;
+    }
+
+    .party-name {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .party-detail {
+      margin-top: 3pt;
+    }
+
+    .recitals {
+      margin: 0 0 8pt 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: recital;
+    }
+
+    .recitals li {
+      margin: 0 0 7pt 0;
+      padding-left: 28pt;
+      position: relative;
+      text-align: justify;
+    }
+
+    .recitals li::before {
+      counter-increment: recital;
+      content: counter(recital, upper-alpha) ".";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    .clause {
+      margin: 14pt 0 0;
+      page-break-inside: avoid;
+    }
+
+    .clause-heading {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11.25pt;
+      font-weight: 700;
+      margin-bottom: 6pt;
+      color: #111827;
+    }
+
+    .subpoints {
+      margin: 6pt 0 8pt 18pt;
+      padding: 0;
+    }
+
+    .subpoints li {
+      margin: 0 0 6pt 0;
+      text-align: justify;
+    }
+
+    .note-panel {
+      margin-top: 14pt;
+      padding: 11pt 13pt;
+      border: 0.75pt solid #9ca3af;
+      background: #f9fafb;
+    }
+
+    .note-panel p {
+      margin: 6pt 0 0;
+      white-space: pre-line;
+      text-align: justify;
+    }
+
+    .deed-warning {
+      margin-top: 12pt;
+      padding: 10pt 12pt;
+      border: 0.75pt solid #92400e;
+      background: #fff7ed;
+      color: #7c2d12;
+      page-break-inside: avoid;
+    }
+
+    .execution {
+      margin-top: 24pt;
+      page-break-inside: avoid;
+    }
+
+    .signatures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14pt;
+    }
+
+    .signature-card {
+      border: 0.75pt solid #9ca3af;
+      padding: 12pt;
+      min-height: 176pt;
+      page-break-inside: avoid;
+    }
+
+    .signature-role {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4b5563;
+    }
+
+    .signature-name {
+      margin-top: 5pt;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .signature-line {
+      margin-top: 28pt;
+      border-bottom: 1pt solid #1f2937;
+      height: 18pt;
+    }
+
+    .signature-meta {
+      margin-top: 8pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      color: #4b5563;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12pt;
+    }
+
+    .witness-block {
+      margin-top: 14pt;
+      padding-top: 10pt;
+      border-top: 0.75pt dashed #9ca3af;
+    }
+
+    .witness-label {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #4b5563;
+    }
+
+    .witness-note {
+      margin-top: 6pt;
+      font-size: 8.9pt;
+      color: #374151;
+      text-align: justify;
+    }
+
+    .footer {
+      margin-top: 18pt;
+      padding-top: 10pt;
+      border-top: 0.75pt solid #9ca3af;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 10pt;
+    }
+
+    @media print {
+      .section-title,
+      .clause-heading,
+      .signature-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div class="cover-topline">
+      Executed as a deed
+    </div>
+    <h1>Guarantor Agreement</h1>
+    <div class="cover-subtitle">Deed of guarantee and indemnity for an England residential tenancy</div>
+    <div class="cover-intro">This deed is intended to give the Landlord direct recourse against the Guarantor for the rent and tenant obligations identified in the tenancy documents.</div>
+
+    <table class="cover-meta">
+      <tr>
+        <td class="label">Document date</td>
+        <td>16 April 2026</td>
+        <td class="label">Reference</td>
+        <td>RL-GUARANTOR-AGREEMENT-TENANCY-001</td>
+      </tr>
+      <tr>
+        <td class="label">Effective date</td>
+        <td>2 May 2026</td>
+        <td class="label">Nature</td>
+        <td>Deed of guarantee and indemnity</td>
+      </tr>
+      <tr>
+        <td class="label">Property</td>
+        <td colspan="3">12 Example Street, London, SW1A 1AA</td>
+      </tr>
+      <tr>
+        <td class="label">Tenant(s)</td>
+        <td>Aisha Student, Ben Student, Cara Student</td>
+        <td class="label">Term / dates</td>
+        <td>
+          2 May 2026
+           to 1 May 2027
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Rent</td>
+        <td>&#163;1500.00</td>
+        <td class="label">Deposit</td>
+        <td>&#163;1500.00</td>
+      </tr>
+    </table>
+  </section>
+
+  <h2 class="section-title">Parties</h2>
+  <p class="opening">
+      This deed is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+  </p>
+
+  <table class="parties-table">
+      <tr>
+        <td class="role">Landlord</td>
+        <td>
+          <div class="party-name">Jane Landlord</div>
+          <div class="party-detail">3 Owner Road, London, SW1A 2BB</div>
+          <div class="party-detail">Email: jane@example.com</div>
+          <div class="party-detail">Telephone: 07123 456789</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Tenant 1</td>
+        <td>
+          <div class="party-name">Aisha Student</div>
+          <div class="party-detail">12 Example Street, London, SW1A 1AA</div>
+          <div class="party-detail">Email: aisha@example.com</div>
+          <div class="party-detail">Telephone: 07000 200001</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Tenant 2</td>
+        <td>
+          <div class="party-name">Ben Student</div>
+          <div class="party-detail">12 Example Street, London, SW1A 1AA</div>
+          <div class="party-detail">Email: ben@example.com</div>
+          <div class="party-detail">Telephone: 07000 200002</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Tenant 3</td>
+        <td>
+          <div class="party-name">Cara Student</div>
+          <div class="party-detail">12 Example Street, London, SW1A 1AA</div>
+          <div class="party-detail">Email: cara@example.com</div>
+          <div class="party-detail">Telephone: 07000 200003</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Guarantor</td>
+        <td>
+          <div class="party-name">Greg Guarantor</div>
+          <div class="party-detail">77 Support Avenue, Bristol, BS1 4AB</div>
+          <div class="party-detail">Email: greg@example.com</div>
+          <div class="party-detail">Telephone: 07000 222222</div>
+        </td>
+      </tr>
+  </table>
+
+    <h2 class="section-title">Background</h2>
+    <ol class="recitals">
+        <li>The Landlord has agreed to grant or continue the tenancy of the Property to the Tenant.</li>
+        <li>The Guarantor has agreed to guarantee the obligations of the Tenant on the terms set out in this deed.</li>
+    </ol>
+
+    <h2 class="section-title">Defined Terms</h2>
+    <table class="detail-table">
+        <tr>
+          <td class="label">Tenancy</td>
+          <td>the residential tenancy of the Property identified in this deed together with any continuation, periodic continuation, or renewal expressly covered by it</td>
+        </tr>
+        <tr>
+          <td class="label">Guarantor</td>
+          <td>Greg Guarantor</td>
+        </tr>
+        <tr>
+          <td class="label">Tenant Obligations</td>
+          <td>the obligations of the Tenant under the tenancy including rent, damage, and other sums properly due</td>
+        </tr>
+    </table>
+
+  <h2 class="section-title">Operative Provisions</h2>
+    <section class="clause">
+      <div class="clause-heading">1. Definitions and Tenancy Background</div>
+
+      <p class="clause-intro">This deed supports the residential tenancy identified below and should be read together with the tenancy agreement and any written renewals or variations expressly covered by it.</p>
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Tenancy start date</td>
+              <td>2 May 2026</td>
+            </tr>
+            <tr>
+              <td class="label">Tenant(s)</td>
+              <td>Aisha Student, Ben Student, Cara Student</td>
+            </tr>
+            <tr>
+              <td class="label">Property</td>
+              <td>12 Example Street, London, SW1A 1AA</td>
+            </tr>
+            <tr>
+              <td class="label">Current rent</td>
+              <td>&#163;1500.00</td>
+            </tr>
+            <tr>
+              <td class="label">Deposit</td>
+              <td>&#163;1500.00</td>
+            </tr>
+        </table>
+
+
+
+    </section>
+    <section class="clause">
+      <div class="clause-heading">2. Guarantor Covenant</div>
+
+      
+
+
+
+          <p>In consideration of the Landlord granting or continuing the tenancy of the Property, the Guarantor agrees as principal obligor and not merely as surety to perform the obligations set out in this document.</p>
+
+        <ul class="subpoints">
+            <li>to pay the rent and all other sums lawfully due under the tenancy within 14 days after written demand from the Landlord;</li>
+            <li>to ensure observance and performance of the tenant covenants contained in the tenancy agreement;</li>
+            <li>to indemnify the Landlord against losses, damage, and reasonably incurred enforcement costs arising from tenant default.</li>
+        </ul>
+    </section>
+    <section class="clause">
+      <div class="clause-heading">3. Nature of Liability</div>
+
+      
+
+
+
+
+        <ul class="subpoints">
+            <li>Where there is more than one tenant, this guarantee applies on a joint and several basis to the obligations of each tenant and the tenancy as a whole.</li>
+            <li>The Landlord may proceed directly against the Guarantor without first taking action against the Tenant, any deposit, or any other security.</li>
+            <li>Any delay, indulgence, concession, acceptance of part payment, or failure by the Landlord to enforce promptly does not by itself release the Guarantor.</li>
+        </ul>
+    </section>
+    <section class="clause">
+      <div class="clause-heading">4. Continuing Guarantee, Renewal, and Variation</div>
+
+      
+
+
+
+          <p>This guarantee is intended to continue for the tenancy, any statutory periodic continuation, and any renewal or written variation of the same tenancy for the same Property and substantially the same tenant group.</p>
+          <p>No material increase in the Guarantor&#x27;s liability is intended to bind the Guarantor unless that increase is stated in this document or separately accepted by the Guarantor in writing.</p>
+
+    </section>
+    <section class="clause">
+      <div class="clause-heading">5. Notices and Information</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Guarantor name</td>
+              <td>Greg Guarantor</td>
+            </tr>
+            <tr>
+              <td class="label">Guarantor address for service</td>
+              <td>77 Support Avenue, Bristol, BS1 4AB</td>
+            </tr>
+            <tr>
+              <td class="label">Guarantor email</td>
+              <td>greg@example.com</td>
+            </tr>
+            <tr>
+              <td class="label">Guarantor phone</td>
+              <td>07000 222222</td>
+            </tr>
+        </table>
+
+
+
+        <ul class="subpoints">
+            <li>The Guarantor must notify the Landlord promptly of any change to the contact details set out above.</li>
+            <li>Any notice or demand may be served by hand, first-class post, or email to the contact details stated in this document unless updated in writing.</li>
+        </ul>
+    </section>
+    <section class="clause">
+      <div class="clause-heading">6. Release, Limitation, and Advice</div>
+
+      
+
+
+
+          <p>If no express financial cap is stated in this document, the guarantee applies to the full amount of the guaranteed obligations arising under the tenancy.</p>
+
+        <ul class="subpoints">
+            <li>The Guarantor is released only when the tenancy has ended, all guaranteed liabilities have been discharged, or the Landlord gives an express written release.</li>
+            <li>The Guarantor acknowledges that they have had the opportunity to read the tenancy agreement and to take independent legal advice before signing.</li>
+        </ul>
+    </section>
+    <section class="clause">
+      <div class="clause-heading">7. Governing Law and Execution</div>
+
+      
+
+
+
+          <p>This guarantee and any dispute arising out of it are governed by the law of England and Wales.</p>
+          <p>The parties intend this document to take effect as a deed executed by the Guarantor.</p>
+
+    </section>
+
+
+    <div class="deed-warning">
+      <strong>Execution reminder</strong><br>
+      Important: because this document is drafted as a deed, the guarantor signature should be witnessed and the final signed copy retained with the tenancy file.
+    </div>
+
+  <section class="execution">
+    <h2 class="section-title">Execution</h2>
+    <p class="execution-copy">This document is intended to take effect as a deed. The guarantor should sign it in the presence of an independent adult witness.</p>
+    <div class="signatures">
+        <div class="signature-card">
+          <div class="signature-role">Landlord</div>
+          <div class="signature-name">Jane Landlord</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+        </div>
+        <div class="signature-card">
+          <div class="signature-role">Tenant 1</div>
+          <div class="signature-name">Aisha Student</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+        </div>
+        <div class="signature-card">
+          <div class="signature-role">Tenant 2</div>
+          <div class="signature-name">Ben Student</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+        </div>
+        <div class="signature-card">
+          <div class="signature-role">Tenant 3</div>
+          <div class="signature-name">Cara Student</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+        </div>
+        <div class="signature-card">
+          <div class="signature-role">Guarantor</div>
+          <div class="signature-name">Greg Guarantor</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+            <div class="witness-block">
+              <div class="witness-label">Witness</div>
+              <div class="signature-line"></div>
+              <div class="signature-meta">
+                <span>Witness signature</span>
+                <span>Date</span>
+              </div>
+              <div class="signature-line"></div>
+              <div class="signature-meta">
+                <span>Witness name</span>
+                <span>Witness address</span>
+              </div>
+              <div class="witness-note">The guarantor should sign in the presence of an independent adult witness.</div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>Generated by Landlord Heaven</span>
+    <span>RL-GUARANTOR-AGREEMENT-TENANCY-001</span>
+  </div>
+</body>
+</html>

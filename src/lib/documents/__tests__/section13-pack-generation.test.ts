@@ -51,6 +51,7 @@ function buildState() {
   state.tenancy.currentRentAmount = 1200;
   state.tenancy.currentRentFrequency = 'monthly';
   state.tenancy.lastRentIncreaseDate = '2025-04-01';
+  state.tenancy.firstIncreaseAfter2003Date = '2025-04-01';
   state.landlord.landlordName = 'Taylor Landlord';
   state.landlord.landlordAddressLine1 = '1 Landlord Terrace';
   state.landlord.landlordTownCity = 'Leeds';
@@ -425,8 +426,14 @@ describe('Section 13 document generation hardening', () => {
       expect(form.getTextField('form4a_property_postcode').getText()).toBe('LS1 1AA');
       expect(form.getTextField('form4a_landlord_name').getText()).toBe('Taylor Landlord');
       expect(form.getTextField('form4a_current_rent_amount').getText()).toBe('1200.00');
+      expect(form.getTextField('form4a_first_increase_day').getText()).toBe('01');
+      expect(form.getTextField('form4a_first_increase_month').getText()).toBe('04');
+      expect(form.getTextField('form4a_first_increase_year').getText()).toBe('2025');
       expect(form.getTextField('form4a_proposed_rent_amount').getText()).toBe('1285.00');
-      expect(form.getTextField('form4a_service_method').getText()).toBe('First class post');
+      expect(form.getTextField('form4a_print_name').getText()).toBe('Taylor Landlord');
+      expect(form.getFieldMaybe('form4a_service_method')).toBeUndefined();
+      expect(form.getFieldMaybe('form4a_supporting_reference')).toBeUndefined();
+      expect(form.getFieldMaybe('form4a_final_signature')).toBeUndefined();
 
   }, 120000);
 
