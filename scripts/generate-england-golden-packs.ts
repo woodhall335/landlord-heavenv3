@@ -26,8 +26,16 @@ import { buildEnglandSection8CompletePackFacts } from '../src/lib/testing/fixtur
 import {
   saveGoldenPack,
   type GoldenPackDocumentInput,
-  type GoldenPackRecord,
 } from './helpers/save-golden-pack.ts';
+import {
+  collectExistingPackRecords,
+  type LivePackProductKey,
+  NON_PACK_PUBLIC_PRODUCTS,
+  packDirectoryExists,
+  parseGeneratorCliOptions,
+  chunkKeys,
+  isPackComplete,
+} from './helpers/golden-pack-selection.ts';
 
 process.env.TZ = 'Europe/London';
 process.env.DISABLE_WITNESS_STATEMENT_AI = 'true';
@@ -35,55 +43,6 @@ process.env.DISABLE_COMPLIANCE_AUDIT_AI = 'true';
 process.env.DISABLE_MONEY_CLAIM_AI = 'true';
 
 const OUTPUT_ROOT = path.join(process.cwd(), 'artifacts', 'golden-packs');
-const NON_PACK_PUBLIC_PRODUCTS = ['ast'] as const;
-
-type LivePackProductKey =
-  | 'notice_only'
-  | 'complete_pack'
-  | 'money_claim'
-  | 'section13_standard'
-  | 'section13_defensive'
-  | 'england_standard_tenancy_agreement'
-  | 'england_premium_tenancy_agreement'
-  | 'england_student_tenancy_agreement'
-  | 'england_hmo_shared_house_tenancy_agreement'
-  | 'england_lodger_agreement';
-
-const LIVE_PACK_PRODUCT_KEYS: LivePackProductKey[] = [
-  'notice_only',
-  'complete_pack',
-  'money_claim',
-  'section13_standard',
-  'section13_defensive',
-  'england_standard_tenancy_agreement',
-  'england_premium_tenancy_agreement',
-  'england_student_tenancy_agreement',
-  'england_hmo_shared_house_tenancy_agreement',
-  'england_lodger_agreement',
-];
-
-function parseOnlyKeys(argv: string[]): LivePackProductKey[] | null {
-  const onlyArg = argv.find((arg) => arg.startsWith('--only='));
-  if (!onlyArg) {
-    return null;
-  }
-
-  const rawKeys = onlyArg
-    .slice('--only='.length)
-    .split(',')
-    .map((key) => key.trim())
-    .filter(Boolean);
-
-  const invalidKeys = rawKeys.filter(
-    (key) => !LIVE_PACK_PRODUCT_KEYS.includes(key as LivePackProductKey)
-  );
-
-  if (invalidKeys.length > 0) {
-    throw new Error(`Unknown golden-pack product key(s): ${invalidKeys.join(', ')}`);
-  }
-
-  return rawKeys as LivePackProductKey[];
-}
 
 const jsonClientStub = {
   async jsonCompletion() {
@@ -631,37 +590,11 @@ function buildScorecardTemplate(manifest: {
   return lines.join('\n');
 }
 
-async function collectExistingPackRecords(baseDir: string): Promise<GoldenPackRecord[]> {
-  try {
-    const entries = await fs.readdir(baseDir, { withFileTypes: true });
-    const packs: GoldenPackRecord[] = [];
-
-    for (const entry of entries) {
-      if (!entry.isDirectory()) {
-        continue;
-      }
-
-      const manifestPath = path.join(baseDir, entry.name, 'manifest.json');
-      try {
-        const manifestRaw = await fs.readFile(manifestPath, 'utf8');
-        packs.push(JSON.parse(manifestRaw) as GoldenPackRecord);
-      } catch {
-        // Ignore folders that are not complete golden-pack directories.
-      }
-    }
-
-    return packs.sort((a, b) => a.displayName.localeCompare(b.displayName));
-  } catch {
-    return [];
-  }
-}
-
 async function main() {
   __setTestJsonAIClient(jsonClientStub);
-  const selectedKeys = parseOnlyKeys(process.argv.slice(2)) ?? LIVE_PACK_PRODUCT_KEYS;
-  const shouldClean = !process.argv.includes('--no-clean');
+  const cli = parseGeneratorCliOptions(process.argv.slice(2));
 
-  if (shouldClean) {
+  if (cli.shouldClean) {
     await fs.rm(OUTPUT_ROOT, { recursive: true, force: true });
   }
   await fs.mkdir(OUTPUT_ROOT, { recursive: true });
@@ -679,16 +612,63 @@ async function main() {
     england_lodger_agreement: generateLodgerGolden,
   };
 
-  for (const key of selectedKeys) {
-    const descriptor = PUBLIC_PRODUCT_DESCRIPTORS[key];
-    console.log(`\nGenerating golden pack: ${descriptor.displayName}`);
-    const documents = await generators[key]();
-    await saveGoldenPack({
-      baseDir: OUTPUT_ROOT,
-      key,
-      displayName: descriptor.displayName,
-      documents,
-    });
+  const batchSummary: Array<{
+    key: LivePackProductKey;
+    status: 'completed' | 'skipped' | 'failed';
+    elapsedMs: number;
+    reason?: string;
+  }> = [];
+
+  for (const batch of chunkKeys(cli.selectedKeys, cli.chunkSize)) {
+    const batchLabel = batch.map((key) => PUBLIC_PRODUCT_DESCRIPTORS[key].displayName).join(', ');
+    console.log(`\nStarting golden pack batch: ${batchLabel}`);
+
+    for (const key of batch) {
+      const descriptor = PUBLIC_PRODUCT_DESCRIPTORS[key];
+      const start = Date.now();
+
+      try {
+        if (cli.refreshExisting && !(await packDirectoryExists(OUTPUT_ROOT, key))) {
+          batchSummary.push({
+            key,
+            status: 'skipped',
+            elapsedMs: Date.now() - start,
+            reason: 'not present on disk',
+          });
+          console.log(`Skipped ${descriptor.displayName}: not present on disk.`);
+          continue;
+        }
+
+        if (cli.resume && (await isPackComplete(OUTPUT_ROOT, key))) {
+          batchSummary.push({
+            key,
+            status: 'skipped',
+            elapsedMs: Date.now() - start,
+            reason: 'already complete',
+          });
+          console.log(`Skipped ${descriptor.displayName}: already complete.`);
+          continue;
+        }
+
+        console.log(`Generating golden pack: ${descriptor.displayName}`);
+        const documents = await generators[key]();
+        await saveGoldenPack({
+          baseDir: OUTPUT_ROOT,
+          key,
+          displayName: descriptor.displayName,
+          documents,
+          extractText: !cli.skipTextExtraction,
+        });
+        const elapsedMs = Date.now() - start;
+        batchSummary.push({ key, status: 'completed', elapsedMs });
+        console.log(`Completed ${descriptor.displayName} in ${(elapsedMs / 1000).toFixed(1)}s.`);
+      } catch (error) {
+        const elapsedMs = Date.now() - start;
+        const message = error instanceof Error ? error.message : String(error);
+        batchSummary.push({ key, status: 'failed', elapsedMs, reason: message });
+        console.error(`Failed ${descriptor.displayName}: ${message}`);
+      }
+    }
   }
 
   const packs = await collectExistingPackRecords(OUTPUT_ROOT);
@@ -737,7 +717,26 @@ async function main() {
     'utf8'
   );
 
+  const completed = batchSummary.filter((entry) => entry.status === 'completed');
+  const skipped = batchSummary.filter((entry) => entry.status === 'skipped');
+  const failed = batchSummary.filter((entry) => entry.status === 'failed');
+
+  console.log('\nGolden pack batch summary:');
+  for (const entry of batchSummary) {
+    const descriptor = PUBLIC_PRODUCT_DESCRIPTORS[entry.key];
+    const reasonSuffix = entry.reason ? ` (${entry.reason})` : '';
+    console.log(
+      `- ${descriptor.displayName}: ${entry.status} in ${(entry.elapsedMs / 1000).toFixed(1)}s${reasonSuffix}`
+    );
+  }
+  console.log(
+    `Totals: ${completed.length} completed, ${skipped.length} skipped, ${failed.length} failed.`
+  );
   console.log(`\nGolden packs written to: ${OUTPUT_ROOT}`);
+
+  if (failed.length > 0) {
+    process.exitCode = 1;
+  }
 }
 
 main()

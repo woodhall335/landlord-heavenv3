@@ -126,15 +126,17 @@
     .arrears-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 1.5em 0;
-      font-size: 9pt;
+      margin: 1.2em 0;
+      font-size: 8.5pt;
+      table-layout: fixed;
     }
 
     .arrears-table th,
     .arrears-table td {
-      padding: 6px 8px;
+      padding: 5px 6px;
       border: 1px solid #1a1a1a;
       text-align: left;
+      vertical-align: top;
     }
 
     .arrears-table th {
@@ -158,12 +160,19 @@
     }
 
     .arrears-table .period-col {
-      min-width: 180px;
+      width: 21%;
+    }
+
+    .arrears-table .date-col {
+      width: 13%;
+      white-space: nowrap;
     }
 
     .arrears-table .notes-col {
       font-size: 8pt;
       color: #666;
+      width: 18%;
+      word-break: break-word;
     }
 
     /* Total Row */
@@ -262,7 +271,7 @@
   <thead>
     <tr>
       <th class="period-col">Period</th>
-      <th>Due Date</th>
+      <th class="date-col">Due Date</th>
       <th class="amount">Rent Due</th>
       <th class="amount">Paid</th>
       <th class="amount">Arrears</th>
@@ -274,7 +283,7 @@
     {{#each arrears_schedule}}
     <tr>
       <td class="period-col">{{period}}</td>
-      <td>{{due_date}}</td>
+      <td class="date-col">{{due_date}}</td>
       <td class="amount">{{currency amount_due}}</td>
       <td class="amount">{{currency amount_paid}}</td>
       <td class="amount">{{currency arrears}}</td>

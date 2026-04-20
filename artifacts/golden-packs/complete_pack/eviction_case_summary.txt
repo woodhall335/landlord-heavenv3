@@ -10,9 +10,11 @@ Court: York County Court and Family Court
 Route
 Current route: Section 8 possession claim
 Grounds relied on: Ground 8, Ground 10
-The claimant relies on the following
-statutory grounds for possession: Ground
-8, Schedule 2, Housing Act 1988 (Rent
+This summary should match the grounds
+pleaded in the notice and court papers: The
+claimant relies on the following statutory
+grounds for possession: Ground 8,
+Schedule 2, Housing Act 1988 (Rent
 arrears; mandatory); Ground 10, Schedule
 2, Housing Act 1988 (Any rent arrears;
 discretionary).
@@ -20,13 +22,17 @@ Tenancy start date 1 January 2024
 Rent £1200.00 monthly
 Due day 1st of each month period
 Current arrears £3600.00
-Arrears at notice date £3600.00
+Arrears at notice
+date
+£3600.00
 Notice served 20 April 2026
 Notice expiry date 18 May 2026
 Earliest proceedings
 date
 18 May 2026
-Compliance snapshot 5 items recorded
+Compliance
+snapshot
+5 items recorded
 
 -- 1 of 3 --
 
@@ -48,6 +54,8 @@ as part of one possession case, while each statutory ground remains separately p
 Form 3A notice served on 20 April 2026, expiring on 18 May 2026, with proceedings not intended
 before 18 May 2026.
 Compliance Status Snapshot
+Use this as a risk summary, not as a replacement for the underlying tenancy documents and
+evidence file.
 Significant risk: Deposit protection is recorded with TDS on 15 January 2024, but prescribed
 information is not recorded as served. This does not automatically invalidate a Section 8 notice,
 but it may expose the landlord to penalties, counterclaims, or credibility issues and should be

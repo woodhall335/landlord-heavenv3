@@ -140,7 +140,7 @@
         "html": "complete_pack/court_bundle_index.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

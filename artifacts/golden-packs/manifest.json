@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-20T07:52:29.624Z",
+  "generatedAt": "2026-04-20T12:13:49.562Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -144,7 +144,7 @@
             "html": "complete_pack/court_bundle_index.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -318,11 +318,11 @@
           "fileName": "england-hmo-shared-house-tenancy-agreement.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.txt"
           },
           "extraction": {
-            "pageCount": 9,
+            "pageCount": 8,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -336,8 +336,8 @@
           "fileName": "pre_tenancy_checklist_england.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.txt"
           },
           "extraction": {
             "pageCount": 5,
@@ -354,11 +354,11 @@
           "fileName": "england-keys-handover-record.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.txt"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -372,8 +372,8 @@
           "fileName": "england-utilities-handover-sheet.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.txt"
           },
           "extraction": {
             "pageCount": 3,
@@ -390,11 +390,11 @@
           "fileName": "england-pet-request-addendum.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -402,14 +402,14 @@
         },
         {
           "title": "Tenancy Variation Record",
-          "description": "Simple record for agreed changes or management updates after the agreement is issued.",
+          "description": "Simple record for agreed changes after the tenancy agreement has been issued.",
           "category": "schedule",
           "documentType": "england_tenancy_variation_record",
           "fileName": "england-tenancy-variation-record.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.txt"
           },
           "extraction": {
             "pageCount": 3,
@@ -426,8 +426,8 @@
           "fileName": "deposit_protection_certificate.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.txt"
           },
           "extraction": {
             "pageCount": 7,
@@ -444,8 +444,8 @@
           "fileName": "prescribed_information_pack.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.txt"
           },
           "extraction": {
             "pageCount": 10,
@@ -462,8 +462,8 @@
           "fileName": "england-hmo-house-rules-appendix.pdf",
           "files": {
             "pdf": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.pdf",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.txt",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.html"
+            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.html",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.txt"
           },
           "extraction": {
             "pageCount": 3,
@@ -488,8 +488,8 @@
           "fileName": "england-lodger-agreement.pdf",
           "files": {
             "pdf": "england_lodger_agreement/england-lodger-agreement.pdf",
-            "text": "england_lodger_agreement/england-lodger-agreement.txt",
-            "html": "england_lodger_agreement/england-lodger-agreement.html"
+            "html": "england_lodger_agreement/england-lodger-agreement.html",
+            "text": "england_lodger_agreement/england-lodger-agreement.txt"
           },
           "extraction": {
             "pageCount": 4,
@@ -506,11 +506,11 @@
           "fileName": "england-lodger-checklist.pdf",
           "files": {
             "pdf": "england_lodger_agreement/england-lodger-checklist.pdf",
-            "text": "england_lodger_agreement/england-lodger-checklist.txt",
-            "html": "england_lodger_agreement/england-lodger-checklist.html"
+            "html": "england_lodger_agreement/england-lodger-checklist.html",
+            "text": "england_lodger_agreement/england-lodger-checklist.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -524,11 +524,11 @@
           "fileName": "england-keys-handover-record.pdf",
           "files": {
             "pdf": "england_lodger_agreement/england-keys-handover-record.pdf",
-            "text": "england_lodger_agreement/england-keys-handover-record.txt",
-            "html": "england_lodger_agreement/england-keys-handover-record.html"
+            "html": "england_lodger_agreement/england-keys-handover-record.html",
+            "text": "england_lodger_agreement/england-keys-handover-record.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -542,8 +542,8 @@
           "fileName": "england-lodger-house-rules-appendix.pdf",
           "files": {
             "pdf": "england_lodger_agreement/england-lodger-house-rules-appendix.pdf",
-            "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt",
-            "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html"
+            "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html",
+            "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -749,14 +749,14 @@
       "documents": [
         {
           "title": "Premium Tenancy Agreement",
-          "description": "England premium residential tenancy agreement with fuller drafting for an ordinary let.",
+          "description": "Premium tenancy agreement for a residential let in England with fuller drafting.",
           "category": "agreement",
           "documentType": "england_premium_tenancy_agreement",
           "fileName": "england-premium-tenancy-agreement.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.pdf",
-            "text": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.txt",
-            "html": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.html"
+            "html": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.html",
+            "text": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.txt"
           },
           "extraction": {
             "pageCount": 9,
@@ -773,8 +773,8 @@
           "fileName": "pre_tenancy_checklist_england.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.pdf",
-            "text": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.txt",
-            "html": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.html"
+            "html": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.html",
+            "text": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.txt"
           },
           "extraction": {
             "pageCount": 5,
@@ -791,11 +791,11 @@
           "fileName": "england-keys-handover-record.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/england-keys-handover-record.pdf",
-            "text": "england_premium_tenancy_agreement/england-keys-handover-record.txt",
-            "html": "england_premium_tenancy_agreement/england-keys-handover-record.html"
+            "html": "england_premium_tenancy_agreement/england-keys-handover-record.html",
+            "text": "england_premium_tenancy_agreement/england-keys-handover-record.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -809,11 +809,11 @@
           "fileName": "england-utilities-handover-sheet.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/england-utilities-handover-sheet.pdf",
-            "text": "england_premium_tenancy_agreement/england-utilities-handover-sheet.txt",
-            "html": "england_premium_tenancy_agreement/england-utilities-handover-sheet.html"
+            "html": "england_premium_tenancy_agreement/england-utilities-handover-sheet.html",
+            "text": "england_premium_tenancy_agreement/england-utilities-handover-sheet.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -827,11 +827,11 @@
           "fileName": "england-pet-request-addendum.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/england-pet-request-addendum.pdf",
-            "text": "england_premium_tenancy_agreement/england-pet-request-addendum.txt",
-            "html": "england_premium_tenancy_agreement/england-pet-request-addendum.html"
+            "html": "england_premium_tenancy_agreement/england-pet-request-addendum.html",
+            "text": "england_premium_tenancy_agreement/england-pet-request-addendum.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -839,17 +839,17 @@
         },
         {
           "title": "Tenancy Variation Record",
-          "description": "Simple record for agreed changes or management updates after the agreement is issued.",
+          "description": "Simple record for agreed changes after the tenancy agreement has been issued.",
           "category": "schedule",
           "documentType": "england_tenancy_variation_record",
           "fileName": "england-tenancy-variation-record.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/england-tenancy-variation-record.pdf",
-            "text": "england_premium_tenancy_agreement/england-tenancy-variation-record.txt",
-            "html": "england_premium_tenancy_agreement/england-tenancy-variation-record.html"
+            "html": "england_premium_tenancy_agreement/england-tenancy-variation-record.html",
+            "text": "england_premium_tenancy_agreement/england-tenancy-variation-record.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -863,8 +863,8 @@
           "fileName": "deposit_protection_certificate.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/deposit_protection_certificate.pdf",
-            "text": "england_premium_tenancy_agreement/deposit_protection_certificate.txt",
-            "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html"
+            "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html",
+            "text": "england_premium_tenancy_agreement/deposit_protection_certificate.txt"
           },
           "extraction": {
             "pageCount": 7,
@@ -881,8 +881,8 @@
           "fileName": "prescribed_information_pack.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/prescribed_information_pack.pdf",
-            "text": "england_premium_tenancy_agreement/prescribed_information_pack.txt",
-            "html": "england_premium_tenancy_agreement/prescribed_information_pack.html"
+            "html": "england_premium_tenancy_agreement/prescribed_information_pack.html",
+            "text": "england_premium_tenancy_agreement/prescribed_information_pack.txt"
           },
           "extraction": {
             "pageCount": 9,
@@ -899,11 +899,11 @@
           "fileName": "england-premium-management-schedule.pdf",
           "files": {
             "pdf": "england_premium_tenancy_agreement/england-premium-management-schedule.pdf",
-            "text": "england_premium_tenancy_agreement/england-premium-management-schedule.txt",
-            "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html"
+            "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html",
+            "text": "england_premium_tenancy_agreement/england-premium-management-schedule.txt"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -959,7 +959,7 @@
             "text": "section13_defensive/section13-tribunal-argument-summary-golden-section13-defence-001.txt"
           },
           "extraction": {
-            "pageCount": 2,
+            "pageCount": 1,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -991,7 +991,7 @@
             "text": "section13_defensive/section13-cover-letter-golden-section13-defence-001.txt"
           },
           "extraction": {
-            "pageCount": 2,
+            "pageCount": 1,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1168,7 +1168,7 @@
             "text": "section13_standard/section13-cover-letter-golden-section13-standard-001.txt"
           },
           "extraction": {
-            "pageCount": 2,
+            "pageCount": 1,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1184,14 +1184,14 @@
       "documents": [
         {
           "title": "Standard Tenancy Agreement",
-          "description": "England standard tenancy agreement for an ordinary whole-property residential let.",
+          "description": "Standard tenancy agreement for a residential let in England.",
           "category": "agreement",
           "documentType": "england_standard_tenancy_agreement",
           "fileName": "england-standard-tenancy-agreement.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.pdf",
-            "text": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.txt",
-            "html": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.html"
+            "html": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.html",
+            "text": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.txt"
           },
           "extraction": {
             "pageCount": 7,
@@ -1208,8 +1208,8 @@
           "fileName": "pre_tenancy_checklist_england.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.pdf",
-            "text": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.txt",
-            "html": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.html"
+            "html": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.html",
+            "text": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.txt"
           },
           "extraction": {
             "pageCount": 5,
@@ -1226,11 +1226,11 @@
           "fileName": "england-keys-handover-record.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-keys-handover-record.pdf",
-            "text": "england_standard_tenancy_agreement/england-keys-handover-record.txt",
-            "html": "england_standard_tenancy_agreement/england-keys-handover-record.html"
+            "html": "england_standard_tenancy_agreement/england-keys-handover-record.html",
+            "text": "england_standard_tenancy_agreement/england-keys-handover-record.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1244,11 +1244,11 @@
           "fileName": "england-utilities-handover-sheet.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-utilities-handover-sheet.pdf",
-            "text": "england_standard_tenancy_agreement/england-utilities-handover-sheet.txt",
-            "html": "england_standard_tenancy_agreement/england-utilities-handover-sheet.html"
+            "html": "england_standard_tenancy_agreement/england-utilities-handover-sheet.html",
+            "text": "england_standard_tenancy_agreement/england-utilities-handover-sheet.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1262,11 +1262,11 @@
           "fileName": "england-pet-request-addendum.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-pet-request-addendum.pdf",
-            "text": "england_standard_tenancy_agreement/england-pet-request-addendum.txt",
-            "html": "england_standard_tenancy_agreement/england-pet-request-addendum.html"
+            "html": "england_standard_tenancy_agreement/england-pet-request-addendum.html",
+            "text": "england_standard_tenancy_agreement/england-pet-request-addendum.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1274,17 +1274,17 @@
         },
         {
           "title": "Tenancy Variation Record",
-          "description": "Simple record for agreed changes or management updates after the agreement is issued.",
+          "description": "Simple record for agreed changes after the tenancy agreement has been issued.",
           "category": "schedule",
           "documentType": "england_tenancy_variation_record",
           "fileName": "england-tenancy-variation-record.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-tenancy-variation-record.pdf",
-            "text": "england_standard_tenancy_agreement/england-tenancy-variation-record.txt",
-            "html": "england_standard_tenancy_agreement/england-tenancy-variation-record.html"
+            "html": "england_standard_tenancy_agreement/england-tenancy-variation-record.html",
+            "text": "england_standard_tenancy_agreement/england-tenancy-variation-record.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1298,8 +1298,8 @@
           "fileName": "deposit_protection_certificate.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/deposit_protection_certificate.pdf",
-            "text": "england_standard_tenancy_agreement/deposit_protection_certificate.txt",
-            "html": "england_standard_tenancy_agreement/deposit_protection_certificate.html"
+            "html": "england_standard_tenancy_agreement/deposit_protection_certificate.html",
+            "text": "england_standard_tenancy_agreement/deposit_protection_certificate.txt"
           },
           "extraction": {
             "pageCount": 7,
@@ -1316,8 +1316,8 @@
           "fileName": "prescribed_information_pack.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/prescribed_information_pack.pdf",
-            "text": "england_standard_tenancy_agreement/prescribed_information_pack.txt",
-            "html": "england_standard_tenancy_agreement/prescribed_information_pack.html"
+            "html": "england_standard_tenancy_agreement/prescribed_information_pack.html",
+            "text": "england_standard_tenancy_agreement/prescribed_information_pack.txt"
           },
           "extraction": {
             "pageCount": 9,
@@ -1342,11 +1342,11 @@
           "fileName": "england-student-tenancy-agreement.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-student-tenancy-agreement.pdf",
-            "text": "england_student_tenancy_agreement/england-student-tenancy-agreement.txt",
-            "html": "england_student_tenancy_agreement/england-student-tenancy-agreement.html"
+            "html": "england_student_tenancy_agreement/england-student-tenancy-agreement.html",
+            "text": "england_student_tenancy_agreement/england-student-tenancy-agreement.txt"
           },
           "extraction": {
-            "pageCount": 10,
+            "pageCount": 8,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1360,8 +1360,8 @@
           "fileName": "pre_tenancy_checklist_england.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/pre_tenancy_checklist_england.pdf",
-            "text": "england_student_tenancy_agreement/pre_tenancy_checklist_england.txt",
-            "html": "england_student_tenancy_agreement/pre_tenancy_checklist_england.html"
+            "html": "england_student_tenancy_agreement/pre_tenancy_checklist_england.html",
+            "text": "england_student_tenancy_agreement/pre_tenancy_checklist_england.txt"
           },
           "extraction": {
             "pageCount": 5,
@@ -1378,11 +1378,11 @@
           "fileName": "england-keys-handover-record.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-keys-handover-record.pdf",
-            "text": "england_student_tenancy_agreement/england-keys-handover-record.txt",
-            "html": "england_student_tenancy_agreement/england-keys-handover-record.html"
+            "html": "england_student_tenancy_agreement/england-keys-handover-record.html",
+            "text": "england_student_tenancy_agreement/england-keys-handover-record.txt"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1396,11 +1396,11 @@
           "fileName": "england-utilities-handover-sheet.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-utilities-handover-sheet.pdf",
-            "text": "england_student_tenancy_agreement/england-utilities-handover-sheet.txt",
-            "html": "england_student_tenancy_agreement/england-utilities-handover-sheet.html"
+            "html": "england_student_tenancy_agreement/england-utilities-handover-sheet.html",
+            "text": "england_student_tenancy_agreement/england-utilities-handover-sheet.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1414,11 +1414,11 @@
           "fileName": "england-pet-request-addendum.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-pet-request-addendum.pdf",
-            "text": "england_student_tenancy_agreement/england-pet-request-addendum.txt",
-            "html": "england_student_tenancy_agreement/england-pet-request-addendum.html"
+            "html": "england_student_tenancy_agreement/england-pet-request-addendum.html",
+            "text": "england_student_tenancy_agreement/england-pet-request-addendum.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1426,17 +1426,17 @@
         },
         {
           "title": "Tenancy Variation Record",
-          "description": "Simple record for agreed changes or management updates after the agreement is issued.",
+          "description": "Simple record for agreed changes after the tenancy agreement has been issued.",
           "category": "schedule",
           "documentType": "england_tenancy_variation_record",
           "fileName": "england-tenancy-variation-record.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-tenancy-variation-record.pdf",
-            "text": "england_student_tenancy_agreement/england-tenancy-variation-record.txt",
-            "html": "england_student_tenancy_agreement/england-tenancy-variation-record.html"
+            "html": "england_student_tenancy_agreement/england-tenancy-variation-record.html",
+            "text": "england_student_tenancy_agreement/england-tenancy-variation-record.txt"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1450,8 +1450,8 @@
           "fileName": "deposit_protection_certificate.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/deposit_protection_certificate.pdf",
-            "text": "england_student_tenancy_agreement/deposit_protection_certificate.txt",
-            "html": "england_student_tenancy_agreement/deposit_protection_certificate.html"
+            "html": "england_student_tenancy_agreement/deposit_protection_certificate.html",
+            "text": "england_student_tenancy_agreement/deposit_protection_certificate.txt"
           },
           "extraction": {
             "pageCount": 7,
@@ -1468,8 +1468,8 @@
           "fileName": "prescribed_information_pack.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/prescribed_information_pack.pdf",
-            "text": "england_student_tenancy_agreement/prescribed_information_pack.txt",
-            "html": "england_student_tenancy_agreement/prescribed_information_pack.html"
+            "html": "england_student_tenancy_agreement/prescribed_information_pack.html",
+            "text": "england_student_tenancy_agreement/prescribed_information_pack.txt"
           },
           "extraction": {
             "pageCount": 9,
@@ -1486,11 +1486,11 @@
           "fileName": "guarantor-agreement.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/guarantor-agreement.pdf",
-            "text": "england_student_tenancy_agreement/guarantor-agreement.txt",
-            "html": "england_student_tenancy_agreement/guarantor-agreement.html"
+            "html": "england_student_tenancy_agreement/guarantor-agreement.html",
+            "text": "england_student_tenancy_agreement/guarantor-agreement.txt"
           },
           "extraction": {
-            "pageCount": 7,
+            "pageCount": 5,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1504,11 +1504,11 @@
           "fileName": "england-student-move-out-schedule.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-student-move-out-schedule.pdf",
-            "text": "england_student_tenancy_agreement/england-student-move-out-schedule.txt",
-            "html": "england_student_tenancy_agreement/england-student-move-out-schedule.html"
+            "html": "england_student_tenancy_agreement/england-student-move-out-schedule.html",
+            "text": "england_student_tenancy_agreement/england-student-move-out-schedule.txt"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"

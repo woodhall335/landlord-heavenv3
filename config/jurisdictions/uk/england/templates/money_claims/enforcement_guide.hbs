@@ -3,13 +3,6 @@
   ENFORCEMENT GUIDE (Post-Judgment)
   Money Claim Pack - England
   ============================================================================
-  Explains enforcement options after obtaining a County Court Judgment (CCJ).
-  Includes:
-  - Attachment of Earnings
-  - Warrant of Control (bailiff action)
-  - Third Party Debt Order (bank account freeze)
-  - Charging Order on Property
-  - Order to Obtain Information (oral examination)
 --}}
 
 <!DOCTYPE html>
@@ -20,7 +13,6 @@
   <style>
     {{{print_css}}}
 
-    /* ===== @PAGE OVERRIDE ===== */
     @page {
       size: A4;
       margin: 10mm;
@@ -35,7 +27,6 @@
       color: #1a1a1a;
     }
 
-    /* Document Header - consistent with schedule_of_arrears */
     .doc-header {
       text-align: center;
       margin-bottom: 1.5em;
@@ -69,7 +60,6 @@
       margin-top: 0.5em;
     }
 
-    /* Case Details Box - consistent with schedule_of_arrears */
     .case-details {
       border: 2px solid #1a1a1a;
       padding: 1em;
@@ -94,7 +84,6 @@
       color: #1a1a1a;
     }
 
-    /* Section Headings */
     h2 {
       font-size: 12pt;
       font-weight: 600;
@@ -111,7 +100,6 @@
       margin: 1.2em 0 0.4em 0;
     }
 
-    /* Paragraphs and Lists */
     p {
       margin: 0.5em 0;
     }
@@ -125,7 +113,6 @@
       margin: 0.3em 0;
     }
 
-    /* Warning/Notice Box */
     .notice-box {
       background: #fff7ed;
       border-left: 4px solid #ea580c;
@@ -138,7 +125,6 @@
       color: #c2410c;
     }
 
-    /* Info Box - consistent with schedule_of_arrears */
     .info-box {
       background: #f8f8f8;
       border-left: 4px solid #1a1a1a;
@@ -147,7 +133,6 @@
       font-size: 10pt;
     }
 
-    /* Enforcement Preferences Box */
     .preferences-box {
       border: 2px solid #1a1a1a;
       padding: 1em;
@@ -170,7 +155,6 @@
       margin: 0.4em 0;
     }
 
-    /* Fees Table - consistent with schedule_of_arrears */
     .fees-table {
       width: 100%;
       border-collapse: collapse;
@@ -199,7 +183,6 @@
       background: #f9fafb;
     }
 
-    /* URL styling - prevent soft-hyphenation and wrapping issues */
     .url-link {
       word-break: normal;
       overflow-wrap: normal;
@@ -212,7 +195,6 @@
       color: #1a1a1a;
     }
 
-    /* Document Footer - consistent with schedule_of_arrears */
     .doc-footer {
       margin-top: 2em;
       padding-top: 1em;
@@ -225,7 +207,6 @@
       margin: 0.3em 0;
     }
 
-    /* Print styles */
     @media print {
       .notice-box, .info-box, .preferences-box {
         page-break-inside: avoid;
@@ -238,62 +219,57 @@
 </head>
 <body>
 
-<!-- Document Header -->
 <div class="doc-header">
   <h1>Enforcement Guide</h1>
-  <p>What to Do After Obtaining a County Court Judgment</p>
-  <span class="doc-badge">Money Claim – Post-Judgment</span>
+  <p>Practical steps after obtaining a County Court Judgment</p>
+  <span class="doc-badge">Money Claim - Post-Judgment</span>
 </div>
 
-<!-- Case Details -->
 <div class="case-details">
   <dl class="case-details-grid">
     <dt>Claimant:</dt>
     <dd>{{landlord_full_name}}</dd>
     <dt>Defendant:</dt>
     <dd>{{tenant_full_name}}</dd>
-    <dt>Claim Amount:</dt>
+    <dt>Claim amount:</dt>
     <dd>{{currency total_claim_amount}}</dd>
     {{#if claim_number}}
-    <dt>Claim Number:</dt>
+    <dt>Claim number:</dt>
     <dd>{{claim_number}}</dd>
     {{/if}}
   </dl>
 </div>
 
-<!-- Important Notice -->
 <div class="notice-box">
-  <strong>Important Notice:</strong> This guide provides general information only. It is NOT legal advice and does not constitute a substitute for advice from a regulated solicitor or legal professional. Enforcement options depend on your specific circumstances, the defendant's financial situation, and judicial decisions. Always consider taking independent legal advice before proceeding with enforcement action.
+  <strong>Important Notice:</strong> This guide explains the main enforcement routes after judgment, but it is not a substitute for advice on the facts of your own case. Enforcement only works if the defendant has wages, funds, property, or other assets you can realistically reach.
 </div>
 
-<!-- Introduction -->
 <h2>Introduction</h2>
 
 <p>
-Congratulations on obtaining your County Court Judgment (CCJ). However, a judgment alone does not automatically result in payment. If the defendant does not pay voluntarily within the time specified by the court, you will need to take <strong>enforcement action</strong> to recover the money owed.
+Getting judgment is an important step, but it does not guarantee payment on its own. If the defendant still does not pay within the time allowed by the court, you need to choose an enforcement route that matches what you know about their finances and assets.
 </p>
 
 <p>
-This guide explains the main enforcement methods available in England, the costs involved, and how to choose the most appropriate method based on your circumstances.
+This guide explains the main enforcement methods available in England, what each one is for, the typical court fee, and how to decide which route is worth trying first.
 </p>
 
 {{#if enforcement_preferences}}
-<!-- Enforcement Preferences -->
 <div class="preferences-box">
-  <h3>Your Selected Enforcement Preferences</h3>
-  <p>Based on your selections, you indicated interest in the following enforcement methods:</p>
+  <h3>Your selected enforcement preferences</h3>
+  <p>Based on your answers, these are the methods you said were most relevant to the case:</p>
   <ul>
   {{#each enforcement_preferences}}
     {{#if (eq this "attachment_of_earnings")}}
-    <li><strong>Attachment of Earnings</strong> — deductions from wages</li>
+    <li><strong>Attachment of Earnings</strong> - deductions from wages</li>
     {{else if (eq this "warrant_of_control")}}
-    <li><strong>Warrant of Control</strong> — bailiff action</li>
+    <li><strong>Warrant of Control</strong> - enforcement agent action</li>
     {{else if (eq this "charging_order")}}
-    <li><strong>Charging Order</strong> — security over property</li>
+    <li><strong>Charging Order</strong> - security over property</li>
     {{else if (eq this "third_party_debt_order")}}
-    <li><strong>Third Party Debt Order</strong> — bank account freeze</li>
+    <li><strong>Third Party Debt Order</strong> - bank account or third-party funds</li>
     {{else if (eq this "order_to_obtain_information")}}
-    <li><strong>Order to Obtain Information</strong> — oral examination</li>
+    <li><strong>Order to Obtain Information</strong> - court questioning about finances</li>
     {{else}}
     <li>{{this}}</li>
     {{/if}}
@@ -305,180 +281,174 @@ This guide explains the main enforcement methods available in England, the costs
 </div>
 {{/if}}
 
-<!-- Before You Start -->
-<h2>Before You Start Enforcement</h2>
+<h2>Before you spend more money on enforcement</h2>
 
-<h3>Checklist Before Enforcement</h3>
+<h3>Checklist before you proceed</h3>
 
 <ul>
-  <li>Wait at least <strong>14 days</strong> from the date judgment was entered before applying for enforcement</li>
-  <li>Check if the defendant has requested time to pay or filed an appeal</li>
-  <li>Gather information about the defendant's financial circumstances (employment, assets, bank details)</li>
-  <li>Consider whether the defendant can actually pay — enforcement against someone with no assets or income may not be worthwhile</li>
-  <li>Be prepared to pay court fees upfront (some are refundable from the defendant if enforcement is successful)</li>
+  <li>Wait at least <strong>14 days</strong> from judgment unless the order says otherwise</li>
+  <li>Check whether the defendant has applied for time to pay or filed an appeal</li>
+  <li>Gather what you know about wages, bank accounts, vehicles, property, or other reachable assets</li>
+  <li>Ask whether the defendant looks able to pay anything at all, because enforcement with no realistic target can waste more money</li>
+  <li>Be ready to pay the court fee up front even though some costs may later be recoverable</li>
 </ul>
 
-<!-- Enforcement Methods -->
-<h2>Enforcement Methods</h2>
+<h2>Main enforcement methods</h2>
 
-<p>The main enforcement methods available after obtaining a CCJ are:</p>
+<p>The main methods available after a County Court Judgment are set out below.</p>
 
 <h3>1. Attachment of Earnings Order</h3>
 
-<p><strong>What it is:</strong> An order requiring the defendant's employer to deduct regular amounts from their wages and pay them directly to you via the court.</p>
+<p><strong>What it is:</strong> An order telling the defendant's employer to deduct money from wages and send it through the court toward the judgment debt.</p>
 
-<p><strong>When to use:</strong></p>
+<p><strong>When it is usually worth considering:</strong></p>
 <ul>
-  <li>The defendant is <strong>employed</strong> (not self-employed)</li>
-  <li>You know their employer's name and address</li>
-  <li>The debt is for a consumer debt or rent arrears</li>
+  <li>The defendant is employed rather than self-employed</li>
+  <li>You know where they work</li>
+  <li>You want regular deductions rather than a single enforcement visit</li>
 </ul>
 
 <p><strong>Advantages:</strong></p>
 <ul>
-  <li>Regular, automatic payments</li>
-  <li>Relatively low cost</li>
-  <li>High success rate if defendant is employed</li>
+  <li>Can produce steady payments over time</li>
+  <li>Usually straightforward once the employer is identified</li>
+  <li>Often a sensible first route where the defendant has stable employment</li>
 </ul>
 
-<p><strong>Disadvantages:</strong></p>
+<p><strong>Risks or limits:</strong></p>
 <ul>
-  <li>Only works for employed defendants</li>
-  <li>Cannot be used if defendant earns below a certain threshold</li>
-  <li>Defendant can change jobs to avoid payment</li>
+  <li>It does not work for self-employed defendants</li>
+  <li>Deductions may be modest if income is low</li>
+  <li>If the defendant changes jobs, the order may need to be revisited</li>
 </ul>
 
-<p><strong>Court Fee:</strong> £110 (as of 2024)</p>
-<p><strong>How to apply:</strong> Complete form N337 and submit to the court that issued the judgment</p>
+<p><strong>Court fee:</strong> £110</p>
+<p><strong>How to apply:</strong> Complete form N337 and file it with the court that entered judgment.</p>
 
-<h3>2. Warrant of Control (Bailiff Action)</h3>
+<h3>2. Warrant of Control</h3>
 
-<p><strong>What it is:</strong> An order authorizing enforcement agents (bailiffs) to visit the defendant's address, seize goods, and sell them at auction to recover the debt.</p>
+<p><strong>What it is:</strong> An order allowing enforcement agents to attend the defendant's address, take control of suitable goods, and use them toward the debt.</p>
 
-<p><strong>When to use:</strong></p>
+<p><strong>When it is usually worth considering:</strong></p>
 <ul>
-  <li>The defendant has <strong>valuable possessions</strong> that can be seized</li>
-  <li>The claim amount is <strong>£5,000 or less</strong> (for County Court enforcement)</li>
-  <li>You know the defendant's home or business address</li>
+  <li>You know where the defendant lives or trades from</li>
+  <li>You believe there are saleable goods available</li>
+  <li>The debt level makes a County Court warrant proportionate</li>
 </ul>
 
 <p><strong>Advantages:</strong></p>
 <ul>
-  <li>Can be very effective if defendant has valuable goods</li>
-  <li>Bailiffs handle the enforcement process</li>
-  <li>Quick resolution possible</li>
+  <li>Can put immediate pressure on the defendant</li>
+  <li>Does not depend on knowing an employer or bank</li>
+  <li>Can be effective where goods of value are clearly present</li>
 </ul>
 
-<p><strong>Disadvantages:</strong></p>
+<p><strong>Risks or limits:</strong></p>
 <ul>
-  <li>Many defendants have few or no valuable possessions</li>
-  <li>Certain items cannot be seized (essential household items, tools of trade up to £1,350 value)</li>
-  <li>Defendant can hide or remove goods</li>
-  <li>Additional bailiff fees may apply</li>
+  <li>Many defendants have few goods worth taking</li>
+  <li>Some items are protected from seizure</li>
+  <li>Goods may already be missing, encumbered, or not worth enough to cover the debt</li>
 </ul>
 
-<p><strong>Court Fee:</strong> £77 for claims up to £600; £110 for claims over £600 (plus bailiff fees)</p>
-<p><strong>How to apply:</strong> Complete form N323 and submit to the court that issued the judgment</p>
+<p><strong>Court fee:</strong> £77 for claims up to £600; £110 for claims over £600</p>
+<p><strong>How to apply:</strong> Complete form N323 and file it with the court that entered judgment.</p>
 
 <div class="info-box">
-<strong>Note — For debts over £5,000:</strong> You need a <strong>Writ of Control</strong> enforced by High Court Enforcement Officers (HCEOs). This requires transferring your judgment to the High Court first (form N293A).
+  <strong>Note:</strong> For debts over £5,000, a transfer to the High Court may be the better enforcement route. That usually means applying for a Writ of Control through form N293A.
 </div>
 
-<h3>3. Third Party Debt Order (Bank Account Freeze)</h3>
+<h3>3. Third Party Debt Order</h3>
 
-<p><strong>What it is:</strong> An order freezing money in the defendant's bank account or building society, then transferring it to you to satisfy the debt.</p>
+<p><strong>What it is:</strong> An order freezing money held for the defendant by a bank or other third party and, if the court allows it, paying that money toward the judgment debt.</p>
 
-<p><strong>When to use:</strong></p>
+<p><strong>When it is usually worth considering:</strong></p>
 <ul>
-  <li>You know the defendant <strong>has money in a bank account</strong></li>
-  <li>You have the name and address of the defendant's bank or building society</li>
-  <li>The defendant has not paid despite having funds available</li>
+  <li>You have reliable information about the defendant's bank or another source holding money for them</li>
+  <li>You want to target funds rather than goods or wages</li>
+  <li>The defendant appears to have cash available but has still not paid</li>
 </ul>
 
 <p><strong>Advantages:</strong></p>
 <ul>
-  <li>Very effective if defendant has sufficient funds in their account</li>
-  <li>Immediate freezing of the account</li>
-  <li>Can result in quick payment</li>
+  <li>Can be very effective if funds are present at the right time</li>
+  <li>May lead to quick recovery</li>
+  <li>Can bring matters to a head quickly once the account is frozen</li>
 </ul>
 
-<p><strong>Disadvantages:</strong></p>
+<p><strong>Risks or limits:</strong></p>
 <ul>
-  <li>You need to identify the bank and branch</li>
-  <li>Account may have insufficient funds</li>
-  <li>Certain accounts are protected (e.g., joint accounts, some benefit payments)</li>
-  <li>The bank may charge defendant an account freeze fee</li>
+  <li>You need enough information to identify the right bank connection</li>
+  <li>The account may not contain enough money when the order lands</li>
+  <li>Some funds may be protected or harder to reach than expected</li>
 </ul>
 
-<p><strong>Court Fee:</strong> £110</p>
-<p><strong>How to apply:</strong> Complete form N349 and provide evidence of the defendant's bank details</p>
+<p><strong>Court fee:</strong> £110</p>
+<p><strong>How to apply:</strong> Complete form N349 and file it with the best bank details you have.</p>
 
-<h3>4. Charging Order on Property</h3>
+<h3>4. Charging Order</h3>
 
-<p><strong>What it is:</strong> An order securing your debt against the defendant's property or land. If the property is sold, you get paid from the sale proceeds. You can also apply for an order for sale to force a sale.</p>
+<p><strong>What it is:</strong> An order securing the judgment debt against the defendant's property or land so the debt sits against that asset.</p>
 
-<p><strong>When to use:</strong></p>
+<p><strong>When it is usually worth considering:</strong></p>
 <ul>
-  <li>The defendant <strong>owns property or land</strong></li>
-  <li>The debt is substantial (usually £1,000+)</li>
-  <li>You are prepared to wait for payment until the property is sold</li>
+  <li>The defendant owns property</li>
+  <li>The debt is substantial enough to justify the extra step</li>
+  <li>You can wait for a longer-term recovery route if immediate payment is unlikely</li>
 </ul>
 
 <p><strong>Advantages:</strong></p>
 <ul>
-  <li>Secures the debt against a valuable asset</li>
-  <li>You will be paid when the property is sold or remortgaged</li>
-  <li>Shows the defendant you are serious about enforcement</li>
+  <li>Places the debt against a significant asset</li>
+  <li>May encourage payment or settlement</li>
+  <li>Can preserve your position if the property is later sold or refinanced</li>
 </ul>
 
-<p><strong>Disadvantages:</strong></p>
+<p><strong>Risks or limits:</strong></p>
 <ul>
-  <li>Can take years before you receive payment</li>
-  <li>Property may have existing mortgages or charges with priority</li>
-  <li>Court rarely orders immediate sale unless debt is very large</li>
-  <li>Requires Land Registry searches and additional legal steps</li>
+  <li>You may still wait a long time for recovery</li>
+  <li>Existing mortgages and prior charges may reduce what is available</li>
+  <li>An order for sale is a separate and more serious step, and it is not granted automatically</li>
 </ul>
 
-<p><strong>Court Fee:</strong> £110 for interim order; additional fee for final order</p>
-<p><strong>How to apply:</strong> Complete form N379 and provide evidence of the defendant's property ownership</p>
+<p><strong>Court fee:</strong> £110 for the interim charging order, plus any later fees</p>
+<p><strong>How to apply:</strong> Complete form N379 and support it with evidence that the defendant owns the property in question.</p>
 
-<h3>5. Order to Obtain Information (Oral Examination)</h3>
+<h3>5. Order to Obtain Information</h3>
 
-<p><strong>What it is:</strong> An order requiring the defendant to attend court and answer questions under oath about their finances, employment, assets, and ability to pay.</p>
+<p><strong>What it is:</strong> An order requiring the defendant to attend court and answer questions on oath about wages, assets, debts, and ability to pay.</p>
 
-<p><strong>When to use:</strong></p>
+<p><strong>When it is usually worth considering:</strong></p>
 <ul>
-  <li>You don't know enough about the defendant's financial situation</li>
-  <li>You want to identify which enforcement method is most appropriate</li>
-  <li>The defendant has not responded to requests for payment</li>
+  <li>You do not know enough about the defendant's finances to choose an enforcement route confidently</li>
+  <li>You suspect there are wages, property, or accounts but need more detail</li>
+  <li>The defendant has ignored requests for payment</li>
 </ul>
 
 <p><strong>Advantages:</strong></p>
 <ul>
-  <li>Provides detailed information about the defendant's finances</li>
-  <li>Helps you choose the best enforcement method</li>
-  <li>Failure to attend court can result in arrest warrant</li>
+  <li>Can give you better information before spending more on enforcement</li>
+  <li>Helps you choose the right next application</li>
+  <li>Shows the court process is continuing even where payment has stalled</li>
 </ul>
 
-<p><strong>Disadvantages:</strong></p>
+<p><strong>Risks or limits:</strong></p>
 <ul>
-  <li>Does not directly result in payment</li>
-  <li>Defendant may lie or provide incomplete information</li>
-  <li>Additional step before actual enforcement</li>
+  <li>It does not itself recover money</li>
+  <li>The answers still need to be tested against what you already know</li>
+  <li>It adds another step before actual recovery action</li>
 </ul>
 
-<p><strong>Court Fee:</strong> £55</p>
-<p><strong>How to apply:</strong> Complete form N316 and submit to the court</p>
+<p><strong>Court fee:</strong> £55</p>
+<p><strong>How to apply:</strong> Complete form N316 and file it with the court.</p>
 
-<!-- Fees Table -->
-<h2>Enforcement Fees and Costs</h2>
+<h2>Fees and costs</h2>
 
 <table class="fees-table">
   <thead>
     <tr>
-      <th>Enforcement Method</th>
-      <th>Court Fee</th>
-      <th>Additional Costs</th>
+      <th>Method</th>
+      <th>Court fee</th>
+      <th>Other likely cost</th>
       <th>Recoverable?</th>
     </tr>
   </thead>
@@ -486,114 +456,106 @@ This guide explains the main enforcement methods available in England, the costs
     <tr>
       <td>Attachment of Earnings</td>
       <td>£110</td>
-      <td>None</td>
-      <td>Yes (if successful)</td>
+      <td>Usually none</td>
+      <td>Often yes if enforcement succeeds</td>
     </tr>
     <tr>
       <td>Warrant of Control (up to £600)</td>
       <td>£77</td>
-      <td>Bailiff fees (varies)</td>
-      <td>Partially</td>
+      <td>Agent fees may arise</td>
+      <td>Partly</td>
     </tr>
     <tr>
       <td>Warrant of Control (over £600)</td>
       <td>£110</td>
-      <td>Bailiff fees (varies)</td>
-      <td>Partially</td>
+      <td>Agent fees may arise</td>
+      <td>Partly</td>
     </tr>
     <tr>
       <td>Third Party Debt Order</td>
       <td>£110</td>
-      <td>None</td>
-      <td>Yes (if successful)</td>
+      <td>Usually none</td>
+      <td>Often yes if funds are recovered</td>
     </tr>
     <tr>
       <td>Charging Order</td>
       <td>£110</td>
-      <td>Land Registry fees (£7)</td>
-      <td>Yes (when property sold)</td>
+      <td>Land Registry and later application costs may apply</td>
+      <td>Sometimes, depending on outcome</td>
     </tr>
     <tr>
       <td>Order to Obtain Information</td>
       <td>£55</td>
-      <td>None</td>
-      <td>Yes</td>
+      <td>Usually none</td>
+      <td>Potentially</td>
     </tr>
   </tbody>
 </table>
 
-<!-- Choosing the Right Method -->
-<h2>How to Choose the Right Enforcement Method</h2>
+<h2>How to choose the right route</h2>
 
 <ol>
   <li>
-    <strong>Assess the defendant's situation</strong><br>
-    Do they have a job? Property? Bank accounts? Assets? Start with an Order to Obtain Information if you're unsure.
+    <strong>Start with what the defendant actually has.</strong><br>
+    Wages, bank funds, goods, and property each point toward a different enforcement method.
   </li>
   <li>
-    <strong>Consider the debt amount</strong><br>
-    For smaller debts (under £1,000), Attachment of Earnings or Warrant of Control are usually most appropriate. For larger debts, consider Charging Orders or High Court Enforcement.
+    <strong>Do not spend fees blindly.</strong><br>
+    The question is not just whether you can enforce, but whether the chosen method has a realistic chance of recovery.
   </li>
   <li>
-    <strong>Evaluate likelihood of success</strong><br>
-    Don't spend money on enforcement if the defendant has no assets, income, or ability to pay. This is known as "throwing good money after bad."
+    <strong>Use information first if the picture is unclear.</strong><br>
+    If you do not know enough about the defendant's finances, an Order to Obtain Information may save wasted applications later.
   </li>
   <li>
-    <strong>Try multiple methods if necessary</strong><br>
-    If one method fails, you can try another. For example, if Attachment of Earnings fails because the defendant is self-employed, try a Charging Order if they own property.
+    <strong>Review the result quickly.</strong><br>
+    If one route fails but fresh information comes in, another route may still be justified.
   </li>
 </ol>
 
-<!-- Next Steps -->
-<h2>Next Steps</h2>
+<h2>Practical next steps</h2>
 
-<h3>Recommended Action Plan</h3>
-
-<p>Based on your claim for <strong>{{currency total_claim_amount}}</strong> against {{tenant_full_name}}:</p>
+<p>Based on your claim for <strong>{{currency total_claim_amount}}</strong> against {{tenant_full_name}}, the usual order is:</p>
 
 <ol>
-  <li><strong>Wait 14 days</strong> from judgment to allow voluntary payment</li>
-  <li><strong>Send a final demand letter</strong> warning of enforcement action</li>
-  <li><strong>If no payment:</strong> Apply for Order to Obtain Information (form N316) to understand defendant's finances</li>
-  <li><strong>Based on financial disclosure:</strong> Choose the most appropriate enforcement method from the options above</li>
-  <li><strong>Monitor and follow up:</strong> Track enforcement progress and be prepared to try alternative methods if needed</li>
+  <li><strong>Wait 14 days</strong> to see whether the judgment is paid voluntarily</li>
+  <li><strong>Send a short final demand</strong> if payment still has not arrived</li>
+  <li><strong>If you still do not know enough about the defendant's finances,</strong> consider an Order to Obtain Information</li>
+  <li><strong>Choose the enforcement route that matches what the defendant actually has,</strong> whether wages, bank funds, goods, or property</li>
+  <li><strong>Review the result promptly</strong> and decide whether a second route is justified</li>
 </ol>
 
-<!-- Important Warnings -->
-<h2>Important Warnings</h2>
+<h2>Important warnings</h2>
 
 <div class="notice-box">
-<strong>Do Not Harass the Defendant:</strong> You must not harass, threaten, or take the law into your own hands. Always use official court enforcement procedures. Harassment can result in criminal charges and may undermine your legal position.
+  <strong>Do Not Harass the Defendant:</strong> Keep all contact measured and lawful. Do not threaten, harass, or try to recover the debt outside the proper court process.
 </div>
 
 <div class="notice-box">
-<strong>Insolvency Risk:</strong> If the defendant declares bankruptcy or enters into an Individual Voluntary Arrangement (IVA), enforcement action will be stayed (stopped). You will become an unsecured creditor in their insolvency proceedings and may only receive a small portion of the debt owed.
+  <strong>Insolvency Risk:</strong> If the defendant goes bankrupt or enters an IVA, enforcement may stop and you may need to prove in the insolvency instead.
 </div>
 
-<!-- Further Resources -->
-<h2>Further Resources</h2>
+<h2>Further resources</h2>
 
 <ul>
-  <li><strong>GOV.UK Enforcement Guidance:</strong><br>
+  <li><strong>GOV.UK enforcement guidance:</strong><br>
     <span class="url-link">https://www.gov.uk/make-court-claim-for-money/enforce-a-judgment</span></li>
-  <li><strong>Court Forms:</strong><br>
+  <li><strong>Court forms:</strong><br>
     <span class="url-link">https://www.gov.uk/government/collections/civil-and-family-court-forms</span></li>
   <li><strong>Citizens Advice:</strong><br>
     <span class="url-link">https://www.citizensadvice.org.uk</span></li>
-  <li><strong>Money Claims Online (MCOL):</strong><br>
+  <li><strong>Money Claim Online:</strong><br>
     <span class="url-link">https://www.moneyclaim.gov.uk</span></li>
 </ul>
 
-<!-- Disclaimer -->
 <div class="info-box">
-<em>This guide is for information only and does not constitute legal advice. If you need legal advice, contact a solicitor.</em>
+  <em>This guide is practical support for post-judgment enforcement. If recovery is likely to be contested or complicated, independent legal advice may still be worthwhile.</em>
 </div>
 
-<!-- Document Footer -->
 <div class="doc-footer">
   <p><strong>Generated:</strong> {{generation_date}}</p>
   <p><strong>Landlord Heaven Money Claim Pack</strong> | England</p>
-  <p><em>This guide supports enforcement action following a County Court Judgment.</em></p>
+  <p><em>This guide supports the steps landlords usually consider after a County Court Judgment has been entered.</em></p>
 </div>
 
 </body>

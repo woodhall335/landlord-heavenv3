@@ -1,4 +1,4 @@
-Landlord Heaven Section 13 Wizard
+Landlord Heaven
 Tribunal Bundle Cover Sheet
 Pack: Section 13 Defensive Pack
 Property: 10 Sample Road, Leeds, LS1 1AA
@@ -10,16 +10,16 @@ This bundle brings together the Form 4A notice, market-rent justification, Tribu
 service record, and any uploaded supporting evidence for a tribunal-ready response pack.
 Section 13 Defensive Pack | Bundle cover Page 1 of 1
 
--- 1 of 24 --
+-- 1 of 22 --
 
-Landlord Heaven Section 13 Wizard
+Landlord Heaven
 Tribunal Bundle Index
 Bundle cover sheet (1 page)
 Exhibit A: Form 4A rent increase notice (9 pages)
 Exhibit B: Rent increase justification report (3 pages)
-Exhibit C: Tribunal Argument Summary (2 pages)
+Exhibit C: Tribunal Argument Summary (1 page)
 Exhibit D: Proof of service record (1 page)
-Exhibit E: Rent increase cover letter (2 pages)
+Exhibit E: Rent increase cover letter (1 page)
 Exhibit F: Tribunal defence guide (1 page)
 Exhibit G: Landlord response template (1 page)
 Exhibit H: Tribunal legal briefing (1 page)
@@ -27,7 +27,7 @@ Exhibit I: Evidence checklist (1 page)
 Exhibit J: Negotiation email template (1 page)
 Section 13 Defensive Pack | Bundle index Page 1 of 1
 
--- 2 of 24 --
+-- 2 of 22 --
 
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26) ©Crown copyright 2026
 Page 1
@@ -65,9 +65,8 @@ tenant in person, leaving
 it at the tenant’s address
 or sending it by registered
 post.
-Prepared using Landlord Heaven Section 13 Wizard
 
--- 3 of 24 --
+-- 3 of 22 --
 
 Page 2
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -96,7 +95,7 @@ Town or city
 County (optional)
 Postcode
 
--- 4 of 24 --
+-- 4 of 22 --
 
 Page 3
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -131,7 +130,7 @@ tenant and the tribunal may
 use this address to serve
 documents on you.
 
--- 5 of 24 --
+-- 5 of 22 --
 
 Page 4
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -215,7 +214,7 @@ Satellite TV.
 Follow the guidance in Note
 B at the end of this notice.
 
--- 6 of 24 --
+-- 6 of 22 --
 
 Page 5
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -237,7 +236,7 @@ Additional signatures for joint landlords
 2. Signature, full name, address, and capacity of signatory (landlord).
 3. Signature, full name, address, and capacity of signatory (landlord).
 
--- 7 of 24 --
+-- 7 of 22 --
 
 Page 6
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -281,7 +280,7 @@ rent amount until the tribunal has made its decision.
 You might find it helpful to check similar properties in your area to get an
 idea of the market rate.
 
--- 8 of 24 --
+-- 8 of 22 --
 
 Page 7
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -325,7 +324,7 @@ starts on the 20th of April, the new rent must start on the 20th day of
 the month when the increase begins. Second example: if a weekly
 tenancy started on a Monday, the new rent must begin on a Monday.
 
--- 9 of 24 --
+-- 9 of 22 --
 
 Page 8
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -341,7 +340,7 @@ Do not include any variable service charges (within the meaning of
 section 18 of the Landlord and Tenant Act 1985) that change based
 on costs.
 
--- 10 of 24 --
+-- 10 of 22 --
 
 Page 9
 Form 4A Landlord’s notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -353,20 +352,15 @@ to sign and date it.
 Date
 Day Month Year
 
--- 11 of 24 --
+-- 11 of 22 --
 
-Landlord Heaven Section 13 Wizard
+Landlord Heaven
 Rent Increase Justification Report
-Purpose: This report explains why the proposed rent is supported by the recorded comparable
-evidence.
-Conclusion: The proposed rent is supported by current market evidence and sits within the
-lower-to-mid range of comparable properties locally.
-Case position: The recorded comparables place the proposed rent below the adjusted median of
-£1297.50 pcm and support it as a market-aligned figure for this tenancy.
-Use this document: Keep it with Form 4A and the proof of service record, and rely on it if the tenant
-queries or challenges the increase.
-This proposal is grounded in 8 comparable two-bedroom homes within 0.5 miles, all listed within the
-last 90 days and all source-backed.
+This report explains why the proposed rent is supported by local comparable evidence.
+The proposed rent is supported by current market evidence and sits within the lower-to-mid range of
+comparable properties locally.
+The recorded comparables support the proposed rent and place it below the adjusted median of
+£1297.50 pcm.
 Property: 10 Sample Road, Leeds, LS1 1AA
 Key points
 - Proposed rent: £1285.00 per month
@@ -376,36 +370,35 @@ Key points
 - Comparable count: 8 total (8 source-backed; 8 within 90 days)
 Market position
 Rules version: england_assured_section13_2026-05-01
-Adjusted market range: lower quartile £1272.50 pcm | median £1297.50 pcm | upper quartile £1318.75
-pcm
+Adjusted market range: lower quartile £1272.50 pcm | median £1297.50 pcm | upper quartile £1318.75 pcm
 Proposed rent: £1285.00 per month (£1285.00 pcm equivalent)
-The proposed rent of £1285.00 per month sits between the lower quartile and the median of the
-adjusted comparable range, against an adjusted range of £1272.50 to £1318.75 pcm and a median of
-£1297.50 pcm.
+The proposed rent of £1285.00 per month sits between the lower quartile and the median of the adjusted
+comparable range, against an adjusted range of £1272.50 to £1318.75 pcm and a median of £1297.50
+pcm.
 Your proposed rent (£1285.00) sits below the median comparable rent (£1297.50 pcm), with strong
 evidence strength based on 8 recent source-backed comparables.
-Strong evidence strength is based on 8 comparable homes, 8 source-backed entries, and 8
-comparables dated within the 90-day freshness window. The file reads as a well-supported market
-review rather than a bare assertion.
+Strong evidence strength is based on 8 comparable homes, 8 source-backed entries, and 8 comparables
+dated within the 90-day freshness window. The file reads as a well-supported market review rather than a
+bare assertion.
 Challenge band: Moderate likelihood of challenge - Based on where your proposed rent sits within the
 adjusted comparable rent range.
-Evidence band: Strong evidence strength - Based on how many comparables you have, how recent
-they are, and how many are source-backed rather than manual or heavily overridden.
+Evidence band: Strong evidence strength - Based on how many comparables you have, how recent they
+are, and how many are source-backed rather than manual or heavily overridden.
 Recorded reasoning
-Section 13 Wizard | Comparable analysis and justification Page 1 of 3
-
--- 12 of 24 --
-
 The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
-month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as
-amended), the proposed increase is presented as reasonable with a moderate likelihood of challenge
-and strong evidence strength. The proposed rent reflects recent local listings, condition, and current
-market positioning for similar two-bedroom homes.
+month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),
+the proposed increase is presented as reasonable with a moderate likelihood of challenge and strong
+evidence strength. The proposed rent reflects recent local listings, condition, and current market positioning
+for similar two-bedroom homes.
 Case-specific note: The proposed rent reflects recent local listings, condition, and current market
 positioning for similar two-bedroom homes.
+Landlord Heaven | Comparable analysis and justification Page 1 of 3
+
+-- 12 of 22 --
+
 Comparable overview
-- Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within
-the last 90 days and all source-backed
+- Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the
+last 90 days and all source-backed
 - Challenge band: Moderate likelihood of challenge
 - Evidence band: Strong evidence strength
 Comparable picture
@@ -430,10 +423,6 @@ Source: scraped
 Source date (published): 15 March 2026
 Adjustments: none recorded
 4. Comparable 4, Leeds | £1290.00 monthly | adjusted £1290.00 pcm
-Section 13 Wizard | Comparable analysis and justification Page 2 of 3
-
--- 13 of 24 --
-
 Source: scraped
 Source date (published): 15 March 2026
 Adjustments: none recorded
@@ -444,6 +433,10 @@ Adjustments: none recorded
 6. Comparable 6, Leeds | £1315.00 monthly | adjusted £1315.00 pcm
 Source: scraped
 Source date (published): 15 March 2026
+Landlord Heaven | Comparable analysis and justification Page 2 of 3
+
+-- 13 of 22 --
+
 Adjustments: none recorded
 7. Comparable 7, Leeds | £1330.00 monthly | adjusted £1330.00 pcm
 Source: scraped
@@ -456,67 +449,55 @@ Adjustments: none recorded
 Tribunal note
 The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
 tribunal can set a lower rent, but not higher than the rent proposed in the notice.
-This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful
-and reasonable. You remain responsible for compliance with all applicable laws.
-Section 13 Wizard | Comparable analysis and justification Page 3 of 3
+This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful and
+reasonable. You remain responsible for compliance with all applicable laws.
+Landlord Heaven | Comparable analysis and justification Page 3 of 3
 
--- 14 of 24 --
+-- 14 of 22 --
 
-Landlord Heaven Section 13 Wizard
+Landlord Heaven
 Tribunal Argument Summary
-Purpose: This is the landlord's concise argument brief for the hearing file.
-Case position: The proposed rent of £1285.00 per month is supported by 8 comparable two-bedroom
-properties within 0.5 miles, with all listed within the last 90 days and all source-backed and is
-positioned below the adjusted median of £1297.50 pcm, making it a reasonable and defensible figure
-under section 13.
-Use this document: Place it immediately behind the justification report and use it as a short speaking
-note if the proposal is challenged.
-This proposal is grounded in 8 comparable two-bedroom homes within 0.5 miles, all listed within the
-last 90 days and all source-backed.
+This is the landlord's concise argument brief for the hearing file.
+The proposed rent of £1285.00 per month is supported by current comparable evidence and sits
+below the adjusted median of £1297.50 pcm.
 Adjusted median market rent: £1297.50 pcm
 Argument in brief
-The proposal should be judged by reference to nearby open-market comparables, not by the size of
-the increase from the previous rent alone.
-The landlord's position is that 8 comparable two-bedroom properties within 0.5 miles, with all listed
-within the last 90 days and all source-backed supports a proposed rent of £1285.00 per month, which
-remains below the adjusted median of £1297.50 pcm and should therefore be judged against the
-recorded comparable market evidence rather than the size of the increase alone.
-Recorded position: The proposed rent of £1285.00 per month is below the adjusted median market
-rent of £1297.50 per month. Based on the comparables analysed under section 13(4) of the Housing
-Act 1988 (as amended), the proposed increase is presented as reasonable with a moderate likelihood
-of challenge and strong evidence strength. The proposed rent reflects recent local listings, condition,
-and current market positioning for similar two-bedroom homes.
+The proposal should be judged by reference to nearby open-market comparables, not by the size of the
+increase from the previous rent alone.
+The landlord relies on the comparable evidence in this file and says the proposed rent of £1285.00 per
+month should be judged against that market evidence, not against the size of the increase alone.
+The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
+month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),
+the proposed increase is presented as reasonable with a moderate likelihood of challenge and strong
+evidence strength. The proposed rent reflects recent local listings, condition, and current market positioning
+for similar two-bedroom homes.
 Strength of the evidence
-Evidence assessment: Strong evidence strength is based on 8 comparable homes, 8 source-backed
-entries, and 8 comparables dated within the 90-day freshness window. The file reads as a
-well-supported market review rather than a bare assertion.
+Strong evidence strength is based on 8 comparable homes, 8 source-backed entries, and 8 comparables
+dated within the 90-day freshness window. The file reads as a well-supported market review rather than a
+bare assertion.
 Comparable 1: Comparable 1, Leeds at £1240.00 monthly, adjusting to £1240.00 pcm, dated 15 March
 2026.
 Comparable 2: Comparable 2, Leeds at £1265.00 monthly, adjusting to £1265.00 pcm, dated 15 March
 2026.
 If challenged, say this
 1. Anchor to evidence
-Say: The proposed rent is based on comparable local properties and the recorded adjustments, not on
-a percentage increase alone.
+Say: The proposed rent is based on comparable local properties and the recorded adjustments, not on a
+percentage increase alone.
 2. Position in the range
-Say: The figure sits below the adjusted median of £1297.50 pcm and should be judged against the
-adjusted comparable range recorded in the report.
+Say: The figure sits below the adjusted median of £1297.50 pcm and should be judged against the adjusted
+comparable range recorded in the report.
 3. Strength of evidence
-Section 13 Defensive Pack | Tribunal argument summary Page 1 of 2
-
--- 15 of 24 --
-
 Say: The proposal is supported by 8 source-backed comparables, with 8 listings inside the 90-day
 freshness window.
 4. Bundle integrity
-Say: The full bundle includes the notice, service record, justification report, Tribunal Argument
-Summary, and the supporting documents I rely on.
+Say: The full bundle includes the notice, service record, justification report, Tribunal Argument Summary,
+and the supporting documents I rely on.
 Important limit
-This summary is a concise argument brief drawn from the saved case facts and comparable analysis.
-It supports presentation of the case, but it does not guarantee a tribunal outcome.
-Section 13 Defensive Pack | Tribunal argument summary Page 2 of 2
+This summary is a concise argument brief drawn from the saved case facts and comparable analysis. It
+supports presentation of the case, but it does not guarantee a tribunal outcome.
+Section 13 Defensive Pack | Tribunal argument summary Page 1 of 1
 
--- 16 of 24 --
+-- 15 of 22 --
 
 CERTIFICATE OF SERVICE
 (Proof of Service - support record only, not a prescribed court form)
@@ -551,97 +532,124 @@ liable for prosecution and that this certificate may be rejected by the court.
 Name of person who served:
 Signature:
 Date signed:
-Generated by Landlord Heaven Section 13 Wizard This form is editable - complete and print after service
+Generated by Landlord Heaven This form is editable - complete and print after service
 
--- 17 of 24 --
+-- 16 of 22 --
 
-Landlord Heaven Section 13 Wizard
+Landlord Heaven
 Section 13 Rent Increase Cover Letter
-Purpose: This cover letter explains what is in the service pack and how to use it before serving Form
-4A.
-This pack sets out a complete and evidence-backed proposal for the revised rent.
-Case position: This proposal is grounded in 8 comparable two-bedroom properties within 0.5 miles,
-with all listed within the last 90 days and all source-backed, places the proposed rent below the
-adjusted median of £1297.50 pcm, and makes the service pack ready to use on the recorded facts.
-Use this document: Keep it at the front of the pack so the notice, evidence, and next steps are easy to
-follow when you serve the increase.
-This proposal is grounded in 8 comparable two-bedroom homes within 0.5 miles, all listed within the
-last 90 days and all source-backed.
+This cover letter explains the proposed rent increase and points the tenant to the notice and
+supporting evidence.
+This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles, with all
+listed within the last 90 days and all source-backed and sits below the adjusted median of £1297.50
+pcm. The notice file is ready to serve on the recorded facts.
 Property: 10 Sample Road, Leeds, LS1 1AA
 Tenant(s): Alex Tenant, Jordan Tenant
 What to do now
 1. Serve Form 4A correctly using the method you have recorded in this pack.
-2. Keep the proof of service record with the completed notice so you can show when and how the
-notice was served.
-3. Retain the justification report with your comparable evidence in case the tenant challenges the
-proposed rent.
-Case position in brief
+2. Keep the proof of service record with the completed notice so you can show when and how the notice
+was served.
+3. Retain the justification report with your comparable evidence in case the tenant challenges the proposed
+rent.
+Rent position in brief
 Current rent: £1200.00 per month
 Proposed rent: £1285.00 per month
 Proposed start date: 01 June 2026
 The proposed rent is supported by current market evidence and sits within the lower-to-mid range of
 comparable properties locally.
-Comparable footing: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the
-last 90 days and all source-backed.
-Recorded banding: Moderate likelihood of challenge and Strong evidence strength.
+Comparable footing: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the last 90
+days and all source-backed.
+Assessment: Moderate likelihood of challenge; Strong evidence strength.
 The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
-month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as
-amended), the proposed increase is presented as reasonable with a moderate likelihood of challenge
-and strong evidence strength. The proposed rent reflects recent local listings, condition, and current
-market positioning for similar two-bedroom homes.
-Keep with your file
+month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),
+the proposed increase is presented as reasonable with a moderate likelihood of challenge and strong
+evidence strength. The proposed rent reflects recent local listings, condition, and current market positioning
+for similar two-bedroom homes.
+Keep with the notice
 Service method recorded: First class post
 Service date recorded: 25 March 2026
 The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
 tribunal can set a lower rent, but not higher than the rent proposed in the notice.
-Section 13 Wizard | England assured tenancy rent increase Page 1 of 2
+This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful and
+reasonable. You remain responsible for compliance with all applicable laws.
+Landlord Heaven | Section 13 rent increase pack Page 1 of 1
 
--- 18 of 24 --
+-- 17 of 22 --
 
-This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful
-and reasonable. You remain responsible for compliance with all applicable laws.
-Section 13 Wizard | England assured tenancy rent increase Page 2 of 2
-
--- 19 of 24 --
-
-Landlord Heaven Section 13 Wizard
+Landlord Heaven
 Tribunal Defence Guide
-Purpose: This guide shows how to present the Section 13 file clearly if the tenant refers the notice to
-the tribunal.
-Case position: The landlord's position is that 8 comparable two-bedroom properties within 0.5 miles,
-with all listed within the last 90 days and all source-backed supports a proposed rent of £1285.00 per
-month, which remains below the adjusted median of £1297.50 pcm and should therefore be judged
-against the recorded comparable market evidence rather than the size of the increase alone.
-Use this document: Use it to prepare your hearing file, bundle, and short oral explanation before any
-response is sent or hearing takes place.
-This proposal is grounded in 8 comparable two-bedroom homes within 0.5 miles, all listed within the
-last 90 days and all source-backed.
+This guide shows how to present the Section 13 file clearly if the tenant refers the notice to the
+tribunal.
+The landlord relies on the comparable evidence in this file and says the proposed rent of £1285.00 per
+month should be judged against that market evidence, not against the size of the increase alone.
 Challenge band: Moderate likelihood of challenge. Evidence band: Strong evidence strength.
 If the tenant applies
-If the tenant refers the notice to the tribunal before the proposed start date, review the application
-promptly and answer from the same evidence base used in this pack.
-Keep the Form 4A notice, proof of service record, justification report, Tribunal Argument Summary,
-photos, EPC, safety documents, and any negotiation correspondence together in one hearing file.
+If the tenant refers the notice to the tribunal before the proposed start date, review the application promptly
+and answer from the same evidence base used in this pack.
+Keep the Form 4A notice, proof of service record, justification report, Tribunal Argument Summary, photos,
+EPC, safety documents, and any negotiation correspondence together in one hearing file.
 What to file and bring
-Bring the merged tribunal bundle, printed copies of supporting evidence, and a short chronology
-covering the tenancy start date, any earlier increase, and the proposed effective date.
-Use the same band wording throughout: Moderate likelihood of challenge and Strong evidence
-strength.
+Bring the merged tribunal bundle, printed copies of supporting evidence, and a short chronology covering
+the tenancy start date, any earlier increase, and the proposed effective date.
+Use the same band wording throughout: Moderate likelihood of challenge and Strong evidence strength.
 How to explain the evidence
-Explain why the chosen comparables are relevant, how each adjustment affects the monthly
-equivalent, and why any user override was applied.
-If a point is weak or missing, acknowledge it briefly and return to the strongest nearby comparables
-rather than overstating the file.
+Explain why the chosen comparables are relevant, how each adjustment affects the monthly equivalent,
+and why any user override was applied.
+If a point is weak or missing, acknowledge it briefly and return to the strongest nearby comparables rather
+than overstating the file.
 Keep your position consistent
-Keep returning to the same market anchor: the proposal is based on 8 comparable two-bedroom
-properties within 0.5 miles, with all listed within the last 90 days and all source-backed, not on a target
-percentage increase.
+Keep returning to the same market anchor: the proposal is based on 8 comparable two-bedroom properties
+within 0.5 miles, with all listed within the last 90 days and all source-backed, not on a target percentage
+increase.
 If challenged, refer back to the recorded comparable table and the adjustments already applied.
-Describe the proposal as below the adjusted median market rent and keep the explanation tied to the
-Form 4A, proof of service, and justification report rather than speculation about what the tribunal may
-do.
-Be ready to explain property condition, tenancy-period alignment, and how the earliest valid start date
-was calculated under the post-1 May 2026 rules.
+Describe the proposal as below the adjusted median market rent and keep the explanation tied to the Form
+4A, proof of service, and justification report rather than speculation about what the tribunal may do.
+Be ready to explain property condition, tenancy-period alignment, and how the earliest valid start date was
+calculated under the post-1 May 2026 rules.
 Section 13 Defensive Pack | Tribunal defence guide Page 1 of 1
 
--- 20 of 24 --
+-- 18 of 22 --
+
+Landlord Heaven
+Landlord Response Template
+Use this template when responding to a tenant application for a market rent determination.
+The recorded comparables support the proposed rent and place it below the adjusted median of
+£1297.50 pcm.
+Suggested response
+I confirm that the notice under section 13(2) of the Housing Act 1988 was served on the tenant and that the
+proposed rent is supported by current open-market comparables for similar homes in the same area.
+The comparable analysis shows an adjusted median market rent of £1297.50 per month, with the proposed
+rent sitting below the adjusted median of £1297.50 pcm.
+The landlord therefore asks the tribunal to determine that the proposed rent is supported by the market
+evidence, or alternatively to set the market rent at the closest figure supported by the evidence bundle.
+Attach with response
+Attach the completed Form 4A, proof of service record, justification report, Tribunal Argument Summary,
+relevant evidence exhibits, and any correspondence showing attempts to resolve the issue before a
+hearing.
+Section 13 Defensive Pack | Landlord response template Page 1 of 1
+
+-- 19 of 22 --
+
+Landlord Heaven
+Tribunal Legal Briefing
+This briefing pulls together the main statutory and practical points that sit behind the landlord evidence
+file.
+The recorded comparables support the proposed rent and place it below the adjusted median of
+£1297.50 pcm.
+Statutory framework
+This pack is prepared on the basis of Housing Act 1988 section 13(2) and section 13(4), as amended for
+assured tenancies from 1 May 2026.
+The new rent must be proposed on Form 4A, served with at least two months notice, aligned to the tenancy
+period, and timed so that the 52-week / 53-week anti-drift rule is satisfied.
+What the tribunal considers
+The tribunal considers the market rent for the property on the open market, assuming the same terms,
+letting circumstances, and tenant obligations unless the evidence shows a meaningful difference.
+Comparable selection, adjustment discipline, and evidence freshness are therefore central. Unsupported or
+stale comparables weaken the landlord case even where the notice itself is valid.
+Practical hearing points
+Current banding: Moderate likelihood of challenge | Strong evidence strength.
+Stay consistent with the report wording. Do not overstate the data. If the evidence is mixed, acknowledge
+that plainly and explain why the proposed figure still sits within a reasonable market range.
+Section 13 Defensive Pack | Legal briefing Page 1 of 1
+
+-- 20 of 22 --

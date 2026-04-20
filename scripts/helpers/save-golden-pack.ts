@@ -68,11 +68,56 @@ function isZipDocument(document: GoldenPackDocumentInput): boolean {
   return document.contentType === 'application/zip' || path.extname(document.file_name).toLowerCase() === '.zip';
 }
 
+export async function extractTextArtifactsForPdf(params: {
+  baseDir: string;
+  productDir: string;
+  baseName: string;
+  pdfBuffer: Buffer;
+}): Promise<{
+  textPath?: string;
+  extraction: GoldenPackDocumentRecord['extraction'];
+}> {
+  try {
+    const extraction = await extractPdfText(params.pdfBuffer, 20);
+    const extractionRecord: GoldenPackDocumentRecord['extraction'] = {
+      pageCount: extraction.pageCount,
+      isLowText: extraction.isLowText,
+      isMetadataOnly: extraction.isMetadataOnly,
+      method: extraction.method,
+      error: extraction.error,
+    };
+
+    if (extraction.text.trim()) {
+      const textPath = path.join(params.productDir, `${params.baseName}.txt`);
+      await fs.writeFile(textPath, extraction.text, 'utf8');
+      return {
+        textPath: toPosix(path.relative(params.baseDir, textPath)),
+        extraction: extractionRecord,
+      };
+    }
+
+    return {
+      extraction: extractionRecord,
+    };
+  } catch (error) {
+    return {
+      extraction: {
+        pageCount: 0,
+        isLowText: true,
+        isMetadataOnly: true,
+        method: 'failed',
+        error: error instanceof Error ? error.message : String(error),
+      },
+    };
+  }
+}
+
 export async function saveGoldenPack(params: {
   baseDir: string;
   key: string;
   displayName: string;
   documents: GoldenPackDocumentInput[];
+  extractText?: boolean;
 }): Promise<GoldenPackRecord> {
   const productDir = path.join(params.baseDir, params.key);
   await fs.rm(productDir, { recursive: true, force: true });
@@ -102,30 +147,16 @@ export async function saveGoldenPack(params: {
       await fs.writeFile(targetPath, pdfBuffer);
       record.files.pdf = toPosix(path.relative(params.baseDir, targetPath));
 
-      if (!isZipDocument(document)) {
-        try {
-          const extraction = await extractPdfText(pdfBuffer, 20);
-          record.extraction = {
-            pageCount: extraction.pageCount,
-            isLowText: extraction.isLowText,
-            isMetadataOnly: extraction.isMetadataOnly,
-            method: extraction.method,
-            error: extraction.error,
-          };
-
-          if (extraction.text.trim()) {
-            const textPath = path.join(productDir, `${baseName}.txt`);
-            await fs.writeFile(textPath, extraction.text, 'utf8');
-            record.files.text = toPosix(path.relative(params.baseDir, textPath));
-          }
-        } catch (error) {
-          record.extraction = {
-            pageCount: 0,
-            isLowText: true,
-            isMetadataOnly: true,
-            method: 'failed',
-            error: error instanceof Error ? error.message : String(error),
-          };
+      if (!isZipDocument(document) && params.extractText !== false) {
+        const extractionArtifacts = await extractTextArtifactsForPdf({
+          baseDir: params.baseDir,
+          productDir,
+          baseName,
+          pdfBuffer,
+        });
+        record.extraction = extractionArtifacts.extraction;
+        if (extractionArtifacts.textPath) {
+          record.files.text = extractionArtifacts.textPath;
         }
       }
     }

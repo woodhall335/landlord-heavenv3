@@ -384,17 +384,18 @@ em {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1em 0;
+  margin: 0.75em 0;
 
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
 th, td {
-  padding: 0.5em;
+  padding: 0.35em 0.45em;
   border: 1px solid #ccc;
   text-align: left;
   vertical-align: top;
+  font-size: 10.5pt;
 }
 
 th {
@@ -494,24 +495,28 @@ th {
     }
 
     .signature-section {
-      margin-top: 2em;
+      margin-top: 1.5em;
     }
 
     .signature-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5em;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1em;
     }
 
     .signature-box {
       border: 1px solid #d8d8d8;
-      padding: 1em;
+      padding: 0.85em;
     }
 
     .signature-line {
-      height: 2.5em;
+      height: 2em;
       border-bottom: 1px solid #1a1a1a;
-      margin-top: 1em;
+      margin-top: 0.8em;
+    }
+
+    .signature-box p {
+      margin: 0.25em 0;
     }
 
     .doc-footer {

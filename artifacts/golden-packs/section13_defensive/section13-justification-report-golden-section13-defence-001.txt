@@ -1,15 +1,10 @@
-Landlord Heaven Section 13 Wizard
+Landlord Heaven
 Rent Increase Justification Report
-Purpose: This report explains why the proposed rent is supported by the recorded comparable
-evidence.
-Conclusion: The proposed rent is supported by current market evidence and sits within the
-lower-to-mid range of comparable properties locally.
-Case position: The recorded comparables place the proposed rent below the adjusted median of
-£1297.50 pcm and support it as a market-aligned figure for this tenancy.
-Use this document: Keep it with Form 4A and the proof of service record, and rely on it if the tenant
-queries or challenges the increase.
-This proposal is grounded in 8 comparable two-bedroom homes within 0.5 miles, all listed within the
-last 90 days and all source-backed.
+This report explains why the proposed rent is supported by local comparable evidence.
+The proposed rent is supported by current market evidence and sits within the lower-to-mid range of
+comparable properties locally.
+The recorded comparables support the proposed rent and place it below the adjusted median of
+£1297.50 pcm.
 Property: 10 Sample Road, Leeds, LS1 1AA
 Key points
 - Proposed rent: £1285.00 per month
@@ -19,36 +14,35 @@ Key points
 - Comparable count: 8 total (8 source-backed; 8 within 90 days)
 Market position
 Rules version: england_assured_section13_2026-05-01
-Adjusted market range: lower quartile £1272.50 pcm | median £1297.50 pcm | upper quartile £1318.75
-pcm
+Adjusted market range: lower quartile £1272.50 pcm | median £1297.50 pcm | upper quartile £1318.75 pcm
 Proposed rent: £1285.00 per month (£1285.00 pcm equivalent)
-The proposed rent of £1285.00 per month sits between the lower quartile and the median of the
-adjusted comparable range, against an adjusted range of £1272.50 to £1318.75 pcm and a median of
-£1297.50 pcm.
+The proposed rent of £1285.00 per month sits between the lower quartile and the median of the adjusted
+comparable range, against an adjusted range of £1272.50 to £1318.75 pcm and a median of £1297.50
+pcm.
 Your proposed rent (£1285.00) sits below the median comparable rent (£1297.50 pcm), with strong
 evidence strength based on 8 recent source-backed comparables.
-Strong evidence strength is based on 8 comparable homes, 8 source-backed entries, and 8
-comparables dated within the 90-day freshness window. The file reads as a well-supported market
-review rather than a bare assertion.
+Strong evidence strength is based on 8 comparable homes, 8 source-backed entries, and 8 comparables
+dated within the 90-day freshness window. The file reads as a well-supported market review rather than a
+bare assertion.
 Challenge band: Moderate likelihood of challenge - Based on where your proposed rent sits within the
 adjusted comparable rent range.
-Evidence band: Strong evidence strength - Based on how many comparables you have, how recent
-they are, and how many are source-backed rather than manual or heavily overridden.
+Evidence band: Strong evidence strength - Based on how many comparables you have, how recent they
+are, and how many are source-backed rather than manual or heavily overridden.
 Recorded reasoning
-Section 13 Wizard | Comparable analysis and justification Page 1 of 3
+The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
+month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),
+the proposed increase is presented as reasonable with a moderate likelihood of challenge and strong
+evidence strength. The proposed rent reflects recent local listings, condition, and current market positioning
+for similar two-bedroom homes.
+Case-specific note: The proposed rent reflects recent local listings, condition, and current market
+positioning for similar two-bedroom homes.
+Landlord Heaven | Comparable analysis and justification Page 1 of 3
 
 -- 1 of 3 --
 
-The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
-month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as
-amended), the proposed increase is presented as reasonable with a moderate likelihood of challenge
-and strong evidence strength. The proposed rent reflects recent local listings, condition, and current
-market positioning for similar two-bedroom homes.
-Case-specific note: The proposed rent reflects recent local listings, condition, and current market
-positioning for similar two-bedroom homes.
 Comparable overview
-- Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within
-the last 90 days and all source-backed
+- Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the
+last 90 days and all source-backed
 - Challenge band: Moderate likelihood of challenge
 - Evidence band: Strong evidence strength
 Comparable picture
@@ -73,10 +67,6 @@ Source: scraped
 Source date (published): 15 March 2026
 Adjustments: none recorded
 4. Comparable 4, Leeds | £1290.00 monthly | adjusted £1290.00 pcm
-Section 13 Wizard | Comparable analysis and justification Page 2 of 3
-
--- 2 of 3 --
-
 Source: scraped
 Source date (published): 15 March 2026
 Adjustments: none recorded
@@ -87,6 +77,10 @@ Adjustments: none recorded
 6. Comparable 6, Leeds | £1315.00 monthly | adjusted £1315.00 pcm
 Source: scraped
 Source date (published): 15 March 2026
+Landlord Heaven | Comparable analysis and justification Page 2 of 3
+
+-- 2 of 3 --
+
 Adjustments: none recorded
 7. Comparable 7, Leeds | £1330.00 monthly | adjusted £1330.00 pcm
 Source: scraped
@@ -99,8 +93,8 @@ Adjustments: none recorded
 Tribunal note
 The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
 tribunal can set a lower rent, but not higher than the rent proposed in the notice.
-This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful
-and reasonable. You remain responsible for compliance with all applicable laws.
-Section 13 Wizard | Comparable analysis and justification Page 3 of 3
+This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful and
+reasonable. You remain responsible for compliance with all applicable laws.
+Landlord Heaven | Comparable analysis and justification Page 3 of 3
 
 -- 3 of 3 --

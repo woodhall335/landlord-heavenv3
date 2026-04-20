@@ -15,9 +15,21 @@ Tenancy Start Date
 Total Arrears Claimed
 £3600.00
 Period Due Date Rent Due Paid Arrears Running Balance Notes
-1 January 2026 to 31 January 2026 1 January 2026 £1200.00 £0.00 £1200.00 £1200.00
-1 February 2026 to 28 February 2026 1 February 2026 £1200.00 £0.00 £1200.00 £2400.00
-1 March 2026 to 31 March 2026 1 March 2026 £1200.00 £0.00 £1200.00 £3600.00
+1 January 2026 to 31 January
+2026
+1 January
+2026
+£1200.00 £0.00 £1200.00 £1200.00
+1 February 2026 to 28
+February 2026
+1 February
+2026
+£1200.00 £0.00 £1200.00 £2400.00
+1 March 2026 to 31 March
+2026
+1 March
+2026
+£1200.00 £0.00 £1200.00 £3600.00
 Total Arrears Outstanding £3600.00 £3600.00
 Payment Allocation Method: Payments have been allocated using the FIFO (First In, First Out) method, applying
 payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears

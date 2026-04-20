@@ -221,7 +221,6 @@ export async function extractPdfText(
 ): Promise<PdfExtractionResult> {
   const startTime = Date.now();
   debugLog('extract_start', { bufferSize: buffer.length, maxPages });
-  console.log('[extractPdfText] Starting PDF extraction...', { bufferSize: buffer.length, maxPages });
 
   let parser: any = null;
 
@@ -241,7 +240,6 @@ export async function extractPdfText(
       : {};
 
     const parseStartTime = Date.now();
-    console.log('[extractPdfText] Calling parser.getText()...');
 
     const { result, timedOut } = await withTimeoutFallback(
       parser.getText(parseOptions),
@@ -252,7 +250,6 @@ export async function extractPdfText(
 
     const parseDuration = Date.now() - parseStartTime;
     debugLog('getText_complete', { durationMs: parseDuration, timedOut });
-    console.log('[extractPdfText] getText complete:', { durationMs: parseDuration, timedOut });
 
     if (timedOut) {
       console.warn('[extractPdfText] PDF parsing timed out after', PARSE_TIMEOUT_MS, 'ms');
@@ -281,11 +278,6 @@ export async function extractPdfText(
       cleanedLength: cleanedText.length,
       pageCount,
       totalDurationMs: totalDuration,
-    });
-    console.log('[extractPdfText] Extraction complete:', {
-      textLength: cleanedText.length,
-      pageCount,
-      durationMs: totalDuration,
     });
 
     const isMetadataOnly = isMetadataOnlyText(cleanedText);
@@ -320,7 +312,7 @@ export async function extractPdfText(
       error.message?.includes('Cannot polyfill');
 
     if (isServerlessError) {
-      console.log('[extractPdfText] Trying unpdf fallback for serverless environment...');
+      debugLog('unpdf_fallback', 'Trying unpdf fallback for serverless environment...');
       const unpdfResult = await extractWithUnpdf(buffer, maxPages);
       if (unpdfResult.method !== 'failed') {
         return unpdfResult;
@@ -348,7 +340,6 @@ async function extractWithUnpdf(
 ): Promise<PdfExtractionResult> {
   const startTime = Date.now();
   debugLog('unpdf_start', { bufferSize: buffer.length, maxPages });
-  console.log('[extractPdfText] Using unpdf fallback...', { bufferSize: buffer.length, maxPages });
 
   try {
     const { extractText, getDocumentProxy } = await import('unpdf');
@@ -391,11 +382,6 @@ async function extractWithUnpdf(
 
     const duration = Date.now() - startTime;
     debugLog('unpdf_complete', {
-      textLength: cleanedText.length,
-      pageCount,
-      durationMs: duration,
-    });
-    console.log('[extractPdfText] unpdf extraction complete:', {
       textLength: cleanedText.length,
       pageCount,
       durationMs: duration,

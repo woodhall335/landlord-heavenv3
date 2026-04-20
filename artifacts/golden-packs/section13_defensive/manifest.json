@@ -46,7 +46,7 @@
         "text": "section13_defensive/section13-tribunal-argument-summary-golden-section13-defence-001.txt"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -78,7 +78,7 @@
         "text": "section13_defensive/section13-cover-letter-golden-section13-defence-001.txt"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

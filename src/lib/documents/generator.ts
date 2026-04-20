@@ -13,6 +13,16 @@ import puppeteerCore from 'puppeteer-core';
 import { SITE_CONFIG } from '@/lib/site-config';
 import { normalizeDatesForRender, sanitizeISODatesInHTML, validateHtmlForPdfTextLayer } from './date-normalizer';
 
+const DEBUG_GOLDEN_PACKS =
+  process.env.DEBUG_GOLDEN_PACKS === 'true' ||
+  process.env.DEBUG_DOCUMENT_GENERATION === 'true';
+
+function debugGenerationLog(...args: unknown[]) {
+  if (DEBUG_GOLDEN_PACKS) {
+    console.log(...args);
+  }
+}
+
 const PDF_RENDER_INVISIBLE_BREAK_CHARS = /[\u00AD\u200B\u200C\u200D\u2060\uFEFF]/g;
 const PDF_RENDER_NON_BREAKING_SPACES = /[\u00A0\u202F]/g;
 const PDF_RENDER_NON_BREAKING_HYPHENS = /\u2011/g;
@@ -80,14 +90,14 @@ async function getBrowser(): Promise<BrowserInstance> {
   if (isVercel) {
     // Use @sparticuz/chromium for Vercel/AWS Lambda
     // This package bundles a serverless-compatible Chromium binary
-    console.log('[getBrowser] Vercel environment detected, loading @sparticuz/chromium');
+    debugGenerationLog('[getBrowser] Vercel environment detected, loading @sparticuz/chromium');
 
     try {
       const chromium = await import('@sparticuz/chromium');
       const execPath = await chromium.default.executablePath();
 
-      console.log('[getBrowser] Chromium executable path:', execPath);
-      console.log('[getBrowser] Chromium args:', chromium.default.args.length, 'args');
+      debugGenerationLog('[getBrowser] Chromium executable path:', execPath);
+      debugGenerationLog('[getBrowser] Chromium args:', chromium.default.args.length, 'args');
 
       return puppeteerCore.launch({
         args: chromium.default.args,
@@ -608,8 +618,8 @@ export function loadPrintCss(): string {
   for (const printCssPath of possiblePaths) {
     try {
       cachedPrintCss = stripCssComments(readFileSync(printCssPath, 'utf-8'));
-      console.log('[PRINT SYSTEM] ✅ Loaded print.css from:', printCssPath);
-      console.log('[PRINT SYSTEM] CSS length:', cachedPrintCss.length, 'characters');
+      debugGenerationLog('[PRINT SYSTEM] Loaded print.css from:', printCssPath);
+      debugGenerationLog('[PRINT SYSTEM] CSS length:', cachedPrintCss.length, 'characters');
       return cachedPrintCss;
     } catch {
       // Try next path
@@ -652,7 +662,7 @@ export function registerPrintPartials(): void {
     }
 
     partialsRegistered = true;
-    console.log(`[PRINT SYSTEM] ✅ Registered ${count} print component partials`);
+    debugGenerationLog(`[PRINT SYSTEM] Registered ${count} print component partials`);
   } catch (error: any) {
     console.warn('[PRINT SYSTEM] ⚠️  Could not load components.hbs:', error.message);
     // Graceful fallback - templates will work without partials if they don't use them
@@ -676,7 +686,7 @@ export function registerTenancyPartials(): void {
     const partialContent = readFileSync(partialPath, 'utf-8');
     Handlebars.registerPartial('statutory_acknowledgements', partialContent);
     tenancyPartialsRegistered = true;
-    console.log('[TEMPLATE SYSTEM] ✅ Registered tenancy partials');
+    debugGenerationLog('[TEMPLATE SYSTEM] Registered tenancy partials');
   } catch (error: any) {
     throw new Error(
       `[TEMPLATE SYSTEM] ❌ Failed to load tenancy partials (statutory_acknowledgements). ` +
@@ -769,7 +779,7 @@ export function loadTemplate(templatePath: string): string {
 
   try {
     const templateContent = readFileSync(fullPath, 'utf-8');
-    console.log(`[TEMPLATE] ✅ Loading from: ${fullPath}`);
+    debugGenerationLog(`[TEMPLATE] Loading from: ${fullPath}`);
     return templateContent;
   } catch (error: any) {
     throw new Error(`Failed to load template ${templatePath}: ${error.message}`);
@@ -2501,3 +2511,6 @@ export async function pdfBytesToPreviewThumbnail(
     }
   }
 }
+
+
+

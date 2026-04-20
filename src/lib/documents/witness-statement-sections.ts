@@ -614,21 +614,21 @@ function buildTimeline(input: WitnessStatementSectionsInput): string {
   };
 
   // Tenancy start
-  pushEvent(input.tenancy.start_date, 'Tenancy commenced');
+  pushEvent(input.tenancy.start_date, 'Tenancy began');
 
   // Earliest arrears period
   const earliestArrears = getEarliestArrearsPeriod(input.arrears?.items);
   if (earliestArrears) {
-    pushEvent(earliestArrears, 'First period of unpaid rent began');
+    pushEvent(earliestArrears, 'The first unpaid rent period began');
   }
 
   // Notice served
   const serviceMethod = formatServiceMethod(input.notice.service_method);
-  pushEvent(input.notice.served_date, `Form 3A notice served on the tenant by ${serviceMethod}`);
+  pushEvent(input.notice.served_date, `The Form 3A notice was served by ${serviceMethod}`);
 
   // Notice expiry
   if (input.notice.expiry_date) {
-    pushEvent(input.notice.expiry_date, 'Notice period expired (earliest date proceedings could commence)');
+    pushEvent(input.notice.expiry_date, 'The notice period expired');
   }
 
   // Signature date (if provided and after notice expiry)
@@ -636,7 +636,7 @@ function buildTimeline(input: WitnessStatementSectionsInput): string {
     input.signing?.signature_date &&
     (!input.notice.expiry_date || input.signing.signature_date >= input.notice.expiry_date)
   ) {
-    pushEvent(input.signing.signature_date, 'This witness statement prepared');
+    pushEvent(input.signing.signature_date, 'This witness statement was prepared');
   }
 
   // Sort events chronologically
@@ -663,48 +663,43 @@ function buildSupportingEvidence(
   input: WitnessStatementSectionsInput,
   exhibits: WitnessExhibit[]
 ): string {
-  const lines: string[] = [];
   const compliance = input.compliance;
   const scheduleExhibit = getExhibitByKey(exhibits, 'schedule_of_arrears');
   const section8NoticeExhibit = getExhibitByKey(exhibits, 'section8_notice');
   const proofOfServiceExhibit = getExhibitByKey(exhibits, 'proof_of_service');
   const verifiedDocs = exhibits.filter((exhibit) => exhibit.key.startsWith('verified_supporting_document_'));
+  const sections: string[] = [];
 
-  // === PACK DOCUMENTS (always generated as part of this pack) ===
-  lines.push('I rely on the following exhibits and supporting documents in support of this claim:');
-  lines.push('');
-
-  // Court forms (always included in court pack)
-  lines.push('Court Forms:');
-  lines.push('- Form N5 - Claim for Possession of Property');
-  lines.push('- Form N119 - Particulars of Claim for Possession');
-  lines.push('');
-
-  lines.push('Witness Exhibits:');
+  const courtForms = [
+    'Form N5 - Claim for Possession of Property',
+    'Form N119 - Particulars of Claim for Possession',
+  ];
+  const exhibitLines: string[] = [];
   if (scheduleExhibit) {
-    lines.push(`- Exhibit ${scheduleExhibit.label}: ${scheduleExhibit.title} - ${scheduleExhibit.description}`);
+    exhibitLines.push(`Exhibit ${scheduleExhibit.label}: ${scheduleExhibit.title} - ${scheduleExhibit.description}`);
   }
   if (section8NoticeExhibit) {
-    lines.push(`- Exhibit ${section8NoticeExhibit.label}: ${section8NoticeExhibit.title} - ${section8NoticeExhibit.description}`);
+    exhibitLines.push(`Exhibit ${section8NoticeExhibit.label}: ${section8NoticeExhibit.title} - ${section8NoticeExhibit.description}`);
   }
   if (proofOfServiceExhibit) {
-    lines.push(`- Exhibit ${proofOfServiceExhibit.label}: ${proofOfServiceExhibit.title} - ${proofOfServiceExhibit.description}`);
+    exhibitLines.push(`Exhibit ${proofOfServiceExhibit.label}: ${proofOfServiceExhibit.title} - ${proofOfServiceExhibit.description}`);
   }
-  lines.push('');
+
+  sections.push('<p>I rely on the following exhibits and supporting documents in support of this claim.</p>');
+  sections.push('<p><strong>Court forms</strong></p>');
+  sections.push(bulletsToHtml(courtForms) || '');
+  sections.push('<p><strong>Witness exhibits</strong></p>');
+  sections.push(bulletsToHtml(exhibitLines) || '<p>No witness exhibits recorded.</p>');
 
   // === VERIFIED UPLOADED/CONFIRMED DOCUMENTS ===
   if (verifiedDocs.length > 0) {
-    lines.push('Verified Documents Available:');
-    verifiedDocs.forEach((doc) => {
-      lines.push(`- Exhibit ${doc.label}: ${doc.title}`);
-    });
-    lines.push('');
+    sections.push('<p><strong>Verified documents available</strong></p>');
+    sections.push(
+      bulletsToHtml(verifiedDocs.map((doc) => `Exhibit ${doc.label}: ${doc.title}`)) || ''
+    );
   }
 
   // === DOCUMENTS TO BE PROVIDED SEPARATELY ===
-  lines.push('The following documents may be provided separately to the court:');
-  lines.push('');
-
   const supplementaryDocs = [
     'Tenancy agreement (original signed agreement)',
     'Bank statements or rent ledger (showing payment history)',
@@ -722,11 +717,10 @@ function buildSupportingEvidence(
     supplementaryDocs.push('Energy Performance Certificate (EPC)');
   }
 
-  supplementaryDocs.forEach((doc) => {
-    lines.push(`- ${doc}`);
-  });
+  sections.push('<p><strong>Documents that may be provided separately to the court</strong></p>');
+  sections.push(bulletsToHtml(supplementaryDocs) || '');
 
-  return lines.join('\n');
+  return sections.filter(Boolean).join('\n');
 }
 
 /**
@@ -763,7 +757,7 @@ function buildRentArrearsNarrative(
  * Build the conclusion/statement of truth section
  */
 function buildConclusion(): string {
-  return 'For those reasons, I respectfully ask the court to make the possession order sought and, if the court thinks fit, judgment for the arrears and costs claimed.';
+  return 'For those reasons, I ask the court to make the possession order sought and, if the court thinks fit, to enter judgment for the arrears and costs claimed.';
 }
 
 function buildDefendantCircumstances(
@@ -801,7 +795,6 @@ export function buildWitnessStatementSections(
   input: WitnessStatementSectionsInput
 ): WitnessStatementJSON {
   const exhibits = buildWitnessExhibits(input);
-  const hasVerifiedEvidence = getVerifiedSupportingDocuments(input).length > 0;
   const draftSource = {
     ...(input.source_data || {}),
     rent_amount: input.source_data?.rent_amount ?? input.tenancy.rent_amount,
@@ -821,21 +814,16 @@ export function buildWitnessStatementSections(
     arrears_at_notice_date: input.source_data?.arrears_at_notice_date ?? input.arrearsAtNoticeDate,
   };
   const draftingModel = buildEnglandPossessionDraftingModel(draftSource);
-  const groundsSummaryHtml =
-    paragraphsToHtml(draftingModel.witness.groundsParagraphs) ||
-    buildGroundsForPossession(input, exhibits);
-  const rentArrearsHtml =
-    paragraphsToHtml(draftingModel.witness.rentArrearsParagraphs) ||
-    buildRentArrearsNarrative(input, exhibits);
+  const groundsSummaryHtml = buildGroundsForPossession(input, exhibits);
+  const rentArrearsHtml = buildRentArrearsNarrative(input, exhibits);
   const conductIssuesHtml = paragraphsToHtml(draftingModel.witness.conductParagraphs);
-  const timelineHtml = bulletsToHtml(draftingModel.witness.timelineItems) || buildTimeline(input);
-  const evidenceHtml = hasVerifiedEvidence
-    ? buildSupportingEvidence(input, exhibits)
-    : [paragraphsToHtml(draftingModel.witness.evidenceParagraphs), bulletsToHtml(draftingModel.witness.evidenceItems)]
-        .filter(Boolean)
-        .join('\n') || buildSupportingEvidence(input, exhibits);
-  const conclusionHtml =
-    paragraphsToHtml(draftingModel.witness.conclusionParagraphs) || buildConclusion();
+  const fallbackTimelineItems = buildTimeline(input)
+    .split('\n')
+    .map((line) => line.replace(/^- /, '').trim())
+    .filter(Boolean);
+  const timelineHtml = bulletsToHtml(fallbackTimelineItems) || buildTimeline(input);
+  const evidenceHtml = buildSupportingEvidence(input, exhibits);
+  const conclusionHtml = buildConclusion();
 
   return {
     introduction: buildIntroduction(input),

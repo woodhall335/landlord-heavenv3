@@ -122,7 +122,7 @@
       <p><strong>Current route:</strong> Section 8 possession claim</p>
       {{/if}}
       <p><strong>Grounds relied on:</strong> {{#if is_section_21}}Section 21{{else}}{{#if groundsReliedUpon}}{{join groundsReliedUpon ", "}}{{else}}No grounds recorded{{/if}}{{/if}}</p>
-      {{#if grounds_summary_text}}<p class="muted">{{grounds_summary_text}}</p>{{/if}}
+      {{#if grounds_summary_text}}<p class="muted">This summary should match the grounds pleaded in the notice and court papers: {{grounds_summary_text}}</p>{{/if}}
     </div>
   </div>
 
@@ -196,6 +196,7 @@
 
   <div class="section">
     <h2>Compliance Status Snapshot</h2>
+    <p class="muted" style="margin-bottom: 0.6em;">Use this as a risk summary, not as a replacement for the underlying tenancy documents and evidence file.</p>
     <ul>
       {{#if compliance_status_items.length}}
         {{#each compliance_status_items}}

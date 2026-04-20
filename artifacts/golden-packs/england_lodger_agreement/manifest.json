@@ -12,8 +12,8 @@
       "fileName": "england-lodger-agreement.pdf",
       "files": {
         "pdf": "england_lodger_agreement/england-lodger-agreement.pdf",
-        "text": "england_lodger_agreement/england-lodger-agreement.txt",
-        "html": "england_lodger_agreement/england-lodger-agreement.html"
+        "html": "england_lodger_agreement/england-lodger-agreement.html",
+        "text": "england_lodger_agreement/england-lodger-agreement.txt"
       },
       "extraction": {
         "pageCount": 4,
@@ -30,11 +30,11 @@
       "fileName": "england-lodger-checklist.pdf",
       "files": {
         "pdf": "england_lodger_agreement/england-lodger-checklist.pdf",
-        "text": "england_lodger_agreement/england-lodger-checklist.txt",
-        "html": "england_lodger_agreement/england-lodger-checklist.html"
+        "html": "england_lodger_agreement/england-lodger-checklist.html",
+        "text": "england_lodger_agreement/england-lodger-checklist.txt"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -48,11 +48,11 @@
       "fileName": "england-keys-handover-record.pdf",
       "files": {
         "pdf": "england_lodger_agreement/england-keys-handover-record.pdf",
-        "text": "england_lodger_agreement/england-keys-handover-record.txt",
-        "html": "england_lodger_agreement/england-keys-handover-record.html"
+        "html": "england_lodger_agreement/england-keys-handover-record.html",
+        "text": "england_lodger_agreement/england-keys-handover-record.txt"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -66,8 +66,8 @@
       "fileName": "england-lodger-house-rules-appendix.pdf",
       "files": {
         "pdf": "england_lodger_agreement/england-lodger-house-rules-appendix.pdf",
-        "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt",
-        "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html"
+        "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html",
+        "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt"
       },
       "extraction": {
         "pageCount": 2,

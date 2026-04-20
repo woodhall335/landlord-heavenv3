@@ -1,17 +1,13 @@
-E N G L A N D R E S I D E N T I A L D O C U M E N T
+FOR PROPERTIES IN ENGLAND
 STANDARD TENANCY AGREEMENT
-England ordinary residential tenancy agreement
-This document records the core terms for an ordinary England residential letting of
-the Property to the named tenant group.
-DOCUMENT DATE 16 April
+Tenancy agreement for a residential let in England
+This agreement records the core terms for a straightforward residential letting of the
+property in England.
+PREPARED 16 April
 2026
-REFERENCE RL-ENGLAND-
-STANDARD-TA-
+FILE REFERENCE RL-ENGLAND-STANDARD-TA-
 TENANCY-001
-EFFECTIVE DATE 2 May
-2026
-NATURE Residential tenancy
-agreement
+EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Residential tenancy agreement
 PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Alice
 Tenant
@@ -24,14 +20,20 @@ LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
 Telephone: 07123 456789
-
--- 1 of 7 --
-
 TENANT Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
 BACKGROUND
+The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out
+in this agreement.
+A.
+The parties intend this document to record the principal occupation, payment, and management
+terms for the letting.
+B.
+
+-- 1 of 7 --
+
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
@@ -40,21 +42,15 @@ OPERATIVE PROVISIONS
 1. Tenancy Status and Core Particulars
 The parties intend the tenant to occupy the Property as their main home on the assured periodic basis
 described in this document.
-DOCUMENT ROUTE New assured periodic tenancy agreement
-PRODUCT TYPE Standard Tenancy Agreement
+TENANCY TYPE New periodic tenancy agreement
+PACK Standard Tenancy Agreement
 FURNISHED STATUS furnished
 TENANCY START
 DATE
 2 May 2026
 The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate
-fixed-term drafting is created by this document unless a solicitor-approved route is expressly used
-outside this product.
-The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set
-out in this agreement.
-A.
-The parties intend this document to record the principal occupation, payment, and
-management terms for the letting.
-B.
+fixed-term drafting is created by this document unless a solicitor-approved route is expressly used outside
+this product.
 
 -- 2 of 7 --
 
@@ -72,21 +68,23 @@ Gas, Electricity, Internet / broadband
 ACCOUNT NAME Landlord Heaven Client Account
 SORT CODE 12-34-56
 ACCOUNT NUMBER 12345678
-The landlord confirms that any rent in advance taken for this tenancy is intended to stay within the
-limits permitted for England assured tenancies.
-Any rent increase for an England assured tenancy should follow the Section 13 statutory route or
-any later replacement process required by law. CPI, RPI, or fixed review wording is not intended
-to override that statutory process in this product.
+The landlord confirms that any rent in advance taken for this tenancy is intended to stay within the limits
+permitted for England assured tenancies.
+Any rent increase for an England assured tenancy should follow the Section 13 statutory route or any
+later replacement process required by law. CPI, RPI, or fixed review wording is not intended to
+override that statutory process in this product.
 3. Deposit Arrangements
 DEPOSIT AMOUNT £1500.00
 DEPOSIT
 PROTECTION
 SCHEME
 DPS
-DEPOSIT REFERENCE DPS-EXAMPLE-2026-0001
+DEPOSIT
+REFERENCE
+DPS-EXAMPLE-2026-0001
 If a deposit is taken, it should be protected in an authorised England scheme within the statutory
-timeframe and the prescribed information should be served in time. The support documents in this
-pack are intended to help record those details.
+timeframe and the prescribed information should be served in time. The support documents in this pack
+are intended to help record those details.
 
 -- 3 of 7 --
 
@@ -94,17 +92,17 @@ pack are intended to help record those details.
 RECORDED TENANT
 NOTICE PERIOD
 2 months
-The tenant may end the tenancy by giving at least 2 months written notice, ending on the appropriate
-day for the tenancy period unless the law changes or the parties later agree a lawful surrender.
+The tenant may end the tenancy by giving at least 2 months written notice, ending on the appropriate day
+for the tenancy period unless the law changes or the parties later agree a lawful surrender.
 The tenant should return keys, remove belongings, leave the property reasonably clean, and provide a
 forwarding address for deposit and final correspondence purposes.
 5. Landlord Ending the Tenancy
-In most circumstances, the landlord may only end the tenancy by obtaining an order for possession
-and the execution of that order. The landlord cannot lawfully end the tenancy just by serving a private
-break clause or informal notice.
+In most circumstances, the landlord may only end the tenancy by obtaining an order for possession and
+the execution of that order. The landlord cannot lawfully end the tenancy just by serving a private break
+clause or informal notice.
 If the landlord seeks possession, the landlord or one of any joint landlords will usually need to serve a
-possession notice using the correct form, specify the ground or grounds relied on, and give the
-minimum notice period that applies to that ground or those grounds before court proceedings begin.
+possession notice using the correct form, specify the ground or grounds relied on, and give the minimum
+notice period that applies to that ground or those grounds before court proceedings begin.
 Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the
 tenancy, the ground should be identified clearly in writing now and supported by the relevant factual
 explanation.
@@ -117,7 +115,8 @@ GAS SAFETY
 CERTIFICATE
 PROVIDED
 Yes
-ELECTRICAL SAFETY
+ELECTRICAL
+SAFETY
 CERTIFICATE
 PROVIDED
 Yes
@@ -129,23 +128,23 @@ ALARMS WHERE
 REQUIRED
 Yes
 RIGHT TO RENT
-CHECKS COMPLETED
+CHECKS
+COMPLETED
 25 April 2026
 Recorded access notice expectation: 24 hours.
-The landlord acknowledges that section 9A of the Landlord and Tenant Act 1985 requires the
-property to be fit for human habitation to the extent that section applies.
-The landlord acknowledges that section 11 of the Landlord and Tenant Act 1985 requires the
-structure and exterior, and the installations for water, gas, electricity, sanitation, space heating,
-and hot water, to be kept in repair to the extent that section applies.
-Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England)
-Regulations 2020 requires relevant electrical safety standards to be met during occupation,
-relevant electrical installations to be inspected and tested by a qualified person at least every 5
-years or sooner if the most recent report requires it, and a copy of that report to be supplied to the
-tenant.
-Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998 requires any relevant
-gas fitting and flue to be kept in a safe condition, safety checks to be carried out by a Gas Safe
-registered engineer at intervals determined in accordance with the Regulations, and a copy of the
-safety record to be given to the tenant.
+The landlord acknowledges that section 9A of the Landlord and Tenant Act 1985 requires the property
+to be fit for human habitation to the extent that section applies.
+The landlord acknowledges that section 11 of the Landlord and Tenant Act 1985 requires the structure
+and exterior, and the installations for water, gas, electricity, sanitation, space heating, and hot water, to
+be kept in repair to the extent that section applies.
+Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations
+2020 requires relevant electrical safety standards to be met during occupation, relevant electrical
+installations to be inspected and tested by a qualified person at least every 5 years or sooner if the most
+recent report requires it, and a copy of that report to be supplied to the tenant.
+Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998 requires any relevant gas
+fitting and flue to be kept in a safe condition, safety checks to be carried out by a Gas Safe registered
+engineer at intervals determined in accordance with the Regulations, and a copy of the safety record to
+be given to the tenant.
 Non-emergency access should normally take place on notice and at a reasonable time unless
 emergency circumstances justify immediate entry.
 
@@ -154,53 +153,51 @@ emergency circumstances justify immediate entry.
 7. Pets, Adaptations, and Equal Treatment
 The tenant may keep a pet at the property if the tenant asks to do so in line with section 16A of the
 Housing Act 1988 and the landlord gives consent.
-The landlord cannot unreasonably refuse consent to keep a pet and should deal with any pet
-request reasonably and within the time required by the law then in force.
-Where the tenant is entitled to make improvements with the landlord consent, the landlord may
-not unreasonably withhold consent to an improvement request where a disabled person occupies
-or intends to occupy the property as their only or main home and the improvement is likely to
-facilitate that person enjoyment of the property having regard to their disability.
-The section 190 Equality Act improvement rights do not apply so far as the tenancy already makes
-like provision, and the tenant can refer to section 6 of the Equality Act 2010 for the meaning of
-disabled person and section 190(9) for the meaning of improvement.
-The landlord confirms that the tenancy was not offered or refused on an unlawful discriminatory
-basis in the recorded answers.
-The landlord confirms that the tenancy was not granted through a prohibited bidding process in
-the recorded answers.
+The landlord cannot unreasonably refuse consent to keep a pet and should deal with any pet request
+reasonably and within the time required by the law then in force.
+Where the tenant is entitled to make improvements with the landlord consent, the landlord may not
+unreasonably withhold consent to an improvement request where a disabled person occupies or
+intends to occupy the property as their only or main home and the improvement is likely to facilitate
+that person enjoyment of the property having regard to their disability.
+The section 190 Equality Act improvement rights do not apply so far as the tenancy already makes like
+provision, and the tenant can refer to section 6 of the Equality Act 2010 for the meaning of disabled
+person and section 190(9) for the meaning of improvement.
+The landlord confirms that the tenancy was not offered or refused on an unlawful discriminatory basis
+in the recorded answers.
+The landlord confirms that the tenancy was not granted through a prohibited bidding process in the
+recorded answers.
 8. Product-Specific Operational Terms
 This standard product is intended for an ordinary whole-property residential let and records the core
 occupation, payment, access, and house-rule terms without the wider operational clauses used in the
 premium route.
 9. Supporting Schedules and File Documents
-This pack includes the main agreement together with a pre-tenancy checklist, keys handover
-record, utilities handover sheet, pet request addendum, and tenancy variation record.
-
--- 6 of 7 --
-
+This pack includes the main agreement together with a pre-tenancy checklist, keys handover record,
+utilities handover sheet, pet request addendum, and tenancy variation record.
 10. Notices and Service Information
 LANDLORD SERVICE
 ADDRESS
 3 Owner Road, London, SW1A 2BB
 LANDLORD EMAIL jane@example.com
 LANDLORD PHONE 07123 456789
-HOW TO RENT GUIDE
-PROVIDED
+HOW TO RENT
+GUIDE PROVIDED
 Yes
-Formal notices should be sent to the landlord service address stated in this document unless the
-landlord later gives a valid written replacement address for service.
-Additional notes
-This document is intended to record the written terms for an England assured periodic tenancy
-and should be read with any deposit, guarantor, and pre-tenancy checklist documents in the
-pack.
+Formal notices should be sent to the landlord service address stated in this document unless the landlord
+later gives a valid written replacement address for service.
+File notes
+
+-- 6 of 7 --
+
+This document is intended to record the written terms for an England assured periodic tenancy and
+should be read with any deposit, guarantor, and pre-tenancy checklist documents in the pack.
 EXECUTION
-This agreement should be signed by the Landlord and the Tenant and then kept with the tenancy
-records.
+This agreement should be signed by the Landlord and the Tenant and then kept with the tenancy records.
 LANDLORD
 Jane Landlord
 Signature Date
 TENANT
 Alice Tenant
 Signature Date
-Generated by Landlord Heaven RL-ENGLAND-STANDARD-TA-TENANCY-001
+Landlord Heaven file copy RL-ENGLAND-STANDARD-TA-TENANCY-001
 
 -- 7 of 7 --

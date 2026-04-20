@@ -91,11 +91,11 @@ Less mortgage outstanding: £ __________
 Savings (bank / building society) £ _________________
 Vehicle(s) £ _________________
 Other assets (specify): ____________________ £ _________________
+SECTION 5: YOUR PAYMENT OFFER
+Based on the financial information above, what can you afford to pay towards this debt?
 
 -- 4 of 6 --
 
-SECTION 5: YOUR PAYMENT OFFER
-Based on the financial information above, what can you afford to pay towards this debt?
 I can afford to pay: £ _________ per _______
 Starting from (date): _____________________
 I will also continue to pay my current rent in full: ☐ Yes ☐ No
@@ -122,13 +122,13 @@ Alice Landlord
 1 High Street London
 E1 1AA
 Email: alice@example.com
-
--- 5 of 6 --
-
 NEED HELP COMPLETING THIS FORM?
 Free debt advice services can help you complete this form and negotiate with the claimant on your
 behalf:
 Citizens Advice: 0800 144 8848 or www.citizensadvice.org.uk
+
+-- 5 of 6 --
+
 StepChange Debt Charity: 0800 138 1111 or www.stepchange.org
 National Debtline: 0808 808 4000 or www.nationaldebtline.org
 MoneyHelper: 0800 138 7777 or www.moneyhelper.org.uk

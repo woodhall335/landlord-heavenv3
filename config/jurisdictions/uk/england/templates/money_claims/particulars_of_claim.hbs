@@ -10,6 +10,10 @@
   {{tenancy_start_date}}. Rent is {{currency rent_amount}} {{rent_frequency}}, payable in advance on
   the {{payment_day}} of each period.
 </p>
+<p>
+  The Claimant seeks judgment for the unpaid rent, together with any properly recoverable damage,
+  charges, interest, and court fee set out below.
+</p>
 
 <h2>Rent arrears</h2>
 <p>
@@ -28,7 +32,7 @@
 {{/if}}
 
 {{#if other_charges.length}}
-<p>Additional recoverable sums:</p>
+<p>The Claimant also seeks the following recoverable sums:</p>
 <ul>
   {{#each other_charges}}
   <li>{{description}} - {{currency amount}}</li>
@@ -56,6 +60,10 @@
   <li>Interest under section 69 CCA 1984</li>
   {{/if}}
 </ol>
+<p>
+  The Claimant asks the court to enter judgment for those sums and for any continuing daily interest
+  claimed until judgment or earlier payment.
+</p>
 
 <h2>Statement of truth</h2>
 <p>

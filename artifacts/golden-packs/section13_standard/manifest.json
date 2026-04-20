@@ -62,7 +62,7 @@
         "text": "section13_standard/section13-cover-letter-golden-section13-standard-001.txt"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

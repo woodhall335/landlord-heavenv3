@@ -1,23 +1,20 @@
-E N G L A N D R E S I D E N T I A L D O C U M E N T
+FOR PROPERTIES IN ENGLAND
 ROOM LET / LODGER AGREEMENT
-England resident-landlord lodger agreement
-This document records a resident-landlord room let in England and the practical
-terms on which the lodger occupies the room and shared facilities.
-DOCUMENT DATE 16 April
+Lodger agreement for a resident-landlord let in England
+This document records a resident-landlord room let in England and the practical terms on
+which the lodger occupies the room and shared facilities.
+PREPARED 16 April
 2026
-REFERENCE RL-ENGLAND-
-LODGER-
-AGREEMENT-
-LODGER-001
+FILE REFERENCE RL-ENGLAND-LODGER-
+AGREEMENT-LODGER-001
 EFFECTIVE DATE 2 May
 2026
-NATURE Resident-landlord
-room-let agreement
+DOCUMENT TYPE Resident-landlord room-let
+agreement
 PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Alice
 Tenant
-TERM / DATES 2 May 2026 to 1 May
-2027
+TERM / DATES 2 May 2026 to 1 May 2027
 RENT £1500.00 DEPOSIT £1500.00
 PARTIES
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in
@@ -29,11 +26,17 @@ Telephone: 07123 456789
 TENANT Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
+Telephone: 07000 111111
+BACKGROUND
+The resident Landlord permits the Lodger to occupy the agreed room at the Property and to use the
+shared facilities identified in this agreement.
+A.
+The parties intend this document to record the practical room-let terms, house rules, and notice
+arrangements that apply to the occupation.
+B.
 
 -- 1 of 4 --
 
-Telephone: 07000 111111
-BACKGROUND
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
@@ -53,19 +56,10 @@ RESIDENT
 LANDLORD
 CONFIRMED
 Yes
-SHARED KITCHEN OR
-BATHROOM WITH
+SHARED KITCHEN
+OR BATHROOM WITH
 LANDLORD
 Yes
-The resident Landlord permits the Lodger to occupy the agreed room at the Property and to use
-the shared facilities identified in this agreement.
-A.
-The parties intend this document to record the practical room-let terms, house rules, and notice
-arrangements that apply to the occupation.
-B.
-
--- 2 of 4 --
-
 2. Licence Fee, Bills, and Included Services
 LICENCE FEE / RENT £1500.00
 PAYMENT
@@ -74,20 +68,24 @@ Monthly
 PAYMENT DUE DAY 1st of each month
 PAYMENT METHOD Bank transfer
 BILLS INCLUDED Gas, Electricity, Internet / broadband
-The lodger should pay the licence fee on time and use the property in a clean, respectful, and
-domestic manner consistent with a room-let in the landlord's own home.
+The lodger should pay the licence fee on time and use the property in a clean, respectful, and domestic
+manner consistent with a room-let in the landlord's own home.
+
+-- 2 of 4 --
+
 3. Use of Shared Facilities and House Rules
 HOUSE RULES AND
 SHARED-SPACE
 NOTES
 No overnight guests without prior agreement.
-The Lodger should respect the resident landlord, neighbours, and any other occupiers and use
-shared facilities reasonably.
+The Lodger should respect the resident landlord, neighbours, and any other occupiers and use shared
+facilities reasonably.
 Any guest, overnight stay, cleaning, kitchen, bathroom, laundry, or rubbish arrangements should
 follow the house rules recorded in this document.
 4. Access, Safety, and Records
 RIGHT TO RENT
-CHECKS COMPLETED
+CHECKS
+COMPLETED
 25 April 2026
 SMOKE ALARMS
 FITTED AND TESTED
@@ -95,29 +93,29 @@ Yes
 CO ALARMS WHERE
 REQUIRED
 Yes
-Because the resident landlord lives at the property, day-to-day access and use of common parts
-should work cooperatively and reasonably. Even so, the lodger should be told about practical
-arrangements for privacy, quiet hours, and shared-space use.
-
--- 3 of 4 --
-
+Because the resident landlord lives at the property, day-to-day access and use of common parts should
+work cooperatively and reasonably. Even so, the lodger should be told about practical arrangements for
+privacy, quiet hours, and shared-space use.
 5. Notice and Ending the Room Let
 LICENCE NOTICE
 PERIOD
 28 days
-Either party may end the arrangement by giving the recorded notice unless a shorter period is
-justified by serious misconduct or both parties agree an earlier move-out date in writing.
-At the end of the arrangement the lodger should return keys, clear the room, and leave any shared
-areas in the expected condition.
+Either party may end the arrangement by giving the recorded notice unless a shorter period is justified by
+serious misconduct or both parties agree an earlier move-out date in writing.
+At the end of the arrangement the lodger should return keys, clear the room, and leave any shared areas in
+the expected condition.
+
+-- 3 of 4 --
+
 EXECUTION
-This lodger agreement should be signed by the resident Landlord and the Lodger and kept with the
-room-let records.
+This lodger agreement should be signed by the resident Landlord and the Lodger and kept with the room-
+let records.
 LANDLORD
 Jane Landlord
 Signature Date
 LODGER
 Alice Tenant
 Signature Date
-Generated by Landlord Heaven RL-ENGLAND-LODGER-AGREEMENT-LODGER-001
+Landlord Heaven file copy RL-ENGLAND-LODGER-AGREEMENT-LODGER-001
 
 -- 4 of 4 --
