@@ -302,7 +302,11 @@ export default function WizardClientPage() {
 
   return (
     <main className={clsx(PUBLIC_LAYOUT_CLASSES.page, 'min-h-screen text-[#1d1532]')}>
-      <UniversalHero {...wizardHeroConfig} ariaLabel={WIZARD_ENTRY_TITLE}>
+      <UniversalHero
+        {...wizardHeroConfig}
+        ariaLabel={WIZARD_ENTRY_TITLE}
+        showUsageCounter={false}
+      >
         <p className="sr-only">{WIZARD_ENTRY_SUBTITLE}</p>
       </UniversalHero>
 

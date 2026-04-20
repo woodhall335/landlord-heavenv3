@@ -225,8 +225,6 @@ export const wizardHeroConfig: HeroConfig = {
     label: 'See prices',
     href: '/pricing',
   },
-  feature:
-    'Start with the route that fits the problem in front of you, then move straight into the right questions.',
 };
 
 /* ============================================================
