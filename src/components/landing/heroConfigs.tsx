@@ -200,6 +200,36 @@ export const moneyClaimSupportHeroConfig: HeroConfig = {
 };
 
 /* ============================================================
+   WIZARD ENTRY
+   ============================================================ */
+
+export const wizardHeroConfig: HeroConfig = {
+  ...defaultHeroMedia,
+  ...withPreset('home'),
+  preset: 'content_index',
+  trustText: 'Choose the right England landlord product before you start',
+  title: 'Choose the landlord product you need',
+  subtitle: (
+    <>
+      Choose the product that matches the job in front of you and start
+      answering the questions straight away. Start with eviction, debt
+      recovery, rent increases, or the right tenancy agreement for your
+      property in England.
+    </>
+  ),
+  primaryCta: {
+    label: 'Choose eviction route',
+    href: '#wizard-eviction',
+  },
+  secondaryCta: {
+    label: 'See prices',
+    href: '/pricing',
+  },
+  feature:
+    'Start with the route that fits the problem in front of you, then move straight into the right questions.',
+};
+
+/* ============================================================
    BLOG
    ============================================================ */
 

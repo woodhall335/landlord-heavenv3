@@ -30,6 +30,8 @@ import {
   resetWizardFlowTracking,
   setWizardAttribution,
 } from '@/lib/wizard/wizardAttribution';
+import { UniversalHero } from '@/components/landing/UniversalHero';
+import { wizardHeroConfig } from '@/components/landing/heroConfigs';
 import {
   trackWizardEntryViewWithAttribution,
   trackWizardIncompatibleChoice,
@@ -88,6 +90,10 @@ const routeImages: Record<string, { src: string; alt: string }> = {
     alt: 'Lodger agreement preview',
   },
 };
+
+const WIZARD_ENTRY_TITLE = 'Choose the landlord product you need';
+const WIZARD_ENTRY_SUBTITLE =
+  'Choose the product that matches the job in front of you';
 
 function ProductCard({
   href,
@@ -297,48 +303,33 @@ export default function WizardClientPage() {
 
   return (
     <main className={clsx(PUBLIC_LAYOUT_CLASSES.page, 'min-h-screen text-[#1d1532]')}>
-      <section className="px-4 pb-8 pt-10 sm:px-6 lg:px-8 lg:pt-14">
-        <div className="mx-auto max-w-6xl">
-          <div className={clsx(PUBLIC_LAYOUT_CLASSES.darkPanel, 'overflow-hidden px-6 py-8 md:px-10 md:py-10')}>
-            <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-              <div>
-                <p className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/82">
-                  Landlord Heaven Wizard
-                </p>
-                <h1 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                  Choose the landlord product you need
-                </h1>
-                <p className="mt-5 max-w-2xl text-lg leading-8 text-white/76">
-                  Choose the product that matches the job in front of you and
-                  start answering the questions straight away. This wizard is for
-                  landlords with property in England, while older non-England
-                  cases stay available through direct account access.
-                </p>
-              </div>
-
-              <div className="rounded-[2rem] border border-white/10 bg-white/8 p-6 backdrop-blur-sm">
-                <p className="text-sm font-semibold text-white">Before you start</p>
-                <ul className="mt-4 space-y-3 text-sm leading-6 text-white/72">
-                  <li className="flex items-start gap-3">
-                    <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
-                    <span>Start with the exact England product you need.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
-                    <span>Eviction starts with two choices: Section 8 notice or the full court pack.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
-                    <span>Older Wales, Scotland, and Northern Ireland cases can still be opened from the dashboard.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+      <UniversalHero {...wizardHeroConfig} ariaLabel={WIZARD_ENTRY_TITLE}>
+        <p className="sr-only">{WIZARD_ENTRY_SUBTITLE}</p>
+        <div className="mt-6 max-w-[34rem] rounded-[1.6rem] border border-white/12 bg-white/10 p-5 text-white shadow-[0_20px_52px_rgba(18,8,38,0.16)] backdrop-blur-sm">
+          <p className="text-sm font-semibold text-white">Before you start</p>
+          <ul className="mt-4 space-y-3 text-sm leading-6 text-white/78">
+            <li className="flex items-start gap-3">
+              <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
+              <span>Start with the exact England product you need.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
+              <span>Eviction starts with two choices: Section 8 notice or the full court pack.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
+              <span>Northern Ireland properties currently support tenancy agreements only.</span>
+            </li>
+          </ul>
+          <div className="mt-4 rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-sm leading-6 text-white/70">
+            <p>Different rules apply in each jurisdiction. Northern Ireland shows a tenancy-agreements-only note on eviction and money-claim entry paths.</p>
+            <p className="mt-2 font-semibold text-white/82">Tenancy agreements only</p>
+            <p className="mt-2">If you continue from an eviction or money-claim entry point, we’ll switch you to the tenancy agreement flow.</p>
           </div>
         </div>
-      </section>
+      </UniversalHero>
 
-      <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+      <section id="wizard-eviction" className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
         <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
           <div className="flex items-center gap-3">
             <RiScales3Line className="h-5 w-5 text-[#6b3fd1]" />
