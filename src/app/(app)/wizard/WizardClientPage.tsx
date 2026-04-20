@@ -11,7 +11,6 @@ import {
   RiHome4Line,
   RiMoneyPoundCircleLine,
   RiScales3Line,
-  RiShieldCheckLine,
 } from 'react-icons/ri';
 import { clsx } from 'clsx';
 import {
@@ -305,28 +304,6 @@ export default function WizardClientPage() {
     <main className={clsx(PUBLIC_LAYOUT_CLASSES.page, 'min-h-screen text-[#1d1532]')}>
       <UniversalHero {...wizardHeroConfig} ariaLabel={WIZARD_ENTRY_TITLE}>
         <p className="sr-only">{WIZARD_ENTRY_SUBTITLE}</p>
-        <div className="mt-6 max-w-[34rem] rounded-[1.6rem] border border-white/12 bg-white/10 p-5 text-white shadow-[0_20px_52px_rgba(18,8,38,0.16)] backdrop-blur-sm">
-          <p className="text-sm font-semibold text-white">Before you start</p>
-          <ul className="mt-4 space-y-3 text-sm leading-6 text-white/78">
-            <li className="flex items-start gap-3">
-              <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
-              <span>Start with the exact England product you need.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
-              <span>Eviction starts with two choices: Section 8 notice or the full court pack.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <RiShieldCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#d7c2ff]" />
-              <span>Northern Ireland properties currently support tenancy agreements only.</span>
-            </li>
-          </ul>
-          <div className="mt-4 rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-sm leading-6 text-white/70">
-            <p>Different rules apply in each jurisdiction. Northern Ireland shows a tenancy-agreements-only note on eviction and money-claim entry paths.</p>
-            <p className="mt-2 font-semibold text-white/82">Tenancy agreements only</p>
-            <p className="mt-2">If you continue from an eviction or money-claim entry point, we’ll switch you to the tenancy agreement flow.</p>
-          </div>
-        </div>
       </UniversalHero>
 
       <section id="wizard-eviction" className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
