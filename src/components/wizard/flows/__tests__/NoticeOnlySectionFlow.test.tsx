@@ -6,7 +6,7 @@
  * Critical regression tests ensuring:
  * 1. Wales flow does NOT show England-specific terminology (Section 21, AST, How to Rent)
  * 2. Wales flow DOES show correct Wales terminology (Section 173, Occupation Contract)
- * 3. England flow continues to work with existing Section 21/Section 8 terminology
+ * 3. England flow stays aligned to the post-1 May 2026 Form 3A-only notice route
  * 4. Scotland Ground 18 consecutive arrears streak calculation works correctly
  * 5. Scotland service method mapping produces stable keys
  * 6. Scotland Ask Heaven context switches between arrears and service method
@@ -232,7 +232,7 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     jurisdiction: 'england' as const,
     initialFacts: {
       __meta: { product: 'notice_only', jurisdiction: 'england' },
-      eviction_route: 'section_21',
+      eviction_route: 'section_8',
     },
   };
 
@@ -240,47 +240,27 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     vi.clearAllMocks();
   });
 
-  it('should render "Section 21" route option for England jurisdiction', async () => {
+  it('should show the Eviction Notice Generator shell title for England', async () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
 
     // Wait for component to load
-    await screen.findByText(/England Eviction Notice/);
+    await screen.findByText(/Eviction Notice Generator/);
 
-    // England should show Section 21 terminology
-    expect(screen.getByText(/England Eviction Notice/)).toBeDefined();
+    expect(screen.getByText(/Eviction Notice Generator/)).toBeDefined();
   });
 
   it('should render "Tenancy" tab label for England (not "Occupation Contract")', async () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
 
     // Wait for component to load
-    await screen.findByText(/England Eviction Notice/);
+    await screen.findByText(/Eviction Notice Generator/);
 
     // England should show "Tenancy" not "Occupation Contract"
     expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
     expect(screen.queryByRole('button', { name: /Occupation Contract/i })).toBeNull();
   });
 
-  it('should show "Section 21 (No-Fault)" in review summary for England section_21 route', async () => {
-    const propsWithSection21 = {
-      ...englandProps,
-      initialFacts: {
-        __meta: { product: 'notice_only', jurisdiction: 'england' },
-        eviction_route: 'section_21',
-      },
-    };
-
-    render(<NoticeOnlySectionFlow {...propsWithSection21} />);
-
-    // Wait for component to load
-    await screen.findByText(/England Eviction Notice/);
-
-    // The flow should be set up for Section 21
-    const reviewButton = screen.getByRole('button', { name: /Review/i });
-    expect(reviewButton).toBeDefined();
-  });
-
-  it('should show "Section 8 (Fault-Based)" for England section_8 route', async () => {
+  it('should keep England on the single Section 8 notice route', async () => {
     const propsWithSection8 = {
       ...englandProps,
       initialFacts: {
@@ -292,9 +272,32 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     render(<NoticeOnlySectionFlow {...propsWithSection8} />);
 
     // Wait for component to load
-    await screen.findByText(/England Eviction Notice/);
+    await screen.findByText(/Eviction Notice Generator/);
+
+    expect(screen.getByText(/Section 8 notice basics/i)).toBeDefined();
+    expect(screen.getByText(/Section 21 and N5B accelerated possession are no longer part of the England private rented flow\./i)).toBeDefined();
+    const selectableSection21Routes = screen.queryAllByRole('radio').filter(
+      (radio) => radio.getAttribute('value') === 'section_21'
+    );
+    expect(selectableSection21Routes.length).toBe(0);
+  });
+
+  it('should keep the England tenancy label and hide Wales terminology', async () => {
+    const propsWithSection8 = {
+      ...englandProps,
+      initialFacts: {
+        __meta: { product: 'notice_only', jurisdiction: 'england' },
+        eviction_route: 'section_8',
+      },
+    };
+
+    render(<NoticeOnlySectionFlow {...propsWithSection8} />);
+
+    // Wait for component to load
+    await screen.findByText(/Eviction Notice Generator/);
 
     // The flow should be set up for Section 8
+    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
     expect(screen.queryByText(/Occupation Contract/)).toBeNull();
   });
 });
@@ -305,7 +308,7 @@ describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
    * are displayed in the review section for each jurisdiction/route combination.
    */
 
-  it('should map eviction routes correctly for Wales', () => {
+  it('should map eviction routes correctly for Wales and England', () => {
     // Test the type label mapping logic
     const getTypeLabel = (jurisdiction: string, eviction_route: string) => {
       if (jurisdiction === 'wales') {
@@ -316,9 +319,7 @@ describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
         }
         return 'Wales notice';
       }
-      return eviction_route === 'section_21'
-        ? 'Section 21 (No-Fault)'
-        : 'Section 8 (Fault-Based)';
+      return 'Section 8 notice pack (Form 3A)';
     };
 
     // Wales routes
@@ -327,8 +328,7 @@ describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
     expect(getTypeLabel('wales', 'unknown')).toBe('Wales notice');
 
     // England routes
-    expect(getTypeLabel('england', 'section_21')).toBe('Section 21 (No-Fault)');
-    expect(getTypeLabel('england', 'section_8')).toBe('Section 8 (Fault-Based)');
+    expect(getTypeLabel('england', 'section_8')).toBe('Section 8 notice pack (Form 3A)');
   });
 
   it('should show Wales Compliance section for Wales routes', async () => {
@@ -350,38 +350,37 @@ describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
     expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
   });
 
-  it('should show Compliance section for England Section 21 route', async () => {
+  it('should not show a legacy Compliance tab for England notice-only', async () => {
     const englandProps = {
       caseId: 'test-case-england',
       jurisdiction: 'england' as const,
       initialFacts: {
         __meta: { product: 'notice_only', jurisdiction: 'england' },
-        eviction_route: 'section_21',
+        eviction_route: 'section_8',
       },
     };
 
     render(<NoticeOnlySectionFlow {...englandProps} />);
 
     // Wait for component to load
-    await screen.findByText(/England Eviction Notice/);
+    await screen.findByText(/Eviction Notice Generator/);
 
-    // Compliance section should appear for England Section 21
-    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
+    expect(screen.queryByRole('button', { name: /Compliance/i })).toBeNull();
   });
 });
 
 describe('NoticeOnlySectionFlow - Header and Title', () => {
-  it('should show "England Eviction Notice" for England jurisdiction', async () => {
+  it('should show "Eviction Notice Generator" for England jurisdiction', async () => {
     render(
       <NoticeOnlySectionFlow
         caseId="test"
         jurisdiction="england"
-        initialFacts={{ __meta: { product: 'notice_only', jurisdiction: 'england' }, eviction_route: 'section_21' }}
+        initialFacts={{ __meta: { product: 'notice_only', jurisdiction: 'england' }, eviction_route: 'section_8' }}
       />
     );
 
-    await screen.findByText(/England Eviction Notice/);
-    expect(screen.getByText(/England Eviction Notice/)).toBeDefined();
+    await screen.findByText(/Eviction Notice Generator/);
+    expect(screen.getByText(/Eviction Notice Generator/)).toBeDefined();
   });
 
   it('should show "Wales Eviction Notice" for Wales jurisdiction', async () => {
@@ -426,11 +425,6 @@ describe('NoticeOnlySectionFlow - Notice Details Section Completion', () => {
       const hasServiceMethod = Boolean(facts.notice_service_method);
       const hasServiceDate = Boolean(facts.notice_date || facts.notice_service_date);
       return hasGrounds && hasServiceMethod && hasServiceDate;
-    }
-
-    // England: Section 21 - just need to confirm service method
-    if (route === 'section_21') {
-      return Boolean(facts.notice_service_method);
     }
 
     // England: Section 8 - need grounds selected + service method
@@ -533,33 +527,7 @@ describe('NoticeOnlySectionFlow - Notice Details Section Completion', () => {
     });
   });
 
-  describe('England Section 21 (unchanged behavior)', () => {
-    it('should return true when only notice_service_method is set', () => {
-      const facts = {
-        eviction_route: 'section_21',
-        notice_service_method: 'first_class_post',
-      };
-      expect(isNoticeComplete(facts)).toBe(true);
-    });
-
-    it('should return false when notice_service_method is missing', () => {
-      const facts = {
-        eviction_route: 'section_21',
-      };
-      expect(isNoticeComplete(facts)).toBe(false);
-    });
-
-    it('should NOT require notice_date (preserves existing England behavior)', () => {
-      const facts = {
-        eviction_route: 'section_21',
-        notice_service_method: 'recorded_delivery',
-        // no notice_date - should still complete for England
-      };
-      expect(isNoticeComplete(facts)).toBe(true);
-    });
-  });
-
-  describe('England Section 8 (unchanged behavior)', () => {
+  describe('England Section 8 notice route', () => {
     it('should return true when section8_grounds and notice_service_method are set', () => {
       const facts = {
         eviction_route: 'section_8',
@@ -752,30 +720,9 @@ describe('NoticeOnlySectionFlow - Wales Next Button Fix', () => {
 });
 
 /**
- * England Next Button Tests - Ensure England flows are unaffected
+ * England Next Button Tests - Post-May-2026 Form 3A route
  */
-describe('NoticeOnlySectionFlow - England Next Button (unchanged)', () => {
-  it('should show multiple sections with England section_21 route', async () => {
-    const englandProps = {
-      caseId: 'test-england-section21',
-      jurisdiction: 'england' as const,
-      initialFacts: {
-        __meta: { product: 'notice_only', jurisdiction: 'england' },
-        eviction_route: 'section_21',
-      },
-    };
-
-    render(<NoticeOnlySectionFlow {...englandProps} />);
-    await screen.findByText(/England Eviction Notice/);
-
-    // England section_21 should show multiple sections including Compliance
-    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
-  });
-
+describe('NoticeOnlySectionFlow - England Next Button', () => {
   it('should show multiple sections with England section_8 route', async () => {
     const englandProps = {
       caseId: 'test-england-section8',
@@ -787,14 +734,15 @@ describe('NoticeOnlySectionFlow - England Next Button (unchanged)', () => {
     };
 
     render(<NoticeOnlySectionFlow {...englandProps} />);
-    await screen.findByText(/England Eviction Notice/);
+    await screen.findByText(/Eviction Notice Generator/);
 
-    // England section_8 should show multiple sections including Arrears
-    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Notice Basics/i })).toBeDefined();
     expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
     expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
     expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Notice Details/i })).toBeDefined();
     expect(screen.getByRole('button', { name: /Arrears/i })).toBeDefined();
+    expect(screen.queryByRole('button', { name: /Compliance/i })).toBeNull();
   });
 
   it('should NOT apply Wales normalization to England routes', async () => {
@@ -804,15 +752,15 @@ describe('NoticeOnlySectionFlow - England Next Button (unchanged)', () => {
       jurisdiction: 'england' as const,
       initialFacts: {
         __meta: { product: 'notice_only', jurisdiction: 'england' },
-        eviction_route: 'section_21', // This should NOT be normalized
+        eviction_route: 'section_8',
       },
     };
 
     render(<NoticeOnlySectionFlow {...englandProps} />);
-    await screen.findByText(/England Eviction Notice/);
+    await screen.findByText(/Eviction Notice Generator/);
 
-    // England should work normally
-    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Notice Basics/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /Arrears/i })).toBeDefined();
   });
 });
 
@@ -2126,31 +2074,8 @@ describe('Scotland Ask Heaven Context', () => {
  * does NOT affect England or Wales flows.
  */
 describe('NoticeOnlySectionFlow - England/Wales Smoke Tests (unchanged behavior)', () => {
-  it('England notice_only should still use notice_service_method for Section 21 completion', () => {
-    // England Section 21 notice completion logic (should remain unchanged)
-    const isEnglandS21NoticeComplete = (facts: Record<string, any>): boolean => {
-      const route = facts.eviction_route as string;
-      if (route === 'section_21') {
-        return Boolean(facts.notice_service_method);
-      }
-      return false;
-    };
-
-    // Section 21 with service method - complete
-    expect(isEnglandS21NoticeComplete({
-      eviction_route: 'section_21',
-      notice_service_method: 'first_class_post',
-    })).toBe(true);
-
-    // Section 21 without service method - NOT complete
-    expect(isEnglandS21NoticeComplete({
-      eviction_route: 'section_21',
-    })).toBe(false);
-  });
-
-  it('England notice_only should still require grounds for Section 8 completion', () => {
-    // England Section 8 notice completion logic (should remain unchanged)
-    const isEnglandS8NoticeComplete = (facts: Record<string, any>): boolean => {
+  it('England notice_only should still require grounds and a service method for completion', () => {
+    const isEnglandNoticeComplete = (facts: Record<string, any>): boolean => {
       const route = facts.eviction_route as string;
       if (route === 'section_8') {
         const selectedGrounds = (facts.section8_grounds as string[]) || [];
@@ -2159,15 +2084,13 @@ describe('NoticeOnlySectionFlow - England/Wales Smoke Tests (unchanged behavior)
       return false;
     };
 
-    // Section 8 with grounds and service method - complete
-    expect(isEnglandS8NoticeComplete({
+    expect(isEnglandNoticeComplete({
       eviction_route: 'section_8',
       section8_grounds: ['Ground 8'],
       notice_service_method: 'first_class_post',
     })).toBe(true);
 
-    // Section 8 without grounds - NOT complete
-    expect(isEnglandS8NoticeComplete({
+    expect(isEnglandNoticeComplete({
       eviction_route: 'section_8',
       section8_grounds: [],
       notice_service_method: 'first_class_post',

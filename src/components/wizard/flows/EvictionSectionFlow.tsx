@@ -10,11 +10,10 @@
  * 3. Property - Full address and postcode
  * 4. Tenancy - Start date, rent amount, frequency, due day
  * 5. Notice - Reuses notice-only schema, served date, service method, expiry
- * 6. Section 21 Compliance - S21 only (deposit, prescribed info, gas, EPC, HtR)
- * 7. Section 8 Arrears - S8 only using ArrearsScheduleStep
- * 8. Evidence - Upload categorized evidence
- * 9. Court & Signing - Court name, signatory details
- * 10. Review - Blockers, warnings, generated documents
+ * 6. Section 8 Arrears - arrears-led and grounds support using ArrearsScheduleStep
+ * 7. Evidence - Upload categorized evidence
+ * 8. Court & Signing - Court name, signatory details
+ * 9. Review - Blockers, warnings, generated documents
  *
  * Flow Structure (Scotland):
  * 1. Case Basics - Jurisdiction (Scotland, PRT)
@@ -52,7 +51,6 @@ import { PartiesSection } from '../sections/eviction/PartiesSection';
 import { PropertySection } from '../sections/eviction/PropertySection';
 import { TenancySection } from '../sections/eviction/TenancySection';
 import { NoticeSection } from '../sections/eviction/NoticeSection';
-import { Section21ComplianceSection } from '../sections/eviction/Section21ComplianceSection';
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { EvidenceSection } from '../sections/eviction/EvidenceSection';
 import { CourtSigningSection } from '../sections/eviction/CourtSigningSection';
@@ -105,8 +103,8 @@ const WALES_ROUTES = ['section_173', 'fault_based'] as const;
 const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
-    label: 'Case Basics',
-    description: 'Possession route and court-pack overview',
+    label: 'Possession Basics',
+    description: 'Form 3A route and court-pack overview',
     jurisdictions: ['england', 'wales'],
     isComplete: (facts, jurisdiction) => {
       const route = facts.eviction_route as string;
@@ -163,51 +161,9 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     },
   },
   {
-    id: 'section21_compliance',
-    label: 'Section 21 Compliance',
-    description: 'Compliance requirements for no-fault eviction',
-    routes: [],
-    isComplete: (facts) => {
-      // Check all S21 compliance requirements
-      const hasDeposit = facts.deposit_taken === true;
-      if (hasDeposit) {
-        if (!facts.deposit_protected) return false;
-        if (!facts.prescribed_info_served) return false;
-      }
-      if (!facts.epc_served) return false;
-      if (!facts.how_to_rent_served) return false;
-      if (facts.has_gas_appliances === true && !facts.gas_safety_cert_served) return false;
-      return true;
-    },
-    hasBlockers: (facts) => {
-      const blockers: string[] = [];
-      if (facts.deposit_taken === true) {
-        if (facts.deposit_protected === false) {
-          blockers.push('Deposit not protected - Section 21 cannot be used');
-        }
-        if (facts.prescribed_info_served === false) {
-          blockers.push('Prescribed information not served - Section 21 cannot be used');
-        }
-      }
-      if (facts.epc_served === false) {
-        blockers.push('EPC not provided - Section 21 cannot be used');
-      }
-      if (facts.how_to_rent_served === false) {
-        blockers.push("'How to Rent' guide not provided - Section 21 cannot be used");
-      }
-      if (facts.has_gas_appliances === true && facts.gas_safety_cert_served === false) {
-        blockers.push('Gas Safety Certificate not provided - Section 21 cannot be used');
-      }
-      if (facts.licensing_required !== 'not_required' && facts.has_valid_licence === false) {
-        blockers.push('Property requires licence but is unlicensed - Section 21 cannot be used');
-      }
-      return blockers;
-    },
-  },
-  {
     id: 'section8_arrears',
-    label: 'Arrears Schedule',
-    description: 'Rent arrears breakdown for Section 8',
+    label: 'Arrears',
+    description: 'Rent arrears schedule and grounds support',
     routes: ['section_8'],
     isComplete: (facts) => {
       // For Section 8 with arrears grounds, arrears schedule + particulars must be complete
@@ -715,8 +671,6 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         return <TenancySection {...englandWalesProps} />;
       case 'notice':
         return <NoticeSection {...englandWalesProps} />;
-      case 'section21_compliance':
-        return <Section21ComplianceSection {...englandWalesProps} />;
       case 'section8_arrears':
         return <Section8ArrearsSection {...englandWalesProps} />;
       case 'evidence':
@@ -793,7 +747,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
           ? 'Scotland Eviction Pack'
           : jurisdiction === 'wales'
           ? 'Wales Eviction Pack'
-          : 'England Eviction Pack'
+          : 'Complete Eviction Pack'
       }
       completedCount={completedCount}
       totalCount={visibleSections.length}

@@ -45,7 +45,7 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
 
   return (
     <div className="space-y-6">
-      {(isWales || !isNoticeOnly) && (
+      {isWales && (
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">Jurisdiction</label>
           <div className="rounded-md border border-gray-200 bg-gray-50 px-4 py-3">

@@ -43,6 +43,7 @@ interface WizardShellV3Props {
 }
 
 export function WizardShellV3({
+  title,
   tabs,
   sectionTitle,
   sectionDescription,
@@ -84,6 +85,7 @@ export function WizardShellV3({
 
       <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-stretch gap-6 px-4 pb-12 pt-4 lg:grid-cols-[minmax(0,1fr)_340px]">
         <WizardMainCardV3
+          shellTitle={title}
           sectionTitle={sectionTitle}
           sectionDescription={sectionDescription}
           stepIconPath={resolveStepIconPath(currentMeta)}

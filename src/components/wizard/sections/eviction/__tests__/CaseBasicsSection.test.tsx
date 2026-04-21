@@ -44,10 +44,11 @@ describe('CaseBasicsSection', () => {
       />
     );
 
-    expect(screen.getByText('Jurisdiction')).toBeInTheDocument();
+    expect(screen.queryByText('Jurisdiction')).not.toBeInTheDocument();
     expect(screen.getByText(/Possession case basics/i)).toBeInTheDocument();
     expect(screen.getByText(/Form 3A route with court-stage pack/i)).toBeInTheDocument();
     expect(screen.getByText(/Form N5/i)).toBeInTheDocument();
     expect(screen.getByText(/Form N119/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Which eviction route are you using/i)).not.toBeInTheDocument();
   });
 });

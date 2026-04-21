@@ -4,15 +4,23 @@
  * Section-based wizard for generating eviction notices, matching the
  * EvictionSectionFlow design language for consistency.
  *
- * Flow Structure (England/Wales):
- * 1. Notice Basics - England Form 3A route summary or Wales route selection
+ * Flow Structure (England):
+ * 1. Notice Basics - Section 8 / Form 3A notice-stage pack overview
  * 2. Parties - Landlord(s) and Tenant(s) with joint support
  * 3. Property - Full address and postcode
  * 4. Tenancy - Start date, rent amount, frequency, due day
- * 5. Section 21 Compliance - S21 only (deposit, prescribed info, gas, EPC, HtR)
- * 6. Notice Details - Grounds and service details (S8 grounds selected here BEFORE arrears)
- * 7. Section 8 Arrears - S8 only using ArrearsScheduleStep (needs grounds to be selected first)
- * 8. Review - Generate and download notice
+ * 5. Notice Details - Grounds and service details
+ * 6. Section 8 Arrears - Arrears schedule for Grounds 8, 10, and 11
+ * 7. Review - Generate and download notice
+ *
+ * Flow Structure (Wales):
+ * 1. Case Basics - Wales route selection
+ * 2. Parties - Landlord(s) and contract-holder(s)
+ * 3. Property - Full address and postcode
+ * 4. Occupation Contract - Contract details and rent
+ * 5. Compliance - Wales pre-service compliance requirements
+ * 6. Notice Details - Section 173 service or fault-based grounds and service
+ * 7. Review - Generate and download notice
  *
  * Flow Structure (Scotland):
  * 1. Case Basics - Jurisdiction (Scotland, PRT)
@@ -113,6 +121,33 @@ interface WizardSection {
 const ENGLAND_ROUTES = ['section_8'] as const;
 const WALES_ROUTES = ['section_173', 'fault_based'] as const;
 const SCOTLAND_ROUTES = ['notice_to_leave'] as const;
+
+function getNoticeOnlyShellTitle(jurisdiction: 'england' | 'wales' | 'scotland'): string {
+  if (jurisdiction === 'scotland') return 'Scotland Notice to Leave';
+  if (jurisdiction === 'wales') return 'Wales Eviction Notice';
+  return 'Eviction Notice Generator';
+}
+
+function getNoticeOnlyReviewType(
+  jurisdiction: 'england' | 'wales' | 'scotland',
+  facts: WizardFacts
+): string {
+  if (jurisdiction === 'scotland') {
+    return 'Notice to Leave (Scotland)';
+  }
+
+  if (jurisdiction === 'wales') {
+    if (facts.eviction_route === 'section_173') {
+      return 'Section 173 (No-fault)';
+    }
+    if (facts.eviction_route === 'fault_based') {
+      return 'Fault-based (breach grounds)';
+    }
+    return 'Wales notice';
+  }
+
+  return 'Section 8 notice pack (Form 3A)';
+}
 
 /**
  * Normalize legacy Wales route values to canonical keys.
@@ -734,6 +769,13 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     // Override labels for Wales jurisdiction
     if (isWales) {
       return filteredSections.map((section) => {
+        if (section.id === 'case_basics') {
+          return {
+            ...section,
+            label: 'Case Basics',
+            description: 'Jurisdiction and notice route',
+          };
+        }
         if (section.id === 'tenancy') {
           return {
             ...section,
@@ -1143,31 +1185,18 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           <h3 className="text-sm font-medium text-gray-900 mb-2">Notice Summary</h3>
           <div className="text-sm text-gray-600 space-y-1">
             <p>
-              <strong>Type:</strong>{' '}
-              {(() => {
-                // Scotland routes
-                if (jurisdiction === 'scotland') {
-                  return 'Notice to Leave (Scotland)';
-                }
-                // Wales routes
-                if (jurisdiction === 'wales') {
-                  if (facts.eviction_route === 'section_173') {
-                    return 'Section 173 (No-fault)';
-                  } else if (facts.eviction_route === 'fault_based') {
-                    return 'Fault-based (breach grounds)';
-                  }
-                  return 'Wales notice';
-                }
-                // England routes
-                return jurisdiction === 'england'
-                  ? 'Form 3A possession route'
-                  : 'Notice route';
-              })()}
+              <strong>Type:</strong> {getNoticeOnlyReviewType(jurisdiction, facts)}
             </p>
             <p>
               <strong>Jurisdiction:</strong>{' '}
               {jurisdiction === 'england' ? 'England' : jurisdiction === 'wales' ? 'Wales' : 'Scotland'}
             </p>
+            {jurisdiction === 'england' && (
+              <p>
+                <strong>Pack includes:</strong> Form 3A notice, service instructions, service and validity
+                checklist, pre-service compliance declaration, and the rent schedule / arrears statement.
+              </p>
+            )}
             {/* England Section 8 grounds */}
             {jurisdiction === 'england' && facts.eviction_route === 'section_8' && (
               <p>
@@ -1209,7 +1238,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
   return (
     <ShellComponent
-      title={jurisdiction === 'scotland' ? 'Scotland Notice to Leave' : `${jurisdiction === 'england' ? 'England' : 'Wales'} Eviction Notice`}
+      title={getNoticeOnlyShellTitle(jurisdiction)}
       completedCount={completedCount}
       totalCount={visibleSections.length}
       progress={progress}

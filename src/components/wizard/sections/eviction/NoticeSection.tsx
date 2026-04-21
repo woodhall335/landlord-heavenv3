@@ -14,16 +14,15 @@
  * Fields:
  * - notice_already_served: Boolean gating question
  * - notice_served_date: Date the notice was served on tenant(s)
- * - notice_service_method: How the notice was delivered (required for N5B)
+ * - notice_service_method: How the notice was delivered
  * - notice_expiry_date: Optional - auto-calculated if not provided
  * - section8_grounds: For Section 8, which grounds are being relied upon
  * - section8_details: Particulars for each ground
  *
  * Notice periods (England):
- * - Section 21: 2 months minimum
- * - Section 8 Ground 8: 14 days minimum
- * - Section 8 Grounds 10/11: 2 months minimum
- * - Section 8 Ground 14 (serious): 14 days minimum
+ * - Ground 8: 4 weeks with the higher 3 months / 13 weeks threshold
+ * - Notice periods vary by the selected ground
+ * - Form 3A is the live private rented route after 1 May 2026
  */
 
 'use client';
@@ -457,6 +456,7 @@ const Section8SpecialistGroundDetails: React.FC<Section8SpecialistGroundDetailsP
 interface InlineNoticeSubflowProps {
   facts: WizardFacts;
   isSection8: boolean;
+  noticeProductLabel: string;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
   onComplete: () => void;
 }
@@ -464,8 +464,8 @@ interface InlineNoticeSubflowProps {
 /**
  * Inline notice-only subflow for generating notices within the eviction wizard.
  *
- * For Section 21: Collects deposit & compliance checks required for Form 6A.
- * For Section 8: Collects grounds and particulars required for Form 3.
+ * For the England public flow this collects Form 3A grounds, service details,
+ * and the supporting facts used across the notice and court-stage documents.
  *
  * This component uses the SAME field keys as config/mqs/notice_only/england.yaml
  * to ensure data compatibility and avoid duplication.
@@ -473,19 +473,20 @@ interface InlineNoticeSubflowProps {
 const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   facts,
   isSection8,
+  noticeProductLabel,
   onUpdate,
   onComplete,
 }) => {
   // =============================================================================
   // INITIAL STEP DETERMINATION
-  // CRITICAL: For Section 21, check if compliance questions are already answered
-  // (e.g., from the separate Compliance tab) to avoid asking twice.
+  // For legacy non-Section 8 routes, check if compliance questions are already answered
+  // (e.g. from an older dedicated compliance step) to avoid asking twice.
   // =============================================================================
   const getInitialStep = (): 'compliance' | 'grounds' | 'service' => {
     if (isSection8) return 'grounds';
 
-    // For Section 21: Check if compliance questions are already answered
-    // These may have been answered in Section21ComplianceSection (Compliance tab)
+    // For legacy non-Section 8 routes: check if compliance questions are already answered.
+    // These may have been answered in an older dedicated compliance step.
     const complianceAlreadyComplete = (() => {
       // Check deposit compliance
       if (facts.deposit_taken === undefined) return false;
@@ -531,9 +532,9 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
 
   // Calculate minimum notice period based on selected grounds
   const minNoticePeriod = useMemo(() => {
-    if (!isSection8) return 60; // Section 21 = 2 months
-    if (selectedGrounds.length === 0) return 14;
-    let maxPeriod = 14;
+    if (!isSection8) return 60;
+    if (selectedGrounds.length === 0) return 28;
+    let maxPeriod = 28;
     selectedGrounds.forEach((ground) => {
       const groundInfo = SECTION_8_GROUNDS.find((g) => g.value === ground);
       if (groundInfo && groundInfo.period > maxPeriod) {
@@ -545,7 +546,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
 
   const minNoticePeriodLabel = useMemo(() => {
     if (!isSection8) return '2 months';
-    if (selectedGrounds.length === 0) return '2 weeks';
+    if (selectedGrounds.length === 0) return 'depends on the ground you choose';
 
     const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => selectedGrounds.includes(ground.value));
     if (matchingGrounds.length === 0) return `${minNoticePeriod} days`;
@@ -680,17 +681,17 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             Generate Notice - Step {currentStepNum} of {totalSteps}
           </h4>
           <p className="text-xs text-[#7C3AED] mt-1">
-            Complete these questions to generate your {isSection8 ? 'Form 3A' : 'Section 21'} notice
+            Complete these questions to prepare your {noticeProductLabel}.
           </p>
         </div>
       </div>
 
-      {/* Section 21 Compliance Step */}
+      {/* Legacy non-Section 8 compliance step */}
       {!isSection8 && currentStep === 'compliance' && (
         <div className="space-y-4">
           <h5 className="text-sm font-medium text-gray-700">Deposit & Compliance Checks</h5>
           <p className="text-xs text-gray-500">
-            Section 21 notices have strict compliance requirements. We need to check these before generating your notice.
+            This legacy notice route has compliance requirements we still need to check before generating the notice.
           </p>
 
           {/* Deposit taken */}
@@ -755,7 +756,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                 </div>
                 {facts.deposit_protected === false && (
                   <p className="text-xs text-red-600 mt-1">
-                    ⚠️ Section 21 cannot be used if the deposit is not protected.
+                    Deposit protection still needs to be resolved before this notice route can be relied on.
                   </p>
                 )}
               </div>
@@ -1067,14 +1068,14 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             </div>
           )}
 
-          {/* Expiry date - SECTION 21 ONLY: Auto-calculated (read-only) */}
+          {/* Expiry date - legacy non-Section 8 route: auto-calculated (read-only) */}
           {!isSection8 && (
             <div className="space-y-2 p-3 bg-purple-50 border border-purple-200 rounded-lg">
               <label className="block text-sm font-medium text-purple-800">
                 Notice expiry date (auto-calculated)
               </label>
               <p className="text-sm text-purple-700">
-                Your Section 21 expiry date will be <strong>automatically calculated</strong> when the notice is generated.
+                The expiry date for this notice will be <strong>automatically calculated</strong> when the notice is generated.
                 The system will determine the earliest legal date based on:
               </p>
               <ul className="text-xs text-purple-600 list-disc list-inside mt-1 space-y-0.5">
@@ -1084,7 +1085,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                 <li>4-month restriction from tenancy start</li>
               </ul>
               <p className="text-xs text-purple-700 mt-2 font-medium">
-                This ensures your notice is legally valid under Housing Act 1988, Section 21(4).
+                This keeps the generated notice aligned to the date rules for this route.
               </p>
             </div>
           )}
@@ -1096,7 +1097,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
               Notice Will Be Generated
             </h5>
             <p className="text-sm text-green-700 mt-1">
-              Your {isSection8 ? 'Form 3A' : 'Form 6A (Section 21)'} notice will be
+              Your {noticeProductLabel} will be
               generated and included in your eviction pack when you complete the wizard.
             </p>
           </div>
@@ -1137,10 +1138,19 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
 
 export const NoticeSection: React.FC<NoticeSectionProps> = ({
   facts,
+  jurisdiction,
   onUpdate,
   mode = 'complete_pack',
 }) => {
-  const isSection8 = facts.eviction_route === 'section_8';
+  const isEngland = jurisdiction === 'england';
+  const isSection8 = isEngland || facts.eviction_route === 'section_8';
+  const noticeProductLabel = isEngland
+    ? 'Form 3A notice'
+    : facts.eviction_route === 'section_173'
+    ? 'Section 173 notice'
+    : isSection8
+    ? 'Form 3A notice'
+    : 'fault-based notice';
   const selectedGrounds = useMemo(
     () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
     [facts.section8_grounds]
@@ -1160,13 +1170,12 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
 
   // Calculate minimum notice period based on selected grounds
   const minNoticePeriod = useMemo(() => {
-    if (!isSection8) return 60; // Section 21 = 2 months
-
-    if (selectedGrounds.length === 0) return 14; // Default minimum
+    if (!isSection8) return 60;
+    if (selectedGrounds.length === 0) return isEngland ? 28 : 14;
 
     // Find the maximum notice period among selected grounds
     // (when multiple grounds, the longest period applies)
-    let maxPeriod = 14;
+    let maxPeriod = isEngland ? 28 : 14;
     selectedGrounds.forEach((ground) => {
       const groundInfo = SECTION_8_GROUNDS.find((g) => g.value === ground);
       if (groundInfo && groundInfo.period > maxPeriod) {
@@ -1174,11 +1183,13 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       }
     });
     return maxPeriod;
-  }, [isSection8, selectedGrounds]);
+  }, [isEngland, isSection8, selectedGrounds]);
 
   const minNoticePeriodLabel = useMemo(() => {
     if (!isSection8) return '2 months';
-    if (selectedGrounds.length === 0) return '2 weeks';
+    if (selectedGrounds.length === 0) {
+      return isEngland ? 'depends on the ground you choose' : '2 weeks';
+    }
 
     const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => selectedGrounds.includes(ground.value));
     if (matchingGrounds.length === 0) return `${minNoticePeriod} days`;
@@ -1192,7 +1203,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     );
 
     return drivingLabels.join(' / ');
-  }, [isSection8, selectedGrounds, minNoticePeriod]);
+  }, [isEngland, isSection8, selectedGrounds, minNoticePeriod]);
 
   // Calculate suggested expiry date
   const suggestedExpiryDate = useMemo(() => {
@@ -1284,7 +1295,9 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                   No, I need to generate a notice
                 </span>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  We'll help you create the correct notice ({isSection8 ? 'Form 3A' : 'Form 6A - Section 21'}) as part of your eviction pack.
+                  {isEngland
+                    ? 'We will help you prepare the current England Form 3A notice as part of your complete eviction pack.'
+                    : `We'll help you prepare the correct ${noticeProductLabel} as part of your eviction pack.`}
                 </p>
               </div>
             </label>
@@ -1296,10 +1309,10 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       {isNoticeOnlyMode && (
         <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
           <h4 className="text-sm font-medium text-purple-900">
-            Generate Your {isSection8 ? 'Form 3A' : 'Section 21'} Notice
+            Generate Your {isEngland ? 'Form 3A' : noticeProductLabel}
           </h4>
           <p className="text-sm text-purple-700 mt-1">
-            Complete the details below to generate your court-ready eviction notice.
+            Complete the details below to prepare your court-ready eviction notice.
           </p>
         </div>
       )}
@@ -1375,7 +1388,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
               )}
             </div>
             <p className="text-xs text-gray-500">
-              Leave blank to auto-calculate. Minimum {minNoticePeriodLabel} for your selected route/grounds.
+              Leave blank to auto-calculate. Minimum {minNoticePeriodLabel}{isEngland ? ' for your selected England grounds.' : ' for your selected route/grounds.'}
             </p>
           </div>
 
@@ -1466,15 +1479,14 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             </div>
           )}
 
-          {/* Section 21 info */}
+          {/* Legacy non-Section 8 notice info */}
           {!isSection8 && (
             <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
               <h4 className="text-sm font-medium text-purple-900 mb-1">
-                Section 21 Notice Period
+                Notice Period
               </h4>
               <p className="text-sm text-purple-800">
-                Section 21 notices require a minimum of 2 months (60 days) notice.
-                The notice cannot expire before the end of any fixed term.
+                This route normally requires a minimum of 2 months (60 days) notice.
               </p>
             </div>
           )}
@@ -1488,6 +1500,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
         <InlineNoticeSubflow
           facts={facts}
           isSection8={isSection8}
+          noticeProductLabel={noticeProductLabel}
           onUpdate={onUpdate}
           onComplete={handleSubflowComplete}
         />
@@ -1504,7 +1517,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
               Notice Setup Complete
             </h4>
             <p className="text-sm text-green-700 mt-1">
-              Your {isSection8 ? 'Form 3A' : 'Section 21 (Form 6A)'} notice will be generated
+              Your {noticeProductLabel} will be generated
               when you complete the eviction pack wizard.
             </p>
           </div>

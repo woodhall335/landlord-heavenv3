@@ -67,4 +67,29 @@ describe('NoticeSection specialist England ground capture', () => {
     expect(screen.getByLabelText('What official notice or source material is relied on?')).toBeInTheDocument();
     expect(screen.getByLabelText('Reference or decision identifier')).toBeInTheDocument();
   });
+
+  it('keeps England complete-pack notice generation on the Form 3A path', () => {
+    renderControlledNoticeSection({
+      __meta: { product: 'complete_pack', original_product: 'complete_pack', jurisdiction: 'england' },
+      eviction_route: 'section_8',
+      notice_already_served: false,
+      section8_grounds: [],
+    }, 'complete_pack');
+
+    expect(screen.getByText(/current England Form 3A notice/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Form 6A/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Section 21/i)).not.toBeInTheDocument();
+  });
+
+  it('keeps England notice-only mode on the Form 3A route', () => {
+    renderControlledNoticeSection({
+      __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },
+      eviction_route: 'section_8',
+      section8_grounds: [],
+    });
+
+    expect(screen.getByText(/Generate Your Form 3A/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Section 21/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Form 6A/i)).not.toBeInTheDocument();
+  });
 });
