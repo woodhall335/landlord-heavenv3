@@ -49,6 +49,10 @@ describe('CaseBasicsSection', () => {
     expect(screen.getByText(/Form 3A route with court-stage pack/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Form N5/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Form N119/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Included in this court-ready pack/i)).toBeInTheDocument();
+    expect(screen.getByText(/evidence collection checklist/i)).toBeInTheDocument();
+    expect(screen.getByText(/court bundle index/i)).toBeInTheDocument();
+    expect(screen.getByText(/hearing checklist/i)).toBeInTheDocument();
     expect(screen.queryByText(/Which eviction route are you using/i)).not.toBeInTheDocument();
   });
 });

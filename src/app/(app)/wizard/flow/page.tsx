@@ -208,6 +208,16 @@ function WizardFlowContent() {
     !editCaseId &&
     mode !== 'edit' &&
     searchParams.get('entry') !== 'steps';
+  const evictionFlowProduct =
+    type === 'eviction'
+      ? normalizedProduct === 'notice_only'
+        ? 'notice_only'
+        : normalizedProduct === 'complete_pack'
+          ? 'complete_pack'
+          : product === 'notice_only'
+            ? 'notice_only'
+            : 'complete_pack'
+      : null;
   const tenancyFlowProduct: TenancyFlowProduct =
     normalizedProduct === 'ast_standard' ||
     normalizedProduct === 'ast_premium' ||
@@ -227,8 +237,7 @@ function WizardFlowContent() {
 
     if (type === 'eviction') {
       // For eviction flows, we treat Ask Heaven product as either notice_only or complete_pack
-      if (normalizedProduct === 'notice_only') return 'notice_only';
-      return 'complete_pack';
+      return evictionFlowProduct;
     }
 
     return null;
@@ -288,6 +297,7 @@ function WizardFlowContent() {
     markWizardStarted(flowTrackingContext);
     hasTrackedStartRef.current = true;
   }, [
+    evictionFlowProduct,
     editCaseId,
     hasRequiredParams,
     jurisdiction,
@@ -394,6 +404,8 @@ function WizardFlowContent() {
         startProduct = rawProduct || type || 'tenancy_agreement';
       }
 
+      setEffectiveProduct(startProduct);
+
       const response = await fetch('/api/wizard/start', {
         method: 'POST',
         headers: {
@@ -476,7 +488,7 @@ function WizardFlowContent() {
   const handleComplete = (completedCaseId: string) => {
     // For eviction cases, all products now go through the review page for analysis
     if (type === 'eviction') {
-      const productParam = askHeavenProduct ?? 'complete_pack';
+      const productParam = evictionFlowProduct ?? 'complete_pack';
       router.push(`/wizard/review?case_id=${completedCaseId}&product=${productParam}`);
       return;
     }
@@ -534,7 +546,7 @@ function WizardFlowContent() {
       return null;
     }
 
-    const activeProduct = askHeavenProduct === 'notice_only' ? 'notice_only' : 'complete_pack';
+    const activeProduct = evictionFlowProduct === 'notice_only' ? 'notice_only' : 'complete_pack';
     const productChoices = [
       {
         key: 'notice_only' as const,
@@ -701,12 +713,13 @@ function WizardFlowContent() {
   // Scotland support added: uses Scotland-specific sections (grounds, tribunal) and 6-month rule validation.
   if (
     type === 'eviction' &&
-    askHeavenProduct === 'complete_pack' &&
+    evictionFlowProduct === 'complete_pack' &&
     USE_EVICTION_SECTION_FLOW &&
     (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
       <EvictionSectionFlow
+        key={`eviction-${evictionFlowProduct}-${caseId}`}
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
       />
@@ -717,12 +730,13 @@ function WizardFlowContent() {
   // This matches the EvictionSectionFlow design for UI consistency.
   if (
     type === 'eviction' &&
-    askHeavenProduct === 'notice_only' &&
+    evictionFlowProduct === 'notice_only' &&
     USE_NOTICE_ONLY_SECTION_FLOW &&
     (jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland')
   ) {
     return (
       <NoticeOnlySectionFlow
+        key={`notice-only-${evictionFlowProduct}-${caseId}`}
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
       />
@@ -776,7 +790,7 @@ function WizardFlowContent() {
         product={
           type === 'tenancy_agreement'
             ? (askHeavenProduct ?? 'tenancy_agreement')
-            : (askHeavenProduct === 'notice_only' ? 'notice_only' : 'complete_pack')
+            : (evictionFlowProduct === 'notice_only' ? 'notice_only' : 'complete_pack')
         }
         initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}

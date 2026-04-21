@@ -133,6 +133,38 @@ describe('England eviction wizard entry switcher', () => {
     });
   });
 
+  it('starts the complete-pack flow for the complete_pack entry steps URL', async () => {
+    hoisted.currentParams = new URLSearchParams(
+      'type=eviction&product=complete_pack&src=product_page&topic=eviction&entry=steps'
+    );
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          case_id: 'case-456',
+        }),
+      })
+    );
+
+    render(<WizardFlowPage />);
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(
+        '/api/wizard/start',
+        expect.objectContaining({
+          method: 'POST',
+        })
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Eviction section flow')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText('Notice-only section flow')).not.toBeInTheDocument();
+  });
+
   it('moves from the chooser into the flow with an explicit steps entry param', async () => {
     render(<WizardFlowPage />);
 
@@ -146,6 +178,22 @@ describe('England eviction wizard entry switcher', () => {
 
     expect(hoisted.pushMock).toHaveBeenCalledWith(
       '/wizard/flow?type=eviction&product=notice_only&src=product_page&topic=eviction&entry=steps'
+    );
+  });
+
+  it('moves from the chooser into the complete-pack flow with an explicit steps entry param', async () => {
+    render(<WizardFlowPage />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', { name: /Choose the pack you want to start with/i })
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Complete Eviction Pack/i }));
+
+    expect(hoisted.pushMock).toHaveBeenCalledWith(
+      '/wizard/flow?type=eviction&product=complete_pack&src=product_page&topic=eviction&entry=steps'
     );
   });
 });
