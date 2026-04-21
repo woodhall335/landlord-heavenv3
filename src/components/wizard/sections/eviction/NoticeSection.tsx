@@ -1244,21 +1244,34 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       {/* Only shown in complete_pack mode - notice_only skips this */}
       {/* ================================================================== */}
       {!isNoticeOnlyMode && (
-        <div className="space-y-3 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+        <div className="space-y-4 rounded-[1.5rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
+          <div className="flex flex-wrap gap-2">
+            {(isEngland
+              ? ['Form 3A notice', 'Service details', 'Grounds and dates']
+              : [noticeProductLabel, 'Service details', 'Route checks']
+            ).map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
           <label className="block text-sm font-medium text-gray-900">
             Have you already served a valid notice on the tenant?
             <span className="text-red-500 ml-1">*</span>
           </label>
-          <p className="text-xs text-gray-500">
-            This determines whether we need to generate a notice for you or use your existing notice.
+          <p className="text-sm leading-6 text-[#60597a]">
+            Choose whether this pack should build a fresh notice for you or work from one you have already served.
           </p>
 
-          <div className="flex flex-col gap-2 mt-2">
+          <div className="flex flex-col gap-3">
             <label className={`
-              flex items-start p-3 border rounded-lg cursor-pointer transition-all
+              flex items-start rounded-2xl border p-4 cursor-pointer transition-all
               ${facts.notice_already_served === true
-                ? 'border-purple-500 bg-purple-50'
-                : 'border-gray-200 hover:border-gray-300'}
+                ? 'border-purple-500 bg-purple-50 ring-2 ring-purple-100'
+                : 'border-gray-200 bg-white hover:border-gray-300'}
             `}>
               <input
                 type="radio"
@@ -1278,10 +1291,10 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             </label>
 
             <label className={`
-              flex items-start p-3 border rounded-lg cursor-pointer transition-all
+              flex items-start rounded-2xl border p-4 cursor-pointer transition-all
               ${facts.notice_already_served === false
-                ? 'border-purple-500 bg-purple-50'
-                : 'border-gray-200 hover:border-gray-300'}
+                ? 'border-purple-500 bg-purple-50 ring-2 ring-purple-100'
+                : 'border-gray-200 bg-white hover:border-gray-300'}
             `}>
               <input
                 type="radio"
@@ -1307,11 +1320,21 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
 
       {/* Notice-only mode header */}
       {isNoticeOnlyMode && (
-        <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
-          <h4 className="text-sm font-medium text-purple-900">
+        <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-5">
+          <div className="flex flex-wrap gap-2">
+            {['Form 3A notice', 'Service details', 'Grounds and dates'].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-purple-200 bg-white/80 px-3 py-1.5 text-xs font-semibold text-purple-900 shadow-sm"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+          <h4 className="mt-4 text-sm font-medium text-purple-900">
             Generate Your {isEngland ? 'Form 3A' : noticeProductLabel}
           </h4>
-          <p className="text-sm text-purple-700 mt-1">
+          <p className="mt-1 text-sm leading-6 text-purple-700">
             Complete the details below to prepare your court-ready eviction notice.
           </p>
         </div>
@@ -1322,7 +1345,24 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       {/* ================================================================== */}
       {noticeAlreadyServed === true && (
         <>
+          <div className="rounded-[1.5rem] border border-[#e6dcff] bg-white p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
+            <div className="flex flex-wrap gap-2">
+              {['Notice service date', 'Service method', 'Expiry date'].map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-[#ddd0ff] bg-[#faf7ff] px-3 py-1.5 text-xs font-semibold text-[#5b36b3]"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+            <p className="mt-4 text-sm leading-6 text-[#60597a]">
+              Enter the served notice details first so the court-facing documents stay aligned with what the tenant actually received.
+            </p>
+          </div>
+
           {/* Notice service date */}
+          <div className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
             <label htmlFor="notice_served_date" className="block text-sm font-medium text-gray-700">
               Date notice was served
@@ -1362,6 +1402,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             <p className="text-xs text-gray-500">
               Required for court forms. The method of service affects when the notice is deemed served.
             </p>
+          </div>
           </div>
 
           {/* Notice expiry date */}
@@ -1446,12 +1487,12 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
 
               {selectedGrounds.length > 0 && (
                 <div className="space-y-4">
-                  <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                  <div className="rounded-[1.4rem] border border-purple-200 bg-purple-50 p-4">
                     <p className="text-sm text-purple-800">
                       <strong>Selected grounds:</strong> {selectedGrounds.join(', ')}
                     </p>
                     <p className="text-xs text-purple-700 mt-1">
-                      Minimum notice period: {minNoticePeriod} days
+                      Minimum notice period: {minNoticePeriodLabel}
                     </p>
                     <p className="text-xs text-[#7C3AED] mt-2">
                       If this is a specialist ground, add the factual basis here so the court forms and support documents stay aligned with the notice already served.
@@ -1511,7 +1552,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       {/* ================================================================== */}
       {noticeAlreadyServed === false && subflowComplete && (
         <div className="space-y-4">
-          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="rounded-[1.5rem] border border-green-200 bg-green-50 p-5">
             <h4 className="text-sm font-medium text-green-800 flex items-center gap-2">
               <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
               Notice Setup Complete
@@ -1523,7 +1564,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
           </div>
 
           {/* Summary of collected data */}
-          <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-2">
+          <div className="rounded-[1.5rem] border border-gray-200 bg-gray-50 p-5 space-y-2">
             <h5 className="text-sm font-medium text-gray-700">Notice Details Summary</h5>
             <dl className="text-sm">
               <div className="flex gap-2">

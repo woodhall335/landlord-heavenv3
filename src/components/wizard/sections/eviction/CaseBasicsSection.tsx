@@ -97,49 +97,65 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
             <label className="block text-sm font-medium text-gray-700">
               {isNoticeOnly ? 'Section 8 notice basics' : 'Possession case basics'}
             </label>
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+            <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-5">
               <h4 className="mb-2 text-sm font-medium text-amber-900">
                 {isNoticeOnly ? 'Form 3A notice-stage pack' : 'Form 3A route with court-stage pack'}
               </h4>
-              <div className="space-y-3 text-sm text-amber-800">
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(isNoticeOnly
+                  ? ['Form 3A notice', 'Service checklist', 'Arrears statement']
+                  : ['Form 3A notice', 'Form N5', 'Form N119', 'Witness statement']
+                ).map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-amber-200 bg-white/80 px-3 py-1.5 text-xs font-semibold text-amber-900 shadow-sm"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-4 space-y-4 text-sm text-amber-800">
                 <p>
                   {isNoticeOnly
                     ? 'This pack prepares the current England Form 3A notice and the notice-stage documents you need before serving anything.'
                     : 'This pack prepares the current England Form 3A notice and the court-stage possession paperwork used to move the case forward properly.'}
                 </p>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>
-                    Ground 8 serious arrears now requires 3 months or 13 weeks of arrears,
-                    depending on rent frequency.
-                  </li>
-                  <li>
-                    Notice periods vary by ground, including 4 months, 4 weeks, 2 weeks, or
-                    immediate-application routes.
-                  </li>
-                  <li>
-                    Section 21 and N5B accelerated possession are no longer part of the England
-                    private rented flow.
-                  </li>
-                </ul>
-                {isNoticeOnly ? (
-                  <div>
-                    <p className="font-medium text-amber-900">Included in this notice pack:</p>
-                    <p>
-                      Form 3A notice, service instructions, service and validity checklist,
-                      pre-service compliance declaration, and the rent schedule / arrears statement.
+                <div className="grid gap-3 md:grid-cols-3">
+                  <div className="rounded-2xl border border-amber-200 bg-white/75 px-4 py-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-amber-900">
+                      Ground 8
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-amber-800">
+                      Serious arrears now require 3 months or 13 weeks of arrears, depending on rent frequency.
                     </p>
                   </div>
-                ) : (
-                  <div>
-                    <p className="font-medium text-amber-900">Included in this court-ready pack:</p>
-                    <p>
-                      Form 3A notice, Form N5, Form N119, the schedule of arrears, evidence
-                      collection checklist, proof of service certificate, witness statement, court
-                      bundle index, hearing checklist, arrears engagement letter, and the eviction
-                      case summary.
+                  <div className="rounded-2xl border border-amber-200 bg-white/75 px-4 py-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-amber-900">
+                      Notice periods
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-amber-800">
+                      Periods vary by ground, including 4 months, 4 weeks, 2 weeks, or immediate-application routes.
                     </p>
                   </div>
-                )}
+                  <div className="rounded-2xl border border-amber-200 bg-white/75 px-4 py-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-amber-900">
+                      England route
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-amber-800">
+                      Section 21 and N5B accelerated possession are no longer part of the England private rented flow.
+                    </p>
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-amber-200 bg-white/75 px-4 py-4">
+                  <p className="font-medium text-amber-900">
+                    {isNoticeOnly ? 'Included in this notice pack' : 'Included in this court-ready pack'}
+                  </p>
+                  <p className="mt-2 leading-6">
+                    {isNoticeOnly
+                      ? 'Form 3A notice, service instructions, service and validity checklist, pre-service compliance declaration, and the rent schedule / arrears statement.'
+                      : 'Form 3A notice, Form N5, Form N119, the schedule of arrears, evidence collection checklist, proof of service certificate, witness statement, court bundle index, hearing checklist, arrears engagement letter, and the eviction case summary.'}
+                  </p>
+                </div>
               </div>
             </div>
           </>

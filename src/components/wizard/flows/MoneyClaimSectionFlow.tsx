@@ -765,7 +765,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
       banner={error ? (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="mb-6 rounded-[1.4rem] border border-red-200 bg-red-50 p-4">
           <div className="flex items-center justify-between">
             <span className="text-red-700">{error}</span>
             <button
@@ -817,7 +817,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                Generate Case Bundle
+                Continue to generate the money claim pack
               </button>
             ) : (
               <button
@@ -830,7 +830,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                Continue
+                {currentSectionIndex === visibleSections.length - 2 ? 'Continue to review' : 'Continue'}
               </button>
             )}
           </div>
@@ -838,8 +838,8 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       )}
     >
       {currentBlockers.length > 0 && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <h3 className="text-sm font-medium text-red-800 mb-2">Cannot Proceed - Blockers:</h3>
+        <div className="mb-6 rounded-[1.4rem] border border-red-200 bg-red-50 p-4">
+          <h3 className="mb-2 text-sm font-medium text-red-800">You need to fix these before this pack is ready</h3>
           <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
             {currentBlockers.map((blocker, i) => (
               <li key={i}>{blocker}</li>
@@ -849,8 +849,8 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       )}
 
       {currentWarnings.length > 0 && (
-        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-          <h3 className="text-sm font-medium text-amber-800 mb-2">Warnings:</h3>
+        <div className="mb-6 rounded-[1.4rem] border border-amber-200 bg-amber-50 p-4">
+          <h3 className="mb-2 text-sm font-medium text-amber-800">These could slow things down later</h3>
           <ul className="list-disc list-inside text-sm text-amber-700 space-y-1">
             {currentWarnings.map((warning, i) => (
               <li key={i}>{warning}</li>

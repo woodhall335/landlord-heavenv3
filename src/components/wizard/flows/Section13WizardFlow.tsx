@@ -931,15 +931,15 @@ export function Section13WizardFlow({
     options?: { type?: string; placeholder?: string; step?: string }
   ) {
     return (
-      <label className="block space-y-1">
-        <span className="text-sm font-medium text-gray-800">{label}</span>
+      <label className="block space-y-2">
+        <span className="text-sm font-semibold text-[#27134a]">{label}</span>
         <input
           type={options?.type || 'text'}
           value={value ?? ''}
           onChange={(event) => onChange(event.target.value)}
           placeholder={options?.placeholder}
           step={options?.step}
-          className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+          className="w-full rounded-2xl border border-[#e1d5ff] bg-[#fcfbff] px-4 py-3 text-sm shadow-sm transition focus:border-violet-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-violet-200"
         />
       </label>
     );
@@ -1190,6 +1190,21 @@ export function Section13WizardFlow({
       case 'proposal':
         return (
           <div className="space-y-5">
+            <div className="rounded-[1.5rem] border border-violet-200 bg-violet-50 p-5">
+              <div className="flex flex-wrap gap-2">
+                {['Form 4A', 'Service record', 'Justification report'].map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-violet-200 bg-white/80 px-3 py-1.5 text-xs font-semibold text-violet-900 shadow-sm"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-4 text-sm leading-6 text-violet-900">
+                This step sets the new rent, the service date, and the proposed start date that carry through the official Form 4A notice and the supporting service record.
+              </p>
+            </div>
             <div className="grid gap-4 md:grid-cols-2">
               {renderTextInput('Proposed rent amount', effectiveState.proposal.proposedRentAmount, (value) =>
                 updateState((prev) => ({
@@ -1209,8 +1224,8 @@ export function Section13WizardFlow({
                   proposal: { ...prev.proposal, proposedStartDate: value || null },
                 }))
               , { type: 'date' })}
-              <label className="block space-y-1">
-                <span className="text-sm font-medium text-gray-800">Service method</span>
+              <label className="block space-y-2">
+                <span className="text-sm font-semibold text-[#27134a]">Service method</span>
                 <select
                   value={effectiveState.proposal.serviceMethod || ''}
                   onChange={(event) =>
@@ -1224,7 +1239,7 @@ export function Section13WizardFlow({
                       },
                     }))
                   }
-                  className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                  className="w-full rounded-2xl border border-[#e1d5ff] bg-[#fcfbff] px-4 py-3 text-sm shadow-sm transition focus:border-violet-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-violet-200"
                 >
                   <option value="">Select service method</option>
                   <option value="hand_delivered">Hand delivered</option>
