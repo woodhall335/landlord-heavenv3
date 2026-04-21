@@ -903,7 +903,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'premium':
         return <PremiumSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'review':
-        return <ReviewSection facts={facts} onUpdate={handleUpdate} caseId={caseId} jurisdiction={jurisdiction} />;
+        return <PremiumReviewSection facts={facts} onUpdate={handleUpdate} caseId={caseId} jurisdiction={jurisdiction} />;
       default:
         return <div>Unknown section: {currentSection.id}</div>;
     }
@@ -3382,6 +3382,170 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
           </p>
         </div>
       )}
+    </div>
+  );
+};
+
+const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
+  const isProductLocked = Boolean(
+    facts.__meta?.purchased_product || (facts.__meta?.entitlements || []).length > 0
+  );
+  const visibleSections = getVisibleSectionsForFacts(facts, isProductLocked);
+  const residentialProduct = getResidentialStandaloneProduct(facts);
+  const terminology = getJurisdictionTerminology(facts.__meta?.jurisdiction || 'england');
+  const allComplete = visibleSections
+    .filter((section) => section.id !== 'review')
+    .every((section) => section.isComplete(facts));
+  const incompleteSections = visibleSections
+    .filter((section) => section.id !== 'review' && !section.isComplete(facts))
+    .map((section) => section.label);
+  const includedDocuments = residentialProduct
+    ? [
+        RESIDENTIAL_LETTING_PRODUCTS[residentialProduct].label,
+        'Prepared file details and signing blocks',
+        'Supporting landlord file notes where relevant',
+      ]
+    : [
+        isPremiumTier(facts.product_tier) ? terminology.premiumTier : terminology.standardTier,
+        hasPositiveDepositAmount(facts)
+          ? 'Prescribed information pack and deposit certificate'
+          : 'No-deposit tenancy wording and file checks',
+        'Pre-tenancy checklist',
+        'Supporting handover records',
+      ];
+  const tenantCount = Number.parseInt(facts.number_of_tenants || '0', 10);
+  const reviewSummary = [
+    {
+      label: 'Product',
+      value:
+        residentialProduct
+          ? RESIDENTIAL_LETTING_PRODUCTS[residentialProduct].label
+          : facts.product_tier || 'Not selected',
+    },
+    {
+      label: 'Property',
+      value: facts.property_address_line1
+        ? `${facts.property_address_line1}, ${facts.property_address_postcode || ''}`.trim().replace(/,\s*$/, '')
+        : 'Not entered',
+    },
+    {
+      label: 'Landlord',
+      value: facts.landlord_full_name || 'Not entered',
+    },
+    {
+      label: 'Tenants',
+      value:
+        facts.tenants?.[0]?.full_name
+          ? `${facts.tenants[0].full_name}${tenantCount > 1 ? ` + ${tenantCount - 1} more` : ''}`
+          : 'Not entered',
+    },
+    {
+      label: 'Rent',
+      value: facts.rent_amount ? `${GBP_SYMBOL}${facts.rent_amount} per ${facts.rent_period}` : 'Not entered',
+    },
+    {
+      label: 'Deposit',
+      value:
+        facts.deposit_amount !== undefined && facts.deposit_amount !== null && String(facts.deposit_amount) !== ''
+          ? Number(facts.deposit_amount) > 0
+            ? `${GBP_SYMBOL}${facts.deposit_amount}`
+            : 'No deposit'
+          : 'Not entered',
+    },
+    {
+      label: 'Start date',
+      value: facts.tenancy_start_date
+        ? new Date(facts.tenancy_start_date).toLocaleDateString('en-GB')
+        : 'Not entered',
+    },
+    {
+      label: 'Jurisdiction',
+      value: facts.__meta?.jurisdiction || 'england',
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <section
+        className={`rounded-[1.6rem] border px-5 py-5 shadow-sm ${
+          allComplete ? 'border-violet-200 bg-violet-50' : 'border-amber-200 bg-amber-50'
+        }`}
+      >
+        <p className={`text-[11px] font-semibold uppercase tracking-[0.16em] ${allComplete ? 'text-violet-700' : 'text-amber-700'}`}>
+          Review your tenancy file
+        </p>
+        <h3 className={`mt-2 text-xl font-semibold tracking-tight ${allComplete ? 'text-violet-950' : 'text-amber-950'}`}>
+          {allComplete ? 'This file is ready to generate' : 'You still need to finish a few sections before this file is ready'}
+        </h3>
+        <p className={`mt-2 text-sm leading-6 ${allComplete ? 'text-violet-800' : 'text-amber-800'}`}>
+          {residentialProduct
+            ? `You are preparing ${RESIDENTIAL_LETTING_PRODUCTS[residentialProduct].label.toLowerCase()} documents from the tenancy facts you have entered.`
+            : `You are preparing ${isPremiumTier(facts.product_tier) ? terminology.premiumTier.toLowerCase() : terminology.standardTier.toLowerCase()} documents for this let.`}
+        </p>
+      </section>
+
+      <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
+        <h4 className="text-lg font-semibold tracking-tight text-[#20103f]">What you are preparing</h4>
+        <p className="mt-2 text-sm leading-6 text-[#62597c]">
+          Check the tenancy facts below before you generate the file. This should read like the right agreement for the property, parties, and payment terms.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {reviewSummary.map((item) => (
+            <div key={item.label} className="rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7b56d8]">{item.label}</p>
+              <p className="mt-2 text-sm font-medium text-[#221342]">{item.value}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="rounded-[1.6rem] border border-amber-200 bg-amber-50 px-5 py-5">
+        <h4 className="text-lg font-semibold tracking-tight text-amber-950">What must be fixed before you continue</h4>
+        {incompleteSections.length > 0 ? (
+          <div className="mt-4 space-y-3">
+            {incompleteSections.map((section) => (
+              <div key={section} className="rounded-2xl border border-white/70 bg-white/75 px-4 py-4">
+                <p className="text-sm font-semibold text-amber-950">{section}</p>
+                <p className="mt-1 text-sm leading-6 text-amber-800">
+                  This section still needs answers before the tenancy file can be generated cleanly.
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-3">
+            <p className="text-sm font-medium text-amber-950">No incomplete sections are showing</p>
+            <p className="mt-1 text-sm leading-6 text-amber-800">
+              The current tenancy facts cover the required sections for this file.
+            </p>
+          </div>
+        )}
+      </section>
+
+      <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
+        <h4 className="text-lg font-semibold tracking-tight text-[#20103f]">Included in your file</h4>
+        <p className="mt-2 text-sm leading-6 text-[#62597c]">
+          These are the documents and supporting records this flow prepares from your answers.
+        </p>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {includedDocuments.map((document) => (
+            <div key={document} className="rounded-2xl border border-[#e7dbff] bg-[#faf7ff] px-4 py-4">
+              <p className="text-sm font-semibold text-[#27134a]">{document}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={isWizardUiV3Enabled ? "rounded-[1.6rem] border border-violet-200 bg-violet-50 px-5 py-5" : "rounded-[1.6rem] border border-green-200 bg-green-50 px-5 py-5"}>
+        <h4 className={isWizardUiV3Enabled ? "text-lg font-semibold tracking-tight text-violet-950" : "text-lg font-semibold tracking-tight text-green-900"}>
+          {allComplete ? 'Ready to generate' : 'Almost ready'}
+        </h4>
+        <p className={isWizardUiV3Enabled ? "mt-2 text-sm leading-6 text-violet-800" : "mt-2 text-sm leading-6 text-green-700"}>
+          {allComplete
+            ? 'Everything needed for this tenancy file is in place. You can now continue to generate the documents.'
+            : 'Finish the remaining sections first, then come back here for one last check before generating.'}
+        </p>
+      </section>
     </div>
   );
 };

@@ -168,10 +168,10 @@ export function SmartReviewPanel({
           {/* Title */}
           <div className="text-left">
             <span className="font-medium text-gray-900">
-              Document Review
+              Uploaded document check
               {hasWarnings && (
                 <span className="ml-2 text-sm font-normal text-gray-600">
-                  ({warnings.length} item{warnings.length !== 1 ? 's' : ''} to review)
+                  ({warnings.length} thing{warnings.length !== 1 ? 's' : ''} to look at)
                 </span>
               )}
             </span>
@@ -195,7 +195,7 @@ export function SmartReviewPanel({
           {!hasWarnings && summary && (
             <div className="text-center py-4">
               <RiCheckboxCircleLine className="w-12 h-12 mx-auto text-[#7C3AED] mb-2" />
-              <p className="text-green-800 font-medium">No issues found</p>
+              <p className="text-green-800 font-medium">Nothing obvious to fix from your uploads</p>
               <p className="text-sm text-gray-500 mt-1">
                 Your documents appear to match the information you provided.
               </p>

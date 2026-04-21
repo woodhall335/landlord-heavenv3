@@ -1,17 +1,13 @@
 /**
  * Review Section - Eviction Wizard
  *
- * Step 10: Final review showing blockers, warnings, and documents to be generated.
+ * Final review for the public eviction products.
  *
- * Displays:
- * - Blockers: Cannot proceed until resolved
- * - Warnings: Can proceed but should be aware
- * - Section completion status
- * - Documents that will be generated
- *
- * Legal Context:
- * - Section 8: Form 3 (notice), N5 + N119 (court forms)
- * - Section 21: Form 6A (notice), N5B (accelerated court form)
+ * The review step should feel like a landlord file review:
+ * - what is being prepared
+ * - what must be fixed before continuing
+ * - what could cause problems later
+ * - what the pack includes
  */
 
 'use client';
@@ -19,7 +15,13 @@
 import React, { useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
-import { RiCheckLine, RiErrorWarningLine, RiArrowDownCircleLine, RiFileTextLine, RiCalendarLine } from 'react-icons/ri';
+import {
+  RiArrowDownCircleLine,
+  RiCalendarLine,
+  RiCheckLine,
+  RiErrorWarningLine,
+  RiFileTextLine,
+} from 'react-icons/ri';
 import { calculateFilingWindow, formatDate } from '@/lib/validators/s21-court-pack';
 
 interface WizardSection {
@@ -52,55 +54,42 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
 }) => {
   const evictionRoute = facts.eviction_route as 'section_8' | 'section_21' | undefined;
 
-  // Calculate filing window for Section 21 cases
   const filingWindowInfo = useMemo(() => {
-    if (evictionRoute !== 'section_21') return null;
+    if (jurisdiction !== 'wales' || evictionRoute !== 'section_21') return null;
 
     const serviceDate = facts.notice_service_date as string | undefined;
-    const possessionDate = facts.notice_expiry_date as string | undefined; // This is the earliest possession date
+    const possessionDate = facts.notice_expiry_date as string | undefined;
 
     if (!serviceDate || !possessionDate) return null;
 
     return calculateFilingWindow(serviceDate, possessionDate);
-  }, [evictionRoute, facts.notice_service_date, facts.notice_expiry_date]);
+  }, [evictionRoute, facts.notice_expiry_date, facts.notice_service_date, jurisdiction]);
 
-  // Collect all blockers and warnings from all sections
   const { blockers, warnings, incompleteRequired } = useMemo(() => {
     const allBlockers: Array<{ section: string; message: string }> = [];
     const allWarnings: Array<{ section: string; message: string }> = [];
     const incomplete: Array<{ section: string; sectionId: string }> = [];
 
     sections.forEach((section) => {
-      // Check route visibility
-      if (section.routes && evictionRoute && !section.routes.includes(evictionRoute)) {
-        return; // Skip sections not applicable to this route
-      }
-
-      // Skip review section itself
+      if (section.routes && evictionRoute && !section.routes.includes(evictionRoute)) return;
       if (section.id === 'review') return;
 
-      // Check completion
       if (!section.isComplete(facts)) {
         incomplete.push({ section: section.label, sectionId: section.id });
       }
 
-      // Check blockers
-      const sectionBlockers = section.hasBlockers?.(facts) || [];
-      sectionBlockers.forEach((msg) => {
-        allBlockers.push({ section: section.label, message: msg });
+      (section.hasBlockers?.(facts) || []).forEach((message) => {
+        allBlockers.push({ section: section.label, message });
       });
 
-      // Check warnings
-      const sectionWarnings = section.hasWarnings?.(facts) || [];
-      sectionWarnings.forEach((msg) => {
-        allWarnings.push({ section: section.label, message: msg });
+      (section.hasWarnings?.(facts) || []).forEach((message) => {
+        allWarnings.push({ section: section.label, message });
       });
     });
 
-    // Add ground 8 specific check
     if (evictionRoute === 'section_8') {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      const hasGround8 = selectedGrounds.some((g) => g.includes('Ground 8'));
+      const hasGround8 = selectedGrounds.some((ground) => ground.includes('Ground 8'));
 
       if (hasGround8) {
         const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
@@ -108,20 +97,20 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
         if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
           allBlockers.push({
             section: 'Arrears Schedule',
-            message: 'Ground 8 requires a completed arrears schedule',
+            message: 'Ground 8 requires a completed arrears schedule before the notice and claim file can be generated cleanly.',
           });
         } else {
           const validation = validateGround8Eligibility({
             arrears_items: arrearsItems,
             rent_amount: facts.rent_amount || 0,
             rent_frequency: facts.rent_frequency || 'monthly',
-            jurisdiction: 'england',
+            jurisdiction: jurisdiction === 'england' ? 'england' : 'wales',
           });
 
           if (!validation.is_eligible) {
             allBlockers.push({
               section: 'Arrears Schedule',
-              message: `Ground 8 threshold not met: ${validation.arrears_in_months?.toFixed(2) || 0} months arrears (minimum 2 required)`,
+              message: `Ground 8 threshold not met yet: ${validation.arrears_in_months?.toFixed(2) || 0} months arrears recorded (${validation.threshold_label || `${validation.threshold_months} months`} required).`,
             });
           }
         }
@@ -129,112 +118,210 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
     }
 
     return { blockers: allBlockers, warnings: allWarnings, incompleteRequired: incomplete };
-  }, [sections, facts, evictionRoute]);
+  }, [evictionRoute, facts, jurisdiction, sections]);
 
-  // Determine documents to generate
   const documentsToGenerate = useMemo(() => {
-    const docs: Array<{ name: string; description: string }> = [];
-
-    if (evictionRoute === 'section_21') {
-      docs.push(
-        { name: 'Form 6A', description: 'Section 21 Notice seeking possession' },
-        { name: 'N5B', description: 'Claim form for accelerated possession (Section 21)' },
-      );
-    } else if (evictionRoute === 'section_8') {
-      docs.push(
-        { name: 'Form 3', description: 'Section 8 Notice seeking possession' },
-        { name: 'N5', description: 'Claim form for possession (Section 8)' },
-        { name: 'N119', description: 'Particulars of claim for possession' },
-      );
-
-      // Add arrears schedule if arrears grounds
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      const hasArrearsGround = selectedGrounds.some((g) =>
-        ['Ground 8', 'Ground 10', 'Ground 11'].some((ag) => g.includes(ag))
-      );
-      if (hasArrearsGround) {
-        docs.push({ name: 'Arrears Schedule', description: 'Detailed rent arrears breakdown' });
-      }
+    if (jurisdiction === 'england') {
+      return [
+        { name: 'Form 3A notice', description: 'Current England possession notice for the selected grounds.' },
+        { name: 'Form N5', description: 'Claim form for the possession proceedings.' },
+        { name: 'Form N119', description: 'Particulars of claim for the court file.' },
+        { name: 'Schedule of arrears', description: 'Running arrears breakdown for rent-based grounds.' },
+        { name: 'Evidence collection checklist', description: 'Checklist for the documents you need to support the claim.' },
+        { name: 'Proof of service certificate', description: 'Record of how and when the notice was served.' },
+        { name: 'Witness statement', description: 'Structured statement setting out the possession case.' },
+        { name: 'Court bundle index', description: 'Index for the court-ready evidence bundle.' },
+        { name: 'Hearing checklist', description: 'Practical checklist for filing and the hearing stage.' },
+        { name: 'Arrears engagement letter', description: 'Landlord-facing arrears engagement record.' },
+        { name: 'Eviction case summary', description: 'Concise overview of the file you are preparing.' },
+      ];
     }
 
-    // Always include roadmap
-    docs.push({ name: 'Eviction Roadmap', description: 'Next steps guide for your claim' });
+    if (evictionRoute === 'section_21') {
+      return [
+        { name: 'Form 6A', description: 'Section 21 notice seeking possession.' },
+        { name: 'N5B', description: 'Accelerated possession claim form.' },
+        { name: 'Case roadmap', description: 'Next steps guide for the possession claim.' },
+      ];
+    }
 
-    return docs;
-  }, [evictionRoute, facts.section8_grounds]);
+    return [
+      { name: 'Form 3 notice', description: 'Section 8 notice seeking possession.' },
+      { name: 'N5', description: 'Claim form for possession.' },
+      { name: 'N119', description: 'Particulars of claim for possession.' },
+      { name: 'Arrears schedule', description: 'Detailed rent arrears breakdown where rent grounds are used.' },
+      { name: 'Case roadmap', description: 'Next steps guide for the possession claim.' },
+    ];
+  }, [evictionRoute, jurisdiction]);
 
-  const canProceed = blockers.length === 0 && incompleteRequired.length === 0;
+  const filingWindowBlocker = filingWindowInfo?.warning?.blocking
+    ? { section: 'Filing window', message: filingWindowInfo.warning.message }
+    : null;
+  const filingWindowWarning =
+    filingWindowInfo?.warning && !filingWindowInfo.warning.blocking
+      ? { section: 'Filing window', message: filingWindowInfo.warning.message }
+      : null;
+
+  const blockerItems = filingWindowBlocker ? [...blockers, filingWindowBlocker] : blockers;
+  const warningItems = filingWindowWarning ? [...warnings, filingWindowWarning] : warnings;
+  const canProceed = blockerItems.length === 0 && incompleteRequired.length === 0;
+
+  const packTitle =
+    jurisdiction === 'england'
+      ? 'Complete Eviction Pack'
+      : evictionRoute === 'section_21'
+        ? 'Section 21 possession pack'
+        : 'Section 8 possession pack';
+
+  const packDescription =
+    jurisdiction === 'england'
+      ? 'You are preparing the current England possession notice, court claim forms, and the supporting documents needed to file a full possession case.'
+      : evictionRoute === 'section_21'
+        ? 'You are preparing a Section 21 notice and the accelerated possession paperwork for this claim.'
+        : 'You are preparing a Section 8 notice and the supporting court forms for this claim.';
 
   return (
     <div className="space-y-8">
-      {/* Summary Header */}
-      <div className={`p-4 rounded-lg border ${
-        canProceed
-          ? 'bg-green-50 border-green-200'
-          : 'bg-amber-50 border-amber-200'
-      }`}>
-        <h3 className={`text-lg font-medium ${
-          canProceed ? 'text-green-900' : 'text-amber-900'
-        }`}>
-          {canProceed
-            ? '✓ Ready to Generate Case Bundle'
-            : '⚠ Please Resolve Issues Before Proceeding'
-          }
+      <section
+        className={`rounded-[1.6rem] border px-5 py-5 shadow-sm ${
+          canProceed ? 'border-emerald-200 bg-emerald-50 text-emerald-900' : 'border-amber-200 bg-amber-50 text-amber-900'
+        }`}
+      >
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] opacity-75">Review your pack</p>
+        <h3 className="mt-2 text-xl font-semibold tracking-tight">
+          {canProceed ? 'This pack is ready to generate' : 'You still need to fix a few things before this pack is ready'}
         </h3>
-        <p className={`text-sm mt-1 ${
-          canProceed ? 'text-green-800' : 'text-amber-800'
-        }`}>
-          {evictionRoute === 'section_21'
-            ? 'England Section 21 Complete Pack'
-            : 'England Section 8 Complete Pack'
-          }
-        </p>
-      </div>
+        <p className="mt-2 text-sm leading-6 opacity-90">{packTitle}</p>
+      </section>
 
-      {/* Filing Window Warning (Section 21 only) */}
+      <ReviewCard title="What you are preparing" description={packDescription}>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <SummaryValue label="File reference" value={caseId} />
+          <SummaryValue label="Jurisdiction" value={jurisdiction === 'england' ? 'England' : 'Wales'} />
+          <SummaryValue
+            label="Route"
+            value={
+              jurisdiction === 'england'
+                ? 'Form 3A possession route'
+                : evictionRoute === 'section_21'
+                  ? 'Section 21 possession route'
+                  : 'Section 8 possession route'
+            }
+          />
+          <SummaryValue
+            label="Notice served"
+            value={facts.notice_service_date ? formatDate(facts.notice_service_date as string) : 'Not yet recorded'}
+          />
+        </div>
+      </ReviewCard>
+
+      <ReviewListCard
+        title="What must be fixed before you continue"
+        emptyTitle="No blocker-level issues are showing"
+        emptyDescription="The pack is not missing any required answers or blocker-level checks at the moment."
+        tone="danger"
+        items={[
+          ...incompleteRequired.map((item) => ({
+            section: item.section,
+            message: 'This section still needs to be completed before the full pack can be generated cleanly.',
+            sectionId: item.sectionId,
+          })),
+          ...blockerItems.map((item) => ({
+            section: item.section,
+            message: item.message,
+          })),
+        ]}
+        onJumpToSection={onJumpToSection}
+      />
+
+      <ReviewListCard
+        title="What could slow things down later"
+        emptyTitle="No extra warnings right now"
+        emptyDescription="There are no non-blocking warnings showing for the current facts."
+        tone="warning"
+        items={warningItems.map((item) => ({
+          section: item.section,
+          message: item.message,
+        }))}
+      />
+
+      <ReviewCard
+        title="Included in your pack"
+        description="These are the documents this product prepares from the answers you have given."
+      >
+        <div className="grid gap-3 md:grid-cols-2">
+          {documentsToGenerate.map((doc) => (
+            <div
+              key={doc.name}
+              className="flex items-start gap-3 rounded-2xl border border-[#e7dbff] bg-[#faf7ff] px-4 py-4"
+            >
+              <RiFileTextLine className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#7C3AED]" />
+              <div>
+                <p className="text-sm font-semibold text-[#27134a]">{doc.name}</p>
+                <p className="mt-1 text-sm leading-6 text-[#62597c]">{doc.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </ReviewCard>
+
       {filingWindowInfo?.warning && (
-        <div className={`p-4 rounded-lg border ${
-          filingWindowInfo.warning.severity === 'error'
-            ? 'bg-red-50 border-red-300'
-            : 'bg-amber-50 border-amber-200'
-        }`}>
+        <div
+          className={`rounded-[1.4rem] border p-4 ${
+            filingWindowInfo.warning.severity === 'error' ? 'border-red-300 bg-red-50' : 'border-amber-200 bg-amber-50'
+          }`}
+        >
           <div className="flex items-start gap-3">
-            <RiCalendarLine className={`h-5 w-5 mt-0.5 flex-shrink-0 ${
-              filingWindowInfo.warning.severity === 'error' ? 'text-red-500' : 'text-amber-500'
-            }`} />
+            <RiCalendarLine
+              className={`mt-0.5 h-5 w-5 flex-shrink-0 ${
+                filingWindowInfo.warning.severity === 'error' ? 'text-red-500' : 'text-amber-500'
+              }`}
+            />
             <div className="flex-1">
-              <h4 className={`font-medium ${
-                filingWindowInfo.warning.severity === 'error' ? 'text-red-900' : 'text-amber-900'
-              }`}>
-                {filingWindowInfo.warning.blocking ? 'Filing Window Issue' : 'Filing Window Notice'}
+              <h4
+                className={`font-medium ${
+                  filingWindowInfo.warning.severity === 'error' ? 'text-red-900' : 'text-amber-900'
+                }`}
+              >
+                Filing window check
               </h4>
-              <p className={`text-sm mt-1 ${
-                filingWindowInfo.warning.severity === 'error' ? 'text-red-800' : 'text-amber-800'
-              }`}>
+              <p
+                className={`mt-1 text-sm ${
+                  filingWindowInfo.warning.severity === 'error' ? 'text-red-800' : 'text-amber-800'
+                }`}
+              >
                 {filingWindowInfo.warning.message}
               </p>
               {filingWindowInfo.warning.helpText && (
-                <p className={`text-sm mt-2 ${
-                  filingWindowInfo.warning.severity === 'error' ? 'text-red-700' : 'text-amber-700'
-                }`}>
+                <p
+                  className={`mt-2 text-sm ${
+                    filingWindowInfo.warning.severity === 'error' ? 'text-red-700' : 'text-amber-700'
+                  }`}
+                >
                   {filingWindowInfo.warning.helpText}
                 </p>
               )}
               {filingWindowInfo.windowDays > 0 && (
-                <div className={`mt-3 p-2 rounded ${
-                  filingWindowInfo.warning.severity === 'error' ? 'bg-red-100' : 'bg-amber-100'
-                }`}>
-                  <p className={`text-xs font-medium ${
-                    filingWindowInfo.warning.severity === 'error' ? 'text-red-900' : 'text-amber-900'
-                  }`}>
-                    Key Dates:
+                <div
+                  className={`mt-3 rounded-xl px-3 py-3 ${
+                    filingWindowInfo.warning.severity === 'error' ? 'bg-red-100' : 'bg-amber-100'
+                  }`}
+                >
+                  <p
+                    className={`text-xs font-semibold uppercase tracking-[0.12em] ${
+                      filingWindowInfo.warning.severity === 'error' ? 'text-red-900' : 'text-amber-900'
+                    }`}
+                  >
+                    Key dates
                   </p>
-                  <ul className={`text-xs mt-1 space-y-0.5 ${
-                    filingWindowInfo.warning.severity === 'error' ? 'text-red-800' : 'text-amber-800'
-                  }`}>
-                    <li>• Earliest court application: {formatDate(facts.notice_expiry_date as string)}</li>
-                    <li>• Notice expires: {formatDate(filingWindowInfo.expiryDate)}</li>
-                    <li>• Filing window: {filingWindowInfo.windowDays} days</li>
+                  <ul
+                    className={`mt-2 space-y-1 text-sm ${
+                      filingWindowInfo.warning.severity === 'error' ? 'text-red-800' : 'text-amber-800'
+                    }`}
+                  >
+                    <li>Earliest court application: {formatDate(facts.notice_expiry_date as string)}</li>
+                    <li>Notice expires: {formatDate(filingWindowInfo.expiryDate)}</li>
+                    <li>Filing window: {filingWindowInfo.windowDays} days</li>
                   </ul>
                 </div>
               )}
@@ -243,91 +330,14 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
         </div>
       )}
 
-      {/* Case Info */}
-      <div className="space-y-2 rounded-md border border-gray-200 bg-gray-50 p-3 text-sm">
-        <p>
-          <span className="font-semibold">Case ID:</span> {caseId}
-        </p>
-        <p>
-          <span className="font-semibold">Jurisdiction:</span> {jurisdiction}
-        </p>
-      </div>
-
-      {/* Incomplete Sections */}
-      {incompleteRequired.length > 0 && (
-        <div className="space-y-3">
-          <h4 className="text-sm font-medium text-gray-900">
-            Incomplete Sections ({incompleteRequired.length})
-          </h4>
-          <div className="space-y-2">
-            {incompleteRequired.map((item) => (
-              <div
-                key={item.sectionId}
-                className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg"
-              >
-                <span className="text-sm text-gray-700">{item.section}</span>
-                <button
-                  type="button"
-                  onClick={() => onJumpToSection(item.sectionId)}
-                  className="text-sm text-[#7C3AED] hover:text-[#6D28D9] font-medium"
-                >
-                  Complete →
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Blockers */}
-      {blockers.length > 0 && (
-        <div className="space-y-3">
-          <h4 className="text-sm font-medium text-red-900">
-            Blockers - Must Fix ({blockers.length})
-          </h4>
-          <div className="space-y-2">
-            {blockers.map((blocker, i) => (
-              <div
-                key={i}
-                className="p-3 bg-red-50 border border-red-200 rounded-lg"
-              >
-                <p className="text-sm text-red-800">
-                  <strong>{blocker.section}:</strong> {blocker.message}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Warnings */}
-      {warnings.length > 0 && (
-        <div className="space-y-3">
-          <h4 className="text-sm font-medium text-amber-900">
-            Warnings - Review Recommended ({warnings.length})
-          </h4>
-          <div className="space-y-2">
-            {warnings.map((warning, i) => (
-              <div
-                key={i}
-                className="p-3 bg-amber-50 border border-amber-200 rounded-lg"
-              >
-                <p className="text-sm text-amber-800">
-                  <strong>{warning.section}:</strong> {warning.message}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Section Status Summary */}
-      <div className="space-y-3">
-        <h4 className="text-sm font-medium text-gray-900">Section Status</h4>
-        <div className="grid grid-cols-2 gap-2">
+      <ReviewCard
+        title="Sections in this pack"
+        description="Use these to jump back and tighten anything that still needs attention."
+      >
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
           {sections
-            .filter((s) => s.id !== 'review')
-            .filter((s) => !s.routes || !evictionRoute || s.routes.includes(evictionRoute))
+            .filter((section) => section.id !== 'review')
+            .filter((section) => !section.routes || !evictionRoute || section.routes.includes(evictionRoute))
             .map((section) => {
               const isComplete = section.isComplete(facts);
               const hasIssues = (section.hasBlockers?.(facts) || []).length > 0;
@@ -337,81 +347,146 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
                   key={section.id}
                   onClick={() => onJumpToSection(section.id)}
                   className={`
-                    flex items-center justify-between p-2 rounded-md text-left text-sm transition-colors
+                    flex items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm transition-colors
                     ${isComplete && !hasIssues
-                      ? 'bg-green-50 text-green-800 hover:bg-green-100'
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-100'
                       : hasIssues
-                        ? 'bg-red-50 text-red-800 hover:bg-red-100'
-                        : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                        ? 'border-red-200 bg-red-50 text-red-900 hover:bg-red-100'
+                        : 'border-[#e7dbff] bg-white text-[#584e73] hover:bg-[#faf7ff]'
                     }
                   `}
                 >
                   <span className="flex items-center gap-2">
-                    {isComplete && !hasIssues && (
-                      <RiCheckLine className="w-4 h-4 text-[#7C3AED]" />
-                    )}
-                    {hasIssues && (
-                      <RiErrorWarningLine className="w-4 h-4 text-[#7C3AED]" />
-                    )}
-                    {!isComplete && !hasIssues && (
-                      <RiArrowDownCircleLine className="w-4 h-4 text-[#7C3AED]" />
-                    )}
+                    {isComplete && !hasIssues ? <RiCheckLine className="h-4 w-4 text-[#7C3AED]" /> : null}
+                    {hasIssues ? <RiErrorWarningLine className="h-4 w-4 text-[#7C3AED]" /> : null}
+                    {!isComplete && !hasIssues ? <RiArrowDownCircleLine className="h-4 w-4 text-[#7C3AED]" /> : null}
                     {section.label}
                   </span>
-                  <span className="text-xs">Edit</span>
+                  <span className="text-xs font-semibold uppercase tracking-[0.12em] opacity-70">Edit</span>
                 </button>
               );
             })}
         </div>
-      </div>
+      </ReviewCard>
 
-      {/* Documents to Generate */}
-      <div className="space-y-3">
-        <h4 className="text-sm font-medium text-gray-900">Documents to Generate</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {documentsToGenerate.map((doc) => (
-            <div
-              key={doc.name}
-              className="flex items-center gap-3 p-3 bg-purple-50 border border-purple-200 rounded-lg"
-            >
-              <RiFileTextLine className="w-5 h-5 text-[#7C3AED] flex-shrink-0" />
-              <div>
-                <p className="text-sm font-medium text-purple-900">{doc.name}</p>
-                <p className="text-xs text-purple-700">{doc.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Generate Button */}
-      <div className="pt-4 border-t border-gray-200">
+      <div className="border-t border-[#ebe4ff] pt-2">
         <button
           type="button"
           onClick={onComplete}
           disabled={!canProceed}
           className={`
-            w-full py-3 px-6 text-base font-medium rounded-lg transition-colors
+            w-full rounded-2xl px-6 py-4 text-base font-semibold transition-colors
             ${canProceed
-              ? 'bg-green-600 text-white hover:bg-green-700'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ? 'bg-[linear-gradient(135deg,#7c3aed,#5b21b6)] text-white shadow-[0_20px_40px_rgba(91,33,182,0.28)] hover:brightness-105'
+              : 'cursor-not-allowed bg-gray-200 text-gray-500'
             }
           `}
         >
-          {canProceed
-            ? 'Generate Complete Pack'
-            : 'Resolve Issues to Continue'
-          }
+          {canProceed ? 'Continue to generate the complete pack' : 'Fix the issues above to continue'}
         </button>
-
-        {canProceed && (
-          <p className="text-xs text-center text-gray-500 mt-2">
-            This will generate all documents ready for submission to the court.
-          </p>
-        )}
+        <p className="mt-3 text-center text-sm text-[#6a627f]">
+          {canProceed
+            ? 'You will be able to preview the paperwork again before payment.'
+            : 'Use the section links above to finish the file cleanly before generating.'}
+        </p>
       </div>
     </div>
   );
 };
+
+function ReviewCard({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
+      <h4 className="text-lg font-semibold tracking-tight text-[#20103f]">{title}</h4>
+      {description ? <p className="mt-2 text-sm leading-6 text-[#62597c]">{description}</p> : null}
+      <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+function ReviewListCard({
+  title,
+  emptyTitle,
+  emptyDescription,
+  tone,
+  items,
+  onJumpToSection,
+}: {
+  title: string;
+  emptyTitle: string;
+  emptyDescription: string;
+  tone: 'danger' | 'warning';
+  items: Array<{ section: string; message: string; sectionId?: string }>;
+  onJumpToSection?: (sectionId: string) => void;
+}) {
+  const styles =
+    tone === 'danger'
+      ? {
+          container: 'border-red-200 bg-red-50',
+          title: 'text-red-900',
+          body: 'text-red-800',
+        }
+      : {
+          container: 'border-amber-200 bg-amber-50',
+          title: 'text-amber-900',
+          body: 'text-amber-800',
+        };
+
+  return (
+    <section className={`rounded-[1.6rem] border px-5 py-5 ${styles.container}`}>
+      <h4 className={`text-lg font-semibold tracking-tight ${styles.title}`}>{title}</h4>
+      {items.length === 0 ? (
+        <div className="mt-3">
+          <p className={`text-sm font-medium ${styles.title}`}>{emptyTitle}</p>
+          <p className={`mt-1 text-sm leading-6 ${styles.body}`}>{emptyDescription}</p>
+        </div>
+      ) : (
+        <div className="mt-4 space-y-3">
+          {items.map((item, index) => (
+            <div key={`${item.section}-${index}`} className="rounded-2xl border border-white/70 bg-white/75 px-4 py-4">
+              {(() => {
+                const sectionId = item.sectionId;
+                return (
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className={`text-sm font-semibold ${styles.title}`}>{item.section}</p>
+                  <p className={`mt-1 text-sm leading-6 ${styles.body}`}>{item.message}</p>
+                </div>
+                {sectionId && onJumpToSection ? (
+                  <button
+                    type="button"
+                    onClick={() => onJumpToSection(sectionId)}
+                    className="rounded-full border border-current/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#7C3AED]"
+                  >
+                    Edit
+                  </button>
+                ) : null}
+              </div>
+                );
+              })()}
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function SummaryValue({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-3">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7b56d8]">{label}</p>
+      <p className="mt-2 text-sm font-medium text-[#221342]">{value}</p>
+    </div>
+  );
+}
 
 export default ReviewSection;

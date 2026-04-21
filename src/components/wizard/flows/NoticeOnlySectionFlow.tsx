@@ -1114,9 +1114,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
     return (
       <div className="space-y-6">
-        {/* Completion status */}
+        {/* What still needs attention */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900">Section Completion</h3>
+          <h3 className="text-lg font-medium text-gray-900">What still needs attention</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {visibleSections
               .filter((s) => s.id !== 'review')
@@ -1151,7 +1151,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         {/* Blockers */}
         {overallBlockers.length > 0 && (
           <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-            <h3 className="text-sm font-medium text-red-800 mb-2">Issues to Resolve</h3>
+            <h3 className="text-sm font-medium text-red-800 mb-2">You need to fix these before this pack is ready</h3>
             <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
               {overallBlockers.map((blocker, i) => (
                 <li key={i}>{blocker}</li>
@@ -1163,7 +1163,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         {/* Incomplete sections */}
         {incompleteRequiredSections.length > 0 && overallBlockers.length === 0 && (
           <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <h3 className="text-sm font-medium text-amber-800 mb-2">Incomplete Sections</h3>
+            <h3 className="text-sm font-medium text-amber-800 mb-2">Finish these sections before you continue</h3>
             <p className="text-sm text-amber-700">
               Please complete: {incompleteRequiredSections.join(', ')}
             </p>
@@ -1173,7 +1173,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         {/* Ready to generate */}
         {allComplete && overallBlockers.length === 0 && (
           <div className={useVioletTone ? "p-4 bg-violet-50 border border-violet-200 rounded-lg" : "p-4 bg-green-50 border border-green-200 rounded-lg"}>
-            <h3 className={useVioletTone ? "text-sm font-medium text-violet-900 mb-2" : "text-sm font-medium text-green-800 mb-2"}>Ready to Generate</h3>
+            <h3 className={useVioletTone ? "text-sm font-medium text-violet-900 mb-2" : "text-sm font-medium text-green-800 mb-2"}>Your notice pack is ready</h3>
             <p className={useVioletTone ? "text-sm text-violet-700" : "text-sm text-green-700"}>
               All sections are complete. Click the button below to generate your notice.
             </p>
@@ -1182,7 +1182,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
         {/* Notice type summary */}
         <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
-          <h3 className="text-sm font-medium text-gray-900 mb-2">Notice Summary</h3>
+          <h3 className="text-sm font-medium text-gray-900 mb-2">What you are preparing</h3>
           <div className="text-sm text-gray-600 space-y-1">
             <p>
               <strong>Type:</strong> {getNoticeOnlyReviewType(jurisdiction, facts)}

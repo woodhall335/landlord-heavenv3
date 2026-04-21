@@ -5,6 +5,7 @@ import { WizardMainCardV3 } from './WizardMainCardV3';
 import { GuidancePanelV3 } from './GuidancePanelV3';
 import { WizardFooterNavV3 } from './WizardFooterNavV3';
 import { WizardTopBarV3 } from './WizardTopBarV3';
+import { WizardPackSummaryRail } from './WizardPackSummaryRail';
 import {
   getStepMetadata,
   resolveStepIconPath,
@@ -88,6 +89,16 @@ export function WizardShellV3({
 
       <div style={{ height: "calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))" }} aria-hidden="true" />
 
+      <div className="mx-auto max-w-[1240px] px-4 pt-4 lg:hidden">
+        <WizardPackSummaryRail
+          product={product}
+          tabs={tabs}
+          currentStepId={currentStepId}
+          currentStepLabel={sectionTitle}
+          mobile
+        />
+      </div>
+
       <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-stretch gap-6 px-4 pb-12 pt-4 lg:grid-cols-[minmax(0,1fr)_340px]">
         <WizardMainCardV3
           shellTitle={title}
@@ -148,6 +159,12 @@ export function WizardShellV3({
                   </span>
                 </div>
               </section>
+              <WizardPackSummaryRail
+                product={product}
+                tabs={tabs}
+                currentStepId={currentStepId}
+                currentStepLabel={sectionTitle}
+              />
               <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />
             </div>
           </div>
