@@ -347,6 +347,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [error, setError] = useState<string | null>(null);
 
   // Smart Review state (hydrated from persisted facts.__smart_review)
@@ -359,6 +360,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   // Debounced save refs
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingFactsRef = useRef<any>(null);
+  const saveResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load existing facts on mount
   useEffect(() => {
@@ -410,6 +412,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     async (updatedFacts: any) => {
       try {
         setSaving(true);
+        setSaveState('saving');
         setError(null);
 
         await saveCaseFacts(caseId, updatedFacts, {
@@ -417,9 +420,13 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
           caseType: 'money_claim',
           product: 'money_claim',
         });
+        setSaveState('saved');
+        if (saveResetTimeoutRef.current) clearTimeout(saveResetTimeoutRef.current);
+        saveResetTimeoutRef.current = setTimeout(() => setSaveState('idle'), 1600);
       } catch (err) {
         console.error('Failed to save facts:', err);
         setError('Failed to save. Please try again.');
+        setSaveState('idle');
       } finally {
         setSaving(false);
       }
@@ -442,6 +449,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
+      setSaveState('saving');
 
       // Set new timeout
       saveTimeoutRef.current = setTimeout(() => {
@@ -463,6 +471,9 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
         if (pendingFactsRef.current) {
           saveFactsToServer(pendingFactsRef.current);
         }
+      }
+      if (saveResetTimeoutRef.current) {
+        clearTimeout(saveResetTimeoutRef.current);
       }
     };
   }, [saveFactsToServer]);
@@ -764,6 +775,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
       product="money_claim"
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
+      saveState={saveState}
       banner={error ? (
         <div className="mb-6 rounded-[1.4rem] border border-red-200 bg-red-50 p-4">
           <div className="flex items-center justify-between">
@@ -804,7 +816,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
           </button>
 
           <div className="flex items-center justify-end gap-2">
-            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
+            {!isWizardUiV3Enabled && saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (
               <button

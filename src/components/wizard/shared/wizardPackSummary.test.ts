@@ -44,4 +44,22 @@ describe('getWizardPackSummary', () => {
     expect(summary.currentStepDocuments).toContain('Service instructions');
     expect(summary.currentStepDocuments).toContain('Service and validity checklist');
   });
+
+  it('maps Section 13 defensive proof and visual previews into the shared summary', () => {
+    const summary = getWizardPackSummary(
+      'section13_defensive',
+      [
+        { id: 'proposal', label: 'Proposal', isCurrent: true, isComplete: false },
+        { id: 'preview', label: 'Preview', isCurrent: false, isComplete: false },
+      ],
+      'proposal'
+    );
+
+    expect(summary.includedDocuments).toContain('Form 4A rent increase notice');
+    expect(summary.includedDocuments).toContain('Tribunal argument summary');
+    expect(summary.currentStepDocuments).toContain('Proof of service record');
+    expect(summary.proofCards.some((card) => card.title === 'Tribunal bundle')).toBe(true);
+    expect(summary.proofPreviews.some((preview) => preview.title === 'Form 4A notice')).toBe(true);
+    expect(summary.proofPreviews.some((preview) => preview.title === 'Tribunal argument summary')).toBe(true);
+  });
 });

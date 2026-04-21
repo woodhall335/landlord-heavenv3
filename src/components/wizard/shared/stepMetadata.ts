@@ -10,7 +10,9 @@ export type WizardProduct =
   | 'money_claim_scotland'
   | 'tenancy_agreement'
   | 'ast_standard'
-  | 'ast_premium';
+  | 'ast_premium'
+  | 'section13_standard'
+  | 'section13_defensive';
 
 export type StepMetadata = {
   iconKey: string;
@@ -103,6 +105,98 @@ const TENANCY_BASE: Record<string, StepMetadata> = {
   review: withChecklist([{ label: 'Validate party details' }, { label: 'Check tenancy economics' }, { label: 'Final readiness confirmation' }], 'Review is a final pass to improve clarity and accuracy before generating documents.', 'RiSearchEyeLine', '~2 min', 'summary-cards'),
 };
 
+const SECTION13_BASE: Record<string, StepMetadata> = {
+  tenancy: withChecklist(
+    [
+      { label: 'Tenant names' },
+      { label: 'Property address' },
+      { label: 'Current rent and frequency' },
+      { label: 'Tenancy dates' },
+    ],
+    'These details anchor the Form 4A notice, the service record, and the rent-increase report to the correct tenancy.',
+    'RiHome4Line',
+    '~4 min',
+    'tenancy'
+  ),
+  landlord: withChecklist(
+    [
+      { label: 'Landlord name' },
+      { label: 'Service address' },
+      { label: 'Agent details', optional: true },
+    ],
+    'Landlord and agent details flow into the notice and cover documents, so this needs to be clean and consistent.',
+    'RiUserStarLine',
+    '~3 min',
+    'landlord'
+  ),
+  proposal: withChecklist(
+    [
+      { label: 'Proposed rent' },
+      { label: 'Date served' },
+      { label: 'Proposed start date' },
+      { label: 'Service method' },
+    ],
+    'This step sets the dates and service method that drive the official Form 4A notice and the proof-of-service record.',
+    'RiFileList3Line',
+    '~4 min',
+    'claim-details'
+  ),
+  charges: withChecklist(
+    [
+      { label: 'Charges included in the rent' },
+      { label: 'Items paid separately', optional: true },
+    ],
+    'Charges included in the rent affect how the rent increase is explained and defended later in the pack.',
+    'RiReceiptLine',
+    '~2 min',
+    'bills'
+  ),
+  comparables: withChecklist(
+    [
+      { label: 'Comparable listings' },
+      { label: 'Rental evidence links' },
+      { label: 'Manual additions', optional: true },
+    ],
+    'Comparable evidence is what makes the proposed rent look grounded and defensible if the tenant challenges it.',
+    'RiSearchEyeLine',
+    '~5 min',
+    'evidence-pack'
+  ),
+  adjustments: withChecklist(
+    [
+      { label: 'Comparable adjustments' },
+      { label: 'Justification notes' },
+      { label: 'Case-specific narrative', optional: true },
+    ],
+    'Adjustments are where the report becomes landlord-specific rather than a simple rent scrape.',
+    'RiFileEditLine',
+    '~4 min',
+    'terms'
+  ),
+  preview: withChecklist(
+    [
+      { label: 'Rent banding' },
+      { label: 'Validation warnings' },
+      { label: 'Plan comparison' },
+    ],
+    'Preview is the final point to sense-check the increase, see the pack, and decide which outputs you need.',
+    'RiSearchEyeLine',
+    '~3 min',
+    'summary-cards'
+  ),
+  outputs: withChecklist(
+    [
+      { label: 'Paid plan status' },
+      { label: 'Document delivery' },
+      { label: 'Tribunal tools', optional: true },
+    ],
+    'Once paid, this step becomes the home for your generated documents and any defensive tribunal tools.',
+    'RiFolderUploadLine',
+    '~3 min',
+    'evidence-pack'
+  ),
+};
+
 const ALL_JURISDICTIONS: WizardJurisdiction[] = ['england', 'wales', 'scotland', 'northern-ireland'];
 const WIZARD_STEP_METADATA_ENTRIES: Array<[string, StepMetadata]> = [];
 
@@ -170,6 +264,10 @@ addEntries('complete_pack', 'england', {
   });
 });
 
+(['section13_standard', 'section13_defensive'] as const).forEach((product) => {
+  addEntries(product, 'england', SECTION13_BASE);
+});
+
 export const WIZARD_STEP_METADATA: Record<string, StepMetadata> = Object.fromEntries(
   WIZARD_STEP_METADATA_ENTRIES
 );
@@ -203,6 +301,10 @@ export function isSupportedJurisdictionForProduct(
     product === 'money_claim_england_wales' ||
     product === 'money_claim_scotland'
   ) {
+    return jurisdiction === 'england';
+  }
+
+  if (product === 'section13_standard' || product === 'section13_defensive') {
     return jurisdiction === 'england';
   }
 

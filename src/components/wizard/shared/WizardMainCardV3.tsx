@@ -8,6 +8,7 @@ interface WizardMainCardV3Props {
   stepIconPath?: string;
   stepNumber?: number;
   totalSteps?: number;
+  stepMotionKey?: string;
   banner?: React.ReactNode;
   children: React.ReactNode;
   navigation: React.ReactNode;
@@ -20,6 +21,7 @@ export function WizardMainCardV3({
   stepIconPath,
   stepNumber,
   totalSteps,
+  stepMotionKey,
   banner,
   children,
   navigation,
@@ -39,13 +41,33 @@ export function WizardMainCardV3({
               Step {stepNumber} of {totalSteps}
             </div>
           ) : null}
-          <StepHeaderV3 title={sectionTitle} description={sectionDescription} iconPath={stepIconPath} />
+          <div key={`${stepMotionKey || sectionTitle}-header`} className="wizard-step-fade">
+            <StepHeaderV3 title={sectionTitle} description={sectionDescription} iconPath={stepIconPath} />
+          </div>
         </div>
 
-        <div className="min-h-0 overflow-visible space-y-5">{children}</div>
+        <div key={stepMotionKey || sectionTitle} className="wizard-step-fade min-h-0 overflow-visible space-y-5">
+          {children}
+        </div>
 
         <div className="mt-6 shrink-0 md:mt-8">{navigation}</div>
       </div>
+      <style jsx>{`
+        .wizard-step-fade {
+          animation: wizardStepFade 220ms ease-out;
+        }
+
+        @keyframes wizardStepFade {
+          0% {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </main>
   );
 }

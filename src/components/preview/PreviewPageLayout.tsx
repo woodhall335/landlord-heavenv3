@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { DocumentList } from './DocumentList';
 import { DocumentInfo } from './DocumentCard';
+import { DocumentProofShowcase } from './DocumentProofShowcase';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { CheckCircle, Shield, Clock, Download, Scale, AlertTriangle, XCircle } from 'lucide-react';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
@@ -60,6 +61,21 @@ export function PreviewPageLayout({
   const [error, setError] = useState<string | null>(null);
   const [complianceBlock, setComplianceBlock] = useState<ComplianceBlockState | null>(null);
   const e2eModeEnabled = useMemo(() => process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true', []);
+  const proofEntries = useMemo(
+    () =>
+      documents
+        .map((document) => ({
+          id: document.id,
+          title: document.title,
+          description: document.description,
+          thumbnailUrl:
+            document.thumbnailUrl ||
+            (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : ''),
+          badge: document.category,
+        }))
+        .filter((document) => Boolean(document.thumbnailUrl)),
+    [documents]
+  );
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -174,6 +190,14 @@ export function PreviewPageLayout({
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Document List - 2 columns */}
           <div className="lg:col-span-2 space-y-6">
+            {proofEntries.length > 0 ? (
+              <DocumentProofShowcase
+                title="Actual draft generated from your answers"
+                description="These are live first-page previews from this case, so you can check the paperwork before payment without relying only on sample documents."
+                entries={proofEntries}
+              />
+            ) : null}
+
             {/* What's Included Card */}
             <div className="bg-white rounded-xl shadow-sm border p-6">
               <div className="flex items-center justify-between mb-4">

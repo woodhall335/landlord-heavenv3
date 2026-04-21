@@ -2,6 +2,13 @@
 
 import React from 'react';
 import { CourtFinderLink } from '@/components/wizard/shared/CourtFinderLink';
+import {
+  EVICTION_HINT_CLASS,
+  EVICTION_INPUT_CLASS,
+  EVICTION_LABEL_CLASS,
+  EVICTION_TEXTAREA_CLASS,
+  EVICTION_TINTED_CARD_CLASS,
+} from '@/components/wizard/sections/eviction/ui';
 
 /**
  * Court Details Section for Complete Pack Flows
@@ -49,7 +56,7 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
         <div className="space-y-2">
           <label
             htmlFor="court_name"
-            className="block text-sm font-medium text-gray-700"
+            className={EVICTION_LABEL_CLASS}
           >
             {isScotland ? 'Sheriff Court name' : 'Court name'}
             <span className="text-red-500 ml-1">*</span>
@@ -57,12 +64,12 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
           <input
             id="court_name"
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+            className={EVICTION_INPUT_CLASS}
             value={courtName}
             onChange={(e) => onUpdate({ court_name: e.target.value })}
             placeholder={isScotland ? 'e.g., Edinburgh Sheriff Court' : 'e.g., Manchester County Court'}
           />
-          <p className="text-xs text-gray-500">
+          <p className={EVICTION_HINT_CLASS}>
             Copy the court name exactly as shown in the {isScotland ? 'Scotcourts locator' : 'Court Finder'} results.
           </p>
         </div>
@@ -70,27 +77,27 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
         <div className="space-y-2">
           <label
             htmlFor="court_address"
-            className="block text-sm font-medium text-gray-700"
+            className={EVICTION_LABEL_CLASS}
           >
             Court address
             <span className="text-red-500 ml-1">*</span>
           </label>
           <textarea
             id="court_address"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[100px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+            className={`${EVICTION_TEXTAREA_CLASS} min-h-[120px]`}
             value={courtAddress}
             onChange={(e) => onUpdate({ court_address: e.target.value })}
             placeholder={isScotland ? 'e.g., 27 Chambers Street, Edinburgh, EH1 1LB' : 'e.g., 1 Bridge Street West, Manchester, M60 9DJ'}
           />
-          <p className="text-xs text-gray-500">
+          <p className={EVICTION_HINT_CLASS}>
             Copy the full court address from the {isScotland ? 'Scotcourts locator' : 'Court Finder'}, including the
             postcode.
           </p>
         </div>
       </div>
 
-      <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
-        <p className="text-xs text-amber-800">
+      <div className={`${EVICTION_TINTED_CARD_CLASS} border-amber-200 bg-amber-50`}>
+        <p className="text-sm leading-6 text-amber-900">
           <strong>Important:</strong> Ensure the court details are correct. Court
           forms with incorrect court information may be rejected or cause delays
           in your {isScotland ? 'eviction proceedings' : 'possession claim'}.

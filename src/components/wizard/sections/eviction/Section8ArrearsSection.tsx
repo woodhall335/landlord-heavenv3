@@ -31,6 +31,13 @@ import { AskHeavenInlineEnhancer } from '../../AskHeavenInlineEnhancer';
 import { useValidationContextSafe } from '@/components/wizard/ValidationContext';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
+import {
+  EVICTION_CARD_CLASS,
+  EVICTION_HINT_CLASS,
+  EVICTION_LABEL_CLASS,
+  EVICTION_TEXTAREA_CLASS,
+  EVICTION_TINTED_CARD_CLASS,
+} from '@/components/wizard/sections/eviction/ui';
 
 interface Section8ArrearsSectionProps {
   facts: WizardFacts;
@@ -251,7 +258,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   if (!hasAnyArrearsGround) {
     return (
       <div className="space-y-6">
-        <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+        <div className={`${EVICTION_CARD_CLASS} border-gray-200 bg-gray-50`}>
           <h4 className="text-sm font-medium text-gray-900 mb-2">
             No Arrears Grounds Selected
           </h4>
@@ -277,7 +284,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   if (missingPrerequisites.length > 0) {
     return (
       <div className="space-y-6">
-        <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+        <div className={`${EVICTION_TINTED_CARD_CLASS} border-amber-200 bg-amber-50`}>
           <h4 className="text-sm font-medium text-amber-900 mb-2">
             Missing Required Information
           </h4>
@@ -297,7 +304,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   return (
     <div className="space-y-6">
       {/* Ground info */}
-      <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+      <div className={`${EVICTION_TINTED_CARD_CLASS} border-purple-200 bg-purple-50`}>
         <h4 className="text-sm font-medium text-purple-900 mb-2">
           {hasGround8 ? 'Ground 8 Arrears Schedule (Required)' : 'Arrears Schedule'}
         </h4>
@@ -318,7 +325,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
 
       {/* P0-4 FIX: Date range validation errors */}
       {dateRangeErrors.length > 0 && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className={`${EVICTION_TINTED_CARD_CLASS} border-red-200 bg-red-50`}>
           <div className="flex items-start gap-2">
             <RiErrorWarningLine className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
             <div>
@@ -343,7 +350,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
 
       {/* Ground 8 Validation */}
       {hasGround8 && ground8Validation && (
-        <div className={`p-4 rounded-lg border ${
+        <div className={`${EVICTION_TINTED_CARD_CLASS} ${
           ground8Validation.is_eligible
             ? 'bg-green-50 border-green-200'
             : 'bg-red-50 border-red-200'
@@ -370,7 +377,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
 
       {/* Summary display */}
       {arrearsSummary && arrearsSummary.total_arrears > 0 && (
-        <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+        <div className={`${EVICTION_CARD_CLASS} border-gray-200 bg-gray-50`}>
           <h4 className="text-sm font-medium text-gray-900 mb-2">
             Arrears Summary
           </h4>
@@ -481,7 +488,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
         <h4 className="text-base font-medium text-gray-900 mb-1">
           Possession particulars
         </h4>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm leading-6 text-gray-600">
           Describe the possession grounds based on the arrears schedule above.
           This will feed the Form 3A explanation and the N119 court particulars.
         </p>
@@ -489,14 +496,14 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
 
       {/* Quick start from arrears data */}
       {arrearsSummary && arrearsSummary.total_arrears > 0 && !particularsText && (
-        <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
-          <p className="text-sm text-purple-800 mb-2">
+        <div className={`${EVICTION_TINTED_CARD_CLASS} border-purple-200 bg-purple-50`}>
+          <p className="text-sm leading-6 text-purple-800 mb-2">
             <strong>Quick start:</strong> Generate a summary based on your arrears schedule.
           </p>
           <button
             type="button"
             onClick={handleUseSuggestion}
-            className="px-3 py-1.5 text-sm font-medium text-purple-700 bg-white border border-purple-300 rounded-md hover:bg-purple-50"
+            className="rounded-2xl border border-purple-300 bg-white px-4 py-2.5 text-sm font-semibold text-purple-700 shadow-sm transition hover:bg-purple-50"
           >
             Use arrears summary as starting point
           </button>
@@ -505,19 +512,19 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
 
       {/* Particulars textarea */}
       <div className="space-y-2">
-        <label htmlFor="section8_details" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="section8_details" className={EVICTION_LABEL_CLASS}>
           Possession particulars for selected grounds
           <span className="text-red-500 ml-1">*</span>
         </label>
         <textarea
           id="section8_details"
           rows={6}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+          className={`${EVICTION_TEXTAREA_CLASS} min-h-[180px]`}
           value={particularsText}
           onChange={(e) => onUpdate({ section8_details: e.target.value })}
           placeholder="Describe the rent arrears: total amount owed, how many months behind, when arrears began, any partial payments made..."
         />
-        <p className="text-xs text-gray-500">
+        <p className={EVICTION_HINT_CLASS}>
           Be specific and factual. Include dates, amounts, and reference the arrears schedule.
           Selected grounds: {selectedGrounds.join(', ') || 'None selected'}
         </p>

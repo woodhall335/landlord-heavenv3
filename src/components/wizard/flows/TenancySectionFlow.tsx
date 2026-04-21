@@ -611,11 +611,13 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [error, setError] = useState<string | null>(null);
 
   // Debounce ref for save operations to prevent excessive API calls
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingFactsRef = useRef<any>(null);
+  const saveResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load existing facts on mount
   useEffect(() => {
@@ -677,6 +679,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     async (updatedFacts: any) => {
       try {
         setSaving(true);
+        setSaveState('saving');
         setError(null);
 
         await saveCaseFacts(caseId, updatedFacts, {
@@ -684,9 +687,13 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
           caseType: 'tenancy_agreement',
           product: saveProduct,
         });
+        setSaveState('saved');
+        if (saveResetTimeoutRef.current) clearTimeout(saveResetTimeoutRef.current);
+        saveResetTimeoutRef.current = setTimeout(() => setSaveState('idle'), 1600);
       } catch (err) {
         console.error('Failed to save facts:', err);
         setError('Failed to save. Please try again.');
+        setSaveState('idle');
       } finally {
         setSaving(false);
       }
@@ -728,6 +735,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
+      setSaveState('saving');
 
       // Debounce the save by 500ms
       saveTimeoutRef.current = setTimeout(() => {
@@ -749,6 +757,9 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
         if (pendingFactsRef.current) {
           saveFactsToServer(pendingFactsRef.current);
         }
+      }
+      if (saveResetTimeoutRef.current) {
+        clearTimeout(saveResetTimeoutRef.current);
       }
     };
   }, [saveFactsToServer]);
@@ -943,6 +954,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       product={product}
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
+      saveState={saveState}
       banner={
         <>
           {highlightedSections.length > 0 && (
@@ -992,7 +1004,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
           </button>
 
           <div className="flex items-center justify-end gap-2">
-            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
+            {!isWizardUiV3Enabled && saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (
               <button

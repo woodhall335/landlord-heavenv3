@@ -4,6 +4,12 @@
 
 import React from 'react';
 import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
+import {
+  MONEY_CLAIM_CARD_CLASS,
+  MONEY_CLAIM_HINT_CLASS,
+  MONEY_CLAIM_INPUT_CLASS,
+  MONEY_CLAIM_LABEL_CLASS,
+} from '@/components/wizard/money-claim/ui';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
@@ -21,13 +27,7 @@ export const TenancySection: React.FC<SectionProps> = ({
   const tenancy = facts.tenancy || {};
   const property = facts.property || {};
 
-  /**
-   * Updates tenancy data in both nested (tenancy.*) and top-level keys.
-   * The validator expects top-level keys like tenancy_start_date, rent_amount, rent_frequency.
-   * We maintain both for backward compatibility and to ensure validation works correctly.
-   */
   const updateTenancy = (field: string, value: any) => {
-    // Map nested fields to top-level validator keys
     const topLevelKeyMap: Record<string, string> = {
       start_date: 'tenancy_start_date',
       end_date: 'tenancy_end_date',
@@ -45,7 +45,6 @@ export const TenancySection: React.FC<SectionProps> = ({
       },
     };
 
-    // Also write to top-level key for validator compatibility
     if (topLevelKey) {
       updates[topLevelKey] = value;
     }
@@ -53,13 +52,7 @@ export const TenancySection: React.FC<SectionProps> = ({
     onUpdate(updates);
   };
 
-  /**
-   * Updates property address data in both nested (property.*) and top-level keys.
-   * The validator expects top-level keys like property_address_line1, property_address_postcode.
-   * We maintain both for backward compatibility and to ensure validation works correctly.
-   */
   const updateProperty = (field: string, value: any) => {
-    // Map nested fields to top-level validator keys
     const topLevelKeyMap: Record<string, string> = {
       address_line1: 'property_address_line1',
       address_line2: 'property_address_line2',
@@ -76,7 +69,6 @@ export const TenancySection: React.FC<SectionProps> = ({
       },
     };
 
-    // Also write to top-level key for validator compatibility
     if (topLevelKey) {
       updates[topLevelKey] = value;
     }
@@ -84,37 +76,41 @@ export const TenancySection: React.FC<SectionProps> = ({
     onUpdate(updates);
   };
 
+  const courtFamilyLabel =
+    jurisdiction === 'england' || jurisdiction === 'wales'
+      ? 'England & Wales'
+      : 'Scotland';
+
   return (
-    <div className="space-y-4">
-      <p className="text-sm text-gray-600">
-        We use these details to map your claim to the correct court forms and rules for{' '}
-        {(jurisdiction === 'england' || jurisdiction === 'wales') ? 'England & Wales' : 'Scotland'}.
+    <div className="space-y-5">
+      <p className="text-sm leading-6 text-[#5a546e]">
+        We use these details to map your claim to the correct court forms and filing rules for{' '}
+        {courtFamilyLabel}.
       </p>
 
-      {/* Full property address */}
-      <div className="space-y-3">
+      <div className={`${MONEY_CLAIM_CARD_CLASS} space-y-4`}>
         <InlineSectionHeaderV3 title="Property address" iconSlug="property" />
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
+
+        <div className="space-y-1.5">
+          <label className={MONEY_CLAIM_LABEL_CLASS}>
             Property address line 1 <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={property.address_line1 || facts.property_address_line1 || ''}
             onChange={(e) => updateProperty('address_line1', e.target.value)}
             placeholder="e.g. 16 Waterloo Road"
           />
         </div>
 
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            Property address line 2{' '}
-            <span className="text-xs text-gray-500">(optional)</span>
+        <div className="space-y-1.5">
+          <label className={MONEY_CLAIM_LABEL_CLASS}>
+            Property address line 2 <span className={MONEY_CLAIM_HINT_CLASS}>(optional)</span>
           </label>
           <input
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={property.address_line2 || facts.property_address_line2 || ''}
             onChange={(e) => updateProperty('address_line2', e.target.value)}
             placeholder="Building, estate or area"
@@ -122,24 +118,24 @@ export const TenancySection: React.FC<SectionProps> = ({
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-charcoal">Town / city</label>
+          <div className="space-y-1.5">
+            <label className={MONEY_CLAIM_LABEL_CLASS}>Town / city</label>
             <input
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={MONEY_CLAIM_INPUT_CLASS}
               value={property.city || facts.property_address_town || ''}
               onChange={(e) => updateProperty('city', e.target.value)}
               placeholder="e.g. Pudsey"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-charcoal">
+          <div className="space-y-1.5">
+            <label className={MONEY_CLAIM_LABEL_CLASS}>
               Postcode <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={MONEY_CLAIM_INPUT_CLASS}
               value={property.postcode || facts.property_address_postcode || ''}
               onChange={(e) => updateProperty('postcode', e.target.value)}
               placeholder="e.g. LS28 7PW"
@@ -148,99 +144,94 @@ export const TenancySection: React.FC<SectionProps> = ({
         </div>
       </div>
 
-      {/* Tenancy dates */}
       <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
+        <div className={`${MONEY_CLAIM_CARD_CLASS} space-y-1.5`}>
+          <label className={MONEY_CLAIM_LABEL_CLASS}>
             Tenancy start date <span className="text-red-500">*</span>
           </label>
           <input
             type="date"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={tenancy.start_date || facts.tenancy_start_date || ''}
             onChange={(e) => updateTenancy('start_date', e.target.value)}
           />
         </div>
 
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            Tenancy end date{' '}
-            <span className="text-xs text-gray-500">(if fixed term)</span>
+        <div className={`${MONEY_CLAIM_CARD_CLASS} space-y-1.5`}>
+          <label className={MONEY_CLAIM_LABEL_CLASS}>
+            Tenancy end date <span className={MONEY_CLAIM_HINT_CLASS}>(if fixed term)</span>
           </label>
           <input
             type="date"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={tenancy.end_date || facts.tenancy_end_date || ''}
             onChange={(e) => updateTenancy('end_date', e.target.value)}
           />
         </div>
       </div>
 
-      {/* Rent basics */}
-      <div className="space-y-3">
+      <div className={`${MONEY_CLAIM_CARD_CLASS} space-y-4`}>
         <InlineSectionHeaderV3 title="Rent details" iconSlug="rent" />
+
         <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            Rent amount (£) <span className="text-red-500">*</span>
-          </label>
+          <div className="space-y-1.5">
+            <label className={MONEY_CLAIM_LABEL_CLASS}>
+              Rent amount (£) <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              min={0}
+              step="0.01"
+              className={MONEY_CLAIM_INPUT_CLASS}
+              value={tenancy.rent_amount ?? facts.rent_amount ?? ''}
+              onChange={(e) =>
+                updateTenancy(
+                  'rent_amount',
+                  e.target.value === '' ? null : Number(e.target.value),
+                )
+              }
+              placeholder="e.g. 750"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className={MONEY_CLAIM_LABEL_CLASS}>
+              Rent frequency <span className="text-red-500">*</span>
+            </label>
+            <select
+              className={MONEY_CLAIM_INPUT_CLASS}
+              value={tenancy.rent_frequency || facts.rent_frequency || ''}
+              onChange={(e) => updateTenancy('rent_frequency', e.target.value)}
+            >
+              <option value="">Select frequency</option>
+              <option value="weekly">Weekly</option>
+              <option value="fortnightly">Fortnightly</option>
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className={MONEY_CLAIM_LABEL_CLASS}>On which day is rent due each period?</label>
           <input
             type="number"
-            min={0}
-            step="0.01"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.rent_amount ?? facts.rent_amount ?? ''}
+            min={1}
+            max={31}
+            className={MONEY_CLAIM_INPUT_CLASS}
+            value={tenancy.rent_due_day ?? facts.rent_due_day ?? ''}
             onChange={(e) =>
               updateTenancy(
-                'rent_amount',
+                'rent_due_day',
                 e.target.value === '' ? null : Number(e.target.value),
               )
             }
-            placeholder="e.g. 750"
+            placeholder="e.g. 1 (for the 1st of the month)"
           />
+          <p className={MONEY_CLAIM_HINT_CLASS}>
+            This helps calculate the arrears schedule correctly.
+          </p>
         </div>
-
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
-            Rent frequency <span className="text-red-500">*</span>
-          </label>
-          <select
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={tenancy.rent_frequency || facts.rent_frequency || ''}
-            onChange={(e) => updateTenancy('rent_frequency', e.target.value)}
-          >
-            <option value="">Select frequency</option>
-            <option value="weekly">Weekly</option>
-            <option value="fortnightly">Fortnightly</option>
-            <option value="monthly">Monthly</option>
-            <option value="quarterly">Quarterly</option>
-          </select>
-        </div>
-        </div>
-      </div>
-
-      {/* Rent due day */}
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-charcoal">
-          On which day is rent due each period?
-        </label>
-        <input
-          type="number"
-          min={1}
-          max={31}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          value={tenancy.rent_due_day ?? facts.rent_due_day ?? ''}
-          onChange={(e) =>
-            updateTenancy(
-              'rent_due_day',
-              e.target.value === '' ? null : Number(e.target.value),
-            )
-          }
-          placeholder="e.g. 1 (for the 1st of the month)"
-        />
-        <p className="text-xs text-gray-500">
-          This helps calculate the arrears schedule correctly.
-        </p>
       </div>
     </div>
   );

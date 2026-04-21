@@ -666,6 +666,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [error, setError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   // Track the current question ID for Ask Heaven contextual help
@@ -674,6 +675,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   // Debounce ref for save operations to prevent excessive API calls
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingFactsRef = useRef<WizardFacts | null>(null);
+  const saveResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load existing facts on mount
   useEffect(() => {
@@ -806,6 +808,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     async (updatedFacts: WizardFacts) => {
       try {
         setSaving(true);
+        setSaveState('saving');
         setError(null);
 
         await saveCaseFacts(caseId, updatedFacts, {
@@ -813,9 +816,13 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           caseType: 'eviction',
           product: 'notice_only',
         });
+        setSaveState('saved');
+        if (saveResetTimeoutRef.current) clearTimeout(saveResetTimeoutRef.current);
+        saveResetTimeoutRef.current = setTimeout(() => setSaveState('idle'), 1600);
       } catch (err) {
         console.error('Failed to save facts:', err);
         setError('Failed to save. Please try again.');
+        setSaveState('idle');
       } finally {
         setSaving(false);
       }
@@ -842,6 +849,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
+      setSaveState('saving');
 
       // Debounce the save by 500ms
       saveTimeoutRef.current = setTimeout(() => {
@@ -864,6 +872,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         if (pendingFactsRef.current) {
           saveFactsToServer(pendingFactsRef.current);
         }
+      }
+      if (saveResetTimeoutRef.current) {
+        clearTimeout(saveResetTimeoutRef.current);
       }
     };
   }, [saveFactsToServer]);
@@ -1255,6 +1266,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       product="notice_only"
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
+      saveState={saveState}
       banner={error ? (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <div className="flex items-center justify-between">
@@ -1295,7 +1307,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           </button>
 
           <div className="flex items-center justify-end gap-2 min-w-[220px]">
-            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
+            {!isWizardUiV3Enabled && saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (
               <button

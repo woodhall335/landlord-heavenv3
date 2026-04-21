@@ -2,6 +2,15 @@
 
 import React from 'react';
 import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
+import {
+  getMoneyClaimChoiceCardClass,
+  MONEY_CLAIM_HINT_CLASS,
+  MONEY_CLAIM_INLINE_NOTE_CLASS,
+  MONEY_CLAIM_LABEL_CLASS,
+  MONEY_CLAIM_TEXTAREA_CLASS,
+  MONEY_CLAIM_TINTED_CARD_CLASS,
+  MONEY_CLAIM_INPUT_CLASS,
+} from '@/components/wizard/money-claim/ui';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
@@ -48,11 +57,11 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
 
       {/* Core claim narrative */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-charcoal">
+        <label className={MONEY_CLAIM_LABEL_CLASS}>
           Briefly describe what this claim is about
         </label>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[140px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+          className={`${MONEY_CLAIM_TEXTAREA_CLASS} min-h-[160px]`}
           value={basisOfClaim}
           onChange={(e) => updateMoneyClaim('basis_of_claim', e.target.value)}
           placeholder="For example: This claim is for rent arrears and related charges under an assured shorthold tenancy of 10 High Street, Manchester..."
@@ -68,7 +77,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           apiMode="generic"
         />
 
-        <p className="text-xs text-gray-500">
+        <p className={MONEY_CLAIM_HINT_CLASS}>
           Focus on the big picture: what the tenancy is, how the arrears arose,
           and what you are asking the court to do. Ask Heaven will turn this into
           a solicitor-style narrative later.
@@ -77,15 +86,15 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
 
       {/* Interest Opt-In - Explicit Confirmation Required */}
       {isEnglandWales && (
-        <div className="space-y-4 rounded-lg border-2 border-purple-200 bg-purple-50 p-4">
+        <div className={`${MONEY_CLAIM_TINTED_CARD_CLASS} space-y-4 border-[#d9ccff] bg-[#f8f4ff]`}>
           <div className="flex items-start gap-3">
             <div className="text-2xl">💷</div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal">
+              <h3 className="text-sm font-semibold text-[#27134a]">
                 Do you want to claim statutory interest?
                 <span className="text-red-500 ml-1">*</span>
               </h3>
-              <p className="text-xs text-gray-600 mt-1">
+              <p className={`${MONEY_CLAIM_HINT_CLASS} mt-1`}>
                 Under Section 69 of the County Courts Act 1984, you can claim simple
                 interest on debts at 8% per year from the date the money became due.
               </p>
@@ -95,12 +104,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           {/* Explicit Yes/No Radio Buttons */}
           <div className="space-y-2 ml-9">
             <label
-              className={`
-                flex items-center p-3 border rounded-lg cursor-pointer transition-all
-                ${chargeInterest === true
-                  ? 'border-purple-500 bg-white ring-2 ring-purple-200'
-                  : 'border-gray-200 bg-white hover:border-gray-300'}
-              `}
+              className={getMoneyClaimChoiceCardClass(chargeInterest === true)}
             >
               <input
                 type="radio"
@@ -119,19 +123,14 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
                 <span className="font-medium text-gray-900">
                   Yes, claim statutory interest at 8%
                 </span>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className={`${MONEY_CLAIM_HINT_CLASS} mt-0.5`}>
                   Interest calculation will be included in your claim documents
                 </p>
               </div>
             </label>
 
             <label
-              className={`
-                flex items-center p-3 border rounded-lg cursor-pointer transition-all
-                ${chargeInterest === false
-                  ? 'border-purple-500 bg-white ring-2 ring-purple-200'
-                  : 'border-gray-200 bg-white hover:border-gray-300'}
-              `}
+              className={getMoneyClaimChoiceCardClass(chargeInterest === false)}
             >
               <input
                 type="radio"
@@ -144,7 +143,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
                 <span className="font-medium text-gray-900">
                   No, I don&apos;t want to claim interest
                 </span>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className={`${MONEY_CLAIM_HINT_CLASS} mt-0.5`}>
                   Your claim will be for the principal debt amount only
                 </p>
               </div>
@@ -159,31 +158,31 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
 
           {/* Interest Details - Only shown when opted in */}
           {chargeInterest === true && (
-            <div className="ml-9 mt-3 p-3 bg-white border border-purple-100 rounded-lg space-y-3">
+            <div className="ml-9 mt-3 rounded-2xl border border-[#ddd2ff] bg-white px-4 py-4 shadow-sm">
               <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
                 Interest Details
               </h4>
 
-              <div className="grid gap-3 md:grid-cols-2">
+              <div className="mt-3 grid gap-3 md:grid-cols-2">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-charcoal">
+                  <label className={MONEY_CLAIM_LABEL_CLASS}>
                     Interest start date
                   </label>
                   <input
                     type="date"
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                    className={MONEY_CLAIM_INPUT_CLASS}
                     value={interestStartDate}
                     onChange={(e) =>
                       updateMoneyClaim('interest_start_date', e.target.value)
                     }
                   />
-                  <p className="text-[11px] text-gray-500">
+                  <p className={MONEY_CLAIM_HINT_CLASS}>
                     Usually the date of the first missed rent payment
                   </p>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-charcoal">
+                  <label className={MONEY_CLAIM_LABEL_CLASS}>
                     Interest rate (% per year)
                   </label>
                   <input
@@ -191,7 +190,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
                     min={0}
                     max={20}
                     step="0.1"
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                    className={MONEY_CLAIM_INPUT_CLASS}
                     value={interestRate}
                     onChange={(e) =>
                       updateMoneyClaim(
@@ -201,13 +200,13 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
                     }
                     placeholder="8"
                   />
-                  <p className="text-[11px] text-gray-500">
+                  <p className={MONEY_CLAIM_HINT_CLASS}>
                     Statutory rate is 8% (recommended)
                   </p>
                 </div>
               </div>
 
-              <div className="p-2 bg-purple-50 rounded text-xs text-purple-800">
+              <div className={`${MONEY_CLAIM_INLINE_NOTE_CLASS} mt-3 text-purple-900`}>
                 <strong>How it works:</strong> Interest is calculated as simple interest
                 from the start date to the date of claim. The daily rate will be shown
                 on your claim form so you can continue to accrue interest until judgment.
@@ -218,14 +217,14 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
       )}
 
       {/* Deposit Deductions Question */}
-      <div className="space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-4">
+      <div className={`${MONEY_CLAIM_TINTED_CARD_CLASS} space-y-3 border-amber-200 bg-amber-50`}>
         <div className="flex items-start gap-3">
           <div className="text-xl">💰</div>
           <div>
-            <h3 className="text-sm font-semibold text-charcoal">
+            <h3 className="text-sm font-semibold text-[#27134a]">
               Have you already made deposit deductions for any of these amounts?
             </h3>
-            <p className="text-xs text-gray-600 mt-1">
+            <p className={`${MONEY_CLAIM_HINT_CLASS} mt-1`}>
               If you&apos;ve deducted amounts from the tenant&apos;s deposit (e.g., for cleaning
               or damage), you can only claim the difference through the court. This avoids
               &quot;double recovery&quot; which courts will penalise.
@@ -235,13 +234,8 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
 
         <div className="space-y-2 ml-9">
           <label
-            className={`
-              flex items-center p-3 border rounded-lg cursor-pointer transition-all
-              ${moneyClaim.deposit_deductions_confirmed === true
-                ? 'border-amber-500 bg-white ring-2 ring-amber-200'
-                : 'border-gray-200 bg-white hover:border-gray-300'}
-            `}
-          >
+              className={getMoneyClaimChoiceCardClass(moneyClaim.deposit_deductions_confirmed === true, 'amber')}
+            >
             <input
               type="radio"
               name="deposit_deductions"
@@ -253,20 +247,15 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
               <span className="font-medium text-gray-900">
                 Yes, I&apos;ve made deposit deductions
               </span>
-              <p className="text-xs text-gray-500 mt-0.5">
-                The amounts I&apos;m claiming are only for costs NOT covered by the deposit
-              </p>
-            </div>
+                <p className={`${MONEY_CLAIM_HINT_CLASS} mt-0.5`}>
+                  The amounts I&apos;m claiming are only for costs NOT covered by the deposit
+                </p>
+              </div>
           </label>
 
           <label
-            className={`
-              flex items-center p-3 border rounded-lg cursor-pointer transition-all
-              ${moneyClaim.deposit_deductions_confirmed === false
-                ? 'border-amber-500 bg-white ring-2 ring-amber-200'
-                : 'border-gray-200 bg-white hover:border-gray-300'}
-            `}
-          >
+              className={getMoneyClaimChoiceCardClass(moneyClaim.deposit_deductions_confirmed === false, 'amber')}
+            >
             <input
               type="radio"
               name="deposit_deductions"
@@ -278,21 +267,21 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
               <span className="font-medium text-gray-900">
                 No deposit deductions have been made
               </span>
-              <p className="text-xs text-gray-500 mt-0.5">
-                I&apos;m claiming the full amounts (or there was no deposit)
-              </p>
-            </div>
+                <p className={`${MONEY_CLAIM_HINT_CLASS} mt-0.5`}>
+                  I&apos;m claiming the full amounts (or there was no deposit)
+                </p>
+              </div>
           </label>
         </div>
       </div>
 
       {/* Other amounts and narrative */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-charcoal">
+        <label className={MONEY_CLAIM_LABEL_CLASS}>
           Anything else you&apos;re claiming (damages, costs, other sums)
         </label>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+          className={`${MONEY_CLAIM_TEXTAREA_CLASS} min-h-[140px]`}
           value={otherAmountsSummary}
           onChange={(e) =>
             updateMoneyClaim('other_amounts_summary', e.target.value)
@@ -310,7 +299,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           apiMode="generic"
         />
 
-        <p className="text-xs text-gray-500">
+        <p className={MONEY_CLAIM_HINT_CLASS}>
           You&apos;ll break down the exact figures in the arrears and damages
           sections. This text gives Ask Heaven context for the Particulars of
           Claim and Schedule of Loss.

@@ -14,7 +14,8 @@ import {
 } from 'react-icons/ri';
 
 import { Button } from '@/components/ui/Button';
-import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
+import { DocumentProofShowcase } from '@/components/preview';
+import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { getCaseFacts } from '@/lib/wizard/facts-client';
 import { getSessionTokenHeaders } from '@/lib/session-token';
 import {
@@ -36,6 +37,7 @@ import type {
   Section13State,
 } from '@/lib/section13/types';
 import { isSection13ProposalStepComplete } from '@/lib/wizard/flow-completion';
+import { getSection13CheckoutThumbnailUrl } from '@/lib/previews/section13CheckoutPreview';
 
 type SectionId =
   | 'tenancy'
@@ -308,6 +310,8 @@ export function Section13WizardFlow({
 
   const hasHydratedRef = useRef(false);
   const pendingSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const saveResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
 
   const localPreview = useMemo(
     () => computeSection13Preview(state, comparables),
@@ -333,6 +337,48 @@ export function Section13WizardFlow({
       : null;
   const activePlan = purchasedPlan || effectiveState.selectedPlan;
   const hasPaidDefensiveOrder = purchasedPlan === 'section13_defensive';
+  const section13PreviewProofEntries = useMemo(
+    () =>
+      [
+        {
+          id: 'section13-form-4a',
+          title: 'Form 4A notice',
+          description: 'Current first-page proof of the official rent increase notice built from this case.',
+          thumbnailUrl: getSection13CheckoutThumbnailUrl(caseId, 'section13-form-4a') || '',
+          badge: 'Official notice',
+        },
+        {
+          id: 'section13-justification-report',
+          title: 'Justification report',
+          description: 'Current first-page proof of the comparable-evidence report generated from this case.',
+          thumbnailUrl: getSection13CheckoutThumbnailUrl(caseId, 'section13-justification-report') || '',
+          badge: 'Evidence',
+        },
+        {
+          id:
+            activePlan === 'section13_defensive'
+              ? 'section13-tribunal-argument-summary'
+              : 'section13-proof-of-service-record',
+          title:
+            activePlan === 'section13_defensive'
+              ? 'Tribunal argument summary'
+              : 'Proof of service record',
+          description:
+            activePlan === 'section13_defensive'
+              ? 'Current first-page proof of the landlord-side defensive summary in this case.'
+              : 'Current first-page proof of the notice service record in this case.',
+          thumbnailUrl:
+            getSection13CheckoutThumbnailUrl(
+              caseId,
+              activePlan === 'section13_defensive'
+                ? 'section13-tribunal-argument-summary'
+                : 'section13-proof-of-service-record'
+            ) || '',
+          badge: activePlan === 'section13_defensive' ? 'Defensive pack' : 'Service record',
+        },
+      ].filter((entry) => Boolean(entry.thumbnailUrl)),
+    [activePlan, caseId]
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -375,6 +421,7 @@ export function Section13WizardFlow({
 
   async function persistDraft(options?: { awaitingPayment?: boolean }) {
     setSaving(true);
+    setSaveState('saving');
     setSaveError(null);
 
     try {
@@ -397,8 +444,14 @@ export function Section13WizardFlow({
         const data = await response.json().catch(() => ({}));
         throw new Error(data.error || 'Draft save failed');
       }
+      setSaveState('saved');
+      if (saveResetTimeoutRef.current) {
+        clearTimeout(saveResetTimeoutRef.current);
+      }
+      saveResetTimeoutRef.current = setTimeout(() => setSaveState('idle'), 1600);
     } catch (error: any) {
       setSaveError(error?.message || 'Draft save failed');
+      setSaveState('idle');
     } finally {
       setSaving(false);
     }
@@ -413,6 +466,8 @@ export function Section13WizardFlow({
         JSON.stringify({ state: effectiveState, comparables })
       );
     }
+
+    setSaveState('saving');
 
     if (pendingSaveRef.current) {
       clearTimeout(pendingSaveRef.current);
@@ -429,6 +484,14 @@ export function Section13WizardFlow({
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseId, comparables, effectiveState]);
+
+  useEffect(() => {
+    return () => {
+      if (saveResetTimeoutRef.current) {
+        clearTimeout(saveResetTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (recoveryEmail.trim()) return;
@@ -1608,6 +1671,14 @@ export function Section13WizardFlow({
               </p>
             </div>
 
+            {section13PreviewProofEntries.length > 0 ? (
+              <DocumentProofShowcase
+                title="Actual draft proof for this case"
+                description="These first-page previews are generated from your current Section 13 answers, so you can sense-check the live notice and support documents before checkout."
+                entries={section13PreviewProofEntries}
+              />
+            ) : null}
+
             <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
               The tenant can apply to the tribunal up to the day before the proposed start date. The tribunal can set a lower rent, but not higher than the rent you propose.
             </div>
@@ -2039,18 +2110,21 @@ export function Section13WizardFlow({
   }
 
   return (
-    <WizardFlowShell
-      title="Section 13 Wizard"
+    <WizardShellV3
+      title={product === 'section13_defensive' ? 'Section 13 Defence Pack' : 'Section 13 Rent Increase Pack'}
       completedCount={completedCount}
       totalCount={STEP_CONFIG.length}
       progress={(completedCount / STEP_CONFIG.length) * 100}
-      stickyTopClass="top-[96px] md:top-[100px]"
       tabs={tabs}
       sectionTitle={currentStep.title}
       sectionDescription={currentStep.description}
+      product={product}
+      jurisdiction={jurisdiction}
+      currentStepId={currentStep.id}
+      saveState={saveState}
       banner={
         saveError ? (
-          <div className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
             {saveError}
           </div>
         ) : saving ? (
@@ -2059,7 +2133,7 @@ export function Section13WizardFlow({
           </div>
         ) : null
       }
-      sidebar={sidebar}
+      guidancePanel={sidebar}
       navigation={
         <div className="flex w-full items-center justify-between gap-3">
           <Button
@@ -2094,7 +2168,7 @@ export function Section13WizardFlow({
         {renderStepContent()}
         {checkoutError ? <p className="text-sm text-rose-700">{checkoutError}</p> : null}
       </div>
-    </WizardFlowShell>
+    </WizardShellV3>
   );
 }
 

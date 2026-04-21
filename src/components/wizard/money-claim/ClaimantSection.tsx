@@ -2,6 +2,13 @@
 
 import React from 'react';
 import { InlineSectionHeaderV3 } from '@/components/wizard/shared/InlineSectionHeaderV3';
+import {
+  getMoneyClaimChoiceCardClass,
+  MONEY_CLAIM_CARD_CLASS,
+  MONEY_CLAIM_HINT_CLASS,
+  MONEY_CLAIM_INPUT_CLASS,
+  MONEY_CLAIM_LABEL_CLASS,
+} from '@/components/wizard/money-claim/ui';
 
 interface SectionProps {
   facts: any;
@@ -103,32 +110,30 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
       </p>
 
       {/* Company/Individual toggle */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-charcoal">
+      <div className={MONEY_CLAIM_CARD_CLASS}>
+        <label className={MONEY_CLAIM_LABEL_CLASS}>
           Are you claiming as an individual or a company?
         </label>
-        <div className="flex gap-3">
+        <div className="mt-3 flex flex-col gap-3 md:flex-row">
           <button
             type="button"
             onClick={() => updateIsCompany(false)}
-            className={`rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
-              !isCompany
-                ? 'border-[#7C3AED] bg-[#7C3AED]/5 text-[#7C3AED]'
-                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+            className={getMoneyClaimChoiceCardClass(!isCompany)}
           >
-            Individual landlord
+            <span className="text-sm font-semibold text-[#241742]">Individual landlord</span>
+            <span className="mt-1 block text-left text-xs leading-5 text-[#6b6580]">
+              Use your personal name if you are claiming in your own name rather than through a registered company.
+            </span>
           </button>
           <button
             type="button"
             onClick={() => updateIsCompany(true)}
-            className={`rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
-              isCompany
-                ? 'border-[#7C3AED] bg-[#7C3AED]/5 text-[#7C3AED]'
-                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+            className={getMoneyClaimChoiceCardClass(isCompany)}
           >
-            Company / Organisation
+            <span className="text-sm font-semibold text-[#241742]">Company / organisation</span>
+            <span className="mt-1 block text-left text-xs leading-5 text-[#6b6580]">
+              Use the full registered company or organisation name that should appear on the N1 claim form.
+            </span>
           </button>
         </div>
       </div>
@@ -136,29 +141,29 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
       {/* Names - varies based on company or individual */}
       {isCompany ? (
         <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">
+          <label className={MONEY_CLAIM_LABEL_CLASS}>
             Company / Organisation name <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={facts.company_name || landlord.company_name || ''}
             onChange={(e) => updateCompanyName(e.target.value)}
             placeholder="e.g. ABC Lettings Ltd"
           />
-          <p className="text-xs text-gray-500">
+          <p className={MONEY_CLAIM_HINT_CLASS}>
             Enter the full registered company name as it appears on Companies House.
           </p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-1">
-            <label className="text-sm font-medium text-charcoal">
+            <label className={MONEY_CLAIM_LABEL_CLASS}>
               Claimant full name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={MONEY_CLAIM_INPUT_CLASS}
               value={landlord.name || facts.landlord_full_name || ''}
               onChange={(e) => updateLandlord('name', e.target.value)}
               placeholder="e.g. Jane Smith"
@@ -166,12 +171,12 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-charcoal">
+            <label className={MONEY_CLAIM_LABEL_CLASS}>
               Second claimant (if joint landlord)
             </label>
             <input
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={MONEY_CLAIM_INPUT_CLASS}
               value={landlord.co_claimant || facts.landlord_co_claimant || ''}
               onChange={(e) => updateLandlord('co_claimant', e.target.value)}
               placeholder="Leave blank if there is only one landlord"
@@ -183,10 +188,10 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
       {/* Contact details */}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">Email</label>
+          <label className={MONEY_CLAIM_LABEL_CLASS}>Email</label>
           <input
             type="email"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={landlord.email || ''}
             onChange={(e) => updateLandlord('email', e.target.value)}
             placeholder="For court updates and settlement offers"
@@ -194,10 +199,10 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-medium text-charcoal">Phone</label>
+          <label className={MONEY_CLAIM_LABEL_CLASS}>Phone</label>
           <input
             type="tel"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={landlord.phone || ''}
             onChange={(e) => updateLandlord('phone', e.target.value)}
             placeholder="Daytime contact number (optional)"
@@ -206,20 +211,20 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
       </div>
 
       {/* Postal address */}
-      <div className="space-y-3 rounded-md border border-gray-200 bg-gray-50 p-3">
+      <div className={`${MONEY_CLAIM_CARD_CLASS} space-y-3`}>
         <InlineSectionHeaderV3 title="Claimant postal address" iconSlug="claimant" />
-        <p className="text-xs text-gray-600">
+        <p className={MONEY_CLAIM_HINT_CLASS}>
           This is the address that will appear on the court papers. If you use a
           managing agent or solicitor for service, we&apos;ll collect that later.
         </p>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-charcoal">
+          <label className={MONEY_CLAIM_LABEL_CLASS}>
             Address line 1 <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={landlord.address_line1 || facts.landlord_address_line1 || ''}
             onChange={(e) => updateLandlord('address_line1', e.target.value)}
             placeholder="e.g. 10 High Street"
@@ -227,12 +232,12 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-medium text-charcoal">
+          <label className={MONEY_CLAIM_LABEL_CLASS}>
             Address line 2 (optional)
           </label>
           <input
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className={MONEY_CLAIM_INPUT_CLASS}
             value={landlord.address_line2 || facts.landlord_address_line2 || ''}
             onChange={(e) => updateLandlord('address_line2', e.target.value)}
             placeholder="Building, estate or area"
@@ -241,12 +246,12 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
 
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1">
-            <label className="text-xs font-medium text-charcoal">
+            <label className={MONEY_CLAIM_LABEL_CLASS}>
               Town / city
             </label>
             <input
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={MONEY_CLAIM_INPUT_CLASS}
               value={landlord.city || facts.landlord_address_town || ''}
               onChange={(e) => updateLandlord('city', e.target.value)}
               placeholder="e.g. Manchester"
@@ -254,12 +259,12 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-medium text-charcoal">
+            <label className={MONEY_CLAIM_LABEL_CLASS}>
               Postcode <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={MONEY_CLAIM_INPUT_CLASS}
               value={landlord.postcode || facts.landlord_address_postcode || ''}
               onChange={(e) => updateLandlord('postcode', e.target.value)}
               placeholder="e.g. M1 2AB"
@@ -270,17 +275,17 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
 
       {/* Reference */}
       <div className="space-y-1">
-        <label className="text-sm font-medium text-charcoal">
+        <label className={MONEY_CLAIM_LABEL_CLASS}>
           Reference to show on claim (optional)
         </label>
         <input
           type="text"
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+          className={MONEY_CLAIM_INPUT_CLASS}
           value={referenceValue}
           onChange={(e) => updateMoneyClaim('reference', e.target.value)}
           placeholder="Internal account/reference you want printed on the claim"
         />
-        <p className="text-xs text-gray-500">
+        <p className={MONEY_CLAIM_HINT_CLASS}>
           This will appear in the reference box on the claim form header so you
           can match court papers back to your system.
         </p>

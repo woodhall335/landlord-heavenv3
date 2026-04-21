@@ -15,6 +15,35 @@ export interface WizardPackSummaryData {
   outstandingSections: string[];
   sectionsNeedingAttention: string[];
   currentStepDocuments: string[];
+  proofCards: Array<{
+    title: string;
+    detail: string;
+    note: string;
+  }>;
+  proofPreviews: Array<{
+    title: string;
+    detail: string;
+    note: string;
+    thumbnailHref: string;
+    embedHref: string;
+  }>;
+}
+
+function buildProofPreview(
+  packKey: string,
+  documentType: string,
+  title: string,
+  detail: string,
+  note: string
+) {
+  const encodedType = encodeURIComponent(documentType);
+  return {
+    title,
+    detail,
+    note,
+    thumbnailHref: `/api/golden-pack-samples/${packKey}/${encodedType}/thumbnail`,
+    embedHref: `/api/golden-pack-samples/${packKey}/${encodedType}/embed`,
+  };
 }
 
 const PACK_CONTENTS: Record<
@@ -111,6 +140,32 @@ const PACK_CONTENTS: Record<
       'Deposit certificate when relevant',
       'Pre-tenancy checklist',
       'Supporting handover records and addenda',
+    ],
+  },
+  section13_standard: {
+    heading: 'Your rent increase pack',
+    subheading: 'Form 4A notice, service record, and evidence-led support',
+    includedDocuments: [
+      'Form 4A rent increase notice',
+      'Rent increase justification report',
+      'Proof of service record',
+      'Rent increase cover letter',
+    ],
+  },
+  section13_defensive: {
+    heading: 'Your Section 13 defence pack',
+    subheading: 'Form 4A notice plus tribunal-ready support documents',
+    includedDocuments: [
+      'Form 4A rent increase notice',
+      'Rent increase justification report',
+      'Proof of service record',
+      'Tribunal argument summary',
+      'Tribunal defence guide',
+      'Landlord response template',
+      'Tribunal legal briefing',
+      'Evidence checklist',
+      'Negotiation email template',
+      'Merged tribunal bundle PDF',
     ],
   },
 };
@@ -210,6 +265,172 @@ const STEP_DOCUMENT_FOCUS: Partial<Record<WizardProduct, Record<string, string[]
     premium: ['Premium assured periodic tenancy agreement', 'Supporting handover records and addenda'],
     review: ['Premium tenancy file'],
   },
+  section13_standard: {
+    tenancy: ['Form 4A rent increase notice', 'Rent increase justification report'],
+    landlord: ['Form 4A rent increase notice', 'Rent increase cover letter'],
+    proposal: ['Form 4A rent increase notice', 'Proof of service record'],
+    charges: ['Rent increase justification report', 'Rent increase cover letter'],
+    comparables: ['Rent increase justification report', 'Form 4A rent increase notice'],
+    adjustments: ['Rent increase justification report', 'Form 4A rent increase notice'],
+    preview: ['Form 4A rent increase notice', 'Rent increase pack'],
+    outputs: ['Rent increase pack'],
+  },
+  section13_defensive: {
+    tenancy: ['Form 4A rent increase notice', 'Rent increase justification report'],
+    landlord: ['Form 4A rent increase notice', 'Rent increase cover letter'],
+    proposal: ['Form 4A rent increase notice', 'Proof of service record'],
+    charges: ['Rent increase justification report', 'Rent increase cover letter'],
+    comparables: ['Rent increase justification report', 'Tribunal argument summary'],
+    adjustments: ['Rent increase justification report', 'Tribunal argument summary'],
+    preview: ['Form 4A rent increase notice', 'Section 13 defence pack'],
+    outputs: ['Merged tribunal bundle PDF', 'Tribunal defence guide'],
+  },
+};
+
+const PROOF_CARD_COPY: Partial<
+  Record<WizardProduct, Array<{ title: string; detail: string; note: string }>>
+> = {
+  notice_only: [
+    { title: 'Form 3A notice', detail: 'Official notice', note: 'Prepared from your grounds, dates, and service answers.' },
+    { title: 'Service checklist', detail: 'Notice-stage guidance', note: 'Keeps service and validity steps aligned before you serve.' },
+  ],
+  complete_pack: [
+    { title: 'Form N5', detail: 'Court claim form', note: 'Built from your party, tenancy, and possession details.' },
+    { title: 'Witness statement', detail: 'Court-ready narrative', note: 'Ties the notice, arrears, and evidence into one file.' },
+  ],
+  money_claim: [
+    { title: 'Letter before claim', detail: 'Pre-action document', note: 'Generated from your debt story and tenant details.' },
+    { title: 'Particulars of claim', detail: 'Court narrative', note: 'Turns your claim basis and schedules into filing-ready wording.' },
+  ],
+  money_claim_england_wales: [
+    { title: 'Letter before claim', detail: 'Pre-action document', note: 'Generated from your debt story and tenant details.' },
+    { title: 'Particulars of claim', detail: 'Court narrative', note: 'Turns your claim basis and schedules into filing-ready wording.' },
+  ],
+  money_claim_scotland: [
+    { title: 'Demand letter', detail: 'Pre-action document', note: 'Generated from your debt story and tenant details.' },
+    { title: 'Particulars of claim', detail: 'Court narrative', note: 'Turns your claim basis and schedules into filing-ready wording.' },
+  ],
+  tenancy_agreement: [
+    { title: 'Tenancy agreement', detail: 'Main document', note: 'Built from the property, tenancy, and landlord answers you provide.' },
+    { title: 'Support records', detail: 'Handover file', note: 'Keeps the let organised from day one.' },
+  ],
+  ast_standard: [
+    { title: 'Tenancy agreement', detail: 'Main document', note: 'Built from the property, tenancy, and landlord answers you provide.' },
+    { title: 'Support records', detail: 'Handover file', note: 'Keeps the let organised from day one.' },
+  ],
+  ast_premium: [
+    { title: 'Premium agreement', detail: 'Main document', note: 'Includes the enhanced clause set and supporting addenda.' },
+    { title: 'Support addenda', detail: 'Operational file', note: 'Adds the stronger tenancy controls in the premium pack.' },
+  ],
+  section13_standard: [
+    { title: 'Form 4A notice', detail: 'Official notice', note: 'Prepared from your rent, date, and service answers.' },
+    { title: 'Justification report', detail: 'Evidence-led support', note: 'Shows the comparable evidence behind the proposed rent.' },
+  ],
+  section13_defensive: [
+    { title: 'Form 4A notice', detail: 'Official notice', note: 'Prepared from your rent, date, and service answers.' },
+    { title: 'Tribunal bundle', detail: 'Defensive output', note: 'Pulls the notice, evidence, and argument support into one file.' },
+  ],
+};
+
+const PROOF_PREVIEW_COPY: Partial<
+  Record<WizardProduct, Array<{ title: string; detail: string; note: string; thumbnailHref: string; embedHref: string }>>
+> = {
+  notice_only: [
+    buildProofPreview(
+      'notice_only',
+      'section8_notice',
+      'Form 3A notice',
+      'Official notice',
+      'See the real completed notice generated from the sample pack answers.'
+    ),
+    buildProofPreview(
+      'notice_only',
+      'arrears_schedule',
+      'Rent schedule / arrears statement',
+      'Supporting evidence',
+      'Shows how the notice-stage arrears evidence is laid out for service and review.'
+    ),
+  ],
+  complete_pack: [
+    buildProofPreview(
+      'complete_pack',
+      'n5_claim',
+      'Form N5',
+      'Court claim form',
+      'See the possession claim form that carries the case into court.'
+    ),
+    buildProofPreview(
+      'complete_pack',
+      'witness_statement',
+      'Witness statement',
+      'Court-ready narrative',
+      'Shows how the pack turns the case facts into one joined-up court story.'
+    ),
+  ],
+  money_claim: [
+    buildProofPreview(
+      'money_claim',
+      'letter_before_claim',
+      'Letter before claim',
+      'Pre-action document',
+      'Shows the PAP-compliant demand document landlords see before court action.'
+    ),
+    buildProofPreview(
+      'money_claim',
+      'n1_claim',
+      'Form N1 claim form',
+      'Official court form',
+      'Shows the live court-form output generated from the claim answers.'
+    ),
+  ],
+  money_claim_england_wales: [
+    buildProofPreview(
+      'money_claim',
+      'letter_before_claim',
+      'Letter before claim',
+      'Pre-action document',
+      'Shows the PAP-compliant demand document landlords see before court action.'
+    ),
+    buildProofPreview(
+      'money_claim',
+      'n1_claim',
+      'Form N1 claim form',
+      'Official court form',
+      'Shows the live court-form output generated from the claim answers.'
+    ),
+  ],
+  section13_standard: [
+    buildProofPreview(
+      'section13_standard',
+      'section13_form_4a',
+      'Form 4A notice',
+      'Official notice',
+      'See the real completed notice used in the sample pack.'
+    ),
+    buildProofPreview(
+      'section13_standard',
+      'section13_justification_report',
+      'Justification report',
+      'Comparable evidence',
+      'Shows the market-rent support and adjustments behind the increase.'
+    ),
+  ],
+  section13_defensive: [
+    buildProofPreview(
+      'section13_defensive',
+      'section13_form_4a',
+      'Form 4A notice',
+      'Official notice',
+      'See the real completed notice used in the defensive sample pack.'
+    ),
+    buildProofPreview(
+      'section13_defensive',
+      'section13_tribunal_argument_summary',
+      'Tribunal argument summary',
+      'Defensive output',
+      'Shows how the defensive pack turns your facts into a hearing-ready position.'
+    ),
+  ],
 };
 
 export function getWizardPackSummary(
@@ -235,5 +456,7 @@ export function getWizardPackSummary(
     outstandingSections,
     sectionsNeedingAttention,
     currentStepDocuments,
+    proofCards: PROOF_CARD_COPY[product] || [],
+    proofPreviews: PROOF_PREVIEW_COPY[product] || [],
   };
 }

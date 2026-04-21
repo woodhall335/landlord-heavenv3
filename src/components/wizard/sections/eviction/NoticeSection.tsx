@@ -35,6 +35,12 @@ import {
   normalizeEnglandGroundCode,
   type EnglandGroundCode,
 } from '@/lib/england-possession/ground-catalog';
+import {
+  EVICTION_HINT_CLASS,
+  EVICTION_INPUT_CLASS,
+  EVICTION_LABEL_CLASS,
+  EVICTION_TEXTAREA_CLASS,
+} from '@/components/wizard/sections/eviction/ui';
 
 interface NoticeSectionProps {
   facts: WizardFacts;
@@ -411,15 +417,15 @@ const Section8SpecialistGroundDetails: React.FC<Section8SpecialistGroundDetailsP
               const fieldId = `${panel.code}-${field.field.replace(/[^a-z0-9]+/gi, '-')}`;
 
               return (
-                <div key={field.field} className={isTextArea ? 'md:col-span-2 space-y-1' : 'space-y-1'}>
-                  <label htmlFor={fieldId} className="block text-sm font-medium text-gray-700">
+                <div key={field.field} className={isTextArea ? 'md:col-span-2 space-y-1.5' : 'space-y-1.5'}>
+                  <label htmlFor={fieldId} className={EVICTION_LABEL_CLASS}>
                     {field.label}
                   </label>
                   {isTextArea ? (
                     <textarea
                       id={fieldId}
                       rows={4}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                      className={`${EVICTION_TEXTAREA_CLASS} min-h-[130px]`}
                       value={value}
                       placeholder={field.placeholder}
                       onChange={(e) => onUpdate({ [field.field]: e.target.value })}
@@ -428,13 +434,13 @@ const Section8SpecialistGroundDetails: React.FC<Section8SpecialistGroundDetailsP
                     <input
                       id={fieldId}
                       type={field.type || 'text'}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+                      className={EVICTION_INPUT_CLASS}
                       value={value}
                       placeholder={field.placeholder}
                       onChange={(e) => onUpdate({ [field.field]: e.target.value })}
                     />
                   )}
-                  <p className="text-xs text-gray-500">{field.helpText}</p>
+                  <p className={EVICTION_HINT_CLASS}>{field.helpText}</p>
                 </div>
               );
             })}

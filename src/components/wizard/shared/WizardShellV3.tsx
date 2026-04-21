@@ -33,6 +33,7 @@ interface WizardShellV3Props {
   sectionDescription?: string;
   banner?: React.ReactNode;
   sidebar?: React.ReactNode;
+  guidancePanel?: React.ReactNode;
   children: React.ReactNode;
   navigation?: React.ReactNode;
   navigationLeft?: React.ReactNode;
@@ -41,6 +42,8 @@ interface WizardShellV3Props {
   product: WizardProduct;
   jurisdiction: WizardJurisdiction;
   currentStepId?: string;
+  saveState?: 'idle' | 'saving' | 'saved';
+  saveStatusLabel?: string;
 }
 
 export function WizardShellV3({
@@ -53,6 +56,7 @@ export function WizardShellV3({
   sectionDescription,
   banner,
   sidebar,
+  guidancePanel,
   children,
   navigation,
   navigationLeft,
@@ -61,6 +65,8 @@ export function WizardShellV3({
   product,
   jurisdiction,
   currentStepId,
+  saveState = 'idle',
+  saveStatusLabel,
 }: WizardShellV3Props) {
   const currentMeta: StepMetadata | undefined = currentStepId
     ? getStepMetadata(product, jurisdiction, currentStepId)
@@ -70,6 +76,13 @@ export function WizardShellV3({
   const activeStepIndex = currentTabIndex >= 0 ? currentTabIndex : 0;
   const completionLabel = `${completedCount} of ${totalCount} sections complete`;
   const percentageLabel = `${Math.round(progress)}% complete`;
+  const resolvedSaveLabel =
+    saveStatusLabel ||
+    (saveState === 'saving'
+      ? 'Saving your answers...'
+      : saveState === 'saved'
+        ? 'Saved just now'
+        : 'Auto-save is on');
 
   return (
     <div
@@ -107,6 +120,7 @@ export function WizardShellV3({
           stepIconPath={resolveStepIconPath(currentMeta)}
           stepNumber={activeStepIndex + 1}
           totalSteps={tabs.length}
+          stepMotionKey={currentStepId || sectionTitle}
           banner={banner}
           navigation={
             navigation ? (
@@ -147,6 +161,18 @@ export function WizardShellV3({
                     style={{ width: `${progress}%` }}
                   />
                 </div>
+                <div className="mt-4 flex items-center gap-2 rounded-2xl border border-[#ece4ff] bg-white/85 px-3.5 py-2.5 shadow-sm">
+                  <span
+                    className={`inline-flex h-2.5 w-2.5 rounded-full ${
+                      saveState === 'saving'
+                        ? 'animate-pulse bg-amber-500'
+                        : saveState === 'saved'
+                          ? 'bg-emerald-500'
+                          : 'bg-[#8b5cf6]'
+                    }`}
+                  />
+                  <p className="text-sm font-medium text-[#4f4768]">{resolvedSaveLabel}</p>
+                </div>
                 <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-[#61597a]">
                   <span className="rounded-full border border-[#e5dcff] bg-white px-3 py-1.5 shadow-sm">
                     Preview before payment
@@ -165,7 +191,7 @@ export function WizardShellV3({
                 currentStepId={currentStepId}
                 currentStepLabel={sectionTitle}
               />
-              <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />
+              {guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />}
             </div>
           </div>
         </aside>

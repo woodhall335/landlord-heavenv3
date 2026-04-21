@@ -382,11 +382,13 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [error, setError] = useState<string | null>(null);
 
   // Debounce ref for save operations to prevent excessive API calls
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingFactsRef = useRef<WizardFacts | null>(null);
+  const saveResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Smart Review state (hydrated from persisted facts.__smart_review)
   const [smartReviewWarnings, setSmartReviewWarnings] = useState<SmartReviewWarningItem[]>([]);
@@ -470,6 +472,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     async (updatedFacts: WizardFacts) => {
       try {
         setSaving(true);
+        setSaveState('saving');
         setError(null);
 
         await saveCaseFacts(caseId, updatedFacts, {
@@ -477,9 +480,13 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
           caseType: 'eviction',
           product: 'complete_pack',
         });
+        setSaveState('saved');
+        if (saveResetTimeoutRef.current) clearTimeout(saveResetTimeoutRef.current);
+        saveResetTimeoutRef.current = setTimeout(() => setSaveState('idle'), 1600);
       } catch (err) {
         console.error('Failed to save facts:', err);
         setError('Failed to save. Please try again.');
+        setSaveState('idle');
       } finally {
         setSaving(false);
       }
@@ -506,6 +513,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
+      setSaveState('saving');
 
       // Debounce the save by 500ms
       saveTimeoutRef.current = setTimeout(() => {
@@ -528,6 +536,9 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         if (pendingFactsRef.current) {
           saveFactsToServer(pendingFactsRef.current);
         }
+      }
+      if (saveResetTimeoutRef.current) {
+        clearTimeout(saveResetTimeoutRef.current);
       }
     };
   }, [saveFactsToServer]);
@@ -765,6 +776,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       product="complete_pack"
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
+      saveState={saveState}
       banner={error ? (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
               <div className="flex items-center justify-between">
@@ -805,7 +817,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
           </button>
 
           <div className="flex items-center justify-end gap-2">
-            {saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
+            {!isWizardUiV3Enabled && saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (
               <button
