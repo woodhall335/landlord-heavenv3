@@ -35,6 +35,7 @@ describe('England tenancy cluster ownership', () => {
         '/hmo-shared-house-tenancy-agreement',
         '/lodger-agreement',
         '/tenancy-agreement-template',
+        '/periodic-tenancy-agreement',
         '/assured-shorthold-tenancy-agreement-template',
         '/assured-periodic-tenancy-agreement',
       ])

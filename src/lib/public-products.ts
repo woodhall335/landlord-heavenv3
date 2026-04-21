@@ -236,7 +236,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
     shortName: 'England Tenancy Agreements',
     seoTitle: 'England Tenancy Agreements',
     metaDescription:
-      'Choose the right England tenancy agreement for Standard, Premium, Student, HMO / Shared House, and Lodger arrangements.',
+      'Choose the right England tenancy agreement for Standard, Premium, Student, HMO / Shared House, and Lodger arrangements, with support for landlords searching periodic tenancy agreement wording too.',
     eyebrow: 'England tenancy agreements',
     heroBadge: 'For landlords in England',
     proofLabel: 'Five agreement options for England lets',
@@ -254,6 +254,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
       { label: 'Standard agreement', href: '/standard-tenancy-agreement' },
       { label: 'Premium agreement', href: '/premium-tenancy-agreement' },
       { label: 'Student agreement', href: '/student-tenancy-agreement' },
+      { label: 'Periodic tenancy agreement guide', href: '/periodic-tenancy-agreement' },
     ],
   },
   england_standard_tenancy_agreement: {
@@ -285,6 +286,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
     defaultGuideLinks: [
       { label: 'England tenancy agreements', href: '/products/ast' },
       { label: 'Premium agreement', href: '/premium-tenancy-agreement' },
+      { label: 'Periodic tenancy agreement guide', href: '/periodic-tenancy-agreement' },
     ],
   },
   england_premium_tenancy_agreement: {
@@ -316,6 +318,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
     defaultGuideLinks: [
       { label: 'England tenancy agreements', href: '/products/ast' },
       { label: 'Standard agreement', href: '/standard-tenancy-agreement' },
+      { label: 'Assured periodic tenancy guide', href: '/assured-periodic-tenancy-agreement' },
     ],
   },
   england_student_tenancy_agreement: {

@@ -18,10 +18,13 @@ export const metadata: Metadata = {
   title: `${descriptor.seoTitle} | England | ${product.displayPrice}`,
   description: descriptor.metaDescription,
   keywords: [
+    'section 8 notice',
+    'section 8 notice england',
+    'eviction notice generator',
     'evict a tenant legally',
     'eviction notice',
+    'form 3a',
     'landlord',
-    'Section 8 notice',
     'England eviction notice',
   ],
   alternates: {

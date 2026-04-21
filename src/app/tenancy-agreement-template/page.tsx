@@ -124,6 +124,13 @@ const supportRoutes = [
       'Use this support page when you need the newer England terminology explained in plain English before returning to the England agreement example and comparison journey.',
     ctaLabel: 'Read assured periodic guide',
   },
+  {
+    title: 'Periodic Tenancy Agreement Guide',
+    href: '/periodic-tenancy-agreement',
+    summary:
+      'Use this plain-English guide if you searched for periodic or rolling tenancy wording and want to understand where that language fits before choosing Standard or Premium.',
+    ctaLabel: 'Read periodic tenancy guide',
+  },
 ] as const;
 
 const clauseExplainers = [
@@ -197,8 +204,10 @@ export const metadata: Metadata = {
     'tenancy contract',
     'rent agreement template england',
     'tenancy contract template england',
+    'tenancy agreement template england',
     'england tenancy agreement template',
     'assured periodic tenancy agreement england',
+    'periodic tenancy agreement england',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {

@@ -11,7 +11,6 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/premium-tenancy-agreement');
 const premiumWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=england_tenancy_page&topic=tenancy';
-const englandHubHref = '/products/ast';
 const premiumPackBreakdown = buildTenancyPackBreakdown('england_premium_tenancy_agreement');
 const premiumSampleProof = getGoldenPackProofData('england_premium_tenancy_agreement');
 
@@ -20,11 +19,13 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Premium Tenancy Agreement England | Fuller Residential Drafting',
   description:
-    'Create a Premium Tenancy Agreement for an ordinary residential let in England that needs fuller drafting, more day-to-day detail, and stronger management wording.',
+    'Create a Premium Tenancy Agreement for an ordinary residential let in England that needs fuller drafting, more day-to-day detail, and stronger management wording under the current assured periodic route.',
   keywords: [
     'premium assured periodic tenancy agreement england',
     'england premium assured periodic tenancy agreement',
     'premium tenancy agreement england',
+    'periodic tenancy agreement england',
+    'assured periodic tenancy agreement england',
     'england premium residential tenancy agreement',
     'england tenancy agreement premium',
     'new england tenancy agreement',
@@ -67,8 +68,8 @@ export default function PremiumTenancyAgreementPage() {
         subtitle="Use this more detailed England tenancy agreement when the tenancy is still a standard residential let, but you want fuller wording around access, repairs, handover, keys, and day-to-day management than the standard route provides."
         primaryCtaLabel="Start premium tenancy agreement"
         primaryCtaHref={premiumWizardHref}
-        secondaryCtaLabel="View all England routes"
-        secondaryCtaHref={englandHubHref}
+        secondaryCtaLabel="Read assured periodic guide"
+        secondaryCtaHref="/assured-periodic-tenancy-agreement"
         legacyNotice="If you were searching for a premium tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator with fuller drafting, this is the more detailed route for ordinary residential lets that need stronger management and handover wording."
         introTitle="For a standard residential let with more detail built in"
         introBody={[
@@ -118,6 +119,13 @@ export default function PremiumTenancyAgreementPage() {
               'Choose the standard assured periodic route if the let is straightforward and you do not need the fuller management and handover wording included in Premium.',
             href: '/standard-tenancy-agreement',
             ctaLabel: 'Compare standard assured periodic route',
+          },
+          {
+            title: 'Assured periodic tenancy guide',
+            description:
+              'Use the assured periodic guide if you want the newer England terminology explained before deciding whether the standard or Premium route is the better fit.',
+            href: '/assured-periodic-tenancy-agreement',
+            ctaLabel: 'Read assured periodic guide',
           },
           {
             title: 'Student Tenancy Agreement',

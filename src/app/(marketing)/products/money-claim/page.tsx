@@ -19,7 +19,9 @@ export const metadata: Metadata = {
   description: descriptor.metaDescription,
   keywords: [
     'money claim',
+    'money claim unpaid rent',
     'unpaid rent',
+    'recover unpaid rent',
     'property damage',
     'landlord money claim pack',
   ],

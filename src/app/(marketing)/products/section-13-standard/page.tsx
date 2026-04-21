@@ -18,6 +18,7 @@ const product = PRODUCTS[config.productSku];
 export const metadata: Metadata = {
   title: config.title,
   description: config.description,
+  keywords: config.keywords,
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: config.title,

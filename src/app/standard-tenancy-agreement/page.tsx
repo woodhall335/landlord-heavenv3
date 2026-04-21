@@ -11,7 +11,6 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/standard-tenancy-agreement');
 const standardWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=standard_tenancy_page&topic=tenancy';
-const englandHubHref = '/products/ast';
 const standardPackBreakdown = buildTenancyPackBreakdown('england_standard_tenancy_agreement');
 const standardSampleProof = getGoldenPackProofData('england_standard_tenancy_agreement');
 
@@ -67,8 +66,8 @@ export default function StandardTenancyAgreementPage() {
         subtitle="Use this standard England tenancy agreement if you are letting a whole property on a straightforward residential tenancy and want current assured periodic wording without student, HMO, lodger, or Premium-level detail."
         primaryCtaLabel="Start standard tenancy agreement"
         primaryCtaHref={standardWizardHref}
-        secondaryCtaLabel="View all England routes"
-        secondaryCtaHref={englandHubHref}
+        secondaryCtaLabel="Read periodic tenancy guide"
+        secondaryCtaHref="/periodic-tenancy-agreement"
         legacyNotice="If you were searching for a standard tenancy agreement, a basic tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator, this is the standard route for a straightforward whole-property let."
         introTitle="For a straightforward whole-property let"
         introBody={[
@@ -115,6 +114,13 @@ export default function StandardTenancyAgreementPage() {
               'Choose the Premium assured periodic route when the let is still a standard residential tenancy but you want more detailed operational drafting and a broader management pack.',
             href: '/premium-tenancy-agreement',
             ctaLabel: 'Compare Premium assured periodic route',
+          },
+          {
+            title: 'Periodic tenancy agreement guide',
+            description:
+              'Use the periodic tenancy guide if you want the newer England terminology explained in plain English before deciding whether Standard or Premium is the better fit.',
+            href: '/periodic-tenancy-agreement',
+            ctaLabel: 'Read periodic tenancy guide',
           },
           {
             title: 'Student Tenancy Agreement',

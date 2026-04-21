@@ -9,6 +9,7 @@ export type Section13ProductPageConfig = {
   slug: 'section-13-standard' | 'section-13-defence';
   title: string;
   description: string;
+  keywords: string[];
   heroTitle: string;
   heroSubtitle: string;
   productSku: 'section13_standard' | 'section13_defensive';
@@ -42,6 +43,13 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   title: `Section 13 Rent Increase Pack for England Landlords | ${PRODUCTS.section13_standard.displayPrice}`,
   description:
     'Increase rent in England using Section 13 and Form 4A with market evidence, service records, and landlord-facing support in one pack.',
+  keywords: [
+    'section 13 notice rent increase',
+    'section 13 notice england',
+    'form 4a rent increase',
+    'rent increase section 13',
+    'increase rent section 13',
+  ],
   heroTitle: 'Section 13 Rent Increase Pack for England landlords',
   heroSubtitle:
     'Increase the rent with evidence, timing checks, and supporting paperwork that still makes sense if the tenant asks why the figure has changed.',
@@ -212,6 +220,13 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   title: `Section 13 Defence Pack for England Landlords | ${PRODUCTS.section13_defensive.displayPrice}`,
   description:
     'Defend a Section 13 rent increase in England with a fuller tribunal-ready bundle, response templates, and market evidence built to stand up under challenge.',
+  keywords: [
+    'section 13 defence pack',
+    'section 13 tribunal defence',
+    'form 4a challenge england',
+    'section 13 tribunal guide',
+    'defend rent increase england',
+  ],
   heroTitle: 'Section 13 Defence Pack for England landlords',
   heroSubtitle:
     'Defend the rent increase with a structured case file that still works when the tenant pushes back and the matter moves closer to tribunal.',

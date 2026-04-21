@@ -18,8 +18,11 @@ export const metadata: Metadata = {
   title: `${descriptor.seoTitle} | ${product.displayPrice}`,
   description: descriptor.metaDescription,
   keywords: [
+    'complete eviction pack',
+    'eviction process england',
     'evict a tenant through court',
     'eviction pack',
+    'possession claim pack',
     'court forms',
     'Section 8 notice',
     'N5',
