@@ -37,6 +37,7 @@ import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttr
 
 // Validation
 import { getSectionValidation, validateMoneyClaimCase } from '@/lib/validation/money-claim-case-validator';
+import { isMoneyClaimClaimStatementSectionComplete } from '@/lib/wizard/flow-completion';
 
 import { ClaimantSection } from '@/components/wizard/money-claim/ClaimantSection';
 import { DefendantSection } from '@/components/wizard/money-claim/DefendantSection';
@@ -231,22 +232,7 @@ const SECTIONS: WizardSection[] = [
     id: 'claim_statement',
     label: 'Claim Statement',
     description: 'Statement, occupancy status, and interest',
-    isComplete: (facts) => {
-      // For England/Wales, must explicitly opt in/out of interest
-      const jurisdiction = facts.__meta?.jurisdiction;
-      const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
-
-      if (isEnglandWales) {
-        // Interest must be explicitly set (true or false, not null/undefined)
-        const interestDecided =
-          facts.money_claim?.charge_interest === true ||
-          facts.money_claim?.charge_interest === false;
-        return interestDecided;
-      }
-
-      // For other jurisdictions, just check if basis_of_claim is provided
-      return !!facts.money_claim?.basis_of_claim;
-    },
+    isComplete: (facts) => isMoneyClaimClaimStatementSectionComplete(facts),
     hasBlockers: (facts, jurisdiction) => {
       const result = getSectionValidation('claim_statement', facts, jurisdiction || 'england');
       return result.blockers;

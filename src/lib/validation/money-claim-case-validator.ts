@@ -312,7 +312,7 @@ export function validateClaimStatementSection(
 
   // Basis of claim is important
   if (!facts.money_claim?.basis_of_claim) {
-    warnings.push(
+    blockers.push(
       'Provide a basis of claim statement to explain what this claim is about'
     );
   } else if (facts.money_claim.basis_of_claim.length < 50) {

@@ -501,7 +501,7 @@ describe('Claim Statement section validation (new)', () => {
    * The new Claim Statement section validates:
    * - charge_interest decision (blocker for England)
    * - interest_start_date (warning when charging interest)
-   * - basis_of_claim (warning)
+   * - basis_of_claim (blocker)
    * - tenant_still_in_property (warning)
    */
   it('should require interest decision for England', () => {
@@ -563,7 +563,7 @@ describe('Claim Statement section validation (new)', () => {
     );
   });
 
-  it('should warn when basis of claim is missing', () => {
+  it('should block when basis of claim is missing', () => {
     const facts = {
       money_claim: {
         charge_interest: false,
@@ -573,7 +573,7 @@ describe('Claim Statement section validation (new)', () => {
     };
 
     const result = validateClaimStatementSection(facts, 'england');
-    expect(result.warnings).toContain(
+    expect(result.blockers).toContain(
       'Provide a basis of claim statement to explain what this claim is about'
     );
   });

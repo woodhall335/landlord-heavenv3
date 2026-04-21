@@ -67,6 +67,10 @@ import {
   RESIDENTIAL_LETTING_PRODUCTS,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
+import {
+  hasPositiveDepositAmount,
+  isTenancyDepositSectionComplete,
+} from '@/lib/wizard/flow-completion';
 
 // Section components - we'll create these inline for now
 import { Button, Input } from '@/components/ui';
@@ -336,12 +340,7 @@ const SECTIONS: WizardSection[] = [
     id: 'deposit',
     label: 'Deposit',
     description: 'Deposit and protection scheme',
-    isComplete: (facts) => {
-      if (facts.deposit_amount === undefined || !facts.deposit_scheme_name) return false;
-      const depositCap = getEnglandDepositCapResult(facts);
-      if (depositCap?.exceeds) return false;
-      return true;
-    },
+    isComplete: (facts) => isTenancyDepositSectionComplete(facts),
     hasBlockers: (facts) => {
       const depositCap = getEnglandDepositCapResult(facts);
       if (depositCap?.exceeds) {
@@ -1742,6 +1741,8 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
   const isScotland = jurisdiction === 'scotland';
   const isEngland = jurisdiction === 'england';
   const englandDepositCap = getEnglandDepositCapResult({ ...facts, __meta: { ...(facts.__meta || {}), jurisdiction } });
+  const hasDeposit = hasPositiveDepositAmount({ ...facts, __meta: { ...(facts.__meta || {}), jurisdiction } });
+  const depositAmount = toFiniteNumber(facts.deposit_amount);
 
   // Jurisdiction-specific deposit schemes
   const depositSchemeOptions = isScotland
@@ -1763,43 +1764,71 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           <CurrencyField
             label="Deposit amount"
             value={facts.deposit_amount}
-            onChange={(v) => onUpdate({ deposit_amount: v })}
+            onChange={(v) => {
+              const nextAmount = toFiniteNumber(v);
+              if (nextAmount === 0) {
+                onUpdate({
+                  deposit_amount: 0,
+                  deposit_scheme_name: '',
+                  deposit_paid_date: '',
+                  deposit_protection_date: '',
+                  deposit_already_protected: undefined,
+                  deposit_reference_number: '',
+                  prescribed_information_served: undefined,
+                });
+                return;
+              }
+
+              onUpdate({ deposit_amount: v });
+            }}
             placeholder="1400"
             required
           />
-          <SelectField
-            label="Deposit protection scheme"
-            value={facts.deposit_scheme_name}
-            onChange={(v) => onUpdate({ deposit_scheme_name: v })}
-            options={depositSchemeOptions}
-            required
-          />
-          <TextField
-            label="Date deposit will be paid"
-            value={facts.deposit_paid_date}
-            onChange={(v) => onUpdate({ deposit_paid_date: v })}
-            type="date"
-          />
-          <TextField
-            label="Date you will protect the deposit"
-            value={facts.deposit_protection_date}
-            onChange={(v) => onUpdate({ deposit_protection_date: v })}
-            type="date"
-          />
-          <YesNoField
-            label="Is the deposit already protected?"
-            value={facts.deposit_already_protected}
-            onChange={(v) => onUpdate({ deposit_already_protected: v })}
-          />
-          {facts.deposit_already_protected && (
-            <TextField
-              label="Deposit protection reference number"
-              value={facts.deposit_reference_number}
-              onChange={(v) => onUpdate({ deposit_reference_number: v })}
-              placeholder="Reference from scheme"
-            />
-          )}
+          {hasDeposit ? (
+            <>
+              <SelectField
+                label="Deposit protection scheme"
+                value={facts.deposit_scheme_name}
+                onChange={(v) => onUpdate({ deposit_scheme_name: v })}
+                options={depositSchemeOptions}
+                required
+              />
+              <TextField
+                label="Date deposit will be paid"
+                value={facts.deposit_paid_date}
+                onChange={(v) => onUpdate({ deposit_paid_date: v })}
+                type="date"
+              />
+              <TextField
+                label="Date you will protect the deposit"
+                value={facts.deposit_protection_date}
+                onChange={(v) => onUpdate({ deposit_protection_date: v })}
+                type="date"
+              />
+              <YesNoField
+                label="Is the deposit already protected?"
+                value={facts.deposit_already_protected}
+                onChange={(v) => onUpdate({ deposit_already_protected: v })}
+              />
+              {facts.deposit_already_protected && (
+                <TextField
+                  label="Deposit protection reference number"
+                  value={facts.deposit_reference_number}
+                  onChange={(v) => onUpdate({ deposit_reference_number: v })}
+                  placeholder="Reference from scheme"
+                />
+              )}
+            </>
+          ) : null}
         </div>
+        {depositAmount === 0 ? (
+          <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <p className="text-sm text-slate-700">
+              No deposit will be taken for this tenancy, so the scheme fields and prescribed information
+              steps are not needed for this pack.
+            </p>
+          </div>
+        ) : null}
         {isEngland && englandDepositCap && (
           <div className={`mt-4 rounded-lg border p-4 ${englandDepositCap.exceeds ? 'border-red-200 bg-red-50' : 'border-emerald-200 bg-emerald-50'}`}>
             <p className={`text-sm ${englandDepositCap.exceeds ? 'text-red-800' : 'text-emerald-800'}`}>
@@ -1818,31 +1847,42 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
           iconSlug="deposit"
           subtitle="Record the deposit information you give the tenant and keep evidence on file."
         />
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
-          <p className="text-sm text-amber-800">
-            {isScotland ? (
-              <>
-                <strong>SCOTTISH LEGAL REQUIREMENT:</strong> You MUST protect the deposit in an approved
-                Scottish scheme within 30 WORKING days of receiving it. You must also provide the tenant with
-                prescribed information within 30 working days. Failure to comply can result in compensation
-                up to 3x the deposit amount.
-              </>
-            ) : (
-              <>
-                <strong>Statutory requirement:</strong> You must give the tenant the prescribed deposit
-                information within 30 days of receiving the deposit. If you do not, a court can order you
-                to repay or protect the deposit and pay compensation of up to 3 times the deposit. Keep
-                evidence that this was done.
-              </>
-            )}
-          </p>
-        </div>
-        <YesNoField
-          label="Have you served or will you serve prescribed information?"
-          value={facts.prescribed_information_served}
-          onChange={(v) => onUpdate({ prescribed_information_served: v })}
-          required
-        />
+        {hasDeposit ? (
+          <>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+              <p className="text-sm text-amber-800">
+                {isScotland ? (
+                  <>
+                    <strong>SCOTTISH LEGAL REQUIREMENT:</strong> You MUST protect the deposit in an approved
+                    Scottish scheme within 30 WORKING days of receiving it. You must also provide the tenant with
+                    prescribed information within 30 working days. Failure to comply can result in compensation
+                    up to 3x the deposit amount.
+                  </>
+                ) : (
+                  <>
+                    <strong>Statutory requirement:</strong> You must give the tenant the prescribed deposit
+                    information within 30 days of receiving the deposit. If you do not, a court can order you
+                    to repay or protect the deposit and pay compensation of up to 3 times the deposit. Keep
+                    evidence that this was done.
+                  </>
+                )}
+              </p>
+            </div>
+            <YesNoField
+              label="Have you served or will you serve prescribed information?"
+              value={facts.prescribed_information_served}
+              onChange={(v) => onUpdate({ prescribed_information_served: v })}
+              required
+            />
+          </>
+        ) : (
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <p className="text-sm text-slate-700">
+              Prescribed information is only needed when a deposit is actually taken. If this tenancy will not
+              take a deposit, we leave that part of the pack out.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

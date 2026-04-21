@@ -35,6 +35,7 @@ import type {
   Section13ProductSku,
   Section13State,
 } from '@/lib/section13/types';
+import { isSection13ProposalStepComplete } from '@/lib/wizard/flow-completion';
 
 type SectionId =
   | 'tenancy'
@@ -176,10 +177,7 @@ function getStepCompleteState(
       };
     case 'proposal':
       return {
-        complete:
-          state.proposal.proposedRentAmount != null &&
-          Boolean(state.proposal.serviceDate) &&
-          Boolean(state.proposal.proposedStartDate),
+        complete: isSection13ProposalStepComplete(state),
         hasIssue: Boolean(state.preview && !state.preview.enteredStartDateValid),
       };
     case 'charges':
@@ -1221,6 +1219,8 @@ export function Section13WizardFlow({
                       proposal: {
                         ...prev.proposal,
                         serviceMethod: (event.target.value || null) as Section13State['proposal']['serviceMethod'],
+                        serviceMethodOther:
+                          event.target.value === 'other' ? prev.proposal.serviceMethodOther : null,
                       },
                     }))
                   }
@@ -1234,6 +1234,18 @@ export function Section13WizardFlow({
                   <option value="other">Other</option>
                 </select>
               </label>
+              {effectiveState.proposal.serviceMethod === 'other' ? (
+                renderTextInput(
+                  'Other service method',
+                  effectiveState.proposal.serviceMethodOther,
+                  (value) =>
+                    updateState((prev) => ({
+                      ...prev,
+                      proposal: { ...prev.proposal, serviceMethodOther: value || null },
+                    })),
+                  { placeholder: 'Describe how the notice will be served' }
+                )
+              ) : null}
             </div>
 
             {effectiveState.preview?.earliestValidStartDate ? (
