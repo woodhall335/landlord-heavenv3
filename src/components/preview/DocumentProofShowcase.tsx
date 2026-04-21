@@ -16,12 +16,14 @@ interface DocumentProofShowcaseProps {
   title?: string;
   description?: string;
   entries: DocumentProofEntry[];
+  compact?: boolean;
 }
 
 export function DocumentProofShowcase({
   title = 'Actual draft proof',
   description = 'These first-page previews are generated from your current answers so you can sense-check the paperwork before payment.',
   entries,
+  compact = false,
 }: DocumentProofShowcaseProps) {
   const [selectedId, setSelectedId] = useState(entries[0]?.id ?? '');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,27 +43,39 @@ export function DocumentProofShowcase({
 
   return (
     <>
-      <section className="rounded-[1.6rem] border border-[#dfe5ff] bg-white p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+      <section
+        className={`border border-[#dfe5ff] bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)] ${
+          compact ? 'rounded-[1.35rem] p-4' : 'rounded-[1.6rem] p-5'
+        }`}
+      >
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6d28d9]">
               Live preview proof
             </p>
-            <h3 className="mt-2 text-xl font-semibold tracking-tight text-[#111827]">{title}</h3>
-            <p className="mt-2 text-sm leading-7 text-slate-600">{description}</p>
+            <h3 className={`mt-2 font-semibold tracking-tight text-[#111827] ${compact ? 'text-lg' : 'text-xl'}`}>
+              {title}
+            </h3>
+            <p className={`mt-2 text-sm text-slate-600 ${compact ? 'leading-6' : 'leading-7'}`}>{description}</p>
           </div>
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-[#d7ccff] bg-[#f7f3ff] px-4 py-2 text-sm font-semibold text-[#5b36b3] transition hover:bg-white"
+            className={`inline-flex items-center justify-center gap-2 rounded-full border border-[#d7ccff] bg-[#f7f3ff] text-sm font-semibold text-[#5b36b3] transition hover:bg-white ${
+              compact ? 'px-3.5 py-2' : 'px-4 py-2'
+            }`}
           >
             <RiFullscreenLine className="h-4 w-4" />
-            Open larger proof
+            {compact ? 'Open proof' : 'Open larger proof'}
           </button>
         </div>
 
-        <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(240px,0.9fr)_minmax(0,1.4fr)]">
-          <div className="space-y-3">
+        <div
+          className={`mt-5 grid gap-5 ${
+            compact ? 'xl:grid-cols-[minmax(220px,0.85fr)_minmax(0,1.2fr)]' : 'lg:grid-cols-[minmax(240px,0.9fr)_minmax(0,1.4fr)]'
+          }`}
+        >
+          <div className={compact ? 'grid gap-3 sm:grid-cols-2 xl:grid-cols-1' : 'space-y-3'}>
             {entries.map((entry) => {
               const isSelected = entry.id === selectedEntry.id;
 
@@ -92,16 +106,20 @@ export function DocumentProofShowcase({
             })}
           </div>
 
-          <div className="rounded-[1.25rem] border border-[#e4ddff] bg-[#f8f5ff] p-3 shadow-sm">
+          <div className={`border border-[#e4ddff] bg-[#f8f5ff] shadow-sm ${compact ? 'rounded-[1.1rem] p-2.5' : 'rounded-[1.25rem] p-3'}`}>
             <div className="overflow-hidden rounded-[1rem] border border-[#e3dbff] bg-white">
               <img
                 src={selectedEntry.thumbnailUrl}
                 alt={`${selectedEntry.title} first-page preview`}
-                className="h-auto w-full bg-white"
+                className={`w-full bg-white ${compact ? 'max-h-[22rem] object-contain' : 'h-auto'}`}
                 loading="lazy"
               />
             </div>
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-[0.95rem] border border-[#e8ddff] bg-white px-4 py-3">
+            <div
+              className={`mt-3 flex flex-wrap items-center justify-between gap-3 border border-[#e8ddff] bg-white ${
+                compact ? 'rounded-[0.85rem] px-3.5 py-3' : 'rounded-[0.95rem] px-4 py-3'
+              }`}
+            >
               <div>
                 <p className="text-sm font-semibold text-[#1f1740]">{selectedEntry.title}</p>
                 <p className="mt-1 text-sm text-slate-600">{selectedEntry.description}</p>
