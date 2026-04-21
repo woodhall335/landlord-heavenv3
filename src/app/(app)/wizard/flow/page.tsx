@@ -541,14 +541,14 @@ function WizardFlowContent() {
         title: 'Eviction Notice Generator',
         subtitle: 'Section 8, May 2026',
         description:
-          'Choose this if you need to serve the current England Section 8 notice and want the grounds, dates, and service checks before you send anything.',
+          'Choose this if you need the Form 3A notice, service instructions, service and validity checklist, pre-service compliance declaration, and rent schedule / arrears statement before you serve anything.',
       },
       {
         key: 'complete_pack' as const,
         title: 'Complete Eviction Pack',
         subtitle: 'Notice through court possession',
         description:
-          'Choose this if you want the notice, court forms, and possession paperwork working together from the start.',
+          'Choose this if you want the Form 3A notice, N5, N119, and the full court-ready possession paperwork working together from the start.',
       },
     ];
 
@@ -563,12 +563,12 @@ function WizardFlowContent() {
               Choose the pack you want to start with
             </h1>
             <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600">
-              Pick the Section 8 notice generator if you need to serve notice now, or go straight
-              into the full court possession pack if you want the notice and court paperwork joined
-              up from the start.
+              Pick the Section 8 notice generator if you need the notice-stage documents first, or
+              go straight into the full court possession pack if you want the notice and court
+              paperwork joined up from the start.
             </p>
             <p className="mt-3 text-sm font-medium text-slate-500">
-              Your questions start on Case Basics after you choose a product.
+              Your questions start on the first real step after you choose a product.
             </p>
 
             <div className="mt-8 grid gap-4 lg:grid-cols-2">
@@ -609,7 +609,7 @@ function WizardFlowContent() {
                         isActive ? 'text-white' : 'text-slate-900'
                       }`}
                     >
-                      {isActive ? 'Continue to Case Basics' : 'Start with this pack'}
+                      {isActive ? 'Continue to the first step' : 'Start with this pack'}
                     </div>
                   </button>
                 );
@@ -619,8 +619,10 @@ function WizardFlowContent() {
             <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <p className="text-sm font-semibold text-slate-900">What changes next</p>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                The wizard will move into the real questions after this screen, starting with Case
-                Basics. The product switcher will not keep following you through every step.
+                The wizard will move into the real questions after this screen. Notice Only starts
+                with Section 8 notice basics. Complete Pack starts with the possession route and
+                court-pack overview. The product switcher will not keep following you through every
+                step.
               </p>
             </div>
           </div>

@@ -5,7 +5,7 @@
  * court-ready, jurisdiction-aware flow.
  *
  * Flow Structure (England/Wales):
- * 1. Case Basics - Jurisdiction and eviction route (S8 or S21)
+ * 1. Case Basics - England Form 3A possession route and court-pack summary
  * 2. Parties - Landlord(s) and Tenant(s) with joint support
  * 3. Property - Full address and postcode
  * 4. Tenancy - Start date, rent amount, frequency, due day
@@ -106,7 +106,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
     label: 'Case Basics',
-    description: 'Jurisdiction and eviction route',
+    description: 'Possession route and court-pack overview',
     jurisdictions: ['england', 'wales'],
     isComplete: (facts, jurisdiction) => {
       const route = facts.eviction_route as string;
@@ -706,7 +706,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     switch (currentSection.id) {
       // England/Wales sections
       case 'case_basics':
-        return <CaseBasicsSection {...englandWalesProps} />;
+        return <CaseBasicsSection {...englandWalesProps} flowProduct="complete_pack" />;
       case 'parties':
         return <PartiesSection {...englandWalesProps} />;
       case 'property':

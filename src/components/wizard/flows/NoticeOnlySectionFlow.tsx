@@ -5,7 +5,7 @@
  * EvictionSectionFlow design language for consistency.
  *
  * Flow Structure (England/Wales):
- * 1. Case Basics - Jurisdiction and eviction route selection
+ * 1. Notice Basics - England Form 3A route summary or Wales route selection
  * 2. Parties - Landlord(s) and Tenant(s) with joint support
  * 3. Property - Full address and postcode
  * 4. Tenancy - Start date, rent amount, frequency, due day
@@ -130,8 +130,8 @@ const normalizeWalesRoute = (route: string | undefined): string | undefined => {
 const SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
-    label: 'Case Basics',
-    description: 'Jurisdiction and eviction route',
+    label: 'Notice Basics',
+    description: 'Section 8 notice route and notice-stage pack',
     isComplete: (facts, jurisdiction) => {
       const route = facts.eviction_route as string;
       if (!route) return false;
@@ -1023,7 +1023,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         if (isWales) {
           return <WalesCaseBasicsSection {...englandWalesProps} />;
         }
-        return <CaseBasicsSection {...englandWalesProps} />;
+        return <CaseBasicsSection {...englandWalesProps} flowProduct="notice_only" />;
       case 'parties':
         // Scotland uses the same Parties section - pass actual jurisdiction for type safety
         if (isScotland) {

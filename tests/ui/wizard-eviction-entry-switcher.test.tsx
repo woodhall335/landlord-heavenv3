@@ -96,7 +96,7 @@ describe('England eviction wizard entry switcher', () => {
     });
 
     expect(
-      screen.getByText(/Your questions start on Case Basics after you choose a product\./i)
+      screen.getByText(/Your questions start on the first real step after you choose a product\./i)
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Eviction Notice Generator/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Complete Eviction Pack/i })).toBeInTheDocument();
