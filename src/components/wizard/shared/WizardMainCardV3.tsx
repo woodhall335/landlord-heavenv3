@@ -27,15 +27,15 @@ export function WizardMainCardV3({
   return (
     <main className="min-w-0 flex flex-1 flex-col lg:max-w-[860px]">
       {banner}
-      <div className="flex flex-col rounded-2xl border border-violet-200 bg-white p-6 shadow-[0_12px_28px_rgba(76,29,149,0.10)] md:p-7">
+      <div className="flex flex-col overflow-hidden rounded-[2rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,246,255,0.96))] p-6 shadow-[0_28px_90px_rgba(76,29,149,0.12)] backdrop-blur-sm md:p-8">
         <div className="shrink-0">
           {shellTitle ? (
-            <div className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-violet-700">
+            <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7650cd]">
               {shellTitle}
             </div>
           ) : null}
           {stepNumber && totalSteps ? (
-            <div className="mb-4 inline-flex rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-800">
+            <div className="mb-5 inline-flex rounded-full border border-[#ddd1ff] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm">
               Step {stepNumber} of {totalSteps}
             </div>
           ) : null}
@@ -44,7 +44,7 @@ export function WizardMainCardV3({
 
         <div className="min-h-0 overflow-visible">{children}</div>
 
-        <div className="mt-6 shrink-0">{navigation}</div>
+        <div className="mt-8 shrink-0">{navigation}</div>
       </div>
     </main>
   );

@@ -30,7 +30,7 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
 
           const connectorClass = isHeader
             ? isComplete || isCurrent
-              ? 'bg-violet-300'
+              ? 'bg-[#b99bff]'
               : hasIssue
               ? 'bg-rose-300/80'
               : 'bg-white/25'
@@ -46,20 +46,22 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
                 onClick={tab.onClick}
                 className={[
                   'group inline-flex items-center gap-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300',
-                  isHeader ? 'rounded-full px-2 py-1' : 'rounded-md px-1.5 py-1',
+                  isHeader
+                    ? 'rounded-full border border-transparent px-2.5 py-1.5 hover:border-[#e5dbff] hover:bg-white/55'
+                    : 'rounded-md px-1.5 py-1',
                 ].join(' ')}
               >
                 <span
                   className={[
                     'inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold transition',
                     isCurrent
-                      ? 'bg-violet-500 text-white ring-2 ring-violet-200/70'
+                      ? 'bg-[linear-gradient(180deg,#7c3aed_0%,#5b21b6_100%)] text-white ring-2 ring-[#d7c6ff]'
                       : isComplete
                       ? 'bg-emerald-500 text-white'
                       : hasIssue
                       ? 'bg-rose-500 text-white'
                       : isHeader
-                      ? 'bg-white/25 text-white group-hover:bg-white/35'
+                      ? 'bg-[#efe7ff] text-[#5b36b3] group-hover:bg-white'
                       : 'bg-violet-100 text-violet-800 group-hover:bg-violet-200',
                   ].join(' ')}
                 >
@@ -77,14 +79,14 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
                     isHeader ? 'text-sm' : 'text-sm',
                     isCurrent
                       ? isHeader
-                        ? 'text-white'
+                        ? 'text-[#231246]'
                         : 'text-violet-950'
                       : hasIssue
                       ? isHeader
-                        ? 'text-rose-100'
+                        ? 'text-rose-700'
                         : 'text-rose-900'
                       : isHeader
-                      ? 'text-violet-100/90 group-hover:text-white'
+                      ? 'text-[#6b6285] group-hover:text-[#231246]'
                       : 'text-violet-800 group-hover:text-violet-950',
                   ].join(' ')}
                 >
