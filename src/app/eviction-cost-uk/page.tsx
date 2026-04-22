@@ -67,11 +67,11 @@ const faqs = [
   },
   {
     question: 'What are the court fees for eviction?',
-    answer: 'Court fees are £355 for a possession claim (N5 or N5B) and £130 for a bailiff warrant if needed. These fees are set by the government and apply whether you use a solicitor or do it yourself.',
+    answer: 'Court fees are £355 for a possession claim and £130 for a bailiff warrant if needed. These fees are set by the government and apply whether you use a solicitor or do it yourself.',
   },
   {
     question: 'Is it cheaper to use Section 21 or Section 8?',
-    answer: 'Court fees are the same (£355). Section 21 accelerated possession (N5B) is often simpler and doesn\'t require a hearing, potentially saving time. Section 8 may require a hearing but can be faster with only 2 weeks notice for some grounds.',
+    answer: 'Court fees are the same (£355). For current England private-rented cases after 1 May 2026, the live route starts with Form 3A and then uses N5 and N119 in court. Grounds 8, 10, and 11 now use 4 weeks notice, not 2 weeks.',
   },
   {
     question: 'Can I recover eviction costs from the tenant?',
@@ -464,7 +464,7 @@ export default function EvictionCostUkPage() {
                     <h4 className="font-semibold text-gray-900 mb-2">Speed matters</h4>
                     <p className="text-gray-600 text-sm mb-4">
                       Every month saved in the eviction process is a month of rent saved.
-                      Section 8 with Ground 8 (rent arrears) requires only 2 weeks notice vs 2 months for Section 21.
+                      For current England cases, Ground 8 now uses 4 weeks notice and requires the higher post-May 2026 arrears threshold.
                     </p>
                     <Link
                       href="/section-8-notice-template"
@@ -574,5 +574,9 @@ export default function EvictionCostUkPage() {
     </>
   );
 }
+
+
+
+
 
 

@@ -124,8 +124,10 @@ const LEGACY_SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
  * - Ground 14A: Immediate (0 days) for domestic violence
  * - Ground 14 serious ASB: Immediate (0 days)
  * - Ground 14 moderate ASB: 14 days minimum
- * - Grounds 1, 2, 5, 6, 7, 9, 16: 2 months (60 days)
- * - All other grounds: 14 days minimum
+ * - Grounds 1, 1A, 2, 6: 4 months
+ * - Grounds 5, 5A, 5B, 5C, 5H, 7, 9: 2 months
+ * - Grounds 8, 10, 11 and some supported-accommodation routes: 4 weeks
+ * - Other remaining grounds: 2 weeks unless immediate application applies
  * - Wales: Generates warnings (wrong terminology)
  */
 export function calculateSection8NoticePeriod(

@@ -77,7 +77,7 @@ function getGuidanceForQuestion(
           return {
             title: '💡 Example particulars for England & Wales',
             examples: [
-              'Ground 8: Rent arrears of £2,400. Rent is £800/month due on 1st. Last payment received 01/08/2024. No payments for Sept, Oct, Nov 2024. Arrears exceed 2 months at notice date.',
+              'Ground 8: Rent arrears of £3,200. Rent is £800/month due on 1st. Last payment received 01/08/2024. No payments for Sept, Oct, Nov, or Dec 2024. Arrears exceed 3 months at notice date.',
               'Ground 10: Total arrears £1,600. Tenant paying sporadically - paid £400 in Sept instead of £800, £0 in Oct, £200 in Nov. Pattern of persistent delay.',
               'Ground 12: Breach of tenancy clause 8.3 (no subletting). Tenant advertising room on SpareRoom.com since 15/10/2024. Screenshot evidence attached. Written warning sent 20/10/2024 ignored.',
               'Ground 14: Anti-social behaviour. Noise complaints from 3 neighbors (Flat 2, 4, 6) on 12/09, 19/09, 26/09. Police attended 26/09 - ref CR12345/24. Environmental Health involved.',
@@ -297,3 +297,4 @@ export function GuidanceTips({ questionId, jurisdiction, caseType }: GuidanceTip
     </div>
   );
 }
+

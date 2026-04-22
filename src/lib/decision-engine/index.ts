@@ -488,14 +488,14 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
       arrearsMonths = (totalArrears / rentAmountForArrears) / 4.33;
     }
 
-    if (arrearsMonths >= 2) {
+    if (arrearsMonths >= 3) {
       section8Grounds.push({
         code: '8',
         title: 'Ground 8 - Serious Rent Arrears',
         type: 'mandatory',
         weight: 'high',
-        notice_period_days: 14,
-        reasoning: 'At least 2 months rent unpaid - mandatory ground if threshold met at notice and hearing',
+        notice_period_days: 28,
+        reasoning: 'At least 3 months rent unpaid - mandatory ground if the statutory threshold is still met at notice and hearing',
         success_probability: 'very_high',
         red_flags: ['Arrears must meet threshold at BOTH notice date and hearing date'],
       });

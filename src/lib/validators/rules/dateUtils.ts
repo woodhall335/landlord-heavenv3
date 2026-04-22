@@ -239,11 +239,11 @@ export function isInFuture(date: Date): boolean {
  *
  * LEGAL RULE (Schedule 2, Ground 8, Housing Act 1988):
  * At the time of service AND at the hearing, rent must be unpaid for:
- * - Weekly rent: at least 8 weeks
- * - Fortnightly rent: at least 4 fortnights (8 weeks)
- * - Monthly rent: at least 2 months
- * - Quarterly rent: at least one quarter (3 months) - but 2 months threshold commonly used
- * - Yearly rent: at least 3 months (but 2 months threshold commonly used)
+ * - Weekly rent: at least 13 weeks
+ * - Fortnightly rent: at least 7 fortnights (13 weeks)
+ * - Monthly rent: at least 3 months
+ * - Quarterly rent: at least one quarter more than 3 months in arrears
+ * - Yearly rent: at least 3 months' rent more than 3 months in arrears
  *
  * Returns the threshold amount that arrears must meet or exceed.
  */
@@ -260,31 +260,29 @@ export function calculateGround8Threshold(
   switch (freq) {
     case 'weekly':
       return {
-        threshold: rentAmount * 8,
-        description: 'at least 8 weeks rent',
+        threshold: rentAmount * 13,
+        description: 'at least 13 weeks rent',
       };
     case 'fortnightly':
       return {
-        threshold: rentAmount * 4,
-        description: 'at least 4 fortnightly payments (8 weeks)',
+        threshold: rentAmount * 7,
+        description: 'at least 7 fortnightly payments (13 weeks)',
       };
     case 'monthly':
       return {
-        threshold: rentAmount * 2,
-        description: 'at least 2 months rent',
+        threshold: rentAmount * 3,
+        description: 'at least 3 months rent',
       };
     case 'quarterly':
-      // Conservative: use 2 months equivalent even though technically 1 quarter
       return {
-        threshold: (rentAmount / 3) * 2,
-        description: 'at least 2 months rent equivalent',
+        threshold: rentAmount,
+        description: 'at least one quarter more than 3 months in arrears',
       };
     case 'yearly':
     case 'annual':
-      // 2 months of annual rent
       return {
-        threshold: (rentAmount / 12) * 2,
-        description: 'at least 2 months rent equivalent',
+        threshold: rentAmount / 4,
+        description: 'at least 3 months rent more than 3 months in arrears',
       };
     default:
       return null;

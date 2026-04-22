@@ -201,12 +201,12 @@ export default function TenantNotPayingRentPage() {
                   <h3 className="text-lg font-bold text-gray-900 mb-2">2. Start possession for arrears</h3>
                   <p className="text-gray-600 text-sm mb-4">
                     Serve a Section 8 notice using rent arrears grounds. In many cases,
-                    Ground 8 gives a two-week notice period.
+                    Ground 8 now gives a four-week notice period.
                   </p>
                   <ul className="space-y-2 text-sm text-gray-600 mb-4">
                     <li className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-primary" />
-                      2 weeks notice (Ground 8)
+                      4 weeks notice (Ground 8)
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-primary" />
@@ -335,12 +335,12 @@ export default function TenantNotPayingRentPage() {
                         </span>
                       </div>
                       <p className="text-gray-600 mb-3">
-                        At least 2 months&apos; rent arrears when notice served AND at the court hearing.
+                        At least 3 months&apos; rent arrears, or 13 weeks&apos; rent for weekly and fortnightly payments, when notice is served AND at the court hearing.
                       </p>
                       <div className="grid sm:grid-cols-2 gap-4 text-sm">
                         <div>
                           <span className="font-medium text-gray-900">Notice period:</span>
-                          <span className="text-gray-600"> 2 weeks</span>
+                          <span className="text-gray-600"> 4 weeks</span>
                         </div>
                         <div>
                           <span className="font-medium text-gray-900">Outcome:</span>
@@ -370,7 +370,7 @@ export default function TenantNotPayingRentPage() {
                       <div className="grid sm:grid-cols-2 gap-4 text-sm">
                         <div>
                           <span className="font-medium text-gray-900">Notice period:</span>
-                          <span className="text-gray-600"> 2 weeks</span>
+                          <span className="text-gray-600"> 4 weeks</span>
                         </div>
                         <div>
                           <span className="font-medium text-gray-900">Outcome:</span>
@@ -400,7 +400,7 @@ export default function TenantNotPayingRentPage() {
                       <div className="grid sm:grid-cols-2 gap-4 text-sm">
                         <div>
                           <span className="font-medium text-gray-900">Notice period:</span>
-                          <span className="text-gray-600"> 2 weeks</span>
+                          <span className="text-gray-600"> 4 weeks</span>
                         </div>
                         <div>
                           <span className="font-medium text-gray-900">Evidence needed:</span>
@@ -419,7 +419,7 @@ export default function TenantNotPayingRentPage() {
                     <h4 className="font-semibold text-gray-900 mb-1">Recommended approach</h4>
                     <p className="text-gray-600 text-sm">
                       Cite all three grounds (8, 10, and 11) on the Section 8 notice if the facts support them. If the tenant pays
-                      the arrears below two months before the hearing, you may lose Ground 8 but still
+                      the arrears below the Ground 8 threshold before the hearing, you may lose Ground 8 but still
                       continue under Grounds 10 and 11.
                     </p>
                   </div>
@@ -582,6 +582,11 @@ export default function TenantNotPayingRentPage() {
     </>
   );
 }
+
+
+
+
+
 
 
 

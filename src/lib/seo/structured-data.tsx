@@ -629,7 +629,7 @@ export const HOWTO_SCHEMAS = {
       { name: 'Gather evidence', text: 'Collect rent statements, warning letters, photos, or other supporting evidence.' },
       { name: 'Complete Form 3A notice', text: 'Fill in the official Form 3A with property details and selected grounds.' },
       { name: 'Serve the notice', text: 'Deliver to tenant by hand, post, or leave at property. Note the service date.' },
-      { name: 'Wait the notice period', text: 'Notice periods vary: 2 weeks for rent arrears (Ground 8), 2 months for most others.' },
+      { name: 'Wait the notice period', text: 'Notice periods vary by ground: 4 weeks for Grounds 8, 10, and 11, 2 months for some others, and 4 months for grounds such as 1, 1A, 2, and 6.' },
       { name: 'Apply for possession order', text: 'If tenant hasn\'t left, apply to court using Form N5 (not N5B for Section 8).' },
     ],
   }),
@@ -687,6 +687,7 @@ export function StructuredData({ data }: { data: object }) {
     />
   );
 }
+
 
 
 

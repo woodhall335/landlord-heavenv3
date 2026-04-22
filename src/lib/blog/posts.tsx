@@ -308,7 +308,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li><strong>Ground 8 (Rent Arrears):</strong> Remains at 2 months, but calculation rules clarified</li>
+          <li><strong>Ground 8 (Rent Arrears):</strong> Now requires 3 months rent, or 13 weeks where rent is paid weekly or fortnightly</li>
           <li><strong>Ground 14 (Anti-Social Behaviour):</strong> Threshold lowered, evidence requirements relaxed</li>
           <li><strong>Ground 14A (Domestic Abuse):</strong> Expanded to cover more situations</li>
         </ul>
@@ -1157,7 +1157,7 @@ const allBlogPosts: BlogPost[] = [
           <li><strong>Ground 7:</strong> Periodic tenancy following death of previous tenant</li>
           <li><strong>Ground 7A:</strong> Tenant convicted of serious offence at the property</li>
           <li><strong>Ground 7B:</strong> Tenant has lost right to rent (immigration)</li>
-          <li><strong>Ground 8:</strong> At least 2 months&apos; rent arrears (most commonly used)</li>
+          <li><strong>Ground 8:</strong> At least 3 months&apos; rent arrears, or 13 weeks&apos; rent if paid weekly or fortnightly</li>
         </ul>
 
         <h3>Discretionary Grounds (Court Decides)</h3>
@@ -1234,7 +1234,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li>Section 8 with Ground 8 has a shorter notice period (2 weeks vs 2 months)</li>
+          <li>Section 8 with Ground 8 now uses 4 weeks notice and the higher post-May 2026 arrears threshold</li>
           <li>Section 21 provides a guaranteed fallback if rent is paid down</li>
           <li>You can pursue whichever notice expires first</li>
           <li>Increases pressure on tenant to negotiate or leave voluntarily</li>
@@ -1267,7 +1267,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What happens if my tenant pays off arrears?</h3>
             <p className="text-gray-600">
-              If they pay arrears below 2 months before the court hearing, Ground 8 no longer applies.
+              If they pay arrears below the Ground 8 threshold before the court hearing, Ground 8 no longer applies.
               This is why serving Section 21 as backup is recommended—it remains valid regardless.
             </p>
           </div>
@@ -1993,7 +1993,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Key Points</p>
           <p className="text-blue-700">
-            For mandatory possession under Ground 8, your tenant must owe at least <strong>2 months&apos; rent</strong>
+            For mandatory possession under Ground 8, your tenant must owe at least <strong>3 months&apos; rent</strong> if the rent is monthly, or 13 weeks&apos; rent if paid weekly or fortnightly
             both when you serve the notice AND at the court hearing. If they pay down below this threshold,
             you lose the mandatory ground.
           </p>
@@ -2017,7 +2017,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><strong>Any arrears:</strong> Discretionary possession under Ground 10 or 11</li>
-          <li><strong>2 months+ arrears:</strong> Mandatory possession under Ground 8</li>
+          <li><strong>3 months rent or 13 weeks arrears:</strong> Mandatory possession under Ground 8</li>
           <li><strong>8 weeks+ arrears (weekly rent):</strong> Alternative calculation for weekly payments</li>
         </ul>
 
@@ -2105,7 +2105,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>The Critical Risk: Arrears Paid Down</h3>
 
         <p>
-          If your tenant pays the arrears below 2 months before the court hearing, Ground 8 no longer
+          If your tenant pays the arrears below the Ground 8 threshold before the court hearing, Ground 8 no longer
           applies. The judge cannot grant mandatory possession. This is why many landlords also serve
           Section 21 as backup.
         </p>
@@ -2140,7 +2140,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li>Pay the arrears in full (problem solved)</li>
-          <li>Pay part of the arrears (may drop below 2 months)</li>
+          <li>Pay part of the arrears (may drop below the Ground 8 threshold)</li>
           <li>Leave the property</li>
           <li>Do nothing (most common)</li>
         </ul>
@@ -2247,14 +2247,14 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">How much rent must be owed for eviction?</h3>
             <p className="text-gray-600">
               Any rent arrears can be grounds for eviction (Ground 10), but for mandatory possession
-              (Ground 8), the tenant must owe at least 2 months&apos; rent at both notice and hearing stage.
+              (Ground 8), the tenant must owe at least 3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly, at both notice and hearing stage.
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant pays some rent before court?</h3>
             <p className="text-gray-600">
-              If they reduce arrears below 2 months before the hearing, Ground 8 fails. You&apos;d need to
+              If they reduce arrears below the Ground 8 threshold before the hearing, Ground 8 fails. You&apos;d need to
               rely on discretionary Ground 10 or have Section 21 as backup.
             </p>
           </div>
@@ -3114,7 +3114,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="text-green-700">
             <strong>Ground 8</strong> is the most commonly used mandatory ground. If the tenant owes at least
             2 months&apos; rent when you serve the notice AND at the court hearing, possession is mandatory.
-            However, if they pay down to below 2 months at any point, you lose the mandatory element.
+            However, if they pay down below the Ground 8 threshold at any point, you lose the mandatory element.
             <Link href="/blog/england-section-8-ground-8" className="text-green-800 underline font-medium ml-1">
               Read our detailed Ground 8 guide ?
             </Link>
@@ -3401,7 +3401,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Can I use multiple grounds?</h3>
             <p className="text-gray-600">
               Yes, and it&apos;s often advisable. For rent arrears, landlords typically use Ground 8 (mandatory)
-              AND Grounds 10 and 11 (discretionary) as backup. If the tenant pays down to below 2 months,
+              AND Grounds 10 and 11 (discretionary) as backup. If the tenant pays down below the Ground 8 threshold,
               you still have the discretionary grounds.
             </p>
           </div>
@@ -3410,7 +3410,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant pays off arrears before the hearing?</h3>
             <p className="text-gray-600">
               For <strong>Ground 8</strong>, the tenant must owe 2+ months at both the notice date AND the hearing
-              date. If they pay down to less than 2 months, you lose Ground 8 (but can still pursue Ground 10/11).
+              date. If they pay down below the Ground 8 threshold, you lose Ground 8 (but can still pursue Ground 10/11).
               Some tenants strategically pay just enough to defeat Ground 8.
             </p>
           </div>
@@ -3458,8 +3458,8 @@ const allBlogPosts: BlogPost[] = [
   {
     slug: 'england-section-8-ground-8',
     title: 'Section 8 Ground 8 Explained: Mandatory Rent Arrears Eviction (2026)',
-    description: 'Complete guide to Section 8 Ground 8 for rent arrears eviction in England. Learn the 2-month threshold, how to prove arrears, court procedures, and common tenant defences.',
-    metaDescription: 'Section 8 Ground 8 rent arrears eviction guide. Mandatory possession for 2+ months arrears. Step-by-step process, evidence requirements, and tenant defences explained.',
+    description: 'Complete guide to Section 8 Ground 8 for rent arrears eviction in England. Learn the post-May 2026 arrears threshold, how to prove arrears, court procedures, and common tenant defences.',
+    metaDescription: 'Section 8 Ground 8 rent arrears eviction guide. Mandatory possession for 3 months rent, or 13 weeks if paid weekly or fortnightly. Step-by-step process, evidence requirements, and tenant defences explained.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',
     readTime: '13 min read',
@@ -3474,7 +3474,7 @@ const allBlogPosts: BlogPost[] = [
     heroImageAlt: 'Section 8 Ground 8 Rent Arrears Eviction',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 8',
-    secondaryKeywords: ['ground 8 rent arrears', 'mandatory possession rent arrears', '2 months rent arrears eviction', 'section 8 arrears', 'eviction for non payment rent'],
+    secondaryKeywords: ['ground 8 rent arrears', 'mandatory possession rent arrears', '3 months rent arrears eviction', 'section 8 arrears', 'eviction for non payment rent'],
     tableOfContents: [
       { id: 'what-is-ground-8', title: 'What Is Ground 8?', level: 2 },
       { id: 'ground-8-requirements', title: 'Requirements for Ground 8', level: 2 },
@@ -3586,7 +3586,7 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          If the tenant pays down to below 2 months at ANY point between these dates, they can pay
+          If the tenant pays down below the Ground 8 threshold at any point between these dates, they can pay
           back up above 2 months by the hearing—but many don&apos;t. Tenants who understand the system
           often pay just enough to defeat Ground 8.
         </p>
@@ -3761,7 +3761,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>1. Strategic Payment</h3>
         <p>
-          Paying just enough before the hearing to bring arrears below 2 months. This defeats Ground 8
+          Paying just enough before the hearing to bring arrears below the Ground 8 threshold. This defeats Ground 8
           but you can still pursue Grounds 10/11.
         </p>
 
@@ -3823,7 +3823,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant pays off some arrears after I serve the notice?</h3>
             <p className="text-gray-600">
-              If they pay down to below 2 months at any point before the hearing, you cannot use Ground 8.
+              If they pay down below the Ground 8 threshold at any point before the hearing, you cannot use Ground 8.
               However, you can still pursue Grounds 10 and 11 if included in your notice. The history of
               arrears will be considered for reasonableness.
             </p>
@@ -3840,7 +3840,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant claims they can&apos;t afford to pay?</h3>
             <p className="text-gray-600">
-              For Ground 8, this is irrelevant. The ground is mandatory—if 2 months arrears exist at both
+              For Ground 8, this is irrelevant. The ground is mandatory—if the post-May 2026 arrears threshold exists at both
               dates, the court must grant possession regardless of the tenant&apos;s financial situation or
               personal circumstances.
             </p>
@@ -4943,7 +4943,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="font-semibold text-blue-800 text-lg mb-2">Strategic Importance</p>
           <p className="text-blue-700">
             Always include Grounds 10 and 11 alongside Ground 8 in your Section 8 notice. If the tenant
-            reduces arrears below 2 months before the hearing (defeating Ground 8), you can still pursue
+            reduces arrears below the Ground 8 threshold before the hearing (defeating Ground 8), you can still pursue
             possession on discretionary grounds.
           </p>
         </div>
@@ -5105,7 +5105,7 @@ const allBlogPosts: BlogPost[] = [
               </tr>
               <tr>
                 <td className="p-4 border-b">Tenant can defeat by paying</td>
-                <td className="p-4 border-b">Yes (below 2 months)</td>
+                <td className="p-4 border-b">Yes (below the Ground 8 threshold)</td>
                 <td className="p-4 border-b">Yes (clear all)</td>
                 <td className="p-4 border-b">No</td>
               </tr>
@@ -5161,13 +5161,13 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Backup for Ground 8</h3>
         <p>
-          Always include them with Ground 8. If the tenant pays down arrears below 2 months before the hearing,
+          Always include them with Ground 8. If the tenant pays down arrears below the Ground 8 threshold before the hearing,
           Ground 8 fails but you can still pursue possession on Grounds 10/11.
         </p>
 
-        <h3>When Arrears Are Below 2 Months</h3>
+        <h3>When Arrears Are Below The Ground 8 Threshold</h3>
         <p>
-          If arrears haven&apos;t reached 2 months (8 weeks for weekly rent), Ground 8 isn&apos;t available.
+          If arrears haven&apos;t reached 3 months (13 weeks for weekly or fortnightly rent), Ground 8 isn&apos;t available.
           Ground 10 works with any amount owed.
         </p>
 
@@ -27116,9 +27116,9 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
           <h4 className="font-semibold text-red-900 mb-2">Ground 8 - Mandatory Possession</h4>
           <p className="text-red-800 mb-2">
-            Ground 8 requires at least 2 months' (8 weeks') arrears at both the time
+            Ground 8 requires at least 3 months' (13 weeks') arrears at both the time
             you serve the Section 8 notice AND at the court hearing. If the tenant
-            pays down to less than 2 months before the hearing, Ground 8 fails.
+            pays down below the Ground 8 threshold before the hearing, Ground 8 fails.
           </p>
           <p className="text-red-800">
             Using Grounds 10 and 11 as backup gives the court discretion to award
@@ -39652,4 +39652,9 @@ export const blogPosts: BlogPost[] = allBlogPosts.filter(
 export function getBlogPost(slug: string): BlogPost | undefined {
   return blogPosts.find((post) => post.slug === slug);
 }
+
+
+
+
+
 

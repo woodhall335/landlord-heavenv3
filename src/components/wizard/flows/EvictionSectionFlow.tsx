@@ -189,7 +189,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
       const hasGround8 = selectedGrounds.some((g) => g.includes('Ground 8'));
 
       if (hasGround8) {
-        // Ground 8 requires 2+ months arrears
+        // Ground 8 requires the post-1 May 2026 statutory arrears threshold
         const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
         const rentAmount = facts.rent_amount || 0;
         const rentFrequency = facts.rent_frequency || 'monthly';
@@ -909,5 +909,6 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = (props) =
 };
 
 export default EvictionSectionFlow;
+
 
 

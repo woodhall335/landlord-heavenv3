@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useMemo, useState, useCallback, useEffect, useRef } from 'react';
 import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
@@ -10,6 +10,7 @@ import {
   type ArrearsScheduleInput,
   type ComputedArrears,
 } from '@/lib/arrears-engine';
+import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
 
 interface ArrearsScheduleStepProps {
   facts: any;
@@ -64,7 +65,7 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
         {formatDate(item.period_start)} - {formatDate(item.period_end)}
       </td>
       <td className="px-3 py-2 text-sm text-gray-700 text-right">
-        £{item.rent_due.toFixed(2)}
+        Â£{item.rent_due.toFixed(2)}
       </td>
       <td className="px-3 py-2">
         <div className="flex items-center gap-2">
@@ -92,7 +93,7 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
         </div>
       </td>
       <td className={`px-3 py-2 text-sm text-right font-medium ${amount_owed > 0 ? 'text-red-600' : 'text-green-600'}`}>
-        £{amount_owed.toFixed(2)}
+        Â£{amount_owed.toFixed(2)}
       </td>
       <td className="px-3 py-2 text-xs text-gray-500">
         {item.notes || (item.is_pro_rated ? `Pro-rated (${item.days_in_period} days)` : '')}
@@ -370,6 +371,13 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
     return computeArrears(arrearsItems, rentFrequency, rentAmount);
   }, [arrearsItems, rentFrequency, rentAmount]);
 
+  const englandGround8Threshold = useMemo(() => {
+    if (jurisdiction !== 'england' || !rentAmount || !rentFrequency) {
+      return null;
+    }
+    return getGround8Threshold(rentAmount, rentFrequency);
+  }, [jurisdiction, rentAmount, rentFrequency]);
+
   return (
     <div className="space-y-6">
       <div>
@@ -451,7 +459,7 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   if (proRatedItem) {
                     return (
                       <span className="block mt-2 text-xs">
-                        Final period: {proRatedItem.days_in_period} days × daily rate = £{proRatedItem.rent_due.toFixed(2)}
+                        Final period: {proRatedItem.days_in_period} days Ã— daily rate = Â£{proRatedItem.rent_due.toFixed(2)}
                       </span>
                     );
                   }
@@ -529,72 +537,95 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
               <div className="flex justify-between items-center">
                 <span className="text-base font-semibold text-charcoal">Total Arrears:</span>
                 <span className="text-xl font-bold text-red-600">
-                  £{computed.total_arrears.toFixed(2)}
+                  Â£{computed.total_arrears.toFixed(2)}
                 </span>
               </div>
             </div>
           </div>
 
           {/* Threshold eligibility indicator - jurisdiction-aware */}
-          {/* Scotland uses 3-month threshold, England/Wales use 2-month threshold */}
+          {/* Scotland uses Ground 18. England uses the post-1 May 2026 Ground 8 threshold. */}
           {jurisdiction === 'scotland' ? (
             // Scotland Ground 18 threshold (3 months)
             computed.arrears_in_months >= 3 ? (
               <div className="rounded-lg border border-green-200 bg-green-50 p-4">
                 <p className="text-sm font-medium text-green-800">
-                  ✓ Ground 18 Threshold Met
+                  âœ“ Ground 18 Threshold Met
                 </p>
                 <p className="text-sm text-green-700 mt-1">
-                  Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 18 threshold
+                  Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 18 threshold
                   (minimum 3 consecutive rent periods required). The Tribunal will consider whether eviction is reasonable.
                 </p>
               </div>
             ) : computed.arrears_in_months > 0 ? (
               <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm font-medium text-amber-800">
-                  ⚠ Ground 18 Threshold Not Met
+                  âš  Ground 18 Threshold Not Met
                 </p>
                 <p className="text-sm text-amber-700 mt-1">
-                  Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 18 threshold
+                  Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 18 threshold
                   (minimum 3 consecutive rent periods required). You may still proceed but evidence strength is reduced.
                 </p>
               </div>
             ) : null
+          ) : jurisdiction === 'england' && englandGround8Threshold ? (
+            computed.total_arrears >= englandGround8Threshold.amount ? (
+              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+                <p className="text-sm font-medium text-green-800">
+                  Ground 8 Threshold Met
+                </p>
+                <p className="text-sm text-green-700 mt-1">
+                  Arrears of GBP {computed.total_arrears.toFixed(2)} meet the Ground 8 threshold
+                  ({englandGround8Threshold.description}, equal to GBP {englandGround8Threshold.amount.toFixed(2)}).
+                  Grounds 10 or 11 can still be used if the arrears later drop below that level.
+                </p>
+              </div>
+            ) : computed.total_arrears > 0 ? (
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                <p className="text-sm font-medium text-amber-800">
+                  Ground 8 Threshold Not Met
+                </p>
+                <p className="text-sm text-amber-700 mt-1">
+                  Arrears of GBP {computed.total_arrears.toFixed(2)} do not meet the Ground 8 threshold
+                  ({englandGround8Threshold.description}, equal to GBP {englandGround8Threshold.amount.toFixed(2)}).
+                  You can still rely on Grounds 10 or 11 for England arrears cases below that threshold.
+                </p>
+              </div>
+            ) : null
           ) : computed.arrears_in_months >= 2 ? (
-            // England/Wales 2-month threshold
             <div className="rounded-lg border border-green-200 bg-green-50 p-4">
               <p className="text-sm font-medium text-green-800">
-                ✓ {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Met
+                âœ“ {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Met
               </p>
               <p className="text-sm text-green-700 mt-1">
                 {jurisdiction === 'wales' ? (
                   <>
-                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Section 157 threshold
+                    Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Section 157 threshold
                     for serious rent arrears under the Renting Homes (Wales) Act 2016.
                   </>
                 ) : (
                   <>
-                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 8 threshold
-                    (minimum 2 months / £{(rentAmount * 2).toFixed(2)} required).
+                    Arrears of GBP {computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) meet the Ground 8 threshold.
                   </>
                 )}
+
               </p>
             </div>
           ) : computed.arrears_in_months > 0 ? (
             <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
               <p className="text-sm font-medium text-amber-800">
-                ⚠ {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Not Met
+                âš  {jurisdiction === 'wales' ? 'Section 157' : 'Ground 8'} Threshold Not Met
               </p>
               <p className="text-sm text-amber-700 mt-1">
                 {jurisdiction === 'wales' ? (
                   <>
-                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Section 157 threshold
+                    Arrears of Â£{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Section 157 threshold
                     (minimum 2 months required). You can still use Section 159 for smaller arrears claims.
                   </>
                 ) : (
                   <>
-                    Arrears of £{computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 8 threshold
-                    (minimum 2 months / £{(rentAmount * 2).toFixed(2)} required). You can still use Grounds 10 or 11 for arrears claims.
+                    Arrears of GBP {computed.total_arrears.toFixed(2)} ({computed.arrears_in_months.toFixed(2)} months) do not meet the Ground 8 threshold.
+                    You can still use Grounds 10 or 11 for arrears claims.
                   </>
                 )}
               </p>

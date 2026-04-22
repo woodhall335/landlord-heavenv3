@@ -300,7 +300,7 @@ function detectGroundSpecificRedFlags(groundNumber: number, facts: CaseFacts): R
       flags.push({
         name: 'Arrears below Ground 8 threshold',
         severity: 'critical',
-        description: `Current arrears (£${currentArrears}) below 2 months rent (£${threshold})`,
+        description: `Current arrears (£${currentArrears}) are below the Ground 8 threshold (£${threshold})`,
         consequence: 'Ground 8 will fail if arrears drop below threshold before hearing',
         action_required: 'Ensure arrears remain above threshold, or use Ground 10 as backup',
       });
@@ -791,3 +791,4 @@ function resolveJurisdiction(facts: CaseFacts): CanonicalJurisdiction {
 
   return fromFacts;
 }
+

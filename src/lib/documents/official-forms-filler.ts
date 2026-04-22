@@ -2391,7 +2391,10 @@ function buildN119ReasonForPossessionLegacy(data: CaseData): string {
 
     // Legally sensible statement: phrase as requirement + current facts
     // DO NOT assert "at the hearing" as a fact - instead cite the requirement
-    const threshold = data.rent_frequency === 'weekly' ? '8 weeks\'' : '2 months\'';
+    const threshold =
+      data.rent_frequency === 'weekly' || data.rent_frequency === 'fortnightly'
+        ? '13 weeks\''
+        : '3 months\'';
     parts.push(
       `Under Ground 8, the court must order possession if at least ${threshold} rent was unpaid ` +
       `both at the date of service of the notice and at the date of the hearing.`

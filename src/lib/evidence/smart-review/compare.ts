@@ -699,14 +699,14 @@ function checkContradictions(
       const rentAmount = parseFloat(wizardFacts.rent_amount || 0);
       const rentFrequency = wizardFacts.rent_frequency?.toLowerCase();
 
-      // Ground 8 requires 8 weeks (weekly) or 2 months arrears
+      // Ground 8 requires 13 weeks (weekly/fortnightly) or 3 months arrears
       let threshold = 0;
       if (rentFrequency === 'weekly') {
-        threshold = rentAmount * 8;
+        threshold = rentAmount * 13;
       } else if (rentFrequency === 'monthly') {
-        threshold = rentAmount * 2;
+        threshold = rentAmount * 3;
       } else if (rentFrequency === 'fortnightly') {
-        threshold = rentAmount * 4;
+        threshold = rentAmount * 6.5;
       }
 
       if (threshold > 0 && totalArrears < threshold) {

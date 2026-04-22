@@ -29,6 +29,7 @@ import {
   type TimingHook,
 } from './eviction-rules-optimizer';
 import { normalizeFactKeys } from '../wizard/normalizeFacts';
+import { calculateEnglandPossessionNoticePeriod } from '../england-possession/ground-catalog';
 
 // ============================================================================
 // TYPES
@@ -565,10 +566,15 @@ function buildComputedContext(facts: EvictionFacts, route: EvictionRoute): Compu
       ntl_notice_period_too_short = days < 28;
     }
 
-    // S8: varies by ground (2 weeks for mandatory, 2 months for discretionary)
-    // Simplified: check minimum 14 days
+    // S8/Form 3A: derive the required notice period from the selected post-1 May 2026 England grounds
     if (route === 'section_8') {
-      s8_notice_period_too_short = days < 14;
+      const selectedGrounds = facts.section8_grounds || facts.section8_grounds_selection || [];
+      if (Array.isArray(selectedGrounds) && selectedGrounds.length > 0) {
+        const requiredNoticeDays = calculateEnglandPossessionNoticePeriod(selectedGrounds).noticePeriodDays;
+        s8_notice_period_too_short = days < requiredNoticeDays;
+      } else {
+        s8_notice_period_calculation_error = true;
+      }
     }
   } else if (route === 'section_21' || route === 'section_8') {
     if (!serviceDate || !expiryDate) {
@@ -593,14 +599,19 @@ function buildComputedContext(facts: EvictionFacts, route: EvictionRoute): Compu
   const has_ground_14 = groundsStr.includes('14') || groundsStr.includes('ground_14') || groundsStr.includes('nuisance') || groundsStr.includes('asb');
   const has_arrears_ground = has_ground_8 || groundsStr.includes('10') || groundsStr.includes('11') || groundsStr.includes('arrears');
 
-  // Ground 8 eligibility (2+ months arrears)
+  // Ground 8 eligibility (post-1 May 2026 threshold)
   let ground_8_eligible = false;
   if (has_ground_8 && facts.rent_amount) {
     const totalArrears = facts.total_arrears || facts.arrears_total || 0;
     const monthlyRent = facts.rent_frequency === 'weekly'
       ? facts.rent_amount * 4.33
       : facts.rent_amount;
-    ground_8_eligible = totalArrears >= monthlyRent * 2;
+    ground_8_eligible =
+      facts.rent_frequency === 'weekly'
+        ? totalArrears >= facts.rent_amount * 13
+        : facts.rent_frequency === 'fortnightly'
+          ? totalArrears >= facts.rent_amount * 7
+          : totalArrears >= monthlyRent * 3;
   }
 
   // Scotland Ground 1 check
@@ -1552,3 +1563,5 @@ export function getValidationSummary(result: ExplainableResult): string {
 export function explainRule(result: ExplainableResult, ruleId: string): RuleExplanation | null {
   return result.explanations.find(e => e.ruleId === ruleId) || null;
 }
+
+

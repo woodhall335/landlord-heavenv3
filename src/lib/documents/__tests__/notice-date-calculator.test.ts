@@ -118,15 +118,15 @@ describe('Section 21 Calendar Month Calculations', () => {
 });
 
 describe('Section 8 Ground-Based Calculations', () => {
-  test('Mandatory ground (Ground 8) = 14 days', () => {
+  test('Mandatory ground (Ground 8) = 28 days', () => {
     const result = calculateSection8ExpiryDate({
       service_date: '2025-01-15',
       grounds: [{ code: 8, mandatory: true }],
     });
 
-    expect(result.earliest_valid_date).toBe('2025-01-29');
-    expect(result.notice_period_days).toBe(14);
-    expect(result.explanation).toContain('14 days');
+    expect(result.earliest_valid_date).toBe('2025-02-12');
+    expect(result.notice_period_days).toBe(28);
+    expect(result.explanation).toContain('4 weeks');
   });
 
   test('Ground 12 discretionary = 14 days minimum, 60 recommended', () => {
@@ -140,37 +140,37 @@ describe('Section 8 Ground-Based Calculations', () => {
     expect(result.earliest_valid_date).toBe('2025-01-29');
     expect(result.notice_period_days).toBe(14);
     expect(result.minimum_legal_days).toBe(14);
-    expect(result.recommended_days).toBe(60); // Has recommendation
+    expect(result.recommended_days).toBeUndefined();
   });
 
   // SKIP: pre-existing failure - investigate later
-  test.skip('Ground 10 discretionary = 60 days minimum (no recommended)', () => {
-    // Ground 10 (some rent arrears) requires 60 days minimum per Housing Act 1988
+  test.skip('Ground 10 discretionary = 28 days minimum (no recommended)', () => {
+    // Ground 10 (some rent arrears) now requires 28 days minimum under the post-1 May 2026 England rules
     const result = calculateSection8ExpiryDate({
       service_date: '2025-01-15',
       grounds: [{ code: 10, mandatory: false }],
       strategy: 'minimum',
     });
 
-    expect(result.earliest_valid_date).toBe('2025-03-16');
-    expect(result.notice_period_days).toBe(60);
-    expect(result.minimum_legal_days).toBe(60);
-    expect(result.recommended_days).toBeUndefined(); // 60 IS the minimum
+    expect(result.earliest_valid_date).toBe('2025-02-12');
+    expect(result.notice_period_days).toBe(28);
+    expect(result.minimum_legal_days).toBe(28);
+    expect(result.recommended_days).toBeUndefined(); // 28 IS the minimum
   });
 
   // SKIP: pre-existing failure - investigate later
   test.skip('Mixed grounds use MAXIMUM period to satisfy all grounds', () => {
-    // Ground 8 (14 days) + Ground 10 (60 days) = 60 days (max to satisfy both)
+    // Ground 8 (28 days) + Ground 10 (28 days) = 28 days (max to satisfy both)
     const result = calculateSection8ExpiryDate({
       service_date: '2025-01-15',
       grounds: [
-        { code: 8, mandatory: true }, // 14 days
-        { code: 10, mandatory: false }, // 60 days (Ground 10/11 require 2 months)
+        { code: 8, mandatory: true }, // 28 days
+        { code: 10, mandatory: false }, // 28 days (Ground 10/11 require 4 weeks)
       ],
       strategy: 'minimum',
     });
 
-    expect(result.notice_period_days).toBe(60); // Uses maximum to satisfy Ground 10
+    expect(result.notice_period_days).toBe(28); // Uses the highest current England notice period across the selected grounds
   });
 });
 
@@ -352,15 +352,15 @@ describe('DST-Safe UTC Date Calculations', () => {
     expect(result2.notice_period_days).toBe(84);
   });
 
-  test('Section 8 14-day periods do not drift (UTC-safe)', () => {
+  test('Section 8 28-day periods do not drift (UTC-safe)', () => {
     // Test across DST boundary
     const result = calculateSection8ExpiryDate({
       service_date: '2025-03-20', // Just before UK DST (last Sunday March)
-      grounds: [{ code: 8, mandatory: true }], // 14 days
+      grounds: [{ code: 8, mandatory: true }], // 28 days
     });
 
-    expect(result.earliest_valid_date).toBe('2025-04-03');
-    expect(result.notice_period_days).toBe(14);
+    expect(result.earliest_valid_date).toBe('2025-04-17');
+    expect(result.notice_period_days).toBe(28);
   });
 });
 
@@ -377,22 +377,20 @@ describe('Section 8 Unified Notice Periods', () => {
     });
 
     expect(result.minimum_legal_days).toBe(14);
-    expect(result.recommended_days).toBe(60);
+    expect(result.recommended_days).toBeUndefined();
     expect(result.used_days).toBe(14);
-    expect(result.explanation_recommended).toContain('not legally required');
-    expect(result.explanation_recommended).toContain('Courts may still grant possession');
   });
 
-  test('Ground 14A: Immediate (0 days) regardless of strategy', () => {
-    // Ground 14A (domestic violence) is always immediate (0 days)
+  test('Ground 14A: 14 days under the current England route', () => {
+    // Ground 14A now follows the 14-day bucket
     const result = calculateSection8NoticePeriod({
       grounds: [{ code: '14A', mandatory: false }],
-      strategy: 'recommended', // Strategy doesn't matter for immediate grounds
+      strategy: 'recommended',
     });
 
-    expect(result.minimum_legal_days).toBe(0);
-    expect(result.used_days).toBe(0);
-    expect(result.recommended_days).toBeUndefined(); // No recommendation for immediate grounds
+    expect(result.minimum_legal_days).toBe(14);
+    expect(result.used_days).toBe(14);
+    expect(result.recommended_days).toBeUndefined();
   });
 
   test('Ground 14 serious ASB: 0 days (immediate)', () => {
@@ -405,42 +403,41 @@ describe('Section 8 Unified Notice Periods', () => {
     expect(result.used_days).toBe(0);
     expect(result.recommended_days).toBeUndefined();
     expect(result.explanation_minimum).toContain('immediate court proceedings');
-    expect(result.explanation_minimum).toContain('violence');
+    expect(result.explanation_minimum).toContain('Ground 14');
   });
 
-  test('Ground 14 moderate ASB: 14 days minimum, 60 recommended', () => {
-    // Ground 14 with moderate severity (not serious) uses standard 14-day period
+  test('Ground 14 moderate ASB: immediate application still applies', () => {
+    // Ground 14 remains immediate even without the "serious" label
     const result = calculateSection8NoticePeriod({
       grounds: [{ code: 14, mandatory: false }],
       severity: 'moderate',
     });
 
-    expect(result.minimum_legal_days).toBe(14);
-    expect(result.recommended_days).toBe(60);
-    expect(result.used_days).toBe(14);
-    expect(result.explanation_minimum).toContain('14 days'); // Standard discretionary period
+    expect(result.minimum_legal_days).toBe(0);
+    expect(result.recommended_days).toBeUndefined();
+    expect(result.used_days).toBe(0);
+    expect(result.explanation_minimum).toContain('immediate court proceedings');
   });
 
-  test('All other mandatory grounds: 14 days, no recommended', () => {
+  test('Ground 8 uses the current 28-day period', () => {
     const result = calculateSection8NoticePeriod({
       grounds: [{ code: 8, mandatory: true }],
     });
 
-    expect(result.minimum_legal_days).toBe(14);
+    expect(result.minimum_legal_days).toBe(28);
     expect(result.recommended_days).toBeUndefined();
-    expect(result.used_days).toBe(14);
+    expect(result.used_days).toBe(28);
   });
 
-  test('Discretionary grounds (14-day): 14 days minimum, 60 recommended', () => {
+  test('Discretionary grounds (14-day): 14 days minimum, no recommendation', () => {
     // Ground 12 (breach of tenancy) has 14-day minimum
     const result = calculateSection8NoticePeriod({
       grounds: [{ code: 12, mandatory: false }],
     });
 
     expect(result.minimum_legal_days).toBe(14);
-    expect(result.recommended_days).toBe(60);
+    expect(result.recommended_days).toBeUndefined();
     expect(result.used_days).toBe(14);
-    expect(result.explanation_recommended).toContain('not legally required');
   });
 
   // SKIP: pre-existing failure - investigate later
@@ -450,8 +447,8 @@ describe('Section 8 Unified Notice Periods', () => {
       grounds: [{ code: 10, mandatory: false }],
     });
 
-    expect(result.minimum_legal_days).toBe(60);
-    expect(result.recommended_days).toBeUndefined(); // 60 IS the minimum
+    expect(result.minimum_legal_days).toBe(28);
+    expect(result.recommended_days).toBeUndefined(); // 28 IS the minimum
     expect(result.used_days).toBe(60);
     expect(result.explanation_minimum).toContain('Ground 10');
   });
@@ -564,8 +561,8 @@ describe('Section 8 Fixed Term Handling', () => {
 
     // Section 8 should NOT extend to fixed term end
     // 14 days from Jan 15 = Jan 29
-    expect(result.earliest_valid_date).toBe('2025-01-29');
-    expect(result.notice_period_days).toBe(14);
+    expect(result.earliest_valid_date).toBe('2025-02-12');
+    expect(result.notice_period_days).toBe(28);
   });
 });
 
@@ -821,3 +818,5 @@ describe('Date Formatting for PDF', () => {
     expect(formatted).toBe('14 July 2026');
   });
 });
+
+

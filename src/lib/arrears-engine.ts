@@ -374,7 +374,7 @@ export function calculateArrearsInMonths(
  * This is the ONLY authoritative Ground 8 check. All other code MUST use this.
  *
  * Ground 8 requirements (Housing Act 1988, Schedule 2):
- * - England: At least 2 months' rent in arrears at BOTH notice date AND hearing date
+ * - England: At least 3 months' rent, or 13 weeks' rent for weekly or fortnightly rents, at BOTH notice date AND hearing date
  * - Scotland: At least 3 months' rent in arrears
  *
  * This function enforces that Ground 8 can ONLY be validated from schedule data.

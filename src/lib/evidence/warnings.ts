@@ -360,7 +360,7 @@ const WARNING_TEMPLATES: Record<WarningCode, WarningTemplate> = {
   [WarningCode.FACT_CONTRADICTION_ARREARS_AMOUNT_VS_GROUND8]: {
     severity: 'warning',
     title: 'Possible arrears inconsistency',
-    messageTemplate: 'The arrears amount may not meet the threshold for Ground 8 (8 weeks or 2 months). Current arrears: {wizardValue}.',
+    messageTemplate: 'The arrears amount may not meet the threshold for Ground 8 (13 weeks or 3 months, depending on rent frequency). Current arrears: {wizardValue}.',
     suggestedUserActionTemplate: 'Verify the arrears amount and ensure it meets Ground 8 requirements at the hearing date.',
     defaultFields: ['total_arrears', 'section8_grounds'],
   },

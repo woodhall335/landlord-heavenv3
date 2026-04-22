@@ -36,8 +36,8 @@ describe('SECTION8_GROUND_DEFINITIONS', () => {
 
   it('Ground 8 contains key statutory phrases', () => {
     const ground8 = SECTION8_GROUND_DEFINITIONS[8];
-    expect(ground8.full_text).toContain('eight weeks\' rent is unpaid');
-    expect(ground8.full_text).toContain('two months\' rent is unpaid');
+    expect(ground8.full_text).toContain('thirteen weeks\' rent is unpaid');
+    expect(ground8.full_text).toContain('three months\' rent is unpaid');
     expect(ground8.full_text).toContain('one quarter\'s rent');
     expect(ground8.legal_basis).toBe('Housing Act 1988, Schedule 2, Ground 8');
   });
@@ -66,7 +66,7 @@ describe('SECTION8_GROUND_DEFINITIONS', () => {
 describe('getSection8StatutoryText', () => {
   it('returns statutory text for valid ground code', () => {
     const text = getSection8StatutoryText(8);
-    expect(text).toContain('eight weeks\' rent is unpaid');
+    expect(text).toContain('thirteen weeks\' rent is unpaid');
   });
 
   it('returns statutory text for string ground code', () => {
@@ -105,7 +105,7 @@ describe('enrichGroundWithStatutoryText', () => {
     };
 
     const enriched = enrichGroundWithStatutoryText(ground);
-    expect(enriched.statutory_text).toContain('eight weeks\' rent is unpaid');
+    expect(enriched.statutory_text).toContain('thirteen weeks\' rent is unpaid');
   });
 
   it('preserves existing statutory_text', () => {
@@ -132,3 +132,4 @@ describe('enrichGroundWithStatutoryText', () => {
     expect(enriched.statutory_text).toBe('');
   });
 });
+

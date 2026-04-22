@@ -73,7 +73,7 @@ export interface ArrearsLedgerResult {
   arrearsAtScheduleDate: number;
   /** Ground 8 threshold validation */
   ground8Validation: {
-    threshold: string; // "2 months" or "8 weeks"
+    threshold: string; // "3 months" or "13 weeks"
     thresholdAmount: number;
     meetsThresholdAtNotice: boolean;
     meetsThresholdAtSchedule: boolean;
@@ -614,8 +614,10 @@ export function calculateArrearsAtDate(
  * Calculate Ground 8 threshold.
  *
  * Ground 8 requires:
- * - Monthly rent: at least 2 months' rent unpaid
- * - Weekly rent: at least 8 weeks' rent unpaid
+ * - Weekly or fortnightly rent: at least 13 weeks' rent unpaid
+ * - Monthly rent: at least 3 months' rent unpaid
+ * - Quarterly rent: at least one quarter's rent more than 3 months in arrears
+ * - Yearly rent: at least 3 months' rent more than 3 months in arrears
  */
 export function calculateGround8Threshold(
   rentAmount: number,
@@ -623,17 +625,17 @@ export function calculateGround8Threshold(
 ): { threshold: string; amount: number } {
   switch (rentFrequency) {
     case 'weekly':
-      return { threshold: '8 weeks', amount: rentAmount * 8 };
+      return { threshold: '13 weeks', amount: rentAmount * 13 };
     case 'fortnightly':
-      return { threshold: '4 fortnights (8 weeks)', amount: rentAmount * 4 };
+      return { threshold: '7 fortnightly payments (13 weeks)', amount: rentAmount * 7 };
     case 'monthly':
-      return { threshold: '2 months', amount: rentAmount * 2 };
+      return { threshold: '3 months', amount: rentAmount * 3 };
     case 'quarterly':
-      return { threshold: '2/3 of quarterly rent (2 months)', amount: (rentAmount / 3) * 2 };
+      return { threshold: 'one quarter more than 3 months in arrears', amount: rentAmount };
     case 'yearly':
-      return { threshold: '1/6 of annual rent (2 months)', amount: rentAmount / 6 };
+      return { threshold: '3 months of annual rent more than 3 months in arrears', amount: rentAmount / 4 };
     default:
-      return { threshold: '2 months', amount: rentAmount * 2 };
+      return { threshold: '3 months', amount: rentAmount * 3 };
   }
 }
 

@@ -95,7 +95,7 @@ describe('Section 8 Rules', () => {
 
   describe('S8-GROUND-8-THRESHOLD', () => {
     it('should pass when Ground 8 threshold is met (monthly rent)', () => {
-      // Monthly rent of £1000, arrears of £2000+ (2 months threshold)
+      // Monthly rent of £1000, arrears of £3000+ (3 months threshold)
       const result = runRules(
         SECTION8_RULES,
         createContext({
@@ -103,7 +103,7 @@ describe('Section 8 Rules', () => {
           grounds_cited: createFact([8]),
           rent_amount: createFact(1000),
           rent_frequency: createFact('monthly'),
-          arrears_amount: createFact(2500),
+          arrears_amount: createFact(3500),
           service_date: createFact('2025-01-01'),
         })
       );
@@ -113,7 +113,7 @@ describe('Section 8 Rules', () => {
     });
 
     it('should fail when Ground 8 threshold is not met', () => {
-      // Monthly rent of £1000, arrears of £1500 (less than 2 months threshold)
+      // Monthly rent of £1000, arrears of £1500 (less than 3 months threshold)
       const result = runRules(
         SECTION8_RULES,
         createContext({
@@ -131,7 +131,7 @@ describe('Section 8 Rules', () => {
     });
 
     it('should pass when Ground 8 threshold is met (weekly rent)', () => {
-      // Weekly rent of £200, arrears of £1600+ (8 weeks threshold)
+      // Weekly rent of £200, arrears of £2600+ (13 weeks threshold)
       const result = runRules(
         SECTION8_RULES,
         createContext({
@@ -139,7 +139,7 @@ describe('Section 8 Rules', () => {
           grounds_cited: createFact([8]),
           rent_amount: createFact(200),
           rent_frequency: createFact('weekly'),
-          arrears_amount: createFact(1800),
+          arrears_amount: createFact(2800),
           service_date: createFact('2025-01-01'),
         })
       );
@@ -290,7 +290,7 @@ describe('Section 8 Rules', () => {
           service_date: createFact('2025-01-01'),
           rent_amount: createFact(1000),
           rent_frequency: createFact('monthly'),
-          arrears_amount: createFact(2500),
+          arrears_amount: createFact(3500),
           benefit_delays: createFact(false),
           disrepair_counterclaims: createFact(false),
           payment_since_notice: createFact(false),
@@ -322,3 +322,4 @@ describe('Section 8 Rules', () => {
     });
   });
 });
+

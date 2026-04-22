@@ -298,7 +298,7 @@ export const SECTION8_RULES: Rule[] = [
         return createRuleResult(
           { id: 'S8-NOTICE-PERIOD', title: 'Notice Period', severity: 'warning' },
           'pass', // Don't block - just note it's missing
-          'Notice period could not be confirmed. Different grounds require different minimum notice periods (2 weeks for some, 2 months for others).',
+          'Notice period could not be confirmed. Different grounds require different minimum notice periods (for example 4 weeks for Grounds 8, 10, and 11, 2 months for some others, and immediate application for Ground 14).',
           { legalBasis: 'Housing Act 1988 s.8(4A)-(4B)' }
         );
       }

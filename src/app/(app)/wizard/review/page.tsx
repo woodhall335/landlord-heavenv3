@@ -2284,9 +2284,9 @@ function NoticeOnlyReviewContent({
               </h2>
               <p className="text-sm text-gray-600 mb-4">
                 These grounds will be included in your {jurisdiction === 'england' ? 'Form 3A notice' : 'Section 8 notice'}.
-                {selectedOnlyPeriod.noticePeriodDays === 14 && selectedGrounds.length === 1 && selectedGrounds.includes('8') && (
+                {selectedOnlyPeriod.noticePeriodDays === 28 && selectedGrounds.length === 1 && selectedGrounds.includes('8') && (
                   <span className="block mt-1 text-green-700 font-medium">
-                    Ground 8 only requires 14 days notice.
+                    Ground 8 now requires 4 weeks notice.
                   </span>
                 )}
               </p>

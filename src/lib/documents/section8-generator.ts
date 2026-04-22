@@ -11,6 +11,7 @@ import {
   validateSection8ExpiryDate,
   type Section8DateParams,
 } from './notice-date-calculator';
+import { calculateEnglandPossessionNoticePeriod } from '@/lib/england-possession/ground-catalog';
 import { fillForm3AForm } from './england-official-form-fillers';
 import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 import { buildEnglandForm3AGroundsText, getEnglandGroundLegalWording } from '@/lib/england-possession/legal-wording';
@@ -338,16 +339,10 @@ export function calculateEarliestPossessionDate(
  * @deprecated Use calculateSection8NoticePeriod from notice-date-calculator instead
  */
 export function determineNoticePeriod(grounds: Section8Ground[]): number {
-  // If any ground 14 or 14A, can use 2 weeks
-  const hasGround14 = grounds.some((g) => g.code === 14);
-  if (hasGround14) return 14;
-
-  // Mandatory grounds: 2 weeks
-  const hasMandatory = grounds.some((g) => g.mandatory);
-  if (hasMandatory) return 14;
-
-  // Legacy helper only. Do not rely on this for post-1 May 2026 England notice periods.
-  return 60;
+  // Legacy helper retained for backwards compatibility.
+  // Delegate to the post-1 May 2026 England ground catalog so callers do not
+  // inherit the pre-reform "mandatory = 2 weeks / discretionary = 2 months" logic.
+  return calculateEnglandPossessionNoticePeriod(grounds.map((g) => g.code)).noticePeriodDays;
 }
 
 /**

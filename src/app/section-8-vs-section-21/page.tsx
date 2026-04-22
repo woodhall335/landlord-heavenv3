@@ -219,8 +219,8 @@ export default function Section8VsSection21Page() {
                       </tr>
                       <tr className="bg-gray-50/50">
                         <td className="p-4 font-medium text-gray-900">Notice period</td>
-                        <td className="p-4 text-center font-bold text-gray-900">2 months</td>
-                        <td className="p-4 text-center font-bold text-gray-900">2 weeks - 2 months</td>
+                        <td className="p-4 text-center font-bold text-gray-900">Ended on 1 May 2026</td>
+                        <td className="p-4 text-center font-bold text-gray-900">Immediate to 4 months</td>
                       </tr>
                       <tr>
                         <td className="p-4 font-medium text-gray-900">Reason required</td>
@@ -234,7 +234,7 @@ export default function Section8VsSection21Page() {
                       <tr className="bg-gray-50/50">
                         <td className="p-4 font-medium text-gray-900">Court hearing</td>
                         <td className="p-4 text-center text-green-600 font-medium">
-                          Not required (N5B)
+                          Historic only (N5B)
                         </td>
                         <td className="p-4 text-center text-amber-600 font-medium">Required (N5)</td>
                       </tr>
@@ -372,9 +372,9 @@ export default function Section8VsSection21Page() {
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-medium text-gray-900">Rent arrears (2+ months)</span>
+                        <span className="font-medium text-gray-900">Rent arrears (3 months or 13 weeks)</span>
                         <p className="text-sm text-gray-600">
-                          Ground 8 gives mandatory possession with only 2 weeks notice
+                          Ground 8 remains the mandatory rent-arrears ground, but now needs 4 weeks notice and the higher post-May 2026 threshold
                         </p>
                       </div>
                     </li>
@@ -390,9 +390,9 @@ export default function Section8VsSection21Page() {
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-medium text-gray-900">Section 21 invalid</span>
+                        <span className="font-medium text-gray-900">Legacy no-fault case only</span>
                         <p className="text-sm text-gray-600">
-                          Your Section 21 may be invalid due to deposit or compliance issues
+                          Only older pre-1 May 2026 England cases can still be running on the old Section 21 path
                         </p>
                       </div>
                     </li>
@@ -413,7 +413,7 @@ export default function Section8VsSection21Page() {
                       Advantages
                     </h4>
                     <ul className="text-sm text-blue-800 space-y-1">
-                      <li>• Shorter notice (2 weeks for rent arrears)</li>
+                      <li>• Shorter notice (4 weeks for rent arrears)</li>
                       <li>• Mandatory grounds (court must grant)</li>
                       <li>• Survives Section 21 abolition</li>
                     </ul>
@@ -432,7 +432,7 @@ export default function Section8VsSection21Page() {
                 Can You Serve Both Notices Together?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Yes—and many landlords do. Serving both gives you maximum protection.
+                Not for new England private-rented cases after 1 May 2026. Section 21 is no longer part of the live route.
               </p>
 
               <div className="bg-primary/5 rounded-2xl p-8 border border-primary/20">
@@ -442,44 +442,37 @@ export default function Section8VsSection21Page() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-gray-900 mb-3">
-                      Why Serve Both Notices
+                      What To Do Instead
                     </h3>
                     <ul className="space-y-3 text-gray-600">
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                         <span>
-                          <strong>Backup protection:</strong> If one notice fails, the other may
-                          still succeed
+                          <strong>Choose the right product first:</strong> start with Notice Only if you need to serve now, or Complete Pack if you want the court paperwork prepared from the start
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                         <span>
-                          <strong>Rent arrears fluctuate:</strong> If tenant pays down arrears
-                          below 2 months, Section 21 is your backup
+                          <strong>Use multiple grounds where the facts support them:</strong> Grounds 10 and 11 can still support the case if Ground 8 later drops away
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                         <span>
-                          <strong>No extra cost:</strong> You can serve both at the same time at
-                          no additional cost
+                          <strong>Keep the case evidence-ready:</strong> the live route still depends on good arrears records, service proof, and the right particulars
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                         <span>
-                          <strong>Choose later:</strong> Wait to see which expires first and has
-                          the strongest case
+                          <strong>Plan for court early:</strong> if possession is likely to be defended, prepare the N5 and N119 side early rather than treating it as an afterthought
                         </span>
                       </li>
                     </ul>
                     <div className="mt-6 bg-white rounded-lg p-4">
                       <p className="text-sm text-gray-700">
-                        <strong>Example:</strong> Tenant owes 3 months rent. Serve Section 8
-                        (Ground 8, 10, 11) with 2 weeks notice AND Section 21 with 2 months
-                        notice. If tenant pays down to 1 month arrears, Ground 8 fails but you
-                        still have Section 21.
+                        <strong>Example:</strong> Tenant owes 3 months rent. Use the current Form 3A route with Grounds 8, 10, and 11 and give 4 weeks notice. If the tenant pays down the arrears before the hearing, Ground 8 may fail, but you can still rely on Grounds 10 and 11 if the evidence supports them.
                       </p>
                     </div>
                   </div>
@@ -538,11 +531,11 @@ export default function Section8VsSection21Page() {
                   <ul className="space-y-3 text-sm">
                     <li className="flex justify-between items-center pb-2 border-b border-gray-100">
                       <span className="text-gray-600">Notice period (Ground 8)</span>
-                      <span className="font-bold text-green-600">2 weeks</span>
+                      <span className="font-bold text-green-600">4 weeks</span>
                     </li>
                     <li className="flex justify-between items-center pb-2 border-b border-gray-100">
                       <span className="text-gray-600">Wait for hearing (N5)</span>
-                      <span className="font-bold text-gray-900">6-12 weeks</span>
+                      <span className="font-bold text-gray-900">6-14 weeks</span>
                     </li>
                     <li className="flex justify-between items-center pb-2 border-b border-gray-100">
                       <span className="text-gray-600">Order compliance</span>
@@ -562,9 +555,7 @@ export default function Section8VsSection21Page() {
 
               <div className="mt-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                 <p className="text-blue-900 text-sm">
-                  <strong>Summary:</strong> Section 8 has a shorter notice period (2 weeks for
-                  rent arrears) but requires a hearing. Section 21 has a longer notice (2 months)
-                  but no hearing. In practice, they often end up taking similar total time.
+                  <strong>Summary:</strong> For current England cases, the live route is the Form 3A / Section 8 possession process. Serious rent arrears now use 4 weeks notice, and the case then proceeds through the standard court route if the tenant does not leave.
                 </p>
               </div>
             </div>
@@ -587,24 +578,22 @@ export default function Section8VsSection21Page() {
                 <div className="flex items-start gap-4">
                   <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-amber-900 mb-2">Renters Reform Bill</h3>
+                    <h3 className="font-bold text-amber-900 mb-2">Section 21 ended on 1 May 2026</h3>
                     <p className="text-amber-800 text-sm mb-4">
-                      The government&apos;s Renters Reform Bill proposes to abolish Section 21
-                      &quot;no-fault&quot; evictions. After abolition, landlords will need to use
-                      Section 8 grounds to evict tenants.
+                      Section 21 is no longer part of the live England private-rented route. Landlords now use the current Form 3A possession notice and the updated statutory grounds.
                     </p>
                     <ul className="space-y-2 text-sm text-amber-800">
                       <li className="flex items-start gap-2">
                         <ArrowRight className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                        New grounds will be added for landlord selling or moving in
+                        The live route now runs through Form 3A and the updated possession grounds
                       </li>
                       <li className="flex items-start gap-2">
                         <ArrowRight className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                        Rent arrears ground (Ground 8) will likely remain
+                        Ground 8 now uses a 4 week notice period and the higher post-May 2026 arrears threshold
                       </li>
                       <li className="flex items-start gap-2">
                         <ArrowRight className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                        Check current legislation before serving any notices
+                        Legacy pre-1 May 2026 Section 21 cases may still exist, but new England cases should not be framed that way
                       </li>
                     </ul>
                   </div>
@@ -618,9 +607,9 @@ export default function Section8VsSection21Page() {
                     <h4 className="font-semibold text-gray-900 mb-2">What this means for you</h4>
                     <p className="text-gray-600 text-sm">
                       If you are dealing with a live tenancy problem, the safest approach is
-                      to choose the route that actually matches the facts now, not the route
-                      that sounds quickest. Our Notice Only Pack includes both Section 21 and
-                      Section 8 notices so you can start with the form that fits your case.
+                      to choose the route that actually matches the facts now. Our Notice Only
+                      Pack prepares the current England Form 3A notice-stage documents, and
+                      the Complete Pack adds the N5, N119, and court-ready possession bundle.
                     </p>
                   </div>
                 </div>
@@ -649,13 +638,13 @@ export default function Section8VsSection21Page() {
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold text-gray-900 mb-3">
-                        Does your tenant owe 2+ months rent?
+                        Does your tenant owe at least 3 months rent, or 13 weeks if paid weekly or fortnightly?
                       </h3>
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div className="bg-green-50 rounded-lg p-4">
                           <span className="font-bold text-green-900 block mb-1">Yes</span>
                           <span className="text-sm text-green-700">
-                            Use Section 8 Ground 8 (mandatory, 2 weeks notice)
+                            Use Section 8 Ground 8 (mandatory, 4 weeks notice)
                           </span>
                         </div>
                         <div className="bg-gray-50 rounded-lg p-4">
@@ -730,9 +719,9 @@ export default function Section8VsSection21Page() {
                     <div className="flex-1">
                       <h3 className="font-bold text-gray-900 mb-2">Our Recommendation</h3>
                       <p className="text-gray-600 text-sm">
-                        <strong>Serve both notices together</strong> for maximum protection. Our
-                        Notice Only Pack includes Section 21 and Section 8 with all applicable
-                        grounds. This gives you flexibility and backup options.
+                        <strong>Use the current Form 3A route</strong> and choose the product that
+                        matches the job. Start with Notice Only if you need to serve now, or use
+                        Complete Pack if you want the notice and court paperwork prepared together.
                       </p>
                     </div>
                   </div>
@@ -807,4 +796,24 @@ export default function Section8VsSection21Page() {
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

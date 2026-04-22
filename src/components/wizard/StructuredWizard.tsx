@@ -2184,7 +2184,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       </h3>
                       <p className="text-sm text-green-800 mb-3">
                         This information was collected earlier. You can update it here if needed.
-                        For Ground 8, arrears must be at least 2 months&apos; rent at both notice and hearing dates.
+                        For Ground 8, arrears must meet the current statutory threshold at both notice and hearing dates: 3 months&apos; rent if monthly, or 13 weeks&apos; rent if weekly or fortnightly.
                       </p>
                     </div>
                   </div>
@@ -4324,3 +4324,4 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     </div>
   );
 };
+

@@ -101,22 +101,22 @@ export const section8RentArrearsFAQs: FAQItem[] = [
   {
     question: 'When can I use Section 8 for rent arrears eviction?',
     answer:
-      'You can serve a Section 8 notice as soon as rent is overdue. For mandatory Ground 8, the tenant must owe at least 2 months rent when you serve the notice AND at the court hearing. Grounds 10 and 11 can be used for any amount of arrears.',
+      'You can serve a Section 8 notice as soon as rent is overdue. For mandatory Ground 8, the tenant must owe at least 3 months rent if rent is monthly, or 13 weeks rent if rent is weekly or fortnightly, when you serve the notice AND at the court hearing. Grounds 10 and 11 can be used for any amount of arrears.',
   },
   {
     question: 'What is the difference between Ground 8, 10, and 11?',
     answer:
-      'Ground 8 is mandatory (court must grant possession) requiring 2 months arrears. Ground 10 is discretionary, for any amount of unpaid rent. Ground 11 is discretionary, for persistent late payment even if currently paid up. We recommend citing all three.',
+      'Ground 8 is mandatory (court must grant possession) if the higher post-May 2026 arrears threshold is met and still met at hearing. Ground 10 is discretionary, for any amount of unpaid rent. Ground 11 is discretionary, for persistent late payment even if currently paid up. We recommend citing all three where the facts support them.',
   },
   {
     question: 'How long is the notice period for Section 8 rent arrears?',
     answer:
-      'For rent arrears grounds (8, 10, 11), the notice period is 2 weeks. This is shorter than Section 21 (2 months). The notice is valid for 12 months, giving you time to start court proceedings.',
+      'For rent arrears grounds (8, 10, 11), the notice period is now 4 weeks in England. The notice remains valid for 12 months, giving you time to start court proceedings.',
   },
   {
     question: 'What if the tenant pays the arrears before the hearing?',
     answer:
-      'If the tenant pays down arrears to less than 2 months before the hearing, you lose mandatory Ground 8. However, you can still proceed with Grounds 10 and 11, though the court has discretion to refuse possession.',
+      'If the tenant pays down arrears below the Ground 8 threshold before the hearing, you lose mandatory Ground 8. However, you can still proceed with Grounds 10 and 11, though the court has discretion to refuse possession.',
   },
   {
     question: 'Can I evict for rent arrears during winter?',
@@ -126,7 +126,7 @@ export const section8RentArrearsFAQs: FAQItem[] = [
   {
     question: 'Should I use Section 8 or Section 21 for rent arrears?',
     answer:
-      'Consider using both. Section 8 Ground 8 gives mandatory possession if arrears stay above 2 months. Section 21 is a backup if the tenant pays down arrears. Section 8 has a shorter notice period (2 weeks vs 2 months).',
+      'For new England private-rented cases after 1 May 2026, use the current Section 8 / Form 3A route. Ground 8 remains the mandatory arrears ground if the higher threshold stays met, and Grounds 10 and 11 remain available as discretionary backups.',
   },
 ];
 
@@ -296,27 +296,27 @@ export const section8VsSection21FAQs: FAQItem[] = [
   {
     question: 'What is the main difference between Section 8 and Section 21?',
     answer:
-      'Section 21 is a no-fault eviction requiring no reason but 2 months notice. Section 8 requires specific grounds (like rent arrears or breach) but can have shorter notice periods. Section 21 uses accelerated procedure; Section 8 requires a hearing.',
+      'Historically, Section 21 was the no-fault route and Section 8 was the grounds-based route. For new England private-rented cases after 1 May 2026, Section 21 has ended and the live route is the Form 3A / Section 8 possession process.',
   },
   {
     question: 'Which eviction notice is faster: Section 8 or Section 21?',
     answer:
-      'It depends. Section 8 has a shorter notice period (2 weeks for rent arrears) but requires a court hearing. Section 21 has 2 months notice but uses accelerated procedure (no hearing). Overall, Section 21 is often faster for straightforward cases.',
+      'For current England cases, the live route is Section 8 / Form 3A. Serious rent arrears now use 4 weeks notice, and court timing depends on listing delays and whether the tenant defends the claim.',
   },
   {
     question: 'Can I serve both Section 8 and Section 21 at the same time?',
     answer:
-      'Yes, this is common practice. Serving both gives you options: if the tenant pays down arrears (losing Ground 8), you still have Section 21. It costs nothing extra to serve both notices together.',
+      'Not for new England private-rented cases after 1 May 2026. Section 21 is no longer part of that live route, so the key decision is which possession grounds you can prove and whether you need notice-only help or the full court pack.',
   },
   {
     question: 'Which notice should I use for rent arrears?',
     answer:
-      'Use Section 8 with Grounds 8, 10, and 11 for rent arrears. Ground 8 gives mandatory possession if 2+ months arrears persist. Consider also serving Section 21 as backup in case the tenant pays down the arrears.',
+      'Use Section 8 with Grounds 8, 10, and 11 for rent arrears. Ground 8 gives mandatory possession if the post-May 2026 threshold remains met. Grounds 10 and 11 stay available as discretionary support if the arrears drop below Ground 8 later.',
   },
   {
     question: 'Is Section 21 being abolished?',
     answer:
-      'The Renters Reform Bill proposes abolishing Section 21 in England, likely from late 2026 onwards. After abolition, landlords will need valid Section 8 grounds to evict. Check current legislation before serving notices.',
+      'Section 21 ended for new England private-rented cases on 1 May 2026. Landlords now use the current possession grounds route and Form 3A notice instead.',
   },
   {
     question: 'Which notice is cheaper to enforce?',
@@ -326,8 +326,20 @@ export const section8VsSection21FAQs: FAQItem[] = [
   {
     question: 'What if my Section 21 notice is invalid?',
     answer:
-      'If your Section 21 is invalid (deposit issues, missing documents), fall back to Section 8 if you have grounds. Many landlords serve both notices precisely because Section 21 has strict validity requirements.',
+      'For current England cases after 1 May 2026, the safer approach is not to build the plan around Section 21 at all. Use the current Form 3A route and make sure the grounds, notice period, service method, and evidence are all aligned from the start.',
   },
 ];
+
+
+
+
+
+
+
+
+
+
+
+
 
 

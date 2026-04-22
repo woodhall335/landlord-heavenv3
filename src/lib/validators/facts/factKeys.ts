@@ -439,7 +439,7 @@ export const FACT_QUESTIONS: FactQuestionConfig[] = [
   {
     factKey: 'arrears_above_threshold_today',
     question: 'Is the rent arrears currently above the Ground 8 threshold?',
-    helpText: 'For monthly rent: 2 months arrears. For weekly rent: 8 weeks arrears. Must be met at notice AND hearing.',
+    helpText: 'For monthly rent: 3 months arrears. For weekly or fortnightly rent: 13 weeks arrears. Must be met at notice AND hearing.',
     type: 'yes_no_unsure',
     section: 'level_a',
     validatorKeys: ['section_8'],

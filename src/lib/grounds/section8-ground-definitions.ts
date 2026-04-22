@@ -77,10 +77,10 @@ export const SECTION8_GROUND_DEFINITIONS: Record<number | string, Section8Ground
   },
   8: {
     code: 8,
-    title: 'Serious rent arrears (at least 8 weeks or 2 months)',
+    title: 'Serious rent arrears (at least 13 weeks or 3 months)',
     mandatory: true,
     legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
-    full_text: 'Both at the date of the service of the notice under section 8 of this Act relating to the proceedings for possession and at the date of the hearing: (a) if rent is payable weekly or fortnightly, at least eight weeks\' rent is unpaid; (b) if rent is payable monthly, at least two months\' rent is unpaid; (c) if rent is payable quarterly, at least one quarter\'s rent is more than three months in arrears; and (d) if rent is payable yearly, at least three months\' rent is more than three months in arrears.',
+    full_text: 'Both at the date of the service of the notice under section 8 of this Act relating to the proceedings for possession and at the date of the hearing: (a) if rent is payable weekly or fortnightly, at least thirteen weeks\' rent is unpaid; (b) if rent is payable monthly, at least three months\' rent is unpaid; (c) if rent is payable quarterly, at least one quarter\'s rent is more than three months in arrears; and (d) if rent is payable yearly, at least three months\' rent is more than three months in arrears.',
   },
   9: {
     code: 9,

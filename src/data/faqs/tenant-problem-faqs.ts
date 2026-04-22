@@ -17,11 +17,11 @@ export const tenantNotPayingRentFAQs: FAQItem[] = [
   },
   {
     question: 'Can I evict a tenant for 1 month unpaid rent?',
-    answer: 'You can serve a Section 8 notice under Ground 10 or 11 (some rent lawfully due and unpaid), but these are discretionary. For mandatory Ground 8, you need 2 months arrears at service AND hearing.',
+    answer: 'You can serve a Section 8 notice under Ground 10 or 11 (some rent lawfully due and unpaid), but these are discretionary. For mandatory Ground 8, you now need the post-May 2026 threshold at service AND hearing: 3 months rent if monthly, or 13 weeks rent if weekly or fortnightly.',
   },
   {
     question: 'Should I use Section 8 or Section 21 for rent arrears?',
-    answer: 'Use both if possible. Section 8 Ground 8 gives mandatory possession if arrears stay above 2 months. Section 21 is a backup if the tenant pays down arrears before the hearing.',
+    answer: 'For new England private-rented cases after 1 May 2026, use the current Section 8 / Form 3A route. Section 21 is no longer part of that live route, so the key choice is which grounds you can support and whether you need the notice-only pack or the full court pack.',
   },
   {
     question: 'Can I change the locks if my tenant does not pay rent?',
@@ -109,3 +109,5 @@ export const tenantDamagingPropertyFAQs: FAQItem[] = [
     answer: 'Only if the property is returned significantly dirtier than at the start. Normal cleaning between tenancies is the landlord cost. Deductions for cleaning must be reasonable and evidenced.',
   },
 ];
+
+
