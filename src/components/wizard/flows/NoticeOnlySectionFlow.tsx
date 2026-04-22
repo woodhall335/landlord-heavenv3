@@ -1306,7 +1306,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             Back
           </button>
 
-          <div className="flex items-center justify-end gap-2 min-w-[220px]">
+          <div className="flex min-w-0 items-center justify-end gap-2 sm:min-w-[220px]">
             {!isWizardUiV3Enabled && saving && <span className="text-sm text-gray-500 whitespace-nowrap">Auto-saving...</span>}
 
             {currentSection?.id === 'review' ? (

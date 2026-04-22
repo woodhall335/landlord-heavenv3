@@ -83,6 +83,7 @@ export function WizardShellV3({
       : saveState === 'saved'
         ? 'Saved just now'
         : 'Auto-save is on');
+  const resolvedGuidancePanel = guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />;
 
   return (
     <div
@@ -102,7 +103,41 @@ export function WizardShellV3({
 
       <div style={{ height: "calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))" }} aria-hidden="true" />
 
-      <div className="mx-auto max-w-[1240px] px-4 pt-4 lg:hidden">
+      <div className="mx-auto max-w-[1240px] space-y-3 px-4 pt-4 lg:hidden">
+        <section className="rounded-[1.35rem] border border-[#e6dcff] bg-white/92 px-4 py-3 shadow-[0_16px_38px_rgba(76,29,149,0.08)]">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7b56d8]">
+                Progress
+              </p>
+              <p className="mt-1 text-base font-semibold tracking-tight text-[#20103f]">
+                {percentageLabel}
+              </p>
+            </div>
+            <span className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1 text-[11px] font-semibold text-[#5b36b3] shadow-sm">
+              Step {activeStepIndex + 1} of {tabs.length}
+            </span>
+          </div>
+          <p className="mt-2 text-sm leading-6 text-[#5e5872]">{completionLabel}</p>
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#ede4ff]">
+            <div
+              className="h-full rounded-full bg-[linear-gradient(90deg,#7c3aed,#5b21b6)] shadow-[0_8px_24px_rgba(91,33,182,0.28)] transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="mt-3 flex items-center gap-2 rounded-2xl border border-[#ece4ff] bg-[#fcfbff] px-3 py-2 shadow-sm">
+            <span
+              className={`inline-flex h-2.5 w-2.5 rounded-full ${
+                saveState === 'saving'
+                  ? 'animate-pulse bg-amber-500'
+                  : saveState === 'saved'
+                    ? 'bg-emerald-500'
+                    : 'bg-[#8b5cf6]'
+              }`}
+            />
+            <p className="text-sm font-medium text-[#4f4768]">{resolvedSaveLabel}</p>
+          </div>
+        </section>
         <WizardPackSummaryRail
           product={product}
           tabs={tabs}
@@ -110,6 +145,20 @@ export function WizardShellV3({
           currentStepLabel={sectionTitle}
           mobile
         />
+        <details className="group">
+          <summary className="list-none cursor-pointer rounded-[1.35rem] border border-[#e6dcff] bg-white/92 px-4 py-3 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#241247]">Step help and checklist</p>
+                <p className="mt-1 text-xs leading-5 text-[#60597a]">
+                  Ask Heaven, what you need, and why this step matters.
+                </p>
+              </div>
+              <span className="text-sm font-medium text-[#7650cd] transition group-open:rotate-180">⌄</span>
+            </div>
+          </summary>
+          <div className="mt-3">{resolvedGuidancePanel}</div>
+        </details>
       </div>
 
       <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-stretch gap-6 px-4 pb-12 pt-4 lg:grid-cols-[minmax(0,1fr)_340px]">
@@ -137,7 +186,7 @@ export function WizardShellV3({
           {children}
         </WizardMainCardV3>
 
-        <aside className="w-full min-h-0 shrink-0 lg:self-start lg:w-[340px]">
+        <aside className="hidden w-full min-h-0 shrink-0 lg:block lg:self-start lg:w-[340px]">
           <div className="lg:sticky lg:top-[calc(var(--site-header-height)+var(--s21-banner-height)+var(--wizard-topbar-height)+8px)]">
             <div className="space-y-4">
               <section className="rounded-[1.8rem] border border-[#e7dbff] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(248,242,255,0.94))] p-5 shadow-[0_20px_60px_rgba(76,29,149,0.10)] backdrop-blur-sm">
@@ -191,7 +240,7 @@ export function WizardShellV3({
                 currentStepId={currentStepId}
                 currentStepLabel={sectionTitle}
               />
-              {guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />}
+              {resolvedGuidancePanel}
             </div>
           </div>
         </aside>

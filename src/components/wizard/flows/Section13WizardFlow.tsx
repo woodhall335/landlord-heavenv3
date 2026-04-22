@@ -2135,19 +2135,24 @@ export function Section13WizardFlow({
       }
       guidancePanel={sidebar}
       navigation={
-        <div className="flex w-full items-center justify-between gap-3">
-          <Button
-            variant="secondary"
+        <>
+          <button
+            type="button"
             onClick={() => setCurrentStepIndex((index) => Math.max(0, index - 1))}
             disabled={currentStepIndex === 0}
+            className={`inline-flex items-center justify-center rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
+              currentStepIndex === 0
+                ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
+                : 'border-violet-200 bg-white text-violet-900 hover:bg-violet-50'
+            }`}
           >
             <RiArrowLeftLine className="mr-2 h-4 w-4" />
             Back
-          </Button>
+          </button>
 
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-500">{jurisdiction === 'england' ? 'England' : jurisdiction}</span>
-            <Button
+          <div className="flex min-w-0 items-center justify-end gap-2 sm:min-w-[220px]">
+            <button
+              type="button"
               onClick={() => {
                 if (currentStep.id === 'preview' && !orderStatus?.paid) {
                   void continueToSharedCheckoutPreview();
@@ -2156,12 +2161,17 @@ export function Section13WizardFlow({
                 setCurrentStepIndex((index) => Math.min(STEP_CONFIG.length - 1, index + 1));
               }}
               disabled={currentStepIndex === STEP_CONFIG.length - 1}
+              className={`inline-flex min-w-[128px] items-center justify-center rounded-xl px-7 py-2.5 text-sm font-semibold transition-all ${
+                currentStepIndex === STEP_CONFIG.length - 1
+                  ? 'cursor-not-allowed bg-gray-100 text-gray-400 shadow-none'
+                  : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_6px_16px_rgba(109,40,217,0.28)] hover:from-violet-700 hover:to-fuchsia-700'
+              }`}
             >
               {currentStep.id === 'preview' && !orderStatus?.paid ? 'Go to checkout preview' : 'Continue'}
               <RiArrowRightLine className="ml-2 h-4 w-4" />
-            </Button>
+            </button>
           </div>
-        </div>
+        </>
       }
     >
       <div className="space-y-4">
