@@ -39,6 +39,13 @@ const OWNER_COMMERCIAL_HREFS = new Set([
   '/products/notice-only',
   '/products/complete-pack',
   '/products/money-claim',
+  '/products/section-13-standard',
+  '/products/section-13-defence',
+  '/standard-tenancy-agreement',
+  '/premium-tenancy-agreement',
+  '/student-tenancy-agreement',
+  '/hmo-shared-house-tenancy-agreement',
+  '/lodger-agreement',
 ]);
 
 async function getSitemapPathnames(): Promise<string[]> {

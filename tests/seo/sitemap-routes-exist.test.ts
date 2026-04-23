@@ -79,19 +79,16 @@ describe('Sitemap Route Existence', () => {
   it('includes the high-intent live support pages we want indexed', () => {
     expect(sitemapPaths).toEqual(
       expect.arrayContaining([
-        '/form-6a-section-21',
-        '/section-21-notice-template',
-        '/section-21-validity-checklist',
-        '/section-21-expired-what-next',
-        '/section-21-notice-period',
-        '/serve-section-21-notice',
-        '/tenant-ignores-section-21',
-        '/what-happens-after-section-21',
-        '/section-8-vs-section-21',
-        '/accelerated-possession-guide',
-        '/n5b-possession-claim-guide',
+        '/form-3-section-8',
+        '/eviction-notice-england',
+        '/section-21-vs-section-8',
         '/no-fault-eviction',
         '/section-8-rent-arrears-eviction',
+        '/n5-n119-possession-claim',
+        '/eviction-court-forms-england',
+        '/serve-section-8-notice',
+        '/tenant-ignores-section-8',
+        '/what-happens-after-section-8',
         '/periodic-tenancy-agreement',
       ])
     );
@@ -108,9 +105,16 @@ describe('Sitemap Route Existence', () => {
         '/blog/how-to-serve-eviction-notice',
         '/blog/england-section-8-process',
         '/blog/england-money-claim-online',
-        '/blog/wales-renting-homes-act',
-        '/blog/scotland-private-residential-tenancy',
-        '/blog/northern-ireland-eviction-process',
+        '/blog/england-form-3a-eviction-notice-generator-after-renters-rights-act',
+        '/blog/england-complete-eviction-pack-after-section-21-ban',
+        '/blog/england-money-claim-unpaid-rent-after-renters-rights-act',
+        '/blog/england-section-13-rent-increase-pack-after-renters-rights-act',
+        '/blog/england-section-13-defence-pack-tribunal-challenge',
+        '/blog/england-standard-tenancy-agreement-after-1-may-2026',
+        '/blog/england-premium-tenancy-agreement-after-renters-rights-act',
+        '/blog/england-student-tenancy-agreement-after-renters-rights-act',
+        '/blog/england-hmo-shared-house-tenancy-agreement-after-renters-rights-act',
+        '/blog/england-lodger-agreement-after-renters-rights-act',
       ])
     );
   });
@@ -139,7 +143,7 @@ describe('Sitemap Route Existence', () => {
       sitemapEntries.map((entry) => [new URL(entry.url).pathname, entry.priority])
     );
 
-    expect(priorities.get('/products/ast')).toBe(0.95);
+    expect(priorities.get('/products/ast')).toBe(0.9);
     expect(priorities.get('/products/notice-only')).toBe(0.95);
     expect(priorities.get('/products/complete-pack')).toBe(0.95);
     expect(priorities.get('/products/money-claim')).toBe(0.95);

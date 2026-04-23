@@ -3,6 +3,7 @@ import { PRODUCTS } from '@/lib/pricing/products';
 import { ImagePlaceholder } from '@/components/blog/ImagePlaceholder';
 import { BlogCTA } from '@/components/blog/BlogCTA';
 import { AlertTriangle, BadgeCheck, Clock3, FileText } from 'lucide-react';
+import { productReformBlogPosts } from './product-reform-posts';
 import { BlogPost } from './types';
 
 const section21TemplateCta = (
@@ -93,6 +94,7 @@ const scotlandEvictionCta = (
 );
 
 const allBlogPosts: BlogPost[] = [
+  ...productReformBlogPosts,
   // ============================================
   // POST 0: Renters Reform Bill (FEATURED - URGENT)
   // Target: 2,000+ words
