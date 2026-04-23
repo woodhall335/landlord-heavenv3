@@ -8,14 +8,15 @@ import { InlineSectionHeaderV3 } from './InlineSectionHeaderV3';
 interface GuidancePanelV3Props {
   metadata?: StepMetadata;
   askHeaven: React.ReactNode;
+  compact?: boolean;
 }
 
-export function GuidancePanelV3({ metadata, askHeaven }: GuidancePanelV3Props) {
+export function GuidancePanelV3({ metadata, askHeaven, compact = false }: GuidancePanelV3Props) {
   return (
-    <div className="space-y-4">
+    <div className={compact ? 'space-y-3' : 'space-y-4'}>
       <div>
         <InlineSectionHeaderV3 title="Ask Heaven" iconSlug="ask-heaven" titleClassName="text-[#241247]" />
-        <AskHeavenCardV3>{askHeaven}</AskHeavenCardV3>
+        <AskHeavenCardV3 compact={compact}>{askHeaven}</AskHeavenCardV3>
       </div>
       <div>
         <InlineSectionHeaderV3
@@ -23,7 +24,7 @@ export function GuidancePanelV3({ metadata, askHeaven }: GuidancePanelV3Props) {
           iconSlug="what-you-need"
           titleClassName="text-[#241247]"
         />
-        <NeedsChecklistV3 title={metadata?.checklistTitle} items={metadata?.checklistItems} />
+        <NeedsChecklistV3 title={metadata?.checklistTitle} items={metadata?.checklistItems} compact={compact} />
       </div>
       <div>
         <InlineSectionHeaderV3
@@ -31,7 +32,7 @@ export function GuidancePanelV3({ metadata, askHeaven }: GuidancePanelV3Props) {
           iconSlug="warning"
           titleClassName="text-[#241247]"
         />
-        <WhyThisMattersV3 title={metadata?.whyThisMatters?.title} body={metadata?.whyThisMatters?.body} />
+        <WhyThisMattersV3 title={metadata?.whyThisMatters?.title} body={metadata?.whyThisMatters?.body} compact={compact} />
       </div>
     </div>
   );

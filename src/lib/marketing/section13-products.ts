@@ -52,16 +52,16 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   ],
   heroTitle: 'Section 13 Rent Increase Pack for England landlords',
   heroSubtitle:
-    'Increase the rent with evidence, timing checks, and supporting paperwork that still makes sense if the tenant asks why the figure has changed.',
+    'Increase the rent with live comparable-listing evidence, timing checks, and supporting paperwork that still makes sense if the tenant asks why the figure has changed.',
   productSku: 'section13_standard',
   ctaLabel: `Start Section 13 Rent Increase Pack - ${PRODUCTS.section13_standard.displayPrice}`,
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
-    'Built for landlords who want the notice, market evidence, and service record to read as one joined-up rent increase file.',
+    'Built for landlords who want more than a blank Form 4A: the notice, live comparable-listing evidence, and service record all read as one joined-up rent increase file.',
     LANDLORD_GUIDANCE_DISCLAIMER,
   ],
   packIntro:
-    'This pack is built for landlords who need more than a blank Form 4A. Each part of the file exists to justify the increase, communicate it properly, and hold up better if the tenant questions the new figure.',
+    'This pack is built for landlords who need more than a blank Form 4A. It helps you check live comparable rental listings, settle on a more supportable new rent, communicate the increase properly, and reduce the risk of an avoidable challenge based on weak evidence.',
   packBreakdown: [
     {
       name: 'Form 4A (Legal Rent Increase Notice)',
@@ -121,12 +121,12 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
       {
         title: 'A form alone does not justify the figure',
         body:
-          'Form 4A starts the process, but it does not explain why the rent should move to the number you want. The market evidence and service record are what stop the increase looking arbitrary.',
+          'Form 4A starts the process, but it does not explain why the rent should move to the number you want. The live comparables, justification report, and service record are what stop the increase looking arbitrary.',
       },
       {
         title: 'Weak evidence gets challenged first',
         body:
-          'If the tenant asks how you arrived at the new rent, you need more than instinct or a rough comparison with another listing you saw last week.',
+          'If the tenant asks how you arrived at the new rent, you need more than instinct or a rough comparison with another listing you saw last week. The pack is built to pull in real comparable listings and turn them into something you can actually rely on.',
       },
       {
         title: 'Service errors can derail a sound increase',
@@ -137,8 +137,13 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   },
   howThisHelps: {
     intro:
-      'The pack is designed to make the increase easier to explain, easier to evidence, and easier to defend if the tenant starts asking for detail.',
+      'The pack is designed to make the increase easier to explain, easier to evidence, and harder to undermine if the tenant starts asking for detail.',
     cards: [
+      {
+        title: 'It helps you find a more supportable figure',
+        body:
+          'The comparable-listings workflow is there to help you judge where the new rent should sit in the real local market, not just to fill space around the notice.',
+      },
       {
         title: 'It makes the file easier to trust',
         body:
@@ -168,9 +173,9 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
       },
       {
         step: 'Step 02',
-        title: 'Build the evidence behind the increase',
+        title: 'Check live comparables and build the evidence',
         body:
-          'Work through the comparable-rent reasoning and service details so the notice and the rest of the file read together cleanly.',
+          'Scrape or import comparable local listings, keep the ones you want to rely on, and work through the service details so the notice and the rest of the file read together cleanly.',
       },
       {
         step: 'Step 03',
@@ -183,7 +188,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   cta: {
     title: 'Increase the rent with a cleaner Section 13 file',
     body:
-      'Start here if you want the notice, the evidence, and the service record prepared as one joined-up England landlord pack instead of piecing them together yourself.',
+      'Start here if you want more than just Form 4A: the notice, the live market evidence, and the service record prepared as one joined-up England landlord pack instead of piecing them together yourself.',
     secondaryLabel: 'See the Section 13 Defence Pack',
     secondaryHref: '/products/section-13-defence',
   },
@@ -200,7 +205,12 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     {
       question: 'Why is the evidence pack included?',
       answer:
-        'Because the legal notice only starts the process. The evidence is what helps you explain the figure and defend it if the tenant questions the increase.',
+        'Because the legal notice only starts the process. The evidence is what helps you explain the figure, show that it sits within a real market range, and defend it if the tenant questions the increase.',
+    },
+    {
+      question: 'Does this use real rental listings?',
+      answer:
+        'Yes. The workflow is built to scrape or import comparable local rental listings so you can support the proposed figure with real market evidence rather than relying on guesswork alone.',
     },
     {
       question: 'Does this replace legal advice?',
@@ -229,16 +239,16 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   ],
   heroTitle: 'Section 13 Defence Pack for England landlords',
   heroSubtitle:
-    'Defend the rent increase with a structured case file that still works when the tenant pushes back and the matter moves closer to tribunal.',
+    'Defend the rent increase with a structured case file built around live comparable-listing evidence, supportable pricing, and tribunal-ready organisation.',
   productSku: 'section13_defensive',
   ctaLabel: `Start Section 13 Defence Pack - ${PRODUCTS.section13_defensive.displayPrice}`,
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
-    'Built for landlords who need the Section 13 file to hold together under challenge, not just look fine on the day it is served.',
+    'Built for landlords who need the Section 13 file to hold together under challenge, not just look fine on the day it is served. This is more than a Form 4A generator.',
     LANDLORD_GUIDANCE_DISCLAIMER,
   ],
   packIntro:
-    'This pack is for the harder Section 13 cases. It does not just help you serve the notice. It helps you organise the argument, the evidence, and the response material so the file still reads clearly when a challenge is active.',
+    'This pack is for the harder Section 13 cases. It does not just help you serve the notice. It helps you use live comparable listings to support the rent level, organise the argument and evidence, and keep the response material clear when a challenge is active.',
   packBreakdown: [
     {
       name: 'Full Tribunal Bundle (Indexed Exhibits)',
@@ -328,7 +338,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
       {
         title: 'A challenged increase needs an argument, not just a form',
         body:
-          'The tribunal will care about the quality of the reasoning and the evidence behind the figure, not just whether a notice was served.',
+          'The tribunal will care about the quality of the reasoning and the evidence behind the figure, not just whether a notice was served. Real comparables and clear adjustments matter.',
       },
       {
         title: 'Disorganised files weaken good cases',
@@ -346,6 +356,11 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     intro:
       'The Defence Pack turns a served notice into a fuller landlord case file that is easier to explain, easier to present, and harder to pick apart.',
     cards: [
+      {
+        title: 'It helps you defend the rent level itself',
+        body:
+          'The comparable-listings analysis is there to show why the number was chosen, helping you defend a more supportable figure instead of relying on bare assertion.',
+      },
       {
         title: 'It keeps the evidence joined up',
         body:
@@ -371,7 +386,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
         step: 'Step 01',
         title: 'Build the notice and the market case together',
         body:
-          'Start with the rent figure, the tenancy details, and the comparable evidence so the defence is grounded in the same facts as the notice.',
+          'Start with the rent figure, the tenancy details, and scraped or imported comparable evidence so the defence is grounded in the same facts as the notice.',
       },
       {
         step: 'Step 02',
@@ -390,7 +405,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   cta: {
     title: 'Prepare the stronger Section 13 defence file now',
     body:
-      'Start here if you expect the rent increase to be challenged and want the evidence, response material, and tribunal bundle prepared before the file starts drifting.',
+      'Start here if you expect the rent increase to be challenged and want the live market evidence, response material, and tribunal bundle prepared before the file starts drifting.',
     secondaryLabel: 'See the Standard Section 13 Pack',
     secondaryHref: '/products/section-13-standard',
   },
@@ -409,6 +424,11 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
       question: 'Why is the tribunal bundle included?',
       answer:
         'Because the way the evidence is organised affects how credible the case feels. The indexed bundle helps the tribunal follow the file more easily.',
+    },
+    {
+      question: 'Does this use real comparable listings too?',
+      answer:
+        'Yes. The Defence Pack is built around the same comparable-listings workflow, then adds the fuller argument, response, and tribunal-facing materials needed when challenge risk is higher.',
     },
     {
       question: 'Is this still England only?',

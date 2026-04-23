@@ -32,8 +32,12 @@ export function WizardPackSummaryRail({
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const outstandingCount = summary.outstandingSections.length;
   const attentionCount = summary.sectionsNeedingAttention.length;
+  const visibleIncludedDocuments = mobile ? summary.includedDocuments.slice(0, 4) : summary.includedDocuments;
+  const hiddenIncludedDocumentCount = summary.includedDocuments.length - visibleIncludedDocuments.length;
+  const visibleOutstandingSections = mobile ? summary.outstandingSections.slice(0, 3) : summary.outstandingSections;
+  const hiddenOutstandingCount = summary.outstandingSections.length - visibleOutstandingSections.length;
   const cardClassName = mobile
-    ? 'rounded-[1.5rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-4 shadow-[0_18px_40px_rgba(76,29,149,0.08)]'
+    ? 'rounded-[1.25rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-3.5 shadow-[0_14px_32px_rgba(76,29,149,0.07)]'
     : 'rounded-[1.8rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_20px_60px_rgba(76,29,149,0.10)]';
   const selectedPreview =
     useMemo(
@@ -53,10 +57,10 @@ export function WizardPackSummaryRail({
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7b56d8]">
               Live pack summary
             </p>
-            <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">
+            <h3 className={`mt-2 font-semibold tracking-tight text-[#20103f] ${mobile ? 'text-base' : 'text-lg'}`}>
               {summary.heading}
             </h3>
-            <p className="mt-1 text-sm leading-6 text-[#60597a]">{summary.subheading}</p>
+            <p className={`mt-1 text-[#60597a] ${mobile ? 'text-xs leading-5' : 'text-sm leading-6'}`}>{summary.subheading}</p>
           </div>
           <span className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1 text-xs font-semibold text-[#5b36b3] shadow-sm">
             Live pack
@@ -65,10 +69,10 @@ export function WizardPackSummaryRail({
 
         {currentStepLabel ? (
           <div className="mt-4 rounded-2xl border border-[#efe7ff] bg-white/80 px-4 py-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7b56d8]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7b56d8]">
               Current step
             </p>
-            <p className="mt-1 text-sm font-medium text-[#241247]">{currentStepLabel}</p>
+            <p className={`mt-1 font-medium text-[#241247] ${mobile ? 'text-xs leading-5' : 'text-sm'}`}>{currentStepLabel}</p>
           </div>
         ) : null}
 
@@ -94,17 +98,22 @@ export function WizardPackSummaryRail({
             <RiFileList3Line className="h-4 w-4 text-[#6d28d9]" />
             <h4 className="text-sm font-semibold text-[#241247]">Included in your pack</h4>
           </div>
-          <ul className="mt-3 space-y-2">
-            {summary.includedDocuments.map((item) => (
-              <li key={item} className="flex items-start gap-2 text-sm leading-6 text-[#4f4768]">
+          <ul className={`mt-3 ${mobile ? 'space-y-1.5' : 'space-y-2'}`}>
+            {visibleIncludedDocuments.map((item) => (
+              <li key={item} className={`flex items-start gap-2 text-[#4f4768] ${mobile ? 'text-xs leading-5' : 'text-sm leading-6'}`}>
                 <RiCheckboxCircleLine className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />
                 <span>{item}</span>
               </li>
             ))}
           </ul>
+          {hiddenIncludedDocumentCount > 0 ? (
+            <p className="mt-2 text-xs font-medium text-[#6a627f]">
+              + {hiddenIncludedDocumentCount} more document{hiddenIncludedDocumentCount === 1 ? '' : 's'} in this pack
+            </p>
+          ) : null}
         </section>
 
-        {summary.proofCards.length > 0 ? (
+        {!mobile && summary.proofCards.length > 0 ? (
           <section className="mt-5">
             <div className="flex items-center gap-2">
               <RiCheckboxCircleLine className="h-4 w-4 text-[#6d28d9]" />
@@ -194,13 +203,18 @@ export function WizardPackSummaryRail({
               <RiTimeLine className="h-4 w-4 text-[#6d28d9]" />
               <h4 className="text-sm font-semibold text-[#241247]">Still to complete</h4>
             </div>
-            <ul className="mt-3 space-y-2">
-              {summary.outstandingSections.map((item) => (
-                <li key={item} className="text-sm leading-6 text-[#5d5773]">
+            <ul className={`mt-3 ${mobile ? 'space-y-1.5' : 'space-y-2'}`}>
+              {visibleOutstandingSections.map((item) => (
+                <li key={item} className={`${mobile ? 'text-xs leading-5' : 'text-sm leading-6'} text-[#5d5773]`}>
                   {item}
                 </li>
               ))}
             </ul>
+            {hiddenOutstandingCount > 0 ? (
+              <p className="mt-2 text-xs font-medium text-[#6a627f]">
+                + {hiddenOutstandingCount} more section{hiddenOutstandingCount === 1 ? '' : 's'} still to complete
+              </p>
+            ) : null}
           </section>
         ) : null}
 
@@ -260,11 +274,11 @@ export function WizardPackSummaryRail({
 
   return (
     <details className="group">
-      <summary className="list-none cursor-pointer rounded-[1.4rem] border border-[#e6dcff] bg-white/90 px-4 py-3 shadow-sm">
+      <summary className="list-none cursor-pointer rounded-[1.25rem] border border-[#e6dcff] bg-white/90 px-3.5 py-3 shadow-sm">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-[#241247]">Your pack and next steps</p>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
               <span className="rounded-full border border-[#ddd0ff] bg-[#f8f3ff] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b46c1]">
                 {summary.currentStepDocuments[0]}
               </span>

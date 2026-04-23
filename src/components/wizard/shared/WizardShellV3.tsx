@@ -84,6 +84,8 @@ export function WizardShellV3({
         ? 'Saved just now'
         : 'Auto-save is on');
   const resolvedGuidancePanel = guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />;
+  const compactMobileGuidancePanel =
+    guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} compact />;
 
   return (
     <div
@@ -103,14 +105,14 @@ export function WizardShellV3({
 
       <div style={{ height: "calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))" }} aria-hidden="true" />
 
-      <div className="mx-auto max-w-[1240px] space-y-3 px-4 pt-4 lg:hidden">
-        <section className="rounded-[1.35rem] border border-[#e6dcff] bg-white/92 px-4 py-3 shadow-[0_16px_38px_rgba(76,29,149,0.08)]">
+      <div className="mx-auto max-w-[1240px] space-y-2.5 px-4 pt-3 lg:hidden">
+        <section className="rounded-[1.25rem] border border-[#e6dcff] bg-white/92 px-3.5 py-3 shadow-[0_12px_28px_rgba(76,29,149,0.07)]">
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7b56d8]">
                 Progress
               </p>
-              <p className="mt-1 text-base font-semibold tracking-tight text-[#20103f]">
+              <p className="mt-1 text-[15px] font-semibold tracking-tight text-[#20103f]">
                 {percentageLabel}
               </p>
             </div>
@@ -118,14 +120,14 @@ export function WizardShellV3({
               Step {activeStepIndex + 1} of {tabs.length}
             </span>
           </div>
-          <p className="mt-2 text-sm leading-6 text-[#5e5872]">{completionLabel}</p>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#ede4ff]">
+          <p className="mt-2 text-xs leading-5 text-[#5e5872]">{completionLabel}</p>
+          <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-[#ede4ff]">
             <div
               className="h-full rounded-full bg-[linear-gradient(90deg,#7c3aed,#5b21b6)] shadow-[0_8px_24px_rgba(91,33,182,0.28)] transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="mt-3 flex items-center gap-2 rounded-2xl border border-[#ece4ff] bg-[#fcfbff] px-3 py-2 shadow-sm">
+          <div className="mt-2.5 flex items-center gap-2 rounded-[1rem] border border-[#ece4ff] bg-[#fcfbff] px-3 py-2 shadow-sm">
             <span
               className={`inline-flex h-2.5 w-2.5 rounded-full ${
                 saveState === 'saving'
@@ -135,7 +137,7 @@ export function WizardShellV3({
                     : 'bg-[#8b5cf6]'
               }`}
             />
-            <p className="text-sm font-medium text-[#4f4768]">{resolvedSaveLabel}</p>
+            <p className="text-xs font-medium text-[#4f4768]">{resolvedSaveLabel}</p>
           </div>
         </section>
         <WizardPackSummaryRail
@@ -146,18 +148,18 @@ export function WizardShellV3({
           mobile
         />
         <details className="group">
-          <summary className="list-none cursor-pointer rounded-[1.35rem] border border-[#e6dcff] bg-white/92 px-4 py-3 shadow-sm">
+          <summary className="list-none cursor-pointer rounded-[1.25rem] border border-[#e6dcff] bg-white/92 px-3.5 py-3 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-[#241247]">Step help and checklist</p>
-                <p className="mt-1 text-xs leading-5 text-[#60597a]">
-                  Ask Heaven, what you need, and why this step matters.
+                <p className="mt-1 text-[11px] leading-4.5 text-[#60597a]">
+                  Ask Heaven, what you need, and why it matters.
                 </p>
               </div>
               <span className="text-sm font-medium text-[#7650cd] transition group-open:rotate-180">⌄</span>
             </div>
           </summary>
-          <div className="mt-3">{resolvedGuidancePanel}</div>
+          <div className="mt-2.5">{compactMobileGuidancePanel}</div>
         </details>
       </div>
 

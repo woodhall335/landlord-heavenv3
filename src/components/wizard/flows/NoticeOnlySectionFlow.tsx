@@ -98,6 +98,57 @@ type WalesRoute = 'section_173' | 'fault_based';
 type ScotlandRoute = 'notice_to_leave';
 type EvictionRoute = EnglandRoute | WalesRoute | ScotlandRoute;
 
+interface NoticeOnlyUpgradePrompt {
+  title: string;
+  reason: string;
+  benefits: string[];
+}
+
+export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'england' | 'wales' | 'scotland'): NoticeOnlyUpgradePrompt | null {
+  if (jurisdiction !== 'england' || facts.eviction_route !== 'section_8') {
+    return null;
+  }
+
+  const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  const normalizedGrounds = selectedGrounds.join(' ').toLowerCase();
+  const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
+  const hasGround8 = normalizedGrounds.includes('ground 8');
+  const hasArrearsGround = ['ground 8', 'ground 10', 'ground 11'].some((ground) => normalizedGrounds.includes(ground));
+  const hasMultipleGrounds = selectedGrounds.length >= 2;
+  const hasSpecialistGround = selectedGrounds.some((ground) =>
+    ['Ground 1', 'Ground 1A', 'Ground 6', 'Ground 7B', 'Ground 9', 'Ground 12', 'Ground 13', 'Ground 14', 'Ground 14A', 'Ground 15', 'Ground 17'].some((code) => ground.includes(code))
+  );
+  const hasArrearsSchedule = Array.isArray(arrearsItems) && arrearsItems.length > 0;
+
+  if (hasGround8 && hasArrearsSchedule) {
+    return {
+      title: 'This case looks ready for the full possession pack',
+      reason:
+        'You are already building the notice around Ground 8 arrears. If you expect to issue proceedings after service, moving into the Complete Eviction Pack now keeps the notice, arrears schedule, N5, N119, and witness statement aligned from the start.',
+      benefits: [
+        'Keeps the notice and court forms consistent from the same answers',
+        'Adds the N5, N119, witness statement, and court bundle support',
+        'Reduces the risk of re-keying facts when the case moves into court',
+      ],
+    };
+  }
+
+  if (hasMultipleGrounds || hasSpecialistGround || hasArrearsGround) {
+    return {
+      title: 'Consider upgrading if this is likely to reach court',
+      reason:
+        'This notice is relying on multiple or more involved possession grounds. The Complete Eviction Pack is a better fit when you want the notice, court forms, and supporting court-file documents prepared together.',
+      benefits: [
+        'Adds the court claim forms and bundle support',
+        'Helps keep evidence and particulars aligned with the notice',
+        'Gives you a stronger court-ready file if the tenant does not leave',
+      ],
+    };
+  }
+
+  return null;
+}
+
 // Section definition type
 interface WizardSection {
   id: string;
@@ -997,6 +1048,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     }
   }, [caseId, jurisdiction, router]);
 
+  const handleUpgradeToCompletePack = useCallback(() => {
+    router.push(`/wizard/flow?type=eviction&product=complete_pack&case_id=${caseId}&entry=steps&upgrade_from=notice_only`);
+  }, [caseId, router]);
+
   // Calculate progress
   const completedCount = visibleSections.filter((s) => s.isComplete(facts, jurisdiction)).length;
   const progress = Math.round((completedCount / visibleSections.length) * 100);
@@ -1122,6 +1177,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     const incompleteRequiredSections = visibleSections
       .filter((s) => s.id !== 'review' && !s.isComplete(facts, jurisdiction))
       .map((s) => s.label);
+    const upgradePrompt = getNoticeOnlyUpgradePrompt(facts, jurisdiction);
 
     return (
       <div className="space-y-6">
@@ -1230,6 +1286,34 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             )}
           </div>
         </div>
+
+        {upgradePrompt ? (
+          <div className="rounded-[1.4rem] border border-[#e4d7ff] bg-[linear-gradient(180deg,#fcfaff_0%,#f5eeff_100%)] px-4 py-4 shadow-sm">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7b56d8]">Court-ready option</p>
+            <h3 className="mt-2 text-base font-semibold tracking-tight text-[#241247]">{upgradePrompt.title}</h3>
+            <p className="mt-2 text-sm leading-6 text-[#5f5877]">{upgradePrompt.reason}</p>
+            <ul className="mt-3 space-y-1.5 text-sm leading-6 text-[#473d63]">
+              {upgradePrompt.benefits.map((benefit) => (
+                <li key={benefit} className="flex items-start gap-2">
+                  <RiCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#7c3aed]" />
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={handleUpgradeToCompletePack}
+                className="inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#7c3aed,#5b21b6)] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(91,33,182,0.24)] transition hover:brightness-105"
+              >
+                Switch to Complete Eviction Pack
+              </button>
+              <p className="text-xs leading-5 text-[#6a627f]">
+                Your saved answers carry across so you can keep building from the same case.
+              </p>
+            </div>
+          </div>
+        ) : null}
       </div>
     );
   };
