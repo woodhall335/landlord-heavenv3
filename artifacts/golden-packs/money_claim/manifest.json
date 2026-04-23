@@ -12,8 +12,8 @@
       "fileName": "01-particulars-of-claim.pdf",
       "files": {
         "pdf": "money_claim/01-particulars-of-claim.pdf",
-        "text": "money_claim/01-particulars-of-claim.txt",
-        "html": "money_claim/01-particulars-of-claim.html"
+        "html": "money_claim/01-particulars-of-claim.html",
+        "text": "money_claim/01-particulars-of-claim.txt"
       },
       "extraction": {
         "pageCount": 2,
@@ -30,8 +30,8 @@
       "fileName": "02-schedule-of-arrears.pdf",
       "files": {
         "pdf": "money_claim/02-schedule-of-arrears.pdf",
-        "text": "money_claim/02-schedule-of-arrears.txt",
-        "html": "money_claim/02-schedule-of-arrears.html"
+        "html": "money_claim/02-schedule-of-arrears.html",
+        "text": "money_claim/02-schedule-of-arrears.txt"
       },
       "extraction": {
         "pageCount": 1,
@@ -48,8 +48,8 @@
       "fileName": "03-interest-calculation.pdf",
       "files": {
         "pdf": "money_claim/03-interest-calculation.pdf",
-        "text": "money_claim/03-interest-calculation.txt",
-        "html": "money_claim/03-interest-calculation.html"
+        "html": "money_claim/03-interest-calculation.html",
+        "text": "money_claim/03-interest-calculation.txt"
       },
       "extraction": {
         "pageCount": 1,
@@ -66,8 +66,8 @@
       "fileName": "04-letter-before-claim.pdf",
       "files": {
         "pdf": "money_claim/04-letter-before-claim.pdf",
-        "text": "money_claim/04-letter-before-claim.txt",
-        "html": "money_claim/04-letter-before-claim.html"
+        "html": "money_claim/04-letter-before-claim.html",
+        "text": "money_claim/04-letter-before-claim.txt"
       },
       "extraction": {
         "pageCount": 5,
@@ -84,8 +84,8 @@
       "fileName": "05-information-sheet-for-defendants.pdf",
       "files": {
         "pdf": "money_claim/05-information-sheet-for-defendants.pdf",
-        "text": "money_claim/05-information-sheet-for-defendants.txt",
-        "html": "money_claim/05-information-sheet-for-defendants.html"
+        "html": "money_claim/05-information-sheet-for-defendants.html",
+        "text": "money_claim/05-information-sheet-for-defendants.txt"
       },
       "extraction": {
         "pageCount": 5,
@@ -102,8 +102,8 @@
       "fileName": "06-reply-form.pdf",
       "files": {
         "pdf": "money_claim/06-reply-form.pdf",
-        "text": "money_claim/06-reply-form.txt",
-        "html": "money_claim/06-reply-form.html"
+        "html": "money_claim/06-reply-form.html",
+        "text": "money_claim/06-reply-form.txt"
       },
       "extraction": {
         "pageCount": 4,
@@ -120,8 +120,8 @@
       "fileName": "07-financial-statement-form.pdf",
       "files": {
         "pdf": "money_claim/07-financial-statement-form.pdf",
-        "text": "money_claim/07-financial-statement-form.txt",
-        "html": "money_claim/07-financial-statement-form.html"
+        "html": "money_claim/07-financial-statement-form.html",
+        "text": "money_claim/07-financial-statement-form.txt"
       },
       "extraction": {
         "pageCount": 6,
@@ -138,8 +138,8 @@
       "fileName": "08-filing-guide.pdf",
       "files": {
         "pdf": "money_claim/08-filing-guide.pdf",
-        "text": "money_claim/08-filing-guide.txt",
-        "html": "money_claim/08-filing-guide.html"
+        "html": "money_claim/08-filing-guide.html",
+        "text": "money_claim/08-filing-guide.txt"
       },
       "extraction": {
         "pageCount": 7,
@@ -156,8 +156,8 @@
       "fileName": "09-enforcement-guide.pdf",
       "files": {
         "pdf": "money_claim/09-enforcement-guide.pdf",
-        "text": "money_claim/09-enforcement-guide.txt",
-        "html": "money_claim/09-enforcement-guide.html"
+        "html": "money_claim/09-enforcement-guide.html",
+        "text": "money_claim/09-enforcement-guide.txt"
       },
       "extraction": {
         "pageCount": 5,

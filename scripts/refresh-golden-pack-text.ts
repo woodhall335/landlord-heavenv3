@@ -31,6 +31,16 @@ async function refreshPackTextArtifacts(key: LivePackProductKey): Promise<{
       continue;
     }
 
+    if (path.extname(document.files.pdf).toLowerCase() !== '.pdf') {
+      if (document.files.text) {
+        await fs.rm(path.join(OUTPUT_ROOT, document.files.text), { force: true });
+        delete document.files.text;
+      }
+      delete document.extraction;
+      skipped += 1;
+      continue;
+    }
+
     const pdfPath = path.join(OUTPUT_ROOT, document.files.pdf);
     const pdfBuffer = await fs.readFile(pdfPath);
     const baseName = path.parse(document.fileName).name;

@@ -12,8 +12,8 @@
       "fileName": "section8_notice.pdf",
       "files": {
         "pdf": "complete_pack/section8_notice.pdf",
-        "text": "complete_pack/section8_notice.txt",
-        "html": "complete_pack/section8_notice.html"
+        "html": "complete_pack/section8_notice.html",
+        "text": "complete_pack/section8_notice.txt"
       },
       "extraction": {
         "pageCount": 10,
@@ -64,8 +64,8 @@
       "fileName": "schedule_of_arrears.pdf",
       "files": {
         "pdf": "complete_pack/schedule_of_arrears.pdf",
-        "text": "complete_pack/schedule_of_arrears.txt",
-        "html": "complete_pack/schedule_of_arrears.html"
+        "html": "complete_pack/schedule_of_arrears.html",
+        "text": "complete_pack/schedule_of_arrears.txt"
       },
       "extraction": {
         "pageCount": 1,
@@ -82,8 +82,8 @@
       "fileName": "evidence_collection_checklist.pdf",
       "files": {
         "pdf": "complete_pack/evidence_collection_checklist.pdf",
-        "text": "complete_pack/evidence_collection_checklist.txt",
-        "html": "complete_pack/evidence_collection_checklist.html"
+        "html": "complete_pack/evidence_collection_checklist.html",
+        "text": "complete_pack/evidence_collection_checklist.txt"
       },
       "extraction": {
         "pageCount": 1,
@@ -100,8 +100,8 @@
       "fileName": "proof_of_service_template.pdf",
       "files": {
         "pdf": "complete_pack/proof_of_service_template.pdf",
-        "text": "complete_pack/proof_of_service_template.txt",
-        "html": "complete_pack/proof_of_service_template.html"
+        "html": "complete_pack/proof_of_service_template.html",
+        "text": "complete_pack/proof_of_service_template.txt"
       },
       "extraction": {
         "pageCount": 2,
@@ -118,8 +118,8 @@
       "fileName": "witness_statement.pdf",
       "files": {
         "pdf": "complete_pack/witness_statement.pdf",
-        "text": "complete_pack/witness_statement.txt",
-        "html": "complete_pack/witness_statement.html"
+        "html": "complete_pack/witness_statement.html",
+        "text": "complete_pack/witness_statement.txt"
       },
       "extraction": {
         "pageCount": 4,
@@ -136,8 +136,8 @@
       "fileName": "court_bundle_index.pdf",
       "files": {
         "pdf": "complete_pack/court_bundle_index.pdf",
-        "text": "complete_pack/court_bundle_index.txt",
-        "html": "complete_pack/court_bundle_index.html"
+        "html": "complete_pack/court_bundle_index.html",
+        "text": "complete_pack/court_bundle_index.txt"
       },
       "extraction": {
         "pageCount": 2,
@@ -154,8 +154,8 @@
       "fileName": "hearing_checklist.pdf",
       "files": {
         "pdf": "complete_pack/hearing_checklist.pdf",
-        "text": "complete_pack/hearing_checklist.txt",
-        "html": "complete_pack/hearing_checklist.html"
+        "html": "complete_pack/hearing_checklist.html",
+        "text": "complete_pack/hearing_checklist.txt"
       },
       "extraction": {
         "pageCount": 2,
@@ -172,8 +172,8 @@
       "fileName": "arrears_engagement_letter.pdf",
       "files": {
         "pdf": "complete_pack/arrears_engagement_letter.pdf",
-        "text": "complete_pack/arrears_engagement_letter.txt",
-        "html": "complete_pack/arrears_engagement_letter.html"
+        "html": "complete_pack/arrears_engagement_letter.html",
+        "text": "complete_pack/arrears_engagement_letter.txt"
       },
       "extraction": {
         "pageCount": 2,
@@ -190,8 +190,8 @@
       "fileName": "eviction_case_summary.pdf",
       "files": {
         "pdf": "complete_pack/eviction_case_summary.pdf",
-        "text": "complete_pack/eviction_case_summary.txt",
-        "html": "complete_pack/eviction_case_summary.html"
+        "html": "complete_pack/eviction_case_summary.html",
+        "text": "complete_pack/eviction_case_summary.txt"
       },
       "extraction": {
         "pageCount": 3,

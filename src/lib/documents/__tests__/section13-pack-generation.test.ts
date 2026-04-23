@@ -19,12 +19,26 @@ import { computeSection13Preview } from '@/lib/section13/rules';
 import type { Section13Comparable } from '@/lib/section13/types';
 
 function buildComparable(index: number, monthlyEquivalent: number): Section13Comparable {
+  const localComparables = [
+    { address: 'Flat 2, The Calls, Leeds LS1', postcode: 'LS1 7BR', distance: 0.2 },
+    { address: 'Apartment 14, Sovereign Street, Leeds LS1', postcode: 'LS1 4BA', distance: 0.3 },
+    { address: 'Flat 5, Brewery Wharf, Leeds LS10', postcode: 'LS10 1NE', distance: 0.4 },
+    { address: 'Apartment 8, Park Row, Leeds LS1', postcode: 'LS1 5HD', distance: 0.4 },
+    { address: 'Flat 11, Riverside Court, Leeds LS1', postcode: 'LS1 4AW', distance: 0.5 },
+    { address: 'Apartment 6, Wellington Street, Leeds LS1', postcode: 'LS1 2DE', distance: 0.5 },
+    { address: 'Flat 3, Dock Street, Leeds LS10', postcode: 'LS10 1JF', distance: 0.5 },
+    { address: 'Apartment 21, East Parade, Leeds LS1', postcode: 'LS1 2BH', distance: 0.5 },
+  ];
+  const comparable = localComparables[index] ?? localComparables[0];
+
   return {
     source: 'scraped',
+    sourceUrl: `https://example.com/leeds-rent-comparable-${index + 1}`,
     sourceDateKind: 'published',
     sourceDateValue: '2026-03-15',
-    addressSnippet: `Comparable ${index + 1}`,
-    postcodeNormalized: 'LS1 1AA',
+    addressSnippet: comparable.address,
+    postcodeNormalized: comparable.postcode,
+    distanceMiles: comparable.distance,
     bedrooms: 2,
     rawRentValue: monthlyEquivalent,
     rawRentFrequency: 'pcm',
@@ -132,44 +146,44 @@ describe('Section 13 document generation hardening', () => {
           "fontSize": 10,
           "height": 16,
           "pageIndex": 3,
-          "width": 124,
-          "x": 74,
-          "y": 742,
+          "width": 140,
+          "x": 67,
+          "y": 754,
         },
         "currentRentFrequency": {
           "fontSize": 10,
           "height": 16,
           "pageIndex": 3,
-          "width": 128,
-          "x": 286,
-          "y": 742,
+          "width": 158,
+          "x": 245,
+          "y": 754,
         },
         "firstIncreaseDay": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 20,
-          "x": 70,
-          "y": 510,
+          "width": 30,
+          "x": 56,
+          "y": 548,
         },
         "firstIncreaseMonth": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 20,
-          "x": 111,
-          "y": 510,
+          "width": 40,
+          "x": 101,
+          "y": 548,
         },
         "firstIncreaseYear": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 44,
-          "x": 152,
-          "y": 510,
+          "width": 52,
+          "x": 146,
+          "y": 548,
         },
         "includedChargeRows": [
           {
@@ -178,18 +192,18 @@ describe('Section 13 document generation hardening', () => {
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 173,
-              "y": 221,
+              "width": 76,
+              "x": 199,
+              "y": 270,
             },
             "proposed": {
               "align": "center",
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 277,
-              "y": 221,
+              "width": 76,
+              "x": 313,
+              "y": 270,
             },
           },
           {
@@ -198,18 +212,18 @@ describe('Section 13 document generation hardening', () => {
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 173,
-              "y": 190,
+              "width": 76,
+              "x": 199,
+              "y": 247,
             },
             "proposed": {
               "align": "center",
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 277,
-              "y": 190,
+              "width": 76,
+              "x": 313,
+              "y": 247,
             },
           },
           {
@@ -218,18 +232,18 @@ describe('Section 13 document generation hardening', () => {
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 173,
-              "y": 159,
+              "width": 76,
+              "x": 199,
+              "y": 220,
             },
             "proposed": {
               "align": "center",
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 277,
-              "y": 159,
+              "width": 76,
+              "x": 313,
+              "y": 220,
             },
           },
           {
@@ -238,18 +252,18 @@ describe('Section 13 document generation hardening', () => {
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 173,
-              "y": 128,
+              "width": 76,
+              "x": 199,
+              "y": 188,
             },
             "proposed": {
               "align": "center",
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 277,
-              "y": 128,
+              "width": 76,
+              "x": 313,
+              "y": 188,
             },
           },
           {
@@ -258,18 +272,18 @@ describe('Section 13 document generation hardening', () => {
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 173,
-              "y": 97,
+              "width": 76,
+              "x": 199,
+              "y": 161,
             },
             "proposed": {
               "align": "center",
               "fontSize": 9,
               "height": 14,
               "pageIndex": 3,
-              "width": 74,
-              "x": 277,
-              "y": 97,
+              "width": 76,
+              "x": 313,
+              "y": 161,
             },
           },
         ],
@@ -278,97 +292,97 @@ describe('Section 13 document generation hardening', () => {
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 20,
-          "x": 70,
-          "y": 587,
+          "width": 30,
+          "x": 56,
+          "y": 619,
         },
         "lastIncreaseMonth": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 20,
-          "x": 111,
-          "y": 587,
+          "width": 40,
+          "x": 101,
+          "y": 619,
         },
         "lastIncreaseYear": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 44,
-          "x": 152,
-          "y": 587,
+          "width": 52,
+          "x": 146,
+          "y": 619,
         },
         "proposedRentAmount": {
           "fontSize": 10,
           "height": 16,
           "pageIndex": 3,
-          "width": 124,
-          "x": 74,
-          "y": 408,
+          "width": 140,
+          "x": 67,
+          "y": 474,
         },
         "proposedRentFrequency": {
           "fontSize": 10,
           "height": 16,
           "pageIndex": 3,
-          "width": 128,
-          "x": 286,
-          "y": 408,
+          "width": 158,
+          "x": 245,
+          "y": 474,
         },
         "proposedStartDay": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 20,
-          "x": 70,
-          "y": 353,
+          "width": 30,
+          "x": 56,
+          "y": 403,
         },
         "proposedStartMonth": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 20,
-          "x": 111,
-          "y": 353,
+          "width": 40,
+          "x": 101,
+          "y": 403,
         },
         "proposedStartYear": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 44,
-          "x": 152,
-          "y": 353,
+          "width": 52,
+          "x": 146,
+          "y": 403,
         },
         "tenancyStartDay": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 20,
-          "x": 70,
-          "y": 663,
+          "width": 30,
+          "x": 56,
+          "y": 684,
         },
         "tenancyStartMonth": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 20,
-          "x": 111,
-          "y": 663,
+          "width": 40,
+          "x": 101,
+          "y": 684,
         },
         "tenancyStartYear": {
           "align": "center",
           "fontSize": 10,
           "height": 14,
           "pageIndex": 3,
-          "width": 44,
-          "x": 152,
-          "y": 663,
+          "width": 52,
+          "x": 146,
+          "y": 684,
         },
       }
     `);
@@ -425,6 +439,8 @@ describe('Section 13 document generation hardening', () => {
       expect(form.getTextField('form4a_first_increase_year').getText()).toBe('2025');
       expect(form.getTextField('form4a_proposed_rent_amount').getText()).toBe('1285.00');
       expect(form.getTextField('form4a_print_name').getText()).toBe('Taylor Landlord');
+      expect(form.getCheckBox('form4a_sign_as_landlord').isChecked()).toBe(true);
+      expect(form.getCheckBox('form4a_sign_as_agent').isChecked()).toBe(false);
       expect(form.getFieldMaybe('form4a_service_method')).toBeUndefined();
       expect(form.getFieldMaybe('form4a_supporting_reference')).toBeUndefined();
       expect(form.getFieldMaybe('form4a_final_signature')).toBeUndefined();
@@ -495,6 +511,18 @@ describe('Section 13 document generation hardening', () => {
     const proofText = (await extractPdfText(proofOfService!.pdf)).text.replace(/\s+/g, ' ').trim();
     expect(proofText).toContain('Generated by Landlord Heaven');
     expect(proofText).not.toContain('Generated by Landlord Heaven Court Pack');
+
+    const proofPdf = await PDFDocument.load(proofOfService!.pdf);
+    const proofForm = proofPdf.getForm();
+    expect(proofForm.getTextField('landlord_name').getText()).toBe('Taylor Landlord');
+    expect(proofForm.getTextField('tenant_name').getText()).toBe('Alex Tenant, Jordan Tenant');
+    expect(proofForm.getTextField('property_address').getText()).toBe('10 Sample Road, Leeds, LS1 1AA');
+    expect(proofForm.getTextField('document_served').getText()).toBe(
+      "Form 4A - Landlord's notice proposing a new rent"
+    );
+    expect(proofForm.getTextField('service_date').getText()).toBe('25/03/2026');
+    expect(proofForm.getTextField('service_address').getText()).toBe('10 Sample Road, Leeds, LS1 1AA');
+    expect(proofForm.getCheckBox('method_post').isChecked()).toBe(true);
   }, 120000);
 
   it('elevates the Standard cover letter with clearer next steps', async () => {
@@ -596,6 +624,7 @@ describe('Section 13 document generation hardening', () => {
     expect(justificationText).toContain('Key points');
     expect(justificationText).toContain('Comparable overview');
     expect(justificationText).toContain('Comparable base: 8 comparable two-bedroom properties within 0.5 miles');
+    expect(justificationText).toContain('Flat 2, The Calls, Leeds LS1');
 
     expect(coverText).toContain(
       'This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles'

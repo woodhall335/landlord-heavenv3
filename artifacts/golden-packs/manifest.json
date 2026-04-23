@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-20T12:13:49.562Z",
+  "generatedAt": "2026-04-23T10:21:12.318Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -16,8 +16,8 @@
           "fileName": "section8_notice.pdf",
           "files": {
             "pdf": "complete_pack/section8_notice.pdf",
-            "text": "complete_pack/section8_notice.txt",
-            "html": "complete_pack/section8_notice.html"
+            "html": "complete_pack/section8_notice.html",
+            "text": "complete_pack/section8_notice.txt"
           },
           "extraction": {
             "pageCount": 10,
@@ -68,8 +68,8 @@
           "fileName": "schedule_of_arrears.pdf",
           "files": {
             "pdf": "complete_pack/schedule_of_arrears.pdf",
-            "text": "complete_pack/schedule_of_arrears.txt",
-            "html": "complete_pack/schedule_of_arrears.html"
+            "html": "complete_pack/schedule_of_arrears.html",
+            "text": "complete_pack/schedule_of_arrears.txt"
           },
           "extraction": {
             "pageCount": 1,
@@ -86,8 +86,8 @@
           "fileName": "evidence_collection_checklist.pdf",
           "files": {
             "pdf": "complete_pack/evidence_collection_checklist.pdf",
-            "text": "complete_pack/evidence_collection_checklist.txt",
-            "html": "complete_pack/evidence_collection_checklist.html"
+            "html": "complete_pack/evidence_collection_checklist.html",
+            "text": "complete_pack/evidence_collection_checklist.txt"
           },
           "extraction": {
             "pageCount": 1,
@@ -104,8 +104,8 @@
           "fileName": "proof_of_service_template.pdf",
           "files": {
             "pdf": "complete_pack/proof_of_service_template.pdf",
-            "text": "complete_pack/proof_of_service_template.txt",
-            "html": "complete_pack/proof_of_service_template.html"
+            "html": "complete_pack/proof_of_service_template.html",
+            "text": "complete_pack/proof_of_service_template.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -122,8 +122,8 @@
           "fileName": "witness_statement.pdf",
           "files": {
             "pdf": "complete_pack/witness_statement.pdf",
-            "text": "complete_pack/witness_statement.txt",
-            "html": "complete_pack/witness_statement.html"
+            "html": "complete_pack/witness_statement.html",
+            "text": "complete_pack/witness_statement.txt"
           },
           "extraction": {
             "pageCount": 4,
@@ -140,8 +140,8 @@
           "fileName": "court_bundle_index.pdf",
           "files": {
             "pdf": "complete_pack/court_bundle_index.pdf",
-            "text": "complete_pack/court_bundle_index.txt",
-            "html": "complete_pack/court_bundle_index.html"
+            "html": "complete_pack/court_bundle_index.html",
+            "text": "complete_pack/court_bundle_index.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -158,8 +158,8 @@
           "fileName": "hearing_checklist.pdf",
           "files": {
             "pdf": "complete_pack/hearing_checklist.pdf",
-            "text": "complete_pack/hearing_checklist.txt",
-            "html": "complete_pack/hearing_checklist.html"
+            "html": "complete_pack/hearing_checklist.html",
+            "text": "complete_pack/hearing_checklist.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -176,8 +176,8 @@
           "fileName": "arrears_engagement_letter.pdf",
           "files": {
             "pdf": "complete_pack/arrears_engagement_letter.pdf",
-            "text": "complete_pack/arrears_engagement_letter.txt",
-            "html": "complete_pack/arrears_engagement_letter.html"
+            "html": "complete_pack/arrears_engagement_letter.html",
+            "text": "complete_pack/arrears_engagement_letter.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -194,8 +194,8 @@
           "fileName": "eviction_case_summary.pdf",
           "files": {
             "pdf": "complete_pack/eviction_case_summary.pdf",
-            "text": "complete_pack/eviction_case_summary.txt",
-            "html": "complete_pack/eviction_case_summary.html"
+            "html": "complete_pack/eviction_case_summary.html",
+            "text": "complete_pack/eviction_case_summary.txt"
           },
           "extraction": {
             "pageCount": 3,
@@ -220,8 +220,8 @@
           "fileName": "section8_notice.pdf",
           "files": {
             "pdf": "notice_only/section8_notice.pdf",
-            "text": "notice_only/section8_notice.txt",
-            "html": "notice_only/section8_notice.html"
+            "html": "notice_only/section8_notice.html",
+            "text": "notice_only/section8_notice.txt"
           },
           "extraction": {
             "pageCount": 10,
@@ -238,8 +238,8 @@
           "fileName": "service_instructions_s8.pdf",
           "files": {
             "pdf": "notice_only/service_instructions_s8.pdf",
-            "text": "notice_only/service_instructions_s8.txt",
-            "html": "notice_only/service_instructions_s8.html"
+            "html": "notice_only/service_instructions_s8.html",
+            "text": "notice_only/service_instructions_s8.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -256,8 +256,8 @@
           "fileName": "validity_checklist_s8.pdf",
           "files": {
             "pdf": "notice_only/validity_checklist_s8.pdf",
-            "text": "notice_only/validity_checklist_s8.txt",
-            "html": "notice_only/validity_checklist_s8.html"
+            "html": "notice_only/validity_checklist_s8.html",
+            "text": "notice_only/validity_checklist_s8.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -274,8 +274,8 @@
           "fileName": "compliance_declaration.pdf",
           "files": {
             "pdf": "notice_only/compliance_declaration.pdf",
-            "text": "notice_only/compliance_declaration.txt",
-            "html": "notice_only/compliance_declaration.html"
+            "html": "notice_only/compliance_declaration.html",
+            "text": "notice_only/compliance_declaration.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -292,8 +292,8 @@
           "fileName": "rent_schedule_arrears_statement.pdf",
           "files": {
             "pdf": "notice_only/rent_schedule_arrears_statement.pdf",
-            "text": "notice_only/rent_schedule_arrears_statement.txt",
-            "html": "notice_only/rent_schedule_arrears_statement.html"
+            "html": "notice_only/rent_schedule_arrears_statement.html",
+            "text": "notice_only/rent_schedule_arrears_statement.txt"
           },
           "extraction": {
             "pageCount": 1,
@@ -568,8 +568,8 @@
           "fileName": "01-particulars-of-claim.pdf",
           "files": {
             "pdf": "money_claim/01-particulars-of-claim.pdf",
-            "text": "money_claim/01-particulars-of-claim.txt",
-            "html": "money_claim/01-particulars-of-claim.html"
+            "html": "money_claim/01-particulars-of-claim.html",
+            "text": "money_claim/01-particulars-of-claim.txt"
           },
           "extraction": {
             "pageCount": 2,
@@ -586,8 +586,8 @@
           "fileName": "02-schedule-of-arrears.pdf",
           "files": {
             "pdf": "money_claim/02-schedule-of-arrears.pdf",
-            "text": "money_claim/02-schedule-of-arrears.txt",
-            "html": "money_claim/02-schedule-of-arrears.html"
+            "html": "money_claim/02-schedule-of-arrears.html",
+            "text": "money_claim/02-schedule-of-arrears.txt"
           },
           "extraction": {
             "pageCount": 1,
@@ -604,8 +604,8 @@
           "fileName": "03-interest-calculation.pdf",
           "files": {
             "pdf": "money_claim/03-interest-calculation.pdf",
-            "text": "money_claim/03-interest-calculation.txt",
-            "html": "money_claim/03-interest-calculation.html"
+            "html": "money_claim/03-interest-calculation.html",
+            "text": "money_claim/03-interest-calculation.txt"
           },
           "extraction": {
             "pageCount": 1,
@@ -622,8 +622,8 @@
           "fileName": "04-letter-before-claim.pdf",
           "files": {
             "pdf": "money_claim/04-letter-before-claim.pdf",
-            "text": "money_claim/04-letter-before-claim.txt",
-            "html": "money_claim/04-letter-before-claim.html"
+            "html": "money_claim/04-letter-before-claim.html",
+            "text": "money_claim/04-letter-before-claim.txt"
           },
           "extraction": {
             "pageCount": 5,
@@ -640,8 +640,8 @@
           "fileName": "05-information-sheet-for-defendants.pdf",
           "files": {
             "pdf": "money_claim/05-information-sheet-for-defendants.pdf",
-            "text": "money_claim/05-information-sheet-for-defendants.txt",
-            "html": "money_claim/05-information-sheet-for-defendants.html"
+            "html": "money_claim/05-information-sheet-for-defendants.html",
+            "text": "money_claim/05-information-sheet-for-defendants.txt"
           },
           "extraction": {
             "pageCount": 5,
@@ -658,8 +658,8 @@
           "fileName": "06-reply-form.pdf",
           "files": {
             "pdf": "money_claim/06-reply-form.pdf",
-            "text": "money_claim/06-reply-form.txt",
-            "html": "money_claim/06-reply-form.html"
+            "html": "money_claim/06-reply-form.html",
+            "text": "money_claim/06-reply-form.txt"
           },
           "extraction": {
             "pageCount": 4,
@@ -676,8 +676,8 @@
           "fileName": "07-financial-statement-form.pdf",
           "files": {
             "pdf": "money_claim/07-financial-statement-form.pdf",
-            "text": "money_claim/07-financial-statement-form.txt",
-            "html": "money_claim/07-financial-statement-form.html"
+            "html": "money_claim/07-financial-statement-form.html",
+            "text": "money_claim/07-financial-statement-form.txt"
           },
           "extraction": {
             "pageCount": 6,
@@ -694,8 +694,8 @@
           "fileName": "08-filing-guide.pdf",
           "files": {
             "pdf": "money_claim/08-filing-guide.pdf",
-            "text": "money_claim/08-filing-guide.txt",
-            "html": "money_claim/08-filing-guide.html"
+            "html": "money_claim/08-filing-guide.html",
+            "text": "money_claim/08-filing-guide.txt"
           },
           "extraction": {
             "pageCount": 7,
@@ -712,8 +712,8 @@
           "fileName": "09-enforcement-guide.pdf",
           "files": {
             "pdf": "money_claim/09-enforcement-guide.pdf",
-            "text": "money_claim/09-enforcement-guide.txt",
-            "html": "money_claim/09-enforcement-guide.html"
+            "html": "money_claim/09-enforcement-guide.html",
+            "text": "money_claim/09-enforcement-guide.txt"
           },
           "extraction": {
             "pageCount": 5,

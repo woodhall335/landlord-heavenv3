@@ -4,10 +4,10 @@ challenged.
 Property 16 Willow Mews York YO24 3HX
 Tenant Ivy Carleton
 Case type Section 8 (Ground 8, Ground 10)
-Notice service date 20 April 2026
-Notice expiry date 18 May 2026
-Earliest proceedings date 18 May 2026
-Prepared 20 April 2026
+Notice service date 23 April 2026
+Notice expiry date 21 May 2026
+Earliest proceedings date 21 May 2026
+Prepared 23 April 2026
 Core Documents
 Ground 8: Serious rent arrears
 Ground 10: Rent arrears (some arrears)

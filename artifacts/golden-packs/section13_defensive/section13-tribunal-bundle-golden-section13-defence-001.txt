@@ -3,7 +3,7 @@ Tribunal Bundle Cover Sheet
 Pack: Section 13 Defensive Pack
 Property: 10 Sample Road, Leeds, LS1 1AA
 Tenant(s): Alex Tenant, Jordan Tenant
-Prepared on: 20 April 2026
+Prepared on: 23 April 2026
 Rules version: england_assured_section13_2026-05-01
 Purpose
 This bundle brings together the Form 4A notice, market-rent justification, Tribunal Argument Summary,
@@ -403,47 +403,55 @@ last 90 days and all source-backed
 - Evidence band: Strong evidence strength
 Comparable picture
 8 comparable 2-bed homes within 0.5 miles
-Comparable 1: Comparable 1, Leeds at £1240.00 monthly, adjusting to £1240.00 pcm, dated 15 March
-2026.
-Comparable 2: Comparable 2, Leeds at £1265.00 monthly, adjusting to £1265.00 pcm, dated 15 March
-2026.
-Comparable 3: Comparable 3, Leeds at £1275.00 monthly, adjusting to £1275.00 pcm, dated 15 March
-2026.
+Comparable 1: Flat 2, The Calls, Leeds LS1 at £1240.00 monthly, adjusting to £1240.00 pcm, dated 15
+March 2026.
+Comparable 2: Apartment 14, Sovereign Street, Leeds LS1 at £1265.00 monthly, adjusting to £1265.00
+pcm, dated 15 March 2026.
+Comparable 3: Flat 5, Brewery Wharf, Leeds LS10 at £1275.00 monthly, adjusting to £1275.00 pcm, dated
+15 March 2026.
 Comparables and adjustments
-1. Comparable 1, Leeds | £1240.00 monthly | adjusted £1240.00 pcm
-Source: scraped
+1. Flat 2, The Calls, Leeds LS1 | £1240.00 monthly | adjusted £1240.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-1
+Distance: 0.20 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
-2. Comparable 2, Leeds | £1265.00 monthly | adjusted £1265.00 pcm
-Source: scraped
+2. Apartment 14, Sovereign Street, Leeds LS1 | £1265.00 monthly | adjusted £1265.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-2
+Distance: 0.30 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
-3. Comparable 3, Leeds | £1275.00 monthly | adjusted £1275.00 pcm
-Source: scraped
+3. Flat 5, Brewery Wharf, Leeds LS10 | £1275.00 monthly | adjusted £1275.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-3
+Distance: 0.40 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
-4. Comparable 4, Leeds | £1290.00 monthly | adjusted £1290.00 pcm
-Source: scraped
+4. Apartment 8, Park Row, Leeds LS1 | £1290.00 monthly | adjusted £1290.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-4
+Distance: 0.40 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
-5. Comparable 5, Leeds | £1305.00 monthly | adjusted £1305.00 pcm
-Source: scraped
-Source date (published): 15 March 2026
-Adjustments: none recorded
-6. Comparable 6, Leeds | £1315.00 monthly | adjusted £1315.00 pcm
-Source: scraped
+5. Flat 11, Riverside Court, Leeds LS1 | £1305.00 monthly | adjusted £1305.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-5
+Distance: 0.50 miles
 Source date (published): 15 March 2026
 Landlord Heaven | Comparable analysis and justification Page 2 of 3
 
 -- 13 of 22 --
 
 Adjustments: none recorded
-7. Comparable 7, Leeds | £1330.00 monthly | adjusted £1330.00 pcm
-Source: scraped
+6. Apartment 6, Wellington Street, Leeds LS1 | £1315.00 monthly | adjusted £1315.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-6
+Distance: 0.50 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
-8. Comparable 8, Leeds | £1345.00 monthly | adjusted £1345.00 pcm
-Source: scraped
+7. Flat 3, Dock Street, Leeds LS10 | £1330.00 monthly | adjusted £1330.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-7
+Distance: 0.50 miles
+Source date (published): 15 March 2026
+Adjustments: none recorded
+8. Apartment 21, East Parade, Leeds LS1 | £1345.00 monthly | adjusted £1345.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-8
+Distance: 0.50 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
 Tribunal note
@@ -475,10 +483,10 @@ Strength of the evidence
 Strong evidence strength is based on 8 comparable homes, 8 source-backed entries, and 8 comparables
 dated within the 90-day freshness window. The file reads as a well-supported market review rather than a
 bare assertion.
-Comparable 1: Comparable 1, Leeds at £1240.00 monthly, adjusting to £1240.00 pcm, dated 15 March
-2026.
-Comparable 2: Comparable 2, Leeds at £1265.00 monthly, adjusting to £1265.00 pcm, dated 15 March
-2026.
+Comparable 1: Flat 2, The Calls, Leeds LS1 at £1240.00 monthly, adjusting to £1240.00 pcm, dated 15
+March 2026.
+Comparable 2: Apartment 14, Sovereign Street, Leeds LS1 at £1265.00 monthly, adjusting to £1265.00
+pcm, dated 15 March 2026.
 If challenged, say this
 1. Anchor to evidence
 Say: The proposed rent is based on comparable local properties and the recorded adjustments, not on a

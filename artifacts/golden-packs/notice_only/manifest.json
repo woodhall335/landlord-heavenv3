@@ -12,8 +12,8 @@
       "fileName": "section8_notice.pdf",
       "files": {
         "pdf": "notice_only/section8_notice.pdf",
-        "text": "notice_only/section8_notice.txt",
-        "html": "notice_only/section8_notice.html"
+        "html": "notice_only/section8_notice.html",
+        "text": "notice_only/section8_notice.txt"
       },
       "extraction": {
         "pageCount": 10,
@@ -30,8 +30,8 @@
       "fileName": "service_instructions_s8.pdf",
       "files": {
         "pdf": "notice_only/service_instructions_s8.pdf",
-        "text": "notice_only/service_instructions_s8.txt",
-        "html": "notice_only/service_instructions_s8.html"
+        "html": "notice_only/service_instructions_s8.html",
+        "text": "notice_only/service_instructions_s8.txt"
       },
       "extraction": {
         "pageCount": 2,
@@ -48,8 +48,8 @@
       "fileName": "validity_checklist_s8.pdf",
       "files": {
         "pdf": "notice_only/validity_checklist_s8.pdf",
-        "text": "notice_only/validity_checklist_s8.txt",
-        "html": "notice_only/validity_checklist_s8.html"
+        "html": "notice_only/validity_checklist_s8.html",
+        "text": "notice_only/validity_checklist_s8.txt"
       },
       "extraction": {
         "pageCount": 2,
@@ -66,8 +66,8 @@
       "fileName": "compliance_declaration.pdf",
       "files": {
         "pdf": "notice_only/compliance_declaration.pdf",
-        "text": "notice_only/compliance_declaration.txt",
-        "html": "notice_only/compliance_declaration.html"
+        "html": "notice_only/compliance_declaration.html",
+        "text": "notice_only/compliance_declaration.txt"
       },
       "extraction": {
         "pageCount": 2,
@@ -84,8 +84,8 @@
       "fileName": "rent_schedule_arrears_statement.pdf",
       "files": {
         "pdf": "notice_only/rent_schedule_arrears_statement.pdf",
-        "text": "notice_only/rent_schedule_arrears_statement.txt",
-        "html": "notice_only/rent_schedule_arrears_statement.html"
+        "html": "notice_only/rent_schedule_arrears_statement.html",
+        "text": "notice_only/rent_schedule_arrears_statement.txt"
       },
       "extraction": {
         "pageCount": 1,

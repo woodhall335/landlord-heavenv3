@@ -59,12 +59,26 @@ const jsonClientStub = {
 type BaseFacts = Record<string, any>;
 
 function buildComparable(index: number, monthlyEquivalent: number): Section13Comparable {
+  const localComparables = [
+    { address: 'Flat 2, The Calls, Leeds LS1', postcode: 'LS1 7BR', distance: 0.2 },
+    { address: 'Apartment 14, Sovereign Street, Leeds LS1', postcode: 'LS1 4BA', distance: 0.3 },
+    { address: 'Flat 5, Brewery Wharf, Leeds LS10', postcode: 'LS10 1NE', distance: 0.4 },
+    { address: 'Apartment 8, Park Row, Leeds LS1', postcode: 'LS1 5HD', distance: 0.4 },
+    { address: 'Flat 11, Riverside Court, Leeds LS1', postcode: 'LS1 4AW', distance: 0.5 },
+    { address: 'Apartment 6, Wellington Street, Leeds LS1', postcode: 'LS1 2DE', distance: 0.5 },
+    { address: 'Flat 3, Dock Street, Leeds LS10', postcode: 'LS10 1JF', distance: 0.5 },
+    { address: 'Apartment 21, East Parade, Leeds LS1', postcode: 'LS1 2BH', distance: 0.5 },
+  ];
+  const comparable = localComparables[index] ?? localComparables[0];
+
   return {
     source: 'scraped',
+    sourceUrl: `https://example.com/leeds-rent-comparable-${index + 1}`,
     sourceDateKind: 'published',
     sourceDateValue: '2026-03-15',
-    addressSnippet: `Comparable ${index + 1}, Leeds`,
-    postcodeNormalized: 'LS1 1AA',
+    addressSnippet: comparable.address,
+    postcodeNormalized: comparable.postcode,
+    distanceMiles: comparable.distance,
     bedrooms: 2,
     rawRentValue: monthlyEquivalent,
     rawRentFrequency: 'pcm',
