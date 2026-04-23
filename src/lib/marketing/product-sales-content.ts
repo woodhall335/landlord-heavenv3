@@ -52,6 +52,11 @@ export type ProductSalesHero = Omit<UniversalHeroProps, 'children'> & {
 };
 
 export interface ProductSalesPageContent {
+  analytics?: {
+    pagePath: string;
+    pageType: 'entry_page' | 'product_page';
+    routeIntent?: string;
+  };
   hero: ProductSalesHero;
   whatYouGet: {
     title: string;

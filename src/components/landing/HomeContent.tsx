@@ -6,12 +6,13 @@
 
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import type { ComponentType } from 'react';
+import { useEffect, type ComponentType } from 'react';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui';
 import { Hero, TrustBar } from '@/components/landing';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { trackHomepageSelectorView } from '@/lib/analytics';
 import {
   getPublicCardAccentClasses,
   PUBLIC_LAYOUT_CLASSES,
@@ -35,12 +36,14 @@ type RouteCard = {
   title: string;
   eyebrow: string;
   description: string;
-  outcome: string;
+  whyRoute: string;
   ctaLabel: string;
   href: string;
   imageSrc: string;
   imageAlt: string;
   accent: keyof typeof accentIconByType;
+  routeIntent: string;
+  product: string;
 };
 
 type ValueCard = {
@@ -81,64 +84,79 @@ const accentIconByType = {
 
 const routeSelectionCards: RouteCard[] = [
   {
-    title: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.shortName,
-    eyebrow: 'Serve the notice first',
+    title: 'Tenant not paying rent',
+    eyebrow: 'Usually start with notice',
     description:
-      'Prepare a Section 8 notice for property in England with checks on grounds, dates, service, and compliance before you serve it.',
-    outcome: 'Best when you need to serve notice before you can move toward possession.',
-    ctaLabel: 'Prepare Section 8 notice',
+      'Start with the Eviction Notice Generator when you need to serve a Section 8 notice correctly before you move any further.',
+    whyRoute:
+      'This is the right route when the next practical step is serving notice, checking the grounds, and keeping the arrears file straight.',
+    ctaLabel: 'Go to eviction notice route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     imageSrc: '/images/notice_bundles.webp',
     imageAlt: 'Section 8 notice document preview',
     accent: 'amethyst',
+    routeIntent: 'tenant_not_paying_rent',
+    product: 'notice_only',
   },
   {
-    title: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.shortName,
-    eyebrow: 'Prepare for court',
+    title: 'Tenant will not leave',
+    eyebrow: 'Usually court-stage help',
     description:
-      'Prepare your notice, N5, N119, and possession claim paperwork together when the case needs to move beyond notice.',
-    outcome: 'Best when you need the notice and court paperwork working together.',
-    ctaLabel: 'Prepare court pack',
+      'Move into the Complete Eviction Pack when the tenancy problem is already heading toward possession paperwork and court steps.',
+    whyRoute:
+      'This is the better route when notice is not the whole job anymore and you need the notice, claim forms, and filing path joined up.',
+    ctaLabel: 'Go to complete eviction route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     imageSrc: '/images/eviction_packs.webp',
     imageAlt: 'Complete eviction pack preview',
     accent: 'plum',
+    routeIntent: 'tenant_will_not_leave',
+    product: 'complete_pack',
   },
   {
-    title: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.shortName,
-    eyebrow: 'Recover what is owed',
+    title: 'Need to recover unpaid rent, bills, or damage',
+    eyebrow: 'Debt recovery route',
     description:
-      'Recover unpaid rent, bills, damage, and guarantor debt with documents built for an England money claim.',
-    outcome: 'Best when the debt needs dealing with separately from possession.',
-    ctaLabel: 'Recover unpaid rent',
+      'Use the Money Claim Pack when the main goal is recovering what is owed, whether the tenant is still there or has already left.',
+    whyRoute:
+      'This route fits when the debt needs dealing with as a claim, instead of being mixed up with the possession route.',
+    ctaLabel: 'Go to money claim route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
     imageSrc: '/images/money_claims.webp',
     imageAlt: 'Money claim pack preview',
     accent: 'emerald',
+    routeIntent: 'recover_debt',
+    product: 'money_claim',
   },
   {
-    title: 'Rent Increase',
-    eyebrow: 'Increase the rent properly',
+    title: 'Need to increase the rent',
+    eyebrow: 'Section 13 route',
     description:
-      'Prepare a Section 13 / Form 4A rent increase for property in England with guidance on dates, notice periods, and supporting steps.',
-    outcome: 'Best when you need to raise the rent lawfully with the right notice.',
-    ctaLabel: 'Prepare rent increase',
+      'Use the rent increase route to choose the right Section 13 pack before you generate anything.',
+    whyRoute:
+      'This is the right route when you need the notice, timing, and supporting paperwork handled properly for an England rent increase.',
+    ctaLabel: 'Go to rent increase route',
     href: '/rent-increase',
     imageSrc: '/images/Statutory-change.webp',
     imageAlt: 'Rent increase support illustration',
     accent: 'amber',
+    routeIntent: 'increase_rent',
+    product: 'section13_standard',
   },
   {
-    title: PUBLIC_PRODUCT_DESCRIPTORS.ast.shortName,
-    eyebrow: 'Put the right agreement in place',
+    title: 'Need a tenancy agreement',
+    eyebrow: 'Agreement route',
     description:
-      'Choose the right agreement for a standard, premium, student, HMO / shared house, or lodger let in England.',
-    outcome: 'Best when you are starting a tenancy or replacing old paperwork.',
-    ctaLabel: 'Choose tenancy agreement',
+      'Start with the tenancy agreements hub when you need the right agreement for the property, occupiers, and let type in England.',
+    whyRoute:
+      'This route fits when you are setting up a tenancy or replacing older paperwork and need the correct agreement first time.',
+    ctaLabel: 'Go to tenancy agreement route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
     imageSrc: '/images/tenancy_agreements.webp',
     imageAlt: 'England tenancy agreement product preview',
     accent: 'lavender',
+    routeIntent: 'tenancy_agreement',
+    product: 'ast',
   },
 ];
 
@@ -239,19 +257,28 @@ function RouteSelectionCard({
   title,
   eyebrow,
   description,
-  outcome,
+  whyRoute,
   ctaLabel,
   href,
   imageSrc,
   imageAlt,
   accent,
+  routeIntent,
+  product,
 }: RouteCard) {
   const accentStyles = getPublicCardAccentClasses(accent);
   const Icon = accentIconByType[accent];
 
   return (
-    <Link
+    <TrackedLink
       href={href}
+      pagePath="/"
+      pageType="homepage"
+      ctaLabel={ctaLabel}
+      ctaPosition="selector"
+      eventName="homepage_selector_option_click"
+      routeIntent={routeIntent}
+      product={product}
       className={clsx(
         'group overflow-hidden rounded-[2rem] border transition duration-200',
         accentStyles.card,
@@ -283,37 +310,46 @@ function RouteSelectionCard({
         <p className="mt-4 text-[15px] leading-7 text-[#5a516d]">{description}</p>
         <div className="mt-5 flex items-start gap-2 text-sm font-semibold text-[#2f2148]">
           <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-[#7c3aed]" />
-          <span>{outcome}</span>
+          <span>{whyRoute}</span>
         </div>
         <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#4f2a96]">
           {ctaLabel}
           <RiArrowRightLine className="h-4 w-4 transition group-hover:translate-x-1" />
         </div>
       </div>
-    </Link>
+    </TrackedLink>
   );
 }
 
 export default function HomeContent() {
+  useEffect(() => {
+    trackHomepageSelectorView({ pagePath: '/' });
+  }, []);
+
   return (
     <div className={PUBLIC_LAYOUT_CLASSES.page}>
       <HeaderConfig mode="autoOnScroll" />
       <Hero />
       <TrustBar />
 
-      <section className="py-14 md:py-18">
+      <section id="homepage-route-selector" className="py-14 md:py-18">
         <Container>
           <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'public-subtle-grid px-6 py-8 md:px-10 md:py-10')}>
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
-                <span className="public-eyebrow">Choose the landlord job</span>
+                <span className="public-eyebrow">Choose the right route</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                  Start with the right product for the problem
+                  What situation are you dealing with?
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  Serve notice, prepare for court, recover debt, increase the rent,
-                  or put the right agreement in place. The job should be obvious
-                  from the first screen.
+                  Start with the real problem, not the legal label. Choose the
+                  situation below and we will route you into the product page that
+                  fits the next step.
+                </p>
+                <p className="mt-3 text-sm font-medium leading-7 text-[#6a6280]">
+                  Most landlords either need to start the notice correctly, move
+                  toward court, recover a debt, raise the rent properly, or put the
+                  right agreement in place.
                 </p>
               </div>
               <div className="public-stat-card px-5 py-4">
@@ -349,11 +385,12 @@ export default function HomeContent() {
             <div className="mx-auto max-w-3xl text-center">
               <span className="public-eyebrow">Why landlords use us</span>
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-                When the paperwork matters, clarity matters
+                Clarity first. Legal detail second.
               </h2>
               <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                If a tenant stops paying, will not leave, or the paperwork needs
-                updating, you need to know what to do next and which documents to use.
+                The fastest way to lose momentum is to start the wrong route. We
+                keep the next step obvious, then help you tighten the paperwork
+                before you serve, file, or send anything.
               </p>
             </div>
 
@@ -622,20 +659,24 @@ export default function HomeContent() {
               Start now
             </span>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-white md:text-5xl">
-              Pick the right product and get moving
+              Choose the route and keep the paperwork moving
             </h2>
             <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-white/78">
-              If the tenant is not paying, will not leave, or you need to sort the
-              tenancy paperwork, you should be able to find the right product and
-              start it in a few minutes.
+              The job should be obvious before the jargon starts. Use the route
+              selector to move into the right product page for your case.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href="/wizard?topic=eviction&src=seo_homepage" className="hero-btn-primary">
-                Start with the right route
-              </Link>
-              <Link href="/pricing" className="hero-btn-secondary">
-                View pricing
-              </Link>
+              <TrackedLink
+                href="#homepage-route-selector"
+                pagePath="/"
+                pageType="homepage"
+                ctaLabel="Choose the right route"
+                ctaPosition="final"
+                eventName="homepage_primary_cta_click"
+                className="hero-btn-primary"
+              >
+                Choose the right route
+              </TrackedLink>
             </div>
             <p className="mt-5 text-sm text-white/66">
               For landlords with property in England. Clear routes, strong checks,

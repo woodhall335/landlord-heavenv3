@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui/Container';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -8,6 +9,16 @@ import type {
   ProductSalesPageContent,
   ProductSalesRouteCard,
 } from '@/lib/marketing/product-sales-content';
+
+function inferProductFromHref(href: string) {
+  if (href.includes('section-13-standard')) return 'section13_standard';
+  if (href.includes('section-13-defence')) return 'section13_defensive';
+  if (href.includes('money-claim')) return 'money_claim';
+  if (href.includes('complete-pack')) return 'complete_pack';
+  if (href.includes('notice-only')) return 'notice_only';
+  if (href.includes('/products/ast')) return 'tenancy_agreement';
+  return undefined;
+}
 
 function BreakdownCard({ item }: { item: ProductSalesBreakdownItem }) {
   return (
@@ -43,7 +54,17 @@ function BreakdownCard({ item }: { item: ProductSalesBreakdownItem }) {
   );
 }
 
-function RouteCard({ item }: { item: ProductSalesRouteCard }) {
+function RouteCard({
+  item,
+  pagePath,
+  pageType,
+  routeIntent,
+}: {
+  item: ProductSalesRouteCard;
+  pagePath: string;
+  pageType: 'entry_page' | 'product_page';
+  routeIntent?: string;
+}) {
   return (
     <article className="flex h-full flex-col rounded-[2rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
       <div className="flex items-start justify-between gap-4">
@@ -74,12 +95,19 @@ function RouteCard({ item }: { item: ProductSalesRouteCard }) {
         </div>
       </dl>
 
-      <Link
+      <TrackedLink
         href={item.href}
+        pagePath={pagePath}
+        pageType={pageType}
+        ctaLabel={item.ctaLabel}
+        ctaPosition="route_card"
+        eventName="product_route_chosen"
+        routeIntent={routeIntent}
+        product={inferProductFromHref(item.href)}
         className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#6D28D9] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#5B21B6]"
       >
         {item.ctaLabel}
-      </Link>
+      </TrackedLink>
     </article>
   );
 }
@@ -124,7 +152,7 @@ function InfoCards({
 }
 
 export function PublicProductSalesPage({ content }: { content: ProductSalesPageContent }) {
-  const { hero, whatYouGet, whyYouNeedThis, howThisHelps, howItWorks, cta, faq } = content;
+  const { analytics, hero, whatYouGet, whyYouNeedThis, howThisHelps, howItWorks, cta, faq } = content;
   const hasRouteCards = Boolean(whatYouGet.routeCards?.length);
   const hasProofBlock = Boolean(whatYouGet.preview || whatYouGet.sampleProof);
   const shouldShowProofAsPrimaryWhatYouGet = hasProofBlock && !hasRouteCards;
@@ -151,7 +179,13 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
 
                 <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
                   {whatYouGet.routeCards?.map((item) => (
-                    <RouteCard key={item.name} item={item} />
+                    <RouteCard
+                      key={item.name}
+                      item={item}
+                      pagePath={analytics?.pagePath || '/rent-increase'}
+                      pageType={analytics?.pageType || 'entry_page'}
+                      routeIntent={analytics?.routeIntent}
+                    />
                   ))}
                 </div>
               </>
@@ -263,13 +297,33 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={cta.primary.href} className="hero-btn-primary">
+              <TrackedLink
+                href={cta.primary.href}
+                pagePath={analytics?.pagePath || '/rent-increase'}
+                pageType={analytics?.pageType || 'entry_page'}
+                ctaLabel={cta.primary.label}
+                ctaPosition="final"
+                eventName="entry_page_primary_cta_click"
+                routeIntent={analytics?.routeIntent}
+                product={inferProductFromHref(cta.primary.href)}
+                className="hero-btn-primary"
+              >
                 {cta.primary.label}
-              </Link>
+              </TrackedLink>
               {cta.secondary ? (
-                <Link href={cta.secondary.href} className="hero-btn-secondary">
+                <TrackedLink
+                  href={cta.secondary.href}
+                  pagePath={analytics?.pagePath || '/rent-increase'}
+                  pageType={analytics?.pageType || 'entry_page'}
+                  ctaLabel={cta.secondary.label}
+                  ctaPosition="final"
+                  eventName="entry_page_secondary_cta_click"
+                  routeIntent={analytics?.routeIntent}
+                  product={inferProductFromHref(cta.secondary.href)}
+                  className="hero-btn-secondary"
+                >
                   {cta.secondary.label}
-                </Link>
+                </TrackedLink>
               ) : null}
             </div>
 

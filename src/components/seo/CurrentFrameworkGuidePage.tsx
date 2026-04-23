@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui/Container';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -36,11 +37,17 @@ export function getCurrentFrameworkMetadata(config: CurrentFrameworkPageConfig):
 export function CurrentFrameworkGuidePage({ config }: { config: CurrentFrameworkPageConfig }) {
   const canonical = getCanonicalUrl(`/${config.slug}`);
   const frameworkLinks = getCurrentEnglandFrameworkLinks(`/${config.slug}`);
+  const pagePath = `/${config.slug}`;
+  const inferProduct = (href: string) => {
+    if (href.includes('notice-only')) return 'notice_only';
+    if (href.includes('complete-pack')) return 'complete_pack';
+    return undefined;
+  };
 
   return (
     <div className="min-h-screen bg-[#fcfaff]">
       <SeoLandingWrapper
-        pagePath={`/${config.slug}`}
+        pagePath={pagePath}
         pageTitle={config.title}
         pageType={config.pageType}
         jurisdiction="england"
@@ -67,11 +74,43 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
       <UniversalHero
         title={config.heroTitle}
         subtitle={config.heroSubtitle}
-        primaryCta={config.primaryCta}
-        secondaryCta={config.secondaryCta}
         showReviewPill
         showTrustPositioningBar
         hideMedia
+        actionsSlot={
+          <>
+            <div className="w-full sm:w-auto">
+              <TrackedLink
+                href={config.primaryCta.href}
+                pagePath={pagePath}
+                pageType="entry_page"
+                ctaLabel={config.primaryCta.label}
+                ctaPosition="hero"
+                eventName="entry_page_primary_cta_click"
+                routeIntent={config.slug}
+                product={inferProduct(config.primaryCta.href)}
+                className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
+              >
+                {config.primaryCta.label}
+              </TrackedLink>
+            </div>
+            <div className="w-full sm:w-auto">
+              <TrackedLink
+                href={config.secondaryCta.href}
+                pagePath={pagePath}
+                pageType="entry_page"
+                ctaLabel={config.secondaryCta.label}
+                ctaPosition="hero"
+                eventName="entry_page_secondary_cta_click"
+                routeIntent={config.slug}
+                product={inferProduct(config.secondaryCta.href)}
+                className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
+              >
+                {config.secondaryCta.label}
+              </TrackedLink>
+            </div>
+          </>
+        }
       >
         <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
           {config.heroBullets.map((bullet) => (
@@ -88,18 +127,32 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
             </p>
             <p className="mt-4 text-lg leading-8 text-slate-700">{config.currentFrameworkNote}</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link
+              <TrackedLink
                 href={config.primaryCta.href}
+                pagePath={pagePath}
+                pageType="entry_page"
+                ctaLabel={config.primaryCta.label}
+                ctaPosition="section"
+                eventName="entry_page_primary_cta_click"
+                routeIntent={config.slug}
+                product={inferProduct(config.primaryCta.href)}
                 className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
               >
                 {config.primaryCta.label}
-              </Link>
-              <Link
+              </TrackedLink>
+              <TrackedLink
                 href={config.secondaryCta.href}
+                pagePath={pagePath}
+                pageType="entry_page"
+                ctaLabel={config.secondaryCta.label}
+                ctaPosition="section"
+                eventName="entry_page_secondary_cta_click"
+                routeIntent={config.slug}
+                product={inferProduct(config.secondaryCta.href)}
                 className="rounded-lg border border-[#e6dbff] bg-white px-5 py-3 font-semibold text-primary hover:bg-[#fcfaff]"
               >
                 {config.secondaryCta.label}
-              </Link>
+              </TrackedLink>
             </div>
           </div>
         </Container>
@@ -177,18 +230,32 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
               Move from guidance into the current England workflow that fits your case. If you already know the route, start the notice. If the case is likely to continue into court, use the fuller possession support and claim-stage guidance instead of piecing it together later.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link
+              <TrackedLink
                 href={config.primaryCta.href}
+                pagePath={pagePath}
+                pageType="entry_page"
+                ctaLabel={config.primaryCta.label}
+                ctaPosition="final"
+                eventName="entry_page_primary_cta_click"
+                routeIntent={config.slug}
+                product={inferProduct(config.primaryCta.href)}
                 className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
               >
                 {config.primaryCta.label}
-              </Link>
-              <Link
+              </TrackedLink>
+              <TrackedLink
                 href={config.secondaryCta.href}
+                pagePath={pagePath}
+                pageType="entry_page"
+                ctaLabel={config.secondaryCta.label}
+                ctaPosition="final"
+                eventName="entry_page_secondary_cta_click"
+                routeIntent={config.slug}
+                product={inferProduct(config.secondaryCta.href)}
                 className="rounded-lg border border-[#e6dbff] bg-white px-5 py-3 font-semibold text-primary hover:bg-[#fcfaff]"
               >
                 {config.secondaryCta.label}
-              </Link>
+              </TrackedLink>
             </div>
           </div>
         </Container>

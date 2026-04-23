@@ -38,7 +38,7 @@ export default function Section13DefenceProductPage() {
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
-      secondaryCta: { label: 'Read the rent increase guide', href: '/rent-increase' },
+      secondaryCta: { label: 'Read the rent increase guide', href: '/products/rent-increase' },
       feature:
         'Built for landlords who need the notice, the evidence, and the tribunal-facing argument to stay joined up under challenge.',
       mediaSrc: '/images/wizard-icons/41-rent.png',

@@ -248,7 +248,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     ],
     heroTitle: 'Section 8 Notice for England',
     heroSubtitle:
-      'Use this guide when you need the live England notice route for arrears, breach, nuisance, or another evidence-based possession case under the current framework.',
+      'Use this page when you need to start the notice correctly in England, then keep the court route clear if the tenant still does not leave.',
     heroBullets: [
       'Explains the live England notice route without retired comparison language.',
       'Focuses on grounds, evidence, service, and possession continuity.',
@@ -383,7 +383,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       },
     ],
     primaryCta: { label: 'Start your eviction notice pack', href: '/products/notice-only' },
-    secondaryCta: { label: 'Read Form 3A', href: '/form-3-section-8' },
+    secondaryCta: { label: 'Already moving toward court? View Complete Eviction Pack', href: '/products/complete-pack' },
   },
   'renters-rights-act-eviction-rules': {
     slug: 'renters-rights-act-eviction-rules',

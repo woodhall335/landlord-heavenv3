@@ -55,26 +55,21 @@ export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('home'),
   preset: 'home',
-  trustText: 'Renters Right Act Compliant Landlord Documents May 2026',
-  title: 'Tenant Not Paying or',
-  highlightTitle: 'Refusing to Leave?',
+  trustText: 'Landlord documents for England with checks before you serve, file, or raise rent',
+  title: 'Landlord paperwork for',
+  highlightTitle: 'the next step in England',
   subtitle: (
     <>
-      Find out whether you need a <strong>Section 8 notice</strong>, a{' '}
-      <strong>court possession pack</strong>, a <strong>money claim</strong>,
-      a <strong>rent increase pack</strong>, or the right tenancy agreement for
-      your property in England.
+      Start with the situation you are dealing with, then move into the right
+      route for notice, court paperwork, debt recovery, rent increases, or
+      tenancy agreements without second-guessing the next step.
     </>
   ),
   primaryCta: {
-    label: 'Find the right product',
-    href: '/wizard?topic=eviction&src=seo_homepage',
+    label: 'Choose the right route',
+    href: '#homepage-route-selector',
   },
-  secondaryCta: {
-    label: 'See prices',
-    href: '/pricing',
-  },
-  feature: 'Documents built for landlords who need to act quickly.',
+  feature: 'Built for landlords in England who want the right route clear from the first screen.',
 };
 
 /* ============================================================

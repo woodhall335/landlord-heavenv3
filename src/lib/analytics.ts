@@ -30,6 +30,7 @@ import {
   type AnalyticsDispatchOptions,
 } from './analytics/ga4-dispatch';
 import { normalizeWizardStep } from './analytics/wizard-step-taxonomy';
+import { getWizardAttribution } from './wizard/wizardAttribution';
 
 /**
  * Track a custom event in both Google Analytics and Facebook Pixel
@@ -573,6 +574,101 @@ export function trackWizardStepComplete(params: {
     variant: 'derived',
     dedupeScope: params.caseId ? 'case' : 'session',
     dedupeKey: `${params.caseId || 'session'}:${normalizedStep.stepGroup}`,
+  });
+}
+
+export type MarketingPageType = 'homepage' | 'entry_page' | 'guide' | 'product_page';
+
+export type MarketingCtaPosition =
+  | 'hero'
+  | 'selector'
+  | 'route_card'
+  | 'quick_answer'
+  | 'section'
+  | 'final'
+  | 'support';
+
+function getMarketingAttributionParams() {
+  if (typeof window === 'undefined') {
+    return {
+      source: 'direct',
+      landing_path: undefined,
+      landing_url: undefined,
+      utm_source: undefined,
+      utm_medium: undefined,
+      utm_campaign: undefined,
+      first_seen_at: undefined,
+    };
+  }
+
+  const attribution = getWizardAttribution();
+
+  return {
+    source: attribution.src || 'direct',
+    landing_path: attribution.landing_path,
+    landing_url: attribution.landing_url,
+    utm_source: attribution.utm_source,
+    utm_medium: attribution.utm_medium,
+    utm_campaign: attribution.utm_campaign,
+    first_seen_at: attribution.first_seen_at,
+  };
+}
+
+export function trackHomepageSelectorView(params: { pagePath: string }): void {
+  const attribution = getMarketingAttributionParams();
+
+  trackEvent(
+    'homepage_selector_view',
+    {
+      page_path: params.pagePath,
+      page_type: 'homepage',
+      source: attribution.source,
+      landing_path: attribution.landing_path,
+      landing_url: attribution.landing_url,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      first_seen_at: attribution.first_seen_at,
+    },
+    {
+      dedupeScope: 'page',
+      dedupeKey: `homepage_selector_view:${params.pagePath}`,
+    }
+  );
+}
+
+export function trackMarketingCtaClick(params: {
+  eventName:
+    | 'homepage_primary_cta_click'
+    | 'homepage_selector_option_click'
+    | 'entry_page_primary_cta_click'
+    | 'entry_page_secondary_cta_click'
+    | 'product_route_chosen';
+  pagePath: string;
+  pageType: MarketingPageType;
+  ctaLabel: string;
+  destinationPath: string;
+  ctaPosition: MarketingCtaPosition;
+  routeIntent?: string;
+  product?: string;
+}): void {
+  const attribution = getMarketingAttributionParams();
+
+  trackEvent(params.eventName, {
+    page_path: params.pagePath,
+    page_type: params.pageType,
+    cta_label: params.ctaLabel,
+    cta_position: params.ctaPosition,
+    destination_path: params.destinationPath,
+    route_intent: params.routeIntent,
+    product: params.product,
+    source: attribution.source,
+    landing_path: attribution.landing_path,
+    landing_url: attribution.landing_url,
+    utm_source: attribution.utm_source,
+    utm_medium: attribution.utm_medium,
+    utm_campaign: attribution.utm_campaign,
+    first_seen_at: attribution.first_seen_at,
   });
 }
 

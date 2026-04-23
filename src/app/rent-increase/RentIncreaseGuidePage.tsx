@@ -72,6 +72,7 @@ function SectionCard({ section }: { section: RentIncreaseGuideSection }) {
 
 export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuidePage }) {
   const canonical = getCanonicalUrl(config.path);
+  const guideHubUrl = getCanonicalUrl(config.slug === 'hub' ? config.path : '/rent-increase');
   const sampleProof = config.samplePackKey ? getGoldenPackProofData(config.samplePackKey) : null;
   const jumpLinks = [
     { href: '#quick-answer', label: 'Quick answer' },
@@ -103,7 +104,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: 'https://landlordheaven.co.uk' },
-          { name: 'Rent Increase Guide', url: getCanonicalUrl('/rent-increase') },
+          { name: 'Rent Increase Guide', url: guideHubUrl },
           { name: config.heroTitle, url: canonical },
         ])}
       />

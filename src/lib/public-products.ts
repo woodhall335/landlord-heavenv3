@@ -187,7 +187,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
       topic: 'general',
     }),
     defaultGuideLinks: [
-      { label: 'Rent Increase', href: '/rent-increase' },
+      { label: 'Rent increase guide', href: '/products/rent-increase' },
       { label: 'Section 13 notice', href: '/rent-increase/section-13-notice' },
       { label: 'Form 4A guide', href: '/rent-increase/form-4a-guide' },
     ],
@@ -219,7 +219,7 @@ export const PUBLIC_PRODUCT_DESCRIPTORS: Record<PublicProductKey, PublicProductD
       topic: 'general',
     }),
     defaultGuideLinks: [
-      { label: 'Rent Increase', href: '/rent-increase' },
+      { label: 'Rent increase guide', href: '/products/rent-increase' },
       { label: 'Section 13 tribunal guide', href: '/rent-increase/section-13-tribunal' },
       { label: 'Rent challenge guide', href: '/rent-increase/rent-increase-challenge' },
     ],

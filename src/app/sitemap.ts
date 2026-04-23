@@ -146,6 +146,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Rent increase SEO hub pages
   const rentIncreasePages = [
     { path: '/rent-increase', priority: 0.92, changeFrequency: 'weekly' as const },
+    { path: '/products/rent-increase', priority: 0.72, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/section-13-notice', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/how-to-increase-rent', priority: 0.88, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/form-4a-guide', priority: 0.9, changeFrequency: 'weekly' as const },

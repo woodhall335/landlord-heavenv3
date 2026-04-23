@@ -38,7 +38,7 @@ export default function Section13StandardProductPage() {
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
-      secondaryCta: { label: 'Read the rent increase guide', href: '/rent-increase' },
+      secondaryCta: { label: 'Read the rent increase guide', href: '/products/rent-increase' },
       feature:
         'Built for landlords who want the notice, the evidence, and the service record to read as one clear rent increase file.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
