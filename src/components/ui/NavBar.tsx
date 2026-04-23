@@ -77,6 +77,9 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   const [showTenancyAgreements, setShowTenancyAgreements] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [mobileMenuTop, setMobileMenuTop] = useState(88);
+  const [mobileMenuState, setMobileMenuState] = useState<EffectiveHeaderState>(
+    headerMode === 'solid' ? 'solid' : 'transparent',
+  );
 
   const [clientUser, setClientUser] = useState<NavBarUser | null>(serverUser || null);
   const [effectiveHeaderState, setEffectiveHeaderState] = useState<EffectiveHeaderState>(
@@ -112,8 +115,14 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   }, [headerMode, scrollThreshold, isWizardFlowRoute]);
 
   useEffect(() => {
+    if (!open) {
+      setMobileMenuState(effectiveHeaderState);
+    }
+  }, [effectiveHeaderState, open]);
+
+  useEffect(() => {
     setOpen(false);
-  }, [effectiveHeaderState]);
+  }, [pathname]);
 
   useEffect(() => {
     const topBar = topBarRef.current;
@@ -207,7 +216,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   const user = clientUser;
 
   const useWizardDarkHeader = isWizardFlowRoute;
-  const isSolid = effectiveHeaderState === 'solid' && !useWizardDarkHeader;
+  const presentationHeaderState = open ? mobileMenuState : effectiveHeaderState;
+  const isSolid = presentationHeaderState === 'solid' && !useWizardDarkHeader;
   const isTenancyMenuActive =
     pathname === '/products/ast' || tenancyAgreementLinks.some((item) => pathname === item.href);
   const textClass = isSolid ? 'text-[#111827]' : 'text-white';
@@ -227,6 +237,16 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
     } finally {
       setIsLoggingOut(false);
     }
+  };
+
+  const toggleMobileMenu = () => {
+    setOpen((previousOpen) => {
+      if (!previousOpen) {
+        setMobileMenuState(effectiveHeaderState);
+      }
+
+      return !previousOpen;
+    });
   };
 
   return (
@@ -371,8 +391,9 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
               ? 'border-gray-200 text-gray-700 bg-white'
               : 'border-white/40 text-white bg-white/10 backdrop-blur-sm'
           )}
-          onClick={() => setOpen(!open)}
+          onClick={toggleMobileMenu}
           aria-expanded={open}
+          aria-controls="mobile-navigation-panel"
         >
           <span>Menu</span>
           <RiMenuLine className={clsx('h-5 w-5', isSolid ? 'text-[#692ED4]' : 'text-white')} />
@@ -381,6 +402,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
 
       {open && (
         <div
+          id="mobile-navigation-panel"
           className="fixed inset-x-0 bottom-0 z-40 lg:hidden"
           style={{ top: mobileMenuTop }}
           aria-label="Mobile navigation"
