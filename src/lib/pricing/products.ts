@@ -156,8 +156,8 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   section13_standard: {
     sku: 'section13_standard',
-    label: 'Section 13 Rent Increase Pack',
-    shortLabel: 'Section 13 Standard',
+    label: 'Standard Section 13 Pack',
+    shortLabel: 'Standard Section 13',
     description: 'Generate Form 4A, proof of service, and a clear rent increase report before you serve',
     price: SEO_PRICES.section13Standard.amount,
     displayPrice: SEO_PRICES.section13Standard.display,
@@ -167,8 +167,8 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   section13_defensive: {
     sku: 'section13_defensive',
-    label: 'Section 13 Defence Pack',
-    shortLabel: 'Section 13 Defence',
+    label: 'Challenge-Ready Section 13 Defence Pack',
+    shortLabel: 'Challenge-Ready Defence',
     description: 'Tribunal-ready Section 13 bundle with challenge guidance, evidence tools, and response documents',
     price: SEO_PRICES.section13Defensive.amount,
     displayPrice: SEO_PRICES.section13Defensive.display,

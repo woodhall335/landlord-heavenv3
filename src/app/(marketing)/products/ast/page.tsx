@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { astHeroConfig } from '@/components/landing/heroConfigs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
@@ -153,23 +154,87 @@ export const runtime = 'nodejs';
 
 export default function EnglandTenancyHubPage() {
   const content: ProductSalesPageContent = {
+    analytics: {
+      pagePath: descriptor.landingHref,
+      pageType: 'product_page',
+      routeIntent: 'tenancy_agreement',
+    },
     hero: {
       ...astHeroConfig,
       trustText:
-        'England tenancy agreements for landlords | choose the route that fits the let, including periodic tenancy wording',
+        'England tenancy agreements for landlords | most ordinary whole-property lets should start with Standard',
+      title: 'Choose the right England',
+      highlightTitle: 'tenancy agreement for the let',
+      subtitle:
+        'If the tenancy is a straightforward whole-property let, start with Standard. Use Premium when you want fuller drafting, and keep the specialist student, shared-house, and lodger routes for the lets that genuinely need them.',
       primaryCta: {
-        label: 'See the five agreement options',
-        href: '#what-you-get',
-      },
-      secondaryCta: {
-        label: 'Open the Standard agreement',
+        label: 'Open Standard Tenancy Agreement',
         href: '/standard-tenancy-agreement',
       },
+      secondaryCta: {
+        label: 'Open Premium Tenancy Agreement',
+        href: '/premium-tenancy-agreement',
+      },
+    },
+    earlyProofBand: {
+      priceLabel: `${descriptor.priceLabel} | five agreement routes`,
+      valueSummary:
+        'Most landlords setting up an ordinary England let should start with Standard. Premium is the stronger secondary route when you want fuller drafting and broader management wording from day one.',
+      includedBullets: [
+        'Five agreement routes for different England letting setups',
+        'Standard is the default for most ordinary whole-property lets',
+        'Premium is there when fuller drafting matters',
+        'Specialist student, HMO / Shared House, and lodger routes stay separate',
+      ],
+      bestFor: 'Best if you want the quickest sensible default before comparing the specialist routes below.',
+      notFor: 'Not for forcing every let into Standard when the occupiers or setup clearly point to Student, HMO / Shared House, or Lodger.',
+      preview: (
+        <div className="rounded-[1.8rem] border border-[#E8E1F8] bg-white p-5 shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
+            Default choice
+          </p>
+          <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#17142B]">
+            Most landlords with a straightforward let should start here
+          </h3>
+          <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
+            Open the Standard agreement first for the ordinary whole-property route. If you already
+            know you want fuller drafting and broader management wording, move straight to Premium.
+          </p>
+          <div className="mt-5 flex flex-col gap-3">
+            <TrackedLink
+              href="/standard-tenancy-agreement"
+              pagePath={descriptor.landingHref}
+              pageType="product_page"
+              ctaLabel="Open Standard Tenancy Agreement"
+              ctaPosition="section"
+              eventName="entry_page_primary_cta_click"
+              routeIntent="tenancy_agreement"
+              product="england_standard_tenancy_agreement"
+              className="hero-btn-primary flex w-full justify-center text-center"
+            >
+              Open Standard Tenancy Agreement
+            </TrackedLink>
+            <TrackedLink
+              href="/premium-tenancy-agreement"
+              pagePath={descriptor.landingHref}
+              pageType="product_page"
+              ctaLabel="Open Premium Tenancy Agreement"
+              ctaPosition="section"
+              eventName="entry_page_secondary_cta_click"
+              routeIntent="tenancy_agreement"
+              product="england_premium_tenancy_agreement"
+              className="hero-btn-secondary flex w-full justify-center text-center"
+            >
+              Open Premium Tenancy Agreement
+            </TrackedLink>
+          </div>
+        </div>
+      ),
     },
     whatYouGet: {
       title: 'Choose the agreement that fits the tenancy',
       intro:
-        'Use this page to compare the five agreement routes properly. Each option below solves a different setup risk, and the next click takes you to the exact page with the full pack breakdown. If you arrived here searching for a periodic tenancy agreement, start with Standard or Premium unless the facts point to a specialist route.',
+        'Use this page to compare the five agreement routes properly after you have checked the default choice. Standard is the usual ordinary-let start, Premium is the fuller residential route, and the specialist options below are for student, shared-house, and lodger setups that need their own wording.',
       routeCards,
     },
     whyYouNeedThis: {
@@ -244,7 +309,7 @@ export default function EnglandTenancyHubPage() {
     cta: {
       title: 'Start with the agreement that fits the let',
       body:
-        'If you already know the tenancy is a straightforward whole-property let, open the Standard agreement first. If you came in searching for a periodic tenancy agreement, that is usually where to start unless you need the fuller Premium route. If not, use the route cards above to move into the exact product page that matches the setup.',
+        'If the tenancy is a straightforward whole-property let, open the Standard agreement first. Move to Premium when you want the fuller residential route. Use the specialist cards above only when the occupiers or letting setup clearly point you there.',
       primary: {
         label: 'Open Standard Tenancy Agreement',
         href: '/standard-tenancy-agreement',

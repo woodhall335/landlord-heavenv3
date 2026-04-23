@@ -40,7 +40,7 @@ export type Section13ProductPageConfig = {
 
 export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   slug: 'section-13-standard',
-  title: `Section 13 Rent Increase Pack for England Landlords | ${PRODUCTS.section13_standard.displayPrice}`,
+  title: `Standard Section 13 Pack for England Landlords | ${PRODUCTS.section13_standard.displayPrice}`,
   description:
     'Increase rent in England using Section 13 and Form 4A with market evidence, service records, and landlord-facing support in one pack.',
   keywords: [
@@ -50,11 +50,11 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     'rent increase section 13',
     'increase rent section 13',
   ],
-  heroTitle: 'Section 13 Rent Increase Pack for England landlords',
+  heroTitle: 'Standard Section 13 Pack for England landlords',
   heroSubtitle:
     'Increase the rent with live comparable-listing evidence, timing checks, and supporting paperwork that still makes sense if the tenant asks why the figure has changed.',
   productSku: 'section13_standard',
-  ctaLabel: `Start Section 13 Rent Increase Pack - ${PRODUCTS.section13_standard.displayPrice}`,
+  ctaLabel: `Start Standard Section 13 Pack - ${PRODUCTS.section13_standard.displayPrice}`,
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
     'Built for landlords who want more than a blank Form 4A: the notice, live comparable-listing evidence, and service record all read as one joined-up rent increase file.',
@@ -179,7 +179,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
       },
       {
         step: 'Step 03',
-        title: 'Generate the Section 13 pack',
+        title: 'Generate the Standard Section 13 pack',
         body:
           'Review the completed file, then serve the notice with the supporting explanation and service record kept together.',
       },
@@ -189,7 +189,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     title: 'Increase the rent with a cleaner Section 13 file',
     body:
       'Start here if you want more than just Form 4A: the notice, the live market evidence, and the service record prepared as one joined-up England landlord pack instead of piecing them together yourself.',
-    secondaryLabel: 'See the Section 13 Defence Pack',
+    secondaryLabel: 'See the Challenge-Ready Section 13 Defence Pack',
     secondaryHref: '/products/section-13-defence',
   },
   faqs: [
@@ -218,16 +218,16 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
         'No. It helps you prepare the paperwork and keep the file organised, but it is not legal representation.',
     },
     {
-      question: 'When should I choose the Defence Pack instead?',
+      question: 'When should I choose the Challenge-Ready Section 13 Defence Pack instead?',
       answer:
-        'Choose the Defence Pack when you expect a challenge or want the fuller tribunal-facing bundle, response materials, and preparation tools from the start.',
+        'Choose the Challenge-Ready Section 13 Defence Pack when you expect a challenge or want the fuller tribunal-facing bundle, response materials, and preparation tools from the start.',
     },
   ],
 };
 
 export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   slug: 'section-13-defence',
-  title: `Section 13 Defence Pack for England Landlords | ${PRODUCTS.section13_defensive.displayPrice}`,
+  title: `Challenge-Ready Section 13 Defence Pack for England Landlords | ${PRODUCTS.section13_defensive.displayPrice}`,
   description:
     'Defend a Section 13 rent increase in England with a fuller tribunal-ready bundle, response templates, and market evidence built to stand up under challenge.',
   keywords: [
@@ -237,11 +237,11 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     'section 13 tribunal guide',
     'defend rent increase england',
   ],
-  heroTitle: 'Section 13 Defence Pack for England landlords',
+  heroTitle: 'Challenge-Ready Section 13 Defence Pack for England landlords',
   heroSubtitle:
     'Defend the rent increase with a structured case file built around live comparable-listing evidence, supportable pricing, and tribunal-ready organisation.',
   productSku: 'section13_defensive',
-  ctaLabel: `Start Section 13 Defence Pack - ${PRODUCTS.section13_defensive.displayPrice}`,
+  ctaLabel: `Start Challenge-Ready Section 13 Defence Pack - ${PRODUCTS.section13_defensive.displayPrice}`,
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
     'Built for landlords who need the Section 13 file to hold together under challenge, not just look fine on the day it is served. This is more than a Form 4A generator.',
@@ -354,7 +354,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   },
   howThisHelps: {
     intro:
-      'The Defence Pack turns a served notice into a fuller landlord case file that is easier to explain, easier to present, and harder to pick apart.',
+      'The Challenge-Ready Section 13 Defence Pack turns a served notice into a fuller landlord case file that is easier to explain, easier to present, and harder to pick apart.',
     cards: [
       {
         title: 'It helps you defend the rent level itself',
@@ -413,12 +413,12 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     {
       question: 'Do I need this pack for every rent increase?',
       answer:
-        'No. Many landlords only need the Standard pack. The Defence Pack is for cases where challenge risk is real or tribunal preparation is already in view.',
+        'No. Many landlords only need the Standard Section 13 Pack. The Challenge-Ready Section 13 Defence Pack is for cases where challenge risk is real or tribunal preparation is already in view.',
     },
     {
       question: 'Does this include the core Section 13 notice documents as well?',
       answer:
-        'Yes. The Defence Pack builds on the standard notice file and adds the fuller challenge, response, and tribunal-facing materials.',
+        'Yes. The Challenge-Ready Section 13 Defence Pack builds on the standard notice file and adds the fuller challenge, response, and tribunal-facing materials.',
     },
     {
       question: 'Why is the tribunal bundle included?',
@@ -428,12 +428,12 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     {
       question: 'Does this use real comparable listings too?',
       answer:
-        'Yes. The Defence Pack is built around the same comparable-listings workflow, then adds the fuller argument, response, and tribunal-facing materials needed when challenge risk is higher.',
+        'Yes. The Challenge-Ready Section 13 Defence Pack is built around the same comparable-listings workflow, then adds the fuller argument, response, and tribunal-facing materials needed when challenge risk is higher.',
     },
     {
       question: 'Is this still England only?',
       answer:
-        'Yes. The Defence Pack is built for England landlords using Section 13 when a challenge is likely.',
+        'Yes. The Challenge-Ready Section 13 Defence Pack is built for England landlords using Section 13 when a challenge is likely.',
     },
     {
       question: 'Does this replace legal advice or representation?',

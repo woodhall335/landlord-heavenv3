@@ -31,10 +31,15 @@ export default function Section13StandardProductPage() {
   const sampleProof = getGoldenPackProofData('section13_standard');
 
   const content: ProductSalesPageContent = {
+    analytics: {
+      pagePath: descriptor.landingHref,
+      pageType: 'product_page',
+      routeIntent: 'section13_standard',
+    },
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 13 and Form 4A pack | built for landlords increasing rent properly',
+      trustText: 'England Standard Section 13 pack | the main route for a normal rent increase file',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
@@ -54,11 +59,24 @@ export default function Section13StandardProductPage() {
         </ul>
       ),
     },
+    earlyProofBand: {
+      priceLabel: `${product.displayPrice} | one-time pack price`,
+      valueSummary:
+        'Start here when the job is a normal Section 13 rent increase and you want the notice, evidence, and service record to hold together before the tenant pushes back.',
+      includedBullets: [
+        'Form 4A notice built from your answers',
+        'Rent justification report and comparable evidence',
+        'Cover letter and proof of service record',
+        'Preview before you pay',
+      ],
+      bestFor: 'Best for the normal Section 13 route when you want a supportable increase file, not just a blank form.',
+      notFor: 'Not for cases where challenge risk is already obvious and you want tribunal-facing support from the start.',
+      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+    },
     whatYouGet: {
       title: 'What you get',
       intro: config.packIntro,
       items: config.packBreakdown,
-      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
       title: 'Why you need this',
@@ -85,7 +103,7 @@ export default function Section13StandardProductPage() {
       guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
-      title: 'Section 13 Rent Increase FAQs',
+      title: 'Standard Section 13 Pack FAQs',
       items: config.faqs,
     },
   };
@@ -105,7 +123,7 @@ export default function Section13StandardProductPage() {
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
           { name: 'Pricing', url: getCanonicalUrl('/pricing') },
-          { name: 'Section 13 Rent Increase Pack', url: canonicalUrl },
+          { name: 'Standard Section 13 Pack', url: canonicalUrl },
         ])}
       />
       <PublicProductSalesPage content={content} />

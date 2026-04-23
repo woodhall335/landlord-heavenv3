@@ -28,6 +28,15 @@ export interface ProductSalesCard {
   body: string;
 }
 
+export interface ProductSalesEarlyProofBand {
+  priceLabel?: string;
+  valueSummary?: ReactNode;
+  includedBullets?: string[];
+  bestFor?: string;
+  notFor?: string;
+  preview?: ReactNode;
+}
+
 export interface ProductSalesStep {
   step: string;
   title: string;
@@ -58,6 +67,7 @@ export interface ProductSalesPageContent {
     routeIntent?: string;
   };
   hero: ProductSalesHero;
+  earlyProofBand?: ProductSalesEarlyProofBand;
   whatYouGet: {
     title: string;
     intro: ReactNode;

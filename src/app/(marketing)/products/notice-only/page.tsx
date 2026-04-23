@@ -71,6 +71,11 @@ export default function NoticeOnlyPage() {
   const sampleProof = getGoldenPackProofData('notice_only');
 
   const content: ProductSalesPageContent = {
+    analytics: {
+      pagePath: descriptor.landingHref,
+      pageType: 'product_page',
+      routeIntent: 'notice_only',
+    },
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
@@ -92,6 +97,20 @@ export default function NoticeOnlyPage() {
       mediaAlt: 'Preview of the England Section 8 notice pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'notice_only',
+    },
+    earlyProofBand: {
+      priceLabel: `${product.displayPrice} | one-time pack price`,
+      valueSummary:
+        'See the completed notice style, the core supporting documents, and the service-focused guidance before you commit. This is the fastest route when the next job is serving notice correctly first.',
+      includedBullets: [
+        'Form 3A notice built from your answers',
+        'Arrears schedule and grounds support',
+        'Service instructions and validity checklist',
+        'Preview before you pay',
+      ],
+      bestFor: 'Best if you need to serve a Section 8 notice correctly before you move toward court.',
+      notFor: 'Not for cases where you already want the N5, N119, and court-stage possession file together.',
+      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whatYouGet: {
       title: 'What you get in the Section 8 notice pack',
@@ -159,7 +178,6 @@ export default function NoticeOnlyPage() {
           includedByDefault: true,
         },
       ],
-      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
       title: 'Why a Section 8 case needs more than a blank notice',

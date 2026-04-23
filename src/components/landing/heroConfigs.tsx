@@ -56,20 +56,20 @@ export const homeHeroConfig: HeroConfig = {
   ...withPreset('home'),
   preset: 'home',
   trustText: 'Landlord documents for England with checks before you serve, file, or raise rent',
-  title: 'Landlord paperwork for',
-  highlightTitle: 'the next step in England',
+  title: 'The right landlord paperwork,',
+  highlightTitle: 'ready before you serve or file.',
   subtitle: (
     <>
-      Start with the situation you are dealing with, then move into the right
-      route for notice, court paperwork, debt recovery, rent increases, or
-      tenancy agreements without second-guessing the next step.
+      Section 8 notices, eviction packs, rent increases, money claims, and
+      tenancy agreements — checked against the current England rules before you
+      download anything. From £14.99.
     </>
   ),
   primaryCta: {
     label: 'Choose the right route',
     href: '#homepage-route-selector',
   },
-  feature: 'Built for landlords in England who want the right route clear from the first screen.',
+  feature: 'Built for landlords in England who need the next step clear fast when the tenancy is already under pressure.',
 };
 
 /* ============================================================

@@ -43,6 +43,30 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
     if (href.includes('complete-pack')) return 'complete_pack';
     return undefined;
   };
+  const frameworkLinksBlock = (
+    <article className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
+      <h2 className="text-3xl font-bold text-[#2a2161]">
+        Current England eviction framework
+      </h2>
+      <p className="mt-4 max-w-3xl leading-8 text-gray-700">
+        Use this England authority bundle to move from the current rule summary into the
+        exact notice, Form 3A, landlord action guide, and possession-process pages that
+        fit the post-1 May 2026 route.
+      </p>
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        {frameworkLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="rounded-2xl border border-[#d8caff] bg-white p-5 transition hover:border-primary hover:bg-[#fcfaff]"
+          >
+            <p className="text-lg font-semibold text-[#2a2161]">{link.title}</p>
+            <p className="mt-2 leading-7 text-gray-700">{link.description}</p>
+          </Link>
+        ))}
+      </div>
+    </article>
+  );
 
   return (
     <div className="min-h-screen bg-[#fcfaff]">
@@ -161,6 +185,39 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-8">
+            {config.decisionBlock ? (
+              <article className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
+                <h2 className="text-3xl font-bold text-[#2a2161]">{config.decisionBlock.title}</h2>
+                <p className="mt-4 max-w-3xl leading-8 text-gray-700">
+                  {config.decisionBlock.intro}
+                </p>
+                <div className="mt-6 grid gap-4 md:grid-cols-2">
+                  {config.decisionBlock.cards.map((card, index) => (
+                    <div
+                      key={card.title}
+                      className="rounded-2xl border border-[#d8caff] bg-white p-5 shadow-[0_14px_34px_rgba(24,11,49,0.05)]"
+                    >
+                      <p className="text-lg font-semibold text-[#2a2161]">{card.title}</p>
+                      <p className="mt-3 leading-7 text-gray-700">{card.body}</p>
+                      <TrackedLink
+                        href={card.href}
+                        pagePath={pagePath}
+                        pageType="entry_page"
+                        ctaLabel={card.ctaLabel}
+                        ctaPosition="section"
+                        eventName={index === 0 ? 'entry_page_primary_cta_click' : 'entry_page_secondary_cta_click'}
+                        routeIntent={config.slug}
+                        product={inferProduct(card.href)}
+                        className="mt-5 inline-flex rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
+                      >
+                        {card.ctaLabel}
+                      </TrackedLink>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            ) : null}
+
             <article className="rounded-3xl border border-[#e6dbff] bg-[#fcfaff] p-6 md:p-8">
               <h2 className="text-3xl font-bold text-[#2a2161]">What you need to know first</h2>
               <div className="mt-5 space-y-5 text-gray-700">
@@ -172,28 +229,7 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
               </div>
             </article>
 
-            <article className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
-              <h2 className="text-3xl font-bold text-[#2a2161]">
-                Current England eviction framework
-              </h2>
-              <p className="mt-4 max-w-3xl leading-8 text-gray-700">
-                Use this England authority bundle to move from the current rule summary into the
-                exact notice, Form 3A, landlord action guide, and possession-process pages that
-                fit the post-1 May 2026 route.
-              </p>
-              <div className="mt-6 grid gap-4 md:grid-cols-2">
-                {frameworkLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="rounded-2xl border border-[#d8caff] bg-white p-5 transition hover:border-primary hover:bg-[#fcfaff]"
-                  >
-                    <p className="text-lg font-semibold text-[#2a2161]">{link.title}</p>
-                    <p className="mt-2 leading-7 text-gray-700">{link.description}</p>
-                  </Link>
-                ))}
-              </div>
-            </article>
+            {!config.deferFrameworkLinks ? frameworkLinksBlock : null}
 
             {config.sections.map((section) => (
               <article
@@ -218,6 +254,8 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
                 </div>
               </article>
             ))}
+
+            {config.deferFrameworkLinks ? frameworkLinksBlock : null}
           </div>
         </Container>
       </section>

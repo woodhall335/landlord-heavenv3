@@ -31,10 +31,15 @@ export default function Section13DefenceProductPage() {
   const sampleProof = getGoldenPackProofData('section13_defensive');
 
   const content: ProductSalesPageContent = {
+    analytics: {
+      pagePath: descriptor.landingHref,
+      pageType: 'product_page',
+      routeIntent: 'section13_defensive',
+    },
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 13 defence pack | landlord evidence and tribunal preparation support',
+      trustText: 'England Challenge-Ready Section 13 Defence Pack | stronger landlord support when challenge risk is already obvious',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
@@ -54,11 +59,24 @@ export default function Section13DefenceProductPage() {
         </ul>
       ),
     },
+    earlyProofBand: {
+      priceLabel: `${product.displayPrice} | one-time pack price`,
+      valueSummary:
+        'Choose this when the case already looks challenge-heavy and you want the notice, evidence story, and tribunal-facing materials prepared as one stronger landlord file.',
+      includedBullets: [
+        'Everything in the Standard Section 13 route',
+        'Tribunal bundle and argument summary',
+        'Response templates and evidence checklist',
+        'Preview before you pay',
+      ],
+      bestFor: 'Best when the tenant is likely to dispute the increase and you want challenge-ready structure from the start.',
+      notFor: 'Not necessary for every rent increase if the case is straightforward and the Standard pack already fits the job.',
+      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+    },
     whatYouGet: {
       title: 'What you get',
       intro: config.packIntro,
       items: config.packBreakdown,
-      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
       title: 'Why you need this',
@@ -85,7 +103,7 @@ export default function Section13DefenceProductPage() {
       guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
-      title: 'Section 13 Defence Pack FAQs',
+      title: 'Challenge-Ready Section 13 Defence Pack FAQs',
       items: config.faqs,
     },
   };
@@ -105,7 +123,7 @@ export default function Section13DefenceProductPage() {
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
           { name: 'Pricing', url: getCanonicalUrl('/pricing') },
-          { name: 'Section 13 Defence Pack', url: canonicalUrl },
+          { name: 'Challenge-Ready Section 13 Defence Pack', url: canonicalUrl },
         ])}
       />
       <PublicProductSalesPage content={content} />

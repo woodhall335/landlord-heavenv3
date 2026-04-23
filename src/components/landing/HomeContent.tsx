@@ -100,11 +100,11 @@ const routeSelectionCards: RouteCard[] = [
   },
   {
     title: 'Tenant will not leave',
-    eyebrow: 'Usually court-stage help',
+    eyebrow: 'Often court-stage, sometimes notice first',
     description:
-      'Move into the Complete Eviction Pack when the tenancy problem is already heading toward possession paperwork and court steps.',
+      'Move into the Complete Eviction Pack when the tenancy problem is already heading toward possession paperwork and court steps. If you have not served notice yet, you may still need to start there first.',
     whyRoute:
-      'This is the better route when notice is not the whole job anymore and you need the notice, claim forms, and filing path joined up.',
+      'This is the better route when notice is not the whole job anymore and you need the notice, claim forms, and filing path joined up, while still recognising that some cases begin with notice first.',
     ctaLabel: 'Go to complete eviction route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     imageSrc: '/images/eviction_packs.webp',
@@ -345,6 +345,9 @@ export default function HomeContent() {
                   Start with the real problem, not the legal label. Choose the
                   situation below and we will route you into the product page that
                   fits the next step.
+                </p>
+                <p className="mt-3 text-sm font-semibold leading-7 text-[#4f2a96]">
+                  These route cards are the fastest way to the right product.
                 </p>
                 <p className="mt-3 text-sm font-medium leading-7 text-[#6a6280]">
                   Most landlords either need to start the notice correctly, move

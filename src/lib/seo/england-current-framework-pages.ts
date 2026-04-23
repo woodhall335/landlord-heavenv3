@@ -36,6 +36,17 @@ export interface CurrentFrameworkPageConfig {
   pageType: 'guide' | 'notice' | 'court';
   currentFrameworkNote: string;
   introduction: string[];
+  decisionBlock?: {
+    title: string;
+    intro: string;
+    cards: Array<{
+      title: string;
+      body: string;
+      ctaLabel: string;
+      href: string;
+    }>;
+  };
+  deferFrameworkLinks?: boolean;
   sections: CurrentFrameworkSection[];
   faqTitle: string;
   faqs: FAQItem[];
@@ -259,10 +270,31 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       'Current England possession work starts with the facts, the right grounds, and a notice path that still makes sense if the matter reaches court.'
     ),
     introduction: [
-      'A Section 8 notice is now one of the main live notice routes landlords need to understand in England. The important question is not whether you can download a form quickly. The important question is whether the case facts support the grounds you want to rely on and whether the notice stage is being prepared in a way that will still stand up later if you need a court order.',
-      'That means a current Section 8 strategy is more than a form exercise. You need to identify the real problem, whether that is rent arrears, breach, nuisance, false statements, or another recognised ground. Then you need to test the evidence, calculate dates carefully, serve the notice correctly, and keep a file that can move forward into a possession claim without major reconstruction.',
-      'This page is written to help you make those decisions in a calm and practical way. It is not a substitute for legal advice on a disputed or unusual case. But it will help you understand what the current England route expects from you, what often goes wrong, and how to avoid starting the notice stage with a weak or confused case theory.',
+      'A Section 8 notice is one of the main live possession routes landlords need to understand in England. The real question is not whether you can download a form quickly. It is whether the facts support the grounds you want to rely on and whether the notice stage is being prepared in a way that still stands up if you later need a court order.',
+      'This page is here to help you make that route choice calmly. Start with notice when serving correctly is still the next practical job. Move to the fuller court route when the case already needs N5, N119, and claim-stage continuity rather than more reading.',
     ],
+    decisionBlock: {
+      title: 'Choose the route that matches the next job',
+      intro:
+        'Do not make every landlord read the whole guide before acting. If you know what the next practical step is, use the matching route below and come back to the deeper guidance second.',
+      cards: [
+        {
+          title: 'Need to serve notice correctly first',
+          body:
+            'Start with the Eviction Notice Generator when the main job is getting the Section 8 notice, grounds, dates, and service steps right before anything goes to court.',
+          ctaLabel: 'Open Eviction Notice Generator',
+          href: '/products/notice-only',
+        },
+        {
+          title: 'Already preparing for court',
+          body:
+            'Move straight to the Complete Eviction Pack when the case already needs the notice, N5, N119, and court-stage possession paperwork joined up in one file.',
+          ctaLabel: 'Open Complete Eviction Pack',
+          href: '/products/complete-pack',
+        },
+      ],
+    },
+    deferFrameworkLinks: true,
     sections: [
       {
         id: 'how-section-8-fits',

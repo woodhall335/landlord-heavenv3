@@ -22,7 +22,7 @@ const sampleProof = getGoldenPackProofData('section13_standard');
 export const metadata: Metadata = {
   title: 'Increase Rent in England | Section 13 / Form 4A Packs for Landlords',
   description:
-    'Increase rent in England using Section 13 and Form 4A. Start the standard rent increase pack or choose the defence route when challenge risk is already part of the case.',
+    'Increase rent in England using Section 13 and Form 4A. Start the Standard Section 13 Pack or choose the Challenge-Ready Section 13 Defence Pack when challenge risk is already part of the case.',
   keywords: [
     'increase rent england',
     'section 13 notice',
@@ -34,14 +34,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Increase Rent in England | Section 13 / Form 4A Packs for Landlords',
     description:
-      'Choose the Section 13 route that fits the case, from the standard rent increase pack to the challenge-ready defence pack.',
+      'Choose the Section 13 route that fits the case, from the Standard Section 13 Pack to the Challenge-Ready Section 13 Defence Pack.',
     url: canonicalUrl,
   },
 };
 
 const routeCards: ProductSalesRouteCard[] = [
   {
-    name: 'Standard Section 13 pack',
+    name: 'Standard Section 13 Pack',
     priceLabel: PRODUCTS.section13_standard.displayPrice,
     whatItIs:
       'The main route for landlords who want to increase rent in England with Form 4A, comparable evidence, and a cleaner service-ready file.',
@@ -52,10 +52,10 @@ const routeCards: ProductSalesRouteCard[] = [
     landlordOutcome:
       'Best for the normal Section 13 job when you want to move from decision to a supportable rent increase file quickly.',
     href: standardDescriptor.landingHref,
-    ctaLabel: 'Open the Standard pack',
+    ctaLabel: 'Open the Standard Section 13 Pack',
   },
   {
-    name: 'Section 13 Defence Pack',
+    name: 'Challenge-Ready Section 13 Defence Pack',
     priceLabel: PRODUCTS.section13_defensive.displayPrice,
     whatItIs:
       'The fuller challenge-ready route for landlords who expect objections, negotiation pressure, or tribunal scrutiny around the proposed rent.',
@@ -66,7 +66,7 @@ const routeCards: ProductSalesRouteCard[] = [
     landlordOutcome:
       'Best when the rent level may be disputed and you want the landlord file prepared for that reality from the start.',
     href: defenceDescriptor.landingHref,
-    ctaLabel: 'Open the Defence Pack',
+    ctaLabel: 'Open the Challenge-Ready Defence Pack',
   },
 ];
 
@@ -74,12 +74,12 @@ const faqs: FAQItem[] = [
   {
     question: 'Which Section 13 route should most landlords start with?',
     answer:
-      'Most landlords should start with the Standard Section 13 pack. It is the main route for serving the increase properly with Form 4A, market evidence, and service records kept together.',
+      'Most landlords should start with the Standard Section 13 Pack. It is the main route for serving the increase properly with Form 4A, market evidence, and service records kept together.',
   },
   {
-    question: 'When should I choose the Defence Pack instead?',
+    question: 'When should I choose the Challenge-Ready Section 13 Defence Pack instead?',
     answer:
-      'Choose the Defence Pack when challenge risk is already part of the picture, for example where the tenant is likely to dispute the figure or you want the fuller tribunal-facing preparation from the start.',
+      'Choose the Challenge-Ready Section 13 Defence Pack when challenge risk is already part of the picture, for example where the tenant is likely to dispute the figure or you want the fuller tribunal-facing preparation from the start.',
   },
   {
     question: 'Is this only for England?',
@@ -89,7 +89,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Do both routes use Form 4A?',
     answer:
-      'Yes. Both routes are built around the England Section 13 / Form 4A process, but the Defence Pack adds stronger challenge and tribunal-preparation support around that core route.',
+      'Yes. Both routes are built around the England Section 13 / Form 4A process, but the Challenge-Ready Section 13 Defence Pack adds stronger challenge and tribunal-preparation support around that core route.',
   },
   {
     question: 'Can I still read the longer guide first?',
@@ -111,7 +111,7 @@ export default function RentIncreaseLandingPage() {
       trustText: 'England Section 13 / Form 4A packs | choose the route that fits the case',
       title: 'Increase rent in England using Section 13 / Form 4A',
       subtitle:
-        'Start with the route that matches the real job. Use the Standard pack for most rent increases, or move straight to the Defence Pack when challenge risk is already part of the case.',
+        'Start with the route that matches the real job. Use the Standard Section 13 Pack for most rent increases, or move straight to the Challenge-Ready Section 13 Defence Pack when challenge risk is already part of the case.',
       feature:
         'Built for landlords who want the notice, evidence, and service record to hold together before the tenant ever reads the increase.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
@@ -126,14 +126,14 @@ export default function RentIncreaseLandingPage() {
               href={standardDescriptor.landingHref}
               pagePath="/rent-increase"
               pageType="entry_page"
-              ctaLabel="Open the Standard pack"
+              ctaLabel="Open the Standard Section 13 Pack"
               ctaPosition="hero"
               eventName="entry_page_primary_cta_click"
               routeIntent="rent_increase"
               product="section13_standard"
               className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
             >
-              Open the Standard pack
+              Open the Standard Section 13 Pack
             </TrackedLink>
           </div>
           <div className="w-full sm:w-auto">
@@ -141,14 +141,14 @@ export default function RentIncreaseLandingPage() {
               href={defenceDescriptor.landingHref}
               pagePath="/rent-increase"
               pageType="entry_page"
-              ctaLabel="See the challenge-ready route"
+              ctaLabel="See the challenge-ready defence route"
               ctaPosition="hero"
               eventName="entry_page_secondary_cta_click"
               routeIntent="rent_increase"
               product="section13_defensive"
               className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
             >
-              See the challenge-ready route
+              See the challenge-ready defence route
             </TrackedLink>
           </div>
         </>
@@ -156,17 +156,29 @@ export default function RentIncreaseLandingPage() {
       children: (
         <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
           <li>Built for the current England Section 13 route using Form 4A.</li>
-          <li>Lets landlords choose between the normal increase route and the stronger defence route.</li>
+          <li>Lets landlords choose between the normal increase route and the stronger challenge-ready defence route.</li>
           <li>Keeps the long-form guide available without making every visitor read it first.</li>
         </ul>
       ),
     },
+    earlyProofBand: {
+      priceLabel: `${standardDescriptor.priceLabel} standard | ${defenceDescriptor.priceLabel} challenge-ready`,
+      valueSummary:
+        'Choose between the normal rent increase route and the stronger challenge-ready route before you start generating anything. This keeps the product choice clear without forcing every visitor through the long guide first.',
+      includedBullets: [
+        'Standard Section 13 Pack for the normal Form 4A workflow',
+        'Challenge-Ready Section 13 Defence Pack for likely disputes',
+        'Guide still available secondarily for research-led landlords',
+      ],
+      bestFor: 'Best if you already know you need to increase the rent and want the product choice made obvious quickly.',
+      notFor: 'Not for treating every rent increase like a challenge-heavy case when the Standard pack already fits.',
+      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+    },
     whatYouGet: {
       title: 'Choose the Section 13 route that fits the case',
       intro:
-        'This page is built for action, not just explanation. Pick the Standard pack when you want the main rent increase workflow, or choose the Defence Pack when the file needs to stand up under stronger tenant challenge from the start.',
+        'This page is built for action, not just explanation. Pick the Standard Section 13 Pack when you want the main rent increase workflow, or choose the Challenge-Ready Section 13 Defence Pack when the file needs to stand up under stronger tenant challenge from the start.',
       routeCards,
-      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
       title: 'Why this converts better than a guide-first page',
@@ -181,7 +193,7 @@ export default function RentIncreaseLandingPage() {
         {
           title: 'Form 4A alone is not the real buying decision',
           body:
-            'The decision is whether the landlord needs the standard service-ready file or the fuller defence-ready file. Once that choice is clear, the rest of the page can sell the outcome more honestly.',
+            'The decision is whether the landlord needs the standard service-ready file or the fuller challenge-ready defence file. Once that choice is clear, the rest of the page can sell the outcome more honestly.',
         },
         {
           title: 'The guide still matters, but as a secondary path',
@@ -198,12 +210,12 @@ export default function RentIncreaseLandingPage() {
         {
           title: 'It gives most landlords a clear default start',
           body:
-            'The Standard pack remains the main starting point, with a direct CTA into the wizard for the common case.',
+            'The Standard Section 13 Pack remains the main starting point, with a direct CTA into the wizard for the common case.',
         },
         {
           title: 'It catches harder cases earlier',
           body:
-            'Landlords who already expect pushback can move straight into the Defence Pack instead of discovering too late that they needed the heavier route.',
+            'Landlords who already expect pushback can move straight into the Challenge-Ready Section 13 Defence Pack instead of discovering too late that they needed the heavier route.',
         },
         {
           title: 'It still supports research-led visitors',
@@ -221,7 +233,7 @@ export default function RentIncreaseLandingPage() {
           step: 'Step 01',
           title: 'Choose the right Section 13 route',
           body:
-            'Start with the Standard pack for most cases, or move to the Defence Pack if challenge or tribunal risk is already shaping the job.',
+            'Start with the Standard Section 13 Pack for most cases, or move to the Challenge-Ready Section 13 Defence Pack if challenge or tribunal risk is already shaping the job.',
         },
         {
           step: 'Step 02',
@@ -240,13 +252,13 @@ export default function RentIncreaseLandingPage() {
     cta: {
       title: 'Start with the route that matches the real case',
       body:
-        'If this is a normal rent increase, start the Standard Section 13 pack now. If challenge risk is already obvious, open the Defence Pack instead. If you still want the longer explanation first, the full guide is still available.',
+        'If this is a normal rent increase, start the Standard Section 13 Pack now. If challenge risk is already obvious, open the Challenge-Ready Section 13 Defence Pack instead. If you still want the longer explanation first, the full guide is still available.',
       primary: {
-        label: 'Start the Standard Section 13 pack',
+        label: 'Start the Standard Section 13 Pack',
         href: standardDescriptor.landingHref,
       },
       secondary: {
-        label: 'Open the Defence Pack',
+        label: 'Open the Challenge-Ready Defence Pack',
         href: defenceDescriptor.landingHref,
       },
       guideLinks: [
