@@ -4,6 +4,7 @@ import { createEmptySection13State } from '@/lib/section13/facts';
 import {
   computeSection13Preview,
   getEvidenceStrengthBand,
+  getSection13PlanRecommendation,
   validateSection13StartDate,
 } from '@/lib/section13/rules';
 import type { Section13Comparable } from '@/lib/section13/types';
@@ -117,5 +118,64 @@ describe('Section 13 evidence and preview metrics', () => {
     expect(preview.sourceBackedCount).toBe(0);
     expect(preview.canAutoGenerateJustification).toBe(false);
     expect(preview.warnings[0]).toContain('No valid source-backed comparables');
+  });
+
+  it('recommends Standard by default for lower-risk cases', () => {
+    const recommendation = getSection13PlanRecommendation({
+      comparableCount: 6,
+      challengeBand: 'moderate_likelihood',
+      challengeBandLabel: 'Moderate likelihood of challenge',
+      evidenceBand: 'strong',
+      evidenceBandLabel: 'Strong evidence strength',
+      proposedPositionLabel: 'Within the adjusted comparable range',
+    });
+
+    expect(recommendation.recommendedPlan).toBe('section13_standard');
+    expect(recommendation.headline).toContain('Standard');
+  });
+
+  it('recommends Defence when challenge risk is elevated', () => {
+    const recommendation = getSection13PlanRecommendation({
+      comparableCount: 6,
+      challengeBand: 'elevated_likelihood',
+      challengeBandLabel: 'Elevated likelihood of challenge',
+      evidenceBand: 'moderate',
+      evidenceBandLabel: 'Moderate evidence strength',
+      proposedPositionLabel: 'Toward the top of the adjusted comparable range',
+    });
+
+    expect(recommendation.recommendedPlan).toBe('section13_defensive');
+    expect(recommendation.reason).toContain('Elevated likelihood of challenge');
+  });
+
+  it('recommends Defence when the landlord expects pushback', () => {
+    const recommendation = getSection13PlanRecommendation(
+      {
+        comparableCount: 6,
+        challengeBand: 'moderate_likelihood',
+        challengeBandLabel: 'Moderate likelihood of challenge',
+        evidenceBand: 'strong',
+        evidenceBandLabel: 'Strong evidence strength',
+        proposedPositionLabel: 'Within the adjusted comparable range',
+      },
+      { expectTenantChallenge: true }
+    );
+
+    expect(recommendation.recommendedPlan).toBe('section13_defensive');
+    expect(recommendation.reason).toContain('expect pushback');
+  });
+
+  it('keeps Standard as the starting recommendation before comparables exist', () => {
+    const recommendation = getSection13PlanRecommendation({
+      comparableCount: 0,
+      challengeBand: 'higher_likelihood',
+      challengeBandLabel: 'Higher likelihood of challenge',
+      evidenceBand: 'weak',
+      evidenceBandLabel: 'Weak evidence strength',
+      proposedPositionLabel: 'No comparable market position yet',
+    });
+
+    expect(recommendation.recommendedPlan).toBe('section13_standard');
+    expect(recommendation.reason).toContain('Run the local listings check next');
   });
 });

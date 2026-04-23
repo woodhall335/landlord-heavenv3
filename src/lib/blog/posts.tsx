@@ -16,13 +16,60 @@ const section21TemplateCta = (
 );
 
 const section8TemplateCta = (
-  <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
-    Serving grounds-based possession proceedings? Start with the{' '}
-    <Link href="/section-8-notice" className="text-primary font-semibold hover:underline">
-      Section 8 notice guide for landlords
-    </Link>{' '}
-    and move into the product-ready Section 8 route once the grounds and evidence file are clear.
-  </p>
+  <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 my-6 text-sm text-amber-900">
+    <p className="font-semibold text-amber-950">Need to act on an England possession ground now?</p>
+    <p className="mt-2">
+      For post-1 May 2026 England cases, Section 21 has gone and the live route is the
+      Form 3A possession notice. Choose the product that matches how far the case has gone.
+    </p>
+    <ul className="mt-3 list-disc space-y-1 pl-5">
+      <li>
+        <Link href="/products/notice-only" className="font-semibold text-primary hover:underline">
+          Eviction Notice Generator
+        </Link>{' '}
+        for the Form 3A notice, service instructions, validity checklist, compliance declaration,
+        and arrears statement before you serve anything.
+      </li>
+      <li>
+        <Link href="/products/complete-pack" className="font-semibold text-primary hover:underline">
+          Complete Eviction Pack
+        </Link>{' '}
+        if you want the notice, N5, N119, evidence checklist, witness material, and court-ready file
+        working together from the start.
+      </li>
+      <li>
+        <Link href="/section-8-notice" className="font-semibold text-primary hover:underline">
+          Section 8 guide
+        </Link>{' '}
+        if you want the rule overview first.
+      </li>
+    </ul>
+  </div>
+);
+
+const section8GroundNextSteps = (
+  <div className="rounded-xl border border-red-200 bg-red-50 p-5 my-6">
+    <p className="text-sm font-semibold uppercase tracking-[0.14em] text-red-700">What landlords should do next</p>
+    <p className="mt-2 text-sm leading-6 text-red-950">
+      If you are under pressure, decide the route early. In England after <strong>1 May 2026</strong>,
+      Section 21 is no longer the live route for new cases. If this ground fits, the next step is using
+      the current <strong>Form 3A</strong> process with the right evidence and timing.
+    </p>
+    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <Link
+        href="/products/notice-only"
+        className="rounded-lg border border-red-200 bg-white px-4 py-3 font-semibold text-red-900 transition-colors hover:border-red-300 hover:bg-red-100"
+      >
+        Start the Eviction Notice Generator
+      </Link>
+      <Link
+        href="/products/complete-pack"
+        className="rounded-lg border border-red-700 bg-red-700 px-4 py-3 font-semibold text-white transition-colors hover:bg-red-800"
+      >
+        Start the Complete Eviction Pack
+      </Link>
+    </div>
+  </div>
 );
 
 const walesEvictionCta = (
@@ -251,12 +298,11 @@ const allBlogPosts: BlogPost[] = [
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-amber-800 text-lg mb-2">Why landlords are reviewing Section 21 cases now</p>
+          <p className="font-semibold text-amber-800 text-lg mb-2">Why landlords must review the current route now</p>
           <p className="text-amber-700">
-            If you have <strong>any doubt</strong> about whether you may need to regain possession of a property
-            in the next 12-18 months, serve Section 21 now. A served notice remains valid for 6 months after
-            it expires. By serving in early 2026, you preserve your options even if the ban takes effect.
-            Once the ban is in place, that route will no longer be available for new use.
+            If you have <strong>any doubt</strong> about whether you need possession, do not assume the old
+            no-fault route still exists. Check which Form 3A ground now applies and whether you need the
+            notice-stage pack or the full court possession pack.
           </p>
         </div>
 
@@ -475,26 +521,26 @@ const allBlogPosts: BlogPost[] = [
           landlords need to review live tenancies early enough to choose the right route with a clear head.
         </p>
 
-        <h3>The Section 21 Window Is Closing</h3>
+        <h3>The Section 21 Window Has Closed for New Notices</h3>
 
         <p>
-          You have until <strong>30 April 2026</strong> to serve Section 21 notices. After this date,
-          no new Section 21 notices can be served—ever. If you have any tenancy where you might need
-          possession in the next 1-2 years, serving Section 21 now preserves your options.
+          The last day to serve a new Section 21 notice was <strong>30 April 2026</strong>. For new England
+          possession cases after that point, landlords need to work through the current Form 3A / Section 8
+          grounds instead.
         </p>
 
         <h3>Court Backlogs Will Worsen</h3>
 
         <p>
-          As the deadline approaches, expect a surge in Section 21 applications. Courts are already
-          dealing with backlogs. Starting your proceedings early gives you the best chance of completing
-          the process before the system becomes overwhelmed.
+          Courts are already dealing with housing backlogs, and the move away from Section 21 is likely to
+          put more pressure on contested possession claims. Getting the notice, evidence, and court forms right
+          first time matters more than ever.
         </p>
 
         <h3>Section 8 Is Harder</h3>
 
         <p>
-          After May 2026, Section 8 is your only eviction option. This means:
+          After 1 May 2026, Section 8/Form 3A is your live eviction route. This means:
         </p>
 
         <ul>
@@ -508,22 +554,22 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Many landlords are reconsidering their portfolios in light of these changes. If you&apos;re thinking
-          about selling properties, you&apos;ll need vacant possession—which means serving Section 21 now.
+          about selling properties and need possession, look at the current sale ground and evidence route
+          instead of assuming Section 21 is available.
         </p>
 
         <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 my-8">
           <h3 className="font-semibold text-gray-900 mb-3">What this means for landlords now</h3>
           <p className="text-gray-700 mb-4">
-            If you still need to rely on a Section 21 route before the April 2026 deadline, it
-            makes sense to get your notice prepared early and keep your options open while that
-            route is still available.
+            If you need possession now, start by identifying the current Form 3A ground and deciding whether
+            you need a notice-stage pack or the full court possession pack.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link
               href="/products/notice-only"
               className="inline-flex items-center bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              {`Prepare Section 21 notice - ${PRODUCTS.notice_only.displayPrice}`}
+              {`Prepare Form 3A notice - ${PRODUCTS.notice_only.displayPrice}`}
             </Link>
             <Link
               href="/products/complete-pack"
@@ -574,7 +620,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Should I sell my rental property?</h3>
             <p className="text-gray-600">
               This depends on your circumstances. Many landlords are reviewing their portfolios. If you&apos;re considering
-              selling, remember you&apos;ll need vacant possession—which means serving Section 21 now while you still can.
+              selling and need vacant possession, check the current sale ground and evidence requirements before serving notice.
             </p>
           </div>
 
@@ -604,14 +650,13 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <p>
-          If there&apos;s one message to take away: <strong>serve Section 21 now if you have any doubt about
-          needing possession in the next 12-18 months</strong>. This is your last chance to use the
-          no-fault eviction route that landlords have relied on for 35 years.
+          If there&apos;s one message to take away: <strong>do not rely on old Section 21 assumptions for a
+          new England case</strong>. Start with the current Form 3A ground, evidence, and notice period.
         </p>
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            {`Generate Section 21 Notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
+            {`Generate Form 3A Notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
             {`Complete Eviction Pack (notices + court forms) - ${PRODUCTS.complete_pack.displayPrice}`}</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
@@ -882,7 +927,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li>Rent arrears (2+ months for mandatory possession)</li>
+          <li>Serious rent arrears (3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly, for mandatory Ground 8)</li>
           <li>Anti-social behaviour</li>
           <li>Breach of tenancy agreement</li>
           <li>Landlord wants to sell the property (new ground)</li>
@@ -897,27 +942,24 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="how-to-serve-section-21" className="scroll-mt-24">How to Serve a Section 21 Notice</h2>
 
         <p>
-          Serving a Section 21 notice correctly is crucial. An invalid notice can delay your
-          eviction by months and cost you significant money. Here&apos;s how to do it right:
+          This section is now mainly useful for legacy cases. For new England notices after 1 May 2026,
+          use the Form 3A possession route instead of trying to serve Section 21.
         </p>
 
         <h3>Option 1: Generate Online (Recommended)</h3>
         <p>
-          The fastest and most reliable method is to use an online service that generates
-          a current Form 6A. This ensures you&apos;re using the current prescribed form
-          with all fields completed correctly.
+          If you are dealing with a legacy notice, check whether it was served before the deadline and whether
+          the court-start deadline still applies. For a new case, use the current Form 3A workflow instead.
         </p>
         <ul>
-          <li><Link href="/eviction-notice-template" className="text-primary hover:underline">
-            Section 21 notice pack</Link> - Preview version (preview only)</li>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Guided Section 21 Notice</Link>{` - Official Form 6A, ${PRODUCTS.notice_only.displayPrice}`}</li>
+            Start the current England Eviction Notice Generator</Link>{` - Form 3A route, ${PRODUCTS.notice_only.displayPrice}`}</li>
         </ul>
 
         <h3>Option 2: Download from Gov.uk</h3>
         <p>
-          You can download Form 6A directly from the government website. However, you&apos;ll
-          need to complete it manually and ensure you don&apos;t make any errors.
+          You can still use GOV.UK for official forms, but make sure you are using the current route. For new
+          England possession notices after 1 May 2026, that means Form 3A rather than Form 6A.
         </p>
 
         <h3>Delivery Methods</h3>
@@ -940,9 +982,8 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I use Section 21 if the tenant owes rent?</h3>
             <p className="text-gray-600">
-              Yes, you can use Section 21 regardless of whether rent is owed. However, if the tenant
-              owes 2+ months rent, you might also consider Section 8 Ground 8, which can be faster
-              for serious rent arrears.
+              For new England notices after 1 May 2026, no. If the tenant owes rent, check the current Form 3A
+              grounds. Ground 8 now requires 3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly.
             </p>
           </div>
 
@@ -1007,9 +1048,9 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'section-21-vs-section-8',
-    title: 'Section 21 vs Section 8 Explained: Which Eviction Notice Should You Use? (2026)',
-    description: 'Compare Section 21 and Section 8 eviction notices. Learn when to use each type, the key differences, and which is best for your situation.',
-    metaDescription: 'Section 21 vs Section 8 explained. Compare notice periods, costs, and success rates to choose the right eviction notice for UK landlords in 2026.',
+    title: 'Section 21 vs Section 8 After the Renters Rights Act: What Landlords Use Now (2026)',
+    description: 'Section 21 vs Section 8 is now a transition question for England landlords. Learn what changed on 1 May 2026 and which Form 3A possession route applies now.',
+    metaDescription: 'Section 21 vs Section 8 after the Renters Rights Act. Section 21 ended in England on 1 May 2026. Learn the current Form 3A and Section 8 possession routes.',
     date: '2026-01-02',
     updatedDate: '2026-01-02',
     readTime: '12 min read',
@@ -1027,21 +1068,21 @@ const allBlogPosts: BlogPost[] = [
     secondaryKeywords: ['section 8 notice', 'eviction notice comparison', 'ground 8', 'rent arrears eviction', 'mandatory grounds'],
     tableOfContents: [
       { id: 'key-differences', title: 'Key Differences', level: 2 },
-      { id: 'when-to-use-section-21', title: 'When to Use Section 21', level: 2 },
-      { id: 'when-to-use-section-8', title: 'When to Use Section 8', level: 2 },
+      { id: 'when-to-use-section-21', title: 'When Section 21 Was Available', level: 2 },
+      { id: 'when-to-use-section-8', title: 'What Landlords Use Now', level: 2 },
       { id: 'section-8-grounds', title: 'Section 8 Grounds Explained', level: 2 },
       { id: 'comparison-table', title: 'Comparison Table', level: 2 },
-      { id: 'using-both-notices', title: 'Using Both Together', level: 2 },
+      { id: 'using-both-notices', title: 'Legacy Cases and Old Notices', level: 2 },
       { id: 'section-21-vs-8-faq', title: 'FAQ', level: 2 },
     ],
     relatedPosts: ['what-is-section-21-notice', 'how-to-serve-eviction-notice', 'how-long-does-eviction-take-uk'],
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          Choosing between a <strong>Section 21 vs Section 8</strong> eviction notice is one of the most important
-          decisions UK landlords face when dealing with problem tenancies. Each notice type has distinct advantages,
-          requirements, and timelines. Understanding these differences could save you months of delays and thousands
-          of pounds in legal fees.
+          If you are searching for <strong>Section 21 vs Section 8</strong>, the key point for England landlords is
+          that this is no longer a normal live choice for new cases. Under the Renters&apos; Rights Act changes,
+          Section 21 ended for new England notices on <strong>1 May 2026</strong>. Most landlords now need the
+          current Form 3A Section 8-led possession route, with the right ground, evidence, and notice period.
         </p>
         {section21TemplateCta}
         {section8TemplateCta}
@@ -1049,9 +1090,9 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Quick Summary</p>
           <p className="text-blue-700">
-            <strong>Section 21</strong> is a no-fault eviction (ending May 2026). <strong>Section 8</strong> requires
-            proving grounds like rent arrears or breach of tenancy. Many landlords serve both simultaneously for
-            maximum protection.
+            <strong>For new England cases after 1 May 2026, Section 21 is not a route to choose.</strong>{' '}
+            Section 8/Form 3A is the live route. The choice is now which possession ground applies and whether
+            you need the notice-stage pack only or the full court possession pack.
           </p>
         </div>
 
@@ -1061,34 +1102,34 @@ const allBlogPosts: BlogPost[] = [
           caption="Understanding the differences between Section 21 and Section 8 notices"
         />
 
-        <h2 id="key-differences" className="scroll-mt-24">Key Differences Between Section 21 and Section 8</h2>
+        <h2 id="key-differences" className="scroll-mt-24">Key Differences After 1 May 2026</h2>
 
         <p>
-          The fundamental difference between these two eviction notices lies in whether you need to prove
-          your tenant has done something wrong. Section 21 requires no reason at all, while Section 8
-          requires you to demonstrate specific grounds for possession.
+          Before the Renters&apos; Rights Act changes took effect, the main difference was whether you needed
+          to prove a ground. Section 21 was no-fault. Section 8 required a statutory ground. For new England
+          cases after 1 May 2026, that comparison is mainly historical because new possession action runs
+          through the grounds-based Form 3A route.
         </p>
 
         <p>
-          <strong>Section 21 (No-Fault Eviction)</strong> allows landlords to recover their property without
-          giving any reason. You simply serve the notice, wait for the notice period to expire, and apply
-          to court if the tenant doesn&apos;t leave. The court must grant possession if all procedural
-          requirements are met.
+          <strong>Section 21 (no-fault eviction)</strong> allowed landlords to recover possession without proving
+          tenant fault. That route is now closed for new England notices. Legacy notices served before the
+          deadline need careful deadline checks, but they should not be treated as the current starting point.
         </p>
 
         <p>
-          <strong>Section 8 (Fault-Based Eviction)</strong> requires you to prove one or more of 17 specific
-          grounds for possession. These range from rent arrears (the most common) to anti-social behaviour,
-          property damage, or the landlord needing to move back in.
+          <strong>Section 8 / Form 3A</strong> requires you to rely on the correct possession ground. These now
+          include rent arrears, breach, anti-social behaviour, sale, landlord/family occupation, and other
+          current England grounds introduced or amended by the Renters&apos; Rights Act framework.
         </p>
 
         <BlogCTA variant="inline" />
 
-        <h2 id="when-to-use-section-21" className="scroll-mt-24">When to Use Section 21</h2>
+        <h2 id="when-to-use-section-21" className="scroll-mt-24">When Section 21 Was Available</h2>
 
         <p>
-          Section 21 is typically the preferred choice when you simply want to regain possession of your
-          property and your tenant hasn&apos;t done anything specifically wrong. Common scenarios include:
+          Before 1 May 2026, Section 21 was commonly used where a landlord wanted possession without proving
+          tenant fault. It was often used for:
         </p>
 
         <ul>
@@ -1100,29 +1141,28 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          The beauty of Section 21 is its simplicity. As long as you&apos;ve met all the compliance requirements
-          (deposit protection, gas safety certificate, EPC, How to Rent guide), the court <strong>must</strong>
-          grant possession. There&apos;s no discretion—it&apos;s a mandatory order.
+          That simplicity is exactly what changed. For new England cases, landlords now need to identify the
+          correct ground and evidence route rather than treating Section 21 as a fallback.
         </p>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-amber-800 text-lg mb-2">Time-Sensitive Warning</p>
           <p className="text-amber-700">
-            Section 21 will be abolished on <strong>1 May 2026</strong>. After this date, you&apos;ll only be able
-            to use Section 8, which requires proving specific grounds. If you&apos;re considering a no-fault eviction,
-            you must serve your notice before 30 April 2026.
+            Section 21 was abolished for new England notices on <strong>1 May 2026</strong>. If you are dealing
+            with an old Section 21 notice served before the deadline, check the legacy claim deadlines carefully.
+            For a new case now, start with the Form 3A possession ground route.
           </p>
         </div>
 
-        <h2 id="when-to-use-section-8" className="scroll-mt-24">When to Use Section 8</h2>
+        <h2 id="when-to-use-section-8" className="scroll-mt-24">What Landlords Use Now</h2>
 
         <p>
-          Section 8 is essential when you have specific grounds for eviction, particularly when dealing with
-          problem tenants. The most common situations include:
+          For new England possession action, Section 8/Form 3A is the route landlords use. The most common
+          situations include:
         </p>
 
         <ul>
-          <li><strong>Rent arrears:</strong> Tenant owes 2+ months rent (Ground 8 - mandatory)</li>
+          <li><strong>Serious rent arrears:</strong> Tenant owes 3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly (Ground 8 - mandatory)</li>
           <li><strong>Persistent late payment:</strong> Regularly pays rent late (Ground 10 - discretionary)</li>
           <li><strong>Anti-social behaviour:</strong> Nuisance to neighbours (Ground 14)</li>
           <li><strong>Property damage:</strong> Tenant has damaged the property (Ground 13)</li>
@@ -1131,9 +1171,9 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          The key advantage of Section 8 is the shorter notice period for serious grounds. For rent arrears
-          of 2+ months (Ground 8), you only need to give <strong>2 weeks&apos; notice</strong> compared to
-          2 months for Section 21.
+          The key issue is choosing the right ground and notice period. Ground 8 now uses a higher arrears
+          threshold and a <strong>4-week notice period</strong>. Grounds 10 and 11 are also important rent
+          arrears backups and use 4 weeks.
         </p>
 
         <ImagePlaceholder
@@ -1163,7 +1203,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Discretionary Grounds (Court Decides)</h3>
 
         <ul>
-          <li><strong>Ground 10:</strong> Some rent arrears (less than 2 months)</li>
+          <li><strong>Ground 10:</strong> Some rent lawfully due remains unpaid, including arrears below the Ground 8 threshold</li>
           <li><strong>Ground 11:</strong> Persistent delay in paying rent</li>
           <li><strong>Ground 12:</strong> Breach of tenancy obligation</li>
           <li><strong>Ground 13:</strong> Property condition deteriorated due to tenant</li>
@@ -1195,7 +1235,7 @@ const allBlogPosts: BlogPost[] = [
               <tr>
                 <td className="p-4 border-b font-medium">Notice Period</td>
                 <td className="p-4 border-b">2 months minimum</td>
-                <td className="p-4 border-b">2 weeks to 2 months (depends on ground)</td>
+                <td className="p-4 border-b">Immediate to 4 months, depending on the current Form 3A ground</td>
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">Court Outcome</td>
@@ -1221,28 +1261,28 @@ const allBlogPosts: BlogPost[] = [
           </table>
         </div>
 
-        <h2 id="using-both-notices" className="scroll-mt-24">Using Both Notices Together</h2>
+        <h2 id="using-both-notices" className="scroll-mt-24">Legacy Cases and Old Notices</h2>
 
         <p>
-          Many experienced landlords serve both Section 21 and Section 8 notices simultaneously,
-          especially when dealing with rent arrears. This &quot;belt and braces&quot; approach provides
-          maximum flexibility.
+          Before the ban, some landlords served Section 21 and Section 8 notices together. That is no longer
+          the current strategy for new England cases. The practical question now is whether an old notice is
+          still usable, or whether you must start again with the current Form 3A route.
         </p>
 
         <p>
-          <strong>Why serve both?</strong>
+          <strong>For new cases, focus on:</strong>
         </p>
 
         <ul>
-          <li>Section 8 with Ground 8 now uses 4 weeks notice and the higher post-May 2026 arrears threshold</li>
-          <li>Section 21 provides a guaranteed fallback if rent is paid down</li>
-          <li>You can pursue whichever notice expires first</li>
-          <li>Increases pressure on tenant to negotiate or leave voluntarily</li>
+          <li>Which Form 3A ground applies</li>
+          <li>Whether the notice period is immediate, 2 weeks, 4 weeks, 2 months, or 4 months</li>
+          <li>Whether you only need the notice pack or the full N5/N119 court pack</li>
+          <li>What evidence will survive a defended possession hearing</li>
         </ul>
 
         <p>
-          With the Section 21 ban approaching, serving both notices now is particularly wise. If Section 21
-          is abolished before your case concludes, you&apos;ll still have the Section 8 to fall back on.
+          If you are relying on anything served before 1 May 2026, treat it as a legacy position and check
+          deadlines before spending money on court papers.
         </p>
 
         <h2 id="section-21-vs-8-faq" className="scroll-mt-24">Section 21 vs Section 8 FAQ</h2>
@@ -1251,16 +1291,17 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I use Section 21 if my tenant owes rent?</h3>
             <p className="text-gray-600">
-              Yes, you can use Section 21 regardless of rent arrears. However, if they owe 2+ months,
-              consider using Section 8 Ground 8 as well—it has a shorter notice period.
+              For new England cases after 1 May 2026, no. Section 21 is no longer available for new notices.
+              If the issue is arrears, look at Ground 8, Ground 10, and Ground 11 under the current Form 3A route.
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Which is faster: Section 21 or Section 8?</h3>
             <p className="text-gray-600">
-              Section 8 can be faster if using Ground 8 (serious rent arrears) because the notice period is
-              only 2 weeks. However, Section 21 is more certain at court because it&apos;s always mandatory.
+              It depends on the ground. Ground 8 now has a 4-week notice period and a higher arrears threshold.
+              Some urgent anti-social behaviour grounds allow immediate application, while sale or occupation
+              grounds usually require 4 months.
             </p>
           </div>
 
@@ -1268,7 +1309,8 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">What happens if my tenant pays off arrears?</h3>
             <p className="text-gray-600">
               If they pay arrears below the Ground 8 threshold before the court hearing, Ground 8 no longer applies.
-              This is why serving Section 21 as backup is recommended—it remains valid regardless.
+              This is why Grounds 10 and 11 are commonly added as backups. They are discretionary, but they
+              can still support the case where the rent history is poor.
             </p>
           </div>
 
@@ -1283,9 +1325,8 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Will Section 8 change after the Section 21 ban?</h3>
             <p className="text-gray-600">
-              Yes. The Renters&apos; Rights Act 2025 adds new mandatory grounds to Section 8, including
-              landlord wanting to sell and landlord wanting to move in. This partially compensates for
-              losing Section 21.
+              Yes. The Renters&apos; Rights Act framework changed the England possession grounds and notice
+              periods. The current route uses Form 3A and the amended grounds instead of a new Section 21 notice.
             </p>
           </div>
         </div>
@@ -1293,17 +1334,17 @@ const allBlogPosts: BlogPost[] = [
         <h2>What to do next</h2>
 
         <p>
-          Whether you choose Section 21, Section 8, or both, getting the notice right is crucial.
-          Invalid notices waste months and cost thousands in delayed possession.
+          For new England cases, the choice is not Section 21 or Section 8. The choice is whether you need
+          the Form 3A notice-stage documents only, or the complete possession pack with court forms too.
         </p>
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
             Generate Eviction Notice</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
-            Complete Section 21 Guide</Link></li>
+            Legacy Section 21 Guide</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
-            Complete Eviction Pack (includes both notices)</Link></li>
+            Complete Eviction Pack (notice + court forms)</Link></li>
         </ul>
       </>
     ),
@@ -1315,15 +1356,15 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'how-to-serve-eviction-notice',
-    title: 'How to Serve an Eviction Notice in the UK: Step-by-Step Guide (2026)',
-    description: 'Learn exactly how to serve an eviction notice correctly. Avoid common mistakes that invalidate notices and delay possession by months.',
-    metaDescription: 'Step-by-step guide to serving eviction notices in the UK. Learn valid delivery methods, timing rules, and proof requirements for 2026.',
+    title: 'How to Serve an Eviction Notice in England After May 2026',
+    description: 'Learn how to serve the current Form 3A eviction notice correctly in England. Avoid service mistakes, date errors, and proof gaps after the Renters Rights Act changes.',
+    metaDescription: 'How to serve a Form 3A eviction notice in England after 1 May 2026. Delivery methods, proof of service, timing rules, and landlord mistakes to avoid.',
     date: '2026-01-02',
     updatedDate: '2026-01-02',
     readTime: '11 min read',
     wordCount: 1280,
     category: 'Eviction Guides',
-    tags: ['Eviction Notice', 'Serving Notice', 'Form 6A', 'Proof of Service', 'Legal Process'],
+    tags: ['Eviction Notice', 'Serving Notice', 'Form 3A', 'Proof of Service', 'Legal Process'],
     author: {
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
@@ -1332,7 +1373,7 @@ const allBlogPosts: BlogPost[] = [
     heroImageAlt: 'How to Serve an Eviction Notice - Complete Guide',
     showUrgencyBanner: true,
     targetKeyword: 'how to serve eviction notice',
-    secondaryKeywords: ['serve section 21', 'eviction notice delivery', 'proof of service', 'valid notice', 'notice requirements'],
+    secondaryKeywords: ['serve section 8 notice', 'form 3a service', 'eviction notice delivery', 'proof of service', 'valid notice'],
     tableOfContents: [
       { id: 'before-serving', title: 'Before You Serve', level: 2 },
       { id: 'delivery-methods', title: 'Valid Delivery Methods', level: 2 },
@@ -1347,7 +1388,7 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           Knowing <strong>how to serve an eviction notice</strong> correctly is just as important as
-          choosing the right notice type. A perfectly drafted Section 21 or Section 8 notice becomes
+          choosing the right notice type. A perfectly drafted Form 3A notice becomes
           worthless if it&apos;s served incorrectly. Invalid service can delay your eviction by months
           and cost you thousands in lost rent and legal fees.
         </p>
@@ -1355,8 +1396,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-red-800 text-lg mb-2">Critical Warning</p>
           <p className="text-red-700">
-            Approximately 30% of Section 21 notices are thrown out at court due to procedural errors,
-            including incorrect service. Follow this guide carefully to ensure your notice is valid.
+            In the post-May 2026 England route, service mistakes still matter. Use the current Form 3A,
+            check the ground-specific notice period, and keep proof of how and when the notice was delivered.
           </p>
         </div>
 
@@ -1369,25 +1410,23 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="before-serving" className="scroll-mt-24">Before You Serve: Essential Checklist</h2>
 
         <p>
-          Before you even think about serving an eviction notice, you must ensure you&apos;ve met all
-          the compliance requirements. For Section 21 notices in particular, failing any of these
-          will invalidate your notice:
+          Before you serve, check that the notice matches the current England route. For new cases after
+          1 May 2026, that normally means Form 3A with the correct ground, particulars, and notice period:
         </p>
 
-        <h3>Section 21 Pre-Service Requirements</h3>
+        <h3>Form 3A Pre-Service Checks</h3>
 
         <ul>
-          <li><strong>Deposit Protection:</strong> Tenant&apos;s deposit protected in an approved scheme within 30 days of receipt</li>
-          <li><strong>Prescribed Information:</strong> Deposit scheme details provided to tenant</li>
-          <li><strong>Gas Safety Certificate:</strong> Valid certificate provided before tenancy started (and annually)</li>
-          <li><strong>EPC Certificate:</strong> Valid Energy Performance Certificate provided to tenant</li>
-          <li><strong>How to Rent Guide:</strong> Current government guide provided at start of tenancy</li>
-          <li><strong>Correct Form:</strong> You&apos;re using Form 6A (the prescribed form)</li>
+          <li><strong>Correct form:</strong> Use the current Form 3A for England possession notices</li>
+          <li><strong>Correct ground:</strong> Pick the ground that genuinely fits the facts</li>
+          <li><strong>Correct notice period:</strong> Immediate, 2 weeks, 4 weeks, 2 months, or 4 months depending on the ground</li>
+          <li><strong>Particulars:</strong> Explain the facts, dates, arrears, or incidents clearly</li>
+          <li><strong>Evidence:</strong> Keep the rent ledger, witness evidence, correspondence, or documents that support the ground</li>
         </ul>
 
         <p>
-          For Section 8 notices, the compliance requirements are less strict, but you must ensure
-          you have evidence to support your claimed grounds for possession.
+          Legacy Section 21 issues may still matter for old notices, but they are not the starting point for a
+          new England case after the Renters&apos; Rights Act changes.
         </p>
 
         <BlogCTA variant="inline" />
@@ -1477,9 +1516,9 @@ const allBlogPosts: BlogPost[] = [
         <h3>Section 8 Timing (varies by ground)</h3>
 
         <ul>
-          <li><strong>Ground 8 (rent arrears):</strong> 2 weeks minimum</li>
-          <li><strong>Grounds 1, 2, 5-7, 9, 16:</strong> 2 months minimum</li>
-          <li><strong>Other grounds:</strong> 2 weeks minimum</li>
+          <li><strong>Ground 8, 10 and 11 rent cases:</strong> 4 weeks minimum under the current England rules</li>
+          <li><strong>Grounds 1 and 2:</strong> 4 months minimum</li>
+          <li><strong>Other grounds:</strong> Immediate, 2 weeks, 2 months, or 4 months depending on the current Form 3A ground</li>
           <li><strong>Can be served:</strong> During fixed term or periodic tenancy</li>
         </ul>
 
@@ -1523,7 +1562,7 @@ const allBlogPosts: BlogPost[] = [
 
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
             <p className="font-semibold text-red-800">Incorrect form</p>
-            <p className="text-red-700 text-sm">Using an outdated version of Form 6A or a non-prescribed format</p>
+            <p className="text-red-700 text-sm">Using an outdated form instead of the current Form 3A route</p>
           </div>
 
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -1538,7 +1577,7 @@ const allBlogPosts: BlogPost[] = [
 
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
             <p className="font-semibold text-red-800">Missing compliance</p>
-            <p className="text-red-700 text-sm">Serving Section 21 without having protected the deposit first</p>
+            <p className="text-red-700 text-sm">Using an old Section 21 checklist for a new post-May 2026 England case</p>
           </div>
 
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -1621,7 +1660,7 @@ const allBlogPosts: BlogPost[] = [
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
             {`Prepare eviction notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
-            Complete Section 21 Guide</Link></li>
+            Section 21 legacy guide</Link></li>
           <li><Link href="/blog/how-long-does-eviction-take-uk" className="text-primary hover:underline">
             How Long Does Eviction Take?</Link></li>
         </ul>
@@ -1636,8 +1675,8 @@ const allBlogPosts: BlogPost[] = [
   {
     slug: 'how-long-does-eviction-take-uk',
     title: 'How Long Does Eviction Take in the UK? Complete Timeline (2026)',
-    description: 'Realistic eviction timelines for UK landlords. Learn how long Section 21 and Section 8 evictions take from notice to possession.',
-    metaDescription: 'UK eviction timeline explained: Section 21 takes 4-6 months, Section 8 varies by ground. Get realistic timeframes for 2026.',
+    description: 'Realistic eviction timelines for England landlords after the Renters Rights Act changes. Learn how long Form 3A, Section 8, court, and bailiff stages take.',
+    metaDescription: 'England eviction timeline after 1 May 2026. Form 3A notice periods, Section 8 court stages, possession orders, and bailiff enforcement explained.',
     date: '2026-01-02',
     updatedDate: '2026-01-02',
     readTime: '9 min read',
@@ -1666,17 +1705,17 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          Understanding <strong>how long eviction takes in the UK</strong> helps you plan realistically
-          and avoid nasty surprises. The honest answer is: longer than you&apos;d hope. A straightforward
-          Section 21 eviction typically takes 4-6 months from serving notice to gaining possession,
-          and contested cases can take much longer.
+          Understanding <strong>how long eviction takes in England</strong> helps you plan realistically
+          and avoid nasty surprises. The honest answer is: longer than you&apos;d hope. After 1 May 2026,
+          new England cases run through Form 3A / Section 8 grounds, then court if the tenant does not leave.
         </p>
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Quick Answer</p>
           <p className="text-blue-700">
-            <strong>Section 21:</strong> 4-6 months typical, up to 9 months if contested.
-            <strong> Section 8:</strong> 2-4 months for rent arrears, longer for discretionary grounds.
+            <strong>Form 3A / Section 8:</strong> notice periods now range from immediate application to 4 months,
+            depending on the ground. Ground 8 rent arrears uses 4 weeks, but court and enforcement can still
+            take several months.
             These times assume no errors in your paperwork.
           </p>
         </div>
@@ -1691,11 +1730,11 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Every eviction follows the same basic stages, though the duration of each stage varies
-          depending on your notice type, the tenant&apos;s response, and court delays.
+          depending on your ground, the tenant&apos;s response, and court delays.
         </p>
 
         <ol>
-          <li><strong>Notice Period:</strong> 2 weeks to 2 months (depending on notice type)</li>
+          <li><strong>Notice Period:</strong> Immediate to 4 months depending on the Form 3A ground</li>
           <li><strong>Court Application:</strong> Processing takes 4-8 weeks</li>
           <li><strong>Possession Order:</strong> Issued if claim is successful</li>
           <li><strong>Tenant Vacates:</strong> 14-42 days given to leave</li>
@@ -1709,11 +1748,11 @@ const allBlogPosts: BlogPost[] = [
 
         <BlogCTA variant="inline" />
 
-        <h2 id="section-21-timeline" className="scroll-mt-24">Section 21 Eviction Timeline</h2>
+        <h2 id="section-21-timeline" className="scroll-mt-24">Legacy Section 21 Timeline</h2>
 
         <p>
-          Section 21 is generally the most predictable route because the court must grant possession
-          if your notice is valid. Here&apos;s a realistic timeline:
+          Section 21 is now a legacy route for England, not the starting point for new notices. Old notices served
+          before the deadline need deadline checks. Historically, a valid Section 21 route looked like this:
         </p>
 
         <div className="overflow-x-auto my-8">
@@ -1764,10 +1803,11 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Section 8 timelines vary significantly depending on which ground you&apos;re using.
-          The mandatory Ground 8 (serious rent arrears) is fastest:
+          The mandatory Ground 8 route is commonly used for serious arrears, but it now uses a 4-week notice
+          period and a higher arrears threshold:
         </p>
 
-        <h3>Ground 8 (Rent Arrears of 2+ Months)</h3>
+        <h3>Ground 8 (3 Months / 13 Weeks Rent Arrears)</h3>
 
         <div className="overflow-x-auto my-8">
           <table className="min-w-full border-collapse">
@@ -1781,8 +1821,8 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="p-4 border-b font-medium">Notice Period</td>
-                <td className="p-4 border-b">2 weeks</td>
-                <td className="p-4 border-b">2 weeks</td>
+                <td className="p-4 border-b">4 weeks</td>
+                <td className="p-4 border-b">4 weeks</td>
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">Court Hearing Scheduled</td>
@@ -1804,8 +1844,9 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <p>
-          <strong>Important:</strong> The tenant must still owe 2+ months rent at the court hearing
-          for Ground 8 to succeed. If they pay down the arrears, you lose the mandatory ground.
+          <strong>Important:</strong> The tenant must still owe the Ground 8 threshold at the court hearing:
+          3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly. If they pay down below that,
+          you lose the mandatory ground.
         </p>
 
         <ImagePlaceholder
@@ -1826,7 +1867,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Accelerated Possession (Section 21 only)</h3>
 
         <p>
-          Section 21 claims can use the &quot;accelerated possession procedure,&quot; which is faster
+          Legacy Section 21 claims can use the &quot;accelerated possession procedure,&quot; which is faster
           because it&apos;s usually dealt with on paper without a hearing. However:
         </p>
 
@@ -1876,12 +1917,12 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><strong>Get the notice right first time:</strong> Invalid notices waste months</li>
-          <li><strong>Use the correct form:</strong> Form 6A for Section 21</li>
+          <li><strong>Use the correct form:</strong> Form 3A for current England possession notices</li>
           <li><strong>Keep perfect records:</strong> Deposit protection, gas certificates, etc.</li>
           <li><strong>Serve correctly:</strong> Follow proper service procedures</li>
           <li><strong>Apply to court promptly:</strong> Don&apos;t wait after notice expires</li>
           <li><strong>Complete forms accurately:</strong> Missing information delays processing</li>
-          <li><strong>Consider both notices:</strong> Section 21 + Section 8 together for options</li>
+          <li><strong>Choose the right pack:</strong> Notice-stage only, or the full N5/N119 court pack</li>
         </ul>
 
         <h2 id="eviction-timeline-faq" className="scroll-mt-24">Eviction Timeline FAQ</h2>
@@ -1890,8 +1931,9 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What&apos;s the fastest possible eviction?</h3>
             <p className="text-gray-600">
-              If your tenant leaves voluntarily during the notice period, a Section 8 Ground 8
-              notice with 2 weeks&apos; notice is fastest. Section 21 minimum is 2 months regardless.
+              If your tenant leaves voluntarily during the notice period, that is the fastest outcome. For current
+              England rent-arrears cases, Ground 8 uses 4 weeks, while some urgent anti-social behaviour grounds
+              allow immediate application.
             </p>
           </div>
 
@@ -1953,9 +1995,9 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'rent-arrears-eviction-guide',
-    title: 'Rent Arrears Eviction: Complete Guide for UK Landlords (2026)',
-    description: 'How to evict a tenant for rent arrears in the UK. Step-by-step process for recovering possession and unpaid rent using Section 8 Ground 8.',
-    metaDescription: 'Complete guide to evicting tenants for rent arrears in the UK. Learn about Section 8 Ground 8, timelines, and recovering unpaid rent.',
+    title: 'Rent Arrears Eviction: England Landlord Guide After May 2026',
+    description: 'How England landlords deal with rent arrears after the Renters Rights Act changes. Ground 8, Grounds 10 and 11, Form 3A, court forms, and unpaid rent recovery.',
+    metaDescription: 'Rent arrears eviction England 2026. Ground 8 now needs 3 months rent or 13 weeks if paid weekly or fortnightly, with 4 weeks notice under Form 3A.',
     date: '2026-01-02',
     updatedDate: '2026-01-02',
     readTime: '11 min read',
@@ -1985,10 +2027,11 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           Dealing with <strong>rent arrears eviction</strong> is one of the most stressful situations
-          UK landlords face. When a tenant stops paying rent, you need to act decisively—but correctly.
+          England landlords face. When a tenant stops paying rent, you need to act decisively—but correctly.
           This guide walks you through the complete process of evicting a tenant for rent arrears and
-          recovering the money you&apos;re owed.
+          recovering the money you&apos;re owed under the post-1 May 2026 Form 3A route.
         </p>
+        {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Key Points</p>
@@ -2018,18 +2061,18 @@ const allBlogPosts: BlogPost[] = [
         <ul>
           <li><strong>Any arrears:</strong> Discretionary possession under Ground 10 or 11</li>
           <li><strong>3 months rent or 13 weeks arrears:</strong> Mandatory possession under Ground 8</li>
-          <li><strong>8 weeks+ arrears (weekly rent):</strong> Alternative calculation for weekly payments</li>
+          <li><strong>4-week notice:</strong> Ground 8, Ground 10, and Ground 11 now use a 4-week Form 3A notice period in England</li>
         </ul>
 
         <p>
-          The <strong>2-month threshold for Ground 8</strong> is calculated differently depending on your
+          The <strong>post-May 2026 Ground 8 threshold</strong> is calculated differently depending on your
           rent payment schedule:
         </p>
 
         <ul>
-          <li><strong>Monthly rent:</strong> 2 full months&apos; rent owed</li>
-          <li><strong>Weekly rent:</strong> 8 weeks&apos; rent owed</li>
-          <li><strong>Quarterly rent:</strong> One quarter&apos;s rent more than 3 months overdue</li>
+          <li><strong>Monthly rent:</strong> 3 full months&apos; rent owed</li>
+          <li><strong>Weekly or fortnightly rent:</strong> 13 weeks&apos; rent owed</li>
+          <li><strong>Other rent frequencies:</strong> Check the current Form 3A wording before relying on Ground 8</li>
         </ul>
 
         <BlogCTA variant="inline" />
@@ -2096,24 +2139,23 @@ const allBlogPosts: BlogPost[] = [
         <h3>Ground 8 Requirements</h3>
 
         <ol>
-          <li>Tenant owes at least 2 months&apos; rent when you serve the notice</li>
-          <li>Tenant still owes at least 2 months&apos; rent at the court hearing</li>
-          <li>Notice period of 2 weeks minimum has passed</li>
-          <li>Notice was served correctly using Form 3</li>
+          <li>Tenant owes at least 3 months&apos; rent when you serve the notice, or 13 weeks&apos; rent if paid weekly or fortnightly</li>
+          <li>Tenant still owes at least that threshold at the court hearing</li>
+          <li>The 4-week Form 3A notice period has passed</li>
+          <li>Notice was served correctly using the current Form 3A</li>
         </ol>
 
         <h3>The Critical Risk: Arrears Paid Down</h3>
 
         <p>
           If your tenant pays the arrears below the Ground 8 threshold before the court hearing, Ground 8 no longer
-          applies. The judge cannot grant mandatory possession. This is why many landlords also serve
-          Section 21 as backup.
+          applies. The judge cannot grant mandatory possession on Ground 8. This is why landlords commonly add
+          Grounds 10 and 11 as discretionary backups.
         </p>
 
         <p>
-          <strong>Tactical advice:</strong> Serve both Section 21 and Section 8 simultaneously. If the
-          tenant pays arrears down, you still have Section 21 to fall back on. However, note that
-          Section 21 will be abolished in May 2026.
+          <strong>Tactical advice:</strong> keep the rent ledger current and include Grounds 10 and 11 where the
+          facts support them. For new England cases after 1 May 2026, Section 21 is not a backup route.
         </p>
 
         <BlogCTA variant="urgency" />
@@ -2121,21 +2163,22 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="eviction-process" className="scroll-mt-24">The Eviction Process for Rent Arrears</h2>
 
         <p>
-          Once you&apos;ve completed pre-action steps and the tenant still owes 2+ months rent,
+          Once you&apos;ve completed pre-action steps and the tenant still owes enough for Ground 8, or there is
+          a strong Ground 10/11 pattern,
           here&apos;s the eviction process:
         </p>
 
         <h3>Step 1: Serve Section 8 Notice</h3>
 
         <p>
-          Use Form 3 (Section 8 notice) and specify Ground 8, plus any other applicable grounds
-          (Ground 10 and 11 are commonly added). The minimum notice period for Ground 8 is 2 weeks.
+          Use the current Form 3A possession notice and specify Ground 8, plus any other applicable grounds
+          (Ground 10 and 11 are commonly added). The minimum notice period for Ground 8 is 4 weeks.
         </p>
 
         <h3>Step 2: Wait for Notice Period</h3>
 
         <p>
-          During the 2-week notice period, the tenant may:
+          During the 4-week notice period, the tenant may:
         </p>
 
         <ul>
@@ -2255,7 +2298,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant pays some rent before court?</h3>
             <p className="text-gray-600">
               If they reduce arrears below the Ground 8 threshold before the hearing, Ground 8 fails. You&apos;d need to
-              rely on discretionary Ground 10 or have Section 21 as backup.
+              rely on discretionary Grounds 10 and 11 if they were included and properly evidenced.
             </p>
           </div>
 
@@ -2270,8 +2313,8 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I use Section 21 for rent arrears?</h3>
             <p className="text-gray-600">
-              Yes. Section 21 doesn&apos;t require any grounds, so rent arrears aren&apos;t relevant. However,
-              Section 8 has a shorter notice period (2 weeks vs 2 months) for serious arrears.
+              For new England cases after 1 May 2026, no. Section 21 is abolished for new notices. Rent arrears
+              cases now need the Form 3A route, usually Ground 8 with Grounds 10 and 11 as backups where appropriate.
             </p>
           </div>
 
@@ -2509,9 +2552,9 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-21-process',
-    title: 'Section 21 Eviction Process Explained (England, 2026)',
-    description: 'Step-by-step guide to the Section 21 eviction process in England, including requirements, timeline, court procedure, and how landlords should plan ahead before the May 2026 abolition.',
-    metaDescription: 'Complete Section 21 eviction process guide for England. Step-by-step instructions, timeline, court forms, and deadline warning. Section 21 ends May 2026.',
+    title: 'Section 21 Eviction Process Explained: Legacy England Guide (2026)',
+    description: 'Legacy guide to the Section 21 eviction process in England and what landlords should use now after the 1 May 2026 Renters Rights Act changes.',
+    metaDescription: 'Section 21 eviction process legacy guide for England. Section 21 ended for new notices on 1 May 2026. Learn the current Form 3A alternative.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',
     readTime: '14 min read',
@@ -2541,15 +2584,15 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          The <strong>Section 21 eviction process</strong> has been the primary route for landlords in England
+          The <strong>Section 21 eviction process</strong> used to be the primary route for landlords in England
           to regain possession of their property since 1988. Also known as <Link href="/no-fault-eviction" className="text-primary hover:underline">&quot;no-fault&quot; eviction</Link>, it allows
           you to end an Assured Shorthold Tenancy without proving any wrongdoing by the tenant. This guide
-          walks you through every step of the process—but time is running out.
+          now acts as a legacy explainer. For new England cases after 1 May 2026, use the current Form 3A route.
         </p>
         {section21TemplateCta}
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-red-800 text-lg mb-2">Critical Deadline: 30 April 2026</p>
+          <p className="font-semibold text-red-800 text-lg mb-2">Section 21 is now a legacy route</p>
           <p className="text-red-700">
             <strong>Section 21 is being abolished on 1 May 2026.</strong> The last day to serve a valid Section 21
             notice is <strong>30 April 2026</strong>. If you may need to regain possession of any property,
@@ -2969,8 +3012,8 @@ const allBlogPosts: BlogPost[] = [
   {
     slug: 'england-section-8-process',
     title: 'Section 8 Eviction Process Explained (England, 2026)',
-    description: 'Complete guide to Section 8 eviction in England. Learn all 17 grounds for possession, notice periods, court procedures, and when to use Section 8 instead of Section 21.',
-    metaDescription: 'Section 8 eviction guide for England 2026. All grounds explained, notice periods, court process, and step-by-step instructions. Essential after Section 21 ends.',
+    description: 'Complete post-May 2026 guide to Section 8/Form 3A eviction in England. Learn the current possession grounds, notice periods, court forms, and evidence steps.',
+    metaDescription: 'Section 8 eviction guide for England after 1 May 2026. Form 3A grounds, notice periods, N5/N119 court process, and landlord next steps.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',
     readTime: '15 min read',
@@ -3003,7 +3046,7 @@ const allBlogPosts: BlogPost[] = [
           <strong>Section 8</strong> of the Housing Act 1988 allows landlords to evict tenants by proving
           one or more statutory grounds for possession. Unlike Section 21, you must demonstrate that
           the tenant has done something wrong or that specific circumstances apply. With Section 21
-          ending in May 2026, Section 8 will become the <strong>only route to eviction</strong> for
+          ended on 1 May 2026, Section 8/Form 3A is the <strong>live route to eviction</strong> for
           most landlords in England.
         </p>
         {section8TemplateCta}
@@ -3011,8 +3054,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-purple-50 border-l-4 border-purple-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-purple-800 text-lg mb-2">Post-Section 21 World</p>
           <p className="text-purple-700">
-            From 1 May 2026, Section 8 becomes the primary eviction route for all landlords. The Renters&apos;
-            Rights Act 2025 is introducing new and amended grounds, making Section 8 more flexible—but
+            From 1 May 2026, Section 8/Form 3A is the primary eviction route for England landlords. The Renters&apos;
+            Rights Act 2025 introduced new and amended grounds, making Section 8 more flexible—but
             you&apos;ll still need to prove your ground applies. Understanding Section 8 is now essential.
           </p>
         </div>
@@ -3028,7 +3071,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Section 8 of the <strong>Housing Act 1988</strong> provides the legal framework for landlords
-          to seek possession of a property by proving one or more of 17 specified grounds. These grounds
+          to seek possession of a property by proving one or more statutory grounds. These grounds
           are divided into two categories:
         </p>
 
@@ -3042,7 +3085,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><strong>Grounds required:</strong> You must specify and prove at least one ground</li>
-          <li><strong>Variable notice periods:</strong> From 2 weeks to 2 months depending on ground</li>
+          <li><strong>Variable notice periods:</strong> Immediate to 4 months depending on the current Form 3A ground</li>
           <li><strong>Court hearing usually required:</strong> Unlike accelerated Section 21 procedure</li>
           <li><strong>Can claim rent arrears:</strong> Unlike Section 21, you can claim money owed</li>
           <li><strong>Can be served anytime:</strong> During fixed term or periodic tenancy</li>
@@ -3067,13 +3110,13 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="p-4 border-b font-medium">Ground 1</td>
-                <td className="p-4 border-b">Landlord previously lived in property as main home (or intends to)</td>
-                <td className="p-4 border-b">2 months</td>
+                <td className="p-4 border-b">Landlord or qualifying family occupation after the tenancy has run long enough</td>
+                <td className="p-4 border-b">4 months</td>
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">Ground 2</td>
                 <td className="p-4 border-b">Mortgage lender requires possession to sell</td>
-                <td className="p-4 border-b">2 months</td>
+                <td className="p-4 border-b">4 months</td>
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">Ground 3</td>
@@ -3093,7 +3136,7 @@ const allBlogPosts: BlogPost[] = [
               <tr>
                 <td className="p-4 border-b font-medium">Ground 6</td>
                 <td className="p-4 border-b">Landlord intends to demolish or substantially reconstruct</td>
-                <td className="p-4 border-b">2 months</td>
+                <td className="p-4 border-b">4 months</td>
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">Ground 7</td>
@@ -3102,8 +3145,8 @@ const allBlogPosts: BlogPost[] = [
               </tr>
               <tr className="bg-amber-50">
                 <td className="p-4 border-b font-bold">Ground 8</td>
-                <td className="p-4 border-b font-bold">Serious rent arrears (2+ months at notice AND hearing)</td>
-                <td className="p-4 border-b font-bold">2 weeks</td>
+                <td className="p-4 border-b font-bold">Serious rent arrears (3 months, or 13 weeks if paid weekly or fortnightly, at notice AND hearing)</td>
+                <td className="p-4 border-b font-bold">4 weeks</td>
               </tr>
             </tbody>
           </table>
@@ -3113,7 +3156,8 @@ const allBlogPosts: BlogPost[] = [
           <p className="font-semibold text-green-800 text-lg mb-2">Ground 8: The Most Powerful Ground</p>
           <p className="text-green-700">
             <strong>Ground 8</strong> is the most commonly used mandatory ground. If the tenant owes at least
-            2 months&apos; rent when you serve the notice AND at the court hearing, possession is mandatory.
+            3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly, when you serve the notice
+            AND at the court hearing, possession is mandatory.
             However, if they pay down below the Ground 8 threshold at any point, you lose the mandatory element.
             <Link href="/blog/england-section-8-ground-8" className="text-green-800 underline font-medium ml-1">
               Read our detailed Ground 8 guide ?
@@ -3153,12 +3197,12 @@ const allBlogPosts: BlogPost[] = [
               <tr>
                 <td className="p-4 border-b font-medium">Ground 10</td>
                 <td className="p-4 border-b">Some rent arrears (any amount at notice and hearing)</td>
-                <td className="p-4 border-b">2 weeks</td>
+                <td className="p-4 border-b">4 weeks</td>
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">Ground 11</td>
                 <td className="p-4 border-b">Persistent delay in paying rent</td>
-                <td className="p-4 border-b">2 weeks</td>
+                <td className="p-4 border-b">4 weeks</td>
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">Ground 12</td>
@@ -3215,8 +3259,11 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><strong>Immediate:</strong> Ground 14 (antisocial behaviour) - can apply to court same day</li>
-          <li><strong>2 weeks:</strong> Grounds 3, 4, 8, 10-15, 17</li>
-          <li><strong>2 months:</strong> Grounds 1, 2, 5, 6, 7, 9, 16</li>
+          <li><strong>Immediate:</strong> Grounds 7A and 14 where immediate application is allowed</li>
+          <li><strong>2 weeks:</strong> Grounds such as 4, 7B, 12, 13, 14A, 14ZA, 15, and 17</li>
+          <li><strong>4 weeks:</strong> Grounds 8, 10, 11, 5E, 5F, 5G, and 18</li>
+          <li><strong>2 months:</strong> Grounds such as 5, 5A, 5B, 5C, 5H, 7, and 9</li>
+          <li><strong>4 months:</strong> Grounds such as 1, 1A, 2, 2ZA-2ZD, 4A, 6, and 6B</li>
         </ul>
 
         <p>
@@ -3227,7 +3274,7 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="serving-section-8" className="scroll-mt-24">Serving the Section 8 Notice</h2>
 
         <p>
-          The Section 8 notice must be served using <strong>Form 3</strong> (the prescribed notice form).
+          The Section 8 notice must be served using the current <strong>Form 3A</strong> prescribed notice.
         </p>
 
         <h3>Notice Requirements</h3>
@@ -3283,7 +3330,7 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="p-4 border-b font-medium">1</td>
-                <td className="p-4 border-b">Complete Form N5 and N119 (or N5B for accelerated)</td>
+                <td className="p-4 border-b">Complete Form N5 and N119 for the standard possession claim</td>
                 <td className="p-4 border-b">1-2 days</td>
               </tr>
               <tr>
@@ -3340,24 +3387,25 @@ const allBlogPosts: BlogPost[] = [
           caption="Section 8 claims usually require a court hearing"
         />
 
-        <h2 id="section-8-vs-21" className="scroll-mt-24">Section 8 vs Section 21: Which to Use?</h2>
+        <h2 id="section-8-vs-21" className="scroll-mt-24">Section 8 vs Section 21 After the Ban</h2>
 
         <p>
-          Until Section 21 ends in May 2026, landlords can choose between Section 8 and Section 21
-          (or use both together). Here&apos;s when each is better:
+          For new England cases after 1 May 2026, this is not a live choice. Section 21 is abolished for new
+          notices and landlords use Form 3A with the correct possession ground. The comparison below is useful
+          only for understanding legacy cases and why the current process is different:
         </p>
 
         <div className="overflow-x-auto my-8">
           <table className="min-w-full border-collapse">
             <thead>
               <tr>
-                <th className="text-left p-4 bg-gray-100 font-semibold">Use Section 8 When...</th>
-                <th className="text-left p-4 bg-gray-100 font-semibold">Use Section 21 When...</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Use Form 3A / Section 8 Now When...</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Section 21 Was Previously Used When...</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="p-4 border-b">Tenant owes 2+ months rent (Ground 8)</td>
+                <td className="p-4 border-b">Tenant owes 3 months&apos; rent, or 13 weeks if paid weekly or fortnightly (Ground 8)</td>
                 <td className="p-4 border-b">No specific grounds but want tenant out</td>
               </tr>
               <tr>
@@ -3373,8 +3421,8 @@ const allBlogPosts: BlogPost[] = [
                 <td className="p-4 border-b">You want more certainty (if valid)</td>
               </tr>
               <tr>
-                <td className="p-4 border-b">After May 2026 (only option)</td>
-                <td className="p-4 border-b">Before May 2026 (still available)</td>
+                <td className="p-4 border-b">After 1 May 2026 for new England cases</td>
+                <td className="p-4 border-b">Only legacy notices served before the deadline</td>
               </tr>
             </tbody>
           </table>
@@ -3409,8 +3457,9 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant pays off arrears before the hearing?</h3>
             <p className="text-gray-600">
-              For <strong>Ground 8</strong>, the tenant must owe 2+ months at both the notice date AND the hearing
-              date. If they pay down below the Ground 8 threshold, you lose Ground 8 (but can still pursue Ground 10/11).
+              For <strong>Ground 8</strong>, the tenant must owe at least 3 months&apos; rent, or 13 weeks&apos; rent
+              if paid weekly or fortnightly, at both the notice date AND the hearing date. If they pay down below
+              the Ground 8 threshold, you lose Ground 8 (but can still pursue Ground 10/11).
               Some tenants strategically pay just enough to defeat Ground 8.
             </p>
           </div>
@@ -3491,10 +3540,12 @@ const allBlogPosts: BlogPost[] = [
         <p className="text-xl text-gray-700 leading-relaxed">
           <strong>Ground 8</strong> is the most powerful tool in a landlord&apos;s arsenal when dealing with
           serious rent arrears. As a <strong>mandatory ground</strong>, if you prove the tenant owes at least
-          2 months&apos; rent at both the date of the notice AND at the court hearing, the judge <em>must</em>
+          3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly, at both the date of the notice
+          AND at the court hearing, the judge <em>must</em>
           grant a possession order—no exceptions, no discretion. This guide explains exactly how Ground 8
           works and how to use it effectively.
         </p>
+        {section8GroundNextSteps}
         {section8TemplateCta}
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
@@ -3526,10 +3577,10 @@ const allBlogPosts: BlogPost[] = [
             &quot;Both at the date of the service of the notice... and at the date of the hearing—
           </p>
           <p className="italic text-gray-700 mt-2">
-            (a) if rent is payable weekly or fortnightly, at least eight weeks&apos; rent is unpaid;
+            (a) if rent is payable weekly or fortnightly, at least 13 weeks&apos; rent is unpaid;
           </p>
           <p className="italic text-gray-700 mt-2">
-            (b) if rent is payable monthly, at least two months&apos; rent is unpaid;
+            (b) if rent is payable monthly, at least three months&apos; rent is unpaid;
           </p>
           <p className="italic text-gray-700 mt-2">
             (c) if rent is payable quarterly, at least one quarter&apos;s rent is more than three months in arrears;
@@ -3541,7 +3592,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           For most landlords with monthly rent payments, this means the tenant must owe <strong>at least
-          2 full months&apos; rent</strong> on two specific dates: when you serve the Section 8 notice, and
+          3 full months&apos; rent</strong> on two specific dates: when you serve the Form 3A notice, and
           when the case is heard in court.
         </p>
 
@@ -3550,7 +3601,7 @@ const allBlogPosts: BlogPost[] = [
         <ul>
           <li><strong>Mandatory:</strong> Court must grant possession if threshold met</li>
           <li><strong>Two-date test:</strong> Arrears must exist at notice date AND hearing date</li>
-          <li><strong>2-week notice period:</strong> Faster than Section 21&apos;s 2 months</li>
+          <li><strong>4-week notice period:</strong> The current post-May 2026 England notice period for Ground 8</li>
           <li><strong>No reasonableness test:</strong> Tenant circumstances are irrelevant</li>
           <li><strong>Can be combined:</strong> Often used alongside Grounds 10 and 11</li>
         </ul>
@@ -3564,38 +3615,38 @@ const allBlogPosts: BlogPost[] = [
         <h3>1. The Arrears Threshold</h3>
 
         <p>
-          For monthly tenancies, the tenant must owe <strong>at least 2 full months&apos; rent</strong>. This
+          For monthly tenancies, the tenant must owe <strong>at least 3 full months&apos; rent</strong>. This
           is calculated as:
         </p>
 
         <ul>
-          <li>If monthly rent is £1,000, they must owe at least £2,000</li>
-          <li>If monthly rent is £1,500, they must owe at least £3,000</li>
-          <li>Partial months don&apos;t count—£1,999 on a £1,000/month rent is NOT 2 months</li>
+          <li>If monthly rent is £1,000, they must owe at least £3,000</li>
+          <li>If monthly rent is £1,500, they must owe at least £4,500</li>
+          <li>Partial months don&apos;t count—£2,999 on a £1,000/month rent is NOT 3 months</li>
         </ul>
 
         <h3>2. The Two-Date Rule</h3>
 
         <p>
-          This is where many landlords lose Ground 8. The 2-month threshold must be met on:
+          This is where many landlords lose Ground 8. The 3-month / 13-week threshold must be met on:
         </p>
 
         <ul>
-          <li><strong>Date 1:</strong> When you serve the Section 8 notice</li>
+          <li><strong>Date 1:</strong> When you serve the Form 3A notice</li>
           <li><strong>Date 2:</strong> When the possession hearing takes place</li>
         </ul>
 
         <p>
           If the tenant pays down below the Ground 8 threshold at any point between these dates, they can pay
-          back up above 2 months by the hearing—but many don&apos;t. Tenants who understand the system
+          back up above the threshold by the hearing—but many don&apos;t. Tenants who understand the system
           often pay just enough to defeat Ground 8.
         </p>
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-red-800 text-lg mb-2">Critical Warning</p>
           <p className="text-red-700">
-            If the tenant owes £2,050 and pays £100 the day before the hearing, leaving £1,950 owed,
-            you lose Ground 8. This is why we recommend <strong>always</strong> including Grounds 10
+            If the monthly rent is £1,000 and the tenant owes £3,050 but pays £100 before the hearing,
+            leaving £2,950 owed, you lose Ground 8. This is why we recommend <strong>always</strong> including Grounds 10
             and 11 as backup—they&apos;re discretionary but don&apos;t have the strict threshold.
           </p>
         </div>
@@ -3665,8 +3716,8 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <p>
-          In this example, with £1,200/month rent, the Ground 8 threshold is £2,400. By December,
-          the tenant owes £3,000, so Ground 8 applies.
+          In this example, with £1,200/month rent, the Ground 8 threshold is £3,600. The tenant would need
+          to owe at least that amount at both the notice date and the hearing for Ground 8 to apply.
         </p>
 
         <h2 id="ground-8-process" className="scroll-mt-24">The Ground 8 Process</h2>
@@ -3675,13 +3726,13 @@ const allBlogPosts: BlogPost[] = [
 
         <ol className="list-decimal list-inside space-y-4 my-6">
           <li className="text-gray-700">
-            <strong>Verify arrears exceed 2 months</strong> - Calculate precisely using your rent ledger
+            <strong>Verify arrears meet the post-May 2026 threshold</strong> - Calculate precisely using your rent ledger
           </li>
           <li className="text-gray-700">
-            <strong>Serve Section 8 notice (Form 3)</strong> - Citing Ground 8 (and Grounds 10, 11 as backup)
+            <strong>Serve Form 3A</strong> - Citing Ground 8 (and Grounds 10, 11 as backup)
           </li>
           <li className="text-gray-700">
-            <strong>Wait 2 weeks</strong> - The minimum notice period for Ground 8
+            <strong>Wait 4 weeks</strong> - The minimum notice period for Ground 8
           </li>
           <li className="text-gray-700">
             <strong>Apply to court</strong> - Using Form N5 and N119, pay £355 fee
@@ -3690,7 +3741,7 @@ const allBlogPosts: BlogPost[] = [
             <strong>Prepare evidence</strong> - Rent ledger, tenancy agreement, bank statements
           </li>
           <li className="text-gray-700">
-            <strong>Attend hearing</strong> - Present evidence, confirm arrears still exceed 2 months
+            <strong>Attend hearing</strong> - Present evidence, confirm arrears still meet the Ground 8 threshold
           </li>
           <li className="text-gray-700">
             <strong>Obtain possession order</strong> - Usually 14 days for the tenant to leave
@@ -3710,7 +3761,7 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="p-4 border-b">Notice period</td>
-                <td className="p-4 border-b">2 weeks (minimum)</td>
+                <td className="p-4 border-b">4 weeks (minimum)</td>
               </tr>
               <tr>
                 <td className="p-4 border-b">Court processing</td>
@@ -3802,7 +3853,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Ground 10: Some Rent Unpaid</h3>
         <p>
           Discretionary ground - any rent arrears at notice AND hearing date. Doesn&apos;t require
-          2 months. Court considers reasonableness.
+          the Ground 8 threshold. Court considers reasonableness.
         </p>
 
         <h3>Ground 11: Persistent Delay</h3>
@@ -3858,8 +3909,8 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">How do I calculate arrears for weekly rent?</h3>
             <p className="text-gray-600">
-              For weekly rent, the threshold is 8 weeks&apos; rent. Multiply your weekly rent by 8 to get
-              the threshold. The same two-date rule applies£8 weeks must be owed at notice date and
+              For weekly or fortnightly rent, the threshold is 13 weeks&apos; rent. Multiply your weekly rent by 13 to get
+              the threshold. The same two-date rule applies: 13 weeks must be owed at notice date and
               hearing date.
             </p>
           </div>
@@ -3887,9 +3938,9 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-accelerated-possession',
-    title: 'Accelerated Possession Procedure England - Complete Guide 2026',
-    description: 'The accelerated possession procedure offers landlords a faster route to eviction through Section 21. Learn eligibility, forms, timelines, and when to use this streamlined court process.',
-    metaDescription: 'Accelerated possession procedure explained for England landlords 2026. Faster Section 21 evictions without court hearings. Learn the process, forms, and timelines.',
+    title: 'Accelerated Possession Procedure England - Legacy Section 21 Guide 2026',
+    description: 'Legacy guide to accelerated possession after the Section 21 ban. Learn when old Section 21 claims may still matter and why new England cases use Form 3A instead.',
+    metaDescription: 'Accelerated possession procedure legacy guide for England. Section 21 ended for new notices on 1 May 2026; new cases use Form 3A and standard possession.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',
     readTime: '12 min read',
@@ -3921,18 +3972,17 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          The <strong>accelerated possession procedure</strong> is a streamlined court process designed specifically for
-          Section 21 evictions in England. Unlike standard possession claims, accelerated cases are typically decided
-          without a court hearing, making them faster, simpler, and less stressful for landlords. Understanding when and
-          how to use this procedure can save you months of waiting and significant legal costs.
+          The <strong>accelerated possession procedure</strong> is now mainly a legacy Section 21 topic for England.
+          It was a streamlined process for Section 21 claims, usually decided on paper without a hearing. For new
+          England possession cases after 1 May 2026, landlords should start with the Form 3A / Section 8 route.
         </p>
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-red-800 text-lg mb-2">Section 21 Deadline Approaching</p>
+          <p className="font-semibold text-red-800 text-lg mb-2">Not the route for new England notices</p>
           <p className="text-red-700">
-            <strong>Section 21 evictions end on 1 May 2026</strong> under the Renters&apos; Rights Act 2025. To use the
-            accelerated procedure, you must serve a valid Section 21 notice before 30 April 2026 and begin court
-            proceedings promptly. After this date, only Section 8 (with grounds) will be available.
+            <strong>Section 21 ended for new England notices on 1 May 2026</strong> under the Renters&apos; Rights Act
+            framework. If you are not dealing with a legacy notice served before the deadline, start with the
+            current Form 3A / Section 8 route instead.
           </p>
         </div>
 
@@ -3952,7 +4002,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <p>
-          This procedure is available <strong>only</strong> for Section 21 claims where:
+          This procedure is available <strong>only</strong> for legacy Section 21 claims where:
         </p>
 
         <ul>
@@ -4432,8 +4482,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Post-2026 Essential</p>
           <p className="text-blue-700">
-            After <strong>1 May 2026</strong>, when Section 21 is abolished, <strong>all evictions</strong> will use
-            the standard possession procedure. Section 8 grounds always require a hearing, so mastering this process
+            After <strong>1 May 2026</strong>, when Section 21 is abolished for new notices, most new England
+            possession claims will use the standard possession procedure. Section 8 grounds usually require a hearing, so mastering this process
             is essential for every landlord.
           </p>
         </div>
@@ -4461,7 +4511,7 @@ const allBlogPosts: BlogPost[] = [
           <li><strong>Court hearing:</strong> A judge hears both sides before making a decision</li>
           <li><strong>Evidence required:</strong> You must prove your grounds for possession</li>
           <li><strong>Money claims allowed:</strong> You can claim rent arrears in the same proceedings</li>
-          <li><strong>Works with any notice:</strong> Required for Section 8 and optional for Section 21</li>
+          <li><strong>Works with current Form 3A claims:</strong> Required for Section 8 and legacy Section 21 cases where standard procedure is used</li>
           <li><strong>Judge&apos;s discretion:</strong> For discretionary grounds, the judge decides if possession is reasonable</li>
         </ul>
 
@@ -4497,16 +4547,15 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>4. When Accelerated Isn&apos;t Available</h3>
         <p>
-          If your Section 21 case doesn&apos;t meet accelerated requirements (e.g., no written tenancy agreement),
-          you must use standard procedure.
+          If you are dealing with a legacy Section 21 case that does not meet accelerated requirements, you may
+          need standard procedure. For new England notices, start with the Form 3A / Section 8 route.
         </p>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-amber-800 text-lg mb-2">Optional for Section 21</p>
           <p className="text-amber-700">
-            You can <em>choose</em> to use standard possession for a Section 21 claim even if accelerated is
-            available. You might do this if you want to claim rent arrears or prefer to present your case in
-            person.
+            This is now mainly a legacy point. New England notices after 1 May 2026 do not start with Section 21.
+            If you want to claim possession and arrears together, prepare the current Form 3A / N5 / N119 file.
           </p>
         </div>
 
@@ -4524,7 +4573,7 @@ const allBlogPosts: BlogPost[] = [
           <li>Claimant (landlord) and defendant (tenant) details</li>
           <li>Property address and description</li>
           <li>Type of tenancy and when it started</li>
-          <li>Details of any notice served (Section 21 or Section 8)</li>
+          <li>Details of any notice served (usually the current Form 3A / Section 8 notice for new England cases)</li>
           <li>Grounds for possession (if using Section 8)</li>
           <li>Particulars of claim (why you want possession)</li>
           <li>Money claim if applicable (rent arrears amount)</li>
@@ -4545,7 +4594,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Supporting Documents</h3>
         <ul>
           <li><strong>Tenancy agreement:</strong> Copy of the full agreement</li>
-          <li><strong>Section 8 or 21 notice:</strong> The notice you served</li>
+          <li><strong>Form 3A / Section 8 notice:</strong> The notice you served</li>
           <li><strong>Proof of service:</strong> How and when the notice was delivered</li>
           <li><strong>Rent schedule:</strong> Showing arrears if claiming money</li>
           <li><strong>Evidence of grounds:</strong> Depending on which grounds you&apos;re using</li>
@@ -4642,8 +4691,9 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Judge&apos;s Decision</h3>
         <p>
-          After hearing both sides, the judge makes a decision. For mandatory grounds (like Ground 8 with 2+
-          months arrears), the judge must grant possession if the conditions are met. For discretionary grounds,
+          After hearing both sides, the judge makes a decision. For mandatory grounds such as Ground 8, the judge
+          must grant possession if the post-May 2026 arrears threshold is met at the notice date and hearing.
+          For discretionary grounds,
           the judge decides what&apos;s reasonable.
         </p>
 
@@ -4673,7 +4723,7 @@ const allBlogPosts: BlogPost[] = [
           Depending on your grounds, you may need additional evidence:
         </p>
         <ul>
-          <li><strong>Ground 8:</strong> Up-to-date arrears calculation showing 2+ months owed</li>
+          <li><strong>Ground 8:</strong> Up-to-date arrears calculation showing 3 months&apos; rent owed, or 13 weeks&apos; rent if paid weekly or fortnightly</li>
           <li><strong>Ground 14:</strong> Incident reports, neighbour statements, police reports</li>
           <li><strong>Ground 12:</strong> Evidence of specific tenancy breaches</li>
           <li><strong>Ground 1:</strong> Proof you previously lived there and need to return</li>
@@ -4775,7 +4825,7 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="p-4 border-b">Notice period</td>
-                <td className="p-4 border-b">2 weeks - 2 months*</td>
+                <td className="p-4 border-b">Immediate - 4 months*</td>
                 <td className="p-4 border-b">2 months</td>
               </tr>
               <tr>
@@ -4808,8 +4858,8 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <p className="text-sm text-gray-600">
-          *Section 8 notice periods vary by ground. Ground 8 (rent arrears) requires 2 weeks minimum; Ground 1
-          (landlord returning) requires 2 months.
+          *Section 8/Form 3A notice periods vary by ground. Ground 8 rent arrears requires 4 weeks; Ground 1
+          landlord/family occupation usually requires 4 months.
         </p>
 
         <h3>Costs</h3>
@@ -4937,6 +4987,7 @@ const allBlogPosts: BlogPost[] = [
           guarantee possession—the court must also decide it&apos;s <em>reasonable</em> to evict. However,
           they&apos;re invaluable when Ground 8 conditions aren&apos;t met or as a backup strategy.
         </p>
+        {section8GroundNextSteps}
         {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
@@ -5012,8 +5063,8 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Notice Period</h3>
         <p>
-          Ground 10 requires a <strong>minimum of 2 weeks&apos; notice</strong> on the Section 8 notice (the
-          same as Ground 8). The notice period starts from the date of service.
+          Ground 10 requires a <strong>minimum of 4 weeks&apos; notice</strong> on the current Form 3A notice.
+          This is the same post-May 2026 notice period used for Ground 8 and Ground 11 in England.
         </p>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
@@ -5053,7 +5104,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Notice Period</h3>
         <p>
-          Ground 11 also requires a <strong>minimum of 2 weeks&apos; notice</strong>.
+          Ground 11 also requires a <strong>minimum of 4 weeks&apos; notice</strong>.
         </p>
 
         <ImagePlaceholder
@@ -5087,13 +5138,13 @@ const allBlogPosts: BlogPost[] = [
               </tr>
               <tr>
                 <td className="p-4 border-b">Minimum arrears</td>
-                <td className="p-4 border-b">2 months</td>
+                <td className="p-4 border-b">3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly</td>
                 <td className="p-4 border-b">Any amount</td>
                 <td className="p-4 border-b">None required</td>
               </tr>
               <tr>
                 <td className="p-4 border-b">Two-date test</td>
-                <td className="p-4 border-b">Yes (2 months at both)</td>
+                <td className="p-4 border-b">Yes (threshold met at both)</td>
                 <td className="p-4 border-b">Yes (any arrears at both)</td>
                 <td className="p-4 border-b">No</td>
               </tr>
@@ -5385,6 +5436,7 @@ const allBlogPosts: BlogPost[] = [
           conduct makes life unbearable for neighbours or damages the property. Understanding what qualifies and how
           to build a strong case is essential for success.
         </p>
+        {section8GroundNextSteps}
         {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
@@ -5513,7 +5565,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Notice Content</h3>
         <p>
-          Your Section 8 notice (Form 3) must:
+          Your Section 8 notice (Form 3A) must:
         </p>
         <ul>
           <li>Specify Ground 14 as the ground being relied upon</li>
@@ -5821,6 +5873,7 @@ const allBlogPosts: BlogPost[] = [
           lied to you or your agent, and that lie induced you to grant the tenancy. It&apos;s an important tool
           when you discover a tenant misrepresented themselves during the application process.
         </p>
+        {section8GroundNextSteps}
         {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
@@ -6000,7 +6053,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Notice Requirements</h3>
         <p>
-          Ground 17 requires a minimum of <strong>2 weeks&apos; notice</strong> on your Section 8 notice.
+          Ground 17 requires a minimum of <strong>2 weeks&apos; notice</strong> on your Form 3A notice.
           The notice should:
         </p>
         <ul>
@@ -6117,19 +6170,19 @@ const allBlogPosts: BlogPost[] = [
   },
   // ============================================
   // POST 15: Section 8 Ground 1 - Landlord Returning
-  // Target: 1,600+ words - Prior notice ground
+  // Target: 1,600+ words - Landlord/family occupation ground
   // ============================================
   {
     slug: 'england-section-8-ground-1',
     title: 'Section 8 Ground 1 Explained: Landlord Returning to Property (England)',
-    description: 'Ground 1 lets landlords recover their property to live in it themselves. Learn the prior notice requirement, when this ground applies, and how to use it correctly.',
-    metaDescription: 'Section 8 Ground 1 explained. Recover your property to live in it as your home. Prior notice requirements, eligibility, and step-by-step England landlord guide.',
+    description: 'Ground 1 lets landlords recover property for landlord or family occupation under the post-May 2026 England rules. Learn the 12-month timing rule, evidence, and 4-month notice period.',
+    metaDescription: 'Section 8 Ground 1 explained after the Renters Rights Act. Landlord or family occupation, 12-month timing rule, 4-month Form 3A notice, and evidence guide.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',
     readTime: '11 min read',
     wordCount: 1600,
     category: 'Eviction Grounds',
-    tags: ['Ground 1', 'Section 8', 'Landlord Occupation', 'Prior Notice', 'Eviction'],
+    tags: ['Ground 1', 'Section 8', 'Landlord Occupation', 'Renters Rights Act', 'Eviction'],
     author: {
       name: 'Landlord Heaven Legal Team',
       role: 'Property Law Specialists',
@@ -6138,10 +6191,10 @@ const allBlogPosts: BlogPost[] = [
     heroImageAlt: 'Section 8 Ground 1 - Landlord Returning to Property',
     showUrgencyBanner: false,
     targetKeyword: 'section 8 ground 1 landlord returning',
-    secondaryKeywords: ['landlord occupation', 'prior notice ground', 'return to property', 'owner occupier ground'],
+    secondaryKeywords: ['landlord occupation', 'family occupation ground', 'return to property', 'owner occupier ground'],
     tableOfContents: [
       { id: 'what-is-ground-1', title: 'What Is Ground 1?', level: 2 },
-      { id: 'prior-notice-requirement', title: 'The Prior Notice Requirement', level: 2 },
+      { id: 'prior-notice-requirement', title: 'The 12-Month Timing Rule', level: 2 },
       { id: 'who-can-use', title: 'Who Can Use Ground 1?', level: 2 },
       { id: 'court-discretion', title: 'Court Discretion', level: 2 },
       { id: 'notice-and-process', title: 'Notice and Court Process', level: 2 },
@@ -6151,11 +6204,12 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          <strong>Ground 1</strong> is a mandatory ground that allows landlords to recover their property when
-          they want to live in it as their own residence. It&apos;s commonly used by landlords who previously
-          occupied the property themselves, or who always intended to return to it. However, there&apos;s a
-          crucial requirement: you must have given the tenant written notice at the start of the tenancy.
+          <strong>Ground 1</strong> is a mandatory post-May 2026 England ground that allows possession where
+          the landlord or a qualifying family member intends to occupy the property as their only or principal
+          home. The current route is not the old prior-notice model: landlords should focus on the 12-month
+          tenancy timing rule, genuine occupation evidence, and the 4-month Form 3A notice period.
         </p>
+        {section8GroundNextSteps}
         {section8TemplateCta}
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
@@ -6204,59 +6258,61 @@ const allBlogPosts: BlogPost[] = [
         <h3>Key Features</h3>
         <ul>
           <li><strong>Type:</strong> Mandatory (court must grant possession if conditions met)</li>
-          <li><strong>Prior notice:</strong> Required in writing before tenancy started</li>
-          <li><strong>Notice period:</strong> 2 months on Section 8 notice</li>
-          <li><strong>Must be landlord or spouse:</strong> Not available for family members or companies</li>
+          <li><strong>Tenancy timing:</strong> Generally cannot be used during the first 12 months of the tenancy</li>
+          <li><strong>Notice period:</strong> 4 months on the current Form 3A notice</li>
+          <li><strong>Occupation purpose:</strong> The property must genuinely be needed as an only or principal home</li>
         </ul>
 
-        <h2 id="prior-notice-requirement" className="scroll-mt-24">The Prior Notice Requirement</h2>
+        <h2 id="prior-notice-requirement" className="scroll-mt-24">The 12-Month Timing Rule</h2>
 
         <p>
-          The critical requirement for Ground 1 is that you gave the tenant <strong>written notice</strong>
-          before or at the beginning of the tenancy that you might seek to recover the property on this ground.
+          The critical post-May 2026 requirement is timing. Ground 1 is designed for genuine landlord or family
+          occupation and generally cannot be used until the tenancy has been running for at least 12 months.
         </p>
 
-        <h3>What the Notice Must Say</h3>
+        <h3>What the Form 3A Notice Must Say</h3>
         <p>
-          The notice must inform the tenant that:
+            The notice should explain:
         </p>
         <ul>
-          <li>Possession may be recovered under Ground 1 of Schedule 2 to the Housing Act 1988</li>
-          <li>The property was previously your home, or you may require it as your home in the future</li>
+          <li>That you are relying on Ground 1 under Schedule 2 to the Housing Act 1988</li>
+          <li>Who needs to occupy the property and why it will be their only or principal home</li>
+          <li>Why the timing rule is met</li>
         </ul>
 
         <h3>Timing</h3>
         <p>
-          The notice must be given <strong>not later than the beginning of the tenancy</strong>. This means:
+          The notice period is <strong>4 months</strong>. You should also check that the tenancy is old enough
+          before serving:
         </p>
         <ul>
-          <li>Before the tenant moves in, OR</li>
-          <li>On the day the tenancy starts</li>
+          <li>Do not treat Ground 1 as a quick no-fault replacement for Section 21</li>
+          <li>Check the 12-month rule before preparing the notice</li>
         </ul>
 
         <h3>Form of Notice</h3>
         <p>
-          There&apos;s no prescribed form. The notice can be:
+          The prescribed form is the current <strong>Form 3A</strong>. It must:
         </p>
         <ul>
-          <li>A separate document given with the tenancy agreement</li>
-          <li>A clause within the tenancy agreement itself</li>
-          <li>A letter or email sent before moving in</li>
+          <li>Use the current official wording</li>
+          <li>State the correct 4-month notice period</li>
+          <li>Give particulars showing why Ground 1 applies</li>
         </ul>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
-          <p className="font-semibold text-amber-800 text-lg mb-2">No Prior Notice?</p>
+          <p className="font-semibold text-amber-800 text-lg mb-2">Do Not Use Old Ground 1 Wording</p>
           <p className="text-amber-700">
-            If you didn&apos;t give prior notice, you can still use Ground 1 but the court has <strong>discretion</strong>
-            to waive the requirement if it&apos;s just and equitable. This is not guaranteed—always give prior
-            notice for new tenancies.
+            Older Ground 1 guidance often focused on prior notice at the start of the tenancy. For new England
+            cases after 1 May 2026, build the file around the current Form 3A rules, the 12-month timing rule,
+            and evidence of genuine occupation.
           </p>
         </div>
 
         <ImagePlaceholder
           src="/images/blog/prior-notice.svg"
-          alt="Prior Notice Requirement"
-          caption="Prior notice should be given before or at the start of the tenancy"
+            alt="Ground 1 timing and occupation evidence"
+            caption="Ground 1 now turns on timing, genuine occupation, and the current Form 3A process"
         />
 
         <BlogCTA variant="default" />
@@ -6287,7 +6343,7 @@ const allBlogPosts: BlogPost[] = [
         <ul>
           <li><strong>Companies:</strong> A company cannot have a &quot;principal home&quot;</li>
           <li><strong>Landlords who bought after letting:</strong> If you purchased an already-tenanted property</li>
-          <li><strong>Other family members:</strong> Ground 1 doesn&apos;t cover children, parents, siblings, etc.</li>
+          <li><strong>Evidence gap:</strong> You will need to show who is moving in and why the occupation is genuine</li>
         </ul>
 
         <h3>Joint Landlords</h3>
@@ -6302,14 +6358,14 @@ const allBlogPosts: BlogPost[] = [
           While Ground 1 is mandatory when conditions are met, there is limited discretion in one scenario:
         </p>
 
-        <h3>Missing Prior Notice</h3>
+        <h3>Timing and Evidence Problems</h3>
         <p>
-          If you failed to give prior notice, the court <strong>may</strong> (but doesn&apos;t have to)
-          waive this requirement if it considers it &quot;just and equitable&quot; to do so. Factors include:
+          If the tenancy has not run long enough, or if the evidence of occupation looks weak, Ground 1 may fail.
+          Factors include:
         </p>
         <ul>
-          <li>Why prior notice wasn&apos;t given (oversight vs. deliberate omission)</li>
-          <li>Whether the tenant knew of the possibility anyway</li>
+          <li>Whether the 12-month timing rule is met</li>
+          <li>Who is going to occupy the property</li>
           <li>Impact on the tenant</li>
           <li>Your genuine need for the property</li>
         </ul>
@@ -6329,8 +6385,9 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Post-Renters&apos; Rights Act</p>
           <p className="text-blue-700">
-            After May 2026, landlord occupation grounds become more important as Section 21 is abolished.
-            The Renters&apos; Rights Act may modify how these grounds work—ensure you stay updated on changes.
+            After 1 May 2026, landlord and family occupation grounds became more important because Section 21
+            is abolished for new notices. Use the current Form 3A wording and check the 12-month timing rule
+            before relying on Ground 1.
           </p>
         </div>
 
@@ -6338,14 +6395,14 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Section 8 Notice</h3>
         <p>
-          Ground 1 requires a <strong>minimum of 2 months&apos; notice</strong> on your Section 8 notice (Form 3).
+          Ground 1 requires a <strong>minimum of 4 months&apos; notice</strong> on the current Form 3A notice.
           The notice should:
         </p>
         <ul>
           <li>Specify Ground 1</li>
           <li>State that you previously occupied the property as your home (if applicable)</li>
           <li>State that you require it as your principal home (or for your spouse/civil partner)</li>
-          <li>Reference the prior notice given at the start of the tenancy</li>
+          <li>Explain why the 12-month timing rule and occupation requirements are met</li>
         </ul>
 
         <h3>Court Proceedings</h3>
@@ -6353,16 +6410,16 @@ const allBlogPosts: BlogPost[] = [
           Use the standard possession procedure (Form N5). At the hearing, be prepared to prove:
         </p>
         <ul>
-          <li>Prior notice was given (show a copy)</li>
-          <li>You previously occupied the property, or require it now</li>
-          <li>You are the landlord (or the property is for your spouse/civil partner)</li>
+          <li>The tenancy timing rule is met</li>
+          <li>You or the qualifying family member genuinely require the property as a home</li>
+          <li>You are the landlord and can prove the occupation intention</li>
         </ul>
 
         <h3>Mandatory Nature</h3>
         <p>
           If you prove these elements, the judge <strong>must</strong> grant possession. Unlike discretionary
-          grounds, the tenant&apos;s circumstances (children, elderly, disability) don&apos;t affect the decision.
-          The only exception is the &quot;just and equitable&quot; discretion for missing prior notice.
+          grounds, the tenant&apos;s circumstances do not usually defeat a properly proven mandatory ground,
+          but weak evidence or wrong timing can still undermine the claim.
         </p>
 
         <ImagePlaceholder
@@ -6386,9 +6443,9 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 1 if my child needs the property?</h3>
             <p className="text-gray-600">
-              No. Ground 1 only covers the landlord, their spouse, or civil partner. For other family members,
-              consider Ground 1A (landlord or family member requiring property) which was introduced by the
-              Renters&apos; Rights Act, or use Section 21 while still available.
+              The current post-May 2026 occupation grounds include family-occupation routes. Check the exact
+              relationship and evidence before serving, because Section 21 is no longer available for new
+              England notices.
             </p>
           </div>
 
@@ -6411,11 +6468,10 @@ const allBlogPosts: BlogPost[] = [
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">I forgot to give prior notice—what now?</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">What if I am using old Ground 1 guidance?</h3>
             <p className="text-gray-600">
-              You can still try Ground 1 and ask the court to waive the prior notice requirement as &quot;just and
-              equitable.&quot; This is not guaranteed. You&apos;ll need to explain why notice wasn&apos;t given and
-              show it would be fair to proceed anyway. Alternatively, consider Section 21 while still available.
+              Do not rely on pre-reform wording without checking it against the current Form 3A route. For new
+              England notices, focus on the occupation facts, the 12-month timing rule, and the 4-month notice period.
             </p>
           </div>
 
@@ -6432,8 +6488,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Recover Your Property</h3>
           <p className="text-gray-700 mb-6">
-            Our Section 8 notices include Ground 1 with proper wording for landlord occupation claims.
-            We also provide prior notice templates to ensure you&apos;re protected for future tenancies.
+            Our Section 8 notice workflow uses the current Form 3A route for landlord and family occupation
+            claims, including the 4-month notice period and evidence prompts.
           </p>
           <Link
             href="/products/notice-only"
@@ -6452,8 +6508,8 @@ const allBlogPosts: BlogPost[] = [
   {
     slug: 'england-section-8-ground-2',
     title: 'Section 8 Ground 2 Explained: Mortgage Lender Repossession (England)',
-    description: 'Ground 2 allows mortgage lenders to recover a property from tenants when the landlord defaults. Learn how this ground works and what it means for landlords and tenants.',
-    metaDescription: 'Section 8 Ground 2 mortgage lender repossession explained. What happens when landlords default on mortgages. Guide for England landlords and affected tenants.',
+    description: 'Ground 2 allows mortgage lenders to recover a property from tenants when the landlord defaults. Learn the post-May 2026 Form 3A timing, evidence, and 4-month notice rule.',
+    metaDescription: 'Section 8 Ground 2 mortgage lender repossession explained for England after May 2026. Current Form 3A route, 4-month notice, and landlord/tenant implications.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',
     readTime: '10 min read',
@@ -6472,7 +6528,7 @@ const allBlogPosts: BlogPost[] = [
     tableOfContents: [
       { id: 'what-is-ground-2', title: 'What Is Ground 2?', level: 2 },
       { id: 'how-it-works', title: 'How Ground 2 Works', level: 2 },
-      { id: 'prior-notice-requirement', title: 'Prior Notice Requirement', level: 2 },
+      { id: 'prior-notice-requirement', title: 'Evidence and Mortgage Position', level: 2 },
       { id: 'tenant-rights', title: 'Tenant Rights', level: 2 },
       { id: 'landlord-considerations', title: 'Landlord Considerations', level: 2 },
       { id: 'ground-2-faq', title: 'FAQ', level: 2 },
@@ -6486,6 +6542,7 @@ const allBlogPosts: BlogPost[] = [
           who find themselves living in a property that the lender is repossessing, but landlords should understand
           it to manage their obligations and protect their tenants.
         </p>
+        {section8GroundNextSteps}
         {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
@@ -6525,8 +6582,8 @@ const allBlogPosts: BlogPost[] = [
         <h3>Ground Details</h3>
         <ul>
           <li><strong>Type:</strong> Mandatory (court must grant possession if conditions met)</li>
-          <li><strong>Prior notice:</strong> Required before tenancy started (usually)</li>
-          <li><strong>Notice period:</strong> 2 months on Section 8 notice</li>
+          <li><strong>Evidence:</strong> Mortgage documents, lender demand, and sale evidence matter</li>
+          <li><strong>Notice period:</strong> 4 months on the current Form 3A notice</li>
           <li><strong>Who uses it:</strong> Mortgage lenders, not landlords</li>
         </ul>
 
@@ -6550,8 +6607,8 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>3. Lender Serves Section 8 Notice</h3>
         <p>
-          To remove the tenant, the lender must serve a Section 8 notice specifying Ground 2. This requires
-          2 months&apos; notice.
+          To remove the tenant, the lender must serve a Form 3A notice specifying Ground 2. This requires
+          4 months&apos; notice.
         </p>
 
         <h3>4. Court Proceedings</h3>
@@ -6569,36 +6626,36 @@ const allBlogPosts: BlogPost[] = [
           </p>
         </div>
 
-        <h2 id="prior-notice-requirement" className="scroll-mt-24">Prior Notice Requirement</h2>
+        <h2 id="prior-notice-requirement" className="scroll-mt-24">Evidence and Mortgage Position</h2>
 
         <p>
-          Like Ground 1, Ground 2 requires prior notice to the tenant:
+          Ground 2 depends on the mortgage position and the lender&apos;s right to sell with vacant possession:
         </p>
 
         <h3>What Notice Is Required</h3>
         <p>
-          Before the tenancy began, the tenant must have been given written notice that:
+          The file should show:
         </p>
         <ul>
-          <li>The property is subject to a mortgage</li>
-          <li>Possession might be recovered under Ground 2</li>
+          <li>The property is subject to a relevant mortgage</li>
+          <li>The lender has the right to exercise a power of sale</li>
+          <li>The lender needs vacant possession for disposal</li>
         </ul>
 
-        <h3>Who Gives the Notice</h3>
+        <h3>Who Gives the Form 3A Notice</h3>
         <p>
-          This notice should come from the landlord at the start of the tenancy. It&apos;s part of good
-          practice to include it in the tenancy agreement or as a separate document.
+          Ground 2 is usually driven by the lender rather than the landlord. The Form 3A notice must use the
+          current wording and give the correct 4-month period.
         </p>
 
-        <h3>If No Prior Notice Was Given</h3>
+        <h3>If the Mortgage Position Is Disputed</h3>
         <p>
-          The court has discretion to waive the prior notice requirement if it&apos;s &quot;just and equitable&quot;
-          to do so. Factors considered include:
+          Tenants may challenge whether Ground 2 applies. Factors include:
         </p>
         <ul>
-          <li>Whether the tenant knew the property was mortgaged</li>
           <li>Whether the lender consented to the tenancy</li>
           <li>The circumstances of the landlord&apos;s default</li>
+          <li>Whether the lender can prove the power of sale and need for vacant possession</li>
         </ul>
 
         <BlogCTA variant="default" />
@@ -6609,10 +6666,10 @@ const allBlogPosts: BlogPost[] = [
           Tenants caught in Ground 2 situations have some protections:
         </p>
 
-        <h3>Right to 2 Months&apos; Notice</h3>
+        <h3>Right to 4 Months&apos; Notice</h3>
         <p>
-          Even when Ground 2 applies, the tenant is entitled to at least 2 months&apos; notice on the
-          Section 8 notice. They can&apos;t be immediately evicted.
+          Even when Ground 2 applies, the tenant is entitled to at least 4 months&apos; notice on the
+          Form 3A notice. They can&apos;t be immediately evicted.
         </p>
 
         <h3>Right to Court Process</h3>
@@ -6632,7 +6689,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
         <ul>
           <li>The lender consented to the tenancy (making it binding)</li>
-          <li>Prior notice wasn&apos;t given and it&apos;s not just and equitable to waive it</li>
+          <li>The lender has not proved the current Ground 2 requirements</li>
           <li>The tenancy actually started before the mortgage</li>
           <li>Technical defects in the notice or proceedings</li>
         </ul>
@@ -6657,7 +6714,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Protect Your Tenants</h3>
         <ul>
-          <li><strong>Give prior notice:</strong> Always inform tenants that the property is mortgaged</li>
+          <li><strong>Keep mortgage records:</strong> Make sure the letting is consistent with the mortgage terms</li>
           <li><strong>Get lender consent:</strong> If required by your mortgage, get written consent to let</li>
           <li><strong>Communicate:</strong> If you&apos;re in financial difficulty, talk to your lender early</li>
         </ul>
@@ -6695,7 +6752,8 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Can I as a landlord use Ground 2?</h3>
             <p className="text-gray-600">
               No. Ground 2 is specifically for mortgagees (lenders), not landlords. If you want to recover
-              your property, use other grounds like Ground 1, Ground 8, or Section 21 (while available).
+              your property, use the current Form 3A grounds that fit the case, such as Ground 1, Ground 1A,
+              Ground 8, or another applicable ground. Section 21 is no longer available for new England notices.
             </p>
           </div>
 
@@ -6727,8 +6785,8 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Does the 2-month notice apply?</h3>
             <p className="text-gray-600">
-              Yes. Even under Ground 2, the Section 8 notice must give at least 2 months&apos; notice. The
-              tenant has this time to find alternative accommodation.
+              Yes. Under the current England Form 3A rules, Ground 2 normally requires 4 months&apos; notice.
+              The tenant has this time to find alternative accommodation.
             </p>
           </div>
 
@@ -6798,6 +6856,7 @@ const allBlogPosts: BlogPost[] = [
           from whoever is occupying the property, but only if proceedings are brought within 12 months of the
           tenant&apos;s death (or within 12 months of the court accepting that death occurred).
         </p>
+        {section8GroundNextSteps}
         {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
@@ -7122,6 +7181,7 @@ const allBlogPosts: BlogPost[] = [
           Whether your tenant is subletting without permission, keeping unauthorised pets, running a business from the
           property, or persistently causing minor nuisance, Ground 12 provides a legal pathway to eviction.
         </p>
+        {section8GroundNextSteps}
         {section8TemplateCta}
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
@@ -7357,7 +7417,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Step 4: Serve Section 8 Notice</h3>
         <p>
-          If the breach continues, serve a Section 8 notice (Form 3) specifying Ground 12:
+          If the breach continues, serve a Form 3A notice specifying Ground 12:
         </p>
         <ul>
           <li>Minimum notice period: 2 weeks</li>
@@ -27097,7 +27157,7 @@ const allBlogPosts: BlogPost[] = [
               <tr>
                 <td className="border p-3 font-bold">Ground 8</td>
                 <td className="border p-3 text-green-600">Mandatory</td>
-                <td className="border p-3">2+ months' arrears at notice AND hearing</td>
+                <td className="border p-3">England after 1 May 2026: 3 months' rent, or 13 weeks' rent if paid weekly or fortnightly, at notice AND hearing</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3 font-bold">Ground 10</td>
@@ -27116,8 +27176,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
           <h4 className="font-semibold text-red-900 mb-2">Ground 8 - Mandatory Possession</h4>
           <p className="text-red-800 mb-2">
-            Ground 8 requires at least 3 months' (13 weeks') arrears at both the time
-            you serve the Section 8 notice AND at the court hearing. If the tenant
+            In England after 1 May 2026, Ground 8 requires at least 3 months' rent, or 13 weeks' rent if paid
+            weekly or fortnightly, at both the time you serve the Form 3A notice AND at the court hearing. If the tenant
             pays down below the Ground 8 threshold before the hearing, Ground 8 fails.
           </p>
           <p className="text-red-800">

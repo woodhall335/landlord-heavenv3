@@ -2,6 +2,7 @@ import type {
   Section13ChallengeLikelihoodBand,
   Section13Comparable,
   Section13EvidenceStrengthBand,
+  Section13PlanRecommendation,
   Section13PreviewMetrics,
   Section13RentFrequency,
   Section13State,
@@ -256,6 +257,74 @@ export function getEvidenceBandLabel(band: Section13EvidenceStrengthBand): strin
     default:
       return 'Weak evidence strength';
   }
+}
+
+export function getSection13PlanRecommendation(
+  preview: Pick<
+    Section13PreviewMetrics,
+    | 'challengeBand'
+    | 'challengeBandLabel'
+    | 'evidenceBand'
+    | 'evidenceBandLabel'
+    | 'proposedPositionLabel'
+    | 'comparableCount'
+  > | null | undefined,
+  options?: {
+    expectTenantChallenge?: boolean;
+    selectedPlan?: 'section13_standard' | 'section13_defensive';
+  }
+): Section13PlanRecommendation {
+  const expectTenantChallenge = Boolean(options?.expectTenantChallenge);
+
+  if (!preview) {
+    return {
+      recommendedPlan: options?.selectedPlan === 'section13_defensive' ? 'section13_defensive' : 'section13_standard',
+      headline: 'Standard is the recommended starting pack',
+      reason:
+        'Start with the Standard pack unless you already expect a challenge. It covers Form 4A, the justification report, and the service record.',
+      upsellMessage:
+        'Move up to the Defence Pack if you expect pushback and want the extra challenge-response and tribunal-facing material from the start.',
+    };
+  }
+
+  if (preview.comparableCount === 0) {
+    return {
+      recommendedPlan: options?.selectedPlan === 'section13_defensive' ? 'section13_defensive' : 'section13_standard',
+      headline: 'Standard is the recommended starting pack',
+      reason:
+        'Run the local listings check next so we can judge the supportable range properly. Until then, Standard remains the best starting point for Form 4A, the justification report, and the service record.',
+      upsellMessage:
+        'Move up to the Defence Pack later if the market evidence or the tenant response makes stronger challenge protection worthwhile.',
+    };
+  }
+
+  const shouldRecommendDefence =
+    expectTenantChallenge ||
+    preview.challengeBand === 'elevated_likelihood' ||
+    preview.challengeBand === 'higher_likelihood' ||
+    (preview.evidenceBand === 'weak' && preview.challengeBand !== 'lower_likelihood');
+
+  if (shouldRecommendDefence) {
+    return {
+      recommendedPlan: 'section13_defensive',
+      headline: 'Defence Pack is recommended for this case',
+      reason: expectTenantChallenge
+        ? 'You expect pushback on the increase, so the Defence Pack adds the response and tribunal-facing material that is most useful when challenge risk is already in view.'
+        : preview.evidenceBand === 'weak'
+          ? `The proposed rent currently looks ${preview.proposedPositionLabel.toLowerCase()} and your evidence strength is still weak, so the Defence Pack gives you stronger challenge-response and tribunal support.`
+          : `${preview.challengeBandLabel} means it is worth preparing the extra challenge-response and tribunal-facing material from the start.`,
+      upsellMessage: 'You can still continue with Standard, but Defence is the safer recommendation when challenge risk is higher.',
+    };
+  }
+
+  return {
+    recommendedPlan: 'section13_standard',
+    headline: 'Standard is the recommended pack for this case',
+    reason:
+      'The current position looks supportable enough to start with Form 4A, the justification report, and the service record without paying for the fuller tribunal-facing bundle.',
+    upsellMessage:
+      'If you still expect pushback, you can upgrade to the Defence Pack for the extra challenge-response and tribunal-facing material.',
+  };
 }
 
 export function buildSection13DefensibilitySummarySentence(

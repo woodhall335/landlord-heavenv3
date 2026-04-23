@@ -87,6 +87,7 @@ export function createEmptySection13State(
       manualJustification: '',
       challengeBandExplainer: SECTION13_CHALLENGE_EXPLAINER,
       evidenceBandExplainer: SECTION13_EVIDENCE_EXPLAINER,
+      expectTenantChallenge: false,
     },
   };
 }
@@ -137,6 +138,8 @@ export function getSection13StateFromFacts(
         existing?.adjustments?.challengeBandExplainer || defaults.adjustments.challengeBandExplainer,
       evidenceBandExplainer:
         existing?.adjustments?.evidenceBandExplainer || defaults.adjustments.evidenceBandExplainer,
+      expectTenantChallenge:
+        existing?.adjustments?.expectTenantChallenge ?? defaults.adjustments.expectTenantChallenge,
     },
     preview: existing?.preview || undefined,
   };

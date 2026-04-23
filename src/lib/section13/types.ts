@@ -205,6 +205,13 @@ export interface Section13PreviewMetrics {
   warnings: string[];
 }
 
+export interface Section13PlanRecommendation {
+  recommendedPlan: Section13ProductSku;
+  headline: string;
+  reason: string;
+  upsellMessage?: string | null;
+}
+
 export interface Section13OutputSnapshot {
   id?: string;
   orderId: string;
@@ -278,6 +285,7 @@ export interface Section13State {
     manualJustification?: string;
     challengeBandExplainer: string;
     evidenceBandExplainer: string;
+    expectTenantChallenge?: boolean;
   };
   preview?: Section13PreviewMetrics;
 }

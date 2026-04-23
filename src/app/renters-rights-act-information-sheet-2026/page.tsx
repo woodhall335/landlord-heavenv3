@@ -194,6 +194,90 @@ export default function RentersRightsInformationSheet2026Page() {
             </div>
           </section>
 
+          <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F6F1FF] via-white to-[#F8F7FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+              What landlords should do next
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+              Download the PDF, then choose the right route for the real problem in front of you
+            </h2>
+            <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
+              <p>
+                If you only need the Information Sheet, download it. But if this page has
+                made you realise your tenancy paperwork is old, weak, or already leading
+                into a dispute, the next step is choosing the right landlord product rather
+                than stopping at the free PDF.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <Link
+                href="/products/ast"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                  Paperwork fix
+                </p>
+                <h3 className="mt-3 text-lg font-semibold text-[#141B2D]">Tenancy agreements</h3>
+                <p className="mt-2 text-sm leading-6 text-[#546075]">
+                  Best if the main issue is outdated tenancy paperwork and you want to move
+                  into a current agreement route.
+                </p>
+              </Link>
+
+              <Link
+                href="/products/notice-only"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                  Notice stage
+                </p>
+                <h3 className="mt-3 text-lg font-semibold text-[#141B2D]">Notice Only</h3>
+                <p className="mt-2 text-sm leading-6 text-[#546075]">
+                  Best if the tenancy is already in trouble and you need to prepare the
+                  current England notice correctly.
+                </p>
+              </Link>
+
+              <Link
+                href="/products/complete-pack"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                  Court route
+                </p>
+                <h3 className="mt-3 text-lg font-semibold text-[#141B2D]">Complete Eviction Pack</h3>
+                <p className="mt-2 text-sm leading-6 text-[#546075]">
+                  Best if you want the notice and the possession paperwork prepared together
+                  from the start.
+                </p>
+              </Link>
+
+              <Link
+                href="/products/money-claim"
+                className="rounded-2xl border border-[#D9D7F7] bg-white p-5 transition hover:border-[#7C3AED] hover:shadow-md"
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                  Debt recovery
+                </p>
+                <h3 className="mt-3 text-lg font-semibold text-[#141B2D]">Money Claim Pack</h3>
+                <p className="mt-2 text-sm leading-6 text-[#546075]">
+                  Best if rent arrears, damage, or tenant debt now need a structured
+                  recovery route.
+                </p>
+              </Link>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              <Link href="/products/ast" className="hero-btn-primary">
+                Replace outdated tenancy paperwork
+              </Link>
+              <Link href="/products/notice-only" className="hero-btn-secondary">
+                Take the next landlord step
+              </Link>
+            </div>
+          </section>
+
           <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               Free download + practical warning
@@ -210,7 +294,7 @@ export default function RentersRightsInformationSheet2026Page() {
                   <li>Download the Renters&apos; Rights Act Information Sheet 2026 PDF</li>
                   <li>See when it must be given and how it should be delivered</li>
                   <li>Understand why older tenancy agreements can create hidden risk</li>
-                  <li>Move into a safer tenancy paperwork route if needed</li>
+                  <li>Choose the right landlord product if the issue is bigger than the PDF itself</li>
                 </ul>
               </div>
               <div>
@@ -346,10 +430,10 @@ export default function RentersRightsInformationSheet2026Page() {
 
           <section className="mx-auto mt-10 max-w-5xl rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-              Safer next step
+              If the tenancy is already in trouble
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-              Do not stop at the free PDF
+              The free PDF is not the route for arrears, notice, or possession problems
             </h2>
             <div className="mt-5 space-y-4 text-lg leading-8 text-[#546075]">
               <p>
@@ -385,7 +469,7 @@ export default function RentersRightsInformationSheet2026Page() {
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Notice Only</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
-                  Take the next step once the tenancy paperwork position is properly handled.
+                  Use this when you are ready to serve the current England notice correctly.
                 </p>
               </Link>
               <Link
@@ -394,7 +478,7 @@ export default function RentersRightsInformationSheet2026Page() {
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Complete Eviction Pack</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
-                  Move from paperwork risk into an end-to-end possession route where needed.
+                  Use this when you want the notice and possession paperwork working together from the start.
                 </p>
               </Link>
               <Link
@@ -403,7 +487,7 @@ export default function RentersRightsInformationSheet2026Page() {
               >
                 <h3 className="text-lg font-semibold text-[#141B2D]">Money Claim Pack</h3>
                 <p className="mt-2 text-sm leading-6 text-[#546075]">
-                  Recover arrears and tenant debt once the underlying file is in better order.
+                  Use this when arrears, damage, or unpaid tenant debt now need a formal recovery route.
                 </p>
               </Link>
             </div>

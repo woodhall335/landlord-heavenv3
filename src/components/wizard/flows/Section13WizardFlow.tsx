@@ -25,6 +25,7 @@ import {
 } from '@/lib/section13/facts';
 import {
   computeSection13Preview,
+  getSection13PlanRecommendation,
   getMonthlyEquivalent,
   getWeeklyEquivalent,
 } from '@/lib/section13/rules';
@@ -33,6 +34,7 @@ import type {
   Section13Comparable,
   Section13ComparableAdjustment,
   Section13EvidenceUpload,
+  Section13PlanRecommendation,
   Section13ProductSku,
   Section13State,
 } from '@/lib/section13/types';
@@ -43,10 +45,11 @@ type SectionId =
   | 'tenancy'
   | 'landlord'
   | 'proposal'
-  | 'charges'
+  | 'rent_position'
   | 'comparables'
+  | 'charges'
   | 'adjustments'
-  | 'preview'
+  | 'preview_checkout'
   | 'outputs';
 
 const STORAGE_PREFIX = 'section13-wizard-draft';
@@ -76,16 +79,22 @@ const STEP_CONFIG: Array<{
     description: 'Set the new rent, date served, and proposed effective date with the post-1 May 2026 rules applied.',
   },
   {
-    id: 'charges',
-    label: 'Charges',
-    title: 'Charges included in rent',
-    description: 'List only the charges that are included within the rent rather than paid separately by the tenant.',
+    id: 'rent_position',
+    label: 'Rent position',
+    title: 'Supportable rent position',
+    description: 'Get an early view of how supportable the proposed figure looks before you finish the full evidence pack.',
   },
   {
     id: 'comparables',
     label: 'Comparables',
     title: 'Comparable listings',
-    description: 'Scrape or import comparable rental listings, then keep only the ones you want to rely on.',
+    description: 'We will pull local listings and help you keep the strongest ones for the file.',
+  },
+  {
+    id: 'charges',
+    label: 'Charges',
+    title: 'Charges included in rent',
+    description: 'List only the charges that are included within the rent rather than paid separately by the tenant.',
   },
   {
     id: 'adjustments',
@@ -94,10 +103,10 @@ const STEP_CONFIG: Array<{
     description: 'Apply auditable comparable adjustments and add any case-specific narrative you want to keep in the report.',
   },
   {
-    id: 'preview',
-    label: 'Preview',
-    title: 'Preview and choose your plan',
-    description: 'See the market-rent position, validation status, and which outputs unlock in each plan before checkout.',
+    id: 'preview_checkout',
+    label: 'Checkout',
+    title: 'Preview, choose your recommended pack, and checkout',
+    description: 'See what we found in the local market, how supportable the rent looks, and which pack is recommended before checkout.',
   },
   {
     id: 'outputs',
@@ -122,6 +131,11 @@ const PLAN_FEATURES: Record<Section13ProductSku, string[]> = {
     'Negotiation email template',
     'Merged tribunal bundle PDF and ZIP export',
   ],
+};
+
+const SECTION13_PLAN_TITLES: Record<Section13ProductSku, string> = {
+  section13_standard: 'Standard Section 13 Pack',
+  section13_defensive: 'Defence Pack',
 };
 
 function getLocalStorageKey(caseId: string) {
@@ -182,6 +196,11 @@ function getStepCompleteState(
         complete: isSection13ProposalStepComplete(state),
         hasIssue: Boolean(state.preview && !state.preview.enteredStartDateValid),
       };
+    case 'rent_position':
+      return {
+        complete: isSection13ProposalStepComplete(state),
+        hasIssue: Boolean(state.preview && !state.preview.enteredStartDateValid),
+      };
     case 'charges':
       return { complete: true, hasIssue: false };
     case 'comparables':
@@ -191,7 +210,7 @@ function getStepCompleteState(
         complete: comparables.length > 0,
         hasIssue: Boolean(state.preview?.warnings.length),
       };
-    case 'preview':
+    case 'preview_checkout':
       return {
         complete: Boolean(state.preview),
         hasIssue: Boolean(state.preview && !state.preview.enteredStartDateValid),
@@ -337,6 +356,20 @@ export function Section13WizardFlow({
       : null;
   const activePlan = purchasedPlan || effectiveState.selectedPlan;
   const hasPaidDefensiveOrder = purchasedPlan === 'section13_defensive';
+  const planRecommendation: Section13PlanRecommendation = useMemo(
+    () =>
+      getSection13PlanRecommendation(effectiveState.preview, {
+        expectTenantChallenge: effectiveState.adjustments.expectTenantChallenge,
+        selectedPlan: effectiveState.selectedPlan,
+      }),
+    [effectiveState.adjustments.expectTenantChallenge, effectiveState.preview, effectiveState.selectedPlan]
+  );
+  const selectedPlanTitle = SECTION13_PLAN_TITLES[effectiveState.selectedPlan];
+  const recommendedPlanTitle = SECTION13_PLAN_TITLES[planRecommendation.recommendedPlan];
+  const checkoutButtonLabel =
+    effectiveState.selectedPlan === 'section13_defensive'
+      ? 'Continue with the Defence Pack for stronger challenge protection'
+      : 'Continue with the Standard Section 13 pack';
   const section13PreviewProofEntries = useMemo(
     () =>
       [
@@ -848,7 +881,7 @@ export function Section13WizardFlow({
     const postcode = effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
     const bedrooms = effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
     if (!postcode || !bedrooms) {
-      setSaveError('Enter a postcode and bedroom count before scraping comparables.');
+      setSaveError('Enter the property postcode and bedroom count before checking local listings.');
       return;
     }
 
@@ -1366,6 +1399,121 @@ export function Section13WizardFlow({
           </div>
         );
 
+      case 'rent_position':
+        return (
+          <div className="space-y-5">
+            <div className="rounded-3xl border border-violet-200 bg-[linear-gradient(180deg,#f8f3ff_0%,#ffffff_100%)] p-5">
+              <p className="text-sm font-semibold text-violet-950">Early rent position check</p>
+              <h3 className="mt-2 text-xl font-semibold text-gray-950">See whether the proposed increase looks supportable</h3>
+              <p className="mt-2 text-sm text-gray-700">
+                This helps you judge whether the proposed increase looks supportable before you finish the full evidence pack. It is more than just Form 4A.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {[
+                  'Uses live comparable listings',
+                  'Helps you choose a more supportable figure',
+                  'Builds Form 4A and the justification pack together',
+                ].map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-medium text-violet-900"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                <p className="text-sm font-semibold text-gray-900">Supportable range</p>
+                <p className="mt-2 text-2xl font-bold text-gray-950">
+                  {formatMoney(effectiveState.preview?.proposedRentMonthly)}
+                </p>
+                <p className="mt-2 text-sm text-gray-700">
+                  {effectiveState.preview?.proposedPositionLabel || 'Add the proposed rent above to see where the figure sits.'}
+                </p>
+                <div className="mt-4 grid grid-cols-3 gap-2 text-sm">
+                  <div className="rounded-xl bg-gray-50 p-3">
+                    <div className="text-xs text-gray-600">LQ</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.lowerQuartile)}</div>
+                  </div>
+                  <div className="rounded-xl bg-gray-50 p-3">
+                    <div className="text-xs text-gray-600">Median</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.median)}</div>
+                  </div>
+                  <div className="rounded-xl bg-gray-50 p-3">
+                    <div className="text-xs text-gray-600">UQ</div>
+                    <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.upperQuartile)}</div>
+                  </div>
+                </div>
+                <p className="mt-4 text-sm text-gray-700">
+                  {comparables.length > 0
+                    ? effectiveState.preview?.previewSummary
+                    : 'Run the local listings check next to turn this into a stronger market-backed estimate.'}
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
+                <p className="text-sm font-semibold text-violet-950">How supportable the proposed rent looks</p>
+                <p className="mt-3 text-sm font-semibold text-violet-900">{effectiveState.preview?.challengeBandLabel}</p>
+                <p className="text-sm text-violet-900/90">{effectiveState.preview?.challengeBandExplainer}</p>
+                <p className="mt-3 text-sm font-semibold text-violet-900">{effectiveState.preview?.evidenceBandLabel}</p>
+                <p className="text-sm text-violet-900/90">
+                  {comparables.length > 0
+                    ? effectiveState.preview?.evidenceBandExplainer
+                    : 'We will confirm the evidence strength once you pull comparable local listings.'}
+                </p>
+                <div className="mt-4 rounded-2xl border border-violet-200 bg-white/80 p-4">
+                  <p className="text-sm font-semibold text-gray-950">Defensibility summary</p>
+                  <p className="mt-2 text-sm text-gray-700">
+                    {effectiveState.preview?.defensibilitySummarySentence}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="max-w-2xl">
+                  <p className="text-sm font-semibold text-gray-950">Next best step</p>
+                  <p className="mt-2 text-sm text-gray-700">
+                    Check local listings automatically so we can compare your proposed rent with the live market and strengthen the justification report.
+                  </p>
+                </div>
+                <Button onClick={() => void handleScrape()} disabled={scrapeLoading}>
+                  {scrapeLoading ? (
+                    <>
+                      <RiLoader4Line className="mr-2 h-4 w-4 animate-spin" />
+                      Checking local listings
+                    </>
+                  ) : (
+                    <>Check local listings automatically</>
+                  )}
+                </Button>
+              </div>
+
+              <label className="mt-4 flex items-start gap-3 rounded-2xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm text-violet-950">
+                <input
+                  type="checkbox"
+                  checked={Boolean(effectiveState.adjustments.expectTenantChallenge)}
+                  onChange={(event) =>
+                    updateState((prev) => ({
+                      ...prev,
+                      adjustments: {
+                        ...prev.adjustments,
+                        expectTenantChallenge: event.target.checked,
+                      },
+                    }))
+                  }
+                  className="mt-0.5 h-4 w-4 rounded border-violet-300 text-violet-700 focus:ring-violet-500"
+                />
+                <span>I already expect the tenant may challenge this increase.</span>
+              </label>
+            </div>
+          </div>
+        );
+
       case 'charges':
         return (
           <div className="space-y-4">
@@ -1443,12 +1591,12 @@ export function Section13WizardFlow({
                     {scrapeLoading ? (
                       <>
                         <RiLoader4Line className="mr-2 h-4 w-4 animate-spin" />
-                        Scraping
+                        Checking local listings
                       </>
                     ) : (
                       <>
                         <RiRefreshLine className="mr-2 h-4 w-4" />
-                        Scrape Rightmove
+                        Check local listings automatically
                       </>
                     )}
                   </Button>
@@ -1482,18 +1630,22 @@ export function Section13WizardFlow({
                   {displayedScrapeMessage}
                 </div>
               ) : null}
+
+              <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                Stronger with 5+ live comparable listings. Keep the best-supported local examples rather than every result.
+              </div>
             </div>
 
             <div className="space-y-4">
               {comparables.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-gray-300 p-6 text-center text-sm text-gray-600">
-                  No comparables yet. Scrape Rightmove, upload CSV, or add linked manual listings.
+                  No local listings added yet. Start with the automatic market check, then use CSV or manual entries only if you need to refine the file.
                 </div>
               ) : null}
 
               {effectiveState.preview?.warnings.some((warning) => warning.includes('source-backed comparables')) ? (
                 <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                  No valid source-backed comparables are available yet. Retry the scrape, upload CSV results, or add a listing link manually to unlock the auto-written justification.
+                  We still need stronger live comparable evidence before the auto-written justification is fully reliable. Retry the automatic check, upload CSV results, or add a listing link manually.
                 </div>
               ) : null}
 
@@ -1625,12 +1777,23 @@ export function Section13WizardFlow({
           </div>
         );
 
-      case 'preview':
+      case 'preview_checkout':
         return (
           <div className="space-y-5">
+            <div className="rounded-3xl border border-violet-200 bg-[linear-gradient(180deg,#f8f3ff_0%,#ffffff_100%)] p-5">
+              <p className="text-sm font-semibold text-violet-950">Recommended pack</p>
+              <h3 className="mt-2 text-xl font-semibold text-gray-950">{planRecommendation.headline}</h3>
+              <p className="mt-2 text-sm text-gray-700">{planRecommendation.reason}</p>
+              {planRecommendation.upsellMessage ? (
+                <p className="mt-3 text-sm text-violet-900">{planRecommendation.upsellMessage}</p>
+              ) : null}
+              <div className="mt-4 inline-flex rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-violet-900">
+                Recommended: {recommendedPlanTitle}
+              </div>
+            </div>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl border border-gray-200 p-4">
-                <p className="text-sm font-semibold text-gray-900">Proposed rent position</p>
+                <p className="text-sm font-semibold text-gray-900">What we found in the local market</p>
                 <p className="mt-2 text-2xl font-bold text-gray-950">
                   {formatMoney(effectiveState.preview?.proposedRentMonthly)}
                 </p>
@@ -1649,15 +1812,15 @@ export function Section13WizardFlow({
                     <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.upperQuartile)}</div>
                   </div>
                 </div>
+                <p className="mt-4 text-sm text-gray-700">{effectiveState.preview?.previewSummary}</p>
               </div>
 
               <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
-                <p className="text-sm font-semibold text-violet-950">Validation and evidence</p>
+                <p className="text-sm font-semibold text-violet-950">How supportable the proposed rent looks</p>
                 <p className="mt-3 text-sm font-semibold text-violet-900">{effectiveState.preview?.challengeBandLabel}</p>
                 <p className="text-sm text-violet-900/90">{effectiveState.preview?.challengeBandExplainer}</p>
                 <p className="mt-3 text-sm font-semibold text-violet-900">{effectiveState.preview?.evidenceBandLabel}</p>
                 <p className="text-sm text-violet-900/90">{effectiveState.preview?.evidenceBandExplainer}</p>
-                <p className="mt-3 text-sm text-violet-900">{effectiveState.preview?.previewSummary}</p>
                 <p className="mt-3 text-xs text-violet-900/80">
                   These bands are evidence signals based on the comparable data and are not legal guarantees.
                 </p>
@@ -1693,6 +1856,13 @@ export function Section13WizardFlow({
               </div>
             ) : null}
 
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              <p className="text-sm font-semibold text-gray-950">What is included in your pack</p>
+              <p className="mt-2 text-sm text-gray-700">
+                {selectedPlanTitle} includes the live Form 4A draft, the justification report, and the delivery material tied to this case. The Defence Pack adds the extra challenge-response and tribunal-facing bundle tools when you need stronger protection.
+              </p>
+            </div>
+
             <div className="grid gap-4 lg:grid-cols-2">
               {(['section13_standard', 'section13_defensive'] as const).map((plan) => (
                 <button
@@ -1712,14 +1882,22 @@ export function Section13WizardFlow({
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-950">
-                        {plan === 'section13_defensive' ? 'Defensive Pack' : 'Standard'}
-                      </h3>
+                      <h3 className="text-lg font-semibold text-gray-950">{SECTION13_PLAN_TITLES[plan]}</h3>
                       <p className="mt-1 text-2xl font-bold text-violet-900">
                         {plan === 'section13_defensive' ? '£34.99' : '£19.99'}
                       </p>
                     </div>
                   </div>
+                  {planRecommendation.recommendedPlan === plan ? (
+                    <div className="mt-3 inline-flex rounded-full border border-violet-300 bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-900">
+                      Recommended
+                    </div>
+                  ) : null}
+                  <p className="mt-3 text-sm text-gray-700">
+                    {plan === 'section13_defensive'
+                      ? 'Best when challenge risk is higher and you want the extra response and tribunal-facing material from the start.'
+                      : 'Best when the proposed increase looks supportable and you mainly need Form 4A, the justification report, and the service record.'}
+                  </p>
                   <ul className="mt-4 space-y-2 text-sm text-gray-700">
                     {PLAN_FEATURES[plan].map((feature) => (
                       <li key={feature}>• {feature}</li>
@@ -1741,7 +1919,7 @@ export function Section13WizardFlow({
                       Opening checkout preview
                     </>
                   ) : (
-                    <>Continue to preview and checkout</>
+                    <>{checkoutButtonLabel}</>
                   )}
                 </Button>
                 <button
@@ -1796,7 +1974,7 @@ export function Section13WizardFlow({
               <p className="mt-2 text-sm text-gray-700">
                 {orderStatus?.paid
                   ? `Payment confirmed. Fulfillment status: ${formatStatusLabel(orderStatus.fulfillment_status)}.`
-                  : 'Complete checkout from the preview step to unlock downloads.'}
+                  : 'Complete checkout from the checkout step to unlock downloads.'}
               </p>
               {orderStatus?.has_final_documents ? (
                 <p className="mt-2 text-sm text-gray-700">
@@ -2081,11 +2259,15 @@ export function Section13WizardFlow({
             <dt>Plan</dt>
             <dd>{effectiveState.selectedPlan === 'section13_defensive' ? 'Defensive' : 'Standard'}</dd>
           </div>
+          <div className="flex items-start justify-between gap-3">
+            <dt>Recommended</dt>
+            <dd>{recommendedPlanTitle}</dd>
+          </div>
         </dl>
       </div>
 
       <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
-        <h3 className="text-sm font-semibold text-violet-950">Bands</h3>
+        <h3 className="text-sm font-semibold text-violet-950">Supportable range signals</h3>
         <p className="mt-2 text-sm font-medium text-violet-900">{effectiveState.preview?.challengeBandLabel}</p>
         <p className="text-sm text-violet-900/90">{effectiveState.preview?.challengeBandExplainer}</p>
         <p className="mt-3 text-sm font-medium text-violet-900">{effectiveState.preview?.evidenceBandLabel}</p>
@@ -2154,7 +2336,7 @@ export function Section13WizardFlow({
             <button
               type="button"
               onClick={() => {
-                if (currentStep.id === 'preview' && !orderStatus?.paid) {
+                if (currentStep.id === 'preview_checkout' && !orderStatus?.paid) {
                   void continueToSharedCheckoutPreview();
                   return;
                 }
@@ -2167,7 +2349,7 @@ export function Section13WizardFlow({
                   : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_6px_16px_rgba(109,40,217,0.28)] hover:from-violet-700 hover:to-fuchsia-700'
               }`}
             >
-              {currentStep.id === 'preview' && !orderStatus?.paid ? 'Go to checkout preview' : 'Continue'}
+              {currentStep.id === 'preview_checkout' && !orderStatus?.paid ? 'Go to checkout preview' : 'Continue'}
               <RiArrowRightLine className="ml-2 h-4 w-4" />
             </button>
           </div>
@@ -2175,6 +2357,24 @@ export function Section13WizardFlow({
       }
     >
       <div className="space-y-4">
+        {currentStep.id !== 'outputs' ? (
+          <div className="rounded-2xl border border-violet-200 bg-[linear-gradient(180deg,#faf7ff_0%,#ffffff_100%)] px-4 py-3">
+            <div className="flex flex-wrap gap-2">
+              {[
+                'Uses live comparable listings',
+                'Helps you choose a more supportable figure',
+                'Builds Form 4A and the justification pack together',
+              ].map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-semibold text-violet-900"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : null}
         {renderStepContent()}
         {checkoutError ? <p className="text-sm text-rose-700">{checkoutError}</p> : null}
       </div>
