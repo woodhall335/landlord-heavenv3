@@ -34,7 +34,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when you want to start with the notice before paying for court paperwork',
     ],
     href: getProductLandingHref('notice_only'),
-    cta: 'See notice details ->',
+    cta: 'See notice details',
   },
   {
     name: 'Complete Eviction Pack',
@@ -48,7 +48,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Helps you avoid piecing the case together across multiple documents',
     ],
     href: getProductLandingHref('complete_pack'),
-    cta: 'See pack details ->',
+    cta: 'See pack details',
     featured: true,
   },
   {
@@ -63,7 +63,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Useful when the property issue and the money issue need separate action',
     ],
     href: getProductLandingHref('money_claim'),
-    cta: 'See pack details ->',
+    cta: 'See pack details',
   },
   {
     name: 'Standard Section 13 Pack',
@@ -77,7 +77,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when you want to explain the figure naturally and keep the paperwork joined up',
     ],
     href: getProductLandingHref('section13_standard'),
-    cta: 'See pack details ->',
+    cta: 'See pack details',
   },
   {
     name: 'Challenge-Ready Section 13 Defence Pack',
@@ -91,7 +91,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when tribunal readiness and a more complete evidence story matter',
     ],
     href: getProductLandingHref('section13_defensive'),
-    cta: 'See pack details ->',
+    cta: 'See pack details',
   },
   {
     name: 'Standard Tenancy Agreement',
@@ -105,7 +105,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best for most ordinary residential lets',
     ],
     href: getProductLandingHref('ast_standard'),
-    cta: 'See agreement options ->',
+    cta: 'See agreement options',
   },
   {
     name: 'Premium Tenancy Agreement',
@@ -119,7 +119,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Student, HMO / Shared House, and Lodger routes now sit on separate England product pages',
     ],
     href: getProductLandingHref('ast_premium'),
-    cta: 'See agreement options ->',
+    cta: 'See agreement options',
   },
 ];
 

@@ -13,7 +13,6 @@ import {
 } from '@/lib/public-brand';
 import { PUBLIC_PRODUCT_DESCRIPTORS } from '@/lib/public-products';
 import { LANDLORD_DOCUMENT_PRICE_RANGE } from '@/lib/pricing/products';
-import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
 import {
   PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
   RESIDENTIAL_LETTING_PRODUCTS,
@@ -21,13 +20,9 @@ import {
   getResidentialLandingHref,
   getResidentialWizardHref,
 } from '@/lib/residential-letting/products';
-import {
-  ENGLAND_POST_MAY_2026_POSITION,
-  LANDLORD_HEAVEN_PURPOSE,
-} from '@/lib/marketing/landlord-messaging';
 import { PRICING_PACKAGE_CARDS, PRICING_SCHEMA_ITEMS } from '@/lib/marketing/pricing-page';
 import { clsx } from 'clsx';
-import { RiArrowRightLine, RiCheckLine } from 'react-icons/ri';
+import { RiCheckLine } from 'react-icons/ri';
 
 export const metadata: Metadata = generateMetadata({
   title: 'Pricing for landlords in England | Eviction, rent increase, debt, and tenancy packs',
@@ -45,8 +40,6 @@ export const metadata: Metadata = generateMetadata({
   ],
 });
 
-const reviewCount = getDynamicReviewCount();
-
 const accentByProduct = {
   notice_only: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.cardAccent,
   complete_pack: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.cardAccent,
@@ -61,37 +54,37 @@ const packageImages: Record<
   { src: string; alt: string; accent: keyof typeof accentByProduct }
 > = {
   notice_only: {
-    src: '/images/notice_bundles.webp',
+    src: '/images/section-8-eviction-notice-generator.webp',
     alt: 'Eviction notice generator preview',
     accent: 'notice_only',
   },
   complete_pack: {
-    src: '/images/eviction_packs.webp',
+    src: '/images/complete-eviction-pack.webp',
     alt: 'Complete eviction pack preview',
     accent: 'complete_pack',
   },
   money_claim: {
-    src: '/images/money_claims.webp',
+    src: '/images/money-claim-pack.webp',
     alt: 'Money claim pack preview',
     accent: 'money_claim',
   },
   section13_standard: {
-    src: '/images/Statutory-change.webp',
+    src: '/images/standard-section-13.webp',
     alt: 'Section 13 rent increase pack preview',
     accent: 'section13_standard',
   },
   section13_defensive: {
-    src: '/images/Statutory-change.webp',
+    src: '/images/defence-section-13.webp',
     alt: 'Section 13 defence pack preview',
     accent: 'section13_defensive',
   },
   ast_standard: {
-    src: '/images/standard_tenancy.webp',
+    src: '/images/standard-tenancy.webp',
     alt: 'Standard tenancy agreement preview',
     accent: 'ast',
   },
   ast_premium: {
-    src: '/images/premium_tenancy.webp',
+    src: '/images/premium-tenancy.webp',
     alt: 'Premium tenancy agreement preview',
     accent: 'ast',
   },
@@ -152,16 +145,9 @@ export default function PricingPage() {
         mediaAlt="Landlord Heaven pricing and product previews"
         showTrustPositioningBar
       >
-        <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-white/35 bg-white/12 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm">
-          <span aria-hidden="true">{'\u2605'.repeat(5)}</span>
-          <span>{`${REVIEW_RATING}/5 | ${reviewCount} reviews`}</span>
-        </div>
         <p className="mt-3 text-sm text-white/88">All prices are one-time payments.</p>
         <p className="mt-2 max-w-3xl text-sm leading-7 text-white/76">
-          {LANDLORD_HEAVEN_PURPOSE}
-        </p>
-        <p className="mt-2 max-w-3xl text-sm leading-7 text-white/76">
-          {ENGLAND_POST_MAY_2026_POSITION}
+          Prices below are for landlords in England who need the right product before they serve, file, or issue anything.
         </p>
       </UniversalHero>
 
@@ -198,17 +184,17 @@ export default function PricingPage() {
                   )}
                 >
                   <div className="grid gap-0 md:grid-cols-[0.42fr_0.58fr]">
-                    <div className="relative min-h-[16rem] overflow-hidden border-b border-black/5 md:border-b-0 md:border-r">
+                    <div className="relative min-h-[16rem] overflow-hidden border-b border-black/5 bg-white md:border-b-0 md:border-r">
                       <Image
                         src={image.src}
                         alt={image.alt}
                         fill
                         sizes="(max-width: 768px) 100vw, 32vw"
-                        className="object-cover"
+                        className="object-contain p-4"
                       />
                     </div>
 
-                    <div className="p-6">
+                    <div className="flex h-full flex-col p-6">
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                           <p
@@ -245,13 +231,12 @@ export default function PricingPage() {
                         ))}
                       </ul>
 
-                      <div className="mt-6">
+                      <div className="mt-auto pt-6">
                         <Link
                           href={card.href}
-                          className="hero-btn-primary inline-flex items-center gap-2"
+                          className="hero-btn-primary inline-flex items-center"
                         >
                           {card.cta}
-                          <RiArrowRightLine className="h-4 w-4" />
                         </Link>
                       </div>
                     </div>
