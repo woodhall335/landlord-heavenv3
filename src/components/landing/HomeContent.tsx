@@ -649,17 +649,17 @@ export default function HomeContent() {
               </p>
             </div>
 
-            <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-8')}>
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] public-image-frame">
-                <Image
-                  src="/images/See-the-product-before-you-commit.webp"
-                  alt="See the product before you commit"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 80vw"
-                  className="object-cover"
-                />
+              <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-8')}>
+                <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] bg-white">
+                  <Image
+                    src="/images/See-the-product-before-you-commit2.webp"
+                    alt="See the product before you commit"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 80vw"
+                    className="object-contain object-center"
+                  />
+                </div>
               </div>
-            </div>
           </div>
         </Container>
       </section>
