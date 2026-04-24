@@ -71,7 +71,7 @@ export default function StandardTenancyAgreementPage() {
         legacyNotice="If you were searching for a standard tenancy agreement, a basic tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator, this is the standard assured periodic route for a straightforward whole-property let under the post-Renters' Rights Act framework."
         introTitle="For a straightforward whole-property let"
         introBody={[
-          'This is the standard route for a new England tenancy agreement where the tenancy is a straightforward whole-property let. Use it when you want current assured periodic wording under the post-Renters' Rights Act framework, without the extra operational detail included in the Premium route or the specialist products.',
+          "This is the standard route for a new England tenancy agreement where the tenancy is a straightforward whole-property let. Use it when you want current assured periodic wording under the post-Renters' Rights Act framework, without the extra operational detail included in the Premium route or the specialist products.",
           'The generator keeps the pack practical and proportionate: the main agreement plus the key supporting paperwork, without making a simple tenancy feel more complicated than it needs to be.',
         ]}
         highlights={[
