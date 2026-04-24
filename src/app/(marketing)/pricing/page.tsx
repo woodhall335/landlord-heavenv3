@@ -184,13 +184,13 @@ export default function PricingPage() {
                   )}
                 >
                   <div className="grid gap-0 md:grid-cols-[0.42fr_0.58fr]">
-                    <div className="relative min-h-[16rem] overflow-hidden border-b border-black/5 bg-white md:border-b-0 md:border-r">
+                    <div className="relative min-h-[16rem] overflow-hidden border-b border-black/5 bg-white md:h-full md:border-b-0 md:border-r">
                       <Image
                         src={image.src}
                         alt={image.alt}
                         fill
                         sizes="(max-width: 768px) 100vw, 32vw"
-                        className="object-contain p-4"
+                        className="object-cover object-center"
                       />
                     </div>
 
