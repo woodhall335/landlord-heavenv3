@@ -240,8 +240,8 @@ const workflowSteps: WorkflowStep[] = [
     title: 'Answer the key details',
     body:
       'We ask for the details needed to prepare the right documents and flag issues before you pay or print.',
-    imageSrc: '/images/eviction-timeline.webp',
-    imageAlt: 'Guided landlord workflow timeline',
+    imageSrc: '/images/start-eviction.webp',
+    imageAlt: 'Answer the key details workflow step',
   },
   {
     step: '03',
