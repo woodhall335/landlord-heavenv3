@@ -56,13 +56,13 @@ export const homeHeroConfig: HeroConfig = {
   ...withPreset('home'),
   preset: 'home',
   trustText: 'Landlord documents for England with checks before you serve, file, or raise rent',
-  title: 'The right landlord paperwork,',
-  highlightTitle: 'ready before you serve or file.',
+  title: 'Solicitor-quality landlord documents.',
+  highlightTitle: 'Without the solicitor bill.',
   subtitle: (
     <>
       Section 8 notices, eviction packs, rent increases, money claims, and
-      tenancy agreements — checked against the current England rules before you
-      download anything. From £14.99.
+      tenancy agreements — checked against current England rules and ready to
+      serve. From £14.99, no subscription.
     </>
   ),
   primaryCta: {
