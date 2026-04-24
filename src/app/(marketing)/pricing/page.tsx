@@ -177,13 +177,13 @@ export default function PricingPage() {
                 <section
                   key={card.name}
                   className={clsx(
-                    'overflow-hidden rounded-[2rem] border',
+                    'h-full overflow-hidden rounded-[2rem] border',
                     accent.card,
                     accent.borderGlow,
                     PUBLIC_LAYOUT_CLASSES.card
                   )}
                 >
-                  <div className="grid gap-0 md:grid-cols-[0.42fr_0.58fr]">
+                  <div className="grid h-full gap-0 md:grid-cols-[0.42fr_0.58fr]">
                     <div className="relative min-h-[16rem] overflow-hidden border-b border-black/5 bg-white md:h-full md:border-b-0 md:border-r">
                       <Image
                         src={image.src}
@@ -205,7 +205,7 @@ export default function PricingPage() {
                           >
                             {card.coverage}
                           </p>
-                          <h3 className="mt-4 text-2xl font-bold text-[#1d1532]">
+                          <h3 className="mt-4 min-h-[8.5rem] text-2xl font-bold text-[#1d1532] md:min-h-[9.5rem]">
                             {card.name}
                           </h3>
                         </div>
@@ -219,10 +219,10 @@ export default function PricingPage() {
                         </div>
                       </div>
 
-                      <p className="mt-5 text-base font-semibold text-[#2d2344]">
+                      <p className="mt-5 min-h-[5.5rem] text-base font-semibold text-[#2d2344]">
                         {card.bestFor}
                       </p>
-                      <ul className="mt-4 space-y-3 text-sm text-[#5a516d]">
+                      <ul className="mt-4 min-h-[9rem] space-y-3 text-sm text-[#5a516d]">
                         {card.points.map((point) => (
                           <li key={point} className="flex items-start gap-2">
                             <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-[#7c3aed]" />
