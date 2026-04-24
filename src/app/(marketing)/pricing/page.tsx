@@ -254,9 +254,6 @@ export default function PricingPage() {
                   the agreement that actually fits the property and occupiers.
                 </p>
               </div>
-              <p className="text-sm text-[#6b6480]">
-                Hub link /products/ast
-              </p>
             </div>
 
             <div className="mt-6 rounded-[1.8rem] border border-[#ece4ff] bg-white/88 p-6 shadow-[0_18px_40px_rgba(58,28,103,0.08)]">
