@@ -63,15 +63,15 @@ export default function StandardTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
         title="Standard Tenancy Agreement England"
-        subtitle="Use this standard England tenancy agreement if you are letting a whole property on a straightforward residential tenancy and want current assured periodic wording without student, HMO, lodger, or Premium-level detail."
+        subtitle="Use this standard England tenancy agreement if you are letting a whole property on a straightforward residential tenancy and want the updated current assured periodic wording under the post-Renters' Rights Act framework, without student, HMO, lodger, or Premium-level detail."
         primaryCtaLabel="Start standard tenancy agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Read periodic tenancy guide"
         secondaryCtaHref="/periodic-tenancy-agreement"
-        legacyNotice="If you were searching for a standard tenancy agreement, a basic tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator, this is the standard route for a straightforward whole-property let."
+        legacyNotice="If you were searching for a standard tenancy agreement, a basic tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator, this is the standard assured periodic route for a straightforward whole-property let under the post-Renters' Rights Act framework."
         introTitle="For a straightforward whole-property let"
         introBody={[
-          'This is the standard route for a new England tenancy agreement where the tenancy is a straightforward whole-property let. Use it when you want current assured periodic wording under the post-Renters Rights Act framework, without the extra operational detail included in the Premium route or the specialist products.',
+          'This is the standard route for a new England tenancy agreement where the tenancy is a straightforward whole-property let. Use it when you want current assured periodic wording under the post-Renters' Rights Act framework, without the extra operational detail included in the Premium route or the specialist products.',
           'The generator keeps the pack practical and proportionate: the main agreement plus the key supporting paperwork, without making a simple tenancy feel more complicated than it needs to be.',
         ]}
         highlights={[
@@ -82,7 +82,7 @@ export default function StandardTenancyAgreementPage() {
         ]}
         compliancePoints={[
           'Built around the current England assured periodic route from 1 May 2026.',
-          'Covers the written information needed for the main England residential tenancy route under the post-Renters Rights Act framework.',
+          "Positioned as the updated current England route for landlords who want Renters' Rights Act-compliant wording for a straightforward let.",
           'Includes the practical England support paperwork that sits alongside the agreement.',
           'If the tenancy is really a student let, shared house, or resident-landlord arrangement, use the specialist route instead.',
         ]}
@@ -253,7 +253,7 @@ export default function StandardTenancyAgreementPage() {
               'Usually not. Student and HMO / Shared House lets now have their own England products, so this standard assured periodic route is best for ordinary residential lets that do not need specialist wording.',
           },
         ]}
-        finalCtaBody="Use this standard England tenancy agreement generator when the tenancy is straightforward and the property is being let as an ordinary whole-property home. If you were searching for a Renters Rights Act tenancy agreement for a simple let, this will usually be the right route. Compare Premium or the specialist products only when the facts call for something more tailored."
+        finalCtaBody="Use this standard England tenancy agreement generator when the tenancy is straightforward and the property is being let as an ordinary whole-property home. If you were searching for a Renters' Rights Act tenancy agreement for a simple let, this updated assured periodic route will usually be the right fit. Compare Premium or the specialist products only when the facts call for something more tailored."
       />
     </div>
   );

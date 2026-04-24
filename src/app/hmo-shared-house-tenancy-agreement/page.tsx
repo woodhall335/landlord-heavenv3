@@ -63,15 +63,15 @@ export default function HmoSharedHouseTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/hmo-shared-house-tenancy-agreement"
         title="HMO / Shared House Tenancy Agreement England"
-        subtitle="Use this England HMO / Shared House tenancy agreement generator when people are sharing the property and you need clearer wording on communal areas, house rules, shared living arrangements, and day-to-day management than a general residential agreement usually provides."
+        subtitle="Use this England HMO / Shared House tenancy agreement generator when people are sharing the property and you need clearer wording on communal areas, house rules, shared living arrangements, and day-to-day management than the updated general residential routes usually provide."
         primaryCtaLabel="Start HMO / Shared House agreement"
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for an HMO tenancy agreement, a shared house agreement, or a tenancy agreement for sharers in England, this is the dedicated route for shared-house occupation rather than a standard residential agreement adapted after the fact."
+        legacyNotice="If you were searching for an HMO tenancy agreement, a shared house agreement, or a tenancy agreement for sharers in England, this is the dedicated route for shared-house occupation within the updated current England framework from 1 May 2026 rather than a standard residential agreement adapted after the fact."
         introTitle="Built for shared houses and HMO-style lets"
         introBody={[
-          'This route is designed for England lets where the real complexity comes from people sharing the property, using communal areas, and living under shared-house rules that need to be made clear from the start.',
+          'This route is designed for England lets where the real complexity comes from people sharing the property, using communal areas, and living under shared-house rules that need to be made clear from the start, while still sitting inside the updated current England framework from 1 May 2026.',
           'Instead of trying to force a shared house into a general residential agreement, this pack is built for the issues that usually matter in HMOs and shared houses: occupiers sharing kitchens and bathrooms, house rules, shared responsibilities, visitor expectations, handover arrangements, and practical day-to-day management.',
         ]}
         highlights={[
@@ -82,6 +82,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         ]}
         compliancePoints={[
           'Built around the current England route from 1 May 2026 for the main tenancy wording.',
+          'Kept separate from the updated Standard and Premium assured periodic routes so shared-house occupation is not forced into an ordinary residential product.',
           'Captures shared-house and HMO-style occupation more directly in the guided flow.',
           'Keeps communal-living wording separate from ordinary residential drafting.',
           'Includes practical file paperwork for shared-house setup, handover, and ongoing variation.',
@@ -256,7 +257,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               'That is usually a Lodger or resident-landlord arrangement rather than an HMO / Shared House tenancy route, so it is usually better to compare the Lodger product instead.',
           },
         ]}
-        finalCtaBody="Use the HMO / Shared House route when the real complexity is shared occupation, communal areas, and day-to-day house management. If the tenants are sharers and you want the agreement to reflect how shared-house living actually works in practice, this is usually a better fit than a general residential agreement. If you are still deciding, compare it against the other England tenancy routes on the main comparison page."
+        finalCtaBody="Use the HMO / Shared House route when the real complexity is shared occupation, communal areas, and day-to-day house management under the updated current England framework. If the tenants are sharers and you want the agreement to reflect how shared-house living actually works in practice, this is usually a better fit than the Standard or Premium assured periodic routes. If you are still deciding, compare it against the other England tenancy routes on the main comparison page."
       />
     </div>
   );

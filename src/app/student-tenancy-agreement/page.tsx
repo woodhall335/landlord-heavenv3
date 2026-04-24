@@ -63,15 +63,15 @@ export default function StudentTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/student-tenancy-agreement"
         title="Student Tenancy Agreement England"
-        subtitle="Use this England student tenancy agreement generator when the occupiers are students and you want clearer wording on guarantors, joint tenants, replacement requests, and end-of-term move-out than a general residential agreement usually provides."
+        subtitle="Use this England student tenancy agreement generator when the occupiers are students and you want clearer wording on guarantors, joint tenants, replacement requests, and end-of-term move-out than the updated general residential routes usually provide."
         primaryCtaLabel="Start student tenancy agreement"
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for a student tenancy agreement template, a student house agreement, or a student tenancy agreement with guarantor wording, this is the dedicated England student route rather than a generic residential agreement adapted after the fact."
+        legacyNotice="If you were searching for a student tenancy agreement template, a student house agreement, or a student tenancy agreement with guarantor wording, this is the dedicated England student route within the updated current framework from 1 May 2026 rather than a generic residential agreement adapted after the fact."
         introTitle="Built for student households"
         introBody={[
-          'This route is designed for student lets where guarantors, shared occupation, replacement requests, and end-of-term expectations usually need much clearer wording from the outset.',
+          "This route is designed for student lets where guarantors, shared occupation, replacement requests, and end-of-term expectations usually need much clearer wording from the outset, while still sitting inside the updated current England framework from 1 May 2026.",
           'Instead of trying to fit a student household into a general residential agreement, this pack is built around the issues that come up most often in student lets: multiple occupiers, guarantor support, mid-tenancy changes, key return, and how the property is handed back at the end of the academic cycle.',
         ]}
         highlights={[
@@ -82,6 +82,7 @@ export default function StudentTenancyAgreementPage() {
         ]}
         compliancePoints={[
           'Built around the current England route from 1 May 2026 for the main tenancy wording.',
+          "Kept separate from the updated Standard and Premium assured periodic routes so student households are not forced into the wrong product.",
           'Lets student households be handled as student households instead of being forced into a generic residential route.',
           'Includes the practical file paperwork that usually matters around student handover and variation.',
           'If the real issue is shared-house management, communal controls, or resident-landlord occupation, compare the HMO / Shared House or Lodger routes instead.',
@@ -255,7 +256,7 @@ export default function StudentTenancyAgreementPage() {
               'Yes. One of the key benefits of this route is clearer wording around hand-back, key return, and end-of-term expectations, which are often more important in student lets than in ordinary residential tenancies.',
           },
         ]}
-        finalCtaBody="Use the Student route when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this is usually the better fit than a general residential agreement. If you are still deciding, compare it against the other England routes on the main comparison page."
+        finalCtaBody="Use the Student route when the occupiers are students and you want the agreement to reflect how student lets actually work in practice under the updated current England framework. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this is usually the better fit than the Standard or Premium assured periodic routes. If you are still deciding, compare it against the other England routes on the main comparison page."
       />
     </div>
   );
