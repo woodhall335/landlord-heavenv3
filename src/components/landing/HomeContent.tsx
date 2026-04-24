@@ -650,13 +650,14 @@ export default function HomeContent() {
             </div>
 
               <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-8')}>
-                <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] bg-white">
+                <div className="overflow-hidden rounded-[2rem]">
                   <Image
                     src="/images/See-the-product-before-you-commit2.webp"
                     alt="See the product before you commit"
-                    fill
+                    width={160}
+                    height={158}
                     sizes="(max-width: 768px) 100vw, 80vw"
-                    className="object-contain object-center"
+                    className="h-auto w-full"
                   />
                 </div>
               </div>
