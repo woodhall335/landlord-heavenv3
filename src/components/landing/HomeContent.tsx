@@ -286,13 +286,13 @@ function RouteSelectionCard({
         PUBLIC_LAYOUT_CLASSES.card
       )}
     >
-      <div className="relative aspect-[16/11] overflow-hidden border-b border-black/5">
+      <div className="relative aspect-[16/11] overflow-hidden border-b border-black/5 bg-gradient-to-br from-[#F7F1FF] via-[#FCFAFF] to-[#EEE3FF]">
         <Image
           src={imageSrc}
           alt={imageAlt}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          className="object-cover transition duration-300 group-hover:scale-[1.03]"
+          className="object-contain p-4 transition duration-300 group-hover:scale-[1.03]"
         />
       </div>
       <div className="p-6">
