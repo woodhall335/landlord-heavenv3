@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
-import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
@@ -69,8 +67,6 @@ const faqs: FAQItem[] = [
 export const runtime = 'nodejs';
 
 export default function CompleteEvictionPackPage() {
-  const sampleProof = getGoldenPackProofData('complete_pack');
-
   const content: ProductSalesPageContent = {
     analytics: {
       pagePath: descriptor.landingHref,
@@ -98,20 +94,6 @@ export default function CompleteEvictionPackPage() {
       mediaAlt: 'Preview of the England complete eviction pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'complete_pack',
-    },
-    earlyProofBand: {
-      priceLabel: `${product.displayPrice} | one-time pack price`,
-      valueSummary:
-        'This page is for landlords who already want the notice and court paperwork joined up. You can see the pack structure, the core possession forms, and the court-stage support before you start.',
-      includedBullets: [
-        'Section 8 notice plus N5 and N119',
-        'Arrears schedule and evidence structure',
-        'Court filing guidance in the same pack',
-        'Preview before you pay',
-      ],
-      bestFor: 'Best if the matter is already moving toward possession paperwork and court filing.',
-      notFor: 'Not for landlords who only need to serve the notice first and decide on court later.',
-      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whatYouGet: {
       title: 'What you get in the Complete Eviction Pack',

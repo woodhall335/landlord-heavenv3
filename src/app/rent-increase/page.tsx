@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
-import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type {
   ProductSalesPageContent,
   ProductSalesRouteCard,
 } from '@/lib/marketing/product-sales-content';
-import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -17,7 +15,6 @@ import { StructuredData, breadcrumbSchema, pricingItemListSchema } from '@/lib/s
 const standardDescriptor = getPublicProductDescriptor('section13_standard')!;
 const defenceDescriptor = getPublicProductDescriptor('section13_defensive')!;
 const canonicalUrl = getCanonicalUrl('/rent-increase');
-const sampleProof = getGoldenPackProofData('section13_standard');
 
 export const metadata: Metadata = {
   title: 'Increase Rent in England | Section 13 / Form 4A Packs for Landlords',
@@ -160,19 +157,6 @@ export default function RentIncreaseLandingPage() {
           <li>Keeps the long-form guide available without making every visitor read it first.</li>
         </ul>
       ),
-    },
-    earlyProofBand: {
-      priceLabel: `${standardDescriptor.priceLabel} standard | ${defenceDescriptor.priceLabel} challenge-ready`,
-      valueSummary:
-        'Choose between the normal rent increase route and the stronger challenge-ready route before you start generating anything. This keeps the product choice clear without forcing every visitor through the long guide first.',
-      includedBullets: [
-        'Standard Section 13 Pack for the normal Form 4A workflow',
-        'Challenge-Ready Section 13 Defence Pack for likely disputes',
-        'Guide still available secondarily for research-led landlords',
-      ],
-      bestFor: 'Best if you already know you need to increase the rent and want the product choice made obvious quickly.',
-      notFor: 'Not for treating every rent increase like a challenge-heavy case when the Standard pack already fits.',
-      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whatYouGet: {
       title: 'Choose the Section 13 route that fits the case',

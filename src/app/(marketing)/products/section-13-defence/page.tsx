@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
-import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { SECTION13_DEFENCE_PAGE } from '@/lib/marketing/section13-products';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -28,8 +26,6 @@ export const metadata: Metadata = {
 };
 
 export default function Section13DefenceProductPage() {
-  const sampleProof = getGoldenPackProofData('section13_defensive');
-
   const content: ProductSalesPageContent = {
     analytics: {
       pagePath: descriptor.landingHref,
@@ -58,20 +54,6 @@ export default function Section13DefenceProductPage() {
           ))}
         </ul>
       ),
-    },
-    earlyProofBand: {
-      priceLabel: `${product.displayPrice} | one-time pack price`,
-      valueSummary:
-        'Choose this when the case already looks challenge-heavy and you want the notice, evidence story, and tribunal-facing materials prepared as one stronger landlord file.',
-      includedBullets: [
-        'Everything in the Standard Section 13 route',
-        'Tribunal bundle and argument summary',
-        'Response templates and evidence checklist',
-        'Preview before you pay',
-      ],
-      bestFor: 'Best when the tenant is likely to dispute the increase and you want challenge-ready structure from the start.',
-      notFor: 'Not necessary for every rent increase if the case is straightforward and the Standard pack already fits the job.',
-      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whatYouGet: {
       title: 'What you get',
