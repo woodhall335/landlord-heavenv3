@@ -342,17 +342,11 @@ export default function HomeContent() {
                   What situation are you dealing with?
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-                  Start with the real problem, not the legal label. Choose the
-                  situation below and we will route you into the product page that
-                  fits the next step.
-                </p>
-                <p className="mt-3 text-sm font-semibold leading-7 text-[#4f2a96]">
-                  These route cards are the fastest way to the right product.
+                  Tell us what's happening and we'll show you the next step.
                 </p>
                 <p className="mt-3 text-sm font-medium leading-7 text-[#6a6280]">
-                  Most landlords either need to start the notice correctly, move
-                  toward court, recover a debt, raise the rent properly, or put the
-                  right agreement in place.
+                  Pick the situation that matches your problem. We'll route you to
+                  the right product — no legal jargon needed.
                 </p>
               </div>
               <div className="public-stat-card px-5 py-4">
