@@ -151,9 +151,9 @@ const routeSelectionCards: RouteCard[] = [
     title: 'Need a tenancy agreement',
     eyebrow: 'Agreement route',
     description:
-      'Start with the tenancy agreements hub when you need the right agreement for the property, occupiers, and let type in England.',
+      'Start with the tenancy agreements hub when you need the right England agreement for the property, occupiers, and let type, including the updated Standard and Premium assured periodic routes.',
     whyRoute:
-      'This route fits when you are setting up a tenancy or replacing older paperwork and need the correct agreement first time.',
+      'This route fits when you are setting up a tenancy or replacing older paperwork and want the current England route, with Standard and Premium updated for the post-Renters’ Rights Act framework from 1 May 2026.',
     ctaLabel: 'Go to tenancy agreement route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
     imageSrc: '/images/create-tenancy-agreement.webp',

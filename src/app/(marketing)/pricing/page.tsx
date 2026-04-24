@@ -250,8 +250,9 @@ export default function PricingPage() {
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5d5672]">
                   Use the hub to choose the right England agreement route for the
                   let, whether that is Standard, Premium, Student, HMO / Shared
-                  House, or Lodger. It is the clearest starting point if you want
-                  the agreement that actually fits the property and occupiers.
+                  House, or Lodger. Standard and Premium are the updated current
+                  England assured periodic routes under the post-Renters' Rights
+                  Act framework from 1 May 2026.
                 </p>
               </div>
             </div>
@@ -262,9 +263,10 @@ export default function PricingPage() {
               </h3>
               <p className="mt-4 max-w-3xl text-sm leading-7 text-[#5d5672]">
                 Most landlords should start at the hub, then move into the exact
-                agreement page that fits the let. That keeps Standard, Premium,
-                Student, HMO / Shared House, and Lodger routes in one place
-                instead of making you compare five separate pricing cards here.
+                agreement page that fits the let. That keeps the updated
+                Standard and Premium assured periodic routes, plus the Student,
+                HMO / Shared House, and Lodger routes, in one place instead of
+                making you compare five separate pricing cards here.
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link href="/products/ast" className="hero-btn-primary text-center">

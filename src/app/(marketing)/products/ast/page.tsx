@@ -49,9 +49,10 @@ const routeCards: ProductSalesRouteCard[] = [
     priceLabel:
       tenancyProducts.find((product) => product.key === 'england_standard_tenancy_agreement')
         ?.priceLabel,
-    whatItIs: 'The baseline agreement for a straightforward whole-property let in England.',
+    whatItIs:
+      'The updated current England assured periodic agreement for a straightforward whole-property let.',
     problemItSolves:
-      'Gives landlords a clean starting point when the tenancy is ordinary and does not need specialist student, shared-house, or resident-landlord wording, including landlords who searched for a periodic tenancy agreement and really need the mainstream England route.',
+      'Gives landlords a clean starting point when the tenancy is ordinary and does not need specialist student, shared-house, or resident-landlord wording, including landlords who searched for a periodic tenancy agreement and need the updated mainstream England route after the Renters’ Rights Act changes.',
     riskIfWrong:
       'If you use a more specialist route by mistake, the paperwork becomes more complicated than it needs to be. If you use something older or vaguer, the core tenancy terms can feel too light.',
     landlordOutcome:
@@ -65,9 +66,9 @@ const routeCards: ProductSalesRouteCard[] = [
       tenancyProducts.find((product) => product.key === 'england_premium_tenancy_agreement')
         ?.priceLabel,
     whatItIs:
-      'The more detailed route for ordinary residential lets that need fuller drafting and stronger management wording.',
+      'The updated fuller current England assured periodic route for ordinary residential lets that need stronger management wording.',
     problemItSolves:
-      'Helps when the landlord wants more detail around access, reporting, inspections, keys, repairs, and hand-back from the outset, while still staying on the ordinary England periodic route.',
+      'Helps when the landlord wants more detail around access, reporting, inspections, keys, repairs, and hand-back from the outset, while still staying on the updated ordinary England periodic route after the Renters’ Rights Act changes.',
     riskIfWrong:
       'If a more involved let is forced into a lighter agreement, avoidable management arguments can start because the paperwork never set expectations clearly enough.',
     landlordOutcome:
@@ -141,7 +142,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What if I searched for periodic tenancy agreement or assured periodic tenancy agreement?',
     answer:
-      'That is still the right kind of search for this England tenancy journey. Use this page to choose the exact agreement product, and use the periodic support guides if you want the terminology explained before you start.',
+      'That is still the right kind of search for this England tenancy journey. Standard and Premium are the updated current England assured periodic routes under the post-Renters’ Rights Act framework, so use this page to choose the exact product and the periodic support guides if you want the terminology explained first.',
   },
   {
     question: 'Where do I get the full pack breakdown for each agreement?',
@@ -162,11 +163,11 @@ export default function EnglandTenancyHubPage() {
     hero: {
       ...astHeroConfig,
       trustText:
-        'England tenancy agreements for landlords | most ordinary whole-property lets should start with Standard',
+        'England tenancy agreements for landlords | Standard and Premium are the updated assured periodic routes from 1 May 2026',
       title: 'Choose the right England',
       highlightTitle: 'tenancy agreement for the let',
       subtitle:
-        'If the tenancy is a straightforward whole-property let, start with Standard. Use Premium when you want fuller drafting, and keep the specialist student, shared-house, and lodger routes for the lets that genuinely need them.',
+        'If the tenancy is a straightforward whole-property let, start with Standard. Use Premium when you want fuller drafting. Standard and Premium are the updated current England assured periodic routes under the post-Renters’ Rights Act framework from 1 May 2026.',
       primaryCta: {
         label: 'Open Standard Tenancy Agreement',
         href: '/standard-tenancy-agreement',
@@ -179,11 +180,11 @@ export default function EnglandTenancyHubPage() {
     earlyProofBand: {
       priceLabel: `${descriptor.priceLabel} | five agreement routes`,
       valueSummary:
-        'Most landlords setting up an ordinary England let should start with Standard. Premium is the stronger secondary route when you want fuller drafting and broader management wording from day one.',
+        'Most landlords setting up an ordinary England let should start with Standard. Premium is the stronger secondary route when you want fuller drafting and broader management wording from day one. Both are updated current England assured periodic routes under the post-Renters’ Rights Act framework.',
       includedBullets: [
         'Five agreement routes for different England letting setups',
-        'Standard is the default for most ordinary whole-property lets',
-        'Premium is there when fuller drafting matters',
+        'Standard is the default updated assured periodic route for most ordinary whole-property lets',
+        'Premium is the updated fuller assured periodic route when broader drafting matters',
         'Specialist student, HMO / Shared House, and lodger routes stay separate',
       ],
       bestFor: 'Best if you want the quickest sensible default before comparing the specialist routes below.',
