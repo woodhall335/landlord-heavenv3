@@ -13,13 +13,6 @@ import {
 } from '@/lib/public-brand';
 import { PUBLIC_PRODUCT_DESCRIPTORS } from '@/lib/public-products';
 import { LANDLORD_DOCUMENT_PRICE_RANGE } from '@/lib/pricing/products';
-import {
-  PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
-  RESIDENTIAL_LETTING_PRODUCTS,
-  RESIDENTIAL_LETTING_PRICE_RANGE,
-  getResidentialLandingHref,
-  getResidentialWizardHref,
-} from '@/lib/residential-letting/products';
 import { PRICING_PACKAGE_CARDS, PRICING_SCHEMA_ITEMS } from '@/lib/marketing/pricing-page';
 import { clsx } from 'clsx';
 import { RiCheckLine } from 'react-icons/ri';
@@ -119,9 +112,6 @@ const solicitorComparison = [
 ];
 
 export default function PricingPage() {
-  const residentialProducts = PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.map(
-    (sku) => RESIDENTIAL_LETTING_PRODUCTS[sku]
-  );
   const pricingSchema = pricingItemListSchema([...PRICING_SCHEMA_ITEMS]);
 
   return (
@@ -253,57 +243,43 @@ export default function PricingPage() {
           <section className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <span className="public-eyebrow">Exact agreement options</span>
+                <span className="public-eyebrow">Tenancy agreement hub</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431]">
-                  England tenancy agreement products
+                  Start with the England tenancy agreement hub
                 </h2>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5d5672]">
-                  If you only need one exact England agreement instead of the hub,
-                  these pages take you straight to the Standard, Premium, Student,
-                  HMO / Shared House, or Lodger agreement you need.
+                  Use the hub to choose the right England agreement route for the
+                  let, whether that is Standard, Premium, Student, HMO / Shared
+                  House, or Lodger. It is the clearest starting point if you want
+                  the agreement that actually fits the property and occupiers.
                 </p>
               </div>
               <p className="text-sm text-[#6b6480]">
-                Per-document pricing {RESIDENTIAL_LETTING_PRICE_RANGE}
+                Hub link /products/ast
               </p>
             </div>
 
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {residentialProducts.map((product) => (
-                <div
-                  key={product.sku}
-                  className="rounded-[1.6rem] border border-[#ece4ff] bg-white/88 p-5 shadow-[0_18px_40px_rgba(58,28,103,0.08)]"
+            <div className="mt-6 rounded-[1.8rem] border border-[#ece4ff] bg-white/88 p-6 shadow-[0_18px_40px_rgba(58,28,103,0.08)]">
+              <h3 className="text-2xl font-semibold text-[#1d1532]">
+                One hub for the full England agreement range
+              </h3>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#5d5672]">
+                Most landlords should start at the hub, then move into the exact
+                agreement page that fits the let. That keeps Standard, Premium,
+                Student, HMO / Shared House, and Lodger routes in one place
+                instead of making you compare five separate pricing cards here.
+              </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <Link href="/products/ast" className="hero-btn-primary text-center">
+                  Open tenancy agreement hub
+                </Link>
+                <Link
+                  href="/products/ast"
+                  className="hero-btn-secondary text-center"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-[#1d1532]">
-                        {product.label}
-                      </h3>
-                      <p className="mt-2 text-sm leading-6 text-[#5d5672]">
-                        {product.description}
-                      </p>
-                    </div>
-                    <div className="whitespace-nowrap text-lg font-bold text-[#6b3fd1]">
-                      {product.displayPrice}
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                    <Link
-                      href={getResidentialLandingHref(product.sku)}
-                      className="hero-btn-secondary flex-1 text-center"
-                    >
-                      See details
-                    </Link>
-                    <Link
-                      href={getResidentialWizardHref(product.sku)}
-                      className="hero-btn-primary flex-1 text-center"
-                    >
-                      Start now
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                  See agreement options
+                </Link>
+              </div>
             </div>
           </section>
 
