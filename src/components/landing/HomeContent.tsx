@@ -165,24 +165,24 @@ const whyLandlordsUseCards: ValueCard[] = [
     title: 'Start with the step that fits the problem',
     body:
       'We help you work out whether you need a Section 8 notice, court papers, a money claim, a rent increase, or a new tenancy agreement before you lose time on the wrong route.',
-    imageSrc: '/images/decision_image.webp',
-    imageAlt: 'Landlord deciding the right route',
+    imageSrc: '/images/Start-with-the-step-that-fits-the- problem.webp',
+    imageAlt: 'Start with the step that fits the problem card image',
     icon: RiFlashlightLine,
   },
   {
     title: 'Catch weak spots before they slow you down',
     body:
       'We flag the details that often cause notices, claims, court forms, and rent increase paperwork to go wrong so you can fix them before you serve, file, or send anything.',
-    imageSrc: '/images/validation_image.webp',
-    imageAlt: 'Landlord validation illustration',
+    imageSrc: '/images/Catch-weak-spots-before-they-slow-you-down.webp',
+    imageAlt: 'Catch weak spots before they slow you down card image',
     icon: RiShieldCheckLine,
   },
   {
     title: 'Get paperwork that holds together',
     body:
       'Your paperwork should match the problem you are dealing with, whether that is possession, arrears, a rent increase, or a new tenancy, and it should read like one joined-up file.',
-    imageSrc: '/images/what_you_get.webp',
-    imageAlt: 'Generated landlord documents and workflow preview',
+    imageSrc: '/images/Get-paperwork-that-holds-together.webp',
+    imageAlt: 'Get paperwork that holds together card image',
     icon: RiFileCheckLine,
   },
 ];
@@ -232,8 +232,8 @@ const workflowSteps: WorkflowStep[] = [
     title: 'Pick the landlord job you need done',
     body:
       'Start with a Section 8 notice, a court pack, a money claim, a rent increase, or a tenancy agreement.',
-    imageSrc: '/images/start-eviction.webp',
-    imageAlt: 'Landlord starting the right route',
+    imageSrc: '/images/recover-unpaid-rent.webp',
+    imageAlt: 'Recover unpaid rent workflow step',
   },
   {
     step: '02',
