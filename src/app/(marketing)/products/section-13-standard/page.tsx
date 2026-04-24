@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
-import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
-import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { SECTION13_STANDARD_PAGE } from '@/lib/marketing/section13-products';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -28,8 +26,6 @@ export const metadata: Metadata = {
 };
 
 export default function Section13StandardProductPage() {
-  const sampleProof = getGoldenPackProofData('section13_standard');
-
   const content: ProductSalesPageContent = {
     analytics: {
       pagePath: descriptor.landingHref,
@@ -58,20 +54,6 @@ export default function Section13StandardProductPage() {
           ))}
         </ul>
       ),
-    },
-    earlyProofBand: {
-      priceLabel: `${product.displayPrice} | one-time pack price`,
-      valueSummary:
-        'Start here when the job is a normal Section 13 rent increase and you want the notice, evidence, and service record to hold together before the tenant pushes back.',
-      includedBullets: [
-        'Form 4A notice built from your answers',
-        'Rent justification report and comparable evidence',
-        'Cover letter and proof of service record',
-        'Preview before you pay',
-      ],
-      bestFor: 'Best for the normal Section 13 route when you want a supportable increase file, not just a blank form.',
-      notFor: 'Not for cases where challenge risk is already obvious and you want tribunal-facing support from the start.',
-      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whatYouGet: {
       title: 'What you get',

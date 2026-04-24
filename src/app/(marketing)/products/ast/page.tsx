@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { astHeroConfig } from '@/components/landing/heroConfigs';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
@@ -8,7 +7,6 @@ import type {
   ProductSalesPageContent,
   ProductSalesRouteCard,
 } from '@/lib/marketing/product-sales-content';
-import type { ProductSku } from '@/lib/pricing/products';
 import { getPublicProductDescriptor, getPublicTenancyProducts } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema, pricingItemListSchema } from '@/lib/seo/structured-data';
@@ -18,7 +16,8 @@ const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 const tenancyProducts = getPublicTenancyProducts();
 
 export const metadata: Metadata = {
-  title: 'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger, Periodic Guide',
+  title:
+    'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger, Periodic Guide',
   description:
     'Choose the right England tenancy agreement for Standard, Premium, Student, HMO / Shared House, and Lodger arrangements, with clear support if you searched for a periodic tenancy agreement in England.',
   keywords: [
@@ -36,7 +35,8 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: 'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger, Periodic Guide',
+    title:
+      'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger, Periodic Guide',
     description:
       'Compare Standard, Premium, Student, HMO / Shared House, and Lodger agreement options for landlords in England, with periodic-tenancy support routes where needed.',
     url: canonicalUrl,
@@ -52,7 +52,7 @@ const routeCards: ProductSalesRouteCard[] = [
     whatItIs:
       'The updated current England assured periodic agreement for a straightforward whole-property let.',
     problemItSolves:
-      'Gives landlords a clean starting point when the tenancy is ordinary and does not need specialist student, shared-house, or resident-landlord wording, including landlords who searched for a periodic tenancy agreement and need the updated mainstream England route after the Renters’ Rights Act changes.',
+      "Gives landlords a clean starting point when the tenancy is ordinary and does not need specialist student, shared-house, or resident-landlord wording, including landlords who searched for a periodic tenancy agreement and need the updated mainstream England route after the Renters' Rights Act changes.",
     riskIfWrong:
       'If you use a more specialist route by mistake, the paperwork becomes more complicated than it needs to be. If you use something older or vaguer, the core tenancy terms can feel too light.',
     landlordOutcome:
@@ -68,7 +68,7 @@ const routeCards: ProductSalesRouteCard[] = [
     whatItIs:
       'The updated fuller current England assured periodic route for ordinary residential lets that need stronger management wording.',
     problemItSolves:
-      'Helps when the landlord wants more detail around access, reporting, inspections, keys, repairs, and hand-back from the outset, while still staying on the updated ordinary England periodic route after the Renters’ Rights Act changes.',
+      "Helps when the landlord wants more detail around access, reporting, inspections, keys, repairs, and hand-back from the outset, while still staying on the updated ordinary England periodic route after the Renters' Rights Act changes.",
     riskIfWrong:
       'If a more involved let is forced into a lighter agreement, avoidable management arguments can start because the paperwork never set expectations clearly enough.',
     landlordOutcome:
@@ -142,7 +142,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What if I searched for periodic tenancy agreement or assured periodic tenancy agreement?',
     answer:
-      'That is still the right kind of search for this England tenancy journey. Standard and Premium are the updated current England assured periodic routes under the post-Renters’ Rights Act framework, so use this page to choose the exact product and the periodic support guides if you want the terminology explained first.',
+      "That is still the right kind of search for this England tenancy journey. Standard and Premium are the updated current England assured periodic routes under the post-Renters' Rights Act framework, so use this page to choose the exact product and the periodic support guides if you want the terminology explained first.",
   },
   {
     question: 'Where do I get the full pack breakdown for each agreement?',
@@ -167,7 +167,7 @@ export default function EnglandTenancyHubPage() {
       title: 'Choose the right England',
       highlightTitle: 'tenancy agreement for the let',
       subtitle:
-        'If the tenancy is a straightforward whole-property let, start with Standard. Use Premium when you want fuller drafting. Standard and Premium are the updated current England assured periodic routes under the post-Renters’ Rights Act framework from 1 May 2026.',
+        "If the tenancy is a straightforward whole-property let, start with Standard. Use Premium when you want fuller drafting. Standard and Premium are the updated current England assured periodic routes under the post-Renters' Rights Act framework from 1 May 2026.",
       primaryCta: {
         label: 'Open Standard Tenancy Agreement',
         href: '/standard-tenancy-agreement',
@@ -177,65 +177,10 @@ export default function EnglandTenancyHubPage() {
         href: '/premium-tenancy-agreement',
       },
     },
-    earlyProofBand: {
-      priceLabel: `${descriptor.priceLabel} | five agreement routes`,
-      valueSummary:
-        'Most landlords setting up an ordinary England let should start with Standard. Premium is the stronger secondary route when you want fuller drafting and broader management wording from day one. Both are updated current England assured periodic routes under the post-Renters’ Rights Act framework.',
-      includedBullets: [
-        'Five agreement routes for different England letting setups',
-        'Standard is the default updated assured periodic route for most ordinary whole-property lets',
-        'Premium is the updated fuller assured periodic route when broader drafting matters',
-        'Specialist student, HMO / Shared House, and lodger routes stay separate',
-      ],
-      bestFor: 'Best if you want the quickest sensible default before comparing the specialist routes below.',
-      notFor: 'Not for forcing every let into Standard when the occupiers or setup clearly point to Student, HMO / Shared House, or Lodger.',
-      preview: (
-        <div className="rounded-[1.8rem] border border-[#E8E1F8] bg-white p-5 shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
-            Default choice
-          </p>
-          <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#17142B]">
-            Most landlords with a straightforward let should start here
-          </h3>
-          <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">
-            Open the Standard agreement first for the ordinary whole-property route. If you already
-            know you want fuller drafting and broader management wording, move straight to Premium.
-          </p>
-          <div className="mt-5 flex flex-col gap-3">
-            <TrackedLink
-              href="/standard-tenancy-agreement"
-              pagePath={descriptor.landingHref}
-              pageType="product_page"
-              ctaLabel="Open Standard Tenancy Agreement"
-              ctaPosition="section"
-              eventName="entry_page_primary_cta_click"
-              routeIntent="tenancy_agreement"
-              product="england_standard_tenancy_agreement"
-              className="hero-btn-primary flex w-full justify-center text-center"
-            >
-              Open Standard Tenancy Agreement
-            </TrackedLink>
-            <TrackedLink
-              href="/premium-tenancy-agreement"
-              pagePath={descriptor.landingHref}
-              pageType="product_page"
-              ctaLabel="Open Premium Tenancy Agreement"
-              ctaPosition="section"
-              eventName="entry_page_secondary_cta_click"
-              routeIntent="tenancy_agreement"
-              product="england_premium_tenancy_agreement"
-              className="hero-btn-secondary flex w-full justify-center text-center"
-            >
-              Open Premium Tenancy Agreement
-            </TrackedLink>
-          </div>
-        </div>
-      ),
-    },
     whatYouGet: {
       title: 'Choose the agreement that fits the tenancy',
       intro:
-        'Use this page to compare the five agreement routes properly after you have checked the default choice. Standard is the usual ordinary-let start, Premium is the fuller residential route, and the specialist options below are for student, shared-house, and lodger setups that need their own wording.',
+        'Use this page to compare the five agreement routes properly. Standard is the usual ordinary-let start, Premium is the fuller residential route, and the specialist options below are for student, shared-house, and lodger setups that need their own wording.',
       routeCards,
     },
     whyYouNeedThis: {
@@ -319,17 +264,7 @@ export default function EnglandTenancyHubPage() {
         label: 'Open Premium Tenancy Agreement',
         href: '/premium-tenancy-agreement',
       },
-      guideLinks: [
-        ...tenancyProducts.map((product) => ({
-          label: product.displayName,
-          href: product.landingHref,
-        })),
-        { label: 'Periodic tenancy agreement guide', href: '/periodic-tenancy-agreement' },
-        {
-          label: 'Assured periodic tenancy guide',
-          href: '/assured-periodic-tenancy-agreement',
-        },
-      ],
+      guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
       title: 'England tenancy agreement FAQs',
@@ -343,19 +278,37 @@ export default function EnglandTenancyHubPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Products', url: getCanonicalUrl('/pricing') },
-          { name: descriptor.displayName, url: canonicalUrl },
+          { name: 'England Tenancy Agreements', url: canonicalUrl },
         ])}
       />
       <StructuredData
-        data={pricingItemListSchema(
-          tenancyProducts.map((product) => ({
-            sku: product.productType as ProductSku,
-            name: product.displayName,
-            description: product.metaDescription,
-            url: `https://landlordheaven.co.uk${product.landingHref}`,
-          }))
-        )}
+        data={pricingItemListSchema([
+          {
+            sku: 'england_standard_tenancy_agreement',
+            name: 'Standard Tenancy Agreement',
+            url: getCanonicalUrl('/standard-tenancy-agreement'),
+          },
+          {
+            sku: 'england_premium_tenancy_agreement',
+            name: 'Premium Tenancy Agreement',
+            url: getCanonicalUrl('/premium-tenancy-agreement'),
+          },
+          {
+            sku: 'england_student_tenancy_agreement',
+            name: 'Student Tenancy Agreement',
+            url: getCanonicalUrl('/student-tenancy-agreement'),
+          },
+          {
+            sku: 'england_hmo_shared_house_tenancy_agreement',
+            name: 'HMO / Shared House Tenancy Agreement',
+            url: getCanonicalUrl('/hmo-shared-house-tenancy-agreement'),
+          },
+          {
+            sku: 'england_lodger_agreement',
+            name: 'Lodger Agreement',
+            url: getCanonicalUrl('/lodger-agreement'),
+          },
+        ])}
       />
       <PublicProductSalesPage content={content} />
     </div>
