@@ -60,6 +60,10 @@ type PreviewCard = {
   imageSrc: string;
   imageAlt: string;
   bullets: string[];
+  href: string;
+  ctaLabel: string;
+  routeIntent: string;
+  product: string;
 };
 
 type WorkflowStep = {
@@ -72,7 +76,7 @@ type WorkflowStep = {
 
 const reviewCount = getDynamicReviewCount();
 const formattedReviewCount = reviewCount.toLocaleString('en-GB');
-const reviewSummary = `${REVIEW_RATING}/5 | ${formattedReviewCount} reviews`;
+const reviewStars = '\u2605\u2605\u2605\u2605\u2605';
 
 const accentIconByType = {
   amethyst: RiFileTextLine,
@@ -192,37 +196,49 @@ const previewCards: PreviewCard[] = [
     title: 'Section 8 notice file ready to review',
     body:
       'If you need to serve notice, you can work through the key details and prepare the paperwork without jumping between guides, forms, and checklists.',
-    imageSrc: '/images/notice_bundles.webp',
-    imageAlt: 'Eviction notice generator preview',
+    imageSrc: '/images/Section-8-notie-file-ready-to-review.webp',
+    imageAlt: 'Section 8 notice file ready to review',
     bullets: [
       'Section 8 notice wording',
       'Grounds, dates, and service checks',
       'Ready to review and print',
     ],
+    href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
+    ctaLabel: 'Open Eviction Notice Generator',
+    routeIntent: 'serve_notice',
+    product: 'notice_only',
   },
   {
     title: 'Court possession paperwork in one file',
     body:
       'When the case has moved beyond notice, you can prepare the main possession forms and keep the next steps together in one place.',
-    imageSrc: '/images/complete pack.png',
-    imageAlt: 'Court possession pack preview',
+    imageSrc: '/images/Court-possession-paperwork-in-one-file.webp',
+    imageAlt: 'Court possession paperwork in one file',
     bullets: [
       'Section 8, N5, and N119 together',
       'Built for the England court route',
       'Clear handover from notice to court',
     ],
+    href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
+    ctaLabel: 'Open Complete Eviction Pack',
+    routeIntent: 'court_possession',
+    product: 'complete_pack',
   },
   {
     title: 'Debt, rent, and tenancy paperwork from the same account',
     body:
       'You can also prepare money claim documents, rent increase paperwork, and tenancy agreements without switching to a different tool.',
-    imageSrc: '/images/laptop.webp',
-    imageAlt: 'Landlord Heaven product previews on a laptop',
+    imageSrc: '/images/Debt-rent-and-tenancy-paperwork-from-the-same-account.webp',
+    imageAlt: 'Debt, rent, and tenancy paperwork from the same account',
     bullets: [
       'Money claims for rent, damage, and bills',
       'Section 13 / Form 4A rent increase paperwork',
       'Agreements for standard, student, HMO, and lodger lets',
     ],
+    href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
+    ctaLabel: 'Open Money Claim Pack',
+    routeIntent: 'recover_debt',
+    product: 'money_claim',
   },
 ];
 
@@ -349,17 +365,20 @@ export default function HomeContent() {
                   the right product — no legal jargon needed.
                 </p>
               </div>
-              <div className="public-stat-card px-5 py-4">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                  Landlords rate us
-                </p>
-                <p className="mt-2 text-3xl font-bold text-[#1c1431]">
-                  {reviewSummary}
-                </p>
-                <p className="mt-1 text-sm text-[#5d5672]">
-                  Based on landlord reviews across the product.
-                </p>
-              </div>
+                <div className="public-stat-card px-5 py-4">
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
+                    Landlords rate us
+                  </p>
+                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-bold text-[#1c1431]">
+                    <span className="text-[#facc15]" aria-hidden="true">
+                      {reviewStars}
+                    </span>
+                    <span>{REVIEW_RATING}/5</span>
+                  </div>
+                  <p className="mt-1 text-sm text-[#5d5672]">
+                    {formattedReviewCount} live reviews across the product.
+                  </p>
+                </div>
             </div>
 
             <div className="mt-8 grid gap-6 xl:grid-cols-3 md:grid-cols-2">
@@ -461,10 +480,18 @@ export default function HomeContent() {
 
               <div className="grid gap-5 md:grid-cols-3">
                 {previewCards.map((card) => (
-                  <article
+                  <TrackedLink
                     key={card.title}
+                    href={card.href}
+                    pagePath="/"
+                    pageType="homepage"
+                    ctaLabel={card.ctaLabel}
+                    ctaPosition="section"
+                    eventName="product_route_chosen"
+                    routeIntent={card.routeIntent}
+                    product={card.product}
                     className={clsx(
-                      'overflow-hidden rounded-[1.8rem] border',
+                      'group overflow-hidden rounded-[1.8rem] border transition duration-200',
                       PUBLIC_LAYOUT_CLASSES.card
                     )}
                   >
@@ -474,7 +501,7 @@ export default function HomeContent() {
                         alt={card.imageAlt}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 30vw"
-                        className="object-cover"
+                        className="object-cover transition duration-300 group-hover:scale-[1.03]"
                       />
                     </div>
                     <div className="p-5">
@@ -490,8 +517,12 @@ export default function HomeContent() {
                           </li>
                         ))}
                       </ul>
+                      <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#4f2a96]">
+                        {card.ctaLabel}
+                        <RiArrowRightLine className="h-4 w-4 transition group-hover:translate-x-1" />
+                      </div>
                     </div>
-                  </article>
+                  </TrackedLink>
                 ))}
               </div>
             </div>
@@ -587,18 +618,21 @@ export default function HomeContent() {
               <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-4xl">
                 Trusted by landlords who want the paperwork right first time
               </h2>
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                <div className="public-stat-card px-5 py-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
-                    Rating
-                  </p>
-                  <p className="mt-3 text-4xl font-bold text-[#1c1431]">
-                    {reviewSummary}
-                  </p>
-                  <p className="mt-2 text-sm text-[#5d5672]">
-                    Average landlord rating across the product.
-                  </p>
-                </div>
+                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                  <div className="public-stat-card px-5 py-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
+                      Rating
+                    </p>
+                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-bold text-[#1c1431] md:text-3xl">
+                      <span className="text-[#facc15]" aria-hidden="true">
+                        {reviewStars}
+                      </span>
+                      <span>{REVIEW_RATING}/5</span>
+                    </div>
+                    <p className="mt-2 text-sm text-[#5d5672]">
+                      Average landlord rating across the product.
+                    </p>
+                  </div>
                 <div className="public-stat-card px-5 py-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6b3fd1]">
                     Reviews
@@ -616,33 +650,14 @@ export default function HomeContent() {
             </div>
 
             <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'overflow-hidden px-6 py-8 md:px-8')}>
-              <div className="grid gap-6 md:grid-cols-[0.48fr_0.52fr] md:items-center">
-                <div className="relative aspect-[5/6] overflow-hidden rounded-[2rem] public-image-frame">
-                  <Image
-                    src="/images/laptop.webp"
-                    alt="Landlord Heaven product dashboard and documents"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#1d1532]">
-                    See the product before you commit
-                  </h3>
-                  <div className="mt-5 space-y-4">
-                    {[
-                      'Real sample packs and previews before you buy',
-                      'Clear product pages that explain what is included',
-                      'A next step that feels obvious from the first screen',
-                    ].map((item) => (
-                      <div key={item} className="flex items-start gap-3">
-                        <RiCheckLine className="mt-1 h-5 w-5 shrink-0 text-[#7c3aed]" />
-                        <p className="text-[15px] leading-7 text-[#5d5672]">{item}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] public-image-frame">
+                <Image
+                  src="/images/See-the-product-before-you-commit.webp"
+                  alt="See the product before you commit"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 80vw"
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>
