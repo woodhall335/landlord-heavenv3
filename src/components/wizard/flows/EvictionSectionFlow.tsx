@@ -63,6 +63,10 @@ import { ScotlandTribunalSection } from '../sections/eviction/ScotlandTribunalSe
 
 // Scotland utilities
 import { validateSixMonthRule } from '@/lib/scotland/grounds';
+import {
+  getEnglandGroundDefinition,
+  normalizeEnglandGroundCode,
+} from '@/lib/england-possession/ground-catalog';
 
 // Types and validation
 import type { WizardFacts } from '@/lib/case-facts/schema';
@@ -152,34 +156,44 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     label: 'Notice',
     description: 'Notice service details',
     isComplete: (facts) => {
+      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
+        const normalized = normalizeEnglandGroundCode(ground);
+        return normalized ? getEnglandGroundDefinition(normalized)?.requiresPriorNotice === true : false;
+      });
+
       // Must answer the gating question first
       if (facts.notice_already_served === undefined) return false;
 
       // If already served: require served date and service method
       // If generating: subflow populates notice_served_date and notice_service_method on completion
-      return Boolean(facts.notice_served_date) && Boolean(facts.notice_service_method);
+      return (
+        Boolean(facts.notice_served_date) &&
+        Boolean(facts.notice_service_method) &&
+        (!requiresPriorNoticeConfirmation || facts.ground_prerequisite_notice_served !== undefined)
+      );
     },
   },
   {
     id: 'section8_arrears',
-    label: 'Arrears',
-    description: 'Rent arrears schedule and grounds support',
+    label: 'Grounds & Particulars',
+    description: 'Section 8 particulars, with arrears support where needed',
     routes: ['section_8'],
     isComplete: (facts) => {
-      // For Section 8 with arrears grounds, arrears schedule + particulars must be complete
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const hasSelectedGrounds = selectedGrounds.length > 0;
       const hasArrearsGround = selectedGrounds.some((g) =>
         ['Ground 8', 'Ground 10', 'Ground 11'].some((ag) => g.includes(ag))
       );
+      const hasParticulars = Boolean(String(facts.section8_details || '').trim());
 
-      if (!hasArrearsGround) return true; // No arrears grounds selected
+      if (!hasSelectedGrounds) return false;
+
+      if (!hasArrearsGround) return hasParticulars;
 
       // Must have arrears items
       const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
       const hasArrearsItems = Array.isArray(arrearsItems) && arrearsItems.length > 0;
-
-      // Must have particulars (now collected in this section after arrears)
-      const hasParticulars = Boolean(facts.section8_details);
 
       return hasArrearsItems && hasParticulars;
     },
@@ -218,13 +232,73 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     id: 'evidence',
     label: 'Court File',
     description: 'Court file readiness and evidence confirmations',
-    isComplete: (facts) =>
-      Boolean(facts.evidence?.notice_service_description?.trim()) &&
-      Boolean(facts.communication_timeline?.log?.trim()) &&
-      facts.communication_timeline?.total_attempts !== undefined &&
-      facts.communication_timeline?.total_attempts !== null &&
-      Boolean(facts.communication_timeline?.tenant_responsiveness) &&
-      Boolean(facts.evidence_reviewed),
+    isComplete: (facts) => {
+      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
+        const normalized = normalizeEnglandGroundCode(ground);
+        return normalized ? getEnglandGroundDefinition(normalized)?.requiresPriorNotice === true : false;
+      });
+
+      const depositTaken = facts.deposit_taken === true;
+      const depositQuestionsComplete =
+        facts.deposit_taken !== undefined &&
+        (!depositTaken ||
+          (facts.deposit_protected !== undefined &&
+            facts.deposit_protected_within_30_days !== undefined &&
+            facts.prescribed_info_served !== undefined &&
+            facts.deposit_returned !== undefined));
+
+      return (
+        Boolean(facts.evidence?.notice_service_description?.trim()) &&
+        Boolean(facts.communication_timeline?.log?.trim()) &&
+        facts.communication_timeline?.total_attempts !== undefined &&
+        facts.communication_timeline?.total_attempts !== null &&
+        Boolean(facts.communication_timeline?.tenant_responsiveness) &&
+        Boolean(facts.evidence_reviewed) &&
+        facts.section_16e_duties_checked !== undefined &&
+        facts.breathing_space_checked !== undefined &&
+        (facts.breathing_space_checked !== true || facts.tenant_in_breathing_space !== undefined) &&
+        facts.evidence_bundle_ready !== undefined &&
+        (!requiresPriorNoticeConfirmation || facts.ground_prerequisite_notice_served !== undefined) &&
+        depositQuestionsComplete
+      );
+    },
+    hasBlockers: (facts) => {
+      const blockers: string[] = [];
+
+      if (facts.section_16e_duties_checked === false) {
+        blockers.push('You must confirm the section 16E landlord duties have been checked before serving or filing.');
+      }
+
+      if (facts.breathing_space_checked === false) {
+        blockers.push('You must check whether the tenant is in a Debt Respite Scheme breathing space before proceeding.');
+      }
+
+      if (facts.tenant_in_breathing_space === true) {
+        blockers.push('The tenant is marked as being in an active breathing space, so the possession route should not proceed yet.');
+      }
+
+      if (facts.evidence_bundle_ready === false) {
+        blockers.push('The complete pack needs the landlord-held records and court-file confirmations to be ready before generation.');
+      }
+
+      const depositTaken = facts.deposit_taken === true;
+      const depositResolved = facts.deposit_returned === true;
+
+      if (depositTaken && !depositResolved && facts.deposit_protected === false) {
+        blockers.push('Deposit protection still needs to be cured or the deposit returned before the possession file is relied on.');
+      }
+
+      if (depositTaken && !depositResolved && facts.deposit_protected_within_30_days === false) {
+        blockers.push('Late deposit protection still needs to be resolved or the deposit returned before relying on these grounds.');
+      }
+
+      if (depositTaken && !depositResolved && facts.prescribed_info_served === false) {
+        blockers.push('Prescribed information still needs to be cured or the deposit returned before relying on these grounds.');
+      }
+
+      return blockers;
+    },
   },
   {
     id: 'court_signing',

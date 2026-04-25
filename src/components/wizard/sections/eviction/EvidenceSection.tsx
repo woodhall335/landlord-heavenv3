@@ -18,6 +18,49 @@ const RESPONSIVENESS_OPTIONS = [
   { value: 'disputing', label: 'The tenant is disputing the arrears or the notice' },
 ];
 
+interface BooleanQuestionProps {
+  label: string;
+  help: string;
+  value: boolean | undefined;
+  onChange: (value: boolean) => void | Promise<void>;
+  yesLabel?: string;
+  noLabel?: string;
+}
+
+const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
+  label,
+  help,
+  value,
+  onChange,
+  yesLabel = 'Yes',
+  noLabel = 'No',
+}) => (
+  <div className="space-y-2 rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+    <p className="text-sm font-semibold text-[#27134a]">{label}</p>
+    <p className="text-sm leading-6 text-[#62597c]">{help}</p>
+    <div className="flex flex-wrap gap-4 pt-1">
+      <label className="flex items-center gap-2 text-sm text-[#27134a]">
+        <input
+          type="radio"
+          checked={value === true}
+          onChange={() => void onChange(true)}
+          className="h-4 w-4 border-[#cbb5ff] text-[#7C3AED] focus:ring-[#7C3AED]"
+        />
+        {yesLabel}
+      </label>
+      <label className="flex items-center gap-2 text-sm text-[#27134a]">
+        <input
+          type="radio"
+          checked={value === false}
+          onChange={() => void onChange(false)}
+          className="h-4 w-4 border-[#cbb5ff] text-[#7C3AED] focus:ring-[#7C3AED]"
+        />
+        {noLabel}
+      </label>
+    </div>
+  </div>
+);
+
 export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
   facts,
   onUpdate,
@@ -77,6 +120,19 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
     communicationTimeline.total_attempts !== undefined &&
     communicationTimeline.total_attempts !== null &&
     Boolean(communicationTimeline.tenant_responsiveness);
+  const depositTaken = facts.deposit_taken === true;
+  const depositQuestionsComplete =
+    facts.deposit_taken !== undefined &&
+    (!depositTaken ||
+      (facts.deposit_protected !== undefined &&
+        facts.deposit_protected_within_30_days !== undefined &&
+        facts.prescribed_info_served !== undefined &&
+        facts.deposit_returned !== undefined));
+  const complianceQuestionsComplete =
+    facts.section_16e_duties_checked !== undefined &&
+    facts.breathing_space_checked !== undefined &&
+    (facts.breathing_space_checked !== true || facts.tenant_in_breathing_space !== undefined) &&
+    facts.evidence_bundle_ready !== undefined;
 
   return (
     <div className="space-y-6">
@@ -220,9 +276,104 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
         </label>
       </section>
 
+      <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
+        <div className="flex items-start gap-3">
+          <RiInformationLine className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#7C3AED]" />
+          <div>
+            <h4 className="text-base font-semibold text-[#20103f]">England compliance confirmations</h4>
+            <p className="mt-1 text-sm leading-6 text-[#62597c]">
+              These confirmations cover the checks that can stop a Form 3A route or possession file from being court-ready.
+              Answer them now so the pack can warn you early instead of leaving the issue until generation.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-3">
+          <BooleanQuestion
+            label="Did this tenancy involve a deposit?"
+            help="We use this to decide whether deposit-protection compliance needs to be checked for the selected grounds."
+            value={facts.deposit_taken}
+            onChange={(value) => onUpdate({ deposit_taken: value })}
+          />
+
+          {depositTaken && (
+            <>
+              <BooleanQuestion
+                label="Is the deposit protected in an approved scheme?"
+                help="If the deposit issue has not been cured, some Form 3A grounds should not be treated as ready for possession proceedings."
+                value={facts.deposit_protected}
+                onChange={(value) => onUpdate({ deposit_protected: value })}
+              />
+              <BooleanQuestion
+                label="Was the deposit protected within 30 days of receipt?"
+                help="This helps the pack flag whether late protection still needs to be cured before you rely on the selected grounds."
+                value={facts.deposit_protected_within_30_days}
+                onChange={(value) => onUpdate({ deposit_protected_within_30_days: value })}
+              />
+              <BooleanQuestion
+                label="Was the prescribed information served?"
+                help="Confirm whether the tenant received the required deposit prescribed information."
+                value={facts.prescribed_info_served}
+                onChange={(value) => onUpdate({ prescribed_info_served: value })}
+              />
+              <BooleanQuestion
+                label="Has the deposit already been returned or otherwise fully resolved?"
+                help="Use this if the deposit issue has already been cured outside the tenancy so the court file can explain that position clearly."
+                value={facts.deposit_returned}
+                onChange={(value) => onUpdate({ deposit_returned: value })}
+              />
+            </>
+          )}
+
+          <BooleanQuestion
+            label="Have you checked the section 16E landlord duties before serving or filing?"
+            help="This confirms you have reviewed the current England landlord-duty checks that must be satisfied before the possession route is relied on."
+            value={facts.section_16e_duties_checked}
+            onChange={(value) => onUpdate({ section_16e_duties_checked: value })}
+            yesLabel="Yes, checked"
+            noLabel="No, not yet"
+          />
+
+          <BooleanQuestion
+            label="Have you checked whether the tenant is in a Debt Respite Scheme breathing space?"
+            help="You should not treat the pack as ready until this check has been done."
+            value={facts.breathing_space_checked}
+            onChange={(value) =>
+              onUpdate(
+                value
+                  ? { breathing_space_checked: true }
+                  : { breathing_space_checked: false, tenant_in_breathing_space: undefined }
+              )
+            }
+            yesLabel="Yes, checked"
+            noLabel="No, not yet"
+          />
+
+          {facts.breathing_space_checked === true && (
+            <BooleanQuestion
+              label="Is the tenant currently in an active breathing space?"
+              help="If the answer is yes, the possession route should be paused until that restriction has been dealt with."
+              value={facts.tenant_in_breathing_space}
+              onChange={(value) => onUpdate({ tenant_in_breathing_space: value })}
+              yesLabel="Yes, active"
+              noLabel="No, not active"
+            />
+          )}
+
+          <BooleanQuestion
+            label="Is the landlord-held evidence bundle ready to support the selected grounds?"
+            help="This should be yes only if the records you would need outside the generated pack are identified and available."
+            value={facts.evidence_bundle_ready}
+            onChange={(value) => onUpdate({ evidence_bundle_ready: value })}
+            yesLabel="Yes, ready"
+            noLabel="No, still incomplete"
+          />
+        </div>
+      </section>
+
       <section
         className={`rounded-[1.6rem] border px-5 py-5 shadow-sm ${
-          coreQuestionsComplete && facts.evidence_reviewed
+          coreQuestionsComplete && facts.evidence_reviewed && depositQuestionsComplete && complianceQuestionsComplete
             ? 'border-emerald-200 bg-emerald-50'
             : 'border-amber-200 bg-amber-50'
         }`}
@@ -242,6 +393,11 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
               needs EPCs, gas safety records, tenancy agreements, or other external records, the generated checklist and
               filing guidance will prompt you to supply those separately.
             </p>
+            {(!depositQuestionsComplete || !complianceQuestionsComplete) && (
+              <p className="mt-3 text-sm leading-6 text-[#8a5a00]">
+                Finish the deposit and compliance confirmations above so the pack can show whether the claim is genuinely court-ready.
+              </p>
+            )}
           </div>
         </div>
       </section>

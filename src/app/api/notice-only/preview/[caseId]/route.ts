@@ -43,6 +43,7 @@ import {
 } from '@/lib/validation/shadow-mode-adapter';
 import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
 import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
+import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
 import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
 
 export const dynamic = 'force-dynamic';
@@ -541,7 +542,11 @@ export async function GET(
 
       // Use mapNoticeOnlyFacts() to build template data with proper address concatenation,
       // ground normalization, deposit logic, and date handling
-      const templateData = mapNoticeOnlyFacts(wizardFacts);
+    let templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    if (jurisdiction === 'england' && selected_route === 'section_8') {
+      templateData = await enrichEnglandSection8TemplateGrounds(templateData);
+    }
 
       // Debug: Log all critical fields to verify correct data flow
       // This helps diagnose blank dates and false compliance in Notice Only pack PDFs

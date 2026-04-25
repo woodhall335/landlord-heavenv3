@@ -13,7 +13,6 @@ import {
 } from './notice-date-calculator';
 import { calculateEnglandPossessionNoticePeriod } from '@/lib/england-possession/ground-catalog';
 import { fillForm3AForm } from './england-official-form-fillers';
-import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 import { buildEnglandForm3AGroundsText, getEnglandGroundLegalWording } from '@/lib/england-possession/legal-wording';
 import { buildEnglandForm3AExplanation } from '@/lib/england-possession/pack-drafting';
 import {
@@ -437,15 +436,11 @@ export async function generateSection8Notice(
       }
 
       const normalizedCode = String(ground.code).replace(/^Ground\s+/i, '').trim().toUpperCase();
-      const legacyGroundDefinition =
-        /^\d+$/.test(normalizedCode)
-          ? SECTION8_GROUND_DEFINITIONS[Number.parseInt(normalizedCode, 10)]
-          : undefined;
       const currentGroundWording = await getEnglandGroundLegalWording(normalizedCode);
 
       return {
         ...ground,
-        statutory_text: currentGroundWording?.legalWording || legacyGroundDefinition?.full_text || '',
+        statutory_text: currentGroundWording?.legalWording || ground.statutory_text || '',
       };
     }),
   );

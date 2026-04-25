@@ -49,13 +49,13 @@ import {
 import { hasArrearsGroundsSelected } from '@/lib/arrears-engine';
 import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
-import { SECTION8_GROUND_DEFINITIONS } from '@/lib/grounds/section8-ground-definitions';
 import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
 import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, isWalesArrearsOnlySelection } from '@/lib/wales/grounds';
 import { buildWalesPartDFromWizardFacts } from '@/lib/wales/partDBuilder';
 import { extractWalesParticularsFromWizardFacts } from '@/lib/wales/particulars';
 import { normalizeRoute, type CanonicalRoute } from '@/lib/wizard/route-normalizer';
 import { generateWalesSection173Notice } from './wales-section173-generator';
+import { getEnglandGroundLegalWording } from '@/lib/england-possession/legal-wording';
 import {
   validateCourtReady,
   logValidationResults,
@@ -266,15 +266,14 @@ function resolveSection8GroundParams(evictionCase: EvictionCase): Section8DatePa
   }, []);
 }
 
-function mapEvictionCaseGroundToSection8NoticeGround(ground: any, groundsData: any): Section8Ground {
+async function mapEvictionCaseGroundToSection8NoticeGround(ground: any, groundsData: any): Promise<Section8Ground> {
   const normalizedGroundCode = String(ground.code || '')
     .replace(/^Ground\s+/i, '')
     .trim()
     .toUpperCase();
   const typedGroundCode: Section8Ground['code'] =
     /^\d+$/.test(normalizedGroundCode) ? Number.parseInt(normalizedGroundCode, 10) : normalizedGroundCode;
-  const legacyGroundDefinition =
-    typeof typedGroundCode === 'number' ? SECTION8_GROUND_DEFINITIONS[typedGroundCode] : undefined;
+  const currentGroundWording = await getEnglandGroundLegalWording(normalizedGroundCode);
 
   return {
     code: typedGroundCode,
@@ -283,7 +282,7 @@ function mapEvictionCaseGroundToSection8NoticeGround(ground: any, groundsData: a
     particulars: ground.particulars,
     supporting_evidence: ground.evidence,
     mandatory: ground.mandatory || false,
-    statutory_text: legacyGroundDefinition?.full_text || '',
+    statutory_text: currentGroundWording?.legalWording || '',
   };
 }
 
@@ -1689,7 +1688,9 @@ async function generateEnglandOrWalesEvictionPack(
       rent_amount: evictionCase.rent_amount,
       rent_frequency: evictionCase.rent_frequency,
       payment_date: evictionCase.payment_day,
-      grounds: evictionCase.grounds.map((ground) => mapEvictionCaseGroundToSection8NoticeGround(ground, groundsData)),
+      grounds: await Promise.all(
+        evictionCase.grounds.map((ground) => mapEvictionCaseGroundToSection8NoticeGround(ground, groundsData))
+      ),
       service_date: currentSection8TemplateData.service_date || undefined,
       notice_period_days: currentSection8TemplateData.notice_period_days || 0,
       earliest_possession_date: currentSection8TemplateData.earliest_possession_date || '',
@@ -3769,7 +3770,9 @@ export async function generateNoticeOnlyPack(
           rent_amount: evictionCase.rent_amount,
           rent_frequency: evictionCase.rent_frequency,
           payment_date: evictionCase.payment_day,
-          grounds: evictionCase.grounds.map((ground) => mapEvictionCaseGroundToSection8NoticeGround(ground, groundsData)),
+          grounds: await Promise.all(
+            evictionCase.grounds.map((ground) => mapEvictionCaseGroundToSection8NoticeGround(ground, groundsData))
+          ),
           // Pass service_date from resolved template data to ensure consistent date across all documents
           service_date: section8TemplateData.service_date,
           notice_period_days: section8TemplateData.notice_period_days || 0,

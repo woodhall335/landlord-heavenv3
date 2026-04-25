@@ -442,6 +442,9 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
   onUpdate,
 }) => {
   const particularsText = facts.section8_details || '';
+  const hasArrearsGround = selectedGrounds.some((ground) =>
+    ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
+  );
   const ground8Threshold = useMemo(
     () => getGround8Threshold(facts.rent_amount || 0, facts.rent_frequency || 'monthly'),
     [facts.rent_amount, facts.rent_frequency]
@@ -449,7 +452,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
 
   // Generate a suggested starting point based on arrears data
   const generateSuggestion = useCallback(() => {
-    if (!arrearsSummary || arrearsSummary.total_arrears === 0) return '';
+    if (!hasArrearsGround || !arrearsSummary || arrearsSummary.total_arrears === 0) return '';
 
     let suggestion = `The tenant owes £${arrearsSummary.total_arrears.toFixed(2)} in rent arrears, `;
     suggestion += `representing ${arrearsSummary.arrears_in_months.toFixed(1)} months of unpaid rent. `;
@@ -463,7 +466,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
       }
 
     return suggestion;
-  }, [arrearsSummary, ground8Threshold.amount, ground8Threshold.description]);
+  }, [arrearsSummary, ground8Threshold.amount, ground8Threshold.description, hasArrearsGround]);
 
   const handleUseSuggestion = () => {
     const suggestion = generateSuggestion();
@@ -489,13 +492,15 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
           Possession particulars
         </h4>
         <p className="text-sm leading-6 text-gray-600">
-          Describe the possession grounds based on the arrears schedule above.
-          This will feed the Form 3A explanation and the N119 court particulars.
+          {hasArrearsGround
+            ? 'Describe the possession grounds using the arrears schedule and any other selected grounds.'
+            : 'Describe the factual basis for the selected Section 8 grounds in clear, court-ready prose.'}
+          {' '}This will feed the Form 3A explanation and the N119 court particulars.
         </p>
       </div>
 
       {/* Quick start from arrears data */}
-      {arrearsSummary && arrearsSummary.total_arrears > 0 && !particularsText && (
+      {hasArrearsGround && arrearsSummary && arrearsSummary.total_arrears > 0 && !particularsText && (
         <div className={`${EVICTION_TINTED_CARD_CLASS} border-purple-200 bg-purple-50`}>
           <p className="text-sm leading-6 text-purple-800 mb-2">
             <strong>Quick start:</strong> Generate a summary based on your arrears schedule.
@@ -522,10 +527,14 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
           className={`${EVICTION_TEXTAREA_CLASS} min-h-[180px]`}
           value={particularsText}
           onChange={(e) => onUpdate({ section8_details: e.target.value })}
-          placeholder="Describe the rent arrears: total amount owed, how many months behind, when arrears began, any partial payments made..."
+          placeholder={
+            hasArrearsGround
+              ? 'Describe the arrears position and any other selected grounds: total amount owed, how many periods behind, when arrears began, partial payments, and the key tenancy events.'
+              : 'Describe the factual basis for the selected grounds: what happened, when it happened, who was involved, what tenancy term or conduct is relied on, and what supporting records exist.'
+          }
         />
         <p className={EVICTION_HINT_CLASS}>
-          Be specific and factual. Include dates, amounts, and reference the arrears schedule.
+          Be specific and factual. Include dates, the selected grounds, and the landlord-held records or chronology that support the case.
           Selected grounds: {selectedGrounds.join(', ') || 'None selected'}
         </p>
       </div>
@@ -533,7 +542,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
       {/* Ask Heaven Inline Enhancer */}
       <AskHeavenInlineEnhancer
         questionId="section8_details"
-        questionText="Possession particulars for Form 3A and N119 rent arrears grounds"
+        questionText="Possession particulars for the selected Form 3A and N119 grounds"
         answer={particularsText}
         onApply={(newText) => onUpdate({ section8_details: newText })}
         context={enhanceContext}

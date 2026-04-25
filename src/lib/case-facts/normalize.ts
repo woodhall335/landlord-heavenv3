@@ -10,10 +10,6 @@ import { createEmptyCaseFacts } from './schema';
 import { normalizeRoutes, getPrimaryRoute, routeToDocumentType } from '../wizard/route-normalizer';
 import { normalizeJurisdiction } from '../types/jurisdiction';
 import {
-  SECTION8_GROUND_DEFINITIONS,
-  type Section8GroundDefinition,
-} from '../grounds/section8-ground-definitions';
-import {
   calculateEnglandPossessionNoticePeriod,
   getEnglandGroundDefinition as getPost2026EnglandGroundDefinition,
 } from '@/lib/england-possession/ground-catalog';
@@ -2743,7 +2739,13 @@ function calculateRequiredNoticePeriod(selectedGrounds: (string | number)[]): nu
   return calculateEnglandPossessionNoticePeriod(selectedGrounds).noticePeriodDays;
 }
 
-// SECTION8_GROUND_DEFINITIONS is now imported from '@/lib/grounds/section8-ground-definitions'
+interface NormalizedSection8GroundDefinition {
+  code: string;
+  title: string;
+  mandatory: boolean;
+  legal_basis: string;
+  full_text: string;
+}
 
 /**
  * Build grounds array from wizard facts with proper structure for Form 3 compliance
@@ -2833,7 +2835,7 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
   };
 
   const renderParticulars = (
-    groundDef: Section8GroundDefinition | undefined,
+    groundDef: NormalizedSection8GroundDefinition | undefined,
     groundCode: string | number | null,
   ) => {
     const particularsEntry = pickParticularEntry(groundCode || '');
@@ -2915,24 +2917,16 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
 
   return filteredGrounds.map((groundStr: string) => {
     const groundNumStr = normalizeGroundCode(groundStr) || '';
-    const groundKey = groundNumStr === '14A' ? '14A' : parseInt(groundNumStr, 10);
-    const groundDef =
-      SECTION8_GROUND_DEFINITIONS[groundKey] ||
-      SECTION8_GROUND_DEFINITIONS[groundNumStr] ||
-      (() => {
-        const englandGround = getPost2026EnglandGroundDefinition(groundNumStr);
-        if (!englandGround) {
-          return undefined;
-        }
-
-        return {
+    const englandGround = getPost2026EnglandGroundDefinition(groundNumStr);
+    const groundDef = englandGround
+      ? ({
           code: englandGround.code,
           title: englandGround.title,
           mandatory: englandGround.mandatory,
           legal_basis: `Housing Act 1988, Schedule 2, Ground ${englandGround.code}`,
           full_text: '',
-        } satisfies Section8GroundDefinition;
-      })();
+        } satisfies NormalizedSection8GroundDefinition)
+      : undefined;
 
     if (!groundDef) {
       console.warn(`[buildGroundsArray] Unknown ground: ${groundStr}`);
@@ -2954,14 +2948,16 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
     let explanation = '';
     const particularLines: string[] = [];
 
-    if (groundDef.code === 8 || groundDef.code === 10 || groundDef.code === 11) {
+    const normalizedGroundCode = String(groundDef.code).toUpperCase();
+
+    if (normalizedGroundCode === '8' || normalizedGroundCode === '10' || normalizedGroundCode === '11') {
       // USE CANONICAL ARREARS DATA from arrears-schedule-mapper
       // This ensures Notice figures match the Rent Schedule exactly
       // Use computed total from schedule (or legacy total as fallback)
       const arrears = scheduleData.arrears_total;
       const arrearsInMonths = scheduleData.arrears_in_months;
 
-      if (groundDef.code === 8) {
+      if (normalizedGroundCode === '8') {
         // Ground 8 - Serious Rent Arrears (MANDATORY)
         const threshold = ground8Threshold.amount;
         const thresholdDescription = ground8Threshold.description;
@@ -3014,34 +3010,34 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
 
         particularLines.push(`<strong>Total arrears: £${arrears.toFixed(2)}</strong>`);
         particularLines.push(
-          groundDef.code === 10
+          normalizedGroundCode === '10'
             ? 'Ground 10 is a DISCRETIONARY ground. The court will consider all circumstances when deciding whether to grant possession.'
             : 'Ground 11 is a DISCRETIONARY ground. The court will consider the pattern of late payments when deciding whether to grant possession.'
         );
         particularLines.push('A detailed schedule of arrears is attached.');
       }
-    } else if (groundDef.code === 12) {
+    } else if (normalizedGroundCode === '12') {
       explanation =
         getWizardValue(wizard, 'section8_other_grounds_narrative') ||
         getWizardValue(wizard, 'section8_grounds_narrative') ||
         'The tenant has breached one or more terms of the tenancy agreement.';
       particularLines.push(explanation);
       particularLines.push('Ground 12 is a DISCRETIONARY ground. The court will consider the nature and severity of the breach.');
-    } else if (groundDef.code === 13 || groundDef.code === 15) {
+    } else if (normalizedGroundCode === '13' || normalizedGroundCode === '15') {
       explanation =
         getWizardValue(wizard, 'section8_other_grounds_narrative') ||
         getWizardValue(wizard, 'section8_grounds_narrative') ||
         'The condition of the property has deteriorated.';
       particularLines.push(explanation);
-      particularLines.push(`Ground ${groundDef.code} is a DISCRETIONARY ground. The court will assess the extent of deterioration.`);
-    } else if (groundDef.code === 14 || groundNumStr === '14A') {
+      particularLines.push(`Ground ${normalizedGroundCode} is a DISCRETIONARY ground. The court will assess the extent of deterioration.`);
+    } else if (normalizedGroundCode === '14' || groundNumStr === '14A') {
       explanation =
         getWizardValue(wizard, 'section8_other_grounds_narrative') ||
         getWizardValue(wizard, 'section8_grounds_narrative') ||
         'The tenant or persons at the property have caused nuisance or annoyance.';
       particularLines.push(explanation);
       particularLines.push(`Ground ${groundNumStr} is a DISCRETIONARY ground. The court will consider evidence of nuisance or anti-social behaviour.`);
-    } else if (groundDef.code === 17) {
+    } else if (normalizedGroundCode === '17') {
       explanation =
         getWizardValue(wizard, 'section8_other_grounds_narrative') ||
         getWizardValue(wizard, 'section8_grounds_narrative') ||

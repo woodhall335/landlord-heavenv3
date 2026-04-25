@@ -1161,6 +1161,20 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
     [facts.section8_grounds]
   );
+  const groundsRequiringPriorNotice = useMemo(() => {
+    const definitions = new Map<EnglandGroundCode, (typeof ENGLAND_GROUND_DEFINITIONS)[number]>();
+
+    selectedGrounds.forEach((ground) => {
+      const code = normalizeEnglandGroundCode(ground);
+      if (!code) return;
+      const definition = ENGLAND_GROUND_MAP.get(code);
+      if (definition?.requiresPriorNotice) {
+        definitions.set(code, definition);
+      }
+    });
+
+    return Array.from(definitions.values());
+  }, [selectedGrounds]);
 
   // Track whether the inline subflow is complete
   const [subflowComplete, setSubflowComplete] = useState(false);
@@ -1605,6 +1619,72 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             Edit notice details
           </button>
         </div>
+      )}
+
+      {isSection8 && groundsRequiringPriorNotice.length > 0 && (
+        <section className="rounded-[1.5rem] border border-[#e6dcff] bg-white p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-[#20103f]">
+              Prior notice or tenancy-start wording check
+            </h4>
+            <p className="text-sm leading-6 text-[#60597a]">
+              The selected ground{groundsRequiringPriorNotice.length > 1 ? 's' : ''}{' '}
+              {groundsRequiringPriorNotice.map((ground) => `Ground ${ground.code}`).join(', ')} rely on
+              prior written notice or tenancy-start wording. Confirm that prerequisite before the pack
+              treats these grounds as court-ready.
+            </p>
+          </div>
+
+          <div className="mt-4 flex flex-col gap-3">
+            <label
+              className={`flex items-start rounded-2xl border p-4 transition-all ${
+                facts.ground_prerequisite_notice_served === true
+                  ? 'border-purple-500 bg-purple-50 ring-2 ring-purple-100'
+                  : 'border-gray-200 bg-white hover:border-gray-300'
+              }`}
+            >
+              <input
+                type="radio"
+                name="ground_prerequisite_notice_served"
+                checked={facts.ground_prerequisite_notice_served === true}
+                onChange={() => onUpdate({ ground_prerequisite_notice_served: true })}
+                className="mt-0.5 mr-3"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-900">
+                  Yes, the required prior notice or tenancy wording is already in place
+                </span>
+                <p className="mt-0.5 text-xs text-gray-500">
+                  Use this if the tenancy paperwork or earlier written notice already supports these grounds.
+                </p>
+              </div>
+            </label>
+
+            <label
+              className={`flex items-start rounded-2xl border p-4 transition-all ${
+                facts.ground_prerequisite_notice_served === false
+                  ? 'border-red-300 bg-red-50 ring-2 ring-red-100'
+                  : 'border-gray-200 bg-white hover:border-gray-300'
+              }`}
+            >
+              <input
+                type="radio"
+                name="ground_prerequisite_notice_served"
+                checked={facts.ground_prerequisite_notice_served === false}
+                onChange={() => onUpdate({ ground_prerequisite_notice_served: false })}
+                className="mt-0.5 mr-3"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-900">
+                  No, that prerequisite is not in place yet
+                </span>
+                <p className="mt-0.5 text-xs text-gray-500">
+                  The wizard will flag this as a blocker so the notice and court pack are not treated as compliant for that ground.
+                </p>
+              </div>
+            </label>
+          </div>
+        </section>
       )}
     </div>
   );

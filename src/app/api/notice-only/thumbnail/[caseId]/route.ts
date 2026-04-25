@@ -30,6 +30,7 @@ import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales';
 import { generateSection21Notice, mapWizardToSection21Data } from '@/lib/documents/section21-generator';
 import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
+import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -351,7 +352,11 @@ export async function GET(
     });
 
     // Build template data
-    const templateData = mapNoticeOnlyFacts(wizardFacts);
+    let templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    if (jurisdiction === 'england' && selectedRoute === 'section_8') {
+      templateData = await enrichEnglandSection8TemplateGrounds(templateData);
+    }
 
     // Add formatted dates
     templateData.service_date_formatted = formatUKDate(templateData.service_date || '');

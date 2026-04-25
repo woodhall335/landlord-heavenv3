@@ -413,13 +413,18 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
   let decisionIssues: ValidationIssue[] = [];
   let customIssues: ValidationIssue[] = [];
 
-  if (product === 'notice_only' || product === 'eviction_pack') {
+  if (
+    product === 'notice_only' ||
+    (product as string) === 'complete_pack' ||
+    product === 'eviction_pack'
+  ) {
     try {
       // Convert facts to CaseFacts for decision engine
       const caseFacts = wizardFactsToCaseFacts(facts);
 
       // Translate eviction_pack to complete_pack for decision engine compatibility
-      const decisionProduct = product === 'eviction_pack' ? 'complete_pack' : product;
+      const decisionProduct: DecisionInput['product'] =
+        product === 'notice_only' ? 'notice_only' : 'complete_pack';
 
       const decisionInput: DecisionInput = {
         jurisdiction: jurisdiction as CanonicalJurisdiction,
@@ -489,7 +494,11 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
     }
   }
 
-  if (jurisdiction === 'england' && route === 'section_8' && (product === 'notice_only' || product === 'eviction_pack')) {
+  if (
+    jurisdiction === 'england' &&
+    route === 'section_8' &&
+    (product === 'notice_only' || (product as string) === 'complete_pack' || product === 'eviction_pack')
+  ) {
     const englandValidation = validateEnglandPost2026WizardFacts(facts as Record<string, any>);
     customIssues = [
       ...englandValidation.blockingIssues,
