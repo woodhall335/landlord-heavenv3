@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
@@ -66,6 +68,8 @@ const faqs: FAQItem[] = [
 export const runtime = 'nodejs';
 
 export default function NoticeOnlyPage() {
+  const sampleProof = getGoldenPackProofData('notice_only');
+
   const content: ProductSalesPageContent = {
     analytics: {
       pagePath: descriptor.landingHref,
@@ -160,6 +164,7 @@ export default function NoticeOnlyPage() {
           includedByDefault: true,
         },
       ],
+      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
       title: 'Why a Section 8 case needs more than a blank notice',

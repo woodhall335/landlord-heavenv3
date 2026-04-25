@@ -93,18 +93,17 @@
       }
     },
     {
-      "title": "Proof of Service Certificate",
-      "description": "Template for proving you served the notice correctly",
+      "title": "Certificate of Service (Form N215)",
+      "description": "Official editable N215 certificate of service for the notice in this pack",
       "category": "evidence_tool",
       "documentType": "proof_of_service",
-      "fileName": "proof_of_service_template.pdf",
+      "fileName": "form_n215_certificate_of_service.pdf",
       "files": {
-        "pdf": "complete_pack/proof_of_service_template.pdf",
-        "text": "complete_pack/proof_of_service_template.txt",
-        "html": "complete_pack/proof_of_service_template.html"
+        "pdf": "complete_pack/form_n215_certificate_of_service.pdf",
+        "text": "complete_pack/form_n215_certificate_of_service.txt"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 5,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

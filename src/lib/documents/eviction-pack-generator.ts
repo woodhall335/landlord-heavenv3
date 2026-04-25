@@ -3428,6 +3428,25 @@ export async function generateNoticeOnlyPack(
       } catch (err) {
         console.warn('Failed to generate Section 21 compliance declaration:', err);
       }
+
+      // 5. Generate official Certificate of Service (Form N215)
+      try {
+        const proofOfServiceDoc = await generateProofOfService(
+          evictionCase,
+          {
+            service_date: section21TemplateData.service_date || section21TemplateData.notice_date,
+            expiry_date:
+              section21TemplateData.display_possession_date ||
+              section21TemplateData.display_possession_date_formatted ||
+              section21TemplateData.notice_expiry_date,
+            service_method: section21TemplateData.service_method,
+          },
+          section21TemplateData
+        );
+        documents.push(proofOfServiceDoc);
+      } catch (err) {
+        console.warn('Failed to generate proof of service:', err);
+      }
     } else if (jurisdiction === 'wales' && isWalesRoute) {
       // ==========================================================================
       // WALES oOTICE-OoLY: Section 173 (no-fault) or fault_based (breach)
@@ -3906,7 +3925,26 @@ export async function generateNoticeOnlyPack(
         console.warn('Failed to generate compliance declaration:', err);
       }
 
-      // 5. Generate Rent Schedule / Arrears Statement if arrears grounds selected
+      // 5. Generate official Certificate of Service (Form N215)
+      try {
+        const proofOfServiceDoc = await generateProofOfService(
+          evictionCase,
+          {
+            service_date: section8TemplateData.service_date || section8TemplateData.notice_date,
+            expiry_date:
+              section8TemplateData.earliest_possession_date ||
+              section8TemplateData.earliest_proceedings_date ||
+              section8TemplateData.notice_expiry_date,
+            service_method: section8TemplateData.service_method,
+          },
+          section8TemplateData
+        );
+        documents.push(proofOfServiceDoc);
+      } catch (err) {
+        console.warn('Failed to generate proof of service:', err);
+      }
+
+      // 6. Generate Rent Schedule / Arrears Statement if arrears grounds selected
       const hasArrearsGrounds = evictionCase.grounds.some((g) =>
         ['Ground 8', 'Ground 10', 'Ground 11'].some((ag) => g.code.includes(ag) || g.code === ag)
       );
@@ -4065,7 +4103,7 @@ export async function generateNoticeOnlyPack(
       total_documents: documents.length,
       includes_court_forms: false,
       includes_expert_guidance: true,
-      includes_evidence_tools: false,
+      includes_evidence_tools: documents.some((document) => document.category === 'evidence_tool'),
       premium_features: ['Notice + Service Instructions + Checklists'],
     },
   };

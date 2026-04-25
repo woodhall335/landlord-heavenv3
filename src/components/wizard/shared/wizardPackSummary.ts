@@ -58,6 +58,7 @@ const PACK_CONTENTS: Record<
       'Service instructions',
       'Service and validity checklist',
       'Pre-service compliance declaration',
+      'Certificate of Service (Form N215)',
       'Rent schedule / arrears statement',
     ],
   },

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
@@ -67,6 +69,8 @@ const faqs: FAQItem[] = [
 export const runtime = 'nodejs';
 
 export default function CompleteEvictionPackPage() {
+  const sampleProof = getGoldenPackProofData('complete_pack');
+
   const content: ProductSalesPageContent = {
     analytics: {
       pagePath: descriptor.landingHref,
@@ -173,6 +177,7 @@ export default function CompleteEvictionPackPage() {
           includedByDefault: true,
         },
       ],
+      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
       title: 'Why you need the full pack instead of isolated forms',

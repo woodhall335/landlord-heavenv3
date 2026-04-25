@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-04-25T15:00:49.481Z
+Generated: 2026-04-25T18:41:40.876Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):
@@ -46,7 +46,7 @@ Documents:
 - Form N119 - Particulars of Claim [n119_particulars]
 - Schedule of Arrears [arrears_schedule]
 - Evidence Collection Checklist [evidence_checklist]
-- Proof of Service Certificate [proof_of_service]
+- Certificate of Service (Form N215) [proof_of_service]
 - Witness Statement [witness_statement]
 - Court Bundle Index [court_bundle_index]
 - Hearing Checklist [hearing_checklist]
@@ -55,7 +55,7 @@ Documents:
 
 ## Eviction Notice Generator (Section 8, May 2026)
 Folder: notice_only
-Documents: 5
+Documents: 6
 Score: 
 What works: 
 Issues found: 
@@ -66,6 +66,7 @@ Documents:
 - Service Instructions [service_instructions]
 - Service & Validity Checklist [validity_checklist]
 - Pre-Service Compliance Declaration [compliance_declaration]
+- Certificate of Service (Form N215) [proof_of_service]
 - Rent Schedule / Arrears Statement [arrears_schedule]
 
 ## HMO / Shared House Tenancy Agreement

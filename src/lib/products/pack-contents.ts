@@ -515,6 +515,14 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
     required: true,
   });
 
+  items.push({
+    key: 'proof_of_service',
+    title: 'Certificate of Service (Form N215)',
+    description: `Official editable Form N215 certificate of service for how and when the ${ENGLAND_SECTION8_NOTICE_NAME} was served.`,
+    category: 'Evidence',
+    required: true,
+  });
+
   if (has_arrears || include_arrears_schedule) {
     items.push({
       key: 'arrears_schedule',

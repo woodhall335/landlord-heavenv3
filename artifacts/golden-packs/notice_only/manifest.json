@@ -2,7 +2,7 @@
   "key": "notice_only",
   "displayName": "Eviction Notice Generator (Section 8, May 2026)",
   "outputDir": "notice_only",
-  "documentCount": 5,
+  "documentCount": 6,
   "documents": [
     {
       "title": "Form 3A notice",
@@ -71,6 +71,23 @@
       },
       "extraction": {
         "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Certificate of Service (Form N215)",
+      "description": "Official editable N215 certificate of service for the notice in this pack",
+      "category": "evidence_tool",
+      "documentType": "proof_of_service",
+      "fileName": "form_n215_certificate_of_service.pdf",
+      "files": {
+        "pdf": "notice_only/form_n215_certificate_of_service.pdf",
+        "text": "notice_only/form_n215_certificate_of_service.txt"
+      },
+      "extraction": {
+        "pageCount": 5,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

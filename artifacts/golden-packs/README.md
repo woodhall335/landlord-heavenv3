@@ -2,7 +2,7 @@
 
 Generated golden sample packs for each live England public product.
 
-Generated at: 2026-04-25T15:00:49.481Z
+Generated at: 2026-04-25T18:41:40.876Z
 
 Command:
 `npx -p node@20 -p tsx tsx scripts/generate-england-golden-packs.ts`
@@ -14,7 +14,7 @@ Top-level files:
 Pack folders:
 - `section13_defensive` (12 documents)
 - `complete_pack` (11 documents)
-- `notice_only` (5 documents)
+- `notice_only` (6 documents)
 - `england_hmo_shared_house_tenancy_agreement` (9 documents)
 - `england_lodger_agreement` (4 documents)
 - `money_claim` (10 documents)
