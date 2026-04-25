@@ -166,7 +166,7 @@ const routeSelectionCards: RouteCard[] = [
 
 const whyLandlordsUseCards: ValueCard[] = [
   {
-    title: 'Start with the step that fits the problem',
+      title: 'Identify the Problem',
     body:
       'We help you work out whether you need a Section 8 notice, court papers, a money claim, a rent increase, or a new tenancy agreement before you lose time on the wrong route.',
     imageSrc: '/images/Start-with-the-step-that-fits-the- problem.webp',
@@ -174,7 +174,7 @@ const whyLandlordsUseCards: ValueCard[] = [
     icon: RiFlashlightLine,
   },
   {
-    title: 'Catch weak spots before they slow you down',
+      title: 'We Check Compliance',
     body:
       'We flag the details that often cause notices, claims, court forms, and rent increase paperwork to go wrong so you can fix them before you serve, file, or send anything.',
     imageSrc: '/images/Catch-weak-spots-before-they-slow-you-down.webp',
