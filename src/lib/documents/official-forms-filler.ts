@@ -152,15 +152,15 @@ const N5_FIELDS = {
   STATEMENT_DATE_MM: 'Date the Statement of Truth is signed - MM',
   STATEMENT_DATE_YYYY: 'Date the Statement of Truth is signed - YYYY',
   SIGNATORY_NAME: 'Full name of the person signing the Statement of Truth',
-  SOLICITOR_FIRM: "Name of claimant's legal representative's firm",
+  SOLICITOR_FIRM: "Name of claimant’s legal representative’s firm",
   POSITION_HELD: 'If signing on behalf of firm or company give position or office held',
 
   // Service address
-  ADDRESS_POSTCODE: "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
-  ADDRESS_TOWN: "Town or city - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
-  ADDRESS_BUILDING: "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
-  ADDRESS_LINE2: "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
-  ADDRESS_COUNTY: "County (optional) - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  ADDRESS_POSTCODE: "Postcode - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
+  ADDRESS_TOWN: "Town or city - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
+  ADDRESS_BUILDING: "building and street - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
+  ADDRESS_LINE2: "Second line of address - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
+  ADDRESS_COUNTY: "County (optional) - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
 
   // Contact details
   FAX: 'If applicable, fax number',
@@ -203,7 +203,7 @@ const N5_CHECKBOXES = {
   SOT_AUTHORISED: 'The Claimant believes that the facts stated in this claim form are true. I am authorised by the claimant to sign this statement',
   SOT_CLAIMANT: 'Statement of Truth is signed by the Claimant',
   SOT_LITIGATION_FRIEND: 'Statement of Truth is signed by the Litigation friend (where claimant is a child or a patient)',
-  SOT_LEGAL_REP: "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))",
+  SOT_LEGAL_REP: "Statement of Truth is signed by the Claimant’s legal representative (as defined by CPR 2.3(1))",
 } as const;
 
 /**
@@ -592,6 +592,18 @@ const N1_REQUIRED_PDF_FIELDS = [
   'Text34', // Postcode
 ];
 
+const N5_REQUIRED_PDF_FIELDS = [
+  N5_FIELDS.COURT,
+  N5_FIELDS.CLAIMANT_DETAILS,
+  N5_FIELDS.DEFENDANT_DETAILS,
+  N5_FIELDS.POSSESSION_OF,
+  N5_FIELDS.ADDRESS_FOR_SERVICE,
+  N5_FIELDS.SIGNATORY_NAME,
+  N5_FIELDS.ADDRESS_POSTCODE,
+  N5_CHECKBOXES.SOT_CLAIMANT,
+  N5_CHECKBOXES.SOT_LEGAL_REP,
+];
+
 /**
  * N119 form field names (38 text fields, 16 checkboxes)
  * Source: public/official-forms/n119-eng.pdf (official HMCTS form, 84.5KB)
@@ -696,6 +708,21 @@ const N119_CHECKBOXES = {
   // Uses curly apostrophe (U+2019)
   SOT_LEGAL_REP: "Statement of Truth signed by Claimant\u2019s legal representative (as defined by CPR 2.3(1))",
 } as const;
+
+const N119_REQUIRED_PDF_FIELDS = [
+  N119_FIELDS.COURT,
+  N119_FIELDS.CLAIMANT,
+  N119_FIELDS.DEFENDANT,
+  N119_FIELDS.POSSESSION_OF,
+  N119_FIELDS.REASON_A,
+  N119_FIELDS.STEPS_TAKEN,
+  N119_FIELDS.NOTICE_OTHER_TYPE,
+  N119_FIELDS.NOTICE_DATE_DAY_MONTH,
+  N119_FIELDS.NOTICE_DATE_YEAR,
+  N119_FIELDS.SIGNATORY_NAME,
+  N119_CHECKBOXES.SOT_CLAIMANT,
+  N119_CHECKBOXES.SOT_LEGAL_REP,
+];
 
 // =============================================================================
 // TYPE DEFINITIONS
@@ -1408,6 +1435,9 @@ export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}
 
   const pdfDoc = await loadOfficialForm(formFile);
   const form = pdfDoc.getForm();
+
+  assertPdfHasFields(form, N5_REQUIRED_PDF_FIELDS, formFile);
+  console.log(`✅ [N5] Template validation passed (${N5_REQUIRED_PDF_FIELDS.length} required fields verified)`);
 
   // === HEADER FIELDS ===
   setTextRequired(form, N5_FIELDS.COURT, data.court_name, ctx);
@@ -2494,6 +2524,9 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
 
   const pdfDoc = await loadOfficialForm(formFile);
   const form = pdfDoc.getForm();
+
+  assertPdfHasFields(form, N119_REQUIRED_PDF_FIELDS, formFile);
+  console.log(`✅ [N119] Template validation passed (${N119_REQUIRED_PDF_FIELDS.length} required fields verified)`);
 
   // === HEADER FIELDS ===
   setTextRequired(form, N119_FIELDS.COURT, data.court_name, ctx);

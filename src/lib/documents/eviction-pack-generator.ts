@@ -1297,6 +1297,10 @@ async function generateEvidenceChecklist(
   const caseTypeLabel = hasSection8Grounds
     ? `Section 8 (${evictionCase.grounds.map(g => g.code).join(', ')})`
     : evictionCase.case_type === 'no_fault' ? 'Section 21' : 'Possession Claim';
+  const useEnglandDraftingModel = jurisdiction === 'england' && !isSection21;
+  const englandDraftingModel = useEnglandDraftingModel
+    ? buildEnglandPossessionDraftingModel(evictionCase as unknown as Record<string, any>)
+    : null;
 
   const data = {
     ...evictionCase,
@@ -1308,12 +1312,17 @@ async function generateEvidenceChecklist(
     current_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
     generated_date: new Date().toISOString().split('T')[0],
     grounds_data: groundsData,
+    is_england_post_2026: useEnglandDraftingModel,
+    drafting_model: englandDraftingModel,
     required_evidence: evictionCase.grounds.map((g) => {
       const groundDetails = getGroundDetails(groundsData, g.code);
       return {
         ground: g.code,
         title: g.title,
-        evidence_items: groundDetails?.required_evidence || [],
+        evidence_items:
+          useEnglandDraftingModel && englandDraftingModel
+            ? []
+            : groundDetails?.required_evidence || [],
       };
     }),
   };
@@ -1436,6 +1445,12 @@ async function generateProofOfService(
       claim_number: String(templateData.claim_number || '').trim(),
       claimant_name: String(templateData.landlord_full_name || evictionCase.landlord_full_name || '').trim(),
       defendant_name: String(templateData.tenant_full_name || evictionCase.tenant_full_name || '').trim(),
+      signatory_name: String(
+        templateData.signatory_name ||
+        templateData.landlord_full_name ||
+        evictionCase.landlord_full_name ||
+        ''
+      ).trim(),
       recipient_name: String(templateData.tenant_full_name || evictionCase.tenant_full_name || '').trim(),
       service_address: String(
         templateData.service_address ||
@@ -1443,13 +1458,44 @@ async function generateProofOfService(
         evictionCase.property_address ||
         ''
       ).trim(),
-      service_address_line1: String(templateData.property_address_line1 || '').trim(),
-      service_address_line2: String(templateData.property_address_line2 || '').trim(),
-      service_address_town: String(templateData.property_address_town || templateData.property_city || '').trim(),
-      service_address_county: String(templateData.property_address_county || '').trim(),
-      service_address_postcode: String(templateData.property_address_postcode || '').trim(),
+      service_address_line1: String(
+        templateData.service_address_line1 ||
+        templateData.property_address_line1 ||
+        ''
+      ).trim(),
+      service_address_line2: String(
+        templateData.service_address_line2 ||
+        templateData.property_address_line2 ||
+        ''
+      ).trim(),
+      service_address_town: String(
+        templateData.service_address_town ||
+        templateData.property_address_town ||
+        templateData.property_city ||
+        ''
+      ).trim(),
+      service_address_county: String(
+        templateData.service_address_county ||
+        templateData.property_address_county ||
+        ''
+      ).trim(),
+      service_address_postcode: String(
+        templateData.service_address_postcode ||
+        templateData.property_address_postcode ||
+        templateData.property_postcode ||
+        templateData.service_postcode ||
+        ''
+      ).trim(),
       service_date:
         templateData.notice_service_date ||
+        templateData.notice_served_date ||
+        templateData.service_date ||
+        templateData.notice_date ||
+        serviceDetails?.service_date,
+      signature_date:
+        templateData.signature_date ||
+        templateData.notice_service_date ||
+        templateData.notice_served_date ||
         templateData.service_date ||
         serviceDetails?.service_date,
       service_method: normalizeEnglandProofOfServiceMethod(

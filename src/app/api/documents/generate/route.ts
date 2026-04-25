@@ -1676,14 +1676,24 @@ export async function POST(request: Request) {
                     claim_number: wizardFacts.claim_number,
                     claimant_name: wizardFacts.landlord_full_name,
                     defendant_name: wizardFacts.tenant_full_name,
+                    signatory_name: wizardFacts.landlord_full_name,
                     recipient_name: wizardFacts.tenant_full_name,
                     service_address: proofPropertyAddress,
                     service_address_line1: wizardFacts.property_address_line1,
                     service_address_line2: wizardFacts.property_address_line2,
                     service_address_town: wizardFacts.property_address_town || wizardFacts.property_city,
                     service_address_county: wizardFacts.property_address_county,
-                    service_address_postcode: wizardFacts.property_address_postcode,
-                    service_date: wizardFacts.notice_served_date || wizardFacts.notice_date,
+                    service_address_postcode:
+                      wizardFacts.property_address_postcode || wizardFacts.property_postcode,
+                    service_date:
+                      wizardFacts.notice_service_date ||
+                      wizardFacts.notice_served_date ||
+                      wizardFacts.notice_date,
+                    signature_date:
+                      wizardFacts.signature_date ||
+                      wizardFacts.notice_service_date ||
+                      wizardFacts.notice_served_date ||
+                      wizardFacts.notice_date,
                     service_method: normalizeEnglandProofOfServiceMethod(normalizedServiceMethod),
                     recipient_email: wizardFacts.tenant_email,
                     document_served:

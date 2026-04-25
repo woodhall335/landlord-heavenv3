@@ -17,6 +17,8 @@ export interface EnglandN215Data {
   claim_number?: string;
   claimant_name?: string;
   defendant_name?: string;
+  signatory_name?: string;
+  signature_date?: string;
   document_served?: string;
   service_date?: string;
   service_method?: EnglandProofOfServiceMethod;
@@ -83,11 +85,15 @@ function formatDateForN215(value: unknown): string {
 
     const day = String(date.getUTCDate()).padStart(2, '0');
     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-    const year = date.getUTCFullYear();
+    const year = String(date.getUTCFullYear()).slice(-2);
     return `${day}/${month}/${year}`;
   } catch {
     return sanitizeFormText(value);
   }
+}
+
+function formatPostcodeForN215(value: unknown): string {
+  return sanitizeFormText(value).replace(/\s+/g, '').toUpperCase();
 }
 
 function splitAddress(data: EnglandN215Data): {
@@ -103,7 +109,7 @@ function splitAddress(data: EnglandN215Data): {
       line2: sanitizeFormText(data.service_address_line2),
       town: sanitizeFormText(data.service_address_town),
       county: sanitizeFormText(data.service_address_county),
-      postcode: sanitizeFormText(data.service_address_postcode),
+      postcode: formatPostcodeForN215(data.service_address_postcode),
     };
   }
 
@@ -112,12 +118,29 @@ function splitAddress(data: EnglandN215Data): {
     .map((line) => sanitizeFormText(line))
     .filter(Boolean);
 
+  const postcodePattern = /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i;
+  let postcode = '';
+
+  if (lines.length > 0) {
+    const lastLine = lines[lines.length - 1];
+    const postcodeMatch = lastLine.match(postcodePattern);
+    if (postcodeMatch) {
+      postcode = formatPostcodeForN215(postcodeMatch[0]);
+      const cleanedLastLine = sanitizeFormText(lastLine.replace(postcodePattern, '').replace(/[,\s]+$/g, ''));
+      if (cleanedLastLine) {
+        lines[lines.length - 1] = cleanedLastLine;
+      } else {
+        lines.pop();
+      }
+    }
+  }
+
   return {
     line1: lines[0] || '',
     line2: lines[1] || '',
     town: lines[2] || '',
     county: lines[3] || '',
-    postcode: lines[4] || '',
+    postcode: postcode || lines[4] || '',
   };
 }
 
@@ -170,6 +193,20 @@ function mapServiceMethodToN215(form: PDFForm, method: EnglandProofOfServiceMeth
   }
 }
 
+function fillSignatureBlock(form: PDFForm, data: EnglandN215Data): void {
+  const signatoryName = sanitizeFormText(data.signatory_name || data.claimant_name);
+  const signatureDate = formatDateForN215(data.signature_date || data.service_date);
+
+  setTextField(form, 'Text Field 91', signatoryName);
+
+  if (signatureDate) {
+    const [day = '', month = '', year = ''] = signatureDate.split('/');
+    setTextField(form, 'Text Field 90', day);
+    setTextField(form, 'Text Field 89', month);
+    setTextField(form, 'Text Field 88', year);
+  }
+}
+
 export async function generateEnglandN215PDF(data: EnglandN215Data = {}): Promise<Uint8Array> {
   const templatePath = path.join(process.cwd(), 'public', 'official-forms', 'N215.pdf');
   const templateBytes = await fs.readFile(templatePath);
@@ -186,6 +223,7 @@ export async function generateEnglandN215PDF(data: EnglandN215Data = {}): Promis
   setTextField(form, 'Text Field 3', data.claimant_name);
   setTextField(form, 'Text Field 4', data.defendant_name);
   setTextField(form, 'Text Field 93', servedDate);
+  setTextField(form, 'Text Field 94', servedDate);
   setTextField(form, 'Text1', data.document_served || 'Form 3A notice');
   setTextField(form, 'Text2', recipientName);
 
@@ -195,7 +233,8 @@ export async function generateEnglandN215PDF(data: EnglandN215Data = {}): Promis
   setTextField(form, 'Text Field 101', address.line2);
   setTextField(form, 'Text Field 100', address.town);
   setTextField(form, 'Text Field 99', address.county);
-  setTextField(form, 'Text16', address.postcode);
+  setTextField(form, 'Text16', formatPostcodeForN215(address.postcode));
+  fillSignatureBlock(form, data);
 
   form.updateFieldAppearances(helvetica);
 

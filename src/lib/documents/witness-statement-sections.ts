@@ -294,8 +294,8 @@ export function buildWitnessExhibits(input: WitnessStatementSectionsInput): Witn
     {
       key: 'proof_of_service',
       label: `${prefix}3`,
-      title: 'Proof of Service',
-      description: 'Certificate or other evidence showing how the Form 3A notice was served.',
+      title: 'Certificate of Service (Form N215)',
+      description: 'Completed Form N215 certificate of service showing how the Form 3A notice was served.',
     },
   ];
 

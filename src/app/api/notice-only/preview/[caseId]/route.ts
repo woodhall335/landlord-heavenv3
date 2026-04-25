@@ -900,6 +900,7 @@ export async function GET(
                 claim_number: wizardFacts.claim_number || templateData.claim_number,
                 claimant_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
                 defendant_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
+                signatory_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
                 recipient_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
                 service_address: wizardFacts.property_address || templateData.property_address,
                 service_address_line1: wizardFacts.property_address_line1 || templateData.property_address_line1,
@@ -910,12 +911,28 @@ export async function GET(
                   templateData.property_address_town ||
                   templateData.property_city,
                 service_address_county: wizardFacts.property_address_county || templateData.property_address_county,
-                service_address_postcode: wizardFacts.property_address_postcode || templateData.property_postcode,
+                service_address_postcode:
+                  wizardFacts.property_address_postcode ||
+                  templateData.property_address_postcode ||
+                  wizardFacts.property_postcode ||
+                  templateData.property_postcode,
                 document_served:
                   selected_route === 'section_21'
                     ? 'Section 21 notice (Form 6A)'
                     : templateData.notice_name || 'Form 3A notice',
-                service_date: templateData.service_date || templateData.notice_date,
+                service_date:
+                  wizardFacts.notice_service_date ||
+                  wizardFacts.notice_served_date ||
+                  templateData.notice_service_date ||
+                  templateData.service_date ||
+                  templateData.notice_date,
+                signature_date:
+                  wizardFacts.signature_date ||
+                  wizardFacts.notice_service_date ||
+                  wizardFacts.notice_served_date ||
+                  templateData.notice_service_date ||
+                  templateData.service_date ||
+                  templateData.notice_date,
                 service_method: normalizeEnglandProofOfServiceMethod(
                   wizardFacts.notice_service_method || templateData.notice_service_method,
                 ),

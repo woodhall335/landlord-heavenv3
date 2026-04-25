@@ -8,18 +8,31 @@ Notice service date 25 April 2026
 Notice expiry date 23 May 2026
 Earliest proceedings date 23 May 2026
 Prepared 25 April 2026
+England post-1 May 2026 focus: keep the notice, service record, and ground-specific
+evidence aligned. The court should be able to follow the file without guessing at missing
+dates, missing documents, or why a specialist ground is said to apply.
 Core Documents
-Ground 8: Serious rent arrears
-Ground 10: Rent arrears (some arrears)
+Assemble the evidence so the court can follow the tenancy history, the notice chronology, and
+the factual basis of each pleaded ground without having to infer missing steps.
+Form 3A notice served on 25 April 2026, expiring on 23 May 2026, with proceedings not
+intended before 23 May 2026.
+Signed tenancy agreement and any renewals or variations.
+The completed Form 3A notice as served.
+Service material showing how the notice was served.
+Any correspondence, inspection records, warning letters, or official notices relevant to
+the pleaded grounds.
 Ground-Specific Evidence
 Ground 8 - Serious rent arrears
-Rent account showing arrears
-Proof of rent amount and payment schedule
-Calculation showing 8 weeks/2 months arrears at notice date
-Calculation showing 8 weeks/2 months arrears at hearing date
 Ground 10 - Rent arrears (some arrears)
-Rent account showing any amount unpaid
-Proof arrears existed at notice date
-Proof arrears still exist at hearing date
 
--- 1 of 1 --
+-- 1 of 2 --
+
+Final Checks Before Issue
+Remove duplicate, placeholder, or unexplained documents before serving the bundle on
+the court or the tenant.
+Make sure dates, party names, and property details match across the notice, the
+witness statement, and the court forms.
+Check that each specialist ground is supported by the specific prior-notice, status, or
+occupancy evidence required for that route.
+
+-- 2 of 2 --

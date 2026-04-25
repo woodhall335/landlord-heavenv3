@@ -86,7 +86,7 @@
         "html": "complete_pack/evidence_collection_checklist.html"
       },
       "extraction": {
-        "pageCount": 1,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

@@ -57,8 +57,8 @@ Witness exhibits
 Exhibit DM1: Schedule of Arrears - Period-by-period breakdown of rent due, payments
 received, and running balance.
 Exhibit DM2: Form 3A Notice - Form 3A notice served on the tenant.
-Exhibit DM3: Proof of Service - Certificate or other evidence showing how the Form 3A
-notice was served.
+Exhibit DM3: Certificate of Service (Form N215) - Completed Form N215 certificate of
+service showing how the Form 3A notice was served.
 Documents that may be provided separately to the court
 Tenancy agreement (original signed agreement)
 Bank statements or rent ledger (showing payment history)
