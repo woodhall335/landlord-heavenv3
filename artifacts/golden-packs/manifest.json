@@ -1,919 +1,10 @@
 {
-  "generatedAt": "2026-04-23T10:21:12.318Z",
+  "generatedAt": "2026-04-25T15:00:49.481Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
-      "key": "complete_pack",
-      "displayName": "Complete Eviction Pack",
-      "outputDir": "complete_pack",
-      "documentCount": 11,
-      "documents": [
-        {
-          "title": "Form 3A notice",
-          "description": "Official notice to tenant citing grounds for possession",
-          "category": "notice",
-          "documentType": "section8_notice",
-          "fileName": "section8_notice.pdf",
-          "files": {
-            "pdf": "complete_pack/section8_notice.pdf",
-            "html": "complete_pack/section8_notice.html",
-            "text": "complete_pack/section8_notice.txt"
-          },
-          "extraction": {
-            "pageCount": 10,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Form N5 - Claim for Possession",
-          "description": "Official court claim form for possession proceedings",
-          "category": "court_form",
-          "documentType": "n5_claim",
-          "fileName": "n5_claim_for_possession.pdf",
-          "files": {
-            "pdf": "complete_pack/n5_claim_for_possession.pdf",
-            "text": "complete_pack/n5_claim_for_possession.txt"
-          },
-          "extraction": {
-            "pageCount": 4,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Form N119 - Particulars of Claim",
-          "description": "Detailed particulars supporting your possession claim",
-          "category": "court_form",
-          "documentType": "n119_particulars",
-          "fileName": "n119_particulars_of_claim.pdf",
-          "files": {
-            "pdf": "complete_pack/n119_particulars_of_claim.pdf",
-            "text": "complete_pack/n119_particulars_of_claim.txt"
-          },
-          "extraction": {
-            "pageCount": 5,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Schedule of Arrears",
-          "description": "Detailed period-by-period breakdown of rent arrears",
-          "category": "evidence_tool",
-          "documentType": "arrears_schedule",
-          "fileName": "schedule_of_arrears.pdf",
-          "files": {
-            "pdf": "complete_pack/schedule_of_arrears.pdf",
-            "html": "complete_pack/schedule_of_arrears.html",
-            "text": "complete_pack/schedule_of_arrears.txt"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Evidence Collection Checklist",
-          "description": "Detailed checklist of all evidence you need to gather",
-          "category": "evidence_tool",
-          "documentType": "evidence_checklist",
-          "fileName": "evidence_collection_checklist.pdf",
-          "files": {
-            "pdf": "complete_pack/evidence_collection_checklist.pdf",
-            "html": "complete_pack/evidence_collection_checklist.html",
-            "text": "complete_pack/evidence_collection_checklist.txt"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Proof of Service Certificate",
-          "description": "Template for proving you served the notice correctly",
-          "category": "evidence_tool",
-          "documentType": "proof_of_service",
-          "fileName": "proof_of_service_template.pdf",
-          "files": {
-            "pdf": "complete_pack/proof_of_service_template.pdf",
-            "html": "complete_pack/proof_of_service_template.html",
-            "text": "complete_pack/proof_of_service_template.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Witness Statement",
-          "description": "Court-ready witness statement for possession proceedings",
-          "category": "court_form",
-          "documentType": "witness_statement",
-          "fileName": "witness_statement.pdf",
-          "files": {
-            "pdf": "complete_pack/witness_statement.pdf",
-            "html": "complete_pack/witness_statement.html",
-            "text": "complete_pack/witness_statement.txt"
-          },
-          "extraction": {
-            "pageCount": 4,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Court Bundle Index",
-          "description": "Index of all documents for court filing",
-          "category": "evidence_tool",
-          "documentType": "court_bundle_index",
-          "fileName": "court_bundle_index.pdf",
-          "files": {
-            "pdf": "complete_pack/court_bundle_index.pdf",
-            "html": "complete_pack/court_bundle_index.html",
-            "text": "complete_pack/court_bundle_index.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Hearing Checklist",
-          "description": "Preparation checklist for the possession hearing",
-          "category": "guidance",
-          "documentType": "hearing_checklist",
-          "fileName": "hearing_checklist.pdf",
-          "files": {
-            "pdf": "complete_pack/hearing_checklist.pdf",
-            "html": "complete_pack/hearing_checklist.html",
-            "text": "complete_pack/hearing_checklist.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Arrears Engagement Letter",
-          "description": "Pre-action engagement letter for rent arrears",
-          "category": "bonus",
-          "documentType": "arrears_engagement_letter",
-          "fileName": "arrears_engagement_letter.pdf",
-          "files": {
-            "pdf": "complete_pack/arrears_engagement_letter.pdf",
-            "html": "complete_pack/arrears_engagement_letter.html",
-            "text": "complete_pack/arrears_engagement_letter.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Eviction Case Summary",
-          "description": "Complete summary of your eviction case and selected grounds",
-          "category": "guidance",
-          "documentType": "case_summary",
-          "fileName": "eviction_case_summary.pdf",
-          "files": {
-            "pdf": "complete_pack/eviction_case_summary.pdf",
-            "html": "complete_pack/eviction_case_summary.html",
-            "text": "complete_pack/eviction_case_summary.txt"
-          },
-          "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        }
-      ]
-    },
-    {
-      "key": "notice_only",
-      "displayName": "Eviction Notice Generator (Section 8, May 2026)",
-      "outputDir": "notice_only",
-      "documentCount": 5,
-      "documents": [
-        {
-          "title": "Form 3A notice",
-          "description": "Official Form 3A notice for England possession proceedings",
-          "category": "notice",
-          "documentType": "section8_notice",
-          "fileName": "section8_notice.pdf",
-          "files": {
-            "pdf": "notice_only/section8_notice.pdf",
-            "html": "notice_only/section8_notice.html",
-            "text": "notice_only/section8_notice.txt"
-          },
-          "extraction": {
-            "pageCount": 10,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Service Instructions",
-          "description": "How to legally serve your Form 3A notice",
-          "category": "guidance",
-          "documentType": "service_instructions",
-          "fileName": "service_instructions_s8.pdf",
-          "files": {
-            "pdf": "notice_only/service_instructions_s8.pdf",
-            "html": "notice_only/service_instructions_s8.html",
-            "text": "notice_only/service_instructions_s8.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Service & Validity Checklist",
-          "description": "Verify your Form 3A notice meets key service and timing requirements",
-          "category": "guidance",
-          "documentType": "validity_checklist",
-          "fileName": "validity_checklist_s8.pdf",
-          "files": {
-            "pdf": "notice_only/validity_checklist_s8.pdf",
-            "html": "notice_only/validity_checklist_s8.html",
-            "text": "notice_only/validity_checklist_s8.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Pre-Service Compliance Declaration",
-          "description": "Evidence of your compliance with landlord obligations",
-          "category": "guidance",
-          "documentType": "compliance_declaration",
-          "fileName": "compliance_declaration.pdf",
-          "files": {
-            "pdf": "notice_only/compliance_declaration.pdf",
-            "html": "notice_only/compliance_declaration.html",
-            "text": "notice_only/compliance_declaration.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Rent Schedule / Arrears Statement",
-          "description": "Period-by-period breakdown of rent arrears",
-          "category": "evidence_tool",
-          "documentType": "arrears_schedule",
-          "fileName": "rent_schedule_arrears_statement.pdf",
-          "files": {
-            "pdf": "notice_only/rent_schedule_arrears_statement.pdf",
-            "html": "notice_only/rent_schedule_arrears_statement.html",
-            "text": "notice_only/rent_schedule_arrears_statement.txt"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        }
-      ]
-    },
-    {
-      "key": "england_hmo_shared_house_tenancy_agreement",
-      "displayName": "HMO / Shared House Tenancy Agreement",
-      "outputDir": "england_hmo_shared_house_tenancy_agreement",
-      "documentCount": 9,
-      "documents": [
-        {
-          "title": "HMO / Shared House Tenancy Agreement",
-          "description": "England HMO / shared-house tenancy agreement with communal-area and sharer drafting.",
-          "category": "agreement",
-          "documentType": "england_hmo_shared_house_tenancy_agreement",
-          "fileName": "england-hmo-shared-house-tenancy-agreement.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.txt"
-          },
-          "extraction": {
-            "pageCount": 8,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Pre-Tenancy Checklist (England)",
-          "description": "England compliance checklist covering the main pre-tenancy and written-information actions for the tenancy file.",
-          "category": "checklist",
-          "documentType": "pre_tenancy_checklist_england",
-          "fileName": "pre_tenancy_checklist_england.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.txt"
-          },
-          "extraction": {
-            "pageCount": 5,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Keys & Handover Record",
-          "description": "Practical handover record for keys, access devices, and move-in confirmations.",
-          "category": "checklist",
-          "documentType": "england_keys_handover_record",
-          "fileName": "england-keys-handover-record.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.txt"
-          },
-          "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Utilities & Meter Handover Sheet",
-          "description": "Record for utilities responsibility, opening readings, and account handover notes.",
-          "category": "checklist",
-          "documentType": "england_utilities_handover_sheet",
-          "fileName": "england-utilities-handover-sheet.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.txt"
-          },
-          "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Pet Request / Consent Addendum",
-          "description": "Optional addendum for recording a pet request, decision, and any consent conditions.",
-          "category": "schedule",
-          "documentType": "england_pet_request_addendum",
-          "fileName": "england-pet-request-addendum.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Tenancy Variation Record",
-          "description": "Simple record for agreed changes after the tenancy agreement has been issued.",
-          "category": "schedule",
-          "documentType": "england_tenancy_variation_record",
-          "fileName": "england-tenancy-variation-record.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.txt"
-          },
-          "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Deposit Protection Certificate",
-          "description": "Standalone certificate confirming the deposit protection scheme details for England.",
-          "category": "guidance",
-          "documentType": "deposit_protection_certificate",
-          "fileName": "deposit_protection_certificate.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.txt"
-          },
-          "extraction": {
-            "pageCount": 7,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Prescribed Information Pack",
-          "description": "Standalone tenancy deposit prescribed information pack for England.",
-          "category": "guidance",
-          "documentType": "tenancy_deposit_information",
-          "fileName": "prescribed_information_pack.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.txt"
-          },
-          "extraction": {
-            "pageCount": 10,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "HMO / Shared House Rules Appendix",
-          "description": "Shared-house appendix covering communal areas, cleaning, waste, visitors, quiet hours, and fire-safety notes.",
-          "category": "schedule",
-          "documentType": "england_hmo_house_rules_appendix",
-          "fileName": "england-hmo-house-rules-appendix.pdf",
-          "files": {
-            "pdf": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.pdf",
-            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.html",
-            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.txt"
-          },
-          "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        }
-      ]
-    },
-    {
-      "key": "england_lodger_agreement",
-      "displayName": "Lodger Agreement",
-      "outputDir": "england_lodger_agreement",
-      "documentCount": 4,
-      "documents": [
-        {
-          "title": "Room Let / Lodger Agreement",
-          "description": "England resident-landlord lodger agreement for a room let or licence-style arrangement.",
-          "category": "agreement",
-          "documentType": "england_lodger_agreement",
-          "fileName": "england-lodger-agreement.pdf",
-          "files": {
-            "pdf": "england_lodger_agreement/england-lodger-agreement.pdf",
-            "html": "england_lodger_agreement/england-lodger-agreement.html",
-            "text": "england_lodger_agreement/england-lodger-agreement.txt"
-          },
-          "extraction": {
-            "pageCount": 4,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Room Let / Lodger Checklist",
-          "description": "Resident-landlord room-let checklist covering handover, house rules, and key practical compliance points.",
-          "category": "checklist",
-          "documentType": "england_lodger_checklist",
-          "fileName": "england-lodger-checklist.pdf",
-          "files": {
-            "pdf": "england_lodger_agreement/england-lodger-checklist.pdf",
-            "html": "england_lodger_agreement/england-lodger-checklist.html",
-            "text": "england_lodger_agreement/england-lodger-checklist.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Keys & Handover Record",
-          "description": "Practical handover record for keys, access devices, and move-in confirmations.",
-          "category": "checklist",
-          "documentType": "england_keys_handover_record",
-          "fileName": "england-keys-handover-record.pdf",
-          "files": {
-            "pdf": "england_lodger_agreement/england-keys-handover-record.pdf",
-            "html": "england_lodger_agreement/england-keys-handover-record.html",
-            "text": "england_lodger_agreement/england-keys-handover-record.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Lodger House Rules Appendix",
-          "description": "Resident-landlord appendix for guests, quiet hours, shared-space cleaning, and room hand-back expectations.",
-          "category": "schedule",
-          "documentType": "england_lodger_house_rules_appendix",
-          "fileName": "england-lodger-house-rules-appendix.pdf",
-          "files": {
-            "pdf": "england_lodger_agreement/england-lodger-house-rules-appendix.pdf",
-            "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html",
-            "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        }
-      ]
-    },
-    {
-      "key": "money_claim",
-      "displayName": "Money Claim Pack",
-      "outputDir": "money_claim",
-      "documentCount": 10,
-      "documents": [
-        {
-          "title": "Particulars of claim",
-          "description": "Detailed particulars for rent arrears, damages and costs.",
-          "category": "particulars",
-          "documentType": "particulars_of_claim",
-          "fileName": "01-particulars-of-claim.pdf",
-          "files": {
-            "pdf": "money_claim/01-particulars-of-claim.pdf",
-            "html": "money_claim/01-particulars-of-claim.html",
-            "text": "money_claim/01-particulars-of-claim.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Schedule of arrears",
-          "description": "Line-by-line arrears schedule required by HMCTS.",
-          "category": "schedule",
-          "documentType": "arrears_schedule",
-          "fileName": "02-schedule-of-arrears.pdf",
-          "files": {
-            "pdf": "money_claim/02-schedule-of-arrears.pdf",
-            "html": "money_claim/02-schedule-of-arrears.html",
-            "text": "money_claim/02-schedule-of-arrears.txt"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Interest calculation",
-          "description": "Section 69 County Courts Act interest workings and daily rate.",
-          "category": "guidance",
-          "documentType": "interest_calculation",
-          "fileName": "03-interest-calculation.pdf",
-          "files": {
-            "pdf": "money_claim/03-interest-calculation.pdf",
-            "html": "money_claim/03-interest-calculation.html",
-            "text": "money_claim/03-interest-calculation.txt"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Letter Before Claim (PAP-DEBT)",
-          "description": "Pre-Action Protocol letter required before issuing proceedings.",
-          "category": "guidance",
-          "documentType": "letter_before_claim",
-          "fileName": "04-letter-before-claim.pdf",
-          "files": {
-            "pdf": "money_claim/04-letter-before-claim.pdf",
-            "html": "money_claim/04-letter-before-claim.html",
-            "text": "money_claim/04-letter-before-claim.txt"
-          },
-          "extraction": {
-            "pageCount": 5,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Information Sheet for Defendants",
-          "description": "Explains defendant rights and options (enclose with Letter Before Claim).",
-          "category": "guidance",
-          "documentType": "defendant_info_sheet",
-          "fileName": "05-information-sheet-for-defendants.pdf",
-          "files": {
-            "pdf": "money_claim/05-information-sheet-for-defendants.pdf",
-            "html": "money_claim/05-information-sheet-for-defendants.html",
-            "text": "money_claim/05-information-sheet-for-defendants.txt"
-          },
-          "extraction": {
-            "pageCount": 5,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Reply Form",
-          "description": "Form for defendant to respond to Letter Before Claim.",
-          "category": "guidance",
-          "documentType": "reply_form",
-          "fileName": "06-reply-form.pdf",
-          "files": {
-            "pdf": "money_claim/06-reply-form.pdf",
-            "html": "money_claim/06-reply-form.html",
-            "text": "money_claim/06-reply-form.txt"
-          },
-          "extraction": {
-            "pageCount": 4,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Financial Statement Form",
-          "description": "Form for defendant to disclose income/expenditure for payment plan.",
-          "category": "guidance",
-          "documentType": "financial_statement_form",
-          "fileName": "07-financial-statement-form.pdf",
-          "files": {
-            "pdf": "money_claim/07-financial-statement-form.pdf",
-            "html": "money_claim/07-financial-statement-form.html",
-            "text": "money_claim/07-financial-statement-form.txt"
-          },
-          "extraction": {
-            "pageCount": 6,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Money Claims Filing Guide",
-          "description": "Step-by-step instructions for filing via MCOL or paper.",
-          "category": "guidance",
-          "documentType": "court_filing_guide",
-          "fileName": "08-filing-guide.pdf",
-          "files": {
-            "pdf": "money_claim/08-filing-guide.pdf",
-            "html": "money_claim/08-filing-guide.html",
-            "text": "money_claim/08-filing-guide.txt"
-          },
-          "extraction": {
-            "pageCount": 7,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Enforcement Guide",
-          "description": "Explains enforcement options after obtaining a County Court Judgment.",
-          "category": "guidance",
-          "documentType": "enforcement_guide",
-          "fileName": "09-enforcement-guide.pdf",
-          "files": {
-            "pdf": "money_claim/09-enforcement-guide.pdf",
-            "html": "money_claim/09-enforcement-guide.html",
-            "text": "money_claim/09-enforcement-guide.txt"
-          },
-          "extraction": {
-            "pageCount": 5,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Form N1 (official PDF)",
-          "description": "Completed claim form ready for County Court Money Claims Centre.",
-          "category": "court_form",
-          "documentType": "n1_claim",
-          "fileName": "10-n1-claim-form.pdf",
-          "files": {
-            "pdf": "money_claim/10-n1-claim-form.pdf",
-            "text": "money_claim/10-n1-claim-form.txt"
-          },
-          "extraction": {
-            "pageCount": 5,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        }
-      ]
-    },
-    {
-      "key": "england_premium_tenancy_agreement",
-      "displayName": "Premium Tenancy Agreement",
-      "outputDir": "england_premium_tenancy_agreement",
-      "documentCount": 9,
-      "documents": [
-        {
-          "title": "Premium Tenancy Agreement",
-          "description": "Premium tenancy agreement for a residential let in England with fuller drafting.",
-          "category": "agreement",
-          "documentType": "england_premium_tenancy_agreement",
-          "fileName": "england-premium-tenancy-agreement.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.pdf",
-            "html": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.html",
-            "text": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.txt"
-          },
-          "extraction": {
-            "pageCount": 9,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Pre-Tenancy Checklist (England)",
-          "description": "England compliance checklist covering the main pre-tenancy and written-information actions for the tenancy file.",
-          "category": "checklist",
-          "documentType": "pre_tenancy_checklist_england",
-          "fileName": "pre_tenancy_checklist_england.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.pdf",
-            "html": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.html",
-            "text": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.txt"
-          },
-          "extraction": {
-            "pageCount": 5,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Keys & Handover Record",
-          "description": "Practical handover record for keys, access devices, and move-in confirmations.",
-          "category": "checklist",
-          "documentType": "england_keys_handover_record",
-          "fileName": "england-keys-handover-record.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/england-keys-handover-record.pdf",
-            "html": "england_premium_tenancy_agreement/england-keys-handover-record.html",
-            "text": "england_premium_tenancy_agreement/england-keys-handover-record.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Utilities & Meter Handover Sheet",
-          "description": "Record for utilities responsibility, opening readings, and account handover notes.",
-          "category": "checklist",
-          "documentType": "england_utilities_handover_sheet",
-          "fileName": "england-utilities-handover-sheet.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/england-utilities-handover-sheet.pdf",
-            "html": "england_premium_tenancy_agreement/england-utilities-handover-sheet.html",
-            "text": "england_premium_tenancy_agreement/england-utilities-handover-sheet.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Pet Request / Consent Addendum",
-          "description": "Optional addendum for recording a pet request, decision, and any consent conditions.",
-          "category": "schedule",
-          "documentType": "england_pet_request_addendum",
-          "fileName": "england-pet-request-addendum.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/england-pet-request-addendum.pdf",
-            "html": "england_premium_tenancy_agreement/england-pet-request-addendum.html",
-            "text": "england_premium_tenancy_agreement/england-pet-request-addendum.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Tenancy Variation Record",
-          "description": "Simple record for agreed changes after the tenancy agreement has been issued.",
-          "category": "schedule",
-          "documentType": "england_tenancy_variation_record",
-          "fileName": "england-tenancy-variation-record.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/england-tenancy-variation-record.pdf",
-            "html": "england_premium_tenancy_agreement/england-tenancy-variation-record.html",
-            "text": "england_premium_tenancy_agreement/england-tenancy-variation-record.txt"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Deposit Protection Certificate",
-          "description": "Standalone certificate confirming the deposit protection scheme details for England.",
-          "category": "guidance",
-          "documentType": "deposit_protection_certificate",
-          "fileName": "deposit_protection_certificate.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/deposit_protection_certificate.pdf",
-            "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html",
-            "text": "england_premium_tenancy_agreement/deposit_protection_certificate.txt"
-          },
-          "extraction": {
-            "pageCount": 7,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Prescribed Information Pack",
-          "description": "Standalone tenancy deposit prescribed information pack for England.",
-          "category": "guidance",
-          "documentType": "tenancy_deposit_information",
-          "fileName": "prescribed_information_pack.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/prescribed_information_pack.pdf",
-            "html": "england_premium_tenancy_agreement/prescribed_information_pack.html",
-            "text": "england_premium_tenancy_agreement/prescribed_information_pack.txt"
-          },
-          "extraction": {
-            "pageCount": 9,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Premium Management Schedule",
-          "description": "Premium-only schedule for inspections, repairs reporting, keys, contractor access, and hand-back expectations.",
-          "category": "schedule",
-          "documentType": "england_premium_management_schedule",
-          "fileName": "england-premium-management-schedule.pdf",
-          "files": {
-            "pdf": "england_premium_tenancy_agreement/england-premium-management-schedule.pdf",
-            "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html",
-            "text": "england_premium_tenancy_agreement/england-premium-management-schedule.txt"
-          },
-          "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        }
-      ]
-    },
-    {
       "key": "section13_defensive",
-      "displayName": "Section 13 Defence Pack",
+      "displayName": "Challenge-Ready Section 13 Defence Pack",
       "outputDir": "section13_defensive",
       "documentCount": 12,
       "documents": [
@@ -1105,8 +196,917 @@
       ]
     },
     {
+      "key": "complete_pack",
+      "displayName": "Complete Eviction Pack",
+      "outputDir": "complete_pack",
+      "documentCount": 11,
+      "documents": [
+        {
+          "title": "Form 3A notice",
+          "description": "Official notice to tenant citing grounds for possession",
+          "category": "notice",
+          "documentType": "section8_notice",
+          "fileName": "section8_notice.pdf",
+          "files": {
+            "pdf": "complete_pack/section8_notice.pdf",
+            "text": "complete_pack/section8_notice.txt",
+            "html": "complete_pack/section8_notice.html"
+          },
+          "extraction": {
+            "pageCount": 10,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Form N5 - Claim for Possession",
+          "description": "Official court claim form for possession proceedings",
+          "category": "court_form",
+          "documentType": "n5_claim",
+          "fileName": "n5_claim_for_possession.pdf",
+          "files": {
+            "pdf": "complete_pack/n5_claim_for_possession.pdf",
+            "text": "complete_pack/n5_claim_for_possession.txt"
+          },
+          "extraction": {
+            "pageCount": 4,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Form N119 - Particulars of Claim",
+          "description": "Detailed particulars supporting your possession claim",
+          "category": "court_form",
+          "documentType": "n119_particulars",
+          "fileName": "n119_particulars_of_claim.pdf",
+          "files": {
+            "pdf": "complete_pack/n119_particulars_of_claim.pdf",
+            "text": "complete_pack/n119_particulars_of_claim.txt"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Schedule of Arrears",
+          "description": "Detailed period-by-period breakdown of rent arrears",
+          "category": "evidence_tool",
+          "documentType": "arrears_schedule",
+          "fileName": "schedule_of_arrears.pdf",
+          "files": {
+            "pdf": "complete_pack/schedule_of_arrears.pdf",
+            "text": "complete_pack/schedule_of_arrears.txt",
+            "html": "complete_pack/schedule_of_arrears.html"
+          },
+          "extraction": {
+            "pageCount": 1,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Evidence Collection Checklist",
+          "description": "Detailed checklist of all evidence you need to gather",
+          "category": "evidence_tool",
+          "documentType": "evidence_checklist",
+          "fileName": "evidence_collection_checklist.pdf",
+          "files": {
+            "pdf": "complete_pack/evidence_collection_checklist.pdf",
+            "text": "complete_pack/evidence_collection_checklist.txt",
+            "html": "complete_pack/evidence_collection_checklist.html"
+          },
+          "extraction": {
+            "pageCount": 1,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Proof of Service Certificate",
+          "description": "Template for proving you served the notice correctly",
+          "category": "evidence_tool",
+          "documentType": "proof_of_service",
+          "fileName": "proof_of_service_template.pdf",
+          "files": {
+            "pdf": "complete_pack/proof_of_service_template.pdf",
+            "text": "complete_pack/proof_of_service_template.txt",
+            "html": "complete_pack/proof_of_service_template.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Witness Statement",
+          "description": "Court-ready witness statement for possession proceedings",
+          "category": "court_form",
+          "documentType": "witness_statement",
+          "fileName": "witness_statement.pdf",
+          "files": {
+            "pdf": "complete_pack/witness_statement.pdf",
+            "text": "complete_pack/witness_statement.txt",
+            "html": "complete_pack/witness_statement.html"
+          },
+          "extraction": {
+            "pageCount": 4,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Court Bundle Index",
+          "description": "Index of all documents for court filing",
+          "category": "evidence_tool",
+          "documentType": "court_bundle_index",
+          "fileName": "court_bundle_index.pdf",
+          "files": {
+            "pdf": "complete_pack/court_bundle_index.pdf",
+            "text": "complete_pack/court_bundle_index.txt",
+            "html": "complete_pack/court_bundle_index.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Hearing Checklist",
+          "description": "Preparation checklist for the possession hearing",
+          "category": "guidance",
+          "documentType": "hearing_checklist",
+          "fileName": "hearing_checklist.pdf",
+          "files": {
+            "pdf": "complete_pack/hearing_checklist.pdf",
+            "text": "complete_pack/hearing_checklist.txt",
+            "html": "complete_pack/hearing_checklist.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Arrears Engagement Letter",
+          "description": "Pre-action engagement letter for rent arrears",
+          "category": "bonus",
+          "documentType": "arrears_engagement_letter",
+          "fileName": "arrears_engagement_letter.pdf",
+          "files": {
+            "pdf": "complete_pack/arrears_engagement_letter.pdf",
+            "text": "complete_pack/arrears_engagement_letter.txt",
+            "html": "complete_pack/arrears_engagement_letter.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Eviction Case Summary",
+          "description": "Complete summary of your eviction case and selected grounds",
+          "category": "guidance",
+          "documentType": "case_summary",
+          "fileName": "eviction_case_summary.pdf",
+          "files": {
+            "pdf": "complete_pack/eviction_case_summary.pdf",
+            "text": "complete_pack/eviction_case_summary.txt",
+            "html": "complete_pack/eviction_case_summary.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        }
+      ]
+    },
+    {
+      "key": "notice_only",
+      "displayName": "Eviction Notice Generator (Section 8, May 2026)",
+      "outputDir": "notice_only",
+      "documentCount": 5,
+      "documents": [
+        {
+          "title": "Form 3A notice",
+          "description": "Official Form 3A notice for England possession proceedings",
+          "category": "notice",
+          "documentType": "section8_notice",
+          "fileName": "section8_notice.pdf",
+          "files": {
+            "pdf": "notice_only/section8_notice.pdf",
+            "text": "notice_only/section8_notice.txt",
+            "html": "notice_only/section8_notice.html"
+          },
+          "extraction": {
+            "pageCount": 10,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Service Instructions",
+          "description": "How to legally serve your Form 3A notice",
+          "category": "guidance",
+          "documentType": "service_instructions",
+          "fileName": "service_instructions_s8.pdf",
+          "files": {
+            "pdf": "notice_only/service_instructions_s8.pdf",
+            "text": "notice_only/service_instructions_s8.txt",
+            "html": "notice_only/service_instructions_s8.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Service & Validity Checklist",
+          "description": "Verify your Form 3A notice meets key service and timing requirements",
+          "category": "guidance",
+          "documentType": "validity_checklist",
+          "fileName": "validity_checklist_s8.pdf",
+          "files": {
+            "pdf": "notice_only/validity_checklist_s8.pdf",
+            "text": "notice_only/validity_checklist_s8.txt",
+            "html": "notice_only/validity_checklist_s8.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Pre-Service Compliance Declaration",
+          "description": "Evidence of your compliance with landlord obligations",
+          "category": "guidance",
+          "documentType": "compliance_declaration",
+          "fileName": "compliance_declaration.pdf",
+          "files": {
+            "pdf": "notice_only/compliance_declaration.pdf",
+            "text": "notice_only/compliance_declaration.txt",
+            "html": "notice_only/compliance_declaration.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Rent Schedule / Arrears Statement",
+          "description": "Period-by-period breakdown of rent arrears",
+          "category": "evidence_tool",
+          "documentType": "arrears_schedule",
+          "fileName": "rent_schedule_arrears_statement.pdf",
+          "files": {
+            "pdf": "notice_only/rent_schedule_arrears_statement.pdf",
+            "text": "notice_only/rent_schedule_arrears_statement.txt",
+            "html": "notice_only/rent_schedule_arrears_statement.html"
+          },
+          "extraction": {
+            "pageCount": 1,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        }
+      ]
+    },
+    {
+      "key": "england_hmo_shared_house_tenancy_agreement",
+      "displayName": "HMO / Shared House Tenancy Agreement",
+      "outputDir": "england_hmo_shared_house_tenancy_agreement",
+      "documentCount": 9,
+      "documents": [
+        {
+          "title": "HMO / Shared House Tenancy Agreement",
+          "description": "England HMO / shared-house tenancy agreement with communal-area and sharer drafting.",
+          "category": "agreement",
+          "documentType": "england_hmo_shared_house_tenancy_agreement",
+          "fileName": "england-hmo-shared-house-tenancy-agreement.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.html"
+          },
+          "extraction": {
+            "pageCount": 8,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Pre-Tenancy Checklist (England)",
+          "description": "England compliance checklist covering the main pre-tenancy and written-information actions for the tenancy file.",
+          "category": "checklist",
+          "documentType": "pre_tenancy_checklist_england",
+          "fileName": "pre_tenancy_checklist_england.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.html"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Keys & Handover Record",
+          "description": "Practical handover record for keys, access devices, and move-in confirmations.",
+          "category": "checklist",
+          "documentType": "england_keys_handover_record",
+          "fileName": "england-keys-handover-record.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Utilities & Meter Handover Sheet",
+          "description": "Record for utilities responsibility, opening readings, and account handover notes.",
+          "category": "checklist",
+          "documentType": "england_utilities_handover_sheet",
+          "fileName": "england-utilities-handover-sheet.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Pet Request / Consent Addendum",
+          "description": "Optional addendum for recording a pet request, decision, and any consent conditions.",
+          "category": "schedule",
+          "documentType": "england_pet_request_addendum",
+          "fileName": "england-pet-request-addendum.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Tenancy Variation Record",
+          "description": "Simple record for agreed changes after the tenancy agreement has been issued.",
+          "category": "schedule",
+          "documentType": "england_tenancy_variation_record",
+          "fileName": "england-tenancy-variation-record.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Deposit Protection Certificate",
+          "description": "Standalone certificate confirming the deposit protection scheme details for England.",
+          "category": "guidance",
+          "documentType": "deposit_protection_certificate",
+          "fileName": "deposit_protection_certificate.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/deposit_protection_certificate.html"
+          },
+          "extraction": {
+            "pageCount": 7,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Prescribed Information Pack",
+          "description": "Standalone tenancy deposit prescribed information pack for England.",
+          "category": "guidance",
+          "documentType": "tenancy_deposit_information",
+          "fileName": "prescribed_information_pack.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/prescribed_information_pack.html"
+          },
+          "extraction": {
+            "pageCount": 10,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "HMO / Shared House Rules Appendix",
+          "description": "Shared-house appendix covering communal areas, cleaning, waste, visitors, quiet hours, and fire-safety notes.",
+          "category": "schedule",
+          "documentType": "england_hmo_house_rules_appendix",
+          "fileName": "england-hmo-house-rules-appendix.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        }
+      ]
+    },
+    {
+      "key": "england_lodger_agreement",
+      "displayName": "Lodger Agreement",
+      "outputDir": "england_lodger_agreement",
+      "documentCount": 4,
+      "documents": [
+        {
+          "title": "Room Let / Lodger Agreement",
+          "description": "England resident-landlord lodger agreement for a room let or licence-style arrangement.",
+          "category": "agreement",
+          "documentType": "england_lodger_agreement",
+          "fileName": "england-lodger-agreement.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-lodger-agreement.pdf",
+            "text": "england_lodger_agreement/england-lodger-agreement.txt",
+            "html": "england_lodger_agreement/england-lodger-agreement.html"
+          },
+          "extraction": {
+            "pageCount": 4,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Room Let / Lodger Checklist",
+          "description": "Resident-landlord room-let checklist covering handover, house rules, and key practical compliance points.",
+          "category": "checklist",
+          "documentType": "england_lodger_checklist",
+          "fileName": "england-lodger-checklist.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-lodger-checklist.pdf",
+            "text": "england_lodger_agreement/england-lodger-checklist.txt",
+            "html": "england_lodger_agreement/england-lodger-checklist.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Keys & Handover Record",
+          "description": "Practical handover record for keys, access devices, and move-in confirmations.",
+          "category": "checklist",
+          "documentType": "england_keys_handover_record",
+          "fileName": "england-keys-handover-record.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-keys-handover-record.pdf",
+            "text": "england_lodger_agreement/england-keys-handover-record.txt",
+            "html": "england_lodger_agreement/england-keys-handover-record.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Lodger House Rules Appendix",
+          "description": "Resident-landlord appendix for guests, quiet hours, shared-space cleaning, and room hand-back expectations.",
+          "category": "schedule",
+          "documentType": "england_lodger_house_rules_appendix",
+          "fileName": "england-lodger-house-rules-appendix.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-lodger-house-rules-appendix.pdf",
+            "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt",
+            "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        }
+      ]
+    },
+    {
+      "key": "money_claim",
+      "displayName": "Money Claim Pack",
+      "outputDir": "money_claim",
+      "documentCount": 10,
+      "documents": [
+        {
+          "title": "Particulars of claim",
+          "description": "Detailed particulars for rent arrears, damages and costs.",
+          "category": "particulars",
+          "documentType": "particulars_of_claim",
+          "fileName": "01-particulars-of-claim.pdf",
+          "files": {
+            "pdf": "money_claim/01-particulars-of-claim.pdf",
+            "text": "money_claim/01-particulars-of-claim.txt",
+            "html": "money_claim/01-particulars-of-claim.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Schedule of arrears",
+          "description": "Line-by-line arrears schedule required by HMCTS.",
+          "category": "schedule",
+          "documentType": "arrears_schedule",
+          "fileName": "02-schedule-of-arrears.pdf",
+          "files": {
+            "pdf": "money_claim/02-schedule-of-arrears.pdf",
+            "text": "money_claim/02-schedule-of-arrears.txt",
+            "html": "money_claim/02-schedule-of-arrears.html"
+          },
+          "extraction": {
+            "pageCount": 1,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Interest calculation",
+          "description": "Section 69 County Courts Act interest workings and daily rate.",
+          "category": "guidance",
+          "documentType": "interest_calculation",
+          "fileName": "03-interest-calculation.pdf",
+          "files": {
+            "pdf": "money_claim/03-interest-calculation.pdf",
+            "text": "money_claim/03-interest-calculation.txt",
+            "html": "money_claim/03-interest-calculation.html"
+          },
+          "extraction": {
+            "pageCount": 1,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Letter Before Claim (PAP-DEBT)",
+          "description": "Pre-Action Protocol letter required before issuing proceedings.",
+          "category": "guidance",
+          "documentType": "letter_before_claim",
+          "fileName": "04-letter-before-claim.pdf",
+          "files": {
+            "pdf": "money_claim/04-letter-before-claim.pdf",
+            "text": "money_claim/04-letter-before-claim.txt",
+            "html": "money_claim/04-letter-before-claim.html"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Information Sheet for Defendants",
+          "description": "Explains defendant rights and options (enclose with Letter Before Claim).",
+          "category": "guidance",
+          "documentType": "defendant_info_sheet",
+          "fileName": "05-information-sheet-for-defendants.pdf",
+          "files": {
+            "pdf": "money_claim/05-information-sheet-for-defendants.pdf",
+            "text": "money_claim/05-information-sheet-for-defendants.txt",
+            "html": "money_claim/05-information-sheet-for-defendants.html"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Reply Form",
+          "description": "Form for defendant to respond to Letter Before Claim.",
+          "category": "guidance",
+          "documentType": "reply_form",
+          "fileName": "06-reply-form.pdf",
+          "files": {
+            "pdf": "money_claim/06-reply-form.pdf",
+            "text": "money_claim/06-reply-form.txt",
+            "html": "money_claim/06-reply-form.html"
+          },
+          "extraction": {
+            "pageCount": 4,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Financial Statement Form",
+          "description": "Form for defendant to disclose income/expenditure for payment plan.",
+          "category": "guidance",
+          "documentType": "financial_statement_form",
+          "fileName": "07-financial-statement-form.pdf",
+          "files": {
+            "pdf": "money_claim/07-financial-statement-form.pdf",
+            "text": "money_claim/07-financial-statement-form.txt",
+            "html": "money_claim/07-financial-statement-form.html"
+          },
+          "extraction": {
+            "pageCount": 6,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Money Claims Filing Guide",
+          "description": "Step-by-step instructions for filing via MCOL or paper.",
+          "category": "guidance",
+          "documentType": "court_filing_guide",
+          "fileName": "08-filing-guide.pdf",
+          "files": {
+            "pdf": "money_claim/08-filing-guide.pdf",
+            "text": "money_claim/08-filing-guide.txt",
+            "html": "money_claim/08-filing-guide.html"
+          },
+          "extraction": {
+            "pageCount": 7,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Enforcement Guide",
+          "description": "Explains enforcement options after obtaining a County Court Judgment.",
+          "category": "guidance",
+          "documentType": "enforcement_guide",
+          "fileName": "09-enforcement-guide.pdf",
+          "files": {
+            "pdf": "money_claim/09-enforcement-guide.pdf",
+            "text": "money_claim/09-enforcement-guide.txt",
+            "html": "money_claim/09-enforcement-guide.html"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Form N1 (official PDF)",
+          "description": "Completed claim form ready for County Court Money Claims Centre.",
+          "category": "court_form",
+          "documentType": "n1_claim",
+          "fileName": "10-n1-claim-form.pdf",
+          "files": {
+            "pdf": "money_claim/10-n1-claim-form.pdf",
+            "text": "money_claim/10-n1-claim-form.txt"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        }
+      ]
+    },
+    {
+      "key": "england_premium_tenancy_agreement",
+      "displayName": "Premium Tenancy Agreement",
+      "outputDir": "england_premium_tenancy_agreement",
+      "documentCount": 9,
+      "documents": [
+        {
+          "title": "Premium Tenancy Agreement",
+          "description": "Premium tenancy agreement for a residential let in England with fuller drafting.",
+          "category": "agreement",
+          "documentType": "england_premium_tenancy_agreement",
+          "fileName": "england-premium-tenancy-agreement.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.pdf",
+            "text": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.txt",
+            "html": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.html"
+          },
+          "extraction": {
+            "pageCount": 9,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Pre-Tenancy Checklist (England)",
+          "description": "England compliance checklist covering the main pre-tenancy and written-information actions for the tenancy file.",
+          "category": "checklist",
+          "documentType": "pre_tenancy_checklist_england",
+          "fileName": "pre_tenancy_checklist_england.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.pdf",
+            "text": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.txt",
+            "html": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.html"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Keys & Handover Record",
+          "description": "Practical handover record for keys, access devices, and move-in confirmations.",
+          "category": "checklist",
+          "documentType": "england_keys_handover_record",
+          "fileName": "england-keys-handover-record.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/england-keys-handover-record.pdf",
+            "text": "england_premium_tenancy_agreement/england-keys-handover-record.txt",
+            "html": "england_premium_tenancy_agreement/england-keys-handover-record.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Utilities & Meter Handover Sheet",
+          "description": "Record for utilities responsibility, opening readings, and account handover notes.",
+          "category": "checklist",
+          "documentType": "england_utilities_handover_sheet",
+          "fileName": "england-utilities-handover-sheet.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/england-utilities-handover-sheet.pdf",
+            "text": "england_premium_tenancy_agreement/england-utilities-handover-sheet.txt",
+            "html": "england_premium_tenancy_agreement/england-utilities-handover-sheet.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Pet Request / Consent Addendum",
+          "description": "Optional addendum for recording a pet request, decision, and any consent conditions.",
+          "category": "schedule",
+          "documentType": "england_pet_request_addendum",
+          "fileName": "england-pet-request-addendum.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/england-pet-request-addendum.pdf",
+            "text": "england_premium_tenancy_agreement/england-pet-request-addendum.txt",
+            "html": "england_premium_tenancy_agreement/england-pet-request-addendum.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Tenancy Variation Record",
+          "description": "Simple record for agreed changes after the tenancy agreement has been issued.",
+          "category": "schedule",
+          "documentType": "england_tenancy_variation_record",
+          "fileName": "england-tenancy-variation-record.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/england-tenancy-variation-record.pdf",
+            "text": "england_premium_tenancy_agreement/england-tenancy-variation-record.txt",
+            "html": "england_premium_tenancy_agreement/england-tenancy-variation-record.html"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Deposit Protection Certificate",
+          "description": "Standalone certificate confirming the deposit protection scheme details for England.",
+          "category": "guidance",
+          "documentType": "deposit_protection_certificate",
+          "fileName": "deposit_protection_certificate.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/deposit_protection_certificate.pdf",
+            "text": "england_premium_tenancy_agreement/deposit_protection_certificate.txt",
+            "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html"
+          },
+          "extraction": {
+            "pageCount": 7,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Prescribed Information Pack",
+          "description": "Standalone tenancy deposit prescribed information pack for England.",
+          "category": "guidance",
+          "documentType": "tenancy_deposit_information",
+          "fileName": "prescribed_information_pack.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/prescribed_information_pack.pdf",
+            "text": "england_premium_tenancy_agreement/prescribed_information_pack.txt",
+            "html": "england_premium_tenancy_agreement/prescribed_information_pack.html"
+          },
+          "extraction": {
+            "pageCount": 9,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Premium Management Schedule",
+          "description": "Premium-only schedule for inspections, repairs reporting, keys, contractor access, and hand-back expectations.",
+          "category": "schedule",
+          "documentType": "england_premium_management_schedule",
+          "fileName": "england-premium-management-schedule.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/england-premium-management-schedule.pdf",
+            "text": "england_premium_tenancy_agreement/england-premium-management-schedule.txt",
+            "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        }
+      ]
+    },
+    {
       "key": "section13_standard",
-      "displayName": "Section 13 Rent Increase Pack",
+      "displayName": "Standard Section 13 Pack",
       "outputDir": "section13_standard",
       "documentCount": 4,
       "documents": [
@@ -1190,8 +1190,8 @@
           "fileName": "england-standard-tenancy-agreement.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.pdf",
-            "html": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.html",
-            "text": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.txt"
+            "text": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.txt",
+            "html": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.html"
           },
           "extraction": {
             "pageCount": 7,
@@ -1208,8 +1208,8 @@
           "fileName": "pre_tenancy_checklist_england.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.pdf",
-            "html": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.html",
-            "text": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.txt"
+            "text": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.txt",
+            "html": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.html"
           },
           "extraction": {
             "pageCount": 5,
@@ -1226,8 +1226,8 @@
           "fileName": "england-keys-handover-record.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-keys-handover-record.pdf",
-            "html": "england_standard_tenancy_agreement/england-keys-handover-record.html",
-            "text": "england_standard_tenancy_agreement/england-keys-handover-record.txt"
+            "text": "england_standard_tenancy_agreement/england-keys-handover-record.txt",
+            "html": "england_standard_tenancy_agreement/england-keys-handover-record.html"
           },
           "extraction": {
             "pageCount": 2,
@@ -1244,8 +1244,8 @@
           "fileName": "england-utilities-handover-sheet.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-utilities-handover-sheet.pdf",
-            "html": "england_standard_tenancy_agreement/england-utilities-handover-sheet.html",
-            "text": "england_standard_tenancy_agreement/england-utilities-handover-sheet.txt"
+            "text": "england_standard_tenancy_agreement/england-utilities-handover-sheet.txt",
+            "html": "england_standard_tenancy_agreement/england-utilities-handover-sheet.html"
           },
           "extraction": {
             "pageCount": 2,
@@ -1262,8 +1262,8 @@
           "fileName": "england-pet-request-addendum.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-pet-request-addendum.pdf",
-            "html": "england_standard_tenancy_agreement/england-pet-request-addendum.html",
-            "text": "england_standard_tenancy_agreement/england-pet-request-addendum.txt"
+            "text": "england_standard_tenancy_agreement/england-pet-request-addendum.txt",
+            "html": "england_standard_tenancy_agreement/england-pet-request-addendum.html"
           },
           "extraction": {
             "pageCount": 2,
@@ -1280,8 +1280,8 @@
           "fileName": "england-tenancy-variation-record.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/england-tenancy-variation-record.pdf",
-            "html": "england_standard_tenancy_agreement/england-tenancy-variation-record.html",
-            "text": "england_standard_tenancy_agreement/england-tenancy-variation-record.txt"
+            "text": "england_standard_tenancy_agreement/england-tenancy-variation-record.txt",
+            "html": "england_standard_tenancy_agreement/england-tenancy-variation-record.html"
           },
           "extraction": {
             "pageCount": 2,
@@ -1298,8 +1298,8 @@
           "fileName": "deposit_protection_certificate.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/deposit_protection_certificate.pdf",
-            "html": "england_standard_tenancy_agreement/deposit_protection_certificate.html",
-            "text": "england_standard_tenancy_agreement/deposit_protection_certificate.txt"
+            "text": "england_standard_tenancy_agreement/deposit_protection_certificate.txt",
+            "html": "england_standard_tenancy_agreement/deposit_protection_certificate.html"
           },
           "extraction": {
             "pageCount": 7,
@@ -1316,8 +1316,8 @@
           "fileName": "prescribed_information_pack.pdf",
           "files": {
             "pdf": "england_standard_tenancy_agreement/prescribed_information_pack.pdf",
-            "html": "england_standard_tenancy_agreement/prescribed_information_pack.html",
-            "text": "england_standard_tenancy_agreement/prescribed_information_pack.txt"
+            "text": "england_standard_tenancy_agreement/prescribed_information_pack.txt",
+            "html": "england_standard_tenancy_agreement/prescribed_information_pack.html"
           },
           "extraction": {
             "pageCount": 9,
@@ -1342,8 +1342,8 @@
           "fileName": "england-student-tenancy-agreement.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-student-tenancy-agreement.pdf",
-            "html": "england_student_tenancy_agreement/england-student-tenancy-agreement.html",
-            "text": "england_student_tenancy_agreement/england-student-tenancy-agreement.txt"
+            "text": "england_student_tenancy_agreement/england-student-tenancy-agreement.txt",
+            "html": "england_student_tenancy_agreement/england-student-tenancy-agreement.html"
           },
           "extraction": {
             "pageCount": 8,
@@ -1360,8 +1360,8 @@
           "fileName": "pre_tenancy_checklist_england.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/pre_tenancy_checklist_england.pdf",
-            "html": "england_student_tenancy_agreement/pre_tenancy_checklist_england.html",
-            "text": "england_student_tenancy_agreement/pre_tenancy_checklist_england.txt"
+            "text": "england_student_tenancy_agreement/pre_tenancy_checklist_england.txt",
+            "html": "england_student_tenancy_agreement/pre_tenancy_checklist_england.html"
           },
           "extraction": {
             "pageCount": 5,
@@ -1378,8 +1378,8 @@
           "fileName": "england-keys-handover-record.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-keys-handover-record.pdf",
-            "html": "england_student_tenancy_agreement/england-keys-handover-record.html",
-            "text": "england_student_tenancy_agreement/england-keys-handover-record.txt"
+            "text": "england_student_tenancy_agreement/england-keys-handover-record.txt",
+            "html": "england_student_tenancy_agreement/england-keys-handover-record.html"
           },
           "extraction": {
             "pageCount": 3,
@@ -1396,8 +1396,8 @@
           "fileName": "england-utilities-handover-sheet.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-utilities-handover-sheet.pdf",
-            "html": "england_student_tenancy_agreement/england-utilities-handover-sheet.html",
-            "text": "england_student_tenancy_agreement/england-utilities-handover-sheet.txt"
+            "text": "england_student_tenancy_agreement/england-utilities-handover-sheet.txt",
+            "html": "england_student_tenancy_agreement/england-utilities-handover-sheet.html"
           },
           "extraction": {
             "pageCount": 2,
@@ -1414,8 +1414,8 @@
           "fileName": "england-pet-request-addendum.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-pet-request-addendum.pdf",
-            "html": "england_student_tenancy_agreement/england-pet-request-addendum.html",
-            "text": "england_student_tenancy_agreement/england-pet-request-addendum.txt"
+            "text": "england_student_tenancy_agreement/england-pet-request-addendum.txt",
+            "html": "england_student_tenancy_agreement/england-pet-request-addendum.html"
           },
           "extraction": {
             "pageCount": 2,
@@ -1432,8 +1432,8 @@
           "fileName": "england-tenancy-variation-record.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-tenancy-variation-record.pdf",
-            "html": "england_student_tenancy_agreement/england-tenancy-variation-record.html",
-            "text": "england_student_tenancy_agreement/england-tenancy-variation-record.txt"
+            "text": "england_student_tenancy_agreement/england-tenancy-variation-record.txt",
+            "html": "england_student_tenancy_agreement/england-tenancy-variation-record.html"
           },
           "extraction": {
             "pageCount": 2,
@@ -1450,8 +1450,8 @@
           "fileName": "deposit_protection_certificate.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/deposit_protection_certificate.pdf",
-            "html": "england_student_tenancy_agreement/deposit_protection_certificate.html",
-            "text": "england_student_tenancy_agreement/deposit_protection_certificate.txt"
+            "text": "england_student_tenancy_agreement/deposit_protection_certificate.txt",
+            "html": "england_student_tenancy_agreement/deposit_protection_certificate.html"
           },
           "extraction": {
             "pageCount": 7,
@@ -1468,8 +1468,8 @@
           "fileName": "prescribed_information_pack.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/prescribed_information_pack.pdf",
-            "html": "england_student_tenancy_agreement/prescribed_information_pack.html",
-            "text": "england_student_tenancy_agreement/prescribed_information_pack.txt"
+            "text": "england_student_tenancy_agreement/prescribed_information_pack.txt",
+            "html": "england_student_tenancy_agreement/prescribed_information_pack.html"
           },
           "extraction": {
             "pageCount": 9,
@@ -1486,8 +1486,8 @@
           "fileName": "guarantor-agreement.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/guarantor-agreement.pdf",
-            "html": "england_student_tenancy_agreement/guarantor-agreement.html",
-            "text": "england_student_tenancy_agreement/guarantor-agreement.txt"
+            "text": "england_student_tenancy_agreement/guarantor-agreement.txt",
+            "html": "england_student_tenancy_agreement/guarantor-agreement.html"
           },
           "extraction": {
             "pageCount": 5,
@@ -1504,8 +1504,8 @@
           "fileName": "england-student-move-out-schedule.pdf",
           "files": {
             "pdf": "england_student_tenancy_agreement/england-student-move-out-schedule.pdf",
-            "html": "england_student_tenancy_agreement/england-student-move-out-schedule.html",
-            "text": "england_student_tenancy_agreement/england-student-move-out-schedule.txt"
+            "text": "england_student_tenancy_agreement/england-student-move-out-schedule.txt",
+            "html": "england_student_tenancy_agreement/england-student-move-out-schedule.html"
           },
           "extraction": {
             "pageCount": 3,

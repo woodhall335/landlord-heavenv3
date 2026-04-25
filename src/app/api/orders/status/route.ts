@@ -13,13 +13,15 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
-import { getEditWindowStatus } from '@/lib/payments/edit-window';
+import { getEditWindowStatusWithOverride } from '@/lib/payments/edit-window';
 import { deriveVisibleFulfillmentState } from '@/lib/payments/fulfillment-routing';
 import {
   isMetadataColumnMissingError,
   setMetadataColumnExists,
   extractOrderMetadata,
 } from '@/lib/payments/safe-order-metadata';
+import { isAdmin } from '@/lib/auth';
+import { isGeneratedPackDocument } from '@/lib/documents/document-origin';
 
 export interface OrderStatusResponse {
   paid: boolean;
@@ -71,6 +73,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const supabase = await createServerSupabaseClient();
     const adminClient = createSupabaseAdminClient();
+    const userIsAdmin = isAdmin(user.id);
 
     const caseId = searchParams.get('case_id');
     const product = searchParams.get('product');
@@ -87,8 +90,11 @@ export async function GET(request: Request) {
       .from('orders')
       .select(ORDER_SELECT_WITH_METADATA)
       .eq('case_id', caseId)
-      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
+
+    if (!userIsAdmin) {
+      orderQueryWithMetadata = orderQueryWithMetadata.eq('user_id', user.id);
+    }
 
     // Optionally filter by product type
     if (product) {
@@ -111,8 +117,11 @@ export async function GET(request: Request) {
         .from('orders')
         .select(ORDER_SELECT_WITHOUT_METADATA)
         .eq('case_id', caseId)
-        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
+
+      if (!userIsAdmin) {
+        orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('user_id', user.id);
+      }
 
       if (product) {
         orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('product_type', product);
@@ -131,24 +140,30 @@ export async function GET(request: Request) {
       );
     }
 
-    // Get final documents (is_preview=false) for this case - need count and latest created_at
-    const { data: finalDocs, count: finalDocCount, error: docError } = await supabase
+    // Get final generated pack documents for this case.
+    const docsClient = userIsAdmin ? adminClient : supabase;
+    let docsQuery = docsClient
       .from('documents')
-      .select('id, created_at', { count: 'exact' })
+      .select('id, created_at, document_type, is_preview, metadata')
       .eq('case_id', caseId)
-      .eq('user_id', user.id)
       .eq('is_preview', false)
-      .order('created_at', { ascending: false })
-      .limit(1);
+      .order('created_at', { ascending: false });
+
+    if (!userIsAdmin) {
+      docsQuery = docsQuery.eq('user_id', user.id);
+    }
+
+    const { data: finalDocs, error: docError } = await docsQuery;
 
     if (docError) {
       console.error('Failed to count documents:', docError);
       // Don't fail the whole request, just report 0
     }
 
+    const generatedDocs = ((finalDocs as any[]) || []).filter((doc) => isGeneratedPackDocument(doc));
     const order = orders?.[0] || null;
-    const documentCount = finalDocCount || 0;
-    const lastFinalDocCreatedAt = finalDocs?.[0]?.created_at || null;
+    const documentCount = generatedDocs.length;
+    const lastFinalDocCreatedAt = generatedDocs[0]?.created_at || null;
 
     // Extract metadata using safe helper (handles missing metadata gracefully)
     const orderMetadata = extractOrderMetadata(order);
@@ -160,7 +175,10 @@ export async function GET(request: Request) {
     });
 
     // Calculate edit window status
-    const editWindow = getEditWindowStatus(order?.paid_at || null);
+    const editWindow = getEditWindowStatusWithOverride(
+      order?.paid_at || null,
+      orderMetadata?.edit_window_override_ends_at ?? null
+    );
 
     // Build response
     const response: OrderStatusResponse = {

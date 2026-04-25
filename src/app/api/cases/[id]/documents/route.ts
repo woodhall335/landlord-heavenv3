@@ -8,6 +8,7 @@
 
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
 export async function GET(
   request: Request,
@@ -25,7 +26,7 @@ export async function GET(
     // First, fetch the case to verify access
     const { data: caseData, error: caseError } = await adminSupabase
       .from('cases')
-      .select('id, user_id')
+      .select('id, user_id, session_token')
       .eq('id', caseId)
       .single();
 
@@ -37,22 +38,15 @@ export async function GET(
       );
     }
 
-    // Type assertion for the case record
     const caseRecord = caseData as {
       id: string;
       user_id: string | null;
+      session_token?: string | null;
     };
-
-    // Manual access control
-    const isOwner = user && caseRecord.user_id === user.id;
-    const isAnonymousCase = caseRecord.user_id === null;
-
-    if (!isOwner && !isAnonymousCase) {
+    const accessError = assertCaseReadAccess({ request, user, caseRow: caseRecord });
+    if (accessError) {
       console.error('Access denied to case documents:', { caseId, userId: user?.id });
-      return NextResponse.json(
-        { error: 'Case not found' },
-        { status: 404 }
-      );
+      return accessError;
     }
 
     // Fetch all documents for this case

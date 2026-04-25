@@ -12,6 +12,7 @@ import { z } from 'zod';
 import { logMutation } from '@/lib/auth/audit-log';
 import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 import { getCase as getE2ECase } from '@/lib/e2eStore';
+import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
 /**
  * GET - Fetch specific case by ID
@@ -60,25 +61,16 @@ export async function GET(
       );
     }
 
-    // Type assertion for the case record properties we need
     const caseRecord = caseData as {
       id: string;
       user_id: string | null;
+      session_token?: string | null;
       [key: string]: unknown;
     };
-
-    // Manual access control: user can access if:
-    // 1. They own the case (user_id matches)
-    // 2. The case is anonymous (user_id is null) - anyone can access
-    const isOwner = user && caseRecord.user_id === user.id;
-    const isAnonymousCase = caseRecord.user_id === null;
-
-    if (!isOwner && !isAnonymousCase) {
+    const accessError = assertCaseReadAccess({ request, user, caseRow: caseRecord });
+    if (accessError) {
       console.error('Access denied to case:', { id, userId: user?.id, caseUserId: caseRecord.user_id });
-      return NextResponse.json(
-        { error: 'Case not found' },
-        { status: 404 }
-      );
+      return accessError;
     }
 
     // Fetch associated documents count

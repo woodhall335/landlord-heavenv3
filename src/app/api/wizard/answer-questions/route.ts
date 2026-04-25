@@ -8,6 +8,7 @@ import { mapEvidenceToFacts } from '@/lib/evidence/map-evidence-to-facts';
 import { REQUIREMENTS, resolveRequirementKey } from '@/lib/validators/requirements';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { isLevelAFactKey, FACT_QUESTIONS, normalizeLevelAFactsToCanonical } from '@/lib/validators/facts/factKeys';
+import { assertCaseWriteAccess } from '@/lib/auth/case-access';
 
 export const runtime = 'nodejs';
 
@@ -184,7 +185,7 @@ export async function POST(request: Request) {
 
     const { data: caseRow, error: caseError } = await supabase
       .from('cases')
-      .select('id, user_id, jurisdiction')
+      .select('id, user_id, jurisdiction, session_token')
       .eq('id', caseId)
       .maybeSingle();
 
@@ -192,13 +193,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    if (caseRow.user_id) {
-      if (!user) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      if (caseRow.user_id !== user.id) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-      }
+    const accessError = assertCaseWriteAccess({
+      request,
+      user,
+      caseRow: caseRow as { user_id: string | null; session_token?: string | null },
+    });
+    if (accessError) {
+      return accessError;
     }
 
     const factsSnapshot = await getOrCreateWizardFacts(supabase as any, caseId);

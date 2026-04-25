@@ -20,6 +20,7 @@ import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import { trackWizardReviewViewWithAttribution, markWizardCompleted } from '@/lib/analytics';
 import { getWizardAttribution } from '@/lib/wizard/wizardAttribution';
 import { getSessionTokenHeaders } from '@/lib/session-token';
+import { getPackContents } from '@/lib/products/pack-contents';
 
 // Scotland utilities
 import {
@@ -1202,6 +1203,16 @@ function EvictionReviewContent({
   const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_documents)
     ? analysis.preview_documents
     : [];
+  const canonicalPackDocuments =
+    jurisdiction === 'england' && (product === 'complete_pack' || product === 'notice_only')
+      ? getPackContents({
+          product,
+          jurisdiction,
+          route: analysis.recommended_route || 'section_8',
+          include_arrears_schedule: Boolean(evidence.rent_schedule_uploaded),
+          has_arrears: Boolean(evidence.rent_schedule_uploaded),
+        })
+      : [];
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -1665,10 +1676,11 @@ function EvictionReviewContent({
 
       {/* Evidence & documents checklist */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Evidence &amp; documents checklist</h2>
+        <h2 className="text-lg font-semibold mb-4">Court file readiness</h2>
         <p className="text-sm text-gray-600 mb-3">
-          This is a quick snapshot of the key documents courts expect to see. Uploading them
-          now makes your pack much stronger and reduces the risk of delays.
+          This is a quick snapshot of the records you have confirmed are available outside the
+          generated pack. We use these answers to shape the checklist and filing guidance, but the
+          product does not rely on customer uploads to generate the eviction paperwork.
         </p>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
@@ -1682,7 +1694,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.tenancy_agreement_uploaded
                   ? 'Marked as provided in your case facts.'
-                  : 'Not uploaded yet – strongly recommended so the judge can see the contract.'}
+                  : 'Not confirmed yet - the generated checklist will remind you to bring it if needed.'}
               </p>
             </div>
           </div>
@@ -1698,7 +1710,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.rent_schedule_uploaded
                   ? 'Arrears schedule recorded for the claim.'
-                  : 'Not uploaded yet – courts expect a clear chronology of missed payments.'}
+                  : 'Not confirmed yet - the court file should still include a clear missed-payment chronology.'}
               </p>
             </div>
           </div>
@@ -1714,7 +1726,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.bank_statements_uploaded
                   ? 'Supporting payment history has been flagged.'
-                  : 'Not flagged yet – optional, but helpful to prove what was paid or missed.'}
+                  : 'Not flagged yet - optional, but useful if the payment history is disputed.'}
               </p>
             </div>
           </div>
@@ -1730,7 +1742,7 @@ function EvictionReviewContent({
               <p className="text-xs text-gray-600">
                 {evidence.other_evidence_uploaded
                   ? 'You have flagged additional documents (photos, quotes, correspondence, etc.).'
-                  : 'Not flagged yet – think about emails, texts, photos or reports that support your case.'}
+                  : 'Not flagged yet - think about emails, texts, photos, or reports that support your case.'}
               </p>
             </div>
           </div>
@@ -1761,6 +1773,13 @@ function EvictionReviewContent({
                     Required for filing
                   </span>
                 )}
+              </li>
+            ))
+          ) : canonicalPackDocuments.length > 0 ? (
+            canonicalPackDocuments.map((doc) => (
+              <li key={doc.key} className="flex items-center gap-2 text-sm">
+                <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
+                {doc.title}
               </li>
             ))
           ) : jurisdiction === 'scotland' ? (

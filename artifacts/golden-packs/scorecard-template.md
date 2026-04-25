@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-04-23T10:20:42.117Z
+Generated: 2026-04-25T15:00:49.481Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):
@@ -9,6 +9,28 @@ Suggested scoring rubric (/10):
 - Completeness: /2
 - Landlord clarity and next steps: /2
 - Finish and polish: /1
+
+## Challenge-Ready Section 13 Defence Pack
+Folder: section13_defensive
+Documents: 12
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Form 4A rent increase notice [section13_form_4a]
+- Rent increase justification report [section13_justification_report]
+- Tribunal Argument Summary [section13_tribunal_argument_summary]
+- Proof of service record [section13_proof_of_service_record]
+- Rent increase cover letter [section13_cover_letter]
+- Tribunal defence guide [section13_tribunal_defence_guide]
+- Landlord response template [section13_landlord_response_template]
+- Tribunal legal briefing [section13_legal_briefing]
+- Evidence checklist [section13_evidence_checklist]
+- Negotiation email template [section13_negotiation_email_template]
+- Merged tribunal bundle PDF [section13_tribunal_bundle]
+- Tribunal bundle ZIP [section13_tribunal_bundle_zip]
 
 ## Complete Eviction Pack
 Folder: complete_pack
@@ -118,29 +140,7 @@ Documents:
 - Prescribed Information Pack [tenancy_deposit_information]
 - Premium Management Schedule [england_premium_management_schedule]
 
-## Section 13 Defence Pack
-Folder: section13_defensive
-Documents: 12
-Score: 
-What works: 
-Issues found: 
-What would move this to 9/10: 
-
-Documents:
-- Form 4A rent increase notice [section13_form_4a]
-- Rent increase justification report [section13_justification_report]
-- Tribunal Argument Summary [section13_tribunal_argument_summary]
-- Proof of service record [section13_proof_of_service_record]
-- Rent increase cover letter [section13_cover_letter]
-- Tribunal defence guide [section13_tribunal_defence_guide]
-- Landlord response template [section13_landlord_response_template]
-- Tribunal legal briefing [section13_legal_briefing]
-- Evidence checklist [section13_evidence_checklist]
-- Negotiation email template [section13_negotiation_email_template]
-- Merged tribunal bundle PDF [section13_tribunal_bundle]
-- Tribunal bundle ZIP [section13_tribunal_bundle_zip]
-
-## Section 13 Rent Increase Pack
+## Standard Section 13 Pack
 Folder: section13_standard
 Documents: 4
 Score: 

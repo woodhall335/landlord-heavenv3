@@ -30,6 +30,7 @@ import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
+import { isAdmin } from '@/lib/auth';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
 import { validateSection21ForCheckout } from '@/lib/validation/section21-checkout-validator';
 import {
@@ -68,6 +69,7 @@ const ORDER_SELECT_WITHOUT_METADATA = 'id, product_type, payment_status, fulfill
 export async function POST(request: Request) {
   try {
     const user = await requireServerAuth();
+    const userIsAdmin = isAdmin(user.id);
     const body = await request.json();
 
     // Validate input
@@ -102,7 +104,7 @@ export async function POST(request: Request) {
     }
 
     // Verify ownership
-    if (caseData.user_id !== user.id) {
+    if (!userIsAdmin && caseData.user_id !== user.id) {
       logger.warn('User attempted resume fulfillment for unowned case', {
         caseId: case_id,
         userId: user.id,
@@ -115,15 +117,20 @@ export async function POST(request: Request) {
     }
 
     // 2. Get the order that needs resume - try with metadata first
-    let { data: order, error: orderError } = await adminSupabase
+    let orderQueryWithMetadata = adminSupabase
       .from('orders')
       .select(ORDER_SELECT_WITH_METADATA)
       .eq('case_id', case_id)
       .eq('payment_status', 'paid')
       .in('fulfillment_status', ['requires_action', 'processing', 'failed'])
       .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
+      .limit(1);
+
+    if (!userIsAdmin) {
+      orderQueryWithMetadata = orderQueryWithMetadata.eq('user_id', user.id);
+    }
+
+    let { data: order, error: orderError } = await orderQueryWithMetadata.single();
 
     // Handle metadata column missing error (42703)
     if (orderError && isMetadataColumnMissingError(orderError)) {
@@ -135,15 +142,20 @@ export async function POST(request: Request) {
       setMetadataColumnExists(false);
 
       // Retry without metadata
-      const fallbackResult = await adminSupabase
+      let fallbackQuery = adminSupabase
         .from('orders')
         .select(ORDER_SELECT_WITHOUT_METADATA)
         .eq('case_id', case_id)
         .eq('payment_status', 'paid')
         .in('fulfillment_status', ['requires_action', 'processing', 'failed'])
         .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
+        .limit(1);
+
+      if (!userIsAdmin) {
+        fallbackQuery = fallbackQuery.eq('user_id', user.id);
+      }
+
+      const fallbackResult = await fallbackQuery.single();
 
       order = fallbackResult.data as any;
       orderError = fallbackResult.error;
@@ -257,11 +269,13 @@ export async function POST(request: Request) {
     });
 
     try {
+      const resolvedUserId = caseData.user_id || user.id;
+
       const fulfillmentResult = await fulfillOrder({
         orderId: order.id,
         caseId: case_id,
         productType: order.product_type,
-        userId: user.id,
+        userId: resolvedUserId,
       });
 
       return NextResponse.json({

@@ -14,7 +14,11 @@ export type MutationAction =
   | 'evidence_upload'
   | 'document_regenerate'
   | 'case_status_change'
-  | 'case_archived';
+  | 'case_archived'
+  | 'admin_retry_fulfillment'
+  | 'admin_resume_fulfillment'
+  | 'admin_document_regenerate'
+  | 'admin_reopen_edit_window';
 
 export interface MutationLogEntry {
   id?: string;

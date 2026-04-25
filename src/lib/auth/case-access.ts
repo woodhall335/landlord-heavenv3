@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { isAdmin } from '@/lib/auth/admin-ids';
 
 export type CaseAccessCaseRow = {
   user_id: string | null;
@@ -20,6 +21,10 @@ export function assertCaseReadAccess(params: {
   caseRow: CaseAccessCaseRow;
 }): NextResponse | null {
   const { request, user, caseRow } = params;
+
+  if (user && isAdmin(user.id)) {
+    return null;
+  }
 
   if (caseRow.user_id) {
     if (!user || caseRow.user_id !== user.id) {

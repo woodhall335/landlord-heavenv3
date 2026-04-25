@@ -345,6 +345,7 @@ async function persistGeneratedDocuments(
       is_preview: false,
       qa_passed: true,
       metadata: {
+        document_origin: 'generated_pack_document',
         description: doc.description,
         pack_type: productType,
         order_id: orderId,

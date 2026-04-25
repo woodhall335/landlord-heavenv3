@@ -43,6 +43,7 @@ import {
 import { rateLimiters } from '@/lib/rate-limit';
 import { getEnglandCanonicalTenancyProduct } from '@/lib/tenancy/england-product-model';
 import { isResidentialLettingProductSku } from '@/lib/residential-letting/products';
+import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
 // Force Node.js runtime - Puppeteer cannot run on Edge
 export const runtime = 'nodejs';
@@ -283,11 +284,13 @@ export async function GET(
       hasCollectedFacts: !!(caseData as any).collected_facts,
     });
 
-    // Access control: Allow if user owns the case OR case is not linked to anyone yet
-    // This supports the wizard flow where users create cases before signing in
     const caseRow = caseData as any;
-    if (user && caseRow.user_id && caseRow.user_id !== user.id) {
-      // Case belongs to a different user - deny access
+    const accessError = assertCaseReadAccess({
+      request,
+      user: user ? { id: user.id } : null,
+      caseRow,
+    });
+    if (accessError) {
       return errorResponse('ACCESS_DENIED', 'You do not have permission to view this case', 403, undefined, rateLimitHeaders);
     }
 

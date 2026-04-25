@@ -69,6 +69,14 @@ export function getEditWindowStatus(
   paidAt: string | Date | null,
   now: Date = new Date()
 ): EditWindowStatus {
+  return getEditWindowStatusWithOverride(paidAt, null, now);
+}
+
+export function getEditWindowStatusWithOverride(
+  paidAt: string | Date | null,
+  overrideEndsAt: string | Date | null,
+  now: Date = new Date()
+): EditWindowStatus {
   // Not paid - editing allowed (wizard flow), but not because of edit window
   if (!paidAt) {
     return {
@@ -79,7 +87,15 @@ export function getEditWindowStatus(
     };
   }
 
-  const endsAt = getEditWindowEndsAt(paidAt);
+  const standardEndsAt = getEditWindowEndsAt(paidAt);
+  const overrideDate =
+    overrideEndsAt && !Number.isNaN(new Date(overrideEndsAt).getTime())
+      ? new Date(overrideEndsAt)
+      : null;
+  const endsAt =
+    overrideDate && overrideDate.getTime() > standardEndsAt.getTime()
+      ? overrideDate
+      : standardEndsAt;
   const isOpen = now < endsAt;
 
   return {

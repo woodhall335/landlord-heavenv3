@@ -16,6 +16,7 @@ import React, { useMemo } from 'react';
 import { DocumentProofShowcase } from '@/components/preview';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
+import { getPackContents } from '@/lib/products/pack-contents';
 import {
   RiArrowDownCircleLine,
   RiCalendarLine,
@@ -122,20 +123,19 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   }, [evictionRoute, facts, jurisdiction, sections]);
 
   const documentsToGenerate = useMemo(() => {
+    const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
     if (jurisdiction === 'england') {
-      return [
-        { name: 'Form 3A notice', description: 'Current England possession notice for the selected grounds.' },
-        { name: 'Form N5', description: 'Claim form for the possession proceedings.' },
-        { name: 'Form N119', description: 'Particulars of claim for the court file.' },
-        { name: 'Schedule of arrears', description: 'Running arrears breakdown for rent-based grounds.' },
-        { name: 'Evidence collection checklist', description: 'Checklist for the documents you need to support the claim.' },
-        { name: 'Proof of service certificate', description: 'Record of how and when the notice was served.' },
-        { name: 'Witness statement', description: 'Structured statement setting out the possession case.' },
-        { name: 'Court bundle index', description: 'Index for the court-ready evidence bundle.' },
-        { name: 'Hearing checklist', description: 'Practical checklist for filing and the hearing stage.' },
-        { name: 'Arrears engagement letter', description: 'Landlord-facing arrears engagement record.' },
-        { name: 'Eviction case summary', description: 'Concise overview of the file you are preparing.' },
-      ];
+      return getPackContents({
+        product: 'complete_pack',
+        jurisdiction,
+        route: evictionRoute,
+        grounds: (facts.section8_grounds as string[]) || [],
+        has_arrears: Boolean(arrearsItems.length),
+        include_arrears_schedule: Boolean(arrearsItems.length),
+      }).map((item) => ({
+        name: item.title,
+        description: item.description || 'Included in the generated possession pack.',
+      }));
     }
 
     if (evictionRoute === 'section_21') {
@@ -153,7 +153,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       { name: 'Arrears schedule', description: 'Detailed rent arrears breakdown where rent grounds are used.' },
       { name: 'Case roadmap', description: 'Next steps guide for the possession claim.' },
     ];
-  }, [evictionRoute, jurisdiction]);
+  }, [evictionRoute, facts.arrears_items, facts.issues?.rent_arrears?.arrears_items, facts.section8_grounds, jurisdiction]);
 
   const filingWindowBlocker = filingWindowInfo?.warning?.blocking
     ? { section: 'Filing window', message: filingWindowInfo.warning.message }

@@ -1,28 +1,9 @@
 import fs from 'fs/promises';
 import path from 'path';
+import Module from 'node:module';
 
-import { __setTestJsonAIClient } from '../src/lib/ai/openai-client.ts';
-import {
-  generateCompleteEvictionPack,
-  generateNoticeOnlyPack,
-} from '../src/lib/documents/eviction-pack-generator.ts';
-import {
-  generateMoneyClaimPack,
-  type MoneyClaimCase,
-} from '../src/lib/documents/money-claim-pack-generator.ts';
-import {
-  generateResidentialLettingDocuments,
-} from '../src/lib/documents/residential-letting-generator.ts';
-import {
-  generateSection13CoreDocuments,
-  generateSection13Pack,
-  generateSection13TribunalBundle,
-} from '../src/lib/documents/section13-generator.ts';
-import { PUBLIC_PRODUCT_DESCRIPTORS } from '../src/lib/public-products.ts';
-import { computeSection13Preview } from '../src/lib/section13/rules.ts';
-import { createEmptySection13State } from '../src/lib/section13/facts.ts';
+import type { MoneyClaimCase } from '../src/lib/documents/money-claim-pack-generator.ts';
 import type { Section13Comparable } from '../src/lib/section13/types.ts';
-import { buildEnglandSection8CompletePackFacts } from '../src/lib/testing/fixtures/complete-pack.ts';
 import {
   saveGoldenPack,
   type GoldenPackDocumentInput,
@@ -36,6 +17,78 @@ import {
   chunkKeys,
   isPackComplete,
 } from './helpers/golden-pack-selection.ts';
+
+let __setTestJsonAIClient: ((client: any) => void) | null = null;
+let generateCompleteEvictionPack: typeof import('../src/lib/documents/eviction-pack-generator.ts').generateCompleteEvictionPack;
+let generateNoticeOnlyPack: typeof import('../src/lib/documents/eviction-pack-generator.ts').generateNoticeOnlyPack;
+let generateMoneyClaimPack: typeof import('../src/lib/documents/money-claim-pack-generator.ts').generateMoneyClaimPack;
+let generateResidentialLettingDocuments: typeof import('../src/lib/documents/residential-letting-generator.ts').generateResidentialLettingDocuments;
+let generateSection13CoreDocuments: typeof import('../src/lib/documents/section13-generator.ts').generateSection13CoreDocuments;
+let generateSection13Pack: typeof import('../src/lib/documents/section13-generator.ts').generateSection13Pack;
+let generateSection13TribunalBundle: typeof import('../src/lib/documents/section13-generator.ts').generateSection13TribunalBundle;
+let PUBLIC_PRODUCT_DESCRIPTORS: typeof import('../src/lib/public-products.ts').PUBLIC_PRODUCT_DESCRIPTORS;
+let computeSection13Preview: typeof import('../src/lib/section13/rules.ts').computeSection13Preview;
+let createEmptySection13State: typeof import('../src/lib/section13/facts.ts').createEmptySection13State;
+let buildEnglandSection8CompletePackFacts: typeof import('../src/lib/testing/fixtures/complete-pack.ts').buildEnglandSection8CompletePackFacts;
+
+let shimsInstalled = false;
+
+function installScriptModuleShims() {
+  if (shimsInstalled) return;
+
+  const originalResolveFilename = (Module as any)._resolveFilename;
+  (Module as any)._resolveFilename = function resolveFilename(request: string, parent: any, isMain: boolean, options: any) {
+    if (request === 'server-only') {
+      return path.join(process.cwd(), 'scripts', 'empty-module.js');
+    }
+    if (typeof request === 'string' && request.startsWith('@/')) {
+      const mapped = path.join(process.cwd(), 'src', request.slice(2));
+      return originalResolveFilename.call(this, mapped, parent, isMain, options);
+    }
+    return originalResolveFilename.call(this, request, parent, isMain, options);
+  };
+
+  shimsInstalled = true;
+}
+
+async function loadGeneratorDeps() {
+  installScriptModuleShims();
+
+  const [
+    openAiClient,
+    evictionGenerator,
+    moneyClaimGenerator,
+    residentialLettingGenerator,
+    section13Generator,
+    publicProducts,
+    section13Rules,
+    section13Facts,
+    completePackFixtures,
+  ] = await Promise.all([
+    import('../src/lib/ai/openai-client.ts'),
+    import('../src/lib/documents/eviction-pack-generator.ts'),
+    import('../src/lib/documents/money-claim-pack-generator.ts'),
+    import('../src/lib/documents/residential-letting-generator.ts'),
+    import('../src/lib/documents/section13-generator.ts'),
+    import('../src/lib/public-products.ts'),
+    import('../src/lib/section13/rules.ts'),
+    import('../src/lib/section13/facts.ts'),
+    import('../src/lib/testing/fixtures/complete-pack.ts'),
+  ]);
+
+  __setTestJsonAIClient = openAiClient.__setTestJsonAIClient;
+  generateCompleteEvictionPack = evictionGenerator.generateCompleteEvictionPack;
+  generateNoticeOnlyPack = evictionGenerator.generateNoticeOnlyPack;
+  generateMoneyClaimPack = moneyClaimGenerator.generateMoneyClaimPack;
+  generateResidentialLettingDocuments = residentialLettingGenerator.generateResidentialLettingDocuments;
+  generateSection13CoreDocuments = section13Generator.generateSection13CoreDocuments;
+  generateSection13Pack = section13Generator.generateSection13Pack;
+  generateSection13TribunalBundle = section13Generator.generateSection13TribunalBundle;
+  PUBLIC_PRODUCT_DESCRIPTORS = publicProducts.PUBLIC_PRODUCT_DESCRIPTORS;
+  computeSection13Preview = section13Rules.computeSection13Preview;
+  createEmptySection13State = section13Facts.createEmptySection13State;
+  buildEnglandSection8CompletePackFacts = completePackFixtures.buildEnglandSection8CompletePackFacts;
+}
 
 process.env.TZ = 'Europe/London';
 process.env.DISABLE_WITNESS_STATEMENT_AI = 'true';
@@ -605,6 +658,12 @@ function buildScorecardTemplate(manifest: {
 }
 
 async function main() {
+  await loadGeneratorDeps();
+
+  if (!__setTestJsonAIClient) {
+    throw new Error('Failed to load OpenAI test client shim for golden-pack generation.');
+  }
+
   __setTestJsonAIClient(jsonClientStub);
   const cli = parseGeneratorCliOptions(process.argv.slice(2));
 

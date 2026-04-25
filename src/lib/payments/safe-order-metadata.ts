@@ -23,6 +23,9 @@ let metadataColumnExists: boolean | null = null;
  * Order metadata structure for Section 21 requires_action flow
  */
 export interface OrderMetadata {
+  edit_window_override_ends_at?: string;
+  edit_window_reopened_at?: string;
+  edit_window_reopened_by?: string;
   required_actions?: Array<{
     fieldKey: string;
     label: string;

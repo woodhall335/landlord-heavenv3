@@ -13,6 +13,7 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
+import { isAdmin } from '@/lib/auth';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
 import { resolveFulfillmentProductForCase } from '@/lib/payments/fulfillment-routing';
 import {
@@ -34,6 +35,7 @@ export interface FulfillOrderRequest {
 export async function POST(request: Request) {
   try {
     const user = await requireServerAuth();
+    const userIsAdmin = isAdmin(user.id);
     const body: FulfillOrderRequest = await request.json();
 
     const { case_id, product } = body;
@@ -49,11 +51,17 @@ export async function POST(request: Request) {
     const supabase = await createServerSupabaseClient();
 
     // Verify case ownership
-    const { data: caseData, error: caseError } = await supabase
+    const caseClient = userIsAdmin ? adminClient : supabase;
+    let caseQuery = caseClient
       .from('cases')
       .select('id, user_id, jurisdiction, case_type')
-      .eq('id', case_id)
-      .single();
+      .eq('id', case_id);
+
+    if (!userIsAdmin) {
+      caseQuery = caseQuery.eq('user_id', user.id);
+    }
+
+    const { data: caseData, error: caseError } = await caseQuery.single();
 
     if (caseError || !caseData) {
       return NextResponse.json(
@@ -62,7 +70,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (caseData.user_id !== user.id) {
+    if (!userIsAdmin && caseData.user_id !== user.id) {
       return NextResponse.json(
         { success: false, error: 'You do not have permission to access this case' },
         { status: 403 }
@@ -143,12 +151,17 @@ export async function POST(request: Request) {
     }
 
     // Check if final documents already exist (idempotency)
-    const { count: existingDocCount } = await supabase
+    let documentsQuery = (userIsAdmin ? adminClient : supabase)
       .from('documents')
       .select('id', { count: 'exact', head: true })
       .eq('case_id', case_id)
-      .eq('user_id', user.id)
       .eq('is_preview', false);
+
+    if (!userIsAdmin) {
+      documentsQuery = documentsQuery.eq('user_id', user.id);
+    }
+
+    const { count: existingDocCount } = await documentsQuery;
 
     if (existingDocCount && existingDocCount > 0) {
       // Documents exist, mark as fulfilled if not already

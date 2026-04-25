@@ -3,7 +3,7 @@ Tribunal Bundle Cover Sheet
 Pack: Section 13 Defensive Pack
 Property: 10 Sample Road, Leeds, LS1 1AA
 Tenant(s): Alex Tenant, Jordan Tenant
-Prepared on: 23 April 2026
+Prepared on: 25 April 2026
 Rules version: england_assured_section13_2026-05-01
 Purpose
 This bundle brings together the Form 4A notice, market-rent justification, Tribunal Argument Summary,

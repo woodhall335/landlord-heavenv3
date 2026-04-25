@@ -216,10 +216,15 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'evidence',
-    label: 'Evidence',
-    description: 'Supporting documents',
-    // Optional section - only complete when user has uploaded evidence or confirmed none needed
-    isComplete: (facts) => Boolean(facts.evidence_reviewed || facts.uploaded_documents?.length > 0),
+    label: 'Court File',
+    description: 'Court file readiness and evidence confirmations',
+    isComplete: (facts) =>
+      Boolean(facts.evidence?.notice_service_description?.trim()) &&
+      Boolean(facts.communication_timeline?.log?.trim()) &&
+      facts.communication_timeline?.total_attempts !== undefined &&
+      facts.communication_timeline?.total_attempts !== null &&
+      Boolean(facts.communication_timeline?.tenant_responsiveness) &&
+      Boolean(facts.evidence_reviewed),
   },
   {
     id: 'court_signing',

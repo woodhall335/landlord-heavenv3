@@ -13,6 +13,7 @@ import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 import { runLegalValidator } from '@/lib/validators/run-legal-validator';
 import { mapEvidenceToFacts } from '@/lib/evidence/map-evidence-to-facts';
 import { classifyDocument } from '@/lib/evidence/classify-document';
+import { assertCaseWriteAccess } from '@/lib/auth/case-access';
 import {
   mergeExtractedFacts,
   applyMergedFacts,
@@ -274,7 +275,7 @@ export async function POST(request: Request) {
 
     const { data: caseRow, error: caseError } = await supabase
       .from('cases')
-      .select('id, user_id, jurisdiction')
+      .select('id, user_id, jurisdiction, session_token')
       .eq('id', caseId)
       .maybeSingle();
 
@@ -300,26 +301,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // If the case is owned, enforce that only the owning user can upload to it
-    if (caseRow.user_id) {
-      if (!user) {
-        return createErrorResponse(
-          'Please sign in to upload evidence for this case',
-          'UNAUTHORIZED',
-          'auth',
-          debugId,
-          401
-        );
-      }
-      if (caseRow.user_id !== user.id) {
-        return createErrorResponse(
-          'You do not have permission to upload evidence to this case',
-          'FORBIDDEN',
-          'auth',
-          debugId,
-          403
-        );
-      }
+    const accessError = assertCaseWriteAccess({
+      request,
+      user,
+      caseRow: caseRow as { user_id: string | null; session_token?: string | null },
+    });
+    if (accessError) {
+      return createErrorResponse(
+        'You do not have permission to upload evidence to this case',
+        accessError.status === 401 ? 'UNAUTHORIZED' : 'FORBIDDEN',
+        'auth',
+        debugId,
+        accessError.status
+      );
     }
 
     // Namespace uploads by "owner" – owned cases use the case owner, otherwise fall back
@@ -372,6 +366,12 @@ export async function POST(request: Request) {
           jurisdiction: caseRow.jurisdiction,
           pdf_url: objectKey, // Store storage path only, NOT public URL
           is_preview: false,
+          metadata: {
+            document_origin: 'evidence_upload',
+            evidence_category: validatedCategory ?? null,
+            question_id: questionId,
+            uploaded_via: 'wizard_upload',
+          },
         })
         .select('id, document_title, document_type, pdf_url, created_at')
         .single();

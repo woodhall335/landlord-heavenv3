@@ -500,34 +500,18 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   });
 
   items.push({
-    key: 'cover_letter_to_tenant',
-    title: 'Cover Letter to Tenant',
-    description: `Non-statutory covering letter to send alongside the ${ENGLAND_SECTION8_NOTICE_NAME}`,
+    key: 'validity_checklist',
+    title: 'Validity Checklist',
+    description: `Pre-service checks for dates, grounds, and service on your ${ENGLAND_SECTION8_NOTICE_NAME}`,
+    category: 'Checklists',
+    required: true,
+  });
+
+  items.push({
+    key: 'compliance_declaration',
+    title: 'Compliance Declaration',
+    description: 'Landlord-facing compliance confirmation to support the notice file.',
     category: 'Guidance',
-    required: true,
-  });
-
-  items.push({
-    key: 'service_checklist',
-    title: 'Service & Compliance Checklist',
-    description: `Notice validity, service, and compliance checks for your ${ENGLAND_SECTION8_NOTICE_NAME}`,
-    category: 'Checklists',
-    required: true,
-  });
-
-  items.push({
-    key: 'evidence_checklist',
-    title: 'Ground-Specific Evidence Checklist',
-    description: 'Evidence prompts tailored to the possession grounds you selected',
-    category: 'Checklists',
-    required: true,
-  });
-
-  items.push({
-    key: 'proof_of_service',
-    title: 'Proof of Service Support',
-    description: `Editable support form for recording how and when your ${ENGLAND_SECTION8_NOTICE_NAME} was served`,
-    category: 'Evidence',
     required: true,
   });
 
@@ -545,7 +529,17 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
 }
 
 function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
-  const items = getEnglandNoticeOnlyContents(args);
+  void args;
+  const items: PackItem[] = [
+    {
+      key: 'section8_notice',
+      title: ENGLAND_SECTION8_NOTICE_TITLE,
+      description: 'Official England possession notice for the current Section 8 route',
+      category: 'Notice',
+      required: true,
+    },
+  ];
+
   items.push({
     key: 'n5_claim',
     title: 'Form N5 - Claim for Possession',
@@ -563,9 +557,65 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
   });
 
   items.push({
-    key: 'court_filing_guide',
-    title: 'Court Filing Guide',
-    description: 'Step-by-step filing guide for N5/N119, including when rent-only claims may also be filed online',
+    key: 'arrears_schedule',
+    title: 'Rent Arrears Schedule',
+    description: 'Period-by-period breakdown of arrears and running balance for the court file.',
+    category: 'Evidence',
+    required: true,
+  });
+
+  items.push({
+    key: 'evidence_checklist',
+    title: 'Evidence Collection Checklist',
+    description: 'Checklist of the landlord-held records to print or bring with the claim.',
+    category: 'Checklists',
+    required: true,
+  });
+
+  items.push({
+    key: 'proof_of_service',
+    title: 'Proof of Service Record',
+    description: `Service record for how and when the ${ENGLAND_SECTION8_NOTICE_NAME} was served.`,
+    category: 'Evidence',
+    required: true,
+  });
+
+  items.push({
+    key: 'witness_statement',
+    title: 'Witness Statement',
+    description: 'Structured landlord statement setting out the possession case and chronology.',
+    category: 'Evidence',
+    required: true,
+  });
+
+  items.push({
+    key: 'court_bundle_index',
+    title: 'Court Bundle Index',
+    description: 'Indexed contents page for the court-ready possession file.',
+    category: 'Checklists',
+    required: true,
+  });
+
+  items.push({
+    key: 'hearing_checklist',
+    title: 'Hearing Checklist',
+    description: 'Practical checklist for filing, service, and hearing preparation.',
+    category: 'Checklists',
+    required: true,
+  });
+
+  items.push({
+    key: 'arrears_engagement_letter',
+    title: 'Arrears Engagement Letter',
+    description: 'Landlord-facing arrears engagement and contact record for the file.',
+    category: 'Guidance',
+    required: true,
+  });
+
+  items.push({
+    key: 'case_summary',
+    title: 'Case Summary',
+    description: 'Concise summary of the claim, arrears position, and filing route.',
     category: 'Guidance',
     required: true,
   });

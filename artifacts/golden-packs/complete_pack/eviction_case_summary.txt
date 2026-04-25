@@ -1,7 +1,7 @@
 EVICTION CASE SUMMARY
 Case ID: golden-complete-pack-001
 Jurisdiction: england
-Generated: 23 April 2026
+Generated: 25 April 2026
 Parties
 Claimant: Daniel Mercer
 Defendant: Ivy Carleton
@@ -25,11 +25,11 @@ Current arrears £3600.00
 Arrears at notice
 date
 £3600.00
-Notice served 23 April 2026
-Notice expiry date 21 May 2026
+Notice served 25 April 2026
+Notice expiry date 23 May 2026
 Earliest proceedings
 date
-21 May 2026
+23 May 2026
 Compliance
 snapshot
 5 items recorded
@@ -42,7 +42,7 @@ arrears), Ground 10 (Any rent arrears).
 The tenancy began on 1 January 2024. The contractual rent is £1,200.00 payable monthly on day
 1 of each rental period.
 Ground 8 is relied on as the serious rent arrears ground.
-At the date of service of the Form 3A notice on 23 April 2026, the arrears stood at £3,600.00.
+At the date of service of the Form 3A notice on 25 April 2026, the arrears stood at £3,600.00.
 That figure is presented as exceeding the statutory Ground 8 threshold of £3,600.00 (3 months).
 The rent account and arrears schedule show the unpaid or short-paid periods between 1 January
 2026 and 31 March 2026, 3 missed payments.
@@ -51,8 +51,8 @@ remains part of the claim history.
 The arrears balance relied on for Ground 10 is £3,600.00.
 The arrears history, service chronology, and any further tenancy concerns should be read together
 as part of one possession case, while each statutory ground remains separately pleaded.
-Form 3A notice served on 23 April 2026, expiring on 21 May 2026, with proceedings not intended
-before 21 May 2026.
+Form 3A notice served on 25 April 2026, expiring on 23 May 2026, with proceedings not intended
+before 23 May 2026.
 Compliance Status Snapshot
 Use this as a risk summary, not as a replacement for the underlying tenancy documents and
 evidence file.
@@ -67,12 +67,12 @@ invalidity, but it remains a legal and evidential risk that should be addressed.
 Advisory / good practice: No How to Rent service record is shown. That does not automatically
 invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was
 served.
-Notice served on 23 April 2026 with earliest proceedings date 21 May 2026.
+Notice served on 25 April 2026 with earliest proceedings date 23 May 2026.
 Pre-action and Procedural Steps
 The claimant has maintained the rent account, sought payment, and kept the arrears position
 under review before issuing proceedings.
-Form 3A notice served on 23 April 2026, expiring on 21 May 2026, with proceedings not intended
-before 21 May 2026.
+Form 3A notice served on 25 April 2026, expiring on 23 May 2026, with proceedings not intended
+before 23 May 2026.
 Defendant Circumstances
 The claimant is not aware of any further information about the defendant's circumstances beyond
 the matters set out in the claim papers and any information the defendant may wish to place before
@@ -84,7 +84,7 @@ Financial Position and Relief Sought
 The claimant seeks possession and, if the court thinks fit, judgment for rent arrears currently
 quantified at £3,600.00.
 The contractual rent is £1,200.00 payable monthly.
-Form 3A notice served on 23 April 2026, expiring on 21 May 2026, with proceedings not intended
-before 21 May 2026.
+Form 3A notice served on 25 April 2026, expiring on 23 May 2026, with proceedings not intended
+before 23 May 2026.
 
 -- 3 of 3 --

@@ -12,8 +12,8 @@
       "fileName": "england-lodger-agreement.pdf",
       "files": {
         "pdf": "england_lodger_agreement/england-lodger-agreement.pdf",
-        "html": "england_lodger_agreement/england-lodger-agreement.html",
-        "text": "england_lodger_agreement/england-lodger-agreement.txt"
+        "text": "england_lodger_agreement/england-lodger-agreement.txt",
+        "html": "england_lodger_agreement/england-lodger-agreement.html"
       },
       "extraction": {
         "pageCount": 4,
@@ -30,8 +30,8 @@
       "fileName": "england-lodger-checklist.pdf",
       "files": {
         "pdf": "england_lodger_agreement/england-lodger-checklist.pdf",
-        "html": "england_lodger_agreement/england-lodger-checklist.html",
-        "text": "england_lodger_agreement/england-lodger-checklist.txt"
+        "text": "england_lodger_agreement/england-lodger-checklist.txt",
+        "html": "england_lodger_agreement/england-lodger-checklist.html"
       },
       "extraction": {
         "pageCount": 2,
@@ -48,8 +48,8 @@
       "fileName": "england-keys-handover-record.pdf",
       "files": {
         "pdf": "england_lodger_agreement/england-keys-handover-record.pdf",
-        "html": "england_lodger_agreement/england-keys-handover-record.html",
-        "text": "england_lodger_agreement/england-keys-handover-record.txt"
+        "text": "england_lodger_agreement/england-keys-handover-record.txt",
+        "html": "england_lodger_agreement/england-keys-handover-record.html"
       },
       "extraction": {
         "pageCount": 2,
@@ -66,8 +66,8 @@
       "fileName": "england-lodger-house-rules-appendix.pdf",
       "files": {
         "pdf": "england_lodger_agreement/england-lodger-house-rules-appendix.pdf",
-        "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html",
-        "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt"
+        "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt",
+        "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html"
       },
       "extraction": {
         "pageCount": 2,

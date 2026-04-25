@@ -14,13 +14,17 @@
  */
 
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
+import { isAdmin } from '@/lib/auth';
+import { getDocumentOrigin, isGeneratedPackDocument } from '@/lib/documents/document-origin';
 
 interface DocumentRow {
   id: string;
   document_type: string;
   is_preview: boolean;
   created_at: string;
+  metadata?: Record<string, any> | null;
   [key: string]: any;
 }
 
@@ -45,7 +49,10 @@ export async function GET(request: Request) {
   try {
     const user = await requireServerAuth();
     const { searchParams } = new URL(request.url);
+    const userIsAdmin = isAdmin(user.id);
     const supabase = await createServerSupabaseClient();
+    const adminSupabase = createSupabaseAdminClient();
+    const queryClient = userIsAdmin ? adminSupabase : supabase;
 
     // Optional filters
     const caseId = searchParams.get('case_id');
@@ -53,18 +60,24 @@ export async function GET(request: Request) {
     const jurisdiction = searchParams.get('jurisdiction');
     const isPreviewParam = searchParams.get('is_preview');
     const latestPerTypeParam = searchParams.get('latest_per_type');
+    const includeUploadsParam = searchParams.get('include_uploads');
+    const includeUploads = includeUploadsParam === 'true';
 
     // Collect case ownership context so documents remain visible even when
     // legacy/generated rows have null/mismatched user_id.
-    const { data: ownedCases } = await supabase
-      .from('cases')
-      .select('id')
-      .eq('user_id', user.id);
-
-    const ownedCaseIds = (ownedCases || []).map((c) => c.id);
+    const ownedCaseIds = userIsAdmin
+      ? []
+      : (
+          (
+            await supabase
+              .from('cases')
+              .select('id')
+              .eq('user_id', user.id)
+          ).data || []
+        ).map((c) => c.id);
 
     // Build query
-    let query = supabase
+    let query = queryClient
       .from('documents')
       .select('*')
       .order('created_at', { ascending: false });
@@ -72,11 +85,13 @@ export async function GET(request: Request) {
     // Apply filters
     if (caseId) {
       // Strong access control for case-scoped reads
-      if (!ownedCaseIds.includes(caseId)) {
+      if (!userIsAdmin && !ownedCaseIds.includes(caseId)) {
         return NextResponse.json({ error: 'Case not found' }, { status: 404 });
       }
 
       query = query.eq('case_id', caseId);
+    } else if (userIsAdmin) {
+      // Admin support tooling can inspect document rows across users.
     } else if (ownedCaseIds.length > 0) {
       // Dashboard: include documents directly owned by user OR attached to owned cases.
       query = query.or(`user_id.eq.${user.id},case_id.in.(${ownedCaseIds.join(',')})`);
@@ -120,10 +135,19 @@ export async function GET(request: Request) {
     // Default: true (deduplicate by document_type, latest wins)
     // Pass 'false' to get all documents without deduplication
     let result: DocumentRow[] = (documents || []) as unknown as DocumentRow[];
+    if (!includeUploads) {
+      result = result.filter((doc) => doc.is_preview || isGeneratedPackDocument(doc));
+    }
+
     const shouldDedupe = latestPerTypeParam !== 'false';
     if (shouldDedupe && result.length > 0) {
       result = deduplicateByType(result);
     }
+
+    result = result.map((doc) => ({
+      ...doc,
+      document_origin: getDocumentOrigin(doc),
+    }));
 
     return NextResponse.json(
       {

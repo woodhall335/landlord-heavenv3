@@ -13,7 +13,8 @@
 
 import { NextResponse } from 'next/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
-import { getEditWindowStatus, type EditWindowStatus } from './edit-window';
+import { getEditWindowStatusWithOverride, type EditWindowStatus } from './edit-window';
+import { extractOrderMetadata } from './safe-order-metadata';
 
 /**
  * Error response returned when the edit window has expired.
@@ -62,7 +63,7 @@ export async function checkMutationAllowed(caseId: string): Promise<MutationChec
   // Find the most recent paid order for this case
   const { data: order, error: orderError } = await adminClient
     .from('orders')
-    .select('id, paid_at, payment_status')
+    .select('id, paid_at, payment_status, metadata')
     .eq('case_id', caseId)
     .eq('payment_status', 'paid')
     .order('paid_at', { ascending: false })
@@ -89,7 +90,11 @@ export async function checkMutationAllowed(caseId: string): Promise<MutationChec
   }
 
   // Has paid order - check edit window
-  const editWindow = getEditWindowStatus(order.paid_at);
+  const orderMetadata = extractOrderMetadata(order);
+  const editWindow = getEditWindowStatusWithOverride(
+    order.paid_at,
+    orderMetadata?.edit_window_override_ends_at ?? null
+  );
 
   if (!editWindow.isOpen) {
     // Edit window expired - block mutation

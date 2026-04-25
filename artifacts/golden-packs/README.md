@@ -2,7 +2,7 @@
 
 Generated golden sample packs for each live England public product.
 
-Generated at: 2026-04-23T10:20:42.117Z
+Generated at: 2026-04-25T15:00:49.481Z
 
 Command:
 `npx -p node@20 -p tsx tsx scripts/generate-england-golden-packs.ts`
@@ -12,13 +12,13 @@ Top-level files:
 - `scorecard-template.md`
 
 Pack folders:
+- `section13_defensive` (12 documents)
 - `complete_pack` (11 documents)
 - `notice_only` (5 documents)
 - `england_hmo_shared_house_tenancy_agreement` (9 documents)
 - `england_lodger_agreement` (4 documents)
 - `money_claim` (10 documents)
 - `england_premium_tenancy_agreement` (9 documents)
-- `section13_defensive` (12 documents)
 - `section13_standard` (4 documents)
 - `england_standard_tenancy_agreement` (8 documents)
 - `england_student_tenancy_agreement` (10 documents)

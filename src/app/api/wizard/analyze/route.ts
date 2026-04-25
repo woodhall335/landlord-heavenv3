@@ -23,6 +23,7 @@ import { getLawProfile } from '@/lib/law-profile';
 import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import { getSelectedGrounds } from '@/lib/grounds';
 import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
+import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
 export const runtime = 'nodejs';
 
@@ -636,15 +637,15 @@ export async function POST(request: Request) {
       wizard_progress: number | null;
     };
 
-    // Manual access control: user can access if:
-    // 1. They own the case (user_id matches)
-    // 2. The case is anonymous (user_id is null) - anyone can access
-    const isOwner = user && caseData.user_id === user.id;
-    const isAnonymousCase = caseData.user_id === null;
+    const accessError = assertCaseReadAccess({
+      request,
+      user,
+      caseRow: caseData as { user_id: string | null; session_token?: string | null },
+    });
 
-    if (!isOwner && !isAnonymousCase) {
+    if (accessError) {
       console.error('Access denied to case:', { case_id, userId: user?.id, caseUserId: caseData.user_id });
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      return accessError;
     }
 
     let canonicalJurisdiction = normalizeJurisdiction(caseData.jurisdiction);

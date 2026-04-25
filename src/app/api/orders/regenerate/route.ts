@@ -13,6 +13,7 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
+import { isAdmin } from '@/lib/auth';
 import { checkMutationAllowed } from '@/lib/payments/edit-window-enforcement';
 import { fulfillOrder } from '@/lib/payments/fulfillment';
 import { resolveFulfillmentProductForCase } from '@/lib/payments/fulfillment-routing';
@@ -37,6 +38,7 @@ export interface RegenerateOrderRequest {
 export async function POST(request: Request) {
   try {
     const user = await requireServerAuth();
+    const userIsAdmin = isAdmin(user.id);
     const body: RegenerateOrderRequest = await request.json();
 
     const { case_id, product } = body;
@@ -51,12 +53,18 @@ export async function POST(request: Request) {
     const adminClient = createSupabaseAdminClient();
     const supabase = await createServerSupabaseClient();
 
-    // Verify case ownership
-    const { data: caseData, error: caseError } = await supabase
+    // Verify case access
+    const caseClient = userIsAdmin ? adminClient : supabase;
+    let caseQuery = caseClient
       .from('cases')
       .select('id, user_id, jurisdiction, case_type, collected_facts')
-      .eq('id', case_id)
-      .single();
+      .eq('id', case_id);
+
+    if (!userIsAdmin) {
+      caseQuery = caseQuery.eq('user_id', user.id);
+    }
+
+    const { data: caseData, error: caseError } = await caseQuery.single();
 
     if (caseError || !caseData) {
       return NextResponse.json(
@@ -65,7 +73,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (caseData.user_id !== user.id) {
+    if (!userIsAdmin && caseData.user_id !== user.id) {
       return NextResponse.json(
         { ok: false, error: 'You do not have permission to access this case' },
         { status: 403 }
@@ -90,6 +98,10 @@ export async function POST(request: Request) {
       .eq('case_id', case_id)
       .eq('payment_status', 'paid');
 
+    if (!userIsAdmin) {
+      orderQueryWithMetadata = orderQueryWithMetadata.eq('user_id', user.id);
+    }
+
     // If product is specified, validate it matches the order
     if (product) {
       orderQueryWithMetadata = orderQueryWithMetadata.eq('product_type', product);
@@ -108,6 +120,10 @@ export async function POST(request: Request) {
         .select(ORDER_SELECT_WITHOUT_METADATA)
         .eq('case_id', case_id)
         .eq('payment_status', 'paid');
+
+      if (!userIsAdmin) {
+        orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('user_id', user.id);
+      }
 
       if (product) {
         orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('product_type', product);
@@ -139,7 +155,7 @@ export async function POST(request: Request) {
     }
 
     // Defense in depth: verify order belongs to this user
-    if (order.user_id && order.user_id !== user.id) {
+    if (!userIsAdmin && order.user_id && order.user_id !== user.id) {
       console.error('[Order Regenerate] User ID mismatch - access denied');
       return NextResponse.json(
         { ok: false, error: 'You do not have permission to regenerate this order' },
