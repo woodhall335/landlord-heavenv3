@@ -72,14 +72,14 @@ export function getNoticeOnlyDocuments(
         pages: '2 pages',
         category: 'Checklists',
       },
-      {
-        id: 'proof-of-service-form-3a',
-        title: 'Proof of Service Support',
-        description: `Editable support form for recording how and when your ${ENGLAND_SECTION8_NOTICE_NAME} was served`,
-        icon: 'evidence',
-        pages: '1-2 pages',
-        category: 'Evidence',
-      }
+        {
+          id: 'proof-of-service-form-3a',
+          title: 'Certificate of Service (Form N215)',
+          description: `Official editable Form N215 certificate for recording how and when your ${ENGLAND_SECTION8_NOTICE_NAME} was served`,
+          icon: 'evidence',
+          pages: '5 pages',
+          category: 'Evidence',
+        }
     );
   }
 
@@ -301,14 +301,14 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
       pages: '2 pages',
       category: 'Evidence',
     },
-    {
-      id: 'proof-of-service',
-      title: 'Proof of Service Certificate',
-      description: 'Template to evidence when and how you served the notice',
-      icon: 'evidence',
-      pages: '1 page',
-      category: 'Evidence',
-    }
+      {
+        id: 'proof-of-service',
+        title: 'Certificate of Service (Form N215)',
+        description: 'Official editable Form N215 certificate for how and when the notice was served',
+        icon: 'evidence',
+        pages: '5 pages',
+        category: 'Evidence',
+      }
   );
 
   return documents;
@@ -812,7 +812,7 @@ export function getProductMeta(product: string): ProductMeta {
         'AI witness statement',
         'Court filing guide',
         'Evidence checklist',
-        'Proof of service template',
+          'Certificate of service (Form N215)',
       ],
     },
     'money_claim': {

@@ -318,7 +318,7 @@ export const completePackContent: WizardLandingContent = {
     'Service instructions and validity checklist',
     'Court filing guide with step-by-step instructions — where to file, court fees, timelines',
     'Evidence checklist for court preparation',
-    'Proof of service certificate template',
+      'Certificate of service (Form N215)',
     'Unlimited regenerations with 12+ months portal storage',
   ],
 

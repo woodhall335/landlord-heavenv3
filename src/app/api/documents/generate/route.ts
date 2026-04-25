@@ -40,6 +40,7 @@ import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/
 import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
 import { generateRiskAssessment, extractRiskAssessmentContext } from '@/lib/ai/risk-assessment-generator';
 import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
+import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -1657,40 +1658,65 @@ export async function POST(request: Request) {
         }
 
         case 'proof_of_service': {
-          // Generate editable PDF form with fillable fields
-          const proofPropertyAddress =
-            wizardFacts.property_address ||
-            buildAddress(
-              wizardFacts.property_address_line1,
-              wizardFacts.property_address_line2,
-              wizardFacts.property_address_town || wizardFacts.property_city,
-              wizardFacts.property_address_county,
-              wizardFacts.property_address_postcode,
-            );
-          const proofPdfBytes = await generateProofOfServicePDF({
-            landlord_name: wizardFacts.landlord_full_name,
-            tenant_name: wizardFacts.tenant_full_name,
-            property_address: proofPropertyAddress,
-            served_date: wizardFacts.notice_served_date || wizardFacts.notice_date,
-            expiry_date: wizardFacts.notice_expiry_date || wizardFacts.earliest_possession_date,
-            service_method: normalizeProofOfServiceMethod(wizardFacts.notice_service_method),
-            document_served: canonicalJurisdiction === 'england'
-              ? 'Form 3A notice'
-              : wizardFacts.eviction_route === 'section_21'
-              ? 'Section 21 Notice (Form 6A)'
-              : wizardFacts.eviction_route === 'section_8'
-              ? 'Section 8 Notice'
-              : 'Notice seeking possession',
-          });
+            // Generate editable proof-of-service PDF.
+            const proofPropertyAddress =
+              wizardFacts.property_address ||
+              buildAddress(
+                wizardFacts.property_address_line1,
+                wizardFacts.property_address_line2,
+                wizardFacts.property_address_town || wizardFacts.property_city,
+                wizardFacts.property_address_county,
+                wizardFacts.property_address_postcode,
+              );
+            const normalizedServiceMethod = normalizeProofOfServiceMethod(wizardFacts.notice_service_method);
+            const proofPdfBytes =
+              canonicalJurisdiction === 'england'
+                ? await generateEnglandN215PDF({
+                    court_name: wizardFacts.court_name,
+                    claim_number: wizardFacts.claim_number,
+                    claimant_name: wizardFacts.landlord_full_name,
+                    defendant_name: wizardFacts.tenant_full_name,
+                    recipient_name: wizardFacts.tenant_full_name,
+                    service_address: proofPropertyAddress,
+                    service_address_line1: wizardFacts.property_address_line1,
+                    service_address_line2: wizardFacts.property_address_line2,
+                    service_address_town: wizardFacts.property_address_town || wizardFacts.property_city,
+                    service_address_county: wizardFacts.property_address_county,
+                    service_address_postcode: wizardFacts.property_address_postcode,
+                    service_date: wizardFacts.notice_served_date || wizardFacts.notice_date,
+                    service_method: normalizeEnglandProofOfServiceMethod(normalizedServiceMethod),
+                    recipient_email: wizardFacts.tenant_email,
+                    document_served:
+                      wizardFacts.eviction_route === 'section_21'
+                        ? 'Section 21 notice (Form 6A)'
+                        : 'Form 3A notice',
+                  })
+                : await generateProofOfServicePDF({
+                    landlord_name: wizardFacts.landlord_full_name,
+                    tenant_name: wizardFacts.tenant_full_name,
+                    property_address: proofPropertyAddress,
+                    served_date: wizardFacts.notice_served_date || wizardFacts.notice_date,
+                    expiry_date: wizardFacts.notice_expiry_date || wizardFacts.earliest_possession_date,
+                    service_method: normalizedServiceMethod,
+                    document_served:
+                      wizardFacts.eviction_route === 'section_21'
+                        ? 'Section 21 Notice (Form 6A)'
+                        : wizardFacts.eviction_route === 'section_8'
+                          ? 'Section 8 Notice'
+                          : 'Notice seeking possession',
+                  });
 
-          generatedDoc = {
-            pdf: Buffer.from(proofPdfBytes),
-            html: null, // Editable PDFs have no HTML representation
-          };
+            generatedDoc = {
+              pdf: Buffer.from(proofPdfBytes),
+              html: null, // Editable PDFs have no HTML representation
+            };
 
-          documentTitle = 'Proof of Service Support';
-          break;
-        }
+            documentTitle =
+              canonicalJurisdiction === 'england'
+                ? 'Certificate of Service (Form N215)'
+                : 'Proof of Service Support';
+            break;
+          }
 
         case 'court_filing_guide': {
           // England & Wales only

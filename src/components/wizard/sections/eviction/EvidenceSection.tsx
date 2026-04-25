@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { RiCheckboxCircleLine, RiFileTextLine, RiInformationLine } from 'react-icons/ri';
+import { buildEnglandEvictionChronology } from '@/lib/england-possession/chronology';
 
 interface EvidenceSectionProps {
   facts: WizardFacts;
@@ -67,6 +68,10 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
 }) => {
   const evidence = facts.evidence || {};
   const communicationTimeline = facts.communication_timeline || {};
+  const generatedChronology = useMemo(
+    () => buildEnglandEvictionChronology(facts as Record<string, any>),
+    [facts],
+  );
 
   const mergeEvidence = async (patch: Record<string, any>) => {
     await onUpdate({
@@ -116,7 +121,6 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
 
   const coreQuestionsComplete =
     Boolean(evidence.notice_service_description) &&
-    Boolean(communicationTimeline.log) &&
     communicationTimeline.total_attempts !== undefined &&
     communicationTimeline.total_attempts !== null &&
     Boolean(communicationTimeline.tenant_responsiveness);
@@ -170,18 +174,34 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
             />
           </label>
 
-          <label className="block">
-            <span className="text-sm font-medium text-[#27134a]">
-              Short chronology of arrears, breaches, and key contact
-            </span>
-            <textarea
-              value={communicationTimeline.log || ''}
-              onChange={(e) => void mergeTimeline({ log: e.target.value })}
-              rows={4}
-              className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
-              placeholder="Summarise missed payments, warning messages, promises to pay, notice service, and anything else the court file should reflect."
-            />
-          </label>
+          <div className="space-y-4">
+            {generatedChronology.paragraphs.length > 0 && (
+              <div className="rounded-2xl border border-[#e4d8ff] bg-[#faf7ff] px-4 py-4">
+                <p className="text-sm font-semibold text-[#27134a]">Generated chronology preview</p>
+                <div className="mt-2 space-y-2 text-sm leading-6 text-[#62597c]">
+                  {generatedChronology.paragraphs.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <label className="block">
+              <span className="text-sm font-medium text-[#27134a]">
+                Additional chronology or breach detail
+              </span>
+              <textarea
+                value={communicationTimeline.log || ''}
+                onChange={(e) => void mergeTimeline({ log: e.target.value })}
+                rows={4}
+                className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                placeholder="Add anything the generated chronology should not miss, such as a disputed breach, a promise to pay, a refused inspection, or another key incident."
+              />
+              <p className="mt-2 text-xs leading-5 text-[#7a7195]">
+                We build the main chronology from your arrears schedule, notice dates, and contact history. Use this box only for extra incident detail or anything unusual the court file should explain.
+              </p>
+            </label>
+          </div>
 
           <label className="block">
             <span className="text-sm font-medium text-[#27134a]">How many payment-chase or contact attempts have you made?</span>

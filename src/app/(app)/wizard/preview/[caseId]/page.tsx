@@ -770,11 +770,11 @@ export default function WizardPreviewPage() {
                     service_checklist: (caseData?.jurisdiction || 'england') === 'england'
                       ? 'Service & Compliance Checklist'
                       : 'Service Checklist',
-                    court_filing_guide: 'Court Filing Guide',
-                    evidence_checklist: 'Ground-Specific Evidence Checklist',
-                    proof_of_service: 'Proof of Service Support',
-                    arrears_schedule: 'Arrears Schedule',
-                  };
+                      court_filing_guide: 'Court Filing Guide',
+                      evidence_checklist: 'Ground-Specific Evidence Checklist',
+                      proof_of_service: 'Certificate of Service (Form N215)',
+                      arrears_schedule: 'Arrears Schedule',
+                    };
                   const docTitle = docTypeLabels[docType] || docType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
                   setValidationErrors({

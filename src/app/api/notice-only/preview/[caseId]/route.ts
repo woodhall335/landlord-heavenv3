@@ -45,6 +45,7 @@ import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wo
 import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
 import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
 import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
+import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -889,20 +890,48 @@ export async function GET(
         console.error('[NOTICE-PREVIEW-API] Ground-specific evidence checklist generation failed:', err);
       }
 
-      // 5. Generate proof of service support
-      console.log('[NOTICE-PREVIEW-API] Generating proof of service support');
+      // 5. Generate proof of service output
+      console.log('[NOTICE-PREVIEW-API] Generating proof of service output');
       try {
-        const proofOfService = await generateProofOfServicePDF({
-          landlord_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
-          tenant_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
-          property_address: wizardFacts.property_address || templateData.property_address,
-          document_served: templateData.notice_name || 'Form 3A notice',
-          served_date: templateData.service_date || templateData.notice_date,
-          expiry_date: templateData.notice_expiry_date || templateData.earliest_possession_date,
-        });
+        const proofOfService =
+          jurisdiction === 'england'
+            ? await generateEnglandN215PDF({
+                court_name: wizardFacts.court_name || templateData.court_name,
+                claim_number: wizardFacts.claim_number || templateData.claim_number,
+                claimant_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
+                defendant_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
+                recipient_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
+                service_address: wizardFacts.property_address || templateData.property_address,
+                service_address_line1: wizardFacts.property_address_line1 || templateData.property_address_line1,
+                service_address_line2: wizardFacts.property_address_line2 || templateData.property_address_line2,
+                service_address_town:
+                  wizardFacts.property_address_town ||
+                  wizardFacts.property_city ||
+                  templateData.property_address_town ||
+                  templateData.property_city,
+                service_address_county: wizardFacts.property_address_county || templateData.property_address_county,
+                service_address_postcode: wizardFacts.property_address_postcode || templateData.property_postcode,
+                document_served:
+                  selected_route === 'section_21'
+                    ? 'Section 21 notice (Form 6A)'
+                    : templateData.notice_name || 'Form 3A notice',
+                service_date: templateData.service_date || templateData.notice_date,
+                service_method: normalizeEnglandProofOfServiceMethod(
+                  wizardFacts.notice_service_method || templateData.notice_service_method,
+                ),
+                recipient_email: wizardFacts.tenant_email || templateData.tenant_email,
+              })
+            : await generateProofOfServicePDF({
+                landlord_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
+                tenant_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
+                property_address: wizardFacts.property_address || templateData.property_address,
+                document_served: templateData.notice_name || 'Form 3A notice',
+                served_date: templateData.service_date || templateData.notice_date,
+                expiry_date: templateData.notice_expiry_date || templateData.earliest_possession_date,
+              });
 
         documents.push({
-          title: 'Proof of Service Support',
+          title: jurisdiction === 'england' ? 'Certificate of Service (Form N215)' : 'Proof of Service Support',
           category: 'guidance',
           pdf: Buffer.from(proofOfService),
         });

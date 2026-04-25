@@ -153,7 +153,7 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                   <p className="mt-2 leading-6">
                     {isNoticeOnly
                       ? 'Form 3A notice, service instructions, service and validity checklist, pre-service compliance declaration, and the rent schedule / arrears statement.'
-                      : 'Form 3A notice, Form N5, Form N119, the schedule of arrears, evidence collection checklist, proof of service certificate, witness statement, court bundle index, hearing checklist, arrears engagement letter, and the eviction case summary.'}
+                      : 'Form 3A notice, Form N5, Form N119, the schedule of arrears, evidence collection checklist, the Form N215 certificate of service, witness statement, court bundle index, hearing checklist, arrears engagement letter, and the eviction case summary.'}
                   </p>
                 </div>
               </div>

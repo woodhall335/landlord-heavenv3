@@ -17,7 +17,7 @@ export const section8Documents: CompletePackPreviewDocument[] = [
   { id: 'court-index', title: 'Court Bundle Index', category: 'Guidance', previewPath: '/images/previews/complete-pack/england/section8/court-bundle-index.webp' },
   { id: 'evidence-checklist', title: 'Evidence Checklist', category: 'Evidence', previewPath: '/images/previews/complete-pack/england/section8/evidence-checklist.webp' },
   { id: 'hearing-checklist', title: 'Hearing Checklist', category: 'Guidance', previewPath: '/images/previews/complete-pack/england/section8/hearing-checklist.webp' },
-  { id: 'proof-service', title: 'Proof of Service Certificate', category: 'Evidence', previewPath: '/images/previews/complete-pack/england/section8/proof-of-service.webp' }
+  { id: 'proof-service', title: 'Certificate of Service (Form N215)', category: 'Evidence', previewPath: '/images/previews/complete-pack/england/section8/proof-of-service.webp' }
 ];
 
 export const section21Documents: CompletePackPreviewDocument[] = [
@@ -28,5 +28,5 @@ export const section21Documents: CompletePackPreviewDocument[] = [
   { id: 'court-index', title: 'Court Bundle Index', category: 'Guidance', previewPath: '/images/previews/complete-pack/england/section21/court-bundle-index.webp' },
   { id: 'evidence-checklist', title: 'Evidence Checklist', category: 'Evidence', previewPath: '/images/previews/complete-pack/england/section21/evidence-checklist.webp' },
   { id: 'hearing-checklist', title: 'Hearing Checklist', category: 'Guidance', previewPath: '/images/previews/complete-pack/england/section21/hearing-checklist.webp' },
-  { id: 'proof-service', title: 'Proof of Service Certificate', category: 'Evidence', previewPath: '/images/previews/complete-pack/england/section21/proof-of-service.webp' }
+  { id: 'proof-service', title: 'Certificate of Service (Form N215)', category: 'Evidence', previewPath: '/images/previews/complete-pack/england/section21/proof-of-service.webp' }
 ];

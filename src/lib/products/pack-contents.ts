@@ -572,13 +572,13 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
     required: true,
   });
 
-  items.push({
-    key: 'proof_of_service',
-    title: 'Proof of Service Record',
-    description: `Service record for how and when the ${ENGLAND_SECTION8_NOTICE_NAME} was served.`,
-    category: 'Evidence',
-    required: true,
-  });
+    items.push({
+      key: 'proof_of_service',
+      title: 'Certificate of Service (Form N215)',
+      description: `Official editable Form N215 certificate of service for how and when the ${ENGLAND_SECTION8_NOTICE_NAME} was served.`,
+      category: 'Evidence',
+      required: true,
+    });
 
   items.push({
     key: 'witness_statement',

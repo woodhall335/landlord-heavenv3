@@ -185,7 +185,7 @@ function getCompletePackGroups(jurisdiction: string): DocumentGroup[] {
       icon: <FolderOpen className="w-4 h-4 text-primary" />,
       documents: [
         { name: 'Evidence Collection Checklist', benefit: 'Documents you need to support your case' },
-        { name: 'Proof of Service Certificate', benefit: 'Evidence of when and how you served notice' },
+          { name: 'Certificate of Service (Form N215)', benefit: 'Official editable N215 showing when and how you served notice' },
       ],
     },
   ];

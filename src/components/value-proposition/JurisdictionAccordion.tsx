@@ -174,7 +174,7 @@ function getJurisdictionInfo(product: ProductType): JurisdictionInfo[] {
             'AI Witness Statement',
             'Court Filing Guide',
             'Evidence Collection Checklist',
-            'Proof of Service Certificate',
+              'Certificate of Service (Form N215)',
           ],
           notes: '7-9 documents total depending on route',
         },

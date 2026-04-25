@@ -7,6 +7,7 @@ import {
   type EnglandGroundCode,
   type EnglandGroundDefinition,
 } from '@/lib/england-possession/ground-catalog';
+import { buildEnglandEvictionChronology } from '@/lib/england-possession/chronology';
 import { ENGLAND_SECTION8_NOTICE_NAME } from '@/lib/england-possession/section8-terminology';
 
 type DraftingInput = Record<string, any>;
@@ -118,7 +119,7 @@ export interface EnglandPossessionDraftingModel {
     groundRows: BundleIndexRow[];
     preparationItems: string[];
   };
-  witness: {
+      witness: {
     groundsParagraphs: string[];
     rentArrearsParagraphs: string[];
     conductParagraphs: string[];
@@ -435,6 +436,7 @@ function buildArrearsDraft(data: DraftingInput, definition: EnglandGroundDefinit
   const noticeDate = formatLongDate(getFirstValue(data, 'notice_service_date', 'notice_served_date', 'section_8_notice_date'));
   const arrearsPeriods = describeArrearsPeriods(data);
   const threshold = rentAmount > 0 ? getGround8Threshold(rentAmount, rentFrequency as any) : null;
+  const chronology = buildEnglandEvictionChronology(data);
 
   const paragraphs: string[] = [];
 
@@ -494,15 +496,18 @@ function buildArrearsDraft(data: DraftingInput, definition: EnglandGroundDefinit
         description: 'Bank statements, ledger extracts, or rent receipts supporting the arrears calculation',
       },
     ],
-    hearingWarnings:
-      definition.code === '8' && threshold
-        ? [
-            `Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of ${formatCurrencyText(threshold.amount)} at the hearing.`,
-          ]
-        : [],
-    timelineItems: [noticeDate ? `Notice served: ${noticeDate}` : '', buildNoticeTimelineSentence(data)].filter(Boolean),
-    riskParagraphs: [],
-  };
+      hearingWarnings:
+        definition.code === '8' && threshold
+          ? [
+              `Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of ${formatCurrencyText(threshold.amount)} at the hearing.`,
+            ]
+          : [],
+      timelineItems:
+        chronology.timelineItems.length > 0
+          ? chronology.timelineItems
+          : [noticeDate ? `Notice served: ${noticeDate}` : '', buildNoticeTimelineSentence(data)].filter(Boolean),
+      riskParagraphs: [],
+    };
 }
 
 function buildBreachDraft(data: DraftingInput, definition: EnglandGroundDefinition): EnglandGroundDraft {
@@ -995,13 +1000,18 @@ function buildPreActionParagraphs(data: DraftingInput, groundDrafts: EnglandGrou
   const recordedSteps = Array.isArray(data.preActionSteps) ? data.preActionSteps : [];
   const stepLines = recordedSteps
     .filter((step) => step?.date && step?.description)
-    .map((step) => `${formatLongDate(step.date)}: ${String(step.description).trim()}`)
-    .filter(Boolean);
+      .map((step) => `${formatLongDate(step.date)}: ${String(step.description).trim()}`)
+      .filter(Boolean);
   const noticeTimelineSentence = buildNoticeTimelineSentence(data);
+  const chronology = buildEnglandEvictionChronology(data);
 
   if (stepLines.length > 0) {
     const hasNoticeLine = stepLines.some((line) => /form 3a|form 3|notice/i.test(line));
     return [...stepLines, !hasNoticeLine ? noticeTimelineSentence : ''].filter(Boolean);
+  }
+
+  if (chronology.paragraphs.length > 0) {
+    return chronology.paragraphs;
   }
 
   return [
@@ -1304,6 +1314,7 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
   const tenancyOverview = buildTenancyOverview(data);
   const userNarrative = extractNarrativeCandidates(data).find(Boolean) || '';
   const preActionParagraphs = buildPreActionParagraphs(data, groundDrafts);
+  const chronology = buildEnglandEvictionChronology(data);
   const defendantCircumstancesParagraphs = buildDefendantCircumstancesParagraphs(data);
   const financialParagraphs = buildFinancialParagraphs(data, groundCodes);
   const evidenceItems = dedupeList(groundDrafts.flatMap((draft) => draft.evidenceItems));
@@ -1387,12 +1398,12 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
     courtFilingGuide,
     roadmap,
     previewSummary,
-    proofOfService: {
-      recordParagraphs: dedupeParagraphs([
-        `Keep the served copy of the ${ENGLAND_SECTION8_NOTICE_NAME}, the completed service record, and any supporting delivery evidence together in the same file.`,
-        groundDrafts.some((draft) => draft.commonReason === 'asb_or_legal_breach')
-          ? 'Where service itself may become contentious, preserve contemporaneous notes, any witness details, and copies of all follow-up communications.'
-          : '',
+      proofOfService: {
+        recordParagraphs: dedupeParagraphs([
+          `Keep the served copy of the ${ENGLAND_SECTION8_NOTICE_NAME}, the completed Form N215 certificate of service, and any supporting delivery evidence together in the same file.`,
+          groundDrafts.some((draft) => draft.commonReason === 'asb_or_legal_breach')
+            ? 'Where service itself may become contentious, preserve contemporaneous notes, any witness details, and copies of all follow-up communications.'
+            : '',
         groundDrafts.some((draft) => ['8', '10', '11'].includes(draft.code))
           ? 'If the claim includes arrears grounds, keep the served notice with the rent schedule that was current at the time of service.'
           : '',
@@ -1404,8 +1415,8 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
         groundsLeadParagraph,
         buildNoticeTimelineSentence(data),
       ]),
-      methodNotes: buildMethodNotes(data),
-      evidenceItems: dedupeList(['Served copy of the notice', 'Completed proof of service certificate', ...evidenceItems]),
+        methodNotes: buildMethodNotes(data),
+        evidenceItems: dedupeList(['Served copy of the notice', 'Completed Form N215 certificate of service', ...evidenceItems]),
       afterServiceItems: dedupeList([
         'Record immediately when, where, and how service was carried out.',
         'Keep the notice timeline consistent across the proof of service, witness statement, and court forms.',
@@ -1426,7 +1437,7 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
         `Use this checklist to confirm that the ${ENGLAND_SECTION8_NOTICE_NAME} and the supporting papers tell the same story in a careful, evidence-led way.`,
         groundsLeadParagraph,
       ]),
-      serviceEvidenceItems: dedupeList(['Copy of the served notice', 'Proof of service certificate or service witness note', ...buildMethodNotes(data)]),
+        serviceEvidenceItems: dedupeList(['Copy of the served notice', 'Completed Form N215 certificate of service or service witness note', ...buildMethodNotes(data)]),
       validityItems: dedupeList([
         `Check that the same party names, address, grounds, court name, and notice timeline appear consistently across the ${ENGLAND_SECTION8_NOTICE_NAME}, the support documents, and any court forms.`,
         ...groundDrafts.flatMap((draft) => (draft.hearingWarnings.length > 0 ? draft.hearingWarnings : [])),
@@ -1489,16 +1500,17 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
           .filter((draft) => ['8', '10', '11'].includes(draft.code))
           .flatMap((draft) => draft.witnessParagraphs),
       ),
-      conductParagraphs: dedupeParagraphs(groundDrafts.flatMap((draft) => draft.conductParagraphs)),
-      evidenceParagraphs: buildWitnessEvidenceParagraphs(groundDrafts),
-      evidenceItems,
-      timelineItems: dedupeList([
-        formatLongDate(getFirstValue(data, 'tenancy_start_date', 'tenancy.start_date'))
-          ? `Tenancy start: ${formatLongDate(getFirstValue(data, 'tenancy_start_date', 'tenancy.start_date'))}`
-          : '',
-        ...groundDrafts.flatMap((draft) => draft.timelineItems),
-        buildNoticeTimelineSentence(data),
-      ]),
+        conductParagraphs: dedupeParagraphs(groundDrafts.flatMap((draft) => draft.conductParagraphs)),
+        evidenceParagraphs: buildWitnessEvidenceParagraphs(groundDrafts),
+        evidenceItems,
+        timelineItems: dedupeList([
+          formatLongDate(getFirstValue(data, 'tenancy_start_date', 'tenancy.start_date'))
+            ? `Tenancy start: ${formatLongDate(getFirstValue(data, 'tenancy_start_date', 'tenancy.start_date'))}`
+            : '',
+          ...chronology.timelineItems,
+          ...groundDrafts.flatMap((draft) => draft.timelineItems),
+          buildNoticeTimelineSentence(data),
+        ]),
       conclusionParagraphs: financialParagraphs,
     },
     groundDrafts,

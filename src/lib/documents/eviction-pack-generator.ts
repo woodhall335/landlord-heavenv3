@@ -95,6 +95,7 @@ import {
   ENGLAND_SECTION8_NOTICE_TYPE_LABEL,
 } from '@/lib/england-possession/section8-terminology';
 import { isDebugStampEnabled } from './debug-stamp';
+import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
 
 // ============================================================================
 // DATE FORMATTIoG HELPER - UK Legal Format
@@ -1427,6 +1428,50 @@ async function generateProofOfService(
   },
   templateData: Record<string, any> = {}
 ): Promise<EvictionPackDocument> {
+  const jurisdiction = evictionCase.jurisdiction;
+
+  if (jurisdiction === 'england') {
+    const pdf = await generateEnglandN215PDF({
+      court_name: String(templateData.court_name || evictionCase.court_name || '').trim(),
+      claim_number: String(templateData.claim_number || '').trim(),
+      claimant_name: String(templateData.landlord_full_name || evictionCase.landlord_full_name || '').trim(),
+      defendant_name: String(templateData.tenant_full_name || evictionCase.tenant_full_name || '').trim(),
+      recipient_name: String(templateData.tenant_full_name || evictionCase.tenant_full_name || '').trim(),
+      service_address: String(
+        templateData.service_address ||
+        templateData.property_address ||
+        evictionCase.property_address ||
+        ''
+      ).trim(),
+      service_address_line1: String(templateData.property_address_line1 || '').trim(),
+      service_address_line2: String(templateData.property_address_line2 || '').trim(),
+      service_address_town: String(templateData.property_address_town || templateData.property_city || '').trim(),
+      service_address_county: String(templateData.property_address_county || '').trim(),
+      service_address_postcode: String(templateData.property_address_postcode || '').trim(),
+      service_date:
+        templateData.notice_service_date ||
+        templateData.service_date ||
+        serviceDetails?.service_date,
+      service_method: normalizeEnglandProofOfServiceMethod(
+        templateData.service_method ||
+          templateData.notice_service_method ||
+          serviceDetails?.service_method,
+      ),
+      recipient_email: String(templateData.tenant_email || '').trim(),
+      document_served: templateData.notice_name || getNoticeTypeLabel(evictionCase),
+    });
+
+    return {
+      title: 'Certificate of Service (Form N215)',
+      description: 'Official editable N215 certificate of service for the notice in this pack',
+      category: 'evidence_tool',
+      document_type: 'proof_of_service',
+      html: undefined,
+      pdf: Buffer.from(pdf),
+      file_name: 'form_n215_certificate_of_service.pdf',
+    };
+  }
+
   const templatePath = 'shared/templates/proof_of_service.hbs';
 
   // Get notice type based on case

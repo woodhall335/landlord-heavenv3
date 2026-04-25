@@ -185,7 +185,7 @@ const STEP_DOCUMENT_FOCUS: Partial<Record<WizardProduct, Record<string, string[]
     parties: ['Form N5', 'Form N119'],
     property: ['Form 3A notice', 'Form N119'],
     tenancy: ['Form 3A notice', 'Schedule of arrears'],
-    notice: ['Form 3A notice', 'Proof of service certificate'],
+    notice: ['Form 3A notice', 'Certificate of service (Form N215)'],
     section8_arrears: ['Schedule of arrears', 'Witness statement'],
     evidence: ['Evidence collection checklist', 'Court bundle index', 'Witness statement'],
     court_signing: ['Form N5', 'Form N119', 'Court bundle index'],
