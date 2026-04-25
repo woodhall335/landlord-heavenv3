@@ -431,14 +431,16 @@ export default function HomeContent() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="mt-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f4ebff] text-[#7c3aed]">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mt-5 text-2xl font-semibold leading-tight text-[#1d1532]">
-                    {card.title}
-                  </h3>
-                  <p className="mt-4 text-[15px] leading-7 text-[#5a516d]">{card.body}</p>
-                </article>
+                    <div className="mt-6 flex items-start gap-4">
+                      <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f4ebff] text-[#7c3aed]">
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <h3 className="line-clamp-2 flex-1 pt-1 text-2xl font-semibold leading-tight text-[#1d1532]">
+                        {card.title}
+                      </h3>
+                    </div>
+                    <p className="mt-4 text-[15px] leading-7 text-[#5a516d]">{card.body}</p>
+                  </article>
               );
             })}
           </div>

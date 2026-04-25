@@ -218,6 +218,24 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   const useWizardDarkHeader = isWizardFlowRoute;
   const presentationHeaderState = open ? mobileMenuState : effectiveHeaderState;
   const isSolid = presentationHeaderState === 'solid' && !useWizardDarkHeader;
+  const mobileMenuUsesLightSurface = !useWizardDarkHeader;
+  const mobileMenuPanelClassName = mobileMenuUsesLightSurface
+    ? 'border-gray-200 bg-white'
+    : 'border-white/25 bg-[#111827]/95 backdrop-blur-sm';
+  const mobileMenuSectionBorderClassName = mobileMenuUsesLightSurface
+    ? 'border-t border-gray-200'
+    : 'border-t border-white/20';
+  const mobileMenuHeadingTextClassName = mobileMenuUsesLightSurface
+    ? 'text-gray-500'
+    : 'text-white/70';
+  const mobileMenuPrimaryTextClassName = mobileMenuUsesLightSurface ? 'text-charcoal' : 'text-white';
+  const mobileMenuSecondaryTextClassName = mobileMenuUsesLightSurface
+    ? 'text-gray-500'
+    : 'text-white/70';
+  const mobileMenuLinkClassName = mobileMenuUsesLightSurface
+    ? 'text-charcoal hover:text-[#692ED4]'
+    : 'text-white hover:text-white/80';
+  const mobileMenuActiveLinkClassName = mobileMenuUsesLightSurface ? 'text-[#111827]' : 'text-white';
   const isTenancyMenuActive =
     pathname === '/products/ast' || tenancyAgreementLinks.some((item) => pathname === item.href);
   const textClass = isSolid ? 'text-[#111827]' : 'text-white';
@@ -403,16 +421,16 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
       {open && (
         <div
           id="mobile-navigation-panel"
-          className="fixed inset-x-0 bottom-0 z-40 lg:hidden"
-          style={{ top: mobileMenuTop }}
+          className="fixed inset-x-0 bottom-0 z-[60] overflow-y-auto overscroll-contain lg:hidden"
+          style={{ top: mobileMenuTop, height: `calc(100dvh - ${mobileMenuTop}px)` }}
           aria-label="Mobile navigation"
           data-testid="mobile-menu-panel"
         >
-          <div className={clsx('h-full border-t', isSolid ? 'border-gray-200 bg-white' : 'border-white/25 bg-[#111827]/95 backdrop-blur-sm')}>
-            <div className="mx-auto h-full max-w-7xl overflow-y-auto overscroll-contain px-6 py-4 [-webkit-overflow-scrolling:touch]">
+          <div className={clsx('min-h-full border-t', mobileMenuPanelClassName)}>
+            <div className="mx-auto max-w-7xl px-6 py-4 pb-8 [-webkit-overflow-scrolling:touch]">
               <div className="flex flex-col gap-4">
                 <div>
-                  <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Account Management</div>
+                  <div className={clsx('mb-2 text-xs font-bold uppercase', mobileMenuHeadingTextClassName)}>Account Management</div>
                   {user ? (
                     <>
                       <div className="mb-4 flex items-center gap-3">
@@ -420,12 +438,12 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                           {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                         </span>
                         <div>
-                          <p className={clsx('font-semibold', isSolid ? 'text-charcoal' : 'text-white')}>{user.name || user.email}</p>
-                          {user.name && <p className={clsx('text-xs', isSolid ? 'text-gray-500' : 'text-white/70')}>{user.email}</p>}
+                          <p className={clsx('font-semibold', mobileMenuPrimaryTextClassName)}>{user.name || user.email}</p>
+                          {user.name && <p className={clsx('text-xs', mobileMenuSecondaryTextClassName)}>{user.email}</p>}
                         </div>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <Link href="/dashboard" className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
+                        <Link href="/dashboard" className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', mobileMenuUsesLightSurface ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
                           Go to Dashboard
                         </Link>
                         <button
@@ -434,7 +452,7 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                             handleLogout();
                           }}
                           disabled={isLoggingOut}
-                          className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', isSolid ? 'text-red-600 hover:text-red-700' : 'text-red-200 hover:text-red-100')}
+                          className={clsx('flex items-center gap-2 py-2 text-sm font-semibold', mobileMenuUsesLightSurface ? 'text-red-600 hover:text-red-700' : 'text-red-200 hover:text-red-100')}
                         >
                           <RiLogoutBoxLine className="h-4 w-4" />
                           {isLoggingOut ? 'Logging out...' : 'Logout'}
@@ -443,18 +461,18 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                     </>
                   ) : (
                     <>
-                      <Link href="/auth/login" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
+                      <Link href="/auth/login" className={clsx('block py-2 text-sm font-semibold', mobileMenuUsesLightSurface ? 'text-primary' : 'text-white')} onClick={() => setOpen(false)}>
                         Login
                       </Link>
-                      <Link href="/auth/signup" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal' : 'text-white')} onClick={() => setOpen(false)}>
+                      <Link href="/auth/signup" className={clsx('block py-2 text-sm font-semibold', mobileMenuPrimaryTextClassName)} onClick={() => setOpen(false)}>
                         Create Account
                       </Link>
                     </>
                   )}
                 </div>
 
-                <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
-                  <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Landlord Products</div>
+                <div className={clsx('pt-4', mobileMenuSectionBorderClassName)}>
+                  <div className={clsx('mb-2 text-xs font-bold uppercase', mobileMenuHeadingTextClassName)}>Landlord Products</div>
                   {primaryLinks.map((item) => (
                     <Link
                       key={item.href}
@@ -462,8 +480,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                       className={clsx(
                         'block py-2 text-sm font-semibold relative',
                         pathname === item.href
-                          ? clsx(isSolid ? 'text-[#111827]' : 'text-white', 'after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-16 after:bg-[#7c3aed]')
-                          : isSolid ? 'text-charcoal' : 'text-white'
+                          ? clsx(mobileMenuActiveLinkClassName, 'after:absolute after:left-0 after:bottom-[-4px] after:h-[2px] after:w-16 after:bg-[#7c3aed]')
+                          : mobileMenuLinkClassName
                       )}
                       onClick={() => setOpen(false)}
                     >
@@ -472,8 +490,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                   ))}
                 </div>
 
-                <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
-                  <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Tenancy Agreements</div>
+                <div className={clsx('pt-4', mobileMenuSectionBorderClassName)}>
+                  <div className={clsx('mb-2 text-xs font-bold uppercase', mobileMenuHeadingTextClassName)}>Tenancy Agreements</div>
                   {tenancyAgreementLinks.map((item) => (
                     <Link
                       key={item.href}
@@ -481,8 +499,8 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                       className={clsx(
                         'block py-2 text-sm font-semibold',
                         pathname === item.href
-                          ? (isSolid ? 'text-[#111827]' : 'text-white')
-                          : (isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')
+                          ? mobileMenuActiveLinkClassName
+                          : mobileMenuLinkClassName
                       )}
                       onClick={() => setOpen(false)}
                     >
@@ -491,13 +509,13 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
                   ))}
                 </div>
 
-                <div className={clsx('pt-4', isSolid ? 'border-t border-gray-200' : 'border-t border-white/20')}>
-                  <div className={clsx('mb-2 text-xs font-bold uppercase', isSolid ? 'text-gray-500' : 'text-white/70')}>Free Tools</div>
-                  <Link href="/tools" className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
+                <div className={clsx('pt-4', mobileMenuSectionBorderClassName)}>
+                  <div className={clsx('mb-2 text-xs font-bold uppercase', mobileMenuHeadingTextClassName)}>Free Tools</div>
+                  <Link href="/tools" className={clsx('block py-2 text-sm font-semibold', mobileMenuLinkClassName)} onClick={() => setOpen(false)}>
                     Free Tools Hub
                   </Link>
                   {freeToolsLinks.map((item) => (
-                    <Link key={item.href} href={item.href} className={clsx('block py-2 text-sm font-semibold', isSolid ? 'text-charcoal hover:text-[#692ED4]' : 'text-white hover:text-white/80')} onClick={() => setOpen(false)}>
+                    <Link key={item.href} href={item.href} className={clsx('block py-2 text-sm font-semibold', mobileMenuLinkClassName)} onClick={() => setOpen(false)}>
                       {item.label}
                     </Link>
                   ))}
