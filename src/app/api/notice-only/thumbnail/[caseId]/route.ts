@@ -3,12 +3,13 @@
  *
  * GET /api/notice-only/thumbnail/[caseId]?document_type=...
  *
- * Generates a watermarked JPEG thumbnail of the first page of a notice-only document
+ * Generates a watermarked JPEG thumbnail of the first page of an eviction document
  * WITHOUT creating persistent database records. This allows preview thumbnails for
- * notice-only flows where documents are only generated post-payment.
+ * notice-only and complete-pack flows where documents are only generated post-payment.
  *
  * Supports:
- * - England: Form 3A notice thumbnails, service instructions, service checklist
+ * - England: Form 3A notice thumbnails, N215, N5, N119, witness statement,
+ *   service instructions, service checklist
  * - Wales: section173_notice, fault_based_notice, service_instructions, service_checklist
  * - Scotland: notice_to_leave, service_instructions, service_checklist
  * - All: arrears_schedule (when applicable)
@@ -23,14 +24,29 @@
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
-import { htmlToPreviewThumbnail, generateDocument, compileTemplate, loadTemplate } from '@/lib/documents/generator';
-import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
+import {
+  htmlToPreviewThumbnail,
+  pdfBytesToPreviewThumbnail,
+  generateDocument,
+  compileTemplate,
+  loadTemplate,
+} from '@/lib/documents/generator';
+import { mapNoticeOnlyFacts, wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales';
 import { generateSection21Notice, mapWizardToSection21Data } from '@/lib/documents/section21-generator';
+import { fillOfficialForm } from '@/lib/documents/official-forms-filler';
+import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
+import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
+import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
 import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
 import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
+import {
+  generateCompleteEvictionPack,
+  generateNoticeOnlyPack,
+  type EvictionPackDocument,
+} from '@/lib/documents/eviction-pack-generator';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -45,6 +61,44 @@ const e2eEnabled = process.env.E2E_MODE === 'true' || process.env.NEXT_PUBLIC_E2
 const PLACEHOLDER_JPEG_BASE64 = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBAQEA8QEA8PDw8QDw8PDw8QFREWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGxAQGi0fHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAAEAAQMBIgACEQEDEQH/xAAXAAADAQAAAAAAAAAAAAAAAAAAAQID/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEAMQAAAB6AA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABBQL/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAgBAwEBPwF//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwF//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQAGPwJ//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQABPyF//9k=';
 const placeholderThumbnail = Buffer.from(PLACEHOLDER_JPEG_BASE64, 'base64');
 
+const ENGLAND_PACK_DOCUMENT_TYPES = new Set([
+  'section8_notice',
+  'service_instructions',
+  'validity_checklist',
+  'compliance_declaration',
+  'proof_of_service',
+  'arrears_schedule',
+  'n5_claim',
+  'n119_particulars',
+  'evidence_checklist',
+  'witness_statement',
+  'court_bundle_index',
+  'hearing_checklist',
+  'arrears_engagement_letter',
+  'case_summary',
+]);
+
+async function getEnglandPackPreviewDocument(
+  pack: 'notice_only' | 'complete_pack',
+  wizardFacts: Record<string, any>,
+  documentType: string
+): Promise<EvictionPackDocument | null> {
+  const enrichedFacts = {
+    ...wizardFacts,
+    __meta: {
+      ...(wizardFacts.__meta || {}),
+      case_id: wizardFacts.id || wizardFacts.case_id || wizardFacts.__meta?.case_id,
+    },
+  };
+
+  const generatedPack =
+    pack === 'complete_pack'
+      ? await generateCompleteEvictionPack(enrichedFacts)
+      : await generateNoticeOnlyPack(enrichedFacts);
+
+  return generatedPack.documents.find((document) => document.document_type === documentType) || null;
+}
+
 /**
  * Structured error response
  */
@@ -57,7 +111,7 @@ function errorResponse(code: string, message: string, status: number, details?: 
 /**
  * Map config document ID to template document type
  */
-function resolveDocumentType(configId: string, jurisdiction: string, route: string): string | null {
+function resolveDocumentType(configId: string, jurisdiction: string): string | null {
   // Notice documents
   if (configId === 'notice-section-21' || configId === 'section21_notice') {
     return jurisdiction === 'england' ? 'section8_notice' : 'section21_notice';
@@ -82,7 +136,7 @@ function resolveDocumentType(configId: string, jurisdiction: string, route: stri
 
   // Checklists
   if (configId.startsWith('validity-checklist') || configId === 'service_checklist') {
-    return 'service_checklist';
+    return 'validity_checklist';
   }
 
   // Arrears schedule
@@ -90,12 +144,49 @@ function resolveDocumentType(configId: string, jurisdiction: string, route: stri
     return 'arrears_schedule';
   }
 
+  if (configId === 'proof_of_service' || configId === 'form_n215' || configId === 'n215') {
+    return 'proof_of_service';
+  }
+
+  if (configId === 'n5_claim' || configId === 'form_n5') {
+    return 'n5_claim';
+  }
+
+  if (configId === 'n119_particulars' || configId === 'form_n119') {
+    return 'n119_particulars';
+  }
+
+  if (configId === 'witness_statement') {
+    return 'witness_statement';
+  }
+
   // Pre-Service Compliance Declaration
   if (configId.startsWith('pre-service-compliance') ||
       configId === 'compliance_checklist' ||
       configId === 'compliance_checklist_section21' ||
-      configId === 'pre_service_compliance') {
-    return 'compliance_checklist';
+      configId === 'pre_service_compliance' ||
+      configId === 'compliance_declaration') {
+    return 'compliance_declaration';
+  }
+
+  if (configId === 'evidence_checklist') {
+    return 'evidence_checklist';
+  }
+
+  if (configId === 'court_bundle_index') {
+    return 'court_bundle_index';
+  }
+
+  if (configId === 'hearing_checklist') {
+    return 'hearing_checklist';
+  }
+
+  if (configId === 'arrears_engagement_letter') {
+    return 'arrears_engagement_letter';
+  }
+
+  if (configId === 'case_summary') {
+    return 'case_summary';
   }
 
   return null;
@@ -114,6 +205,18 @@ function getTemplatePath(
     if (docType === 'section8_notice') {
       return 'FORM3A_SPECIAL';
     }
+    if (docType === 'proof_of_service') {
+      return 'N215_SPECIAL';
+    }
+    if (docType === 'n5_claim') {
+      return 'N5_SPECIAL';
+    }
+    if (docType === 'n119_particulars') {
+      return 'N119_SPECIAL';
+    }
+    if (docType === 'witness_statement') {
+      return 'WITNESS_STATEMENT_SPECIAL';
+    }
     if (docType === 'section21_notice') {
       // Section 21 uses a dedicated generator - handle differently
       return 'SECTION21_SPECIAL';
@@ -122,14 +225,14 @@ function getTemplatePath(
       const instructionRoute = route === 'section_21' || route === 'accelerated_possession' ? 'section_21' : 'section_8';
       return `uk/england/templates/eviction/service_instructions_${instructionRoute}.hbs`;
     }
-    if (docType === 'service_checklist') {
+    if (docType === 'validity_checklist') {
       const checklistRoute = route === 'section_21' || route === 'accelerated_possession' ? 'section_21' : 'section_8';
       return `uk/england/templates/eviction/checklist_${checklistRoute}.hbs`;
     }
     if (docType === 'arrears_schedule') {
       return 'uk/england/templates/money_claims/schedule_of_arrears.hbs';
     }
-    if (docType === 'compliance_checklist') {
+    if (docType === 'compliance_declaration') {
       // Use route-specific compliance checklist
       const isSection21 = route === 'section_21' || route === 'accelerated_possession';
       return isSection21
@@ -151,14 +254,14 @@ function getTemplatePath(
       const walesRoute = route === 'wales_section_173' || route === 'section_173' ? 'section_173' : 'fault_based';
       return `uk/wales/templates/eviction/service_instructions_${walesRoute}.hbs`;
     }
-    if (docType === 'service_checklist') {
+    if (docType === 'validity_checklist') {
       const checklistRoute = route === 'wales_section_173' || route === 'section_173' ? 'section_173' : 'fault_based';
       return `uk/wales/templates/eviction/checklist_${checklistRoute}.hbs`;
     }
     if (docType === 'arrears_schedule') {
       return 'uk/wales/templates/money_claims/schedule_of_arrears.hbs';
     }
-    if (docType === 'compliance_checklist') {
+    if (docType === 'compliance_declaration') {
       return 'uk/wales/templates/eviction/compliance_checklist.hbs';
     }
   }
@@ -171,13 +274,13 @@ function getTemplatePath(
     if (docType === 'service_instructions') {
       return 'uk/scotland/templates/eviction/service_instructions_notice_to_leave.hbs';
     }
-    if (docType === 'service_checklist') {
+    if (docType === 'validity_checklist') {
       return 'uk/scotland/templates/eviction/checklist_notice_to_leave.hbs';
     }
     if (docType === 'arrears_schedule') {
       return 'uk/scotland/templates/money_claims/schedule_of_arrears.hbs';
     }
-    if (docType === 'compliance_checklist') {
+    if (docType === 'compliance_declaration') {
       return 'uk/scotland/templates/eviction/compliance_checklist.hbs';
     }
   }
@@ -203,6 +306,13 @@ function formatUKDate(dateString: string): string {
   } catch {
     return dateString;
   }
+}
+
+function buildAddress(...parts: Array<string | null | undefined>): string {
+  return parts
+    .map((part) => (typeof part === 'string' ? part.trim() : part))
+    .filter(Boolean)
+    .join('\n');
 }
 
 export async function GET(
@@ -231,6 +341,7 @@ export async function GET(
     // Parse query params
     const url = new URL(request.url);
     const documentType = url.searchParams.get('document_type');
+    const pack = (url.searchParams.get('pack') || '').trim() as 'notice_only' | 'complete_pack' | '';
 
     if (!caseId) {
       return errorResponse('MISSING_CASE_ID', 'Case ID is required', 400);
@@ -333,9 +444,47 @@ export async function GET(
     }
 
     // Resolve the document type from config ID
-    const resolvedDocType = resolveDocumentType(documentType, jurisdiction, selectedRoute);
+    const resolvedDocType = resolveDocumentType(documentType, jurisdiction);
     if (!resolvedDocType) {
       return errorResponse('INVALID_DOCUMENT_TYPE', `Unknown document type: ${documentType}`, 400);
+    }
+
+    if (jurisdiction === 'england' && pack && ENGLAND_PACK_DOCUMENT_TYPES.has(resolvedDocType)) {
+      const previewDocument = await getEnglandPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, resolvedDocType);
+
+      if (!previewDocument) {
+        return errorResponse('DOCUMENT_NOT_FOUND', `No generated preview document found for ${resolvedDocType}`, 404, {
+          caseId,
+          pack,
+          resolvedDocType,
+        });
+      }
+
+      const thumbnail =
+        previewDocument.pdf
+          ? await pdfBytesToPreviewThumbnail(previewDocument.pdf, {
+              watermarkText: 'PREVIEW',
+              documentId: `${caseId}-${resolvedDocType}`,
+            })
+          : await htmlToPreviewThumbnail(previewDocument.html || '', {
+              quality: 75,
+              watermarkText: 'PREVIEW',
+            });
+
+      const headers: Record<string, string> = {
+        'Content-Type': 'image/jpeg',
+        'Content-Disposition': 'inline; filename="preview.jpg"',
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'X-Thumbnail-Runtime': 'nodejs',
+        'X-Document-Type': resolvedDocType,
+      };
+
+      if (!isVercel) {
+        headers['Content-Length'] = thumbnail.length.toString();
+      }
+
+      return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
     }
 
     // Get template path
@@ -371,6 +520,11 @@ export async function GET(
     templateData.is_wales_section_173 = selectedRoute === 'wales_section_173';
     templateData.is_wales_fault_based = selectedRoute === 'wales_fault_based';
 
+    const { caseData } =
+      jurisdiction === 'england' || jurisdiction === 'wales'
+        ? wizardFactsToEnglandWalesEviction(caseId, wizardFacts)
+        : { caseData: null as any };
+
     // Wales-specific fields
     if (jurisdiction === 'wales') {
       const contractStartDate = wizardFacts.contract_start_date || templateData.tenancy_start_date;
@@ -378,8 +532,9 @@ export async function GET(
       templateData.contract_holder_full_name = wizardFacts.contract_holder_full_name || templateData.tenant_full_name;
     }
 
-    // Generate HTML content
-    let html: string;
+    // Generate HTML or official-PDF thumbnail content
+    let html: string | null = null;
+    let pdfThumbnail: Buffer | null = null;
 
     if (templatePath === 'FORM3A_SPECIAL') {
       const selectedGrounds = [
@@ -424,12 +579,118 @@ export async function GET(
   </div>
 </body>
 </html>`;
+    } else if (templatePath === 'N215_SPECIAL') {
+      const proofPropertyAddress =
+        wizardFacts.property_address ||
+        buildAddress(
+          wizardFacts.property_address_line1,
+          wizardFacts.property_address_line2,
+          wizardFacts.property_address_town || wizardFacts.property_city,
+          wizardFacts.property_address_county,
+          wizardFacts.property_address_postcode,
+        );
+
+      const n215Bytes = await generateEnglandN215PDF({
+        court_name: wizardFacts.court_name,
+        claim_number: wizardFacts.claim_number,
+        claimant_name: wizardFacts.landlord_full_name,
+        defendant_name: wizardFacts.tenant_full_name,
+        signatory_name: wizardFacts.signatory_name || wizardFacts.landlord_full_name,
+        signatory_capacity: wizardFacts.solicitor_firm ? 'claimant_legal_representative' : 'claimant',
+        signatory_firm: wizardFacts.solicitor_firm,
+        signatory_position: (wizardFacts as any).signatory_position,
+        recipient_name: wizardFacts.tenant_full_name,
+        recipient_capacity:
+          ((wizardFacts as any).notice_service_recipient_capacity as
+            | 'claimant'
+            | 'defendant'
+            | 'solicitor'
+            | 'litigation_friend'
+            | undefined) || 'defendant',
+        service_location:
+          ((wizardFacts as any).notice_service_location as
+            | 'usual_residence'
+            | 'last_known_residence'
+            | 'place_of_business'
+            | 'principal_place_of_business'
+            | 'last_known_place_of_business'
+            | 'last_known_principal_place_of_business'
+            | 'principal_office_of_partnership'
+            | 'principal_office_of_corporation'
+            | 'principal_office_of_company'
+            | 'place_of_business_of_partnership_company_corporation'
+            | 'within_jurisdiction_connection'
+            | 'other'
+            | undefined) || 'usual_residence',
+        service_location_other: (wizardFacts as any).notice_service_location_other,
+        service_address: proofPropertyAddress,
+        service_address_line1: wizardFacts.property_address_line1,
+        service_address_line2: wizardFacts.property_address_line2,
+        service_address_town: wizardFacts.property_address_town || wizardFacts.property_city,
+        service_address_county: wizardFacts.property_address_county,
+        service_address_postcode: wizardFacts.property_address_postcode || wizardFacts.property_postcode,
+        service_date:
+          wizardFacts.notice_service_date ||
+          wizardFacts.notice_served_date ||
+          wizardFacts.notice_date,
+        signature_date:
+          wizardFacts.signature_date ||
+          wizardFacts.notice_service_date ||
+          wizardFacts.notice_served_date ||
+          wizardFacts.notice_date,
+        service_time: (wizardFacts as any).service_time || (wizardFacts as any).notice_service_time,
+        service_method: normalizeEnglandProofOfServiceMethod(wizardFacts.notice_service_method),
+        dx_number: wizardFacts.dx_number,
+        fax_number: (wizardFacts as any).fax_number,
+        recipient_email:
+          (wizardFacts as any).notice_service_recipient_email || wizardFacts.tenant_email,
+        other_electronic_identification: (wizardFacts as any).other_electronic_identification,
+        document_served: selectedRoute === 'section_21' ? 'Section 21 notice (Form 6A)' : 'Form 3A notice',
+      });
+
+      pdfThumbnail = await pdfBytesToPreviewThumbnail(n215Bytes, {
+        watermarkText: 'PREVIEW',
+        documentId: `${caseId}-n215`,
+      });
+    } else if (templatePath === 'N5_SPECIAL') {
+      const n5Bytes = await fillOfficialForm('n5', caseData);
+      pdfThumbnail = await pdfBytesToPreviewThumbnail(n5Bytes, {
+        watermarkText: 'PREVIEW',
+        documentId: `${caseId}-n5`,
+      });
+    } else if (templatePath === 'N119_SPECIAL') {
+      const n119Bytes = await fillOfficialForm('n119', caseData);
+      pdfThumbnail = await pdfBytesToPreviewThumbnail(n119Bytes, {
+        watermarkText: 'PREVIEW',
+        documentId: `${caseId}-n119`,
+      });
+    } else if (templatePath === 'WITNESS_STATEMENT_SPECIAL') {
+      const witnessFacts = wizardFactsToCaseFacts(wizardFacts);
+      const witnessContext = extractWitnessStatementContext(witnessFacts);
+      const witnessContent = await generateWitnessStatement(witnessFacts, witnessContext);
+
+      const witnessDoc = await generateDocument({
+        templatePath: `uk/england/templates/eviction/witness-statement.hbs`,
+        data: {
+          landlord_name: witnessContext.landlord_name,
+          landlord_address: wizardFacts.landlord_address || caseData?.landlord_address || '',
+          tenant_name: witnessContext.tenant_name,
+          property_address: witnessContext.property_address,
+          court_name: wizardFacts.court_name || caseData?.court_name || 'County Court',
+          witness_statement: witnessContent,
+          generated_date: new Date().toLocaleDateString('en-GB'),
+        },
+        isPreview: true,
+        outputFormat: 'both',
+      });
+
+      html = witnessDoc.html;
     } else if (templatePath === 'SECTION21_SPECIAL') {
       // Use dedicated Section 21 generator
       const section21NoticeData = mapWizardToSection21Data(wizardFacts, {
         serviceDate: templateData.service_date || templateData.notice_date,
       });
-      const section21Doc = await generateSection21Notice(section21NoticeData, true);
+      await generateSection21Notice(section21NoticeData, true);
       // We need HTML, but this generator returns PDF
       // Fall back to generating from template directly
       const fallbackTemplate = 'uk/england/templates/notice_only/form_6a_section21/notice.hbs';
@@ -458,7 +719,7 @@ export async function GET(
         deposit_protected: wizardFacts.deposit_protected || templateData.deposit_protected,
       };
       // Get HTML output
-      const result = await generateWalesSection173Notice(section173Data, true);
+      await generateWalesSection173Notice(section173Data, true);
       // The generator returns PDF, but we need HTML - generate from base template
       const isConverted = wizardFacts.wales_contract_category === 'converted' ||
                           wizardFacts.is_converted_contract === true;
@@ -530,10 +791,12 @@ export async function GET(
     }
 
     // Generate thumbnail
-    const thumbnail = await htmlToPreviewThumbnail(html, {
-      quality: 75,
-      watermarkText: 'PREVIEW',
-    });
+    const thumbnail =
+      pdfThumbnail ||
+      (await htmlToPreviewThumbnail(html || '', {
+        quality: 75,
+        watermarkText: 'PREVIEW',
+      }));
 
     const elapsed = Date.now() - startTime;
     console.log(`[Notice-Only-Thumbnail] Success:`, {

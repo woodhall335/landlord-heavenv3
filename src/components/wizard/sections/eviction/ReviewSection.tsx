@@ -17,6 +17,7 @@ import { DocumentProofShowcase } from '@/components/preview';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
 import { getPackContents } from '@/lib/products/pack-contents';
+import { buildEnglandPackProofEntries } from './buildEnglandPackProofEntries';
 import {
   RiArrowDownCircleLine,
   RiCalendarLine,
@@ -167,28 +168,14 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const warningItems = filingWindowWarning ? [...warnings, filingWindowWarning] : warnings;
   const canProceed = blockerItems.length === 0 && incompleteRequired.length === 0;
 
-  const caseProofEntries = useMemo(() => {
-    if (jurisdiction !== 'england' || evictionRoute !== 'section_8') {
-      return [];
-    }
-
-    return [
-      {
-        id: 'form3a-notice',
-        title: 'Form 3A notice',
-        description: 'Live first-page draft of the notice generated from this case.',
-        thumbnailUrl: `/api/notice-only/thumbnail/${caseId}?document_type=section8_notice`,
-        badge: 'Actual draft',
-      },
-      {
-        id: 'arrears-schedule',
-        title: 'Rent schedule / arrears statement',
-        description: 'Live first-page draft of the arrears support document for this case.',
-        thumbnailUrl: `/api/notice-only/thumbnail/${caseId}?document_type=arrears_schedule`,
-        badge: 'Actual draft',
-      },
-    ];
-  }, [caseId, evictionRoute, jurisdiction]);
+  const caseProofEntries =
+    jurisdiction === 'england' && evictionRoute === 'section_8'
+      ? buildEnglandPackProofEntries({
+          product: 'complete_pack',
+          caseId,
+          facts,
+        })
+      : [];
 
   const packTitle =
     jurisdiction === 'england'
@@ -243,7 +230,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
         <DocumentProofShowcase
           compact
           title="Actual draft checkpoints from this case"
-          description="These live first-page previews help you sense-check the notice-stage paperwork before you pay for the full pack."
+          description="These live first-page previews help you sense-check the actual notice, court-form, service, and witness paperwork before you pay for the full pack."
           entries={caseProofEntries}
         />
       ) : null}

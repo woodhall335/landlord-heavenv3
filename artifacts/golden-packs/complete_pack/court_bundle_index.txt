@@ -10,10 +10,10 @@ Court York County Court and Family Court
 Claimant Daniel Mercer
 Defendant Ivy Carleton
 Property 16 Willow Mews York YO24 3HX
-Notice service date 25 April 2026
-Notice expiry date 23 May 2026
-Earliest proceedings date 23 May 2026
-Bundle prepared 25 April 2026
+Notice service date 26 April 2026
+Notice expiry date 24 May 2026
+Earliest proceedings date 24 May 2026
+Bundle prepared 26 April 2026
 
 -- 1 of 2 --
 
@@ -49,6 +49,6 @@ Bundle preparation notes
 Paginate the bundle consistently and update the exhibit references if documents are added or removed.
 Keep the court-facing bundle free from unused sections, stray technical notes, and irrelevant material.
 Prepared by: Daniel Mercer
-Date: 25 April 2026
+Date: 26 April 2026
 
 -- 2 of 2 --

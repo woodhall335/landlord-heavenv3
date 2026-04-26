@@ -930,6 +930,7 @@ export interface CaseData {
   // Court
   court_name?: string;
   court_address?: string;
+  claim_number?: string;
 
   // Signature
   signatory_name: string;
@@ -1441,6 +1442,8 @@ export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}
 
   // === HEADER FIELDS ===
   setTextRequired(form, N5_FIELDS.COURT, data.court_name, ctx);
+  setTextOptional(form, N5_FIELDS.CLAIM_NO, data.claim_number, ctx);
+  setTextOptional(form, N5_FIELDS.CLAIM_NO_2, data.claim_number, ctx);
   setTextOptional(form, N5_FIELDS.FEE_ACCOUNT, data.claimant_reference, ctx);
 
   // === PARTY DETAILS ===
@@ -1537,6 +1540,7 @@ export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}
   // Statement of Truth checkbox
   if (data.solicitor_firm) {
     setTextOptional(form, N5_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
+    setTextOptional(form, N5_FIELDS.POSITION_HELD, 'Solicitor', ctx);
     setCheckbox(form, N5_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
     setCheckbox(form, N5_CHECKBOXES.SOT_AUTHORISED, true, ctx);
   } else {
@@ -1553,8 +1557,8 @@ export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}
   if (serviceAddressLines.length > 1) {
     setTextOptional(form, N5_FIELDS.ADDRESS_LINE2, serviceAddressLines[1], ctx);
   }
-  setTextOptional(form, N5_FIELDS.ADDRESS_TOWN, data.service_address_town, ctx);
-  setTextOptional(form, N5_FIELDS.ADDRESS_COUNTY, data.service_address_county, ctx);
+  setTextOptional(form, N5_FIELDS.ADDRESS_TOWN, data.service_address_town || data.landlord_address_town || serviceAddressLines[2], ctx);
+  setTextOptional(form, N5_FIELDS.ADDRESS_COUNTY, data.service_address_county || serviceAddressLines[3], ctx);
   setTextOptional(form, N5_FIELDS.ADDRESS_POSTCODE, data.service_postcode || data.landlord_postcode, ctx);
 
   // === CONTACT DETAILS ===
@@ -2530,6 +2534,7 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
 
   // === HEADER FIELDS ===
   setTextRequired(form, N119_FIELDS.COURT, data.court_name, ctx);
+  setTextOptional(form, N119_FIELDS.CLAIM_NO, data.claim_number, ctx);
   setTextRequired(form, N119_FIELDS.CLAIMANT, data.landlord_full_name, ctx);
   setTextRequired(form, N119_FIELDS.DEFENDANT, data.tenant_full_name, ctx);
   setTextRequired(form, N119_FIELDS.POSSESSION_OF, data.property_address, ctx);
@@ -2739,6 +2744,7 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   // Statement of Truth checkboxes
   if (data.solicitor_firm) {
     setTextOptional(form, N119_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
+    setTextOptional(form, N119_FIELDS.POSITION_HELD, 'Solicitor', ctx);
     setCheckbox(form, N119_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
     setCheckbox(form, N119_CHECKBOXES.SOT_AUTHORISED, true, ctx);
   } else {

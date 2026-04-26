@@ -59,6 +59,21 @@ const SERVICE_METHODS = [
   { value: 'other', label: 'Other method' },
 ];
 
+const N215_RECIPIENT_CAPACITY_OPTIONS = [
+  { value: 'defendant', label: 'The tenant / defendant' },
+  { value: 'solicitor', label: "The tenant's solicitor" },
+  { value: 'litigation_friend', label: 'A litigation friend' },
+] as const;
+
+const N215_SERVICE_LOCATION_OPTIONS = [
+  { value: 'usual_residence', label: "The tenant's usual residence" },
+  { value: 'last_known_residence', label: "The tenant's last known residence" },
+  { value: 'place_of_business', label: "The tenant's place of business" },
+  { value: 'principal_place_of_business', label: "The tenant's principal place of business" },
+  { value: 'within_jurisdiction_connection', label: 'Another place with a clear jurisdictional connection' },
+  { value: 'other', label: 'Other location' },
+] as const;
+
 const ENGLAND_GROUND_DEFINITIONS = listEnglandGroundDefinitions();
 const ENGLAND_GROUND_MAP = new Map(
   ENGLAND_GROUND_DEFINITIONS.map((ground) => [ground.code, ground] as const)
@@ -90,6 +105,175 @@ interface GroundDetailPanelConfig {
   intro: string;
   fields: GroundDetailFieldConfig[];
 }
+
+interface N215QuestionFieldsProps {
+  facts: WizardFacts;
+  onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  mode: 'served' | 'planned';
+}
+
+const N215QuestionFields: React.FC<N215QuestionFieldsProps> = ({ facts, onUpdate, mode }) => {
+  const serviceMethod = String(facts.notice_service_method || '').trim();
+  const recipientCapacity = String(facts.notice_service_recipient_capacity || 'defendant').trim();
+  const serviceLocation = String(facts.notice_service_location || 'usual_residence').trim();
+  const showTime = ['hand_delivered', 'email', 'other'].includes(serviceMethod);
+  const showRecipientEmail = serviceMethod === 'email';
+  const showOtherElectronicId = serviceMethod === 'other';
+  const showLocationOther = serviceLocation === 'other';
+  const showSignatoryPosition = Boolean(facts.solicitor_firm);
+
+  return (
+    <div className="rounded-[1.5rem] border border-[#ede4ff] bg-[#fbf9ff] p-5">
+      <div className="max-w-3xl">
+        <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">
+          Certificate Of Service Facts
+        </h4>
+        <p className="mt-2 text-sm leading-6 text-[#5d5672]">
+          These extra service facts let us prefill more of the official Form N215 instead of leaving the landlord to complete routine court-service details manually later.
+        </p>
+      </div>
+
+      <div className="mt-5 grid gap-5 md:grid-cols-2">
+        <div className="space-y-2">
+          <label htmlFor={`notice_service_recipient_capacity_${mode}`} className="block text-sm font-medium text-gray-700">
+            Who received or will receive the notice?
+          </label>
+          <select
+            id={`notice_service_recipient_capacity_${mode}`}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+            value={recipientCapacity}
+            onChange={(e) => void onUpdate({ notice_service_recipient_capacity: e.target.value })}
+          >
+            {N215_RECIPIENT_CAPACITY_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-gray-500">
+            Default is the tenant / defendant. Change this only if service was through a solicitor or litigation friend.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor={`notice_service_location_${mode}`} className="block text-sm font-medium text-gray-700">
+            Where was or will it be served?
+          </label>
+          <select
+            id={`notice_service_location_${mode}`}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+            value={serviceLocation}
+            onChange={(e) =>
+              void onUpdate({
+                notice_service_location: e.target.value,
+                ...(e.target.value === 'other' ? {} : { notice_service_location_other: '' }),
+              })
+            }
+          >
+            {N215_SERVICE_LOCATION_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-gray-500">
+            Default is the tenant&apos;s usual residence. Override it if the notice went somewhere different.
+          </p>
+        </div>
+
+        {showLocationOther && (
+          <div className="space-y-2 md:col-span-2">
+            <label htmlFor={`notice_service_location_other_${mode}`} className="block text-sm font-medium text-gray-700">
+              Other service location
+              <span className="ml-1 text-red-500">*</span>
+            </label>
+            <input
+              id={`notice_service_location_other_${mode}`}
+              type="text"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+              value={facts.notice_service_location_other || ''}
+              onChange={(e) => void onUpdate({ notice_service_location_other: e.target.value })}
+              placeholder="For example: tenant's instructed solicitor's office"
+            />
+          </div>
+        )}
+
+        {showTime && (
+          <div className="space-y-2">
+            <label htmlFor={`notice_service_time_${mode}`} className="block text-sm font-medium text-gray-700">
+              {mode === 'served' ? 'Time of service' : 'Expected time of service'}
+            </label>
+            <input
+              id={`notice_service_time_${mode}`}
+              type="time"
+              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+              value={facts.notice_service_time || facts.service_time || ''}
+              onChange={(e) => void onUpdate({ notice_service_time: e.target.value, service_time: e.target.value })}
+            />
+            <p className="text-xs text-gray-500">
+              Helpful for hand delivery and electronic service, but can be left blank if you genuinely do not know it.
+            </p>
+          </div>
+        )}
+
+        {showRecipientEmail && (
+          <div className="space-y-2">
+            <label htmlFor={`notice_service_recipient_email_${mode}`} className="block text-sm font-medium text-gray-700">
+              Email address used for service
+              <span className="ml-1 text-red-500">*</span>
+            </label>
+            <input
+              id={`notice_service_recipient_email_${mode}`}
+              type="email"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+              value={facts.notice_service_recipient_email || facts.tenant_email || ''}
+              onChange={(e) => void onUpdate({ notice_service_recipient_email: e.target.value })}
+              placeholder="tenant@example.com"
+            />
+            <p className="text-xs text-gray-500">
+              This is the actual address used to send the notice, not your own contact address.
+            </p>
+          </div>
+        )}
+
+        {showOtherElectronicId && (
+          <div className="space-y-2">
+            <label htmlFor={`other_electronic_identification_${mode}`} className="block text-sm font-medium text-gray-700">
+              Other electronic identifier
+            </label>
+            <input
+              id={`other_electronic_identification_${mode}`}
+              type="text"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+              value={facts.other_electronic_identification || ''}
+              onChange={(e) => void onUpdate({ other_electronic_identification: e.target.value })}
+              placeholder="For example: portal username, app ID, or reference"
+            />
+          </div>
+        )}
+
+        {showSignatoryPosition && (
+          <div className="space-y-2">
+            <label htmlFor={`signatory_position_${mode}`} className="block text-sm font-medium text-gray-700">
+              Position or office held by the signer
+            </label>
+            <input
+              id={`signatory_position_${mode}`}
+              type="text"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+              value={facts.signatory_position || ''}
+              onChange={(e) => void onUpdate({ signatory_position: e.target.value })}
+              placeholder="For example: Solicitor, Director, Litigation Executive"
+            />
+            <p className="text-xs text-gray-500">
+              We only ask this where a legal representative or firm is named, so the statement-of-truth block can be completed more cleanly.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const OCCUPATION_STYLE_GROUND_CODES = new Set<EnglandGroundCode>([
   '2', '2ZA', '2ZB', '2ZC', '2ZD', '4', '4A', '5', '5A', '5B', '5C', '5E', '5F', '5G', '5H', '7', '18',
@@ -1044,6 +1228,8 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             </select>
           </div>
 
+          <N215QuestionFields facts={facts} onUpdate={onUpdate} mode="planned" />
+
           {/* Expiry date - SECTION 8 ONLY: User-editable */}
           {isSection8 && (
             <div className="space-y-2">
@@ -1424,6 +1610,8 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             </p>
           </div>
           </div>
+
+          <N215QuestionFields facts={facts} onUpdate={onUpdate} mode="served" />
 
           {/* Notice expiry date */}
           <div className="space-y-2">

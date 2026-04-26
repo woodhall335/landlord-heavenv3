@@ -901,7 +901,34 @@ export async function GET(
                 claimant_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
                 defendant_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
                 signatory_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,
+                signatory_capacity: wizardFacts.solicitor_firm ? 'claimant_legal_representative' : 'claimant',
+                signatory_firm: wizardFacts.solicitor_firm || templateData.solicitor_firm,
+                signatory_position: (wizardFacts as any).signatory_position || templateData.signatory_position,
                 recipient_name: wizardFacts.tenant_full_name || templateData.tenant_full_name,
+        recipient_capacity:
+          ((wizardFacts as any).notice_service_recipient_capacity as
+            | 'claimant'
+            | 'defendant'
+            | 'solicitor'
+            | 'litigation_friend'
+            | undefined) || 'defendant',
+        service_location:
+          ((wizardFacts as any).notice_service_location as
+            | 'usual_residence'
+            | 'last_known_residence'
+            | 'place_of_business'
+            | 'principal_place_of_business'
+            | 'last_known_place_of_business'
+            | 'last_known_principal_place_of_business'
+            | 'principal_office_of_partnership'
+            | 'principal_office_of_corporation'
+            | 'principal_office_of_company'
+            | 'place_of_business_of_partnership_company_corporation'
+            | 'within_jurisdiction_connection'
+            | 'other'
+            | undefined) || 'usual_residence',
+        service_location_other:
+          (wizardFacts as any).notice_service_location_other || templateData.notice_service_location_other,
                 service_address: wizardFacts.property_address || templateData.property_address,
                 service_address_line1: wizardFacts.property_address_line1 || templateData.property_address_line1,
                 service_address_line2: wizardFacts.property_address_line2 || templateData.property_address_line2,
@@ -933,10 +960,19 @@ export async function GET(
                   templateData.notice_service_date ||
                   templateData.service_date ||
                   templateData.notice_date,
+                service_time: (wizardFacts as any).service_time || (wizardFacts as any).notice_service_time,
                 service_method: normalizeEnglandProofOfServiceMethod(
                   wizardFacts.notice_service_method || templateData.notice_service_method,
                 ),
-                recipient_email: wizardFacts.tenant_email || templateData.tenant_email,
+                dx_number: wizardFacts.dx_number || templateData.dx_number,
+                fax_number: (wizardFacts as any).fax_number || templateData.fax_number,
+        recipient_email:
+          (wizardFacts as any).notice_service_recipient_email ||
+          wizardFacts.tenant_email ||
+          templateData.notice_service_recipient_email ||
+          templateData.tenant_email,
+                other_electronic_identification:
+                  (wizardFacts as any).other_electronic_identification || templateData.other_electronic_identification,
               })
             : await generateProofOfServicePDF({
                 landlord_name: wizardFacts.landlord_full_name || templateData.landlord_full_name,

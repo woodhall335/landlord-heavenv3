@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { RiCloseLine } from 'react-icons/ri';
 
@@ -15,8 +15,11 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'fullscreen';
   showCloseButton?: boolean;
+  panelClassName?: string;
+  bodyClassName?: string;
+  headerClassName?: string;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -26,13 +29,21 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   size = 'medium',
   showCloseButton = true,
+  panelClassName = '',
+  bodyClassName = '',
+  headerClassName = '',
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setIsVisible(false);
+    setTimeout(onClose, 200); // Wait for animation to complete
+  }, [onClose]);
+
   useEffect(() => {
     if (isOpen) {
-      const openTimer = setTimeout(() => {
+      setTimeout(() => {
         setIsAnimating(true);
         // Small delay to ensure the element is mounted before animating
         requestAnimationFrame(() => {
@@ -60,11 +71,6 @@ export const Modal: React.FC<ModalProps> = ({
     }
   };
 
-  const handleClose = () => {
-    setIsVisible(false);
-    setTimeout(onClose, 200); // Wait for animation to complete
-  };
-
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -74,7 +80,7 @@ export const Modal: React.FC<ModalProps> = ({
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen]);
+  }, [handleClose, isOpen]);
 
   if (!isOpen && !isAnimating) return null;
 
@@ -82,6 +88,7 @@ export const Modal: React.FC<ModalProps> = ({
     small: 'max-w-md',
     medium: 'max-w-2xl',
     large: 'max-w-4xl',
+    fullscreen: 'max-w-6xl h-[100dvh] max-h-[100dvh] rounded-none sm:h-[94vh] sm:max-h-[94vh] sm:rounded-2xl',
   };
 
   const modalContent = (
@@ -100,18 +107,18 @@ export const Modal: React.FC<ModalProps> = ({
 
       {/* Modal with scale + fade animation */}
       <div
-        className={`relative bg-white rounded-2xl shadow-2xl ${sizeClasses[size]} w-full max-h-[90vh] overflow-hidden transition-all duration-200 ease-out ${
+        className={`relative bg-white rounded-2xl shadow-2xl ${sizeClasses[size]} w-full ${size === 'fullscreen' ? '' : 'max-h-[90vh]'} overflow-hidden transition-all duration-200 ease-out ${
           isVisible
             ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-95 translate-y-4'
-        }`}
+        } ${panelClassName}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className={`flex items-center justify-between px-6 py-4 border-b border-gray-200 ${headerClassName}`}>
             {title && (
               <h2 id="modal-title" className="text-xl font-semibold text-gray-900">
                 {title}
@@ -130,7 +137,7 @@ export const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Content */}
-        <div className="px-6 py-4 overflow-y-auto max-h-[calc(90vh-8rem)]">
+        <div className={`px-6 py-4 overflow-y-auto ${size === 'fullscreen' ? 'h-[calc(100dvh-73px)] max-h-none sm:h-[calc(94vh-73px)]' : 'max-h-[calc(90vh-8rem)]'} ${bodyClassName}`}>
           {children}
         </div>
       </div>

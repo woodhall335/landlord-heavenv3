@@ -1451,7 +1451,33 @@ async function generateProofOfService(
         evictionCase.landlord_full_name ||
         ''
       ).trim(),
+      signatory_capacity: templateData.solicitor_firm ? 'claimant_legal_representative' : 'claimant',
+      signatory_firm: String(templateData.solicitor_firm || '').trim(),
+      signatory_position: String(templateData.signatory_position || '').trim(),
       recipient_name: String(templateData.tenant_full_name || evictionCase.tenant_full_name || '').trim(),
+      recipient_capacity:
+        ((templateData.notice_service_recipient_capacity as
+          | 'claimant'
+          | 'defendant'
+          | 'solicitor'
+          | 'litigation_friend'
+          | undefined) || 'defendant'),
+      service_location:
+        ((templateData.notice_service_location as
+          | 'usual_residence'
+          | 'last_known_residence'
+          | 'place_of_business'
+          | 'principal_place_of_business'
+          | 'last_known_place_of_business'
+          | 'last_known_principal_place_of_business'
+          | 'principal_office_of_partnership'
+          | 'principal_office_of_corporation'
+          | 'principal_office_of_company'
+          | 'place_of_business_of_partnership_company_corporation'
+          | 'within_jurisdiction_connection'
+          | 'other'
+          | undefined) || 'usual_residence'),
+      service_location_other: String(templateData.notice_service_location_other || '').trim(),
       service_address: String(
         templateData.service_address ||
         templateData.property_address ||
@@ -1498,12 +1524,16 @@ async function generateProofOfService(
         templateData.notice_served_date ||
         templateData.service_date ||
         serviceDetails?.service_date,
+      service_time: templateData.service_time || templateData.notice_service_time,
       service_method: normalizeEnglandProofOfServiceMethod(
         templateData.service_method ||
           templateData.notice_service_method ||
           serviceDetails?.service_method,
       ),
-      recipient_email: String(templateData.tenant_email || '').trim(),
+      dx_number: String(templateData.dx_number || '').trim(),
+      fax_number: String(templateData.fax_number || '').trim(),
+      recipient_email: String(templateData.notice_service_recipient_email || templateData.tenant_email || '').trim(),
+      other_electronic_identification: String(templateData.other_electronic_identification || '').trim(),
       document_served: templateData.notice_name || getNoticeTypeLabel(evictionCase),
     });
 

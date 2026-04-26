@@ -287,7 +287,8 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
 function buildEvictionCaseFromFacts(
   caseId: string,
   facts: CaseFacts,
-  evictionRoute: any
+  evictionRoute: any,
+  wizardFacts: any
 ): { evictionCase: EvictionCase; caseType: EvictionCase['case_type'] } {
   const landlordAddress = buildAddress(
     facts.parties.landlord.address_line1,
@@ -335,7 +336,8 @@ function buildEvictionCaseFromFacts(
     ),
     solicitor_phone: facts.parties.solicitor.phone || undefined,
     solicitor_email: facts.parties.solicitor.email || undefined,
-    dx_number: undefined,
+    dx_number: wizardFacts.dx_number || undefined,
+    fax_number: wizardFacts.fax_number || undefined,
     service_address_line1: facts.service_contact.service_address_line1 || undefined,
     service_address_line2: facts.service_contact.service_address_line2 || undefined,
     service_address_town: facts.service_contact.service_city || undefined,
@@ -367,6 +369,15 @@ function buildEvictionCaseFromFacts(
     deposit_protection_date: facts.tenancy.deposit_protection_date || undefined,
     court_name: facts.court.court_name || undefined,
     court_address: facts.court.court_address || undefined,
+    notice_service_time: wizardFacts.notice_service_time || wizardFacts.service_time || undefined,
+    service_time: wizardFacts.service_time || wizardFacts.notice_service_time || undefined,
+    notice_service_recipient_capacity: wizardFacts.notice_service_recipient_capacity || undefined,
+    notice_service_location: wizardFacts.notice_service_location || undefined,
+    notice_service_location_other: wizardFacts.notice_service_location_other || undefined,
+    notice_service_recipient_email:
+      wizardFacts.notice_service_recipient_email || wizardFacts.tenant_email || undefined,
+    other_electronic_identification: wizardFacts.other_electronic_identification || undefined,
+    signatory_position: wizardFacts.signatory_position || undefined,
   };
 
   return { evictionCase, caseType };
@@ -608,6 +619,7 @@ function buildCaseData(
     service_email: evictionCase.service_email,
     court_name: evictionCase.court_name || wizardFacts.court_name,
     court_address: evictionCase.court_address || wizardFacts.court_address,
+    claim_number: wizardFacts.claim_number || undefined,
     signatory_name: wizardFacts.signatory_name || evictionCase.landlord_full_name,
     signature_date: wizardFacts.signature_date || new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
@@ -805,7 +817,7 @@ export function wizardFactsToEnglandWalesEviction(
 ): { evictionCase: EvictionCase; caseData: CaseData } {
   const facts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
   const evictionRoute = wizardFacts.eviction_route || wizardFacts.notice_type || facts.notice.notice_type;
-  const { evictionCase, caseType } = buildEvictionCaseFromFacts(caseId, facts, evictionRoute);
+  const { evictionCase, caseType } = buildEvictionCaseFromFacts(caseId, facts, evictionRoute, wizardFacts);
   const caseData = buildCaseData(facts, evictionCase, caseType, wizardFacts);
 
   return { evictionCase, caseData };

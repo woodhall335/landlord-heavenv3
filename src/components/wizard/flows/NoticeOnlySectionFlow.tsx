@@ -10,8 +10,9 @@
  * 3. Property - Full address and postcode
  * 4. Tenancy - Start date, rent amount, frequency, due day
  * 5. Notice Details - Grounds and service details
- * 6. Section 8 Arrears - Arrears schedule for Grounds 8, 10, and 11
- * 7. Review - Generate and download notice
+ * 6. Section 8 Compliance - Deposit, landlord duties, and wider compliance record
+ * 7. Section 8 Arrears - Arrears schedule for Grounds 8, 10, and 11
+ * 8. Review - Generate and download notice
  *
  * Flow Structure (Wales):
  * 1. Case Basics - Wales route selection
@@ -47,10 +48,12 @@ import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/ri';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { DocumentProofShowcase } from '@/components/preview';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
+import { buildEnglandPackProofEntries } from '../sections/eviction/buildEnglandPackProofEntries';
 
 // Reuse section components from eviction flow
 import { CaseBasicsSection } from '../sections/eviction/CaseBasicsSection';
@@ -58,6 +61,7 @@ import { PartiesSection } from '../sections/eviction/PartiesSection';
 import { PropertySection } from '../sections/eviction/PropertySection';
 import { TenancySection } from '../sections/eviction/TenancySection';
 import { Section21ComplianceSection } from '../sections/eviction/Section21ComplianceSection';
+import { Section8ComplianceSection } from '../sections/eviction/Section8ComplianceSection';
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { NoticeSection } from '../sections/eviction/NoticeSection';
 
@@ -177,6 +181,21 @@ function getNoticeOnlyShellTitle(jurisdiction: 'england' | 'wales' | 'scotland')
   if (jurisdiction === 'scotland') return 'Scotland Notice to Leave';
   if (jurisdiction === 'wales') return 'Wales Eviction Notice';
   return 'Eviction Notice Generator';
+}
+
+function hasCompleteCollectibleN215Facts(facts: WizardFacts): boolean {
+  const serviceMethod = String(facts.notice_service_method || '').trim();
+  const serviceLocation = String(facts.notice_service_location || 'usual_residence').trim();
+
+  if (serviceMethod === 'email' && !String(facts.notice_service_recipient_email || facts.tenant_email || '').trim()) {
+    return false;
+  }
+
+  if (serviceLocation === 'other' && !String(facts.notice_service_location_other || '').trim()) {
+    return false;
+  }
+
+  return true;
 }
 
 function getNoticeOnlyReviewType(
@@ -413,16 +432,103 @@ const SECTIONS: WizardSection[] = [
 
       // England: Section 21 - just need to confirm service method
       if (route === 'section_21') {
-        return Boolean(facts.notice_service_method);
+        return Boolean(facts.notice_service_method) && hasCompleteCollectibleN215Facts(facts);
       }
 
       // England: Section 8 - need grounds selected + service method
       if (route === 'section_8') {
         const selectedGrounds = (facts.section8_grounds as string[]) || [];
-        return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+        return selectedGrounds.length > 0 && Boolean(facts.notice_service_method) && hasCompleteCollectibleN215Facts(facts);
       }
 
       return false;
+    },
+  },
+  {
+    id: 'section8_compliance',
+    label: 'Compliance Record',
+    description: 'Deposit, landlord duties, and wider tenancy compliance',
+    routes: ['section_8'] as EvictionRoute[],
+    isComplete: (facts) => {
+      const depositTaken = facts.deposit_taken === true;
+      const depositQuestionsComplete =
+        facts.deposit_taken !== undefined &&
+        (!depositTaken ||
+          (facts.deposit_protected !== undefined &&
+            facts.deposit_protected_within_30_days !== undefined &&
+            facts.prescribed_info_served !== undefined &&
+            facts.deposit_returned !== undefined));
+
+      const epcProvided = facts.epc_served ?? facts.epc_provided;
+      const howToRentProvided = facts.how_to_rent_served ?? facts.how_to_rent_provided;
+      const hasGasAppliances = facts.has_gas_appliances;
+      const gasSafetyProvided = facts.gas_safety_cert_served ?? facts.gas_safety_cert_provided;
+
+      const propertyComplianceQuestionsComplete =
+        epcProvided !== undefined &&
+        howToRentProvided !== undefined &&
+        hasGasAppliances !== undefined &&
+        (hasGasAppliances !== true || gasSafetyProvided !== undefined);
+
+      return (
+        depositQuestionsComplete &&
+        propertyComplianceQuestionsComplete &&
+        facts.section_16e_duties_checked !== undefined &&
+        facts.breathing_space_checked !== undefined &&
+        (facts.breathing_space_checked !== true || facts.tenant_in_breathing_space !== undefined)
+      );
+    },
+    hasBlockers: (facts) => {
+      const blockers: string[] = [];
+      const depositTaken = facts.deposit_taken === true;
+      const depositResolved = facts.deposit_returned === true;
+
+      if (facts.section_16e_duties_checked === false) {
+        blockers.push('You must confirm the section 16E landlord duties have been checked before relying on this Form 3A route.');
+      }
+
+      if (facts.breathing_space_checked === false) {
+        blockers.push('You must check whether the tenant is in a Debt Respite Scheme breathing space before relying on this notice route.');
+      }
+
+      if (facts.tenant_in_breathing_space === true) {
+        blockers.push('The tenant is marked as being in an active breathing space, so the notice route should not proceed yet.');
+      }
+
+      if (depositTaken && !depositResolved && facts.deposit_protected === false) {
+        blockers.push('Deposit protection still needs to be cured or the deposit returned before the possession notice is relied on.');
+      }
+
+      if (depositTaken && !depositResolved && facts.deposit_protected_within_30_days === false) {
+        blockers.push('Late deposit protection still needs to be resolved or the deposit returned before relying on these grounds.');
+      }
+
+      if (depositTaken && !depositResolved && facts.prescribed_info_served === false) {
+        blockers.push('Prescribed information still needs to be cured or the deposit returned before relying on these grounds.');
+      }
+
+      return blockers;
+    },
+    hasWarnings: (facts) => {
+      const warnings: string[] = [];
+      const epcProvided = facts.epc_served ?? facts.epc_provided;
+      const howToRentProvided = facts.how_to_rent_served ?? facts.how_to_rent_provided;
+      const hasGasAppliances = facts.has_gas_appliances;
+      const gasSafetyProvided = facts.gas_safety_cert_served ?? facts.gas_safety_cert_provided;
+
+      if (epcProvided === false) {
+        warnings.push('EPC is currently marked as not provided. That does not automatically block a Form 3A route, but it weakens the wider compliance story if challenged.');
+      }
+
+      if (howToRentProvided === false) {
+        warnings.push("The file currently records that the How to Rent guide was not given. That should be treated as a compliance risk if the tenant raises it.");
+      }
+
+      if (hasGasAppliances === true && gasSafetyProvided === false) {
+        warnings.push('The property has gas appliances but the gas safety certificate is currently marked as not provided. That should be corrected or explained before the case reaches court.');
+      }
+
+      return warnings;
     },
   },
   {
@@ -1157,6 +1263,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         return <WalesComplianceSection {...englandWalesProps} onSetCurrentQuestionId={setCurrentQuestionId} />;
       case 'section21_compliance':
         return <Section21ComplianceSection {...englandWalesProps} />;
+      case 'section8_compliance':
+        return <Section8ComplianceSection facts={facts} onUpdate={handleUpdate} />;
       case 'section8_arrears':
         return <Section8ArrearsSection {...englandWalesProps} />;
       case 'notice':
@@ -1170,6 +1278,18 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         return <div>Unknown section: {currentSection.id}</div>;
     }
   };
+
+  const englandNoticeOnlyProofEntries = useMemo(() => {
+    if (jurisdiction !== 'england' || facts.eviction_route !== 'section_8') {
+      return [];
+    }
+
+    return buildEnglandPackProofEntries({
+      product: 'notice_only',
+      caseId,
+      facts,
+    });
+  }, [caseId, facts, jurisdiction]);
 
   // Render review section
   const renderReviewSection = () => {
@@ -1261,7 +1381,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             {jurisdiction === 'england' && (
               <p>
                 <strong>Pack includes:</strong> Form 3A notice, service instructions, service and validity
-                checklist, pre-service compliance declaration, and the rent schedule / arrears statement.
+                checklist, pre-service compliance declaration, Certificate of Service (Form N215), and the
+                rent schedule / arrears statement where arrears are part of the case.
               </p>
             )}
             {/* England Section 8 grounds */}
@@ -1286,6 +1407,15 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             )}
           </div>
         </div>
+
+        {englandNoticeOnlyProofEntries.length > 0 ? (
+          <DocumentProofShowcase
+            compact
+            title="Actual draft checkpoints from this case"
+            description="Open each completed notice-stage document from your current answers, including the official notice, the service paperwork, and every support document in the pack."
+            entries={englandNoticeOnlyProofEntries}
+          />
+        ) : null}
 
         {upgradePrompt ? (
           <div className="rounded-[1.4rem] border border-[#e4d7ff] bg-[linear-gradient(180deg,#fcfaff_0%,#f5eeff_100%)] px-4 py-4 shadow-sm">

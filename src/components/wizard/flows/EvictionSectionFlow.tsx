@@ -11,7 +11,7 @@
  * 4. Tenancy - Start date, rent amount, frequency, due day
  * 5. Notice - Reuses notice-only schema, served date, service method, expiry
  * 6. Section 8 Arrears - arrears-led and grounds support using ArrearsScheduleStep
- * 7. Evidence - Upload categorized evidence
+ * 7. Evidence - Court-file confirmations, chronology, and landlord-held records
  * 8. Court & Signing - Court name, signatory details
  * 9. Review - Blockers, warnings, generated documents
  *
@@ -22,7 +22,7 @@
  * 4. Tenancy - Start date, rent amount, frequency (6-month rule validation)
  * 5. Grounds - Select eviction ground (ALL discretionary in Scotland)
  * 6. Notice - Notice to Leave details (6-month rule enforced)
- * 7. Evidence - Upload categorized evidence
+ * 7. Evidence - Tribunal-file confirmations and landlord-held records
  * 8. Tribunal - First-tier Tribunal info and signatory
  * 9. Review - Blockers, warnings, generated documents
  *
@@ -98,6 +98,21 @@ interface WizardSection {
   hasWarnings?: (facts: WizardFacts, jurisdiction?: string) => string[];
 }
 
+function hasCompleteCollectibleN215Facts(facts: WizardFacts): boolean {
+  const serviceMethod = String(facts.notice_service_method || '').trim();
+  const serviceLocation = String(facts.notice_service_location || 'usual_residence').trim();
+
+  if (serviceMethod === 'email' && !String(facts.notice_service_recipient_email || facts.tenant_email || '').trim()) {
+    return false;
+  }
+
+  if (serviceLocation === 'other' && !String(facts.notice_service_location_other || '').trim()) {
+    return false;
+  }
+
+  return true;
+}
+
 // Define all sections with their visibility rules
 // These sections apply to England and Wales
 // Valid routes by jurisdiction
@@ -170,6 +185,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
       return (
         Boolean(facts.notice_served_date) &&
         Boolean(facts.notice_service_method) &&
+        hasCompleteCollectibleN215Facts(facts) &&
         (!requiresPriorNoticeConfirmation || facts.ground_prerequisite_notice_served !== undefined)
       );
     },
@@ -240,6 +256,10 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
       });
 
       const depositTaken = facts.deposit_taken === true;
+      const epcProvided = facts.epc_served ?? facts.epc_provided;
+      const howToRentProvided = facts.how_to_rent_served ?? facts.how_to_rent_provided;
+      const hasGasAppliances = facts.has_gas_appliances;
+      const gasSafetyProvided = facts.gas_safety_cert_served ?? facts.gas_safety_cert_provided;
       const depositQuestionsComplete =
         facts.deposit_taken !== undefined &&
         (!depositTaken ||
@@ -247,10 +267,14 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
             facts.deposit_protected_within_30_days !== undefined &&
             facts.prescribed_info_served !== undefined &&
             facts.deposit_returned !== undefined));
+      const propertyComplianceQuestionsComplete =
+        epcProvided !== undefined &&
+        howToRentProvided !== undefined &&
+        hasGasAppliances !== undefined &&
+        (hasGasAppliances !== true || gasSafetyProvided !== undefined);
 
       return (
         Boolean(facts.evidence?.notice_service_description?.trim()) &&
-        Boolean(facts.communication_timeline?.log?.trim()) &&
         facts.communication_timeline?.total_attempts !== undefined &&
         facts.communication_timeline?.total_attempts !== null &&
         Boolean(facts.communication_timeline?.tenant_responsiveness) &&
@@ -260,7 +284,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
         (facts.breathing_space_checked !== true || facts.tenant_in_breathing_space !== undefined) &&
         facts.evidence_bundle_ready !== undefined &&
         (!requiresPriorNoticeConfirmation || facts.ground_prerequisite_notice_served !== undefined) &&
-        depositQuestionsComplete
+        depositQuestionsComplete &&
+        propertyComplianceQuestionsComplete
       );
     },
     hasBlockers: (facts) => {
@@ -298,6 +323,32 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
       }
 
       return blockers;
+    },
+    hasWarnings: (facts) => {
+      const warnings: string[] = [];
+
+      const epcProvided = facts.epc_served ?? facts.epc_provided;
+      const howToRentProvided = facts.how_to_rent_served ?? facts.how_to_rent_provided;
+      const hasGasAppliances = facts.has_gas_appliances;
+      const gasSafetyProvided = facts.gas_safety_cert_served ?? facts.gas_safety_cert_provided;
+
+      if (epcProvided === false) {
+        warnings.push('EPC is currently marked as not provided. That does not automatically block a Form 3A route, but it weakens the wider compliance story if challenged.');
+      }
+
+      if (howToRentProvided === false) {
+        warnings.push("The file currently records that the How to Rent guide was not given. That should be treated as a compliance risk and explained if the tenant raises it.");
+      }
+
+      if (hasGasAppliances === true && gasSafetyProvided === false) {
+        warnings.push('The property has gas appliances but the gas safety certificate is currently marked as not provided. That should be corrected or explained before the case reaches court.');
+      }
+
+      if (!String(facts.communication_timeline?.log || '').trim()) {
+        warnings.push('No extra chronology notes have been added. The generated chronology will still be used, but add incident detail here if the case has unusual facts or a non-arrears breach story.');
+      }
+
+      return warnings;
     },
   },
   {

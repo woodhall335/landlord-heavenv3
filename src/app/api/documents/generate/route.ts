@@ -1677,7 +1677,33 @@ export async function POST(request: Request) {
                     claimant_name: wizardFacts.landlord_full_name,
                     defendant_name: wizardFacts.tenant_full_name,
                     signatory_name: wizardFacts.landlord_full_name,
+                    signatory_capacity: wizardFacts.solicitor_firm ? 'claimant_legal_representative' : 'claimant',
+                    signatory_firm: wizardFacts.solicitor_firm,
+                    signatory_position: (wizardFacts as any).signatory_position,
                     recipient_name: wizardFacts.tenant_full_name,
+                  recipient_capacity:
+                    ((wizardFacts as any).notice_service_recipient_capacity as
+                      | 'claimant'
+                      | 'defendant'
+                      | 'solicitor'
+                      | 'litigation_friend'
+                      | undefined) || 'defendant',
+                  service_location:
+                    ((wizardFacts as any).notice_service_location as
+                      | 'usual_residence'
+                      | 'last_known_residence'
+                      | 'place_of_business'
+                      | 'principal_place_of_business'
+                      | 'last_known_place_of_business'
+                      | 'last_known_principal_place_of_business'
+                      | 'principal_office_of_partnership'
+                      | 'principal_office_of_corporation'
+                      | 'principal_office_of_company'
+                      | 'place_of_business_of_partnership_company_corporation'
+                      | 'within_jurisdiction_connection'
+                      | 'other'
+                      | undefined) || 'usual_residence',
+                  service_location_other: (wizardFacts as any).notice_service_location_other,
                     service_address: proofPropertyAddress,
                     service_address_line1: wizardFacts.property_address_line1,
                     service_address_line2: wizardFacts.property_address_line2,
@@ -1694,8 +1720,13 @@ export async function POST(request: Request) {
                       wizardFacts.notice_service_date ||
                       wizardFacts.notice_served_date ||
                       wizardFacts.notice_date,
+                    service_time: (wizardFacts as any).service_time || (wizardFacts as any).notice_service_time,
                     service_method: normalizeEnglandProofOfServiceMethod(normalizedServiceMethod),
-                    recipient_email: wizardFacts.tenant_email,
+                    dx_number: wizardFacts.dx_number,
+                    fax_number: (wizardFacts as any).fax_number,
+                  recipient_email:
+                    (wizardFacts as any).notice_service_recipient_email || wizardFacts.tenant_email,
+                    other_electronic_identification: (wizardFacts as any).other_electronic_identification,
                     document_served:
                       wizardFacts.eviction_route === 'section_21'
                         ? 'Section 21 notice (Form 6A)'

@@ -68,6 +68,10 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
 }) => {
   const evidence = facts.evidence || {};
   const communicationTimeline = facts.communication_timeline || {};
+  const epcProvided = facts.epc_served ?? facts.epc_provided;
+  const howToRentProvided = facts.how_to_rent_served ?? facts.how_to_rent_provided;
+  const hasGasAppliances = facts.has_gas_appliances;
+  const gasSafetyProvided = facts.gas_safety_cert_served ?? facts.gas_safety_cert_provided;
   const generatedChronology = useMemo(
     () => buildEnglandEvictionChronology(facts as Record<string, any>),
     [facts],
@@ -132,6 +136,11 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
         facts.deposit_protected_within_30_days !== undefined &&
         facts.prescribed_info_served !== undefined &&
         facts.deposit_returned !== undefined));
+  const propertyComplianceQuestionsComplete =
+    epcProvided !== undefined &&
+    howToRentProvided !== undefined &&
+    hasGasAppliances !== undefined &&
+    (hasGasAppliances !== true || gasSafetyProvided !== undefined);
   const complianceQuestionsComplete =
     facts.section_16e_duties_checked !== undefined &&
     facts.breathing_space_checked !== undefined &&
@@ -234,6 +243,58 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
               ))}
             </select>
           </label>
+        </div>
+      </section>
+
+      <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
+        <div className="flex items-start gap-3">
+          <RiInformationLine className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#7C3AED]" />
+          <div>
+            <h4 className="text-base font-semibold text-[#20103f]">Property compliance record</h4>
+            <p className="mt-1 text-sm leading-6 text-[#62597c]">
+              These questions capture the wider tenancy-compliance position for the court file. For a Form 3A route they are not all statutory blockers in the same way they are for Section 21, but they still matter for risk, court credibility, and the evidence story.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-3">
+          <BooleanQuestion
+            label="Was an EPC given for the tenancy?"
+            help="Record whether the landlord can confirm an Energy Performance Certificate was provided for the let."
+            value={epcProvided}
+            onChange={(value) => onUpdate({ epc_served: value, epc_provided: value })}
+          />
+
+          <BooleanQuestion
+            label="Was the How to Rent guide given?"
+            help="Record whether the tenant received the How to Rent guide. This is especially important context if the wider compliance history may be questioned later."
+            value={howToRentProvided}
+            onChange={(value) => onUpdate({ how_to_rent_served: value, how_to_rent_provided: value })}
+          />
+
+          <BooleanQuestion
+            label="Does the property have gas appliances that trigger gas safety requirements?"
+            help="Answer this first so the pack knows whether a gas-safety confirmation is relevant to the file."
+            value={hasGasAppliances}
+            onChange={(value) =>
+              onUpdate(
+                value
+                  ? { has_gas_appliances: true }
+                  : { has_gas_appliances: false, gas_safety_cert_served: undefined, gas_safety_cert_provided: undefined }
+              )
+            }
+            yesLabel="Yes, has gas"
+            noLabel="No gas appliances"
+          />
+
+          {hasGasAppliances === true && (
+            <BooleanQuestion
+              label="Was a valid gas safety certificate provided?"
+              help="Record whether the landlord can confirm a valid gas safety certificate was given where the property has gas appliances."
+              value={gasSafetyProvided}
+              onChange={(value) => onUpdate({ gas_safety_cert_served: value, gas_safety_cert_provided: value })}
+            />
+          )}
         </div>
       </section>
 
@@ -393,7 +454,11 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
 
       <section
         className={`rounded-[1.6rem] border px-5 py-5 shadow-sm ${
-          coreQuestionsComplete && facts.evidence_reviewed && depositQuestionsComplete && complianceQuestionsComplete
+          coreQuestionsComplete &&
+          facts.evidence_reviewed &&
+          depositQuestionsComplete &&
+          propertyComplianceQuestionsComplete &&
+          complianceQuestionsComplete
             ? 'border-emerald-200 bg-emerald-50'
             : 'border-amber-200 bg-amber-50'
         }`}
@@ -413,9 +478,9 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
               needs EPCs, gas safety records, tenancy agreements, or other external records, the generated checklist and
               filing guidance will prompt you to supply those separately.
             </p>
-            {(!depositQuestionsComplete || !complianceQuestionsComplete) && (
+            {(!depositQuestionsComplete || !propertyComplianceQuestionsComplete || !complianceQuestionsComplete) && (
               <p className="mt-3 text-sm leading-6 text-[#8a5a00]">
-                Finish the deposit and compliance confirmations above so the pack can show whether the claim is genuinely court-ready.
+                Finish the deposit, property-compliance, and court-readiness confirmations above so the pack can show whether the claim is genuinely court-ready.
               </p>
             )}
           </div>

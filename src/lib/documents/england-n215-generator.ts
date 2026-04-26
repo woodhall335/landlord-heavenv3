@@ -18,10 +18,19 @@ export interface EnglandN215Data {
   claimant_name?: string;
   defendant_name?: string;
   signatory_name?: string;
+  signatory_capacity?:
+    | 'claimant'
+    | 'defendant'
+    | 'litigation_friend'
+    | 'claimant_legal_representative'
+    | 'defendant_legal_representative';
+  signatory_firm?: string;
+  signatory_position?: string;
   signature_date?: string;
   document_served?: string;
   service_date?: string;
   service_method?: EnglandProofOfServiceMethod;
+  service_time?: string;
   service_address?: string;
   service_address_line1?: string;
   service_address_line2?: string;
@@ -29,7 +38,25 @@ export interface EnglandN215Data {
   service_address_county?: string;
   service_address_postcode?: string;
   recipient_name?: string;
+  recipient_capacity?: 'claimant' | 'defendant' | 'solicitor' | 'litigation_friend';
+  service_location?:
+    | 'usual_residence'
+    | 'last_known_residence'
+    | 'place_of_business'
+    | 'principal_place_of_business'
+    | 'last_known_place_of_business'
+    | 'last_known_principal_place_of_business'
+    | 'principal_office_of_partnership'
+    | 'principal_office_of_corporation'
+    | 'principal_office_of_company'
+    | 'place_of_business_of_partnership_company_corporation'
+    | 'within_jurisdiction_connection'
+    | 'other';
+  service_location_other?: string;
+  dx_number?: string;
+  fax_number?: string;
   recipient_email?: string;
+  other_electronic_identification?: string;
 }
 
 export function normalizeEnglandProofOfServiceMethod(value: unknown): EnglandProofOfServiceMethod | undefined {
@@ -165,6 +192,10 @@ function checkBox(form: PDFForm, fieldName: string): void {
   }
 }
 
+function normalizeServiceTime(value: unknown): string {
+  return sanitizeFormText(value);
+}
+
 function mapServiceMethodToN215(form: PDFForm, method: EnglandProofOfServiceMethod | undefined, data: EnglandN215Data): void {
   if (!method) return;
 
@@ -178,15 +209,102 @@ function mapServiceMethodToN215(form: PDFForm, method: EnglandProofOfServiceMeth
       break;
     case 'hand_delivery':
       checkBox(form, 'Check Box5');
+      setTextField(form, 'Text6', data.recipient_name || data.defendant_name);
+      setTextField(form, 'Text7', normalizeServiceTime(data.service_time));
       break;
     case 'email':
       checkBox(form, 'Check Box13');
       setTextField(form, 'Text14', 'Email');
       setTextField(form, 'Text19', data.recipient_email);
+      setTextField(form, 'Text15', normalizeServiceTime(data.service_time));
       break;
     case 'other':
       checkBox(form, 'Check Box8');
       setTextField(form, 'Text9', 'Other permitted service method');
+      break;
+    default:
+      break;
+  }
+}
+
+function fillRecipientCapacity(form: PDFForm, capacity: EnglandN215Data['recipient_capacity']): void {
+  switch (capacity) {
+    case 'claimant':
+      checkBox(form, 'Check Box21');
+      break;
+    case 'defendant':
+      checkBox(form, 'Check Box22');
+      break;
+    case 'solicitor':
+      checkBox(form, 'Check Box23');
+      break;
+    case 'litigation_friend':
+      checkBox(form, 'Check Box24');
+      break;
+    default:
+      break;
+  }
+}
+
+function fillServiceLocation(form: PDFForm, location: EnglandN215Data['service_location'], otherText?: string): void {
+  switch (location) {
+    case 'usual_residence':
+      checkBox(form, 'Check Box25');
+      break;
+    case 'last_known_residence':
+      checkBox(form, 'Check Box26');
+      break;
+    case 'place_of_business':
+      checkBox(form, 'Check Box27');
+      break;
+    case 'principal_place_of_business':
+      checkBox(form, 'Check Box28');
+      break;
+    case 'last_known_place_of_business':
+      checkBox(form, 'Check Box29');
+      break;
+    case 'last_known_principal_place_of_business':
+      checkBox(form, 'Check Box30');
+      break;
+    case 'principal_office_of_partnership':
+      checkBox(form, 'Check Box31');
+      break;
+    case 'principal_office_of_corporation':
+      checkBox(form, 'Check Box32');
+      break;
+    case 'principal_office_of_company':
+      checkBox(form, 'Check Box33');
+      break;
+    case 'place_of_business_of_partnership_company_corporation':
+      checkBox(form, 'Check Box34');
+      break;
+    case 'within_jurisdiction_connection':
+      checkBox(form, 'Check Box35');
+      break;
+    case 'other':
+      setTextField(form, 'Text36', otherText);
+      break;
+    default:
+      break;
+  }
+}
+
+function fillSignatoryCapacity(form: PDFForm, capacity: EnglandN215Data['signatory_capacity']): void {
+  switch (capacity) {
+    case 'claimant':
+      checkBox(form, 'Check Box40');
+      break;
+    case 'defendant':
+      checkBox(form, 'Check Box41');
+      break;
+    case 'litigation_friend':
+      checkBox(form, 'Check Box42');
+      break;
+    case 'claimant_legal_representative':
+      checkBox(form, 'Check Box43');
+      break;
+    case 'defendant_legal_representative':
+      checkBox(form, 'Check Box44');
       break;
     default:
       break;
@@ -198,6 +316,10 @@ function fillSignatureBlock(form: PDFForm, data: EnglandN215Data): void {
   const signatureDate = formatDateForN215(data.signature_date || data.service_date);
 
   setTextField(form, 'Text Field 91', signatoryName);
+  setTextField(form, 'Text Field 87', signatoryName);
+  setTextField(form, 'Text Field 86', data.signatory_firm);
+  setTextField(form, 'Text Field 85', data.signatory_position);
+  fillSignatoryCapacity(form, data.signatory_capacity || 'claimant');
 
   if (signatureDate) {
     const [day = '', month = '', year = ''] = signatureDate.split('/');
@@ -228,12 +350,18 @@ export async function generateEnglandN215PDF(data: EnglandN215Data = {}): Promis
   setTextField(form, 'Text2', recipientName);
 
   mapServiceMethodToN215(form, normalizeEnglandProofOfServiceMethod(data.service_method), data);
+  fillRecipientCapacity(form, data.recipient_capacity || 'defendant');
+  fillServiceLocation(form, data.service_location || 'usual_residence', data.service_location_other);
 
   setTextField(form, 'Text Field 102', address.line1);
   setTextField(form, 'Text Field 101', address.line2);
   setTextField(form, 'Text Field 100', address.town);
   setTextField(form, 'Text Field 99', address.county);
   setTextField(form, 'Text16', formatPostcodeForN215(address.postcode));
+  setTextField(form, 'Text17', data.dx_number);
+  setTextField(form, 'Text18', data.fax_number);
+  setTextField(form, 'Text19', data.recipient_email);
+  setTextField(form, 'Text20', data.other_electronic_identification);
   fillSignatureBlock(form, data);
 
   form.updateFieldAppearances(helvetica);
