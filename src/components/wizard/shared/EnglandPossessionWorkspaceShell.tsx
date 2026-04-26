@@ -5,7 +5,6 @@ import { WizardMainCardV3 } from './WizardMainCardV3';
 import { GuidancePanelV3 } from './GuidancePanelV3';
 import { WizardFooterNavV3 } from './WizardFooterNavV3';
 import { WizardTopBarV3 } from './WizardTopBarV3';
-import { WizardPackSummaryRail } from './WizardPackSummaryRail';
 import {
   getStepMetadata,
   resolveStepIconPath,
@@ -155,7 +154,6 @@ export function EnglandPossessionWorkspaceShell({
   const currentScreenMeta = getEnglandPossessionScreenMeta(product, currentStepId);
   const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
   const activeStepIndex = currentTabIndex >= 0 ? currentTabIndex : 0;
-  const currentTab = tabs[activeStepIndex];
   const issueCount = tabs.filter((tab) => tab.hasIssue).length;
   const completionLabel = `${completedCount} of ${totalCount} sections complete`;
   const percentageLabel = `${Math.round(progress)}% complete`;
@@ -204,16 +202,11 @@ export function EnglandPossessionWorkspaceShell({
             </span>
           </div>
           <p className="mt-2 text-xs leading-5 text-[#5e5872]">{completionLabel}</p>
-          {currentTab ? (
+          {issueCount > 0 ? (
             <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full border border-[#d9cafe] bg-[#faf7ff] px-3 py-1 text-[11px] font-semibold text-[#5b36b3] shadow-sm">
-                Current: {currentTab.label}
+              <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-semibold text-amber-900 shadow-sm">
+                {issueCount} need attention
               </span>
-              {issueCount > 0 ? (
-                <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-semibold text-amber-900 shadow-sm">
-                  {issueCount} need attention
-                </span>
-              ) : null}
             </div>
           ) : null}
           <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-[#ede4ff]">
@@ -235,14 +228,6 @@ export function EnglandPossessionWorkspaceShell({
             <p className="text-xs font-medium text-[#4f4768]">{resolvedSaveLabel}</p>
           </div>
         </section>
-
-        <WizardPackSummaryRail
-          product={product}
-          tabs={tabs}
-          currentStepId={currentStepId}
-          currentStepLabel={sectionTitle}
-          mobile
-        />
 
         {currentScreenMeta ? (
           <StepFocusPanel
@@ -330,16 +315,11 @@ export function EnglandPossessionWorkspaceShell({
                   </span>
                 </div>
                 <p className="mt-3 text-sm leading-6 text-[#5e5872]">{completionLabel}</p>
-                {currentTab ? (
+                {issueCount > 0 ? (
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="rounded-full border border-[#d9cafe] bg-[#faf7ff] px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm">
-                      Current: {currentTab.label}
+                    <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-900 shadow-sm">
+                      {issueCount} need attention
                     </span>
-                    {issueCount > 0 ? (
-                      <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-900 shadow-sm">
-                        {issueCount} need attention
-                      </span>
-                    ) : null}
                   </div>
                 ) : null}
                 <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[#ede4ff]">
@@ -365,20 +345,10 @@ export function EnglandPossessionWorkspaceShell({
                     Post-May 2026 route
                   </span>
                   <span className="rounded-full border border-[#e5dcff] bg-white px-3 py-1.5 shadow-sm">
-                    Preview before payment
-                  </span>
-                  <span className="rounded-full border border-[#e5dcff] bg-white px-3 py-1.5 shadow-sm">
                     Save answers as you go
                   </span>
                 </div>
               </section>
-
-              <WizardPackSummaryRail
-                product={product}
-                tabs={tabs}
-                currentStepId={currentStepId}
-                currentStepLabel={sectionTitle}
-              />
 
               {resolvedGuidancePanel}
             </div>

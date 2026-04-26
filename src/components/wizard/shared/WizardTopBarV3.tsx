@@ -23,7 +23,6 @@ export function WizardTopBarV3({ tabs, getStepMetadataForId }: WizardTopBarV3Pro
     tabs.findIndex((tab) => tab.isCurrent),
     0
   );
-  const currentTab = tabs[currentStepIndex];
   const completedCount = tabs.filter((tab) => tab.isComplete).length;
   const issueCount = tabs.filter((tab) => tab.hasIssue).length;
 
@@ -58,10 +57,7 @@ export function WizardTopBarV3({ tabs, getStepMetadataForId }: WizardTopBarV3Pro
               <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-900">
                 {issueCount} warning{issueCount === 1 ? '' : 's'}
               </span>
-            ) : null}
-          </div>
-          <div className="mb-2 hidden min-w-0 xl:block">
-            <p className="truncate text-sm font-semibold text-[#231246]">{currentTab?.label}</p>
+              ) : null}
           </div>
           <WizardStepperV3
             tabs={tabs}

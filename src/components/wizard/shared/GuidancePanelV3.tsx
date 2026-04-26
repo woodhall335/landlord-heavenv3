@@ -14,18 +14,8 @@ interface GuidancePanelV3Props {
 export function GuidancePanelV3({ metadata, askHeaven, compact = false }: GuidancePanelV3Props) {
   return (
     <div className={compact ? 'space-y-3' : 'space-y-4'}>
-      <div>
-        <InlineSectionHeaderV3 title="Ask Heaven" iconSlug="ask-heaven" titleClassName="text-[#241247]" />
-        <AskHeavenCardV3 compact={compact}>{askHeaven}</AskHeavenCardV3>
-      </div>
-      <div>
-        <InlineSectionHeaderV3
-          title={metadata?.checklistTitle ?? "What you'll need"}
-          iconSlug="what-you-need"
-          titleClassName="text-[#241247]"
-        />
-        <NeedsChecklistV3 title={metadata?.checklistTitle} items={metadata?.checklistItems} compact={compact} />
-      </div>
+      <AskHeavenCardV3 compact={compact}>{askHeaven}</AskHeavenCardV3>
+      <NeedsChecklistV3 title={metadata?.checklistTitle} items={metadata?.checklistItems} compact={compact} />
       <div>
         <InlineSectionHeaderV3
           title="Why this matters"
