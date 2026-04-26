@@ -11,6 +11,8 @@ export interface DocumentProofEntry {
   thumbnailUrl: string;
   badge?: string;
   previewUrl?: string;
+  groupLabel?: string;
+  groupOrder?: number;
 }
 
 interface DocumentProofShowcaseProps {
@@ -26,24 +28,48 @@ export function DocumentProofShowcase({
   entries,
   compact = false,
 }: DocumentProofShowcaseProps) {
-  const [selectedId, setSelectedId] = useState(entries[0]?.id ?? '');
+  const orderedEntries = useMemo(
+    () =>
+      [...entries].sort((left, right) => {
+        const leftOrder = left.groupOrder ?? 999;
+        const rightOrder = right.groupOrder ?? 999;
+        return leftOrder - rightOrder;
+      }),
+    [entries]
+  );
+  const [selectedId, setSelectedId] = useState(orderedEntries[0]?.id ?? '');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const resolvedSelectedId = useMemo(
-    () => (entries.some((entry) => entry.id === selectedId) ? selectedId : entries[0]?.id ?? ''),
-    [entries, selectedId]
+    () => (orderedEntries.some((entry) => entry.id === selectedId) ? selectedId : orderedEntries[0]?.id ?? ''),
+    [orderedEntries, selectedId]
   );
 
   const selectedEntry = useMemo(
-    () => entries.find((entry) => entry.id === resolvedSelectedId) ?? entries[0] ?? null,
-    [entries, resolvedSelectedId]
+    () => orderedEntries.find((entry) => entry.id === resolvedSelectedId) ?? orderedEntries[0] ?? null,
+    [orderedEntries, resolvedSelectedId]
   );
   const selectedIndex = useMemo(
-    () => entries.findIndex((entry) => entry.id === selectedEntry?.id),
-    [entries, selectedEntry]
+    () => orderedEntries.findIndex((entry) => entry.id === selectedEntry?.id),
+    [orderedEntries, selectedEntry]
   );
+  const groupedModalEntries = useMemo(() => {
+    const groups = new Map<string, DocumentProofEntry[]>();
+
+    for (const entry of orderedEntries) {
+      const label = entry.groupLabel || 'Pack documents';
+      const bucket = groups.get(label) || [];
+      bucket.push(entry);
+      groups.set(label, bucket);
+    }
+
+    return Array.from(groups.entries()).map(([label, groupEntries]) => ({
+      label,
+      entries: groupEntries,
+    }));
+  }, [orderedEntries]);
   const hasPrevious = selectedIndex > 0;
-  const hasNext = selectedIndex >= 0 && selectedIndex < entries.length - 1;
+  const hasNext = selectedIndex >= 0 && selectedIndex < orderedEntries.length - 1;
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -52,17 +78,17 @@ export function DocumentProofShowcase({
 
     const handleKeyNavigation = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft' && hasPrevious) {
-        setSelectedId(entries[selectedIndex - 1]?.id ?? selectedId);
+        setSelectedId(orderedEntries[selectedIndex - 1]?.id ?? selectedId);
       }
 
       if (event.key === 'ArrowRight' && hasNext) {
-        setSelectedId(entries[selectedIndex + 1]?.id ?? selectedId);
+        setSelectedId(orderedEntries[selectedIndex + 1]?.id ?? selectedId);
       }
     };
 
     window.addEventListener('keydown', handleKeyNavigation);
     return () => window.removeEventListener('keydown', handleKeyNavigation);
-  }, [entries, hasNext, hasPrevious, isModalOpen, selectedId, selectedIndex]);
+  }, [hasNext, hasPrevious, isModalOpen, orderedEntries, selectedId, selectedIndex]);
 
   if (!selectedEntry) {
     return null;
@@ -70,12 +96,12 @@ export function DocumentProofShowcase({
 
   const goToPreviousEntry = () => {
     if (!hasPrevious) return;
-    setSelectedId(entries[selectedIndex - 1]?.id ?? resolvedSelectedId);
+    setSelectedId(orderedEntries[selectedIndex - 1]?.id ?? resolvedSelectedId);
   };
 
   const goToNextEntry = () => {
     if (!hasNext) return;
-    setSelectedId(entries[selectedIndex + 1]?.id ?? resolvedSelectedId);
+    setSelectedId(orderedEntries[selectedIndex + 1]?.id ?? resolvedSelectedId);
   };
 
   return (
@@ -113,7 +139,7 @@ export function DocumentProofShowcase({
           }`}
         >
           <div className={compact ? 'grid gap-3 sm:grid-cols-2 xl:grid-cols-1' : 'space-y-3'}>
-            {entries.map((entry) => {
+            {orderedEntries.map((entry) => {
               const isSelected = entry.id === selectedEntry.id;
 
               return (
@@ -134,6 +160,11 @@ export function DocumentProofShowcase({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
+                      {entry.groupLabel ? (
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7b56d8]">
+                          {entry.groupLabel}
+                        </p>
+                      ) : null}
                       <p className="text-sm font-semibold text-[#1f1740]">{entry.title}</p>
                       <p className="mt-2 text-sm leading-6 text-slate-600">{entry.description}</p>
                     </div>
@@ -197,7 +228,7 @@ export function DocumentProofShowcase({
                   Completed document viewer
                 </p>
                 <p className="mt-1 text-sm text-slate-600">
-                  {selectedIndex + 1} of {entries.length} in this pack
+                  {selectedIndex + 1} of {orderedEntries.length} in this pack
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -222,6 +253,35 @@ export function DocumentProofShowcase({
               </div>
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-600">{selectedEntry.description}</p>
+            <div className="mt-4 space-y-3">
+              {groupedModalEntries.map((group) => (
+                <div key={group.label}>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7b56d8]">
+                    {group.label}
+                  </p>
+                  <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
+                    {group.entries.map((entry) => {
+                      const isActive = entry.id === selectedEntry.id;
+
+                      return (
+                        <button
+                          key={entry.id}
+                          type="button"
+                          onClick={() => setSelectedId(entry.id)}
+                          className={`whitespace-nowrap rounded-full border px-3.5 py-2 text-sm font-semibold transition ${
+                            isActive
+                              ? 'border-[#7c3aed] bg-[#f3ecff] text-[#4c1d95] shadow-sm'
+                              : 'border-[#ddd0ff] bg-white text-[#6b46c1] hover:bg-[#faf7ff]'
+                          }`}
+                        >
+                          {entry.title}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="min-h-0 flex-1 overflow-hidden px-3 py-3 sm:px-4 sm:py-4">
@@ -251,6 +311,7 @@ export function DocumentProofShowcase({
           <div className="sticky bottom-0 border-t border-[#e3dbff] bg-white/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/85 sm:px-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-slate-600">
+                {selectedEntry.groupLabel ? `${selectedEntry.groupLabel}. ` : ''}
                 Tap through the documents to review the full completed pack before continuing.
               </div>
               <div className="flex gap-2">

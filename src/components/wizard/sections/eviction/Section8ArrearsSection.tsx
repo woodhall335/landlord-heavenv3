@@ -45,6 +45,58 @@ interface Section8ArrearsSectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
+function ArrearsCheckpointCard({
+  title,
+  description,
+  outputs,
+}: {
+  title: string;
+  description: string;
+  outputs: string[];
+}) {
+  return (
+    <section className="rounded-[1.5rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">Arrears checkpoint</p>
+      <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">{title}</h3>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-[#60597a]">{description}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {outputs.map((output) => (
+          <span
+            key={output}
+            className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
+          >
+            {output}
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ArrearsStatusCard({
+  label,
+  value,
+  tone = 'neutral',
+}: {
+  label: string;
+  value: string;
+  tone?: 'neutral' | 'success' | 'warning';
+}) {
+  const toneClasses =
+    tone === 'success'
+      ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
+      : tone === 'warning'
+        ? 'border-amber-200 bg-amber-50 text-amber-900'
+        : 'border-[#ece4ff] bg-[#faf7ff] text-[#20103f]';
+
+  return (
+    <div className={`rounded-2xl border px-4 py-3 shadow-sm ${toneClasses}`}>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] opacity-80">{label}</p>
+      <p className="mt-2 text-sm font-semibold">{value}</p>
+    </div>
+  );
+}
+
 export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   facts,
   onUpdate,
@@ -303,6 +355,24 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
 
   return (
     <div className="space-y-6">
+      <ArrearsCheckpointCard
+        title={
+          hasGround8
+            ? 'Build the arrears file once and reuse it across the whole case'
+            : 'Use one arrears schedule to support the notice and later court file'
+        }
+        description={
+          hasGround8
+            ? 'Ground 8 needs a clean period-by-period arrears record that stays consistent from the notice through to the hearing. This step should make the threshold and the supporting narrative obvious without overwhelming the user.'
+            : 'This step keeps the arrears schedule, the possession particulars, and the later court documents aligned from one source of truth.'
+        }
+        outputs={
+          hasGround8
+            ? ['Arrears schedule', 'Ground 8 check', 'Form 3A particulars', 'N119 arrears detail']
+            : ['Arrears schedule', 'Form 3A particulars', 'N119 arrears detail']
+        }
+      />
+
       {/* Ground info */}
       <div className={`${EVICTION_TINTED_CARD_CLASS} border-purple-200 bg-purple-50`}>
         <h4 className="text-sm font-medium text-purple-900 mb-2">
@@ -322,6 +392,26 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
           </p>
         )}
       </div>
+
+      {(arrearsSummary || (hasGround8 && ground8Validation)) && (
+        <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {arrearsSummary && arrearsSummary.total_arrears > 0 ? (
+            <>
+              <ArrearsStatusCard label="Total arrears" value={`£${arrearsSummary.total_arrears.toFixed(2)}`} tone="warning" />
+              <ArrearsStatusCard label="Arrears in months" value={arrearsSummary.arrears_in_months.toFixed(2)} />
+              <ArrearsStatusCard label="Periods with arrears" value={`${arrearsSummary.periods_with_arrears}`} />
+              <ArrearsStatusCard label="Fully unpaid periods" value={`${arrearsSummary.periods_fully_unpaid}`} />
+            </>
+          ) : null}
+          {hasGround8 && ground8Validation ? (
+            <ArrearsStatusCard
+              label="Ground 8 status"
+              value={ground8Validation.is_eligible ? 'Threshold met' : 'Threshold not met yet'}
+              tone={ground8Validation.is_eligible ? 'success' : 'warning'}
+            />
+          ) : null}
+        </section>
+      )}
 
       {/* P0-4 FIX: Date range validation errors */}
       {dateRangeErrors.length > 0 && (
@@ -379,8 +469,11 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
       {arrearsSummary && arrearsSummary.total_arrears > 0 && (
         <div className={`${EVICTION_CARD_CLASS} border-gray-200 bg-gray-50`}>
           <h4 className="text-sm font-medium text-gray-900 mb-2">
-            Arrears Summary
+            Arrears Summary Detail
           </h4>
+          <p className="mb-3 text-sm leading-6 text-gray-600">
+            This is the quick numerical view of the same arrears schedule that feeds the notice, the witness material, and the court particulars.
+          </p>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <span className="text-gray-600">Total arrears:</span>

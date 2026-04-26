@@ -66,18 +66,18 @@ interface ValidatedTextareaProps extends BaseFieldProps {
 // ============================================================================
 
 const INPUT_BASE_STYLES = `
-  w-full rounded-md px-3 py-2 text-sm transition-colors
-  focus:outline-none focus:ring-2
+  w-full rounded-2xl px-4 py-3 text-sm text-[#20163a] shadow-[0_10px_24px_rgba(53,31,108,0.04)] transition-all
+  focus:outline-none focus:ring-4
 `;
 
 const INPUT_NORMAL_STYLES = `
-  border border-gray-300
-  focus:border-[#7C3AED] focus:ring-[#7C3AED]/20
+  border border-[#ddd2ff] bg-[#fcfbff]
+  focus:border-[#7C3AED] focus:bg-white focus:ring-[#ede9fe]
 `;
 
 const INPUT_ERROR_STYLES = `
-  border border-red-500
-  focus:border-red-500 focus:ring-red-500/20
+  border border-red-400 bg-red-50/40
+  focus:border-red-500 focus:bg-white focus:ring-red-100
 `;
 
 // ============================================================================
@@ -96,7 +96,6 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
   required = false,
   className = '',
   error: externalError,
-  validateOnBlur = false,
   type = 'text',
   min,
   max,
@@ -152,7 +151,7 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <label htmlFor={id} className="block text-sm font-semibold text-[#27134a]">
         {label}
         {isRequired && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -173,7 +172,7 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
         className={`
           ${INPUT_BASE_STYLES}
           ${error ? INPUT_ERROR_STYLES : INPUT_NORMAL_STYLES}
-          ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}
+          ${disabled ? 'bg-gray-100 cursor-not-allowed shadow-none' : ''}
         `}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : helperText ? `${id}-help` : undefined}
@@ -193,7 +192,7 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
       )}
 
       {!error && helperText && (
-        <p id={`${id}-help`} className="text-xs text-gray-500">
+        <p id={`${id}-help`} className="text-xs leading-5 text-[#6b6580]">
           {helperText}
         </p>
       )}
@@ -264,7 +263,7 @@ export const ValidatedSelect: React.FC<ValidatedSelectProps> = ({
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <label htmlFor={id} className="block text-sm font-semibold text-[#27134a]">
         {label}
         {isRequired && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -279,7 +278,7 @@ export const ValidatedSelect: React.FC<ValidatedSelectProps> = ({
         className={`
           ${INPUT_BASE_STYLES}
           ${error ? INPUT_ERROR_STYLES : INPUT_NORMAL_STYLES}
-          ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}
+          ${disabled ? 'bg-gray-100 cursor-not-allowed shadow-none' : ''}
         `}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : helperText ? `${id}-help` : undefined}
@@ -306,7 +305,7 @@ export const ValidatedSelect: React.FC<ValidatedSelectProps> = ({
       )}
 
       {!error && helperText && (
-        <p id={`${id}-help`} className="text-xs text-gray-500">
+        <p id={`${id}-help`} className="text-xs leading-5 text-[#6b6580]">
           {helperText}
         </p>
       )}
@@ -381,7 +380,7 @@ export const ValidatedTextarea: React.FC<ValidatedTextareaProps> = ({
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <label htmlFor={id} className="block text-sm font-semibold text-[#27134a]">
         {label}
         {isRequired && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -398,7 +397,7 @@ export const ValidatedTextarea: React.FC<ValidatedTextareaProps> = ({
         className={`
           ${INPUT_BASE_STYLES}
           ${error ? INPUT_ERROR_STYLES : INPUT_NORMAL_STYLES}
-          ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}
+          ${disabled ? 'bg-gray-100 cursor-not-allowed shadow-none' : ''}
         `}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : helperText ? `${id}-help` : undefined}
@@ -418,7 +417,7 @@ export const ValidatedTextarea: React.FC<ValidatedTextareaProps> = ({
       )}
 
       {!error && helperText && (
-        <p id={`${id}-help`} className="text-xs text-gray-500">
+        <p id={`${id}-help`} className="text-xs leading-5 text-[#6b6580]">
           {helperText}
         </p>
       )}
@@ -506,13 +505,13 @@ export const ValidatedCurrencyInput: React.FC<ValidatedCurrencyInputProps> = ({
 
   return (
     <div className={`space-y-1 ${className}`}>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <label htmlFor={id} className="block text-sm font-semibold text-[#27134a]">
         {label}
         {isRequired && <span className="text-red-500 ml-1">*</span>}
       </label>
 
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">£</span>
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[#6b6580]">£</span>
         <input
           id={id}
           name={id}
@@ -527,9 +526,9 @@ export const ValidatedCurrencyInput: React.FC<ValidatedCurrencyInputProps> = ({
           step="0.01"
           className={`
             ${INPUT_BASE_STYLES}
-            pl-7
+            pl-8
             ${error ? INPUT_ERROR_STYLES : INPUT_NORMAL_STYLES}
-            ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}
+            ${disabled ? 'bg-gray-100 cursor-not-allowed shadow-none' : ''}
           `}
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-error` : helperText ? `${id}-help` : undefined}
@@ -550,7 +549,7 @@ export const ValidatedCurrencyInput: React.FC<ValidatedCurrencyInputProps> = ({
       )}
 
       {!error && helperText && (
-        <p id={`${id}-help`} className="text-xs text-gray-500">
+        <p id={`${id}-help`} className="text-xs leading-5 text-[#6b6580]">
           {helperText}
         </p>
       )}

@@ -39,6 +39,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useRouter } from 'next/navigation';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
+import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/EnglandPossessionWorkspaceShell';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
@@ -122,8 +123,8 @@ const WALES_ROUTES = ['section_173', 'fault_based'] as const;
 const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
-    label: 'Possession Basics',
-    description: 'Form 3A route and court-pack overview',
+    label: "What's going on?",
+    description: 'Choose the possession problem and set the court-pack route',
     jurisdictions: ['england', 'wales'],
     isComplete: (facts, jurisdiction) => {
       const route = facts.eviction_route as string;
@@ -138,8 +139,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'parties',
-    label: 'Parties',
-    description: 'Landlord and tenant details',
+    label: 'Who and where?',
+    description: 'Landlord, tenant, and service identity details',
     isComplete: (facts) =>
       Boolean(facts.landlord_full_name) &&
       Boolean(facts.landlord_address_line1) &&
@@ -150,7 +151,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'property',
     label: 'Property',
-    description: 'Property address',
+    description: 'Property address used across the court file',
     isComplete: (facts) =>
       Boolean(facts.property_address_line1) &&
       Boolean(facts.property_address_town) &&
@@ -158,8 +159,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'tenancy',
-    label: 'Tenancy',
-    description: 'Tenancy details and rent',
+    label: 'Tenancy details',
+    description: 'Tenancy dates, rent, and payment pattern',
     isComplete: (facts) =>
       Boolean(facts.tenancy_start_date) &&
       Boolean(facts.rent_amount) &&
@@ -168,8 +169,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'notice',
-    label: 'Notice',
-    description: 'Notice service details',
+    label: 'When will you serve?',
+    description: 'Notice, service, and N215 details before claim drafting',
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
@@ -192,8 +193,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'section8_arrears',
-    label: 'Grounds & Particulars',
-    description: 'Section 8 particulars, with arrears support where needed',
+    label: 'About the arrears',
+    description: 'Section 8 particulars with arrears support where needed',
     routes: ['section_8'],
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
@@ -246,8 +247,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'evidence',
-    label: 'Court File',
-    description: 'Court file readiness and evidence confirmations',
+    label: 'Evidence summary',
+    description: 'Court-file readiness, compliance, and evidence confirmations',
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
@@ -353,8 +354,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'court_signing',
-    label: 'Court & Signing',
-    description: 'Court details and statement of truth',
+    label: 'Prepare your court claim',
+    description: 'Court details, signing, and claim-form assembly',
     isComplete: (facts) =>
       Boolean(facts.court_name) &&
       Boolean(facts.signatory_name) &&
@@ -362,8 +363,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'review',
-    label: 'Review',
-    description: 'Review and generate your case bundle',
+    label: 'Review your court-ready pack',
+    description: 'Open the completed documents and check court-pack readiness',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -732,7 +733,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
 
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex, visibleSections, facts, jurisdiction]);
+  }, [caseId, currentSectionIndex, visibleSections, facts, jurisdiction]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {
@@ -879,7 +880,12 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     );
   }
 
-  const ShellComponent: React.ComponentType<any> = isWizardUiV3Enabled ? WizardShellV3 : WizardFlowShell;
+  const ShellComponent: React.ComponentType<any> =
+    isWizardUiV3Enabled && jurisdiction === 'england'
+      ? EnglandPossessionWorkspaceShell
+      : isWizardUiV3Enabled
+        ? WizardShellV3
+        : WizardFlowShell;
 
   return (
     <ShellComponent

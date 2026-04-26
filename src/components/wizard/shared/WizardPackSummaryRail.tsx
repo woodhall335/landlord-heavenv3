@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
   RiCheckboxCircleLine,
   RiFileList3Line,
@@ -28,7 +28,7 @@ export function WizardPackSummaryRail({
 }: WizardPackSummaryRailProps) {
   const summary = getWizardPackSummary(product, tabs, currentStepId);
   const previewEntries = summary.proofPreviews;
-  const [selectedPreviewTitle, setSelectedPreviewTitle] = useState(previewEntries[0]?.title ?? '');
+  const [selectedPreviewTitle, setSelectedPreviewTitle] = useState<string | null>(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const outstandingCount = summary.outstandingSections.length;
   const attentionCount = summary.sectionsNeedingAttention.length;
@@ -40,14 +40,7 @@ export function WizardPackSummaryRail({
     ? 'rounded-[1.25rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-3.5 shadow-[0_14px_32px_rgba(76,29,149,0.07)]'
     : 'rounded-[1.8rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_20px_60px_rgba(76,29,149,0.10)]';
   const selectedPreview =
-    useMemo(
-      () => previewEntries.find((entry) => entry.title === selectedPreviewTitle) ?? previewEntries[0] ?? null,
-      [previewEntries, selectedPreviewTitle]
-    );
-
-  useEffect(() => {
-    setSelectedPreviewTitle(previewEntries[0]?.title ?? '');
-  }, [previewEntries]);
+    previewEntries.find((entry) => entry.title === selectedPreviewTitle) ?? previewEntries[0] ?? null;
 
   const content = (
     <>

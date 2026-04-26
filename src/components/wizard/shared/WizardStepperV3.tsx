@@ -47,8 +47,10 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
                 className={[
                   'group inline-flex items-center gap-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300',
                   isHeader
-                    ? 'rounded-full border border-transparent px-2.5 py-1.5 hover:border-[#e5dbff] hover:bg-white/55'
-                    : 'rounded-md px-1.5 py-1',
+                    ? isCurrent
+                      ? 'rounded-full border border-[#ddceff] bg-white/88 px-2.5 py-1.5 shadow-sm'
+                      : 'rounded-full border border-transparent px-2.5 py-1.5 hover:border-[#e5dbff] hover:bg-white/55'
+                    : 'rounded-xl px-2 py-1.5',
                 ].join(' ')}
               >
                 <span
@@ -77,8 +79,8 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
                   className={[
                     'max-w-[156px] truncate font-medium',
                     isHeader ? 'text-sm' : 'text-sm',
-                    isCurrent
-                      ? isHeader
+                  isCurrent
+                    ? isHeader
                         ? 'text-[#231246]'
                         : 'text-violet-950'
                       : hasIssue
@@ -86,8 +88,8 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
                         ? 'text-rose-700'
                         : 'text-rose-900'
                       : isHeader
-                      ? 'text-[#6b6285] group-hover:text-[#231246]'
-                      : 'text-violet-800 group-hover:text-violet-950',
+                        ? 'text-[#6b6285] group-hover:text-[#231246]'
+                        : 'text-violet-800 group-hover:text-violet-950',
                   ].join(' ')}
                 >
                   {tab.label}

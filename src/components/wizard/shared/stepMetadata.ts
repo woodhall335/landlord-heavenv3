@@ -65,16 +65,79 @@ const EVICTION_BASE: Record<string, StepMetadata> = {
   property: withChecklist([{ label: 'Property address' }, { label: 'Postcode' }, { label: 'Any unit details', optional: true }], 'Property details identify the tenancy unambiguously across notices and supporting documents.', 'RiHome4Line', '~2 min', 'property'),
   tenancy: withChecklist([{ label: 'Tenancy start date' }, { label: 'Rent amount' }, { label: 'Rent frequency' }, { label: 'Rent due day' }], 'Tenancy terms drive notice content, dates, and arrears calculations used later in the wizard.', 'RiCalendarLine', '~3 min', 'tenancy'),
   section21_compliance: withChecklist([{ label: 'Deposit protection details' }, { label: 'Prescribed information status' }, { label: 'Gas/EPC/How to Rent records' }], 'Compliance checks help confirm whether a no-fault route is suitable before final review.', 'RiShieldCheckLine', '~4 min', 'section-21'),
+  section8_compliance: withChecklist(
+    [
+      { label: 'Deposit and prescribed information position' },
+      { label: 'EPC / gas / How to Rent status' },
+      { label: 'Section 16E and breathing-space checks' },
+    ],
+    'This records the compliance and risk facts that shape Section 8 readiness, warnings, and support documents before service.',
+    'RiShieldCheckLine',
+    '~4 min',
+    'compliance'
+  ),
   wales_compliance: withChecklist([{ label: 'Registration or licensing status' }, { label: 'Written statement status' }, { label: 'Deposit compliance (if taken)' }, { label: 'Safeguard declarations' }], 'These checks capture prerequisite Wales requirements before progressing to drafting.', 'RiShieldCheckLine', '~4 min', 'compliance'),
-  notice: withChecklist([{ label: 'Service date' }, { label: 'Notice grounds or reason' }, { label: 'Method of service' }], 'Notice settings determine deadlines and ensure the generated document reflects your case facts.', 'RiMailSendLine', '~4 min', 'notice-details'),
+  notice: withChecklist(
+    [
+      { label: 'Service date' },
+      { label: 'Notice grounds or reason' },
+      { label: 'Method of service' },
+      { label: 'N215 service facts', optional: true },
+    ],
+    'Notice settings determine deadlines and ensure the generated Form 3A and proof-of-service paperwork reflect the same case facts.',
+    'RiMailSendLine',
+    '~4 min',
+    'notice-details'
+  ),
   scotland_notice: withChecklist([{ label: 'Notice to Leave date' }, { label: 'Ground reference' }, { label: 'Service method' }], 'Notice timing and service details are key to producing a valid Notice to Leave draft.', 'RiMailSendLine', '~3 min', 'notice-details'),
-  section8_arrears: withChecklist([{ label: 'Rent schedule' }, { label: 'Arrears periods' }, { label: 'Payment history', optional: true }], 'Arrears figures support ground selection and improve consistency in calculations and evidence.', 'RiMoneyPoundCircleLine', '~5 min', 'rent-arrears'),
+  section8_arrears: withChecklist(
+    [
+      { label: 'Rent schedule' },
+      { label: 'Arrears periods' },
+      { label: 'Payment history', optional: true },
+      { label: 'Section 8 particulars' },
+    ],
+    'Arrears figures support ground selection and improve consistency across the notice, the schedule, and later court paperwork.',
+    'RiMoneyPoundCircleLine',
+    '~5 min',
+    'rent-arrears'
+  ),
   scotland_compliance: withChecklist([{ label: 'PRT-related prerequisites' }, { label: 'Safety/compliance records', optional: true }, { label: 'Supporting timeline details' }], 'This captures key Scotland-specific checks so later steps can stay focused on grounds and notice details.', 'RiShieldCheckLine', '~3 min', 'compliance'),
   scotland_grounds: withChecklist([{ label: 'Ground selection' }, { label: 'Ground facts summary' }, { label: 'Date references', optional: true }], 'Ground selection provides the legal basis for the notice and structures the final draft output.', 'RiScales3Line', '~3 min', 'grounds'),
-  evidence: withChecklist([{ label: 'Core supporting files' }, { label: 'Arrears records', optional: true }, { label: 'Communication log', optional: true }], 'Evidence planning helps you keep supporting material organized before completion.', 'RiFolderUploadLine', '~4 min', 'evidence'),
-  court_signing: withChecklist([{ label: 'Court details' }, { label: 'Claimant signing details' }, { label: 'Reference numbers', optional: true }], 'Court and signing information ensures generated paperwork is complete and ready for next actions.', 'RiQuillPenLine', '~3 min', 'court'),
+  evidence: withChecklist(
+    [
+      { label: 'Court-file readiness confirmations' },
+      { label: 'Arrears / breach support' },
+      { label: 'Chronology and contact record', optional: true },
+    ],
+    'This step gathers the structured confirmations that turn the pack into a court file rather than just a notice generator.',
+    'RiFolderUploadLine',
+    '~4 min',
+    'evidence'
+  ),
+  court_signing: withChecklist(
+    [
+      { label: 'Court details' },
+      { label: 'Claimant signing details' },
+      { label: 'Reference numbers', optional: true },
+    ],
+    'Court and signing information keeps the N5, N119, and the statement of truth aligned without asking post-issue court facts too early.',
+    'RiQuillPenLine',
+    '~3 min',
+    'court'
+  ),
   scotland_tribunal: withChecklist([{ label: 'Tribunal venue or region' }, { label: 'Representative details', optional: true }, { label: 'Submission readiness check' }], 'Tribunal details help prepare the final bundle for the correct forum and process.', 'RiBuildingLine', '~3 min', 'hearing'),
-  review: withChecklist([{ label: 'Check entered facts' }, { label: 'Confirm dates and names' }, { label: 'Download-ready confirmation' }], 'The review step is a final quality check to reduce avoidable errors before generating outputs.', 'RiSearchEyeLine', '~2 min', 'review-finish'),
+  review: withChecklist(
+    [
+      { label: 'Check entered facts' },
+      { label: 'Open the completed documents' },
+      { label: 'Confirm generation readiness' },
+    ],
+    'The review step is a final quality check that should feel like a document checkpoint, not just a plain confirmation screen.',
+    'RiSearchEyeLine',
+    '~2 min',
+    'review-finish'
+  ),
 };
 
 const MONEY_CLAIM_BASE: Record<string, StepMetadata> = {
@@ -215,7 +278,7 @@ addEntries('notice_only', 'england', {
   parties: EVICTION_BASE.parties,
   property: EVICTION_BASE.property,
   tenancy: EVICTION_BASE.tenancy,
-  section21_compliance: EVICTION_BASE.section21_compliance,
+  section8_compliance: EVICTION_BASE.section8_compliance,
   notice: EVICTION_BASE.notice,
   section8_arrears: EVICTION_BASE.section8_arrears,
   review: EVICTION_BASE.review,

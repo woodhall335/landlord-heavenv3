@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
-import { RiCheckboxCircleLine, RiFileTextLine, RiInformationLine } from 'react-icons/ri';
+import { RiCheckboxCircleLine, RiFileTextLine } from 'react-icons/ri';
 import { buildEnglandEvictionChronology } from '@/lib/england-possession/chronology';
 
 interface EvidenceSectionProps {
@@ -10,6 +10,91 @@ interface EvidenceSectionProps {
   jurisdiction: 'england' | 'wales';
   caseId: string;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+}
+
+function EvidenceCheckpointCard({
+  title,
+  description,
+  outputs,
+}: {
+  title: string;
+  description: string;
+  outputs: string[];
+}) {
+  return (
+    <section className="rounded-[1.5rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">Evidence checkpoint</p>
+      <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">{title}</h3>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-[#60597a]">{description}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {outputs.map((output) => (
+          <span
+            key={output}
+            className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
+          >
+            {output}
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function EvidenceStatusCard({
+  label,
+  value,
+  tone = 'neutral',
+}: {
+  label: string;
+  value: string;
+  tone?: 'neutral' | 'success' | 'warning';
+}) {
+  const toneClasses =
+    tone === 'success'
+      ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
+      : tone === 'warning'
+        ? 'border-amber-200 bg-amber-50 text-amber-900'
+        : 'border-[#ece4ff] bg-[#faf7ff] text-[#20103f]';
+
+  return (
+    <div className={`rounded-2xl border px-4 py-3 shadow-sm ${toneClasses}`}>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] opacity-80">{label}</p>
+      <p className="mt-2 text-sm font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function CollapsibleStepCard({
+  stepLabel,
+  title,
+  description,
+  defaultOpen = false,
+  children,
+}: {
+  stepLabel: string;
+  title: string;
+  description: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <details
+      open={defaultOpen}
+      className="group rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm"
+    >
+      <summary className="list-none cursor-pointer">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">{stepLabel}</p>
+            <h4 className="mt-2 text-base font-semibold text-[#20103f]">{title}</h4>
+            <p className="mt-1 text-sm leading-6 text-[#62597c]">{description}</p>
+          </div>
+          <span className="mt-1 text-sm font-medium text-[#7650cd] transition group-open:rotate-180">⌄</span>
+        </div>
+      </summary>
+      <div className="mt-4">{children}</div>
+    </details>
+  );
 }
 
 const RESPONSIVENESS_OPTIONS = [
@@ -146,9 +231,57 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
     facts.breathing_space_checked !== undefined &&
     (facts.breathing_space_checked !== true || facts.tenant_in_breathing_space !== undefined) &&
     facts.evidence_bundle_ready !== undefined;
+  const readinessStatus = coreQuestionsComplete && facts.evidence_reviewed && depositQuestionsComplete && propertyComplianceQuestionsComplete && complianceQuestionsComplete;
+  const propertyComplianceTouched =
+    epcProvided !== undefined ||
+    howToRentProvided !== undefined ||
+    hasGasAppliances !== undefined ||
+    gasSafetyProvided !== undefined;
+  const recordsTouched =
+    availabilityChecks.some((item) => Boolean((evidence as any)[item.key])) ||
+    Boolean(facts.evidence_reviewed);
+  const englandComplianceTouched =
+    facts.deposit_taken !== undefined ||
+    facts.deposit_protected !== undefined ||
+    facts.deposit_protected_within_30_days !== undefined ||
+    facts.prescribed_info_served !== undefined ||
+    facts.deposit_returned !== undefined ||
+    facts.section_16e_duties_checked !== undefined ||
+    facts.breathing_space_checked !== undefined ||
+    facts.tenant_in_breathing_space !== undefined ||
+    facts.evidence_bundle_ready !== undefined;
 
   return (
     <div className="space-y-6">
+      <EvidenceCheckpointCard
+        title="Turn the notice into a court-ready file without asking for uploads"
+        description="This step keeps chronology, compliance, landlord-held records, and bundle readiness in one place. The goal is to make the pack smarter and clearer, not to bury the user in evidence admin."
+        outputs={['Evidence checklist', 'Witness statement', 'Case summary', 'Readiness warnings']}
+      />
+
+      <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <EvidenceStatusCard
+          label="Chronology"
+          value={generatedChronology.paragraphs.length > 0 ? 'Generated from case facts' : 'Waiting for more facts'}
+          tone={generatedChronology.paragraphs.length > 0 ? 'success' : 'warning'}
+        />
+        <EvidenceStatusCard
+          label="Core evidence step"
+          value={coreQuestionsComplete ? 'Answered' : 'Still needs answers'}
+          tone={coreQuestionsComplete ? 'success' : 'warning'}
+        />
+        <EvidenceStatusCard
+          label="Compliance record"
+          value={depositQuestionsComplete && propertyComplianceQuestionsComplete && complianceQuestionsComplete ? 'Recorded' : 'Still incomplete'}
+          tone={depositQuestionsComplete && propertyComplianceQuestionsComplete && complianceQuestionsComplete ? 'success' : 'warning'}
+        />
+        <EvidenceStatusCard
+          label="Court-file readiness"
+          value={readinessStatus ? 'Ready to review' : 'Needs more confirmations'}
+          tone={readinessStatus ? 'success' : 'warning'}
+        />
+      </section>
+
       <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="rounded-2xl bg-[#f4ecff] p-2 text-[#7C3AED]">
@@ -169,6 +302,9 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
 
       <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
         <h4 className="text-base font-semibold text-[#20103f]">Service and chronology details</h4>
+        <p className="mt-2 text-sm leading-6 text-[#62597c]">
+          Keep this step focused on service proof, the generated chronology, and any extra incident detail that the court file should not miss.
+        </p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="block">
             <span className="text-sm font-medium text-[#27134a]">
@@ -246,17 +382,12 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
         </div>
       </section>
 
-      <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
-        <div className="flex items-start gap-3">
-          <RiInformationLine className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#7C3AED]" />
-          <div>
-            <h4 className="text-base font-semibold text-[#20103f]">Property compliance record</h4>
-            <p className="mt-1 text-sm leading-6 text-[#62597c]">
-              These questions capture the wider tenancy-compliance position for the court file. For a Form 3A route they are not all statutory blockers in the same way they are for Section 21, but they still matter for risk, court credibility, and the evidence story.
-            </p>
-          </div>
-        </div>
-
+      <CollapsibleStepCard
+        stepLabel="Step 2 of 4"
+        title="Record the wider property compliance story"
+        description="These answers help the pack explain the wider tenancy compliance picture without turning the step into a full legal memo."
+        defaultOpen={propertyComplianceTouched}
+      >
         <div className="mt-4 grid gap-3">
           <BooleanQuestion
             label="Was an EPC given for the tenancy?"
@@ -296,20 +427,14 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
             />
           )}
         </div>
-      </section>
+      </CollapsibleStepCard>
 
-      <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
-        <div className="flex items-start gap-3">
-          <RiInformationLine className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#7C3AED]" />
-          <div>
-            <h4 className="text-base font-semibold text-[#20103f]">Landlord-held records confirmation</h4>
-            <p className="mt-1 text-sm leading-6 text-[#62597c]">
-              These confirmations do not upload or generate third-party records. They simply tell the pack what
-              evidence exists outside the platform, so the generated checklists and court guidance stay accurate.
-            </p>
-          </div>
-        </div>
-
+      <CollapsibleStepCard
+        stepLabel="Step 3 of 4"
+        title="Confirm what records exist outside the platform"
+        description="These confirmations do not upload anything. They simply keep the checklist and filing guidance honest about what the landlord already holds."
+        defaultOpen={recordsTouched}
+      >
         <div className="mt-4 grid gap-3">
           {availabilityChecks.map((item) => {
             const checked = Boolean((evidence as any)[item.key]);
@@ -355,20 +480,14 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
             </p>
           </div>
         </label>
-      </section>
+      </CollapsibleStepCard>
 
-      <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
-        <div className="flex items-start gap-3">
-          <RiInformationLine className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#7C3AED]" />
-          <div>
-            <h4 className="text-base font-semibold text-[#20103f]">England compliance confirmations</h4>
-            <p className="mt-1 text-sm leading-6 text-[#62597c]">
-              These confirmations cover the checks that can stop a Form 3A route or possession file from being court-ready.
-              Answer them now so the pack can warn you early instead of leaving the issue until generation.
-            </p>
-          </div>
-        </div>
-
+      <CollapsibleStepCard
+        stepLabel="Step 4 of 4"
+        title="Confirm the England checks that affect court-readiness"
+        description="These are the questions that can stop a Form 3A route or a possession file from being treated as ready. Keep them focused and factual."
+        defaultOpen={englandComplianceTouched}
+      >
         <div className="mt-4 grid gap-3">
           <BooleanQuestion
             label="Did this tenancy involve a deposit?"
@@ -450,15 +569,11 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
             noLabel="No, still incomplete"
           />
         </div>
-      </section>
+      </CollapsibleStepCard>
 
       <section
         className={`rounded-[1.6rem] border px-5 py-5 shadow-sm ${
-          coreQuestionsComplete &&
-          facts.evidence_reviewed &&
-          depositQuestionsComplete &&
-          propertyComplianceQuestionsComplete &&
-          complianceQuestionsComplete
+          readinessStatus
             ? 'border-emerald-200 bg-emerald-50'
             : 'border-amber-200 bg-amber-50'
         }`}
@@ -466,7 +581,7 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
         <div className="flex items-start gap-3">
           <RiCheckboxCircleLine
             className={`mt-0.5 h-5 w-5 flex-shrink-0 ${
-              coreQuestionsComplete && facts.evidence_reviewed
+              readinessStatus
                 ? 'text-emerald-600'
                 : 'text-amber-600'
             }`}

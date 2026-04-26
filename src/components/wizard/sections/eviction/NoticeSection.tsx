@@ -112,6 +112,60 @@ interface N215QuestionFieldsProps {
   mode: 'served' | 'planned';
 }
 
+function StepCheckpointCard({
+  eyebrow,
+  title,
+  description,
+  outputs,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  outputs: string[];
+}) {
+  return (
+    <section className="rounded-[1.5rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">{eyebrow}</p>
+      <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">{title}</h3>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-[#60597a]">{description}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {outputs.map((output) => (
+          <span
+            key={output}
+            className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
+          >
+            {output}
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function NoticeStatusCard({
+  label,
+  value,
+  tone = 'neutral',
+}: {
+  label: string;
+  value: string;
+  tone?: 'neutral' | 'success' | 'warning';
+}) {
+  const toneClasses =
+    tone === 'success'
+      ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
+      : tone === 'warning'
+        ? 'border-amber-200 bg-amber-50 text-amber-900'
+        : 'border-[#ece4ff] bg-[#faf7ff] text-[#20103f]';
+
+  return (
+    <div className={`rounded-2xl border px-4 py-3 shadow-sm ${toneClasses}`}>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] opacity-80">{label}</p>
+      <p className="mt-2 text-sm font-semibold">{value}</p>
+    </div>
+  );
+}
+
 const N215QuestionFields: React.FC<N215QuestionFieldsProps> = ({ facts, onUpdate, mode }) => {
   const serviceMethod = String(facts.notice_service_method || '').trim();
   const recipientCapacity = String(facts.notice_service_recipient_capacity || 'defendant').trim();
@@ -1441,10 +1495,30 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
   const handleSubflowComplete = useCallback(() => {
     setSubflowComplete(true);
   }, []);
+  const hasServedCoreFacts = Boolean(facts.notice_served_date) && Boolean(facts.notice_service_method);
 
 
   return (
     <div className="space-y-6">
+      <StepCheckpointCard
+        eyebrow={isNoticeOnlyMode ? 'Notice checkpoint' : 'Notice and service checkpoint'}
+        title={
+          isNoticeOnlyMode
+            ? `Build the ${isEngland ? 'Form 3A notice' : noticeProductLabel} without extra noise`
+            : 'Keep the notice, service record, and later court file in sync'
+        }
+        description={
+          isNoticeOnlyMode
+            ? 'This step should gather only the facts that affect the notice, service guidance, and proof of service. The goal is a clean completed pack, not an overwhelming interview.'
+            : 'This step decides whether you are working from a notice already served or generating one now. Either way, the same notice and N215 facts should carry cleanly into the court-ready pack.'
+        }
+        outputs={
+          isNoticeOnlyMode
+            ? ['Form 3A', 'N215', 'Service instructions', 'Validity checklist']
+            : ['Form 3A', 'N215', 'Service guide', 'Earliest court timing']
+        }
+      />
+
       {/* ================================================================== */}
       {/* GATING QUESTION: Have you already served a notice? */}
       {/* Only shown in complete_pack mode - notice_only skips this */}
@@ -1551,6 +1625,29 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       {/* ================================================================== */}
       {noticeAlreadyServed === true && (
         <>
+          <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <NoticeStatusCard
+              label="Notice path"
+              value="Using an already served notice"
+              tone="success"
+            />
+            <NoticeStatusCard
+              label="Service basics"
+              value={hasServedCoreFacts ? 'Recorded' : 'Still needs date and method'}
+              tone={hasServedCoreFacts ? 'success' : 'warning'}
+            />
+            <NoticeStatusCard
+              label="Grounds"
+              value={isSection8 ? (selectedGrounds.length > 0 ? `${selectedGrounds.length} selected` : 'Still need selection') : 'Not a Section 8 route'}
+              tone={isSection8 ? (selectedGrounds.length > 0 ? 'success' : 'warning') : 'neutral'}
+            />
+            <NoticeStatusCard
+              label="Minimum notice"
+              value={minNoticePeriodLabel}
+              tone="neutral"
+            />
+          </section>
+
           <div className="rounded-[1.5rem] border border-[#e6dcff] bg-white p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
             <div className="flex flex-wrap gap-2">
               {['Notice service date', 'Service method', 'Expiry date'].map((item) => (
@@ -1611,7 +1708,16 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
           </div>
           </div>
 
-          <N215QuestionFields facts={facts} onUpdate={onUpdate} mode="served" />
+          {hasServedCoreFacts ? (
+            <N215QuestionFields facts={facts} onUpdate={onUpdate} mode="served" />
+          ) : (
+            <div className="rounded-[1.5rem] border border-[#ece4ff] bg-[#faf7ff] p-5 shadow-sm">
+              <p className="text-sm font-semibold text-[#27134a]">Next: certificate of service details</p>
+              <p className="mt-2 text-sm leading-6 text-[#62597c]">
+                Once the served date and service method are recorded, we will unlock the extra N215 questions so the official certificate of service can be completed more cleanly.
+              </p>
+            </div>
+          )}
 
           {/* Notice expiry date */}
           <div className="space-y-2">
@@ -1643,7 +1749,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
 
           {/* Section 8 Grounds Selection */}
           {isSection8 && (
-            <div className="pt-4 border-t border-gray-200 space-y-4">
+            <div className="space-y-4 rounded-[1.5rem] border border-[#e6dcff] bg-white p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
                   Form 3A Grounds
@@ -1652,6 +1758,9 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                 <p className="text-xs text-gray-500">
                   Select all grounds that apply. Grounds are divided into mandatory (court must grant
                   if proven) and discretionary (court decides if reasonable).
+                </p>
+                <p className="text-xs font-medium text-[#6f54c8]">
+                  All current England post-May 2026 Form 3A grounds remain available here, including the specialist grounds that need extra factual detail.
                 </p>
               </div>
 

@@ -3,6 +3,7 @@
 import type { DocumentProofEntry } from '@/components/preview/DocumentProofShowcase';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { getPackContents } from '@/lib/products/pack-contents';
+import type { PackItemCategory } from '@/lib/products/pack-contents';
 
 type EnglandEvictionPackProduct = 'notice_only' | 'complete_pack';
 
@@ -22,6 +23,21 @@ const DOCUMENT_TYPE_BY_PACK_KEY: Record<string, string> = {
   arrears_engagement_letter: 'arrears_engagement_letter',
   case_summary: 'case_summary',
 };
+
+function getGroupMeta(category: PackItemCategory): { label: string; order: number } {
+  switch (category) {
+    case 'Notice':
+    case 'Court forms':
+    case 'Evidence':
+      return { label: 'Court forms & core file', order: 0 };
+    case 'Checklists':
+    case 'Guidance':
+    case 'Other':
+    case 'Tenancy agreement':
+    default:
+      return { label: 'Support docs', order: 1 };
+  }
+}
 
 export function buildEnglandPackProofEntries({
   product,
@@ -49,6 +65,7 @@ export function buildEnglandPackProofEntries({
     if (!documentType) {
       continue;
     }
+    const groupMeta = getGroupMeta(item.category);
 
     const query = `pack=${encodeURIComponent(product)}&document_type=${encodeURIComponent(documentType)}`;
 
@@ -59,6 +76,8 @@ export function buildEnglandPackProofEntries({
       thumbnailUrl: `/api/notice-only/thumbnail/${caseId}?${query}`,
       badge: 'Actual draft',
       previewUrl: `/api/notice-only/embed/${caseId}?${query}`,
+      groupLabel: groupMeta.label,
+      groupOrder: groupMeta.order,
     });
   }
 

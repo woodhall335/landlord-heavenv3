@@ -51,6 +51,7 @@ import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { DocumentProofShowcase } from '@/components/preview';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
+import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/EnglandPossessionWorkspaceShell';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
 import { buildEnglandPackProofEntries } from '../sections/eviction/buildEnglandPackProofEntries';
@@ -235,8 +236,8 @@ const normalizeWalesRoute = (route: string | undefined): string | undefined => {
 const SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
-    label: 'Notice Basics',
-    description: 'Section 8 notice route and notice-stage pack',
+    label: "What's going on?",
+    description: 'Choose the possession problem and set the correct notice-stage route',
     isComplete: (facts, jurisdiction) => {
       const route = facts.eviction_route as string;
       if (!route) return false;
@@ -259,8 +260,8 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'parties',
-    label: 'Parties',
-    description: 'Landlord and tenant details',
+    label: 'Who and where?',
+    description: 'Landlord, tenant, and service identity details',
     isComplete: (facts) =>
       Boolean(facts.landlord_full_name) &&
       Boolean(facts.landlord_address_line1) &&
@@ -271,7 +272,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'property',
     label: 'Property',
-    description: 'Property address',
+    description: 'Property address used across the notice pack',
     isComplete: (facts) =>
       Boolean(facts.property_address_line1) &&
       Boolean(facts.property_address_town) &&
@@ -279,8 +280,8 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'tenancy',
-    label: 'Tenancy',
-    description: 'Tenancy details and rent',
+    label: 'Tenancy details',
+    description: 'Tenancy dates, rent, and payment pattern',
     isComplete: (facts) =>
       Boolean(facts.tenancy_start_date) &&
       Boolean(facts.rent_amount) &&
@@ -289,7 +290,7 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'wales_compliance',
-    label: 'Compliance',
+    label: 'Quick checks',
     description: 'Wales pre-service compliance requirements',
     // Wales-only section - uses jurisdiction instead of routes to avoid route filtering
     jurisdiction: 'wales',
@@ -366,7 +367,7 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'section21_compliance',
-    label: 'Compliance',
+    label: 'Quick checks',
     description: 'Compliance requirements for Section 21',
     // Only for England Section 21 - Wales has different requirements
     routes: [] as EvictionRoute[],
@@ -408,8 +409,8 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'notice',
-    label: 'Notice Details',
-    description: 'Grounds and service details',
+    label: 'Your notice',
+    description: 'Grounds, dates, and service details for the live notice',
     isComplete: (facts) => {
       const route = facts.eviction_route as string;
 
@@ -446,7 +447,7 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'section8_compliance',
-    label: 'Compliance Record',
+    label: 'Quick checks',
     description: 'Deposit, landlord duties, and wider tenancy compliance',
     routes: ['section_8'] as EvictionRoute[],
     isComplete: (facts) => {
@@ -533,8 +534,8 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'section8_arrears',
-    label: 'Arrears',
-    description: 'Rent arrears breakdown for Section 8',
+    label: 'About the arrears',
+    description: 'Rent arrears schedule and supporting particulars',
     // Only for England Section 8 - Wales arrears is handled inline in WalesNoticeSection
     routes: ['section_8'] as EvictionRoute[],
     isComplete: (facts) => {
@@ -583,8 +584,8 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'review',
-    label: 'Review',
-    description: 'Review and generate notice',
+    label: 'Review your pack',
+    description: 'Open the completed documents and check pack readiness',
     isComplete: () => false, // Always navigable
   },
 ];
@@ -1095,7 +1096,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
       setCurrentSectionIndex(currentSectionIndex + 1);
     }
-  }, [currentSectionIndex, visibleSections, facts, jurisdiction]);
+  }, [caseId, currentSectionIndex, visibleSections, facts, jurisdiction]);
 
   // Navigate to previous section
   const handleBack = useCallback(() => {
@@ -1459,7 +1460,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     );
   }
 
-  const ShellComponent: React.ComponentType<any> = isWizardUiV3Enabled ? WizardShellV3 : WizardFlowShell;
+  const ShellComponent: React.ComponentType<any> =
+    isWizardUiV3Enabled && jurisdiction === 'england'
+      ? EnglandPossessionWorkspaceShell
+      : isWizardUiV3Enabled
+        ? WizardShellV3
+        : WizardFlowShell;
 
   return (
     <ShellComponent

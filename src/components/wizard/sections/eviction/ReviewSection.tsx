@@ -227,10 +227,31 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       </ReviewCard>
 
       {caseProofEntries.length > 0 ? (
+        <ReviewCard
+          title="Core document checkpoints"
+          description="Open the completed versions of the key pack documents from this case before you generate or pay. This should feel like a document review, not just a tick-box confirmation."
+        >
+          <div className="flex flex-wrap gap-2">
+            {caseProofEntries.map((entry) => (
+              <span
+                key={entry.id}
+                className="rounded-full border border-[#ddd0ff] bg-[#faf7ff] px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
+              >
+                {entry.title}
+              </span>
+            ))}
+          </div>
+          <p className="mt-3 text-sm leading-6 text-[#62597c]">
+            Tap any document below to open the full completed version in the in-page viewer.
+          </p>
+        </ReviewCard>
+      ) : null}
+
+      {caseProofEntries.length > 0 ? (
         <DocumentProofShowcase
           compact
-          title="Actual draft checkpoints from this case"
-          description="These live first-page previews help you sense-check the actual notice, court-form, service, and witness paperwork before you pay for the full pack."
+          title="Open the completed documents from this case"
+          description="These live previews let you open the actual notice, court-form, service, and witness paperwork generated from this case before you pay for the full pack."
           entries={caseProofEntries}
         />
       ) : null}
@@ -266,7 +287,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       />
 
       <ReviewCard
-        title="Included in your pack"
+        title="Everything included in your pack"
         description="These are the documents this product prepares from the answers you have given."
       >
         <div className="grid gap-3 md:grid-cols-2">
