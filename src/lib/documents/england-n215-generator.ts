@@ -1,4 +1,10 @@
-import 'server-only';
+if (typeof window === 'undefined' && typeof require !== 'undefined') {
+  try {
+    require('server-only');
+  } catch {
+    // Allow script/test environments to import this module outside Next server runtime.
+  }
+}
 
 import fs from 'fs/promises';
 import path from 'path';

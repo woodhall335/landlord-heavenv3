@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -6,6 +7,11 @@ import { PDFDocument } from 'pdf-lib';
 import { PDFParse } from 'pdf-parse';
 
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
+import {
+  generateCompleteEvictionPack as generateLiveCompleteEvictionPack,
+  generateNoticeOnlyPack as generateLiveNoticeOnlyPack,
+  type EvictionPackDocument,
+} from '@/lib/documents/eviction-pack-generator';
 import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-filler';
 import { generateDocument } from '@/lib/documents/generator';
 import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
@@ -18,6 +24,11 @@ import { validateFlow, type FlowValidationResult } from '@/lib/validation/valida
 import { validateNoticeOnlyCase } from '@/lib/validation/notice-only-case-validator';
 import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
+
+process.env.TZ = 'Europe/London';
+process.env.DISABLE_WITNESS_STATEMENT_AI = 'true';
+process.env.DISABLE_COMPLIANCE_AUDIT_AI = 'true';
+process.env.DISABLE_MONEY_CLAIM_AI = 'true';
 
 type WizardFacts = Record<string, any>;
 
@@ -413,7 +424,7 @@ function createNoticeOnlyFacts(): WizardFacts {
       'Ground 1A: The landlord intends to sell the property on the open market after possession is recovered.',
     signatory_name: 'Tariq Ahmed Mohammed',
     signatory_capacity: 'landlord',
-    signature_date: '2026-06-01',
+    signature_date: '2026-06-30',
 
     'case_facts.meta.jurisdiction': 'england',
     'case_facts.parties.landlord.name': 'Tariq Ahmed Mohammed',
@@ -514,7 +525,7 @@ function createCompletePackFacts(): WizardFacts {
       'Grounds 8, 10 and 11: the tenant owes substantial rent arrears and has repeatedly fallen into arrears.',
     signatory_name: 'Tariq Ahmed Mohammed',
     signatory_capacity: 'landlord',
-    signature_date: '2026-06-01',
+    signature_date: '2026-06-30',
 
     'case_facts.meta.jurisdiction': 'england',
     'case_facts.parties.landlord.name': 'Tariq Ahmed Mohammed',
@@ -885,197 +896,82 @@ async function buildForm3AData(caseId: string, wizardFacts: WizardFacts): Promis
 }
 
 async function generateNoticeOnlyPack(rootDir: string, wizardFacts: WizardFacts): Promise<GeneratedArtifact[]> {
-  const caseId = 'audit-notice-only';
+  const pack = await generateLiveNoticeOnlyPack(wizardFacts);
+  return persistGeneratedPackDocuments(rootDir, pack.documents);
+}
+
+function isOfficialPdfDocument(documentType: string): boolean {
+  return ['section8_notice', 'proof_of_service', 'n5_claim', 'n119_particulars'].includes(documentType);
+}
+
+function resolveAuditOutputPath(rootDir: string, document: EvictionPackDocument, preferPdf: boolean): string {
+  const originalFileName = document.file_name || `${document.document_type}.${preferPdf ? 'pdf' : 'html'}`;
+
+  if (preferPdf) {
+    return path.join(rootDir, originalFileName.replace(/\.html$/i, '.pdf'));
+  }
+
+  if (/\.html?$/i.test(originalFileName)) {
+    return path.join(rootDir, originalFileName);
+  }
+
+  return path.join(rootDir, originalFileName.replace(/\.pdf$/i, '.html'));
+}
+
+async function persistGeneratedPackDocuments(
+  rootDir: string,
+  documents: EvictionPackDocument[],
+): Promise<GeneratedArtifact[]> {
+  await ensureDir(rootDir);
+
   const artifacts: GeneratedArtifact[] = [];
-  const caseFacts = wizardFactsToCaseFacts(wizardFacts);
-  const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, 'section_8');
-  const form3AData = await buildForm3AData(caseId, wizardFacts);
 
-  const form3ABytes = await fillOfficialForm('form3a', form3AData);
-  const form3APath = path.join(rootDir, 'form3a-notice.pdf');
-  const form3AMeta = await writePdf(form3APath, form3ABytes);
-  artifacts.push({
-    key: 'section8_notice',
-    title: 'Form 3A Notice Seeking Possession',
-    outputPath: form3APath,
-    type: 'pdf',
-    ...form3AMeta,
-  });
+  for (const document of documents) {
+    const preferPdf = isOfficialPdfDocument(document.document_type) || !document.html;
+    const outputPath = resolveAuditOutputPath(rootDir, document, preferPdf);
 
-  const serviceInstructions = await generateDocument({
-    templatePath: 'uk/england/templates/eviction/service_instructions_section_8.hbs',
-    data: guidanceData,
-    outputFormat: 'html',
-  });
-  const serviceInstructionsPath = path.join(rootDir, 'service-instructions.html');
-  const serviceInstructionsMeta = await writeHtml(serviceInstructionsPath, serviceInstructions.html);
-  artifacts.push({
-    key: 'service_instructions',
-    title: 'Service Instructions',
-    outputPath: serviceInstructionsPath,
-    type: 'html',
-    ...serviceInstructionsMeta,
-  });
+    if (preferPdf && document.pdf) {
+      const meta = await writePdf(outputPath, document.pdf);
+      artifacts.push({
+        key: document.document_type,
+        title: document.title,
+        outputPath,
+        type: 'pdf',
+        ...meta,
+      });
+      continue;
+    }
 
-  const coverLetter = await generateDocument({
-    templatePath: 'uk/england/templates/eviction/cover_letter_to_tenant.hbs',
-    data: guidanceData,
-    outputFormat: 'html',
-  });
-  const coverLetterPath = path.join(rootDir, 'cover-letter-to-tenant.html');
-  const coverLetterMeta = await writeHtml(coverLetterPath, coverLetter.html);
-  artifacts.push({
-    key: 'cover_letter_to_tenant',
-    title: 'Cover Letter to Tenant',
-    outputPath: coverLetterPath,
-    type: 'html',
-    ...coverLetterMeta,
-  });
+    if (document.html) {
+      const meta = await writeHtml(outputPath, document.html);
+      artifacts.push({
+        key: document.document_type,
+        title: document.title,
+        outputPath,
+        type: 'html',
+        ...meta,
+      });
+      continue;
+    }
 
-  const serviceChecklist = await generateDocument({
-    templatePath: 'uk/england/templates/eviction/checklist_section_8.hbs',
-    data: guidanceData,
-    outputFormat: 'html',
-  });
-  const serviceChecklistPath = path.join(rootDir, 'service-checklist.html');
-  const serviceChecklistMeta = await writeHtml(serviceChecklistPath, serviceChecklist.html);
-  artifacts.push({
-    key: 'service_checklist',
-    title: 'Service & Compliance Checklist',
-    outputPath: serviceChecklistPath,
-    type: 'html',
-    ...serviceChecklistMeta,
-  });
-
-  const evidenceChecklist = await generateDocument({
-    templatePath: 'shared/templates/evidence_collection_checklist.hbs',
-    data: {
-      ...guidanceData,
-      required_evidence: buildGroundSpecificEvidence(getSelectedGrounds(wizardFacts)),
-    },
-    outputFormat: 'html',
-  });
-  const evidenceChecklistPath = path.join(rootDir, 'evidence-checklist.html');
-  const evidenceChecklistMeta = await writeHtml(evidenceChecklistPath, evidenceChecklist.html);
-  artifacts.push({
-    key: 'evidence_checklist',
-    title: 'Ground-Specific Evidence Checklist',
-    outputPath: evidenceChecklistPath,
-    type: 'html',
-    ...evidenceChecklistMeta,
-  });
-
-  const proofOfServiceBytes = await generateProofOfServicePDF({
-    landlord_name: wizardFacts.landlord_full_name,
-    tenant_name: wizardFacts.tenant_full_name,
-    property_address: buildAddress(
-      wizardFacts.property_address_line1,
-      wizardFacts.property_city,
-      wizardFacts.property_postcode,
-    ),
-    document_served: 'Form 3A notice seeking possession',
-    served_date: wizardFacts.notice_served_date,
-    expiry_date: wizardFacts.notice_expiry_date,
-    service_method: wizardFacts.notice_service_method,
-  });
-  const proofOfServicePath = path.join(rootDir, 'proof-of-service.pdf');
-  const proofOfServiceMeta = await writePdf(proofOfServicePath, proofOfServiceBytes);
-  artifacts.push({
-    key: 'proof_of_service',
-    title: 'Proof of Service Support',
-    outputPath: proofOfServicePath,
-    type: 'pdf',
-    ...proofOfServiceMeta,
-  });
+    if (document.pdf) {
+      const meta = await writePdf(outputPath, document.pdf);
+      artifacts.push({
+        key: document.document_type,
+        title: document.title,
+        outputPath,
+        type: 'pdf',
+        ...meta,
+      });
+    }
+  }
 
   return artifacts;
 }
 
 async function generateCompletePack(rootDir: string, wizardFacts: WizardFacts): Promise<GeneratedArtifact[]> {
-  const caseId = 'audit-complete-pack';
-  const artifacts = await generateNoticeOnlyPack(rootDir, wizardFacts);
-  const { caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
-
-  const n5Bytes = await fillOfficialForm('n5', caseData as CaseData);
-  const n5Path = path.join(rootDir, 'n5-claim.pdf');
-  const n5Meta = await writePdf(n5Path, n5Bytes);
-  artifacts.push({
-    key: 'n5_claim',
-    title: 'Form N5 - Claim for Possession',
-    outputPath: n5Path,
-    type: 'pdf',
-    ...n5Meta,
-  });
-
-  const n119Bytes = await fillOfficialForm('n119', caseData as CaseData);
-  const n119Path = path.join(rootDir, 'n119-particulars.pdf');
-  const n119Meta = await writePdf(n119Path, n119Bytes);
-  artifacts.push({
-    key: 'n119_particulars',
-    title: 'Form N119 - Particulars of Claim',
-    outputPath: n119Path,
-    type: 'pdf',
-    ...n119Meta,
-  });
-
-  const courtFilingGuide = await generateDocument({
-    templatePath: 'uk/england/templates/eviction/court_filing_guide.hbs',
-    data: {
-      ...wizardFacts,
-      jurisdiction: 'england',
-      current_date: new Date().toLocaleDateString('en-GB'),
-    },
-    outputFormat: 'html',
-  });
-  const courtFilingGuidePath = path.join(rootDir, 'court-filing-guide.html');
-  const courtFilingGuideMeta = await writeHtml(courtFilingGuidePath, courtFilingGuide.html);
-  artifacts.push({
-    key: 'court_filing_guide',
-    title: 'Court Filing Guide',
-    outputPath: courtFilingGuidePath,
-    type: 'html',
-    ...courtFilingGuideMeta,
-  });
-
-  const caseFacts = wizardFactsToCaseFacts(wizardFacts);
-  const arrearsData = getArrearsScheduleData({
-    arrears_items: caseFacts.issues?.rent_arrears?.arrears_items || [],
-    total_arrears:
-      wizardFacts.total_arrears ||
-      wizardFacts.rent_arrears_amount ||
-      caseFacts.issues?.rent_arrears?.total_arrears ||
-      0,
-    rent_amount: wizardFacts.rent_amount || caseFacts.tenancy?.rent_amount || 0,
-    rent_frequency: wizardFacts.rent_frequency || caseFacts.tenancy?.rent_frequency || 'monthly',
-    include_schedule: true,
-  });
-
-  if (arrearsData.include_schedule_pdf) {
-    const arrearsSchedule = await generateDocument({
-      templatePath: 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
-      data: {
-        claimant_reference: wizardFacts.claimant_reference || caseId,
-        arrears_schedule: arrearsData.arrears_schedule,
-        arrears_total: arrearsData.arrears_total,
-        rent_amount: wizardFacts.rent_amount,
-        rent_frequency: wizardFacts.rent_frequency,
-        tenancy_start_date: wizardFacts.tenancy_start_date || caseFacts.tenancy?.start_date || '',
-        payment_day: wizardFacts.rent_due_day || caseFacts.tenancy?.rent_due_day || '',
-      },
-      outputFormat: 'html',
-    });
-    const arrearsSchedulePath = path.join(rootDir, 'arrears-schedule.html');
-    const arrearsScheduleMeta = await writeHtml(arrearsSchedulePath, arrearsSchedule.html);
-    artifacts.push({
-      key: 'arrears_schedule',
-      title: 'Rent Arrears Schedule',
-      outputPath: arrearsSchedulePath,
-      type: 'html',
-      ...arrearsScheduleMeta,
-    });
-  }
-
-  return artifacts;
+  const pack = await generateLiveCompleteEvictionPack(wizardFacts);
+  return persistGeneratedPackDocuments(rootDir, pack.documents);
 }
 
 function getMissingPackKeys(

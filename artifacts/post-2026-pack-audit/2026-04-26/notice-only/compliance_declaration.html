@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Schedule of Rent Arrears</title>
+  <title>Compliance Checklist - Pre-Service Checks</title>
   <style>
     * {
   margin: 0;
@@ -384,17 +384,18 @@ em {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1em 0;
+  margin: 0.75em 0;
 
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
 th, td {
-  padding: 0.5em;
+  padding: 0.35em 0.45em;
   border: 1px solid #ccc;
   text-align: left;
   vertical-align: top;
+  font-size: 10.5pt;
 }
 
 th {
@@ -402,22 +403,19 @@ th {
   background-color: #f0f0f0;
 }
 
-    /* ===== @PAGE OVERRIDE ===== */
     @page {
       size: A4;
       margin: 10mm;
     }
 
     body {
-      padding: 0;
       margin: 0 auto;
-      font-family: Arial, sans-serif;
-      font-size: 10pt;
-      line-height: 1.5;
+      padding: 0;
       color: #1a1a1a;
+      font-size: 10pt;
+      line-height: 1.55;
     }
 
-    /* Document Header */
     .doc-header {
       text-align: center;
       margin-bottom: 1.5em;
@@ -426,294 +424,227 @@ th {
     }
 
     .doc-header h1 {
+      margin: 0 0 0.4em 0;
       font-size: 14pt;
-      font-weight: 600;
-      margin: 0 0 0.5em 0;
-      line-height: 1.3;
-      color: #1a1a1a;
+      font-weight: 700;
     }
 
     .doc-badge {
       display: inline-block;
+      padding: 0.3em 0.8em;
       background: #1a1a1a;
       color: white;
-      padding: 0.3em 0.8em;
       font-size: 10pt;
       font-weight: 600;
-      letter-spacing: 0.5px;
     }
 
-    /* Case Details Box */
-    .case-details {
-      border: 2px solid #1a1a1a;
-      padding: 1em;
-      margin: 1.5em 0;
-      background: #fafafa;
+    .summary-box,
+    .item,
+    .callout {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
-    .case-details-grid {
-      display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 0.4em 1em;
-      font-size: 10pt;
-    }
-
-    .case-details-grid dt {
-      font-weight: 600;
-      color: #444;
-    }
-
-    .case-details-grid dd {
-      margin: 0;
-      color: #1a1a1a;
-    }
-
-    /* Summary Box */
     .summary-box {
-      border: 2px solid #1a1a1a;
+      margin: 1.25em 0;
       padding: 1em;
-      margin: 1.5em 0;
-      background: #f0f9ff;
-    }
-
-    .summary-box h3 {
-      margin: 0 0 0.8em 0;
-      font-size: 11pt;
-      font-weight: 600;
+      border: 1px solid #d8d8d8;
+      background: #fafafa;
     }
 
     .summary-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.8em 2em;
+      grid-template-columns: 170px 1fr;
+      gap: 0.45em 1em;
     }
 
-    .summary-item {
-      padding: 0.6em;
-      background: white;
-      border: 1px solid #ddd;
+    .summary-grid dt {
+      font-weight: 600;
+      color: #444;
     }
 
-    .summary-item dt {
-      font-size: 9pt;
-      color: #666;
-      margin-bottom: 0.2em;
-    }
-
-    .summary-item dd {
+    .summary-grid dd {
       margin: 0;
-      font-size: 11pt;
-      font-weight: 600;
     }
 
-    /* Arrears Table */
-    .arrears-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1.5em 0;
+    .callout {
+      margin: 1.25em 0;
+      padding: 1em;
+      border-left: 4px solid #1a1a1a;
+      background: #f7f7f7;
+    }
+
+    .callout.critical {
+      border-color: #b91c1c;
+      background: #fef2f2;
+    }
+
+    .callout.warning {
+      border-color: #b45309;
+      background: #fff7ed;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8em;
+      margin: 1.25em 0;
+    }
+
+    .legend-item,
+    .item {
+      border: 1px solid #d8d8d8;
+      background: white;
+    }
+
+    .legend-item {
+      padding: 0.8em;
+    }
+
+    .status {
+      display: inline-block;
+      margin-bottom: 0.6em;
+      padding: 0.2em 0.55em;
+      border-radius: 999px;
       font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
-    .arrears-table th,
-    .arrears-table td {
-      padding: 6px 8px;
-      border: 1px solid #1a1a1a;
-      text-align: left;
+    .status.critical {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
-    .arrears-table th {
-      background: #1a1a1a;
-      color: white;
-      font-weight: 600;
-      white-space: nowrap;
+    .status.risk {
+      background: #ffedd5;
+      color: #9a3412;
     }
 
-    .arrears-table td {
-      background: #fff;
+    .status.advisory {
+      background: #e0f2fe;
+      color: #075985;
     }
 
-    .arrears-table tr:nth-child(even) td {
-      background: #f9fafb;
-    }
-
-    .arrears-table .amount {
-      text-align: right;
-      font-family: 'Courier New', monospace;
-    }
-
-    .arrears-table .period-col {
-      min-width: 180px;
-    }
-
-    .arrears-table .notes-col {
-      font-size: 8pt;
-      color: #666;
-    }
-
-    /* Total Row */
-    .total-row {
-      background: #1a1a1a !important;
-      color: white;
+    .section-title {
+      margin: 1.75em 0 0.75em 0;
+      padding-bottom: 0.4em;
+      border-bottom: 2px solid #1a1a1a;
+      font-size: 12pt;
       font-weight: 700;
     }
 
-    .total-row td {
-      background: #1a1a1a !important;
-      color: white !important;
-      border-color: #1a1a1a;
-    }
-
-    /* Info Box */
-    .info-box {
-      background: #f8f8f8;
-      border-left: 4px solid #1a1a1a;
+    .item {
+      margin: 1em 0;
       padding: 1em;
-      margin: 1.5em 0;
-      font-size: 10pt;
     }
 
-    /* Document Footer */
+    .item h3 {
+      margin: 0 0 0.4em 0;
+      font-size: 11pt;
+    }
+
+    .item p {
+      margin: 0.35em 0;
+    }
+
+    ul {
+      margin: 0.5em 0 0 1.2em;
+    }
+
+    li {
+      margin: 0.35em 0;
+    }
+
     .doc-footer {
       margin-top: 2em;
       padding-top: 1em;
-      border-top: 2px solid #e5e7eb;
+      border-top: 1px solid #d8d8d8;
       font-size: 9pt;
-      color: #6b7280;
-    }
-
-    .doc-footer p {
-      margin: 0.3em 0;
-    }
-
-    @media print {
-      .arrears-table {
-        page-break-inside: avoid;
-      }
+      color: #555;
     }
   </style>
 </head>
 <body>
+  <div class="doc-header">
+    <h1>Compliance Checklist - Pre-Service Checks</h1>
+    <span class="doc-badge">
+      Form 3A notice
+    </span>
+  </div>
 
-<!-- Document Header -->
-<div class="doc-header">
-  <h1>Schedule of Rent Arrears</h1>
-  <span class="doc-badge">Money Claim – County Court</span>
-</div>
+  <div class="callout">
+    <p><strong>Purpose:</strong> Review these items before relying on the notice. This checklist helps distinguish between a likely blocker, a significant litigation risk, and matters that are primarily advisory or good practice.</p>
+  </div>
 
-<!-- Case Details -->
-<div class="case-details">
-  <dl class="case-details-grid">
-    <dt>Property:</dt>
-    <dd></dd>
-    <dt>Defendant:</dt>
-    <dd></dd>
-    <dt>Claimant:</dt>
-    <dd></dd>
-    <dt>Claim Reference:</dt>
-    <dd>audit-complete-pack</dd>
-    <dt>Schedule Date:</dt>
-    <dd>18 April 2026</dd>
-  </dl>
-</div>
-
-<!-- Arrears Summary -->
-<div class="summary-box">
-  <h3>Arrears Summary</h3>
-  <div class="summary-grid">
-    <div class="summary-item">
-      <dt>Rent Amount</dt>
-      <dd>&#163;1200.00 monthly</dd>
-    </div>
-    <div class="summary-item">
-      <dt>Due Day</dt>
-      <dd>1st of each month</dd>
-    </div>
-    <div class="summary-item">
-      <dt>Tenancy Start Date</dt>
+  <div class="summary-box">
+    <dl class="summary-grid">
+      <dt>Property</dt>
+      <dd>35 Woodhall Park Avenue
+Pudsey
+LS28 7HF</dd>
+      <dt>Tenancy start date</dt>
       <dd>15 January 2024</dd>
+      <dt>Notice type</dt>
+      <dd>Form 3A notice</dd>
+      <dt>Generated</dt>
+      <dd>26 April 2026</dd>
+    </dl>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="status critical">Critical blocker</div>
+      <p>Likely to block the current possession route or materially weaken the claim unless corrected first.</p>
     </div>
-    <div class="summary-item">
-      <dt>Total Arrears Claimed</dt>
-      <dd><strong>&#163;4200.00</strong></dd>
+    <div class="legend-item">
+      <div class="status risk">Significant risk</div>
+      <p>Does not necessarily invalidate a Section 8 notice but can create penalties, counterclaims, or evidential problems.</p>
+    </div>
+    <div class="legend-item">
+      <div class="status advisory">Advisory / good practice</div>
+      <p>Still worth resolving, documenting, or improving before court if possible.</p>
     </div>
   </div>
-</div>
 
-<!-- Arrears Schedule Table with Running Balance -->
-<table class="arrears-table">
-  <thead>
-    <tr>
-      <th class="period-col">Period</th>
-      <th>Due Date</th>
-      <th class="amount">Rent Due</th>
-      <th class="amount">Paid</th>
-      <th class="amount">Arrears</th>
-      <th class="amount">Running Balance</th>
-      <th class="notes-col">Notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="period-col">1 February 2026 to 28 February 2026</td>
-      <td>28 February 2026</td>
-      <td class="amount">&#163;1200.00</td>
-      <td class="amount">&#163;0.00</td>
-      <td class="amount">&#163;1200.00</td>
-      <td class="amount"><strong>&#163;1200.00</strong></td>
-      <td class="notes-col"></td>
-    </tr>
-    <tr>
-      <td class="period-col">1 March 2026 to 31 March 2026</td>
-      <td>31 March 2026</td>
-      <td class="amount">&#163;1200.00</td>
-      <td class="amount">&#163;0.00</td>
-      <td class="amount">&#163;1200.00</td>
-      <td class="amount"><strong>&#163;2400.00</strong></td>
-      <td class="notes-col"></td>
-    </tr>
-    <tr>
-      <td class="period-col">1 April 2026 to 30 April 2026</td>
-      <td>30 April 2026</td>
-      <td class="amount">&#163;1200.00</td>
-      <td class="amount">&#163;0.00</td>
-      <td class="amount">&#163;1200.00</td>
-      <td class="amount"><strong>&#163;3600.00</strong></td>
-      <td class="notes-col"></td>
-    </tr>
-    <tr>
-      <td class="period-col">1 May 2026 to 31 May 2026</td>
-      <td>31 May 2026</td>
-      <td class="amount">&#163;1200.00</td>
-      <td class="amount">&#163;600.00</td>
-      <td class="amount">&#163;600.00</td>
-      <td class="amount"><strong>&#163;4200.00</strong></td>
-      <td class="notes-col"></td>
-    </tr>
-    <tr class="total-row">
-      <td colspan="4"><strong>Total Arrears Outstanding</strong></td>
-      <td class="amount"><strong>&#163;4200.00</strong></td>
-      <td class="amount"><strong>&#163;4200.00</strong></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+  <h2 class="section-title">Key Compliance Areas</h2>
 
-<!-- Payment Allocation Note -->
-<div class="info-box">
-  <strong>Payment Allocation Method:</strong> Payments have been allocated using the FIFO (First In, First Out) method, applying payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears allocation.
-</div>
+  <div class="item">
+    <h3>Deposit protection and prescribed information</h3>
+        <div class="status risk">Significant risk</div>
+        <p>The deposit appears to have been protected, but prescribed information service is not confirmed in the current pack data.</p>
+        <p>This does not automatically invalidate a Section 8 notice, but it may expose the landlord to penalties, counterclaims, or credibility issues and should be resolved where possible.</p>
+  </div>
 
-<!-- Evidence Note -->
-<div class="info-box">
-  <strong>Evidence Requirements:</strong> Attach proof of payments received, bank statements, and rent ledgers behind this schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
-</div>
+  <div class="item">
+    <h3>Gas safety</h3>
+    <div class="status advisory">Advisory / good practice</div>
+    <p>No gas safety provision is confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but the tenancy file should still be checked and the evidence retained if available.</p>
+      </div>
 
-<!-- Footer -->
-<div class="doc-footer">
-  <p><strong>Generated:</strong> 18 April 2026</p>
-  <p><strong>Landlord Heaven Money Claim Pack</strong> | England</p>
-  <p><em>This schedule supports the particulars of claim and demonstrates the calculation of arrears owed.</em></p>
-</div>
+  <div class="item">
+    <h3>Energy Performance Certificate (EPC)</h3>
+    <div class="status advisory">Advisory / good practice</div>
+    <p>No EPC provision is confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but the tenancy file should still be checked and updated where possible.</p>
+      </div>
 
+  <div class="item">
+    <h3>How to Rent guide</h3>
+    <div class="status advisory">Advisory / good practice</div>
+    <p>How to Rent service is not confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.</p>
+      </div>
+
+
+  <h2 class="section-title">Practical Summary</h2>
+
+  <div class="callout warning">
+    <p><strong>Section 8 route:</strong> Compliance issues do not all carry the same consequence. Some do not automatically invalidate the notice, but they can still weaken the claim, increase costs exposure, or create separate landlord liability. Resolve what you can and keep the file evidence clear.</p>
+  </div>
+
+  <div class="doc-footer">
+    <p><strong>Generated:</strong> 26 April 2026</p>
+    <p><strong>Landlord Heaven</strong> | England notice support document</p>
+  </div>
 </body>
 </html>

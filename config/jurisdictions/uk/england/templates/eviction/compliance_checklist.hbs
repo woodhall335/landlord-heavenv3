@@ -206,7 +206,11 @@
   <div class="legend">
     <div class="legend-item">
       <div class="status critical">Critical blocker</div>
-      <p>Typically blocks a Section 21 route unless corrected first.</p>
+      {{#if (eq selected_notice_route "section_21")}}
+      <p>Typically blocks reliance on the Section 21 route unless corrected first.</p>
+      {{else}}
+      <p>Likely to block the current possession route or materially weaken the claim unless corrected first.</p>
+      {{/if}}
     </div>
     <div class="legend-item">
       <div class="status risk">Significant risk</div>

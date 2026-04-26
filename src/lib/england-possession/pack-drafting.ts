@@ -1023,28 +1023,59 @@ function buildPreActionParagraphs(data: DraftingInput, groundDrafts: EnglandGrou
 }
 
 function buildDefendantCircumstancesParagraphs(data: DraftingInput): string[] {
-  const details = [
-    data.tenant_vulnerability_details,
-    data.vulnerability_details,
-    data.known_tenant_defences,
-  ]
+  const vulnerabilityDetails = [data.tenant_vulnerability_details, data.vulnerability_details]
     .map((value) => String(value || '').trim())
     .filter(Boolean);
-
-  const benefitsDetails = [data.benefit_type, data.tenant_benefits_details]
+  const knownDefences = String(data.known_tenant_defences || '').trim();
+  const disrepairIssues = String(data.disrepair_issues_list || '').trim();
+  const disrepairDate = formatLongDate(data.disrepair_complaint_date);
+  const previousProceedings = String(data.previous_proceedings_details || '').trim();
+  const benefitDetails = [data.benefit_type, data.tenant_benefits_details]
     .map((value) => String(value || '').trim())
     .filter(Boolean);
+  const counterclaimGrounds = Array.isArray(data.counterclaim_grounds)
+    ? data.counterclaim_grounds.map((entry) => String(entry || '').trim()).filter(Boolean)
+    : String(data.counterclaim_grounds || '')
+        .split(/\r?\n|;/)
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+  const paymentPlanResponse = String(data.payment_plan_response || '').trim();
 
-  if (details.length === 0 && benefitsDetails.length === 0) {
+  const paragraphs = [
+    vulnerabilityDetails.length > 0
+      ? `Known defendant circumstances: ${vulnerabilityDetails.join(' ')}`
+      : '',
+    knownDefences
+      ? `The claimant understands that the defendant may seek to rely on the following defence or dispute points: ${knownDefences}. The claimant's bundle should answer those points through the chronology, compliance record, and supporting documents.`
+      : '',
+    data.disrepair_complaints === true
+      ? `The defendant has raised disrepair issues${disrepairDate ? ` on or around ${disrepairDate}` : ''}: ${disrepairIssues || 'details to be confirmed in the bundle'}. The claimant should exhibit the relevant inspection, repair, and response evidence so any set-off or counterclaim point is answered directly.`
+      : '',
+    data.previous_court_proceedings === true
+      ? `There have been previous proceedings or formal litigation steps relating to this tenancy: ${previousProceedings || 'details to be confirmed in the claim bundle'}. The present claim should explain that earlier history so the court can see how the current case fits into it.`
+      : '',
+    benefitDetails.length > 0
+      ? `Benefit information disclosed to the claimant: ${benefitDetails.join(', ')}. If arrears are said to be linked to benefit delay or direct payment problems, the claimant should keep the payment chronology and contact history tightly aligned to that explanation.`
+      : '',
+    data.payment_plan_offered === true
+      ? `A payment plan or arrears arrangement was offered${
+          paymentPlanResponse
+            ? ` and the recorded outcome was: ${paymentPlanResponse}.`
+            : " The claimant should exhibit that proposal and the tenant's response or non-compliance."
+        }`
+      : '',
+    data.tenant_counterclaim_likely === true
+      ? `A counterclaim or set-off is considered likely${counterclaimGrounds.length > 0 ? ` on the following issues: ${counterclaimGrounds.join('; ')}.` : '.'} The claimant's witness material and hearing preparation should answer those issues expressly rather than leaving them to inference.`
+      : '',
+  ].filter(Boolean);
+
+  if (paragraphs.length === 0) {
     return [
       "The claimant is not aware of any further information about the defendant's circumstances beyond the matters set out in the claim papers and any information the defendant may wish to place before the court.",
     ];
   }
 
-  return [
-    details.length > 0 ? `Known defendant circumstances: ${details.join(' ')}` : '',
-    benefitsDetails.length > 0 ? `Benefit information disclosed to the claimant: ${benefitsDetails.join(', ')}.` : '',
-  ].filter(Boolean);
+  return paragraphs;
 }
 
 function buildFinancialParagraphs(data: DraftingInput, grounds: EnglandGroundCode[]): string[] {

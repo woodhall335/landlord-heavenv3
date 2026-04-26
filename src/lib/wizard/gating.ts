@@ -63,7 +63,7 @@ export interface WizardGateInput {
  * Extract ground codes from section8_grounds array
  * Handles formats like "Ground 8 - Serious rent arrears" or "ground_8"
  */
-function extractGroundCodes(section8Grounds: any[]): number[] {
+function extractGroundCodes(section8Grounds: any[]): Array<number | string> {
   if (!Array.isArray(section8Grounds)) return [];
 
   return section8Grounds
@@ -71,26 +71,33 @@ function extractGroundCodes(section8Grounds: any[]): number[] {
       if (typeof g === 'number') return g;
       if (typeof g !== 'string') return null;
 
-      // Try "Ground 8" format
-      const match = g.match(/Ground\s+(\d+)/i);
-      if (match) return parseInt(match[1], 10);
+      // Try "Ground 8" or "Ground 1A" format
+      const match = g.match(/Ground\s+(\d+[A-Z]*)/i);
+      if (match) {
+        const normalized = match[1].toUpperCase();
+        return /^\d+$/.test(normalized) ? parseInt(normalized, 10) : normalized;
+      }
 
-      // Try "ground_8" format
-      const underscoreMatch = g.match(/ground[_\s](\d+)/i);
-      if (underscoreMatch) return parseInt(underscoreMatch[1], 10);
+      // Try "ground_8" or "ground_1a" format
+      const underscoreMatch = g.match(/ground[_\s](\d+[A-Z]*)/i);
+      if (underscoreMatch) {
+        const normalized = underscoreMatch[1].toUpperCase();
+        return /^\d+$/.test(normalized) ? parseInt(normalized, 10) : normalized;
+      }
 
       return null;
     })
-    .filter((code): code is number => code !== null && !isNaN(code));
+    .filter((code): code is number | string => code !== null && !(typeof code === 'number' && isNaN(code)));
 }
 
 /**
  * Check if particulars exist for a given ground
  */
-function hasParticularsForGround(facts: Record<string, any>, groundCode: number): boolean {
+function hasParticularsForGround(facts: Record<string, any>, groundCode: number | string): boolean {
+  const normalizedGroundKey = `ground_${String(groundCode).toLowerCase()}`;
   // Check structured particulars: ground_particulars.ground_8.summary or section_8_particulars.ground_8
-  const structuredPath1 = resolveFactValue(facts, `ground_particulars.ground_${groundCode}.summary`);
-  const structuredPath2 = resolveFactValue(facts, `section_8_particulars.ground_${groundCode}`);
+  const structuredPath1 = resolveFactValue(facts, `ground_particulars.${normalizedGroundKey}.summary`);
+  const structuredPath2 = resolveFactValue(facts, `section_8_particulars.${normalizedGroundKey}`);
 
   if (structuredPath1 && typeof structuredPath1 === 'string' && structuredPath1.trim().length > 0) {
     return true;
@@ -493,7 +500,7 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
 
   if (selectedRoute === 'section_8' || selectedRoute?.toLowerCase().includes('section 8')) {
     if (groundCodes.length > 0) {
-      const missingParticulars: number[] = [];
+      const missingParticulars: Array<number | string> = [];
 
       for (const groundCode of groundCodes) {
         if (!hasParticularsForGround(facts, groundCode)) {
@@ -513,7 +520,10 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     }
 
     // Warn if only discretionary grounds selected
-    const mandatoryGrounds = groundCodes.filter(code => code >= 1 && code <= 8);
+    const mandatoryGrounds = groundCodes.filter((code) => {
+      const normalized = typeof code === 'string' ? Number.parseInt(code, 10) : code;
+      return Number.isFinite(normalized) && normalized >= 1 && normalized <= 8;
+    });
     if (groundCodes.length > 0 && mandatoryGrounds.length === 0) {
       warnings.push({
         code: 'SECTION_8_ONLY_DISCRETIONARY',

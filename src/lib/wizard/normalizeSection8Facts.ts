@@ -26,7 +26,7 @@ import { resolveFactValue } from '@/lib/jurisdictions/validators';
  * Extract ground codes from section8_grounds array
  * Handles formats like "Ground 8 - Serious rent arrears" or "ground_8"
  */
-function extractGroundCodes(section8Grounds: any[]): number[] {
+function extractGroundCodes(section8Grounds: any[]): Array<number | string> {
   if (!Array.isArray(section8Grounds)) return [];
 
   return section8Grounds
@@ -34,24 +34,31 @@ function extractGroundCodes(section8Grounds: any[]): number[] {
       if (typeof g === 'number') return g;
       if (typeof g !== 'string') return null;
 
-      // Try "Ground 8" format
-      const match = g.match(/Ground\s+(\d+)/i);
-      if (match) return parseInt(match[1], 10);
+      // Try "Ground 8" or "Ground 1A" format
+      const match = g.match(/Ground\s+(\d+[A-Z]*)/i);
+      if (match) {
+        const normalized = match[1].toUpperCase();
+        return /^\d+$/.test(normalized) ? parseInt(normalized, 10) : normalized;
+      }
 
-      // Try "ground_8" format
-      const underscoreMatch = g.match(/ground[_\s](\d+)/i);
-      if (underscoreMatch) return parseInt(underscoreMatch[1], 10);
+      // Try "ground_8" or "ground_1a" format
+      const underscoreMatch = g.match(/ground[_\s](\d+[A-Z]*)/i);
+      if (underscoreMatch) {
+        const normalized = underscoreMatch[1].toUpperCase();
+        return /^\d+$/.test(normalized) ? parseInt(normalized, 10) : normalized;
+      }
 
       return null;
     })
-    .filter((code): code is number => code !== null && !isNaN(code));
+    .filter((code): code is number | string => code !== null && !(typeof code === 'number' && isNaN(code)));
 }
 
 /**
  * Check if a ground code is an arrears ground (8, 10, or 11)
  */
-function isArrearsGround(groundCode: number): boolean {
-  return [8, 10, 11].includes(groundCode);
+function isArrearsGround(groundCode: number | string): boolean {
+  const normalized = typeof groundCode === 'string' ? Number.parseInt(groundCode, 10) : groundCode;
+  return Number.isFinite(normalized) && [8, 10, 11].includes(normalized);
 }
 
 /**
@@ -266,9 +273,10 @@ export function normalizeSection8Facts(facts: Record<string, any>): Record<strin
   // BACKFILL 2: ground_particulars.ground_X.summary from section8_details
   // ============================================================================
   for (const groundCode of groundCodes) {
+    const groundKey = `ground_${String(groundCode).toLowerCase()}`;
     // Check if particulars already exist for this ground
-    const existingSummary = resolveFactValue(facts, `ground_particulars.ground_${groundCode}.summary`);
-    const existingAltPath = resolveFactValue(facts, `section_8_particulars.ground_${groundCode}`);
+    const existingSummary = resolveFactValue(facts, `ground_particulars.${groundKey}.summary`);
+    const existingAltPath = resolveFactValue(facts, `section_8_particulars.${groundKey}`);
 
     // Check flat ground_particulars for mention of the ground
     const flatParticulars = resolveFactValue(facts, 'ground_particulars');
@@ -298,13 +306,13 @@ export function normalizeSection8Facts(facts: Record<string, any>): Record<strin
         }
 
         // Set the summary at the expected path
-        if (!facts.ground_particulars[`ground_${groundCode}`]) {
-          facts.ground_particulars[`ground_${groundCode}`] = {};
+        if (!facts.ground_particulars[groundKey]) {
+          facts.ground_particulars[groundKey] = {};
         }
 
-        facts.ground_particulars[`ground_${groundCode}`].summary = summary;
+        facts.ground_particulars[groundKey].summary = summary;
 
-        console.log(`[normalizeSection8Facts] Backfilled ground_particulars.ground_${groundCode}.summary from arrears data/section8_details`);
+        console.log(`[normalizeSection8Facts] Backfilled ground_particulars.${groundKey}.summary from arrears data/section8_details`);
       }
     }
   }
@@ -348,15 +356,16 @@ export function validateSection8FactsPresent(facts: Record<string, any>): {
 
   // Check ground particulars for each selected ground
   for (const groundCode of groundCodes) {
-    const summary = resolveFactValue(facts, `ground_particulars.ground_${groundCode}.summary`);
-    const altPath = resolveFactValue(facts, `section_8_particulars.ground_${groundCode}`);
+    const groundKey = `ground_${String(groundCode).toLowerCase()}`;
+    const summary = resolveFactValue(facts, `ground_particulars.${groundKey}.summary`);
+    const altPath = resolveFactValue(facts, `section_8_particulars.${groundKey}`);
     const flatParticulars = resolveFactValue(facts, 'ground_particulars');
     const hasFlatParticulars = flatParticulars &&
                                typeof flatParticulars === 'string' &&
                                new RegExp(`Ground\\s+${groundCode}\\b`, 'i').test(flatParticulars);
 
     if (!summary && !altPath && !hasFlatParticulars) {
-      missingFields.push(`ground_particulars.ground_${groundCode}.summary`);
+      missingFields.push(`ground_particulars.${groundKey}.summary`);
     }
   }
 

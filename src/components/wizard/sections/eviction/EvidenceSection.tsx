@@ -4,6 +4,12 @@ import React, { useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { RiCheckboxCircleLine, RiFileTextLine } from 'react-icons/ri';
 import { buildEnglandEvictionChronology } from '@/lib/england-possession/chronology';
+import {
+  getDefenceRiskValue,
+  mergeDefenceRiskUpdate,
+  normalizeDefenceRiskList,
+  stringifyDefenceRiskList,
+} from '@/lib/england-possession/defence-risk';
 
 interface EvidenceSectionProps {
   facts: WizardFacts;
@@ -107,7 +113,7 @@ const RESPONSIVENESS_OPTIONS = [
 interface BooleanQuestionProps {
   label: string;
   help: string;
-  value: boolean | undefined;
+  value: boolean | undefined | null;
   onChange: (value: boolean) => void | Promise<void>;
   yesLabel?: string;
   noLabel?: string;
@@ -151,12 +157,32 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
   facts,
   onUpdate,
 }) => {
+  const riskFacts = (((facts as any).risk || {}) as Record<string, any>);
   const evidence = facts.evidence || {};
   const communicationTimeline = facts.communication_timeline || {};
   const epcProvided = facts.epc_served ?? facts.epc_provided;
   const howToRentProvided = facts.how_to_rent_served ?? facts.how_to_rent_provided;
   const hasGasAppliances = facts.has_gas_appliances;
   const gasSafetyProvided = facts.gas_safety_cert_served ?? facts.gas_safety_cert_provided;
+  const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  const hasArrearsGround = selectedGrounds.some((ground) =>
+    ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
+  );
+  const tenantDisputesClaim = getDefenceRiskValue<boolean | null>(facts as any, 'tenant_disputes_claim');
+  const knownTenantDefences = String(getDefenceRiskValue(facts as any, 'known_tenant_defences') || '');
+  const disrepairComplaints = getDefenceRiskValue<boolean | null>(facts as any, 'disrepair_complaints');
+  const disrepairComplaintDate = String(getDefenceRiskValue(facts as any, 'disrepair_complaint_date') || '');
+  const disrepairIssuesList = String(getDefenceRiskValue(facts as any, 'disrepair_issues_list') || '');
+  const previousCourtProceedings = getDefenceRiskValue<boolean | null>(facts as any, 'previous_court_proceedings');
+  const previousProceedingsDetails = String(getDefenceRiskValue(facts as any, 'previous_proceedings_details') || '');
+  const tenantVulnerability = getDefenceRiskValue<boolean | null>(facts as any, 'tenant_vulnerability');
+  const tenantVulnerabilityDetails = String(getDefenceRiskValue(facts as any, 'tenant_vulnerability_details') || '');
+  const tenantCounterclaimLikely = getDefenceRiskValue<boolean | null>(facts as any, 'tenant_counterclaim_likely');
+  const counterclaimGrounds = stringifyDefenceRiskList(getDefenceRiskValue(facts as any, 'counterclaim_grounds'));
+  const paymentPlanOffered = getDefenceRiskValue<boolean | null>(facts as any, 'payment_plan_offered');
+  const paymentPlanResponse = String(getDefenceRiskValue(facts as any, 'payment_plan_response') || '');
+  const benefitType = String((facts as any).benefit_type || '');
+  const tenantBenefitsDetails = String((facts as any).tenant_benefits_details || '');
   const generatedChronology = useMemo(
     () => buildEnglandEvictionChronology(facts as Record<string, any>),
     [facts],
@@ -178,6 +204,10 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
         ...patch,
       },
     });
+  };
+
+  const mergeRisk = async (patch: Record<string, any>) => {
+    await onUpdate(mergeDefenceRiskUpdate({ ...facts, risk: riskFacts }, patch));
   };
 
   const availabilityChecks = [
@@ -250,6 +280,16 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
     facts.breathing_space_checked !== undefined ||
     facts.tenant_in_breathing_space !== undefined ||
     facts.evidence_bundle_ready !== undefined;
+  const defenceRiskTouched =
+    tenantDisputesClaim !== undefined ||
+    Boolean(knownTenantDefences.trim()) ||
+    disrepairComplaints !== undefined ||
+    previousCourtProceedings !== undefined ||
+    tenantVulnerability !== undefined ||
+    tenantCounterclaimLikely !== undefined ||
+    paymentPlanOffered !== undefined ||
+    Boolean(benefitType.trim()) ||
+    Boolean(tenantBenefitsDetails.trim());
 
   return (
     <div className="space-y-6">
@@ -483,7 +523,189 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
       </CollapsibleStepCard>
 
       <CollapsibleStepCard
-        stepLabel="Step 4 of 4"
+        stepLabel="Step 4 of 5"
+        title="Anticipate the tenant's likely defence points"
+        description="Use this to record the issues the landlord pack should answer proactively, especially where the tenant may rely on disrepair, benefits delay, vulnerability, or a counterclaim."
+        defaultOpen={defenceRiskTouched}
+      >
+        <div className="mt-4 grid gap-3">
+          <BooleanQuestion
+            label="Has the tenant already disputed the arrears, the notice, or the possession route?"
+            help="Answer yes if the tenant has already raised a reason why possession should not proceed or why the notice is said to be wrong."
+            value={tenantDisputesClaim}
+            onChange={(value) => mergeRisk({ tenant_disputes_claim: value })}
+            yesLabel="Yes, disputed"
+            noLabel="No dispute raised"
+          />
+
+          {tenantDisputesClaim === true && (
+            <label className="block rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+              <span className="text-sm font-medium text-[#27134a]">Known tenant defence or dispute points</span>
+              <textarea
+                value={knownTenantDefences}
+                onChange={(e) => void mergeRisk({ known_tenant_defences: e.target.value })}
+                rows={4}
+                className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                placeholder="For example: disputes the arrears figure, says the delay is a UC issue, says repairs were ignored, or says the notice was not validly served."
+              />
+            </label>
+          )}
+
+          <BooleanQuestion
+            label="Has the tenant made any disrepair complaint that could be raised against the claim?"
+            help="Record repair complaints that may turn into a set-off, disrepair defence, or counterclaim at hearing."
+            value={disrepairComplaints}
+            onChange={(value) => mergeRisk({ disrepair_complaints: value })}
+            yesLabel="Yes, complaints made"
+            noLabel="No disrepair issue known"
+          />
+
+          {disrepairComplaints === true && (
+            <div className="grid gap-3 rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+              <label className="block">
+                <span className="text-sm font-medium text-[#27134a]">When was the complaint raised?</span>
+                <input
+                  type="date"
+                  value={disrepairComplaintDate}
+                  onChange={(e) => void mergeRisk({ disrepair_complaint_date: e.target.value })}
+                  className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                />
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-[#27134a]">What issues are being raised?</span>
+                <textarea
+                  value={disrepairIssuesList}
+                  onChange={(e) => void mergeRisk({ disrepair_issues_list: e.target.value })}
+                  rows={4}
+                  className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                  placeholder="For example: boiler failures, mould, leaking roof, unsafe electrics, broken windows."
+                />
+              </label>
+            </div>
+          )}
+
+          <BooleanQuestion
+            label="Have there been previous court or tribunal proceedings relating to this tenancy?"
+            help="Use this where there has already been litigation, a withdrawn claim, a prior money case, or another possession attempt tied to the same tenancy."
+            value={previousCourtProceedings}
+            onChange={(value) => mergeRisk({ previous_court_proceedings: value })}
+            yesLabel="Yes, previous proceedings"
+            noLabel="No previous proceedings"
+          />
+
+          {previousCourtProceedings === true && (
+            <label className="block rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+              <span className="text-sm font-medium text-[#27134a]">Previous proceedings details</span>
+              <textarea
+                value={previousProceedingsDetails}
+                onChange={(e) => void mergeRisk({ previous_proceedings_details: e.target.value })}
+                rows={4}
+                className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                placeholder="For example: prior possession claim dismissed, money judgment already obtained, consent order, or earlier proceedings stayed."
+              />
+            </label>
+          )}
+
+          <BooleanQuestion
+            label="Is there any vulnerability or personal circumstance the court is likely to hear about?"
+            help="Record only what is already known and relevant to timing, proportionality, support needs, or likely hearing-stage arguments."
+            value={tenantVulnerability}
+            onChange={(value) => mergeRisk({ tenant_vulnerability: value })}
+            yesLabel="Yes, known issue"
+            noLabel="No known issue"
+          />
+
+          {tenantVulnerability === true && (
+            <label className="block rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+              <span className="text-sm font-medium text-[#27134a]">Vulnerability details</span>
+              <textarea
+                value={tenantVulnerabilityDetails}
+                onChange={(e) => void mergeRisk({ tenant_vulnerability_details: e.target.value })}
+                rows={4}
+                className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                placeholder="For example: medical vulnerability, safeguarding concerns, mental health issues, or support involvement the landlord already knows about."
+              />
+            </label>
+          )}
+
+          <BooleanQuestion
+            label="Is a tenant counterclaim or set-off likely?"
+            help="Use this when the tenant is likely to plead disrepair, a deposit penalty, unlawful fees, or another monetary counterclaim."
+            value={tenantCounterclaimLikely}
+            onChange={(value) => mergeRisk({ tenant_counterclaim_likely: value })}
+            yesLabel="Yes, likely"
+            noLabel="No counterclaim expected"
+          />
+
+          {tenantCounterclaimLikely === true && (
+            <label className="block rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+              <span className="text-sm font-medium text-[#27134a]">Counterclaim or set-off grounds</span>
+              <textarea
+                value={counterclaimGrounds}
+                onChange={(e) =>
+                  void mergeRisk({
+                    counterclaim_grounds: normalizeDefenceRiskList(e.target.value),
+                  })
+                }
+                rows={4}
+                className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                placeholder="Use one line per point, for example: disrepair set-off, deposit penalty, unlawful fee dispute."
+              />
+            </label>
+          )}
+
+          {hasArrearsGround && (
+            <>
+              <label className="block rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+                <span className="text-sm font-medium text-[#27134a]">Benefit or Universal Credit arrears context</span>
+                <input
+                  type="text"
+                  value={benefitType}
+                  onChange={(e) => void onUpdate({ benefit_type: e.target.value })}
+                  className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                  placeholder="For example: UC housing costs delay, Housing Benefit suspension, direct payment issue."
+                />
+              </label>
+
+              <label className="block rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+                <span className="text-sm font-medium text-[#27134a]">Extra arrears context to answer likely defence points</span>
+                <textarea
+                  value={tenantBenefitsDetails}
+                  onChange={(e) => void onUpdate({ tenant_benefits_details: e.target.value })}
+                  rows={3}
+                  className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                  placeholder="For example: landlord allowed time for benefit issues, payment plan was offered, or tenant acknowledged the debt despite the benefits issue."
+                />
+              </label>
+
+              <BooleanQuestion
+                label="Was a payment plan or arrears arrangement offered?"
+                help="This helps the pack explain what the landlord did before moving to possession proceedings."
+                value={paymentPlanOffered}
+                onChange={(value) => mergeRisk({ payment_plan_offered: value })}
+                yesLabel="Yes, offered"
+                noLabel="No plan offered"
+              />
+
+              {paymentPlanOffered === true && (
+                <label className="block rounded-2xl border border-[#ece4ff] bg-[#faf7ff] px-4 py-4">
+                  <span className="text-sm font-medium text-[#27134a]">What happened with that payment plan?</span>
+                  <textarea
+                    value={paymentPlanResponse}
+                    onChange={(e) => void mergeRisk({ payment_plan_response: e.target.value })}
+                    rows={3}
+                    className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                    placeholder="For example: ignored, accepted then broken, refused, or partly complied with."
+                  />
+                </label>
+              )}
+            </>
+          )}
+        </div>
+      </CollapsibleStepCard>
+
+      <CollapsibleStepCard
+        stepLabel="Step 5 of 5"
         title="Confirm the England checks that affect court-readiness"
         description="These are the questions that can stop a Form 3A route or a possession file from being treated as ready. Keep them focused and factual."
         defaultOpen={englandComplianceTouched}

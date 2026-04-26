@@ -501,7 +501,7 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
 
   items.push({
     key: 'validity_checklist',
-    title: 'Validity Checklist',
+    title: 'Service & Validity Checklist',
     description: `Pre-service checks for dates, grounds, and service on your ${ENGLAND_SECTION8_NOTICE_NAME}`,
     category: 'Checklists',
     required: true,
@@ -509,7 +509,7 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
 
   items.push({
     key: 'compliance_declaration',
-    title: 'Compliance Declaration',
+    title: 'Pre-Service Compliance Declaration',
     description: 'Landlord-facing compliance confirmation to support the notice file.',
     category: 'Guidance',
     required: true,
@@ -526,7 +526,7 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   if (has_arrears || include_arrears_schedule) {
     items.push({
       key: 'arrears_schedule',
-      title: 'Rent Arrears Schedule',
+      title: 'Rent Schedule / Arrears Statement',
       description: 'Period-by-period breakdown of arrears',
       category: 'Evidence',
       required: false,
@@ -566,7 +566,7 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
 
   items.push({
     key: 'arrears_schedule',
-    title: 'Rent Arrears Schedule',
+    title: 'Schedule of Arrears',
     description: 'Period-by-period breakdown of arrears and running balance for the court file.',
     category: 'Evidence',
     required: true,
@@ -622,7 +622,7 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
 
   items.push({
     key: 'case_summary',
-    title: 'Case Summary',
+    title: 'Eviction Case Summary',
     description: 'Concise summary of the claim, arrears position, and filing route.',
     category: 'Guidance',
     required: true,

@@ -16,8 +16,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render, screen, waitFor, act, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, waitFor, act } from '@testing-library/react';
 
 // Import Scotland utilities for direct testing
 import {
@@ -106,6 +105,22 @@ vi.mock('@/components/wizard/ArrearsScheduleStep', () => ({
 
 // Import after mocks
 import { NoticeOnlySectionFlow } from '../NoticeOnlySectionFlow';
+
+function escapeStepLabel(label: string): string {
+  return label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function stepButtonName(label: string): RegExp {
+  return new RegExp(`^(?:\\d+\\s+)?${escapeStepLabel(label)}$`, 'i');
+}
+
+function getStepButton(label: string) {
+  return screen.getByRole('button', { name: stepButtonName(label) });
+}
+
+function queryStepButton(label: string) {
+  return screen.queryByRole('button', { name: stepButtonName(label) });
+}
 
 describe('NoticeOnlySectionFlow - Wales Jurisdiction', () => {
   const walesProps = {
@@ -347,7 +362,7 @@ describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
     await screen.findByText(/Wales Eviction Notice/);
 
     // Wales Compliance section should appear for Wales routes
-    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
+    expect(getStepButton('Quick checks')).toBeDefined();
   });
 
   it('should not show a legacy Compliance tab for England notice-only', async () => {
@@ -633,10 +648,10 @@ describe('NoticeOnlySectionFlow - Wales Next Button Fix', () => {
 
     // With section_173 route, should see multiple section tabs (Parties, Property, etc.)
     // not just Case Basics
-    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Occupation Contract/i })).toBeDefined();
+    expect(getStepButton('Case Basics')).toBeDefined();
+    expect(getStepButton('Who and where?')).toBeDefined();
+    expect(getStepButton('Property')).toBeDefined();
+    expect(getStepButton('Occupation Contract')).toBeDefined();
   });
 
   it('should show multiple sections (not just case_basics) with Wales fault_based route', async () => {
@@ -653,10 +668,10 @@ describe('NoticeOnlySectionFlow - Wales Next Button Fix', () => {
     await screen.findByText(/Wales Eviction Notice/);
 
     // With fault_based route, should see multiple section tabs
-    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Occupation Contract/i })).toBeDefined();
+    expect(getStepButton('Case Basics')).toBeDefined();
+    expect(getStepButton('Who and where?')).toBeDefined();
+    expect(getStepButton('Property')).toBeDefined();
+    expect(getStepButton('Occupation Contract')).toBeDefined();
   });
 
   it('should handle legacy prefixed wales_section_173 value as section_173', async () => {
@@ -674,9 +689,9 @@ describe('NoticeOnlySectionFlow - Wales Next Button Fix', () => {
     await screen.findByText(/Wales Eviction Notice/);
 
     // Should still show multiple sections (normalization converts wales_section_173 -> section_173)
-    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+    expect(getStepButton('Case Basics')).toBeDefined();
+    expect(getStepButton('Who and where?')).toBeDefined();
+    expect(getStepButton('Property')).toBeDefined();
   });
 
   it('should handle legacy prefixed wales_fault_based value as fault_based', async () => {
@@ -694,9 +709,9 @@ describe('NoticeOnlySectionFlow - Wales Next Button Fix', () => {
     await screen.findByText(/Wales Eviction Notice/);
 
     // Should still show multiple sections (normalization converts wales_fault_based -> fault_based)
-    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
+    expect(getStepButton('Case Basics')).toBeDefined();
+    expect(getStepButton('Who and where?')).toBeDefined();
+    expect(getStepButton('Property')).toBeDefined();
   });
 
   it('should show only case_basics when no Wales route is selected', async () => {
@@ -713,9 +728,9 @@ describe('NoticeOnlySectionFlow - Wales Next Button Fix', () => {
     await screen.findByText(/Wales Eviction Notice/);
 
     // Without a route, should only see Case Basics
-    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
+    expect(getStepButton('Case Basics')).toBeDefined();
     // Other sections should not be visible yet
-    expect(screen.queryByRole('button', { name: /Parties/i })).toBeNull();
+    expect(queryStepButton('Who and where?')).toBeNull();
   });
 });
 
@@ -736,12 +751,13 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
     await screen.findByText(/Eviction Notice Generator/);
 
-    expect(screen.getByRole('button', { name: /Notice Basics/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Notice Details/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Arrears/i })).toBeDefined();
+    expect(getStepButton("What's going on?")).toBeDefined();
+    expect(getStepButton('Who and where?')).toBeDefined();
+    expect(getStepButton('Property')).toBeDefined();
+    expect(getStepButton('Tenancy details')).toBeDefined();
+    expect(getStepButton('Quick checks')).toBeDefined();
+    expect(getStepButton('Your notice')).toBeDefined();
+    expect(getStepButton('About the arrears')).toBeDefined();
     expect(screen.queryByRole('button', { name: /Compliance/i })).toBeNull();
   });
 
@@ -759,8 +775,8 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
     await screen.findByText(/Eviction Notice Generator/);
 
-    expect(screen.getByRole('button', { name: /Notice Basics/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Arrears/i })).toBeDefined();
+    expect(getStepButton("What's going on?")).toBeDefined();
+    expect(getStepButton('About the arrears')).toBeDefined();
   });
 });
 
@@ -799,13 +815,13 @@ describe('NoticeOnlySectionFlow - Scotland Jurisdiction', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Scotland should show these sections
-    expect(screen.getByRole('button', { name: /Case Basics/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Parties/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Property/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Grounds/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Notice/i })).toBeDefined();
-    expect(screen.getByRole('button', { name: /Review/i })).toBeDefined();
+    expect(getStepButton('Case Basics')).toBeDefined();
+    expect(getStepButton('Parties')).toBeDefined();
+    expect(getStepButton('Property')).toBeDefined();
+    expect(getStepButton('Tenancy')).toBeDefined();
+    expect(getStepButton('Grounds')).toBeDefined();
+    expect(getStepButton('Notice')).toBeDefined();
+    expect(getStepButton('Review')).toBeDefined();
   });
 
   it('should show Scotland-specific Compliance section (not England Section 21/Section 8 Arrears)', async () => {
@@ -815,8 +831,8 @@ describe('NoticeOnlySectionFlow - Scotland Jurisdiction', () => {
 
     // Scotland DOES have a Compliance section (different from England's Section 21 Compliance)
     // but should NOT show England-specific Arrears section
-    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
-    expect(screen.queryByRole('button', { name: /Arrears/i })).toBeNull();
+    expect(getStepButton('Compliance')).toBeDefined();
+    expect(queryStepButton('About the arrears')).toBeNull();
   });
 
   it('should NOT show Wales-specific terminology for Scotland', async () => {
@@ -827,7 +843,7 @@ describe('NoticeOnlySectionFlow - Scotland Jurisdiction', () => {
     // Scotland should NOT show Wales-specific terminology
     expect(screen.queryByRole('button', { name: /Occupation Contract/i })).toBeNull();
     // Should use "Tenancy" not "Occupation Contract"
-    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
+    expect(getStepButton('Tenancy')).toBeDefined();
   });
 
   it('should show PRT (Private Residential Tenancy) information in Case Basics', async () => {
@@ -1086,7 +1102,7 @@ describe('NoticeOnlySectionFlow - Scotland Notice Copy', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Click on Notice tab to view notice section
-    const noticeButton = screen.getByRole('button', { name: /Notice/i });
+    const noticeButton = getStepButton('Notice');
     noticeButton.click();
 
     // Should show appropriate copy without "complete pack"
@@ -1109,7 +1125,7 @@ describe('NoticeOnlySectionFlow - Scotland Notice Copy', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Click on Notice tab to view notice section
-    const noticeButton = screen.getByRole('button', { name: /Notice/i });
+    const noticeButton = getStepButton('Notice');
     await act(async () => {
       noticeButton.click();
     });
@@ -1329,8 +1345,8 @@ describe('NoticeOnlySectionFlow - Scotland Ask Heaven Wiring', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // AskHeavenPanel should be rendered
-    const askHeavenPanel = screen.getByTestId('ask-heaven-panel');
-    expect(askHeavenPanel).toBeDefined();
+    const askHeavenPanels = screen.getAllByTestId('ask-heaven-panel');
+    expect(askHeavenPanels.length).toBeGreaterThan(0);
   });
 
   it('should show Scotland Grounds tab for Scotland jurisdiction', async () => {
@@ -1365,7 +1381,7 @@ describe('NoticeOnlySectionFlow - Scotland Ask Heaven Wiring', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Notice tab should be visible
-    const noticeButton = screen.getByRole('button', { name: /Notice/i });
+    const noticeButton = getStepButton('Notice');
     expect(noticeButton).toBeDefined();
   });
 });
@@ -1400,7 +1416,7 @@ describe('NoticeOnlySectionFlow - Scotland Arrears Schedule UI Logic', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Flow should render and show the Notice tab
-    expect(screen.getByRole('button', { name: /Notice/i })).toBeDefined();
+    expect(getStepButton('Notice')).toBeDefined();
   });
 
   it('should render Scotland flow without errors for non-arrears Ground 1 facts', async () => {
@@ -1419,7 +1435,7 @@ describe('NoticeOnlySectionFlow - Scotland Arrears Schedule UI Logic', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Flow should render
-    expect(screen.getByRole('button', { name: /Notice/i })).toBeDefined();
+    expect(getStepButton('Notice')).toBeDefined();
   });
 });
 
@@ -1446,7 +1462,7 @@ describe('NoticeOnlySectionFlow - Scotland Compliance Section', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Scotland should show Compliance tab
-    expect(screen.getByRole('button', { name: /Compliance/i })).toBeDefined();
+    expect(getStepButton('Compliance')).toBeDefined();
   });
 
   it('should mark Scotland compliance section as complete when all required fields are answered', () => {
@@ -1716,7 +1732,7 @@ describe('NoticeOnlySectionFlow - Scotland Compliance Section', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Compliance tab should be visible and clickable
-    const complianceButton = screen.getByRole('button', { name: /Compliance/i });
+    const complianceButton = getStepButton('Compliance');
     expect(complianceButton).toBeDefined();
   });
 });
@@ -2030,8 +2046,8 @@ describe('Scotland Ask Heaven Context', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // The AskHeavenPanel should be rendered (mocked)
-    const askHeavenPanel = screen.getByTestId('ask-heaven-panel');
-    expect(askHeavenPanel).toBeDefined();
+    const askHeavenPanels = screen.getAllByTestId('ask-heaven-panel');
+    expect(askHeavenPanels.length).toBeGreaterThan(0);
   });
 
   it('should show Notice tab for Ground 18 with arrears schedule UI', async () => {
@@ -2051,7 +2067,7 @@ describe('Scotland Ask Heaven Context', () => {
     await screen.findByText(/Scotland Notice to Leave/);
 
     // Notice tab should be visible for Ground 18
-    const noticeButton = screen.getByRole('button', { name: /Notice/i });
+    const noticeButton = getStepButton('Notice');
     expect(noticeButton).toBeDefined();
 
     // Click and wait for re-render

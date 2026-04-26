@@ -78,6 +78,7 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+import { hasCompleteDefenceRiskAnswers } from '@/lib/england-possession/defence-risk';
 
 // Validation context for live field validation
 import { ValidationProvider, useValidationContext } from '@/components/wizard/ValidationContext';
@@ -286,7 +287,12 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
         facts.evidence_bundle_ready !== undefined &&
         (!requiresPriorNoticeConfirmation || facts.ground_prerequisite_notice_served !== undefined) &&
         depositQuestionsComplete &&
-        propertyComplianceQuestionsComplete
+        propertyComplianceQuestionsComplete &&
+        hasCompleteDefenceRiskAnswers(facts as Record<string, any>, {
+          requireArrearsContext: selectedGrounds.some((ground) =>
+            ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
+          ),
+        })
       );
     },
     hasBlockers: (facts) => {

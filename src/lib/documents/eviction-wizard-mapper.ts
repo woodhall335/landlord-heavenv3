@@ -15,9 +15,7 @@ import { EvidenceCategory } from '@/lib/evidence/schema';
 import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
 import {
   buildN5BFields,
-  mergeN5BFieldsIntoCaseData,
   logN5BFieldStatus,
-  type N5BFields,
 } from './n5b-field-builder';
 
 /**
@@ -44,9 +42,6 @@ function buildAddress(...parts: Array<string | null | undefined>): string {
 
     // Check if this part (or its content) is already included in any earlier part
     const isSubstringOfExisting = addressSoFarLower.some(existing => existing.includes(partLower));
-
-    // Also check if this part already contains one of the existing parts (shouldn't add duplicate info)
-    const containsExisting = addressSoFarLower.some(existing => partLower.includes(existing) && existing.length > 3);
 
     if (!isSubstringOfExisting) {
       // Only skip if the part is redundant (already fully contained in a previous line)
@@ -546,9 +541,53 @@ function buildCaseData(
       wizardFacts.known_tenant_defences ||
       (facts as any).risk?.known_tenant_defences ||
       undefined,
+    tenant_disputes_claim:
+      wizardFacts.tenant_disputes_claim ??
+      (facts as any).risk?.tenant_disputes_claim ??
+      undefined,
+    previous_court_proceedings:
+      wizardFacts.previous_court_proceedings ??
+      (facts as any).risk?.previous_court_proceedings ??
+      undefined,
+    previous_proceedings_details:
+      wizardFacts.previous_proceedings_details ||
+      (facts as any).risk?.previous_proceedings_details ||
+      undefined,
+    disrepair_complaints:
+      wizardFacts.disrepair_complaints ??
+      (facts as any).risk?.disrepair_complaints ??
+      undefined,
+    disrepair_complaint_date:
+      wizardFacts.disrepair_complaint_date ||
+      (facts as any).risk?.disrepair_complaint_date ||
+      undefined,
+    disrepair_issues_list:
+      wizardFacts.disrepair_issues_list ||
+      (facts as any).risk?.disrepair_issues_list ||
+      undefined,
     benefit_type:
       wizardFacts.benefit_type ||
       wizardFacts.tenant_benefits_details ||
+      undefined,
+    tenant_benefits_details:
+      wizardFacts.tenant_benefits_details ||
+      wizardFacts.benefit_type ||
+      undefined,
+    tenant_counterclaim_likely:
+      wizardFacts.tenant_counterclaim_likely ??
+      (facts as any).risk?.tenant_counterclaim_likely ??
+      undefined,
+    counterclaim_grounds:
+      wizardFacts.counterclaim_grounds ||
+      (facts as any).risk?.counterclaim_grounds ||
+      undefined,
+    payment_plan_offered:
+      wizardFacts.payment_plan_offered ??
+      (facts as any).risk?.payment_plan_offered ??
+      undefined,
+    payment_plan_response:
+      wizardFacts.payment_plan_response ||
+      (facts as any).risk?.payment_plan_response ||
       undefined,
     total_arrears:
       wizardFacts.total_arrears ||

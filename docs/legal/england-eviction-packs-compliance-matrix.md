@@ -13,6 +13,9 @@ Scope:
 - Form N119
 - England eviction support documents shipped in the canonical packs
 
+Related ground-by-ground support status:
+- [england-post-2026-section8-ground-support-matrix.md](/Users/t_moh/Documents/GitHub/landlord-heavenv3/docs/legal/england-post-2026-section8-ground-support-matrix.md:1)
+
 This matrix is intended to replace ad-hoc code inspection when checking:
 - whether the wizard is asking for the right facts
 - whether those facts reach the generated documents
@@ -33,6 +36,7 @@ This matrix is intended to replace ad-hoc code inspection when checking:
 | Service basics | `notice_date`, `notice_served_date`, `notice_service_method`, `notice_expiry_date` | Form 3A, N215, N119, witness statement, hearing checklist |
 | N215 collectible facts | `notice_service_time`, `notice_service_recipient_capacity`, `notice_service_location`, `notice_service_location_other`, `notice_service_recipient_email`, `other_electronic_identification`, `signatory_position` | Form N215 |
 | Compliance record | `deposit_taken`, `deposit_protected`, `deposit_protected_within_30_days`, `prescribed_info_served`, `deposit_returned`, `section_16e_duties_checked`, `breathing_space_checked`, `tenant_in_breathing_space`, `epc_served`, `how_to_rent_served`, `has_gas_appliances`, `gas_safety_cert_served` | Compliance declaration, evidence checklist, witness statement, case summary, smart warnings |
+| Defence-risk / dispute-risk facts | `tenant_disputes_claim`, `known_tenant_defences`, `disrepair_complaints`, `disrepair_complaint_date`, `disrepair_issues_list`, `previous_court_proceedings`, `previous_proceedings_details`, `tenant_vulnerability`, `tenant_vulnerability_details`, `tenant_counterclaim_likely`, `counterclaim_grounds`, `benefit_type`, `tenant_benefits_details`, `payment_plan_offered`, `payment_plan_response` | Witness statement, N119 circumstances drafting, case summary, evidence checklist, readiness warnings |
 | Arrears | `arrears_items`, `total_arrears`, `arrears_at_notice_date`, payment history facts | Arrears schedule, Form 3A particulars, N119, witness statement, chronology, case summary |
 
 ### Complete Pack additional court-file facts
@@ -252,4 +256,3 @@ Important compliance note:
    - preview / thumbnail
    - golden-pack regeneration
    - this matrix
-

@@ -3060,8 +3060,13 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       .map(p => formatMultiline(p) || '')
       .join('<br>');
 
+    const serializedGroundCode =
+      typeof groundDef.code === 'string' && /^\d+$/.test(groundDef.code)
+        ? Number.parseInt(groundDef.code, 10)
+        : groundDef.code;
+
     return {
-      code: groundDef.code,
+      code: serializedGroundCode,
       number: String(groundDef.code),
       mandatory: groundDef.mandatory,
       title: groundDef.title,
@@ -4179,6 +4184,64 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // GROUNDS ARRAY (for Section 8 and Scotland)
   // =============================================================================
   templateData.grounds = buildGroundsArray(wizard, templateData);
+
+  // =============================================================================
+  // DEFENCE / DISPUTE RISK FACTS
+  // =============================================================================
+  const counterclaimGroundsRaw = getFirstValue(wizard, [
+    'risk.counterclaim_grounds',
+    'counterclaim_grounds',
+  ]);
+  const counterclaimGrounds = Array.isArray(counterclaimGroundsRaw)
+    ? counterclaimGroundsRaw.map((entry) => String(entry || '').trim()).filter(Boolean)
+    : typeof counterclaimGroundsRaw === 'string'
+      ? counterclaimGroundsRaw.split(/\r?\n|;/).map((entry) => entry.trim()).filter(Boolean)
+      : [];
+
+  templateData.known_tenant_defences = extractString(
+    getFirstValue(wizard, ['known_tenant_defences', 'risk.known_tenant_defences'])
+  );
+  templateData.tenant_disputes_claim = coerceBoolean(
+    getFirstValue(wizard, ['tenant_disputes_claim', 'risk.tenant_disputes_claim'])
+  );
+  templateData.previous_court_proceedings = coerceBoolean(
+    getFirstValue(wizard, ['previous_court_proceedings', 'risk.previous_court_proceedings'])
+  );
+  templateData.previous_proceedings_details = extractString(
+    getFirstValue(wizard, ['previous_proceedings_details', 'risk.previous_proceedings_details'])
+  );
+  templateData.disrepair_complaints = coerceBoolean(
+    getFirstValue(wizard, ['disrepair_complaints', 'risk.disrepair_complaints'])
+  );
+  templateData.disrepair_complaint_date = extractString(
+    getFirstValue(wizard, ['disrepair_complaint_date', 'risk.disrepair_complaint_date'])
+  );
+  templateData.disrepair_issues_list = extractString(
+    getFirstValue(wizard, ['disrepair_issues_list', 'risk.disrepair_issues_list'])
+  );
+  templateData.tenant_vulnerability = coerceBoolean(
+    getFirstValue(wizard, ['tenant_vulnerability', 'risk.tenant_vulnerability'])
+  );
+  templateData.tenant_vulnerability_details = extractString(
+    getFirstValue(wizard, ['tenant_vulnerability_details', 'risk.tenant_vulnerability_details'])
+  );
+  templateData.tenant_counterclaim_likely = coerceBoolean(
+    getFirstValue(wizard, ['tenant_counterclaim_likely', 'risk.tenant_counterclaim_likely'])
+  );
+  templateData.counterclaim_grounds = counterclaimGrounds.length > 0 ? counterclaimGrounds : null;
+  templateData.counterclaim_grounds_text = counterclaimGrounds.length > 0 ? counterclaimGrounds.join(', ') : null;
+  templateData.payment_plan_offered = coerceBoolean(
+    getFirstValue(wizard, ['payment_plan_offered', 'risk.payment_plan_offered'])
+  );
+  templateData.payment_plan_response = extractString(
+    getFirstValue(wizard, ['payment_plan_response', 'risk.payment_plan_response'])
+  );
+  templateData.benefit_type = extractString(
+    getFirstValue(wizard, ['benefit_type'])
+  );
+  templateData.tenant_benefits_details = extractString(
+    getFirstValue(wizard, ['tenant_benefits_details'])
+  );
 
   // =============================================================================
   // DATES: Ensure notice_date, service_date, earliest_possession_date are always set

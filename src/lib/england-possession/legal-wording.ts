@@ -1,4 +1,11 @@
-import 'server-only';
+if (typeof window === 'undefined' && typeof require !== 'undefined') {
+  try {
+    require('server-only');
+  } catch {
+    // Allow CLI audit/generation scripts to import this module outside Next's
+    // server-component runtime.
+  }
+}
 
 import fs from 'fs/promises';
 import path from 'path';

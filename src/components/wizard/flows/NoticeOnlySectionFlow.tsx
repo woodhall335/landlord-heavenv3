@@ -96,6 +96,7 @@ import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
+import { hasCompleteDefenceRiskAnswers } from '@/lib/england-possession/defence-risk';
 
 // Route types for England, Wales, and Scotland
 type EnglandRoute = 'section_8';
@@ -452,6 +453,10 @@ const SECTIONS: WizardSection[] = [
     routes: ['section_8'] as EvictionRoute[],
     isComplete: (facts) => {
       const depositTaken = facts.deposit_taken === true;
+      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const hasArrearsGround = selectedGrounds.some((ground) =>
+        ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
+      );
       const depositQuestionsComplete =
         facts.deposit_taken !== undefined &&
         (!depositTaken ||
@@ -476,7 +481,10 @@ const SECTIONS: WizardSection[] = [
         propertyComplianceQuestionsComplete &&
         facts.section_16e_duties_checked !== undefined &&
         facts.breathing_space_checked !== undefined &&
-        (facts.breathing_space_checked !== true || facts.tenant_in_breathing_space !== undefined)
+        (facts.breathing_space_checked !== true || facts.tenant_in_breathing_space !== undefined) &&
+        hasCompleteDefenceRiskAnswers(facts as Record<string, any>, {
+          requireArrearsContext: hasArrearsGround,
+        })
       );
     },
     hasBlockers: (facts) => {

@@ -28,14 +28,14 @@ export type EvictionPackProduct = 'notice_only' | 'complete_pack';
 export function validateNoticeOnlyBeforeRender(params: {
   jurisdiction: JurisdictionKey;
   facts: Record<string, any>;
-  selectedGroundCodes: number[];
+  selectedGroundCodes: Array<number | string>;
   selectedRoute?: string;
   stage?: 'wizard' | 'preview' | 'generate';
 }): NoticeValidationOutcome {
   const { jurisdiction, facts, selectedGroundCodes, stage = 'wizard' } = params;
   const hasGroundsArray = Array.isArray(facts.section8_grounds) && facts.section8_grounds.length > 0;
   const inferredGrounds = selectedGroundCodes.length > 0
-    ? selectedGroundCodes.map((code) => `ground_${code}`)
+    ? selectedGroundCodes.map((code) => `ground_${String(code).toLowerCase()}`)
     : undefined;
   const factsWithGrounds = hasGroundsArray || !inferredGrounds
     ? facts
@@ -71,7 +71,7 @@ export function validateNoticeOnlyBeforeRender(params: {
 export function assertNoticeOnlyValid(params: {
   jurisdiction: JurisdictionKey;
   facts: Record<string, any>;
-  selectedGroundCodes: number[];
+  selectedGroundCodes: Array<number | string>;
 }): void {
   const outcome = validateNoticeOnlyBeforeRender(params);
   if (outcome.blocking.length > 0) {
@@ -105,7 +105,7 @@ export function assertNoticeOnlyValid(params: {
 export function validateCompletePackBeforeGeneration(params: {
   jurisdiction: JurisdictionKey;
   facts: Record<string, any>;
-  selectedGroundCodes: number[];
+  selectedGroundCodes: Array<number | string>;
   caseType: 'no_fault' | 'rent_arrears' | 'antisocial' | 'breach' | 'landlord_needs' | 'other';
 }): NoticeValidationOutcome {
   const { jurisdiction, facts, selectedGroundCodes, caseType } = params;
@@ -271,7 +271,7 @@ export function validateCompletePackBeforeGeneration(params: {
 export function assertCompletePackValid(params: {
   jurisdiction: JurisdictionKey;
   facts: Record<string, any>;
-  selectedGroundCodes: number[];
+  selectedGroundCodes: Array<number | string>;
   caseType: 'no_fault' | 'rent_arrears' | 'antisocial' | 'breach' | 'landlord_needs' | 'other';
 }): void {
   const outcome = validateCompletePackBeforeGeneration(params);

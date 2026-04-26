@@ -1,4 +1,8 @@
 import { type DecisionRules, type FactsSchema, type JurisdictionKey, loadJurisdictionRuleBundle } from './rulesLoader';
+import {
+  listEnglandGroundDefinitions,
+  normalizeEnglandGroundCode,
+} from '@/lib/england-possession/ground-catalog';
 
 export type ValidationStage = 'wizard' | 'preview' | 'generate' | 'generation';
 
@@ -90,20 +94,21 @@ function evaluateExpression(
   }
 }
 
-function buildGroundIndex(decisionRules: DecisionRules): Record<number, any> {
-  const index: Record<number, any> = {};
+function normalizeSelectedGroundCode(code: number | string): string {
+  return String(code).toUpperCase().replace(/^GROUND[\s_]*/i, '').trim();
+}
+
+function buildGroundIndex(decisionRules: DecisionRules): Record<string, any> {
+  const index: Record<string, any> = {};
   const mandatory = decisionRules.section_8_grounds?.mandatory || {};
   const discretionary = decisionRules.section_8_grounds?.discretionary || {};
   const buckets = [mandatory, discretionary];
 
   for (const bucket of buckets) {
     for (const [key, value] of Object.entries(bucket)) {
-      const match = key.match(/ground_(\d+)/i);
+      const match = key.match(/ground_(\d+[a-z]*)/i);
       if (match) {
-        const code = parseInt(match[1], 10);
-        if (!Number.isNaN(code)) {
-          index[code] = value;
-        }
+        index[match[1].toUpperCase()] = value;
       }
     }
   }
@@ -114,7 +119,7 @@ function buildGroundIndex(decisionRules: DecisionRules): Record<number, any> {
 export function validateGroundsFromConfig(params: {
   jurisdiction: JurisdictionKey;
   decisionRules: DecisionRules;
-  selectedGroundCodes: number[];
+  selectedGroundCodes: Array<number | string>;
   facts: Record<string, any>;
 }): LegalValidationResult {
   const { decisionRules, selectedGroundCodes, facts, jurisdiction } = params;
@@ -122,20 +127,35 @@ export function validateGroundsFromConfig(params: {
   const warnings: LegalValidationIssue[] = [];
 
   const groundIndex = buildGroundIndex(decisionRules);
-  const allowedGrounds = Object.keys(groundIndex).map((code) => Number(code));
+  const allowedGrounds = new Set(Object.keys(groundIndex).map((code) => code.toUpperCase()));
+
+  if (jurisdiction === 'england') {
+    for (const definition of listEnglandGroundDefinitions()) {
+      allowedGrounds.add(definition.code.toUpperCase());
+    }
+  }
 
   for (const code of selectedGroundCodes) {
-    if (!allowedGrounds.includes(code)) {
+    const normalizedCode =
+      jurisdiction === 'england'
+        ? normalizeEnglandGroundCode(code) || normalizeSelectedGroundCode(code)
+        : normalizeSelectedGroundCode(code);
+
+    if (!allowedGrounds.has(normalizedCode)) {
       blocking.push({
         code: 'GROUND_NOT_ALLOWED',
-        user_message: `Ground ${code} is not permitted for ${jurisdiction} notices`,
+        user_message: `Ground ${normalizedCode} is not permitted for ${jurisdiction} notices`,
         internal_reason: 'Ground not present in jurisdiction decision_rules',
       });
     }
   }
 
   for (const code of selectedGroundCodes) {
-    const cfg = groundIndex[code];
+    const normalizedCode =
+      jurisdiction === 'england'
+        ? normalizeEnglandGroundCode(code) || normalizeSelectedGroundCode(code)
+        : normalizeSelectedGroundCode(code);
+    const cfg = groundIndex[normalizedCode];
     if (!cfg) {
       continue;
     }
@@ -147,9 +167,9 @@ export function validateGroundsFromConfig(params: {
       if (isMissing(value)) {
         blocking.push({
           code: 'GROUND_REQUIRED_FACT_MISSING',
-          user_message: `Ground ${code} is missing required fact: ${factName}`,
+          user_message: `Ground ${normalizedCode} is missing required fact: ${factName}`,
           fields: [factName],
-          internal_reason: `Required by jurisdiction config for ground_${code}`,
+          internal_reason: `Required by jurisdiction config for ground_${normalizedCode}`,
         });
       }
     }
@@ -168,7 +188,7 @@ export function validateGroundsFromConfig(params: {
       if (!evaluation.ok) {
         blocking.push({
           code: 'GROUND_ELIGIBILITY_RULE_FAILED',
-          user_message: `Ground ${code} eligibility not satisfied`,
+          user_message: `Ground ${normalizedCode} eligibility not satisfied`,
           internal_reason: evaluation.reason || `Rule '${rule}' evaluated to false`,
           fields: cfg.required_facts || undefined,
         });
@@ -379,7 +399,7 @@ export function validateDepositCompliance(params: {
 export function validateJurisdictionCompliance(params: {
   jurisdiction: JurisdictionKey;
   facts: Record<string, any>;
-  selectedGroundCodes: number[];
+  selectedGroundCodes: Array<number | string>;
   product?: ProductKey;
   route?: string | null;
   stage?: ValidationStage;

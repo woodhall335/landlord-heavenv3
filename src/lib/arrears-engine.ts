@@ -505,16 +505,22 @@ export function validateGround8Eligibility(params: {
  *
  * Arrears grounds are: Ground 8, Ground 10, Ground 11
  */
-export function hasArrearsGroundsSelected(groundCodes: number[]): boolean {
+export function hasArrearsGroundsSelected(groundCodes: Array<number | string>): boolean {
   const arrearsGrounds = [8, 10, 11];
-  return groundCodes.some((code) => arrearsGrounds.includes(code));
+  return groundCodes.some((code) => {
+    const normalized = typeof code === 'string' ? Number.parseInt(code, 10) : code;
+    return Number.isFinite(normalized) && arrearsGrounds.includes(normalized);
+  });
 }
 
 /**
  * Check if Ground 8 is selected.
  */
-export function hasGround8Selected(groundCodes: number[]): boolean {
-  return groundCodes.includes(8);
+export function hasGround8Selected(groundCodes: Array<number | string>): boolean {
+  return groundCodes.some((code) => {
+    const normalized = typeof code === 'string' ? Number.parseInt(code, 10) : code;
+    return normalized === 8;
+  });
 }
 
 // ============================================================================

@@ -1126,17 +1126,19 @@ function toEnglandDepositScheme(
   return undefined;
 }
 
-function extractGroundCodes(section8Grounds: any[]): number[] {
+function extractGroundCodes(section8Grounds: any[]): Array<number | string> {
   if (!Array.isArray(section8Grounds)) return [];
 
   return section8Grounds
     .map((g) => {
       if (typeof g === 'number') return g;
       if (typeof g !== 'string') return null;
-      const match = g.match(/Ground\s+(\d+)/i) || g.match(/ground[_\s](\d+)/i);
-      return match ? parseInt(match[1], 10) : null;
+      const match = g.match(/Ground\s+(\d+[A-Z]*)/i) || g.match(/ground[_\s](\d+[A-Z]*)/i);
+      if (!match) return null;
+      const normalized = match[1].toUpperCase();
+      return /^\d+$/.test(normalized) ? parseInt(normalized, 10) : normalized;
     })
-    .filter((code): code is number => code !== null && !Number.isNaN(code));
+    .filter((code): code is number | string => code !== null && !(typeof code === 'number' && Number.isNaN(code)));
 }
 
 export interface GroundClaim {

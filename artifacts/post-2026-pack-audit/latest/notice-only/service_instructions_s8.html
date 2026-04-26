@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Form 3A notice - Service and Validity Checklist</title>
+  <title>Service Instructions - Form 3A notice</title>
   <style>
     * {
   margin: 0;
@@ -384,17 +384,18 @@ em {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1em 0;
+  margin: 0.75em 0;
 
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
 th, td {
-  padding: 0.5em;
+  padding: 0.35em 0.45em;
   border: 1px solid #ccc;
   text-align: left;
   vertical-align: top;
+  font-size: 10.5pt;
 }
 
 th {
@@ -416,6 +417,11 @@ th {
     }
 
     h2 {
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
+    h3 {
       page-break-after: avoid;
       break-after: avoid-page;
     }
@@ -442,38 +448,69 @@ th {
       font-weight: 600;
     }
 
-    .summary-box,
-    .checklist-box,
-    .callout {
+    .details-box,
+    .callout,
+    .method-card,
+    .checklist-box {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
-    .summary-box,
-    .checklist-box {
+    .details-box,
+    .checklist-box,
+    .method-card {
       margin: 1.25em 0;
       border: 1px solid #d8d8d8;
       background: #fff;
     }
 
-    .summary-box {
+    .details-box,
+    .checklist-box .content,
+    .method-card .content {
       padding: 1em;
-      background: #fafafa;
     }
 
-    .summary-grid {
+    .details-grid {
       display: grid;
-      grid-template-columns: 190px 1fr;
+      grid-template-columns: 180px 1fr;
       gap: 0.45em 1em;
     }
 
-    .summary-grid dt {
+    .details-grid dt {
       font-weight: 600;
       color: #444;
     }
 
-    .summary-grid dd {
+    .details-grid dd {
       margin: 0;
+    }
+
+    .callout {
+      margin: 1.25em 0;
+      padding: 1em;
+      border-left: 4px solid #1a1a1a;
+      background: #f7f7f7;
+    }
+
+    .callout.warning {
+      border-color: #b45309;
+      background: #fff7ed;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .callout.critical {
+      border-color: #b91c1c;
+      background: #fef2f2;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .callout.success {
+      border-color: #15803d;
+      background: #f0fdf4;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     .section-title {
@@ -493,11 +530,22 @@ th {
       break-inside: avoid;
     }
 
+    .section-header-block {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .callout-section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
     .section {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
+    .method-card .heading,
     .checklist-box .heading {
       margin: 0;
       padding: 0.7em 0.9em;
@@ -509,38 +557,16 @@ th {
       break-after: avoid-page;
     }
 
-    .checklist-box .content {
-      padding: 1em;
+    .method-card.recommended .heading {
+      background: #0f172a;
     }
 
     ul {
-      margin: 0.4em 0 0 1.2em;
-    }
-
-    .checklist {
-      page-break-inside: avoid;
-      break-inside: avoid;
+      margin: 0.6em 0 0 1.2em;
     }
 
     li {
-      margin: 0.4em 0;
-    }
-
-    .callout {
-      margin: 1.25em 0;
-      padding: 1em;
-      border-left: 4px solid #1a1a1a;
-      background: #f7f7f7;
-    }
-
-    .callout.warning {
-      border-color: #b45309;
-      background: #fff7ed;
-    }
-
-    .callout.critical {
-      border-color: #b91c1c;
-      background: #fef2f2;
+      margin: 0.35em 0;
     }
 
     .doc-footer {
@@ -554,107 +580,113 @@ th {
 </head>
 <body>
   <div class="doc-header">
-    <h1>Service and Validity Checklist</h1>
+    <h1>Service Instructions</h1>
     <span class="doc-badge">Form 3A notice</span>
   </div>
 
-  <div class="callout callout-section">
-    <p><strong>Purpose:</strong> Use this checklist to verify that the Form 3A notice is internally consistent across the notice and support documents, has been served using a defensible method, and is ready for evidence use if a claim is issued.</p>
-    <p>Use this checklist to confirm that the Form 3A notice and the supporting papers tell the same story in a careful, evidence-led way.</p>
-    <p>The claimant seeks possession of 35 Woodhall Park Avenue
+  <div class="section callout-section">
+    <div class="callout">
+    <p><strong>Purpose:</strong> Use these instructions to serve the Form 3A notice consistently and preserve evidence of when, where, and how service took place.</p>
+      <p>Use these instructions to serve the Form 3A notice consistently and keep a defensible record of service.</p>
+      <p>The claimant seeks possession of 35 Woodhall Park Avenue
 Pudsey
-West Yorkshire
-LS28 7HF relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears), Ground 11 (Persistent arrears).</p>
+LS28 7HF relying on Ground 1A (Sale of dwelling house).</p>
+      <p>Form 3A notice served on 1 June 2026, expiring on 1 October 2026, with proceedings not intended before 1 October 2026.</p>
+    </div>
   </div>
 
-  <div class="summary-box checklist-section">
-    <dl class="summary-grid">
-      <dt>Landlord</dt>
-      <dd>Tariq Ahmed Mohammed</dd>
-      <dt>Tenant</dt>
-      <dd>Sonia Shezadi</dd>
+  <div class="details-box">
+    <dl class="details-grid">
       <dt>Property</dt>
       <dd>35 Woodhall Park Avenue
 Pudsey
-West Yorkshire
 LS28 7HF</dd>
-      <dt>Tenancy start date</dt>
-      <dd>15/01/2024</dd>
+      <dt>Tenant</dt>
+      <dd>Sonia Shezadi, Hamza Shezadi</dd>
+      <dt>Notice</dt>
+      <dd>Form 3A notice</dd>
       <dt>Notice service date</dt>
       <dd>1 June 2026</dd>
       <dt>Notice expiry date</dt>
-      <dd>29/06/2026</dd>
+      <dd>1 October 2026</dd>
       <dt>Earliest proceedings date</dt>
-      <dd>29/06/2026</dd>
-      <dt>Grounds relied on</dt>
-      <dd>Ground 8 – Rent arrears, Ground 10 – Any rent arrears, Ground 11 – Persistent arrears</dd>
+      <dd>1 October 2026</dd>
     </dl>
   </div>
 
-  <div class="callout warning callout-section">
-    <p><strong>Current England notice periods after 1 May 2026:</strong> use the longest period that applies where multiple grounds are included.</p>
-    <ul>
-      <li>4 months minimum: Grounds 1, 1A, 2, 2ZA, 2ZB, 2ZC, 2ZD, 4A, 6, 6B.</li>
-      <li>2 months minimum: Grounds 5, 5A, 5B, 5C, 5H, 7, 9.</li>
-      <li>4 weeks (28 days) minimum: Grounds 5E, 5F, 5G, 8, 10, 11, 18.</li>
-      <li>2 weeks (14 days) minimum: Grounds 4, 7B, 12, 13, 14A, 14ZA, 15, 17.</li>
-      <li>Immediate (0 days): Grounds 7A and 14.</li>
-      <li>Where multiple grounds are relied on, use the MAXIMUM notice period.</li>
-    </ul>
+  <h2 class="section-title section-header-block">Recommended Service Method</h2>
+
+  <div class="method-card">
+    <div class="heading">First Class Post</div>
+    <div class="content">
+      <ul>
+        <li>Send the Form 3A notice by Royal Mail first class post.</li>
+        <li>Keep the proof of posting receipt and a copy of the notice served.</li>
+        <li>Record the date of posting and keep any follow-up correspondence.</li>
+        <li>Use the service date and proceedings date shown above as your canonical pack timeline.</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="section checklist-section">
-    <h2 class="section-title section-header-block">Service Evidence</h2>
+  <div class="checklist-box checklist-section">
+    <div class="heading">Practical Method Notes</div>
+    <div class="content">
+      <ul>
+        <li>Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.</li>
+        <li>If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and why the service date used in the pack is the correct date.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section callout-section">
+    <div class="callout warning">
+    <p><strong>Electronic service:</strong> Do not rely on email or text alone unless the tenancy terms clearly permit electronic service and you are satisfied the clause applies to notices of this kind.</p>
+    </div>
+  </div>
+
+  <div class="section callout-section">
+    <h2 class="section-title section-header-block">Evidence To Keep</h2>
+
     <div class="checklist-box checklist-section">
-      <div class="heading">Keep With The Pack</div>
+      <div class="heading">Service Evidence Checklist</div>
       <div class="content">
-        <ul class="checklist">
-          <li>Copy of the served notice</li>
-          <li>Proof of service certificate or service witness note</li>
-          <li>Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.</li>
-          <li>If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and why the service date used in the pack is the correct date.</li>
+        <ul>
+          <li>Served copy of the notice</li>
+          <li>Completed Form N215 certificate of service</li>
+          <li>Ownership proof</li>
+          <li>Sale intention statement</li>
+          <li>Sale evidence</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <div class="section checklist-section">
-    <h2 class="section-title section-header-block">Validity Checks</h2>
-    <div class="checklist-box checklist-section">
-      <div class="heading">Before You Rely On The Notice</div>
-      <div class="content">
-        <ul class="checklist">
-          <li>Check that the same party names, address, grounds, court name, and notice timeline appear consistently across the Form 3A notice, the support documents, and any court forms.</li>
-          <li>Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of &#163;3,600.00 at the hearing.</li>
-          <li>If arrears grounds are relied on, make sure the arrears schedule and the pleaded figures still match the current rent account.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <h2 class="section-title">After Service</h2>
 
-  <div class="callout warning callout-section">
-    <p><strong>Notice periods:</strong> The required notice period depends on the grounds relied on and can change. If you alter the grounds, the service method, or the intended service date, regenerate the pack so every document uses the same recalculated dates.</p>
-  </div>
-
-  <div class="section checklist-section">
-    <h2 class="section-title section-header-block">After Service</h2>
-    <div class="checklist-box checklist-section">
-      <div class="heading">Do Not Do These Things</div>
-      <div class="content">
-        <ul class="checklist">
-          <li>Review the pack as a whole before issue so that dates, court details, and ground wording remain aligned.</li>
-          <li>Remove empty or unused sections rather than leaving placeholder text or blank visual gaps in court-facing documents.</li>
-        </ul>
-      </div>
+  <div class="checklist-box">
+    <div class="heading">Next Steps</div>
+    <div class="content">
+      <ul>
+        <li>Record immediately when, where, and how service was carried out.</li>
+        <li>Keep the notice timeline consistent across the proof of service, witness statement, and court forms.</li>
+        <li>Retain the supporting documents that explain why the statutory ground remains factually justified at issue and at hearing.</li>
+      </ul>
     </div>
   </div>
 
   <div class="callout critical">
-    <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds particulars are inconsistent across the pack, even where the underlying arrears or breach evidence is strong.</p>
+    <p><strong>Important:</strong> Incorrect service or weak service evidence can delay or undermine the possession claim even where the factual grounds are otherwise strong.</p>
   </div>
 
+  <h2 class="section-title">Common Mistakes To Avoid</h2>
+  <ul>
+    <li>Using one service date on the notice and a different date in the support documents.</li>
+    <li>Leaving unsupported allegations in the pack without the document or witness material needed to prove them.</li>
+    <li>Serving a notice that states the statutory ground but does not clearly set out the tenancy-specific facts relied on.</li>
+  </ul>
+
   <div class="doc-footer">
-    <p><strong>Generated:</strong> 18/04/2026</p>
+    <p><strong>Generated:</strong> 26 April 2026</p>
     <p><strong>Landlord Heaven</strong> | England Section 8 support document</p>
   </div>
 </body>

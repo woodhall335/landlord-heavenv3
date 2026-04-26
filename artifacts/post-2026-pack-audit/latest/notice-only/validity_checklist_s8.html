@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Evidence Collection Checklist</title>
+  <title>Form 3A notice - Service and Validity Checklist</title>
   <style>
     * {
   margin: 0;
@@ -384,17 +384,18 @@ em {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1em 0;
+  margin: 0.75em 0;
 
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
 th, td {
-  padding: 0.5em;
+  padding: 0.35em 0.45em;
   border: 1px solid #ccc;
   text-align: left;
   vertical-align: top;
+  font-size: 10.5pt;
 }
 
 th {
@@ -404,44 +405,54 @@ th {
 
     @page {
       size: A4;
-      margin: 15mm;
+      margin: 10mm;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      margin: 0 auto;
+      padding: 0;
+      color: #1a1a1a;
       font-size: 10pt;
       line-height: 1.55;
-      color: #1a1a1a;
-      margin: 0;
     }
 
-    .header {
-      margin-bottom: 1.5em;
-      padding-bottom: 0.9em;
-      border-bottom: 2px solid #1a1a1a;
+    h2 {
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
+    .doc-header {
       text-align: center;
+      margin-bottom: 1.5em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid #1a1a1a;
     }
 
-    .header h1 {
-      margin: 0 0 0.3em 0;
-      font-size: 16pt;
+    .doc-header h1 {
+      margin: 0 0 0.4em 0;
+      font-size: 14pt;
+      font-weight: 700;
     }
 
-    .header p {
-      margin: 0.2em 0;
-      color: #555;
+    .doc-badge {
+      display: inline-block;
+      padding: 0.3em 0.8em;
+      background: #1a1a1a;
+      color: white;
+      font-size: 10pt;
+      font-weight: 600;
     }
 
     .summary-box,
-    .section,
+    .checklist-box,
     .callout {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
     .summary-box,
-    .section {
-      margin: 1.2em 0;
+    .checklist-box {
+      margin: 1.25em 0;
       border: 1px solid #d8d8d8;
       background: #fff;
     }
@@ -453,7 +464,7 @@ th {
 
     .summary-grid {
       display: grid;
-      grid-template-columns: 180px 1fr;
+      grid-template-columns: 190px 1fr;
       gap: 0.45em 1em;
     }
 
@@ -466,135 +477,183 @@ th {
       margin: 0;
     }
 
-    .section h2 {
-      margin: 0;
-      padding: 0.75em 0.95em;
-      background: #1a1a1a;
-      color: #fff;
-      font-size: 11pt;
+    .section-title {
+      margin: 1.75em 0 0.75em 0;
+      padding-bottom: 0.4em;
+      border-bottom: 2px solid #1a1a1a;
+      font-size: 12pt;
+      font-weight: 700;
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
 
-    .section .content {
+    .section-header-block,
+    .callout-section,
+    .checklist-section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .checklist-box .heading {
+      margin: 0;
+      padding: 0.7em 0.9em;
+      background: #1a1a1a;
+      color: white;
+      font-size: 11pt;
+      font-weight: 700;
+      page-break-after: avoid;
+      break-after: avoid-page;
+    }
+
+    .checklist-box .content {
       padding: 1em;
     }
 
-    .ground-block {
-      margin: 1em 0 0 0;
-      padding-top: 1em;
-      border-top: 1px solid #e5e5e5;
-    }
-
-    .ground-block:first-child {
-      margin-top: 0;
-      padding-top: 0;
-      border-top: none;
-    }
-
-    .ground-block h3 {
-      margin: 0 0 0.45em 0;
-      font-size: 10pt;
-    }
-
-    .note {
-      margin: 0 0 0.7em 0;
-      color: #666;
-      font-size: 9pt;
-    }
-
-    .callout {
-      margin: 1.2em 0;
-      padding: 0.95em 1em;
-      border-left: 4px solid #b45309;
-      background: #fff7ed;
-    }
-
     ul {
-      margin: 0.35em 0 0 1.2em;
+      margin: 0.4em 0 0 1.2em;
+    }
+
+    .checklist {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     li {
-      margin: 0.38em 0;
+      margin: 0.4em 0;
+    }
+
+    .callout {
+      margin: 1.25em 0;
+      padding: 1em;
+      border-left: 4px solid #1a1a1a;
+      background: #f7f7f7;
+    }
+
+    .callout.warning {
+      border-color: #b45309;
+      background: #fff7ed;
+    }
+
+    .callout.critical {
+      border-color: #b91c1c;
+      background: #fef2f2;
+    }
+
+    .doc-footer {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #d8d8d8;
+      font-size: 9pt;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Evidence Collection Checklist</h1>
-    <p>Use this checklist to assemble a clean, court-ready possession file.</p>
+  <div class="doc-header">
+    <h1>Service and Validity Checklist</h1>
+    <span class="doc-badge">Form 3A notice</span>
   </div>
 
-  <div class="summary-box">
+  <div class="callout callout-section">
+    <p><strong>Purpose:</strong> Use this checklist to verify that the Form 3A notice is internally consistent across the notice and support documents, has been served using a defensible method, and is ready for evidence use if a claim is issued.</p>
+    <p>Use this checklist to confirm that the Form 3A notice and the supporting papers tell the same story in a careful, evidence-led way.</p>
+    <p>The claimant seeks possession of 35 Woodhall Park Avenue
+Pudsey
+LS28 7HF relying on Ground 1A (Sale of dwelling house).</p>
+  </div>
+
+  <div class="summary-box checklist-section">
     <dl class="summary-grid">
+      <dt>Landlord</dt>
+      <dd>Tariq Ahmed Mohammed</dd>
+      <dt>Tenant</dt>
+      <dd>Sonia Shezadi, Hamza Shezadi</dd>
       <dt>Property</dt>
       <dd>35 Woodhall Park Avenue
 Pudsey
-West Yorkshire
 LS28 7HF</dd>
-      <dt>Tenant</dt>
-      <dd>Sonia Shezadi</dd>
-      <dt>Case type</dt>
-      <dd>Post-1 May 2026 England possession</dd>
-      <dt>Grounds relied on</dt>
-      <dd>Ground 1A – Sale of dwelling house</dd>
+      <dt>Tenancy start date</dt>
+      <dd>15 January 2024</dd>
       <dt>Notice service date</dt>
       <dd>1 June 2026</dd>
       <dt>Notice expiry date</dt>
-      <dd>01/10/2026</dd>
+      <dd>1 October 2026</dd>
       <dt>Earliest proceedings date</dt>
-      <dd>01/10/2026</dd>
-      <dt>Prepared</dt>
-      <dd>18/04/2026</dd>
+      <dd>1 October 2026</dd>
+      <dt>Grounds relied on</dt>
+      <dd>Ground 1A – Landlord previously occupied as only or principal home</dd>
     </dl>
   </div>
 
-  <div class="callout">
-    <p><strong>England post-1 May 2026 focus:</strong> keep the notice, service record, and ground-specific evidence aligned. The court should be able to follow the pack without guessing missing dates, missing documents, or why a specialist ground is said to apply.</p>
-    <p><strong>Ground 1A:</strong> keep sale evidence and any reletting-restriction awareness material with the main bundle.</p>
+  <div class="callout warning callout-section">
+    <p><strong>Current England notice periods after 1 May 2026:</strong> use the longest period that applies where multiple grounds are included.</p>
+    <ul>
+      <li>4 months minimum: Grounds 1, 1A, 2, 2ZA, 2ZB, 2ZC, 2ZD, 4A, 6, 6B.</li>
+      <li>2 months minimum: Grounds 5, 5A, 5B, 5C, 5H, 7, 9.</li>
+      <li>4 weeks (28 days) minimum: Grounds 5E, 5F, 5G, 8, 10, 11, 18.</li>
+      <li>2 weeks (14 days) minimum: Grounds 4, 7B, 12, 13, 14A, 14ZA, 15, 17.</li>
+      <li>Immediate (0 days): Grounds 7A and 14.</li>
+      <li>Where multiple grounds are relied on, use the MAXIMUM notice period.</li>
+    </ul>
   </div>
 
-  <div class="section">
-    <h2>Core Documents</h2>
-    <div class="content">
-      <p>The claimant seeks possession of 35 Woodhall Park Avenue
-Pudsey
-West Yorkshire
-LS28 7HF relying on Ground 1A (Sale of dwelling house).</p>
-      <p>Assemble the evidence so the court can follow the tenancy history, the notice chronology, and the factual basis of each pleaded ground without having to infer missing steps.</p>
-      <p>Form 3A notice served on 1 June 2026, expiring on 1 October 2026, with proceedings not intended before 1 October 2026.</p>
-
-      <ul>
-        <li>Signed tenancy agreement and any renewals or variations.</li>
-        <li>The completed Form 3A notice as served.</li>
-        <li>Service material showing how the notice was served (first class post).</li>
-        <li>Any correspondence, inspection records, warning letters, or official notices relevant to the pleaded grounds.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>Ground-Specific Evidence</h2>
-    <div class="content">
-      <div class="ground-block">
-        <h3>Ground 1A (Sale of dwelling house)</h3>
-        <p class="note">Mandatory ground: the evidence should prove each statutory element clearly at the relevant dates.</p>
-        <ul>
-          <li>Ownership proof</li>
-          <li>Sale intention statement</li>
-          <li>Sale evidence</li>
+  <div class="section checklist-section">
+    <h2 class="section-title section-header-block">Service Evidence</h2>
+    <div class="checklist-box checklist-section">
+      <div class="heading">Keep With The Pack</div>
+      <div class="content">
+        <ul class="checklist">
+          <li>Copy of the served notice</li>
+          <li>Completed Form N215 certificate of service or service witness note</li>
+          <li>Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.</li>
+          <li>If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and why the service date used in the pack is the correct date.</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <h2>Final Checks Before Issue</h2>
-    <div class="content">
-      <ul>
-        <li>Remove duplicate, placeholder, or unexplained documents before serving the bundle on the court or the tenant.</li>
-        <li>Make sure dates, party names, and property details match across the notice, the witness statement, and the court forms.</li>
-        <li>Check that each specialist ground is supported by the specific prior-notice, status, or occupancy evidence required for that route.</li>
-      </ul>
+  <div class="section checklist-section">
+    <h2 class="section-title section-header-block">Validity Checks</h2>
+    <div class="checklist-box checklist-section">
+      <div class="heading">Before You Rely On The Notice</div>
+      <div class="content">
+        <ul class="checklist">
+          <li>Check that the same party names, address, grounds, court name, and notice timeline appear consistently across the Form 3A notice, the support documents, and any court forms.</li>
+          <li>The court is likely to expect contemporary evidence of the proposed occupation, sale, or other intended use.</li>
+        </ul>
+      </div>
     </div>
+  </div>
+
+  <div class="callout warning callout-section">
+    <p><strong>Notice periods:</strong> The required notice period depends on the grounds relied on and can change. If you alter the grounds, the service method, or the intended service date, regenerate the pack so every document uses the same recalculated dates.</p>
+  </div>
+
+  <div class="section checklist-section">
+    <h2 class="section-title section-header-block">After Service</h2>
+    <div class="checklist-box checklist-section">
+      <div class="heading">Do Not Do These Things</div>
+      <div class="content">
+        <ul class="checklist">
+          <li>Review the pack as a whole before issue so that dates, court details, and ground wording remain aligned.</li>
+          <li>Remove empty or unused sections rather than leaving placeholder text or blank visual gaps in court-facing documents.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout critical">
+    <p><strong>Risk warning:</strong> A possession claim can be delayed or contested if the notice dates, service evidence, or grounds particulars are inconsistent across the pack, even where the underlying arrears or breach evidence is strong.</p>
+  </div>
+
+  <div class="doc-footer">
+    <p><strong>Generated:</strong> 26 April 2026</p>
+    <p><strong>Landlord Heaven</strong> | England Section 8 support document</p>
   </div>
 </body>
 </html>
