@@ -214,7 +214,7 @@
     </div>
     <div class="legend-item">
       <div class="status risk">Significant risk</div>
-      <p>Does not necessarily invalidate a Section 8 notice but can create penalties, counterclaims, or evidential problems.</p>
+      <p>Can still lead to penalties, counterclaims, credibility damage, or a weaker court file even where it is not an outright route blocker.</p>
     </div>
     <div class="legend-item">
       <div class="status advisory">Advisory / good practice</div>
@@ -252,21 +252,42 @@
         <div class="status advisory">Recorded as satisfied</div>
         <p>The pack records deposit protection and prescribed information compliance.</p>
         {{else}}
+        {{#if section8_deposit_exception_only}}
         <div class="status risk">Significant risk</div>
         {{#if (eq prescribed_info_given false)}}
         <p>The deposit appears to have been protected, but prescribed information is not recorded as having been given.</p>
         {{else}}
         <p>The deposit appears to have been protected, but prescribed information service is not confirmed in the current pack data.</p>
         {{/if}}
-        <p>This does not automatically invalidate a Section 8 notice, but it may expose the landlord to penalties, counterclaims, or credibility issues and should be resolved where possible.</p>
+        <p>Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still expose the landlord to penalty proceedings, counterclaims, or credibility issues and should still be resolved.</p>
+        {{else}}
+        <div class="status critical">Critical route risk</div>
+        {{#if (eq prescribed_info_given false)}}
+        <p>The deposit appears to have been protected, but prescribed information is not recorded as having been given.</p>
+        {{else}}
+        <p>The deposit appears to have been protected, but prescribed information service is not confirmed in the current pack data.</p>
+        {{/if}}
+        <p>For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order unless the deposit requirements have been complied with, the deposit has been returned in full or with agreed deductions, or any deposit-compliance dispute has already been resolved.</p>
+        {{/if}}
         {{/if}}
       {{else if (eq deposit_protected false)}}
+      {{#if section8_deposit_exception_only}}
       <div class="status risk">Significant risk</div>
       <p>The deposit is not recorded as protected in an approved scheme.</p>
-      <p>This does not automatically invalidate a Section 8 notice, but it may expose the landlord to penalties, counterclaims, or credibility issues and should be resolved where possible.</p>
+      <p>Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still expose the landlord to penalty proceedings, counterclaims, or credibility issues and should still be resolved.</p>
       {{else}}
+      <div class="status critical">Critical route risk</div>
+      <p>The deposit is not recorded as protected in an approved scheme.</p>
+      <p>For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order unless the deposit requirements have been complied with, the deposit has been returned in full or with agreed deductions, or any deposit-compliance dispute has already been resolved.</p>
+      {{/if}}
+      {{else}}
+      {{#if section8_deposit_exception_only}}
       <div class="status advisory">Advisory / good practice</div>
       <p>Deposit protection status is not confirmed in the current pack data. Check the scheme record and any prescribed information service record before relying on the file.</p>
+      {{else}}
+      <div class="status critical">Critical route risk</div>
+      <p>Deposit protection status is not confirmed in the current pack data. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.</p>
+      {{/if}}
       {{/if}}
     {{/if}}
   </div>

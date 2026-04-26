@@ -2,7 +2,6 @@ SERVICE INSTRUCTIONS
 Form 3A notice
 Purpose: Use these instructions to serve the Form 3A notice consistently and preserve evidence of when, where,
 and how service took place.
-Use these instructions to serve the Form 3A notice consistently and keep a defensible record of service.
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears), Ground 10
 (Any rent arrears).
 Form 3A notice served on 26 April 2026, expiring on 24 May 2026, with proceedings not intended before 24 May
@@ -18,7 +17,8 @@ First Class Post
 Send the Form 3A notice by Royal Mail first class post.
 Keep the proof of posting receipt and a copy of the notice served.
 Record the date of posting and keep any follow-up correspondence.
-Use the service date and proceedings date shown above as your canonical pack timeline.
+Keep the service date and earliest proceedings date consistent across the notice, the N215 certificate, and any
+later court papers.
 Practical Method Notes
 Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.
 If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and

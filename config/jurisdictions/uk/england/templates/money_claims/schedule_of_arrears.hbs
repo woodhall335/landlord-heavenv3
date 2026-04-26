@@ -1,7 +1,7 @@
 {{!--
   ============================================================================
   SCHEDULE OF DEBT (Court-Ready)
-  Money Claim Pack - England
+  England Possession / Arrears Support Schedule
   ============================================================================
   Court-credible schedule with:
   - Running balance column (for arrears)
@@ -222,7 +222,7 @@
 <!-- Document Header -->
 <div class="doc-header">
   <h1>{{#if arrears_schedule}}Schedule of Rent Arrears{{else}}Schedule of Debt{{/if}}</h1>
-  <span class="doc-badge">Money Claim – County Court</span>
+  <span class="doc-badge">{{#if pack_context_label}}{{pack_context_label}}{{else}}Possession support schedule{{/if}}</span>
 </div>
 
 <!-- Case Details -->
@@ -314,8 +314,8 @@
 <div class="doc-footer">
   <p><strong>Generated:</strong> {{format_date generation_date "long"}}</p>
   {{#unless clean_output}}
-  <p><strong>Landlord Heaven Money Claim Pack</strong> | England</p>
-  <p><em>This schedule supports the particulars of claim and demonstrates the calculation of arrears owed.</em></p>
+  <p><strong>{{#if pack_context_label}}{{pack_context_label}}{{else}}Landlord Heaven Possession Pack{{/if}}</strong> | England</p>
+  <p><em>{{#if schedule_role_note}}{{schedule_role_note}}{{else}}This schedule supports the pleaded arrears case and any later possession claim.{{/if}}</em></p>
   {{/unless}}
 </div>
 

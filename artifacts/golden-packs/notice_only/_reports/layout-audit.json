@@ -1,0 +1,125 @@
+{
+  "timestamp": "2026-04-26T16:54:02.012Z",
+  "totalPDFs": 6,
+  "totalIssues": 0,
+  "criticalIssues": 0,
+  "results": [
+    {
+      "path": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs\\notice_only\\compliance_declaration.pdf",
+      "relativePath": "compliance_declaration.pdf",
+      "route": "root",
+      "issues": [],
+      "checks": {
+        "topWhitespace": {
+          "passed": true,
+          "firstTextPosition": 0
+        },
+        "requiredHeadings": {
+          "passed": true,
+          "foundHeadings": []
+        },
+        "placeholders": {
+          "passed": true
+        }
+      }
+    },
+    {
+      "path": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs\\notice_only\\form_n215_certificate_of_service.pdf",
+      "relativePath": "form_n215_certificate_of_service.pdf",
+      "route": "root",
+      "issues": [],
+      "checks": {
+        "topWhitespace": {
+          "passed": true,
+          "firstTextPosition": 0
+        },
+        "requiredHeadings": {
+          "passed": true,
+          "foundHeadings": []
+        },
+        "placeholders": {
+          "passed": true
+        }
+      }
+    },
+    {
+      "path": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs\\notice_only\\rent_schedule_arrears_statement.pdf",
+      "relativePath": "rent_schedule_arrears_statement.pdf",
+      "route": "root",
+      "issues": [],
+      "checks": {
+        "topWhitespace": {
+          "passed": true,
+          "firstTextPosition": 0
+        },
+        "requiredHeadings": {
+          "passed": true,
+          "foundHeadings": []
+        },
+        "placeholders": {
+          "passed": true
+        }
+      }
+    },
+    {
+      "path": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs\\notice_only\\section8_notice.pdf",
+      "relativePath": "section8_notice.pdf",
+      "route": "root",
+      "issues": [],
+      "checks": {
+        "topWhitespace": {
+          "passed": true,
+          "firstTextPosition": 0
+        },
+        "requiredHeadings": {
+          "passed": true,
+          "foundHeadings": [
+            "NOTICE SEEKING POSSESSION",
+            "Housing Act 1988"
+          ]
+        },
+        "placeholders": {
+          "passed": true
+        }
+      }
+    },
+    {
+      "path": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs\\notice_only\\service_instructions_s8.pdf",
+      "relativePath": "service_instructions_s8.pdf",
+      "route": "root",
+      "issues": [],
+      "checks": {
+        "topWhitespace": {
+          "passed": true,
+          "firstTextPosition": 0
+        },
+        "requiredHeadings": {
+          "passed": true,
+          "foundHeadings": []
+        },
+        "placeholders": {
+          "passed": true
+        }
+      }
+    },
+    {
+      "path": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs\\notice_only\\validity_checklist_s8.pdf",
+      "relativePath": "validity_checklist_s8.pdf",
+      "route": "root",
+      "issues": [],
+      "checks": {
+        "topWhitespace": {
+          "passed": true,
+          "firstTextPosition": 0
+        },
+        "requiredHeadings": {
+          "passed": true,
+          "foundHeadings": []
+        },
+        "placeholders": {
+          "passed": true
+        }
+      }
+    }
+  ]
+}

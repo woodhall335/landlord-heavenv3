@@ -40,11 +40,11 @@ E. Tenancy documents
 E1 Tenancy agreement Signed tenancy agreement
 E2 Deposit evidence Deposit protection or prescribed information
 records, if relevant
-G. Correspondence
-G1 Pre-action
+F. Correspondence
+F1 Pre-action
 correspondence
 Letters, emails, or messages sent before issue
-G2 Tenant responses Any response received from the tenant
+F2 Tenant responses Any response received from the tenant
 Bundle preparation notes
 Paginate the bundle consistently and update the exhibit references if documents are added or removed.
 Keep the court-facing bundle free from unused sections, stray technical notes, and irrelevant material.

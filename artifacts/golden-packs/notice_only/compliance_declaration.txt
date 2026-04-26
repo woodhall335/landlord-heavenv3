@@ -7,24 +7,27 @@ Tenancy start date 1 January 2024
 Notice type Form 3A notice
 Generated 26 April 2026
 CRITICAL BLOCKER
-Typically blocks a Section 21 route
-unless corrected first.
+Likely to block the current
+possession route or materially
+weaken the claim unless corrected
+first.
 SIGNIFICANT RISK
-Does not necessarily invalidate a
-Section 8 notice but can create
-penalties, counterclaims, or
-evidential problems.
+Can still lead to penalties,
+counterclaims, credibility damage,
+or a weaker court file even where it
+is not an outright route blocker.
 ADVISORY / GOOD PRACTICE
 Still worth resolving, documenting,
 or improving before court if
 possible.
 Key Compliance Areas
 Deposit protection and prescribed information
-SIGNIFICANT RISK
+CRITICAL ROUTE RISK
 The deposit appears to have been protected, but prescribed information service is not confirmed in the current pack
 data.
-This does not automatically invalidate a Section 8 notice, but it may expose the landlord to penalties, counterclaims,
-or credibility issues and should be resolved where possible.
+For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order unless the
+deposit requirements have been complied with, the deposit has been returned in full or with agreed deductions, or
+any deposit-compliance dispute has already been resolved.
 Gas safety
 ADVISORY / GOOD PRACTICE
 No gas safety provision is confirmed in the current pack data. That does not automatically invalidate a Section 8

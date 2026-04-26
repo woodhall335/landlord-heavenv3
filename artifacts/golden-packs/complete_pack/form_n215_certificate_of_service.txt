@@ -59,9 +59,9 @@ Fax number
 Email address
 Other electronic identification
 Being the
-claimant’s
-defendant’s
-solicitor’s
+claimant's
+defendant's
+solicitor's
 litigation friend
 Location
 usual residence
@@ -93,12 +93,12 @@ Claimant
 Defendant
 Litigation friend
 (where judgment creditor is a child or a protected party)
-Claimant’s legal representative (as defined by CPR 2.3(1))
-Defendant’s legal representative (as defined by CPR 2.3(1))
+Claimant's legal representative (as defined by CPR 2.3(1))
+Defendant's legal representative (as defined by CPR 2.3(1))
 Date
 Day Month Year
 Full name
-Name of legal representative’s firm
+Name of legal representative's firm
 If signing on behalf of firm or company give position or office held
 
 -- 4 of 5 --
@@ -143,7 +143,7 @@ Personal service
 If the document is served personally before 4.30pm on a business
 day, it is served on that day; or in any other case, on the next
 business day after that day.
-In this context ‘business day’ means any day except Saturday, Sunday or
+In this context 'business day' means any day except Saturday, Sunday or
 a bank holiday; (under the Banking and Financial Dealings Act 1971 in the
 part of the UK where service is to take place) includes Good Friday and
 Christmas Day.

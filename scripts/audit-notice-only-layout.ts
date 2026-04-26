@@ -18,8 +18,9 @@
 
 import fs from 'fs/promises';
 import path from 'path';
+import { extractPdfText } from '../src/lib/evidence/extract-pdf-text.ts';
 
-const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts', 'notice_only');
+const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts', 'golden-packs', 'notice_only');
 const REPORTS_DIR = path.join(ARTIFACTS_DIR, '_reports');
 
 interface LayoutIssue {
@@ -84,7 +85,7 @@ async function findPDFs(): Promise<Array<{ path: string; route: string }>> {
 }
 
 /**
- * Extract text from PDF using pdfjs-dist
+ * Extract text from PDF using the shared extraction pipeline
  */
 async function extractPDFText(pdfPath: string): Promise<{ text: string; error?: string }> {
   try {
@@ -96,34 +97,10 @@ async function extractPDFText(pdfPath: string): Promise<{ text: string; error?: 
       return { text: '', error: 'Invalid PDF header' };
     }
 
-    // Try pdfjs-dist
-    try {
-      const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
-
-      if (!(pdfjsLib as any).GlobalWorkerOptions.workerSrc) {
-        (pdfjsLib as any).GlobalWorkerOptions.workerSrc = '';
-      }
-
-      const loadingTask = pdfjsLib.getDocument({
-        data: new Uint8Array(pdfBuffer),
-        useSystemFonts: true,
-        verbosity: 0,
-      });
-
-      const pdfDoc = await loadingTask.promise;
-      const textParts: string[] = [];
-
-      for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-        const page = await pdfDoc.getPage(pageNum);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map((item: any) => item.str || '').join(' ');
-        textParts.push(pageText);
-      }
-
-      return { text: textParts.join('\n') };
-    } catch (pdfjsError: any) {
-      return { text: '', error: `pdfjs-dist failed: ${pdfjsError.message}` };
-    }
+    const extraction = await extractPdfText(pdfBuffer, 20);
+    return extraction.error
+      ? { text: extraction.text || '', error: extraction.error }
+      : { text: extraction.text };
   } catch (e: any) {
     return { text: '', error: `File read failed: ${e.message}` };
   }
@@ -160,6 +137,7 @@ function checkTopWhitespace(text: string): { passed: boolean; firstTextPosition?
 function checkRequiredHeadings(text: string, route: string): { passed: boolean; foundHeadings: string[] } {
   const requiredHeadings: Record<string, string[]> = {
     'england/form_3_section8': ['NOTICE SEEKING POSSESSION', 'Housing Act 1988'],
+    'section8_notice': ['NOTICE SEEKING POSSESSION', 'Housing Act 1988'],
     'england/form_6a_section21': ['Notice Requiring Possession', 'Housing Act 1988'],
     'wales/rhw17': ['FORM RHW17', 'Renting Homes (Wales) Act 2016'],
     'wales/rhw16': ['FORM RHW16', 'Renting Homes (Wales) Act 2016'],
@@ -181,9 +159,10 @@ function checkRequiredHeadings(text: string, route: string): { passed: boolean; 
     return { passed: true, foundHeadings: [] };
   }
 
+  const normalizedText = text.toUpperCase();
   const foundHeadings: string[] = [];
   for (const heading of required) {
-    if (text.includes(heading)) {
+    if (normalizedText.includes(heading.toUpperCase())) {
       foundHeadings.push(heading);
     }
   }
@@ -255,7 +234,7 @@ async function auditPDF(pdf: { path: string; route: string }): Promise<LayoutAud
 
   // Run checks
   const topWhitespaceCheck = checkTopWhitespace(text);
-  const headingsCheck = checkRequiredHeadings(text, pdf.route);
+  const headingsCheck = checkRequiredHeadings(text, `${pdf.route}/${relativePath}`);
   const placeholdersCheck = checkPlaceholders(text);
 
   // Generate issues

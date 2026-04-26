@@ -209,11 +209,12 @@ function formatServiceMethod(method: string): string {
  */
 function formatTenancyType(tenancyType: string | undefined): string {
   const typeMap: Record<string, string> = {
-    ast_fixed_term: 'assured shorthold tenancy (fixed term)',
-    ast_periodic: 'assured shorthold tenancy (periodic)',
+    ast_fixed_term: 'assured tenancy (granted for a fixed term)',
+    ast_periodic: 'assured periodic tenancy',
+    assured_shorthold: 'assured tenancy',
     assured: 'assured tenancy',
   };
-  return typeMap[tenancyType || ''] || 'assured shorthold tenancy';
+  return typeMap[tenancyType || ''] || 'assured tenancy';
 }
 
 /**

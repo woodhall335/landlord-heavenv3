@@ -101,11 +101,15 @@
     }
 
     .checklist li::before {
-      content: "[ ]";
+      content: "";
       position: absolute;
       left: 0;
-      top: 0.6em;
-      font-weight: 700;
+      top: 0.72em;
+      width: 12px;
+      height: 12px;
+      border: 1.5px solid #1a1a1a;
+      border-radius: 3px;
+      background: white;
     }
 
     .notes {
@@ -266,7 +270,7 @@
   {{/if}}
 
   <div class="section">
-    <h3>What to do if...</h3>
+    <h3>If the case changes</h3>
     <ul class="checklist">
       {{#if drafting_model.hearingChecklist.contingencyItems.length}}
         {{#each drafting_model.hearingChecklist.contingencyItems}}

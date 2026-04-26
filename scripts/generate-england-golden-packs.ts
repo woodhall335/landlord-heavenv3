@@ -314,6 +314,12 @@ function buildGoldenMoneyClaimCase(): MoneyClaimCase {
 }
 
 async function generateNoticeOnlyGolden(): Promise<GoldenPackDocumentInput[]> {
+  const facts = buildGoldenEnglandSection8WizardFacts('golden-notice-only-001');
+  const pack = await generateNoticeOnlyPack(facts);
+  return pack.documents;
+}
+
+function buildGoldenEnglandSection8WizardFacts(caseId: string, overrides: Record<string, any> = {}): BaseFacts {
   const arrearsItems = [
     {
       period_start: '2026-01-01',
@@ -338,9 +344,9 @@ async function generateNoticeOnlyGolden(): Promise<GoldenPackDocumentInput[]> {
     },
   ];
 
-  const facts = buildEnglandSection8CompletePackFacts({
+  return buildEnglandSection8CompletePackFacts({
     overrides: {
-      __meta: { case_id: 'golden-notice-only-001', jurisdiction: 'england' },
+      __meta: { case_id: caseId, jurisdiction: 'england' },
       clean_output: true,
       landlord_name: 'Daniel Mercer',
       landlord_address_line1: '27 Rowan Avenue',
@@ -353,59 +359,18 @@ async function generateNoticeOnlyGolden(): Promise<GoldenPackDocumentInput[]> {
       total_arrears: 3600,
       rent_arrears_amount: 3600,
       arrears_items: arrearsItems,
+      ...overrides,
     },
   });
-
-  const pack = await generateNoticeOnlyPack(facts);
-  return pack.documents;
 }
 
 async function generateCompletePackGolden(): Promise<GoldenPackDocumentInput[]> {
-  const arrearsItems = [
-    {
-      period_start: '2026-01-01',
-      period_end: '2026-01-31',
-      rent_due: 1200,
-      rent_paid: 0,
-      amount_owed: 1200,
-    },
-    {
-      period_start: '2026-02-01',
-      period_end: '2026-02-28',
-      rent_due: 1200,
-      rent_paid: 0,
-      amount_owed: 1200,
-    },
-    {
-      period_start: '2026-03-01',
-      period_end: '2026-03-31',
-      rent_due: 1200,
-      rent_paid: 0,
-      amount_owed: 1200,
-    },
-  ];
-
-  const pack = await generateCompleteEvictionPack({
-    ...buildEnglandSection8CompletePackFacts({
-      overrides: {
-        __meta: { case_id: 'golden-complete-pack-001', jurisdiction: 'england' },
-      },
+  const pack = await generateCompleteEvictionPack(
+    buildGoldenEnglandSection8WizardFacts('golden-complete-pack-001', {
+      court_name: 'York County Court and Family Court',
+      court_mode: true,
     }),
-    landlord_name: 'Daniel Mercer',
-    landlord_address_line1: '27 Rowan Avenue',
-    landlord_city: 'Leeds',
-    landlord_postcode: 'LS8 2PF',
-    tenant1_name: 'Ivy Carleton',
-    property_address_line1: '16 Willow Mews',
-    property_city: 'York',
-    property_postcode: 'YO24 3HX',
-    court_name: 'York County Court and Family Court',
-    clean_output: true,
-    court_mode: true,
-    total_arrears: 3600,
-    rent_arrears_amount: 3600,
-    arrears_items: arrearsItems,
-  });
+  );
 
   return pack.documents;
 }

@@ -106,7 +106,7 @@ For guidance on the
 minimum amount of
 notice, see the Form 3A:
 Completing the notice
-seeking possession –
+seeking possession -
 guidance for private
 landlords at: https://www.
 gov.uk/guidance/assured-
@@ -117,12 +117,12 @@ tenancy-forms
 Page 3
 Form 3A Notice seeking possession of a property let on an assured tenancy or an assured agricultural
 occupancy in the private rented sector (05.26)
-4. Landlord’s reasons for asking you to leave
+4. Landlord's reasons for asking you to leave
 Your landlord must explain why they are seeking possession of the
 property. This means they must give you reasons why they want you
 to leave the property and give you at least the minimum amount of
 notice to do so.
-They can only use certain reasons called ‘possession grounds’. The
+They can only use certain reasons called 'possession grounds'. The
 possession grounds are in Schedule 2 to the Housing Act 1988 (as
 amended) and can be found in full in Form 3A: Legal wording for
 possession grounds which can be accessed at: https://www.gov.
@@ -161,8 +161,8 @@ the boxes to indicate the
 reason(s) you are seeking
 possession. If none of
 the listed grounds apply,
-select ‘Other (ground(s)
-not listed above)’. Provide
+select 'Other (ground(s)
+not listed above)'. Provide
 the full legal wording for
 each possession ground
 you are seeking to rely on in
@@ -213,9 +213,9 @@ appears in the guidance.
 Page 5
 Form 3A Notice seeking possession of a property let on an assured tenancy or an assured agricultural
 occupancy in the private rented sector (05.26)
-4.3 Landlord’s explanation of why each possession ground is being used Note to the landlord 4.3:
+4.3 Landlord's explanation of why each possession ground is being used Note to the landlord 4.3:
 Write a heading for each
-This is your landlord’s explanation of how and why they believe they ground you are using and
+This is your landlord's explanation of how and why they believe they ground you are using and
 are legally able to use the grounds for possession in questions 4.1 explain in your own words
 and 4.2. why you believe you can
 use that ground. You should
@@ -304,7 +304,7 @@ Before your landlord can apply to the court for a possession order they
 must give you at least the minimum amount of notice. The amount of time
 depends on the reason they want to regain possession. For the minimum
 amount of notice required for the ground(s) that your landlord is using see
-Form 3A: Receiving the notice seeking possession – guidance for
+Form 3A: Receiving the notice seeking possession - guidance for
 tenants accessed at: https://www.gov.uk/guidance/assured-tenancy-forms.
 If your landlord goes to court, you will have the opportunity to dispute the
 possession claim.
@@ -314,11 +314,11 @@ your-property-guidance-for-landlords-and-letting-agents/repossessing-
 your-privately-rented-property-on-or-after-1-may-2026
 When seeking to regain possession, landlords must also adhere to duties
 set out in Section 16E of the Housing Act 1988. Further information can be
-found in Form 3A: Receiving the notice seeking possession – guidance for
+found in Form 3A: Receiving the notice seeking possession - guidance for
 tenants, accessed at: https://www.gov.uk/guidance/assured-tenancy-forms
 Where to seek advice
 There are places you can find advice about this notice:
-• www.shelter.org.uk or Shelter’s emergency helpline on
+• www.shelter.org.uk or Shelter's emergency helpline on
 0808 800 4444
 • Get free legal advice through the Housing Loss Prevention Advice
 Service at https://www.gov.uk/guidance/legal-aid-for-possession-
@@ -331,10 +331,10 @@ contact-us/
 at https://solicitors.lawsociety.org.uk/
 • Civil Legal Advice (CLA) may be able to direct you to legal advice on
 housing. You can contact them at www.gov.uk/civil-legal-advice, by
-calling 0345 345 4345 (Monday to Friday, 9am–8pm and Saturday
-9am–12:30pm), or by texting ‘legalaid’ and your name to 80010 to
+calling 0345 345 4345 (Monday to Friday, 9am-8pm and Saturday
+9am-12:30pm), or by texting 'legalaid' and your name to 80010 to
 ask CLA to call you back. It costs the same as a normal text message.
-If you’re worried about becoming homeless contact your local authority for
+If you're worried about becoming homeless contact your local authority for
 support. You can find your local authority at: www.gov.uk/find-local-council
 
 -- 8 of 10 --

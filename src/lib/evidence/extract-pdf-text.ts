@@ -186,6 +186,14 @@ function cleanExtractedText(text: string): string {
     cleaned = cleaned.replace(pattern, replacement);
   }
 
+  cleaned = cleaned
+    .replace(/Â£/g, '£')
+    .replace(/â€¢/g, '-')
+    .replace(/[â€“–—]/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[’‘]/g, "'")
+    .replace(/…/g, '...');
+
   return cleaned
     // Replace multiple newlines with double newline
     .replace(/\n{3,}/g, '\n\n')

@@ -56,10 +56,10 @@ before 24 May 2026.
 Compliance Status Snapshot
 Use this as a risk summary, not as a replacement for the underlying tenancy documents and
 evidence file.
-Significant risk: Deposit protection is recorded with TDS on 15 January 2024, but prescribed
-information is not recorded as served. This does not automatically invalidate a Section 8 notice,
-but it may expose the landlord to penalties, counterclaims, or credibility issues and should be
-resolved where possible.
+Critical route risk: Deposit protection is recorded with TDS on 15 January 2024, but prescribed
+information is not recorded as served. For most post-1 May 2026 private-rented-sector grounds,
+the court will not make a possession order until the deposit position has been cured, the deposit
+has been returned, or any deposit-compliance dispute has already been resolved.
 Significant risk: No gas safety provision is recorded. This does not automatically invalidate a
 Section 8 notice, but it can create regulatory or evidential risk.
 Significant risk: No EPC provision is recorded. This is not treated here as automatic Section 8
@@ -72,8 +72,8 @@ Pre-action and Procedural Steps
 The rent account first shows an unpaid or short-paid period from 1 January 2026. The most recent
 affected rental period is 1 March 2026. The current arrears total is £3,600.00 across 3 missed or
 short-paid rental periods.
-The notice service milestone currently recorded is 26 April 2026. The possession / proceedings
-date currently recorded in the file is 24 May 2026.
+The Form 3A notice service milestone currently recorded is 26 April 2026. The possession /
+proceedings date currently recorded in the file is 24 May 2026.
 Defendant Circumstances
 The claimant is not aware of any further information about the defendant's circumstances beyond
 the matters set out in the claim papers and any information the defendant may wish to place before

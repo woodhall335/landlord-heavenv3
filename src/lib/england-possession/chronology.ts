@@ -1,4 +1,5 @@
 import type { ArrearsItem } from '@/lib/case-facts/schema';
+import { ENGLAND_SECTION8_NOTICE_NAME } from '@/lib/england-possession/section8-terminology';
 
 type ChronologyInput = Record<string, any>;
 
@@ -155,6 +156,13 @@ function summarizeArrears(data: ChronologyInput): {
 }
 
 function buildNoticeParagraph(data: ChronologyInput): { paragraph: string; timelineItem: string } {
+  const routeHint = String(
+    getFirstValue(data, 'selected_notice_route', 'recommended_route', 'eviction_route', 'claim_type', 'notice_type') || '',
+  ).toLowerCase();
+  const noticeLabel =
+    routeHint.includes('section_8') || routeHint.includes('section 8')
+      ? ENGLAND_SECTION8_NOTICE_NAME
+      : 'notice';
   const serviceDate = formatLongDate(
     getFirstValue(data, 'notice_service_date', 'notice_served_date', 'section_8_notice_date', 'notice.service_date'),
   );
@@ -168,7 +176,7 @@ function buildNoticeParagraph(data: ChronologyInput): { paragraph: string; timel
 
   return {
     paragraph: [
-      serviceDate ? `The notice service milestone currently recorded is ${serviceDate}.` : '',
+      serviceDate ? `The ${noticeLabel} service milestone currently recorded is ${serviceDate}.` : '',
       expiryDate ? `The possession / proceedings date currently recorded in the file is ${expiryDate}.` : '',
     ]
       .filter(Boolean)

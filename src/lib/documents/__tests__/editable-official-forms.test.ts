@@ -250,9 +250,9 @@ describe('Editable Official Forms - No Flatten', () => {
       const form = pdfDoc.getForm();
 
       expect(form.getTextField('4. (a) The reason the claimant is asking for possession is:').getText()).toContain('Ground 8');
-      expect(form.getTextField('4. (b) The reason the claimant is asking for possession is:').getText()).toContain('No separate breach particulars');
+      expect(form.getTextField('4. (b) The reason the claimant is asking for possession is:').getText()).toContain('No separate non-arrears breach particulars');
       expect(form.getTextField('4. (c) The reason the claimant is asking for possession is:').getText()).toContain('Ground 8, Schedule 2, Housing Act 1988');
-      expect(form.getTextField('5. The following steps have already been taken to recover any arrears:').getText()).toContain('Form 3A');
+      expect(form.getTextField('5. The following steps have already been taken to recover any arrears:').getText()).toContain('Form 3A notice');
       expect(form.getTextField('7. The following information is known about the defendant’s circumstances:').getText()).toContain('health and financial difficulties');
       expect(form.getTextField('8. The claimant is asking the court to take the following financial or other information into account when making its decision whether or not to grant an order for possession:').getText()).toContain('rent arrears');
     });
@@ -282,7 +282,7 @@ describe('Editable Official Forms - No Flatten', () => {
       const form = pdfDoc.getForm();
       const explanation = form.getTextField('form3a_explanation_text').getText();
 
-      expect(explanation).toContain('Ground 8 is relied on as the mandatory serious rent arrears ground.');
+      expect(explanation).toContain('Ground 8 is relied on as the serious rent arrears ground.');
       expect(explanation).toContain('The tenancy began on');
       expect(explanation.length).toBeGreaterThan(180);
     });

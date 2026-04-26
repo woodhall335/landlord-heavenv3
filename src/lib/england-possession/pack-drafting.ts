@@ -237,7 +237,7 @@ function isGeneratedArrearsSummary(text: string): boolean {
 
   const normalized = text
     .replace(/\s+/g, ' ')
-    .replace(/Â£/g, '£')
+    .replace(/Ã‚Â£|Â£/g, '£')
     .trim()
     .toLowerCase();
 
@@ -1078,6 +1078,46 @@ function buildDefendantCircumstancesParagraphs(data: DraftingInput): string[] {
   return paragraphs;
 }
 
+function buildDefenceRiskEvidenceItems(data: DraftingInput): string[] {
+  const items: string[] = [];
+  const knownDefences = String(data.known_tenant_defences || '').trim();
+  const benefitDetails = [data.benefit_type, data.tenant_benefits_details]
+    .map((value) => String(value || '').trim())
+    .filter(Boolean);
+
+  if (knownDefences) {
+    items.push(
+      `Documents answering the tenant's stated defence or dispute points (${knownDefences}).`,
+    );
+  }
+
+  if (data.disrepair_complaints === true) {
+    items.push(
+      'Repair logs, inspection notes, contractor records, photographs, and response correspondence answering any disrepair or set-off point.',
+    );
+  }
+
+  if (data.previous_court_proceedings === true) {
+    items.push('Copies of any previous possession proceedings, orders, or settlement terms affecting this tenancy.');
+  }
+
+  if (benefitDetails.length > 0) {
+    items.push(
+      'Benefit or Universal Credit correspondence, payment screenshots, and rent-account notes explaining any benefit-linked arrears issue.',
+    );
+  }
+
+  if (data.payment_plan_offered === true) {
+    items.push("Copies of any arrears-payment proposal and the tenant's response or non-compliance.");
+  }
+
+  if (data.tenant_counterclaim_likely === true) {
+    items.push('The documents that most directly answer any likely counterclaim or equitable set-off point.');
+  }
+
+  return dedupeList(items);
+}
+
 function buildFinancialParagraphs(data: DraftingInput, grounds: EnglandGroundCode[]): string[] {
   const totalArrears = toNumber(getFirstValue(data, 'total_arrears', 'arrears_at_notice_date', 'current_arrears'));
   const rentAmount = toNumber(getFirstValue(data, 'rent_amount', 'tenancy.rent_amount'));
@@ -1193,6 +1233,12 @@ function buildEvidenceChecklistSection(params: {
 }): EnglandPossessionDraftingModel['evidenceChecklist'] {
   const { data, groundCodes, groundsLeadParagraph, groundDrafts } = params;
   const serviceMethod = String(getFirstValue(data, 'notice_service_method', 'service_method') || '').toLowerCase();
+  const defenceRiskEvidenceItems = buildDefenceRiskEvidenceItems(data);
+  const hasDefenceRiskInputs =
+    defenceRiskEvidenceItems.length > 0 ||
+    String(data.known_tenant_defences || '').trim().length > 0 ||
+    data.disrepair_complaints === true ||
+    data.tenant_counterclaim_likely === true;
 
   return {
     overviewParagraphs: dedupeParagraphs([
@@ -1208,6 +1254,7 @@ function buildEvidenceChecklistSection(params: {
         ? 'Up-to-date rent account and arrears schedule, including payments made after service if any.'
         : '',
       'Any correspondence, inspection records, warning letters, or official notices relevant to the pleaded grounds.',
+      ...defenceRiskEvidenceItems,
     ]),
     groundSections: buildEvidenceChecklistSections(groundDrafts),
     finalChecks: dedupeList([
@@ -1216,6 +1263,9 @@ function buildEvidenceChecklistSection(params: {
       groundCodes.some((code) => ['8', '10', '11'].includes(code))
         ? 'Update the arrears figures immediately before issue and again before any hearing.'
         : 'Check that each specialist ground is supported by the specific prior-notice, status, or occupancy evidence required for that route.',
+      hasDefenceRiskInputs
+        ? 'If the tenant is likely to dispute the claim, make sure the bundle contains the documents that answer those points directly rather than leaving the judge to infer the response.'
+        : '',
     ]),
   };
 }
@@ -1442,7 +1492,6 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
     },
     serviceInstructions: {
       overviewParagraphs: dedupeParagraphs([
-        `Use these instructions to serve the ${ENGLAND_SECTION8_NOTICE_NAME} consistently and keep a defensible record of service.`,
         groundsLeadParagraph,
         buildNoticeTimelineSentence(data),
       ]),
@@ -1465,8 +1514,8 @@ export function buildEnglandPossessionDraftingModel(data: DraftingInput): Englan
     },
     validityChecklist: {
       overviewParagraphs: dedupeParagraphs([
-        `Use this checklist to confirm that the ${ENGLAND_SECTION8_NOTICE_NAME} and the supporting papers tell the same story in a careful, evidence-led way.`,
         groundsLeadParagraph,
+        buildNoticeTimelineSentence(data),
       ]),
         serviceEvidenceItems: dedupeList(['Copy of the served notice', 'Completed Form N215 certificate of service or service witness note', ...buildMethodNotes(data)]),
       validityItems: dedupeList([

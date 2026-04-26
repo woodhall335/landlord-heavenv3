@@ -5,7 +5,7 @@ Name of court Claim No.
 Name of Claimant
 Name of Defendant
 1. The claimant has a right to possession of:
-2. To the best of the claimant’s knowledge the following persons are in possession of the property:
+2. To the best of the claimant's knowledge the following persons are in possession of the property:
 About the tenancy
 3. (a) The premises are let to the defendant(s) under a(n)
 tenancy which began on .
@@ -28,7 +28,7 @@ on 20 .
 6. The appropriate (notice to quit) (notice of breach of lease) (notice seeking possession) (notice
 seeking a demotion order) (other
 About the defendant
-7. The following information is known about the defendant’s circumstances:
+7. The following information is known about the defendant's circumstances:
 About the claimant
 8. The claimant is asking the court to take the following financial or other information into account
 when making its decision whether or not to grant an order for possession:
@@ -45,7 +45,7 @@ What the court is being asked to do:
 (b) pay the unpaid rent and any charge for use and occupation up to the date an order is made;
 (c) pay rent and any charge for use and occupation from the date of the order until the claimant
 recovers possession of the property;
-(d) pay the claimant’s costs of making this claim.
+(d) pay the claimant's costs of making this claim.
 11. In the alternative to possession, is the claimant asking the court to make a demotion order or an
 order suspending the right to buy?
 Yes No
@@ -89,11 +89,11 @@ statement.
 Signature
 Claimant
 Litigation friend (where claimant is a child or a patient)
-Claimant’s legal representative (as defined by CPR 2.3(1))
+Claimant's legal representative (as defined by CPR 2.3(1))
 Date
 Day Month Year
 Full name
-Name of claimant’s legal representative’s firm
+Name of claimant's legal representative's firm
 If signing on behalf of firm or company give position or office held
 Find out how HM Courts and Tribunals Service uses personal information you give them when you fill in a
 form: https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service/about/personal-

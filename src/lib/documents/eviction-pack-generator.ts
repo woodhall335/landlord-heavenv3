@@ -601,6 +601,15 @@ function buildCaseSummaryComplianceItems(params: {
     ''
   );
   const isSection21Route = evictionCase.case_type === 'no_fault' || normalizedRoute === 'section_21';
+  const normalizedGroundCodes = (evictionCase.grounds || [])
+    .map((ground) => String(ground.code || '').replace(/^Ground\s+/i, '').trim().toUpperCase())
+    .filter(Boolean);
+  const section8DepositExceptionOnly =
+    normalizedGroundCodes.length > 0 &&
+    normalizedGroundCodes.every((code) => code === '7A' || code === '14');
+  const section8DepositBarApplies =
+    normalizedGroundCodes.length === 0 ||
+    normalizedGroundCodes.some((code) => code !== '7A' && code !== '14');
   const depositProtected = resolveBooleanField(complianceSources, 'deposit_protected');
   const prescribedInfoGiven = resolveBooleanField(
     complianceSources,
@@ -660,10 +669,16 @@ function buildCaseSummaryComplianceItems(params: {
   } else {
     if (depositProtected === true && prescribedInfoGiven === true) {
       items.push(`Advisory / good practice: Deposit protection and prescribed information are recorded${depositContext}.`);
+    } else if (section8DepositExceptionOnly && depositProtected === true) {
+      items.push(`Significant risk: Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still generate penalties, counterclaims, or credibility issues and should still be resolved.`);
+    } else if (section8DepositExceptionOnly && depositProtected === false) {
+      items.push('Significant risk: Deposit protection is not recorded. Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still generate penalties, counterclaims, or credibility issues and should still be resolved.');
     } else if (depositProtected === true) {
-      items.push(`Significant risk: Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. This does not automatically invalidate a Section 8 notice, but it may expose the landlord to penalties, counterclaims, or credibility issues and should be resolved where possible.`);
+      items.push(`Critical route risk: Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position has been cured, the deposit has been returned, or any deposit-compliance dispute has already been resolved.`);
     } else if (depositProtected === false) {
-      items.push('Significant risk: Deposit protection is not recorded. This does not automatically invalidate a Section 8 notice, but it may expose the landlord to penalties, counterclaims, or credibility issues and should be resolved where possible.');
+      items.push('Critical route risk: Deposit protection is not recorded. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit requirements have been complied with, the deposit has been returned, or any deposit-compliance dispute has already been resolved.');
+    } else if (section8DepositBarApplies) {
+      items.push('Critical route risk: Deposit protection status is not confirmed in the available pack data. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.');
     } else {
       items.push('Advisory / good practice: Deposit protection status is not confirmed in the available pack data.');
     }
@@ -801,8 +816,17 @@ function buildSection8TemplateData(
 
   // Build ground descriptions string (e.g., "Ground 8 – Serious rent arrears, Ground 10 – ...")
   const groundDescriptions = evictionCase.grounds
-    .map((g) => `Ground ${g.code.replace('Ground ', '')} – ${g.title}`)
+    .map((g) => `Ground ${g.code.replace('Ground ', '')} - ${g.title}`)
     .join(', ');
+  const normalizedGroundCodes = evictionCase.grounds
+    .map((ground) => String(ground.code || '').replace(/^Ground\s+/i, '').trim().toUpperCase())
+    .filter(Boolean);
+  const section8DepositExceptionOnly =
+    normalizedGroundCodes.length > 0 &&
+    normalizedGroundCodes.every((code) => code === '7A' || code === '14');
+  const section8DepositBarApplies =
+    normalizedGroundCodes.length === 0 ||
+    normalizedGroundCodes.some((code) => code !== '7A' && code !== '14');
 
   const now = new Date().toISOString().split('T')[0];
   const draftingModel = buildEnglandPossessionDraftingModel({
@@ -868,6 +892,8 @@ function buildSection8TemplateData(
     how_to_rent_served: howToRentGiven,
     hmo_license_required: hmoLicenseRequired,
     hmo_license_valid: hmoLicenseValid,
+    section8_deposit_exception_only: section8DepositExceptionOnly,
+    section8_deposit_bar_applies: section8DepositBarApplies,
     // Ground descriptions for checklist
     ground_descriptions: groundDescriptions,
     grounds: evictionCase.grounds,
@@ -2528,6 +2554,9 @@ export async function generateCompleteEvictionPack(
             rent_frequency: rentFrequencyLabel,
             // Add generation date (legacy alias)
             generated_date: today,
+            pack_context_label: 'Complete Eviction Pack',
+            schedule_role_note:
+              'This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.',
           },
           isPreview: false,
           outputFormat: 'both',
@@ -4065,6 +4094,9 @@ export async function generateNoticeOnlyPack(
                 arrears_schedule: proRatedSchedule,
                 arrears_total: roundedProRatedTotal,
                 claimant_reference: caseId,
+                pack_context_label: 'Notice Only Pack',
+                schedule_role_note:
+                  'This schedule supports the pleaded arrears grounds and should be kept with the served notice and service record.',
               },
               isPreview: false,
               outputFormat: 'both',
