@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   listEnglandGroundDefinitions,
+  normalizeEnglandGroundCode,
 } from '@/lib/england-possession/ground-catalog';
 import {
   calculateEarliestValidPossessionDate,
@@ -87,6 +88,12 @@ describe('England post-2026 validation', () => {
   it('calculates the earliest valid Form 3A date using calendar months where required', () => {
     expect(calculateEarliestValidPossessionDate('2026-04-01', ['Ground 1A'])).toBe('2026-08-01');
     expect(calculateEarliestValidPossessionDate('2026-04-01', ['Ground 8'])).toBe('2026-04-29');
+  });
+
+  it('normalizes full wizard ground labels to bare England ground codes', () => {
+    expect(normalizeEnglandGroundCode('Ground 1A - Sale of dwelling house')).toBe('1A');
+    expect(normalizeEnglandGroundCode('Ground 8 - Rent arrears')).toBe('8');
+    expect(normalizeEnglandGroundCode('14ZA - Rioting')).toBe('14ZA');
   });
 
   it('blocks service or filing when the tenant is in an active breathing space', () => {

@@ -470,10 +470,23 @@ const FORM3A_COMMON_REASON_ORDER: EnglandCommonReasonKey[] = [
 ];
 
 export function normalizeEnglandGroundCode(code: string | number): EnglandGroundCode | null {
-  const normalized = String(code).toUpperCase().replace(/^GROUND[\s_]*/i, '').trim();
-  return normalized in ENGLAND_POST_2026_GROUND_CATALOG
-    ? (normalized as EnglandGroundCode)
-    : null;
+  const raw = String(code).toUpperCase().trim();
+  const stripped = raw.replace(/^GROUND[\s_]*/i, '').trim();
+  const directCandidate = stripped.split(/\s*[-–—:]\s*/, 1)[0]?.trim() || stripped;
+
+  if (directCandidate in ENGLAND_POST_2026_GROUND_CATALOG) {
+    return directCandidate as EnglandGroundCode;
+  }
+
+  const matchedPrefix = stripped.match(/^(\d+[A-Z]*)\b/);
+  if (matchedPrefix) {
+    const candidate = matchedPrefix[1] as EnglandGroundCode;
+    if (candidate in ENGLAND_POST_2026_GROUND_CATALOG) {
+      return candidate;
+    }
+  }
+
+  return null;
 }
 
 export function getEnglandGroundDefinition(code: string | number): EnglandGroundDefinition | null {

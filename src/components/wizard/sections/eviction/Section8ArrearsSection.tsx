@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Section 8 Arrears Section - Eviction Wizard
  *
  * Step 7 (Section 8 only): Collects detailed arrears schedule.
@@ -28,6 +28,7 @@ import type { WizardFacts, ArrearsItem } from '@/lib/case-facts/schema';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
 import { validateGround8Eligibility, computeArrears } from '@/lib/arrears-engine';
 import { AskHeavenInlineEnhancer } from '../../AskHeavenInlineEnhancer';
+import AskHeavenStepAutofill from '@/components/wizard/AskHeavenStepAutofill';
 import { useValidationContextSafe } from '@/components/wizard/ValidationContext';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
@@ -42,6 +43,8 @@ import {
 interface Section8ArrearsSectionProps {
   facts: WizardFacts;
   jurisdiction: 'england' | 'wales';
+  caseId?: string;
+  product?: 'notice_only' | 'complete_pack';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
@@ -99,6 +102,8 @@ function ArrearsStatusCard({
 
 export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   facts,
+  caseId,
+  product = 'complete_pack',
   onUpdate,
 }) => {
   const selectedGrounds = (facts.section8_grounds as string[]) || [];
@@ -358,13 +363,13 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
       <ArrearsCheckpointCard
         title={
           hasGround8
-            ? 'Build the arrears file once and reuse it across the whole case'
-            : 'Use one arrears schedule to support the notice and later court file'
+            ? 'Build the arrears schedule once'
+            : 'Build one arrears schedule for the case'
         }
         description={
           hasGround8
-            ? 'Ground 8 needs a clean period-by-period arrears record that stays consistent from the notice through to the hearing. This step should make the threshold and the supporting narrative obvious without overwhelming the user.'
-            : 'This step keeps the arrears schedule, the possession particulars, and the later court documents aligned from one source of truth.'
+            ? 'Ground 8 needs a clear period-by-period arrears record that stays consistent from the notice through to the hearing.'
+            : 'Use one schedule so the arrears totals and particulars stay consistent throughout the pack.'
         }
         outputs={
           hasGround8
@@ -453,7 +458,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
           <div className={`text-sm ${ground8Validation.is_eligible ? 'text-green-800' : 'text-red-800'}`}>
             <p>
               Arrears: {ground8Validation.arrears_in_months?.toFixed(2) || 0} months
-              ({ground8Validation.is_eligible ? '≥' : '<'} {ground8Validation.threshold_label || ground8Threshold.description} required)
+              ({ground8Validation.is_eligible ? 'â‰¥' : '<'} {ground8Validation.threshold_label || ground8Threshold.description} required)
             </p>
             {!ground8Validation.is_eligible && (
               <p className="mt-2 font-medium">
@@ -508,6 +513,8 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
         facts={facts}
         selectedGrounds={selectedGrounds}
         arrearsSummary={arrearsSummary}
+        caseId={caseId}
+        product={product}
         onUpdate={onUpdate}
       />
     </div>
@@ -525,6 +532,8 @@ interface ParticularsProps {
   facts: WizardFacts;
   selectedGrounds: string[];
   arrearsSummary: ReturnType<typeof computeArrears> | null;
+  caseId?: string;
+  product: 'notice_only' | 'complete_pack';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
@@ -532,6 +541,8 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
   facts,
   selectedGrounds,
   arrearsSummary,
+  caseId,
+  product,
   onUpdate,
 }) => {
   const particularsText = facts.section8_details || '';
@@ -578,6 +589,25 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
     jurisdiction: 'england',
   }), [selectedGrounds, arrearsSummary, facts.rent_amount, facts.rent_frequency]);
 
+  const particularsSeedAnswer = useMemo(() => {
+    const generatedSuggestion = generateSuggestion();
+    if (generatedSuggestion) {
+      return generatedSuggestion;
+    }
+
+    return [
+      `Selected grounds: ${selectedGrounds.join(', ') || 'Ground 8'}.`,
+      facts.tenancy_start_date ? `Tenancy start date: ${facts.tenancy_start_date}.` : '',
+      facts.notice_served_date ? `Notice served date: ${facts.notice_served_date}.` : '',
+      arrearsSummary
+        ? `Current arrears total: £${arrearsSummary.total_arrears.toFixed(2)} across ${arrearsSummary.periods_with_arrears} rent period(s).`
+        : '',
+      'Draft clear possession particulars using the arrears schedule and the selected Section 8 grounds. Keep the wording factual and suitable for Form 3A and N119.',
+    ]
+      .filter(Boolean)
+      .join('\n');
+  }, [arrearsSummary, facts.notice_served_date, facts.tenancy_start_date, generateSuggestion, selectedGrounds]);
+
   return (
     <div className="pt-6 border-t border-gray-200 space-y-4">
       <div>
@@ -608,6 +638,23 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
         </div>
       )}
 
+      <AskHeavenStepAutofill
+        caseId={caseId}
+        jurisdiction="england"
+        product={product}
+        buttonLabel="Draft these particulars for me"
+        helperText="Ask Heaven can fill the possession-particulars box from the arrears schedule and the selected grounds. It will only fill the box if it is blank."
+        targets={[
+          {
+            id: 'section8_details',
+            currentValue: particularsText,
+            questionText: 'Possession particulars for the selected Form 3A and N119 grounds',
+            seedAnswer: particularsSeedAnswer,
+            apply: (text: string) => onUpdate({ section8_details: text }),
+          },
+        ]}
+      />
+
       {/* Particulars textarea */}
       <div className="space-y-2">
         <label htmlFor="section8_details" className={EVICTION_LABEL_CLASS}>
@@ -627,7 +674,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
           }
         />
         <p className={EVICTION_HINT_CLASS}>
-          Be specific and factual. Include dates, the selected grounds, and the landlord-held records or chronology that support the case.
+          Be specific and factual. Include dates, the selected grounds, and the supporting records or chronology that back up the case.
           Selected grounds: {selectedGrounds.join(', ') || 'None selected'}
         </p>
       </div>
@@ -646,4 +693,5 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
 };
 
 export default Section8ArrearsSection;
+
 

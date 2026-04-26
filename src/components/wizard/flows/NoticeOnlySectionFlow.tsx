@@ -65,6 +65,7 @@ import { Section21ComplianceSection } from '../sections/eviction/Section21Compli
 import { Section8ComplianceSection } from '../sections/eviction/Section8ComplianceSection';
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { NoticeSection } from '../sections/eviction/NoticeSection';
+import { GroundDetailsSection } from '../sections/eviction/GroundDetailsSection';
 
 // Wales-specific section components
 import { OccupationContractSection } from '../sections/wales/OccupationContractSection';
@@ -97,6 +98,7 @@ import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 import { hasCompleteDefenceRiskAnswers } from '@/lib/england-possession/defence-risk';
+import { getSelectedGroundDetailPanels, hasSelectedGroundDetailPanels } from '../sections/eviction/ground-detail-config';
 
 // Route types for England, Wales, and Scotland
 type EnglandRoute = 'section_8';
@@ -143,11 +145,11 @@ export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'en
     return {
       title: 'Consider upgrading if this is likely to reach court',
       reason:
-        'This notice is relying on multiple or more involved possession grounds. The Complete Eviction Pack is a better fit when you want the notice, court forms, and supporting court-file documents prepared together.',
+        'This notice is relying on multiple or more involved possession grounds. The Complete Eviction Pack is a better fit when you want the notice, court forms, and supporting documents prepared together.',
       benefits: [
         'Adds the court claim forms and bundle support',
         'Helps keep evidence and particulars aligned with the notice',
-        'Gives you a stronger court-ready file if the tenant does not leave',
+        'Gives you a stronger claim pack if the tenant does not leave',
       ],
     };
   }
@@ -541,6 +543,32 @@ const SECTIONS: WizardSection[] = [
     },
   },
   {
+    id: 'ground_details',
+    label: 'Ground details',
+    description: 'Facts and evidence for any selected specialist grounds',
+    routes: ['section_8'] as EvictionRoute[],
+    isComplete: (facts) => {
+      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const hasSpecialistGrounds = hasSelectedGroundDetailPanels(selectedGrounds);
+      if (!hasSpecialistGrounds) return true;
+
+      const panels = getSelectedGroundDetailPanels(selectedGrounds);
+      const hasArrearsGround = selectedGrounds.some((ground) =>
+        ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
+      );
+
+      const specialistFactsComplete = panels.every((panel) =>
+        panel.fields.some((field) => Boolean(String((facts as Record<string, any>)[field.field] || '').trim()))
+      );
+
+      if (!specialistFactsComplete) {
+        return false;
+      }
+
+      return hasArrearsGround ? true : Boolean(String(facts.section8_details || '').trim());
+    },
+  },
+  {
     id: 'section8_arrears',
     label: 'About the arrears',
     description: 'Rent arrears schedule and supporting particulars',
@@ -904,6 +932,11 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     // Normalize route for Wales to handle legacy prefixed values (wales_section_173 -> section_173)
     const rawRoute = facts.eviction_route as string | undefined;
     const route = isWales ? normalizeWalesRoute(rawRoute) : rawRoute;
+    const selectedGrounds = (facts.section8_grounds as string[]) || [];
+    const hasSpecialistGrounds = hasSelectedGroundDetailPanels(selectedGrounds);
+    const hasArrearsGround = selectedGrounds.some((ground) =>
+      ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
+    );
 
     // Determine if route is valid for this jurisdiction
     const hasValidRoute = isWales
@@ -911,6 +944,14 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       : route && ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
 
     const filteredSections = SECTIONS.filter((section) => {
+      if (!isWales && section.id === 'ground_details') {
+        return Boolean(route === 'section_8' && hasSpecialistGrounds);
+      }
+
+      if (!isWales && section.id === 'section8_arrears') {
+        return Boolean(route === 'section_8' && hasArrearsGround);
+      }
+
       // Route-specific sections (S21 compliance, S8 arrears) only apply to England
       if (section.routes) {
         // Wales doesn't use these England-specific sections
@@ -964,10 +1005,30 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       });
     }
 
-    return filteredSections;
-  }, [jurisdiction, facts.eviction_route]);
+    const englandOrder = [
+      'case_basics',
+      'parties',
+      'property',
+      'tenancy',
+      'section8_compliance',
+      'notice',
+      'ground_details',
+      'section8_arrears',
+      'review',
+    ];
+
+    return filteredSections.sort(
+      (left, right) => englandOrder.indexOf(left.id) - englandOrder.indexOf(right.id),
+    );
+  }, [jurisdiction, facts.eviction_route, facts.section8_grounds]);
 
   const currentSection = visibleSections[currentSectionIndex];
+
+  useEffect(() => {
+    if (currentSectionIndex >= visibleSections.length) {
+      setCurrentSectionIndex(Math.max(visibleSections.length - 1, 0));
+    }
+  }, [currentSectionIndex, visibleSections.length]);
 
   // Save facts to backend
   const saveFactsToServer = useCallback(
@@ -1274,8 +1335,16 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         return <Section21ComplianceSection {...englandWalesProps} />;
       case 'section8_compliance':
         return <Section8ComplianceSection facts={facts} onUpdate={handleUpdate} />;
+      case 'ground_details':
+        return (
+          <GroundDetailsSection
+            {...englandWalesProps}
+            caseId={caseId}
+            product="notice_only"
+          />
+        );
       case 'section8_arrears':
-        return <Section8ArrearsSection {...englandWalesProps} />;
+        return <Section8ArrearsSection {...englandWalesProps} caseId={caseId} product="notice_only" />;
       case 'notice':
         // Wales uses WalesNoticeSection, England uses NoticeSection
         return isWales

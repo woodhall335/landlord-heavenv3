@@ -757,7 +757,8 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     expect(getStepButton('Tenancy details')).toBeDefined();
     expect(getStepButton('Quick checks')).toBeDefined();
     expect(getStepButton('Your notice')).toBeDefined();
-    expect(getStepButton('About the arrears')).toBeDefined();
+    expect(queryStepButton('Ground details')).toBeNull();
+    expect(queryStepButton('About the arrears')).toBeNull();
     expect(screen.queryByRole('button', { name: /Compliance/i })).toBeNull();
   });
 
@@ -776,6 +777,64 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     await screen.findByText(/Eviction Notice Generator/);
 
     expect(getStepButton("What's going on?")).toBeDefined();
+    expect(queryStepButton('Ground details')).toBeNull();
+    expect(queryStepButton('About the arrears')).toBeNull();
+  });
+
+  it('shows the arrears step and skips ground details for arrears-only England cases', async () => {
+    render(
+      <NoticeOnlySectionFlow
+        caseId="test-england-arrears-only"
+        jurisdiction="england"
+        initialFacts={{
+          __meta: { product: 'notice_only', jurisdiction: 'england' },
+          eviction_route: 'section_8',
+          section8_grounds: ['Ground 8 - Rent arrears', 'Ground 10 - Any rent arrears'],
+        }}
+      />
+    );
+
+    await screen.findByText(/Eviction Notice Generator/);
+
+    expect(queryStepButton('Ground details')).toBeNull();
+    expect(getStepButton('About the arrears')).toBeDefined();
+  });
+
+  it('shows the ground-details step and skips arrears for specialist-only England cases', async () => {
+    render(
+      <NoticeOnlySectionFlow
+        caseId="test-england-specialist-only"
+        jurisdiction="england"
+        initialFacts={{
+          __meta: { product: 'notice_only', jurisdiction: 'england' },
+          eviction_route: 'section_8',
+          section8_grounds: ['Ground 1A - Sale of dwelling house'],
+        }}
+      />
+    );
+
+    await screen.findByText(/Eviction Notice Generator/);
+
+    expect(getStepButton('Ground details')).toBeDefined();
+    expect(queryStepButton('About the arrears')).toBeNull();
+  });
+
+  it('shows both ground details and arrears for mixed England cases', async () => {
+    render(
+      <NoticeOnlySectionFlow
+        caseId="test-england-mixed-grounds"
+        jurisdiction="england"
+        initialFacts={{
+          __meta: { product: 'notice_only', jurisdiction: 'england' },
+          eviction_route: 'section_8',
+          section8_grounds: ['Ground 8 - Rent arrears', 'Ground 1A - Sale of dwelling house'],
+        }}
+      />
+    );
+
+    await screen.findByText(/Eviction Notice Generator/);
+
+    expect(getStepButton('Ground details')).toBeDefined();
     expect(getStepButton('About the arrears')).toBeDefined();
   });
 });

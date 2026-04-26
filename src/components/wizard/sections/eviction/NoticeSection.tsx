@@ -37,10 +37,9 @@ import {
 } from '@/lib/england-possession/ground-catalog';
 import {
   EVICTION_HINT_CLASS,
-  EVICTION_INPUT_CLASS,
   EVICTION_LABEL_CLASS,
-  EVICTION_TEXTAREA_CLASS,
 } from '@/components/wizard/sections/eviction/ui';
+import { hasSelectedGroundDetailPanels } from './ground-detail-config';
 
 interface NoticeSectionProps {
   facts: WizardFacts;
@@ -107,23 +106,6 @@ function getGroundSelectionHelperText(selectedGrounds: string[], noticeAlreadySe
   return noticeAlreadyServed
     ? 'If this includes any specialist ground, add the factual basis here so the court forms and support documents stay aligned with the notice already served.'
     : 'Arrears-led particulars can still be refined later, but any specialist ground should be factually anchored here so the pack reads coherently throughout.';
-}
-
-type GroundDetailFieldType = 'text' | 'textarea' | 'date';
-
-interface GroundDetailFieldConfig {
-  field: string;
-  label: string;
-  helpText: string;
-  type?: GroundDetailFieldType;
-  placeholder?: string;
-}
-
-interface GroundDetailPanelConfig {
-  code: EnglandGroundCode;
-  title: string;
-  intro: string;
-  fields: GroundDetailFieldConfig[];
 }
 
 interface N215QuestionFieldsProps {
@@ -349,366 +331,6 @@ const N215QuestionFields: React.FC<N215QuestionFieldsProps> = ({ facts, onUpdate
   );
 };
 
-const OCCUPATION_STYLE_GROUND_CODES = new Set<EnglandGroundCode>([
-  '2', '2ZA', '2ZB', '2ZC', '2ZD', '4', '4A', '5', '5A', '5B', '5C', '5E', '5F', '5G', '5H', '7', '18',
-]);
-
-function groundFactPath(code: EnglandGroundCode, field: string): string {
-  return `ground_${code.toLowerCase()}.${field}`;
-}
-
-function buildGroundDetailPanelConfig(code: EnglandGroundCode): GroundDetailPanelConfig | null {
-  const definition = ENGLAND_GROUND_MAP.get(code);
-  if (!definition) return null;
-
-  if (code === '1') {
-    return {
-      code,
-      title: definition.title,
-      intro:
-        'Tell us who is expected to occupy the property after possession and why the landlord is now relying on this route.',
-      fields: [
-        {
-          field: groundFactPath(code, 'intended_occupier'),
-          label: 'Who is expected to occupy the property?',
-          helpText: 'Name the landlord or family member, or describe them clearly if you do not want to use a full name.',
-        },
-        {
-          field: groundFactPath(code, 'occupier_relationship'),
-          label: 'What is their relationship to the landlord?',
-          helpText: 'For example: landlord, spouse, adult son, parent, or other qualifying family member.',
-        },
-        {
-          field: groundFactPath(code, 'occupation_reason'),
-          label: 'Why is possession needed for this occupation?',
-          helpText: 'Summarise the factual reason calmly and specifically.',
-          type: 'textarea',
-          placeholder: 'For example: the landlord is returning from working abroad and intends to live in the property as their main home.',
-        },
-        {
-          field: groundFactPath(code, 'decision_date'),
-          label: 'When was the decision made?',
-          helpText: 'Use the date the landlord decided to recover possession for this purpose, if known.',
-          type: 'date',
-        },
-        {
-          field: groundFactPath(code, 'intended_start_date'),
-          label: 'When is occupation expected to begin?',
-          helpText: 'This helps us explain timing without over-committing.',
-          type: 'date',
-        },
-        {
-          field: groundFactPath(code, 'supporting_evidence'),
-          label: 'What evidence supports this ground?',
-          helpText: 'List the documents or records you already have or expect to rely on.',
-          type: 'textarea',
-        },
-      ],
-    };
-  }
-
-  if (code === '1A') {
-    return {
-      code,
-      title: definition.title,
-      intro:
-        'Tell us why the property is to be sold and what practical steps have already been taken toward the sale.',
-      fields: [
-        {
-          field: groundFactPath(code, 'sale_reason'),
-          label: 'Why is the property being sold?',
-          helpText: 'Give the practical reason for the proposed sale.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'sale_steps_taken'),
-          label: 'What sale steps have already been taken?',
-          helpText: 'For example: valuation, discussions with agents, marketing preparation, or lender discussions.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'decision_date'),
-          label: 'When was the decision to sell made?',
-          helpText: 'Use the best date available.',
-          type: 'date',
-        },
-        {
-          field: groundFactPath(code, 'intended_sale_timing'),
-          label: 'What is the expected sale timetable?',
-          helpText: 'A short practical summary is enough.',
-        },
-        {
-          field: groundFactPath(code, 'supporting_evidence'),
-          label: 'What evidence supports the sale intention?',
-          helpText: 'List the key supporting documents or records.',
-          type: 'textarea',
-        },
-      ],
-    };
-  }
-
-  if (code === '7B') {
-    return {
-      code,
-      title: definition.title,
-      intro:
-        'Tell us the immigration-status basis relied on, who it affects, and the official material that supports the ground.',
-      fields: [
-        {
-          field: groundFactPath(code, 'affected_occupiers'),
-          label: 'Which occupiers are affected?',
-          helpText: 'Name or describe the occupiers whose status is relied on for this ground.',
-        },
-        {
-          field: groundFactPath(code, 'status_basis'),
-          label: 'What is the current status position?',
-          helpText: 'Summarise the right-to-rent or immigration issue in neutral, factual terms.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'notice_source'),
-          label: 'What official notice or source material is relied on?',
-          helpText: 'For example: Home Office notice, right-to-rent disqualification letter, or follow-up confirmation.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'status_check_date'),
-          label: 'When was the relevant notice or check received?',
-          helpText: 'Use the date of the official material or status check, if known.',
-          type: 'date',
-        },
-        {
-          field: groundFactPath(code, 'decision_or_reference'),
-          label: 'Reference or decision identifier',
-          helpText: 'Include any reference number, decision date, or official identifier if available.',
-        },
-        {
-          field: groundFactPath(code, 'supporting_evidence'),
-          label: 'What supporting evidence is available?',
-          helpText: 'List the documents you can produce in support.',
-          type: 'textarea',
-        },
-      ],
-    };
-  }
-
-  if (code === '9') {
-    return {
-      code,
-      title: definition.title,
-      intro:
-        'Tell us where the alternative accommodation is, when it is available, and why it is said to be suitable.',
-      fields: [
-        {
-          field: groundFactPath(code, 'alternative_address'),
-          label: 'Address or description of the alternative accommodation',
-          helpText: 'Use the full address if known, or enough detail to identify it.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'availability_date'),
-          label: 'When will it be available?',
-          helpText: 'Use the date the tenant could realistically move in, if known.',
-          type: 'date',
-        },
-        {
-          field: groundFactPath(code, 'suitability_summary'),
-          label: 'Why is it said to be suitable?',
-          helpText: 'Address size, location, condition, or household fit in a practical way.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'affordability_summary'),
-          label: 'What is the affordability or availability position?',
-          helpText: 'Summarise rent level, funding, or any other practical point.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'supporting_evidence'),
-          label: 'What evidence supports this alternative accommodation?',
-          helpText: 'List the documents or confirmations available.',
-          type: 'textarea',
-        },
-      ],
-    };
-  }
-
-  if (code === '6' || code === '6B') {
-    return {
-      code,
-      title: definition.title,
-      intro:
-        'Tell us what works are proposed, why possession is needed to carry them out, and what project material already exists.',
-      fields: [
-        {
-          field: groundFactPath(code, 'works_description'),
-          label: 'Describe the proposed works',
-          helpText: 'Summarise the redevelopment, demolition, or substantial works in practical terms.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'possession_requirement_reason'),
-          label: 'Why is possession needed for the works?',
-          helpText: 'Explain why the works cannot reasonably proceed with the tenant in occupation.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'intended_start_date'),
-          label: 'When are the works expected to start?',
-          helpText: 'Use the best available date.',
-          type: 'date',
-        },
-        {
-          field: groundFactPath(code, 'planning_or_contractor_status'),
-          label: 'Planning, contractor, or project status',
-          helpText: 'For example: planning obtained, contractor instructed, funding approved, or quotations pending.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'supporting_evidence'),
-          label: 'What evidence supports the works?',
-          helpText: 'List the key plans, approvals, quotations, contracts, or other project records.',
-          type: 'textarea',
-        },
-      ],
-    };
-  }
-
-  if (OCCUPATION_STYLE_GROUND_CODES.has(code)) {
-    return {
-      code,
-      title: definition.title,
-      intro:
-        'Tell us the current factual basis for this specialist route, who or what qualifying occupier/category is relied on, and what documents support it.',
-      fields: [
-        {
-          field: groundFactPath(code, 'factual_basis'),
-          label: `Why is Ground ${code} said to apply?`,
-          helpText: 'Summarise the statutory facts in careful, neutral prose.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'qualifying_occupier'),
-          label: 'Who or what qualifying occupier/category is relied on?',
-          helpText: 'For example: former employee, student cohort, minister, seasonal worker, or other qualifying category.',
-        },
-        {
-          field: groundFactPath(code, 'occupier_relationship'),
-          label: 'Relationship or status details',
-          helpText: 'Explain the relationship to the landlord or the qualifying status relied on.',
-        },
-        {
-          field: groundFactPath(code, 'trigger_date'),
-          label: 'Relevant trigger or status date',
-          helpText: 'Use the key date connected to the status relied on, if known.',
-          type: 'date',
-        },
-        {
-          field: groundFactPath(code, 'notice_or_status_details'),
-          label: 'Notice, status, or context details',
-          helpText: 'Add any prior notice, licence terms, employment/education link, or other relevant factual detail.',
-          type: 'textarea',
-        },
-        {
-          field: groundFactPath(code, 'supporting_evidence'),
-          label: 'What evidence supports this ground?',
-          helpText: 'List the key documents or records available.',
-          type: 'textarea',
-        },
-      ],
-    };
-  }
-
-  return null;
-}
-
-interface Section8SpecialistGroundDetailsProps {
-  facts: WizardFacts;
-  selectedGrounds: string[];
-  onUpdate: (updates: Record<string, any>) => void | Promise<void>;
-}
-
-const Section8SpecialistGroundDetails: React.FC<Section8SpecialistGroundDetailsProps> = ({
-  facts,
-  selectedGrounds,
-  onUpdate,
-}) => {
-  const selectedGroundConfigs = useMemo(() => {
-    return Array.from(
-      new Set(
-        selectedGrounds
-          .map((ground) => normalizeEnglandGroundCode(ground))
-          .filter((ground): ground is EnglandGroundCode => Boolean(ground))
-      )
-    )
-      .map((code) => buildGroundDetailPanelConfig(code))
-      .filter((panel): panel is GroundDetailPanelConfig => Boolean(panel));
-  }, [selectedGrounds]);
-
-  if (selectedGroundConfigs.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="space-y-4 rounded-lg border border-slate-200 bg-white/90 p-4">
-      <div className="space-y-1">
-        <h5 className="text-sm font-medium text-slate-900">Specialist Ground Details</h5>
-        <p className="text-xs text-slate-600">
-          These answers feed the notice particulars, witness statement, case summary, and court-facing support text.
-          Keep them factual and specific rather than argumentative.
-        </p>
-      </div>
-
-      {selectedGroundConfigs.map((panel) => (
-        <section key={panel.code} className="space-y-3 rounded-lg border border-slate-200 p-4">
-          <div className="space-y-1">
-            <h6 className="text-sm font-semibold text-slate-900">
-              Ground {panel.code} - {panel.title}
-            </h6>
-            <p className="text-xs text-slate-600">{panel.intro}</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {panel.fields.map((field) => {
-              const value = (facts as Record<string, any>)[field.field] || '';
-              const isTextArea = field.type === 'textarea';
-              const fieldId = `${panel.code}-${field.field.replace(/[^a-z0-9]+/gi, '-')}`;
-
-              return (
-                <div key={field.field} className={isTextArea ? 'md:col-span-2 space-y-1.5' : 'space-y-1.5'}>
-                  <label htmlFor={fieldId} className={EVICTION_LABEL_CLASS}>
-                    {field.label}
-                  </label>
-                  {isTextArea ? (
-                    <textarea
-                      id={fieldId}
-                      rows={4}
-                      className={`${EVICTION_TEXTAREA_CLASS} min-h-[130px]`}
-                      value={value}
-                      placeholder={field.placeholder}
-                      onChange={(e) => onUpdate({ [field.field]: e.target.value })}
-                    />
-                  ) : (
-                    <input
-                      id={fieldId}
-                      type={field.type || 'text'}
-                      className={EVICTION_INPUT_CLASS}
-                      value={value}
-                      placeholder={field.placeholder}
-                      onChange={(e) => onUpdate({ [field.field]: e.target.value })}
-                    />
-                  )}
-                  <p className={EVICTION_HINT_CLASS}>{field.helpText}</p>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      ))}
-    </div>
-  );
-};
-
 // =============================================================================
 // INLINE NOTICE-ONLY SUBFLOW
 // =============================================================================
@@ -793,6 +415,8 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
     () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
     [facts.section8_grounds]
   );
+  const hasArrearsGround = selectedGrounds.some((ground) => ARREARS_LED_GROUND_LABELS.has(ground));
+  const hasSpecialistGroundDetails = hasSelectedGroundDetailPanels(selectedGrounds);
 
   // Calculate minimum notice period based on selected grounds
   const minNoticePeriod = useMemo(() => {
@@ -1242,13 +866,15 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                     {getGroundSelectionHelperText(selectedGrounds)}
                   </p>
                 )}
+                <p className="mt-2 text-xs font-medium text-[#5b36b3]">
+                  Next step:{' '}
+                  {hasSpecialistGroundDetails
+                    ? 'continue to Ground details so we can capture the facts behind the specialist grounds.'
+                    : hasArrearsGround
+                      ? 'continue to About the arrears so we can build the rent schedule and particulars.'
+                      : 'continue to the next step to review the pack.'}
+                </p>
               </div>
-
-              <Section8SpecialistGroundDetails
-                facts={facts}
-                selectedGrounds={selectedGrounds}
-                onUpdate={onUpdate}
-              />
             </div>
           )}
         </div>
@@ -1423,6 +1049,8 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
     [facts.section8_grounds]
   );
+  const hasArrearsGround = selectedGrounds.some((ground) => ARREARS_LED_GROUND_LABELS.has(ground));
+  const hasSpecialistGroundDetails = hasSelectedGroundDetailPanels(selectedGrounds);
   const groundsRequiringPriorNotice = useMemo(() => {
     const definitions = new Map<EnglandGroundCode, (typeof ENGLAND_GROUND_DEFINITIONS)[number]>();
 
@@ -1838,13 +1466,15 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                         {getGroundSelectionHelperText(selectedGrounds, true)}
                       </p>
                     )}
+                    <p className="mt-2 text-xs font-medium text-[#5b36b3]">
+                      Next step:{' '}
+                      {hasSpecialistGroundDetails
+                        ? 'continue to Ground details so we can anchor the selected specialist grounds properly.'
+                        : hasArrearsGround
+                          ? 'continue to About the arrears so the arrears schedule and particulars stay aligned.'
+                          : 'continue to the next step to keep the notice pack moving.'}
+                    </p>
                   </div>
-
-                  <Section8SpecialistGroundDetails
-                    facts={facts}
-                    selectedGrounds={selectedGrounds}
-                    onUpdate={onUpdate}
-                  />
                 </div>
               )}
             </div>
@@ -1854,9 +1484,12 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
           {isSection8 && selectedGrounds.length > 0 && (
             <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
               <p className="text-sm text-amber-800">
-                <strong>Next step:</strong> Arrears-led and general narrative drafting can still be refined later,
-                but these structured answers will now carry through into the notice support text, witness statement,
-                and case summary.
+                <strong>Next step:</strong>{' '}
+                {hasSpecialistGroundDetails
+                  ? 'the Ground details step will capture the specialist facts behind the selected grounds.'
+                  : hasArrearsGround
+                    ? 'the About the arrears step will build the rent schedule and the possession particulars.'
+                    : 'the next step will help you finish the notice pack without adding unnecessary detail here.'}
               </p>
             </div>
           )}

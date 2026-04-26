@@ -30,10 +30,7 @@ export function WizardTopBarV3({ tabs, getStepMetadataForId }: WizardTopBarV3Pro
     <header className="fixed left-0 right-0 top-[calc(var(--site-header-height)+var(--s21-banner-height))] z-40 border-b border-[#ece3ff] bg-[rgba(255,255,255,0.82)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1240px] items-center gap-4 px-4 py-3">
         <div className="hidden shrink-0 lg:block">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7b56d8]">
-            Case progress
-          </p>
-          <div className="mt-1.5 flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="shrink-0 rounded-full border border-[#dacdff] bg-[linear-gradient(180deg,#f9f6ff_0%,#efe6ff_100%)] px-3 py-1 text-sm font-semibold text-[#552fb0] shadow-sm">
               Step {currentStepIndex + 1} of {tabs.length}
             </span>

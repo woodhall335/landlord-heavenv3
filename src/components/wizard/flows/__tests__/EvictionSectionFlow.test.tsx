@@ -148,10 +148,57 @@ describe('EvictionSectionFlow - England complete pack', () => {
 
     await screen.findByText(/Complete Eviction Pack/i);
 
-    expect(screen.getByText(/Case progress/i)).toBeDefined();
+    expect(screen.getAllByText(/Step 1 of 9/i).length).toBeGreaterThan(0);
     expect(getStepButton('Prepare your court claim')).toBeDefined();
     expect(getStepButton('Review your court-ready pack')).toBeDefined();
     expect(screen.getAllByTestId('ask-heaven-panel').length).toBeGreaterThan(0);
+  });
+
+  it('skips ground details for arrears-only complete-pack cases', async () => {
+    render(<EvictionSectionFlow {...englandCompletePackProps} />);
+
+    await screen.findByText(/Complete Eviction Pack/i);
+
+    expect(screen.queryByRole('button', { name: stepButtonName('Ground details') })).toBeNull();
+    expect(getStepButton('About the arrears')).toBeDefined();
+  });
+
+  it('shows ground details and skips arrears for specialist-only complete-pack cases', async () => {
+    render(
+      <EvictionSectionFlow
+        {...englandCompletePackProps}
+        initialFacts={{
+          ...englandCompletePackProps.initialFacts,
+          section8_grounds: ['Ground 1A - Sale of dwelling house'],
+          section8_details: 'The landlord intends to sell the dwelling-house and has instructed agents.',
+          arrears_items: [],
+          total_arrears: 0,
+          arrears_at_notice_date: 0,
+        }}
+      />
+    );
+
+    await screen.findByText(/Complete Eviction Pack/i);
+
+    expect(getStepButton('Ground details')).toBeDefined();
+    expect(screen.queryByRole('button', { name: stepButtonName('About the arrears') })).toBeNull();
+  });
+
+  it('shows both ground details and arrears for mixed complete-pack cases', async () => {
+    render(
+      <EvictionSectionFlow
+        {...englandCompletePackProps}
+        initialFacts={{
+          ...englandCompletePackProps.initialFacts,
+          section8_grounds: ['Ground 8 - Serious rent arrears', 'Ground 1A - Sale of dwelling house'],
+        }}
+      />
+    );
+
+    await screen.findByText(/Complete Eviction Pack/i);
+
+    expect(getStepButton('Ground details')).toBeDefined();
+    expect(getStepButton('About the arrears')).toBeDefined();
   });
 
   it('review step shows the full England court-pack document checkpoints', async () => {

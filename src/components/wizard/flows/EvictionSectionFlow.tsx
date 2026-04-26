@@ -11,7 +11,7 @@
  * 4. Tenancy - Start date, rent amount, frequency, due day
  * 5. Notice - Reuses notice-only schema, served date, service method, expiry
  * 6. Section 8 Arrears - arrears-led and grounds support using ArrearsScheduleStep
- * 7. Evidence - Court-file confirmations, chronology, and landlord-held records
+ * 7. Evidence - service proof, chronology, and supporting records
  * 8. Court & Signing - Court name, signatory details
  * 9. Review - Blockers, warnings, generated documents
  *
@@ -22,7 +22,7 @@
  * 4. Tenancy - Start date, rent amount, frequency (6-month rule validation)
  * 5. Grounds - Select eviction ground (ALL discretionary in Scotland)
  * 6. Notice - Notice to Leave details (6-month rule enforced)
- * 7. Evidence - Tribunal-file confirmations and landlord-held records
+ * 7. Evidence - tribunal confirmations and supporting records
  * 8. Tribunal - First-tier Tribunal info and signatory
  * 9. Review - Blockers, warnings, generated documents
  *
@@ -52,6 +52,7 @@ import { PartiesSection } from '../sections/eviction/PartiesSection';
 import { PropertySection } from '../sections/eviction/PropertySection';
 import { TenancySection } from '../sections/eviction/TenancySection';
 import { NoticeSection } from '../sections/eviction/NoticeSection';
+import { GroundDetailsSection } from '../sections/eviction/GroundDetailsSection';
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { EvidenceSection } from '../sections/eviction/EvidenceSection';
 import { CourtSigningSection } from '../sections/eviction/CourtSigningSection';
@@ -79,6 +80,7 @@ import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 import { hasCompleteDefenceRiskAnswers } from '@/lib/england-possession/defence-risk';
+import { getSelectedGroundDetailPanels, hasSelectedGroundDetailPanels } from '../sections/eviction/ground-detail-config';
 
 // Validation context for live field validation
 import { ValidationProvider, useValidationContext } from '@/components/wizard/ValidationContext';
@@ -152,7 +154,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'property',
     label: 'Property',
-    description: 'Property address used across the court file',
+    description: 'Property address used across the pack and claim documents',
     isComplete: (facts) =>
       Boolean(facts.property_address_line1) &&
       Boolean(facts.property_address_town) &&
@@ -189,6 +191,22 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
         Boolean(facts.notice_service_method) &&
         hasCompleteCollectibleN215Facts(facts) &&
         (!requiresPriorNoticeConfirmation || facts.ground_prerequisite_notice_served !== undefined)
+      );
+    },
+  },
+  {
+    id: 'ground_details',
+    label: 'Ground details',
+    description: 'Facts and evidence for any selected specialist grounds',
+    routes: ['section_8'],
+    isComplete: (facts) => {
+      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      const hasSpecialistGrounds = hasSelectedGroundDetailPanels(selectedGrounds);
+      if (!hasSpecialistGrounds) return true;
+
+      const panels = getSelectedGroundDetailPanels(selectedGrounds);
+      return panels.every((panel) =>
+        panel.fields.some((field) => Boolean(String((facts as Record<string, any>)[field.field] || '').trim()))
       );
     },
   },
@@ -249,7 +267,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'evidence',
     label: 'Evidence summary',
-    description: 'Court-file readiness, compliance, and evidence confirmations',
+    description: 'Service proof, chronology, supporting records, and readiness checks',
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
@@ -311,7 +329,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
       }
 
       if (facts.evidence_bundle_ready === false) {
-        blockers.push('The complete pack needs the landlord-held records and court-file confirmations to be ready before generation.');
+        blockers.push('The complete pack needs the supporting records and readiness confirmations to be in place before generation.');
       }
 
       const depositTaken = facts.deposit_taken === true;
@@ -578,6 +596,11 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
 
     // For England/Wales, filter by eviction route
     const route = facts.eviction_route as string | undefined;
+    const selectedGrounds = (facts.section8_grounds as string[]) || [];
+    const hasSpecialistGrounds = hasSelectedGroundDetailPanels(selectedGrounds);
+    const hasArrearsGround = selectedGrounds.some((ground) =>
+      ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
+    );
 
     // Wales routes don't have route-specific sections (like S21 compliance or S8 arrears)
     // so we show all non-route-specific sections once a valid route is selected
@@ -586,7 +609,15 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       ? route && WALES_ROUTES.includes(route as typeof WALES_ROUTES[number])
       : route && ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
 
-    return sections.filter((section) => {
+    const filteredSections = sections.filter((section) => {
+      if (!isWales && section.id === 'ground_details') {
+        return Boolean(route === 'section_8' && hasSpecialistGrounds);
+      }
+
+      if (!isWales && section.id === 'section8_arrears') {
+        return Boolean(route === 'section_8' && hasArrearsGround);
+      }
+
       // Route-specific sections (S21 compliance, S8 arrears) only apply to England
       if (section.routes) {
         // Wales doesn't use these England-specific sections
@@ -600,9 +631,32 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       if (!hasValidRoute) return section.id === 'case_basics';
       return true;
     });
-  }, [jurisdiction, facts.eviction_route]);
+
+    const englandOrder = [
+      'case_basics',
+      'parties',
+      'property',
+      'tenancy',
+      'notice',
+      'ground_details',
+      'section8_arrears',
+      'evidence',
+      'court_signing',
+      'review',
+    ];
+
+    return filteredSections.sort(
+      (left, right) => englandOrder.indexOf(left.id) - englandOrder.indexOf(right.id),
+    );
+  }, [jurisdiction, facts.eviction_route, facts.section8_grounds]);
 
   const currentSection = visibleSections[currentSectionIndex];
+
+  useEffect(() => {
+    if (currentSectionIndex >= visibleSections.length) {
+      setCurrentSectionIndex(Math.max(visibleSections.length - 1, 0));
+    }
+  }, [currentSectionIndex, visibleSections.length]);
 
   // Save facts to backend using the facts-client helper
   const saveFactsToServer = useCallback(
@@ -819,8 +873,16 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         return <TenancySection {...englandWalesProps} />;
       case 'notice':
         return <NoticeSection {...englandWalesProps} />;
+      case 'ground_details':
+        return (
+          <GroundDetailsSection
+            {...englandWalesProps}
+            caseId={caseId}
+            product="complete_pack"
+          />
+        );
       case 'section8_arrears':
-        return <Section8ArrearsSection {...englandWalesProps} />;
+        return <Section8ArrearsSection {...englandWalesProps} caseId={caseId} product="complete_pack" />;
       case 'evidence':
         return <EvidenceSection {...englandWalesProps} caseId={caseId} />;
       case 'court_signing':

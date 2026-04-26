@@ -12,7 +12,6 @@ import {
   type WizardJurisdiction,
   type WizardProduct,
 } from './stepMetadata';
-import { getEnglandPossessionScreenMeta } from './englandPossessionScreenConfig';
 
 interface WizardTab {
   id: string;
@@ -46,86 +45,6 @@ interface EnglandPossessionWorkspaceShellProps {
   saveStatusLabel?: string;
 }
 
-function StepFocusPanel({
-  title,
-  eyebrow,
-  helper,
-  focusTitle,
-  focusItems,
-  outputTitle,
-  outputs,
-  legalChecks,
-  compact = false,
-}: {
-  title: string;
-  eyebrow: string;
-  helper: string;
-  focusTitle: string;
-  focusItems: string[];
-  outputTitle: string;
-  outputs: string[];
-  legalChecks?: string[];
-  compact?: boolean;
-}) {
-  return (
-    <section className={`rounded-[1.4rem] border border-[#e7dbff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(246,240,255,0.96))] shadow-[0_18px_46px_rgba(76,29,149,0.08)] ${compact ? 'p-4' : 'p-5'}`}>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7b56d8]">
-        {eyebrow}
-      </p>
-      <h3 className={`mt-2 font-semibold tracking-tight text-[#20103f] ${compact ? 'text-base' : 'text-lg'}`}>
-        {title}
-      </h3>
-      <p className="mt-2 text-sm leading-6 text-[#5e5872]">{helper}</p>
-
-      <div className={`mt-4 grid gap-4 ${compact ? 'grid-cols-1' : 'grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(220px,0.9fr)]'}`}>
-        <div className="rounded-[1.1rem] border border-[#ece4ff] bg-white/88 p-4 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6f54c8]">{focusTitle}</p>
-          <ul className="mt-3 space-y-2.5 text-sm leading-6 text-[#4f4768]">
-            {focusItems.map((item) => (
-              <li key={item} className="flex items-start gap-2">
-                <span className="mt-2 inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-[#7c3aed]" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="space-y-3">
-          <div className="rounded-[1.1rem] border border-[#ece4ff] bg-white/88 p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6f54c8]">{outputTitle}</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {outputs.map((output) => (
-                <span
-                  key={output}
-                  className="rounded-full border border-[#ddd0ff] bg-[#faf7ff] px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
-                >
-                  {output}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {legalChecks && legalChecks.length > 0 ? (
-            <div className="rounded-[1.1rem] border border-[#dff2e3] bg-[#f5fff7] p-4 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#1f7a40]">Legal checks in play</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {legalChecks.map((check) => (
-                  <span
-                    key={check}
-                    className="rounded-full border border-[#cdeed4] bg-white px-3 py-1.5 text-xs font-semibold text-[#1f7a40] shadow-sm"
-                  >
-                    {check}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function EnglandPossessionWorkspaceShell({
   title,
   completedCount,
@@ -151,7 +70,6 @@ export function EnglandPossessionWorkspaceShell({
   const currentMeta: StepMetadata | undefined = currentStepId
     ? getStepMetadata(product, jurisdiction, currentStepId)
     : undefined;
-  const currentScreenMeta = getEnglandPossessionScreenMeta(product, currentStepId);
   const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
   const activeStepIndex = currentTabIndex >= 0 ? currentTabIndex : 0;
   const issueCount = tabs.filter((tab) => tab.hasIssue).length;
@@ -229,20 +147,6 @@ export function EnglandPossessionWorkspaceShell({
           </div>
         </section>
 
-        {currentScreenMeta ? (
-          <StepFocusPanel
-            compact
-            title={sectionTitle}
-            eyebrow={currentScreenMeta.eyebrow}
-            helper={currentScreenMeta.helper}
-            focusTitle={currentScreenMeta.focusTitle}
-            focusItems={currentScreenMeta.focusItems}
-            outputTitle={currentScreenMeta.outputTitle}
-            outputs={currentScreenMeta.outputs}
-            legalChecks={currentScreenMeta.legalChecks}
-          />
-        ) : null}
-
         <details className="group">
           <summary className="list-none cursor-pointer rounded-[1.25rem] border border-[#e6dcff] bg-white/92 px-3.5 py-3 shadow-sm">
             <div className="flex items-center justify-between gap-3">
@@ -252,7 +156,7 @@ export function EnglandPossessionWorkspaceShell({
                   Ask Heaven, what you need, and why it matters.
                 </p>
               </div>
-              <span className="text-sm font-medium text-[#7650cd] transition group-open:rotate-180">⌄</span>
+              <span className="text-sm font-medium text-[#7650cd] transition group-open:rotate-180">v</span>
             </div>
           </summary>
           <div className="mt-2.5">{compactMobileGuidancePanel}</div>
@@ -281,19 +185,6 @@ export function EnglandPossessionWorkspaceShell({
             )
           }
         >
-          {currentScreenMeta ? (
-            <StepFocusPanel
-              title={sectionTitle}
-              eyebrow={currentScreenMeta.eyebrow}
-              helper={currentScreenMeta.helper}
-              focusTitle={currentScreenMeta.focusTitle}
-              focusItems={currentScreenMeta.focusItems}
-              outputTitle={currentScreenMeta.outputTitle}
-              outputs={currentScreenMeta.outputs}
-              legalChecks={currentScreenMeta.legalChecks}
-            />
-          ) : null}
-
           {children}
         </WizardMainCardV3>
 

@@ -1,9 +1,10 @@
-'use client';
+﻿'use client';
 
 import React, { useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { RiCheckboxCircleLine, RiFileTextLine } from 'react-icons/ri';
 import { buildEnglandEvictionChronology } from '@/lib/england-possession/chronology';
+import AskHeavenStepAutofill, { type AskHeavenStepDraftTarget } from '@/components/wizard/AskHeavenStepAutofill';
 import {
   getDefenceRiskValue,
   mergeDefenceRiskUpdate,
@@ -155,6 +156,7 @@ const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
 
 export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
   facts,
+  caseId,
   onUpdate,
 }) => {
   const riskFacts = (((facts as any).risk || {}) as Record<string, any>);
@@ -209,6 +211,167 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
   const mergeRisk = async (patch: Record<string, any>) => {
     await onUpdate(mergeDefenceRiskUpdate({ ...facts, risk: riskFacts }, patch));
   };
+
+  const evidenceDraftTargets = useMemo<AskHeavenStepDraftTarget[]>(() => {
+    const propertyAddress = [
+      facts.property_address_line1,
+      facts.property_address_town,
+      facts.property_address_postcode,
+    ]
+      .filter(Boolean)
+      .join(', ');
+    const chronologySummary = generatedChronology.timelineItems
+      .slice(0, 6)
+      .join('\n');
+
+    return [
+      {
+        id: 'evidence.notice_service_description',
+        currentValue: String(evidence.notice_service_description || ''),
+        questionText: 'Describe how the notice was served and what proof exists',
+        seedAnswer: [
+          `Selected grounds: ${selectedGrounds.join(', ') || 'Section 8'}.`,
+          facts.notice_served_date ? `Notice served date: ${facts.notice_served_date}.` : '',
+          facts.notice_service_method ? `Service method: ${facts.notice_service_method}.` : '',
+          propertyAddress ? `Property: ${propertyAddress}.` : '',
+          'Draft a short factual description of how the notice was served and what proof of service exists.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) => mergeEvidence({ notice_service_description: text }),
+      },
+      {
+        id: 'communication_timeline.log',
+        currentValue: String(communicationTimeline.log || ''),
+        questionText: 'Add extra chronology details that should carry into the landlord pack',
+        seedAnswer: [
+          `Selected grounds: ${selectedGrounds.join(', ') || 'Section 8'}.`,
+          chronologySummary ? `Generated chronology so far:\n${chronologySummary}` : '',
+          'Draft a short chronology note that fills any obvious gaps without inventing new facts.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) => mergeTimeline({ log: text }),
+      },
+      {
+        id: 'risk.known_tenant_defences',
+        currentValue: knownTenantDefences,
+        questionText: "Record the tenant's known defence or dispute points",
+        seedAnswer: [
+          `Selected grounds: ${selectedGrounds.join(', ') || 'Section 8'}.`,
+          tenantDisputesClaim === true ? 'The tenant is already disputing the claim.' : '',
+          hasArrearsGround && tenantBenefitsDetails ? `Existing arrears context: ${tenantBenefitsDetails}` : '',
+          'Draft a factual note of the defence or dispute points the landlord already knows about.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) => mergeRisk({ known_tenant_defences: text }),
+      },
+      {
+        id: 'risk.disrepair_issues_list',
+        currentValue: disrepairIssuesList,
+        questionText: 'Describe the disrepair complaints being raised',
+        seedAnswer: [
+          disrepairComplaints === true ? 'The tenant has raised disrepair complaints.' : '',
+          disrepairComplaintDate ? `Complaint date: ${disrepairComplaintDate}.` : '',
+          'Draft a factual summary of the repair issues being raised and keep it neutral.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) => mergeRisk({ disrepair_issues_list: text }),
+      },
+      {
+        id: 'risk.previous_proceedings_details',
+        currentValue: previousProceedingsDetails,
+        questionText: 'Describe any previous court proceedings linked to this tenancy',
+        seedAnswer: [
+          previousCourtProceedings === true ? 'There have been previous proceedings linked to this tenancy.' : '',
+          'Draft a short factual summary of the earlier proceedings and their outcome, if known.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) => mergeRisk({ previous_proceedings_details: text }),
+      },
+      {
+        id: 'risk.tenant_vulnerability_details',
+        currentValue: tenantVulnerabilityDetails,
+        questionText: "Describe the tenant's known vulnerability context",
+        seedAnswer: [
+          tenantVulnerability === true ? 'The tenant has known vulnerability factors.' : '',
+          'Draft a neutral note of the vulnerability context the landlord already knows about and why it may affect the case narrative.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) => mergeRisk({ tenant_vulnerability_details: text }),
+      },
+      {
+        id: 'risk.counterclaim_grounds',
+        currentValue: counterclaimGrounds,
+        questionText: 'Describe the likely counterclaim or set-off points',
+        seedAnswer: [
+          tenantCounterclaimLikely === true ? 'A counterclaim or set-off is thought to be likely.' : '',
+          'Draft a short factual note of the likely counterclaim or set-off points the landlord expects the tenant to raise.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) =>
+          mergeRisk({
+            counterclaim_grounds: normalizeDefenceRiskList(text),
+          }),
+      },
+      {
+        id: 'tenant_benefits_details',
+        currentValue: tenantBenefitsDetails,
+        questionText: 'Describe the benefit or Universal Credit context affecting the arrears story',
+        seedAnswer: [
+          benefitType ? `Benefit or UC context already noted: ${benefitType}.` : '',
+          'Draft a factual arrears-context note explaining any benefits delay, UC issue, or similar point the landlord needs to answer.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) => onUpdate({ tenant_benefits_details: text }),
+      },
+      {
+        id: 'risk.payment_plan_response',
+        currentValue: paymentPlanResponse,
+        questionText: 'Describe what happened with the payment plan',
+        seedAnswer: [
+          paymentPlanOffered === true ? 'A payment plan was offered.' : '',
+          'Draft a factual note of how the tenant responded to the payment plan and what happened next.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+        apply: (text: string) => mergeRisk({ payment_plan_response: text }),
+      },
+    ];
+  }, [
+    benefitType,
+    communicationTimeline.log,
+    counterclaimGrounds,
+    disrepairComplaintDate,
+    disrepairComplaints,
+    disrepairIssuesList,
+    evidence.notice_service_description,
+    facts.notice_served_date,
+    facts.notice_service_method,
+    facts.property_address_line1,
+    facts.property_address_postcode,
+    facts.property_address_town,
+    generatedChronology.timelineItems,
+    hasArrearsGround,
+    knownTenantDefences,
+    onUpdate,
+    paymentPlanOffered,
+    paymentPlanResponse,
+    previousCourtProceedings,
+    previousProceedingsDetails,
+    selectedGrounds,
+    tenantBenefitsDetails,
+    tenantCounterclaimLikely,
+    tenantDisputesClaim,
+    tenantVulnerability,
+    tenantVulnerabilityDetails,
+  ]);
 
   const availabilityChecks = [
     {
@@ -294,8 +457,8 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
   return (
     <div className="space-y-6">
       <EvidenceCheckpointCard
-        title="Turn the notice into a court-ready file without asking for uploads"
-        description="This step keeps chronology, compliance, landlord-held records, and bundle readiness in one place. The goal is to make the pack smarter and clearer, not to bury the user in evidence admin."
+        title="Pull together the evidence and chronology"
+        description="Use this step to confirm service proof, the key chronology, and the supporting records you already have."
         outputs={['Evidence checklist', 'Witness statement', 'Case summary', 'Readiness warnings']}
       />
 
@@ -316,7 +479,7 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
           tone={depositQuestionsComplete && propertyComplianceQuestionsComplete && complianceQuestionsComplete ? 'success' : 'warning'}
         />
         <EvidenceStatusCard
-          label="Court-file readiness"
+          label="Pack readiness"
           value={readinessStatus ? 'Ready to review' : 'Needs more confirmations'}
           tone={readinessStatus ? 'success' : 'warning'}
         />
@@ -329,21 +492,31 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
           </div>
           <div>
             <h3 className="text-lg font-semibold tracking-tight text-[#20103f]">
-              Court file readiness
+              Pack readiness
             </h3>
             <p className="mt-2 text-sm leading-6 text-[#62597c]">
-              We generate the landlord-authored notice, court forms, and filing paperwork from
-              your answers. This step records the key facts and confirms what landlord-held records
-              exist, without asking you to upload documents into the product.
+              We generate the notice, court forms, and supporting documents from
+              your answers. This step confirms the key facts and the records you already hold,
+              without asking you to upload anything here.
             </p>
           </div>
         </div>
       </section>
 
+      <AskHeavenStepAutofill
+        caseId={caseId}
+        jurisdiction="england"
+        product="complete_pack"
+        buttonLabel="Draft my written sections"
+        helperText="Ask Heaven will fill the blank writing boxes in this step using the chronology, service details, and defence-risk facts already in your case."
+        emptyStateText="The writing boxes in this step already have content. You can still edit them manually if needed."
+        targets={evidenceDraftTargets}
+      />
+
       <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
         <h4 className="text-base font-semibold text-[#20103f]">Service and chronology details</h4>
         <p className="mt-2 text-sm leading-6 text-[#62597c]">
-          Keep this step focused on service proof, the generated chronology, and any extra incident detail that the court file should not miss.
+          Keep this step focused on service proof, the generated chronology, and any extra incident detail that should not be missed.
         </p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="block">
@@ -383,7 +556,7 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
                 placeholder="Add anything the generated chronology should not miss, such as a disputed breach, a promise to pay, a refused inspection, or another key incident."
               />
               <p className="mt-2 text-xs leading-5 text-[#7a7195]">
-                We build the main chronology from your arrears schedule, notice dates, and contact history. Use this box only for extra incident detail or anything unusual the court file should explain.
+                We build the main chronology from your arrears schedule, notice dates, and contact history. Use this box only for extra incident detail or anything unusual the pack should explain.
               </p>
             </label>
           </div>
@@ -512,7 +685,7 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
           />
           <div>
             <p className="text-sm font-semibold text-[#27134a]">
-              I have reviewed which landlord-held records are available for this claim.
+              I have reviewed which supporting records are available for this claim.
             </p>
             <p className="mt-1 text-sm leading-6 text-[#62597c]">
               This confirms the generated checklist can refer to what exists outside the platform,
@@ -740,7 +913,7 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
               />
               <BooleanQuestion
                 label="Has the deposit already been returned or otherwise fully resolved?"
-                help="Use this if the deposit issue has already been cured outside the tenancy so the court file can explain that position clearly."
+                help="Use this if the deposit issue has already been cured outside the tenancy so the pack can explain that position clearly."
                 value={facts.deposit_returned}
                 onChange={(value) => onUpdate({ deposit_returned: value })}
               />
@@ -783,7 +956,7 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
           )}
 
           <BooleanQuestion
-            label="Is the landlord-held evidence bundle ready to support the selected grounds?"
+            label="Are the supporting records ready to support the selected grounds?"
             help="This should be yes only if the records you would need outside the generated pack are identified and available."
             value={facts.evidence_bundle_ready}
             onChange={(value) => onUpdate({ evidence_bundle_ready: value })}
@@ -826,3 +999,4 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
     </div>
   );
 };
+

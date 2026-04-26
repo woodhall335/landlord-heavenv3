@@ -89,6 +89,18 @@ const EVICTION_BASE: Record<string, StepMetadata> = {
     '~4 min',
     'notice-details'
   ),
+  ground_details: withChecklist(
+    [
+      { label: 'What happened' },
+      { label: 'When it happened' },
+      { label: 'Why the selected ground applies' },
+      { label: 'Supporting evidence', optional: true },
+    ],
+    'This step adds the factual detail that makes the selected specialist grounds read clearly across the notice, particulars, and witness material.',
+    'RiFileEditLine',
+    '~4 min',
+    'grounds'
+  ),
   scotland_notice: withChecklist([{ label: 'Notice to Leave date' }, { label: 'Ground reference' }, { label: 'Service method' }], 'Notice timing and service details are key to producing a valid Notice to Leave draft.', 'RiMailSendLine', '~3 min', 'notice-details'),
   section8_arrears: withChecklist(
     [
@@ -106,11 +118,11 @@ const EVICTION_BASE: Record<string, StepMetadata> = {
   scotland_grounds: withChecklist([{ label: 'Ground selection' }, { label: 'Ground facts summary' }, { label: 'Date references', optional: true }], 'Ground selection provides the legal basis for the notice and structures the final draft output.', 'RiScales3Line', '~3 min', 'grounds'),
   evidence: withChecklist(
     [
-      { label: 'Court-file readiness confirmations' },
+      { label: 'Readiness confirmations' },
       { label: 'Arrears / breach support' },
       { label: 'Chronology and contact record', optional: true },
     ],
-    'This step gathers the structured confirmations that turn the pack into a court file rather than just a notice generator.',
+    'This step confirms the evidence, chronology, and supporting records behind the pack.',
     'RiFolderUploadLine',
     '~4 min',
     'evidence'
@@ -280,6 +292,7 @@ addEntries('notice_only', 'england', {
   tenancy: EVICTION_BASE.tenancy,
   section8_compliance: EVICTION_BASE.section8_compliance,
   notice: EVICTION_BASE.notice,
+  ground_details: EVICTION_BASE.ground_details,
   section8_arrears: EVICTION_BASE.section8_arrears,
   review: EVICTION_BASE.review,
 });
@@ -310,7 +323,7 @@ addEntries('complete_pack', 'england', {
   property: EVICTION_BASE.property,
   tenancy: EVICTION_BASE.tenancy,
   notice: EVICTION_BASE.notice,
-  section21_compliance: EVICTION_BASE.section21_compliance,
+  ground_details: EVICTION_BASE.ground_details,
   section8_arrears: EVICTION_BASE.section8_arrears,
   evidence: EVICTION_BASE.evidence,
   court_signing: EVICTION_BASE.court_signing,
