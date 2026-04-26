@@ -23,6 +23,17 @@ describe('England post-2026 validation', () => {
     expect(codes).toContain('14A');
   });
 
+  it('lists England Form 3A grounds in human legal order, keeping alphanumeric grounds next to their base ground', () => {
+    const codes = listEnglandGroundDefinitions().map((ground) => ground.code);
+
+    expect(codes.slice(0, 7)).toEqual(['1', '1A', '2', '2ZA', '2ZB', '2ZC', '2ZD']);
+    expect(codes.indexOf('4A')).toBe(codes.indexOf('4') + 1);
+    expect(codes.indexOf('5A')).toBe(codes.indexOf('5') + 1);
+    expect(codes.indexOf('7A')).toBe(codes.indexOf('7') + 1);
+    expect(codes.indexOf('14A')).toBe(codes.indexOf('14') + 1);
+    expect(codes.indexOf('14ZA')).toBe(codes.indexOf('14A') + 1);
+  });
+
   it('blocks Ground 8 when the arrears threshold is not met', () => {
     const result = validateEnglandPost2026WizardFacts({
       ...CORE_ENGLAND_FACTS,

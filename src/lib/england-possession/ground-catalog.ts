@@ -481,8 +481,38 @@ export function getEnglandGroundDefinition(code: string | number): EnglandGround
   return normalized ? ENGLAND_POST_2026_GROUND_CATALOG[normalized] : null;
 }
 
+function compareEnglandGroundCodes(left: EnglandGroundCode, right: EnglandGroundCode): number {
+  const leftMatch = left.match(/^(\d+)([A-Z]*)$/i);
+  const rightMatch = right.match(/^(\d+)([A-Z]*)$/i);
+
+  if (!leftMatch || !rightMatch) {
+    return left.localeCompare(right);
+  }
+
+  const leftNumber = Number.parseInt(leftMatch[1], 10);
+  const rightNumber = Number.parseInt(rightMatch[1], 10);
+
+  if (leftNumber !== rightNumber) {
+    return leftNumber - rightNumber;
+  }
+
+  const leftSuffix = (leftMatch[2] || '').toUpperCase();
+  const rightSuffix = (rightMatch[2] || '').toUpperCase();
+
+  if (leftSuffix === rightSuffix) {
+    return 0;
+  }
+
+  if (!leftSuffix) return -1;
+  if (!rightSuffix) return 1;
+
+  return leftSuffix.localeCompare(rightSuffix);
+}
+
 export function listEnglandGroundDefinitions(): EnglandGroundDefinition[] {
-  return Object.values(ENGLAND_POST_2026_GROUND_CATALOG);
+  return Object.values(ENGLAND_POST_2026_GROUND_CATALOG).sort((left, right) =>
+    compareEnglandGroundCodes(left.code, right.code),
+  );
 }
 
 export function getEnglandGroundNoticePeriodDays(code: string | number): number {

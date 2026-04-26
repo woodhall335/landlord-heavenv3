@@ -49,7 +49,7 @@ const JURISDICTION_INFO: Record<CanonicalJurisdiction, JurisdictionInfo> = {
     keyDifferences: [
       'New England tenancies from 1 May 2026 use the assured periodic framework',
       'Section 21 has ended for new England private-rented cases, so possession now follows the current Form 3A ground-based route',
-      'Deposit cap: 5 weeks rent (6 weeks if annual rent over Â£50,000)',
+  'Deposit cap: 5 weeks rent (6 weeks if annual rent over £50,000)',
       'Written information and key safety documents should be tracked with proof of delivery',
     ],
   },
@@ -316,7 +316,7 @@ export function ChecksSummaryBox({
           <div className="mt-3 pt-3 border-t border-green-200">
             <p className="text-xs text-green-700">
               <span className="font-medium">Solicitor comparison:</span>{' '}
-              A property solicitor would charge Â£200-500 for this level of compliance review.
+    A property solicitor would charge £200-500 for this level of compliance review.
             </p>
           </div>
         </div>

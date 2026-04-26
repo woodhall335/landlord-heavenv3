@@ -89,6 +89,26 @@ const SECTION_8_GROUNDS = ENGLAND_GROUND_DEFINITIONS.map((ground) => ({
   mandatory: ground.mandatory,
 }));
 
+const ARREARS_LED_GROUND_LABELS = new Set(['Ground 8', 'Ground 10', 'Ground 11']);
+
+function getGroundSelectionHelperText(selectedGrounds: string[], noticeAlreadyServed = false): string {
+  if (selectedGrounds.length === 0) {
+    return '';
+  }
+
+  const arrearsOnly = selectedGrounds.every((ground) => ARREARS_LED_GROUND_LABELS.has(ground));
+
+  if (arrearsOnly) {
+    return noticeAlreadyServed
+      ? 'This is an arrears-led notice, so the rent schedule, chronology, and court papers should all keep using the same arrears story from here.'
+      : 'This is an arrears-led notice, so the rent schedule, chronology, and support documents will keep using the same arrears story from here.';
+  }
+
+  return noticeAlreadyServed
+    ? 'If this includes any specialist ground, add the factual basis here so the court forms and support documents stay aligned with the notice already served.'
+    : 'Arrears-led particulars can still be refined later, but any specialist ground should be factually anchored here so the pack reads coherently throughout.';
+}
+
 type GroundDetailFieldType = 'text' | 'textarea' | 'date';
 
 interface GroundDetailFieldConfig {
@@ -1217,9 +1237,11 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                 <p className="text-xs text-purple-700 mt-1">
                   Minimum notice period: {minNoticePeriodLabel}
                 </p>
-                <p className="text-xs text-[#7C3AED] mt-2">
-                  Arrears-led particulars can still be refined later, but specialist grounds should be factually anchored here so the pack reads coherently throughout.
-                </p>
+                {getGroundSelectionHelperText(selectedGrounds) && (
+                  <p className="text-xs text-[#7C3AED] mt-2">
+                    {getGroundSelectionHelperText(selectedGrounds)}
+                  </p>
+                )}
               </div>
 
               <Section8SpecialistGroundDetails
@@ -1504,13 +1526,13 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
         eyebrow={isNoticeOnlyMode ? 'Notice checkpoint' : 'Notice and service checkpoint'}
         title={
           isNoticeOnlyMode
-            ? `Build the ${isEngland ? 'Form 3A notice' : noticeProductLabel} without extra noise`
-            : 'Keep the notice, service record, and later court file in sync'
+            ? `Build the ${isEngland ? 'Form 3A notice' : noticeProductLabel}`
+            : 'Confirm the notice and service details'
         }
         description={
           isNoticeOnlyMode
-            ? 'This step should gather only the facts that affect the notice, service guidance, and proof of service. The goal is a clean completed pack, not an overwhelming interview.'
-            : 'This step decides whether you are working from a notice already served or generating one now. Either way, the same notice and N215 facts should carry cleanly into the court-ready pack.'
+            ? 'Answer only the questions that affect the notice, the service guidance, and the proof of service.'
+            : 'Tell us whether you already served a notice or need to generate one now, then we will keep the notice and N215 details aligned.'
         }
         outputs={
           isNoticeOnlyMode
@@ -1811,9 +1833,11 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                     <p className="text-xs text-purple-700 mt-1">
                       Minimum notice period: {minNoticePeriodLabel}
                     </p>
-                    <p className="text-xs text-[#7C3AED] mt-2">
-                      If this is a specialist ground, add the factual basis here so the court forms and support documents stay aligned with the notice already served.
-                    </p>
+                    {getGroundSelectionHelperText(selectedGrounds, true) && (
+                      <p className="text-xs text-[#7C3AED] mt-2">
+                        {getGroundSelectionHelperText(selectedGrounds, true)}
+                      </p>
+                    )}
                   </div>
 
                   <Section8SpecialistGroundDetails

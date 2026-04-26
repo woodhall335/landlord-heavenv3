@@ -92,4 +92,18 @@ describe('NoticeSection specialist England ground capture', () => {
     expect(screen.queryByText(/Section 21/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Form 6A/i)).not.toBeInTheDocument();
   });
+
+  it('uses arrears-specific helper copy when only arrears grounds are selected', () => {
+    renderControlledNoticeSection({
+      __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },
+      eviction_route: 'section_8',
+      section8_grounds: ['Ground 8'],
+    });
+
+    expect(screen.getByText(/Minimum notice period: 4 weeks/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/This is an arrears-led notice, so the rent schedule, chronology, and support documents will keep using the same arrears story from here\./i),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/specialist ground/i)).not.toBeInTheDocument();
+  });
 });
