@@ -11,15 +11,33 @@ const SECTION13_THUMBNAIL_DOCUMENT_TYPES_BY_ID: Record<string, string> = {
   'section13-negotiation-email-template': 'section13_negotiation_email_template',
 };
 
+function getSection13CheckoutDocumentType(documentId: string): string | undefined {
+  return SECTION13_THUMBNAIL_DOCUMENT_TYPES_BY_ID[documentId];
+}
+
 export function getSection13CheckoutThumbnailUrl(
   caseId: string,
   documentId: string
 ): string | undefined {
-  const documentType = SECTION13_THUMBNAIL_DOCUMENT_TYPES_BY_ID[documentId];
+  const documentType = getSection13CheckoutDocumentType(documentId);
 
   if (!documentType) {
     return undefined;
   }
 
   return `/api/section13/thumbnail/${caseId}?document_type=${encodeURIComponent(documentType)}`;
+}
+
+export function getSection13CheckoutPreviewUrl(
+  caseId: string,
+  documentId: string,
+  product: 'section13_standard' | 'section13_defensive'
+): string | undefined {
+  const documentType = getSection13CheckoutDocumentType(documentId);
+
+  if (!documentType) {
+    return undefined;
+  }
+
+  return `/api/section13/embed/${caseId}?document_type=${encodeURIComponent(documentType)}&product=${encodeURIComponent(product)}`;
 }

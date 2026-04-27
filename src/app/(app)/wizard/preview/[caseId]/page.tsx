@@ -56,7 +56,10 @@ import {
   type ProductSku,
 } from '@/lib/pricing/products';
 import { normalizeEnglandTenancyPurpose } from '@/lib/tenancy/england-reform';
-import { getSection13CheckoutThumbnailUrl } from '@/lib/previews/section13CheckoutPreview';
+import {
+  getSection13CheckoutPreviewUrl,
+  getSection13CheckoutThumbnailUrl,
+} from '@/lib/previews/section13CheckoutPreview';
 
 interface CaseData {
   id: string;
@@ -1072,8 +1075,12 @@ export default function WizardPreviewPage() {
         // Map config IDs to document_type for the money claim thumbnail API
         const docTypeForThumbnail = possibleTypes[0] || doc.id;
         thumbnailUrl = `/api/money-claim/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
+        if (product === 'money_claim') {
+          previewUrl = `/api/money-claim/embed/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
+        }
       } else if (product === 'section13_standard' || product === 'section13_defensive') {
         thumbnailUrl = getSection13CheckoutThumbnailUrl(caseId, doc.id);
+        previewUrl = getSection13CheckoutPreviewUrl(caseId, doc.id, product);
       }
 
       return {
