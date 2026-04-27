@@ -1,11 +1,13 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui/Container';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
 import type {
   ProductSalesBreakdownItem,
+  ProductSalesCard,
   ProductSalesEarlyProofBand,
   ProductSalesPageContent,
   ProductSalesRouteCard,
@@ -126,7 +128,7 @@ function InfoCards({
 }: {
   title: string;
   intro: ReactNode;
-  cards: Array<{ title: string; body: string }>;
+  cards: ProductSalesCard[];
   sectionId: string;
 }) {
   return (
@@ -144,10 +146,23 @@ function InfoCards({
             {cards.map((card) => (
               <article
                 key={card.title}
-                className="rounded-[1.8rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_14px_34px_rgba(24,11,49,0.05)]"
+                className="overflow-hidden rounded-[1.8rem] border border-[#E8E1F8] bg-[#FCFAFF] shadow-[0_14px_34px_rgba(24,11,49,0.05)]"
               >
-                <h3 className="text-xl font-semibold tracking-tight text-[#17142B]">{card.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">{card.body}</p>
+                {card.imageSrc ? (
+                  <div className="relative h-56 w-full">
+                    <Image
+                      src={card.imageSrc}
+                      alt={card.imageAlt || card.title}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                    />
+                  </div>
+                ) : null}
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold tracking-tight text-[#17142B]">{card.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">{card.body}</p>
+                </div>
               </article>
             ))}
           </div>

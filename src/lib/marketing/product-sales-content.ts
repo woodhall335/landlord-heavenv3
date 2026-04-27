@@ -26,6 +26,8 @@ export interface ProductSalesRouteCard {
 export interface ProductSalesCard {
   title: string;
   body: string;
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 export interface ProductSalesEarlyProofBand {

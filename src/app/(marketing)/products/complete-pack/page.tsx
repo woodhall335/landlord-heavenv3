@@ -188,16 +188,22 @@ export default function CompleteEvictionPackPage() {
           title: 'Possession cases are won or lost on continuity',
           body:
             'The court wants the notice, the grounds, the arrears evidence, and the claim forms to tell the same story from start to finish.',
+          imageSrc: '/images/Court-possession-paperwork-in-one-file.webp',
+          imageAlt: 'Court possession paperwork assembled in one file',
         },
         {
           title: 'Weak particulars can blunt a good case',
           body:
             "If the landlord's position is not explained clearly in N119, the case is harder to follow even when the facts are sound.",
+          imageSrc: '/images/Catch-weak-spots-before-they-slow-you-down.webp',
+          imageAlt: 'Court particulars and weak spots being reviewed',
         },
         {
           title: 'Filing errors create expensive delay',
           body:
             'Even after the notice is served, the case can still be slowed down by bad filing, missing paperwork, or an evidence bundle that was never organised properly.',
+          imageSrc: '/images/Get-paperwork-that-holds-together.webp',
+          imageAlt: 'Court filing paperwork prepared to avoid delay',
         },
       ],
     },

@@ -175,16 +175,22 @@ export default function NoticeOnlyPage() {
           title: 'The court looks at the notice first',
           body:
             "If the notice is wrong, the case can stall before the judge even gets to the tenant's breach or the arrears position.",
+          imageSrc: '/images/the-court-looks-at-the-notice-first.webp',
+          imageAlt: 'Court paperwork and notice review illustration',
         },
         {
           title: 'Arrears cases are only as clear as the paperwork',
           body:
             "If the numbers are inconsistent or the grounds are not explained properly, the landlord's position becomes harder to follow and easier to challenge.",
+          imageSrc: '/images/arrears-cases-are-only-clear-as-the-paperwork.webp',
+          imageAlt: 'Arrears paperwork and rent schedule illustration',
         },
         {
           title: 'Service mistakes undo good cases',
           body:
             'A strong notice can still fail if you cannot show it was served correctly and on time.',
+          imageSrc: '/images/service-mistakes-undo-good-cases.webp',
+          imageAlt: 'Notice service and delivery proof illustration',
         },
       ],
     },
