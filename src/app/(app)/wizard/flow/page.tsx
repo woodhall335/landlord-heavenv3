@@ -9,6 +9,7 @@
 'use client';
 
 import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
 import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSectionFlow';
@@ -552,6 +553,8 @@ function WizardFlowContent() {
         key: 'notice_only' as const,
         title: 'Eviction Notice Generator',
         subtitle: 'Section 8, May 2026',
+        imageSrc: '/images/eviction-notice-generator-wizard.webp',
+        imageAlt: 'Eviction Notice Generator wizard preview',
         description:
           'Choose this if you need the Form 3A notice, service instructions, service and validity checklist, pre-service compliance declaration, and rent schedule / arrears statement before you serve anything.',
       },
@@ -559,6 +562,8 @@ function WizardFlowContent() {
         key: 'complete_pack' as const,
         title: 'Complete Eviction Pack',
         subtitle: 'Notice through court possession',
+        imageSrc: '/images/complete-eviction-pack-wizard.webp',
+        imageAlt: 'Complete Eviction Pack wizard preview',
         description:
           'Choose this if you want the Form 3A notice, N5, N119, and the full court-ready possession paperwork working together from the start.',
       },
@@ -598,6 +603,17 @@ function WizardFlowContent() {
                         : 'border-slate-200 bg-slate-50 text-slate-900 hover:border-violet-300 hover:bg-violet-50/50'
                     }`}
                   >
+                    <div className="mb-5 overflow-hidden rounded-[1.4rem] border border-white/12 bg-white/80 shadow-[0_18px_34px_rgba(15,23,42,0.08)]">
+                      <Image
+                        src={choice.imageSrc}
+                        alt={choice.imageAlt}
+                        width={1200}
+                        height={760}
+                        className="h-auto w-full object-cover"
+                        sizes="(min-width: 1024px) 32rem, 100vw"
+                        priority={isActive}
+                      />
+                    </div>
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <div className="text-lg font-semibold">{choice.title}</div>
