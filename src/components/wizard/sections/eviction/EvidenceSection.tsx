@@ -560,8 +560,8 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
           </label>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="block">
-              <span className="text-sm font-medium text-[#27134a]">How many payment-chase or contact attempts have you made?</span>
+            <label className="block h-full">
+              <span className="block min-h-[3.25rem] text-sm font-medium text-[#27134a]">How many payment-chase or contact attempts have you made?</span>
               <input
                 type="number"
                 min={0}
@@ -576,8 +576,8 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
               />
             </label>
 
-            <label className="block">
-              <span className="text-sm font-medium text-[#27134a]">How would you describe the tenant's response?</span>
+            <label className="block h-full">
+              <span className="block min-h-[3.25rem] text-sm font-medium text-[#27134a]">How would you describe the tenant's response?</span>
               <select
                 value={communicationTimeline.tenant_responsiveness || ''}
                 onChange={(e) => void mergeTimeline({ tenant_responsiveness: e.target.value || null })}

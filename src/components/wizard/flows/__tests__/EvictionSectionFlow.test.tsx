@@ -201,7 +201,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
     expect(getStepButton('About the arrears')).toBeDefined();
   });
 
-  it('review step shows the full England court-pack document checkpoints', async () => {
+  it('review step keeps the readiness summary and issue lists for the England court pack', async () => {
     const user = userEvent.setup();
 
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
@@ -209,13 +209,10 @@ describe('EvictionSectionFlow - England complete pack', () => {
     await screen.findByText(/Complete Eviction Pack/i);
     await user.click(getStepButton('Review your court-ready pack'));
 
-    await screen.findByText(/Review the completed documents in this pack/i);
-
-    expect(screen.getAllByText(/Form N5 - Claim for Possession/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Form N119 - Particulars of Claim/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Certificate of Service \(Form N215\)/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Witness Statement/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Court Bundle Index/i).length).toBeGreaterThan(0);
+    await screen.findByText(/This pack is ready to generate|You still need to fix a few things before this pack is ready/i);
+    expect(screen.getByText(/What must be fixed before you continue/i)).toBeDefined();
+    expect(screen.getByText(/What could slow things down later/i)).toBeDefined();
+    expect(screen.getByText(/Sections in this pack/i)).toBeDefined();
   });
 });
 

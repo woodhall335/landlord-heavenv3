@@ -184,28 +184,6 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[1.5rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">
-          Claim assembly checkpoint
-        </p>
-        <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">
-          Finish the court-facing details without asking court-assigned facts too early
-        </h3>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-[#60597a]">
-          This step should lock the court venue, the statement of truth, and the claimant signing details that feed the N5 and N119. It should feel like assembly, not another fact-finding round.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {['N5 claim form', 'N119 particulars', 'Statement of truth', 'Court bundle index'].map((item) => (
-            <span
-              key={item}
-              className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
-            >
-              {item}
-            </span>
-          ))}
-        </div>
-      </section>
-
       {/* Court Details */}
       <div className="space-y-4">
         <h3 className="border-b pb-2 text-lg font-medium text-gray-900">

@@ -13,17 +13,13 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { DocumentProofShowcase } from '@/components/preview';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { validateGround8Eligibility } from '@/lib/arrears-engine';
-import { getPackContents } from '@/lib/products/pack-contents';
-import { buildEnglandPackProofEntries } from './buildEnglandPackProofEntries';
 import {
   RiArrowDownCircleLine,
   RiCalendarLine,
   RiCheckLine,
   RiErrorWarningLine,
-  RiFileTextLine,
 } from 'react-icons/ri';
 import { calculateFilingWindow, formatDate } from '@/lib/validators/s21-court-pack';
 
@@ -54,6 +50,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   sections,
   onComplete,
   onJumpToSection,
+  onUpdate: _onUpdate,
 }) => {
   const evictionRoute = facts.eviction_route as 'section_8' | 'section_21' | undefined;
 
@@ -123,39 +120,6 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
     return { blockers: allBlockers, warnings: allWarnings, incompleteRequired: incomplete };
   }, [evictionRoute, facts, jurisdiction, sections]);
 
-  const documentsToGenerate = useMemo(() => {
-    const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
-    if (jurisdiction === 'england') {
-      return getPackContents({
-        product: 'complete_pack',
-        jurisdiction,
-        route: evictionRoute,
-        grounds: (facts.section8_grounds as string[]) || [],
-        has_arrears: Boolean(arrearsItems.length),
-        include_arrears_schedule: Boolean(arrearsItems.length),
-      }).map((item) => ({
-        name: item.title,
-        description: item.description || 'Included in the generated possession pack.',
-      }));
-    }
-
-    if (evictionRoute === 'section_21') {
-      return [
-        { name: 'Form 6A', description: 'Section 21 notice seeking possession.' },
-        { name: 'N5B', description: 'Accelerated possession claim form.' },
-        { name: 'Case roadmap', description: 'Next steps guide for the possession claim.' },
-      ];
-    }
-
-    return [
-      { name: 'Form 3 notice', description: 'Section 8 notice seeking possession.' },
-      { name: 'N5', description: 'Claim form for possession.' },
-      { name: 'N119', description: 'Particulars of claim for possession.' },
-      { name: 'Arrears schedule', description: 'Detailed rent arrears breakdown where rent grounds are used.' },
-      { name: 'Case roadmap', description: 'Next steps guide for the possession claim.' },
-    ];
-  }, [evictionRoute, facts.arrears_items, facts.issues?.rent_arrears?.arrears_items, facts.section8_grounds, jurisdiction]);
-
   const filingWindowBlocker = filingWindowInfo?.warning?.blocking
     ? { section: 'Filing window', message: filingWindowInfo.warning.message }
     : null;
@@ -167,15 +131,6 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const blockerItems = filingWindowBlocker ? [...blockers, filingWindowBlocker] : blockers;
   const warningItems = filingWindowWarning ? [...warnings, filingWindowWarning] : warnings;
   const canProceed = blockerItems.length === 0 && incompleteRequired.length === 0;
-
-  const caseProofEntries =
-    jurisdiction === 'england' && evictionRoute === 'section_8'
-      ? buildEnglandPackProofEntries({
-          product: 'complete_pack',
-          caseId,
-          facts,
-        })
-      : [];
 
   const packTitle =
     jurisdiction === 'england'
@@ -226,15 +181,6 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
         </div>
       </ReviewCard>
 
-      {caseProofEntries.length > 0 ? (
-        <DocumentProofShowcase
-          compact
-          title="Review the completed documents in this pack"
-          description="Open the actual notice, court forms, service paperwork, and support documents generated from this case before you generate the full pack."
-          entries={caseProofEntries}
-        />
-      ) : null}
-
       <ReviewListCard
         title="What must be fixed before you continue"
         emptyTitle="No blocker-level issues are showing"
@@ -264,26 +210,6 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           message: item.message,
         }))}
       />
-
-      <ReviewCard
-        title="Everything included in your pack"
-        description="These are the documents this product prepares from the answers you have given."
-      >
-        <div className="grid gap-3 md:grid-cols-2">
-          {documentsToGenerate.map((doc) => (
-            <div
-              key={doc.name}
-              className="flex items-start gap-3 rounded-2xl border border-[#e7dbff] bg-[#faf7ff] px-4 py-4"
-            >
-              <RiFileTextLine className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#7C3AED]" />
-              <div>
-                <p className="text-sm font-semibold text-[#27134a]">{doc.name}</p>
-                <p className="mt-1 text-sm leading-6 text-[#62597c]">{doc.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </ReviewCard>
 
       {filingWindowInfo?.warning && (
         <div

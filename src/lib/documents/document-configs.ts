@@ -300,15 +300,7 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
       icon: 'evidence',
       pages: '2 pages',
       category: 'Evidence',
-    },
-      {
-        id: 'proof-of-service',
-        title: 'Certificate of Service (Form N215)',
-        description: 'Official editable Form N215 certificate for how and when the notice was served',
-        icon: 'evidence',
-        pages: '5 pages',
-        category: 'Evidence',
-      }
+    }
   );
 
   return documents;
