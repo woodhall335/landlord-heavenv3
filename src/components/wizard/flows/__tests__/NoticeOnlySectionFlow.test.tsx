@@ -16,7 +16,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act, fireEvent } from '@testing-library/react';
 
 // Import Scotland utilities for direct testing
 import {
@@ -289,8 +289,7 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     // Wait for component to load
     await screen.findByText(/Eviction Notice Generator/);
 
-    expect(screen.getByText(/Section 8 notice basics/i)).toBeDefined();
-    expect(screen.getByText(/Section 21 and N5B accelerated possession are no longer part of the England private rented flow\./i)).toBeDefined();
+    expect(screen.getByRole('heading', { name: /What's going on\?/i })).toBeDefined();
     const selectableSection21Routes = screen.queryAllByRole('radio').filter(
       (radio) => radio.getAttribute('value') === 'section_21'
     );
@@ -1162,7 +1161,9 @@ describe('NoticeOnlySectionFlow - Scotland Notice Copy', () => {
 
     // Click on Notice tab to view notice section
     const noticeButton = getStepButton('Notice');
-    noticeButton.click();
+    await act(async () => {
+      fireEvent.click(noticeButton);
+    });
 
     // Should show appropriate copy without "complete pack"
     // The text should indicate notice generation, not pack generation

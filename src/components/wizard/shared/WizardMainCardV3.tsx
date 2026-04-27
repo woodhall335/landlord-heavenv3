@@ -52,7 +52,7 @@ export function WizardMainCardV3({
 
         <div className="mt-6 shrink-0 md:mt-8">{navigation}</div>
       </div>
-      <style jsx>{`
+      <style>{`
         .wizard-step-fade {
           animation: wizardStepFade 220ms ease-out;
         }

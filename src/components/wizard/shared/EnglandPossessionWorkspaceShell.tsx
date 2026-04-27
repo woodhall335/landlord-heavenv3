@@ -153,7 +153,7 @@ export function EnglandPossessionWorkspaceShell({
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-[#241247]">Step help and checklist</p>
                 <p className="mt-1 text-[11px] leading-4.5 text-[#60597a]">
-                  Ask Heaven, what you need, and why it matters.
+                  Open Ask Heaven for step-by-step help.
                 </p>
               </div>
               <span className="text-sm font-medium text-[#7650cd] transition group-open:rotate-180">v</span>
