@@ -362,28 +362,26 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                     key={issue.id}
                     type="button"
                     onClick={() => handleSelectPrimaryIssue(issue.id)}
-                    className={`rounded-[1.35rem] border px-4 py-4 text-left transition ${
+                    className={`overflow-hidden rounded-[1.35rem] border text-left transition ${
                       selected
                         ? 'border-[#7C3AED] bg-[#f5efff] shadow-[0_10px_24px_rgba(124,58,237,0.12)]'
                         : 'border-[#ebe4ff] bg-white hover:border-[#d8cbff] hover:bg-[#fcfaff]'
                     }`}
                     aria-pressed={selected}
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-[88px] shrink-0 overflow-hidden rounded-[1rem] border border-[#eadfff] bg-white shadow-sm">
-                        <Image
-                          src={issue.imageSrc}
-                          alt={issue.imageAlt}
-                          width={240}
-                          height={180}
-                          className="h-auto w-full object-cover"
-                          sizes="88px"
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold text-[#20103f]">{issue.title}</p>
-                        <p className="mt-2 text-sm leading-6 text-[#60597a]">{issue.description}</p>
-                      </div>
+                    <div className="w-full overflow-hidden">
+                      <Image
+                        src={issue.imageSrc}
+                        alt={issue.imageAlt}
+                        width={720}
+                        height={360}
+                        className="h-[148px] w-full object-cover"
+                        sizes="(min-width: 768px) 50vw, 100vw"
+                      />
+                    </div>
+                    <div className="px-4 py-4">
+                      <p className="text-sm font-semibold text-[#20103f]">{issue.title}</p>
+                      <p className="mt-2 text-sm leading-6 text-[#60597a]">{issue.description}</p>
                     </div>
                   </button>
                 );
