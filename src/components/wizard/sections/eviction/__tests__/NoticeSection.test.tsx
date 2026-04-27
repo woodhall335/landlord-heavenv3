@@ -36,7 +36,7 @@ function renderControlledNoticeSection(initialFacts: WizardFacts, mode: 'complet
 }
 
 describe('NoticeSection specialist England ground capture', () => {
-  it('shows specialist ground detail questions in notice-only mode when a sale ground is selected', () => {
+  it('marks the notice grounds as manually touched when a specialist ground is selected in notice-only mode', () => {
     const updatesSpy = renderControlledNoticeSection({
       __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },
       eviction_route: 'section_8',
@@ -45,14 +45,15 @@ describe('NoticeSection specialist England ground capture', () => {
 
     fireEvent.click(screen.getByLabelText(/Ground 1A - Sale of dwelling house/i));
 
-    expect(updatesSpy).toHaveBeenCalledWith({ section8_grounds: ['Ground 1A'] });
-    expect(screen.getByText('Specialist Ground Details')).toBeInTheDocument();
-    expect(screen.getByLabelText('Why is the property being sold?')).toBeInTheDocument();
-    expect(screen.getByLabelText('What sale steps have already been taken?')).toBeInTheDocument();
-    expect(screen.getByLabelText('What evidence supports the sale intention?')).toBeInTheDocument();
+    expect(updatesSpy).toHaveBeenCalledWith({
+      section8_grounds: ['Ground 1A'],
+      section8_grounds_touched: true,
+      section8_grounds_seeded_from_selector: false,
+    });
+    expect(screen.queryByText('Specialist Ground Details')).not.toBeInTheDocument();
   });
 
-  it('shows specialist ground detail questions on the already-served complete-pack path', () => {
+  it('keeps specialist detail capture out of the notice step on the already-served complete-pack path', () => {
     renderControlledNoticeSection({
       __meta: { product: 'complete_pack', original_product: 'complete_pack', jurisdiction: 'england' },
       eviction_route: 'section_8',
@@ -62,10 +63,8 @@ describe('NoticeSection specialist England ground capture', () => {
       section8_grounds: ['Ground 6', 'Ground 7B'],
     }, 'complete_pack');
 
-    expect(screen.getByText('Specialist Ground Details')).toBeInTheDocument();
-    expect(screen.getByLabelText('Describe the proposed works')).toBeInTheDocument();
-    expect(screen.getByLabelText('What official notice or source material is relied on?')).toBeInTheDocument();
-    expect(screen.getByLabelText('Reference or decision identifier')).toBeInTheDocument();
+    expect(screen.queryByText('Specialist Ground Details')).not.toBeInTheDocument();
+    expect(screen.getByText(/Have you already served a valid notice on the tenant\?/i)).toBeInTheDocument();
   });
 
   it('keeps England complete-pack notice generation on the Form 3A path', () => {

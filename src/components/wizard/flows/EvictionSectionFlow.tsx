@@ -127,7 +127,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
     label: "What's going on?",
-    description: 'Choose the possession problem and set the court-pack route',
+    description: 'Pick the main reason you need possession. You can confirm the legal grounds next.',
     jurisdictions: ['england', 'wales'],
     isComplete: (facts, jurisdiction) => {
       const route = facts.eviction_route as string;
@@ -137,7 +137,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
       if (jurisdiction === 'wales') {
         return WALES_ROUTES.includes(route as typeof WALES_ROUTES[number]);
       }
-      return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
+      return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]) && Boolean(facts.england_primary_issue);
     },
   },
   {

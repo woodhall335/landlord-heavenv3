@@ -486,7 +486,11 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
     const newGrounds = selectedGrounds.includes(ground)
       ? selectedGrounds.filter((g) => g !== ground)
       : [...selectedGrounds, ground];
-    onUpdate({ section8_grounds: newGrounds });
+    onUpdate({
+      section8_grounds: newGrounds,
+      section8_grounds_touched: true,
+      section8_grounds_seeded_from_selector: false,
+    });
   };
 
   // Check if current step is complete
@@ -1138,7 +1142,11 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     const newGrounds = selectedGrounds.includes(ground)
       ? selectedGrounds.filter((g) => g !== ground)
       : [...selectedGrounds, ground];
-    onUpdate({ section8_grounds: newGrounds });
+    onUpdate({
+      section8_grounds: newGrounds,
+      section8_grounds_touched: true,
+      section8_grounds_seeded_from_selector: false,
+    });
   };
 
   // Handle subflow completion

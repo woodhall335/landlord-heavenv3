@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @vitest-environment jsdom
  *
  * NoticeOnlySectionFlow Tests
@@ -271,7 +271,7 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     await screen.findByText(/Eviction Notice Generator/);
 
     // England should show "Tenancy" not "Occupation Contract"
-    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
+    expect(getStepButton('Tenancy details')).toBeDefined();
     expect(screen.queryByRole('button', { name: /Occupation Contract/i })).toBeNull();
   });
 
@@ -311,7 +311,7 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     await screen.findByText(/Eviction Notice Generator/);
 
     // The flow should be set up for Section 8
-    expect(screen.getByRole('button', { name: /Tenancy/i })).toBeDefined();
+    expect(getStepButton('Tenancy details')).toBeDefined();
     expect(screen.queryByText(/Occupation Contract/)).toBeNull();
   });
 });
@@ -395,6 +395,7 @@ describe('NoticeOnlySectionFlow - Header and Title', () => {
 
     await screen.findByText(/Eviction Notice Generator/);
     expect(screen.getByText(/Eviction Notice Generator/)).toBeDefined();
+    expect(screen.getByText(/Tenant is not paying rent/i)).toBeDefined();
   });
 
   it('should show "Wales Eviction Notice" for Wales jurisdiction', async () => {
@@ -1673,7 +1674,7 @@ describe('NoticeOnlySectionFlow - Scotland Compliance Section', () => {
 
       // EICR missing
       if (facts.eicr_served === false) {
-        warnings.push('Missing EICR can result in fines up to £5,000.');
+        warnings.push('Missing EICR can result in fines up to Â£5,000.');
       }
 
       // Repairing standard not met
@@ -2233,3 +2234,6 @@ describe('NoticeOnlySectionFlow - England/Wales Smoke Tests (unchanged behavior)
     })).toBe(false);
   });
 });
+
+
+

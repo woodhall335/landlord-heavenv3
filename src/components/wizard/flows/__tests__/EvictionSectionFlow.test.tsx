@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @vitest-environment jsdom
  */
 
@@ -132,7 +132,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
     await screen.findByText(/Complete Eviction Pack/i);
-
+    expect(screen.getByText(/Tenant is not paying rent/i)).toBeDefined();
     expect(getStepButton("What's going on?")).toBeDefined();
     expect(getStepButton('Who and where?')).toBeDefined();
     expect(getStepButton('Tenancy details')).toBeDefined();
@@ -218,3 +218,4 @@ describe('EvictionSectionFlow - England complete pack', () => {
     expect(screen.getAllByText(/Court Bundle Index/i).length).toBeGreaterThan(0);
   });
 });
+

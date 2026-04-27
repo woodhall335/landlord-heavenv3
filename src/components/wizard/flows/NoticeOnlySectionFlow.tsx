@@ -240,13 +240,13 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'case_basics',
     label: "What's going on?",
-    description: 'Choose the possession problem and set the correct notice-stage route',
+    description: 'Pick the main reason you need possession. You can confirm the legal grounds next.',
     isComplete: (facts, jurisdiction) => {
       const route = facts.eviction_route as string;
       if (!route) return false;
       // England routes
       if (jurisdiction === 'england') {
-        return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
+        return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]) && Boolean(facts.england_primary_issue);
       }
       // Wales routes
       if (jurisdiction === 'wales') {
