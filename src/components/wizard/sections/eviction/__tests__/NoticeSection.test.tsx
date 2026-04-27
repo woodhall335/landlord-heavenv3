@@ -87,7 +87,9 @@ describe('NoticeSection specialist England ground capture', () => {
       section8_grounds: [],
     });
 
-    expect(screen.getByText(/Generate Your Form 3A/i)).toBeInTheDocument();
+    expect(screen.getByText(/Form 3A Grounds/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Generate Your Form 3A/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Notice checkpoint/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Section 21/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Form 6A/i)).not.toBeInTheDocument();
   });

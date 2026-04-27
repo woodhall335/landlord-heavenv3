@@ -114,36 +114,6 @@ interface N215QuestionFieldsProps {
   mode: 'served' | 'planned';
 }
 
-function StepCheckpointCard({
-  eyebrow,
-  title,
-  description,
-  outputs,
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
-  outputs: string[];
-}) {
-  return (
-    <section className="rounded-[1.5rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_14px_34px_rgba(76,29,149,0.06)]">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6f54c8]">{eyebrow}</p>
-      <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">{title}</h3>
-      <p className="mt-2 max-w-3xl text-sm leading-6 text-[#60597a]">{description}</p>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {outputs.map((output) => (
-          <span
-            key={output}
-            className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
-          >
-            {output}
-          </span>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function NoticeStatusCard({
   label,
   value,
@@ -1158,25 +1128,6 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
 
   return (
     <div className="space-y-6">
-      <StepCheckpointCard
-        eyebrow={isNoticeOnlyMode ? 'Notice checkpoint' : 'Notice and service checkpoint'}
-        title={
-          isNoticeOnlyMode
-            ? `Build the ${isEngland ? 'Form 3A notice' : noticeProductLabel}`
-            : 'Confirm the notice and service details'
-        }
-        description={
-          isNoticeOnlyMode
-            ? 'Answer only the questions that affect the notice, the service guidance, and the proof of service.'
-            : 'Tell us whether you already served a notice or need to generate one now, then we will keep the notice and N215 details aligned.'
-        }
-        outputs={
-          isNoticeOnlyMode
-            ? ['Form 3A', 'N215', 'Service instructions', 'Validity checklist']
-            : ['Form 3A', 'N215', 'Service guide', 'Earliest court timing']
-        }
-      />
-
       {/* ================================================================== */}
       {/* GATING QUESTION: Have you already served a notice? */}
       {/* Only shown in complete_pack mode - notice_only skips this */}
@@ -1253,28 +1204,6 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
               </div>
             </label>
           </div>
-        </div>
-      )}
-
-      {/* Notice-only mode header */}
-      {isNoticeOnlyMode && (
-        <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-5">
-          <div className="flex flex-wrap gap-2">
-            {['Form 3A notice', 'Service details', 'Grounds and dates'].map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-purple-200 bg-white/80 px-3 py-1.5 text-xs font-semibold text-purple-900 shadow-sm"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-          <h4 className="mt-4 text-sm font-medium text-purple-900">
-            Generate Your {isEngland ? 'Form 3A' : noticeProductLabel}
-          </h4>
-          <p className="mt-1 text-sm leading-6 text-purple-700">
-            Complete the details below to prepare your court-ready eviction notice.
-          </p>
         </div>
       )}
 

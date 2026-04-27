@@ -209,7 +209,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
     await screen.findByText(/Complete Eviction Pack/i);
     await user.click(getStepButton('Review your court-ready pack'));
 
-    await screen.findByText(/Core document checkpoints/i);
+    await screen.findByText(/Review the completed documents in this pack/i);
 
     expect(screen.getAllByText(/Form N5 - Claim for Possession/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Form N119 - Particulars of Claim/i).length).toBeGreaterThan(0);

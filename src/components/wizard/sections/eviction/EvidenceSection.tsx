@@ -516,9 +516,9 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
       <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
         <h4 className="text-base font-semibold text-[#20103f]">Service and chronology details</h4>
         <p className="mt-2 text-sm leading-6 text-[#62597c]">
-          Keep this step focused on service proof, the generated chronology, and any extra incident detail that should not be missed.
+          Record how the notice was served, review the generated chronology, and add only the extra detail the pack still needs.
         </p>
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <div className="mt-4 space-y-4">
           <label className="block">
             <span className="text-sm font-medium text-[#27134a]">
               How can you prove service of the notice?
@@ -532,66 +532,66 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
             />
           </label>
 
-          <div className="space-y-4">
-            {generatedChronology.paragraphs.length > 0 && (
-              <div className="rounded-2xl border border-[#e4d8ff] bg-[#faf7ff] px-4 py-4">
-                <p className="text-sm font-semibold text-[#27134a]">Generated chronology preview</p>
-                <div className="mt-2 space-y-2 text-sm leading-6 text-[#62597c]">
-                  {generatedChronology.paragraphs.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
+          {generatedChronology.paragraphs.length > 0 && (
+            <div className="rounded-2xl border border-[#e4d8ff] bg-[#faf7ff] px-4 py-4">
+              <p className="text-sm font-semibold text-[#27134a]">Generated chronology preview</p>
+              <div className="mt-2 space-y-2 text-sm leading-6 text-[#62597c]">
+                {generatedChronology.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
               </div>
-            )}
+            </div>
+          )}
+
+          <label className="block">
+            <span className="text-sm font-medium text-[#27134a]">
+              Additional chronology or breach detail
+            </span>
+            <textarea
+              value={communicationTimeline.log || ''}
+              onChange={(e) => void mergeTimeline({ log: e.target.value })}
+              rows={4}
+              className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+              placeholder="Add anything the generated chronology should not miss, such as a disputed breach, a promise to pay, a refused inspection, or another key incident."
+            />
+            <p className="mt-2 text-xs leading-5 text-[#7a7195]">
+              We build the main chronology from your arrears schedule, notice dates, and contact history. Use this box only for extra detail the pack still needs explained.
+            </p>
+          </label>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="block">
+              <span className="text-sm font-medium text-[#27134a]">How many payment-chase or contact attempts have you made?</span>
+              <input
+                type="number"
+                min={0}
+                value={communicationTimeline.total_attempts ?? ''}
+                onChange={(e) =>
+                  void mergeTimeline({
+                    total_attempts: e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+                className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
+                placeholder="0"
+              />
+            </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-[#27134a]">
-                Additional chronology or breach detail
-              </span>
-              <textarea
-                value={communicationTimeline.log || ''}
-                onChange={(e) => void mergeTimeline({ log: e.target.value })}
-                rows={4}
+              <span className="text-sm font-medium text-[#27134a]">How would you describe the tenant's response?</span>
+              <select
+                value={communicationTimeline.tenant_responsiveness || ''}
+                onChange={(e) => void mergeTimeline({ tenant_responsiveness: e.target.value || null })}
                 className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
-                placeholder="Add anything the generated chronology should not miss, such as a disputed breach, a promise to pay, a refused inspection, or another key incident."
-              />
-              <p className="mt-2 text-xs leading-5 text-[#7a7195]">
-                We build the main chronology from your arrears schedule, notice dates, and contact history. Use this box only for extra incident detail or anything unusual the pack should explain.
-              </p>
+              >
+                <option value="">Select one</option>
+                {RESPONSIVENESS_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </label>
           </div>
-
-          <label className="block">
-            <span className="text-sm font-medium text-[#27134a]">How many payment-chase or contact attempts have you made?</span>
-            <input
-              type="number"
-              min={0}
-              value={communicationTimeline.total_attempts ?? ''}
-              onChange={(e) =>
-                void mergeTimeline({
-                  total_attempts: e.target.value === '' ? null : Number(e.target.value),
-                })
-              }
-              className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
-              placeholder="0"
-            />
-          </label>
-
-          <label className="block">
-            <span className="text-sm font-medium text-[#27134a]">How would you describe the tenant's response?</span>
-            <select
-              value={communicationTimeline.tenant_responsiveness || ''}
-              onChange={(e) => void mergeTimeline({ tenant_responsiveness: e.target.value || null })}
-              className="mt-2 w-full rounded-2xl border border-[#dccbff] bg-[#fcfbff] px-4 py-3 text-sm text-[#221342] outline-none transition focus:border-[#7C3AED]"
-            >
-              <option value="">Select one</option>
-              {RESPONSIVENESS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
         </div>
       </section>
 

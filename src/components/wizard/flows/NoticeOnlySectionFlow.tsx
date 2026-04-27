@@ -1489,8 +1489,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         {englandNoticeOnlyProofEntries.length > 0 ? (
           <DocumentProofShowcase
             compact
-            title="Actual draft checkpoints from this case"
-            description="Open each completed notice-stage document from your current answers, including the official notice, the service paperwork, and every support document in the pack."
+            title="Review the completed documents in this pack"
+            description="Open each completed notice-stage document from your current answers, including the official notice, service paperwork, and support documents."
             entries={englandNoticeOnlyProofEntries}
           />
         ) : null}

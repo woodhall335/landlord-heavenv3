@@ -23,8 +23,8 @@ interface DocumentProofShowcaseProps {
 }
 
 export function DocumentProofShowcase({
-  title = 'Actual draft proof',
-  description = 'These first-page previews are generated from your current answers so you can sense-check the paperwork before payment.',
+  title = 'Review the completed documents',
+  description = 'Open the completed documents generated from your current answers and check them before you continue.',
   entries,
   compact = false,
 }: DocumentProofShowcaseProps) {
@@ -113,10 +113,7 @@ export function DocumentProofShowcase({
       >
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6d28d9]">
-              Live preview proof
-            </p>
-            <h3 className={`mt-2 font-semibold tracking-tight text-[#111827] ${compact ? 'text-lg' : 'text-xl'}`}>
+            <h3 className={`font-semibold tracking-tight text-[#111827] ${compact ? 'text-lg' : 'text-xl'}`}>
               {title}
             </h3>
             <p className={`mt-2 text-sm text-slate-600 ${compact ? 'leading-6' : 'leading-7'}`}>{description}</p>

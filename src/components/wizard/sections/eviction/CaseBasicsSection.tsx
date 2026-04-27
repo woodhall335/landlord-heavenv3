@@ -375,7 +375,7 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                         alt={issue.imageAlt}
                         width={720}
                         height={360}
-                        className="h-[148px] w-full object-cover"
+                        className="h-[188px] w-full object-cover"
                         sizes="(min-width: 768px) 50vw, 100vw"
                       />
                     </div>

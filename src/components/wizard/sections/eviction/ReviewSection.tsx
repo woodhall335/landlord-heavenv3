@@ -227,31 +227,10 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       </ReviewCard>
 
       {caseProofEntries.length > 0 ? (
-        <ReviewCard
-          title="Core document checkpoints"
-          description="Open the completed versions of the key pack documents from this case before you generate or pay. This should feel like a document review, not just a tick-box confirmation."
-        >
-          <div className="flex flex-wrap gap-2">
-            {caseProofEntries.map((entry) => (
-              <span
-                key={entry.id}
-                className="rounded-full border border-[#ddd0ff] bg-[#faf7ff] px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
-              >
-                {entry.title}
-              </span>
-            ))}
-          </div>
-          <p className="mt-3 text-sm leading-6 text-[#62597c]">
-            Tap any document below to open the full completed version in the in-page viewer.
-          </p>
-        </ReviewCard>
-      ) : null}
-
-      {caseProofEntries.length > 0 ? (
         <DocumentProofShowcase
           compact
-          title="Open the completed documents from this case"
-          description="These live previews let you open the actual notice, court-form, service, and witness paperwork generated from this case before you pay for the full pack."
+          title="Review the completed documents in this pack"
+          description="Open the actual notice, court forms, service paperwork, and support documents generated from this case before you generate the full pack."
           entries={caseProofEntries}
         />
       ) : null}
