@@ -109,6 +109,7 @@ export function PreviewPageLayout({
           thumbnailUrl:
             document.thumbnailUrl ||
             (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : ''),
+          previewUrl: document.previewUrl,
           badge: document.category,
         }))
         .filter((document) => Boolean(document.thumbnailUrl)),

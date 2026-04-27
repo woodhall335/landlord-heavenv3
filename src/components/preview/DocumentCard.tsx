@@ -14,6 +14,8 @@ export interface DocumentInfo {
   documentId?: string;
   /** Pre-loaded thumbnail URL (optional) */
   thumbnailUrl?: string;
+  /** Full preview URL for watermarked in-page document viewing */
+  previewUrl?: string;
 }
 
 interface DocumentCardProps {
@@ -38,15 +40,15 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 export function DocumentCard({ document, isLocked, onUnlock, onDownload }: DocumentCardProps) {
   const IconComponent = iconMap[document.icon] || FileText;
   const [showPreview, setShowPreview] = useState(false);
-  const [thumbnailLoading, setThumbnailLoading] = useState(false);
   const [thumbnailError, setThumbnailError] = useState(false);
 
   // Determine thumbnail URL - either pre-loaded or from API
   const thumbnailUrl = document.thumbnailUrl ||
     (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : null);
+  const previewUrl = document.previewUrl || null;
 
   const handlePreviewClick = () => {
-    if (thumbnailUrl) {
+    if (previewUrl || thumbnailUrl) {
       setShowPreview(true);
     }
   };
@@ -65,7 +67,6 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                 src={thumbnailUrl}
                 alt={`Preview of ${document.title}`}
                 className="h-full w-full object-contain bg-white"
-                onLoad={() => setThumbnailLoading(false)}
                 onError={(e) => {
                   // Log thumbnail load failure for debugging (works in both dev and production)
                   const img = e.currentTarget;
@@ -108,7 +109,6 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                   }
 
                   setThumbnailError(true);
-                  setThumbnailLoading(false);
                 }}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg transition-colors flex items-center justify-center">
@@ -163,13 +163,13 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
       </div>
 
       {/* Preview Modal */}
-      {showPreview && thumbnailUrl && (
+      {showPreview && (previewUrl || thumbnailUrl) && (
         <div
           className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
           onClick={() => setShowPreview(false)}
         >
           <div
-            className="relative bg-white rounded-xl shadow-2xl max-w-2xl max-h-[90vh] overflow-hidden"
+            className="relative bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[92vh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-4 border-b">
@@ -181,16 +181,26 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                 <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
-            <div className="p-4 overflow-auto max-h-[calc(90vh-120px)]">
-              <img
-                src={thumbnailUrl}
-                alt={`Full preview of ${document.title}`}
-                className="mx-auto h-auto max-w-full rounded-lg bg-white shadow-lg"
-              />
+            <div className="p-4 overflow-auto max-h-[calc(92vh-120px)] bg-gray-50">
+              {previewUrl ? (
+                <iframe
+                  src={previewUrl}
+                  title={`${document.title} full preview`}
+                  className="h-[75vh] w-full rounded-lg border bg-white shadow-lg"
+                  loading="lazy"
+                  sandbox="allow-scripts allow-same-origin"
+                />
+              ) : thumbnailUrl ? (
+                <img
+                  src={thumbnailUrl}
+                  alt={`Full preview of ${document.title}`}
+                  className="mx-auto h-auto max-w-full rounded-lg bg-white shadow-lg"
+                />
+              ) : null}
             </div>
             <div className="p-4 border-t bg-gray-50 flex items-center justify-between">
               <p className="text-sm text-gray-500">
-                This is a watermarked preview of the first page only.
+                This is a watermarked preview. Downloads stay locked until payment.
               </p>
               <button
                 onClick={onUnlock}

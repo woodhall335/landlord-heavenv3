@@ -1058,10 +1058,16 @@ export default function WizardPreviewPage() {
 
       // For pre-purchase flows with in-memory previews, use dedicated thumbnail endpoints.
       let thumbnailUrl: string | undefined;
+      let previewUrl: string | undefined;
       if (product === 'notice_only') {
         // Map config IDs to document_type for the thumbnail API
         const docTypeForThumbnail = possibleTypes[0] || doc.id;
         thumbnailUrl = `/api/notice-only/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
+        previewUrl = `/api/notice-only/embed/${caseId}?pack=notice_only&document_type=${encodeURIComponent(docTypeForThumbnail)}`;
+      } else if (product === 'complete_pack') {
+        const docTypeForThumbnail = possibleTypes[0] || doc.id;
+        thumbnailUrl = `/api/notice-only/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
+        previewUrl = `/api/notice-only/embed/${caseId}?pack=complete_pack&document_type=${encodeURIComponent(docTypeForThumbnail)}`;
       } else if (product === 'money_claim' || product === 'sc_money_claim') {
         // Map config IDs to document_type for the money claim thumbnail API
         const docTypeForThumbnail = possibleTypes[0] || doc.id;
@@ -1076,6 +1082,7 @@ export default function WizardPreviewPage() {
         // For products with dedicated preview routes, use those thumbnail endpoints.
         // For other products, DocumentCard will use documentId to fetch from /api/documents/thumbnail
         thumbnailUrl: thumbnailUrl,
+        previewUrl: previewUrl,
       };
     });
   };
