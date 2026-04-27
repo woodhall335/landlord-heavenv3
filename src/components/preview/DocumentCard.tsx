@@ -46,22 +46,41 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
   const thumbnailUrl = document.thumbnailUrl ||
     (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : null);
   const previewUrl = document.previewUrl || null;
+  const canPreview = Boolean(previewUrl || thumbnailUrl);
 
   const handlePreviewClick = () => {
-    if (previewUrl || thumbnailUrl) {
+    if (canPreview) {
       setShowPreview(true);
     }
   };
 
   return (
     <>
-      <div className={`border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-all ${isLocked ? 'border-gray-200' : 'border-primary/20'}`}>
+      <div
+        className={`border rounded-lg p-4 bg-white shadow-sm transition-all ${isLocked ? 'border-gray-200' : 'border-primary/20'} ${canPreview ? 'cursor-pointer hover:shadow-md' : 'hover:shadow-md'}`}
+        onClick={canPreview ? handlePreviewClick : undefined}
+        onKeyDown={
+          canPreview
+            ? (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  handlePreviewClick();
+                }
+              }
+            : undefined
+        }
+        role={canPreview ? 'button' : undefined}
+        tabIndex={canPreview ? 0 : undefined}
+      >
         <div className="flex items-start gap-4">
           {/* Thumbnail or Icon */}
           {thumbnailUrl && !thumbnailError ? (
             <div
               className="relative w-16 h-22 flex-shrink-0 cursor-pointer group overflow-hidden rounded-lg border bg-white shadow-sm"
-              onClick={handlePreviewClick}
+              onClick={(event) => {
+                event.stopPropagation();
+                handlePreviewClick();
+              }}
             >
               <img
                 src={thumbnailUrl}
@@ -127,8 +146,18 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
           )}
 
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 truncate">{document.title}</h3>
-            <p className="text-sm text-gray-600 mt-1 line-clamp-2">{document.description}</p>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h3 className="font-semibold text-gray-900 truncate">{document.title}</h3>
+                <p className="text-sm text-gray-600 mt-1 line-clamp-2">{document.description}</p>
+              </div>
+              {canPreview ? (
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-violet-700">
+                  <Eye className="w-3.5 h-3.5" />
+                  Preview
+                </span>
+              ) : null}
+            </div>
             <div className="flex items-center gap-3 mt-2">
               {document.pages && (
                 <span className="text-xs text-gray-400">{document.pages}</span>
@@ -143,7 +172,10 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
           <div className="flex-shrink-0">
             {isLocked ? (
               <button
-                onClick={onUnlock}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onUnlock();
+                }}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-sm font-medium"
               >
                 <Lock className="w-4 h-4" />
@@ -151,7 +183,10 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
               </button>
             ) : (
               <button
-                onClick={onDownload}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDownload?.();
+                }}
                 className="flex items-center gap-2 px-4 py-2 bg-purple-100 text-primary rounded-lg hover:bg-primary hover:text-white transition-colors text-sm font-medium"
               >
                 <Download className="w-4 h-4" />

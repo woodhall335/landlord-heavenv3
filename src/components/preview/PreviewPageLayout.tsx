@@ -1,9 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { DocumentList } from './DocumentList';
 import { DocumentInfo } from './DocumentCard';
-import { DocumentProofShowcase } from './DocumentProofShowcase';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { CheckCircle, Shield, Clock, Download, Scale, AlertTriangle, XCircle } from 'lucide-react';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
@@ -58,30 +57,6 @@ function getPreviewSubtitle(product: string, documentCount: number): string {
   return `${documentCount} documents ready for instant download`;
 }
 
-function getProofCopy(product: string): { title: string; description: string } {
-  if (product === 'notice_only' || product === 'complete_pack') {
-    return {
-      title: 'Actual eviction draft generated from your answers',
-      description:
-        'These are live first-page previews from this case, so you can sense-check the notice and supporting paperwork before payment instead of relying only on sample documents.',
-    };
-  }
-
-  if (product === 'money_claim') {
-    return {
-      title: 'Actual money claim draft generated from your answers',
-      description:
-        'These are live first-page previews from this case, so you can review the debt-recovery paperwork before payment rather than relying only on sample pack pages.',
-    };
-  }
-
-  return {
-    title: 'Actual draft generated from your answers',
-    description:
-      'These are live first-page previews from this case, so you can check the paperwork before payment without relying only on sample documents.',
-  };
-}
-
 export function PreviewPageLayout({
   caseId,
   product,
@@ -96,25 +71,8 @@ export function PreviewPageLayout({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [complianceBlock, setComplianceBlock] = useState<ComplianceBlockState | null>(null);
-  const e2eModeEnabled = useMemo(() => process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true', []);
-  const previewSubtitle = useMemo(() => getPreviewSubtitle(product, documents.length), [documents.length, product]);
-  const proofCopy = useMemo(() => getProofCopy(product), [product]);
-  const proofEntries = useMemo(
-    () =>
-      documents
-        .map((document) => ({
-          id: document.id,
-          title: document.title,
-          description: document.description,
-          thumbnailUrl:
-            document.thumbnailUrl ||
-            (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : ''),
-          previewUrl: document.previewUrl,
-          badge: document.category,
-        }))
-        .filter((document) => Boolean(document.thumbnailUrl)),
-    [documents]
-  );
+  const e2eModeEnabled = process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true';
+  const previewSubtitle = getPreviewSubtitle(product, documents.length);
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -227,14 +185,6 @@ export function PreviewPageLayout({
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Document List - 2 columns */}
           <div className="lg:col-span-2 space-y-6">
-            {proofEntries.length > 0 ? (
-              <DocumentProofShowcase
-                title={proofCopy.title}
-                description={proofCopy.description}
-                entries={proofEntries}
-              />
-            ) : null}
-
             {/* What's Included Card */}
             <div className="bg-white rounded-xl shadow-sm border p-6">
               <div className="flex items-center justify-between mb-4">

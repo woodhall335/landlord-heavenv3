@@ -48,13 +48,11 @@ import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/ri';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
-import { DocumentProofShowcase } from '@/components/preview';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/EnglandPossessionWorkspaceShell';
 import { isWizardThemeV2 } from '@/components/wizard/shared/theme';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
-import { buildEnglandPackProofEntries } from '../sections/eviction/buildEnglandPackProofEntries';
 
 // Reuse section components from eviction flow
 import { CaseBasicsSection } from '../sections/eviction/CaseBasicsSection';
@@ -1357,18 +1355,6 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     }
   };
 
-  const englandNoticeOnlyProofEntries = useMemo(() => {
-    if (jurisdiction !== 'england' || facts.eviction_route !== 'section_8') {
-      return [];
-    }
-
-    return buildEnglandPackProofEntries({
-      product: 'notice_only',
-      caseId,
-      facts,
-    });
-  }, [caseId, facts, jurisdiction]);
-
   // Render review section
   const renderReviewSection = () => {
     const overallBlockers = getAllBlockers();
@@ -1485,15 +1471,6 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             )}
           </div>
         </div>
-
-        {englandNoticeOnlyProofEntries.length > 0 ? (
-          <DocumentProofShowcase
-            compact
-            title="Review the completed documents in this pack"
-            description="Open each completed notice-stage document from your current answers, including the official notice, service paperwork, and support documents."
-            entries={englandNoticeOnlyProofEntries}
-          />
-        ) : null}
 
         {upgradePrompt ? (
           <div className="rounded-[1.4rem] border border-[#e4d7ff] bg-[linear-gradient(180deg,#fcfaff_0%,#f5eeff_100%)] px-4 py-4 shadow-sm">
