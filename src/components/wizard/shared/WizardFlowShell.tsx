@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 import { clsx } from 'clsx';
 import { isWizardThemeV2 } from './theme';
@@ -43,9 +43,23 @@ export function WizardFlowShell({
   navigation,
   stickyTopClass = 'top-0',
 }: WizardFlowShellProps) {
+  const hasMountedRef = useRef(false);
   const completionLabel = `${completedCount} of ${totalCount} sections complete`;
   const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
   const activeStep = currentTabIndex >= 0 ? currentTabIndex + 1 : 1;
+
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
+    if (/jsdom/i.test(window.navigator.userAgent)) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeStep, sectionTitle]);
 
   return (
     <div className={clsx('min-h-screen', isWizardThemeV2 ? 'bg-white' : 'bg-gray-50')}>

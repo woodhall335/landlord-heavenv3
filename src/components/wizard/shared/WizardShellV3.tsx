@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { WizardMainCardV3 } from './WizardMainCardV3';
 import { GuidancePanelV3 } from './GuidancePanelV3';
 import { WizardFooterNavV3 } from './WizardFooterNavV3';
@@ -67,6 +67,7 @@ export function WizardShellV3({
   saveState = 'idle',
   saveStatusLabel,
 }: WizardShellV3Props) {
+  const hasMountedRef = useRef(false);
   const currentMeta: StepMetadata | undefined = currentStepId
     ? getStepMetadata(product, jurisdiction, currentStepId)
     : undefined;
@@ -84,8 +85,19 @@ export function WizardShellV3({
         ? 'Saved just now'
         : 'Auto-save is on');
   const resolvedGuidancePanel = guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />;
-  const compactMobileGuidancePanel =
-    guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} compact />;
+
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
+    if (/jsdom/i.test(window.navigator.userAgent)) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentStepId, activeStepIndex]);
 
   return (
     <div
@@ -104,64 +116,6 @@ export function WizardShellV3({
       />
 
       <div style={{ height: "calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))" }} aria-hidden="true" />
-
-      <div className="mx-auto max-w-[1240px] space-y-2.5 px-4 pt-3 lg:hidden">
-        <section className="rounded-[1.25rem] border border-[#e6dcff] bg-white/92 px-3.5 py-3 shadow-[0_12px_28px_rgba(76,29,149,0.07)]">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7b56d8]">
-                Progress
-              </p>
-              <p className="mt-1 text-[15px] font-semibold tracking-tight text-[#20103f]">
-                {percentageLabel}
-              </p>
-            </div>
-            <span className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1 text-[11px] font-semibold text-[#5b36b3] shadow-sm">
-              Step {activeStepIndex + 1} of {tabs.length}
-            </span>
-          </div>
-          <p className="mt-2 text-xs leading-5 text-[#5e5872]">{completionLabel}</p>
-          {issueCount > 0 ? (
-            <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-semibold text-amber-900 shadow-sm">
-                {issueCount} need attention
-              </span>
-            </div>
-          ) : null}
-          <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-[#ede4ff]">
-            <div
-              className="h-full rounded-full bg-[linear-gradient(90deg,#7c3aed,#5b21b6)] shadow-[0_8px_24px_rgba(91,33,182,0.28)] transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="mt-2.5 flex items-center gap-2 rounded-[1rem] border border-[#ece4ff] bg-[#fcfbff] px-3 py-2 shadow-sm">
-            <span
-              className={`inline-flex h-2.5 w-2.5 rounded-full ${
-                saveState === 'saving'
-                  ? 'animate-pulse bg-amber-500'
-                  : saveState === 'saved'
-                    ? 'bg-emerald-500'
-                    : 'bg-[#8b5cf6]'
-              }`}
-            />
-            <p className="text-xs font-medium text-[#4f4768]">{resolvedSaveLabel}</p>
-          </div>
-        </section>
-        <details className="group">
-          <summary className="list-none cursor-pointer rounded-[1.25rem] border border-[#e6dcff] bg-white/92 px-3.5 py-3 shadow-sm">
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-[#241247]">Step help and checklist</p>
-                <p className="mt-1 text-[11px] leading-4.5 text-[#60597a]">
-                  Open Ask Heaven for step-by-step help.
-                </p>
-              </div>
-              <span className="text-sm font-medium text-[#7650cd] transition group-open:rotate-180">⌄</span>
-            </div>
-          </summary>
-          <div className="mt-2.5">{compactMobileGuidancePanel}</div>
-        </details>
-      </div>
 
       <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-stretch gap-6 px-4 pb-12 pt-4 lg:grid-cols-[minmax(0,1fr)_340px]">
         <WizardMainCardV3

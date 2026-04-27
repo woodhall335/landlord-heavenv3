@@ -7,6 +7,7 @@
 
 'use client';
 
+import Image from 'next/image';
 import React, { useEffect, useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 
@@ -34,6 +35,8 @@ interface SelectorCard {
   id: EnglandPrimaryIssueId;
   title: string;
   description: string;
+  imageSrc: string;
+  imageAlt: string;
 }
 
 interface SelectorSubtype {
@@ -48,41 +51,57 @@ const ENGLAND_PRIMARY_ISSUES: SelectorCard[] = [
     id: 'rent_not_paid',
     title: 'Tenant is not paying rent',
     description: 'Use this when the main issue is unpaid rent and you need an arrears-led notice.',
+    imageSrc: '/images/tenant-is-not-paying-rent.webp',
+    imageAlt: 'Tenant is not paying rent',
   },
   {
     id: 'rent_paid_late',
     title: 'Tenant keeps paying late',
     description: 'Use this when rent is persistently late even if some payments do arrive.',
+    imageSrc: '/images/tenant-keeps-paying-late.webp',
+    imageAlt: 'Tenant keeps paying late',
   },
   {
     id: 'breach_or_damage',
     title: 'Tenant has broken the tenancy or caused damage',
     description: 'Use this for breach of terms, damage to the property, or damage to furniture.',
+    imageSrc: '/images/tenant-has-broken-the-tenancy-or-caused-damage.webp',
+    imageAlt: 'Tenant has broken the tenancy or caused damage',
   },
   {
     id: 'antisocial_or_criminal',
     title: 'Serious antisocial or criminal behaviour',
     description: 'Use this for nuisance, serious criminal conduct, or riot-related behaviour.',
+    imageSrc: '/images/serious-antisocial-or-criminal-behaviour.webp',
+    imageAlt: 'Serious antisocial or criminal behaviour',
   },
   {
     id: 'need_property_back',
     title: 'I need the property back',
     description: 'Use this if you need possession because of sale, occupation, works, or rehousing.',
+    imageSrc: '/images/i-need-the-property-back.webp',
+    imageAlt: 'I need the property back',
   },
   {
     id: 'right_to_rent',
     title: 'Immigration or right to rent issue',
     description: 'Use this where the tenancy is affected by right to rent restrictions.',
+    imageSrc: '/images/immigration-or-right-to-rent-issue.webp',
+    imageAlt: 'Immigration or right to rent issue',
   },
   {
     id: 'specialist_case',
     title: 'Specialist housing or employment case',
     description: 'Use this for mortgagee, student, supported housing, or employment-linked possession routes.',
+    imageSrc: '/images/specialist-housing-or-employment-case.webp',
+    imageAlt: 'Specialist housing or employment case',
   },
   {
     id: 'not_sure',
     title: "I'm not sure yet",
     description: 'Start with the broad route now and choose the legal ground on the next step.',
+    imageSrc: '/images/i-am-not-sure-yet.webp',
+    imageAlt: "I'm not sure yet",
   },
 ];
 
@@ -350,8 +369,22 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                     }`}
                     aria-pressed={selected}
                   >
-                    <p className="text-sm font-semibold text-[#20103f]">{issue.title}</p>
-                    <p className="mt-2 text-sm leading-6 text-[#60597a]">{issue.description}</p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-[88px] shrink-0 overflow-hidden rounded-[1rem] border border-[#eadfff] bg-white shadow-sm">
+                        <Image
+                          src={issue.imageSrc}
+                          alt={issue.imageAlt}
+                          width={240}
+                          height={180}
+                          className="h-auto w-full object-cover"
+                          sizes="88px"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-[#20103f]">{issue.title}</p>
+                        <p className="mt-2 text-sm leading-6 text-[#60597a]">{issue.description}</p>
+                      </div>
+                    </div>
                   </button>
                 );
               })}
