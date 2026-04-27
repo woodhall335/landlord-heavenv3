@@ -4,8 +4,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import {
   RiAddLine,
-  RiArrowLeftLine,
-  RiArrowRightLine,
   RiDeleteBinLine,
   RiExternalLinkLine,
   RiLoader4Line,
@@ -2304,6 +2302,7 @@ export function Section13WizardFlow({
       jurisdiction={jurisdiction}
       currentStepId={currentStep.id}
       saveState={saveState}
+      statusChips={['Save answers as you go']}
       banner={
         saveError ? (
           <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
@@ -2322,13 +2321,12 @@ export function Section13WizardFlow({
             type="button"
             onClick={() => setCurrentStepIndex((index) => Math.max(0, index - 1))}
             disabled={currentStepIndex === 0}
-            className={`inline-flex items-center justify-center rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
+            className={`px-4 py-2 text-sm font-medium rounded-xl border transition-colors ${
               currentStepIndex === 0
-                ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
-                : 'border-violet-200 bg-white text-violet-900 hover:bg-violet-50'
+                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                : 'bg-white text-violet-900 border-violet-200 hover:bg-violet-50'
             }`}
           >
-            <RiArrowLeftLine className="mr-2 h-4 w-4" />
             Back
           </button>
 
@@ -2343,14 +2341,13 @@ export function Section13WizardFlow({
                 setCurrentStepIndex((index) => Math.min(STEP_CONFIG.length - 1, index + 1));
               }}
               disabled={currentStepIndex === STEP_CONFIG.length - 1}
-              className={`inline-flex min-w-[128px] items-center justify-center rounded-xl px-7 py-2.5 text-sm font-semibold transition-all ${
+              className={`px-7 py-2.5 text-sm font-semibold rounded-xl transition-all min-w-[160px] ${
                 currentStepIndex === STEP_CONFIG.length - 1
-                  ? 'cursor-not-allowed bg-gray-100 text-gray-400 shadow-none'
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
                   : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_6px_16px_rgba(109,40,217,0.28)] hover:from-violet-700 hover:to-fuchsia-700'
               }`}
             >
               {currentStep.id === 'preview_checkout' && !orderStatus?.paid ? 'Go to checkout preview' : 'Continue'}
-              <RiArrowRightLine className="ml-2 h-4 w-4" />
             </button>
           </div>
         </>

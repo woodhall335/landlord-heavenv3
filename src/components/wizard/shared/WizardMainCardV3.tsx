@@ -30,14 +30,14 @@ export function WizardMainCardV3({
     <main className="min-w-0 flex flex-1 flex-col lg:max-w-[860px]">
       {banner}
       <div className="flex flex-col overflow-hidden rounded-[1.7rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,246,255,0.96))] shadow-[0_28px_90px_rgba(76,29,149,0.12)] backdrop-blur-sm md:rounded-[2rem]">
-        <div className="sticky top-[calc(var(--site-header-height)+var(--s21-banner-height)+var(--wizard-topbar-height)+10px)] z-20 border-b border-[#efe6ff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,246,255,0.96))] px-4 pb-4 pt-4 shadow-[0_10px_28px_rgba(76,29,149,0.07)] backdrop-blur-xl sm:px-5 sm:pb-5 sm:pt-5 md:px-8 md:pb-6 md:pt-8">
+        <div className="z-10 border-b border-[#efe6ff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,246,255,0.96))] px-4 pb-4 pt-4 shadow-[0_10px_28px_rgba(76,29,149,0.05)] sm:px-5 sm:pb-5 sm:pt-5 md:px-8 md:pb-5 md:pt-5">
           {shellTitle ? (
-            <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7650cd] sm:text-[11px]">
+            <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7650cd] sm:text-[11px]">
               {shellTitle}
             </div>
           ) : null}
           {stepNumber && totalSteps ? (
-            <div className="mb-4 inline-flex rounded-full border border-[#ddd1ff] bg-white px-3 py-1.5 text-[11px] font-semibold text-[#5b36b3] shadow-sm sm:mb-5 sm:px-3.5 sm:text-xs">
+            <div className="mb-4 inline-flex rounded-full border border-[#ddd1ff] bg-white px-3 py-1.5 text-[11px] font-semibold text-[#5b36b3] shadow-sm sm:px-3.5 sm:text-xs">
               Step {stepNumber} of {totalSteps}
             </div>
           ) : null}

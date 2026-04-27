@@ -756,7 +756,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
 
   return (
     <ShellComponent
-      title={`${jurisdictionLabel} Pack`}
+      title={jurisdiction === 'england' ? 'Money Claim Pack' : `${jurisdictionLabel} Pack`}
       completedCount={completedCount}
       totalCount={visibleSections.length}
       progress={progress}

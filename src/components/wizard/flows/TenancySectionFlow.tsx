@@ -935,7 +935,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
 
   return (
     <ShellComponent
-      title={`${jurisdictionLabel} Pack`}
+      title={jurisdiction === 'england' ? 'Tenancy Agreement Generator' : `${jurisdictionLabel} Pack`}
       completedCount={completedCount}
       totalCount={visibleSections.length}
       progress={progress}

@@ -5,11 +5,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 
-import { Button, Input } from '@/components/ui';
+import { Input } from '@/components/ui';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
-import { WizardFooterNavV3 } from '@/components/wizard/shared/WizardFooterNavV3';
-import { WizardMainCardV3 } from '@/components/wizard/shared/WizardMainCardV3';
-import { WizardTopBarV3 } from '@/components/wizard/shared/WizardTopBarV3';
+import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
@@ -1565,15 +1563,15 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
         className="england-tenancy-standalone min-h-screen"
         style={{
           ...themeStyle,
-          backgroundColor: '#150733',
+          backgroundColor: '#f7f4ff',
           backgroundImage:
-            "linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(10,5,28,0.52) 45%, rgba(30,12,72,0.64) 100%), url('/images/bg.webp')",
+            "radial-gradient(circle at top, rgba(234,221,255,0.92) 0%, rgba(248,244,255,0.98) 34%, rgba(255,255,255,1) 74%), linear-gradient(180deg, rgba(255,255,255,0.84) 0%, rgba(247,242,255,0.98) 100%), url('/images/bg.webp')",
           backgroundSize: 'cover',
           backgroundPosition: 'center top',
         }}
       >
         <div className="mx-auto flex min-h-screen max-w-4xl items-center justify-center px-4">
-          <div className="w-full max-w-xl rounded-2xl border border-violet-200/40 bg-white/95 p-8 text-center shadow-[0_24px_60px_rgba(20,8,48,0.22)] backdrop-blur">
+          <div className="w-full max-w-xl rounded-2xl border border-[#e6dcff] bg-white/95 p-8 text-center shadow-[0_24px_60px_rgba(76,29,149,0.12)] backdrop-blur">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50">
               <Image src={profile.icon} alt="" width={44} height={44} className="h-11 w-11 object-contain" />
             </div>
@@ -1594,67 +1592,56 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
   }
 
   return (
-    <div
-      className="england-tenancy-standalone min-h-screen pb-28 lg:pb-14"
-      style={{
-        ...themeStyle,
-        backgroundColor: '#150733',
-        backgroundImage:
-          "linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(10,5,28,0.52) 45%, rgba(30,12,72,0.64) 100%), url('/images/bg.webp')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center top',
-      }}
-    >
-      <WizardTopBarV3 tabs={tabs} getStepMetadataForId={() => undefined} />
-      <div
-        style={{
-          height:
-            'calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))',
-        }}
-        aria-hidden="true"
-      />
+    <WizardShellV3
+      title={profile.eyebrow}
+      completedCount={stepCompletion.filter((entry) => entry.isComplete).length}
+      totalCount={visibleSteps.length}
+      progress={visibleSteps.length > 0 ? (stepCompletion.filter((entry) => entry.isComplete).length / visibleSteps.length) * 100 : 0}
+      tabs={tabs}
+      sectionTitle={step.title}
+      sectionDescription={step.description}
+      product="tenancy_agreement"
+      jurisdiction={jurisdiction}
+      currentStepId={step.id}
+      saveState={saveState}
+      statusChips={['Save answers as you go']}
+      stepIconPathOverride={profile.stepIcons[step.id] || profile.icon}
+      getStepMetadataForId={() => undefined}
+      navigation={(
+        <>
+          <button
+            type="button"
+            onClick={previous}
+            disabled={activeStep === 0 || saving || uploading}
+            className={`
+              px-4 py-2 text-sm font-medium rounded-xl border transition-colors
+              ${activeStep === 0 || saving || uploading
+                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                : 'bg-white text-violet-900 border-violet-200 hover:bg-violet-50'}
+            `}
+          >
+            Back
+          </button>
 
-      <div className="mx-auto max-w-[920px] px-4 pb-10 pt-4">
-        <WizardMainCardV3
-          sectionTitle={step.title}
-          sectionDescription={step.description}
-          stepIconPath={profile.stepIcons[step.id] || profile.icon}
-          stepNumber={activeStep + 1}
-          totalSteps={visibleSteps.length}
-          navigation={
-            <div className="hidden lg:block">
-              <WizardFooterNavV3
-                leftSlot={
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={previous}
-                    disabled={activeStep === 0 || saving || uploading}
-                    className="!rounded-xl !border !border-violet-200 !bg-white !px-6 !py-3 !text-violet-950 !shadow-sm"
-                  >
-                    Back
-                  </Button>
-                }
-                centerSlot={
-                  <span>
-                    {stepCompletion[activeStep]?.completed || 0}/{stepCompletion[activeStep]?.total || 0} required answered
-                  </span>
-                }
-                rightSlot={
-                  <Button
-                    type="button"
-                    onClick={next}
-                    disabled={saving || uploading}
-                    className="!rounded-xl !border-0 !bg-violet-600 !px-6 !py-3 !text-white !shadow-sm hover:!bg-violet-700"
-                  >
-                    {ctaLabel}
-                  </Button>
-                }
-              />
-            </div>
-          }
-        >
-          <div className="space-y-6">
+          <div className="flex min-w-0 items-center justify-end gap-2 sm:min-w-[220px]">
+            <button
+              type="button"
+              onClick={next}
+              disabled={saving || uploading}
+              className={`
+                px-7 py-2.5 text-sm font-semibold rounded-xl transition-all min-w-[160px]
+                ${saving || uploading
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                  : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
+              `}
+            >
+              {ctaLabel}
+            </button>
+          </div>
+        </>
+      )}
+    >
+      <div className="space-y-6" style={themeStyle}>
             {profile.cautionBanner ? (
               <div
                 className={clsx(
@@ -1691,31 +1678,7 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
                 ))}
               </div>
             ) : null}
-          </div>
-        </WizardMainCardV3>
       </div>
-
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-violet-200 bg-white/95 px-4 py-3 shadow-[0_-16px_30px_rgba(20,8,48,0.12)] backdrop-blur lg:hidden">
-        <div className="mx-auto flex max-w-[1240px] items-center gap-3">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={previous}
-            disabled={activeStep === 0 || saving || uploading}
-            className="flex-1 !rounded-xl !border !border-violet-200 !bg-white !px-4 !py-3 !text-violet-950 !shadow-sm"
-          >
-            Back
-          </Button>
-          <Button
-            type="button"
-            onClick={next}
-            disabled={saving || uploading}
-            className="flex-[1.3] !rounded-xl !border-0 !bg-violet-600 !px-4 !py-3 !text-white !shadow-sm hover:!bg-violet-700"
-          >
-            {ctaLabel}
-          </Button>
-        </div>
-      </div>
-    </div>
+    </WizardShellV3>
   );
 }

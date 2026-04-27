@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { EnglandPossessionWorkspaceShell } from './EnglandPossessionWorkspaceShell';
 import { WizardMainCardV3 } from './WizardMainCardV3';
 import { GuidancePanelV3 } from './GuidancePanelV3';
 import { WizardFooterNavV3 } from './WizardFooterNavV3';
@@ -44,6 +45,9 @@ interface WizardShellV3Props {
   currentStepId?: string;
   saveState?: 'idle' | 'saving' | 'saved';
   saveStatusLabel?: string;
+  statusChips?: string[];
+  stepIconPathOverride?: string;
+  getStepMetadataForId?: (stepId: string) => StepMetadata | undefined;
 }
 
 export function WizardShellV3({
@@ -67,10 +71,44 @@ export function WizardShellV3({
   currentStepId,
   saveState = 'idle',
   saveStatusLabel,
+  statusChips,
+  stepIconPathOverride,
+  getStepMetadataForId,
 }: WizardShellV3Props) {
+  if (jurisdiction === 'england') {
+    return (
+      <EnglandPossessionWorkspaceShell
+        title={title}
+        completedCount={completedCount}
+        totalCount={totalCount}
+        progress={progress}
+        tabs={tabs}
+        sectionTitle={sectionTitle}
+        sectionDescription={sectionDescription}
+        banner={banner}
+        sidebar={sidebar}
+        guidancePanel={guidancePanel}
+        navigation={navigation}
+        navigationLeft={navigationLeft}
+        navigationCenter={navigationCenter}
+        navigationRight={navigationRight}
+        product={product}
+        jurisdiction="england"
+        currentStepId={currentStepId}
+        saveState={saveState}
+        saveStatusLabel={saveStatusLabel}
+        statusChips={statusChips}
+        stepIconPathOverride={stepIconPathOverride}
+        getStepMetadataForId={getStepMetadataForId}
+      >
+        {children}
+      </EnglandPossessionWorkspaceShell>
+    );
+  }
+
   const hasMountedRef = useRef(false);
   const currentMeta: StepMetadata | undefined = currentStepId
-    ? getStepMetadata(product, jurisdiction, currentStepId)
+    ? (getStepMetadataForId ? getStepMetadataForId(currentStepId) : getStepMetadata(product, jurisdiction, currentStepId))
     : undefined;
 
   const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
@@ -108,7 +146,9 @@ export function WizardShellV3({
     >
       <WizardTopBarV3
         tabs={tabs}
-        getStepMetadataForId={(stepId) => getStepMetadata(product, jurisdiction, stepId)}
+        getStepMetadataForId={(stepId) =>
+          getStepMetadataForId ? getStepMetadataForId(stepId) : getStepMetadata(product, jurisdiction, stepId)
+        }
       />
 
       <div style={{ height: "calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))" }} aria-hidden="true" />
@@ -118,7 +158,7 @@ export function WizardShellV3({
           shellTitle={title}
           sectionTitle={sectionTitle}
           sectionDescription={sectionDescription}
-          stepIconPath={resolveStepIconPath(currentMeta)}
+          stepIconPath={stepIconPathOverride || resolveStepIconPath(currentMeta)}
           stepNumber={activeStepIndex + 1}
           totalSteps={tabs.length}
           stepMotionKey={currentStepId || sectionTitle}

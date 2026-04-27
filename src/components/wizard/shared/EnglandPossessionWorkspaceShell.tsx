@@ -39,11 +39,14 @@ interface EnglandPossessionWorkspaceShellProps {
   navigationLeft?: React.ReactNode;
   navigationCenter?: React.ReactNode;
   navigationRight?: React.ReactNode;
-  product: Extract<WizardProduct, 'notice_only' | 'complete_pack'>;
+  product: WizardProduct;
   jurisdiction: Extract<WizardJurisdiction, 'england'>;
   currentStepId?: string;
   saveState?: 'idle' | 'saving' | 'saved';
   saveStatusLabel?: string;
+  statusChips?: string[];
+  stepIconPathOverride?: string;
+  getStepMetadataForId?: (stepId: string) => StepMetadata | undefined;
 }
 
 export function EnglandPossessionWorkspaceShell({
@@ -67,10 +70,15 @@ export function EnglandPossessionWorkspaceShell({
   currentStepId,
   saveState = 'idle',
   saveStatusLabel,
+  statusChips,
+  stepIconPathOverride,
+  getStepMetadataForId,
 }: EnglandPossessionWorkspaceShellProps) {
   const hasMountedRef = useRef(false);
+  const resolveMetadataForStep = (stepId: string) =>
+    getStepMetadataForId ? getStepMetadataForId(stepId) : getStepMetadata(product, jurisdiction, stepId);
   const currentMeta: StepMetadata | undefined = currentStepId
-    ? getStepMetadata(product, jurisdiction, currentStepId)
+    ? resolveMetadataForStep(currentStepId)
     : undefined;
   const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
   const activeStepIndex = currentTabIndex >= 0 ? currentTabIndex : 0;
@@ -84,6 +92,11 @@ export function EnglandPossessionWorkspaceShell({
       : saveState === 'saved'
         ? 'Saved just now'
         : 'Auto-save is on');
+  const resolvedStatusChips =
+    statusChips ||
+    (product === 'notice_only' || product === 'complete_pack'
+      ? ['Post-May 2026 route', 'Save answers as you go']
+      : ['Save answers as you go']);
   const resolvedGuidancePanel = guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />;
 
   useEffect(() => {
@@ -107,7 +120,7 @@ export function EnglandPossessionWorkspaceShell({
     >
       <WizardTopBarV3
         tabs={tabs}
-        getStepMetadataForId={(stepId) => getStepMetadata(product, jurisdiction, stepId)}
+        getStepMetadataForId={resolveMetadataForStep}
       />
 
       <div style={{ height: 'calc(var(--site-header-height) + var(--s21-banner-height) + var(--wizard-topbar-height))' }} aria-hidden="true" />
@@ -117,7 +130,7 @@ export function EnglandPossessionWorkspaceShell({
           shellTitle={title}
           sectionTitle={sectionTitle}
           sectionDescription={sectionDescription}
-          stepIconPath={resolveStepIconPath(currentMeta)}
+          stepIconPath={stepIconPathOverride || resolveStepIconPath(currentMeta)}
           stepNumber={activeStepIndex + 1}
           totalSteps={tabs.length}
           stepMotionKey={currentStepId || sectionTitle}
@@ -180,14 +193,15 @@ export function EnglandPossessionWorkspaceShell({
                   />
                   <p className="text-sm font-medium text-[#4f4768]">{resolvedSaveLabel}</p>
                 </div>
-                <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-[#61597a]">
-                  <span className="rounded-full border border-[#e5dcff] bg-white px-3 py-1.5 shadow-sm">
-                    Post-May 2026 route
-                  </span>
-                  <span className="rounded-full border border-[#e5dcff] bg-white px-3 py-1.5 shadow-sm">
-                    Save answers as you go
-                  </span>
-                </div>
+                {resolvedStatusChips.length > 0 ? (
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-[#61597a]">
+                    {resolvedStatusChips.map((chip) => (
+                      <span key={chip} className="rounded-full border border-[#e5dcff] bg-white px-3 py-1.5 shadow-sm">
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
               </section>
 
               {resolvedGuidancePanel}
