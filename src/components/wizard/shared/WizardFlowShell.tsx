@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 import { clsx } from 'clsx';
 import { isWizardThemeV2 } from './theme';
+import { scrollWizardViewportToTop } from './scrollWizardViewportToTop';
 
 export interface WizardTab {
   id: string;
@@ -53,12 +54,7 @@ export function WizardFlowShell({
       hasMountedRef.current = true;
       return;
     }
-
-    if (/jsdom/i.test(window.navigator.userAgent)) {
-      return;
-    }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollWizardViewportToTop('smooth');
   }, [activeStep, sectionTitle]);
 
   return (

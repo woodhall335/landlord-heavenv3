@@ -22,6 +22,7 @@ import { OutcomeConfidenceIndicator } from './OutcomeConfidenceIndicator';
 import { CourtFeeEstimator } from './CourtFeeEstimator';
 import { EvidenceGallery, getRelevantEvidenceCategories } from './EvidenceGallery';
 import { buildEvidenceContext, type EvidenceContext } from '@/lib/evidence/money-claim-evidence-classifier';
+import { scrollWizardViewportToTop } from '@/components/wizard/shared/scrollWizardViewportToTop';
 import {
   trackOutcomeConfidenceShown,
   trackCourtFeeEstimatorViewed,
@@ -580,8 +581,7 @@ export const ReviewSection: React.FC<SectionProps> = ({
     // Dispatch a custom event that the parent wizard can listen to
     const event = new CustomEvent('wizard:navigate', { detail: { section } });
     window.dispatchEvent(event);
-    // Also scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollWizardViewportToTop('smooth');
   };
 
   return (

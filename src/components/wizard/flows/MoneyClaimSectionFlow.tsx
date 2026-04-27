@@ -27,6 +27,7 @@ import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { isWizardUiV3Enabled } from '@/components/wizard/shared/flags';
+import { scrollWizardViewportToTop } from '@/components/wizard/shared/scrollWizardViewportToTop';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import type { SmartReviewWarningItem, SmartReviewSummary } from '@/components/wizard/SmartReviewPanel';
 
@@ -614,8 +615,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     const index = visibleSections.findIndex((s) => s.id === sectionId);
     if (index >= 0) {
       setCurrentSectionIndex(index);
-      // Scroll to top after navigation
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollWizardViewportToTop('smooth');
     }
   }, [visibleSections]);
 

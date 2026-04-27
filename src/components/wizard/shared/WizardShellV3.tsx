@@ -5,6 +5,7 @@ import { WizardMainCardV3 } from './WizardMainCardV3';
 import { GuidancePanelV3 } from './GuidancePanelV3';
 import { WizardFooterNavV3 } from './WizardFooterNavV3';
 import { WizardTopBarV3 } from './WizardTopBarV3';
+import { scrollWizardViewportToTop } from './scrollWizardViewportToTop';
 import {
   getStepMetadata,
   resolveStepIconPath,
@@ -91,12 +92,7 @@ export function WizardShellV3({
       hasMountedRef.current = true;
       return;
     }
-
-    if (/jsdom/i.test(window.navigator.userAgent)) {
-      return;
-    }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollWizardViewportToTop('smooth');
   }, [currentStepId, activeStepIndex]);
 
   return (
