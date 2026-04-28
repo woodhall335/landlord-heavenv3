@@ -216,10 +216,6 @@ export const wizardHeroConfig: HeroConfig = {
     label: 'Choose eviction route',
     href: '#wizard-eviction',
   },
-  secondaryCta: {
-    label: 'See prices',
-    href: '/pricing',
-  },
 };
 
 /* ============================================================

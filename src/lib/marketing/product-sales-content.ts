@@ -21,6 +21,8 @@ export interface ProductSalesRouteCard {
   href: string;
   ctaLabel: string;
   priceLabel?: string;
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 export interface ProductSalesCard {

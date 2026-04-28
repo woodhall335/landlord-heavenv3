@@ -74,48 +74,62 @@ function RouteCard({
   routeIntent?: string;
 }) {
   return (
-    <article className="flex h-full flex-col rounded-[2rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
-      <div className="flex items-start justify-between gap-4">
-        <h3 className="text-2xl font-semibold tracking-tight text-[#17142B]">{item.name}</h3>
-        {item.priceLabel ? (
-          <span className="rounded-full border border-[#D8C8FF] bg-[#F7F1FF] px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#5E3E9A]">
-            {item.priceLabel}
-          </span>
-        ) : null}
+    <article className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_14px_34px_rgba(24,11,49,0.06)]">
+      {item.imageSrc ? (
+        <div className="relative h-56 w-full overflow-hidden border-b border-[#E8E1F8]">
+          <Image
+            src={item.imageSrc}
+            alt={item.imageAlt || item.name}
+            fill
+            className="object-cover"
+            sizes="(min-width: 1280px) 33vw, (min-width: 1024px) 50vw, 100vw"
+          />
+        </div>
+      ) : null}
+
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-2xl font-semibold tracking-tight text-[#17142B]">{item.name}</h3>
+          {item.priceLabel ? (
+            <span className="rounded-full border border-[#D8C8FF] bg-[#F7F1FF] px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#5E3E9A]">
+              {item.priceLabel}
+            </span>
+          ) : null}
+        </div>
+
+        <dl className="mt-5 flex-1 space-y-4 text-sm leading-7 text-[#4B5565] md:text-base">
+          <div>
+            <dt className="font-semibold text-[#17142B]">What it is for</dt>
+            <dd>{item.whatItIs}</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-[#17142B]">What problem it solves</dt>
+            <dd>{item.problemItSolves}</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-[#17142B]">What goes wrong without it</dt>
+            <dd>{item.riskIfWrong}</dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-[#17142B]">How it helps the landlord</dt>
+            <dd>{item.landlordOutcome}</dd>
+          </div>
+        </dl>
+
+        <TrackedLink
+          href={item.href}
+          pagePath={pagePath}
+          pageType={pageType}
+          ctaLabel={item.ctaLabel}
+          ctaPosition="route_card"
+          eventName="product_route_chosen"
+          routeIntent={routeIntent}
+          product={inferProductFromHref(item.href)}
+          className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#6D28D9] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#5B21B6]"
+        >
+          {item.ctaLabel}
+        </TrackedLink>
       </div>
-
-      <dl className="mt-5 flex-1 space-y-4 text-sm leading-7 text-[#4B5565] md:text-base">
-        <div>
-          <dt className="font-semibold text-[#17142B]">What it is for</dt>
-          <dd>{item.whatItIs}</dd>
-        </div>
-        <div>
-          <dt className="font-semibold text-[#17142B]">What problem it solves</dt>
-          <dd>{item.problemItSolves}</dd>
-        </div>
-        <div>
-          <dt className="font-semibold text-[#17142B]">What goes wrong without it</dt>
-          <dd>{item.riskIfWrong}</dd>
-        </div>
-        <div>
-          <dt className="font-semibold text-[#17142B]">How it helps the landlord</dt>
-          <dd>{item.landlordOutcome}</dd>
-        </div>
-      </dl>
-
-      <TrackedLink
-        href={item.href}
-        pagePath={pagePath}
-        pageType={pageType}
-        ctaLabel={item.ctaLabel}
-        ctaPosition="route_card"
-        eventName="product_route_chosen"
-        routeIntent={routeIntent}
-        product={inferProductFromHref(item.href)}
-        className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#6D28D9] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#5B21B6]"
-      >
-        {item.ctaLabel}
-      </TrackedLink>
     </article>
   );
 }

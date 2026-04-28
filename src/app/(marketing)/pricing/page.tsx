@@ -130,7 +130,6 @@ export default function PricingPage() {
           label: 'Choose the right product',
           href: '/wizard?topic=eviction&src=pricing_page',
         }}
-        secondaryCta={{ label: 'Contact support', href: '/contact' }}
         mediaSrc="/images/laptop.webp"
         mediaAlt="Landlord Heaven pricing and product previews"
         showTrustPositioningBar
