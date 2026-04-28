@@ -4,7 +4,7 @@
  * Smoke tests to ensure PDFs don't contain raw markdown or [object Object] artifacts
  */
 
-import { compileTemplate, safeText, loadTemplate, isFullHtmlDocument, generateDocument } from '../generator';
+import { compileTemplate, safeText, loadTemplate, isFullHtmlDocument, generateDocument, loadPrintCss } from '../generator';
 import { generateSection8Notice } from '../section8-generator';
 import { generateNoticeToLeave } from '../scotland/notice-to-leave-generator';
 
@@ -206,6 +206,26 @@ describe('safeText Helper', () => {
     expect(result).toContain('foo');
     expect(result).toContain('bar');
     expect(result).not.toBe('[object Object]');
+  });
+});
+
+describe('Shared print system', () => {
+  test('uses zero body padding so page margins do not double-stack', () => {
+    const css = loadPrintCss();
+
+    expect(css).toContain('body {');
+    expect(css).toContain('padding: 0;');
+    expect(css).not.toContain('padding: 0.5in;');
+  });
+
+  test('aligns field groups on a shared two-column grid', () => {
+    const css = loadPrintCss();
+
+    expect(css).toContain('.field-group {');
+    expect(css).toContain('display: grid;');
+    expect(css).toContain('grid-template-columns: minmax(1.9in, auto) minmax(0, 1fr);');
+    expect(css).toContain('.field-value {');
+    expect(css).not.toContain('margin-left: 0.25in;');
   });
 });
 

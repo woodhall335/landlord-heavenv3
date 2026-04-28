@@ -126,7 +126,7 @@ describe('Section 13 evidence and preview metrics', () => {
       challengeBand: 'moderate_likelihood',
       challengeBandLabel: 'Moderate likelihood of challenge',
       evidenceBand: 'strong',
-      evidenceBandLabel: 'Strong evidence strength',
+      evidenceBandLabel: 'Strong evidence',
       proposedPositionLabel: 'Within the adjusted comparable range',
     });
 
@@ -140,7 +140,7 @@ describe('Section 13 evidence and preview metrics', () => {
       challengeBand: 'elevated_likelihood',
       challengeBandLabel: 'Elevated likelihood of challenge',
       evidenceBand: 'moderate',
-      evidenceBandLabel: 'Moderate evidence strength',
+      evidenceBandLabel: 'Moderate evidence',
       proposedPositionLabel: 'Toward the top of the adjusted comparable range',
     });
 
@@ -155,7 +155,7 @@ describe('Section 13 evidence and preview metrics', () => {
         challengeBand: 'moderate_likelihood',
         challengeBandLabel: 'Moderate likelihood of challenge',
         evidenceBand: 'strong',
-        evidenceBandLabel: 'Strong evidence strength',
+        evidenceBandLabel: 'Strong evidence',
         proposedPositionLabel: 'Within the adjusted comparable range',
       },
       { expectTenantChallenge: true }
@@ -171,7 +171,7 @@ describe('Section 13 evidence and preview metrics', () => {
       challengeBand: 'higher_likelihood',
       challengeBandLabel: 'Higher likelihood of challenge',
       evidenceBand: 'weak',
-      evidenceBandLabel: 'Weak evidence strength',
+      evidenceBandLabel: 'Weak evidence',
       proposedPositionLabel: 'No comparable market position yet',
     });
 

@@ -229,10 +229,10 @@ function buildContactParagraph(data: ChronologyInput): { paragraph: string; time
 function buildReadinessParagraph(data: ChronologyInput): string {
   const evidenceReady = getFirstValue(data, 'evidence_bundle_ready');
   if (evidenceReady === true) {
-    return 'The landlord-held evidence bundle has been confirmed as ready alongside the generated possession paperwork.';
+    return 'The supporting evidence bundle has been confirmed as ready alongside the generated possession paperwork.';
   }
   if (evidenceReady === false) {
-    return 'The landlord-held evidence bundle is not yet complete, so the generated pack should be treated as a drafting file pending the remaining external records.';
+    return 'The supporting evidence bundle is not yet complete, so the generated pack should be treated as a draft pending the remaining external records.';
   }
   return '';
 }

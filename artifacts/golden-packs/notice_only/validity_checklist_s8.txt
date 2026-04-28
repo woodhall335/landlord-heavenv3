@@ -4,15 +4,15 @@ Purpose: Use this checklist to verify that the Form 3A notice is internally cons
 documents, has been served using a defensible method, and is ready for evidence use if a claim is issued.
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears), Ground 10
 (Any rent arrears).
-Form 3A notice served on 26 April 2026, expiring on 24 May 2026, with proceedings not intended before 24 May
+Form 3A notice served on 28 April 2026, expiring on 26 May 2026, with proceedings not intended before 26 May
 2026.
 Landlord Daniel Mercer
 Tenant Ivy Carleton
 Property 16 Willow Mews York YO24 3HX
 Tenancy start date 1 January 2024
-Notice service date 26 April 2026
-Notice expiry date 24 May 2026
-Earliest proceedings date 24 May 2026
+Notice service date 28 April 2026
+Notice expiry date 26 May 2026
+Earliest proceedings date 26 May 2026
 Grounds relied on Ground 8 - Serious rent arrears, Ground 10 - Rent arrears (some arrears)
 Current England notice periods after 1 May 2026: use the longest period that applies where multiple grounds are
 included.
@@ -50,6 +50,6 @@ Remove empty or unused sections rather than leaving placeholder text or blank vi
 documents.
 Risk warning: A possession claim can be delayed or contested if the notice dates, service evidence, or grounds
 particulars are inconsistent across the pack, even where the underlying arrears or breach evidence is strong.
-Generated: 26 April 2026
+Generated: 28 April 2026
 
 -- 2 of 2 --

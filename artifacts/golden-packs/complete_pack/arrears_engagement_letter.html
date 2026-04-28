@@ -26,9 +26,9 @@ body {
   line-height: 1.5;
   color: #000;
   background: #fff;
-  max-width: 8.5in;
-  margin: 0 auto;
-  padding: 0.5in;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   font-variant-ligatures: none;
   font-feature-settings: "liga" 0, "clig" 0;
 
@@ -169,7 +169,12 @@ em {
 
 
 .field-group {
-  margin: 1em 0;
+  display: grid;
+  grid-template-columns: minmax(1.9in, auto) minmax(0, 1fr);
+  column-gap: 0.18in;
+  row-gap: 0.15em;
+  align-items: start;
+  margin: 0.75em 0;
 
   page-break-inside: avoid;
   break-inside: avoid;
@@ -177,17 +182,19 @@ em {
 
 .field-label {
   font-weight: bold;
-  margin-top: 0.75em;
-  margin-bottom: 0.25em;
+  margin: 0;
+  padding-top: 0.2em;
   display: block;
+  line-height: 1.4;
 }
 
 .field-value {
-  margin-left: 0.25in;
+  margin: 0;
   border-bottom: 1px dotted #666;
-  min-height: 1.5em;
-  padding: 0.25em 0;
+  min-height: 1.4em;
+  padding: 0.15em 0 0.2em 0;
   display: block;
+  line-height: 1.4;
 }
 
 .field-value:empty::after {
@@ -196,11 +203,12 @@ em {
 
 
 .multiline-field {
-  margin-left: 0.25in;
+  margin: 0;
   border: 1px solid #ccc;
-  padding: 0.5em;
+  padding: 0.45em 0.55em;
   min-height: 3em;
   background-color: #fafafa;
+  line-height: 1.45;
 }
 
 
@@ -340,7 +348,7 @@ em {
 @media print {
   body {
     margin: 0;
-    padding: 0.5in;
+    padding: 0;
   }
 
   
@@ -512,7 +520,7 @@ YO24 3HX
   </div>
 
   <div class="date-line">
-      26/04/2026
+      28/04/2026
   </div>
 </div>
 
@@ -535,7 +543,7 @@ YO24 3HX
   </p>
 
   <p>
-    According to my records, the arrears stand at <strong>&#163;3600.00</strong> as at 26/04/2026.
+    According to my records, the arrears stand at <strong>&#163;3600.00</strong> as at 28/04/2026.
   </p>
 
   <div class="action-box">

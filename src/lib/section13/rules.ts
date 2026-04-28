@@ -250,12 +250,12 @@ export function getChallengeBandLabel(band: Section13ChallengeLikelihoodBand): s
 export function getEvidenceBandLabel(band: Section13EvidenceStrengthBand): string {
   switch (band) {
     case 'strong':
-      return 'Strong evidence strength';
+      return 'Strong evidence';
     case 'moderate':
-      return 'Moderate evidence strength';
+      return 'Moderate evidence';
     case 'weak':
     default:
-      return 'Weak evidence strength';
+      return 'Weak evidence';
   }
 }
 

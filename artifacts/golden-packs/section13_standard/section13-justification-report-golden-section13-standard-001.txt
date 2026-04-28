@@ -10,7 +10,7 @@ Key points
 - Proposed rent: £1285.00 per month
 - Local median: £1297.50 pcm
 - Position: Below the adjusted median market rent
-- Evidence strength: Strong evidence strength
+- Evidence strength: Strong evidence
 - Comparable count: 8 total (8 source-backed; 8 within 90 days)
 Market position
 Rules version: england_assured_section13_2026-05-01
@@ -20,20 +20,20 @@ The proposed rent of £1285.00 per month sits between the lower quartile and the
 comparable range, against an adjusted range of £1272.50 to £1318.75 pcm and a median of £1297.50
 pcm.
 Your proposed rent (£1285.00) sits below the median comparable rent (£1297.50 pcm), with strong
-evidence strength based on 8 recent source-backed comparables.
-Strong evidence strength is based on 8 comparable homes, 8 source-backed entries, and 8 comparables
-dated within the 90-day freshness window. The file reads as a well-supported market review rather than a
-bare assertion.
+evidence based on 8 recent source-backed comparables.
+Strong evidence is based on 8 comparable homes, 8 source-backed entries, and 8 comparables dated
+within the 90-day freshness window. The file reads as a well-supported market review rather than a bare
+assertion.
 Challenge band: Moderate likelihood of challenge - Based on where your proposed rent sits within the
 adjusted comparable rent range.
-Evidence band: Strong evidence strength - Based on how many comparables you have, how recent they
-are, and how many are source-backed rather than manual or heavily overridden.
+Evidence band: Strong evidence - Based on how many comparables you have, how recent they are, and
+how many are source-backed rather than manual or heavily overridden.
 Recorded reasoning
 The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
 month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),
 the proposed increase is presented as reasonable with a moderate likelihood of challenge and strong
-evidence strength. The proposed rent reflects recent local listings, condition, and current market positioning
-for similar two-bedroom homes.
+evidence. The proposed rent reflects recent local listings, condition, and current market positioning for
+similar two-bedroom homes.
 Case-specific note: The proposed rent reflects recent local listings, condition, and current market
 positioning for similar two-bedroom homes.
 Landlord Heaven | Comparable analysis and justification Page 1 of 3
@@ -44,7 +44,7 @@ Comparable overview
 - Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the
 last 90 days and all source-backed
 - Challenge band: Moderate likelihood of challenge
-- Evidence band: Strong evidence strength
+- Evidence band: Strong evidence
 Comparable picture
 8 comparable 2-bed homes within 0.5 miles
 Comparable 1: Flat 2, The Calls, Leeds LS1 at £1240.00 monthly, adjusting to £1240.00 pcm, dated 15

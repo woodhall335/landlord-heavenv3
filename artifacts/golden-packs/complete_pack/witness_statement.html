@@ -26,9 +26,9 @@ body {
   line-height: 1.5;
   color: #000;
   background: #fff;
-  max-width: 8.5in;
-  margin: 0 auto;
-  padding: 0.5in;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   font-variant-ligatures: none;
   font-feature-settings: "liga" 0, "clig" 0;
 
@@ -169,7 +169,12 @@ em {
 
 
 .field-group {
-  margin: 1em 0;
+  display: grid;
+  grid-template-columns: minmax(1.9in, auto) minmax(0, 1fr);
+  column-gap: 0.18in;
+  row-gap: 0.15em;
+  align-items: start;
+  margin: 0.75em 0;
 
   page-break-inside: avoid;
   break-inside: avoid;
@@ -177,17 +182,19 @@ em {
 
 .field-label {
   font-weight: bold;
-  margin-top: 0.75em;
-  margin-bottom: 0.25em;
+  margin: 0;
+  padding-top: 0.2em;
   display: block;
+  line-height: 1.4;
 }
 
 .field-value {
-  margin-left: 0.25in;
+  margin: 0;
   border-bottom: 1px dotted #666;
-  min-height: 1.5em;
-  padding: 0.25em 0;
+  min-height: 1.4em;
+  padding: 0.15em 0 0.2em 0;
   display: block;
+  line-height: 1.4;
 }
 
 .field-value:empty::after {
@@ -196,11 +203,12 @@ em {
 
 
 .multiline-field {
-  margin-left: 0.25in;
+  margin: 0;
   border: 1px solid #ccc;
-  padding: 0.5em;
+  padding: 0.45em 0.55em;
   min-height: 3em;
   background-color: #fafafa;
+  line-height: 1.45;
 }
 
 
@@ -340,7 +348,7 @@ em {
 @media print {
   body {
     margin: 0;
-    padding: 0.5in;
+    padding: 0;
   }
 
   
@@ -713,10 +721,10 @@ LS8 2PF</strong>, will say as follows:
 
 Ground 8 is a mandatory ground for possession. Ground 8 requires that at least 3 months' rent be unpaid both at the date of the notice and at the date of the hearing.
 
-At the date of service of the Form 3A notice (26 April 2026), the total rent arrears stood at &#163;3,600.00, representing approximately 3.0 months' rent.
+At the date of service of the Form 3A notice (28 April 2026), the total rent arrears stood at &#163;3,600.00, representing approximately 3.0 months' rent.
 This significantly exceeds the Ground 8 threshold of 3 months' rent (&#163;3,600.00).
 
-As at the date of this statement (26 April 2026), the total rent arrears amount to &#163;3,600.00, representing approximately 3.0 months of unpaid rent.
+As at the date of this statement (28 April 2026), the total rent arrears amount to &#163;3,600.00, representing approximately 3.0 months of unpaid rent.
 
 A detailed Schedule of Arrears (Exhibit DM1) showing the period-by-period breakdown of rent due and payments received is attached to this pack.
 
@@ -730,7 +738,7 @@ Ground 10 is a discretionary ground which applies where some rent is unpaid both
 <div class="statement-section">
   <h2><span class="num">5</span> Timeline of Events</h2>
   <div class="statement-content">
-    <ul><li>1 January 2024: Tenancy began</li><li>1 January 2026: The first unpaid rent period began</li><li>26 April 2026: The Form 3A notice was served by post</li><li>24 May 2026: The notice period expired</li></ul>
+    <ul><li>1 January 2024: Tenancy began</li><li>1 January 2026: The first unpaid rent period began</li><li>28 April 2026: The Form 3A notice was served by post</li><li>26 May 2026: The notice period expired</li></ul>
   </div>
 </div>
 
@@ -798,7 +806,7 @@ Ground 10 is a discretionary ground which applies where some rent is unpaid both
 
 <!-- Footer -->
 <div class="doc-footer">
-  <p><strong>Generated:</strong> 26 April 2026</p>
+  <p><strong>Generated:</strong> 28 April 2026</p>
 </div>
 
 </body>

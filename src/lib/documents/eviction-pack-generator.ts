@@ -564,7 +564,13 @@ function formatPaymentDayDisplay(
     return 'Per tenancy agreement';
   }
 
-  const base = `${getOrdinalSuffix(paymentDay)} of each ${rentFrequency === 'monthly' ? 'month' : rentFrequency || 'rental'} period`;
+  const frequencyLabel =
+    rentFrequency === 'monthly'
+      ? 'month'
+      : rentFrequency
+        ? `${rentFrequency} period`
+        : 'rental period';
+  const base = `${getOrdinalSuffix(paymentDay)} day of each ${frequencyLabel}`;
   return usualPaymentWeekday ? `${base} (${usualPaymentWeekday})` : base;
 }
 

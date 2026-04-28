@@ -173,6 +173,24 @@ function formatLongDate(value: unknown): string {
   }
 }
 
+function getOrdinalSuffix(value: number): string {
+  const remainder = value % 100;
+  if (remainder >= 11 && remainder <= 13) {
+    return 'th';
+  }
+
+  switch (value % 10) {
+    case 1:
+      return 'st';
+    case 2:
+      return 'nd';
+    case 3:
+      return 'rd';
+    default:
+      return 'th';
+  }
+}
+
 function describeRentFrequency(value: unknown): string {
   switch (String(value || '').toLowerCase()) {
     case 'weekly':
@@ -367,7 +385,7 @@ function buildTenancyOverview(data: DraftingInput): string {
   return [
     tenancyStart ? `The tenancy began on ${tenancyStart}.` : '',
     rentAmount > 0
-      ? `The contractual rent is ${formatCurrencyText(rentAmount)} payable ${frequency}${Number.isFinite(paymentDay) ? ` on day ${paymentDay} of each rental period` : ''}.`
+      ? `The contractual rent is ${formatCurrencyText(rentAmount)} payable ${frequency}${Number.isFinite(paymentDay) ? ` on the ${paymentDay}${getOrdinalSuffix(paymentDay)} day of each rental period` : ''}.`
       : '',
   ]
     .filter(Boolean)

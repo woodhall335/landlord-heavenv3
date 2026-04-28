@@ -302,7 +302,12 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
                     </div>
                   </div>
 
-                  <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+                  <div
+                    className={
+                      whatYouGet.routeGridClassName ??
+                      'mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3'
+                    }
+                  >
                     {whatYouGet.routeCards?.map((item) => (
                       <RouteCard
                         key={item.name}

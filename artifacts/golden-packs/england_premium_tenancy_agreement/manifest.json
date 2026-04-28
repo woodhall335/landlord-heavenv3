@@ -124,7 +124,7 @@
         "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html"
       },
       "extraction": {
-        "pageCount": 7,
+        "pageCount": 6,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

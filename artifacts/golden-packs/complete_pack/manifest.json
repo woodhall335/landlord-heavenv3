@@ -121,7 +121,7 @@
         "html": "complete_pack/witness_statement.html"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

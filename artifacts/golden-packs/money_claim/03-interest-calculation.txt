@@ -1,4 +1,4 @@
-Interest Calculation (s.69 County Courts Act 1984)
+INTEREST CALCULATION (S.69 COUNTY COURTS ACT 1984)
 Principal claimed: £2890.00
 Interest rate: 8% per annum
 Interest start date: 2 February 2026
@@ -10,8 +10,9 @@ Working
 Step 1 - Daily rate: (£2890.00 x 8%) / 365 = £0.63 per day
 Step 2 - Interest accrued: £0.63 x 85 days = £53.55
 Interest continues
-Interest continues to accrue at £0.63 per day from 28 April 2026 until judgment or earlier payment.
-Note: Update this calculation if you file after the above calculation date. You may claim interest up
-to and including the date of issue.
+Interest continues to accrue at £0.63 per day from 28 April 2026 until judgment or earlier
+payment.
+Note: Update this calculation if you file after the above calculation date. You may claim
+interest up to and including the date of issue.
 
 -- 1 of 1 --

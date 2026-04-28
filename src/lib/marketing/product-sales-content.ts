@@ -79,6 +79,7 @@ export interface ProductSalesPageContent {
     intro: ReactNode;
     items?: ProductSalesBreakdownItem[];
     routeCards?: ProductSalesRouteCard[];
+    routeGridClassName?: string;
     conditionalTitle?: string;
     conditionalIntro?: ReactNode;
     conditionalItems?: ProductSalesBreakdownItem[];

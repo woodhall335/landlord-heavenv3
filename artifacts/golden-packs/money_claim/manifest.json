@@ -70,7 +70,7 @@
         "html": "money_claim/04-letter-before-claim.html"
       },
       "extraction": {
-        "pageCount": 5,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

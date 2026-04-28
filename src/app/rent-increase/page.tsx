@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
-import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type {
   ProductSalesPageContent,
   ProductSalesRouteCard,
 } from '@/lib/marketing/product-sales-content';
-import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -42,6 +40,8 @@ const routeCards: ProductSalesRouteCard[] = [
   {
     name: 'Standard Section 13 Pack',
     priceLabel: PRODUCTS.section13_standard.displayPrice,
+    imageSrc: '/images/rent-increase-standard.webp',
+    imageAlt: 'Standard Section 13 rent increase pack',
     whatItIs:
       'The main route for landlords who want to increase rent in England with Form 4A, comparable evidence, and a cleaner service-ready file.',
     problemItSolves:
@@ -56,6 +56,8 @@ const routeCards: ProductSalesRouteCard[] = [
   {
     name: 'Challenge-Ready Section 13 Defence Pack',
     priceLabel: PRODUCTS.section13_defensive.displayPrice,
+    imageSrc: '/images/rent-increase-defence.webp',
+    imageAlt: 'Challenge-ready Section 13 defence pack',
     whatItIs:
       'The fuller challenge-ready route for landlords who expect objections, negotiation pressure, or tribunal scrutiny around the proposed rent.',
     problemItSolves:
@@ -98,22 +100,12 @@ const faqs: FAQItem[] = [
 ];
 
 export default function RentIncreaseLandingPage() {
-  const standardSampleProof = getGoldenPackProofData('section13_standard');
-  const defenceSampleProof = getGoldenPackProofData('section13_defensive');
-
   const content: ProductSalesPageContent = {
     analytics: {
       pagePath: '/rent-increase',
       pageType: 'entry_page',
       routeIntent: 'rent_increase',
     },
-    postHeroContent:
-      standardSampleProof || defenceSampleProof ? (
-        <div className="space-y-8">
-          {standardSampleProof ? <GoldenPackProof data={standardSampleProof} /> : null}
-          {defenceSampleProof ? <GoldenPackProof data={defenceSampleProof} /> : null}
-        </div>
-      ) : undefined,
     hero: {
       preset: standardDescriptor.heroPreset,
       badge: standardDescriptor.heroBadge,
@@ -174,6 +166,7 @@ export default function RentIncreaseLandingPage() {
       title: 'Choose the Section 13 route that fits the case',
       intro:
         'This page is built for action, not just explanation. Pick the Standard Section 13 Pack when you want the main rent increase workflow, or choose the Challenge-Ready Section 13 Defence Pack when the file needs to stand up under stronger tenant challenge from the start.',
+      routeGridClassName: 'mt-8 grid gap-6 lg:grid-cols-2',
       routeCards,
     },
     whyYouNeedThis: {

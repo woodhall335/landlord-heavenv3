@@ -571,7 +571,7 @@ const FALLBACK_PRINT_CSS = `
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @page { size: A4; margin: 0.75in 0.75in 1in 0.75in; }
 html { font-size: 12pt; }
-body { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 12pt; line-height: 1.5; color: #000; background: #fff; max-width: 8.5in; margin: 0 auto; padding: 0.5in; word-wrap: break-word; }
+body { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 12pt; line-height: 1.5; color: #000; background: #fff; max-width: none; margin: 0; padding: 0; word-wrap: break-word; }
 h1 { font-size: 14pt; font-weight: bold; line-height: 1.3; text-align: center; text-transform: uppercase; margin: 0 0 1em 0; page-break-after: avoid; }
 h2 { font-size: 12pt; font-weight: bold; line-height: 1.4; text-align: center; margin: 0 0 1em 0; page-break-after: avoid; }
 h3 { font-size: 12pt; font-weight: bold; line-height: 1.4; margin: 1.5em 0 0.5em 0; page-break-after: avoid; }
@@ -582,8 +582,10 @@ strong { font-weight: bold; }
 .link, a { color: #0066cc; text-decoration: underline; word-break: break-all; }
 .info-box { border: 2px solid #000; padding: 1em; margin: 1em 0 1.5em 0; background-color: #f9f9f9; page-break-inside: avoid; }
 .section { margin: 1.5em 0; page-break-inside: avoid; break-inside: avoid; }
-.field-label { font-weight: bold; margin-top: 0.75em; margin-bottom: 0.25em; display: block; }
-.field-value { margin-left: 0.25in; border-bottom: 1px dotted #666; min-height: 1.5em; padding: 0.25em 0; display: block; }
+.field-group { display: grid; grid-template-columns: minmax(1.9in, auto) minmax(0, 1fr); column-gap: 0.18in; row-gap: 0.15em; align-items: start; margin: 0.75em 0; page-break-inside: avoid; break-inside: avoid; }
+.field-label { font-weight: bold; margin: 0; padding-top: 0.2em; display: block; line-height: 1.4; }
+.field-value { margin: 0; border-bottom: 1px dotted #666; min-height: 1.4em; padding: 0.15em 0 0.2em 0; display: block; line-height: 1.4; }
+.multiline-field { margin: 0; border: 1px solid #ccc; padding: 0.45em 0.55em; min-height: 3em; background-color: #fafafa; line-height: 1.45; }
 .signature-block { margin-top: 2em; page-break-inside: avoid; break-inside: avoid; }
 .checkbox { display: inline-block; width: 1em; height: 1em; border: 1px solid #000; margin-right: 0.5em; vertical-align: middle; background-color: #fff; }
 .guidance-section { margin-top: 2em; padding-top: 1.5em; border-top: 2px solid #000; }
@@ -631,6 +633,22 @@ export function loadPrintCss(): string {
   console.warn('[PRINT SYSTEM] Tried paths:', possiblePaths);
   cachedPrintCss = stripCssComments(FALLBACK_PRINT_CSS);
   return cachedPrintCss;
+}
+
+function buildNonFullHtmlPageRules(options?: {
+  pageSize?: 'A4' | 'Letter';
+  margins?: { top: string; right: string; bottom: string; left: string };
+}): string {
+  if (!options?.pageSize && !options?.margins) {
+    return '';
+  }
+
+  return `
+@page {
+  size: ${options.pageSize || 'A4'};
+  margin: ${options.margins?.top || '0.75in'} ${options.margins?.right || '0.75in'} ${options.margins?.bottom || '1in'} ${options.margins?.left || '0.75in'};
+}
+`.trim();
 }
 
 /**
@@ -1266,142 +1284,19 @@ export async function htmlToPdf(
       if (PDF_DEBUG) {
         console.log('[PDF_DEBUG] NOT a full HTML document - wrapping in default HTML structure');
       }
-      // Wrap non-full HTML in proper HTML structure with styling
+      const nonFullHtmlPageRules = buildNonFullHtmlPageRules(options);
+      const nonFullHtmlPrintCss = loadPrintCss();
+
+      // Wrap non-full HTML in the shared print system so typography, spacing, and
+      // field alignment stay consistent with full HTML templates and golden packs.
       finalHtml = `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <style>
-    body {
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 12pt;
-      line-height: 1.6;
-      color: #000;
-      max-width: 100%;
-      margin: 0;
-      padding: 0;
-      word-break: normal;
-      overflow-wrap: break-word;
-      hyphens: none;
-      -webkit-hyphens: none;
-      font-variant-ligatures: none;
-      font-feature-settings: "liga" 0, "clig" 0;
-    }
-    h1 {
-      font-size: 16pt;
-      font-weight: bold;
-      text-align: center;
-      margin: 20px 0;
-    }
-    h2 {
-      font-size: 14pt;
-      font-weight: bold;
-      margin: 15px 0 10px 0;
-      border-bottom: 1px solid #000;
-      padding-bottom: 5px;
-    }
-    h3 {
-      font-size: 13pt;
-      font-weight: bold;
-      margin: 12px 0 8px 0;
-    }
-    h4 {
-      font-size: 12pt;
-      font-weight: bold;
-      margin: 10px 0 5px 0;
-    }
-    p {
-      margin: 8px 0;
-      text-align: left;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0;
-    }
-    table, th, td {
-      border: 1px solid #000;
-    }
-    th, td {
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f0f0f0;
-      font-weight: bold;
-    }
-    strong {
-      font-weight: bold;
-    }
-    ul, ol {
-      margin: 10px 0;
-      padding-left: 30px;
-    }
-    li {
-      margin: 5px 0;
-    }
-    hr {
-      border: none;
-      border-top: 2px solid #000;
-      margin: 20px 0;
-    }
-    .page-break {
-      page-break-after: always;
-    }
-    .page-break-before {
-      page-break-before: always;
-      break-before: page;
-    }
-    .avoid-break {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .ground-block {
-      page-break-before: always;
-      break-before: page;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    /* Prevent ugly page splits for key content blocks */
-    table {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    h2, h3, h4 {
-      page-break-after: avoid;
-      break-after: avoid;
-    }
-    h2 + p, h3 + p, h4 + p, h2 + ul, h3 + ul, h4 + ul {
-      page-break-before: avoid;
-      break-before: avoid;
-    }
-    .section, .warning, .critical, .info-box, .success, .checklist, .evidence-item {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .ground, .ground-detail, .clause {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .timeline, .timeline-step, .cost-breakdown, .checklist-item {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    /* Ensure arrears tables don't split */
-    .arrears-table, .arrears-breakdown {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    @page {
-      size: ${options?.pageSize || 'A4'};
-      margin: ${options?.margins?.top || '2cm'} ${options?.margins?.right || '2cm'} ${options?.margins?.bottom || '2cm'} ${options?.margins?.left || '2cm'};
-    }
-    @media print {
-      body {
-        margin: 0;
-      }
-    }
+${nonFullHtmlPrintCss}
+${nonFullHtmlPageRules ? `\n${nonFullHtmlPageRules}` : ''}
   </style>
 </head>
 <body>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-28T10:17:09.036Z",
+  "generatedAt": "2026-04-28T11:40:38.376Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -318,7 +318,7 @@
             "html": "complete_pack/witness_statement.html"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -835,7 +835,7 @@
             "html": "money_claim/04-letter-before-claim.html"
           },
           "extraction": {
-            "pageCount": 5,
+            "pageCount": 4,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1076,7 +1076,7 @@
             "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html"
           },
           "extraction": {
-            "pageCount": 7,
+            "pageCount": 6,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1318,7 +1318,7 @@
             "html": "england_standard_tenancy_agreement/deposit_protection_certificate.html"
           },
           "extraction": {
-            "pageCount": 7,
+            "pageCount": 6,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"

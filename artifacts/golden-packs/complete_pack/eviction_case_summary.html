@@ -25,9 +25,9 @@ body {
   line-height: 1.5;
   color: #000;
   background: #fff;
-  max-width: 8.5in;
-  margin: 0 auto;
-  padding: 0.5in;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   font-variant-ligatures: none;
   font-feature-settings: "liga" 0, "clig" 0;
 
@@ -168,7 +168,12 @@ em {
 
 
 .field-group {
-  margin: 1em 0;
+  display: grid;
+  grid-template-columns: minmax(1.9in, auto) minmax(0, 1fr);
+  column-gap: 0.18in;
+  row-gap: 0.15em;
+  align-items: start;
+  margin: 0.75em 0;
 
   page-break-inside: avoid;
   break-inside: avoid;
@@ -176,17 +181,19 @@ em {
 
 .field-label {
   font-weight: bold;
-  margin-top: 0.75em;
-  margin-bottom: 0.25em;
+  margin: 0;
+  padding-top: 0.2em;
   display: block;
+  line-height: 1.4;
 }
 
 .field-value {
-  margin-left: 0.25in;
+  margin: 0;
   border-bottom: 1px dotted #666;
-  min-height: 1.5em;
-  padding: 0.25em 0;
+  min-height: 1.4em;
+  padding: 0.15em 0 0.2em 0;
   display: block;
+  line-height: 1.4;
 }
 
 .field-value:empty::after {
@@ -195,11 +202,12 @@ em {
 
 
 .multiline-field {
-  margin-left: 0.25in;
+  margin: 0;
   border: 1px solid #ccc;
-  padding: 0.5em;
+  padding: 0.45em 0.55em;
   min-height: 3em;
   background-color: #fafafa;
+  line-height: 1.45;
 }
 
 
@@ -339,7 +347,7 @@ em {
 @media print {
   body {
     margin: 0;
-    padding: 0.5in;
+    padding: 0;
   }
 
   
@@ -499,7 +507,7 @@ th {
     <h1>Eviction Case Summary</h1>
     <p><strong>Case ID:</strong> golden-complete-pack-001</p>
     <p><strong>Jurisdiction:</strong> england</p>
-    <p><strong>Generated:</strong> 26 April 2026</p>
+    <p><strong>Generated:</strong> 28 April 2026</p>
   </div>
 
   <div class="summary-grid">
@@ -532,7 +540,7 @@ YO24 3HX</p>
       </tr>
       <tr>
         <th>Due day</th>
-        <td colspan="3">1st of each month period</td>
+        <td colspan="3">1st day of each month</td>
       </tr>
       <tr>
         <th>Current arrears</th>
@@ -544,15 +552,15 @@ YO24 3HX</p>
       </tr>
       <tr>
         <th>Notice served</th>
-        <td colspan="3">26 April 2026</td>
+        <td colspan="3">28 April 2026</td>
       </tr>
       <tr>
         <th>Notice expiry date</th>
-        <td colspan="3">24 May 2026</td>
+        <td colspan="3">26 May 2026</td>
       </tr>
       <tr>
         <th>Earliest proceedings date</th>
-        <td colspan="3">24 May 2026</td>
+        <td colspan="3">26 May 2026</td>
       </tr>
       <tr>
         <th>Compliance snapshot</th>
@@ -566,15 +574,15 @@ YO24 3HX</p>
       <p>The claimant seeks possession of 16 Willow Mews
 York
 YO24 3HX relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears).</p>
-      <p>The tenancy began on 1 January 2024. The contractual rent is &#163;1,200.00 payable monthly on day 1 of each rental period.</p>
+      <p>The tenancy began on 1 January 2024. The contractual rent is &#163;1,200.00 payable monthly on the 1st day of each rental period.</p>
       <p>Ground 8 is relied on as the serious rent arrears ground.</p>
-      <p>At the date of service of the Form 3A notice on 26 April 2026, the arrears stood at &#163;3,600.00.</p>
+      <p>At the date of service of the Form 3A notice on 28 April 2026, the arrears stood at &#163;3,600.00.</p>
       <p>That figure is presented as exceeding the statutory Ground 8 threshold of &#163;3,600.00 (3 months).</p>
       <p>The rent account and arrears schedule show the unpaid or short-paid periods between 1 January 2026 and 31 March 2026, 3 missed payments.</p>
       <p>Ground 10 is relied on because rent lawfully due was unpaid when the notice was served and remains part of the claim history.</p>
       <p>The arrears balance relied on for Ground 10 is &#163;3,600.00.</p>
       <p>The arrears history, service chronology, and any further tenancy concerns should be read together as part of one possession case, while each statutory ground remains separately pleaded.</p>
-      <p>Form 3A notice served on 26 April 2026, expiring on 24 May 2026, with proceedings not intended before 24 May 2026.</p>
+      <p>Form 3A notice served on 28 April 2026, expiring on 26 May 2026, with proceedings not intended before 26 May 2026.</p>
   </div>
 
   <div class="section">
@@ -585,14 +593,14 @@ YO24 3HX relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears).</p>
         <li>Significant risk: No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidential risk.</li>
         <li>Significant risk: No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.</li>
         <li>Advisory / good practice: No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.</li>
-        <li>Notice served on 26 April 2026 with earliest proceedings date 24 May 2026.</li>
+        <li>Notice served on 28 April 2026 with earliest proceedings date 26 May 2026.</li>
     </ul>
   </div>
 
   <div class="section">
     <h2>Pre-action and Procedural Steps</h2>
       <p>The rent account first shows an unpaid or short-paid period from 1 January 2026. The most recent affected rental period is 1 March 2026. The current arrears total is &#163;3,600.00 across 3 missed or short-paid rental periods.</p>
-      <p>The Form 3A notice service milestone currently recorded is 26 April 2026. The possession / proceedings date currently recorded in the file is 24 May 2026.</p>
+      <p>The Form 3A notice service milestone currently recorded is 28 April 2026. The possession / proceedings date currently recorded in the file is 26 May 2026.</p>
   </div>
 
   <div class="section">
@@ -604,7 +612,7 @@ YO24 3HX relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears).</p>
     <h2>Financial Position and Relief Sought</h2>
       <p>The claimant seeks possession and, if the court thinks fit, judgment for rent arrears currently quantified at &#163;3,600.00.</p>
       <p>The contractual rent is &#163;1,200.00 payable monthly.</p>
-      <p>Form 3A notice served on 26 April 2026, expiring on 24 May 2026, with proceedings not intended before 24 May 2026.</p>
+      <p>Form 3A notice served on 28 April 2026, expiring on 26 May 2026, with proceedings not intended before 26 May 2026.</p>
   </div>
 </body>
 </html>
