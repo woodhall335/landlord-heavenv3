@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Tenancy Agreement</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 16mm 18mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 10.7pt;
+      line-height: 1.52;
+      color: #18181b;
+      background: #fff;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      page-break-after: avoid;
+      color: #111827;
+    }
+
+    .cover {
+      border: 1.5pt solid #1f2937;
+      padding: 20pt 22pt 18pt;
+      margin-bottom: 16pt;
+    }
+
+    .cover-topline {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 7.9pt;
+      color: #4b5563;
+      margin-bottom: 8pt;
+    }
+
+    .cover h1 {
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-size: 18.5pt;
+      line-height: 1.15;
+    }
+
+    .cover-subtitle {
+      margin-top: 7pt;
+      font-size: 10.35pt;
+      color: #374151;
+    }
+
+    .cover-intro {
+      margin-top: 12pt;
+      padding: 10pt 12pt;
+      border-left: 3pt solid #374151;
+      background: #f8fafc;
+      color: #1f2937;
+      text-align: justify;
+    }
+
+    .cover-meta,
+    .parties-table,
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12pt;
+      font-size: 9.35pt;
+    }
+
+    .cover-meta td,
+    .parties-table td,
+    .detail-table td {
+      border: 0.75pt solid #9ca3af;
+      padding: 6pt 8pt;
+      vertical-align: top;
+    }
+
+    .cover-meta .label,
+    .parties-table .role,
+    .detail-table .label {
+      width: 24%;
+      background: #f3f4f6;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #374151;
+    }
+
+    .section-title {
+      font-size: 11.9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1pt solid #111827;
+      padding-bottom: 4pt;
+      margin: 14pt 0 9pt;
+    }
+
+    .opening,
+    .clause p,
+    .clause-intro,
+    .execution-copy {
+      margin: 0 0 7pt 0;
+      text-align: justify;
+    }
+
+    .party-name {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .party-detail {
+      margin-top: 2pt;
+    }
+
+    .recitals {
+      margin: 0 0 8pt 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: recital;
+    }
+
+    .recitals li {
+      margin: 0 0 6pt 0;
+      padding-left: 28pt;
+      position: relative;
+      text-align: justify;
+    }
+
+    .recitals li::before {
+      counter-increment: recital;
+      content: counter(recital, upper-alpha) ".";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    .clause {
+      margin: 11pt 0 0;
+      page-break-inside: avoid;
+    }
+
+    .clause-heading {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10.85pt;
+      font-weight: 700;
+      margin-bottom: 5pt;
+      color: #111827;
+    }
+
+    .subpoints {
+      margin: 4pt 0 7pt 18pt;
+      padding: 0;
+    }
+
+    .subpoints li {
+      margin: 0 0 6pt 0;
+      text-align: justify;
+    }
+
+    .note-panel {
+      margin-top: 12pt;
+      padding: 10pt 12pt;
+      border: 0.75pt solid #9ca3af;
+      background: #f9fafb;
+    }
+
+    .note-panel p {
+      margin: 6pt 0 0;
+      white-space: pre-line;
+      text-align: justify;
+    }
+
+    .deed-warning {
+      margin-top: 10pt;
+      padding: 9pt 11pt;
+      border: 0.75pt solid #92400e;
+      background: #fff7ed;
+      color: #7c2d12;
+      page-break-inside: avoid;
+    }
+
+    .execution {
+      margin-top: 18pt;
+      page-break-inside: avoid;
+    }
+
+    .signatures {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220pt, 1fr));
+      gap: 12pt;
+    }
+
+    .signature-card {
+      border: 0.75pt solid #9ca3af;
+      padding: 10pt 11pt;
+      min-height: 152pt;
+      page-break-inside: avoid;
+    }
+
+    .signature-role {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4b5563;
+    }
+
+    .signature-name {
+      margin-top: 4pt;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .signature-line {
+      margin-top: 22pt;
+      border-bottom: 1pt solid #1f2937;
+      height: 16pt;
+    }
+
+    .signature-meta {
+      margin-top: 6pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      color: #4b5563;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12pt;
+    }
+
+    .witness-block {
+      margin-top: 12pt;
+      padding-top: 8pt;
+      border-top: 0.75pt dashed #9ca3af;
+    }
+
+    .witness-label {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #4b5563;
+    }
+
+    .witness-note {
+      margin-top: 6pt;
+      font-size: 8.9pt;
+      color: #374151;
+      text-align: justify;
+    }
+
+    .footer {
+      margin-top: 14pt;
+      padding-top: 8pt;
+      border-top: 0.75pt solid #9ca3af;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.15pt;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 10pt;
+    }
+
+    @media print {
+      .section-title,
+      .clause-heading,
+      .signature-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div class="cover-topline">
+      For properties in England
+    </div>
+    <h1>Premium Tenancy Agreement</h1>
+    <div class="cover-subtitle">Expanded tenancy agreement for a residential let in England</div>
+    <div class="cover-intro">This agreement records a residential letting in England with fuller operational and management drafting than the standard route.</div>
+
+    <table class="cover-meta">
+      <tr>
+        <td class="label">Prepared</td>
+        <td>16 April 2026</td>
+        <td class="label">File reference</td>
+        <td>RL-ENGLAND-PREMIUM-TA-TENANCY-001</td>
+      </tr>
+      <tr>
+        <td class="label">Effective date</td>
+        <td>2 May 2026</td>
+        <td class="label">Document type</td>
+        <td>Premium residential tenancy agreement</td>
+      </tr>
+      <tr>
+        <td class="label">Property</td>
+        <td colspan="3">12 Example Street, London, SW1A 1AA</td>
+      </tr>
+      <tr>
+        <td class="label">Tenant(s)</td>
+        <td>Alice Tenant</td>
+        <td class="label">Term / dates</td>
+        <td>
+          2 May 2026
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Rent</td>
+        <td>&#163;1500.00</td>
+        <td class="label">Deposit</td>
+        <td>&#163;1500.00</td>
+      </tr>
+    </table>
+  </section>
+
+  <h2 class="section-title">Parties</h2>
+  <p class="opening">
+      This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+  </p>
+
+  <table class="parties-table">
+      <tr>
+        <td class="role">Landlord</td>
+        <td>
+          <div class="party-name">Jane Landlord</div>
+          <div class="party-detail">3 Owner Road, London, SW1A 2BB</div>
+          <div class="party-detail">Email: jane@example.com</div>
+          <div class="party-detail">Telephone: 07123 456789</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Tenant</td>
+        <td>
+          <div class="party-name">Alice Tenant</div>
+          <div class="party-detail">12 Example Street, London, SW1A 1AA</div>
+          <div class="party-detail">Email: alice@example.com</div>
+          <div class="party-detail">Telephone: 07000 111111</div>
+        </td>
+      </tr>
+  </table>
+
+    <h2 class="section-title">Background</h2>
+    <ol class="recitals">
+        <li>The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out in this premium agreement.</li>
+        <li>The parties intend fuller operational and management detail to be recorded in the agreement while keeping the letting within the ordinary residential tenancy file.</li>
+    </ol>
+
+    <h2 class="section-title">Defined Terms</h2>
+    <table class="detail-table">
+        <tr>
+          <td class="label">Property</td>
+          <td>12 Example Street, London, SW1A 1AA</td>
+        </tr>
+        <tr>
+          <td class="label">Landlord</td>
+          <td>Jane Landlord</td>
+        </tr>
+        <tr>
+          <td class="label">Tenant</td>
+          <td>Alice Tenant</td>
+        </tr>
+    </table>
+
+  <h2 class="section-title">Operative Provisions</h2>
+    <section class="clause">
+      <div class="clause-heading">1. Tenancy Status and Core Particulars</div>
+
+      <p class="clause-intro">The parties intend the tenant to occupy the Property as their main home on the assured periodic basis described in this document.</p>
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Tenancy type</td>
+              <td>New periodic tenancy agreement</td>
+            </tr>
+            <tr>
+              <td class="label">Pack</td>
+              <td>Premium Tenancy Agreement</td>
+            </tr>
+            <tr>
+              <td class="label">Furnished status</td>
+              <td>furnished</td>
+            </tr>
+            <tr>
+              <td class="label">Tenancy start date</td>
+              <td>2 May 2026</td>
+            </tr>
+        </table>
+
+
+          <p>The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-term drafting is created by this document unless a solicitor-approved route is expressly used outside this product.</p>
+
+    </section>
+    <section class="clause">
+      <div class="clause-heading">2. Rent, Payment Method, and Bill Treatment</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Rent</td>
+              <td>&#163;1500.00</td>
+            </tr>
+            <tr>
+              <td class="label">Rent period</td>
+              <td>Monthly</td>
+            </tr>
+            <tr>
+              <td class="label">Rent due day</td>
+              <td>1st of each month</td>
+            </tr>
+            <tr>
+              <td class="label">Payment method</td>
+              <td>Bank transfer</td>
+            </tr>
+            <tr>
+              <td class="label">Bills included in rent</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td class="label">Included bills detail</td>
+              <td>No bills are stated to be included in the rent unless this agreement expressly says otherwise.</td>
+            </tr>
+            <tr>
+              <td class="label">Account name</td>
+              <td>Landlord Heaven Client Account</td>
+            </tr>
+            <tr>
+              <td class="label">Sort code</td>
+              <td>12-34-56</td>
+            </tr>
+            <tr>
+              <td class="label">Account number</td>
+              <td>12345678</td>
+            </tr>
+        </table>
+
+
+          <p>The landlord confirms that any rent in advance taken for this tenancy is intended to stay within the limits permitted for England assured tenancies.</p>
+
+        <ul class="subpoints">
+            <li>Any rent increase for an England assured tenancy should follow the Section 13 statutory route or any later replacement process required by law. CPI, RPI, or fixed review wording is not intended to override that statutory process in this product.</li>
+        </ul>
+    </section>
+    <section class="clause">
+      <div class="clause-heading">3. Deposit Arrangements</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Deposit amount</td>
+              <td>&#163;1500.00</td>
+            </tr>
+            <tr>
+              <td class="label">Deposit protection scheme</td>
+              <td>DPS</td>
+            </tr>
+            <tr>
+              <td class="label">Deposit reference</td>
+              <td>DPS-EXAMPLE-2026-0001</td>
+            </tr>
+        </table>
+
+
+          <p>If a deposit is taken, it should be protected in an authorised England scheme within the statutory timeframe and the prescribed information should be served in time. The support documents in this pack are intended to help record those details.</p>
+
+    </section>
+    <section class="clause">
+      <div class="clause-heading">4. Tenant Ending the Tenancy</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Recorded tenant notice period</td>
+              <td>2 months</td>
+            </tr>
+        </table>
+
+
+          <p>The tenant may end the tenancy by giving at least 2 months written notice, ending on the appropriate day for the tenancy period unless the law changes or the parties later agree a lawful surrender.</p>
+          <p>The tenant should return keys, remove belongings, leave the property reasonably clean, and provide a forwarding address for deposit and final correspondence purposes.</p>
+
+    </section>
+    <section class="clause">
+      <div class="clause-heading">5. Landlord Ending the Tenancy</div>
+
+      
+
+
+
+          <p>In most circumstances, the landlord may only end the tenancy by obtaining an order for possession and the execution of that order. The landlord cannot lawfully end the tenancy just by serving a private break clause or informal notice.</p>
+          <p>If the landlord seeks possession, the landlord or one of any joint landlords will usually need to serve a possession notice using the correct form, specify the ground or grounds relied on, and give the minimum notice period that applies to that ground or those grounds before court proceedings begin.</p>
+          <p>Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy, the ground should be identified clearly in writing now and supported by the relevant factual explanation.</p>
+
+    </section>
+    <section class="clause">
+      <div class="clause-heading">6. Repairs, Fitness, Safety, and Access</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">EPC rating</td>
+              <td>C</td>
+            </tr>
+            <tr>
+              <td class="label">Gas safety certificate provided</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td class="label">Electrical safety certificate provided</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td class="label">Smoke alarms fitted and tested</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td class="label">Carbon monoxide alarms where required</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td class="label">Right to rent checks completed</td>
+              <td>25 April 2026</td>
+            </tr>
+        </table>
+
+
+          <p>Recorded access notice expectation: 24 hours.</p>
+
+        <ul class="subpoints">
+            <li>The landlord acknowledges that section 9A of the Landlord and Tenant Act 1985 requires the property to be fit for human habitation to the extent that section applies.</li>
+            <li>The landlord acknowledges that section 11 of the Landlord and Tenant Act 1985 requires the structure and exterior, and the installations for water, gas, electricity, sanitation, space heating, and hot water, to be kept in repair to the extent that section applies.</li>
+            <li>Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020 requires relevant electrical safety standards to be met during occupation, relevant electrical installations to be inspected and tested by a qualified person at least every 5 years or sooner if the most recent report requires it, and a copy of that report to be supplied to the tenant.</li>
+            <li>Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998 requires any relevant gas fitting and flue to be kept in a safe condition, safety checks to be carried out by a Gas Safe registered engineer at intervals determined in accordance with the Regulations, and a copy of the safety record to be given to the tenant.</li>
+            <li>Non-emergency access should normally take place on notice and at a reasonable time unless emergency circumstances justify immediate entry.</li>
+        </ul>
+    </section>
+    <section class="clause">
+      <div class="clause-heading">7. Pets, Adaptations, and Equal Treatment</div>
+
+      
+
+
+
+
+        <ul class="subpoints">
+            <li>The tenant may keep a pet at the property if the tenant asks to do so in line with section 16A of the Housing Act 1988 and the landlord gives consent.</li>
+            <li>The landlord cannot unreasonably refuse consent to keep a pet and should deal with any pet request reasonably and within the time required by the law then in force.</li>
+            <li>The landlord confirms that the tenancy was not offered or refused on an unlawful discriminatory basis in the recorded answers.</li>
+            <li>The landlord confirms that the tenancy was not granted through a prohibited bidding process in the recorded answers.</li>
+        </ul>
+    </section>
+    <section class="clause">
+      <div class="clause-heading">8. Premium Handover, Reporting, and Evidence Protocol</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Primary management contact channel</td>
+              <td>Email</td>
+            </tr>
+            <tr>
+              <td class="label">Routine inspection window</td>
+              <td>Quarterly weekday daytime visits</td>
+            </tr>
+            <tr>
+              <td class="label">Repairs reporting contact</td>
+              <td>Landlord direct by email</td>
+            </tr>
+            <tr>
+              <td class="label">Repairs response expectation</td>
+              <td>Within 24 hours</td>
+            </tr>
+            <tr>
+              <td class="label">Keys and access devices held</td>
+              <td>2 front-door keys and 1 fob</td>
+            </tr>
+            <tr>
+              <td class="label">Check-in paperwork expectation</td>
+              <td>Tenant to review the signed inventory, meter readings, and key record at check-in.</td>
+            </tr>
+            <tr>
+              <td class="label">Contractor access procedure</td>
+              <td>Tenant to be notified before contractor attendance.</td>
+            </tr>
+            <tr>
+              <td class="label">Contractor key release policy</td>
+              <td>Keys released to contractors only against a signed key register and same-day return expectation.</td>
+            </tr>
+            <tr>
+              <td class="label">Utilities and account transfer expectation</td>
+              <td>Tenant to open supplier accounts from the tenancy start date using the recorded opening readings.</td>
+            </tr>
+            <tr>
+              <td class="label">Move-out and hand-back expectations</td>
+              <td>Return all keys and provide final meter readings.</td>
+            </tr>
+        </table>
+
+
+          <p>This premium product is still an ordinary residential tenancy route, but it records fuller operational detail for inspections, reporting lines, keys, hand-back expectations, and management arrangements.</p>
+          <p>Primary management contact channel: Email.</p>
+          <p>Routine inspection window: Quarterly weekday daytime visits.</p>
+          <p>Repairs reporting contact: Landlord direct by email.</p>
+          <p>Check-in paperwork and evidence expectation: Tenant to review the signed inventory, meter readings, and key record at check-in.</p>
+          <p>Contractor access procedure: Tenant to be notified before contractor attendance.</p>
+          <p>Utilities and account transfer expectation: Tenant to open supplier accounts from the tenancy start date using the recorded opening readings.</p>
+          <p>Recorded hand-back expectations: Return all keys and provide final meter readings.</p>
+
+    </section>
+    <section class="clause">
+      <div class="clause-heading">9. Supporting Schedules and File Documents</div>
+
+      
+
+
+
+
+        <ul class="subpoints">
+            <li>This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a premium management schedule.</li>
+        </ul>
+    </section>
+    <section class="clause">
+      <div class="clause-heading">10. Notices and Service Information</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">Landlord service address</td>
+              <td>3 Owner Road, London, SW1A 2BB</td>
+            </tr>
+            <tr>
+              <td class="label">Landlord email</td>
+              <td>jane@example.com</td>
+            </tr>
+            <tr>
+              <td class="label">Landlord phone</td>
+              <td>07123 456789</td>
+            </tr>
+            <tr>
+              <td class="label">How to Rent guide provided</td>
+              <td>Yes</td>
+            </tr>
+        </table>
+
+
+          <p>Formal notices should be sent to the landlord service address stated in this document unless the landlord later gives a valid written replacement address for service.</p>
+
+    </section>
+
+    <div class="note-panel">
+      <strong>File notes</strong>
+      <p>This document is intended to record the written terms for an England assured periodic tenancy and should be read with any deposit, guarantor, and pre-tenancy checklist documents in the pack.
+
+The Premium pack is intended to travel with its management schedule, keys handover record, utilities handover sheet, pet-request addendum, and tenancy variation record.</p>
+    </div>
+
+
+  <section class="execution">
+    <h2 class="section-title">Execution</h2>
+    <p class="execution-copy">This premium agreement should be signed by the Landlord and the Tenant and retained with the tenancy records.</p>
+    <div class="signatures">
+        <div class="signature-card">
+          <div class="signature-role">Landlord</div>
+          <div class="signature-name">Jane Landlord</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+        </div>
+        <div class="signature-card">
+          <div class="signature-role">Tenant</div>
+          <div class="signature-name">Alice Tenant</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+        </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>Landlord Heaven file copy</span>
+    <span>RL-ENGLAND-PREMIUM-TA-TENANCY-001</span>
+  </div>
+</body>
+</html>

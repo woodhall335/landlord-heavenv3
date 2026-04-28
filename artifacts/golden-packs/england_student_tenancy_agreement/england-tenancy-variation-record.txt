@@ -1,0 +1,60 @@
+FOR PROPERTIES IN ENGLAND
+TENANCY VARIATION RECORD
+Student Tenancy Agreement variation record
+Use this record to log agreed changes after the main agreement is signed, so the tenancy
+file stays clear and up to date.
+PREPARED 16 April 2026 FILE REFERENCE RL-ENGLAND-
+STUDENT-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Variation record
+PROPERTY 12 Example Street, London, SW1A 1AA
+TENANT(S) Aisha Student, Ben
+Student, Cara Student
+TERM / DATES 2 May 2026 to 1 May
+2027
+RENT £1500.00 DEPOSIT £1500.00
+PARTIES
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in
+England.
+LANDLORD Jane Landlord
+3 Owner Road, London, SW1A 2BB
+Email: jane@example.com
+Telephone: 07123 456789
+TENANT 1 Aisha Student
+12 Example Street, London, SW1A 1AA
+Email: aisha@example.com
+Telephone: 07000 200001
+TENANT 2 Ben Student
+12 Example Street, London, SW1A 1AA
+Email: ben@example.com
+Telephone: 07000 200002
+TENANT 3 Cara Student
+12 Example Street, London, SW1A 1AA
+Email: cara@example.com
+
+-- 1 of 2 --
+
+Telephone: 07000 200003
+DEFINED TERMS
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Aisha Student
+OPERATIVE PROVISIONS
+1. Variation Record Purpose
+UNDERLYING
+PRODUCT
+Student Tenancy Agreement
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT(S) Aisha Student, Ben Student, Cara Student
+Use this record to note agreed changes after the tenancy starts without losing the original signed
+paperwork.
+Any important change should be dated, signed where appropriate, and stored with the main tenancy file.
+EXECUTION
+Any material change should be dated and retained with the tenancy file.
+FILE OWNER
+Jane Landlord
+Signature Date
+Landlord Heaven file copy RL-ENGLAND-STUDENT-TA-TENANCY-001
+
+-- 2 of 2 --

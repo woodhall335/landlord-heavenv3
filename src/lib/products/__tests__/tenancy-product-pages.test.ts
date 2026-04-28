@@ -10,9 +10,9 @@ describe('tenancy product pages', () => {
   it('/products/ast acts as the England comparison owner page', () => {
     const source = readSource('src/app/(marketing)/products/ast/page.tsx');
 
-    expect(source).toContain('Start here if you are not sure which England agreement to use');
-    expect(source).toContain('Compare all five England agreement types in one place');
-    expect(source).toContain('Standard, Premium, Student, HMO / Shared House');
+    expect(source).toContain('Choose the agreement that fits the tenancy');
+    expect(source).toContain('Use this page to compare the five agreement routes properly.');
+    expect(source).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
     expect(source).toContain('pricingItemListSchema');
   });
 
@@ -89,6 +89,6 @@ describe('tenancy product pages', () => {
     expect(premiumSource).toContain('Renters Rights Act tenancy agreement');
     expect(premiumSource).toContain('new tenancy agreement generator');
     expect(premiumSource).toContain('england tenancy agreement management schedule');
-    expect(premiumSource).toContain('stronger supporting pack with a management schedule and handover paperwork');
+    expect(premiumSource).toContain('you want a stronger pack with a management schedule and handover records');
   });
 });

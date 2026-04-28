@@ -1,0 +1,80 @@
+{
+  "key": "england_lodger_agreement",
+  "displayName": "Lodger Agreement",
+  "outputDir": "england_lodger_agreement",
+  "documentCount": 4,
+  "documents": [
+    {
+      "title": "Room Let / Lodger Agreement",
+      "description": "England resident-landlord lodger agreement for a room let or licence-style arrangement.",
+      "category": "agreement",
+      "documentType": "england_lodger_agreement",
+      "fileName": "england-lodger-agreement.pdf",
+      "files": {
+        "pdf": "england_lodger_agreement/england-lodger-agreement.pdf",
+        "text": "england_lodger_agreement/england-lodger-agreement.txt",
+        "html": "england_lodger_agreement/england-lodger-agreement.html"
+      },
+      "extraction": {
+        "pageCount": 4,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Room Let / Lodger Checklist",
+      "description": "Resident-landlord room-let checklist covering handover, house rules, and key practical compliance points.",
+      "category": "checklist",
+      "documentType": "england_lodger_checklist",
+      "fileName": "england-lodger-checklist.pdf",
+      "files": {
+        "pdf": "england_lodger_agreement/england-lodger-checklist.pdf",
+        "text": "england_lodger_agreement/england-lodger-checklist.txt",
+        "html": "england_lodger_agreement/england-lodger-checklist.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Keys & Handover Record",
+      "description": "Practical handover record for keys, access devices, and move-in confirmations.",
+      "category": "checklist",
+      "documentType": "england_keys_handover_record",
+      "fileName": "england-keys-handover-record.pdf",
+      "files": {
+        "pdf": "england_lodger_agreement/england-keys-handover-record.pdf",
+        "text": "england_lodger_agreement/england-keys-handover-record.txt",
+        "html": "england_lodger_agreement/england-keys-handover-record.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Lodger House Rules Appendix",
+      "description": "Resident-landlord appendix for guests, quiet hours, shared-space cleaning, and room hand-back expectations.",
+      "category": "schedule",
+      "documentType": "england_lodger_house_rules_appendix",
+      "fileName": "england-lodger-house-rules-appendix.pdf",
+      "files": {
+        "pdf": "england_lodger_agreement/england-lodger-house-rules-appendix.pdf",
+        "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt",
+        "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    }
+  ]
+}
