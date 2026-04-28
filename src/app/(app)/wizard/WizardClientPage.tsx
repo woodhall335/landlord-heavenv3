@@ -49,43 +49,39 @@ type CardProps = {
 
 const routeImages: Record<string, { src: string; alt: string }> = {
   notice_only: {
-    src: '/images/notice_bundles.webp',
+    src: '/images/wizard-eviction-notice-generator.webp',
     alt: 'Section 8 notice generator preview',
   },
   complete_pack: {
-    src: '/images/eviction_packs.webp',
+    src: '/images/wizard-comlete-eviction-pack.webp',
     alt: 'Complete eviction pack preview',
   },
   money_claim: {
-    src: '/images/money_claims.webp',
+    src: '/images/wizard-money-claim-pack.webp',
     alt: 'Money claim pack preview',
   },
   section13_standard: {
-    src: '/images/Statutory-change.webp',
+    src: '/images/wizard-section-13-rent-increase.webp',
     alt: 'Rent increase pack preview',
   },
-  ast: {
-    src: '/images/tenancy_agreements.webp',
-    alt: 'England tenancy agreement preview',
-  },
   england_standard_tenancy_agreement: {
-    src: '/images/standard_tenancy.webp',
+    src: '/images/wizard-standard-tenancy-agreement.webp',
     alt: 'Standard tenancy agreement preview',
   },
   england_premium_tenancy_agreement: {
-    src: '/images/premium_tenancy.webp',
+    src: '/images/wizard-premium-tenancy-agreement.webp',
     alt: 'Premium tenancy agreement preview',
   },
   england_student_tenancy_agreement: {
-    src: '/images/student_tenency.webp',
+    src: '/images/wizard-student-tenancy-agreement.webp',
     alt: 'Student tenancy agreement preview',
   },
   england_hmo_shared_house_tenancy_agreement: {
-    src: '/images/hmo_tenency_agreement.webp',
+    src: '/images/wizard-hmo-agreement.webp',
     alt: 'HMO shared house tenancy agreement preview',
   },
   england_lodger_agreement: {
-    src: '/images/room_let_agreement.webp',
+    src: '/images/wizard-lodger-agreement.webp',
     alt: 'Lodger agreement preview',
   },
 };
@@ -110,7 +106,7 @@ function ProductCard({
     <Link
       href={href}
       className={clsx(
-        'group overflow-hidden rounded-[2rem] border transition duration-200',
+        'group flex h-full flex-col overflow-hidden rounded-[2rem] border transition duration-200',
         accentStyles.card,
         accentStyles.borderGlow,
         PUBLIC_LAYOUT_CLASSES.card
@@ -125,7 +121,7 @@ function ProductCard({
           className="object-cover transition duration-300 group-hover:scale-[1.03]"
         />
       </div>
-      <div className="p-6">
+      <div className="flex flex-1 flex-col p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className={clsx('inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em]', accentStyles.chip)}>
@@ -135,7 +131,7 @@ function ProductCard({
           </div>
           <RiArrowRightLine className="mt-1 h-5 w-5 shrink-0 opacity-60 transition group-hover:translate-x-1" />
         </div>
-        <p className="mt-4 text-sm leading-7 text-[#5a516d]">{description}</p>
+          <p className="mt-4 text-sm leading-7 text-[#5a516d]">{description}</p>
         <p className="mt-5 text-sm font-semibold text-[#2d2344]">{price}</p>
       </div>
     </Link>
@@ -314,14 +310,15 @@ export default function WizardClientPage() {
         <div className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
           <div className="flex items-center gap-3">
             <RiScales3Line className="h-5 w-5 text-[#6b3fd1]" />
-            <h2 className="text-2xl font-semibold text-[#1d1532]">Eviction in England</h2>
+            <h2 className="text-2xl font-semibold text-[#1d1532]">England landlord casework</h2>
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5a516d]">
-            Choose the eviction product that fits what you need to do. The notice
-            product is for serving a Section 8 notice under the post-May 2026
-            rules. The court pack adds N5, N119, and the possession paperwork.
+            Start with the route that matches the job in front of you: serve a
+            Section 8 notice, prepare the full possession pack, recover a debt
+            through the county court, or increase rent under the post-May 2026
+            England rules.
           </p>
-          <div className="mt-8 grid gap-6 lg:grid-cols-2">
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
             <ProductCard
               href={PUBLIC_PRODUCT_DESCRIPTORS.notice_only.wizardHref}
               title={PUBLIC_PRODUCT_DESCRIPTORS.notice_only.shortName}
@@ -342,42 +339,27 @@ export default function WizardClientPage() {
               imageSrc={routeImages.complete_pack.src}
               imageAlt={routeImages.complete_pack.alt}
             />
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 pb-6 pt-2 sm:px-6 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-3">
-          <ProductCard
+            <ProductCard
               href={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.wizardHref}
               title={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.shortName}
               description="Recover unpaid rent, damage, bills, and former-tenant debt through the England county court process."
-            price={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.priceLabel}
-            eyebrow="Debt recovery"
-            accent={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.cardAccent}
-            imageSrc={routeImages.money_claim.src}
-            imageAlt={routeImages.money_claim.alt}
-          />
-          <ProductCard
+              price={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.priceLabel}
+              eyebrow="Debt recovery"
+              accent={PUBLIC_PRODUCT_DESCRIPTORS.money_claim.cardAccent}
+              imageSrc={routeImages.money_claim.src}
+              imageAlt={routeImages.money_claim.alt}
+            />
+            <ProductCard
               href={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.wizardHref}
               title="Rent Increase"
               description="Increase rent in England using Section 13 and Form 4A without mixing in eviction or debt paperwork."
-            price={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.priceLabel}
-            eyebrow="Rent increase"
-            accent={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.cardAccent}
-            imageSrc={routeImages.section13_standard.src}
-            imageAlt={routeImages.section13_standard.alt}
-          />
-          <ProductCard
-            href={PUBLIC_PRODUCT_DESCRIPTORS.ast.wizardHref}
-            title={PUBLIC_PRODUCT_DESCRIPTORS.ast.shortName}
-            description="Choose the right England tenancy agreement for Standard, Premium, Student, HMO / Shared House, or Lodger use."
-            price={PUBLIC_PRODUCT_DESCRIPTORS.ast.priceLabel}
-            eyebrow="Tenancy agreements"
-            accent={PUBLIC_PRODUCT_DESCRIPTORS.ast.cardAccent}
-            imageSrc={routeImages.ast.src}
-            imageAlt={routeImages.ast.alt}
-          />
+              price={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.priceLabel}
+              eyebrow="Rent increase"
+              accent={PUBLIC_PRODUCT_DESCRIPTORS.section13_standard.cardAccent}
+              imageSrc={routeImages.section13_standard.src}
+              imageAlt={routeImages.section13_standard.alt}
+            />
+          </div>
         </div>
       </section>
 
@@ -389,8 +371,9 @@ export default function WizardClientPage() {
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5a516d]">
             If you already know the exact agreement you need, jump straight in
-            below. If you want help choosing between the five agreement options, start from
-            the England tenancy hub.
+            below. If you want help choosing between the five Renters&apos; Rights
+            compliant tenancy agreements aligned to the post-May 2026 rules,
+            start from the England tenancy hub.
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             {tenancyCards.map((product) => (
