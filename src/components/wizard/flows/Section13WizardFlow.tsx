@@ -36,6 +36,7 @@ import type {
   Section13ProductSku,
   Section13State,
 } from '@/lib/section13/types';
+import { PRODUCTS } from '@/lib/pricing/products';
 import { isSection13ProposalStepComplete } from '@/lib/wizard/flow-completion';
 import { getSection13CheckoutThumbnailUrl } from '@/lib/previews/section13CheckoutPreview';
 
@@ -1882,7 +1883,9 @@ export function Section13WizardFlow({
                     <div>
                       <h3 className="text-lg font-semibold text-gray-950">{SECTION13_PLAN_TITLES[plan]}</h3>
                       <p className="mt-1 text-2xl font-bold text-violet-900">
-                        {plan === 'section13_defensive' ? '£34.99' : '£19.99'}
+                        {plan === 'section13_defensive'
+                          ? PRODUCTS.section13_defensive.displayPrice
+                          : PRODUCTS.section13_standard.displayPrice}
                       </p>
                     </div>
                   </div>

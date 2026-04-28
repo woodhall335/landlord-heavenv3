@@ -7,6 +7,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { PRODUCTS } from '@/lib/pricing/products';
 import {
   isMetadataColumnMissingError,
   setMetadataColumnExists,
@@ -18,6 +19,9 @@ import {
   getOrdersSelectFields,
   type OrderMetadata,
 } from '../safe-order-metadata';
+
+const COMPLETE_PACK_AMOUNT = PRODUCTS.complete_pack.price;
+const NOTICE_ONLY_AMOUNT = PRODUCTS.notice_only.price;
 
 // Mock console.warn to prevent noise in test output
 const originalWarn = console.warn;
@@ -346,7 +350,7 @@ describe('Backward Compatibility', () => {
       paid_at: '2024-01-15T10:30:00Z',
       order_id: 'order-123',
       stripe_session_id: 'cs_test_abc',
-      total_amount: 34.99,
+      total_amount: COMPLETE_PACK_AMOUNT,
       currency: 'GBP',
       has_final_documents: false,
       final_document_count: 0,
@@ -386,7 +390,7 @@ describe('OrderStatusResponse with requires_action', () => {
       paid_at: '2024-01-15T10:30:00Z',
       order_id: 'order-123',
       stripe_session_id: 'cs_test_abc',
-      total_amount: 34.99,
+      total_amount: COMPLETE_PACK_AMOUNT,
       currency: 'GBP',
       has_final_documents: false,
       final_document_count: 0,
@@ -425,7 +429,7 @@ describe('OrderStatusResponse with requires_action', () => {
       paid_at: '2024-01-15T10:30:00Z',
       order_id: 'order-123',
       stripe_session_id: 'cs_test_abc',
-      total_amount: 39.99,
+      total_amount: NOTICE_ONLY_AMOUNT,
       currency: 'GBP',
       has_final_documents: false,
       final_document_count: 0,

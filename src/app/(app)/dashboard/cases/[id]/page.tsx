@@ -29,6 +29,7 @@ import { deriveDisplayStatus } from '@/lib/case-status';
 import { validateUrlProduct, type CanonicalJurisdiction } from '@/lib/tenancy/product-normalization';
 import { doesDocumentTypeMatch, getDashboardDocumentTitle } from '@/lib/documents/dashboard-document-display';
 import { ASK_HEAVEN_CTA } from '@/constants/askHeavenCta';
+import { PRODUCTS } from '@/lib/pricing/products';
 import {
   getEnglandCanonicalTenancyProduct,
   getEnglandTenancyProductLabel,
@@ -556,7 +557,11 @@ export default function CaseDetailPage() {
 
       // Get product info from case type
       const productName = getCaseTypeLabel(caseDetails.case_type);
-      const amount = orderStatus.total_amount || 19.99;
+      const fallbackProduct =
+        caseDetails.case_type in PRODUCTS
+          ? PRODUCTS[caseDetails.case_type as keyof typeof PRODUCTS]
+          : null;
+      const amount = orderStatus.total_amount || fallbackProduct?.price || 0;
       const currency = orderStatus.currency || 'GBP';
 
       // Get attribution data from session/local storage

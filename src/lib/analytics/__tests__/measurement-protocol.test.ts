@@ -10,6 +10,10 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { PRODUCTS } from '@/lib/pricing/products';
+
+const NOTICE_ONLY_AMOUNT = PRODUCTS.notice_only.price;
+const COMPLETE_PACK_AMOUNT = PRODUCTS.complete_pack.price;
 
 // Store original env
 const originalEnv = process.env;
@@ -114,7 +118,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -141,7 +145,7 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
         utm_source: 'google',
         utm_medium: 'cpc',
@@ -181,13 +185,13 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-abc-123',
-        value: 19.99,
+        value: COMPLETE_PACK_AMOUNT,
         currency: 'GBP',
         items: [
           {
             item_id: 'complete_pack',
             item_name: 'Complete Eviction Pack',
-            price: 19.99,
+            price: COMPLETE_PACK_AMOUNT,
             quantity: 1,
             item_category: 'legal_document',
           },
@@ -198,7 +202,7 @@ describe('Measurement Protocol', () => {
 
       expect(requestBody.events[0].name).toBe('purchase');
       expect(requestBody.events[0].params.transaction_id).toBe('order-abc-123');
-      expect(requestBody.events[0].params.value).toBe(19.99);
+      expect(requestBody.events[0].params.value).toBe(COMPLETE_PACK_AMOUNT);
       expect(requestBody.events[0].params.currency).toBe('GBP');
       expect(requestBody.events[0].params.items).toHaveLength(1);
       expect(requestBody.events[0].params.items[0].item_id).toBe('complete_pack');
@@ -217,7 +221,7 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '9876543210.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -239,7 +243,7 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
         userId: 'user-abc-123',
       });
@@ -262,7 +266,7 @@ describe('Measurement Protocol', () => {
       await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -282,7 +286,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -301,7 +305,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -323,7 +327,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEvent({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -346,7 +350,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEventWithRetry({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -369,7 +373,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEventWithRetry({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -388,7 +392,7 @@ describe('Measurement Protocol', () => {
       const result = await sendServerPurchaseEventWithRetry({
         clientId: '1234567890.1705226400',
         transactionId: 'order-123',
-        value: 19.99,
+        value: NOTICE_ONLY_AMOUNT,
         currency: 'GBP',
       });
 
@@ -408,7 +412,7 @@ describe('Measurement Protocol', () => {
         {
           clientId: '1234567890.1705226400',
           transactionId: 'order-123',
-          value: 19.99,
+          value: NOTICE_ONLY_AMOUNT,
           currency: 'GBP',
         },
         2 // max 2 retries
@@ -435,7 +439,7 @@ describe('Measurement Protocol', () => {
         {
           clientId: '1234567890.1705226400',
           transactionId: 'order-123',
-          value: 19.99,
+          value: NOTICE_ONLY_AMOUNT,
           currency: 'GBP',
         },
         true // debug mode
@@ -469,7 +473,7 @@ describe('Measurement Protocol', () => {
         {
           clientId: '1234567890.1705226400',
           transactionId: 'order-123',
-          value: 19.99,
+          value: NOTICE_ONLY_AMOUNT,
           currency: 'GBP',
         },
         true
@@ -507,13 +511,13 @@ describe('GA4 purchase event payload structure', () => {
     await sendServerPurchaseEvent({
       clientId: '1234567890.1705226400',
       transactionId: 'order-123',
-      value: 19.99,
+      value: NOTICE_ONLY_AMOUNT,
       currency: 'GBP',
       items: [
         {
           item_id: 'notice_only',
           item_name: 'Notice Only Pack',
-          price: 19.99,
+          price: NOTICE_ONLY_AMOUNT,
           quantity: 1,
         },
       ],
@@ -555,7 +559,7 @@ describe('GA4 purchase event payload structure', () => {
     await sendServerPurchaseEvent({
       clientId: '1234567890.1705226400',
       transactionId: 'order-123',
-      value: 19.99,
+      value: NOTICE_ONLY_AMOUNT,
       currency: 'GBP',
       // Only utm_source provided, others undefined
       utm_source: 'google',

@@ -811,7 +811,7 @@ export async function POST(request: Request) {
       : undefined;
 
     // Create order record using admin client to avoid RLS issues
-    // Amount comes from products.ts (source of truth) - already in GBP (e.g., 19.99)
+    // Amount comes from products.ts (source of truth) - already in GBP (for example 49.99)
     // Attribution fields are stored for revenue reporting (Migration 012)
     const orderPayload = {
         user_id: user.id,

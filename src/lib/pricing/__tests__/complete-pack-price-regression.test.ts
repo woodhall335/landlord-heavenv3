@@ -10,12 +10,17 @@ const SCAN_ROOTS = ['src/app', 'src/components', 'src/lib/seo', 'src/lib/blog', 
 const TEXT_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.mdx']);
 
 const CORE_PRICE_EXPECTATIONS: Record<
-  Extract<ProductSku, 'notice_only' | 'complete_pack' | 'money_claim' | 'ast_standard' | 'ast_premium'>,
+  Extract<
+    ProductSku,
+    'notice_only' | 'complete_pack' | 'money_claim' | 'section13_standard' | 'section13_defensive' | 'ast_standard' | 'ast_premium'
+  >,
   { amount: number; display: string; pence: number }
 > = {
-  notice_only: { amount: 39.99, display: '£39.99', pence: 3999 },
-  complete_pack: { amount: 89.99, display: '£89.99', pence: 8999 },
-  money_claim: { amount: 29.99, display: '£29.99', pence: 2999 },
+  notice_only: { amount: 49.99, display: '£49.99', pence: 4999 },
+  complete_pack: { amount: 99.99, display: '£99.99', pence: 9999 },
+  money_claim: { amount: 49.99, display: '£49.99', pence: 4999 },
+  section13_standard: { amount: 29.99, display: '£29.99', pence: 2999 },
+  section13_defensive: { amount: 49.99, display: '£49.99', pence: 4999 },
   ast_standard: { amount: 14.99, display: '£14.99', pence: 1499 },
   ast_premium: { amount: 24.99, display: '£24.99', pence: 2499 },
 };
@@ -47,6 +52,12 @@ describe('Pricing regression checks', () => {
     expect(SEO_PRICES.moneyClaim.amount).toBe(CORE_PRICE_EXPECTATIONS.money_claim.amount);
     expect(SEO_PRICES.moneyClaim.display).toBe(CORE_PRICE_EXPECTATIONS.money_claim.display);
 
+    expect(SEO_PRICES.section13Standard.amount).toBe(CORE_PRICE_EXPECTATIONS.section13_standard.amount);
+    expect(SEO_PRICES.section13Standard.display).toBe(CORE_PRICE_EXPECTATIONS.section13_standard.display);
+
+    expect(SEO_PRICES.section13Defensive.amount).toBe(CORE_PRICE_EXPECTATIONS.section13_defensive.amount);
+    expect(SEO_PRICES.section13Defensive.display).toBe(CORE_PRICE_EXPECTATIONS.section13_defensive.display);
+
     expect(SEO_PRICES.tenancyStandard.amount).toBe(CORE_PRICE_EXPECTATIONS.ast_standard.amount);
     expect(SEO_PRICES.tenancyStandard.display).toBe(CORE_PRICE_EXPECTATIONS.ast_standard.display);
 
@@ -56,6 +67,8 @@ describe('Pricing regression checks', () => {
     expect(PRODUCTS.notice_only.price).toBe(CORE_PRICE_EXPECTATIONS.notice_only.amount);
     expect(PRODUCTS.complete_pack.price).toBe(CORE_PRICE_EXPECTATIONS.complete_pack.amount);
     expect(PRODUCTS.money_claim.price).toBe(CORE_PRICE_EXPECTATIONS.money_claim.amount);
+    expect(PRODUCTS.section13_standard.price).toBe(CORE_PRICE_EXPECTATIONS.section13_standard.amount);
+    expect(PRODUCTS.section13_defensive.price).toBe(CORE_PRICE_EXPECTATIONS.section13_defensive.amount);
     expect(PRODUCTS.sc_money_claim.displayPrice).toBe(CORE_PRICE_EXPECTATIONS.money_claim.display);
     expect(PRODUCTS.ast_standard.price).toBe(CORE_PRICE_EXPECTATIONS.ast_standard.amount);
     expect(PRODUCTS.ast_premium.price).toBe(CORE_PRICE_EXPECTATIONS.ast_premium.amount);
@@ -90,6 +103,8 @@ describe('Pricing regression checks', () => {
       { label: 'Notice Only £29.99', pattern: /(Section\s*21|Section\s*8|Notice(?:\s+Only)?|Eviction Notice)[^\n£]{0,120}£29\.99/i },
       { label: 'Complete Pack £49.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£49\.99/i },
       { label: 'Notice Only £19.99', pattern: /(Section\s*21|Section\s*8|Notice(?:\s+Only)?|Eviction Notice)[^\n£]{0,120}£19\.99/i },
+      { label: 'Section 13 Standard £19.99', pattern: /Standard Section 13(?: Pack)?[^\n£]{0,120}£19\.99/i },
+      { label: 'Section 13 Defence £34.99', pattern: /Section 13 Defence(?: Pack)?[^\n£]{0,120}£34\.99/i },
       { label: 'Complete Pack £79.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£79\.99/i },
       { label: 'Money Claim £59.99', pattern: /Money Claim(?:s)?[^\n£]{0,120}£59\.99/i },
       { label: 'Standard tenancy £9.99', pattern: /Standard\s+(?:AST|PRT|Contract)[^\n£]{0,120}£9\.99/i },
