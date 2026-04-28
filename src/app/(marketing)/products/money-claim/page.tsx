@@ -69,6 +69,7 @@ export default function MoneyClaimPage() {
   const sampleProof = getGoldenPackProofData('money_claim');
 
   const content: ProductSalesPageContent = {
+    postHeroContent: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
@@ -92,6 +93,7 @@ export default function MoneyClaimPage() {
       trustPositioningPreset: 'money_claim',
     },
     whatYouGet: {
+      hideSection: true,
       title: 'What you get in the Money Claim Pack',
       intro:
         'This is a debt-recovery system, not just a claim form. Each part of the pack exists to move the case from pre-action pressure into court and then into enforcement if the tenant still does not pay.',
@@ -179,7 +181,6 @@ export default function MoneyClaimPage() {
           includedByDefault: true,
         },
       ],
-      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
       title: 'Why a landlord money claim needs more than one form',

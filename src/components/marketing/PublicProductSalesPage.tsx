@@ -259,96 +259,100 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
 }
 
 export function PublicProductSalesPage({ content }: { content: ProductSalesPageContent }) {
-  const { analytics, hero, earlyProofBand, whatYouGet, whyYouNeedThis, howThisHelps, howItWorks, cta, faq } = content;
+  const { analytics, hero, postHeroContent, earlyProofBand, whatYouGet, whyYouNeedThis, howThisHelps, howItWorks, cta, faq } = content;
   const hasRouteCards = Boolean(whatYouGet.routeCards?.length);
   const hasProofBlock = Boolean(whatYouGet.preview || whatYouGet.sampleProof);
   const shouldShowProofAsPrimaryWhatYouGet = hasProofBlock && !hasRouteCards;
   const hasFallbackBreakdown =
     Boolean(whatYouGet.items?.length) || Boolean(whatYouGet.conditionalItems?.length);
+  const shouldRenderWhatYouGet = !whatYouGet.hideSection;
 
   return (
     <>
       <UniversalHero {...hero}>{hero.children}</UniversalHero>
+      {postHeroContent ? <section className="scroll-mt-24 bg-white py-10 md:py-12"><Container><div className="mx-auto max-w-6xl">{postHeroContent}</div></Container></section> : null}
       {earlyProofBand ? <EarlyProofBand content={earlyProofBand} /> : null}
 
-      <section id="what-you-get" className="scroll-mt-24 bg-[#FCFAFF] py-12 md:py-16">
-        <Container>
-          <div className="mx-auto max-w-6xl">
-            {hasRouteCards ? (
-              <>
-                <div className="max-w-3xl">
-                  <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
-                    {whatYouGet.title}
-                  </h2>
-                  <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
-                    {whatYouGet.intro}
+      {shouldRenderWhatYouGet ? (
+        <section id="what-you-get" className="scroll-mt-24 bg-[#FCFAFF] py-12 md:py-16">
+          <Container>
+            <div className="mx-auto max-w-6xl">
+              {hasRouteCards ? (
+                <>
+                  <div className="max-w-3xl">
+                    <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+                      {whatYouGet.title}
+                    </h2>
+                    <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
+                      {whatYouGet.intro}
+                    </div>
                   </div>
-                </div>
 
-                <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
-                  {whatYouGet.routeCards?.map((item) => (
-                    <RouteCard
-                      key={item.name}
-                      item={item}
-                      pagePath={analytics?.pagePath || '/rent-increase'}
-                      pageType={analytics?.pageType || 'entry_page'}
-                      routeIntent={analytics?.routeIntent}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : null}
-
-            {hasFallbackBreakdown && !shouldShowProofAsPrimaryWhatYouGet ? (
-              <>
-                <div className="max-w-3xl">
-                  <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
-                    {whatYouGet.title}
-                  </h2>
-                  <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
-                    {whatYouGet.intro}
+                  <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+                    {whatYouGet.routeCards?.map((item) => (
+                      <RouteCard
+                        key={item.name}
+                        item={item}
+                        pagePath={analytics?.pagePath || '/rent-increase'}
+                        pageType={analytics?.pageType || 'entry_page'}
+                        routeIntent={analytics?.routeIntent}
+                      />
+                    ))}
                   </div>
-                </div>
+                </>
+              ) : null}
 
-                {whatYouGet.items?.length ? (
-                  <div className="mt-8 grid gap-5 lg:grid-cols-2">
-                    {whatYouGet.items.map((item) => (
+              {hasFallbackBreakdown && !shouldShowProofAsPrimaryWhatYouGet ? (
+                <>
+                  <div className="max-w-3xl">
+                    <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+                      {whatYouGet.title}
+                    </h2>
+                    <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
+                      {whatYouGet.intro}
+                    </div>
+                  </div>
+
+                  {whatYouGet.items?.length ? (
+                    <div className="mt-8 grid gap-5 lg:grid-cols-2">
+                      {whatYouGet.items.map((item) => (
+                        <BreakdownCard key={item.name} item={item} />
+                      ))}
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+
+              {whatYouGet.conditionalItems?.length && !shouldShowProofAsPrimaryWhatYouGet ? (
+                <div className="mt-10 rounded-[2rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.05)] md:p-8">
+                  <div className="max-w-3xl">
+                    <h3 className="text-2xl font-semibold tracking-tight text-[#17142B]">
+                      {whatYouGet.conditionalTitle || 'Included when your answers require it'}
+                    </h3>
+                    {whatYouGet.conditionalIntro ? (
+                      <div className="mt-3 text-base leading-8 text-[#4B5565]">
+                        {whatYouGet.conditionalIntro}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="mt-6 grid gap-5 lg:grid-cols-2">
+                    {whatYouGet.conditionalItems.map((item) => (
                       <BreakdownCard key={item.name} item={item} />
                     ))}
                   </div>
-                ) : null}
-              </>
-            ) : null}
-
-            {whatYouGet.conditionalItems?.length && !shouldShowProofAsPrimaryWhatYouGet ? (
-              <div className="mt-10 rounded-[2rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.05)] md:p-8">
-                <div className="max-w-3xl">
-                  <h3 className="text-2xl font-semibold tracking-tight text-[#17142B]">
-                    {whatYouGet.conditionalTitle || 'Included when your answers require it'}
-                  </h3>
-                  {whatYouGet.conditionalIntro ? (
-                    <div className="mt-3 text-base leading-8 text-[#4B5565]">
-                      {whatYouGet.conditionalIntro}
-                    </div>
-                  ) : null}
                 </div>
-                <div className="mt-6 grid gap-5 lg:grid-cols-2">
-                  {whatYouGet.conditionalItems.map((item) => (
-                    <BreakdownCard key={item.name} item={item} />
-                  ))}
-                </div>
-              </div>
-            ) : null}
+              ) : null}
 
-            {hasProofBlock ? (
-              <div className={hasRouteCards || hasFallbackBreakdown ? 'mt-10 space-y-8' : ''}>
-                {whatYouGet.preview ? <div>{whatYouGet.preview}</div> : null}
-                {whatYouGet.sampleProof ? <div>{whatYouGet.sampleProof}</div> : null}
-              </div>
-            ) : null}
-          </div>
-        </Container>
-      </section>
+              {hasProofBlock ? (
+                <div className={hasRouteCards || hasFallbackBreakdown ? 'mt-10 space-y-8' : ''}>
+                  {whatYouGet.preview ? <div>{whatYouGet.preview}</div> : null}
+                  {whatYouGet.sampleProof ? <div>{whatYouGet.sampleProof}</div> : null}
+                </div>
+              ) : null}
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
       <InfoCards
         title={whyYouNeedThis.title}

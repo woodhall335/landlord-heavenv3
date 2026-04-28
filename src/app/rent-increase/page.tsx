@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type {
   ProductSalesPageContent,
   ProductSalesRouteCard,
 } from '@/lib/marketing/product-sales-content';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -96,12 +98,22 @@ const faqs: FAQItem[] = [
 ];
 
 export default function RentIncreaseLandingPage() {
+  const standardSampleProof = getGoldenPackProofData('section13_standard');
+  const defenceSampleProof = getGoldenPackProofData('section13_defensive');
+
   const content: ProductSalesPageContent = {
     analytics: {
       pagePath: '/rent-increase',
       pageType: 'entry_page',
       routeIntent: 'rent_increase',
     },
+    postHeroContent:
+      standardSampleProof || defenceSampleProof ? (
+        <div className="space-y-8">
+          {standardSampleProof ? <GoldenPackProof data={standardSampleProof} /> : null}
+          {defenceSampleProof ? <GoldenPackProof data={defenceSampleProof} /> : null}
+        </div>
+      ) : undefined,
     hero: {
       preset: standardDescriptor.heroPreset,
       badge: standardDescriptor.heroBadge,

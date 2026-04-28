@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { SECTION13_DEFENCE_PAGE } from '@/lib/marketing/section13-products';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -26,12 +28,15 @@ export const metadata: Metadata = {
 };
 
 export default function Section13DefenceProductPage() {
+  const sampleProof = getGoldenPackProofData('section13_defensive');
+
   const content: ProductSalesPageContent = {
     analytics: {
       pagePath: descriptor.landingHref,
       pageType: 'product_page',
       routeIntent: 'section13_defensive',
     },
+    postHeroContent: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
@@ -56,6 +61,7 @@ export default function Section13DefenceProductPage() {
       ),
     },
     whatYouGet: {
+      hideSection: true,
       title: 'What you get',
       intro: config.packIntro,
       items: config.packBreakdown,

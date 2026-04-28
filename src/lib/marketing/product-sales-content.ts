@@ -69,8 +69,10 @@ export interface ProductSalesPageContent {
     routeIntent?: string;
   };
   hero: ProductSalesHero;
+  postHeroContent?: ReactNode;
   earlyProofBand?: ProductSalesEarlyProofBand;
   whatYouGet: {
+    hideSection?: boolean;
     title: string;
     intro: ReactNode;
     items?: ProductSalesBreakdownItem[];
