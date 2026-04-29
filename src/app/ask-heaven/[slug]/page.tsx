@@ -207,7 +207,7 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
         initialQuestionText={question.question}
         showReviewWarning={question.status !== 'approved' && !isCanarySlug}
         chatHeading={question.question}
-        chatSubheading="Free landlord assistant for England/Wales/Scotland/N. Ireland"
+        chatSubheading="Plain-English landlord help for England, Wales, Scotland, and Northern Ireland"
       />
       <div className="bg-white pb-12">
         <div className="container mx-auto px-4 pt-8">

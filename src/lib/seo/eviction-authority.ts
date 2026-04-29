@@ -195,3 +195,34 @@ export function getAuthorityLinks(slug: string) {
     clusterLabel: cluster.label,
   };
 }
+
+const AUTHORITY_LINK_LABELS: Record<string, string> = {
+  '/eviction-notice-template': 'Eviction notice guide',
+  '/products/notice-only': 'Notice Only',
+  '/products/complete-pack': 'Complete Eviction Pack',
+  '/products/money-claim': 'Money Claim Pack',
+  '/products/ast': 'England tenancy agreements',
+  '/tools/rent-arrears-calculator': 'Rent arrears calculator',
+  '/renters-rights-act-eviction-rules': "Renters' Rights Act eviction rules",
+  '/section-8-notice': 'Section 8 notice guide',
+  '/section-21-notice': 'Section 21 transition guide',
+  '/eviction-process-england': 'England eviction process guide',
+  '/eviction-court-forms-england': 'Eviction court forms guide',
+};
+
+export function formatAuthorityLinkLabel(pathname: string): string {
+  if (AUTHORITY_LINK_LABELS[pathname]) {
+    return AUTHORITY_LINK_LABELS[pathname];
+  }
+
+  const lastSegment = pathname.replace(/^\/+/, '').split('/').filter(Boolean).pop();
+  if (!lastSegment) {
+    return pathname;
+  }
+
+  return lastSegment
+    .split('-')
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}

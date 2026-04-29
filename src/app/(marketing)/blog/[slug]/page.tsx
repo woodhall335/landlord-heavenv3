@@ -970,7 +970,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               </div>
 
               <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
-                <span className="rounded-full border border-[#e3d3ff] bg-[#f8f1ff] px-3 py-1 text-[#692ed4]">Landlord action guide</span>
+                <span className="rounded-full border border-[#e3d3ff] bg-[#f8f1ff] px-3 py-1 text-[#692ed4]">Landlord guide</span>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{post.author.role}</span>
               </div>
 
@@ -1010,11 +1010,11 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               <div className="mt-5 rounded-2xl border border-[#e6dbff] bg-white/90 p-4 sm:p-5">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">
-                  Read this first
+                  What this guide will help with
                 </p>
                 <p className="mt-2 text-sm text-slate-700">
-                  This guide explains the problem in plain English first, then
-                  shows you the next practical step when you are ready.
+                  This guide explains the problem in plain English, then helps
+                  you work out the next sensible step.
                 </p>
               </div>
             </div>
@@ -1059,7 +1059,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               {quickAnswer && (
                 <section className="mt-8 rounded-2xl border border-[#e9dcff] bg-white p-5 shadow-sm md:p-6" aria-label="Quick answer">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Quick answer</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">Short answer</p>
                   <h2 className="mt-2 text-xl font-bold text-gray-900">{quickAnswer.question}</h2>
                   <p className="mt-3 text-sm text-gray-700">{quickAnswer.answer}</p>
                   <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-gray-700">
@@ -1072,8 +1072,8 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
               {isTop30UpgradedPost(post.slug) && (
                 <section className="mt-8 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Recommended next routes">
-                  <h2 className="text-xl font-bold text-gray-900">Choose your next legal step</h2>
-                  <p className="mt-2 text-sm text-gray-700">Use the route below that matches your case stage to avoid dead ends and procedural delays.</p>
+                  <h2 className="text-xl font-bold text-gray-900">Pick the next step that fits your case</h2>
+                  <p className="mt-2 text-sm text-gray-700">Use the option below that matches where you are now, so you do not waste time on the wrong paperwork.</p>
                   <ul className="mt-4 space-y-2 text-sm">
                     {intentLinks.map((link) => (
                       <li key={link.href}>
@@ -1098,9 +1098,9 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               <NextSteps slug={post.slug} category={post.category} tags={post.tags} />
 
               <section className="mt-10 rounded-2xl border border-[#e9dcff] bg-[#f8f1ff] p-5 shadow-sm md:p-6" aria-label="Core eviction guides">
-                <h2 className="text-xl font-bold text-gray-900">Core eviction guides to keep your case moving</h2>
+                <h2 className="text-xl font-bold text-gray-900">Core eviction guides landlords usually need next</h2>
                 <p className="mt-2 text-sm text-gray-700">
-                  Keep your case connected with the core possession guides most landlords need during arrears and notice problems.
+                  These are the core possession guides landlords usually need after notice or arrears problems start.
                 </p>
                 <ul className="mt-4 space-y-2 text-sm">
                   {CORE_EVICTION_GUIDES.map((guide) => (

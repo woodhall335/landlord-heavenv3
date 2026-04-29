@@ -106,7 +106,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        trustText="Built for England landlords choosing the right letting agreement."
+        trustText="England tenancy agreements for landlords, updated for the post-May 2026 rules."
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
@@ -115,7 +115,7 @@ export function EnglandTenancyPage({
             ? { label: secondaryCtaLabel, href: secondaryCtaHref }
             : undefined
         }
-        feature="Choose the agreement that matches how the property is actually being let."
+        feature="Choose the agreement that fits the way you are letting the property."
         mediaSrc="/images/tenancy_agreements.webp"
         mediaAlt="Tenancy agreement documents and landlord paperwork"
         showTrustPositioningBar
@@ -229,12 +229,12 @@ export function EnglandTenancyPage({
               <section className="mb-12 rounded-[2rem] border border-[#E6E0D5] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
                 <div className="max-w-3xl">
                   <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                    Common landlord searches this route covers
+                    Common landlord searches for this setup
                   </h2>
                   <p className="mt-3 text-base leading-7 text-[#546075]">
                     These are the phrases landlords usually use when they are trying to find the right
-                    agreement for this setup. The important part is making sure the product and the let
-                    match each other cleanly.
+                    agreement for this kind of let. The important part is making sure the agreement
+                    matches the way the property is actually being occupied.
                   </p>
                 </div>
                 <div className="mt-5 flex flex-wrap gap-3">
@@ -253,7 +253,7 @@ export function EnglandTenancyPage({
             <section className="mb-12 grid gap-8 lg:grid-cols-2">
               <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
                   <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                    What this agreement route covers
+                    What this agreement covers
                   </h2>
                 <ul className="mt-5 space-y-3 text-[#465066]">
                   {highlights.map((item) => (
@@ -267,7 +267,7 @@ export function EnglandTenancyPage({
 
               <div className="rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)]">
                   <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                    How this lines up with the current England rules
+                    How this fits the current England rules
                   </h2>
                 <ul className="mt-5 space-y-3 text-[#465066]">
                   {compliancePoints.map((item) => (
@@ -284,7 +284,7 @@ export function EnglandTenancyPage({
               <section className="mb-12 grid gap-8 lg:grid-cols-2">
                 <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
                   <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                    This route is usually right if
+                    This agreement is usually right if
                   </h2>
                   <ul className="mt-5 space-y-3 text-[#465066]">
                     {idealFor.map((item) => (
@@ -298,7 +298,7 @@ export function EnglandTenancyPage({
 
                 <div className="rounded-[2rem] border border-[#F0DCC7] bg-[#FFF8F1] p-6 shadow-[0_14px_32px_rgba(124,72,18,0.06)]">
                   <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                    Pick a different route if
+                    Choose a different agreement if
                   </h2>
                   <ul className="mt-5 space-y-3 text-[#465066]">
                     {notFor.map((item) => (
@@ -316,11 +316,11 @@ export function EnglandTenancyPage({
               <section className="mb-12">
                 <div className="max-w-3xl">
                   <h2 className="text-3xl font-bold tracking-tight text-[#141B2D]">
-                    What you get
+                    What comes with it
                   </h2>
                   <p className="mt-3 text-base leading-7 text-[#546075]">
-                    The agreement is the main document, but we also include the practical paperwork a
-                    landlord usually needs around it so the tenancy starts on a cleaner footing.
+                    The agreement is the main document, but we also include the practical paperwork
+                    landlords usually need around it so the tenancy starts on a cleaner footing.
                   </p>
                 </div>
                 <div className="mt-6 grid gap-5 md:grid-cols-2">
@@ -350,11 +350,11 @@ export function EnglandTenancyPage({
               <section className="mb-12">
                 <div className="max-w-3xl">
                   <h2 className="text-3xl font-bold tracking-tight text-[#141B2D]">
-                    Compare England agreement routes
+                    Compare England tenancy agreements
                   </h2>
                   <p className="mt-3 text-base leading-7 text-[#546075]">
-                    Pick the route that matches the way the property is actually being let. That matters
-                    more than old AST wording or a vague idea of what sounds more "premium".
+                    Pick the agreement that matches the way the property is actually being let. That
+                    matters more than old AST wording or a vague idea of what sounds more "premium".
                   </p>
                 </div>
                 <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -401,9 +401,9 @@ export function EnglandTenancyPage({
             {salesContent?.ctaBody ||
               finalCtaBody || (
                 <>
-                  Start with the route that matches the property and the occupiers now, not the label
-                  you may have used years ago. England now has separate routes for Standard, Premium,
-                  Student, HMO / Shared House, and Lodger agreements.
+                  Start with the agreement that matches the property and the occupiers now, not the
+                  label you may have used years ago. England now has separate options for Standard,
+                  Premium, Student, HMO / Shared House, and Lodger agreements.
                 </>
               )}
           </div>
@@ -426,15 +426,15 @@ export function EnglandTenancyPage({
           {isSalesMode && routeComparison.length ? (
             <div className="mt-8 border-t border-white/15 pt-6">
               <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#D5CCF6]">
-                Compare other England agreement routes
+                Compare other England tenancy agreements
               </p>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
                 {routeComparison.map((route) => (
-                  <Link
-                    key={route.href}
-                    href={route.href}
-                    className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/15"
-                  >
+                <Link
+                  key={route.href}
+                  href={route.href}
+                  className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/15"
+                >
                     {route.ctaLabel || route.title}
                   </Link>
                 ))}

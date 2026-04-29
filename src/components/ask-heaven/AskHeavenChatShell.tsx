@@ -560,7 +560,7 @@ export default function AskHeavenChatShell({
     markEmailCaptured();
     trackAskHeavenEmailCapture(getTrackingParams());
     setEmailGateOpen(false);
-    setEmailStatus('Thanks! You can continue your conversation.');
+    setEmailStatus('Thanks. You can carry on with your question.');
   }, [getTrackingParams]);
 
   // Determine if we're in welcome state (no messages yet)
@@ -781,7 +781,7 @@ export default function AskHeavenChatShell({
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Ask Heaven</h2>
             )}
             <p className="mt-1 text-sm text-gray-600">
-              {chatSubheading ?? "Free landlord assistant for England/Wales/Scotland/N. Ireland"}
+              {chatSubheading ?? "Plain-English landlord help for England, Wales, Scotland, and Northern Ireland"}
             </p>
           </div>
           {showReviewWarning && (
@@ -825,7 +825,7 @@ export default function AskHeavenChatShell({
                   Hi, how can I help you?
                 </h2>
                 <p className="text-gray-500 text-lg">
-                  Free UK landlord advice for {jurisdictionLabels[jurisdiction]}
+                  Ask a landlord question about {jurisdictionLabels[jurisdiction]}
                 </p>
               </div>
 
@@ -848,7 +848,7 @@ export default function AskHeavenChatShell({
                       ref={inputRef}
                       type="text"
                       className="flex-1 py-4 px-3 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none text-base"
-                      placeholder="Ask about evictions, rent arrears, deposits..."
+                      placeholder="Ask about eviction notices, rent arrears, deposits, or tenancy agreements..."
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       disabled={isSending}
@@ -875,7 +875,7 @@ export default function AskHeavenChatShell({
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 pr-32 md:pr-48">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-xl">📋</span>
-                    <h3 className="font-bold text-gray-900">Popular Topics</h3>
+                    <h3 className="font-bold text-gray-900">Popular questions</h3>
                   </div>
                   <div className="space-y-3">
                     {quickPrompts.map((item) => (
@@ -1169,8 +1169,8 @@ export default function AskHeavenChatShell({
         source="ask_heaven_gate"
         jurisdiction={jurisdiction}
         tags={['ask_heaven', 'email_gate']}
-        title="Continue your conversation"
-        description="Enter your email to continue chatting with Ask Heaven. We'll also send you a summary of your conversation."
+        title="Keep chatting with Ask Heaven"
+        description="Enter your email to keep chatting. We'll also send you a copy of this conversation."
         primaryLabel="Continue"
         includeEmailReport={false}
         onSuccess={handleEmailCaptured}

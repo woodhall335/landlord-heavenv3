@@ -114,10 +114,10 @@ export const noticeOnlyContent: WizardLandingContent = {
   slug: 'eviction-notice-template',
   title: `Eviction Notice Generator 2026 | Form 3A, Wales Notices & Scotland Notice to Leave | ${SEO_PRICES.evictionNotice.display}`,
   description:
-    'Generate procedurally correct eviction notices for England (Form 3A current possession route), Wales (Section 173/181 under Renting Homes (Wales) Act 2016), and Scotland (Notice to Leave). Correct notice type, statutory wording, and notice periods. Official forms included.',
+    'Generate the right eviction notice for England (Form 3A), Wales (Section 173 or 181), or Scotland (Notice to Leave), with the correct wording, notice period, and official form for your jurisdiction.',
   h1: 'Need a Form 3A, Wales Notice, or Notice to Leave?',
   subheading:
-    'Jurisdiction-specific eviction notices for England, Wales & Scotland — compliance-checked with watermarked previews before you pay.',
+    'Jurisdiction-specific eviction notices for England, Wales, and Scotland, with checks before you serve and a watermarked preview before you pay.',
 
   product: 'notice_only',
   wizardUrl: '/wizard?product=notice_only&src=product_page&topic=eviction',
@@ -130,7 +130,7 @@ export const noticeOnlyContent: WizardLandingContent = {
       name: 'England Form 3A Possession Notice',
       jurisdiction: 'England',
       description:
-        'Current England possession notice citing Schedule 2 grounds on Form 3A. Notice periods vary by ground, and this is the live England notice route in the post-1 May 2026 framework.',
+        'Current England possession notice on Form 3A using Schedule 2 grounds. Notice periods vary by ground under the post-1 May 2026 framework.',
       legalBasis: 'Housing Act 1988, s.8, Schedule 2',
     },
     {
@@ -168,16 +168,16 @@ export const noticeOnlyContent: WizardLandingContent = {
 
   // NEW: Why landlords use this instead of templates
   whyUseThis: {
-    heading: 'Why Landlords Use This Instead of Templates',
+    heading: 'Why Landlords Use This Instead of a Template',
     intro:
       'Incorrect eviction notices are a leading cause of failed or delayed possession claims. A single error in notice type, wording, grounds, or notice period can result in your case being struck out. Our generator reduces this risk by ensuring your notice is procedurally correct from the start.',
     benefits: [
-      'Correct notice type for your jurisdiction — Form 3A (England), Section 173/181 (Wales), or Notice to Leave (Scotland)',
-      'Statutory wording that matches current legislation — not outdated template language',
-      'Correct notice period calculated automatically based on tenancy start date and chosen grounds',
-      'Grounds selection with required wording for each ground cited',
-      'Pre-flight compliance checks flag common blockers before you serve — deposit protection, gas safety, EPC, How to Rent',
-      'Prepared in the correct format for service — reduces the risk of procedural rejection at court or tribunal',
+      'The right notice for your jurisdiction: Form 3A in England, Section 173 or 181 in Wales, or Notice to Leave in Scotland',
+      'Current statutory wording rather than old template wording copied from elsewhere',
+      'Notice periods worked out from your answers, including tenancy dates and grounds where relevant',
+      'Ground-specific wording where the law requires it',
+      'Checks for common blockers before you serve, such as deposit protection, gas safety, EPC, and How to Rent in England',
+      'A notice prepared in the right format for service, which reduces the risk of avoidable rejection later',
     ],
   },
 
@@ -225,7 +225,7 @@ export const noticeOnlyContent: WizardLandingContent = {
     {
       question: 'What eviction notices do you generate?',
       answer:
-        'We generate procedurally correct notices for three jurisdictions: England (current possession route using Form 3A), Wales (Section 173 no-fault and Section 181 fault-based under Renting Homes (Wales) Act 2016), and Scotland (Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016).',
+        'We generate notices for three jurisdictions: England (Form 3A), Wales (Section 173 no-fault and Section 181 fault-based notices), and Scotland (Notice to Leave).',
     },
     {
       question: 'What does "procedurally correct" mean?',
@@ -235,7 +235,7 @@ export const noticeOnlyContent: WizardLandingContent = {
     {
       question: 'Are these official government forms?',
       answer:
-        'Yes. We use official prescribed forms: Form 3A for the live England possession route, official RHW forms for Wales, and the prescribed Notice to Leave format for Scotland. These are the forms required by courts and tribunals.',
+        'Yes. We use the official prescribed forms: Form 3A for England, the RHW forms for Wales, and the prescribed Notice to Leave format for Scotland.',
     },
     {
       question: 'What compliance checks are performed?',
@@ -276,10 +276,10 @@ export const completePackContent: WizardLandingContent = {
   slug: 'products/complete-pack',
   title: `Complete Eviction Bundle 2026 – England | Form 3A, N5 & N119 Possession Pack | ${SEO_PRICES.evictionBundle.display}`,
   description:
-    'End-to-end England eviction paperwork for the current possession route: Form 3A notice, N5 claim form, N119 particulars of claim, and filing guidance. We create the full court route, not just the notice.',
+    'End-to-end England eviction paperwork: Form 3A notice, N5 claim form, N119 particulars of claim, and filing guidance. This is the full possession pack, not just the notice.',
   h1: 'Taking Your Tenant to Court? Complete England Form 3A Eviction Pack',
   subheading:
-    'Form 3A notice + N5 + N119 + witness statement + filing guide — generated, validated, and internally consistent to reduce rejected possession claims.',
+    'Form 3A notice, N5, N119, a witness statement, and a filing guide prepared together so your possession paperwork is consistent from the start.',
 
   product: 'complete_pack',
   wizardUrl: '/wizard?product=complete_pack&src=product_page&topic=eviction',
@@ -298,7 +298,7 @@ export const completePackContent: WizardLandingContent = {
       name: 'N5 Claim for Possession',
       formNumber: 'N5',
       description:
-        'Standard possession claim form for the live England possession route. Filed at county court with N119.',
+        'Standard possession claim form for the current England process. Filed at county court with N119.',
       route: 'current_england_route',
     },
     {
@@ -312,8 +312,8 @@ export const completePackContent: WizardLandingContent = {
 
   whatYouGet: [
     'England Form 3A possession notice with correct statutory wording',
-    'Court claim forms: N5 + N119 for the standard possession route',
-    'Particulars of Claim (N119) — professionally structured case statement drafted in the correct legal format',
+    'Court claim forms: N5 and N119 for the standard possession process',
+    'Particulars of Claim (N119) setting out your case clearly in the right legal format',
     'AI-drafted witness statement with your case details',
     'Service instructions and validity checklist',
     'Court filing guide with step-by-step instructions — where to file, court fees, timelines',
@@ -324,24 +324,24 @@ export const completePackContent: WizardLandingContent = {
 
   // NEW: Why landlords use this - emphasising full court route
   whyUseThis: {
-    heading: 'Why This Bundle — Not Just a Notice',
+    heading: 'Why This Pack — Not Just a Notice',
     intro:
-      'Most eviction failures happen at the court filing stage, not the notice stage. An incomplete or inconsistent court submission leads to rejected claims, wasted fees, and months of delay. This bundle prepares the FULL court route — from notice to filed claim — ensuring your documents work together.',
+      'A lot of possession cases go wrong after the notice has been served because the court paperwork is incomplete, inconsistent, or hard to follow. This pack prepares the notice and the court claim together, so the documents work as one set.',
     benefits: [
-      'We prepare the live England possession route: Form 3A notice followed by N5 + N119 for county court possession proceedings',
-      'We draft your Particulars of Claim in the correct legal format, ensuring grounds, dates, and amounts are clearly structured.',
-      'For rent arrears: we itemise amounts, dates, and running totals in the particulars — exactly what the court requires',
-      'For breach grounds: we detail the specific ground(s) and supporting facts in the correct legal format',
-      'All forms are internally consistent — notice, claim form, and particulars align and cross-reference correctly',
-      'Reduces rejected claims: forms are validated before generation to catch missing fields, date errors, and compliance issues',
+      'Form 3A, N5, and N119 are prepared as one joined-up possession file for the county court',
+      'The Particulars of Claim are drafted in the right format so the grounds, dates, and figures are easy to follow',
+      'For rent arrears, the pack lays out the amounts, dates, and running totals clearly',
+      'For breach cases, it sets out the relevant ground and the supporting facts in a structured way',
+      'The notice, claim form, and particulars are checked against each other so they do not contradict one another',
+      'Validation catches missing fields, date issues, and common compliance problems before the documents are generated',
     ],
   },
 
   // NEW: Procedural benefits with Particulars of Claim emphasis
   proceduralBenefits: [
-    'Generates the Particulars of Claim (N119) — the statement of case that sets out your grounds, arrears history, and facts in detail',
-    'Builds the live England route: Form 3A + N5 + N119',
-    'Ensures internal consistency: notice grounds, claim form, and particulars align and reference each other correctly',
+    'Generates the Particulars of Claim (N119), which is where the grounds, arrears history, and supporting facts are set out in detail',
+    'Builds the current England possession file: Form 3A, N5, and N119',
+    'Checks that the notice, claim form, and particulars all line up properly',
     'Pre-fills official HMCTS forms with your case details — court-ready format',
     'Calculates notice periods, court deadlines, and earliest filing dates',
     'Flags compliance blockers (deposit, gas, EPC, How to Rent) before you file',
@@ -351,8 +351,8 @@ export const completePackContent: WizardLandingContent = {
   // NEW: Legal validation explainer
   legalValidationExplainer: {
     whatItMeans: [
-      'Maps your situation to the live England possession route',
-      'Generates the correct court forms for your route (Form 3A + N5 + N119)',
+      'Maps your answers to the current England possession process',
+      'Generates the right court forms for that process: Form 3A, N5, and N119',
       'Pre-fills all mandatory court form fields',
       'Creates Particulars of Claim with grounds, arrears history, and case details',
       'Validates internal consistency between notice, claim form, and particulars',
@@ -363,7 +363,7 @@ export const completePackContent: WizardLandingContent = {
   },
 
   howValidationWorks: [
-    'Route mapping: current England possession route → Form 3A + N5 + N119',
+    'Maps the case to the current England possession process: Form 3A, N5, and N119',
     'Form generation: Official HMCTS forms pre-filled with your case details',
     'Particulars of Claim: Grounds, arrears history, dates, and amounts drafted in legal format',
     'Compliance validation: Checks deposit, gas safety, EPC, How to Rent before generating',
@@ -373,7 +373,7 @@ export const completePackContent: WizardLandingContent = {
 
   whoThisIsFor: [
     'England landlords who need the complete eviction journey from notice to possession order',
-    'Landlords with rent arrears seeking the live England possession route with properly drafted particulars',
+    'Landlords with rent arrears who want the current England possession paperwork and properly drafted particulars',
     'Landlords who want Form 3A, N5, and N119 prepared as one consistent court pack',
     'Property managers handling court filings who need consistent, court-ready documents',
   ],
@@ -382,7 +382,7 @@ export const completePackContent: WizardLandingContent = {
     {
       question: 'What court route does this bundle cover?',
       answer:
-        'This bundle covers the live England possession route using Form 3A, N5, and N119. It is designed for the post-1 May 2026 framework and does not sell or generate the old accelerated possession route in the public England flow.',
+      'This bundle covers the current England possession process using Form 3A, N5, and N119. It is built for the post-1 May 2026 framework and does not generate the old accelerated possession route in the public England flow.',
     },
     {
       question: 'What is the N119 Particulars of Claim?',
@@ -437,10 +437,10 @@ export const moneyClaimContent: WizardLandingContent = {
   slug: 'money-claim',
   title: `Money Claim Pack 2026 | Form N1 Generator | Daily Interest Rate | England Only | ${SEO_PRICES.moneyClaim.display}`,
   description:
-    'Generate Form N1 claim form for rent arrears, property damage, cleaning costs, and contractual sums. England only. Automatic interest calculation with daily rate. Figures consistent across all documents. County court filing guide included.',
+    'Generate Form N1 for rent arrears, property damage, cleaning costs, and other contractual sums in England, with automatic interest calculation and a county court filing guide.',
   h1: 'Money Claim Pack — England Only',
   subheading:
-    'Form N1 claim form with automatic interest calculation, daily rate breakdown, and PAP-compliant Letter Before Claim for English county courts',
+    'Form N1 claim paperwork with automatic interest calculation, a daily rate breakdown, and a Letter Before Claim for England county court cases.',
 
   product: 'money_claim',
   wizardUrl: '/wizard?product=money_claim&src=product_page',
@@ -490,16 +490,16 @@ export const moneyClaimContent: WizardLandingContent = {
 
   // NEW: Why landlords use this
   whyUseThis: {
-    heading: 'Why This Pack — Not a DIY N1',
+    heading: 'Why This Pack — Not Just a Blank N1',
     intro:
-      'Money claims fail when figures don\'t add up, interest is calculated incorrectly, or documents are inconsistent. Courts reject claims with arithmetic errors or incomplete particulars. Our system ensures every figure is consistent across Form N1, Schedule of Debt, and Particulars of Claim — and calculates interest correctly with the daily rate shown.',
+      'Money claims often fall apart because the figures do not add up, the interest is wrong, or the documents do not match each other. This pack keeps the N1, the debt schedule, and the particulars consistent, and it works out the interest for you.',
     benefits: [
-      'Form N1 pre-filled with your claim details — mapped to official court format',
-      'Automatic interest calculation at 8% statutory rate with correct start dates for each debt item',
-      'Daily rate shown clearly — courts and defendants expect this (e.g., "£1.37 per day continuing")',
-      'All figures reconcile: Schedule of Debt totals match N1 claim amount and Particulars',
-      'PAP-DEBT compliant Letter Before Claim — required before you can issue proceedings',
-      'Filing guidance: Where to file in England (County Court Money Claims Centre or local county court)',
+      'Form N1 pre-filled in the official court format',
+      'Automatic 8% statutory interest calculation using the right start dates for each debt item',
+      'The daily rate is shown clearly because the court expects to see it',
+      'The debt schedule, N1, and particulars are checked so the totals match',
+      'A Letter Before Claim that follows the debt protocol before proceedings are issued',
+      'Clear filing guidance for the County Court Money Claims Centre or the local county court where appropriate',
     ],
   },
 
@@ -510,7 +510,7 @@ export const moneyClaimContent: WizardLandingContent = {
     'Shows daily rate explicitly (e.g., "£1.37 per day") — required for judgment and enforcement',
     'Ensures figures are consistent across N1, Schedule of Debt, and Particulars of Claim',
     'Creates PAP-DEBT compliant Letter Before Claim with 30-day response period',
-    'England only: Guides you on where to file based on defendant address and claim type',
+    'England only: explains where to file based on the defendant address and the claim type',
     'Validates dates are within 6-year limitation period',
   ],
 
@@ -603,10 +603,10 @@ export const astStandardContent: WizardLandingContent = {
   slug: 'tenancy-agreement',
   title: `Tenancy Agreement Generator 2026 | England Tenancy Agreement, Occupation Contract, PRT | ${SEO_PRICES.tenancyStandard.display}`,
   description:
-    'Jurisdiction-specific tenancy agreements: England tenancy agreement designed for the assured periodic framework, Occupation Contract (Wales), Private Residential Tenancy (Scotland), and Private Tenancy Agreement (Northern Ireland). Older agreements may be harder to rely on if they use outdated wording or structure.',
+    'Jurisdiction-specific tenancy agreements for England, Wales, Scotland, and Northern Ireland, using the right agreement type and current wording for each nation.',
   h1: 'Tenancy Agreement Generator',
   subheading:
-    'Jurisdiction-specific agreements with current England tenancy agreement wording and the correct terminology for Wales, Scotland, and Northern Ireland',
+    'Jurisdiction-specific agreements with current England wording and the correct terminology for Wales, Scotland, and Northern Ireland.',
 
   product: 'ast_standard',
   wizardUrl: '/wizard?product=ast_standard&src=product_page&topic=tenancy',
@@ -624,8 +624,8 @@ export const astStandardContent: WizardLandingContent = {
         'Current England tenancy agreement wording for new England agreements',
         'Deposit protection and written-information guidance captured in the wizard',
         'Tenant notice and landlord possession wording updated for the current England product position',
-        'No live AST-first or Section 21-led sales positioning in the public England flow',
-        'Routes existing written and verbal tenancies into separate England guidance paths',
+        'No old AST-first or Section 21-led wording in the public England product',
+        'Existing written and verbal tenancies are handled through separate England guidance pages',
       ],
       notes: 'Public England product now uses current England tenancy agreement wording.',
     },
@@ -687,9 +687,9 @@ export const astStandardContent: WizardLandingContent = {
   ],
 
   whyUseThis: {
-    heading: 'Why Jurisdiction-Specific Not A Generic Template',
+    heading: 'Why Use a Jurisdiction-Specific Agreement Instead of a Generic Template',
     intro:
-    'Using the wrong terminology or law for your jurisdiction creates disputes and compliance problems. Older agreements may be harder to rely on if they use outdated wording or structure. The live England product now uses current England tenancy agreement wording, while Wales needs an Occupation Contract, Scotland needs a PRT, and Northern Ireland needs its own private tenancy wording.',
+    'Using the wrong law or the wrong terminology for the property location creates avoidable disputes and compliance problems. Older agreements can also be harder to rely on if the wording is out of date. England now needs current England tenancy agreement wording, while Wales needs an Occupation Contract, Scotland needs a PRT, and Northern Ireland needs its own private tenancy wording.',
     benefits: [
       'Correct agreement type: England tenancy agreement, Standard Occupation Contract (Wales), PRT (Scotland), Private Tenancy (NI)',
       'Correct terminology for each nation instead of generic UK wording',
@@ -762,7 +762,7 @@ export const astStandardContent: WizardLandingContent = {
     {
       question: 'Is this agreement legally compliant?',
       answer:
-        'Agreements are drafted for the supported residential workflow in each jurisdiction and include the required core statutory terms. For unusual situations such as commercial mixed-use, licence agreements, or company lets, consult a solicitor.',
+        'Agreements are drafted for the supported residential use cases in each jurisdiction and include the required core statutory terms. For unusual situations such as commercial mixed-use, licence agreements, or company lets, consult a solicitor.',
     },
     {
       question: 'Can I preview before paying?',
@@ -787,7 +787,7 @@ export const astStandardContent: WizardLandingContent = {
 };
 
 /**
- * AST PREMIUM - Enhanced tenancy agreements across the shared UK funnel.
+* AST PREMIUM - Enhanced tenancy agreements across the shared UK offering.
  * England Premium is now the fuller ordinary-residential route, while the
  * England Student, HMO / Shared House, and Lodger products sit separately.
  */
@@ -795,10 +795,10 @@ export const astPremiumContent: WizardLandingContent = {
   slug: 'premium-tenancy-agreement',
   title: `Premium Tenancy Agreement 2026 | Fuller Residential Drafting | ${SEO_PRICES.tenancyPremium.display}`,
   description:
-    'Premium tenancy agreements with fuller drafting, inventory support, and compliance guidance. In England, Premium is now the ordinary-residential premium route, while Student, HMO / Shared House, and Lodger products are separate.',
+    'Premium tenancy agreements with fuller drafting, inventory support, and compliance guidance. In England, Premium is the fuller ordinary residential option, while Student, HMO / Shared House, and Lodger have their own separate products.',
   h1: 'Premium Tenancy Agreement',
   subheading:
-    'Fuller drafting, inventory support, and enhanced operational detail for premium tenancy agreements',
+    'Fuller drafting, inventory support, and more day-to-day detail for landlords who want more than a basic agreement.',
 
   product: 'ast_premium',
   wizardUrl: '/wizard?product=ast_premium&src=product_page&topic=tenancy',
@@ -811,7 +811,7 @@ export const astPremiumContent: WizardLandingContent = {
       name: 'England',
       flag: 'England',
       agreementType: 'Premium England tenancy agreement',
-      legalBasis: 'Current England agreement wording for the ordinary-residential premium route',
+      legalBasis: 'Current England agreement wording for the fuller ordinary residential premium agreement',
       keyFeatures: [
         'All Standard England agreement clauses plus fuller operational drafting',
         'More detailed property management and practical wording',
@@ -863,7 +863,7 @@ export const astPremiumContent: WizardLandingContent = {
   ],
 
   whatYouGet: [
-    'Premium tenancy agreement with fuller drafting than the Standard route',
+    'Premium tenancy agreement with fuller drafting than the Standard version',
     'Enhanced operational wording for ordinary residential lets',
     'Guarantor-friendly drafting where selected in the supported flow',
     'Inventory and schedule of condition completed through the wizard where supported',
@@ -877,9 +877,9 @@ export const astPremiumContent: WizardLandingContent = {
   ],
 
   whyUseThis: {
-    heading: 'Why Premium Not Just Standard',
+    heading: 'Why Choose Premium Instead of Standard',
     intro:
-      'Premium is for landlords who want fuller drafting, clearer operational detail, and a more tailored agreement than the baseline Standard route. In England, HMO/shared-house, student, and lodger cases now have their own dedicated products instead of being folded into Premium.',
+      'Premium is for landlords who want fuller drafting, clearer day-to-day detail, and a more tailored agreement than the Standard version. In England, HMO / shared-house, student, and lodger cases now have their own dedicated products instead of being folded into Premium.',
     benefits: [
       'Fuller drafting for inspections, property use, and day-to-day management',
       'Guarantor-friendly wording where the supported flow captures that detail',
@@ -891,7 +891,7 @@ export const astPremiumContent: WizardLandingContent = {
   },
 
   proceduralBenefits: [
-    'Includes fuller drafting for the premium route rather than only the baseline standard wording',
+    'Includes fuller drafting rather than only the baseline standard wording',
     'Includes guarantor-friendly wording where selected in the supported flow',
     'Generates inventory and schedule of condition with the wizard instead of leaving it blank',
     'Creates jurisdiction-specific compliance checklist for pre-tenancy requirements',
@@ -910,24 +910,24 @@ export const astPremiumContent: WizardLandingContent = {
       'Applies all Standard validation plus Premium-specific provisions',
     ],
     disclaimer:
-      'This is systematic procedural validation, not legal advice. Premium agreements are drafted for the supported premium residential workflow in each jurisdiction. For complex arrangements such as commercial HMOs, licence agreements, or unusual guarantee structures, consult a qualified solicitor.',
+      'This is systematic procedural validation, not legal advice. Premium agreements are drafted for the supported residential use cases in each jurisdiction. For complex arrangements such as commercial HMOs, licence agreements, or unusual guarantee structures, consult a qualified solicitor.',
   },
 
   howValidationWorks: [
     'Jurisdiction-specific drafting: premium wording stays aligned with the selected nation',
     'Cross-jurisdiction safety: the selected jurisdiction keeps the right terminology and compliance framing',
     'Guarantor validation: ensures guarantor details and liability scope are captured',
-    'Inventory workflow: converts guided answers into a usable schedule of condition',
+    'Inventory support: converts guided answers into a usable schedule of condition',
     'Compliance checklist: highlights the main pre-tenancy requirements for the chosen jurisdiction',
     'Premium terms: keeps enhanced clauses aligned with the core agreement details',
   ],
 
   whoThisIsFor: [
-    'Landlords wanting fuller drafting than the baseline standard route',
+    'Landlords wanting fuller drafting than the baseline standard agreement',
     'Ordinary residential lets needing more operational detail',
     'Landlords requiring guarantor-friendly wording in the supported flow',
     'Professional landlords wanting more detailed protection in disputes',
-    'Landlords who want a more detailed product without switching into a separate England HMO, Student, or Lodger route',
+    'Landlords who want a more detailed agreement without moving into a separate England HMO, Student, or Lodger product',
   ],
 
   faqs: [

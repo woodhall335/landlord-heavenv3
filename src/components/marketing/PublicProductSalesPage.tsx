@@ -42,15 +42,15 @@ function BreakdownCard({ item }: { item: ProductSalesBreakdownItem }) {
 
       <dl className="mt-5 space-y-4 text-sm leading-7 text-[#4B5565] md:text-base">
         <div>
-          <dt className="font-semibold text-[#17142B]">What it is</dt>
+          <dt className="font-semibold text-[#17142B]">In plain English</dt>
           <dd>{item.plainEnglish}</dd>
         </div>
         <div>
-          <dt className="font-semibold text-[#17142B]">What it does</dt>
+          <dt className="font-semibold text-[#17142B]">What this covers</dt>
           <dd>{item.function}</dd>
         </div>
         <div>
-          <dt className="font-semibold text-[#17142B]">Why it is needed</dt>
+          <dt className="font-semibold text-[#17142B]">What can go wrong without it</dt>
           <dd>{item.riskIfMissing}</dd>
         </div>
         <div>
@@ -99,19 +99,19 @@ function RouteCard({
 
         <dl className="mt-5 flex-1 space-y-4 text-sm leading-7 text-[#4B5565] md:text-base">
           <div>
-            <dt className="font-semibold text-[#17142B]">What it is for</dt>
+            <dt className="font-semibold text-[#17142B]">Best when</dt>
             <dd>{item.whatItIs}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-[#17142B]">What problem it solves</dt>
+            <dt className="font-semibold text-[#17142B]">What it helps with</dt>
             <dd>{item.problemItSolves}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-[#17142B]">What goes wrong without it</dt>
+            <dt className="font-semibold text-[#17142B]">Common problem if you choose wrong</dt>
             <dd>{item.riskIfWrong}</dd>
           </div>
           <div>
-            <dt className="font-semibold text-[#17142B]">How it helps the landlord</dt>
+            <dt className="font-semibold text-[#17142B]">How it helps you</dt>
             <dd>{item.landlordOutcome}</dd>
           </div>
         </dl>
@@ -208,7 +208,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
                   </span>
                 ) : null}
                 <span className="rounded-full border border-[#E8E1F8] bg-white px-4 py-2 text-sm font-semibold text-[#2A2161]">
-                  Preview before purchase
+                  Preview before you buy
                 </span>
               </div>
 
@@ -221,7 +221,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
               {hasChecklist ? (
                 <div className="mt-6">
                   <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
-                    What is included up front
+                    What you can see straight away
                   </p>
                   <ul className="mt-4 grid gap-3 text-sm leading-7 text-[#2A2161] md:grid-cols-2 md:text-base">
                     {content.includedBullets?.map((bullet) => (
@@ -239,7 +239,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
                   {content.bestFor ? (
                     <div className="rounded-[1.6rem] border border-[#D9F2E7] bg-[#F2FBF6] p-5">
                       <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#0D7A5A]">
-                        Best for
+                        Best fit
                       </p>
                       <p className="mt-3 text-sm leading-7 text-[#215245] md:text-base">
                         {content.bestFor}
@@ -249,7 +249,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
                   {content.notFor ? (
                     <div className="rounded-[1.6rem] border border-[#F3E4D0] bg-[#FFF8EF] p-5">
                       <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#A55A0F]">
-                        Not for
+                        Not the right fit
                       </p>
                       <p className="mt-3 text-sm leading-7 text-[#69431E] md:text-base">
                         {content.notFor}
