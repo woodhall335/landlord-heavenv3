@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 
 const faqs: FAQItem[] = [
   {
-    question: 'What does the Complete Eviction Pack include?',
+    question: 'What does the Section 8 Complete Eviction Pack include?',
     answer:
       'It includes the current England Section 8 notice, Form N5, Form N119, an arrears schedule, an evidence bundle structure, and court filing guidance in one joined-up possession pack.',
   },
@@ -83,7 +83,7 @@ export default function CompleteEvictionPackPage() {
       trustText: 'England court possession pack | notice, claim forms, and filing support together',
       title: descriptor.displayName,
       subtitle:
-        'Prepare and file a full court-ready possession case without leaving legal gaps between the notice, the claim forms, and the evidence.',
+        'Prepare and file a full Section 8 court-ready possession case without leaving legal gaps between the notice, the claim forms, and the evidence.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -100,7 +100,7 @@ export default function CompleteEvictionPackPage() {
       trustPositioningPreset: 'complete_pack',
     },
     whatYouGet: {
-      title: 'What you get in the Complete Eviction Pack',
+      title: 'What you get in the Section 8 Complete Eviction Pack',
       intro:
         'This pack is for landlords who need the notice stage and the court stage joined up. Each document exists to move the case from service into possession proceedings without leaving the file full of gaps.',
       items: [
@@ -255,7 +255,7 @@ export default function CompleteEvictionPackPage() {
       ],
     },
     cta: {
-      title: 'Start the full possession file now',
+      title: 'Start the full Section 8 possession file now',
       body:
         'Start here if you want the Section 8 notice, the claim forms, and the filing guidance prepared together as one England possession file.',
       primary: {
@@ -269,7 +269,7 @@ export default function CompleteEvictionPackPage() {
       guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
-      title: 'Complete Eviction Pack FAQs',
+      title: 'Section 8 Complete Eviction Pack FAQs',
       items: faqs,
     },
   };
