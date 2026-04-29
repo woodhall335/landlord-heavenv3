@@ -19,10 +19,6 @@ interface Seed {
   productLink: { label: string; href: string };
 }
 
-function paragraph(focus: string, scenario: string, heading: string, angle: string) {
-  return `${focus} is much easier to manage when you treat it as a clear sequence of steps instead of one big legal problem. In ${heading.toLowerCase()}, start by pinning down the tenancy position, what has gone wrong, and what you want from the case. ${angle} Keep one chronology covering payments, breach events, service evidence, and key communications, then use it across notices, claim forms, witness statements, and hearing notes so the story stays consistent. Landlords dealing with ${scenario} usually lose time when they rely on memory or scattered documents, so keep one indexed evidence file with dated records before each step.`;
-}
-
 const deepSectionTitles = [
   'Start with the facts and the legal position',
   'Get the notice right and prove service',
@@ -45,9 +41,9 @@ function buildDeepSections(seed: Seed): PillarSection[] {
   return deepSectionTitles.map((title, index) => ({
     title,
     paragraphs: [
-      paragraph(seed.focus, seed.scenario, title, deepAngles[index]),
-      paragraph(seed.focus, seed.scenario, title, 'When facts change, update your chronology and action list the same day so decisions are based on current evidence rather than assumptions from earlier drafts.'),
-      paragraph(seed.focus, seed.scenario, title, 'The fastest route is the route least likely to be challenged, adjourned, or struck out, so prioritise procedural resilience over optimistic timing.'),
+      `${seed.focus} gets easier to manage when you break it into clear stages instead of treating it like one big legal problem. At the ${title.toLowerCase()} stage, start by pinning down the tenancy position, what has gone wrong, and what you want from the case. ${deepAngles[index]}`,
+      `Keep one chronology covering payments, breach events, service evidence, and key communications, then reuse it across notices, claim forms, witness statements, and hearing notes so the story stays consistent. Landlords dealing with ${seed.scenario} usually lose time when they rely on memory or scattered documents, so keep one indexed evidence file with dated records before each step.`,
+      `When the facts change, update your chronology and action list the same day so decisions are based on current evidence rather than assumptions from earlier drafts. The fastest route is usually the one least likely to be challenged, adjourned, or struck out, so prioritise procedural resilience over optimistic timing.`,
     ],
   }));
 }
@@ -76,21 +72,21 @@ function buildPage(seed: Seed): PillarPageContent {
       'Links to the guides and tools landlords usually need next.',
     ],
     quickAnswer: [
-      `${seed.focus} usually starts with three things: checking the facts, checking the paperwork, and choosing the legal step that actually fits the case. Landlords who do that early are much less likely to waste time on avoidable notice or court mistakes.`,
+      `${seed.focus} usually starts with three things: checking the facts, checking the paperwork, and choosing the legal step that really fits the case. Landlords who do that early are far less likely to waste time on avoidable notice or court mistakes.`,
       `For ${seed.scenario}, the practical sequence is to confirm the tenancy position, serve the right notice with solid proof of service, get the court papers consistent before deadlines, and think ahead to enforcement so the case does not stall after the order.`,
     ],
     routeExplanation: [
-      'Section 21 is usually used when you want possession without relying on tenant fault and the compliance requirements have been met. It can be straightforward, but only if the paperwork and timing are right.',
-      'Section 8 is used when you are relying on a specific breach such as serious arrears or anti-social behaviour. It can be stronger for breach-led cases, but only if the facts and evidence match the grounds you cite.',
-      'The court process depends on what notice was served, how the tenant responds, and whether the case is likely to be defended. Some cases are relatively clean; others need fuller preparation from the outset.',
-      'Enforcement should be thought about before judgment, not after it. Bailiff timing, property access, and any follow-on debt recovery are easier to manage when they are planned as part of the same case.',
+      'Section 21 is usually used when you want possession without relying on tenant fault and the compliance requirements have been met. It can be straightforward, but only when the paperwork and timing are right.',
+      'Section 8 is used when you are relying on a specific breach such as serious arrears or anti-social behaviour. It can be stronger for breach-led cases, but only when the facts and evidence really match the grounds you cite.',
+      'The court process depends on what notice was served, how the tenant responds, and whether the case is likely to be defended. Some cases are relatively clean; others need fuller preparation from the start.',
+      'Enforcement should be planned before judgment, not treated as an afterthought. Bailiff timing, property access, and any follow-on debt recovery are all easier to manage when they are part of the same plan.',
     ],
     processSteps: [
       { title: 'Diagnose the facts and the tenancy position', detail: `Confirm the tenancy status, whether the notice is available, whether the compliance documents are in order, and whether ${seed.scenario} adds extra risk before you commit to the next legal step.` },
       { title: 'Choose the right notice and serve it properly', detail: 'Pick the notice that matches the facts, then serve it using a reliable method and keep full dated proof of service in the same file.' },
-      { title: 'Run pre-court quality checks', detail: 'Before filing, reconcile every date, figure, and annex across forms and schedules. This prevents contradictions that often trigger adjournments or re-filings.' },
-      { title: 'File claim and prepare hearing narrative', detail: 'Issue the claim with full supporting documents, then build a short hearing narrative mapping facts to legal tests so presentation is clear and judge-friendly.' },
-      { title: 'Execute possession and next-stage recovery', detail: 'After order, action enforcement promptly if needed, secure property handover steps, and progress arrears or damages recovery according to a pre-set commercial threshold.' },
+      { title: 'Run pre-court quality checks', detail: 'Before filing, reconcile every date, figure, and annex across forms and schedules. That prevents the contradictions that often trigger adjournments or re-filings.' },
+      { title: 'File claim and prepare hearing narrative', detail: 'Issue the claim with full supporting documents, then build a short hearing story mapping the facts to the legal test so the case is easy to follow.' },
+      { title: 'Execute possession and next-stage recovery', detail: 'After the order, move into enforcement promptly if needed, secure the property handover properly, and only then push arrears or damages recovery as far as it remains commercially sensible.' },
     ],
     checklists: [
       {

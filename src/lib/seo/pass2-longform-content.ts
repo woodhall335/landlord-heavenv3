@@ -29,10 +29,6 @@ const sectionTemplates = [
   'What to do over the next 30 days',
 ];
 
-function longParagraph(focus: string, heading: string, angle: string): string {
-  return `${focus} usually goes better when you treat it as a sequence of clear steps rather than one rushed letter. In the ${heading.toLowerCase()} stage, landlords usually get better results when each action has a reason behind it, a dated piece of evidence, and a clear idea of what happens next if the tenant disputes the facts or simply delays. ${angle} Keep one master timeline covering the tenancy, service events, payments, and key communications, then reuse it across notices, statements, and court paperwork so the story stays consistent. That makes the case easier to explain and easier for the court to follow.`;
-}
-
 function buildSections(focus: string): IntentSection[] {
   const angles = [
     'Decide early whether your main aim is possession, debt recovery, or both, so the paperwork matches what you are really trying to achieve.',
@@ -49,9 +45,9 @@ function buildSections(focus: string): IntentSection[] {
   return sectionTemplates.map((heading, index) => ({
     title: heading,
     paragraphs: [
-      longParagraph(focus, heading, angles[index]),
-      longParagraph(focus, heading, 'Where you are unsure, write the assumption down and update it when new evidence arrives instead of letting guesswork drive the next step.'),
-      longParagraph(focus, heading, 'When you have a choice, the best option is usually the one least likely to be delayed, challenged, or sent back for corrections.'),
+      `${focus} usually goes better when you break it into clear steps instead of treating it like one long legal problem. At the ${heading.toLowerCase()} stage, start by working out what needs to be true before you do anything else. ${angles[index]} That gives you a much steadier basis for the paperwork that follows.`,
+      `This is also the point where landlords often save or lose time later. Keep one master timeline for the tenancy, service events, payments, and key communications, then reuse it across notices, statements, and court paperwork so the story stays consistent. Where you are unsure, write the assumption down and update it when new evidence arrives instead of letting guesswork drive the next step.`,
+      `Practical discipline matters as much as the legal theory here. Name the documents clearly, keep the latest version of each file in one place, and check that each action still matches the facts on the day you take it. When you have a choice, the better option is usually the one least likely to be delayed, challenged, or sent back for corrections.`,
     ],
   }));
 }

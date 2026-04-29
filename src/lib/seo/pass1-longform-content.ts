@@ -20,18 +20,18 @@ function buildSections(topic: string, points: string[], extra: string): IntentSe
   const intro: IntentSection = {
     title: `${topic}: what to get right first`,
     paragraphs: [
-      `Most landlords lose time on ${topic.toLowerCase()} because they rush into the next document before the facts are properly pinned down. Start with one clear timeline, one evidence folder, and one short note setting out what you want from the case. That usually means getting the property back, recovering money, or keeping both options open while you see how the tenant responds.`,
+      `Most landlords lose time on ${topic.toLowerCase()} when they rush into the next document before the facts are straight. Start with one clear timeline, one evidence folder, and one short note setting out what you want from the case. In practice that usually means getting the property back, recovering money, or keeping both options open while you see how the tenant responds.`,
       `Once that is clear, the next decisions become much easier. You can check whether the notice you have in mind really fits the facts, whether the dates work, and whether your evidence is strong enough to stand up if the tenant pushes back. ${extra}`,
-      `This guide is written for landlords who want clear next steps in plain English. It shows what to gather, what usually goes wrong, and when a straightforward notice is enough compared with a fuller court-ready pack.`,
+      `The aim here is simple: help you see what to gather, what usually goes wrong, and when a straightforward notice is enough compared with a fuller court-ready pack.`,
     ],
   };
 
   const body = points.map((point) => ({
     title: point,
     paragraphs: [
-      `${point} is not just another box to tick. Before you move on, check what needs to be true first. That usually means confirming the facts, saving the key documents, and writing down anything that could weaken your position later. Landlords who do this early usually find the rest of the case much easier to manage.`,
-      `At this stage, keep the legal checks and practical checks side by side. Legal checks include the right notice, the right dates, and the right service method. Practical checks include diary reminders, named documents, contractor records where relevant, and calm written communication if the tenant is still engaging with you.`,
-      `If anything changes, update your file the same day. A part-payment, a promise to leave, a repair complaint, or a sudden change in contact can all affect what you do next. The stronger approach is to keep your paperwork current rather than trying to explain contradictions later.`,
+      `${point} is not just another box to tick. Before you move on, check what needs to be true first. In practice that means confirming the facts, saving the key documents, and noting anything that could weaken your position later. Landlords who do this early usually find the rest of the case much easier to manage.`,
+      `At this stage, keep the legal checks and the practical checks side by side. The legal side usually means the right notice, the right dates, and the right service method. The practical side means diary reminders, named documents, contractor records where relevant, and calm written communication if the tenant is still engaging with you.`,
+      `If anything changes, update the file the same day. A part-payment, a promise to leave, a repair complaint, or a sudden change in contact can all affect what you do next. It is much easier to keep the paperwork current than to explain contradictions later.`,
     ],
   }));
 
@@ -39,7 +39,7 @@ function buildSections(topic: string, points: string[], extra: string): IntentSe
     title: `Keep the case clear from first notice to final outcome`,
     paragraphs: [
       `The simplest way to stay in control is to work through the case in stages: identify the problem, check the facts, choose the right legal step, serve correctly, watch for changes, and prepare for court only if you need to. That gives you a steady process instead of a rushed chain of reactions.`,
-      `Before you file anything with the court, do one final consistency check. Make sure the names, dates, tenancy details, notice details, and any money figures all line up across every document. This small review step prevents a lot of avoidable delays.`,
+      `Before you file anything with the court, do one final consistency check. Make sure the names, dates, tenancy details, notice details, and any money figures all line up across every document. That small review step prevents a lot of avoidable delays.`,
       `Once the case ends, close the loop properly. Decide whether any debt recovery is worth pursuing, finish the account, and note what you would do differently next time. That is how one difficult tenancy turns into a better process for the next one.`,
     ],
     bullets: [
@@ -55,10 +55,10 @@ function buildSections(topic: string, points: string[], extra: string): IntentSe
 function buildFaqs(topic: string, points: string[]): FAQItem[] {
   return points.slice(0, 8).map((point) => ({
     question: `${topic}: what should I do about ${point.toLowerCase()} first?`,
-    answer: `Start by pinning down the facts, saving the evidence, and checking that your next legal step really fits the situation. For ${point.toLowerCase()}, landlords usually get better results when the notice, dates, and supporting documents all come from one clear timeline instead of being pieced together later.`,
+    answer: `Start by pinning down the facts, saving the evidence, and checking that your next legal step really fits the situation. For ${point.toLowerCase()}, landlords usually do better when the notice, dates, and supporting documents all come from one clear timeline instead of being pieced together later.`,
   })).concat({
     question: `${topic}: when should I start with Notice Only and when should I use Complete Pack?`,
-    answer: 'Use Notice Only when you mainly need the first legal documents prepared properly. Use Complete Pack when the case is already moving towards court and you want the paperwork to stay joined up from notice through hearing preparation.',
+    answer: 'Use Notice Only when you mainly need the first legal documents prepared properly. Use Complete Pack when the case is already moving toward court and you want the paperwork to stay joined up from notice through hearing preparation.',
   });
 }
 

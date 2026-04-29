@@ -86,7 +86,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     ],
     heroTitle: 'Form 3A Section 8 Notice for England',
     heroSubtitle:
-      'Use this page when you need the current England possession notice, clear ground selection, and a notice-stage workflow that fits the rules in force from 1 May 2026.',
+      'Use this page when you need the current England possession notice, clear ground selection, and a notice-stage process that fits the rules in force from 1 May 2026.',
     heroBullets: [
       'Focused on the current England Form 3A route.',
       'Explains grounds, evidence, timing, and service in plain English.',
@@ -108,7 +108,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         paragraphs: [
           'Form 3A is the prescribed form and notice used for a Section 8 possession route in England. In practical terms, it is the formal notice that tells the tenant which grounds you rely on, when the notice expires, and why you say possession should be granted. That makes it the key notice-stage document for arrears, serious breach, nuisance, and other evidence-based cases under the current framework.',
           'That function matters because the court will often read the notice as the opening statement of your case. If the grounds are unclear, if the particulars are vague, or if the dates do not align with the facts, you create avoidable friction later. You are not only preparing something to serve on the tenant. You are also preparing something that may be examined by a judge alongside your rent schedule, tenancy agreement, witness evidence, and claim forms.',
-          'The safest way to think about Form 3A is as one part of a possession workflow. You identify the facts. You match them to the correct ground or grounds. You draft the notice with enough clarity to show why those grounds apply. You serve the notice properly and preserve proof of service. If the tenant remains, you then move into the court stage with the same facts and chronology, rather than trying to reconstruct the case from memory weeks later.',
+          'The safest way to think about Form 3A is as one part of a possession case. You identify the facts. You match them to the correct ground or grounds. You draft the notice with enough clarity to show why those grounds apply. You serve the notice properly and preserve proof of service. If the tenant remains, you then move into the court stage with the same facts and chronology, rather than trying to reconstruct the case from memory weeks later.',
         ],
         bullets: [
           'Treat Form 3A as the first court-facing document in your file.',
@@ -169,15 +169,15 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         bullets: [
           'Plan the N5 and N119 stage before the notice expires.',
           'Keep the notice file in a format you can re-use for court.',
-          'Treat every date and document as part of one possession workflow.',
+          'Treat every date and document as part of one possession case.',
         ],
       },
       {
         id: 'best-next-step',
         title: 'When to use Notice Only and when to use broader support',
         paragraphs: [
-          'Notice Only is usually the best next step where you already understand the route, have the tenancy facts to hand, and mainly need the notice drafted and checked through a current workflow. It is especially useful when the core question is how to convert real facts into a structured notice with the right grounds, dates, and service notes, rather than how to redesign the whole strategy from the beginning.',
-          'Broader support is often the better choice where the case is already heading towards court, where the evidence is harder to organise, or where the facts are changing quickly. You may need more than a notice. You may need help keeping the claim route, supporting documents, and next-stage planning aligned. That is the point at which a full possession workflow usually becomes more valuable than a notice-only drafting step.',
+          'Notice Only is usually the best next step where you already understand the route, have the tenancy facts to hand, and mainly need the notice drafted and checked through a current process. It is especially useful when the core question is how to convert real facts into a structured notice with the right grounds, dates, and service notes, rather than how to redesign the whole strategy from the beginning.',
+          'Broader support is often the better choice where the case is already heading towards court, where the evidence is harder to organise, or where the facts are changing quickly. You may need more than a notice. You may need help keeping the claim route, supporting documents, and next-stage planning aligned. That is the point at which a full possession process usually becomes more valuable than a notice-only drafting step.',
           'Whichever route you choose, keep the standard the same. You should still aim for calm drafting, a precise chronology, and a file that would stand up to later scrutiny. The biggest risk in current England possession work is often not a lack of urgency. It is using urgency as a reason to skip the basic quality checks that make the route defensible.',
         ],
       },
@@ -223,7 +223,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       {
         href: '/products/notice-only',
         title: 'Eviction Notice Pack for Landlords',
-        description: 'Generate the current England notice with the route, dates, and service workflow in one place.',
+        description: 'Generate the current England notice with the route, dates, and service steps in one place.',
         icon: 'document',
         type: 'product',
       },
@@ -330,7 +330,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         paragraphs: [
           'Timing is one of the easiest places for a live case to become weaker than it should be. Different grounds can have different notice periods and practical implications. That means you should never assume the timing from a previous case will still be right. Instead, you should calculate the dates for the actual grounds you are serving now and record how you arrived at them so the file is transparent later.',
           'You should also think ahead to what happens after the notice expires. If the tenant stays, do you have the documents ready to move forward? Do you know what facts may change before the hearing? Have you kept the records that show the state of arrears or the pattern of conduct at key points in time? A careful timing approach is therefore not just about the notice expiry date. It is about building a case timeline you can still explain months later.',
-          'That is why many landlords benefit from a structured workflow rather than a template-only approach. A good workflow helps you generate the notice, check the dates, and understand how the next stage may look if the dispute continues. The goal is to reduce avoidable timing errors and to keep you focused on what the case needs next, rather than simply getting the notice out of the door as fast as possible.',
+          'That is why many landlords benefit from a structured process rather than a template-only approach. A good process helps you generate the notice, check the dates, and understand how the next stage may look if the dispute continues. The goal is to reduce avoidable timing errors and keep you focused on what the case needs next, rather than simply getting the notice out of the door as fast as possible.',
         ],
       },
       {
@@ -348,16 +348,16 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         paragraphs: [
           'After service, keep tracking the case rather than assuming the notice will speak for itself. If payments are made, record them. If communications continue, preserve them. If new incidents happen, add them to the chronology. You are still building the file, and that matters because a case can look different by the time the notice period ends or a hearing date is listed.',
           'If the tenant remains, you may need to move into an N5 and N119 possession claim. That is where the discipline of the notice stage pays off. The best claim bundles usually grow naturally from the notice file. The core facts remain the same. The service record is already preserved. The evidence is already grouped sensibly. You are not inventing the case late. You are extending the case you already prepared properly.',
-          'Where the case is complex, high-conflict, or likely to be defended, broader workflow support often becomes sensible before the claim is issued. The point is not to make the route feel frightening. It is to recognise that possession work is easier when the notice, the claim, and the supporting documents all tell the same story from the start.',
+          'Where the case is complex, high-conflict, or likely to be defended, broader support often becomes sensible before the claim is issued. The point is not to make the route feel frightening. It is to recognise that possession work is easier when the notice, the claim, and the supporting documents all tell the same story from the start.',
         ],
       },
       {
         id: 'best-action',
         title: 'Best action for current England landlords',
         paragraphs: [
-          'If you already know the facts fit the current Section 8 route, Notice Only is usually the cleanest way to move from research into action. It keeps the focus on the notice, the grounds, and the service workflow. If the case already looks likely to continue into court, or if the evidence needs more structured handling, Complete Pack may be the better operational choice because it gives you more continuity across the next stages.',
+          'If you already know the facts fit the current Section 8 route, Notice Only is usually the cleanest way to move from research into action. It keeps the focus on the notice, the grounds, and the service process. If the case already looks likely to continue into court, or if the evidence needs more structured handling, Complete Pack may be the better operational choice because it gives you more continuity across the next stages.',
           'Either way, the main lesson is consistency. Your notice should match your documents. Your documents should match your chronology. Your chronology should still make sense when you prepare the claim. Current England possession work rewards steady file quality. It is rarely improved by jumping between disconnected templates and later trying to force everything into one coherent bundle.',
-          'Use this page as the strategic guide, then move into the product path that fits your level of certainty. If the route is clear, start the current notice. If the case already needs a more complete possession workflow, review the court-stage support and the N5 and N119 guidance before you leave the planning stage behind.',
+          'Use this page as the strategic guide, then move into the product path that fits your level of certainty. If the route is clear, start the current notice. If the case already needs more complete possession support, review the court-stage support and the N5 and N119 guidance before you leave the planning stage behind.',
         ],
       },
     ],
@@ -379,7 +379,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
           'You may need to bring a possession claim and prepare N5 and N119 paperwork, using the same notice-stage facts, service record, and supporting documents.',
       },
       {
-        question: 'Where should I go if I want the current workflow now?',
+        question: 'Where should I go if I want to start now?',
         answer:
           'Start with Notice Only if the route is settled. If you already expect the matter to move into court, compare the Complete Pack and the possession claim guidance as well.',
       },
@@ -402,7 +402,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       {
         href: '/products/notice-only',
         title: 'Eviction Notice Pack for Landlords',
-        description: 'Generate the current England notice workflow once the grounds, dates, and evidence are clear.',
+        description: 'Generate the current England notice once the grounds, dates, and evidence are clear.',
         icon: 'document',
         type: 'product',
       },
@@ -562,7 +562,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       {
         href: '/products/notice-only',
         title: 'Eviction Notice Pack for Landlords',
-        description: 'Use the transactional notice workflow once the England route is already clear.',
+        description: 'Use the guided notice process once the England route is already clear.',
         icon: 'legal',
         type: 'product',
       },
@@ -574,7 +574,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     slug: 'eviction-notice-england',
     title: 'England Eviction Notice Generator | Current Possession Route 2026',
     description:
-      'Use the current England eviction notice generator route to prepare a compliant notice workflow, understand Form 3A, and move into N5 and N119 claim support if the case continues.',
+      'Use the current England eviction notice generator to prepare a compliant notice, understand Form 3A, and move into N5 and N119 claim support if the case continues.',
     keywords: [
       'england eviction notice generator',
       'eviction notice england',
@@ -584,7 +584,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
     ],
     heroTitle: 'England Eviction Notice Generator',
     heroSubtitle:
-      'Start here when you want a current England notice workflow that reflects the rules in force from 1 May 2026 and routes you into the right next step.',
+      'Start here when you want a current England notice process that reflects the rules in force from 1 May 2026 and points you to the right next step.',
     heroBullets: [
       'Built around current England notice-stage logic.',
       'Explains what you need before you generate anything.',
@@ -595,8 +595,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       'A current England notice generator should help you identify the live route, build the notice around real facts, and preserve the file for a later claim if the case continues.'
     ),
     introduction: [
-      'Landlords often search for an England eviction notice generator because they want speed. That is understandable, but the safest current approach is not just to generate a document quickly. It is to use a workflow that helps you confirm the route, capture the facts properly, calculate dates carefully, and keep the notice and service record strong enough for later use if the matter reaches court.',
-      'A generator can be valuable when it reduces procedural mistakes. It can become risky when it encourages you to treat the notice as a standalone download rather than part of a current possession file. This page is therefore focused on the generator as a workflow, not as a shortcut. You should expect it to help with route logic, notice preparation, service planning, and the next-stage handoff into a possession claim if the tenant stays.',
+      'Landlords often search for an England eviction notice generator because they want speed. That is understandable, but the safest current approach is not just to generate a document quickly. It is to use a process that helps you confirm the route, capture the facts properly, calculate dates carefully, and keep the notice and service record strong enough for later use if the matter reaches court.',
+      'A generator can be valuable when it reduces procedural mistakes. It can become risky when it encourages you to treat the notice as a standalone download rather than part of a current possession file. This page is therefore focused on the generator as a process, not as a shortcut. You should expect it to help with route logic, notice preparation, service planning, and the next-stage handoff into a possession claim if the tenant stays.',
       'The current England framework makes that continuity especially important. From 1 May 2026 onward, the useful question is not simply how to produce a form. The useful question is how to move from a live landlord problem into a notice route that still holds together if the case becomes defended, delayed, or court-bound. That is the standard a good generator should meet.',
     ],
     sections: [
@@ -604,9 +604,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         id: 'what-a-generator-should-do',
         title: 'What a current England generator should actually do',
         paragraphs: [
-          'A good current generator should help you answer the practical questions that matter before service. What is the basis for possession? Which notice route fits the facts? What information needs to be captured so the notice is accurate? What service method will you use? What evidence will you need later? If the workflow cannot help you with those questions, it may still create a document, but it is not doing enough to protect the case.',
-          'That is because notice quality depends on context. The same tenancy may need different routes depending on the facts. The same ground may be stronger or weaker depending on the evidence. The same document can look compliant on screen and still be difficult to defend later if the dates are wrong or the particulars are thin. A well-designed workflow should slow you down only where accuracy genuinely matters and should otherwise help you move efficiently.',
-          'You should therefore judge a generator by whether it improves decision quality, not only by whether it reduces typing. The most useful tool is one that leaves you with a notice, service plan, and supporting file that still make sense when someone else reads them later. That is the point of a current workflow.',
+          'A good current generator should help you answer the practical questions that matter before service. What is the basis for possession? Which notice route fits the facts? What information needs to be captured so the notice is accurate? What service method will you use? What evidence will you need later? If the process cannot help you with those questions, it may still create a document, but it is not doing enough to protect the case.',
+          'That is because notice quality depends on context. The same tenancy may need different routes depending on the facts. The same ground may be stronger or weaker depending on the evidence. The same document can look compliant on screen and still be difficult to defend later if the dates are wrong or the particulars are thin. A well-designed process should slow you down only where accuracy genuinely matters and should otherwise help you move efficiently.',
+          'You should therefore judge a generator by whether it improves decision quality, not only by whether it reduces typing. The most useful tool is one that leaves you with a notice, service plan, and supporting file that still make sense when someone else reads them later. That is the point of a current process.',
         ],
       },
       {
@@ -622,8 +622,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         id: 'how-generator-fits-court',
         title: 'How the generator fits into a later possession claim',
         paragraphs: [
-          'The best current notice workflows are designed with the claim stage in mind. If the tenant does not leave, your notice-stage work should be re-usable when you prepare N5 and N119 documents. The names, dates, rent figures, service notes, and chronology should already be consistent. That makes the claim stage less about rebuilding the history and more about presenting the existing file in the format the court expects.',
-          'This is one of the main advantages of using a structured current generator rather than a static template. A workflow can capture the core data once and help you carry it forward coherently. That does not replace judgment about the claim itself, but it does reduce the chance that the notice stage and the court stage tell slightly different stories because they were prepared separately at different times.',
+          'The best current notice processes are designed with the claim stage in mind. If the tenant does not leave, your notice-stage work should be re-usable when you prepare N5 and N119 documents. The names, dates, rent figures, service notes, and chronology should already be consistent. That makes the claim stage less about rebuilding the history and more about presenting the existing file in the format the court expects.',
+          'This is one of the main advantages of using a structured current generator rather than a static template. A process can capture the core data once and help you carry it forward coherently. That does not replace judgment about the claim itself, but it does reduce the chance that the notice stage and the court stage tell slightly different stories because they were prepared separately at different times.',
           'If your case is already close to court, think about the generator as the front door to a wider process rather than as the whole process. The cleaner your notice inputs are now, the more useful they become later. That includes the tenancy details, the rent record, the service proof, and the explanation of the grounds. Quality in usually means quality out.',
         ],
       },
@@ -632,11 +632,11 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         title: 'Common mistakes landlords make when using notice tools',
         paragraphs: [
           'One common mistake is trying to use the tool before the facts are settled. If the rent ledger is not updated, or if you are unsure which ground truly applies, the notice may end up looking certain while the file remains uncertain. The better approach is to do a short fact check first and then let the tool reflect the case you actually have.',
-          'Another mistake is treating service as something to think about after the notice is generated. In reality, service is part of the notice workflow. The method, date, and record all matter. If you leave that thinking until later, you increase the risk that the file becomes fragmented. A current workflow should help you keep service and notice drafting together rather than apart.',
-          'A final mistake is assuming that a generator removes the need for review. Even a strong workflow still depends on the quality of the information you put into it. You should still read the notice carefully, confirm the dates, and make sure the grounds and particulars match the evidence you have. Automation is helpful, but it is not a licence to switch off judgment.',
+          'Another mistake is treating service as something to think about after the notice is generated. In reality, service is part of the notice process. The method, date, and record all matter. If you leave that thinking until later, you increase the risk that the file becomes fragmented. A current process should help you keep service and notice drafting together rather than apart.',
+          'A final mistake is assuming that a generator removes the need for review. Even a strong process still depends on the quality of the information you put into it. You should still read the notice carefully, confirm the dates, and make sure the grounds and particulars match the evidence you have. Automation is helpful, but it is not a licence to switch off judgment.',
         ],
         bullets: [
-          'Do not start the workflow before the facts are updated.',
+          'Do not start before the facts are updated.',
           'Plan service before you finalise the notice.',
           'Read the finished notice as if it may be shown in court later.',
         ],
@@ -646,16 +646,16 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         title: 'Who should use Notice Only and who should use broader support',
         paragraphs: [
           'Notice Only is usually right for landlords who already understand the route, want the current notice generated through a structured process, and are comfortable managing the surrounding file. It gives you the most direct path from live facts into a current England notice. That is often the best fit for a relatively clear case where the main risk is procedural accuracy rather than strategic uncertainty.',
-          'Broader support is often more suitable where the case is contested, the evidence needs significant organisation, or the next step is likely to be court. In those cases, the notice is only one part of the job. You may need a workflow that keeps the claim stage in view and helps you preserve continuity between the initial notice and later possession documents.',
-          'Neither choice changes the core principle. The current England framework works best when you use one route consistently from the start. Once you decide whether you need a focused notice workflow or a wider possession workflow, keep the file orderly and keep your next-step planning connected to that same route.',
+          'Broader support is often more suitable where the case is contested, the evidence needs significant organisation, or the next step is likely to be court. In those cases, the notice is only one part of the job. You may need a process that keeps the claim stage in view and helps you preserve continuity between the initial notice and later possession documents.',
+          'Neither choice changes the core principle. The current England framework works best when you use one route consistently from the start. Once you decide whether you need a focused notice process or wider possession support, keep the file orderly and keep your next-step planning connected to that same route.',
         ],
       },
       {
         id: 'best-next-step-generator',
         title: 'Best next step if you want to generate the notice now',
         paragraphs: [
-          'If the route is clear and your documents are ready, move into Notice Only and use the workflow to prepare the current England notice properly. If you want to understand the wider sequence first, read the England process guide so you know how notice, claim, and enforcement fit together. If the tenant is likely to remain and you want the court stage in view already, open the N5 and N119 guide at the same time.',
-          'The goal is not simply to leave this page with a document. The goal is to leave with a notice workflow that is accurate, current, and useful beyond the first step. That is the standard a current England generator should meet in 2026.',
+          'If the route is clear and your documents are ready, move into Notice Only and use the process to prepare the current England notice properly. If you want to understand the wider sequence first, read the England process guide so you know how notice, claim, and enforcement fit together. If the tenant is likely to remain and you want the court stage in view already, open the N5 and N119 guide at the same time.',
+          'The goal is not simply to leave this page with a document. The goal is to leave with a notice process that is accurate, current, and useful beyond the first step. That is the standard a current England generator should meet in 2026.',
           'Used carefully, the generator becomes the beginning of a better organised possession case. Used casually, it can become just another file to fix later. Choose the first approach and the current framework becomes much easier to manage.',
         ],
       },
