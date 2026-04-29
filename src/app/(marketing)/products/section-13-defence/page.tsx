@@ -40,7 +40,7 @@ export default function Section13DefenceProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Challenge-Ready Section 13 Defence Pack | stronger landlord support when challenge risk is already obvious',
+      trustText: 'England Section 13 defence pack | support for challenged rent increases',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },

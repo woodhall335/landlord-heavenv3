@@ -125,6 +125,8 @@ export function UniversalHero({
       /(\*{3,}|\bstars?\b|\breviews?\b|\/5\b|\brated\b)/i.test(resolvedTrustText)
   );
   const showTrustDescriptor = Boolean(resolvedTrustText) && !trustTextLooksLikeReview;
+  const shouldUseStackedDesktopReviewPill =
+    showTrustDescriptor && resolvedTrustText.trim().length > 60;
   const isCenter = align === 'center';
   const shouldRenderMedia = !hideMedia && mediaSrc !== null;
 
@@ -206,22 +208,69 @@ export function UniversalHero({
             )}
 
             {shouldShowReviewPill && (
-              <p
-                className={clsx(
-                  'hidden w-full max-w-xl flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm lg:flex',
-                  presetStyles.reviewPill,
-                  isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left'
-                )}
-              >
-                <RiShieldCheckFill className="h-5 w-5 text-[#7c3aed]" aria-hidden="true" />
-                {showTrustDescriptor ? <span>{resolvedTrustText}</span> : null}
-                <span className="text-[#facc15]" aria-hidden="true">
-                  {REVIEW_STARS}
-                </span>
-                <span className="font-medium text-[#2b253d]">
-                  {REVIEW_RATING}/5 | {reviewCount} reviews
-                </span>
-              </p>
+              shouldUseStackedDesktopReviewPill ? (
+                <p
+                  data-testid="hero-review-pill-desktop"
+                  className={clsx(
+                    'hidden w-full max-w-[46rem] rounded-full border border-white/80 bg-white/85 px-4 py-2.5 text-sm font-semibold shadow-sm backdrop-blur-sm lg:block',
+                    presetStyles.reviewPill,
+                    isCenter ? 'mx-auto text-center' : 'text-left'
+                  )}
+                >
+                  <span
+                    className={clsx(
+                      'flex items-start gap-3 leading-5',
+                      isCenter ? 'justify-center' : 'justify-start'
+                    )}
+                  >
+                    <RiShieldCheckFill
+                      className="mt-0.5 h-5 w-5 shrink-0 text-[#7c3aed]"
+                      aria-hidden="true"
+                    />
+                    <span data-testid="hero-review-pill-trust">{resolvedTrustText}</span>
+                  </span>
+                  <span
+                    data-testid="hero-review-pill-meta"
+                    className={clsx(
+                      'mt-1.5 flex items-center gap-3 leading-5',
+                      isCenter ? 'justify-center' : 'pl-8'
+                    )}
+                  >
+                    <span className="shrink-0 text-[#facc15]" aria-hidden="true">
+                      {REVIEW_STARS}
+                    </span>
+                    <span className="shrink-0 font-medium text-[#2b253d]">
+                      {REVIEW_RATING}/5 | {reviewCount} reviews
+                    </span>
+                  </span>
+                </p>
+              ) : (
+                <p
+                  data-testid="hero-review-pill-desktop"
+                  className={clsx(
+                    'hidden w-full max-w-2xl items-center gap-3 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur-sm lg:flex',
+                    presetStyles.reviewPill,
+                    isCenter ? 'mx-auto justify-center text-center' : 'justify-start text-left'
+                  )}
+                >
+                  <RiShieldCheckFill className="h-5 w-5 shrink-0 text-[#7c3aed]" aria-hidden="true" />
+                  {showTrustDescriptor ? (
+                    <span data-testid="hero-review-pill-trust" className="min-w-0 leading-5">
+                      {resolvedTrustText}
+                    </span>
+                  ) : null}
+                  <span
+                    data-testid="hero-review-pill-meta"
+                    className="shrink-0 text-[#facc15]"
+                    aria-hidden="true"
+                  >
+                    {REVIEW_STARS}
+                  </span>
+                  <span className="shrink-0 font-medium text-[#2b253d]">
+                    {REVIEW_RATING}/5 | {reviewCount} reviews
+                  </span>
+                </p>
+              )
             )}
 
             {shouldRenderHeading && (

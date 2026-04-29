@@ -336,7 +336,7 @@ export default function TenancyAgreementTemplatePage() {
       <main>
         <UniversalHero
           preset="content_index"
-          trustText="Real England tenancy agreement example | Compare Standard, Premium, Student, HMO, and Lodger routes"
+        trustText="Real England tenancy agreement examples | compare all five landlord routes"
           mediaSrc="/images/tenancy_agreements.webp"
           mediaAlt="Preview of England tenancy agreement documents"
           title="Tenancy Agreement Template"

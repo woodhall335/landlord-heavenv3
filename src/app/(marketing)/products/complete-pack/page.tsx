@@ -80,7 +80,7 @@ export default function CompleteEvictionPackPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England court possession pack | notice, claim forms, and filing support together',
+      trustText: 'England possession pack | notice, claim forms, and filing guidance',
       title: descriptor.displayName,
       subtitle:
         'Prepare and file a full Section 8 court-ready possession case without leaving legal gaps between the notice, the claim forms, and the evidence.',

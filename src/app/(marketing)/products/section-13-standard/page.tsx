@@ -40,7 +40,7 @@ export default function Section13StandardProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Standard Section 13 pack | the main route for a normal rent increase file',
+      trustText: 'England Section 13 pack | standard route for a rent increase file',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },

@@ -110,7 +110,7 @@ export default function RentersRightsInformationSheet2026Page() {
           mascotDecorativeOnMobile={false}
           mascotDecorativeOnDesktop={false}
           showTrustPositioningBar
-          trustText="Older tenancy agreements can create hidden legal and enforcement risk under the new regime"
+        trustText="Older tenancy agreements can create legal risk under the new regime"
         />
 
         <Container className="py-12 md:py-16">

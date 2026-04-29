@@ -17,6 +17,8 @@ import { PRICING_PACKAGE_CARDS, PRICING_SCHEMA_ITEMS } from '@/lib/marketing/pri
 import { clsx } from 'clsx';
 import { RiCheckLine } from 'react-icons/ri';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 export const metadata: Metadata = generateMetadata({
   title: 'Pricing for landlords in England | Eviction, rent increase, debt, and tenancy packs',
   description:
@@ -122,7 +124,7 @@ export default function PricingPage() {
       <UniversalHero
         preset="content_index"
         badge="Transparent pricing for landlords in England"
-        trustText="One-time prices across eviction, debt, rent increase, and tenancy agreements"
+        trustText="One-time prices for eviction, debt, rent increase, and tenancy products"
         title="See the price"
         highlightTitle="and what each pack helps you do"
         subtitle="If you need to serve notice, prepare for court, recover rent, increase the rent properly, or put the right tenancy agreement in place, this page shows the prices in one place for landlords in England."

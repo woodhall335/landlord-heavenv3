@@ -25,6 +25,8 @@ import {
   productLinks,
   toolLinks,
 } from '@/lib/seo/internal-links';
+
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 import {
   StructuredData,
   breadcrumbSchema,

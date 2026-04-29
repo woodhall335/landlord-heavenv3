@@ -73,7 +73,7 @@ export default function MoneyClaimPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England county court money claim pack | unpaid rent, bills, damage, and guarantor debt',
+      trustText: 'England money claim pack | unpaid rent, bills, damage, and guarantor debt',
       title: descriptor.displayName,
       subtitle:
         'Recover unpaid rent or other tenancy debt through a structured England claim file instead of trying to piece the pre-action letter, court forms, and enforcement steps together by hand.',

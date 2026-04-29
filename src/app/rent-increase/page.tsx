@@ -109,7 +109,7 @@ export default function RentIncreaseLandingPage() {
     hero: {
       preset: standardDescriptor.heroPreset,
       badge: standardDescriptor.heroBadge,
-      trustText: 'England Section 13 / Form 4A packs | choose the route that fits the case',
+        trustText: 'England Section 13 / Form 4A packs | choose the right route',
       title: 'Increase rent in England using Section 13 / Form 4A',
       subtitle:
         'Start with the route that matches the real job. Use the Standard Section 13 Pack for most rent increases, or move straight to the Challenge-Ready Section 13 Defence Pack when challenge risk is already part of the case.',

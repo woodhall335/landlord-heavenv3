@@ -11,6 +11,8 @@ import { getPublicProductDescriptor, getPublicTenancyProducts } from '@/lib/publ
 import { getCanonicalUrl } from '@/lib/seo';
 import { StructuredData, breadcrumbSchema, pricingItemListSchema } from '@/lib/seo/structured-data';
 
+export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
+
 const descriptor = getPublicProductDescriptor('ast')!;
 const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 const tenancyProducts = getPublicTenancyProducts();
@@ -173,7 +175,7 @@ export default function EnglandTenancyHubPage() {
     hero: {
       ...astHeroConfig,
       trustText:
-        'England tenancy agreements for landlords | Standard and Premium are the updated assured periodic routes from 1 May 2026',
+        'England tenancy agreements | Standard and Premium updated for 1 May 2026',
       title: 'Choose the right England',
       highlightTitle: 'tenancy agreement for the let',
       subtitle:

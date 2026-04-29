@@ -55,7 +55,7 @@ export const homeHeroConfig: HeroConfig = {
   ...defaultHeroMedia,
   ...withPreset('home'),
   preset: 'home',
-  trustText: 'Landlord documents for England with checks before you serve, file, or raise rent',
+  trustText: 'England landlord documents checked before you serve, file, or raise rent',
   title: 'Solicitor-quality landlord documents.',
   highlightTitle: 'Without the solicitor bill.',
   subtitle: (
@@ -82,7 +82,7 @@ export const astHeroConfig: HeroConfig = {
   preset: 'product_owner',
   badge: PUBLIC_PRODUCT_DESCRIPTORS.ast.heroBadge,
   mediaSrc: '/images/tenancy_agreements.webp',
-  trustText: 'England tenancy agreements for landlords | Standard, Premium, Student, HMO, and Lodger',
+  trustText: 'Choose the right England tenancy agreement for the let',
   title: 'Create the Right',
   highlightTitle: 'Tenancy Agreement for Your England Let',
   subtitle: astSubtitle,
@@ -178,7 +178,7 @@ export const moneyClaimSupportHeroConfig: HeroConfig = {
   preset: 'content_index',
   badge: 'For landlords in England',
   mediaSrc: '/images/money_claims.webp',
-  trustText: 'England landlord debt-recovery support | Product owner plus scenario guides',
+  trustText: 'England landlord debt-recovery support | product and scenario guides',
   title: 'Need help with a',
   highlightTitle: 'landlord money claim?',
   subtitle:

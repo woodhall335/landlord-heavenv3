@@ -106,7 +106,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        trustText="Built for England landlords creating the right agreement for the way the property is actually being let."
+        trustText="Built for England landlords choosing the right letting agreement."
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
