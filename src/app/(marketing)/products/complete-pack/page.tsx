@@ -40,19 +40,19 @@ export const metadata: Metadata = {
 
 const faqs: FAQItem[] = [
   {
-    question: 'What does the Section 8 Complete Eviction Pack include?',
+    question: 'What does the Stage 2 Court & Possession Pack include?',
     answer:
-      'It includes the current England Section 8 notice, Form N5, Form N119, an arrears schedule, an evidence bundle structure, and court filing guidance in one joined-up possession pack.',
+      'It is the complete combined pack. It includes the current England Section 8 notice and service documents from Stage 1, plus Form N5, Form N119, an arrears schedule, an evidence bundle structure, and court filing guidance for Stage 2.',
   },
   {
     question: 'Who is this built for?',
     answer:
-      'It is built for landlords in England who want the notice and the court-stage possession paperwork prepared together.',
+      'It is built for landlords in England who want both the notice/service stage and the court-stage possession paperwork prepared together.',
   },
   {
     question: 'When should I choose this instead of the notice product?',
     answer:
-      'Choose this pack when you want the court-possession paperwork as well as the Section 8 notice. If you only need to serve the notice first, the Eviction Notice Generator is the better fit.',
+      'Choose this pack when you want the court-possession paperwork as well as the Section 8 notice. If you only need to serve the notice first, the Stage 1 Notice & Service Pack is the better fit.',
   },
   {
     question: 'Does this include N5 and N119?',
@@ -80,29 +80,29 @@ export default function CompleteEvictionPackPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England possession pack | notice, claim forms, and filing guidance',
+      trustText: 'England possession pack | carry the case into court without breaking the file',
       title: descriptor.displayName,
       subtitle:
-        'Prepare and file a full Section 8 court-ready possession case without leaving legal gaps between the notice, the claim forms, and the evidence.',
+        'Prepare and file a full Section 8 possession case with both the notice/service stage and the court stage working from the same file.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
       },
       secondaryCta: {
-        label: 'Only need the notice first?',
+        label: 'Only need Stage 1 first?',
         href: '/products/notice-only',
       },
       feature:
-        'Built for landlords who want the notice, the court forms, and the filing steps to line up as one possession case.',
+        'Most possession cases fail on notice, service, or consistency errors — this complete pack is designed to prevent those across both stages.',
       mediaSrc: '/images/eviction_packs.webp',
-      mediaAlt: 'Preview of the England complete eviction pack',
+      mediaAlt: 'Preview of the England Stage 2 court and possession pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'complete_pack',
     },
     whatYouGet: {
-      title: 'What you get in the Section 8 Complete Eviction Pack',
+      title: 'What you get in Stage 2',
       intro:
-        'This pack is for landlords who need the notice stage and the court stage joined up. Each document exists to move the case from service into possession proceedings without leaving the file full of gaps.',
+        'This is the full combined pack. It includes the Stage 1 notice and service documents as well as the Stage 2 court documents, so the case moves from service into possession proceedings without breaking the file.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -180,7 +180,7 @@ export default function CompleteEvictionPackPage() {
       sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
-      title: 'Why you need the full pack instead of isolated forms',
+      title: 'Why Stage 2 works better than isolated forms',
       intro:
         'Landlords often lose time when the notice, the claim form, and the evidence are prepared at different times and never read like one joined-up case. This pack is built to stop that happening.',
       cards: [
@@ -210,7 +210,7 @@ export default function CompleteEvictionPackPage() {
     howThisHelps: {
       title: 'How the full pack improves the landlord outcome',
       intro:
-        'The pack is designed to do more than generate forms. It keeps the possession route coherent from the notice through to court.',
+        'The pack is designed to do more than generate forms. It keeps the possession route coherent from the notice through to court and hearing preparation.',
       cards: [
         {
           title: 'It keeps the notice and court paperwork aligned',
@@ -255,21 +255,21 @@ export default function CompleteEvictionPackPage() {
       ],
     },
     cta: {
-      title: 'Start the full Section 8 possession file now',
+      title: 'Start Stage 2 now',
       body:
-        'Start here if you want the Section 8 notice, the claim forms, and the filing guidance prepared together as one England possession file.',
+        'Start here if you want the complete combined pack with the notice, service record, claim forms, and hearing support prepared together as one England possession file.',
       primary: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
       },
       secondary: {
-        label: 'Switch to Eviction Notice Generator',
+        label: 'Switch to Stage 1 Notice Pack',
         href: '/products/notice-only',
       },
       guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
-      title: 'Section 8 Complete Eviction Pack FAQs',
+      title: 'Stage 2 Court & Possession FAQs',
       items: faqs,
     },
   };

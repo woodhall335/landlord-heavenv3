@@ -56,7 +56,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What if I also need the court paperwork?',
     answer:
-      'Choose the Complete Eviction Pack if you want the Section 8 notice, N5, N119, and the court-stage possession paperwork together in one workflow.',
+      'Choose the Stage 2 Court & Possession Pack if you want the Section 8 notice, N5, N119, and the court-stage possession paperwork together in one workflow.',
   },
   {
     question: 'Can I preview the pack before I pay?',
@@ -79,29 +79,29 @@ export default function NoticeOnlyPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 8 notice generator | landlord checks before you serve',
+      trustText: 'England Section 8 notice and service pack | built to hold up if challenged',
       title: descriptor.displayName,
       subtitle:
-        'Start the eviction process correctly under the current England rules so the case does not fall apart before it even reaches court.',
+        'Start the eviction process correctly, or risk the case failing before court. This pack aligns the notice, service, and evidence so the file does not fall apart on technical errors.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
       },
       secondaryCta: {
-        label: 'See the Complete Eviction Pack',
+        label: 'See the Stage 2 Court Pack',
         href: '/products/complete-pack',
       },
       feature:
-        'Built for landlords who need the notice, the grounds, and the service steps to line up before anything is served.',
+        'Most possession cases fail on notice, service, or consistency errors — this pack is designed to prevent those.',
       mediaSrc: '/images/notice_bundles.webp',
       mediaAlt: 'Preview of the England Section 8 notice pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'notice_only',
     },
     whatYouGet: {
-      title: 'What you get in the Section 8 notice pack',
+      title: 'What you get in Stage 1',
       intro:
-        'This is not just a notice template. It is a structured notice file where each part exists to start possession on the right footing and reduce the risk of the case failing over avoidable mistakes.',
+        'This is not just a notice template. It is a Stage 1 notice and service file built to start possession on the right footing and reduce the risk of technical failure.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -167,7 +167,7 @@ export default function NoticeOnlyPage() {
       sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whyYouNeedThis: {
-      title: 'Why a Section 8 case needs more than a blank notice',
+      title: 'Why Stage 1 needs more than a blank notice',
       intro:
         'Most notice-stage failures are not dramatic. They come from small gaps in the grounds, the arrears record, or the way the notice was served. This pack is built to stop those gaps from creeping in.',
       cards: [
@@ -197,7 +197,7 @@ export default function NoticeOnlyPage() {
     howThisHelps: {
       title: 'How this puts you in a stronger position',
       intro:
-        'The pack is designed to reduce procedural risk now and make the case easier to carry forward if the tenant does not leave after notice.',
+        'The pack is designed to reduce procedural risk now and make the case easier to carry into Stage 2 if the tenant does not leave after notice.',
       cards: [
         {
           title: 'It makes the notice file easier to trust',
@@ -242,21 +242,21 @@ export default function NoticeOnlyPage() {
       ],
     },
     cta: {
-      title: 'Prepare the Section 8 notice with more confidence',
+      title: 'Start Stage 1 with more confidence',
       body:
-        'If you need to serve notice now, start here so the grounds, dates, arrears, and service steps are prepared as one joined-up England landlord file.',
+        'Start here if you need the notice, service, and evidence aligned before anything is served, with a direct path into Stage 2 if the case later moves to court.',
       primary: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
       },
       secondary: {
-        label: 'Switch to Complete Eviction Pack',
+        label: 'Switch to Stage 2 Court Pack',
         href: '/products/complete-pack',
       },
       guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
-      title: 'Eviction Notice Generator FAQs',
+      title: 'Stage 1 Notice & Service FAQs',
       items: faqs,
     },
   };

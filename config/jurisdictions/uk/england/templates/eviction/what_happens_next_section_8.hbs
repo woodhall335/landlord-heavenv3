@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What Happens Next</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    body {
+      margin: 0;
+      color: #1f1635;
+      font-size: 10pt;
+      line-height: 1.55;
+    }
+
+    .hero,
+    .step-card,
+    .handoff-box {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .hero {
+      border: 1px solid #ddd6fe;
+      background: #faf8ff;
+      padding: 1.2em;
+      margin-bottom: 1em;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.2em 0;
+      font-size: 18pt;
+    }
+
+    .hero h2 {
+      margin: 0 0 0.35em 0;
+      font-size: 11pt;
+      color: #5b5370;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero p {
+      margin: 0.25em 0;
+    }
+
+    .steps {
+      display: grid;
+      gap: 0.9em;
+    }
+
+    .step-card,
+    .handoff-box {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      padding: 1em;
+    }
+
+    .step-number {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      background: #ede9fe;
+      color: #4c1d95;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .step-card h3,
+    .handoff-box h3 {
+      margin: 0 0 0.4em 0;
+      font-size: 10.5pt;
+      color: #231942;
+    }
+
+    .step-card p,
+    .handoff-box p {
+      margin: 0.3em 0;
+    }
+
+    .muted {
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h2>{{pack_title}}</h2>
+    <h1>What Happens Next</h1>
+    <p><strong>{{status_label}}</strong></p>
+    <p>{{next_step_text}}</p>
+  </div>
+
+  <div class="steps">
+    {{#each next_steps}}
+    <div class="step-card">
+      <div class="step-number">Step {{step}}</div>
+      <h3>{{title}}</h3>
+      <p>{{detail}}</p>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="handoff-box">
+    {{#if (eq pack_stage "stage1")}}
+    <h3>Stage 2 handoff</h3>
+    <p>If this proceeds to court, the Stage 2 Court & Possession Pack builds directly on this file.</p>
+    <p class="muted">The same notice, service record, arrears position, and core facts should carry forward without being rebuilt from scratch.</p>
+    {{else}}
+    <h3>After court preparation</h3>
+    <p>Keep the issued claim, service record, hearing bundle, and any later enforcement papers aligned in the same case file.</p>
+    <p class="muted">The stronger the continuity between notice, claim, hearing, and enforcement, the less room there is for avoidable procedural challenge.</p>
+    {{/if}}
+  </div>
+</body>
+</html>

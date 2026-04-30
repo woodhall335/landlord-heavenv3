@@ -17,6 +17,7 @@ describe('dashboard document key canonicalization', () => {
   it('matches expected canonical keys against legacy title-backed keys', () => {
     expect(doesDocumentTypeMatch('service_checklist', 'Service & Validity Checklist')).toBe(true);
     expect(doesDocumentTypeMatch('compliance_declaration', 'Pre-Service Compliance Declaration')).toBe(true);
+    expect(doesDocumentTypeMatch('what_happens_next', 'What Happens Next')).toBe(true);
   });
 
   it('uses explicit titles for the new England tenancy support documents', () => {
@@ -26,5 +27,7 @@ describe('dashboard document key canonicalization', () => {
     expect(getDashboardDocumentTitle('england_keys_handover_record')).toBe('Keys & Handover Record');
     expect(getDashboardDocumentTitle('england_premium_management_schedule')).toBe('Premium Management Schedule');
     expect(getDashboardDocumentTitle('england_hmo_house_rules_appendix')).toBe('HMO / Shared House Rules Appendix');
+    expect(getDashboardDocumentTitle('case_summary')).toBe('Case Summary');
+    expect(getDashboardDocumentTitle('what_happens_next')).toBe('What Happens Next');
   });
 });

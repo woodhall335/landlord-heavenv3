@@ -1,8 +1,8 @@
 {{!--
   ============================================================================
-  COMPLIANCE CHECKLIST - PRE-SERVICE CHECKS
+  COMPLIANCE CHECKLIST - PRE-SERVICE DECISION ENGINE
   ============================================================================
-  Route-aware compliance summary for England notice packs.
+  Structured England Section 8 compliance summary built from shared risk items.
 --}}
 
 <!DOCTYPE html>
@@ -19,185 +19,182 @@
     }
 
     body {
-      margin: 0 auto;
-      padding: 0;
-      color: #1a1a1a;
+      margin: 0;
+      color: #1f1635;
       font-size: 10pt;
       line-height: 1.55;
     }
 
-    .doc-header {
-      text-align: center;
-      margin-bottom: 1.5em;
-      padding-bottom: 1em;
-      border-bottom: 2px solid #1a1a1a;
-    }
-
-    .doc-header h1 {
-      margin: 0 0 0.4em 0;
-      font-size: 14pt;
-      font-weight: 700;
-    }
-
-    .doc-badge {
-      display: inline-block;
-      padding: 0.3em 0.8em;
-      background: #1a1a1a;
-      color: white;
-      font-size: 10pt;
-      font-weight: 600;
-    }
-
+    .hero,
     .summary-box,
+    .legend-item,
     .item,
-    .callout {
+    .action-box {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
-    .summary-box {
-      margin: 1.25em 0;
+    .hero {
+      border: 1px solid #ddd6fe;
+      background: #faf8ff;
+      padding: 1.2em;
+      margin-bottom: 1em;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.2em 0;
+      font-size: 18pt;
+    }
+
+    .hero h2 {
+      margin: 0 0 0.35em 0;
+      font-size: 11pt;
+      color: #5b5370;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero p {
+      margin: 0.25em 0;
+    }
+
+    .summary-box,
+    .legend-item,
+    .item,
+    .action-box {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+    }
+
+    .summary-box,
+    .action-box {
       padding: 1em;
-      border: 1px solid #d8d8d8;
-      background: #fafafa;
+      margin-bottom: 0.9em;
     }
 
     .summary-grid {
       display: grid;
       grid-template-columns: 170px 1fr;
-      gap: 0.45em 1em;
+      gap: 0.45em 0.9em;
     }
 
     .summary-grid dt {
-      font-weight: 600;
-      color: #444;
+      font-weight: 700;
+      color: #5b5370;
     }
 
     .summary-grid dd {
       margin: 0;
     }
 
-    .callout {
-      margin: 1.25em 0;
-      padding: 1em;
-      border-left: 4px solid #1a1a1a;
-      background: #f7f7f7;
-    }
-
-    .callout.critical {
-      border-color: #b91c1c;
-      background: #fef2f2;
-    }
-
-    .callout.warning {
-      border-color: #b45309;
-      background: #fff7ed;
-    }
-
     .legend {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.8em;
-      margin: 1.25em 0;
-    }
-
-    .legend-item,
-    .item {
-      border: 1px solid #d8d8d8;
-      background: white;
+      margin-bottom: 1em;
     }
 
     .legend-item {
-      padding: 0.8em;
+      padding: 0.9em;
     }
 
-    .status {
+    .status-chip {
       display: inline-block;
-      margin-bottom: 0.6em;
-      padding: 0.2em 0.55em;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
       border-radius: 999px;
-      font-size: 9pt;
+      font-size: 8.5pt;
       font-weight: 700;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      background: #ede9fe;
+      color: #4c1d95;
     }
 
-    .status.critical {
-      background: #fee2e2;
-      color: #991b1b;
+    .status-chip.ok {
+      background: #dcfce7;
+      color: #166534;
     }
 
-    .status.risk {
+    .status-chip.risk {
       background: #ffedd5;
       color: #9a3412;
     }
 
-    .status.advisory {
-      background: #e0f2fe;
-      color: #075985;
+    .status-chip.critical {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
     .section-title {
-      margin: 1.75em 0 0.75em 0;
-      padding-bottom: 0.4em;
-      border-bottom: 2px solid #1a1a1a;
+      margin: 1.2em 0 0.65em 0;
       font-size: 12pt;
       font-weight: 700;
+      color: #231942;
+    }
+
+    .items {
+      display: grid;
+      gap: 0.9em;
     }
 
     .item {
-      margin: 1em 0;
       padding: 1em;
     }
 
-    .item h3 {
+    .item.ok {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+    }
+
+    .item.risk {
+      border-color: #fed7aa;
+      background: #fff7ed;
+    }
+
+    .item.critical {
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .item h3,
+    .action-box h3 {
       margin: 0 0 0.4em 0;
-      font-size: 11pt;
+      font-size: 10.5pt;
+      color: #231942;
     }
 
-    .item p {
-      margin: 0.35em 0;
+    .item p,
+    .action-box p {
+      margin: 0.3em 0;
     }
 
-    ul {
-      margin: 0.5em 0 0 1.2em;
-    }
-
-    li {
-      margin: 0.35em 0;
-    }
-
-    .doc-footer {
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 1px solid #d8d8d8;
-      font-size: 9pt;
-      color: #555;
+    .muted {
+      color: #6b7280;
     }
   </style>
 </head>
 <body>
-  <div class="doc-header">
-    <h1>Compliance Checklist - Pre-Service Checks</h1>
-    <span class="doc-badge">
-      {{#if (eq selected_notice_route "section_21")}}Section 21 notice{{else}}{{notice_name}}{{/if}}
-    </span>
-  </div>
-
-  <div class="callout">
-    <p><strong>Purpose:</strong> Review these items before relying on the notice. This checklist helps distinguish between a likely blocker, a significant litigation risk, and matters that are primarily advisory or good practice.</p>
+  <div class="hero">
+    <h2>{{pack_title}}</h2>
+    <h1>Compliance Checklist</h1>
+    <p><strong>{{status_label}}</strong></p>
+    <p>{{pack_supporting_line}}</p>
+    <p class="muted">{{risk_line}}</p>
   </div>
 
   <div class="summary-box">
     <dl class="summary-grid">
       <dt>Property</dt>
       <dd>{{property_address}}</dd>
+      <dt>Tenant</dt>
+      <dd>{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</dd>
+      <dt>Notice type</dt>
+      <dd>{{notice_name}}</dd>
       {{#if tenancy_start_date}}
       <dt>Tenancy start date</dt>
       <dd>{{format_date tenancy_start_date "long"}}</dd>
       {{/if}}
-      <dt>Notice type</dt>
-      <dd>{{#if (eq selected_notice_route "section_21")}}Section 21 notice{{else}}{{notice_name}}{{/if}}</dd>
       <dt>Generated</dt>
       <dd>{{format_date current_date "long"}}</dd>
     </dl>
@@ -205,186 +202,36 @@
 
   <div class="legend">
     <div class="legend-item">
-      <div class="status critical">Critical blocker</div>
-      {{#if (eq selected_notice_route "section_21")}}
-      <p>Typically blocks reliance on the Section 21 route unless corrected first.</p>
-      {{else}}
-      <p>Likely to block the current possession route or materially weaken the claim unless corrected first.</p>
-      {{/if}}
+      <div class="status-chip critical">Critical</div>
+      <p>Resolve this before relying on the notice or moving on with the case.</p>
     </div>
     <div class="legend-item">
-      <div class="status risk">Significant risk</div>
-      <p>Can still lead to penalties, counterclaims, credibility damage, or a weaker court file even where it is not an outright route blocker.</p>
+      <div class="status-chip risk">Risk</div>
+      <p>This may not automatically invalidate the route, but it can weaken the file or create delay.</p>
     </div>
     <div class="legend-item">
-      <div class="status advisory">Advisory / good practice</div>
-      <p>Still worth resolving, documenting, or improving before court if possible.</p>
+      <div class="status-chip ok">OK</div>
+      <p>The current pack data records this point, but you still need to retain the underlying evidence.</p>
     </div>
   </div>
 
-  <h2 class="section-title">Key Compliance Areas</h2>
-
-  <div class="item">
-    <h3>Deposit protection and prescribed information</h3>
-    {{#if (eq selected_notice_route "section_21")}}
-      {{#if (eq deposit_protected true)}}
-        {{#if (eq prescribed_info_given true)}}
-        <div class="status advisory">Recorded as satisfied</div>
-        <p>The pack records that the deposit was protected and the prescribed information was given.</p>
-        {{else}}
-        <div class="status critical">Critical blocker</div>
-        {{#if (eq prescribed_info_given false)}}
-        <p>The deposit is recorded as protected, but the prescribed information is not recorded as having been given. That can block reliance on a Section 21 notice until the position is corrected.</p>
-        {{else}}
-        <p>Deposit protection is recorded, but prescribed information service is not confirmed in the current pack data. A Section 21 notice should not be relied on until that position is checked and corrected if necessary.</p>
-        {{/if}}
-        {{/if}}
-      {{else if (eq deposit_protected false)}}
-      <div class="status critical">Critical blocker</div>
-      <p>The deposit is not recorded as protected in an approved scheme. A Section 21 notice should not be relied on until that issue is resolved.</p>
-      {{else}}
-      <div class="status critical">Critical blocker</div>
-      <p>Deposit protection status is not confirmed in the current pack data. A Section 21 notice should not be relied on until the position has been checked.</p>
-      {{/if}}
-    {{else}}
-      {{#if (eq deposit_protected true)}}
-        {{#if (eq prescribed_info_given true)}}
-        <div class="status advisory">Recorded as satisfied</div>
-        <p>The pack records deposit protection and prescribed information compliance.</p>
-        {{else}}
-        {{#if section8_deposit_exception_only}}
-        <div class="status risk">Significant risk</div>
-        {{#if (eq prescribed_info_given false)}}
-        <p>The deposit appears to have been protected, but prescribed information is not recorded as having been given.</p>
-        {{else}}
-        <p>The deposit appears to have been protected, but prescribed information service is not confirmed in the current pack data.</p>
-        {{/if}}
-        <p>Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still expose the landlord to penalty proceedings, counterclaims, or credibility issues and should still be resolved.</p>
-        {{else}}
-        <div class="status critical">Critical route risk</div>
-        {{#if (eq prescribed_info_given false)}}
-        <p>The deposit appears to have been protected, but prescribed information is not recorded as having been given.</p>
-        {{else}}
-        <p>The deposit appears to have been protected, but prescribed information service is not confirmed in the current pack data.</p>
-        {{/if}}
-        <p>For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order unless the deposit requirements have been complied with, the deposit has been returned in full or with agreed deductions, or any deposit-compliance dispute has already been resolved.</p>
-        {{/if}}
-        {{/if}}
-      {{else if (eq deposit_protected false)}}
-      {{#if section8_deposit_exception_only}}
-      <div class="status risk">Significant risk</div>
-      <p>The deposit is not recorded as protected in an approved scheme.</p>
-      <p>Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still expose the landlord to penalty proceedings, counterclaims, or credibility issues and should still be resolved.</p>
-      {{else}}
-      <div class="status critical">Critical route risk</div>
-      <p>The deposit is not recorded as protected in an approved scheme.</p>
-      <p>For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order unless the deposit requirements have been complied with, the deposit has been returned in full or with agreed deductions, or any deposit-compliance dispute has already been resolved.</p>
-      {{/if}}
-      {{else}}
-      {{#if section8_deposit_exception_only}}
-      <div class="status advisory">Advisory / good practice</div>
-      <p>Deposit protection status is not confirmed in the current pack data. Check the scheme record and any prescribed information service record before relying on the file.</p>
-      {{else}}
-      <div class="status critical">Critical route risk</div>
-      <p>Deposit protection status is not confirmed in the current pack data. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.</p>
-      {{/if}}
-      {{/if}}
-    {{/if}}
+  <h2 class="section-title">Decision Engine</h2>
+  <div class="items">
+    {{#each compliance_status_items}}
+    <div class="item {{severity}}">
+      <div class="status-chip {{severity}}">{{severity}}</div>
+      <h3>{{title}}</h3>
+      <p>{{detail}}</p>
+      <p><strong>Action:</strong> {{action}}</p>
+    </div>
+    {{/each}}
   </div>
 
-  <div class="item">
-    <h3>Gas safety</h3>
-    {{#if (eq gas_cert_provided true)}}
-    <div class="status advisory">Recorded as satisfied</div>
-    <p>The pack records a gas safety certificate as provided.</p>
-    {{else if (eq selected_notice_route "section_21")}}
-    <div class="status critical">Critical blocker</div>
-    {{#if (eq gas_cert_provided false)}}
-    <p>No gas safety provision is recorded. That can block reliance on a Section 21 notice where the requirement applies.</p>
-    {{else}}
-    <p>No gas safety provision is confirmed in the current pack data. That can block reliance on a Section 21 notice where the requirement applies.</p>
-    {{/if}}
-    {{else if (eq gas_cert_provided false)}}
-    <div class="status risk">Significant risk</div>
-    <p>No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can expose the landlord to regulatory and evidential risk.</p>
-    {{else}}
-    <div class="status advisory">Advisory / good practice</div>
-    <p>No gas safety provision is confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but the tenancy file should still be checked and the evidence retained if available.</p>
-    {{/if}}
-  </div>
-
-  <div class="item">
-    <h3>Energy Performance Certificate (EPC)</h3>
-    {{#if (eq epc_provided true)}}
-    <div class="status advisory">Recorded as satisfied</div>
-    <p>The pack records EPC provision{{#if epc_rating}} with rating {{epc_rating}}{{/if}}.</p>
-    {{else if (eq selected_notice_route "section_21")}}
-    <div class="status critical">Critical blocker</div>
-    {{#if (eq epc_provided false)}}
-    <p>No EPC provision is recorded. That can block reliance on a Section 21 notice.</p>
-    {{else}}
-    <p>No EPC provision is confirmed in the current pack data. That can block reliance on a Section 21 notice.</p>
-    {{/if}}
-    {{else if (eq epc_provided false)}}
-    <div class="status risk">Significant risk</div>
-    <p>No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.</p>
-    {{else}}
-    <div class="status advisory">Advisory / good practice</div>
-    <p>No EPC provision is confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but the tenancy file should still be checked and updated where possible.</p>
-    {{/if}}
-  </div>
-
-  <div class="item">
-    <h3>How to Rent guide</h3>
-    {{#if (eq how_to_rent_given true)}}
-    <div class="status advisory">Recorded as satisfied</div>
-    <p>The pack records that the How to Rent guide was given.</p>
-    {{else if (eq selected_notice_route "section_21")}}
-    <div class="status critical">Critical blocker</div>
-    {{#if (eq how_to_rent_given false)}}
-    <p>No How to Rent service record is shown. That can block reliance on a Section 21 notice.</p>
-    {{else}}
-    <p>How to Rent service is not confirmed in the current pack data. That can block reliance on a Section 21 notice.</p>
-    {{/if}}
-    {{else if (eq how_to_rent_given false)}}
-    <div class="status advisory">Advisory / good practice</div>
-    <p>No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.</p>
-    {{else}}
-    <div class="status advisory">Advisory / good practice</div>
-    <p>How to Rent service is not confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.</p>
-    {{/if}}
-  </div>
-
-  {{#if hmo_license_required}}
-  <div class="item">
-    <h3>Licensing</h3>
-    {{#if hmo_license_valid}}
-    <div class="status advisory">Recorded as satisfied</div>
-    <p>The pack records the required property licence as valid.</p>
-    {{else}}
-    <div class="status risk">Significant risk</div>
-    <p>The property appears to require a licence, but no valid licence is recorded. That may create separate regulatory exposure and can affect the possession claim.</p>
-    {{/if}}
-  </div>
-  {{/if}}
-
-  <h2 class="section-title">Practical Summary</h2>
-
-  {{#if (eq selected_notice_route "section_21")}}
-  <div class="callout critical">
-    <p><strong>Section 21 route:</strong> If any critical blocker remains unresolved, do not rely on the Section 21 notice until the position has been corrected and rechecked.</p>
-  </div>
-  {{else}}
-  <div class="callout warning">
-    <p><strong>Section 8 route:</strong> Compliance issues do not all carry the same consequence. Some do not automatically invalidate the notice, but they can still weaken the claim, increase costs exposure, or create separate landlord liability. Resolve what you can and keep the file evidence clear.</p>
-  </div>
-  {{/if}}
-
-  <div class="doc-footer">
-    <p><strong>Generated:</strong> {{format_date current_date "long"}}</p>
-    {{#unless clean_output}}
-    <p><strong>Landlord Heaven</strong> | England notice support document</p>
-    {{/unless}}
+  <h2 class="section-title">Next move</h2>
+  <div class="action-box">
+    <h3>{{status_label}}</h3>
+    <p>{{next_step_text}}</p>
+    <p class="muted">Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record, or legal advice on the facts of the case.</p>
   </div>
 </body>
 </html>

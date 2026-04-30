@@ -2,189 +2,347 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Eviction Case Summary</title>
+  <title>{{pack_summary_title}}</title>
   <style>
     {{{print_css}}}
 
     @page {
       size: A4;
-      margin: 15mm;
+      margin: 12mm;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
+      color: #1f1635;
       font-size: 10pt;
       line-height: 1.5;
-      color: #1a1a1a;
-      margin: 0;
     }
 
-    .header {
-      border-bottom: 2px solid #1a1a1a;
-      margin-bottom: 1.5em;
-      padding-bottom: 0.75em;
+    .hero,
+    .panel,
+    .fact-card,
+    .risk-card,
+    .status-card {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
-    .header h1 {
-      margin: 0 0 0.25em 0;
-      font-size: 16pt;
+    .hero {
+      border: 1px solid #ddd6fe;
+      background: #faf8ff;
+      padding: 1.25em;
+      margin-bottom: 1.1em;
     }
 
-    .header p {
-      margin: 0.2em 0;
-      color: #555;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       gap: 1em;
-      margin-bottom: 1.5em;
+      margin-bottom: 0.9em;
     }
 
-    .card {
-      border: 1px solid #d9d9d9;
-      padding: 0.9em 1em;
-      background: #fafafa;
+    .hero h1 {
+      margin: 0 0 0.2em 0;
+      font-size: 19pt;
+      line-height: 1.1;
     }
 
-    .card h2 {
-      margin: 0 0 0.6em 0;
+    .hero h2 {
+      margin: 0;
       font-size: 11pt;
+      color: #5b5370;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .key-facts {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.5em;
+    .hero p {
+      margin: 0.3em 0 0 0;
     }
 
-    .key-facts th,
-    .key-facts td {
-      border: 1px solid #d9d9d9;
-      padding: 8px 10px;
-      vertical-align: top;
-      text-align: left;
+    .status-pill {
+      display: inline-block;
+      padding: 0.45em 0.9em;
+      border-radius: 999px;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #fff;
+      background: #166534;
+      white-space: nowrap;
     }
 
-    .key-facts th {
-      width: 28%;
-      background: #f2f2f2;
+    .status-pill.risk {
+      background: #b45309;
+    }
+
+    .status-pill.critical {
+      background: #b91c1c;
+    }
+
+    .risk-line {
+      margin-top: 0.8em;
+      padding-top: 0.8em;
+      border-top: 1px solid #ddd6fe;
+      color: #4c1d95;
       font-weight: 600;
     }
 
-    .section {
-      margin-bottom: 1.25em;
+    .facts-grid,
+    .panel-grid,
+    .risk-grid,
+    .status-grid {
+      display: grid;
+      gap: 0.8em;
     }
 
-    .section h2 {
+    .facts-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 1.1em;
+    }
+
+    .panel-grid,
+    .risk-grid,
+    .status-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .fact-card,
+    .panel,
+    .risk-card,
+    .status-card {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      padding: 0.95em 1em;
+    }
+
+    .fact-card .label,
+    .panel h3,
+    .risk-card .label,
+    .status-card .label {
+      display: block;
+      margin-bottom: 0.35em;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b6481;
+    }
+
+    .fact-card .value {
       font-size: 11pt;
-      margin: 0 0 0.5em 0;
-      padding-bottom: 0.25em;
-      border-bottom: 1px solid #d9d9d9;
+      font-weight: 700;
+      color: #231942;
     }
 
-    .section p,
-    .section ul {
+    .section-title {
+      margin: 1.3em 0 0.7em 0;
+      font-size: 12pt;
+      font-weight: 700;
+      color: #231942;
+    }
+
+    .panel h3,
+    .risk-card h3,
+    .status-card h3 {
+      margin: 0 0 0.45em 0;
+      font-size: 10pt;
+      color: #231942;
+    }
+
+    .panel p,
+    .risk-card p,
+    .status-card p {
+      margin: 0.3em 0;
+    }
+
+    .panel ul,
+    .status-card ul {
       margin: 0;
+      padding-left: 1.1em;
     }
 
-    .section ul {
-      padding-left: 1.2em;
+    .panel li,
+    .status-card li {
+      margin: 0.25em 0;
+    }
+
+    .risk-card.ok,
+    .status-card.ok {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+    }
+
+    .risk-card.risk,
+    .status-card.risk {
+      border-color: #fed7aa;
+      background: #fff7ed;
+    }
+
+    .risk-card.critical,
+    .status-card.critical {
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .risk-card .chip,
+    .status-card .chip {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: #ede9fe;
+      color: #4c1d95;
+    }
+
+    .risk-card.ok .chip,
+    .status-card.ok .chip {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .risk-card.risk .chip,
+    .status-card.risk .chip {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .risk-card.critical .chip,
+    .status-card.critical .chip {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
     .muted {
-      color: #666;
+      color: #6b7280;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Eviction Case Summary</h1>
-    <p><strong>Case ID:</strong> {{case_id}}</p>
-    <p><strong>Jurisdiction:</strong> {{jurisdiction}}</p>
-    {{#if generated_date}}<p><strong>Generated:</strong> {{format_date generated_date "long"}}</p>{{/if}}
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <h2>{{pack_title}}</h2>
+        <h1>{{pack_summary_title}}</h1>
+        <p><strong>{{pack_strapline}}</strong></p>
+        <p>{{pack_supporting_line}}</p>
+      </div>
+      <div>
+        <span class="status-pill{{#if (eq status_label "SERVE WITH RISKS")}} risk{{/if}}{{#if (eq status_label "PREPARE WITH RISKS")}} risk{{/if}}{{#if (eq status_label "DO NOT SERVE YET")}} critical{{/if}}{{#if (eq status_label "DO NOT ISSUE YET")}} critical{{/if}}">{{status_label}}</span>
+      </div>
+    </div>
+    <div class="muted">
+      <strong>Case ID:</strong> {{case_id}}
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>Jurisdiction:</strong> {{jurisdiction}}
+      {{#if generated_date}}
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>Generated:</strong> {{format_date generated_date "long"}}
+      {{/if}}
+    </div>
+    <div class="risk-line">{{risk_line}}</div>
   </div>
 
-  <div class="summary-grid">
-    <div class="card">
-      <h2>Parties</h2>
-      <p><strong>Claimant:</strong> {{landlord_full_name}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</p>
-      <p><strong>Defendant:</strong> {{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</p>
-      <p><strong>Property:</strong> {{property_address}}</p>
+  <div class="facts-grid">
+    <div class="fact-card">
+      <span class="label">Property</span>
+      <div class="value">{{property_address}}</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Tenant</span>
+      <div class="value">{{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Grounds</span>
+      <div class="value">{{grounds_summary_text}}</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Arrears</span>
+      <div class="value">{{currency current_arrears_total}}</div>
+    </div>
+    {{#if (hasValue notice_served_date)}}
+    <div class="fact-card">
+      <span class="label">Notice served</span>
+      <div class="value">{{format_date notice_served_date "long"}}</div>
+    </div>
+    {{/if}}
+    {{#if (hasValue notice_expiry_date)}}
+    <div class="fact-card">
+      <span class="label">Notice expires</span>
+      <div class="value">{{format_date notice_expiry_date "long"}}</div>
+    </div>
+    {{/if}}
+    {{#if (hasValue earliest_proceedings_date)}}
+    <div class="fact-card">
+      <span class="label">Earliest proceedings</span>
+      <div class="value">{{format_date earliest_proceedings_date "long"}}</div>
+    </div>
+    {{/if}}
+    <div class="fact-card">
+      <span class="label">Claimant</span>
+      <div class="value">{{landlord_full_name}}{{#if landlord_2_name}}, {{landlord_2_name}}{{/if}}</div>
+    </div>
+  </div>
+
+  <div class="panel-grid">
+    <div class="panel">
+      <h3>What this pack does</h3>
+      <ul>
+        {{#each what_this_pack_does}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Next step</h3>
+      <p>{{next_step_text}}</p>
       {{#if court_name}}<p><strong>Court:</strong> {{court_name}}</p>{{/if}}
-    </div>
-    <div class="card">
-      <h2>Route</h2>
-      {{#if is_section_21}}
-      <p><strong>Current route:</strong> Section 21 (no-fault possession)</p>
-      {{else}}
-      <p><strong>Current route:</strong> Section 8 possession claim</p>
-      {{/if}}
-      <p><strong>Grounds relied on:</strong> {{#if is_section_21}}Section 21{{else}}{{#if groundsReliedUpon}}{{join groundsReliedUpon ", "}}{{else}}No grounds recorded{{/if}}{{/if}}</p>
-      {{#if grounds_summary_text}}<p class="muted">This summary should match the grounds pleaded in the notice and court papers: {{grounds_summary_text}}</p>{{/if}}
+      {{#if (hasValue payment_day_display)}}<p><strong>Rent due:</strong> {{payment_day_display}}</p>{{/if}}
+      {{#if (or (hasValue arrears_at_notice_date) (eq arrears_at_notice_date 0))}}<p><strong>Arrears at notice date:</strong> {{currency arrears_at_notice_date}}</p>{{/if}}
     </div>
   </div>
 
-  <table class="key-facts">
-    <tbody>
-      {{#if (hasValue tenancy_start_date)}}
-      <tr>
-        <th>Tenancy start date</th>
-        <td colspan="3">{{format_date tenancy_start_date "long"}}</td>
-      </tr>
-      {{/if}}
-      {{#if (or (hasValue rent_amount) (eq rent_amount 0))}}
-      <tr>
-        <th>Rent</th>
-        <td colspan="3">{{currency rent_amount}} {{rent_frequency_label}}</td>
-      </tr>
-      {{/if}}
-      {{#if (hasValue payment_day_display)}}
-      <tr>
-        <th>Due day</th>
-        <td colspan="3">{{payment_day_display}}</td>
-      </tr>
-      {{/if}}
-      {{#if (or (hasValue current_arrears_total) (eq current_arrears_total 0))}}
-      <tr>
-        <th>Current arrears</th>
-        <td colspan="3">{{currency current_arrears_total}}</td>
-      </tr>
-      {{/if}}
-      {{#if (or (hasValue arrears_at_notice_date) (eq arrears_at_notice_date 0))}}
-      <tr>
-        <th>Arrears at notice date</th>
-        <td colspan="3">{{currency arrears_at_notice_date}}</td>
-      </tr>
-      {{/if}}
-      {{#if (hasValue notice_served_date)}}
-      <tr>
-        <th>Notice served</th>
-        <td colspan="3">{{format_date notice_served_date "long"}}</td>
-      </tr>
-      {{/if}}
-      {{#if (hasValue notice_expiry_date)}}
-      <tr>
-        <th>Notice expiry date</th>
-        <td colspan="3">{{format_date notice_expiry_date "long"}}</td>
-      </tr>
-      {{/if}}
-      {{#if (hasValue earliest_proceedings_date)}}
-      <tr>
-        <th>Earliest proceedings date</th>
-        <td colspan="3">{{format_date earliest_proceedings_date "long"}}</td>
-      </tr>
-      {{/if}}
-      <tr>
-        <th>Compliance snapshot</th>
-        <td colspan="3">{{#if compliance_status_items.length}}{{compliance_status_items.length}} items recorded{{else}}No compliance items recorded{{/if}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <h2 class="section-title">Key Risks</h2>
+  <div class="risk-grid">
+    {{#if key_risk_titles.length}}
+      {{#each compliance_status_items}}
+        {{#unless (eq severity "ok")}}
+        <div class="risk-card {{severity}}">
+          <div class="chip">{{severity}}</div>
+          <h3>{{title}}</h3>
+          <p>{{detail}}</p>
+          <p><strong>Action:</strong> {{action}}</p>
+        </div>
+        {{/unless}}
+      {{/each}}
+    {{else}}
+      <div class="risk-card ok">
+        <div class="chip">ok</div>
+        <h3>No critical or risk items recorded</h3>
+        <p>The current pack data does not show a blocker or elevated risk in the structured compliance snapshot.</p>
+        <p><strong>Action:</strong> Keep the notice, service, and evidence file aligned as the case progresses.</p>
+      </div>
+    {{/if}}
+  </div>
 
-  <div class="section">
-    <h2>Case Narrative</h2>
+  <h2 class="section-title">Compliance Snapshot</h2>
+  <div class="status-grid">
+    {{#each compliance_status_items}}
+    <div class="status-card {{severity}}">
+      <span class="label">{{title}}</span>
+      <div class="chip">{{severity}}</div>
+      <p>{{detail}}</p>
+      <p><strong>Action:</strong> {{action}}</p>
+    </div>
+    {{/each}}
+  </div>
+
+  <h2 class="section-title">Case Context</h2>
+  <div class="panel">
     {{#if drafting_model.caseSummary.narrativeParagraphs.length}}
       {{#each drafting_model.caseSummary.narrativeParagraphs}}
       <p>{{this}}</p>
@@ -194,22 +352,8 @@
     {{/if}}
   </div>
 
-  <div class="section">
-    <h2>Compliance Status Snapshot</h2>
-    <p class="muted" style="margin-bottom: 0.6em;">Use this as a risk summary, not as a replacement for the underlying tenancy documents and evidence file.</p>
-    <ul>
-      {{#if compliance_status_items.length}}
-        {{#each compliance_status_items}}
-        <li>{{this}}</li>
-        {{/each}}
-      {{else}}
-        <li>No compliance snapshot items were recorded in the pack data.</li>
-      {{/if}}
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Pre-action and Procedural Steps</h2>
+  <h2 class="section-title">Procedural Notes</h2>
+  <div class="panel">
     {{#if drafting_model.caseSummary.stepsParagraphs.length}}
       {{#each drafting_model.caseSummary.stepsParagraphs}}
       <p>{{this}}</p>
@@ -220,8 +364,8 @@
   </div>
 
   {{#if (or drafting_model.caseSummary.defendantCircumstancesParagraphs.length (hasValue defendant_circumstances_text))}}
-  <div class="section">
-    <h2>Defendant Circumstances</h2>
+  <h2 class="section-title">Defendant Circumstances</h2>
+  <div class="panel">
     {{#if drafting_model.caseSummary.defendantCircumstancesParagraphs.length}}
       {{#each drafting_model.caseSummary.defendantCircumstancesParagraphs}}
       <p>{{this}}</p>
@@ -233,8 +377,8 @@
   {{/if}}
 
   {{#if (or drafting_model.caseSummary.financialParagraphs.length (hasValue financial_info_text))}}
-  <div class="section">
-    <h2>Financial Position and Relief Sought</h2>
+  <h2 class="section-title">Financial Position</h2>
+  <div class="panel">
     {{#if drafting_model.caseSummary.financialParagraphs.length}}
       {{#each drafting_model.caseSummary.financialParagraphs}}
       <p>{{this}}</p>

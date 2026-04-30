@@ -122,10 +122,10 @@ export interface ProductConfig {
 export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   notice_only: {
     sku: 'notice_only',
-    label: 'Eviction Notice Generator (Section 8, May 2026)',
-    shortLabel: 'Eviction Notice Generator',
+    label: 'Stage 1: Section 8 Notice & Service Pack',
+    shortLabel: 'Stage 1 Notice & Service',
     description:
-      'Generate a Section 8 notice for England under the post-May 2026 rules, with landlord checks on grounds, dates, service, and compliance before you serve',
+      'Built to hold up if challenged: align the Section 8 notice, service, and evidence before you serve anything in England',
     price: SEO_PRICES.evictionNotice.amount,
     displayPrice: SEO_PRICES.evictionNotice.display,
     wizardHref: '/wizard/flow?type=eviction&product=notice_only&src=product_page&topic=eviction',
@@ -133,10 +133,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   complete_pack: {
     sku: 'complete_pack',
-    label: 'Complete Eviction Pack',
-    shortLabel: 'Complete Eviction Pack',
+    label: 'Stage 2: Section 8 Court & Possession Pack',
+    shortLabel: 'Stage 2 Court & Possession',
     description:
-      'Court-possession bundle for landlords in England with the Section 8 route, N5, N119, and filing guidance',
+      'Complete pack covering both the Section 8 notice/service stage and the court stage, with the notice, service record, court forms, and evidence kept in one England file',
     price: SEO_PRICES.evictionBundle.amount,
     displayPrice: SEO_PRICES.evictionBundle.display,
     priceNote: 'For landlords in England',

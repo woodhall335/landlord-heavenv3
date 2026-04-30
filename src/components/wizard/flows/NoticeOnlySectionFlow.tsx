@@ -130,7 +130,7 @@ export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'en
     return {
       title: 'This case looks ready for the full possession pack',
       reason:
-        'You are already building this notice around Ground 8 arrears. If you expect to go to court after service, moving into the Complete Eviction Pack now keeps the notice, arrears schedule, N5, N119, and witness statement aligned from the start.',
+        'You are already building this notice around Ground 8 arrears. If you expect to go to court after service, moving into the Stage 2 Court & Possession Pack now keeps the notice, arrears schedule, N5, N119, and witness statement aligned from the start.',
       benefits: [
         'Keeps the notice and court forms consistent from the same answers',
         'Adds the N5, N119, witness statement, and court bundle support',
@@ -143,7 +143,7 @@ export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'en
     return {
       title: 'Consider upgrading if this is likely to reach court',
       reason:
-        'This notice relies on multiple or more involved possession grounds. The Complete Eviction Pack is a better fit when you want the notice, court forms, and supporting documents prepared together.',
+        'This notice relies on multiple or more involved possession grounds. The Stage 2 Court & Possession Pack is a better fit when you want the notice, court forms, and supporting documents prepared together.',
       benefits: [
         'Adds the court claim forms and bundle support',
         'Helps keep evidence and particulars aligned with the notice',
@@ -182,7 +182,7 @@ const SCOTLAND_ROUTES = ['notice_to_leave'] as const;
 function getNoticeOnlyShellTitle(jurisdiction: 'england' | 'wales' | 'scotland'): string {
   if (jurisdiction === 'scotland') return 'Scotland Notice to Leave';
   if (jurisdiction === 'wales') return 'Wales Eviction Notice';
-  return 'Eviction Notice Generator';
+  return 'Stage 1: Section 8 Notice & Service Pack';
 }
 
 function hasCompleteCollectibleN215Facts(facts: WizardFacts): boolean {
@@ -1491,7 +1491,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                 onClick={handleUpgradeToCompletePack}
                 className="inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#7c3aed,#5b21b6)] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(91,33,182,0.24)] transition hover:brightness-105"
               >
-                Switch to Complete Eviction Pack
+                Switch to Stage 2 Court & Possession Pack
               </button>
               <p className="text-xs leading-5 text-[#6a627f]">
                 Your saved answers carry across so you can keep building from the same case.

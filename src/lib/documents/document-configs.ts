@@ -33,6 +33,14 @@ export function getNoticeOnlyDocuments(
   if (jurisdiction === 'england') {
     documents.push(
       {
+        id: 'case-summary-stage-1',
+        title: 'Case Summary — Stage 1 Notice & Service',
+        description: 'Front-page case summary with status, risks, and next step before service.',
+        icon: 'guidance',
+        pages: '1-2 pages',
+        category: 'Guidance',
+      },
+      {
         id: 'notice-form-3a',
         title: ENGLAND_SECTION8_NOTICE_TITLE,
         description: 'Official England possession notice for the current Section 8 route',
@@ -49,37 +57,37 @@ export function getNoticeOnlyDocuments(
         category: 'Guidance',
       },
       {
-        id: 'cover-letter-form-3a',
-        title: 'Cover Letter to Tenant',
-        description: `Non-statutory covering letter to send alongside your ${ENGLAND_SECTION8_NOTICE_NAME}`,
+        id: 'validity-checklist-form-3a',
+        title: 'Service & Validity Checklist',
+        description: `Pre-service checklist for ${ENGLAND_SECTION8_NOTICE_NAME} dates, grounds, and service timing`,
+        icon: 'checklist',
+        pages: '2 pages',
+        category: 'Checklists',
+      },
+      {
+        id: 'compliance-checklist-form-3a',
+        title: 'Pre-Service Compliance Declaration',
+        description: 'Decision-engine compliance snapshot showing blockers, risks, and recorded items before service.',
         icon: 'guidance',
-        pages: '1 page',
+        pages: '2 pages',
         category: 'Guidance',
       },
       {
-        id: 'validity-checklist-form-3a',
-        title: 'Service & Compliance Checklist',
-        description: `Pre-service checklist for ${ENGLAND_SECTION8_NOTICE_NAME} validity, timing, and compliance`,
-        icon: 'checklist',
-        pages: '2 pages',
-        category: 'Checklists',
+        id: 'proof-of-service-form-3a',
+        title: 'Certificate of Service (Form N215)',
+        description: `Official editable Form N215 certificate for recording how and when your ${ENGLAND_SECTION8_NOTICE_NAME} was served`,
+        icon: 'evidence',
+        pages: '5 pages',
+        category: 'Evidence',
       },
       {
-        id: 'evidence-checklist-form-3a',
-        title: 'Ground-Specific Evidence Checklist',
-        description: 'Evidence prompts tailored to the possession grounds in your notice',
-        icon: 'checklist',
-        pages: '2 pages',
-        category: 'Checklists',
-      },
-        {
-          id: 'proof-of-service-form-3a',
-          title: 'Certificate of Service (Form N215)',
-          description: `Official editable Form N215 certificate for recording how and when your ${ENGLAND_SECTION8_NOTICE_NAME} was served`,
-          icon: 'evidence',
-          pages: '5 pages',
-          category: 'Evidence',
-        }
+        id: 'what-happens-next-stage-1',
+        title: 'What Happens Next',
+        description: 'Next-step guide covering service, notice expiry, and the Stage 2 court handoff.',
+        icon: 'guidance',
+        pages: '1 page',
+        category: 'Guidance',
+      }
     );
   }
 
@@ -207,22 +215,42 @@ export function getNoticeOnlyDocuments(
 export function getCompletePackDocuments(jurisdiction: string, noticeRoute: string): DocumentInfo[] {
   const documents: DocumentInfo[] = [];
 
-  // Start with Notice Only documents
-  const noticeOnlyDocs = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
-  documents.push(...noticeOnlyDocs);
-
   // Add court forms - route-specific (aligned with pack-contents.ts single source of truth)
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
     if (jurisdiction === 'england') {
-      documents.push({
-        id: 'form-n5',
-        title: 'Form N5 - Claim for Possession',
-        description: 'Official court form to start a standard possession claim',
-        icon: 'court-form',
-        pages: '8 pages',
-        category: 'Court Forms',
-      });
       documents.push(
+        {
+          id: 'case-summary-stage-2',
+          title: 'Case Summary — Stage 2 Court & Possession',
+          description: 'Front-page court-stage summary with readiness, risks, and the next step.',
+          icon: 'guidance',
+          pages: '1-2 pages',
+          category: 'Guidance',
+        },
+        {
+          id: 'notice-form-3a',
+          title: ENGLAND_SECTION8_NOTICE_TITLE,
+          description: 'Official England possession notice for the current Section 8 route',
+          icon: 'notice',
+          pages: '10 pages',
+          category: 'Notice',
+        },
+        {
+          id: 'service-instructions-form-3a',
+          title: 'Service Instructions',
+          description: `Service playbook for the ${ENGLAND_SECTION8_NOTICE_NAME} and linked court file`,
+          icon: 'guidance',
+          pages: '2 pages',
+          category: 'Guidance',
+        },
+        {
+          id: 'form-n5',
+          title: 'Form N5 - Claim for Possession',
+          description: 'Official court form to start a standard possession claim',
+          icon: 'court-form',
+          pages: '8 pages',
+          category: 'Court Forms',
+        },
         {
           id: 'form-n119',
           title: 'Form N119 - Particulars of Claim',
@@ -230,9 +258,43 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
           icon: 'court-form',
           pages: '4-6 pages',
           category: 'Court Forms',
-        }
+        },
+        {
+          id: 'arrears-schedule-complete',
+          title: 'Schedule of Arrears',
+          description: 'Period-by-period arrears schedule for the court file.',
+          icon: 'schedule',
+          pages: '1-3 pages',
+          category: 'Evidence',
+        },
+        {
+          id: 'proof-of-service-form-3a',
+          title: 'Certificate of Service (Form N215)',
+          description: `Official editable Form N215 certificate for recording how and when your ${ENGLAND_SECTION8_NOTICE_NAME} was served`,
+          icon: 'evidence',
+          pages: '5 pages',
+          category: 'Evidence',
+        },
+        {
+          id: 'hearing-checklist',
+          title: 'Hearing Checklist',
+          description: 'Practical checklist for filing, service, and hearing preparation.',
+          icon: 'checklist',
+          pages: '2 pages',
+          category: 'Checklists',
+        },
+        {
+          id: 'what-happens-next-stage-2',
+          title: 'What Happens Next',
+          description: 'Next-step guide covering issue, hearing preparation, and enforcement handoff.',
+          icon: 'guidance',
+          pages: '1 page',
+          category: 'Guidance',
+        },
       );
     } else {
+      const noticeOnlyDocs = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
+      documents.push(...noticeOnlyDocs);
       // Wales routes continue to use the standard N5 + N119 paper route.
       documents.push(
         {
@@ -256,6 +318,8 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
   }
 
   if (jurisdiction === 'scotland') {
+    const noticeOnlyDocs = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
+    documents.push(...noticeOnlyDocs);
     documents.push({
       id: 'form-e',
       title: 'Form E - Tribunal Application',
@@ -781,30 +845,32 @@ export interface ProductMeta {
 export function getProductMeta(product: string): ProductMeta {
   const products: Record<string, ProductMeta> = {
     'notice_only': {
-      name: 'Notice Only Pack',
+      name: 'Stage 1: Section 8 Notice & Service Pack',
       price: PRODUCTS.notice_only.displayPrice,
       originalPrice: '£150+',
       savings: 'Save £120+ vs solicitors',
       features: [
-        'Legally compliant eviction notice',
-        'Service instructions',
-        'Service & validity checklist',
-        'Pre-service compliance declaration',
+        'Front-page case summary and risk snapshot',
+        'Legally compliant Section 8 notice',
+        'Service playbook and proof of service',
+        'Decision-engine compliance checklist',
+        'What happens next guidance',
         'Instant PDF download',
       ],
     },
     'complete_pack': {
-      name: 'Complete Eviction Pack',
+      name: 'Stage 2: Section 8 Court & Possession Pack',
       price: PRODUCTS.complete_pack.displayPrice,
       originalPrice: '£2,500+',
       savings: 'Save £2,400+ vs solicitors',
       features: [
-        'Everything in Notice Only',
-        'Court forms (N5, N119, N5B)',
+        'Front-page court-stage summary and risk snapshot',
+        'Section 8 notice plus service playbook',
+        'Court forms (N5, N119)',
         'AI witness statement',
-        'Court filing guide',
-        'Evidence checklist',
-          'Certificate of service (Form N215)',
+        'Court filing and hearing support',
+        'Certificate of service (Form N215)',
+        'What happens next guidance',
       ],
     },
     'money_claim': {

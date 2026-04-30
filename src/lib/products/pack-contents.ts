@@ -483,6 +483,14 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
   const { has_arrears, include_arrears_schedule } = args;
 
   items.push({
+    key: 'case_summary',
+    title: 'Case Summary — Stage 1 Notice & Service',
+    description: 'Front-page case summary showing status, key risks, and the next step before service.',
+    category: 'Guidance',
+    required: true,
+  });
+
+  items.push({
     key: 'section8_notice',
     title: ENGLAND_SECTION8_NOTICE_TITLE,
     description: 'Official England possession notice for the current Section 8 route',
@@ -533,12 +541,27 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
     });
   }
 
+  items.push({
+    key: 'what_happens_next',
+    title: 'What Happens Next',
+    description: 'Next-step guide covering service, notice expiry, and the Stage 2 court handoff.',
+    category: 'Guidance',
+    required: true,
+  });
+
   return items;
 }
 
 function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
   void args;
   const items: PackItem[] = [
+    {
+      key: 'case_summary',
+      title: 'Case Summary — Stage 2 Court & Possession',
+      description: 'Front-page summary for the complete pack, showing readiness, key risks, and the next step across notice and court.',
+      category: 'Guidance',
+      required: true,
+    },
     {
       key: 'section8_notice',
       title: ENGLAND_SECTION8_NOTICE_TITLE,
@@ -547,6 +570,14 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       required: true,
     },
   ];
+
+  items.push({
+    key: 'service_instructions',
+    title: 'Service Instructions',
+    description: `Stage 1 service playbook included inside the complete pack so the ${ENGLAND_SECTION8_NOTICE_NAME} and court file stay aligned.`,
+    category: 'Guidance',
+    required: true,
+  });
 
   items.push({
     key: 'n5_claim',
@@ -621,9 +652,9 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
   });
 
   items.push({
-    key: 'case_summary',
-    title: 'Eviction Case Summary',
-    description: 'Concise summary of the claim, arrears position, and filing route.',
+    key: 'what_happens_next',
+    title: 'What Happens Next',
+    description: 'Next-step guide covering issue, hearing preparation, and enforcement handoff.',
     category: 'Guidance',
     required: true,
   });

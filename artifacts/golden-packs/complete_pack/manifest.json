@@ -1,9 +1,27 @@
 {
   "key": "complete_pack",
-  "displayName": "Section 8 Complete Eviction Pack",
+  "displayName": "Stage 2: Section 8 Court & Possession Pack",
   "outputDir": "complete_pack",
-  "documentCount": 11,
+  "documentCount": 13,
   "documents": [
+    {
+      "title": "Case Summary — Stage 2 Court & Possession",
+      "description": "Complete summary of your eviction case and selected grounds",
+      "category": "guidance",
+      "documentType": "case_summary",
+      "fileName": "eviction_case_summary.pdf",
+      "files": {
+        "pdf": "complete_pack/eviction_case_summary.pdf",
+        "text": "complete_pack/eviction_case_summary.txt",
+        "html": "complete_pack/eviction_case_summary.html"
+      },
+      "extraction": {
+        "pageCount": 4,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
     {
       "title": "Form 3A notice",
       "description": "Official notice to tenant citing grounds for possession",
@@ -17,6 +35,24 @@
       },
       "extraction": {
         "pageCount": 10,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Service Instructions",
+      "description": "Service playbook for the Form 3A notice and court file",
+      "category": "guidance",
+      "documentType": "service_instructions",
+      "fileName": "service_instructions_s8.pdf",
+      "files": {
+        "pdf": "complete_pack/service_instructions_s8.pdf",
+        "text": "complete_pack/service_instructions_s8.txt",
+        "html": "complete_pack/service_instructions_s8.html"
+      },
+      "extraction": {
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -182,18 +218,18 @@
       }
     },
     {
-      "title": "Eviction Case Summary",
-      "description": "Complete summary of your eviction case and selected grounds",
+      "title": "What Happens Next",
+      "description": "Clear next steps after notice and through the court stage",
       "category": "guidance",
-      "documentType": "case_summary",
-      "fileName": "eviction_case_summary.pdf",
+      "documentType": "what_happens_next",
+      "fileName": "what_happens_next.pdf",
       "files": {
-        "pdf": "complete_pack/eviction_case_summary.pdf",
-        "text": "complete_pack/eviction_case_summary.txt",
-        "html": "complete_pack/eviction_case_summary.html"
+        "pdf": "complete_pack/what_happens_next.pdf",
+        "text": "complete_pack/what_happens_next.txt",
+        "html": "complete_pack/what_happens_next.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

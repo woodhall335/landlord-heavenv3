@@ -20,12 +20,13 @@ describe('getPackContents', () => {
         const items = getPackContents(args);
 
         expect(items.length).toBeGreaterThan(0);
+        expect(items[0]?.key).toBe('case_summary');
         expect(items.find(i => i.key === 'section8_notice')?.title).toContain('Form 3A');
         expect(items.find(i => i.key === 'service_instructions')).toBeDefined();
-        expect(items.find(i => i.key === 'cover_letter_to_tenant')).toBeDefined();
-        expect(items.find(i => i.key === 'service_checklist')).toBeDefined();
-        expect(items.find(i => i.key === 'evidence_checklist')).toBeDefined();
+        expect(items.find(i => i.key === 'validity_checklist')).toBeDefined();
+        expect(items.find(i => i.key === 'compliance_declaration')).toBeDefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
+        expect(items.find(i => i.key === 'what_happens_next')).toBeDefined();
         expect(items.find(i => i.key === 'section21_notice')).toBeUndefined();
       });
 
@@ -150,14 +151,16 @@ describe('getPackContents', () => {
         };
         const items = getPackContents(args);
 
+        expect(items[0]?.key).toBe('case_summary');
         expect(items.find(i => i.key === 'section8_notice')?.title).toContain('Form 3A');
+        expect(items.find(i => i.key === 'service_instructions')).toBeDefined();
         expect(items.find(i => i.key === 'n5_claim')).toBeDefined();
         expect(items.find(i => i.key === 'n119_particulars')).toBeDefined();
-        expect(items.find(i => i.key === 'court_filing_guide')).toBeDefined();
-        expect(items.find(i => i.key === 'cover_letter_to_tenant')).toBeDefined();
+        expect(items.find(i => i.key === 'arrears_schedule')).toBeDefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
+        expect(items.find(i => i.key === 'witness_statement')).toBeDefined();
+        expect(items.find(i => i.key === 'what_happens_next')).toBeDefined();
         expect(items.find(i => i.key === 'n5b_claim')).toBeUndefined();
-        expect(items.find(i => i.key === 'witness_statement')).toBeUndefined();
       });
 
       it('returns England complete pack with N5 and N119', () => {

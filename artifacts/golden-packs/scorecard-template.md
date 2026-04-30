@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-04-30T10:25:19.412Z
+Generated: 2026-04-30T12:00:17.187Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):
@@ -31,22 +31,6 @@ Documents:
 - Negotiation email template [section13_negotiation_email_template]
 - Merged tribunal bundle PDF [section13_tribunal_bundle]
 - Tribunal bundle ZIP [section13_tribunal_bundle_zip]
-
-## Eviction Notice Generator (Section 8, May 2026)
-Folder: notice_only
-Documents: 6
-Score: 
-What works: 
-Issues found: 
-What would move this to 9/10: 
-
-Documents:
-- Form 3A notice [section8_notice]
-- Service Instructions [service_instructions]
-- Service & Validity Checklist [validity_checklist]
-- Pre-Service Compliance Declaration [compliance_declaration]
-- Certificate of Service (Form N215) [proof_of_service]
-- Rent Schedule / Arrears Statement [arrears_schedule]
 
 ## HMO / Shared House Tenancy Agreement
 Folder: england_hmo_shared_house_tenancy_agreement
@@ -120,16 +104,36 @@ Documents:
 - Prescribed Information Pack [tenancy_deposit_information]
 - Premium Management Schedule [england_premium_management_schedule]
 
-## Section 8 Complete Eviction Pack
-Folder: complete_pack
-Documents: 11
+## Stage 1: Section 8 Notice & Service Pack
+Folder: notice_only
+Documents: 8
 Score: 
 What works: 
 Issues found: 
 What would move this to 9/10: 
 
 Documents:
+- Case Summary — Stage 1 Notice & Service [case_summary]
 - Form 3A notice [section8_notice]
+- Service Instructions [service_instructions]
+- Service & Validity Checklist [validity_checklist]
+- Pre-Service Compliance Declaration [compliance_declaration]
+- Certificate of Service (Form N215) [proof_of_service]
+- Rent Schedule / Arrears Statement [arrears_schedule]
+- What Happens Next [what_happens_next]
+
+## Stage 2: Section 8 Court & Possession Pack
+Folder: complete_pack
+Documents: 13
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Case Summary — Stage 2 Court & Possession [case_summary]
+- Form 3A notice [section8_notice]
+- Service Instructions [service_instructions]
 - Form N5 - Claim for Possession [n5_claim]
 - Form N119 - Particulars of Claim [n119_particulars]
 - Schedule of Arrears [arrears_schedule]
@@ -139,7 +143,7 @@ Documents:
 - Court Bundle Index [court_bundle_index]
 - Hearing Checklist [hearing_checklist]
 - Arrears Engagement Letter [arrears_engagement_letter]
-- Eviction Case Summary [case_summary]
+- What Happens Next [what_happens_next]
 
 ## Standard Section 13 Pack
 Folder: section13_standard

@@ -18,29 +18,29 @@ export type PricingPackageCard = {
 
 export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
   {
-    name: 'Eviction Notice Generator (Section 8, May 2026)',
+    name: 'Stage 1: Section 8 Notice & Service Pack',
     productSku: 'notice_only',
     price: PRODUCTS.notice_only.displayPrice,
     coverage: 'For landlords in England',
-    bestFor: 'You need the right Section 8 notice ready before you serve anything.',
+    bestFor: 'You need the Section 8 notice, service, and evidence lined up before you serve anything.',
     points: [
-      'Section 8 notice with checks on grounds, dates, service, and compliance',
-      'Built for England after 1 May 2026 with the key notice checks up front',
-      'Best when you want to start with the notice before moving into court paperwork',
+      'Built to hold up if challenged with the key notice, service, and compliance checks up front',
+      'Built for England after 1 May 2026 with a front-page case summary and risk snapshot',
+      'Best when you want to start with notice and service before moving into court paperwork',
     ],
     href: getProductLandingHref('notice_only'),
     cta: 'See notice details',
   },
   {
-    name: 'Complete Eviction Pack',
+    name: 'Stage 2: Section 8 Court & Possession Pack',
     productSku: 'complete_pack',
     price: PRODUCTS.complete_pack.displayPrice,
     coverage: 'For landlords in England',
-    bestFor: 'You need the notice, court forms, and filing guidance kept together.',
+    bestFor: 'You need the notice, court forms, service record, and evidence kept together as one case file.',
     points: [
-      'Built for landlords already thinking about possession paperwork and court steps',
-      'Includes the Section 8 notice, core court forms, and filing guidance together',
-      'Helps you avoid piecing the case together across multiple separate documents',
+      'Carries the case into court without breaking the file',
+      'Includes the Section 8 notice, service playbook, core court forms, and filing guidance together',
+      'Helps you avoid piecing the claim together across separate documents and timelines',
     ],
     href: getProductLandingHref('complete_pack'),
     cta: 'See pack details',
@@ -119,8 +119,8 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
 ];
 
 export const PRICING_SCHEMA_ITEMS = [
-  { sku: 'notice_only', name: 'Eviction Notice Generator (Section 8, May 2026)', url: '/products/notice-only' },
-  { sku: 'complete_pack', name: 'Complete Eviction Pack', url: '/products/complete-pack' },
+  { sku: 'notice_only', name: 'Stage 1: Section 8 Notice & Service Pack', url: '/products/notice-only' },
+  { sku: 'complete_pack', name: 'Stage 2: Section 8 Court & Possession Pack', url: '/products/complete-pack' },
   { sku: 'money_claim', name: 'Money Claim Pack', url: '/products/money-claim' },
   { sku: 'section13_standard', name: 'Standard Section 13 Pack', url: '/products/section-13-standard' },
   { sku: 'section13_defensive', name: 'Challenge-Ready Section 13 Defence Pack', url: '/products/section-13-defence' },

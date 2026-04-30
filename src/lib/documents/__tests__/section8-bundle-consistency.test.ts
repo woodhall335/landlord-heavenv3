@@ -42,6 +42,8 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('Latest proceedings date');
+    expect(content).toContain('Step 1 — Prepare');
+    expect(content).toContain('Step 4 — Align');
     expect(content).toContain('{{notice_name}}');
     expect(content).toContain('Form 3A');
   });
@@ -73,7 +75,7 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('{{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}');
     expect(content).toContain('Latest proceedings date');
-    expect(content).toContain('What to do if...');
+    expect(content).toContain('If the case changes');
     expect(content).toContain('The tenant attends with a defence.');
     expect(content).toContain('The tenant raises housing disrepair or a counterclaim.');
     expect(content).not.toContain('[Enter court name]');
@@ -93,6 +95,8 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('{{#if (hasValue notice_expiry_date)}}');
     expect(content).toContain('{{#if (hasValue earliest_proceedings_date)}}');
+    expect(content).toContain('{{pack_summary_title}}');
+    expect(content).toContain('{{#each compliance_status_items}}');
     expect(content).toContain('drafting_model.caseSummary.defendantCircumstancesParagraphs.length');
   });
 
@@ -127,12 +131,22 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('{{#if (hasValue witness_statement.timeline)}}');
   });
 
-  test('compliance checklist uses tri-state Section 8 risk wording instead of overstating unknown values', () => {
+  test('compliance checklist renders structured Section 8 risk cards', () => {
     const templatePath = path.join(TEMPLATES_BASE, 'eviction/compliance_checklist.hbs');
     const content = fs.readFileSync(templatePath, 'utf-8');
 
-    expect(content).toContain('Deposit protection status is not confirmed in the current pack data.');
-    expect(content).toContain('prescribed information service is not confirmed in the current pack data.');
-    expect(content).toContain('How to Rent service is not confirmed in the current pack data.');
+    expect(content).toContain('{{#each compliance_status_items}}');
+    expect(content).toContain('{{status_label}}');
+    expect(content).toContain('{{next_step_text}}');
+    expect(content).toContain('Decision Engine');
+  });
+
+  test('what-happens-next template wires the stage handoff and next steps', () => {
+    const templatePath = path.join(TEMPLATES_BASE, 'eviction/what_happens_next_section_8.hbs');
+    const content = fs.readFileSync(templatePath, 'utf-8');
+
+    expect(content).toContain('{{#each next_steps}}');
+    expect(content).toContain('{{#if (eq pack_stage "stage1")}}');
+    expect(content).toContain('Stage 2 handoff');
   });
 });

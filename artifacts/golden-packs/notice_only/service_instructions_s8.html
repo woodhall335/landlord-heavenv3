@@ -832,172 +832,140 @@ th {
     }
 
     body {
-      margin: 0 auto;
-      padding: 0;
-      color: #1a1a1a;
+      margin: 0;
+      color: #1f1635;
       font-size: 10pt;
       line-height: 1.55;
     }
 
-    h2 {
-      page-break-after: avoid;
-      break-after: avoid-page;
-    }
-
-    h3 {
-      page-break-after: avoid;
-      break-after: avoid-page;
-    }
-
-    .doc-header {
-      text-align: center;
-      margin-bottom: 1.5em;
-      padding-bottom: 1em;
-      border-bottom: 2px solid #1a1a1a;
-    }
-
-    .doc-header h1 {
-      margin: 0 0 0.4em 0;
-      font-size: 14pt;
-      font-weight: 700;
-    }
-
-    .doc-badge {
-      display: inline-block;
-      padding: 0.3em 0.8em;
-      background: #1a1a1a;
-      color: white;
-      font-size: 10pt;
-      font-weight: 600;
-    }
-
-    .details-box,
-    .callout,
-    .method-card,
-    .checklist-box {
+    .hero,
+    .summary-box,
+    .step-card,
+    .risk-box,
+    .note-box {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
-    .details-box,
-    .checklist-box,
-    .method-card {
-      margin: 1.25em 0;
-      border: 1px solid #d8d8d8;
+    .hero {
+      border: 1px solid #ddd6fe;
+      background: #faf8ff;
+      padding: 1.2em;
+      margin-bottom: 1.1em;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.2em 0;
+      font-size: 18pt;
+    }
+
+    .hero h2 {
+      margin: 0 0 0.35em 0;
+      font-size: 11pt;
+      color: #5b5370;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero p {
+      margin: 0.25em 0;
+    }
+
+    .summary-box,
+    .step-card,
+    .note-box {
+      border: 1px solid #e5e7eb;
       background: #fff;
-    }
-
-    .details-box,
-    .checklist-box .content,
-    .method-card .content {
       padding: 1em;
+      margin-bottom: 0.9em;
     }
 
-    .details-grid {
+    .summary-grid {
       display: grid;
       grid-template-columns: 180px 1fr;
-      gap: 0.45em 1em;
+      gap: 0.45em 0.9em;
     }
 
-    .details-grid dt {
-      font-weight: 600;
-      color: #444;
+    .summary-grid dt {
+      font-weight: 700;
+      color: #5b5370;
     }
 
-    .details-grid dd {
+    .summary-grid dd {
       margin: 0;
-    }
-
-    .callout {
-      margin: 1.25em 0;
-      padding: 1em;
-      border-left: 4px solid #1a1a1a;
-      background: #f7f7f7;
-    }
-
-    .callout.warning {
-      border-color: #b45309;
-      background: #fff7ed;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .callout.critical {
-      border-color: #b91c1c;
-      background: #fef2f2;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .callout.success {
-      border-color: #15803d;
-      background: #f0fdf4;
-      page-break-inside: avoid;
-      break-inside: avoid;
     }
 
     .section-title {
-      margin: 1.75em 0 0.75em 0;
-      padding-bottom: 0.4em;
-      border-bottom: 2px solid #1a1a1a;
+      margin: 1.25em 0 0.65em 0;
       font-size: 12pt;
       font-weight: 700;
-      page-break-after: avoid;
-      break-after: avoid-page;
+      color: #231942;
     }
 
-    .section-header-block,
-    .callout-section,
-    .checklist-section {
-      page-break-inside: avoid;
-      break-inside: avoid;
+    .steps-grid {
+      display: grid;
+      gap: 0.9em;
     }
 
-    .section-header-block {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .callout-section {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .section {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .method-card .heading,
-    .checklist-box .heading {
-      margin: 0;
-      padding: 0.7em 0.9em;
-      background: #1a1a1a;
-      color: white;
-      font-size: 11pt;
+    .step-number {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      background: #ede9fe;
+      color: #4c1d95;
+      font-size: 8.5pt;
       font-weight: 700;
-      page-break-after: avoid;
-      break-after: avoid-page;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
 
-    .method-card.recommended .heading {
-      background: #0f172a;
+    .step-card h3,
+    .note-box h3,
+    .risk-box h3 {
+      margin: 0 0 0.45em 0;
+      font-size: 10.5pt;
+      color: #231942;
     }
 
-    ul {
-      margin: 0.6em 0 0 1.2em;
+    .step-card p,
+    .note-box p,
+    .risk-box p {
+      margin: 0.3em 0;
     }
 
-    li {
-      margin: 0.35em 0;
+    .step-card ul,
+    .note-box ul {
+      margin: 0.4em 0 0 1.1em;
     }
 
-    .doc-footer {
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 1px solid #d8d8d8;
-      font-size: 9pt;
-      color: #555;
+    .step-card li,
+    .note-box li {
+      margin: 0.25em 0;
+    }
+
+    .risk-box {
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      padding: 1em;
+      margin-top: 1em;
+    }
+
+    .risk-chip {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .muted {
+      color: #6b7280;
     }
   </style>
 </head>
@@ -1013,23 +981,16 @@ th {
       </div>
     </div>
 
-  <div class="doc-header">
-    <h1>Service Instructions</h1>
-    <span class="doc-badge">Form 3A notice</span>
+  <div class="hero">
+    <h2>Stage 1: Section 8 Notice &amp; Service Pack</h2>
+    <h1>Service Playbook</h1>
+    <p><strong>Form 3A notice</strong> is the current Form 3A Section 8 notice for England.</p>
+    <p>This pack aligns the notice, service, and evidence so your case doesn’t fall apart on technical errors.</p>
+    <p class="muted">Most possession cases fail on notice, service, or consistency errors — this pack is designed to prevent those.</p>
   </div>
 
-  <div class="section callout-section">
-    <div class="callout">
-    <p><strong>Purpose:</strong> Use these instructions to serve the Form 3A notice consistently and preserve evidence of when, where, and how service took place.</p>
-      <p>The claimant seeks possession of 16 Willow Mews
-York
-YO24 3HX relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears).</p>
-      <p>Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28 May 2026.</p>
-    </div>
-  </div>
-
-  <div class="details-box">
-    <dl class="details-grid">
+  <div class="summary-box">
+    <dl class="summary-grid">
       <dt>Property</dt>
       <dd>16 Willow Mews
 York
@@ -1047,79 +1008,66 @@ YO24 3HX</dd>
     </dl>
   </div>
 
-  <h2 class="section-title section-header-block">Recommended Service Method</h2>
-
-  <div class="method-card">
-    <div class="heading">First Class Post</div>
-    <div class="content">
+  <h2 class="section-title">Service Playbook</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">Step 1 — Prepare</div>
+      <h3>Prepare the notice pack before anything is served</h3>
+      <p>Print or save the Form 3A notice, keep a clean copy, and make sure the notice date, expiry date, and earliest proceedings date all match the rest of the file.</p>
       <ul>
-        <li>Send the Form 3A notice by Royal Mail first class post.</li>
-        <li>Keep the proof of posting receipt and a copy of the notice served.</li>
-        <li>Record the date of posting and keep any follow-up correspondence.</li>
-        <li>Keep the service date and earliest proceedings date consistent across the notice, the N215 certificate, and any later court papers.</li>
+        <li>Keep one clean copy for service and one copy for your records.</li>
+        <li>Check that the grounds, dates, and arrears schedule line up before the notice leaves your hands.</li>
+        <li>Keep the compliance snapshot with the file so you know what still needs attention.</li>
+      </ul>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">Step 2 — Serve</div>
+      <h3>Serve the Form 3A notice in a way you can prove later</h3>
+      <p>Use first class post and keep the proof of posting. This is usually the cleanest option when you need a straightforward service record.</p>
+      <ul>
+        <li>Serve the same notice that appears in this pack.</li>
+        <li>Record the exact date of service and the method used.</li>
+        <li>Do not alter the service record after the event unless you are correcting it transparently across the whole file.</li>
+      </ul>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">Step 3 — Record</div>
+      <h3>Build the service evidence immediately</h3>
+      <p>Keep proof of posting, delivery notes, photographs, or attendance notes straight away. Service evidence is often what saves or weakens the case later.</p>
+      <ul>
+        <li>Keep proof of posting or a written attendance note.</li>
+        <li>Keep the served notice copy with the same dates shown on the N215 certificate.</li>
+        <li>Store every service document in the same case file so nothing has to be rebuilt later.</li>
+      </ul>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number">Step 4 — Align</div>
+      <h3>Keep the notice, N215, and later court file saying the same thing</h3>
+      <p>Most possession cases fail on inconsistency, not because the landlord lacked a form. Keep the notice, service record, arrears evidence, and any later court paperwork aligned from the start.</p>
+      <ul>
+        <li>Check the notice date, expiry date, and earliest proceedings date against the whole file.</li>
+        <li>Make sure the grounds and arrears position stay consistent if the case moves into court.</li>
+        <li>If the tenant does not leave, move into Stage 2 so the court file builds directly from this served notice record.</li>
       </ul>
     </div>
   </div>
 
-  <div class="checklist-box checklist-section">
-    <div class="heading">Practical Method Notes</div>
-    <div class="content">
-      <ul>
-        <li>Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.</li>
-        <li>If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and why the service date used in the pack is the correct date.</li>
-      </ul>
-    </div>
+  <div class="risk-box">
+    <div class="risk-chip">Failure risk</div>
+    <h3>Incorrect service can delay or undermine the claim</h3>
+    <p>If the tenant disputes service or the dates do not match across the notice, N215, and later court papers, the case can be delayed or weakened even where the underlying grounds are sound.</p>
+    <p><strong>Action:</strong> Keep the service record complete and aligned before you move on.</p>
   </div>
 
-  <div class="section callout-section">
-    <div class="callout warning">
-    <p><strong>Electronic service:</strong> Do not rely on email or text alone unless the tenancy terms clearly permit electronic service and you are satisfied the clause applies to notices of this kind.</p>
-    </div>
-  </div>
-
-  <div class="section callout-section">
-    <h2 class="section-title section-header-block">Evidence To Keep</h2>
-
-    <div class="checklist-box checklist-section">
-      <div class="heading">Service Evidence Checklist</div>
-      <div class="content">
-        <ul>
-          <li>Served copy of the notice</li>
-          <li>Completed Form N215 certificate of service</li>
-          <li>Updated rent statement and arrears schedule</li>
-          <li>Payment ledger, bank statements, or rent receipts</li>
-          <li>Copies of payment demands or arrears correspondence</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <h2 class="section-title">After Service</h2>
-
-  <div class="checklist-box">
-    <div class="heading">Next Steps</div>
-    <div class="content">
-      <ul>
-        <li>Record immediately when, where, and how service was carried out.</li>
-        <li>Keep the notice timeline consistent across the proof of service, witness statement, and court forms.</li>
-        <li>Update the arrears schedule to the latest practicable date before issuing proceedings or attending any hearing.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="callout critical">
-    <p><strong>Important:</strong> Incorrect service or weak service evidence can delay or undermine the possession claim even where the factual grounds are otherwise strong.</p>
-  </div>
-
-  <h2 class="section-title">Common Mistakes To Avoid</h2>
-  <ul>
-    <li>Using one service date on the notice and a different date in the support documents.</li>
-    <li>Leaving unsupported allegations in the pack without the document or witness material needed to prove them.</li>
-    <li>Relying on a stale arrears figure or an outdated payment schedule.</li>
-  </ul>
-
-  <div class="doc-footer">
-    <p><strong>Generated:</strong> 30 April 2026</p>
+  <h2 class="section-title">File Notes</h2>
+  <div class="note-box">
+      <p>The claimant seeks possession of 16 Willow Mews
+York
+YO24 3HX relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears).</p>
+      <p>Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28 May 2026.</p>
   </div>
 </body>
 </html>

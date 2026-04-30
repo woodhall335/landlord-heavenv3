@@ -586,15 +586,40 @@ function formatRentFrequencyLabel(value?: string | null): string {
   return mapping[value || ''] || String(value || 'monthly');
 }
 
+type ComplianceSeverity = 'critical' | 'risk' | 'ok';
+type EnglandSection8PackStage = 'stage1' | 'stage2';
+
+interface ComplianceStatusItem {
+  severity: ComplianceSeverity;
+  title: string;
+  detail: string;
+  action: string;
+}
+
+interface PackNextStepItem {
+  step: string;
+  title: string;
+  detail: string;
+}
+
+function buildComplianceStatusItem(
+  severity: ComplianceSeverity,
+  title: string,
+  detail: string,
+  action: string,
+): ComplianceStatusItem {
+  return { severity, title, detail, action };
+}
+
 function buildCaseSummaryComplianceItems(params: {
   evictionCase: EvictionCase;
   caseData?: Partial<CaseData> | null;
   wizardFacts?: Record<string, any>;
   noticeServedDate?: string;
   earliestProceedingsDate?: string;
-}): string[] {
+}): ComplianceStatusItem[] {
   const { evictionCase, caseData, wizardFacts, noticeServedDate, earliestProceedingsDate } = params;
-  const items: string[] = [];
+  const items: ComplianceStatusItem[] = [];
   const complianceSources = [
     wizardFacts as Record<string, any>,
     caseData as Record<string, any>,
@@ -664,61 +689,441 @@ function buildCaseSummaryComplianceItems(params: {
   const depositContext = `${depositScheme ? ` with ${depositScheme}` : ''}${protectedDate ? ` on ${formatUKLegalDate(protectedDate)}` : ''}`;
   if (isSection21Route) {
     if (depositProtected === true && prescribedInfoGiven === true) {
-      items.push(`Advisory / good practice: Deposit protection and prescribed information are recorded${depositContext}.`);
+      items.push(
+        buildComplianceStatusItem(
+          'ok',
+          'Deposit compliance recorded',
+          `Deposit protection and prescribed information are recorded${depositContext}.`,
+          'Keep the scheme paperwork and prescribed information record with the notice file.',
+        ),
+      );
     } else if (depositProtected === true) {
-      items.push(`Critical blocker: Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. Section 21 should not be relied on until that position is corrected and rechecked.`);
+      items.push(
+        buildComplianceStatusItem(
+          'critical',
+          'Prescribed information not confirmed',
+          `Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. Section 21 should not be relied on until that position is corrected and rechecked.`,
+          'Confirm service of the prescribed information or resolve the deposit position before relying on the notice.',
+        ),
+      );
     } else if (depositProtected === false) {
-      items.push('Critical blocker: Deposit protection is not recorded. Section 21 should not be relied on until the position is resolved.');
+      items.push(
+        buildComplianceStatusItem(
+          'critical',
+          'Deposit protection not recorded',
+          'Deposit protection is not recorded. Section 21 should not be relied on until the position is resolved.',
+          'Resolve the deposit position before relying on the notice.',
+        ),
+      );
     } else {
-      items.push('Critical blocker: Deposit protection status is not confirmed in the available pack data.');
+      items.push(
+        buildComplianceStatusItem(
+          'critical',
+          'Deposit protection not confirmed',
+          'Deposit protection status is not confirmed in the available pack data.',
+          'Check the tenancy file and confirm the deposit position before relying on the notice.',
+        ),
+      );
     }
   } else {
     if (depositProtected === true && prescribedInfoGiven === true) {
-      items.push(`Advisory / good practice: Deposit protection and prescribed information are recorded${depositContext}.`);
+      items.push(
+        buildComplianceStatusItem(
+          'ok',
+          'Deposit compliance recorded',
+          `Deposit protection and prescribed information are recorded${depositContext}.`,
+          'Retain the scheme certificate and prescribed information record with the case file.',
+        ),
+      );
     } else if (section8DepositExceptionOnly && depositProtected === true) {
-      items.push(`Significant risk: Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still generate penalties, counterclaims, or credibility issues and should still be resolved.`);
+      items.push(
+        buildComplianceStatusItem(
+          'risk',
+          'Prescribed information not confirmed',
+          `Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still generate penalties, counterclaims, or credibility issues and should still be resolved.`,
+          'Confirm or cure the prescribed information position before relying on the wider evidence file.',
+        ),
+      );
     } else if (section8DepositExceptionOnly && depositProtected === false) {
-      items.push('Significant risk: Deposit protection is not recorded. Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still generate penalties, counterclaims, or credibility issues and should still be resolved.');
+      items.push(
+        buildComplianceStatusItem(
+          'risk',
+          'Deposit protection not recorded',
+          'Deposit protection is not recorded. Grounds 7A and 14 are not subject to the same possession-order bar, but deposit non-compliance can still generate penalties, counterclaims, or credibility issues and should still be resolved.',
+          'Resolve or document the deposit position before progressing the case.',
+        ),
+      );
     } else if (depositProtected === true) {
-      items.push(`Critical route risk: Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position has been cured, the deposit has been returned, or any deposit-compliance dispute has already been resolved.`);
+      items.push(
+        buildComplianceStatusItem(
+          'critical',
+          'Prescribed information not confirmed',
+          `Deposit protection is recorded${depositContext}, but prescribed information is not recorded as served. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position has been cured, the deposit has been returned, or any deposit-compliance dispute has already been resolved.`,
+          'Confirm, cure, or return the deposit before relying on the possession route.',
+        ),
+      );
     } else if (depositProtected === false) {
-      items.push('Critical route risk: Deposit protection is not recorded. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit requirements have been complied with, the deposit has been returned, or any deposit-compliance dispute has already been resolved.');
+      items.push(
+        buildComplianceStatusItem(
+          'critical',
+          'Deposit protection not recorded',
+          'Deposit protection is not recorded. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit requirements have been complied with, the deposit has been returned, or any deposit-compliance dispute has already been resolved.',
+          'Resolve the deposit issue before serving or issuing on the main possession grounds.',
+        ),
+      );
     } else if (section8DepositBarApplies) {
-      items.push('Critical route risk: Deposit protection status is not confirmed in the available pack data. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.');
+      items.push(
+        buildComplianceStatusItem(
+          'critical',
+          'Deposit protection not confirmed',
+          'Deposit protection status is not confirmed in the available pack data. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.',
+          'Check the tenancy file and confirm the deposit position before serving or issuing.',
+        ),
+      );
     } else {
-      items.push('Advisory / good practice: Deposit protection status is not confirmed in the available pack data.');
+      items.push(
+        buildComplianceStatusItem(
+          'ok',
+          'Deposit position not confirmed in pack data',
+          'Deposit protection status is not confirmed in the available pack data.',
+          'Check the file and record the deposit position so the evidence set stays complete.',
+        ),
+      );
     }
   }
 
   if (gasEvidenceRecorded) {
-    items.push(`Advisory / good practice: Gas safety evidence is recorded${caseData?.gas_safety_check_date ? ` on ${formatUKLegalDate(caseData.gas_safety_check_date)}` : ''}.`);
+    items.push(
+      buildComplianceStatusItem(
+        'ok',
+        'Gas safety evidence recorded',
+        `Gas safety evidence is recorded${caseData?.gas_safety_check_date ? ` on ${formatUKLegalDate(caseData.gas_safety_check_date)}` : ''}.`,
+        'Keep the gas safety record with the notice and court file.',
+      ),
+    );
   } else if (isSection21Route) {
-    items.push('Critical blocker: No gas safety provision is recorded where the requirement may apply.');
+    items.push(
+      buildComplianceStatusItem(
+        'critical',
+        'Gas safety record not confirmed',
+        'No gas safety provision is recorded where the requirement may apply.',
+        'Confirm the gas safety record before relying on the notice.',
+      ),
+    );
   } else {
-    items.push('Significant risk: No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidential risk.');
+    items.push(
+      buildComplianceStatusItem(
+        'risk',
+        'Gas safety record not confirmed',
+        'No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidential risk.',
+        'Locate the gas safety record or document why it does not apply before the file is challenged.',
+      ),
+    );
   }
 
   if (epcEvidenceRecorded) {
-    items.push(`Advisory / good practice: EPC evidence is recorded${evictionCase.epc_rating ? ` (rating ${evictionCase.epc_rating})` : ''}${caseData?.epc_provided_date ? ` on ${formatUKLegalDate(caseData.epc_provided_date)}` : ''}.`);
+    items.push(
+      buildComplianceStatusItem(
+        'ok',
+        'EPC record recorded',
+        `EPC evidence is recorded${evictionCase.epc_rating ? ` (rating ${evictionCase.epc_rating})` : ''}${caseData?.epc_provided_date ? ` on ${formatUKLegalDate(caseData.epc_provided_date)}` : ''}.`,
+        'Retain the EPC record with the case file.',
+      ),
+    );
   } else if (isSection21Route) {
-    items.push('Critical blocker: No EPC provision is recorded.');
+    items.push(
+      buildComplianceStatusItem(
+        'critical',
+        'EPC record not confirmed',
+        'No EPC provision is recorded.',
+        'Confirm the EPC position before relying on the notice.',
+      ),
+    );
   } else {
-    items.push('Significant risk: No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.');
+    items.push(
+      buildComplianceStatusItem(
+        'risk',
+        'EPC record not confirmed',
+        'No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.',
+        'Locate the EPC record or explain the position in the evidence file.',
+      ),
+    );
   }
 
   if (howToRentRecorded) {
-    items.push(`Advisory / good practice: How to Rent service is recorded${caseData?.how_to_rent_date ? ` on ${formatUKLegalDate(caseData.how_to_rent_date)}` : ''}.`);
+    items.push(
+      buildComplianceStatusItem(
+        'ok',
+        'How to Rent record recorded',
+        `How to Rent service is recorded${caseData?.how_to_rent_date ? ` on ${formatUKLegalDate(caseData.how_to_rent_date)}` : ''}.`,
+        'Keep the service record with the tenancy file.',
+      ),
+    );
   } else if (isSection21Route) {
-    items.push('Critical blocker: No How to Rent service record is shown.');
+    items.push(
+      buildComplianceStatusItem(
+        'critical',
+        'How to Rent record not confirmed',
+        'No How to Rent service record is shown.',
+        'Confirm the service record before relying on the notice.',
+      ),
+    );
   } else {
-    items.push('Advisory / good practice: No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.');
+    items.push(
+      buildComplianceStatusItem(
+        'ok',
+        'How to Rent record not confirmed',
+        'No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.',
+        'Check the tenancy file and record the position so the file stays complete.',
+      ),
+    );
   }
 
   if (noticeServedDate || earliestProceedingsDate) {
-    items.push(`Notice served${noticeServedDate ? ` on ${formatUKLegalDate(noticeServedDate)}` : ''}${earliestProceedingsDate ? ` with earliest proceedings date ${formatUKLegalDate(earliestProceedingsDate)}` : ''}.`);
+    items.push(
+      buildComplianceStatusItem(
+        'ok',
+        'Notice timeline recorded',
+        `Notice served${noticeServedDate ? ` on ${formatUKLegalDate(noticeServedDate)}` : ''}${earliestProceedingsDate ? ` with earliest proceedings date ${formatUKLegalDate(earliestProceedingsDate)}` : ''}.`,
+        'Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and any court papers.',
+      ),
+    );
   }
 
   return items;
+}
+
+function buildSection8GroundsSummary(evictionCase: EvictionCase): string {
+  const items = (evictionCase.grounds || [])
+    .map((ground) => {
+      const rawCode = typeof ground === 'string' ? ground : ground.code;
+      const code = String(rawCode || '').replace(/^Ground\s+/i, '').trim();
+      if (!code) {
+        return null;
+      }
+      const label = typeof ground === 'string' ? code : ground.mandatory ? 'mandatory' : 'discretionary';
+      return `Ground ${code} (${label})`;
+    })
+    .filter((value): value is string => Boolean(value));
+
+  return items.length > 0 ? items.join(', ') : 'No grounds recorded';
+}
+
+function buildPackTitle(stage: EnglandSection8PackStage): string {
+  return stage === 'stage1'
+    ? 'Stage 1: Section 8 Notice & Service Pack'
+    : 'Stage 2: Section 8 Court & Possession Pack';
+}
+
+function buildPackStrapline(stage: EnglandSection8PackStage): string {
+  return stage === 'stage1'
+    ? 'Built to hold up if challenged'
+    : 'Carry the case into court without breaking the file';
+}
+
+function buildPackSupportingLine(stage: EnglandSection8PackStage): string {
+  return stage === 'stage1'
+    ? 'This pack aligns the notice, service, and evidence so your case doesn’t fall apart on technical errors.'
+    : 'This complete pack includes both Stage 1 notice and service documents and Stage 2 court papers, keeping the notice, service record, court forms, and evidence aligned in one possession file.';
+}
+
+function buildPackRiskLine(): string {
+  return 'Most possession cases fail on notice, service, or consistency errors — this pack is designed to prevent those.';
+}
+
+function buildPackStatusLabel(
+  stage: EnglandSection8PackStage,
+  items: ComplianceStatusItem[],
+): string {
+  const hasCritical = items.some((item) => item.severity === 'critical');
+  if (hasCritical) {
+    return stage === 'stage1' ? 'DO NOT SERVE YET' : 'DO NOT ISSUE YET';
+  }
+
+  const hasRisk = items.some((item) => item.severity === 'risk');
+  if (hasRisk) {
+    return stage === 'stage1' ? 'SERVE WITH RISKS' : 'PREPARE WITH RISKS';
+  }
+
+  return stage === 'stage1' ? 'READY TO SERVE' : 'READY FOR COURT PREPARATION';
+}
+
+function buildPackOutcomeBullets(stage: EnglandSection8PackStage): string[] {
+  if (stage === 'stage1') {
+    return [
+      'Generates a legally structured Section 8 notice',
+      'Aligns service and evidence',
+      'Reduces risk of rejection or delay',
+    ];
+  }
+
+  return [
+    'Includes both the Stage 1 notice pack and the Stage 2 court documents',
+    'Keeps service, claim wording, and evidence aligned for court',
+    'Reduces the risk of delay, contradiction, or weak filing',
+  ];
+}
+
+function buildPackNextStep(stage: EnglandSection8PackStage, noticeExpiryDate?: string): string {
+  if (stage === 'stage1') {
+    return 'Serve the notice correctly using the service instructions in this pack.';
+  }
+
+  return noticeExpiryDate
+    ? `Prepare the court file now and do not issue before ${formatUKLegalDate(noticeExpiryDate)}.`
+    : 'Prepare the court file now and issue only when the notice timeline allows.';
+}
+
+function buildPackNextSteps(
+  stage: EnglandSection8PackStage,
+  noticeExpiryDate?: string,
+): PackNextStepItem[] {
+  if (stage === 'stage1') {
+    return [
+      {
+        step: '1',
+        title: 'Wait for notice expiry',
+        detail: noticeExpiryDate
+          ? `Wait until ${formatUKLegalDate(noticeExpiryDate)} before starting possession proceedings.`
+          : 'Wait until the notice has expired before starting possession proceedings.',
+      },
+      {
+        step: '2',
+        title: 'Move into Stage 2 if the tenant stays',
+        detail: 'If the tenant does not leave, move into the Stage 2 Court & Possession Pack so the claim is built from the same file.',
+      },
+      {
+        step: '3',
+        title: 'Keep the file aligned',
+        detail: 'This pack continues directly into the court-stage paperwork without re-keying the core facts.',
+      },
+    ];
+  }
+
+  return [
+    {
+      step: '1',
+      title: 'Issue the claim when eligible',
+      detail: noticeExpiryDate
+        ? `Issue the possession claim once the notice period has expired and no earlier than ${formatUKLegalDate(noticeExpiryDate)}.`
+        : 'Issue the possession claim once the notice period has expired.',
+    },
+    {
+      step: '2',
+      title: 'Serve and track the court file',
+      detail: 'Keep service proof, filing confirmations, and any court correspondence together in the same case file.',
+    },
+    {
+      step: '3',
+      title: 'Prepare for hearing and enforcement',
+      detail: 'Use the hearing checklist and bundle materials to prepare for court, then move to enforcement if an order is made and the tenant still does not leave.',
+    },
+  ];
+}
+
+function buildTopRiskTitles(items: ComplianceStatusItem[]): string[] {
+  return items
+    .filter((item) => item.severity !== 'ok')
+    .slice(0, 3)
+    .map((item) => item.title);
+}
+
+function buildEnglandSection8PackSummaryData(params: {
+  stage: EnglandSection8PackStage;
+  evictionCase: EvictionCase;
+  caseData?: Partial<CaseData> | null;
+  wizardFacts?: Record<string, any>;
+  section8RenderData?: Record<string, any> | null;
+  groundsData: any;
+  noticeServedDate?: string;
+  noticeExpiryDate?: string;
+  earliestProceedingsDate?: string;
+  currentArrearsTotal?: number | null;
+  arrearsAtNoticeDate?: number | null;
+  paymentDay?: number | null;
+  usualPaymentWeekday?: string | null;
+}): Record<string, any> {
+  const {
+    stage,
+    evictionCase,
+    caseData,
+    wizardFacts,
+    section8RenderData,
+    groundsData,
+    noticeServedDate,
+    noticeExpiryDate,
+    earliestProceedingsDate,
+    currentArrearsTotal,
+    arrearsAtNoticeDate,
+    paymentDay,
+    usualPaymentWeekday,
+  } = params;
+
+  const caseSummaryDraftingData = {
+    ...wizardFacts,
+    ...evictionCase,
+    ...(caseData || {}),
+    ground_codes: (evictionCase.grounds || []).map((ground) => typeof ground === 'string' ? ground : ground.code),
+    total_arrears: currentArrearsTotal,
+    current_arrears: currentArrearsTotal,
+    arrears_at_notice_date: arrearsAtNoticeDate,
+    notice_served_date: noticeServedDate,
+    section_8_notice_date: noticeServedDate,
+    notice_expiry_date: noticeExpiryDate,
+    rent_due_day: paymentDay,
+  };
+
+  const complianceStatusItems = buildCaseSummaryComplianceItems({
+    evictionCase,
+    caseData,
+    wizardFacts,
+    noticeServedDate,
+    earliestProceedingsDate,
+  });
+  const stageTitle =
+    stage === 'stage1'
+      ? 'Case Summary — Stage 1 Notice & Service'
+      : 'Case Summary — Stage 2 Court & Possession';
+
+  return {
+    ...evictionCase,
+    ...(caseData || {}),
+    ...(section8RenderData || {}),
+    grounds_data: groundsData,
+    groundsReliedUpon: (evictionCase.grounds || []).map((ground) => typeof ground === 'string' ? ground : ground.code),
+    is_section_21: evictionCase.case_type === 'no_fault',
+    generated_date: new Date().toISOString().split('T')[0],
+    generated_at: new Date().toISOString(),
+    rent_frequency_label: formatRentFrequencyLabel(evictionCase.rent_frequency),
+    payment_day_display: formatPaymentDayDisplay(paymentDay, evictionCase.rent_frequency, usualPaymentWeekday),
+    notice_served_date: noticeServedDate,
+    notice_expiry_date: noticeExpiryDate,
+    earliest_proceedings_date: earliestProceedingsDate,
+    current_arrears_total: currentArrearsTotal,
+    arrears_at_notice_date: arrearsAtNoticeDate,
+    grounds_summary_text: buildSection8GroundsSummary(evictionCase),
+    case_narrative_text: buildN119ReasonForPossessionText(caseSummaryDraftingData),
+    steps_taken_text: buildN119StepsTakenText(caseSummaryDraftingData),
+    defendant_circumstances_text: buildN119DefendantCircumstancesText(caseSummaryDraftingData),
+    financial_info_text: buildN119FinancialInfoText(caseSummaryDraftingData),
+    compliance_status_items: complianceStatusItems,
+    court_name:
+      section8RenderData?.court_name ||
+      caseData?.court_name ||
+      evictionCase.court_name,
+    pack_stage: stage,
+    pack_stage_label: stage === 'stage1' ? 'Stage 1' : 'Stage 2',
+    pack_title: buildPackTitle(stage),
+    pack_summary_title: stageTitle,
+    pack_strapline: buildPackStrapline(stage),
+    pack_supporting_line: buildPackSupportingLine(stage),
+    risk_line: buildPackRiskLine(),
+    status_label: buildPackStatusLabel(stage, complianceStatusItems),
+    key_risk_titles: buildTopRiskTitles(complianceStatusItems),
+    what_this_pack_does: buildPackOutcomeBullets(stage),
+    next_step_text: buildPackNextStep(stage, noticeExpiryDate),
+    next_steps: buildPackNextSteps(stage, noticeExpiryDate),
+  };
 }
 
 /**
@@ -1870,6 +2275,32 @@ async function generateEnglandOrWalesEvictionPack(
       pdf: section8Doc.pdf,
       file_name: 'section8_notice.pdf',
     });
+
+    if (jurisdiction === 'england' && isSection8Route) {
+      const serviceInstructionsDoc = await generateDocument({
+        templatePath: 'uk/england/templates/eviction/service_instructions_section_8.hbs',
+        data: {
+          ...currentSection8TemplateData,
+          pack_stage: 'stage2',
+          pack_title: buildPackTitle('stage2'),
+          pack_strapline: buildPackStrapline('stage2'),
+          pack_supporting_line: buildPackSupportingLine('stage2'),
+          risk_line: buildPackRiskLine(),
+        },
+        isPreview: false,
+        outputFormat: 'both',
+      });
+
+      documents.push({
+        title: 'Service Instructions',
+        description: `Service playbook for the ${ENGLAND_SECTION8_NOTICE_NAME} and court file`,
+        category: 'guidance',
+        document_type: 'service_instructions',
+        html: serviceInstructionsDoc.html,
+        pdf: serviceInstructionsDoc.pdf,
+        file_name: 'service_instructions_s8.pdf',
+      });
+    }
   }
 
   // 2. Section 21 ootice (if no-fault) - EoGLAoD OoLY
@@ -2560,7 +2991,7 @@ export async function generateCompleteEvictionPack(
             rent_frequency: rentFrequencyLabel,
             // Add generation date (legacy alias)
             generated_date: today,
-            pack_context_label: 'Complete Eviction Pack',
+            pack_context_label: 'Stage 2: Section 8 Court & Possession Pack',
             schedule_role_note:
               'This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.',
           },
@@ -3102,66 +3533,53 @@ export async function generateCompleteEvictionPack(
     wizardFacts?.tenancy?.usual_payment_weekday ||
     (caseData as any)?.usual_payment_weekday ||
     undefined;
-  const caseSummaryDraftingData = {
-    ...wizardFacts,
-    ...evictionCase,
-    ...(caseData || {}),
-    ground_codes: groundsReliedUpon,
-    total_arrears: currentArrearsTotal,
-    current_arrears: currentArrearsTotal,
-    arrears_at_notice_date: arrearsAtNoticeDate,
-    notice_served_date: noticeServedDate,
-    section_8_notice_date: noticeServedDate,
-    notice_expiry_date: noticeExpiryDate,
-    rent_due_day: paymentDay,
-  };
+  const stage2SummaryData = buildEnglandSection8PackSummaryData({
+    stage: 'stage2',
+    evictionCase,
+    caseData,
+    wizardFacts,
+    section8RenderData: section8CanonicalRenderData || undefined,
+    groundsData,
+    noticeServedDate,
+    noticeExpiryDate,
+    earliestProceedingsDate,
+    currentArrearsTotal,
+    arrearsAtNoticeDate,
+    paymentDay,
+    usualPaymentWeekday,
+  });
   const caseSummaryDoc = await generateDocument({
     templatePath: 'shared/templates/eviction_case_summary.hbs',
-    data: {
-      ...evictionCase,
-      ...(caseData || {}),
-      ...(section8CanonicalRenderData || {}),
-      grounds_data: groundsData,
-      groundsReliedUpon,
-      is_section_21: evictionCase.case_type === 'no_fault',
-      generated_date: new Date().toISOString().split('T')[0],
-      generated_at: new Date().toISOString(),
-      rent_frequency_label: formatRentFrequencyLabel(evictionCase.rent_frequency),
-      payment_day_display: formatPaymentDayDisplay(paymentDay, evictionCase.rent_frequency, usualPaymentWeekday),
-      notice_served_date: noticeServedDate,
-      notice_expiry_date: noticeExpiryDate,
-      earliest_proceedings_date: earliestProceedingsDate,
-      current_arrears_total: currentArrearsTotal,
-      arrears_at_notice_date: arrearsAtNoticeDate,
-      grounds_summary_text: buildN119StatutoryGroundsText(caseSummaryDraftingData),
-      case_narrative_text: buildN119ReasonForPossessionText(caseSummaryDraftingData),
-      steps_taken_text: buildN119StepsTakenText(caseSummaryDraftingData),
-      defendant_circumstances_text: buildN119DefendantCircumstancesText(caseSummaryDraftingData),
-      financial_info_text: buildN119FinancialInfoText(caseSummaryDraftingData),
-      compliance_status_items: buildCaseSummaryComplianceItems({
-        evictionCase,
-        caseData,
-        wizardFacts,
-        noticeServedDate,
-        earliestProceedingsDate,
-      }),
-      court_name:
-        section8CanonicalRenderData?.court_name ||
-        caseData?.court_name ||
-        evictionCase.court_name,
-    },
+    data: stage2SummaryData,
     isPreview: false,
     outputFormat: 'both',
   });
 
-  documents.push({
-    title: 'Eviction Case Summary',
+  documents.unshift({
+    title: 'Case Summary — Stage 2 Court & Possession',
     description: 'Complete summary of your eviction case and selected grounds',
     category: 'guidance',
     document_type: 'case_summary',
     html: caseSummaryDoc.html,
     pdf: caseSummaryDoc.pdf,
     file_name: 'eviction_case_summary.pdf',
+  });
+
+  const whatHappensNextDoc = await generateDocument({
+    templatePath: 'uk/england/templates/eviction/what_happens_next_section_8.hbs',
+    data: stage2SummaryData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'What Happens Next',
+    description: 'Clear next steps after notice and through the court stage',
+    category: 'guidance',
+    document_type: 'what_happens_next',
+    html: whatHappensNextDoc.html,
+    pdf: whatHappensNextDoc.pdf,
+    file_name: 'what_happens_next.pdf',
   });
 
   const enforceArrearsConsistency =
@@ -3933,6 +4351,82 @@ export async function generateNoticeOnlyPack(
         caseData,
         evictionCase,
       });
+      const noticeServedDate =
+        section8TemplateData.notice_service_date ||
+        section8TemplateData.service_date ||
+        wizardFacts?.notice_served_date ||
+        wizardFacts?.notice_service_date;
+      const noticeExpiryDate =
+        section8TemplateData.notice_expiry_date ||
+        section8TemplateData.earliest_possession_date ||
+        section8TemplateData.earliest_proceedings_date;
+      const earliestProceedingsDate =
+        section8TemplateData.earliest_proceedings_date ||
+        section8TemplateData.earliest_possession_date ||
+        section8TemplateData.notice_expiry_date;
+      const currentArrearsTotal =
+        section8TemplateData.current_arrears ??
+        section8TemplateData.arrears_total ??
+        wizardFacts?.arrears_total ??
+        wizardFacts?.issues?.rent_arrears?.total_arrears ??
+        evictionCase.current_arrears ??
+        0;
+      const arrearsAtNoticeDate =
+        section8TemplateData.arrears_at_notice_date ??
+        currentArrearsTotal;
+      const paymentDay =
+        wizardFacts?.rent_due_day ||
+        wizardFacts?.payment_day ||
+        evictionCase.payment_day;
+      const usualPaymentWeekday =
+        wizardFacts?.usual_payment_weekday ||
+        wizardFacts?.tenancy?.usual_payment_weekday ||
+        undefined;
+      const stage1SummaryData = buildEnglandSection8PackSummaryData({
+        stage: 'stage1',
+        evictionCase,
+        caseData,
+        wizardFacts,
+        section8RenderData: section8TemplateData,
+        groundsData,
+        noticeServedDate,
+        noticeExpiryDate,
+        earliestProceedingsDate,
+        currentArrearsTotal,
+        arrearsAtNoticeDate,
+        paymentDay,
+        usualPaymentWeekday,
+      });
+      const stage1SupportData = {
+        ...section8TemplateData,
+        pack_stage: 'stage1',
+        pack_stage_label: 'Stage 1',
+        pack_title: buildPackTitle('stage1'),
+        pack_strapline: buildPackStrapline('stage1'),
+        pack_supporting_line: buildPackSupportingLine('stage1'),
+        risk_line: buildPackRiskLine(),
+        status_label: stage1SummaryData.status_label,
+        compliance_status_items: stage1SummaryData.compliance_status_items,
+        key_risk_titles: stage1SummaryData.key_risk_titles,
+        what_this_pack_does: stage1SummaryData.what_this_pack_does,
+        next_step_text: stage1SummaryData.next_step_text,
+        next_steps: stage1SummaryData.next_steps,
+      };
+      const caseSummaryDoc = await generateDocument({
+        templatePath: 'shared/templates/eviction_case_summary.hbs',
+        data: stage1SummaryData,
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: 'Case Summary — Stage 1 Notice & Service',
+        description: 'Front-page summary of the notice file and the main risks before service',
+        category: 'guidance',
+        document_type: 'case_summary',
+        html: caseSummaryDoc.html,
+        pdf: caseSummaryDoc.pdf,
+        file_name: 'case_summary.pdf',
+      });
 
       const section8Doc = await generateSection8Notice(
         {
@@ -3979,7 +4473,7 @@ export async function generateNoticeOnlyPack(
       try {
         const serviceInstructionsDoc = await generateDocument({
           templatePath: 'uk/england/templates/eviction/service_instructions_section_8.hbs',
-          data: section8TemplateData,
+          data: stage1SupportData,
           isPreview: false,
           outputFormat: 'both',
         });
@@ -4021,7 +4515,7 @@ export async function generateNoticeOnlyPack(
       try {
         const complianceDoc = await generateDocument({
           templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
-          data: section8TemplateData,
+          data: stage1SupportData,
           isPreview: false,
           outputFormat: 'both',
         });
@@ -4100,7 +4594,7 @@ export async function generateNoticeOnlyPack(
                 arrears_schedule: proRatedSchedule,
                 arrears_total: roundedProRatedTotal,
                 claimant_reference: caseId,
-                pack_context_label: 'Notice Only Pack',
+                pack_context_label: 'Stage 1: Section 8 Notice & Service Pack',
                 schedule_role_note:
                   'This schedule supports the pleaded arrears grounds and should be kept with the served notice and service record.',
               },
@@ -4120,6 +4614,26 @@ export async function generateNoticeOnlyPack(
         } catch (err) {
           console.warn('Failed to generate arrears schedule:', err);
         }
+      }
+
+      try {
+        const whatHappensNextDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/what_happens_next_section_8.hbs',
+          data: stage1SummaryData,
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'What Happens Next',
+          description: 'What to do after the notice is served and how Stage 2 continues the same case file',
+          category: 'guidance',
+          document_type: 'what_happens_next',
+          html: whatHappensNextDoc.html,
+          pdf: whatHappensNextDoc.pdf,
+          file_name: 'what_happens_next.pdf',
+        });
+      } catch (err) {
+        console.warn('Failed to generate what happens next guidance:', err);
       }
     }
   } else if (jurisdiction === 'scotland') {

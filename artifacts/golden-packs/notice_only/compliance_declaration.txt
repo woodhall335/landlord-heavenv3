@@ -4,55 +4,62 @@ JURISDICTION
 england
 GENERATED
 30 April 2026
-Compliance Checklist - Pre-Service Checks
-FORM 3A NOTICE
-Purpose: Review these items before relying on the notice. This checklist helps distinguish between a likely blocker,
-a significant litigation risk, and matters that are primarily advisory or good practice.
+Stage 1: Section 8 Notice & Service Pack
+Compliance Checklist
+DO NOT SERVE YET
+This pack aligns the notice, service, and evidence so your case doesn't fall apart on technical errors.
+Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent those.
 PROPERTY 16 Willow Mews York YO24 3HX
-TENANCY START DATE 1 January 2024
+TENANT Ivy Carleton
 NOTICE TYPE Form 3A notice
+TENANCY START DATE 1 January 2024
 GENERATED 30 April 2026
-CRITICAL BLOCKER
-Likely to block the current
-possession route or materially
-weaken the claim unless corrected
-first.
-SIGNIFICANT RISK
-Can still lead to penalties,
-counterclaims, credibility damage,
-or a weaker court file even where it
-is not an outright route blocker.
-ADVISORY / GOOD PRACTICE
-Still worth resolving, documenting,
-or improving before court if
-possible.
-Key Compliance Areas
-Deposit protection and prescribed information
-CRITICAL ROUTE RISK
-The deposit appears to have been protected, but prescribed information service is not confirmed in the current pack
-data.
-For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order unless the
-deposit requirements have been complied with, the deposit has been returned in full or with agreed deductions, or
-any deposit-compliance dispute has already been resolved.
-Gas safety
-ADVISORY / GOOD PRACTICE
-No gas safety provision is confirmed in the current pack data. That does not automatically invalidate a Section 8
-notice, but the tenancy file should still be checked and the evidence retained if available.
+CRITICAL
+Resolve this before relying on the
+notice or moving on with the case.
+RISK
+This may not automatically
+invalidate the route, but it can
+weaken the file or create delay.
+OK
+The current pack data records this
+point, but you still need to retain
+the underlying evidence.
+Decision Engine
+CRITICAL
+Prescribed information not confirmed
+Deposit protection is recorded with TDS on 15 January 2024, but prescribed information is not recorded as served.
+For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit
+position has been cured, the deposit has been returned, or any deposit-compliance dispute has already been
+resolved.
+Action: Confirm, cure, or return the deposit before relying on the possession route.
+RISK
+Gas safety record not confirmed
+No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can create
+regulatory or evidential risk.
+Action: Locate the gas safety record or document why it does not apply before the file is challenged.
 
 -- 1 of 2 --
 
-Energy Performance Certificate (EPC)
-ADVISORY / GOOD PRACTICE
-No EPC provision is confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but
-the tenancy file should still be checked and updated where possible.
-How to Rent guide
-ADVISORY / GOOD PRACTICE
-How to Rent service is not confirmed in the current pack data. That does not automatically invalidate a Section 8
-notice, but it is worth checking the tenancy file and recording what was served.
-Practical Summary
-Section 8 route: Compliance issues do not all carry the same consequence. Some do not automatically invalidate
-the notice, but they can still weaken the claim, increase costs exposure, or create separate landlord liability. Resolve
-what you can and keep the file evidence clear.
-Generated: 30 April 2026
+RISK
+EPC record not confirmed
+No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and
+evidential risk that should be addressed.
+Action: Locate the EPC record or explain the position in the evidence file.
+OK
+How to Rent record not confirmed
+No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth
+checking the tenancy file and recording what was served.
+Action: Check the tenancy file and record the position so the file stays complete.
+OK
+Notice timeline recorded
+Notice served on 30 April 2026 with earliest proceedings date 28 May 2026.
+Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and any court
+papers.
+Next move
+DO NOT SERVE YET
+Serve the notice correctly using the service instructions in this pack.
+Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record, or legal
+advice on the facts of the case.
 
 -- 2 of 2 --

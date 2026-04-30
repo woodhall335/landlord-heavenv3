@@ -1,9 +1,27 @@
 {
   "key": "notice_only",
-  "displayName": "Eviction Notice Generator (Section 8, May 2026)",
+  "displayName": "Stage 1: Section 8 Notice & Service Pack",
   "outputDir": "notice_only",
-  "documentCount": 6,
+  "documentCount": 8,
   "documents": [
+    {
+      "title": "Case Summary — Stage 1 Notice & Service",
+      "description": "Front-page summary of the notice file and the main risks before service",
+      "category": "guidance",
+      "documentType": "case_summary",
+      "fileName": "case_summary.pdf",
+      "files": {
+        "pdf": "notice_only/case_summary.pdf",
+        "text": "notice_only/case_summary.txt",
+        "html": "notice_only/case_summary.html"
+      },
+      "extraction": {
+        "pageCount": 4,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
     {
       "title": "Form 3A notice",
       "description": "Official Form 3A notice for England possession proceedings",
@@ -106,6 +124,24 @@
       },
       "extraction": {
         "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "What Happens Next",
+      "description": "What to do after the notice is served and how Stage 2 continues the same case file",
+      "category": "guidance",
+      "documentType": "what_happens_next",
+      "fileName": "what_happens_next.pdf",
+      "files": {
+        "pdf": "notice_only/what_happens_next.pdf",
+        "text": "notice_only/what_happens_next.txt",
+        "html": "notice_only/what_happens_next.html"
+      },
+      "extraction": {
+        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

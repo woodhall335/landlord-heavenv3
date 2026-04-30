@@ -2,7 +2,7 @@
   ============================================================================
   SERVICE INSTRUCTIONS - ENGLAND SECTION 8 / FORM 3A
   ============================================================================
-  Support document for the current England Form 3A notice workflow.
+  Stage-aware support document for the current England Form 3A notice workflow.
 --}}
 
 <!DOCTYPE html>
@@ -19,196 +19,154 @@
     }
 
     body {
-      margin: 0 auto;
-      padding: 0;
-      color: #1a1a1a;
+      margin: 0;
+      color: #1f1635;
       font-size: 10pt;
       line-height: 1.55;
     }
 
-    h2 {
-      page-break-after: avoid;
-      break-after: avoid-page;
-    }
-
-    h3 {
-      page-break-after: avoid;
-      break-after: avoid-page;
-    }
-
-    .doc-header {
-      text-align: center;
-      margin-bottom: 1.5em;
-      padding-bottom: 1em;
-      border-bottom: 2px solid #1a1a1a;
-    }
-
-    .doc-header h1 {
-      margin: 0 0 0.4em 0;
-      font-size: 14pt;
-      font-weight: 700;
-    }
-
-    .doc-badge {
-      display: inline-block;
-      padding: 0.3em 0.8em;
-      background: #1a1a1a;
-      color: white;
-      font-size: 10pt;
-      font-weight: 600;
-    }
-
-    .details-box,
-    .callout,
-    .method-card,
-    .checklist-box {
+    .hero,
+    .summary-box,
+    .step-card,
+    .risk-box,
+    .note-box {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
-    .details-box,
-    .checklist-box,
-    .method-card {
-      margin: 1.25em 0;
-      border: 1px solid #d8d8d8;
+    .hero {
+      border: 1px solid #ddd6fe;
+      background: #faf8ff;
+      padding: 1.2em;
+      margin-bottom: 1.1em;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.2em 0;
+      font-size: 18pt;
+    }
+
+    .hero h2 {
+      margin: 0 0 0.35em 0;
+      font-size: 11pt;
+      color: #5b5370;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero p {
+      margin: 0.25em 0;
+    }
+
+    .summary-box,
+    .step-card,
+    .note-box {
+      border: 1px solid #e5e7eb;
       background: #fff;
-    }
-
-    .details-box,
-    .checklist-box .content,
-    .method-card .content {
       padding: 1em;
+      margin-bottom: 0.9em;
     }
 
-    .details-grid {
+    .summary-grid {
       display: grid;
       grid-template-columns: 180px 1fr;
-      gap: 0.45em 1em;
+      gap: 0.45em 0.9em;
     }
 
-    .details-grid dt {
-      font-weight: 600;
-      color: #444;
+    .summary-grid dt {
+      font-weight: 700;
+      color: #5b5370;
     }
 
-    .details-grid dd {
+    .summary-grid dd {
       margin: 0;
-    }
-
-    .callout {
-      margin: 1.25em 0;
-      padding: 1em;
-      border-left: 4px solid #1a1a1a;
-      background: #f7f7f7;
-    }
-
-    .callout.warning {
-      border-color: #b45309;
-      background: #fff7ed;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .callout.critical {
-      border-color: #b91c1c;
-      background: #fef2f2;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .callout.success {
-      border-color: #15803d;
-      background: #f0fdf4;
-      page-break-inside: avoid;
-      break-inside: avoid;
     }
 
     .section-title {
-      margin: 1.75em 0 0.75em 0;
-      padding-bottom: 0.4em;
-      border-bottom: 2px solid #1a1a1a;
+      margin: 1.25em 0 0.65em 0;
       font-size: 12pt;
       font-weight: 700;
-      page-break-after: avoid;
-      break-after: avoid-page;
+      color: #231942;
     }
 
-    .section-header-block,
-    .callout-section,
-    .checklist-section {
-      page-break-inside: avoid;
-      break-inside: avoid;
+    .steps-grid {
+      display: grid;
+      gap: 0.9em;
     }
 
-    .section-header-block {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .callout-section {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .section {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-
-    .method-card .heading,
-    .checklist-box .heading {
-      margin: 0;
-      padding: 0.7em 0.9em;
-      background: #1a1a1a;
-      color: white;
-      font-size: 11pt;
+    .step-number {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      background: #ede9fe;
+      color: #4c1d95;
+      font-size: 8.5pt;
       font-weight: 700;
-      page-break-after: avoid;
-      break-after: avoid-page;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
 
-    .method-card.recommended .heading {
-      background: #0f172a;
+    .step-card h3,
+    .note-box h3,
+    .risk-box h3 {
+      margin: 0 0 0.45em 0;
+      font-size: 10.5pt;
+      color: #231942;
     }
 
-    ul {
-      margin: 0.6em 0 0 1.2em;
+    .step-card p,
+    .note-box p,
+    .risk-box p {
+      margin: 0.3em 0;
     }
 
-    li {
-      margin: 0.35em 0;
+    .step-card ul,
+    .note-box ul {
+      margin: 0.4em 0 0 1.1em;
     }
 
-    .doc-footer {
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 1px solid #d8d8d8;
-      font-size: 9pt;
-      color: #555;
+    .step-card li,
+    .note-box li {
+      margin: 0.25em 0;
+    }
+
+    .risk-box {
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      padding: 1em;
+      margin-top: 1em;
+    }
+
+    .risk-chip {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .muted {
+      color: #6b7280;
     }
   </style>
 </head>
 <body>
-  <div class="doc-header">
-    <h1>Service Instructions</h1>
-    <span class="doc-badge">{{notice_name}}</span>
+  <div class="hero">
+    <h2>{{pack_title}}</h2>
+    <h1>Service Playbook</h1>
+    <p><strong>{{notice_name}}</strong> is the current Form 3A Section 8 notice for England.</p>
+    <p>{{pack_supporting_line}}</p>
+    <p class="muted">{{risk_line}}</p>
   </div>
 
-  <div class="section callout-section">
-    <div class="callout">
-    <p><strong>Purpose:</strong> Use these instructions to serve the {{notice_name}} consistently and preserve evidence of when, where, and how service took place.</p>
-    {{#if drafting_model.serviceInstructions.overviewParagraphs.length}}
-      {{#each drafting_model.serviceInstructions.overviewParagraphs}}
-      <p>{{this}}</p>
-      {{/each}}
-    {{else}}
-      <p>This guidance is general information only. It does not replace legal advice or the need to check the tenancy agreement and the latest official guidance before serving notice.</p>
-    {{/if}}
-    </div>
-  </div>
-
-  <div class="details-box">
-    <dl class="details-grid">
+  <div class="summary-box">
+    <dl class="summary-grid">
       <dt>Property</dt>
       <dd>{{property_address}}</dd>
       <dt>Tenant</dt>
@@ -234,133 +192,81 @@
     </dl>
   </div>
 
-  <h2 class="section-title section-header-block">Recommended Service Method</h2>
-
-  {{#if (eq service_method "post")}}
-  <div class="method-card">
-    <div class="heading">First Class Post</div>
-    <div class="content">
+  <h2 class="section-title">Service Playbook</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">Step 1 — Prepare</div>
+      <h3>Prepare the notice pack before anything is served</h3>
+      <p>Print or save the {{notice_name}}, keep a clean copy, and make sure the notice date, expiry date, and earliest proceedings date all match the rest of the file.</p>
       <ul>
-        <li>Send the {{notice_name}} by Royal Mail first class post.</li>
-        <li>Keep the proof of posting receipt and a copy of the notice served.</li>
-        <li>Record the date of posting and keep any follow-up correspondence.</li>
-        <li>Keep the service date and earliest proceedings date consistent across the notice, the N215 certificate, and any later court papers.</li>
+        <li>Keep one clean copy for service and one copy for your records.</li>
+        <li>Check that the grounds, dates, and arrears schedule line up before the notice leaves your hands.</li>
+        <li>Keep the compliance snapshot with the file so you know what still needs attention.</li>
       </ul>
     </div>
-  </div>
-  {{else if (eq service_method "recorded_delivery")}}
-  <div class="method-card">
-    <div class="heading">Recorded or Signed Delivery</div>
-    <div class="content">
+
+    <div class="step-card">
+      <div class="step-number">Step 2 — Serve</div>
+      <h3>Serve the Form 3A notice in a way you can prove later</h3>
+      {{#if (eq service_method "post")}}
+      <p>Use first class post and keep the proof of posting. This is usually the cleanest option when you need a straightforward service record.</p>
+      {{else if (eq service_method "recorded_delivery")}}
+      <p>Recorded or signed delivery can help with tracking, but be careful if the item is refused or not collected because that can create avoidable disputes.</p>
+      {{else if (eq service_method "hand")}}
+      <p>Hand delivery can work well when you can record the date, location, and how the notice was left or handed over.</p>
+      {{else}}
+      <p>Use the service method recorded in the pack and make sure it matches the tenancy file and the N215 record.</p>
+      {{/if}}
       <ul>
-        <li>Keep the tracking reference and delivery outcome.</li>
-        <li>Be cautious: a refused or uncollected item can create service disputes.</li>
-        <li>Keep a backup plan ready if there is any doubt about receipt.</li>
+        <li>Serve the same notice that appears in this pack.</li>
+        <li>Record the exact date of service and the method used.</li>
+        <li>Do not alter the service record after the event unless you are correcting it transparently across the whole file.</li>
       </ul>
     </div>
-  </div>
-  {{else}}
-  <div class="method-card recommended">
-    <div class="heading">Hand Delivery</div>
-    <div class="content">
+
+    <div class="step-card">
+      <div class="step-number">Step 3 — Record</div>
+      <h3>Build the service evidence immediately</h3>
+      <p>Keep proof of posting, delivery notes, photographs, or attendance notes straight away. Service evidence is often what saves or weakens the case later.</p>
       <ul>
-        <li>Deliver the {{notice_name}} through the letterbox or directly to the tenant if appropriate.</li>
-        <li>Record the date and exact time of service immediately.</li>
-        <li>If possible, take a witness and a contemporaneous photograph of delivery.</li>
-        <li>Keep the served copy with your pack evidence.</li>
+        <li>Keep proof of posting or a written attendance note.</li>
+        <li>Keep the served notice copy with the same dates shown on the N215 certificate.</li>
+        <li>Store every service document in the same case file so nothing has to be rebuilt later.</li>
       </ul>
     </div>
-  </div>
-  {{/if}}
 
-  {{#if drafting_model.serviceInstructions.methodNotes.length}}
-  <div class="checklist-box checklist-section">
-    <div class="heading">Practical Method Notes</div>
-    <div class="content">
+    <div class="step-card">
+      <div class="step-number">Step 4 — Align</div>
+      <h3>Keep the notice, N215, and later court file saying the same thing</h3>
+      <p>Most possession cases fail on inconsistency, not because the landlord lacked a form. Keep the notice, service record, arrears evidence, and any later court paperwork aligned from the start.</p>
       <ul>
-        {{#each drafting_model.serviceInstructions.methodNotes}}
-        <li>{{this}}</li>
-        {{/each}}
-      </ul>
-    </div>
-  </div>
-  {{/if}}
-
-  <div class="section callout-section">
-    <div class="callout warning">
-    <p><strong>Electronic service:</strong> Do not rely on email or text alone unless the tenancy terms clearly permit electronic service and you are satisfied the clause applies to notices of this kind.</p>
-    </div>
-  </div>
-
-  <div class="section callout-section">
-    <h2 class="section-title section-header-block">Evidence To Keep</h2>
-
-    <div class="checklist-box checklist-section">
-      <div class="heading">Service Evidence Checklist</div>
-      <div class="content">
-        <ul>
-          {{#if drafting_model.serviceInstructions.evidenceItems.length}}
-            {{#each drafting_model.serviceInstructions.evidenceItems}}
-          <li>{{this}}</li>
-            {{/each}}
-          {{else}}
-          <li>A copy of the completed {{notice_name}} that was served.</li>
-          <li>Proof of posting, tracking, or witness details, depending on the service method used.</li>
-          <li>A contemporaneous note of the service date, time, location, and method.</li>
-          <li>Any tenant acknowledgement or later correspondence that refers to receipt of the notice.</li>
-          {{/if}}
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <h2 class="section-title">After Service</h2>
-
-  <div class="checklist-box">
-    <div class="heading">Next Steps</div>
-    <div class="content">
-      <ul>
-        {{#if drafting_model.serviceInstructions.afterServiceItems.length}}
-          {{#each drafting_model.serviceInstructions.afterServiceItems}}
-        <li>{{this}}</li>
-          {{/each}}
+        <li>Check the notice date, expiry date, and earliest proceedings date against the whole file.</li>
+        <li>Make sure the grounds and arrears position stay consistent if the case moves into court.</li>
+        {{#if (eq pack_stage "stage2")}}
+        <li>Carry the same facts into Form N5, Form N119, the witness statement, and the hearing bundle.</li>
         {{else}}
-        {{#if (hasValue notice_expiry_date_formatted)}}
-        <li>Allow the notice period to run until {{notice_expiry_date_formatted}}.</li>
-        {{/if}}
-        {{#if (hasValue earliest_proceedings_date_formatted)}}
-        <li>Do not start possession proceedings before {{earliest_proceedings_date_formatted}}.</li>
-        {{/if}}
-        <li>Do not change locks, remove belongings, or try to force the tenant out without a court order and lawful enforcement.</li>
-        <li>If the tenant remains, the standard court route is usually Form N5 with Form N119. Some rent-arrears-only claims may also be suitable for PCOL.</li>
+        <li>If the tenant does not leave, move into Stage 2 so the court file builds directly from this served notice record.</li>
         {{/if}}
       </ul>
     </div>
   </div>
 
-  <div class="callout critical">
-    <p><strong>Important:</strong> Incorrect service or weak service evidence can delay or undermine the possession claim even where the factual grounds are otherwise strong.</p>
+  <div class="risk-box">
+    <div class="risk-chip">Failure risk</div>
+    <h3>Incorrect service can delay or undermine the claim</h3>
+    <p>If the tenant disputes service or the dates do not match across the notice, N215, and later court papers, the case can be delayed or weakened even where the underlying grounds are sound.</p>
+    <p><strong>Action:</strong> Keep the service record complete and aligned before you move on.</p>
   </div>
 
-  <h2 class="section-title">Common Mistakes To Avoid</h2>
-  <ul>
-    {{#if drafting_model.serviceInstructions.commonMistakes.length}}
-      {{#each drafting_model.serviceInstructions.commonMistakes}}
-    <li>{{this}}</li>
+  <h2 class="section-title">File Notes</h2>
+  <div class="note-box">
+    {{#if drafting_model.serviceInstructions.overviewParagraphs.length}}
+      {{#each drafting_model.serviceInstructions.overviewParagraphs}}
+      <p>{{this}}</p>
       {{/each}}
     {{else}}
-    <li>Using a notice timeline in one document that does not match the rest of the pack.</li>
-    <li>Leaving the service method undocumented.</li>
-    <li>Serving by a method that the tenancy does not allow without checking the consequences.</li>
-    <li>Starting proceedings before the earliest proceedings date has passed.</li>
+      <p>This guidance is practical support only. Check the tenancy agreement, your evidence file, and current official guidance before serving the notice.</p>
     {{/if}}
-  </ul>
-
-  <div class="doc-footer">
-    <p><strong>Generated:</strong> {{generated_date}}</p>
-    {{#unless clean_output}}
-    <p><strong>Landlord Heaven</strong> | England Section 8 support document</p>
-    {{/unless}}
   </div>
 </body>
 </html>

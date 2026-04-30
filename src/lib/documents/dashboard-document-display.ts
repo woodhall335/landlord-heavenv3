@@ -55,6 +55,8 @@ const LEGACY_DOCUMENT_KEY_ALIASES: Record<string, string> = {
   'pre-service compliance declaration': 'compliance_declaration',
   'pre service compliance declaration': 'compliance_declaration',
   'rent schedule / arrears statement': 'arrears_schedule',
+  'what happens next': 'what_happens_next',
+  'case summary': 'case_summary',
 };
 
 function normalizeDocumentKey(value: string): string {
@@ -110,6 +112,8 @@ export function getDashboardDocumentCategory(documentType: string): DashboardDoc
       'evidence_bundle_index',
       'validity_checklist',
       'eviction_roadmap',
+      'case_summary',
+      'what_happens_next',
     ].includes(documentType)
   ) {
     return 'eviction';
@@ -206,7 +210,9 @@ export function getDashboardDocumentTitle(documentType: string): string {
     rental_inspection_report: 'Rental Inspection Report',
     flatmate_agreement: 'Flatmate Agreement',
     renewal_tenancy_agreement: 'Renewal Tenancy Agreement',
-  section8_notice: 'Form 3A notice',
+    section8_notice: 'Form 3A notice',
+    case_summary: 'Case Summary',
+    what_happens_next: 'What Happens Next',
     service_instructions: 'Service Instructions',
     cover_letter_to_tenant: 'Cover Letter to Tenant',
     service_checklist: 'Service & Compliance Checklist',

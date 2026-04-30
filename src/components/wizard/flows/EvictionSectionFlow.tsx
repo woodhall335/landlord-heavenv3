@@ -962,7 +962,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
           ? 'Scotland Eviction Pack'
           : jurisdiction === 'wales'
           ? 'Wales Eviction Pack'
-          : 'Complete Eviction Pack'
+          : 'Stage 2: Section 8 Court & Possession Pack'
       }
       completedCount={completedCount}
       totalCount={visibleSections.length}

@@ -551,21 +551,21 @@ function WizardFlowContent() {
     const productChoices = [
       {
         key: 'notice_only' as const,
-        title: 'Eviction Notice Generator',
-        subtitle: 'Section 8, May 2026',
+        title: 'Stage 1: Section 8 Notice & Service Pack',
+        subtitle: 'Built to hold up if challenged',
         imageSrc: '/images/eviction-notice-generator-wizard.webp',
-        imageAlt: 'Eviction Notice Generator wizard preview',
+        imageAlt: 'Stage 1 Section 8 Notice and Service Pack wizard preview',
         description:
-          'Choose this if you need the Form 3A notice, service instructions, service and validity checklist, pre-service compliance declaration, and rent schedule / arrears statement before you serve anything.',
+          'Choose this if you need the Form 3A notice, front-page case summary, service playbook, compliance snapshot, and arrears support lined up before you serve anything.',
       },
       {
         key: 'complete_pack' as const,
-        title: 'Complete Eviction Pack',
-        subtitle: 'Notice through court possession',
+        title: 'Stage 2: Section 8 Court & Possession Pack',
+        subtitle: 'Carry the case into court without breaking the file',
         imageSrc: '/images/complete-eviction-pack-wizard.webp',
-        imageAlt: 'Complete Eviction Pack wizard preview',
+        imageAlt: 'Stage 2 Section 8 Court and Possession Pack wizard preview',
         description:
-          'Choose this if you want the Form 3A notice, N5, N119, and the full court-ready possession paperwork working together from the start.',
+          'Choose this if you want the full combined pack: Stage 1 notice and service documents plus Stage 2 court documents, all working together from the start.',
       },
     ];
 

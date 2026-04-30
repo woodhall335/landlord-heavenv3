@@ -4,37 +4,121 @@ JURISDICTION
 england
 GENERATED
 30 April 2026
-Eviction Case Summary
-Case ID: golden-complete-pack-001
-Jurisdiction: england
-Generated: 30 April 2026
-Parties
-Claimant: Daniel Mercer
-Defendant: Ivy Carleton
-Property: 16 Willow Mews York YO24 3HX
+Stage 2: Section 8 Court & Possession Pack
+Case Summary - Stage 2 Court &
+Possession
+Carry the case into court without breaking the file
+This complete pack includes both Stage 1 notice and service documents and Stage 2
+court papers, keeping the notice, service record, court forms, and evidence aligned in
+one possession file.
+DO NOT ISSUE YET
+Case ID: golden-complete-pack-001 | Jurisdiction: england | Generated: 30 April 2026
+Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent
+those.
+PROPERTY
+16 Willow Mews York YO24 3HX
+TENANT
+Ivy Carleton
+GROUNDS
+Ground 8 (mandatory), Ground 10
+(discretionary)
+ARREARS
+£3600.00
+NOTICE SERVED
+30 April 2026
+NOTICE EXPIRES
+28 May 2026
+EARLIEST PROCEEDINGS
+28 May 2026
+CLAIMANT
+Daniel Mercer
+What this pack does
+Includes both the Stage 1 notice pack and the
+Stage 2 court documents
+Keeps service, claim wording, and evidence
+aligned for court
+Reduces the risk of delay, contradiction, or weak
+filing
+Next step
+Prepare the court file now and do not issue before 28
+May 2026.
 Court: York County Court and Family Court
-Route
-Current route: Section 8 possession claim
-Grounds relied on: Ground 8, Ground 10
-This summary should match the grounds pleaded
-in the notice and court papers: The claimant relies
-on the following statutory grounds for possession:
-Ground 8, Schedule 2, Housing Act 1988 (Rent
-arrears; mandatory); Ground 10, Schedule 2,
-Housing Act 1988 (Any rent arrears; discretionary).
-Tenancy start date 1 January 2024
-Rent £1200.00 monthly
-Due day 1st day of each month
-Current arrears £3600.00
-Arrears at notice date £3600.00
-Notice served 30 April 2026
-Notice expiry date 28 May 2026
-Earliest proceedings date 28 May 2026
-Compliance snapshot 5 items recorded
+Rent due: 1st day of each month
+Arrears at notice date: £3600.00
 
--- 1 of 3 --
+-- 1 of 4 --
 
-Case Narrative
+Key Risks
+CRITICAL
+Prescribed information not confirmed
+Deposit protection is recorded with TDS on 15
+January 2024, but prescribed information is not
+recorded as served. For most post-1 May 2026
+private-rented-sector grounds, the court will not make
+a possession order until the deposit position has been
+cured, the deposit has been returned, or any deposit-
+compliance dispute has already been resolved.
+Action: Confirm, cure, or return the deposit before
+relying on the possession route.
+RISK
+Gas safety record not confirmed
+No gas safety provision is recorded. This does not
+automatically invalidate a Section 8 notice, but it can
+create regulatory or evidential risk.
+Action: Locate the gas safety record or document
+why it does not apply before the file is challenged.
+RISK
+EPC record not confirmed
+No EPC provision is recorded. This is not treated
+here as automatic Section 8 invalidity, but it remains a
+legal and evidential risk that should be addressed.
+Action: Locate the EPC record or explain the position
+in the evidence file.
+Compliance Snapshot
+PRESCRIBED INFORMATION NOT CONFIRMED
+CRITICAL
+Deposit protection is recorded with TDS on 15
+January 2024, but prescribed information is not
+recorded as served. For most post-1 May 2026
+private-rented-sector grounds, the court will not make
+a possession order until the deposit position has been
+cured, the deposit has been returned, or any deposit-
+compliance dispute has already been resolved.
+Action: Confirm, cure, or return the deposit before
+relying on the possession route.
+GAS SAFETY RECORD NOT CONFIRMED
+RISK
+No gas safety provision is recorded. This does not
+automatically invalidate a Section 8 notice, but it can
+create regulatory or evidential risk.
+Action: Locate the gas safety record or document
+why it does not apply before the file is challenged.
+
+-- 2 of 4 --
+
+EPC RECORD NOT CONFIRMED
+RISK
+No EPC provision is recorded. This is not treated
+here as automatic Section 8 invalidity, but it remains a
+legal and evidential risk that should be addressed.
+Action: Locate the EPC record or explain the position
+in the evidence file.
+HOW TO RENT RECORD NOT CONFIRMED
+OK
+No How to Rent service record is shown. That does
+not automatically invalidate a Section 8 notice, but it
+is worth checking the tenancy file and recording what
+was served.
+Action: Check the tenancy file and record the
+position so the file stays complete.
+NOTICE TIMELINE RECORDED
+OK
+Notice served on 30 April 2026 with earliest
+proceedings date 28 May 2026.
+Action: Keep the service date, expiry date, and
+proceedings date aligned across the notice, N215,
+and any court papers.
+Case Context
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears), Ground 10
 (Any rent arrears).
 The tenancy began on 1 January 2024. The contractual rent is £1,200.00 payable monthly on the 1st day of each
@@ -51,20 +135,10 @@ The arrears history, service chronology, and any further tenancy concerns should
 possession case, while each statutory ground remains separately pleaded.
 Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28 May
 2026.
-Compliance Status Snapshot
-Use this as a risk summary, not as a replacement for the underlying tenancy documents and evidence file.
-Critical route risk: Deposit protection is recorded with TDS on 15 January 2024, but prescribed information is not
-recorded as served. For most post-1 May 2026 private-rented-sector grounds, the court will not make a
-possession order until the deposit position has been cured, the deposit has been returned, or any deposit-
-compliance dispute has already been resolved.
-Significant risk: No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice,
-but it can create regulatory or evidential risk.
-Significant risk: No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it
-remains a legal and evidential risk that should be addressed.
-Advisory / good practice: No How to Rent service record is shown. That does not automatically invalidate a
-Section 8 notice, but it is worth checking the tenancy file and recording what was served.
-Notice served on 30 April 2026 with earliest proceedings date 28 May 2026.
-Pre-action and Procedural Steps
+
+-- 3 of 4 --
+
+Procedural Notes
 The rent account first shows an unpaid or short-paid period from 1 January 2026. The most recent affected rental
 period is 1 March 2026. The current arrears total is £3,600.00 across 3 missed or short-paid rental periods.
 The Form 3A notice service milestone currently recorded is 30 April 2026. The possession / proceedings date
@@ -72,14 +146,11 @@ currently recorded in the file is 28 May 2026.
 Defendant Circumstances
 The claimant is not aware of any further information about the defendant's circumstances beyond the matters set
 out in the claim papers and any information the defendant may wish to place before the court.
-
--- 2 of 3 --
-
-Financial Position and Relief Sought
+Financial Position
 The claimant seeks possession and, if the court thinks fit, judgment for rent arrears currently quantified at
 £3,600.00.
 The contractual rent is £1,200.00 payable monthly.
 Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28 May
 2026.
 
--- 3 of 3 --
+-- 4 of 4 --

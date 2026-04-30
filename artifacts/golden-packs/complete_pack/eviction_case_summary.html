@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Eviction Case Summary</title>
+  <title>Case Summary — Stage 2 Court &amp; Possession</title>
   <style>
     * {
   margin: 0;
@@ -827,93 +827,217 @@ th {
 
     @page {
       size: A4;
-      margin: 15mm;
+      margin: 12mm;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
+      color: #1f1635;
       font-size: 10pt;
       line-height: 1.5;
-      color: #1a1a1a;
-      margin: 0;
     }
 
-    .header {
-      border-bottom: 2px solid #1a1a1a;
-      margin-bottom: 1.5em;
-      padding-bottom: 0.75em;
+    .hero,
+    .panel,
+    .fact-card,
+    .risk-card,
+    .status-card {
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
-    .header h1 {
-      margin: 0 0 0.25em 0;
-      font-size: 16pt;
+    .hero {
+      border: 1px solid #ddd6fe;
+      background: #faf8ff;
+      padding: 1.25em;
+      margin-bottom: 1.1em;
     }
 
-    .header p {
-      margin: 0.2em 0;
-      color: #555;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       gap: 1em;
-      margin-bottom: 1.5em;
+      margin-bottom: 0.9em;
     }
 
-    .card {
-      border: 1px solid #d9d9d9;
-      padding: 0.9em 1em;
-      background: #fafafa;
+    .hero h1 {
+      margin: 0 0 0.2em 0;
+      font-size: 19pt;
+      line-height: 1.1;
     }
 
-    .card h2 {
-      margin: 0 0 0.6em 0;
+    .hero h2 {
+      margin: 0;
       font-size: 11pt;
+      color: #5b5370;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .key-facts {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.5em;
+    .hero p {
+      margin: 0.3em 0 0 0;
     }
 
-    .key-facts th,
-    .key-facts td {
-      border: 1px solid #d9d9d9;
-      padding: 8px 10px;
-      vertical-align: top;
-      text-align: left;
+    .status-pill {
+      display: inline-block;
+      padding: 0.45em 0.9em;
+      border-radius: 999px;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #fff;
+      background: #166534;
+      white-space: nowrap;
     }
 
-    .key-facts th {
-      width: 28%;
-      background: #f2f2f2;
+    .status-pill.risk {
+      background: #b45309;
+    }
+
+    .status-pill.critical {
+      background: #b91c1c;
+    }
+
+    .risk-line {
+      margin-top: 0.8em;
+      padding-top: 0.8em;
+      border-top: 1px solid #ddd6fe;
+      color: #4c1d95;
       font-weight: 600;
     }
 
-    .section {
-      margin-bottom: 1.25em;
+    .facts-grid,
+    .panel-grid,
+    .risk-grid,
+    .status-grid {
+      display: grid;
+      gap: 0.8em;
     }
 
-    .section h2 {
+    .facts-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 1.1em;
+    }
+
+    .panel-grid,
+    .risk-grid,
+    .status-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .fact-card,
+    .panel,
+    .risk-card,
+    .status-card {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      padding: 0.95em 1em;
+    }
+
+    .fact-card .label,
+    .panel h3,
+    .risk-card .label,
+    .status-card .label {
+      display: block;
+      margin-bottom: 0.35em;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b6481;
+    }
+
+    .fact-card .value {
       font-size: 11pt;
-      margin: 0 0 0.5em 0;
-      padding-bottom: 0.25em;
-      border-bottom: 1px solid #d9d9d9;
+      font-weight: 700;
+      color: #231942;
     }
 
-    .section p,
-    .section ul {
+    .section-title {
+      margin: 1.3em 0 0.7em 0;
+      font-size: 12pt;
+      font-weight: 700;
+      color: #231942;
+    }
+
+    .panel h3,
+    .risk-card h3,
+    .status-card h3 {
+      margin: 0 0 0.45em 0;
+      font-size: 10pt;
+      color: #231942;
+    }
+
+    .panel p,
+    .risk-card p,
+    .status-card p {
+      margin: 0.3em 0;
+    }
+
+    .panel ul,
+    .status-card ul {
       margin: 0;
+      padding-left: 1.1em;
     }
 
-    .section ul {
-      padding-left: 1.2em;
+    .panel li,
+    .status-card li {
+      margin: 0.25em 0;
+    }
+
+    .risk-card.ok,
+    .status-card.ok {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+    }
+
+    .risk-card.risk,
+    .status-card.risk {
+      border-color: #fed7aa;
+      background: #fff7ed;
+    }
+
+    .risk-card.critical,
+    .status-card.critical {
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .risk-card .chip,
+    .status-card .chip {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: #ede9fe;
+      color: #4c1d95;
+    }
+
+    .risk-card.ok .chip,
+    .status-card.ok .chip {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .risk-card.risk .chip,
+    .status-card.risk .chip {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .risk-card.critical .chip,
+    .status-card.critical .chip {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
     .muted {
-      color: #666;
+      color: #6b7280;
     }
   </style>
 </head>
@@ -929,74 +1053,141 @@ th {
       </div>
     </div>
 
-  <div class="header">
-    <h1>Eviction Case Summary</h1>
-    <p><strong>Case ID:</strong> golden-complete-pack-001</p>
-    <p><strong>Jurisdiction:</strong> england</p>
-    <p><strong>Generated:</strong> 30 April 2026</p>
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <h2>Stage 2: Section 8 Court &amp; Possession Pack</h2>
+        <h1>Case Summary — Stage 2 Court &amp; Possession</h1>
+        <p><strong>Carry the case into court without breaking the file</strong></p>
+        <p>This complete pack includes both Stage 1 notice and service documents and Stage 2 court papers, keeping the notice, service record, court forms, and evidence aligned in one possession file.</p>
+      </div>
+      <div>
+        <span class="status-pill critical">DO NOT ISSUE YET</span>
+      </div>
+    </div>
+    <div class="muted">
+      <strong>Case ID:</strong> golden-complete-pack-001
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>Jurisdiction:</strong> england
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>Generated:</strong> 30 April 2026
+    </div>
+    <div class="risk-line">Most possession cases fail on notice, service, or consistency errors — this pack is designed to prevent those.</div>
   </div>
 
-  <div class="summary-grid">
-    <div class="card">
-      <h2>Parties</h2>
-      <p><strong>Claimant:</strong> Daniel Mercer</p>
-      <p><strong>Defendant:</strong> Ivy Carleton</p>
-      <p><strong>Property:</strong> 16 Willow Mews
+  <div class="facts-grid">
+    <div class="fact-card">
+      <span class="label">Property</span>
+      <div class="value">16 Willow Mews
 York
-YO24 3HX</p>
-      <p><strong>Court:</strong> York County Court and Family Court</p>
+YO24 3HX</div>
     </div>
-    <div class="card">
-      <h2>Route</h2>
-      <p><strong>Current route:</strong> Section 8 possession claim</p>
-      <p><strong>Grounds relied on:</strong> Ground 8, Ground 10</p>
-      <p class="muted">This summary should match the grounds pleaded in the notice and court papers: The claimant relies on the following statutory grounds for possession: Ground 8, Schedule 2, Housing Act 1988 (Rent arrears; mandatory); Ground 10, Schedule 2, Housing Act 1988 (Any rent arrears; discretionary).</p>
+    <div class="fact-card">
+      <span class="label">Tenant</span>
+      <div class="value">Ivy Carleton</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Grounds</span>
+      <div class="value">Ground 8 (mandatory), Ground 10 (discretionary)</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Arrears</span>
+      <div class="value">&#163;3600.00</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Notice served</span>
+      <div class="value">30 April 2026</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Notice expires</span>
+      <div class="value">28 May 2026</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Earliest proceedings</span>
+      <div class="value">28 May 2026</div>
+    </div>
+    <div class="fact-card">
+      <span class="label">Claimant</span>
+      <div class="value">Daniel Mercer</div>
     </div>
   </div>
 
-  <table class="key-facts">
-    <tbody>
-      <tr>
-        <th>Tenancy start date</th>
-        <td colspan="3">1 January 2024</td>
-      </tr>
-      <tr>
-        <th>Rent</th>
-        <td colspan="3">&#163;1200.00 monthly</td>
-      </tr>
-      <tr>
-        <th>Due day</th>
-        <td colspan="3">1st day of each month</td>
-      </tr>
-      <tr>
-        <th>Current arrears</th>
-        <td colspan="3">&#163;3600.00</td>
-      </tr>
-      <tr>
-        <th>Arrears at notice date</th>
-        <td colspan="3">&#163;3600.00</td>
-      </tr>
-      <tr>
-        <th>Notice served</th>
-        <td colspan="3">30 April 2026</td>
-      </tr>
-      <tr>
-        <th>Notice expiry date</th>
-        <td colspan="3">28 May 2026</td>
-      </tr>
-      <tr>
-        <th>Earliest proceedings date</th>
-        <td colspan="3">28 May 2026</td>
-      </tr>
-      <tr>
-        <th>Compliance snapshot</th>
-        <td colspan="3">5 items recorded</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="panel-grid">
+    <div class="panel">
+      <h3>What this pack does</h3>
+      <ul>
+        <li>Includes both the Stage 1 notice pack and the Stage 2 court documents</li>
+        <li>Keeps service, claim wording, and evidence aligned for court</li>
+        <li>Reduces the risk of delay, contradiction, or weak filing</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Next step</h3>
+      <p>Prepare the court file now and do not issue before 28 May 2026.</p>
+      <p><strong>Court:</strong> York County Court and Family Court</p>
+      <p><strong>Rent due:</strong> 1st day of each month</p>
+      <p><strong>Arrears at notice date:</strong> &#163;3600.00</p>
+    </div>
+  </div>
 
-  <div class="section">
-    <h2>Case Narrative</h2>
+  <h2 class="section-title">Key Risks</h2>
+  <div class="risk-grid">
+        <div class="risk-card critical">
+          <div class="chip">critical</div>
+          <h3>Prescribed information not confirmed</h3>
+          <p>Deposit protection is recorded with TDS on 15 January 2024, but prescribed information is not recorded as served. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position has been cured, the deposit has been returned, or any deposit-compliance dispute has already been resolved.</p>
+          <p><strong>Action:</strong> Confirm, cure, or return the deposit before relying on the possession route.</p>
+        </div>
+        <div class="risk-card risk">
+          <div class="chip">risk</div>
+          <h3>Gas safety record not confirmed</h3>
+          <p>No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidential risk.</p>
+          <p><strong>Action:</strong> Locate the gas safety record or document why it does not apply before the file is challenged.</p>
+        </div>
+        <div class="risk-card risk">
+          <div class="chip">risk</div>
+          <h3>EPC record not confirmed</h3>
+          <p>No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.</p>
+          <p><strong>Action:</strong> Locate the EPC record or explain the position in the evidence file.</p>
+        </div>
+  </div>
+
+  <h2 class="section-title">Compliance Snapshot</h2>
+  <div class="status-grid">
+    <div class="status-card critical">
+      <span class="label">Prescribed information not confirmed</span>
+      <div class="chip">critical</div>
+      <p>Deposit protection is recorded with TDS on 15 January 2024, but prescribed information is not recorded as served. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position has been cured, the deposit has been returned, or any deposit-compliance dispute has already been resolved.</p>
+      <p><strong>Action:</strong> Confirm, cure, or return the deposit before relying on the possession route.</p>
+    </div>
+    <div class="status-card risk">
+      <span class="label">Gas safety record not confirmed</span>
+      <div class="chip">risk</div>
+      <p>No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidential risk.</p>
+      <p><strong>Action:</strong> Locate the gas safety record or document why it does not apply before the file is challenged.</p>
+    </div>
+    <div class="status-card risk">
+      <span class="label">EPC record not confirmed</span>
+      <div class="chip">risk</div>
+      <p>No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.</p>
+      <p><strong>Action:</strong> Locate the EPC record or explain the position in the evidence file.</p>
+    </div>
+    <div class="status-card ok">
+      <span class="label">How to Rent record not confirmed</span>
+      <div class="chip">ok</div>
+      <p>No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.</p>
+      <p><strong>Action:</strong> Check the tenancy file and record the position so the file stays complete.</p>
+    </div>
+    <div class="status-card ok">
+      <span class="label">Notice timeline recorded</span>
+      <div class="chip">ok</div>
+      <p>Notice served on 30 April 2026 with earliest proceedings date 28 May 2026.</p>
+      <p><strong>Action:</strong> Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and any court papers.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">Case Context</h2>
+  <div class="panel">
       <p>The claimant seeks possession of 16 Willow Mews
 York
 YO24 3HX relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears).</p>
@@ -1011,31 +1202,19 @@ YO24 3HX relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears).</p>
       <p>Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28 May 2026.</p>
   </div>
 
-  <div class="section">
-    <h2>Compliance Status Snapshot</h2>
-    <p class="muted" style="margin-bottom: 0.6em;">Use this as a risk summary, not as a replacement for the underlying tenancy documents and evidence file.</p>
-    <ul>
-        <li>Critical route risk: Deposit protection is recorded with TDS on 15 January 2024, but prescribed information is not recorded as served. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position has been cured, the deposit has been returned, or any deposit-compliance dispute has already been resolved.</li>
-        <li>Significant risk: No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidential risk.</li>
-        <li>Significant risk: No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.</li>
-        <li>Advisory / good practice: No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.</li>
-        <li>Notice served on 30 April 2026 with earliest proceedings date 28 May 2026.</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Pre-action and Procedural Steps</h2>
+  <h2 class="section-title">Procedural Notes</h2>
+  <div class="panel">
       <p>The rent account first shows an unpaid or short-paid period from 1 January 2026. The most recent affected rental period is 1 March 2026. The current arrears total is &#163;3,600.00 across 3 missed or short-paid rental periods.</p>
       <p>The Form 3A notice service milestone currently recorded is 30 April 2026. The possession / proceedings date currently recorded in the file is 28 May 2026.</p>
   </div>
 
-  <div class="section">
-    <h2>Defendant Circumstances</h2>
+  <h2 class="section-title">Defendant Circumstances</h2>
+  <div class="panel">
       <p>The claimant is not aware of any further information about the defendant&#x27;s circumstances beyond the matters set out in the claim papers and any information the defendant may wish to place before the court.</p>
   </div>
 
-  <div class="section">
-    <h2>Financial Position and Relief Sought</h2>
+  <h2 class="section-title">Financial Position</h2>
+  <div class="panel">
       <p>The claimant seeks possession and, if the court thinks fit, judgment for rent arrears currently quantified at &#163;3,600.00.</p>
       <p>The contractual rent is &#163;1,200.00 payable monthly.</p>
       <p>Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28 May 2026.</p>
