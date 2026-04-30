@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-30T12:50:06.401Z",
+  "generatedAt": "2026-04-30T16:39:09.804Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -957,7 +957,7 @@
       "key": "complete_pack",
       "displayName": "Stage 2: Section 8 Court & Possession Pack",
       "outputDir": "complete_pack",
-      "documentCount": 13,
+      "documentCount": 12,
       "documents": [
         {
           "title": "Case Summary — Stage 2 Court & Possession",
@@ -978,36 +978,36 @@
           }
         },
         {
-          "title": "Form 3A notice",
-          "description": "Official notice to tenant citing grounds for possession",
-          "category": "notice",
-          "documentType": "section8_notice",
-          "fileName": "section8_notice.pdf",
+          "title": "Court Readiness Status",
+          "description": "Decision-engine status page showing whether the possession file is ready for issue or still carries risk.",
+          "category": "guidance",
+          "documentType": "court_readiness_status",
+          "fileName": "court_readiness_status.pdf",
           "files": {
-            "pdf": "complete_pack/section8_notice.pdf",
-            "text": "complete_pack/section8_notice.txt",
-            "html": "complete_pack/section8_notice.html"
+            "pdf": "complete_pack/court_readiness_status.pdf",
+            "text": "complete_pack/court_readiness_status.txt",
+            "html": "complete_pack/court_readiness_status.html"
           },
           "extraction": {
-            "pageCount": 10,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
           }
         },
         {
-          "title": "Service Instructions",
-          "description": "Service playbook for the Form 3A notice and court file",
+          "title": "Court Forms",
+          "description": "Alignment note for the claim forms so the court papers stay consistent with the served notice and service record.",
           "category": "guidance",
-          "documentType": "service_instructions",
-          "fileName": "service_instructions_s8.pdf",
+          "documentType": "court_forms_guide",
+          "fileName": "court_forms_guide.pdf",
           "files": {
-            "pdf": "complete_pack/service_instructions_s8.pdf",
-            "text": "complete_pack/service_instructions_s8.txt",
-            "html": "complete_pack/service_instructions_s8.html"
+            "pdf": "complete_pack/court_forms_guide.pdf",
+            "text": "complete_pack/court_forms_guide.txt",
+            "html": "complete_pack/court_forms_guide.html"
           },
           "extraction": {
-            "pageCount": 2,
+            "pageCount": 1,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1066,18 +1066,36 @@
           }
         },
         {
-          "title": "Evidence Collection Checklist",
-          "description": "Detailed checklist of all evidence you need to gather",
-          "category": "evidence_tool",
-          "documentType": "evidence_checklist",
-          "fileName": "evidence_collection_checklist.pdf",
+          "title": "Form 3A notice",
+          "description": "Official notice to tenant citing grounds for possession",
+          "category": "notice",
+          "documentType": "section8_notice",
+          "fileName": "section8_notice.pdf",
           "files": {
-            "pdf": "complete_pack/evidence_collection_checklist.pdf",
-            "text": "complete_pack/evidence_collection_checklist.txt",
-            "html": "complete_pack/evidence_collection_checklist.html"
+            "pdf": "complete_pack/section8_notice.pdf",
+            "text": "complete_pack/section8_notice.txt",
+            "html": "complete_pack/section8_notice.html"
           },
           "extraction": {
-            "pageCount": 2,
+            "pageCount": 10,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Service Continuity Notes",
+          "description": "Continuity note tying the served notice, Form N215, and the court claim into one file.",
+          "category": "guidance",
+          "documentType": "service_record_notes",
+          "fileName": "service_record_notes.pdf",
+          "files": {
+            "pdf": "complete_pack/service_record_notes.pdf",
+            "text": "complete_pack/service_record_notes.txt",
+            "html": "complete_pack/service_record_notes.html"
+          },
+          "extraction": {
+            "pageCount": 1,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1101,44 +1119,26 @@
           }
         },
         {
-          "title": "Witness Statement",
-          "description": "Court-ready witness statement for possession proceedings",
-          "category": "court_form",
-          "documentType": "witness_statement",
-          "fileName": "witness_statement.pdf",
+          "title": "Evidence Required for Hearing",
+          "description": "Court-facing checklist of the documents and proof needed for the possession hearing.",
+          "category": "guidance",
+          "documentType": "evidence_checklist",
+          "fileName": "evidence_required_for_hearing.pdf",
           "files": {
-            "pdf": "complete_pack/witness_statement.pdf",
-            "text": "complete_pack/witness_statement.txt",
-            "html": "complete_pack/witness_statement.html"
+            "pdf": "complete_pack/evidence_required_for_hearing.pdf",
+            "text": "complete_pack/evidence_required_for_hearing.txt",
+            "html": "complete_pack/evidence_required_for_hearing.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 1,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
           }
         },
         {
-          "title": "Court Bundle Index",
-          "description": "Index of all documents for court filing",
-          "category": "evidence_tool",
-          "documentType": "court_bundle_index",
-          "fileName": "court_bundle_index.pdf",
-          "files": {
-            "pdf": "complete_pack/court_bundle_index.pdf",
-            "text": "complete_pack/court_bundle_index.txt",
-            "html": "complete_pack/court_bundle_index.html"
-          },
-          "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Hearing Checklist",
-          "description": "Preparation checklist for the possession hearing",
+          "title": "Hearing Preparation Guide",
+          "description": "Court-facing hearing guide covering validity, service, grounds, arrears, and the documents to bring.",
           "category": "guidance",
           "documentType": "hearing_checklist",
           "fileName": "hearing_checklist.pdf",
@@ -1148,25 +1148,7 @@
             "html": "complete_pack/hearing_checklist.html"
           },
           "extraction": {
-            "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Arrears Engagement Letter",
-          "description": "Pre-action engagement letter for rent arrears",
-          "category": "bonus",
-          "documentType": "arrears_engagement_letter",
-          "fileName": "arrears_engagement_letter.pdf",
-          "files": {
-            "pdf": "complete_pack/arrears_engagement_letter.pdf",
-            "text": "complete_pack/arrears_engagement_letter.txt",
-            "html": "complete_pack/arrears_engagement_letter.html"
-          },
-          "extraction": {
-            "pageCount": 2,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"

@@ -75,6 +75,8 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('{{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}');
     expect(content).toContain('Latest proceedings date');
+    expect(content).toContain('What the court will consider');
+    expect(content).toContain('Common failure points');
     expect(content).toContain('If the case changes');
     expect(content).toContain('The tenant attends with a defence.');
     expect(content).toContain('The tenant raises housing disrepair or a counterclaim.');
@@ -148,5 +150,6 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('{{#each next_steps}}');
     expect(content).toContain('{{#if (eq pack_stage "stage1")}}');
     expect(content).toContain('Stage 2 handoff');
+    expect(content).toContain('single continuous file');
   });
 });

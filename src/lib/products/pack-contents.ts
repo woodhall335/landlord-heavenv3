@@ -554,112 +554,92 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
 
 function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
   void args;
-  const items: PackItem[] = [
+  return [
     {
       key: 'case_summary',
       title: 'Case Summary — Stage 2 Court & Possession',
-      description: 'Front-page summary for the complete pack, showing readiness, key risks, and the next step across notice and court.',
+      description: 'Front-page summary for the complete pack, showing court readiness, key risks, and the next step across notice and issue.',
       category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'court_readiness_status',
+      title: 'Court Readiness Status',
+      description: 'Decision-engine status page showing whether the file is ready for issue, carries risk, or should not yet be issued.',
+      category: 'Checklists',
+      required: true,
+    },
+    {
+      key: 'court_forms_guide',
+      title: 'Court Forms',
+      description: 'Alignment note for the court forms so the claim papers stay consistent with the notice and service record.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'n5_claim',
+      title: 'Form N5 - Claim for Possession',
+      description: 'Standard possession claim form for the county court paper route.',
+      category: 'Court forms',
+      required: true,
+    },
+    {
+      key: 'n119_particulars',
+      title: 'Form N119 - Particulars of Claim',
+      description: 'Particulars of claim to accompany the possession claim.',
+      category: 'Court forms',
+      required: true,
+    },
+    {
+      key: 'arrears_schedule',
+      title: 'Schedule of Arrears',
+      description: 'Updated arrears position at claim date, with period-by-period figures and running balance for court.',
+      category: 'Evidence',
       required: true,
     },
     {
       key: 'section8_notice',
       title: ENGLAND_SECTION8_NOTICE_TITLE,
-      description: 'Official England possession notice for the current Section 8 route',
+      description: `The served ${ENGLAND_SECTION8_NOTICE_NAME} carried forward as the Stage 1 foundation of the court file.`,
       category: 'Notice',
       required: true,
     },
-  ];
-
-  items.push({
-    key: 'service_instructions',
-    title: 'Service Instructions',
-    description: `Stage 1 service playbook included inside the complete pack so the ${ENGLAND_SECTION8_NOTICE_NAME} and court file stay aligned.`,
-    category: 'Guidance',
-    required: true,
-  });
-
-  items.push({
-    key: 'n5_claim',
-    title: 'Form N5 - Claim for Possession',
-    description: 'Standard possession claim form for the county court paper route',
-    category: 'Court forms',
-    required: true,
-  });
-
-  items.push({
-    key: 'n119_particulars',
-    title: 'Form N119 - Particulars of Claim',
-    description: 'Particulars of claim to accompany your possession claim',
-    category: 'Court forms',
-    required: true,
-  });
-
-  items.push({
-    key: 'arrears_schedule',
-    title: 'Schedule of Arrears',
-    description: 'Period-by-period breakdown of arrears and running balance for the court file.',
-    category: 'Evidence',
-    required: true,
-  });
-
-  items.push({
-    key: 'evidence_checklist',
-    title: 'Evidence Collection Checklist',
-    description: 'Checklist of the landlord-held records to print or bring with the claim.',
-    category: 'Checklists',
-    required: true,
-  });
-
-    items.push({
+    {
+      key: 'service_record_notes',
+      title: 'Service Continuity Notes',
+      description: `Continuity note tying the served ${ENGLAND_SECTION8_NOTICE_NAME} to Form N215 and the claim file.`,
+      category: 'Guidance',
+      required: true,
+    },
+    {
       key: 'proof_of_service',
       title: 'Certificate of Service (Form N215)',
       description: `Official editable Form N215 certificate of service for how and when the ${ENGLAND_SECTION8_NOTICE_NAME} was served.`,
       category: 'Evidence',
       required: true,
-    });
-
-  items.push({
-    key: 'witness_statement',
-    title: 'Witness Statement',
-    description: 'Structured landlord statement setting out the possession case and chronology.',
-    category: 'Evidence',
-    required: true,
-  });
-
-  items.push({
-    key: 'court_bundle_index',
-    title: 'Court Bundle Index',
-    description: 'Indexed contents page for the court-ready possession file.',
-    category: 'Checklists',
-    required: true,
-  });
-
-  items.push({
-    key: 'hearing_checklist',
-    title: 'Hearing Checklist',
-    description: 'Practical checklist for filing, service, and hearing preparation.',
-    category: 'Checklists',
-    required: true,
-  });
-
-  items.push({
-    key: 'arrears_engagement_letter',
-    title: 'Arrears Engagement Letter',
-    description: 'Landlord-facing arrears engagement and contact record for the file.',
-    category: 'Guidance',
-    required: true,
-  });
-
-  items.push({
-    key: 'what_happens_next',
-    title: 'What Happens Next',
-    description: 'Next-step guide covering issue, hearing preparation, and enforcement handoff.',
-    category: 'Guidance',
-    required: true,
-  });
-
-  return items;
+    },
+    {
+      key: 'evidence_checklist',
+      title: 'Evidence Required for Hearing',
+      description: 'Court-facing checklist of the documents and proof needed for the possession hearing.',
+      category: 'Checklists',
+      required: true,
+    },
+    {
+      key: 'hearing_checklist',
+      title: 'Hearing Preparation Guide',
+      description: 'Practical hearing guide covering the main questions, failure points, and documents to bring.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'what_happens_next',
+      title: 'What Happens Next',
+      description: 'Next-step guide covering issue, hearing, possession, and enforcement continuity.',
+      category: 'Guidance',
+      required: true,
+    },
+  ];
 }
 
 function getEnglandMoneyClaimContents(): PackItem[] {

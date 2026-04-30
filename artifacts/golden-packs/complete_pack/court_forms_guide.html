@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Evidence Collection Checklist</title>
+  <title>Court Forms</title>
   <style>
     * {
   margin: 0;
@@ -356,6 +355,17 @@ body.lh-support-doc h4 {
   max-width: min(240px, 100%);
   display: block;
   flex-shrink: 0;
+}
+
+body.lh-support-doc--tenancy .lh-pack-masthead {
+  gap: 0.9em;
+  margin-bottom: 1em;
+  padding-bottom: 0.75em;
+}
+
+body.lh-support-doc--tenancy .lh-brand-mark {
+  width: 172px;
+  max-width: min(172px, 100%);
 }
 
 .lh-brand-logo {
@@ -828,116 +838,100 @@ th {
 
     @page {
       size: A4;
-      margin: 15mm;
+      margin: 12mm;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
+      color: #1f1635;
       font-size: 10pt;
       line-height: 1.55;
-      color: #1a1a1a;
-      margin: 0;
     }
 
-    .header {
-      margin-bottom: 1.5em;
-      padding-bottom: 0.9em;
-      border-bottom: 2px solid #1a1a1a;
-      text-align: center;
-    }
-
-    .header h1 {
-      margin: 0 0 0.3em 0;
-      font-size: 16pt;
-    }
-
-    .header p {
-      margin: 0.2em 0;
-      color: #555;
-    }
-
-    .summary-box,
-    .section,
-    .callout {
+    .hero,
+    .panel,
+    .warning-box,
+    .list-card {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
-    .summary-box,
-    .section {
-      margin: 1.2em 0;
-      border: 1px solid #d8d8d8;
+    .hero,
+    .panel,
+    .warning-box,
+    .list-card {
+      border: 1px solid #e5e7eb;
       background: #fff;
+      padding: 1em 1.1em;
+      margin-bottom: 0.9em;
     }
 
-    .summary-box {
-      padding: 1em;
-      background: #fafafa;
+    .hero {
+      background: #faf8ff;
+      border-color: #ddd6fe;
     }
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 0.45em 1em;
+    .eyebrow,
+    .chip {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: #ede9fe;
+      color: #4c1d95;
     }
 
-    .summary-grid dt {
-      font-weight: 600;
-      color: #444;
+    h1,
+    h2,
+    h3 {
+      color: #231942;
     }
 
-    .summary-grid dd {
-      margin: 0;
+    h1 {
+      margin: 0 0 0.25em 0;
+      font-size: 18pt;
     }
 
-    .section h2 {
-      margin: 0;
-      padding: 0.75em 0.95em;
-      background: #1a1a1a;
-      color: #fff;
-      font-size: 11pt;
+    h2 {
+      margin: 1.1em 0 0.55em 0;
+      font-size: 12pt;
     }
 
-    .section .content {
-      padding: 1em;
+    h3 {
+      margin: 0 0 0.35em 0;
+      font-size: 10.5pt;
     }
 
-    .ground-block {
-      margin: 1em 0 0 0;
-      padding-top: 1em;
-      border-top: 1px solid #e5e5e5;
-    }
-
-    .ground-block:first-child {
-      margin-top: 0;
-      padding-top: 0;
-      border-top: none;
-    }
-
-    .ground-block h3 {
-      margin: 0 0 0.45em 0;
-      font-size: 10pt;
-    }
-
-    .note {
-      margin: 0 0 0.7em 0;
-      color: #666;
-      font-size: 9pt;
-    }
-
-    .callout {
-      margin: 1.2em 0;
-      padding: 0.95em 1em;
-      border-left: 4px solid #b45309;
-      background: #fff7ed;
+    p {
+      margin: 0.3em 0;
     }
 
     ul {
-      margin: 0.35em 0 0 1.2em;
+      margin: 0.4em 0 0 1.1em;
+      padding: 0;
     }
 
     li {
-      margin: 0.38em 0;
+      margin: 0.3em 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85em;
+    }
+
+    .warning-box {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .muted {
+      color: #6b7280;
     }
   </style>
 </head>
@@ -953,76 +947,44 @@ th {
       </div>
     </div>
 
-  <div class="header">
-    <h1>Evidence Collection Checklist</h1>
-    <p>Use this checklist to gather the documents you will actually rely on if the possession claim is challenged.</p>
+  <div class="hero">
+    <div class="eyebrow">Stage 2: Section 8 Court &amp; Possession Pack</div>
+    <h1>Court Forms</h1>
+    <p><strong>These forms are completed using the same facts, dates, and grounds as your notice and service record.</strong></p>
+    <p>This pack turns the served notice into a court-ready possession file that stays consistent under scrutiny.</p>
   </div>
 
-  <div class="summary-box">
-    <dl class="summary-grid">
-      <dt>Property</dt>
-      <dd>16 Willow Mews
-York
-YO24 3HX</dd>
-      <dt>Tenant</dt>
-      <dd>Ivy Carleton</dd>
-      <dt>Case type</dt>
-      <dd>Section 8 (Ground 8, Ground 10)</dd>
-      <dt>Notice service date</dt>
-      <dd>30 April 2026</dd>
-      <dt>Notice expiry date</dt>
-      <dd>28 May 2026</dd>
-      <dt>Earliest proceedings date</dt>
-      <dd>28 May 2026</dd>
-      <dt>Prepared</dt>
-      <dd>30 April 2026</dd>
-    </dl>
-  </div>
-
-  <div class="callout">
-    <p><strong>England post-1 May 2026 focus:</strong> keep the notice, service record, and ground-specific evidence aligned. The court should be able to follow the file without guessing at missing dates, missing documents, or why a specialist ground is said to apply.</p>
-  </div>
-
-  <div class="section">
-    <h2>Core Documents</h2>
-    <div class="content">
-      <p>Assemble the evidence so the court can follow the tenancy history, the notice chronology, and the factual basis of each pleaded ground without having to infer missing steps.</p>
-      <p>Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28 May 2026.</p>
-
-      <ul>
-        <li>Signed tenancy agreement and any renewals or variations.</li>
-        <li>The completed Form 3A notice as served.</li>
-        <li>Service material showing how the notice was served.</li>
-        <li>Any correspondence, inspection records, warning letters, or official notices relevant to the pleaded grounds.</li>
-      </ul>
+  <div class="grid">
+    <div class="list-card">
+      <div class="chip">Included</div>
+      <h3>Form N5</h3>
+      <p>The possession claim form that starts the county court claim.</p>
+    </div>
+    <div class="list-card">
+      <div class="chip">Included</div>
+      <h3>Form N119</h3>
+      <p>The particulars of claim that explain the grounds, timeline, and arrears position relied on in court.</p>
     </div>
   </div>
 
-  <div class="section">
-    <h2>Ground-Specific Evidence</h2>
-    <div class="content">
-      <div class="ground-block">
-        <h3>Ground 8 - Serious rent arrears</h3>
-        <ul>
-        </ul>
-      </div>
-      <div class="ground-block">
-        <h3>Ground 10 - Rent arrears (some arrears)</h3>
-        <ul>
-        </ul>
-      </div>
-    </div>
+  <div class="panel">
+    <h2>Do not change</h2>
+    <ul>
+      <li>grounds</li>
+      <li>arrears figures</li>
+      <li>dates</li>
+    </ul>
   </div>
-  
-  <div class="section">
-    <h2>Final Checks Before Issue</h2>
-    <div class="content">
-      <ul>
-        <li>Remove duplicate, placeholder, or unexplained documents before serving the bundle on the court or the tenant.</li>
-        <li>Make sure dates, party names, and property details match across the notice, the witness statement, and the court forms.</li>
-        <li>Check that each specialist ground is supported by the specific prior-notice, status, or occupancy evidence required for that route.</li>
-      </ul>
-    </div>
+
+  <div class="warning-box">
+    <h2>Alignment warning</h2>
+    <p>Inconsistency between the served notice and the claim is one of the most common reasons possession cases are delayed or challenged.</p>
+    <p class="muted">Keep the Section 8 notice, N215, arrears schedule, Form N5, and Form N119 reading from the same timeline and figures.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Next step</h2>
+    <p>Review the claim forms against the served notice and issue them only when the notice timeline allows proceedings.</p>
   </div>
 </body>
 </html>

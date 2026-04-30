@@ -254,7 +254,10 @@
 
 <!-- Arrears Summary -->
 <div class="summary-box">
-  <h3>Arrears Summary</h3>
+  <h3>{{#if arrears_position_heading}}{{arrears_position_heading}}{{else}}Arrears Summary{{/if}}</h3>
+  {{#if arrears_position_note}}
+  <p>{{arrears_position_note}}</p>
+  {{/if}}
   <div class="summary-grid">
     <div class="summary-item">
       <dt>Rent Amount</dt>
@@ -272,6 +275,12 @@
       <dt>Total Arrears Claimed</dt>
       <dd><strong>{{currency arrears_total}}</strong></dd>
     </div>
+    {{#if periods_missed}}
+    <div class="summary-item">
+      <dt>Periods Missed</dt>
+      <dd><strong>{{periods_missed}}</strong></dd>
+    </div>
+    {{/if}}
   </div>
 </div>
 

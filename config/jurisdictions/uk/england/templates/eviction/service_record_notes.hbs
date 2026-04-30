@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Service Continuity Notes</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    body {
+      margin: 0;
+      color: #1f1635;
+      font-size: 10pt;
+      line-height: 1.55;
+    }
+
+    .hero,
+    .check-card,
+    .warning-box,
+    .note-box {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      padding: 1em 1.1em;
+      margin-bottom: 0.9em;
+    }
+
+    .hero {
+      background: #faf8ff;
+      border-color: #ddd6fe;
+    }
+
+    .chip {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: #ede9fe;
+      color: #4c1d95;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #231942;
+    }
+
+    h1 {
+      margin: 0 0 0.25em 0;
+      font-size: 18pt;
+    }
+
+    h2 {
+      margin: 1em 0 0.55em 0;
+      font-size: 12pt;
+    }
+
+    h3 {
+      margin: 0 0 0.35em 0;
+      font-size: 10.5pt;
+    }
+
+    p {
+      margin: 0.3em 0;
+    }
+
+    ul {
+      margin: 0.45em 0 0 1.1em;
+      padding: 0;
+    }
+
+    li {
+      margin: 0.35em 0;
+    }
+
+    .warning-box {
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+
+    .muted {
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="chip">{{pack_title}}</div>
+    <h1>Service Continuity</h1>
+    <p><strong>This claim relies on the same service record created in Stage 1.</strong></p>
+    <p>Keep the served notice, service method, and certificate of service aligned as one continuous file.</p>
+  </div>
+
+  <div class="check-card">
+    <h2>Check</h2>
+    <ul>
+      <li>Notice date matches across the Section 8 notice, N215, and court forms.</li>
+      <li>Service method matches the method actually used.</li>
+      <li>N215 reflects the real date, address, and recipient used for service.</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h2>Failure risk</h2>
+    <p>If the notice date, service method, or service evidence do not align, the claim may be challenged or delayed.</p>
+    <p class="muted">Treat service continuity as part of the possession claim, not as a separate administrative note.</p>
+  </div>
+
+  <div class="note-box">
+    <h2>What to keep together</h2>
+    <p>Keep the served notice copy, the certificate of service, any postal or hand-delivery evidence, and the updated arrears schedule in the same file.</p>
+  </div>
+</body>
+</html>

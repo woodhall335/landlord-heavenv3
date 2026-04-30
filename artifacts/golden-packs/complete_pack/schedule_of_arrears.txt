@@ -9,7 +9,9 @@ DEFENDANT: Ivy Carleton
 CLAIMANT: Daniel Mercer
 CLAIM REFERENCE: golden-complete-pack-001
 SCHEDULE DATE: 30 April 2026
-Arrears Summary
+Arrears Position at Claim Date
+This schedule matches the figures relied on in the Section 8 notice and claim form (N119). Keep it updated to the
+latest practicable date before issuing.
 RENT AMOUNT
 £1200.00 monthly
 DUE DAY
@@ -18,6 +20,8 @@ TENANCY START DATE
 1 January 2024
 TOTAL ARREARS CLAIMED
 £3600.00
+PERIODS MISSED
+3
 Period Due Date Rent Due Paid Arrears Running Balance
 1 January 2026 to 31
 January 2026
@@ -32,11 +36,11 @@ Total Arrears Outstanding £3600.00 £3600.00
 Payment Allocation Method: Payments have been allocated using the FIFO (First In, First Out) method, applying
 payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears
 allocation.
-Evidence Requirements: Attach proof of payments received, bank statements, and rent ledgers behind this
-schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
 
 -- 1 of 2 --
 
+Evidence Requirements: Attach proof of payments received, bank statements, and rent ledgers behind this
+schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
 Generated: 30 April 2026
 Stage 2: Section 8 Court & Possession Pack | England
 This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.

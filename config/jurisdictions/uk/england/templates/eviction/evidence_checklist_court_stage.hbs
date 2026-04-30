@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Evidence Required for Hearing</title>
+  <style>
+    {{{print_css}}}
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    body {
+      margin: 0;
+      color: #1f1635;
+      font-size: 10pt;
+      line-height: 1.55;
+    }
+
+    .hero,
+    .section-card {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      padding: 1em 1.1em;
+      margin-bottom: 0.9em;
+    }
+
+    .hero {
+      background: #faf8ff;
+      border-color: #ddd6fe;
+    }
+
+    .chip {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: #ede9fe;
+      color: #4c1d95;
+    }
+
+    .chip.critical {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .chip.risk {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .chip.ok {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    h1,
+    h2 {
+      color: #231942;
+    }
+
+    h1 {
+      margin: 0 0 0.25em 0;
+      font-size: 18pt;
+    }
+
+    h2 {
+      margin: 0 0 0.45em 0;
+      font-size: 11pt;
+    }
+
+    p {
+      margin: 0.3em 0;
+    }
+
+    ul {
+      margin: 0.45em 0 0 1.1em;
+      padding: 0;
+    }
+
+    li {
+      margin: 0.35em 0;
+    }
+
+    .section-card.critical {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .section-card.risk {
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+
+    .section-card.ok {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="chip">{{pack_title}}</div>
+    <h1>Evidence Required for Hearing</h1>
+    <p><strong>Use this as the court-facing evidence checklist for the possession hearing.</strong></p>
+    <p>{{pack_supporting_line}}</p>
+  </div>
+
+  {{#each evidence_required_sections}}
+  <div class="section-card {{severity}}">
+    <div class="chip {{severity}}">{{label}}</div>
+    <h2>{{title}}</h2>
+    <ul>
+      {{#each items}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/each}}
+</body>
+</html>

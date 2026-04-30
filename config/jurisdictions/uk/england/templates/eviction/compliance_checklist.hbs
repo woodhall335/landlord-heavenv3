@@ -9,7 +9,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Compliance Checklist - Pre-Service Checks</title>
+  <title>{{#if checklist_title}}{{checklist_title}}{{else}}Compliance Checklist - Pre-Service Checks{{/if}}</title>
   <style>
     {{{print_css}}}
 
@@ -177,7 +177,7 @@
 <body>
   <div class="hero">
     <h2>{{pack_title}}</h2>
-    <h1>Compliance Checklist</h1>
+    <h1>{{#if checklist_title}}{{checklist_title}}{{else}}Compliance Checklist{{/if}}</h1>
     <p><strong>{{status_label}}</strong></p>
     <p>{{pack_supporting_line}}</p>
     <p class="muted">{{risk_line}}</p>
@@ -203,19 +203,29 @@
   <div class="legend">
     <div class="legend-item">
       <div class="status-chip critical">Critical</div>
-      <p>Resolve this before relying on the notice or moving on with the case.</p>
+      <p>{{#if legend_critical_text}}{{legend_critical_text}}{{else}}Resolve this before relying on the notice or moving on with the case.{{/if}}</p>
     </div>
     <div class="legend-item">
       <div class="status-chip risk">Risk</div>
-      <p>This may not automatically invalidate the route, but it can weaken the file or create delay.</p>
+      <p>{{#if legend_risk_text}}{{legend_risk_text}}{{else}}This may not automatically invalidate the route, but it can weaken the file or create delay.{{/if}}</p>
     </div>
     <div class="legend-item">
       <div class="status-chip ok">OK</div>
-      <p>The current pack data records this point, but you still need to retain the underlying evidence.</p>
+      <p>{{#if legend_ok_text}}{{legend_ok_text}}{{else}}The current pack data records this point, but you still need to retain the underlying evidence.{{/if}}</p>
     </div>
   </div>
 
-  <h2 class="section-title">Decision Engine</h2>
+  {{#if key_risk_titles.length}}
+  <h2 class="section-title">{{#if status_reasoning_title}}{{status_reasoning_title}}{{else}}Status reasoning{{/if}}</h2>
+  <div class="action-box">
+    <h3>{{status_label}}</h3>
+    <p><strong>Reason:</strong> {{primary_status_item.title}}</p>
+    <p><strong>Impact:</strong> {{primary_status_item.detail}}</p>
+    <p><strong>Action:</strong> {{primary_status_item.action}}</p>
+  </div>
+  {{/if}}
+
+  <h2 class="section-title">{{#if decision_engine_title}}{{decision_engine_title}}{{else}}Decision Engine{{/if}}</h2>
   <div class="items">
     {{#each compliance_status_items}}
     <div class="item {{severity}}">
@@ -227,7 +237,7 @@
     {{/each}}
   </div>
 
-  <h2 class="section-title">Next move</h2>
+  <h2 class="section-title">{{#if next_move_title}}{{next_move_title}}{{else}}Next move{{/if}}</h2>
   <div class="action-box">
     <h3>{{status_label}}</h3>
     <p>{{next_step_text}}</p>

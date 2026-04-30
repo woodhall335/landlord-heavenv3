@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Arrears Engagement Letter</title>
+  <title>Service Continuity Notes</title>
   <style>
     * {
   margin: 0;
@@ -356,6 +355,17 @@ body.lh-support-doc h4 {
   max-width: min(240px, 100%);
   display: block;
   flex-shrink: 0;
+}
+
+body.lh-support-doc--tenancy .lh-pack-masthead {
+  gap: 0.9em;
+  margin-bottom: 1em;
+  padding-bottom: 0.75em;
+}
+
+body.lh-support-doc--tenancy .lh-brand-mark {
+  width: 172px;
+  max-width: min(172px, 100%);
 }
 
 .lh-brand-logo {
@@ -828,88 +838,87 @@ th {
 
     @page {
       size: A4;
-      margin: 20mm;
+      margin: 12mm;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      font-size: 11pt;
-      line-height: 1.6;
-      color: #1a1a1a;
-      padding: 0;
-      margin: 0 auto;
-    }
-
-    .template-notice {
-      background: #fff3cd;
-      border: 2px solid #ffc107;
-      padding: 1em;
-      margin-bottom: 2em;
-      text-align: center;
-    }
-
-    .template-notice h3 {
-      margin: 0 0 0.5em 0;
-      color: #856404;
-    }
-
-    .template-notice p {
       margin: 0;
+      color: #1f1635;
       font-size: 10pt;
-      color: #856404;
+      line-height: 1.55;
     }
 
-    .letter-header {
-      margin-bottom: 2em;
+    .hero,
+    .check-card,
+    .warning-box,
+    .note-box {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      padding: 1em 1.1em;
+      margin-bottom: 0.9em;
     }
 
-    .address-block {
-      margin-bottom: 1.5em;
+    .hero {
+      background: #faf8ff;
+      border-color: #ddd6fe;
     }
 
-    .date-line {
-      margin-bottom: 2em;
+    .chip {
+      display: inline-block;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: #ede9fe;
+      color: #4c1d95;
     }
 
-    .salutation {
-      margin-bottom: 1.5em;
+    h1,
+    h2,
+    h3 {
+      color: #231942;
     }
 
-    .reference {
-      font-weight: bold;
-      margin-bottom: 1.5em;
+    h1 {
+      margin: 0 0 0.25em 0;
+      font-size: 18pt;
     }
 
-    .letter-body p {
-      margin-bottom: 1em;
+    h2 {
+      margin: 1em 0 0.55em 0;
+      font-size: 12pt;
     }
 
-    .action-box {
-      background: #f8f9fa;
-      border-left: 4px solid #1a1a1a;
-      padding: 1em;
-      margin: 1.5em 0;
+    h3 {
+      margin: 0 0 0.35em 0;
+      font-size: 10.5pt;
     }
 
-    .closing {
-      margin-top: 2em;
+    p {
+      margin: 0.3em 0;
     }
 
-    .signature-block {
-      margin-top: 3em;
+    ul {
+      margin: 0.45em 0 0 1.1em;
+      padding: 0;
     }
 
-    .fill-in {
-      color: #dc3545;
-      font-style: italic;
+    li {
+      margin: 0.35em 0;
     }
 
-    .instruction {
-      font-size: 9pt;
-      color: #6c757d;
-      background: #f8f9fa;
-      padding: 0.5em;
-      margin-top: 0.5em;
+    .warning-box {
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+
+    .muted {
+      color: #6b7280;
     }
   </style>
 </head>
@@ -925,97 +934,31 @@ th {
       </div>
     </div>
 
-
-
-<!-- Letter Header -->
-<div class="letter-header">
-  <div class="address-block">
-    <strong>Daniel Mercer</strong><br>
-    27 Rowan Avenue
-Leeds
-LS8 2PF<br>
-      Tel: 07123456789<br>
-      Email: alex@example.com
+  <div class="hero">
+    <div class="chip">Stage 2: Section 8 Court &amp; Possession Pack</div>
+    <h1>Service Continuity</h1>
+    <p><strong>This claim relies on the same service record created in Stage 1.</strong></p>
+    <p>Keep the served notice, service method, and certificate of service aligned as one continuous file.</p>
   </div>
 
-  <div class="address-block">
-    <strong>Ivy Carleton</strong><br>
-    16 Willow Mews
-York
-YO24 3HX
-  </div>
-
-  <div class="date-line">
-      30/04/2026
-  </div>
-</div>
-
-<!-- Salutation -->
-<div class="salutation">
-  Dear Ivy Carleton,
-</div>
-
-<!-- Reference -->
-<div class="reference">
-  Re: Rent Arrears at 16 Willow Mews
-York
-YO24 3HX
-</div>
-
-<!-- Letter Body -->
-<div class="letter-body">
-  <p>
-    I am writing about the rent arrears on your tenancy at the above property.
-  </p>
-
-  <p>
-    According to my records, the arrears stand at <strong>&#163;3600.00</strong> as at 30/04/2026.
-  </p>
-
-  <div class="action-box">
-    <strong>What you need to do:</strong>
+  <div class="check-card">
+    <h2>Check</h2>
     <ul>
-      <li>Pay the arrears in full as soon as possible, OR</li>
-      <li>Contact me immediately to discuss a payment arrangement</li>
+      <li>Notice date matches across the Section 8 notice, N215, and court forms.</li>
+      <li>Service method matches the method actually used.</li>
+      <li>N215 reflects the real date, address, and recipient used for service.</li>
     </ul>
-    <p>Please respond within <strong>14 days</strong> of the date of this letter.</p>
   </div>
 
-  <p>
-    If you cannot pay in full straight away, I am willing to consider a reasonable payment plan. I will need you to contact me within the time stated above so we can discuss it properly.
-  </p>
+  <div class="warning-box">
+    <h2>Failure risk</h2>
+    <p>If the notice date, service method, or service evidence do not align, the claim may be challenged or delayed.</p>
+    <p class="muted">Treat service continuity as part of the possession claim, not as a separate administrative note.</p>
+  </div>
 
-  <p>
-    If I do not receive payment or hear from you within that timeframe, I may need to take formal steps to recover the arrears and, if necessary, seek possession. This may include:
-  </p>
-
-  <ul>
-    <li>Serving a formal notice seeking possession</li>
-    <li>Commencing court proceedings</li>
-    <li>Seeking judgment for the arrears and related costs</li>
-  </ul>
-
-  <p>
-    I would prefer to resolve this without court action, which would add cost and pressure for both sides.
-  </p>
-
-  <p>
-    Please contact me as soon as you can if you want to discuss payment or need to explain your position.
-  </p>
-</div>
-
-<!-- Closing -->
-<div class="closing">
-  <p>Yours sincerely,</p>
-</div>
-
-<!-- Signature Block -->
-<div class="signature-block">
-  <p>_______________________________</p>
-  <p><strong>Daniel Mercer</strong></p>
-  <p>Landlord</p>
-</div>
-
-
+  <div class="note-box">
+    <h2>What to keep together</h2>
+    <p>Keep the served notice copy, the certificate of service, any postal or hand-delivery evidence, and the updated arrears schedule in the same file.</p>
+  </div>
 </body>
 </html>

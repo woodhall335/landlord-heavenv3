@@ -12,6 +12,9 @@ describe('dashboard document key canonicalization', () => {
     expect(toCanonicalDocumentKey('Service & Validity Checklist')).toBe('service_checklist');
     expect(toCanonicalDocumentKey('Pre-Service Compliance Declaration')).toBe('compliance_declaration');
     expect(toCanonicalDocumentKey('Rent Schedule / Arrears Statement')).toBe('arrears_schedule');
+    expect(toCanonicalDocumentKey('Court Readiness Status')).toBe('court_readiness_status');
+    expect(toCanonicalDocumentKey('Court Forms')).toBe('court_forms_guide');
+    expect(toCanonicalDocumentKey('Service Continuity Notes')).toBe('service_record_notes');
   });
 
   it('matches expected canonical keys against legacy title-backed keys', () => {
@@ -28,6 +31,11 @@ describe('dashboard document key canonicalization', () => {
     expect(getDashboardDocumentTitle('england_premium_management_schedule')).toBe('Premium Management Schedule');
     expect(getDashboardDocumentTitle('england_hmo_house_rules_appendix')).toBe('HMO / Shared House Rules Appendix');
     expect(getDashboardDocumentTitle('case_summary')).toBe('Case Summary');
+    expect(getDashboardDocumentTitle('court_readiness_status')).toBe('Court Readiness Status');
+    expect(getDashboardDocumentTitle('court_forms_guide')).toBe('Court Forms');
+    expect(getDashboardDocumentTitle('service_record_notes')).toBe('Service Continuity Notes');
+    expect(getDashboardDocumentTitle('evidence_checklist')).toBe('Evidence Required for Hearing');
+    expect(getDashboardDocumentTitle('hearing_checklist')).toBe('Hearing Preparation Guide');
     expect(getDashboardDocumentTitle('what_happens_next')).toBe('What Happens Next');
   });
 });

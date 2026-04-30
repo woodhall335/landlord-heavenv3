@@ -78,6 +78,57 @@ describe('England Section 8 support document templates', () => {
     expect(template).toContain('{{#each next_steps}}');
     expect(template).toContain('What Happens Next');
     expect(template).toContain('Stage 2 handoff');
+    expect(template).toContain('single continuous file');
+  });
+
+  it('renders the new Stage 2 court support templates', () => {
+    const courtReadiness = readTemplate(
+      'config',
+      'jurisdictions',
+      'uk',
+      'england',
+      'templates',
+      'eviction',
+      'compliance_checklist.hbs',
+    );
+    const courtForms = readTemplate(
+      'config',
+      'jurisdictions',
+      'uk',
+      'england',
+      'templates',
+      'eviction',
+      'court_forms_guide.hbs',
+    );
+    const serviceContinuity = readTemplate(
+      'config',
+      'jurisdictions',
+      'uk',
+      'england',
+      'templates',
+      'eviction',
+      'service_record_notes.hbs',
+    );
+    const courtEvidence = readTemplate(
+      'config',
+      'jurisdictions',
+      'uk',
+      'england',
+      'templates',
+      'eviction',
+      'evidence_checklist_court_stage.hbs',
+    );
+
+    expect(courtReadiness).toContain('{{#if key_risk_titles.length}}');
+    expect(courtReadiness).toContain('{{#if checklist_title}}');
+    expect(courtForms).toContain('Do not change');
+    expect(courtForms).toContain('grounds');
+    expect(courtForms).toContain('Form N5');
+    expect(courtForms).toContain('Form N119');
+    expect(serviceContinuity).toContain('This claim relies on the same service record created in Stage 1.');
+    expect(serviceContinuity).toContain('N215 reflects the real date, address, and recipient used for service.');
+    expect(courtEvidence).toContain('Evidence Required for Hearing');
+    expect(courtEvidence).toContain('{{#each evidence_required_sections}}');
   });
 
   it('uses current Form 3A language in the court filing guide', () => {

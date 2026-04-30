@@ -937,7 +937,7 @@ function buildPackStrapline(stage: EnglandSection8PackStage): string {
 function buildPackSupportingLine(stage: EnglandSection8PackStage): string {
   return stage === 'stage1'
     ? 'This pack aligns the notice, service, and evidence so your case doesn’t fall apart on technical errors.'
-    : 'This complete pack includes both Stage 1 notice and service documents and Stage 2 court papers, keeping the notice, service record, court forms, and evidence aligned in one possession file.';
+    : 'This pack turns the served notice into a court-ready possession file that stays consistent under scrutiny.';
 }
 
 function buildPackRiskLine(): string {
@@ -950,7 +950,7 @@ function buildPackStatusLabel(
 ): string {
   const hasCritical = items.some((item) => item.severity === 'critical');
   if (hasCritical) {
-    return stage === 'stage1' ? 'DO NOT SERVE YET' : 'DO NOT ISSUE YET';
+    return stage === 'stage1' ? 'DO NOT SERVE YET' : 'DO NOT ISSUE - CASE MAY FAIL';
   }
 
   const hasRisk = items.some((item) => item.severity === 'risk');
@@ -958,7 +958,7 @@ function buildPackStatusLabel(
     return stage === 'stage1' ? 'SERVE WITH RISKS' : 'PREPARE WITH RISKS';
   }
 
-  return stage === 'stage1' ? 'READY TO SERVE' : 'READY FOR COURT PREPARATION';
+  return stage === 'stage1' ? 'READY TO SERVE' : 'READY FOR COURT';
 }
 
 function buildPackOutcomeBullets(stage: EnglandSection8PackStage): string[] {
@@ -971,9 +971,9 @@ function buildPackOutcomeBullets(stage: EnglandSection8PackStage): string[] {
   }
 
   return [
-    'Includes both the Stage 1 notice pack and the Stage 2 court documents',
-    'Keeps service, claim wording, and evidence aligned for court',
-    'Reduces the risk of delay, contradiction, or weak filing',
+    'Prepares a possession claim file that can be issued and defended without inconsistency across notice, service, and evidence',
+    'Carries the served notice, claim forms, service record, and arrears evidence in one continuous case file',
+    'Reduces the risk of delay, contradiction, or avoidable challenge in court',
   ];
 }
 
@@ -983,8 +983,8 @@ function buildPackNextStep(stage: EnglandSection8PackStage, noticeExpiryDate?: s
   }
 
   return noticeExpiryDate
-    ? `Prepare the court file now and do not issue before ${formatUKLegalDate(noticeExpiryDate)}.`
-    : 'Prepare the court file now and issue only when the notice timeline allows.';
+    ? `Prepare and issue the possession claim using the forms and guidance in this pack once the claim is eligible on or after ${formatUKLegalDate(noticeExpiryDate)}.`
+    : 'Prepare and issue the possession claim using the forms and guidance in this pack once the notice timeline allows.';
 }
 
 function buildPackNextSteps(
@@ -1023,13 +1023,13 @@ function buildPackNextSteps(
     },
     {
       step: '2',
-      title: 'Serve and track the court file',
-      detail: 'Keep service proof, filing confirmations, and any court correspondence together in the same case file.',
+      title: 'Prepare for the hearing',
+      detail: 'At the hearing, the court will consider notice validity, service, whether the grounds apply, and whether the arrears are proved. Keep the file updated to the latest practicable date.',
     },
     {
       step: '3',
-      title: 'Prepare for hearing and enforcement',
-      detail: 'Use the hearing checklist and bundle materials to prepare for court, then move to enforcement if an order is made and the tenant still does not leave.',
+      title: 'Move to possession or enforcement',
+      detail: 'If possession is granted, follow the date to leave in the order. If the tenant does not leave, move straight into warrant or enforcement steps using the same continuous file.',
     },
   ];
 }
@@ -1039,6 +1039,76 @@ function buildTopRiskTitles(items: ComplianceStatusItem[]): string[] {
     .filter((item) => item.severity !== 'ok')
     .slice(0, 3)
     .map((item) => item.title);
+}
+
+function buildPrimaryStatusItem(items: ComplianceStatusItem[]): ComplianceStatusItem | null {
+  return items.find((item) => item.severity === 'critical')
+    || items.find((item) => item.severity === 'risk')
+    || items[0]
+    || null;
+}
+
+function buildStage2CourtEvidenceSections(evictionCase: EvictionCase): Array<{
+  severity: ComplianceSeverity;
+  label: string;
+  title: string;
+  items: string[];
+}> {
+  const noticeLabel = getNoticeTypeLabel(evictionCase);
+
+  return [
+    {
+      severity: 'critical',
+      label: 'Critical',
+      title: 'Core claim evidence',
+      items: [
+        'Signed tenancy agreement',
+        'Rent account or arrears proof',
+        `Served ${noticeLabel} copy`,
+      ],
+    },
+    {
+      severity: 'risk',
+      label: 'Risk',
+      title: 'Compliance and supporting records',
+      items: [
+        'Deposit compliance evidence',
+        'Gas safety record',
+        'EPC record',
+      ],
+    },
+    {
+      severity: 'ok',
+      label: 'OK',
+      title: 'Useful supporting material',
+      items: [
+        'Supporting correspondence',
+        'Any payment-history explanations or updated ledger notes',
+      ],
+    },
+  ];
+}
+
+function reorderEnglandSection8Stage2Documents(documents: EvictionPackDocument[]): EvictionPackDocument[] {
+  const preferredOrder = [
+    'case_summary',
+    'court_readiness_status',
+    'court_forms_guide',
+    'n5_claim',
+    'n119_particulars',
+    'arrears_schedule',
+    'section8_notice',
+    'service_record_notes',
+    'proof_of_service',
+    'evidence_checklist',
+    'hearing_checklist',
+    'what_happens_next',
+  ];
+  const byType = new Map(documents.map((document) => [document.document_type, document]));
+
+  return preferredOrder
+    .map((documentType) => byType.get(documentType))
+    .filter((document): document is EvictionPackDocument => Boolean(document));
 }
 
 function buildEnglandSection8PackSummaryData(params: {
@@ -1132,6 +1202,7 @@ function buildEnglandSection8PackSummaryData(params: {
     pack_supporting_line: buildPackSupportingLine(stage),
     risk_line: buildPackRiskLine(),
     status_label: buildPackStatusLabel(stage, complianceStatusItems),
+    primary_status_item: buildPrimaryStatusItem(complianceStatusItems),
     key_risk_titles: buildTopRiskTitles(complianceStatusItems),
     what_this_pack_does: buildPackOutcomeBullets(stage),
     next_step_text: buildPackNextStep(stage, noticeExpiryDate),
@@ -3020,6 +3091,10 @@ export async function generateCompleteEvictionPack(
             // Add generation date (legacy alias)
             generated_date: today,
             pack_context_label: 'Stage 2: Section 8 Court & Possession Pack',
+            arrears_position_heading: 'Arrears Position at Claim Date',
+            arrears_position_note:
+              'This schedule matches the figures relied on in the Section 8 notice and claim form (N119). Keep it updated to the latest practicable date before issuing.',
+            periods_missed: canonicalArrears?.arrearsPeriods ?? arrearsData.arrears_schedule.length,
             schedule_role_note:
               'This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.',
           },
@@ -3389,10 +3464,10 @@ export async function generateCompleteEvictionPack(
     });
 
     documents.push({
-      title: isSection21 ? 'Hearing Checklist (Section 21)' : 'Hearing Checklist',
+      title: isSection21 ? 'Hearing Checklist (Section 21)' : 'Hearing Preparation Guide',
       description: isSection21
         ? 'Preparation checklist for Section 21 accelerated possession'
-        : 'Preparation checklist for the possession hearing',
+        : 'Court-facing hearing guide covering validity, service, grounds, arrears, and the documents to bring.',
       category: 'guidance',
       document_type: 'hearing_checklist',
       html: hearingChecklistDoc.html,
@@ -3576,6 +3651,93 @@ export async function generateCompleteEvictionPack(
     paymentDay,
     usualPaymentWeekday,
   });
+
+  if (isEnglandSection8Case) {
+    const courtReadinessDoc = await generateDocument({
+      templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+      data: {
+        ...stage2SummaryData,
+        checklist_title: 'Court Readiness Status',
+        decision_engine_title: 'Court readiness decision engine',
+        status_reasoning_title: 'Court status',
+        next_move_title: 'Issue decision',
+        legend_critical_text: 'Resolve this before issuing proceedings or relying on the file in court.',
+        legend_risk_text: 'This may not stop issue automatically, but it can weaken the file or create delay if left unmanaged.',
+        legend_ok_text: 'The current pack data records this point, but you still need to retain the underlying evidence for court.',
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Court Readiness Status',
+      description: 'Decision-engine status page showing whether the possession file is ready for issue or still carries risk.',
+      category: 'guidance',
+      document_type: 'court_readiness_status',
+      html: courtReadinessDoc.html,
+      pdf: courtReadinessDoc.pdf,
+      file_name: 'court_readiness_status.pdf',
+    });
+
+    const courtFormsGuideDoc = await generateDocument({
+      templatePath: 'uk/england/templates/eviction/court_forms_guide.hbs',
+      data: stage2SummaryData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Court Forms',
+      description: 'Alignment note for the claim forms so the court papers stay consistent with the served notice and service record.',
+      category: 'guidance',
+      document_type: 'court_forms_guide',
+      html: courtFormsGuideDoc.html,
+      pdf: courtFormsGuideDoc.pdf,
+      file_name: 'court_forms_guide.pdf',
+    });
+
+    const serviceRecordNotesDoc = await generateDocument({
+      templatePath: 'uk/england/templates/eviction/service_record_notes.hbs',
+      data: stage2SummaryData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Service Continuity Notes',
+      description: 'Continuity note tying the served notice, Form N215, and the court claim into one file.',
+      category: 'guidance',
+      document_type: 'service_record_notes',
+      html: serviceRecordNotesDoc.html,
+      pdf: serviceRecordNotesDoc.pdf,
+      file_name: 'service_record_notes.pdf',
+    });
+
+    const evidenceChecklistDoc = await generateDocument({
+      templatePath: 'uk/england/templates/eviction/evidence_checklist_court_stage.hbs',
+      data: {
+        ...stage2SummaryData,
+        evidence_required_sections: buildStage2CourtEvidenceSections(evictionCase),
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    const existingEvidenceChecklistIndex = documents.findIndex(
+      (document) => document.document_type === 'evidence_checklist',
+    );
+    const stage2EvidenceChecklist: EvictionPackDocument = {
+      title: 'Evidence Required for Hearing',
+      description: 'Court-facing checklist of the documents and proof needed for the possession hearing.',
+      category: 'guidance',
+      document_type: 'evidence_checklist',
+      html: evidenceChecklistDoc.html,
+      pdf: evidenceChecklistDoc.pdf,
+      file_name: 'evidence_required_for_hearing.pdf',
+    };
+    if (existingEvidenceChecklistIndex >= 0) {
+      documents.splice(existingEvidenceChecklistIndex, 1, stage2EvidenceChecklist);
+    } else {
+      documents.push(stage2EvidenceChecklist);
+    }
+  }
+
   const caseSummaryDoc = await generateDocument({
     templatePath: 'shared/templates/eviction_case_summary.hbs',
     data: stage2SummaryData,
@@ -3610,6 +3772,11 @@ export async function generateCompleteEvictionPack(
     file_name: 'what_happens_next.pdf',
   });
 
+  if (isEnglandSection8Case) {
+    const orderedStage2Documents = reorderEnglandSection8Stage2Documents(documents);
+    documents.splice(0, documents.length, ...orderedStage2Documents);
+  }
+
   const enforceArrearsConsistency =
     process.env.NODE_ENV !== 'production' ||
     process.env.ENFORCE_ARREARS_CONSISTENCY === 'true';
@@ -3635,7 +3802,7 @@ export async function generateCompleteEvictionPack(
     assertCourtNameConsistentAcrossDocuments({
       documents,
       courtName: section8CanonicalRenderData?.court_name,
-      documentTypes: ['witness_statement', 'court_bundle_index', 'hearing_checklist', 'case_summary'],
+      documentTypes: ['hearing_checklist', 'case_summary'],
     });
   }
 

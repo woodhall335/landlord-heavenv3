@@ -1,0 +1,22 @@
+CASE ID
+golden-complete-pack-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
+STAGE 2: SECTION 8 COURT & POSSESSION PACK
+Service Continuity
+This claim relies on the same service record created in Stage 1.
+Keep the served notice, service method, and certificate of service aligned as one continuous file.
+Check
+Notice date matches across the Section 8 notice, N215, and court forms.
+Service method matches the method actually used.
+N215 reflects the real date, address, and recipient used for service.
+Failure risk
+If the notice date, service method, or service evidence do not align, the claim may be challenged or delayed.
+Treat service continuity as part of the possession claim, not as a separate administrative note.
+What to keep together
+Keep the served notice copy, the certificate of service, any postal or hand-delivery evidence, and the updated
+arrears schedule in the same file.
+
+-- 1 of 1 --

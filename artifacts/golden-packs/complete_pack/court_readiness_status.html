@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Court Bundle Index</title>
+  <title>Court Readiness Status</title>
   <style>
     * {
   margin: 0;
@@ -356,6 +356,17 @@ body.lh-support-doc h4 {
   max-width: min(240px, 100%);
   display: block;
   flex-shrink: 0;
+}
+
+body.lh-support-doc--tenancy .lh-pack-masthead {
+  gap: 0.9em;
+  margin-bottom: 1em;
+  padding-bottom: 0.75em;
+}
+
+body.lh-support-doc--tenancy .lh-brand-mark {
+  width: 172px;
+  max-width: min(172px, 100%);
 }
 
 .lh-brand-logo {
@@ -828,119 +839,162 @@ th {
 
     @page {
       size: A4;
-      margin: 15mm;
+      margin: 10mm;
     }
 
     body {
-      margin: 0 auto;
-      padding: 0;
-      color: #1a1a1a;
-      font-size: 10pt;
-      line-height: 1.5;
-    }
-
-    .bundle-header {
-      text-align: center;
-      margin-bottom: 1.2em;
-      padding-bottom: 0.85em;
-      border-bottom: 2px solid #1a1a1a;
-    }
-
-    .bundle-kicker {
-      font-size: 8.5pt;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #6b7280;
-      margin-bottom: 0.45em;
-    }
-
-    .bundle-header h1 {
-      margin: 0 0 0.2em 0;
-      font-size: 15pt;
-    }
-
-    .bundle-header h2 {
       margin: 0;
-      font-size: 10.25pt;
-      color: #555;
-      font-weight: 400;
+      color: #1f1635;
+      font-size: 10pt;
+      line-height: 1.55;
     }
 
-    .case-details,
-    .notes-section,
-    .index-table {
+    .hero,
+    .summary-box,
+    .legend-item,
+    .item,
+    .action-box {
       page-break-inside: avoid;
       break-inside: avoid;
     }
 
-    .case-details,
-    .notes-section {
-      margin-bottom: 1.2em;
-      padding: 0.85em;
-      border: 1px solid #d8d8d8;
-      background: #fafafa;
+    .hero {
+      border: 1px solid #ddd6fe;
+      background: #faf8ff;
+      padding: 1.2em;
+      margin-bottom: 1em;
     }
 
-    .case-details-grid {
+    .hero h1 {
+      margin: 0 0 0.2em 0;
+      font-size: 18pt;
+    }
+
+    .hero h2 {
+      margin: 0 0 0.35em 0;
+      font-size: 11pt;
+      color: #5b5370;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero p {
+      margin: 0.25em 0;
+    }
+
+    .summary-box,
+    .legend-item,
+    .item,
+    .action-box {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+    }
+
+    .summary-box,
+    .action-box {
+      padding: 1em;
+      margin-bottom: 0.9em;
+    }
+
+    .summary-grid {
       display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 0.45em 1em;
+      grid-template-columns: 170px 1fr;
+      gap: 0.45em 0.9em;
     }
 
-    .case-details-grid dt {
-      font-weight: 600;
+    .summary-grid dt {
+      font-weight: 700;
+      color: #5b5370;
     }
 
-    .case-details-grid dd {
+    .summary-grid dd {
       margin: 0;
     }
 
-    .index-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.5em;
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8em;
+      margin-bottom: 1em;
     }
 
-    .index-table th,
-    .index-table td {
-      padding: 6px 8px;
-      border: 1px solid #1a1a1a;
-      text-align: left;
-      vertical-align: top;
+    .legend-item {
+      padding: 0.9em;
     }
 
-    .index-table th {
-      background: #1a1a1a;
-      color: white;
-      font-weight: 700;
-    }
-
-    .section-header td {
-      background: #efefef;
-      font-weight: 700;
-    }
-
-    .tab-number,
-    .page-ref,
-    .checkbox-col {
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .checkbox {
+    .status-chip {
       display: inline-block;
-      width: 14px;
-      height: 14px;
-      border: 1px solid #1a1a1a;
-      background: white;
+      margin-bottom: 0.45em;
+      padding: 0.18em 0.55em;
+      border-radius: 999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: #ede9fe;
+      color: #4c1d95;
     }
 
-    .footer {
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 1px solid #d8d8d8;
-      font-size: 9pt;
-      color: #555;
+    .status-chip.ok {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-chip.risk {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .status-chip.critical {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .section-title {
+      margin: 1.2em 0 0.65em 0;
+      font-size: 12pt;
+      font-weight: 700;
+      color: #231942;
+    }
+
+    .items {
+      display: grid;
+      gap: 0.9em;
+    }
+
+    .item {
+      padding: 1em;
+    }
+
+    .item.ok {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+    }
+
+    .item.risk {
+      border-color: #fed7aa;
+      background: #fff7ed;
+    }
+
+    .item.critical {
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .item h3,
+    .action-box h3 {
+      margin: 0 0 0.4em 0;
+      font-size: 10.5pt;
+      color: #231942;
+    }
+
+    .item p,
+    .action-box p {
+      margin: 0.3em 0;
+    }
+
+    .muted {
+      color: #6b7280;
     }
   </style>
 </head>
@@ -956,178 +1010,86 @@ th {
       </div>
     </div>
 
-  <div class="bundle-header">
-    <div class="bundle-kicker">England possession file</div>
-    <h1>Court Bundle Index</h1>
-    <h2>Claim for possession of residential property</h2>
+  <div class="hero">
+    <h2>Stage 2: Section 8 Court &amp; Possession Pack</h2>
+    <h1>Court Readiness Status</h1>
+    <p><strong>READY FOR COURT</strong></p>
+    <p>This pack turns the served notice into a court-ready possession file that stays consistent under scrutiny.</p>
+    <p class="muted">Most possession cases fail on notice, service, or consistency errors — this pack is designed to prevent those.</p>
   </div>
 
-  <div class="case-details">
-    <p>The claimant seeks possession of 16 Willow Mews
-York
-YO24 3HX relying on Ground 8 (Rent arrears), Ground 10 (Any rent arrears).</p>
-    <p>Arrange the bundle so that the notice, service evidence, and ground-specific supporting documents can be followed without the reader having to infer missing steps.</p>
-    <dl class="case-details-grid">
-      <dt>Case number</dt>
-      <dd><em>To be assigned by court</em></dd>
-      <dt>Court</dt>
-      <dd>York County Court and Family Court</dd>
-      <dt>Claimant</dt>
-      <dd>Daniel Mercer</dd>
-      <dt>Defendant</dt>
-      <dd>Ivy Carleton</dd>
+  <div class="summary-box">
+    <dl class="summary-grid">
       <dt>Property</dt>
       <dd>16 Willow Mews
 York
 YO24 3HX</dd>
-      <dt>Notice service date</dt>
-      <dd>30 April 2026</dd>
-      <dt>Notice expiry date</dt>
-      <dd>28 May 2026</dd>
-      <dt>Earliest proceedings date</dt>
-      <dd>28 May 2026</dd>
-      <dt>Bundle prepared</dt>
+      <dt>Tenant</dt>
+      <dd>Ivy Carleton</dd>
+      <dt>Notice type</dt>
+      <dd>Form 3A notice</dd>
+      <dt>Tenancy start date</dt>
+      <dd>1 January 2024</dd>
+      <dt>Generated</dt>
       <dd>30 April 2026</dd>
     </dl>
   </div>
 
-  <table class="index-table">
-    <thead>
-      <tr>
-        <th class="checkbox-col">Done</th>
-        <th class="tab-number">Tab</th>
-        <th>Document</th>
-        <th>Description</th>
-        <th class="page-ref">Exhibit</th>
-        <th class="page-ref">Pages</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="section-header">
-        <td colspan="6">A. Court forms</td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">A1</td>
-        <td>Form N5</td>
-        <td>Claim for possession of property</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">A2</td>
-        <td>Form N119</td>
-        <td>Particulars of claim for possession</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-
-      <tr class="section-header">
-        <td colspan="6">B. Notice documents</td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">B1</td>
-        <td>Form 3A notice</td>
-        <td>Official Form 3A notice relied on for this claim</td>
-        <td class="page-ref">DM2</td>
-        <td class="page-ref"></td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">B2</td>
-        <td>Proof of service certificate</td>
-        <td>Service record for the Form 3A notice</td>
-        <td class="page-ref">DM3</td>
-        <td class="page-ref"></td>
-      </tr>
-
-      <tr class="section-header">
-        <td colspan="6">C. Witness evidence</td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">C1</td>
-        <td>Witness statement</td>
-        <td>Witness statement of Daniel Mercer</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-
-      <tr class="section-header">
-        <td colspan="6">D. Ground-specific evidence</td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">D1</td>
-        <td>Schedule of arrears</td>
-        <td>Period-by-period rent schedule showing sums due, payments received, and the running balance</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">D2</td>
-        <td>Payment history evidence</td>
-        <td>Bank statements, ledger extracts, or rent receipts supporting the arrears calculation</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-
-      <tr class="section-header">
-        <td colspan="6">E. Tenancy documents</td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">E1</td>
-        <td>Tenancy agreement</td>
-        <td>Signed tenancy agreement</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">E2</td>
-        <td>Deposit evidence</td>
-        <td>Deposit protection or prescribed information records, if relevant</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-
-      <tr class="section-header">
-        <td colspan="6">F. Correspondence</td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">F1</td>
-        <td>Pre-action correspondence</td>
-        <td>Letters, emails, or messages sent before issue</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-      <tr>
-        <td class="checkbox-col"><span class="checkbox"></span></td>
-        <td class="tab-number">F2</td>
-        <td>Tenant responses</td>
-        <td>Any response received from the tenant</td>
-        <td class="page-ref"></td>
-        <td class="page-ref"></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="notes-section">
-    <h3>Bundle preparation notes</h3>
-    <ul>
-      <li>Paginate the bundle consistently and update the exhibit references if documents are added or removed.</li>
-      <li>Keep the court-facing bundle free from unused sections, stray technical notes, and irrelevant material.</li>
-    </ul>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="status-chip critical">Critical</div>
+      <p>Resolve this before issuing proceedings or relying on the file in court.</p>
+    </div>
+    <div class="legend-item">
+      <div class="status-chip risk">Risk</div>
+      <p>This may not stop issue automatically, but it can weaken the file or create delay if left unmanaged.</p>
+    </div>
+    <div class="legend-item">
+      <div class="status-chip ok">OK</div>
+      <p>The current pack data records this point, but you still need to retain the underlying evidence for court.</p>
+    </div>
   </div>
 
-  <div class="footer">
-    <p><strong>Prepared by:</strong> Daniel Mercer</p>
-    <p><strong>Date:</strong> 30 April 2026</p>
+
+  <h2 class="section-title">Court readiness decision engine</h2>
+  <div class="items">
+    <div class="item ok">
+      <div class="status-chip ok">ok</div>
+      <h3>Deposit compliance recorded</h3>
+      <p>Deposit protection and prescribed information are recorded with TDS on 15 January 2024.</p>
+      <p><strong>Action:</strong> Retain the scheme certificate and prescribed information record with the case file.</p>
+    </div>
+    <div class="item ok">
+      <div class="status-chip ok">ok</div>
+      <h3>Gas safety evidence recorded</h3>
+      <p>Gas safety evidence is recorded on 10 January 2024.</p>
+      <p><strong>Action:</strong> Keep the gas safety record with the notice and court file.</p>
+    </div>
+    <div class="item ok">
+      <div class="status-chip ok">ok</div>
+      <h3>EPC record recorded</h3>
+      <p>EPC evidence is recorded.</p>
+      <p><strong>Action:</strong> Retain the EPC record with the case file.</p>
+    </div>
+    <div class="item ok">
+      <div class="status-chip ok">ok</div>
+      <h3>How to Rent record recorded</h3>
+      <p>How to Rent service is recorded on 15 January 2024.</p>
+      <p><strong>Action:</strong> Keep the service record with the tenancy file.</p>
+    </div>
+    <div class="item ok">
+      <div class="status-chip ok">ok</div>
+      <h3>Notice timeline recorded</h3>
+      <p>Notice served on 30 April 2026 with earliest proceedings date 28 May 2026.</p>
+      <p><strong>Action:</strong> Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and any court papers.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">Issue decision</h2>
+  <div class="action-box">
+    <h3>READY FOR COURT</h3>
+    <p>Prepare and issue the possession claim using the forms and guidance in this pack once the claim is eligible on or after 28 May 2026.</p>
+    <p class="muted">Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record, or legal advice on the facts of the case.</p>
   </div>
 </body>
 </html>

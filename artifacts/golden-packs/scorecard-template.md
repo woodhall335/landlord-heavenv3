@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-04-30T12:50:06.401Z
+Generated: 2026-04-30T16:39:09.804Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):
@@ -124,7 +124,7 @@ Documents:
 
 ## Stage 2: Section 8 Court & Possession Pack
 Folder: complete_pack
-Documents: 13
+Documents: 12
 Score: 
 What works: 
 Issues found: 
@@ -132,17 +132,16 @@ What would move this to 9/10:
 
 Documents:
 - Case Summary — Stage 2 Court & Possession [case_summary]
-- Form 3A notice [section8_notice]
-- Service Instructions [service_instructions]
+- Court Readiness Status [court_readiness_status]
+- Court Forms [court_forms_guide]
 - Form N5 - Claim for Possession [n5_claim]
 - Form N119 - Particulars of Claim [n119_particulars]
 - Schedule of Arrears [arrears_schedule]
-- Evidence Collection Checklist [evidence_checklist]
+- Form 3A notice [section8_notice]
+- Service Continuity Notes [service_record_notes]
 - Certificate of Service (Form N215) [proof_of_service]
-- Witness Statement [witness_statement]
-- Court Bundle Index [court_bundle_index]
-- Hearing Checklist [hearing_checklist]
-- Arrears Engagement Letter [arrears_engagement_letter]
+- Evidence Required for Hearing [evidence_checklist]
+- Hearing Preparation Guide [hearing_checklist]
 - What Happens Next [what_happens_next]
 
 ## Standard Section 13 Pack

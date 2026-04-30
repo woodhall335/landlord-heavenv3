@@ -9,7 +9,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Hearing Checklist</title>
+  <title>Hearing Preparation Guide</title>
   <style>
     {{{print_css}}}
 
@@ -134,8 +134,8 @@
 </head>
 <body>
   <div class="header">
-    <h1>Hearing Checklist</h1>
-    <h2>Prepare the hearing file and speaking points for the possession hearing{{#if (contains groundsReliedUpon "Ground 8")}} - with Ground 8 arrears kept under review{{/if}}</h2>
+    <h1>Hearing Preparation Guide</h1>
+    <h2>Prepare the hearing file, updated arrears position, and speaking points for the possession hearing{{#if (contains groundsReliedUpon "Ground 8")}} - with Ground 8 arrears kept under review{{/if}}</h2>
   </div>
 
   <div class="summary-box">
@@ -185,6 +185,16 @@
   {{/if}}
 
   <div class="section">
+    <h3>What the court will consider</h3>
+    <ul class="checklist">
+      <li>Is the notice valid?</li>
+      <li>Was it served correctly?</li>
+      <li>Do the grounds apply?</li>
+      <li>Are the arrears proven?</li>
+    </ul>
+  </div>
+
+  <div class="section">
     <h3>Before the hearing</h3>
     <ul class="checklist">
       {{#if drafting_model.hearingChecklist.beforeItems.length}}
@@ -213,7 +223,7 @@
   </div>
 
   <div class="section">
-    <h3>Documents to bring</h3>
+    <h3>Bring to court</h3>
     <ul class="checklist">
       {{#if drafting_model.hearingChecklist.documentItems.length}}
         {{#each drafting_model.hearingChecklist.documentItems}}
@@ -227,6 +237,15 @@
       <li>The updated arrears schedule and any supporting payment records.</li>
       <li>Photo ID and any key correspondence relevant to the grounds relied on.</li>
       {{/if}}
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Common failure points</h3>
+    <ul class="checklist">
+      <li>Inconsistent dates between the notice, N215, and claim papers.</li>
+      <li>Missing or unclear service evidence.</li>
+      <li>Arrears figures that do not match the latest schedule or payment history.</li>
     </ul>
   </div>
 
