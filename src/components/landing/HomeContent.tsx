@@ -390,12 +390,6 @@ export default function HomeContent() {
         </Container>
       </section>
 
-      <section className="py-8">
-        <Container>
-          <div className={PUBLIC_LAYOUT_CLASSES.divider} />
-        </Container>
-      </section>
-
       <section className="pb-16 pt-4 md:pb-20">
         <Container>
             <div className="mx-auto max-w-3xl text-center">
@@ -444,12 +438,6 @@ export default function HomeContent() {
               );
             })}
           </div>
-        </Container>
-      </section>
-
-      <section className="py-8">
-        <Container>
-          <div className={PUBLIC_LAYOUT_CLASSES.divider} />
         </Container>
       </section>
 
@@ -532,12 +520,6 @@ export default function HomeContent() {
         </Container>
       </section>
 
-      <section className="py-8">
-        <Container>
-          <div className={PUBLIC_LAYOUT_CLASSES.divider} />
-        </Container>
-      </section>
-
       <section className="pb-16 pt-4 md:pb-20">
         <Container>
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -603,12 +585,6 @@ export default function HomeContent() {
               </div>
             </div>
           </div>
-        </Container>
-      </section>
-
-      <section className="py-8">
-        <Container>
-          <div className={PUBLIC_LAYOUT_CLASSES.divider} />
         </Container>
       </section>
 
