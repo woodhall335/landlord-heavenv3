@@ -16,7 +16,7 @@
         "html": "notice_only/case_summary.html"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

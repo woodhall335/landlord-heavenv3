@@ -1009,6 +1009,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'prescribed_info_given',
     'prescribed_info_provided',
     'prescribed_info_served',
+    'prescribed_information_date',
     'tenancy.prescribed_info_given',
   ]);
   if (prescribedInfoValue !== null && prescribedInfoValue !== undefined) {
@@ -2387,6 +2388,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'gas_certificate_provided', // Canonical wizard key
     'gas_safety_cert_provided',
     'gas_safety_certificate_provided',
+    'gas_safety_certificate',
   ]);
   if (gasSafety !== null && gasSafety !== undefined) {
     base.compliance.gas_safety_cert_provided = coerceBoolean(gasSafety);
@@ -2395,6 +2397,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   const epcProvided = getFirstValue(wizard, [
     'case_facts.compliance.epc_provided',
     'epc_provided',
+    'epc_rating',
   ]);
   if (epcProvided !== null && epcProvided !== undefined) {
     base.compliance.epc_provided = coerceBoolean(epcProvided);
@@ -2430,6 +2433,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.compliance.prescribed_info_date = getFirstValue(wizard, [
     'compliance.prescribed_info_date',
     'prescribed_info_date',
+    'prescribed_information_date',
   ]);
 
   // EICR (Electrical Safety)

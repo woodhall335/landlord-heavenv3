@@ -6,7 +6,7 @@ GENERATED
 30 April 2026
 Stage 1: Section 8 Notice & Service Pack
 Compliance Checklist
-DO NOT SERVE YET
+READY TO SERVE
 This pack aligns the notice, service, and evidence so your case doesn't fall apart on technical errors.
 Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent those.
 PROPERTY 16 Willow Mews York YO24 3HX
@@ -26,38 +26,32 @@ The current pack data records this
 point, but you still need to retain
 the underlying evidence.
 Decision Engine
-CRITICAL
-Prescribed information not confirmed
-Deposit protection is recorded with TDS on 15 January 2024, but prescribed information is not recorded as served.
-For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit
-position has been cured, the deposit has been returned, or any deposit-compliance dispute has already been
-resolved.
-Action: Confirm, cure, or return the deposit before relying on the possession route.
-RISK
-Gas safety record not confirmed
-No gas safety provision is recorded. This does not automatically invalidate a Section 8 notice, but it can create
-regulatory or evidential risk.
-Action: Locate the gas safety record or document why it does not apply before the file is challenged.
+OK
+Deposit compliance recorded
+Deposit protection and prescribed information are recorded with TDS on 15 January 2024.
+Action: Retain the scheme certificate and prescribed information record with the case file.
+OK
+Gas safety evidence recorded
+Gas safety evidence is recorded on 10 January 2024.
+Action: Keep the gas safety record with the notice and court file.
+OK
+EPC record recorded
+EPC evidence is recorded.
+Action: Retain the EPC record with the case file.
 
 -- 1 of 2 --
 
-RISK
-EPC record not confirmed
-No EPC provision is recorded. This is not treated here as automatic Section 8 invalidity, but it remains a legal and
-evidential risk that should be addressed.
-Action: Locate the EPC record or explain the position in the evidence file.
 OK
-How to Rent record not confirmed
-No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth
-checking the tenancy file and recording what was served.
-Action: Check the tenancy file and record the position so the file stays complete.
+How to Rent record recorded
+How to Rent service is recorded on 15 January 2024.
+Action: Keep the service record with the tenancy file.
 OK
 Notice timeline recorded
 Notice served on 30 April 2026 with earliest proceedings date 28 May 2026.
 Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and any court
 papers.
 Next move
-DO NOT SERVE YET
+READY TO SERVE
 Serve the notice correctly using the service instructions in this pack.
 Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record, or legal
 advice on the facts of the case.

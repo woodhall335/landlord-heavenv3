@@ -92,6 +92,18 @@ export function buildEnglandSection8CompletePackFacts(options: BuildSection8Opti
     deposit_protected: true,
     deposit_protection_date: '2024-01-15',
     deposit_scheme_name: 'TDS',
+    prescribed_info_served: true,
+    prescribed_info_given: true,
+    prescribed_information_date: '2024-01-15',
+    relevant_gas_fitting_present: true,
+    has_gas_at_property: true,
+    gas_safety_certificate: true,
+    gas_safety_provided: true,
+    gas_safety_check_date: '2024-01-10',
+    epc_provided: true,
+    epc_rating: 'C',
+    how_to_rent_provided: true,
+    how_to_rent_date: '2024-01-15',
     rent_arrears_amount: 2400,
     case_facts: {
       eviction: {

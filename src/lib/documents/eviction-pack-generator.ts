@@ -642,14 +642,23 @@ function buildCaseSummaryComplianceItems(params: {
     normalizedGroundCodes.length === 0 ||
     normalizedGroundCodes.some((code) => code !== '7A' && code !== '14');
   const depositProtected = resolveBooleanField(complianceSources, 'deposit_protected');
-  const prescribedInfoGiven = resolveBooleanField(
-    complianceSources,
-    'prescribed_info_given',
-    'prescribed_info_served',
-    'tenancy.prescribed_info_given',
-    'compliance.prescribed_info_given',
-    'compliance.prescribed_info_served'
-  );
+  const prescribedInfoRecordedDate =
+    resolveStringField(
+      complianceSources,
+      'prescribed_information_date',
+      'prescribed_info_date',
+      'compliance.prescribed_info_date',
+      'section21.prescribed_info_date'
+    ) || '';
+  const prescribedInfoGiven =
+    resolveBooleanField(
+      complianceSources,
+      'prescribed_info_given',
+      'prescribed_info_served',
+      'tenancy.prescribed_info_given',
+      'compliance.prescribed_info_given',
+      'compliance.prescribed_info_served'
+    ) === true || Boolean(prescribedInfoRecordedDate);
   const depositScheme =
     resolveStringField(
       complianceSources,
@@ -668,6 +677,8 @@ function buildCaseSummaryComplianceItems(params: {
       'gas_safety_certificate',
       'compliance.gas_cert_provided'
     ) === true || Boolean(caseData?.gas_safety_check_date);
+  const epcRatingRecorded =
+    resolveStringField(complianceSources, 'epc_rating', 'compliance.epc_rating') || '';
   const epcEvidenceRecorded =
     resolveBooleanField(
       complianceSources,
@@ -675,7 +686,9 @@ function buildCaseSummaryComplianceItems(params: {
       'epc_served',
       'compliance.epc_provided',
       'compliance.epc_served'
-    ) === true || Boolean(evictionCase.epc_rating || caseData?.epc_provided_date);
+    ) === true || Boolean(epcRatingRecorded || evictionCase.epc_rating || caseData?.epc_provided_date);
+  const howToRentRecordedDate =
+    resolveStringField(complianceSources, 'how_to_rent_date', 'compliance.how_to_rent_date') || '';
   const howToRentRecorded =
     resolveBooleanField(
       complianceSources,
@@ -684,7 +697,7 @@ function buildCaseSummaryComplianceItems(params: {
       'how_to_rent_served',
       'compliance.how_to_rent_given',
       'compliance.how_to_rent_served'
-    ) === true || Boolean(caseData?.how_to_rent_date);
+    ) === true || Boolean(howToRentRecordedDate || caseData?.how_to_rent_date);
 
   const depositContext = `${depositScheme ? ` with ${depositScheme}` : ''}${protectedDate ? ` on ${formatUKLegalDate(protectedDate)}` : ''}`;
   if (isSection21Route) {
@@ -1161,14 +1174,23 @@ function buildSection8TemplateData(
     evictionCase as Record<string, any>,
   ];
   const depositProtected = resolveBooleanField(complianceSources, 'deposit_protected');
-  const prescribedInfoGiven = resolveBooleanField(
-    complianceSources,
-    'prescribed_info_given',
-    'prescribed_info_served',
-    'tenancy.prescribed_info_given',
-    'compliance.prescribed_info_given',
-    'compliance.prescribed_info_served'
-  );
+  const prescribedInfoRecordedDate =
+    resolveStringField(
+      complianceSources,
+      'prescribed_information_date',
+      'prescribed_info_date',
+      'compliance.prescribed_info_date',
+      'section21.prescribed_info_date'
+    ) || '';
+  const prescribedInfoGiven =
+    resolveBooleanField(
+      complianceSources,
+      'prescribed_info_given',
+      'prescribed_info_served',
+      'tenancy.prescribed_info_given',
+      'compliance.prescribed_info_given',
+      'compliance.prescribed_info_served'
+    ) === true || Boolean(prescribedInfoRecordedDate);
   const gasCertProvided = resolveBooleanField(
     complianceSources,
     'gas_cert_provided',
@@ -1177,21 +1199,27 @@ function buildSection8TemplateData(
     'gas_safety_certificate',
     'compliance.gas_cert_provided'
   );
-  const epcProvided = resolveBooleanField(
-    complianceSources,
-    'epc_provided',
-    'epc_served',
-    'compliance.epc_provided',
-    'compliance.epc_served'
-  );
-  const howToRentGiven = resolveBooleanField(
-    complianceSources,
-    'how_to_rent_given',
-    'how_to_rent_provided',
-    'how_to_rent_served',
-    'compliance.how_to_rent_given',
-    'compliance.how_to_rent_served'
-  );
+  const epcRatingRecorded =
+    resolveStringField(complianceSources, 'epc_rating', 'compliance.epc_rating') || '';
+  const epcProvided =
+    resolveBooleanField(
+      complianceSources,
+      'epc_provided',
+      'epc_served',
+      'compliance.epc_provided',
+      'compliance.epc_served'
+    ) === true || Boolean(epcRatingRecorded);
+  const howToRentRecordedDate =
+    resolveStringField(complianceSources, 'how_to_rent_date', 'compliance.how_to_rent_date') || '';
+  const howToRentGiven =
+    resolveBooleanField(
+      complianceSources,
+      'how_to_rent_given',
+      'how_to_rent_provided',
+      'how_to_rent_served',
+      'compliance.how_to_rent_given',
+      'compliance.how_to_rent_served'
+    ) === true || Boolean(howToRentRecordedDate);
   const hmoLicenseRequired = resolveBooleanField(
     complianceSources,
     'hmo_license_required',

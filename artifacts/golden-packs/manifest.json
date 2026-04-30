@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-30T12:00:17.187Z",
+  "generatedAt": "2026-04-30T12:50:06.401Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -820,7 +820,7 @@
             "html": "notice_only/case_summary.html"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -971,7 +971,7 @@
             "html": "complete_pack/eviction_case_summary.html"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
