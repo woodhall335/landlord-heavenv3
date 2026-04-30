@@ -1,3 +1,9 @@
+CASE ID
+golden-complete-pack-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Eviction Case Summary
 Case ID: golden-complete-pack-001
 Jurisdiction: england

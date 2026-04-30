@@ -666,6 +666,29 @@ export function isPremiumSupportingDocumentTemplatePath(templatePath: string): b
   return !isOfficialMappedTemplatePath(templatePath);
 }
 
+let supportDocumentLogoDataUri: string | null | undefined;
+
+function getSupportDocumentLogoDataUri(): string | null {
+  if (supportDocumentLogoDataUri !== undefined) {
+    return supportDocumentLogoDataUri;
+  }
+
+  const logoPath = join(process.cwd(), 'public', 'images', 'logo.png');
+  if (!existsSync(logoPath)) {
+    supportDocumentLogoDataUri = null;
+    return supportDocumentLogoDataUri;
+  }
+
+  try {
+    const buffer = readFileSync(logoPath);
+    supportDocumentLogoDataUri = `data:image/png;base64,${buffer.toString('base64')}`;
+    return supportDocumentLogoDataUri;
+  } catch {
+    supportDocumentLogoDataUri = null;
+    return supportDocumentLogoDataUri;
+  }
+}
+
 function buildSupportDocumentChrome(data: Record<string, any>): string {
   const generatedLabel = sanitizeTextForPdfRendering(
     typeof data.generation_date === 'string' && data.generation_date.trim()
@@ -683,15 +706,15 @@ function buildSupportDocumentChrome(data: Record<string, any>): string {
   const caseId = sanitizeTextForPdfRendering(
     String(data.claim_reference || data.case_reference || data.case_id || data.document_id || '')
   );
+  const logoDataUri = getSupportDocumentLogoDataUri();
+  const brandMark = logoDataUri
+    ? `<img class="lh-brand-logo" src="${logoDataUri}" alt="" />`
+    : '<span class="lh-brand-fallback">Landlord Heaven</span>';
 
   return `
     <div class="lh-pack-masthead" aria-hidden="true">
       <div class="lh-brand-lockup">
-        <div class="lh-brand-mark">LH</div>
-        <div class="lh-brand-copy">
-          <div class="lh-brand-name">LANDLORDHEAVEN</div>
-          <div class="lh-brand-tag">Legal documents for landlords</div>
-        </div>
+        <div class="lh-brand-mark">${brandMark}</div>
       </div>
       <div class="lh-pack-meta">
         ${caseId ? `<div class="lh-pack-meta-item"><span>Case ID</span><strong>${caseId}</strong></div>` : ''}
@@ -717,6 +740,10 @@ function injectSupportDocumentBodyClass(html: string): string {
   return html;
 }
 
+function hasSupportDocumentChromeMarkup(html: string): boolean {
+  return /<div\b[^>]*class=(["'])[^"']*\blh-pack-masthead\b[^"']*\1/i.test(html);
+}
+
 export function applyPremiumSupportDocumentTheme(
   html: string,
   templatePath: string,
@@ -731,7 +758,7 @@ export function applyPremiumSupportDocumentTheme(
   if (isFullHtmlDocument(html)) {
     let themedHtml = injectSupportDocumentBodyClass(html);
 
-    if (!themedHtml.includes('lh-pack-masthead') && /<body\b[^>]*>/i.test(themedHtml)) {
+    if (!hasSupportDocumentChromeMarkup(themedHtml) && /<body\b[^>]*>/i.test(themedHtml)) {
       themedHtml = themedHtml.replace(/<body\b[^>]*>/i, matched => `${matched}\n${chrome}\n`);
     }
 

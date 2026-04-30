@@ -1,3 +1,9 @@
+CASE ID
+golden-money-claim-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Schedule of Rent Arrears
 POSSESSION SUPPORT SCHEDULE
 PROPERTY: 2 High Street London
@@ -14,7 +20,7 @@ TENANCY START DATE
 1 January 2024
 TOTAL ARREARS CLAIMED
 £2430.00
-Period Due Date Rent Due Paid Arrears Running Balance Notes
+Period Due Date Rent Due Paid Arrears Running Balance
 December 2025 01/12/2025 £950.00 £0.00 £950.00 £0.00
 January 2026 01/01/2026 £950.00 £0.00 £950.00 £0.00
 February 2026 01/02/2026 £950.00 £420.00 £530.00 £0.00

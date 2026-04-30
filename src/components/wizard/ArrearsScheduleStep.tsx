@@ -95,9 +95,6 @@ const PeriodRow: React.FC<PeriodRowProps> = ({ item, index, onStatusChange }) =>
       <td className={`px-3 py-2 text-sm text-right font-medium ${amount_owed > 0 ? 'text-red-600' : 'text-green-600'}`}>
         £{amount_owed.toFixed(2)}
       </td>
-      <td className="px-3 py-2 text-xs text-gray-500">
-        {item.notes || (item.is_pro_rated ? `Pro-rated (${item.days_in_period} days)` : '')}
-      </td>
     </tr>
   );
 };
@@ -485,9 +482,6 @@ export const ArrearsScheduleStep: React.FC<ArrearsScheduleStepProps> = ({ facts,
                   </th>
                   <th className="px-3 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
                     Amount Owed
-                  </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                    Notes
                   </th>
                 </tr>
               </thead>

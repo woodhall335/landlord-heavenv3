@@ -59,7 +59,35 @@ describe('support document theming', () => {
     expect(themed).toContain('class="lh-support-doc"');
     expect(themed).toContain('lh-pack-masthead');
     expect(themed).toContain('support-001');
-    expect(themed).toContain('LANDLORDHEAVEN');
+    expect(themed).toContain('class="lh-brand-logo"');
+    expect(themed).toContain('data:image/png;base64,');
+    expect(themed).not.toContain('LANDLORDHEAVEN');
+    expect(themed).not.toContain('Legal documents for landlords');
+    expect(themed).not.toContain('linear-gradient');
+  });
+
+  it('still injects masthead markup when print CSS already defines the masthead class', () => {
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>.lh-pack-masthead { display: flex; }</style>
+  <title>Checklist</title>
+</head>
+<body><div class="doc-header"><h1>Hearing Checklist</h1></div></body>
+</html>
+    `.trim();
+
+    const themed = applyPremiumSupportDocumentTheme(
+      html,
+      'uk/england/templates/eviction/hearing_checklist.hbs',
+      { jurisdiction: 'England', case_id: 'support-002' }
+    );
+
+    const mastheadMatches = themed.match(/<div class="lh-pack-masthead"/g) ?? [];
+    expect(mastheadMatches).toHaveLength(1);
+    expect(themed).toContain('support-002');
+    expect(themed).toContain('class="lh-brand-logo"');
   });
 
   it('wraps support-document fragments in the premium shell', () => {
@@ -75,6 +103,8 @@ describe('support document theming', () => {
     expect(themed).toContain('class="lh-support-doc"');
     expect(themed).toContain('lh-fragment-support-doc');
     expect(themed).toContain('Money Claim Pack');
+    expect(themed).toContain('class="lh-brand-logo"');
+    expect(themed).not.toContain('linear-gradient');
   });
 
   it('leaves official forms unchanged', () => {
@@ -113,5 +143,7 @@ describe('support document theming', () => {
     expect(themed).toContain('class="lh-support-doc"');
     expect(themed).toContain('lh-pack-masthead');
     expect(themed).toContain('agreement-001');
+    expect(themed).toContain('class="lh-brand-logo"');
+    expect(themed).not.toContain('linear-gradient');
   });
 });

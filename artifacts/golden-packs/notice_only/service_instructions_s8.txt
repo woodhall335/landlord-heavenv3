@@ -1,3 +1,9 @@
+CASE ID
+golden-notice-only-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Service Instructions
 FORM 3A NOTICE
 Purpose: Use these instructions to serve the Form 3A notice consistently and preserve evidence of when, where,
@@ -25,11 +31,11 @@ Practical Method Notes
 Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.
 If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and
 why the service date used in the pack is the correct date.
-Electronic service: Do not rely on email or text alone unless the tenancy terms clearly permit electronic service and
-you are satisfied the clause applies to notices of this kind.
 
 -- 1 of 2 --
 
+Electronic service: Do not rely on email or text alone unless the tenancy terms clearly permit electronic service and
+you are satisfied the clause applies to notices of this kind.
 Evidence To Keep
 Service Evidence Checklist
 Served copy of the notice

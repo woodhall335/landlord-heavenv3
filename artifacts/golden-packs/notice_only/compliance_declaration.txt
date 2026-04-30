@@ -1,3 +1,9 @@
+CASE ID
+golden-notice-only-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Compliance Checklist - Pre-Service Checks
 FORM 3A NOTICE
 Purpose: Review these items before relying on the notice. This checklist helps distinguish between a likely blocker,
@@ -32,13 +38,13 @@ Gas safety
 ADVISORY / GOOD PRACTICE
 No gas safety provision is confirmed in the current pack data. That does not automatically invalidate a Section 8
 notice, but the tenancy file should still be checked and the evidence retained if available.
+
+-- 1 of 2 --
+
 Energy Performance Certificate (EPC)
 ADVISORY / GOOD PRACTICE
 No EPC provision is confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but
 the tenancy file should still be checked and updated where possible.
-
--- 1 of 2 --
-
 How to Rent guide
 ADVISORY / GOOD PRACTICE
 How to Rent service is not confirmed in the current pack data. That does not automatically invalidate a Section 8

@@ -105,7 +105,7 @@
         "html": "notice_only/rent_schedule_arrears_statement.html"
       },
       "extraction": {
-        "pageCount": 1,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

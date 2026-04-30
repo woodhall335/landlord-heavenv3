@@ -1,3 +1,9 @@
+CASE ID
+golden-money-claim-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Enforcement Guide
 Practical steps after obtaining a County Court Judgment
 MONEY CLAIM - POST-JUDGMENT
@@ -25,11 +31,11 @@ Gather what you know about wages, bank accounts, vehicles, property, or other re
 Ask whether the defendant looks able to pay anything at all, because enforcement with no realistic target can waste
 more money
 Be ready to pay the court fee up front even though some costs may later be recoverable
-Main enforcement methods
-The main methods available after a County Court Judgment are set out below.
 
 -- 1 of 5 --
 
+Main enforcement methods
+The main methods available after a County Court Judgment are set out below.
 1. Attachment of Earnings Order
 What it is: An order telling the defendant's employer to deduct money from wages and send it through the court toward
 the judgment debt.
@@ -66,12 +72,12 @@ Court fee: £77 for claims up to £600; £110 for claims over £600
 How to apply: Complete form N323 and file it with the court that entered judgment.
 Note: For debts over £5,000, a transfer to the High Court may be the better enforcement route. That usually means
 applying for a Writ of Control through form N293A.
-3. Third Party Debt Order
-What it is: An order freezing money held for the defendant by a bank or other third party and, if the court allows it, paying
-that money toward the judgment debt.
 
 -- 2 of 5 --
 
+3. Third Party Debt Order
+What it is: An order freezing money held for the defendant by a bank or other third party and, if the court allows it, paying
+that money toward the judgment debt.
 When it is usually worth considering:
 You have reliable information about the defendant's bank or another source holding money for them
 You want to target funds rather than goods or wages
@@ -109,12 +115,12 @@ and ability to pay.
 When it is usually worth considering:
 You do not know enough about the defendant's finances to choose an enforcement route confidently
 You suspect there are wages, property, or accounts but need more detail
-The defendant has ignored requests for payment
-Advantages:
-Can give you better information before spending more on enforcement
 
 -- 3 of 5 --
 
+The defendant has ignored requests for payment
+Advantages:
+Can give you better information before spending more on enforcement
 Helps you choose the right next application
 Shows the court process is continuing even where payment has stalled
 Risks or limits:
@@ -154,13 +160,13 @@ If you do not know enough about the defendant's finances, an Order to Obtain Inf
 applications later.
 4. Review the result quickly.
 If one route fails but fresh information comes in, another route may still be justified.
+
+-- 4 of 5 --
+
 Practical next steps
 Based on your claim for £2944.81 against Tom Tenant, the usual order is:
 1. Wait 14 days to see whether the judgment is paid voluntarily
 2. Send a short final demand if payment still has not arrived
-
--- 4 of 5 --
-
 3. If you still do not know enough about the defendant's finances, consider an Order to Obtain Information
 4. Choose the enforcement route that matches what the defendant actually has, whether wages, bank funds,
 goods, or property

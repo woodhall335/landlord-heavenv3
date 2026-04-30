@@ -1,3 +1,9 @@
+CASE ID
+golden-complete-pack-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Daniel Mercer
 27 Rowan Avenue Leeds LS8 2PF
 Tel: 07123456789
@@ -23,8 +29,11 @@ Seeking judgment for the arrears and related costs
 I would prefer to resolve this without court action, which would add cost and pressure for both sides.
 Please contact me as soon as you can if you want to discuss payment or need to explain your position.
 Yours sincerely,
+
+-- 1 of 2 --
+
 _______________________________
 Daniel Mercer
 Landlord
 
--- 1 of 1 --
+-- 2 of 2 --

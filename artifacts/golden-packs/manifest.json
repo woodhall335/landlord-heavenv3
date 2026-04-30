@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-30T09:30:24.294Z",
+  "generatedAt": "2026-04-30T10:25:19.412Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -302,7 +302,7 @@
             "html": "notice_only/rent_schedule_arrears_statement.html"
           },
           "extraction": {
-            "pageCount": 1,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -328,7 +328,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-shared-house-tenancy-agreement.html"
           },
           "extraction": {
-            "pageCount": 8,
+            "pageCount": 5,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -346,7 +346,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/pre_tenancy_checklist_england.html"
           },
           "extraction": {
-            "pageCount": 5,
+            "pageCount": 4,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -364,7 +364,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/england-keys-handover-record.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -382,7 +382,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/england-utilities-handover-sheet.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -400,7 +400,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/england-pet-request-addendum.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -418,7 +418,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/england-tenancy-variation-record.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -472,7 +472,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -498,7 +498,7 @@
             "html": "england_lodger_agreement/england-lodger-agreement.html"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -516,7 +516,7 @@
             "html": "england_lodger_agreement/england-lodger-checklist.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -534,7 +534,7 @@
             "html": "england_lodger_agreement/england-keys-handover-record.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -686,7 +686,7 @@
             "html": "money_claim/07-financial-statement-form.html"
           },
           "extraction": {
-            "pageCount": 6,
+            "pageCount": 7,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -765,7 +765,7 @@
             "html": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.html"
           },
           "extraction": {
-            "pageCount": 9,
+            "pageCount": 5,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -783,7 +783,7 @@
             "html": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.html"
           },
           "extraction": {
-            "pageCount": 5,
+            "pageCount": 4,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -801,7 +801,7 @@
             "html": "england_premium_tenancy_agreement/england-keys-handover-record.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -909,7 +909,7 @@
             "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -987,7 +987,7 @@
             "html": "complete_pack/schedule_of_arrears.html"
           },
           "extraction": {
-            "pageCount": 1,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1094,7 +1094,7 @@
             "html": "complete_pack/arrears_engagement_letter.html"
           },
           "extraction": {
-            "pageCount": 1,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1210,7 +1210,7 @@
             "html": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.html"
           },
           "extraction": {
-            "pageCount": 7,
+            "pageCount": 4,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1228,7 +1228,7 @@
             "html": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.html"
           },
           "extraction": {
-            "pageCount": 5,
+            "pageCount": 4,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1246,7 +1246,7 @@
             "html": "england_standard_tenancy_agreement/england-keys-handover-record.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1362,7 +1362,7 @@
             "html": "england_student_tenancy_agreement/england-student-tenancy-agreement.html"
           },
           "extraction": {
-            "pageCount": 8,
+            "pageCount": 5,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1380,7 +1380,7 @@
             "html": "england_student_tenancy_agreement/pre_tenancy_checklist_england.html"
           },
           "extraction": {
-            "pageCount": 5,
+            "pageCount": 4,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1398,7 +1398,7 @@
             "html": "england_student_tenancy_agreement/england-keys-handover-record.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1416,7 +1416,7 @@
             "html": "england_student_tenancy_agreement/england-utilities-handover-sheet.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1434,7 +1434,7 @@
             "html": "england_student_tenancy_agreement/england-pet-request-addendum.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1452,7 +1452,7 @@
             "html": "england_student_tenancy_agreement/england-tenancy-variation-record.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1506,7 +1506,7 @@
             "html": "england_student_tenancy_agreement/guarantor-agreement.html"
           },
           "extraction": {
-            "pageCount": 5,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1524,7 +1524,7 @@
             "html": "england_student_tenancy_agreement/england-student-move-out-schedule.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"

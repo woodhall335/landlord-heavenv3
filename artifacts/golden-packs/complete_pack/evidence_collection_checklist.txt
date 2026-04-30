@@ -1,3 +1,9 @@
+CASE ID
+golden-complete-pack-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Evidence Collection Checklist
 Use this checklist to gather the documents you will actually rely on if the possession claim is challenged.
 PROPERTY 16 Willow Mews York YO24 3HX
@@ -22,12 +28,12 @@ The completed Form 3A notice as served.
 Service material showing how the notice was served.
 Any correspondence, inspection records, warning letters, or official notices relevant to the pleaded
 grounds.
-Ground-Specific Evidence
-Ground 8 - Serious rent arrears
-Ground 10 - Rent arrears (some arrears)
 
 -- 1 of 2 --
 
+Ground-Specific Evidence
+Ground 8 - Serious rent arrears
+Ground 10 - Rent arrears (some arrears)
 Final Checks Before Issue
 Remove duplicate, placeholder, or unexplained documents before serving the bundle on the court or the
 tenant.

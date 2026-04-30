@@ -1,3 +1,9 @@
+CASE ID
+golden-notice-only-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Schedule of Rent Arrears
 NOTICE ONLY PACK
 PROPERTY: 16 Willow Mews York YO24 3HX
@@ -14,15 +20,15 @@ TENANCY START DATE
 1 January 2024
 TOTAL ARREARS CLAIMED
 £3600.00
-Period Due Date Rent Due Paid Arrears Running Balance Notes
+Period Due Date Rent Due Paid Arrears Running Balance
 1 January 2026 to 31
 January 2026
 1 January 2026 £1200.00 £0.00 £1200.00 £1200.00
-1 February 2026 to
-28 February 2026
-1 February 2026£1200.00 £0.00 £1200.00 £2400.00
-1 March 2026 to 31
-March 2026
+1 February 2026 to 28
+February 2026
+1 February 2026 £1200.00 £0.00 £1200.00 £2400.00
+1 March 2026 to 31 March
+2026
 1 March 2026 £1200.00 £0.00 £1200.00 £3600.00
 Total Arrears Outstanding £3600.00 £3600.00
 Payment Allocation Method: Payments have been allocated using the FIFO (First In, First Out) method, applying
@@ -30,6 +36,9 @@ payments to the oldest outstanding rent periods first. This is the standard cour
 allocation.
 Evidence Requirements: Attach proof of payments received, bank statements, and rent ledgers behind this
 schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
+
+-- 1 of 2 --
+
 Generated: 30 April 2026
 
--- 1 of 1 --
+-- 2 of 2 --

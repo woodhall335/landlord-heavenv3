@@ -16,7 +16,7 @@
         "html": "england_student_tenancy_agreement/england-student-tenancy-agreement.html"
       },
       "extraction": {
-        "pageCount": 8,
+        "pageCount": 5,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -34,7 +34,7 @@
         "html": "england_student_tenancy_agreement/pre_tenancy_checklist_england.html"
       },
       "extraction": {
-        "pageCount": 5,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -52,7 +52,7 @@
         "html": "england_student_tenancy_agreement/england-keys-handover-record.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -70,7 +70,7 @@
         "html": "england_student_tenancy_agreement/england-utilities-handover-sheet.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -88,7 +88,7 @@
         "html": "england_student_tenancy_agreement/england-pet-request-addendum.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -106,7 +106,7 @@
         "html": "england_student_tenancy_agreement/england-tenancy-variation-record.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -160,7 +160,7 @@
         "html": "england_student_tenancy_agreement/guarantor-agreement.html"
       },
       "extraction": {
-        "pageCount": 5,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -178,7 +178,7 @@
         "html": "england_student_tenancy_agreement/england-student-move-out-schedule.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

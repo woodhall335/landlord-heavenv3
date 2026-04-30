@@ -1,3 +1,9 @@
+CASE ID
+golden-notice-only-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
 Service and Validity Checklist
 FORM 3A NOTICE
 Purpose: Use this checklist to verify that the Form 3A notice is internally consistent across the notice and support
@@ -24,6 +30,9 @@ included.
 2 weeks (14 days) minimum: Grounds 4, 7B, 12, 13, 14A, 14ZA, 15, 17.
 Immediate (0 days): Grounds 7A and 14.
 Where multiple grounds are relied on, use the MAXIMUM notice period.
+
+-- 1 of 2 --
+
 Service Evidence
 Keep With The Pack
 Copy of the served notice
@@ -31,9 +40,6 @@ Completed Form N215 certificate of service or service witness note
 Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.
 If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and
 why the service date used in the pack is the correct date.
-
--- 1 of 2 --
-
 Validity Checks
 Before You Rely On The Notice
 Check that the same party names, address, grounds, court name, and notice timeline appear consistently

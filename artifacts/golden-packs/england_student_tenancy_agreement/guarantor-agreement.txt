@@ -1,22 +1,16 @@
-LH
-LANDLORDHEAVEN
-Legal documents for landlords
 Case IDgolden-student-tenancy-001
 JurisdictionEngland
 Generated30 April 2026
 EXECUTED AS A DEED
 GUARANTOR AGREEMENT
 Deed of guarantee and indemnity for an England residential tenancy
-This deed is intended to give the Landlord direct recourse against the Guarantor for the
-rent and tenant obligations identified in the tenancy documents.
-PREPARED 16 April 2026 FILE REFERENCE RL-GUARANTOR-
-AGREEMENT-TENANCY-
-001
-EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Deed of guarantee and
-indemnity
+This deed is intended to give the Landlord direct recourse against the Guarantor for the rent and tenant obligations identified in the
+tenancy documents.
+PREPARED 16 April 2026 FILE REFERENCE RL-GUARANTOR-AGREEMENT-
+TENANCY-001
+EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Deed of guarantee and indemnity
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Aisha Student, Ben
-Student, Cara
+TENANT(S) Aisha Student, Ben Student, Cara
 Student
 TERM / DATES 2 May 2026 to 1 May 2027
 RENT £1500.00 DEPOSIT £1500.00
@@ -30,9 +24,6 @@ TENANT 1 Aisha Student
 12 Example Street, London, SW1A 1AA
 Email: aisha@example.com
 Telephone: 07000 200001
-
--- 1 of 5 --
-
 TENANT 2 Ben Student
 12 Example Street, London, SW1A 1AA
 Email: ben@example.com
@@ -46,86 +37,69 @@ GUARANTOR Greg Guarantor
 Email: greg@example.com
 Telephone: 07000 222222
 BACKGROUND
-DEFINED TERMS
-TENANCY the residential tenancy of the Property identified in this deed together with any
-continuation, periodic continuation, or renewal expressly covered by it
-GUARANTOR Greg Guarantor
-TENANT
-OBLIGATIONS
-the obligations of the Tenant under the tenancy including rent, damage, and other sums
-properly due
 The Landlord has agreed to grant or continue the tenancy of the Property to the Tenant. A.
-The Guarantor has agreed to guarantee the obligations of the Tenant on the terms set out in this
-deed.
-B.
 
--- 2 of 5 --
+-- 1 of 3 --
 
+DEFINED TERMS
+TENANCY the residential tenancy of the Property identified in this deed together with any continuation, periodic continuation, or
+renewal expressly covered by it
+GUARANTOR Greg Guarantor
+TENANT OBLIGATIONS the obligations of the Tenant under the tenancy including rent, damage, and other sums properly due
 OPERATIVE PROVISIONS
 1. Definitions and Tenancy Background
-This deed supports the residential tenancy identified below and should be read together with the tenancy
-agreement and any written renewals or variations expressly covered by it.
-TENANCY START
-DATE
-2 May 2026
+This deed supports the residential tenancy identified below and should be read together with the tenancy agreement and any written renewals or
+variations expressly covered by it.
+TENANCY START DATE 2 May 2026
 TENANT(S) Aisha Student, Ben Student, Cara Student
 PROPERTY 12 Example Street, London, SW1A 1AA
 CURRENT RENT £1500.00
 DEPOSIT £1500.00
 2. Guarantor Covenant
-In consideration of the Landlord granting or continuing the tenancy of the Property, the Guarantor agrees
-as principal obligor and not merely as surety to perform the obligations set out in this document.
-to pay the rent and all other sums lawfully due under the tenancy within 14 days after written demand
-from the Landlord;
+In consideration of the Landlord granting or continuing the tenancy of the Property, the Guarantor agrees as principal obligor and not merely as
+surety to perform the obligations set out in this document.
+to pay the rent and all other sums lawfully due under the tenancy within 14 days after written demand from the Landlord;
 to ensure observance and performance of the tenant covenants contained in the tenancy agreement;
-to indemnify the Landlord against losses, damage, and reasonably incurred enforcement costs arising
-from tenant default.
+to indemnify the Landlord against losses, damage, and reasonably incurred enforcement costs arising from tenant default.
 3. Nature of Liability
-Where there is more than one tenant, this guarantee applies on a joint and several basis to the
-obligations of each tenant and the tenancy as a whole.
-The Landlord may proceed directly against the Guarantor without first taking action against the
-Tenant, any deposit, or any other security.
-Any delay, indulgence, concession, acceptance of part payment, or failure by the Landlord to enforce
-promptly does not by itself release the Guarantor.
+Where there is more than one tenant, this guarantee applies on a joint and several basis to the obligations of each tenant and the tenancy as a
+whole.
+The Landlord may proceed directly against the Guarantor without first taking action against the Tenant, any deposit, or any other security.
+Any delay, indulgence, concession, acceptance of part payment, or failure by the Landlord to enforce promptly does not by itself release the
+Guarantor.
 4. Continuing Guarantee, Renewal, and Variation
-This guarantee is intended to continue for the tenancy, any statutory periodic continuation, and any
-renewal or written variation of the same tenancy for the same Property and substantially the same tenant
-group.
-No material increase in the Guarantor's liability is intended to bind the Guarantor unless that increase is
-stated in this document or separately accepted by the Guarantor in writing.
-
--- 3 of 5 --
-
+This guarantee is intended to continue for the tenancy, any statutory periodic continuation, and any renewal or written variation of the same tenancy
+for the same Property and substantially the same tenant group.
+No material increase in the Guarantor's liability is intended to bind the Guarantor unless that increase is stated in this document or separately
+accepted by the Guarantor in writing.
 5. Notices and Information
 GUARANTOR NAME Greg Guarantor
-GUARANTOR
-ADDRESS FOR
+GUARANTOR ADDRESS FOR
 SERVICE
 77 Support Avenue, Bristol, BS1 4AB
 GUARANTOR EMAIL greg@example.com
 GUARANTOR PHONE 07000 222222
 The Guarantor must notify the Landlord promptly of any change to the contact details set out above.
-Any notice or demand may be served by hand, first-class post, or email to the contact details stated in
-this document unless updated in writing.
+Any notice or demand may be served by hand, first-class post, or email to the contact details stated in this document unless updated in writing.
+The Guarantor has agreed to guarantee the obligations of the Tenant on the terms set out in this deed. B.
+
+-- 2 of 3 --
+
 6. Release, Limitation, and Advice
-If no express financial cap is stated in this document, the guarantee applies to the full amount of the
-guaranteed obligations arising under the tenancy.
-The Guarantor is released only when the tenancy has ended, all guaranteed liabilities have been
-discharged, or the Landlord gives an express written release.
-The Guarantor acknowledges that they have had the opportunity to read the tenancy agreement and to
-take independent legal advice before signing.
+If no express financial cap is stated in this document, the guarantee applies to the full amount of the guaranteed obligations arising under the
+tenancy.
+The Guarantor is released only when the tenancy has ended, all guaranteed liabilities have been discharged, or the Landlord gives an express
+written release.
+The Guarantor acknowledges that they have had the opportunity to read the tenancy agreement and to take independent legal advice before
+signing.
 7. Governing Law and Execution
 This guarantee and any dispute arising out of it are governed by the law of England and Wales.
 The parties intend this document to take effect as a deed executed by the Guarantor.
 Execution reminder
-Important: because this document is drafted as a deed, the guarantor signature should be witnessed
-and the final signed copy retained with the tenancy file.
-
--- 4 of 5 --
-
+Important: because this document is drafted as a deed, the guarantor signature should be witnessed and the final signed copy retained with the
+tenancy file.
 EXECUTION
-This document is intended to take effect as a deed. The guarantor should sign it in the presence of an
-independent adult witness.
+This document is intended to take effect as a deed. The guarantor should sign it in the presence of an independent adult witness.
 LANDLORD
 Jane Landlord
 Signature Date
@@ -148,4 +122,4 @@ The guarantor should sign in the presence of an
 independent adult witness.
 Landlord Heaven file copy RL-GUARANTOR-AGREEMENT-TENANCY-001
 
--- 5 of 5 --
+-- 3 of 3 --

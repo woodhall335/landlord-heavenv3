@@ -333,9 +333,10 @@ body.lh-support-doc h4 {
 
 .lh-pack-masthead {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 1em;
+  align-items: center;
+  gap: 1.25em;
   margin: 0 0 1.25em 0;
   padding: 0 0 0.9em 0;
   border-bottom: 1.5px solid #d9d7f7;
@@ -346,41 +347,30 @@ body.lh-support-doc h4 {
 .lh-brand-lockup {
   display: flex;
   align-items: center;
-  gap: 0.7em;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .lh-brand-mark {
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10pt;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  width: 240px;
+  max-width: min(240px, 100%);
+  display: block;
+  flex-shrink: 0;
 }
 
-.lh-brand-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1em;
+.lh-brand-logo {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-.lh-brand-name {
+.lh-brand-fallback {
+  display: inline-block;
   font-size: 12pt;
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #2e1065;
-}
-
-.lh-brand-tag {
-  font-size: 7.5pt;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #6d6790;
+  white-space: nowrap;
 }
 
 .lh-pack-meta {
@@ -395,7 +385,7 @@ body.lh-support-doc h4 {
   padding: 0.45em 0.65em;
   border: 1px solid #ddd9f8;
   border-radius: 10px;
-  background: linear-gradient(180deg, #fbfaff 0%, #f4f1ff 100%);
+  background: #f4f1ff;
 }
 
 .lh-pack-meta-item span {
@@ -427,7 +417,7 @@ body.lh-support-doc .schedule-header {
   border: 1px solid #ddd9f8;
   border-bottom: 0;
   border-radius: 16px 16px 0 0;
-  background: linear-gradient(180deg, #ffffff 0%, #faf8ff 100%);
+  background: #faf8ff;
   box-shadow: inset 0 -1px 0 #ece8ff;
 }
 
@@ -472,7 +462,7 @@ body.lh-support-doc .premium-badge {
   padding: 0.38em 0.9em;
   border: 1px solid #7048d7;
   border-radius: 999px;
-  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+  background: #5b36b3;
   color: #fff;
   font-size: 8.6pt;
   font-weight: 700;
@@ -485,9 +475,9 @@ body.lh-support-doc .doc-title {
   padding: 1em 1.15em;
   border: 1px solid #d9d7f7;
   border-radius: 16px;
-  background: linear-gradient(180deg, #2e1065 0%, #4c1d95 100%);
-  color: #fff;
-  box-shadow: 0 10px 30px rgba(47, 20, 95, 0.12);
+  background: #f1ecff;
+  color: #251744;
+  box-shadow: 0 10px 30px rgba(47, 20, 95, 0.08);
 }
 
 body.lh-support-doc .summary-box,
@@ -518,7 +508,7 @@ body.lh-support-doc .signature-block,
 body.lh-support-doc .witness-section {
   border-color: #ddd9f8;
   border-radius: 16px;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfaff 100%);
+  background: #fbfaff;
   box-shadow: 0 8px 24px rgba(42, 22, 80, 0.06);
 }
 
@@ -551,7 +541,7 @@ body.lh-support-doc .action-box {
 
 body.lh-support-doc .callout {
   border-left: 4px solid #7c3aed;
-  background: linear-gradient(180deg, #fbf9ff 0%, #f6f2ff 100%);
+  background: #f6f2ff;
 }
 
 body.lh-support-doc .callout.warning,
@@ -559,21 +549,21 @@ body.lh-support-doc .warning-box,
 body.lh-support-doc .compliance-item-header.warning,
 body.lh-support-doc .action-box.recommended .action-box-header {
   border-color: #d97706;
-  background: linear-gradient(180deg, #fff8ee 0%, #fff2de 100%);
+  background: #fff2de;
 }
 
 body.lh-support-doc .callout.critical,
 body.lh-support-doc .compliance-item-header.fail,
 body.lh-support-doc .action-box.critical .action-box-header {
   border-color: #b91c1c;
-  background: linear-gradient(180deg, #fff3f3 0%, #fee2e2 100%);
+  background: #fee2e2;
 }
 
 body.lh-support-doc .callout.success,
 body.lh-support-doc .overall-assessment.ready,
 body.lh-support-doc .compliance-item-header.pass {
   border-color: #15803d;
-  background: linear-gradient(180deg, #f3fdf5 0%, #dcfce7 100%);
+  background: #dcfce7;
 }
 
 body.lh-support-doc .summary-grid dt,
@@ -629,7 +619,7 @@ body.lh-support-doc .section-title {
   border: 0;
   border-bottom: 1px solid #e7e2ff;
   border-radius: 16px 16px 0 0;
-  background: linear-gradient(180deg, #f8f6ff 0%, #f1ecff 100%);
+  background: #f1ecff;
   font-size: 10.5pt;
   font-weight: 700;
 }
@@ -639,18 +629,19 @@ body.lh-support-doc .section-title {
 }
 
 body.lh-support-doc .section-number {
-  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+  background: #e7defe;
+  color: #251744;
   box-shadow: 0 8px 18px rgba(76, 29, 149, 0.18);
 }
 
 body.lh-support-doc .property-highlight,
 body.lh-support-doc .property-detail-item {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.18);
+  color: #251744;
+  border-color: #d4cbf0;
 }
 
 body.lh-support-doc .property-highlight {
-  background: linear-gradient(135deg, #5b34c6 0%, #2d1f53 100%);
+  background: #e8e1fb;
 }
 
 body.lh-support-doc .statement-section h2 {
@@ -659,7 +650,8 @@ body.lh-support-doc .statement-section h2 {
 
 body.lh-support-doc .statement-section h2 .num,
 body.lh-support-doc .section-header .num {
-  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+  background: #e7defe;
+  color: #251744;
 }
 
 body.lh-support-doc .index-table,
@@ -676,8 +668,8 @@ body.lh-support-doc .index-table th,
 body.lh-support-doc .arrears-table th,
 body.lh-support-doc table th {
   border-color: #5b34c6;
-  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
-  color: #fff;
+  background: #ede7ff;
+  color: #251744;
   font-size: 8.8pt;
   font-weight: 700;
   letter-spacing: 0.03em;

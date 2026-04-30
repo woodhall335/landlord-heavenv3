@@ -124,7 +124,7 @@
         "html": "money_claim/07-financial-statement-form.html"
       },
       "extraction": {
-        "pageCount": 6,
+        "pageCount": 7,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

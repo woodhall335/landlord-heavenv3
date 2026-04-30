@@ -16,7 +16,7 @@
         "html": "england_lodger_agreement/england-lodger-agreement.html"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -34,7 +34,7 @@
         "html": "england_lodger_agreement/england-lodger-checklist.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -52,7 +52,7 @@
         "html": "england_lodger_agreement/england-keys-handover-record.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

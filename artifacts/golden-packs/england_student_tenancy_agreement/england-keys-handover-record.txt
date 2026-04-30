@@ -1,27 +1,20 @@
-LH
-LANDLORDHEAVEN
-Legal documents for landlords
 Case IDgolden-student-tenancy-001
 JurisdictionEngland
 Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 KEYS & HANDOVER RECORD
 Student Tenancy Agreement move-in handover record
-Use this handover record alongside the agreement to note keys, fobs, alarm codes, and the
-points confirmed at move-in.
-PREPARED 16 April 2026 FILE REFERENCE RL-ENGLAND-
-STUDENT-TA-
+Use this handover record alongside the agreement to note keys, fobs, alarm codes, and the points confirmed at move-in.
+PREPARED 16 April 2026 FILE REFERENCE RL-ENGLAND-STUDENT-TA-
 TENANCY-001
 EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Handover record
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Aisha Student, Ben
-Student, Cara Student
-TERM / DATES 2 May 2026 to 1 May
-2027
+TENANT(S) Aisha Student, Ben Student, Cara
+Student
+TERM / DATES 2 May 2026 to 1 May 2027
 RENT £1500.00 DEPOSIT £1500.00
 PARTIES
-This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in
-England.
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
 LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
@@ -31,9 +24,6 @@ TENANT 1 Aisha Student
 Email: aisha@example.com
 Telephone: 07000 200001
 TENANT 2 Ben Student
-
--- 1 of 3 --
-
 12 Example Street, London, SW1A 1AA
 Email: ben@example.com
 Telephone: 07000 200002
@@ -45,26 +35,21 @@ DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Aisha Student
+
+-- 1 of 2 --
+
 OPERATIVE PROVISIONS
 1. Handover Summary
 PACK Student Tenancy Agreement
 PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Aisha Student, Ben Student, Cara Student
 START DATE 2 May 2026
-KEYS AND ACCESS
-DEVICES
-Record keys, fobs, alarms, and any concierge access devices here.
-Use this record to note the physical handover items provided at move-in and the items expected back at the
-end of occupation.
+KEYS AND ACCESS DEVICES Record keys, fobs, alarms, and any concierge access devices here.
+Use this record to note the physical handover items provided at move-in and the items expected back at the end of occupation.
 2. Practical Checks
 Record the number of keys, fobs, gate controls, or alarm codes handed over.
-Confirm meter readings, appliance instructions, and any property-specific access rules on the handover
-date.
-Keep the signed or acknowledged handover record with the main agreement and any inventory or
-move-in photos.
-
--- 2 of 3 --
-
+Confirm meter readings, appliance instructions, and any property-specific access rules on the handover date.
+Keep the signed or acknowledged handover record with the main agreement and any inventory or move-in photos.
 EXECUTION
 Keep this handover record with the agreement, inventory, and any move-in photographs or check-in notes.
 FILE OWNER
@@ -72,4 +57,4 @@ Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-STUDENT-TA-TENANCY-001
 
--- 3 of 3 --
+-- 2 of 2 --

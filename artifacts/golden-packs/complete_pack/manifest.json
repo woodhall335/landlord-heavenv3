@@ -68,7 +68,7 @@
         "html": "complete_pack/schedule_of_arrears.html"
       },
       "extraction": {
-        "pageCount": 1,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -175,7 +175,7 @@
         "html": "complete_pack/arrears_engagement_letter.html"
       },
       "extraction": {
-        "pageCount": 1,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

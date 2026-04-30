@@ -257,6 +257,7 @@ describe('Money Claim Document Formatting Regression Tests', () => {
       expect(entries[0].due_date).toBe('1 August 2025');
       expect(entries[1].due_date).toBe('1 September 2025');
       expect(entries[2].due_date).toBe('1 October 2025');
+      expect(entries.every((entry) => !('notes' in entry))).toBe(true);
     });
 
     it('should display due dates in schedule table', async () => {
@@ -268,6 +269,8 @@ describe('Money Claim Document Formatting Regression Tests', () => {
       expect(html).toContain('1 August 2025');
       expect(html).toContain('1 September 2025');
       expect(html).toContain('1 October 2025');
+      expect(html).not.toContain('<th class="notes-col">Notes</th>');
+      expect(html).not.toContain('>Notes</th>');
     });
   });
 

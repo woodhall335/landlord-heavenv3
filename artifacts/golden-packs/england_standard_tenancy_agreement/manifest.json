@@ -16,7 +16,7 @@
         "html": "england_standard_tenancy_agreement/england-standard-tenancy-agreement.html"
       },
       "extraction": {
-        "pageCount": 7,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -34,7 +34,7 @@
         "html": "england_standard_tenancy_agreement/pre_tenancy_checklist_england.html"
       },
       "extraction": {
-        "pageCount": 5,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -52,7 +52,7 @@
         "html": "england_standard_tenancy_agreement/england-keys-handover-record.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

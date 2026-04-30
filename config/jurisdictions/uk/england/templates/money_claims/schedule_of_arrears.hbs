@@ -160,19 +160,28 @@
     }
 
     .arrears-table .period-col {
-      width: 21%;
+      width: 25%;
     }
 
     .arrears-table .date-col {
-      width: 13%;
+      width: 18%;
       white-space: nowrap;
     }
 
-    .arrears-table .notes-col {
-      font-size: 8pt;
-      color: #666;
-      width: 18%;
-      word-break: break-word;
+    .arrears-table .due-col {
+      width: 13%;
+    }
+
+    .arrears-table .paid-col {
+      width: 12%;
+    }
+
+    .arrears-table .arrears-col {
+      width: 13%;
+    }
+
+    .arrears-table .balance-col {
+      width: 19%;
     }
 
     /* Total Row */
@@ -272,11 +281,10 @@
     <tr>
       <th class="period-col">Period</th>
       <th class="date-col">Due Date</th>
-      <th class="amount">Rent Due</th>
-      <th class="amount">Paid</th>
-      <th class="amount">Arrears</th>
-      <th class="amount">Running Balance</th>
-      <th class="notes-col">Notes</th>
+      <th class="amount due-col">Rent Due</th>
+      <th class="amount paid-col">Paid</th>
+      <th class="amount arrears-col">Arrears</th>
+      <th class="amount balance-col">Running Balance</th>
     </tr>
   </thead>
   <tbody>
@@ -284,18 +292,16 @@
     <tr>
       <td class="period-col">{{period}}</td>
       <td class="date-col">{{due_date}}</td>
-      <td class="amount">{{currency amount_due}}</td>
-      <td class="amount">{{currency amount_paid}}</td>
-      <td class="amount">{{currency arrears}}</td>
-      <td class="amount"><strong>{{currency running_balance}}</strong></td>
-      <td class="notes-col">{{#if notes}}{{notes}}{{/if}}</td>
+      <td class="amount due-col">{{currency amount_due}}</td>
+      <td class="amount paid-col">{{currency amount_paid}}</td>
+      <td class="amount arrears-col">{{currency arrears}}</td>
+      <td class="amount balance-col"><strong>{{currency running_balance}}</strong></td>
     </tr>
     {{/each}}
     <tr class="total-row">
       <td colspan="4"><strong>Total Arrears Outstanding</strong></td>
       <td class="amount"><strong>{{currency arrears_total}}</strong></td>
       <td class="amount"><strong>{{currency arrears_total}}</strong></td>
-      <td></td>
     </tr>
   </tbody>
 </table>
