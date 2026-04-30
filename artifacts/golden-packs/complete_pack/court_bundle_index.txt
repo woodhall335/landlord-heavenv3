@@ -1,19 +1,21 @@
 ENGLAND POSSESSION FILE
-COURT BUNDLE INDEX
+Court Bundle Index
 Claim for possession of residential property
-The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears), Ground
-10 (Any rent arrears).
+The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
+Ground 10 (Any rent arrears).
 Arrange the bundle so that the notice, service evidence, and ground-specific supporting documents can be
 followed without the reader having to infer missing steps.
-Case number To be assigned by court
-Court York County Court and Family Court
-Claimant Daniel Mercer
-Defendant Ivy Carleton
-Property 16 Willow Mews York YO24 3HX
-Notice service date 28 April 2026
-Notice expiry date 26 May 2026
-Earliest proceedings date 26 May 2026
-Bundle prepared 28 April 2026
+CASE NUMBER To be assigned by court
+COURT York County Court and Family Court
+CLAIMANT Daniel Mercer
+DEFENDANT Ivy Carleton
+PROPERTY 16 Willow Mews York YO24 3HX
+NOTICE SERVICE DATE 30 April 2026
+NOTICE EXPIRY DATE 28 May 2026
+EARLIEST PROCEEDINGS
+DATE
+28 May 2026
+BUNDLE PREPARED 30 April 2026
 
 -- 1 of 2 --
 
@@ -30,12 +32,11 @@ C. Witness evidence
 C1 Witness statement Witness statement of Daniel Mercer
 D. Ground-specific evidence
 D1 Schedule of arrears Period-by-period rent schedule showing sums
-due, payments received, and the running
-balance
+due, payments received, and the running balance
 D2 Payment history
 evidence
-Bank statements, ledger extracts, or rent
-receipts supporting the arrears calculation
+Bank statements, ledger extracts, or rent receipts
+supporting the arrears calculation
 E. Tenancy documents
 E1 Tenancy agreement Signed tenancy agreement
 E2 Deposit evidence Deposit protection or prescribed information
@@ -49,6 +50,6 @@ Bundle preparation notes
 Paginate the bundle consistently and update the exhibit references if documents are added or removed.
 Keep the court-facing bundle free from unused sections, stray technical notes, and irrelevant material.
 Prepared by: Daniel Mercer
-Date: 28 April 2026
+Date: 30 April 2026
 
 -- 2 of 2 --

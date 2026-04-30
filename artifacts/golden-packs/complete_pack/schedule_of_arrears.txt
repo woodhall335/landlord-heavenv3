@@ -1,25 +1,25 @@
-SCHEDULE OF RENT ARREARS
-Complete Eviction Pack
-Property: 16 Willow Mews York YO24 3HX
-Defendant: Ivy Carleton
-Claimant: Daniel Mercer
-Claim Reference: golden-complete-pack-001
-Schedule Date: 28 April 2026
+Schedule of Rent Arrears
+COMPLETE EVICTION PACK
+PROPERTY: 16 Willow Mews York YO24 3HX
+DEFENDANT: Ivy Carleton
+CLAIMANT: Daniel Mercer
+CLAIM REFERENCE: golden-complete-pack-001
+SCHEDULE DATE: 30 April 2026
 Arrears Summary
-Rent Amount
+RENT AMOUNT
 £1200.00 monthly
-Due Day
+DUE DAY
 1st of each month
-Tenancy Start Date
+TENANCY START DATE
 1 January 2024
-Total Arrears Claimed
+TOTAL ARREARS CLAIMED
 £3600.00
 Period Due Date Rent Due Paid Arrears Running Balance Notes
 1 January 2026 to 31
 January 2026
 1 January 2026 £1200.00 £0.00 £1200.00 £1200.00
-1 February 2026 to 28
-February 2026
+1 February 2026 to
+28 February 2026
 1 February 2026£1200.00 £0.00 £1200.00 £2400.00
 1 March 2026 to 31
 March 2026
@@ -30,7 +30,7 @@ payments to the oldest outstanding rent periods first. This is the standard cour
 allocation.
 Evidence Requirements: Attach proof of payments received, bank statements, and rent ledgers behind this
 schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
-Generated: 28 April 2026
+Generated: 30 April 2026
 Complete Eviction Pack | England
 This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.
 

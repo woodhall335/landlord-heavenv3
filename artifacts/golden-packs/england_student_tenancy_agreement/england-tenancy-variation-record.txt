@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-student-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 TENANCY VARIATION RECORD
 Student Tenancy Agreement variation record
@@ -25,15 +31,15 @@ TENANT 1 Aisha Student
 Email: aisha@example.com
 Telephone: 07000 200001
 TENANT 2 Ben Student
+
+-- 1 of 3 --
+
 12 Example Street, London, SW1A 1AA
 Email: ben@example.com
 Telephone: 07000 200002
 TENANT 3 Cara Student
 12 Example Street, London, SW1A 1AA
 Email: cara@example.com
-
--- 1 of 2 --
-
 Telephone: 07000 200003
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
@@ -50,6 +56,9 @@ TENANT(S) Aisha Student, Ben Student, Cara Student
 Use this record to note agreed changes after the tenancy starts without losing the original signed
 paperwork.
 Any important change should be dated, signed where appropriate, and stored with the main tenancy file.
+
+-- 2 of 3 --
+
 EXECUTION
 Any material change should be dated and retained with the tenancy file.
 FILE OWNER
@@ -57,4 +66,4 @@ Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-STUDENT-TA-TENANCY-001
 
--- 2 of 2 --
+-- 3 of 3 --

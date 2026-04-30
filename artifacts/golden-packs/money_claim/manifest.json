@@ -88,7 +88,7 @@
         "html": "money_claim/05-information-sheet-for-defendants.html"
       },
       "extraction": {
-        "pageCount": 5,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -106,7 +106,7 @@
         "html": "money_claim/06-reply-form.html"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -142,7 +142,7 @@
         "html": "money_claim/08-filing-guide.html"
       },
       "extraction": {
-        "pageCount": 7,
+        "pageCount": 6,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

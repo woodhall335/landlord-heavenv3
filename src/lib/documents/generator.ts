@@ -47,6 +47,11 @@ const PDF_RENDER_MOJIBAKE_REPLACEMENTS: Array<[RegExp, string]> = [
 function normalizePdfRenderMojibake(input: string): string {
   let result = input;
 
+  result = result.replace(/Ã‚Â£/g, '£');
+  result = result.replace(/Â£/g, '£');
+  result = result.replace(/Ã‚Â©/g, '©');
+  result = result.replace(/Â©/g, '©');
+
   for (const [pattern, replacement] of PDF_RENDER_MOJIBAKE_REPLACEMENTS) {
     result = result.replace(pattern, replacement);
   }
@@ -294,6 +299,12 @@ function registerHandlebarsHelpers() {
   Handlebars.registerHelper('mcol_number', function (amount) {
     if (typeof amount !== 'number') return '0.00';
     return amount.toFixed(2);
+  });
+
+  // Override currency formatting with a clean pound symbol for HTML, PDF, and pack artifacts.
+  Handlebars.registerHelper('currency', function (amount) {
+    if (typeof amount !== 'number') return '£0.00';
+    return `£${amount.toFixed(2)}`;
   });
 
   // Format date (UK format: DD/MM/YYYY or "D Month YYYY" for long format)
@@ -633,6 +644,118 @@ export function loadPrintCss(): string {
   console.warn('[PRINT SYSTEM] Tried paths:', possiblePaths);
   cachedPrintCss = stripCssComments(FALLBACK_PRINT_CSS);
   return cachedPrintCss;
+}
+
+const OFFICIAL_MAPPED_TEMPLATE_PATTERNS = [
+  /\/notice_only\/form_3_section8\/notice\.hbs$/i,
+  /\/notice_only\/form_6a_section21\/notice\.hbs$/i,
+  /\/eviction\/notice-improved\.hbs$/i,
+  /\/eviction\/notice-section8-improved\.hbs$/i,
+  /\/eviction\/n5_claim\.hbs$/i,
+  /\/eviction\/n5b_claim\.hbs$/i,
+  /\/eviction\/n119_particulars\.hbs$/i,
+  /\/money_claims\/n1_claim\.hbs$/i,
+  /\/section13\/.*form_4a/i,
+] as const;
+
+export function isOfficialMappedTemplatePath(templatePath: string): boolean {
+  return OFFICIAL_MAPPED_TEMPLATE_PATTERNS.some(pattern => pattern.test(templatePath));
+}
+
+export function isPremiumSupportingDocumentTemplatePath(templatePath: string): boolean {
+  return !isOfficialMappedTemplatePath(templatePath);
+}
+
+function buildSupportDocumentChrome(data: Record<string, any>): string {
+  const generatedLabel = sanitizeTextForPdfRendering(
+    typeof data.generation_date === 'string' && data.generation_date.trim()
+      ? data.generation_date
+      : new Date().toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        })
+  );
+
+  const jurisdiction = sanitizeTextForPdfRendering(
+    String(data.jurisdiction || data.property_location || 'England')
+  );
+  const caseId = sanitizeTextForPdfRendering(
+    String(data.claim_reference || data.case_reference || data.case_id || data.document_id || '')
+  );
+
+  return `
+    <div class="lh-pack-masthead" aria-hidden="true">
+      <div class="lh-brand-lockup">
+        <div class="lh-brand-mark">LH</div>
+        <div class="lh-brand-copy">
+          <div class="lh-brand-name">LANDLORDHEAVEN</div>
+          <div class="lh-brand-tag">Legal documents for landlords</div>
+        </div>
+      </div>
+      <div class="lh-pack-meta">
+        ${caseId ? `<div class="lh-pack-meta-item"><span>Case ID</span><strong>${caseId}</strong></div>` : ''}
+        <div class="lh-pack-meta-item"><span>Jurisdiction</span><strong>${jurisdiction}</strong></div>
+        <div class="lh-pack-meta-item"><span>Generated</span><strong>${generatedLabel}</strong></div>
+      </div>
+    </div>
+  `.trim();
+}
+
+function injectSupportDocumentBodyClass(html: string): string {
+  if (/<body\b[^>]*class=/i.test(html)) {
+    return html.replace(/<body\b([^>]*)class=(["'])([^"']*)(["'])([^>]*)>/i, (_match, before, quoteOpen, classes, quoteClose, after) => {
+      const nextClasses = classes.includes('lh-support-doc') ? classes : `${classes} lh-support-doc`.trim();
+      return `<body${before}class=${quoteOpen}${nextClasses}${quoteClose}${after}>`;
+    });
+  }
+
+  if (/<body\b/i.test(html)) {
+    return html.replace(/<body\b([^>]*)>/i, '<body$1 class="lh-support-doc">');
+  }
+
+  return html;
+}
+
+export function applyPremiumSupportDocumentTheme(
+  html: string,
+  templatePath: string,
+  data: Record<string, any>
+): string {
+  if (!isPremiumSupportingDocumentTemplatePath(templatePath)) {
+    return html;
+  }
+
+  const chrome = buildSupportDocumentChrome(data);
+
+  if (isFullHtmlDocument(html)) {
+    let themedHtml = injectSupportDocumentBodyClass(html);
+
+    if (!themedHtml.includes('lh-pack-masthead') && /<body\b[^>]*>/i.test(themedHtml)) {
+      themedHtml = themedHtml.replace(/<body\b[^>]*>/i, matched => `${matched}\n${chrome}\n`);
+    }
+
+    return themedHtml;
+  }
+
+  const nonFullHtmlPrintCss = loadPrintCss();
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    ${nonFullHtmlPrintCss}
+  </style>
+</head>
+<body class="lh-support-doc">
+  ${chrome}
+  <div class="lh-fragment-support-doc">
+    ${html}
+  </div>
+</body>
+</html>
+  `.trim();
 }
 
 function buildNonFullHtmlPageRules(options?: {
@@ -1413,6 +1536,7 @@ export async function generateDocument(
 
   // Compile template
   let html = compileTemplate(templateContent, enrichedData);
+  html = applyPremiumSupportDocumentTheme(html, templatePath, enrichedData);
 
   // Inject debug stamp if enabled (dev only)
   if (debugStamp) {

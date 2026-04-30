@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-lodger-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 KEYS & HANDOVER RECORD
 Room Let / Lodger Agreement move-in handover record
@@ -26,13 +32,13 @@ TENANT Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
+
+-- 1 of 3 --
+
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Alice Tenant
-
--- 1 of 2 --
-
 OPERATIVE PROVISIONS
 1. Handover Summary
 PACK Room Let / Lodger Agreement
@@ -55,6 +61,9 @@ Keep this handover record with the agreement, inventory, and any move-in photogr
 FILE OWNER
 Jane Landlord
 Signature Date
+
+-- 2 of 3 --
+
 Landlord Heaven file copy RL-ENGLAND-LODGER-AGREEMENT-LODGER-001
 
--- 2 of 2 --
+-- 3 of 3 --

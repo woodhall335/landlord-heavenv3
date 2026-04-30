@@ -1,11 +1,11 @@
-COMPLIANCE CHECKLIST - PRE-SERVICE CHECKS
-Form 3A notice
+Compliance Checklist - Pre-Service Checks
+FORM 3A NOTICE
 Purpose: Review these items before relying on the notice. This checklist helps distinguish between a likely blocker,
 a significant litigation risk, and matters that are primarily advisory or good practice.
-Property 16 Willow Mews York YO24 3HX
-Tenancy start date 1 January 2024
-Notice type Form 3A notice
-Generated 28 April 2026
+PROPERTY 16 Willow Mews York YO24 3HX
+TENANCY START DATE 1 January 2024
+NOTICE TYPE Form 3A notice
+GENERATED 30 April 2026
 CRITICAL BLOCKER
 Likely to block the current
 possession route or materially
@@ -47,6 +47,6 @@ Practical Summary
 Section 8 route: Compliance issues do not all carry the same consequence. Some do not automatically invalidate
 the notice, but they can still weaken the claim, increase costs exposure, or create separate landlord liability. Resolve
 what you can and keep the file evidence clear.
-Generated: 28 April 2026
+Generated: 30 April 2026
 
 -- 2 of 2 --

@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-premium-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 PREMIUM TENANCY AGREEMENT
 Expanded tenancy agreement for a residential let in England
@@ -25,16 +31,10 @@ TENANT Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
-BACKGROUND
-The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out
-in this premium agreement.
-A.
-The parties intend fuller operational and management detail to be recorded in the agreement while
-keeping the letting within the ordinary residential tenancy file.
-B.
 
 -- 1 of 9 --
 
+BACKGROUND
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
@@ -52,6 +52,12 @@ DATE
 The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate
 fixed-term drafting is created by this document unless a solicitor-approved route is expressly used outside
 this product.
+The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out
+in this premium agreement.
+A.
+The parties intend fuller operational and management detail to be recorded in the agreement while
+keeping the letting within the ordinary residential tenancy file.
+B.
 
 -- 2 of 9 --
 

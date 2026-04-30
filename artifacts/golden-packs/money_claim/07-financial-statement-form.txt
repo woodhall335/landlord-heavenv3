@@ -1,4 +1,4 @@
-FINANCIAL STATEMENT FORM
+Financial Statement Form
 Pre-Action Protocol for Debt Claims
 Use this form to show your income and outgoings
 if you want to propose a payment plan.
@@ -12,7 +12,7 @@ StepChange (0800 138 1111), or National Debtline (0808 808 4000).
 
 -- 1 of 6 --
 
-FINANCIAL STATEMENT FORM
+Financial Statement Form
 Complete all sections below
 YOUR DETAILS
 Your full name: _________________________________________
@@ -80,8 +80,8 @@ SECTION 3: YOUR AVAILABLE INCOME
 Total monthly income (from Section 1) £ _________________
 Total monthly outgoings (from Section 2) £ _________________
 Available income (income minus outgoings): £ _____________
-If your available income is negative (i.e., your outgoings are higher than your income), you should seek
-free debt advice urgently.
+If your available income is negative (i.e., your outgoings are higher than your income), you should seek free debt
+advice urgently.
 SECTION 4: YOUR ASSETS
 List any assets you own (e.g., property, savings, vehicles)
 Asset Estimated Value (£)
@@ -91,16 +91,16 @@ Less mortgage outstanding: £ __________
 Savings (bank / building society) £ _________________
 Vehicle(s) £ _________________
 Other assets (specify): ____________________ £ _________________
-SECTION 5: YOUR PAYMENT OFFER
-Based on the financial information above, what can you afford to pay towards this debt?
 
 -- 4 of 6 --
 
+SECTION 5: YOUR PAYMENT OFFER
+Based on the financial information above, what can you afford to pay towards this debt?
 I can afford to pay: £ _________ per _______
 Starting from (date): _____________________
 I will also continue to pay my current rent in full: ☐ Yes ☐ No
-Note: Any payment arrangement you propose must be realistic and sustainable. You should also
-continue paying your current rent in full (if you still live at the property) to prevent further arrears.
+Note: Any payment arrangement you propose must be realistic and sustainable. You should also continue paying
+your current rent in full (if you still live at the property) to prevent further arrears.
 SECTION 6: ADDITIONAL INFORMATION
 Is there anything else you would like the claimant to know about your financial situation?
 _________________________________________________________________
@@ -108,8 +108,8 @@ _________________________________________________________________
 _________________________________________________________________
 _________________________________________________________________
 DECLARATION
-I confirm that the information I have given on this form is true and complete to the best of my knowledge.
-I understand that if I provide false information, it may affect any agreement or court order.
+I confirm that the information I have given on this form is true and complete to the best of my knowledge. I
+understand that if I provide false information, it may affect any agreement or court order.
 Your signature: _________________________________________
 Date: _________________________________________
 WHAT TO DO NEXT
@@ -122,13 +122,12 @@ Alice Landlord
 1 High Street London
 E1 1AA
 Email: alice@example.com
-NEED HELP COMPLETING THIS FORM?
-Free debt advice services can help you complete this form and negotiate with the claimant on your
-behalf:
-Citizens Advice: 0800 144 8848 or www.citizensadvice.org.uk
 
 -- 5 of 6 --
 
+NEED HELP COMPLETING THIS FORM?
+Free debt advice services can help you complete this form and negotiate with the claimant on your behalf:
+Citizens Advice: 0800 144 8848 or www.citizensadvice.org.uk
 StepChange Debt Charity: 0800 138 1111 or www.stepchange.org
 National Debtline: 0808 808 4000 or www.nationaldebtline.org
 MoneyHelper: 0800 138 7777 or www.moneyhelper.org.uk

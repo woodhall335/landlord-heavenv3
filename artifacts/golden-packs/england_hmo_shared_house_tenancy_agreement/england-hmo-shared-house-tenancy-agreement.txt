@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-hmo-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 HMO / SHARED HOUSE TENANCY AGREEMENT
 Tenancy agreement for an HMO or shared house in England
@@ -25,13 +31,13 @@ TENANT 1 Nina Sharer
 12 Example Street, London, SW1A 1AA
 Email: nina@example.com
 Telephone: 07000 300001
+
+-- 1 of 8 --
+
 TENANT 2 Owen Sharer
 12 Example Street, London, SW1A 1AA
 Email: owen@example.com
 Telephone: 07000 300002
-
--- 1 of 8 --
-
 TENANT 3 Priya Sharer
 12 Example Street, London, SW1A 1AA
 Email: priya@example.com
@@ -45,6 +51,15 @@ DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Nina Sharer
+The Landlord agrees to let the Property to the Tenant group for shared residential occupation on the
+terms set out in this agreement.
+A.
+The parties intend communal-area, sharer, and property-management detail to form part of the
+primary agreement.
+B.
+
+-- 2 of 8 --
+
 OPERATIVE PROVISIONS
 1. Tenancy Status and Core Particulars
 The parties intend the tenant to occupy the Property as their main home on the assured periodic basis
@@ -58,15 +73,6 @@ DATE
 The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate
 fixed-term drafting is created by this document unless a solicitor-approved route is expressly used outside
 this product.
-The Landlord agrees to let the Property to the Tenant group for shared residential occupation on the
-terms set out in this agreement.
-A.
-The parties intend communal-area, sharer, and property-management detail to form part of the
-primary agreement.
-B.
-
--- 2 of 8 --
-
 2. Rent, Payment Method, and Bill Treatment
 RENT £1500.00
 RENT PERIOD Monthly
@@ -86,6 +92,9 @@ permitted for England assured tenancies.
 Any rent increase for an England assured tenancy should follow the Section 13 statutory route or any
 later replacement process required by law. CPI, RPI, or fixed review wording is not intended to
 override that statutory process in this product.
+
+-- 3 of 8 --
+
 3. Deposit Arrangements
 DEPOSIT AMOUNT £1500.00
 DEPOSIT
@@ -98,9 +107,6 @@ DPS-EXAMPLE-2026-0001
 If a deposit is taken, it should be protected in an authorised England scheme within the statutory
 timeframe and the prescribed information should be served in time. The support documents in this pack
 are intended to help record those details.
-
--- 3 of 8 --
-
 4. Tenant Ending the Tenancy
 RECORDED TENANT
 NOTICE PERIOD

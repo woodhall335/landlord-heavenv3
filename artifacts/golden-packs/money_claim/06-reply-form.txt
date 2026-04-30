@@ -1,4 +1,12 @@
-REPLY FORM
+LH LANDLORDHEAVEN
+LEGAL DOCUMENTS FOR LANDLORDS
+CASE ID
+golden-money-claim-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
+Reply Form
 Use this form to respond to the Letter Before Claim
 YOUR DETAILS
 Your full name: _________________________________________
@@ -10,23 +18,22 @@ Your telephone: _________________________________________
 Your email: _________________________________________
 CLAIMANT'S DETAILS
 Claimant's name: Alice Landlord
-Amount claimed: £2943.55
-Date of Letter Before Claim: 28 April 2026
+Amount claimed: £2944.81
+Date of Letter Before Claim: 30 April 2026
 YOUR RESPONSE
 Please tick ONE box below:
 ☐ Option 1: I will pay the debt in full
-I agree that I owe the amount claimed and I will pay in full by: ___________________
-(date)
+I agree that I owe the amount claimed and I will pay in full by: ___________________ (date)
 ☐ Option 2: I want to arrange a payment plan
 I agree that I owe the money but I cannot pay in full. I would like to arrange a payment plan.
 I can afford to pay:
 £ ___________ per week ☐
 £ ___________ per month ☐
 Other: £ ___________ per ___________ ☐
+
+-- 1 of 3 --
+
 I have completed the Financial Statement Form (tick if enclosed): ☐
-
--- 1 of 4 --
-
 ☐ Option 3: I dispute the debt
 I do not agree that I owe this money, or I believe the amount is wrong.
 Reason for dispute: (Please tick all that apply)
@@ -56,24 +63,22 @@ Evidence enclosed: (Please list any documents you are sending to support your ca
 ☐ Other: _________________________________________
 ☐ Option 4: I need more information
 I need more information or documents before I can respond properly.
-
--- 2 of 4 --
-
 Please provide the following:
 _________________________________________________________________
 _________________________________________________________________
 _________________________________________________________________
+
+-- 2 of 3 --
+
 ☐ Option 5: I am in vulnerable circumstances
-I am in a vulnerable situation and request that you pause proceedings to allow me to seek
-advice.
+I am in a vulnerable situation and request that you pause proceedings to allow me to seek advice.
 Explanation of circumstances: (e.g., mental health issues, serious illness, bereavement)
 _________________________________________________________________
 _________________________________________________________________
 _________________________________________________________________
 I am currently seeking advice from: _________________________________________
 DECLARATION
-I confirm that the information I have given on this form is true and complete to the best of
-my knowledge.
+I confirm that the information I have given on this form is true and complete to the best of my knowledge.
 Your signature: _________________________________________
 Date: _________________________________________
 WHAT TO DO NEXT
@@ -88,9 +93,6 @@ E1 1AA
 Email: alice@example.com
 NEED HELP?
 If you need free, independent debt advice, contact:
-
--- 3 of 4 --
-
 Citizens Advice: 0800 144 8848 or www.citizensadvice.org.uk
 StepChange Debt Charity: 0800 138 1111 or www.stepchange.org
 National Debtline: 0808 808 4000 or www.nationaldebtline.org
@@ -100,4 +102,4 @@ Data Protection: The information you provide on this form will be used by the cl
 response and, if necessary, for court proceedings. Your personal data will be processed in accordance with
 the General Data Protection Regulation (GDPR) and the Data Protection Act 2018.
 
--- 4 of 4 --
+-- 3 of 3 --

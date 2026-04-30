@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-student-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 STUDENT TENANCY AGREEMENT
 Tenancy agreement for a student let in England
@@ -24,15 +30,15 @@ TENANT 1 Aisha Student
 12 Example Street, London, SW1A 1AA
 Email: aisha@example.com
 Telephone: 07000 200001
+
+-- 1 of 8 --
+
 TENANT 2 Ben Student
 12 Example Street, London, SW1A 1AA
 Email: ben@example.com
 Telephone: 07000 200002
 TENANT 3 Cara Student
 12 Example Street, London, SW1A 1AA
-
--- 1 of 8 --
-
 Email: cara@example.com
 Telephone: 07000 200003
 BACKGROUND

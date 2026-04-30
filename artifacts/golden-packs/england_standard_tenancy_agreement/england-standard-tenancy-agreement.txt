@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-standard-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 STANDARD TENANCY AGREEMENT
 Tenancy agreement for a residential let in England
@@ -24,16 +30,10 @@ TENANT Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
-BACKGROUND
-The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out
-in this agreement.
-A.
-The parties intend this document to record the principal occupation, payment, and management
-terms for the letting.
-B.
 
 -- 1 of 7 --
 
+BACKGROUND
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
@@ -51,6 +51,12 @@ DATE
 The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate
 fixed-term drafting is created by this document unless a solicitor-approved route is expressly used outside
 this product.
+The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out
+in this agreement.
+A.
+The parties intend this document to record the principal occupation, payment, and management
+terms for the letting.
+B.
 
 -- 2 of 7 --
 

@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-lodger-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 ROOM LET / LODGER AGREEMENT
 Lodger agreement for a resident-landlord let in England
@@ -27,16 +33,10 @@ TENANT Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
-BACKGROUND
-The resident Landlord permits the Lodger to occupy the agreed room at the Property and to use the
-shared facilities identified in this agreement.
-A.
-The parties intend this document to record the practical room-let terms, house rules, and notice
-arrangements that apply to the occupation.
-B.
 
 -- 1 of 4 --
 
+BACKGROUND
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
@@ -60,6 +60,15 @@ SHARED KITCHEN
 OR BATHROOM WITH
 LANDLORD
 Yes
+The resident Landlord permits the Lodger to occupy the agreed room at the Property and to use the
+shared facilities identified in this agreement.
+A.
+The parties intend this document to record the practical room-let terms, house rules, and notice
+arrangements that apply to the occupation.
+B.
+
+-- 2 of 4 --
+
 2. Licence Fee, Bills, and Included Services
 LICENCE FEE / RENT £1500.00
 PAYMENT
@@ -70,9 +79,6 @@ PAYMENT METHOD Bank transfer
 BILLS INCLUDED Gas, Electricity, Internet / broadband
 The lodger should pay the licence fee on time and use the property in a clean, respectful, and domestic
 manner consistent with a room-let in the landlord's own home.
-
--- 2 of 4 --
-
 3. Use of Shared Facilities and House Rules
 HOUSE RULES AND
 SHARED-SPACE
@@ -96,6 +102,9 @@ Yes
 Because the resident landlord lives at the property, day-to-day access and use of common parts should
 work cooperatively and reasonably. Even so, the lodger should be told about practical arrangements for
 privacy, quiet hours, and shared-space use.
+
+-- 3 of 4 --
+
 5. Notice and Ending the Room Let
 LICENCE NOTICE
 PERIOD
@@ -104,9 +113,6 @@ Either party may end the arrangement by giving the recorded notice unless a shor
 serious misconduct or both parties agree an earlier move-out date in writing.
 At the end of the arrangement the lodger should return keys, clear the room, and leave any shared areas in
 the expected condition.
-
--- 3 of 4 --
-
 EXECUTION
 This lodger agreement should be signed by the resident Landlord and the Lodger and kept with the room-
 let records.

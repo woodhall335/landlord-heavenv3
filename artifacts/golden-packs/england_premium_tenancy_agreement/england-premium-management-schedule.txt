@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-premium-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 PREMIUM MANAGEMENT SCHEDULE
 Premium operational and management schedule
@@ -24,13 +30,13 @@ TENANT Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
+
+-- 1 of 3 --
+
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Alice Tenant
-
--- 1 of 3 --
-
 OPERATIVE PROVISIONS
 1. Premium Management Schedule
 PRIMARY
@@ -64,6 +70,9 @@ EXPECTATIONS
 Return all keys and provide final meter readings.
 This schedule sits behind the Premium agreement and records the fuller day-to-day management detail
 that does not belong in the Standard route.
+
+-- 2 of 3 --
+
 2. Premium Check-In and Utilities Protocol
 CHECK-IN
 PAPERWORK
@@ -77,9 +86,6 @@ Tenant to open supplier accounts from the tenancy start date using the recorded 
 readings.
 Use this section alongside the keys handover record, utilities handover sheet, and any signed inventory or
 meter evidence kept with the tenancy file.
-
--- 2 of 3 --
-
 EXECUTION
 Keep this schedule with the Premium agreement and handover file.
 FILE OWNER

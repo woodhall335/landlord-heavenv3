@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-student-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 EXECUTED AS A DEED
 GUARANTOR AGREEMENT
 Deed of guarantee and indemnity for an England residential tenancy
@@ -24,15 +30,15 @@ TENANT 1 Aisha Student
 12 Example Street, London, SW1A 1AA
 Email: aisha@example.com
 Telephone: 07000 200001
+
+-- 1 of 5 --
+
 TENANT 2 Ben Student
 12 Example Street, London, SW1A 1AA
 Email: ben@example.com
 Telephone: 07000 200002
 TENANT 3 Cara Student
 12 Example Street, London, SW1A 1AA
-
--- 1 of 5 --
-
 Email: cara@example.com
 Telephone: 07000 200003
 GUARANTOR Greg Guarantor
@@ -48,6 +54,13 @@ TENANT
 OBLIGATIONS
 the obligations of the Tenant under the tenancy including rent, damage, and other sums
 properly due
+The Landlord has agreed to grant or continue the tenancy of the Property to the Tenant. A.
+The Guarantor has agreed to guarantee the obligations of the Tenant on the terms set out in this
+deed.
+B.
+
+-- 2 of 5 --
+
 OPERATIVE PROVISIONS
 1. Definitions and Tenancy Background
 This deed supports the residential tenancy identified below and should be read together with the tenancy
@@ -59,13 +72,6 @@ TENANT(S) Aisha Student, Ben Student, Cara Student
 PROPERTY 12 Example Street, London, SW1A 1AA
 CURRENT RENT £1500.00
 DEPOSIT £1500.00
-The Landlord has agreed to grant or continue the tenancy of the Property to the Tenant. A.
-The Guarantor has agreed to guarantee the obligations of the Tenant on the terms set out in this
-deed.
-B.
-
--- 2 of 5 --
-
 2. Guarantor Covenant
 In consideration of the Landlord granting or continuing the tenancy of the Property, the Guarantor agrees
 as principal obligor and not merely as surety to perform the obligations set out in this document.
@@ -87,6 +93,9 @@ renewal or written variation of the same tenancy for the same Property and subst
 group.
 No material increase in the Guarantor's liability is intended to bind the Guarantor unless that increase is
 stated in this document or separately accepted by the Guarantor in writing.
+
+-- 3 of 5 --
+
 5. Notices and Information
 GUARANTOR NAME Greg Guarantor
 GUARANTOR
@@ -98,9 +107,6 @@ GUARANTOR PHONE 07000 222222
 The Guarantor must notify the Landlord promptly of any change to the contact details set out above.
 Any notice or demand may be served by hand, first-class post, or email to the contact details stated in
 this document unless updated in writing.
-
--- 3 of 5 --
-
 6. Release, Limitation, and Advice
 If no express financial cap is stated in this document, the guarantee applies to the full amount of the
 guaranteed obligations arising under the tenancy.

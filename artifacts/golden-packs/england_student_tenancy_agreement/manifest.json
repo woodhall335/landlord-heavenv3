@@ -70,7 +70,7 @@
         "html": "england_student_tenancy_agreement/england-utilities-handover-sheet.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -88,7 +88,7 @@
         "html": "england_student_tenancy_agreement/england-pet-request-addendum.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -106,7 +106,7 @@
         "html": "england_student_tenancy_agreement/england-tenancy-variation-record.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -124,7 +124,7 @@
         "html": "england_student_tenancy_agreement/deposit_protection_certificate.html"
       },
       "extraction": {
-        "pageCount": 7,
+        "pageCount": 6,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -142,7 +142,7 @@
         "html": "england_student_tenancy_agreement/prescribed_information_pack.html"
       },
       "extraction": {
-        "pageCount": 9,
+        "pageCount": 8,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

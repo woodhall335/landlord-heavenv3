@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-hmo-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 KEYS & HANDOVER RECORD
 HMO / Shared House Tenancy Agreement move-in handover record
@@ -25,15 +31,15 @@ TENANT 1 Nina Sharer
 12 Example Street, London, SW1A 1AA
 Email: nina@example.com
 Telephone: 07000 300001
+
+-- 1 of 3 --
+
 TENANT 2 Owen Sharer
 12 Example Street, London, SW1A 1AA
 Email: owen@example.com
 Telephone: 07000 300002
 TENANT 3 Priya Sharer
 12 Example Street, London, SW1A 1AA
-
--- 1 of 3 --
-
 Email: priya@example.com
 Telephone: 07000 300003
 TENANT 4 Reece Sharer
@@ -55,15 +61,15 @@ DEVICES
 Record keys, fobs, alarms, and any concierge access devices here.
 Use this record to note the physical handover items provided at move-in and the items expected back at the
 end of occupation.
+
+-- 2 of 3 --
+
 2. Practical Checks
 Record the number of keys, fobs, gate controls, or alarm codes handed over.
 Confirm meter readings, appliance instructions, and any property-specific access rules on the handover
 date.
 Keep the signed or acknowledged handover record with the main agreement and any inventory or
 move-in photos.
-
--- 2 of 3 --
-
 EXECUTION
 Keep this handover record with the agreement, inventory, and any move-in photographs or check-in notes.
 FILE OWNER

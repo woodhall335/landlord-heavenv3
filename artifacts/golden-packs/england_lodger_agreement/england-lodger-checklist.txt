@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-lodger-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 ROOM LET / LODGER CHECKLIST
 Resident-landlord handover and room-let checklist
@@ -26,13 +32,13 @@ TENANT Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
+
+-- 1 of 3 --
+
 DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Alice Tenant
-
--- 1 of 2 --
-
 OPERATIVE PROVISIONS
 1. Before Move-In
 Confirm the room to be occupied, any furniture or household items included, and the house rules
@@ -50,6 +56,9 @@ Smoke alarms fitted and tested: Yes.
 CO alarms where required: Yes.
 Keep a dated copy of the agreement, checklist, payment record, and any inventory or move-in
 photographs with the room-let file.
+
+-- 2 of 3 --
+
 EXECUTION
 Keep this checklist with the lodger agreement, key record, and any room inventory or move-in
 photographs.
@@ -58,4 +67,4 @@ Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-LODGER-AGREEMENT-LODGER-001
 
--- 2 of 2 --
+-- 3 of 3 --

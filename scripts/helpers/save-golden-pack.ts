@@ -68,6 +68,23 @@ function isZipDocument(document: GoldenPackDocumentInput): boolean {
   return document.contentType === 'application/zip' || path.extname(document.file_name).toLowerCase() === '.zip';
 }
 
+const GOLDEN_PACK_TEXT_NORMALIZATIONS: Array<[RegExp, string]> = [
+  [/Ã‚Â£/g, '£'],
+  [/Â£/g, '£'],
+  [/Ã‚Â©/g, '©'],
+  [/Â©/g, '©'],
+];
+
+function normalizeGoldenPackTextArtifact(text: string): string {
+  let normalized = text;
+
+  for (const [pattern, replacement] of GOLDEN_PACK_TEXT_NORMALIZATIONS) {
+    normalized = normalized.replace(pattern, replacement);
+  }
+
+  return normalized.normalize('NFC');
+}
+
 export async function extractTextArtifactsForPdf(params: {
   baseDir: string;
   productDir: string;
@@ -89,7 +106,7 @@ export async function extractTextArtifactsForPdf(params: {
 
     if (extraction.text.trim()) {
       const textPath = path.join(params.productDir, `${params.baseName}.txt`);
-      await fs.writeFile(textPath, extraction.text, 'utf8');
+      await fs.writeFile(textPath, normalizeGoldenPackTextArtifact(extraction.text), 'utf8');
       return {
         textPath: toPosix(path.relative(params.baseDir, textPath)),
         extraction: extractionRecord,
@@ -169,7 +186,7 @@ export async function saveGoldenPack(params: {
 
     if (document.text && !record.files.text) {
       const textPath = path.join(productDir, `${baseName}.txt`);
-      await fs.writeFile(textPath, document.text, 'utf8');
+      await fs.writeFile(textPath, normalizeGoldenPackTextArtifact(document.text), 'utf8');
       record.files.text = toPosix(path.relative(params.baseDir, textPath));
     }
 

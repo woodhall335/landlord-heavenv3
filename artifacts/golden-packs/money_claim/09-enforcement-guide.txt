@@ -1,9 +1,9 @@
-ENFORCEMENT GUIDE
+Enforcement Guide
 Practical steps after obtaining a County Court Judgment
-Money Claim - Post-Judgment
-Claimant: Alice Landlord
-Defendant: Tom Tenant
-Claim amount: £2943.55
+MONEY CLAIM - POST-JUDGMENT
+CLAIMANT: Alice Landlord
+DEFENDANT: Tom Tenant
+CLAIM AMOUNT: £2944.81
 Important Notice: This guide explains the main enforcement routes after judgment, but it is not a substitute for
 advice on the facts of your own case. Enforcement only works if the defendant has wages, funds, property, or other
 assets you can realistically reach.
@@ -27,12 +27,12 @@ more money
 Be ready to pay the court fee up front even though some costs may later be recoverable
 Main enforcement methods
 The main methods available after a County Court Judgment are set out below.
-1. Attachment of Earnings Order
-What it is: An order telling the defendant's employer to deduct money from wages and send it through the court toward
-the judgment debt.
 
 -- 1 of 5 --
 
+1. Attachment of Earnings Order
+What it is: An order telling the defendant's employer to deduct money from wages and send it through the court toward
+the judgment debt.
 When it is usually worth considering:
 The defendant is employed rather than self-employed
 You know where they work
@@ -69,12 +69,12 @@ applying for a Writ of Control through form N293A.
 3. Third Party Debt Order
 What it is: An order freezing money held for the defendant by a bank or other third party and, if the court allows it, paying
 that money toward the judgment debt.
-When it is usually worth considering:
-You have reliable information about the defendant's bank or another source holding money for them
-You want to target funds rather than goods or wages
 
 -- 2 of 5 --
 
+When it is usually worth considering:
+You have reliable information about the defendant's bank or another source holding money for them
+You want to target funds rather than goods or wages
 The defendant appears to have cash available but has still not paid
 Advantages:
 Can be very effective if funds are present at the right time
@@ -112,12 +112,12 @@ You suspect there are wages, property, or accounts but need more detail
 The defendant has ignored requests for payment
 Advantages:
 Can give you better information before spending more on enforcement
-Helps you choose the right next application
-Shows the court process is continuing even where payment has stalled
-Risks or limits:
 
 -- 3 of 5 --
 
+Helps you choose the right next application
+Shows the court process is continuing even where payment has stalled
+Risks or limits:
 It does not itself recover money
 The answers still need to be tested against what you already know
 It adds another step before actual recovery action
@@ -137,8 +137,8 @@ Warrant of Control (over
 £110 Agent fees may arise Partly
 Third Party Debt Order £110 Usually none Often yes if funds are
 recovered
-Charging Order £110 Land Registry and later application
-costs may apply
+Charging Order £110 Land Registry and later application costs
+may apply
 Sometimes, depending on
 outcome
 Order to Obtain
@@ -155,16 +155,16 @@ applications later.
 4. Review the result quickly.
 If one route fails but fresh information comes in, another route may still be justified.
 Practical next steps
-Based on your claim for £2943.55 against Tom Tenant, the usual order is:
+Based on your claim for £2944.81 against Tom Tenant, the usual order is:
 1. Wait 14 days to see whether the judgment is paid voluntarily
 2. Send a short final demand if payment still has not arrived
+
+-- 4 of 5 --
+
 3. If you still do not know enough about the defendant's finances, consider an Order to Obtain Information
 4. Choose the enforcement route that matches what the defendant actually has, whether wages, bank funds,
 goods, or property
 5. Review the result promptly and decide whether a second route is justified
-
--- 4 of 5 --
-
 Important warnings
 Do Not Harass the Defendant: Keep all contact measured and lawful. Do not threaten, harass, or try to recover the
 debt outside the proper court process.
@@ -181,7 +181,7 @@ Money Claim Online:
 https://www.moneyclaim.gov.uk
 This guide is practical support for post-judgment enforcement. If recovery is likely to be contested or complicated,
 independent legal advice may still be worthwhile.
-Generated: 28 April 2026
+Generated: 30 April 2026
 Landlord Heaven Money Claim Pack | England
 This guide supports the steps landlords usually consider after a County Court Judgment has been entered.
 

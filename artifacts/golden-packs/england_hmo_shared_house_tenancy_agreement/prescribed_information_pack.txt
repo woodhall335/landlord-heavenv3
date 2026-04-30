@@ -1,3 +1,11 @@
+LH LANDLORDHEAVEN
+LEGAL DOCUMENTS FOR LANDLORDS
+CASE ID
+golden-hmo-tenancy-001
+JURISDICTION
+England
+GENERATED
+30 April 2026
 PRESCRIBED INFORMATION
 Tenancy Deposit Scheme
 As required by The Housing (Tenancy Deposits) (Prescribed Information) Order 2007
@@ -31,25 +39,22 @@ Email: reece@example.com
 Address: 12 Example Street, London, SW1A 1AA
 5. DEPOSIT DETAILS
 Amount of Deposit: £1500.00
-
--- 1 of 10 --
-
 Date Received: 2 May 2026
-How held: Insured scheme - the deposit is held by the landlord or agent and backed by the
-scheme
+How held: Insured scheme - the deposit is held by the landlord or agent and backed by the scheme
+
+-- 1 of 8 --
+
 6. DEPOSIT PROTECTION SCHEME
 Scheme Details
 Scheme Name: DPS
 Contact Information:
-See the deposit scheme website or membership confirmation for the current registered
-address.
+See the deposit scheme website or membership confirmation for the current registered address.
 Telephone: See scheme website
 Email: See scheme website
 Website: https://www.depositprotection.com/
 Scheme Type: Insurance-based
-How it works: The landlord holds the deposit but it is protected by insurance. At the end of
-the tenancy, the landlord must return the deposit or use the scheme's dispute resolution
-service if there is a disagreement.
+How it works: The landlord holds the deposit but it is protected by insurance. At the end of the tenancy, the
+landlord must return the deposit or use the scheme's dispute resolution service if there is a disagreement.
 Deposit Reference: DPS-EXAMPLE-2026-0001
 Date Protected: 2 May 2026
 7. CIRCUMSTANCES WHEN DEPOSIT MAY BE RETAINED
@@ -57,21 +62,16 @@ The landlord or agent may make deductions from the deposit for:
 1. Unpaid Rent
 Any rent or other money owed under the tenancy agreement at the end of the tenancy.
 2. Damage
-Damage to the property, furnishings, or contents beyond normal wear and tear. This
-includes:
+Damage to the property, furnishings, or contents beyond normal wear and tear. This includes:
 - Broken items
 - Burns, cuts, or stains beyond normal wear
 - Damage caused by pets
 - Holes in walls
 - Broken fixtures or fittings
-
--- 2 of 10 --
-
-Normal wear and tear is not covered - this means reasonable deterioration from ordinary
-living.
+Normal wear and tear is not covered - this means reasonable deterioration from ordinary living.
 3. Cleaning
-Professional cleaning costs if the property is returned in an unreasonably unclean condition
-compared to the check-in inventory.
+Professional cleaning costs if the property is returned in an unreasonably unclean condition compared to the
+check-in inventory.
 4. Missing Items
 Replacement costs for:
 - Lost keys
@@ -79,6 +79,9 @@ Replacement costs for:
 - Removed fixtures or fittings
 5. Other Breaches
 Costs arising from other breaches of the tenancy agreement.
+
+-- 2 of 8 --
+
 Evidence Required
 The landlord must provide evidence of any claimed deductions:
 Check-in and check-out inventories
@@ -95,9 +98,6 @@ Step 3: Discuss and agree any deductions
 Step 4: Complete the deposit return form
 Step 5: Submit the agreed allocation to the scheme
 The landlord will return your share within 10 working days of agreement.
-
--- 3 of 10 --
-
 9. DISPUTE RESOLUTION
 If You Cannot Agree
 If you and the landlord cannot agree on deposit deductions:
@@ -106,14 +106,16 @@ Communicate in writing
 Exchange evidence (photos, receipts)
 Consider compromise
 Step 2: Use Alternative Dispute Resolution (ADR)
-Both parties can ask the scheme to resolve the dispute using its free, impartial ADR
-service.
+Both parties can ask the scheme to resolve the dispute using its free, impartial ADR service.
 ADR Process
 1. Either party raises a dispute with the scheme
 2. Both parties submit evidence (photos, inventory, receipts, statements)
 3. An independent adjudicator reviews all evidence
 4. A decision is made (usually within 28 days)
 5. The scheme releases the deposit according to the decision
+
+-- 3 of 8 --
+
 6. The decision is binding on both parties
 ADR Service Details
 Service: DPS ADR Service
@@ -121,14 +123,10 @@ Contact: See scheme website
 Email: See scheme website
 Website: https://www.depositprotection.com/
 Cost: Free to both parties
-Time limit: You must raise a dispute within the deadline set by your deposit scheme after
-the tenancy ends.
+Time limit: You must raise a dispute within the deadline set by your deposit scheme after the tenancy ends.
 Court Action
 Alternatively, either party can take the matter to court, but this will involve:
 Court fees (approx £100 to £300)
-
--- 4 of 10 --
-
 Possible legal costs
 Longer time to resolve
 Risk of a costs order
@@ -150,6 +148,9 @@ Clean the property to the check-in standard
 Repair any damage you caused
 Remove all belongings
 Return all keys and devices
+
+-- 4 of 8 --
+
 Settle final utility bills
 Attend check-out if possible
 Provide a forwarding address
@@ -157,9 +158,6 @@ Provide a forwarding address
 The landlord must:
 Protect the deposit within 30 days
 Provide prescribed information within 30 days
-
--- 5 of 10 --
-
 Comply with the scheme's rules
 Provide evidence for any deductions
 Return the deposit within 10 days if there are no valid deductions
@@ -187,14 +185,12 @@ Major uncleanliness
 Pet damage
 Disputes over fair wear and tear are common, so keep photos from check-in.
 
--- 6 of 10 --
+-- 5 of 8 --
 
 13. BETTERMENT
-Landlords cannot charge for "betterment" - leaving the property in better condition than it
-was at the start.
-Example: If the carpet was 5 years old at check-in and worn when you leave, the landlord
-can only charge for the appropriate proportion of the replacement cost, not the cost of a
-brand-new carpet.
+Landlords cannot charge for "betterment" - leaving the property in better condition than it was at the start.
+Example: If the carpet was 5 years old at check-in and worn when you leave, the landlord can only charge for
+the appropriate proportion of the replacement cost, not the cost of a brand-new carpet.
 14. YOUR RIGHTS
 You have the right to:
 Have your deposit protected in an approved scheme
@@ -215,9 +211,6 @@ The landlord:
 May face a court order to pay a financial penalty
 May face deposit-compliance issues in later possession proceedings
 Cannot easily regain possession until compliance issues are addressed
-
--- 7 of 10 --
-
 16. USEFUL CONTACTS
 Your Deposit Scheme:
 DPS
@@ -226,6 +219,9 @@ Web: https://www.depositprotection.com/
 Citizens Advice:
 Tel: 0800 144 8848
 Web: www.citizensadvice.org.uk
+
+-- 6 of 8 --
+
 Shelter Housing Advice:
 Tel: 0808 800 4444
 Web: www.shelter.org.uk
@@ -247,9 +243,6 @@ Signed: _________________________
 Name: Owen Sharer
 Date: _________________________
 Tenant 3:
-
--- 8 of 10 --
-
 Signed: _________________________
 Name: Priya Sharer
 Date: _________________________
@@ -262,6 +255,9 @@ I confirm that:
 The deposit has been protected in DPS
 This prescribed information has been provided within 30 days
 All information provided is accurate
+
+-- 7 of 8 --
+
 I will comply with the scheme's rules
 Signed: _________________________
 Name: Jane Landlord
@@ -273,13 +269,10 @@ Tenancy agreement
 Check-in inventory
 Deposit protection certificate
 Generated by Landlord Heaven
-Document Reference: DOC-MOIK0YV1-R4COYH
-Generated: 2026-04-28T11:40:14.845Z
+Document Reference: DOC-MOLA91I5-KK5083
+Generated: 2026-04-30T09:29:53.885Z
 LEGAL BASIS:
 Housing Act 2004
-
--- 9 of 10 --
-
 The Housing (Tenancy Deposits) (Prescribed Information) Order 2007
 
--- 10 of 10 --
+-- 8 of 8 --

@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-hmo-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 HMO / SHARED HOUSE RULES APPENDIX
 Communal areas and sharer house-rules appendix
@@ -25,15 +31,15 @@ TENANT 1 Nina Sharer
 12 Example Street, London, SW1A 1AA
 Email: nina@example.com
 Telephone: 07000 300001
+
+-- 1 of 3 --
+
 TENANT 2 Owen Sharer
 12 Example Street, London, SW1A 1AA
 Email: owen@example.com
 Telephone: 07000 300002
 TENANT 3 Priya Sharer
 12 Example Street, London, SW1A 1AA
-
--- 1 of 3 --
-
 Email: priya@example.com
 Telephone: 07000 300003
 TENANT 4 Reece Sharer
@@ -56,14 +62,14 @@ RECYCLING
 ARRANGEMENTS
 Bins to be presented every Tuesday night.
 FIRE SAFETY NOTES Do not tamper with detectors and keep escape routes clear.
+
+-- 2 of 3 --
+
 EXECUTION
 Keep this appendix with the HMO / shared-house agreement and any property-management notes.
 FILE OWNER
 Jane Landlord
 Signature Date
-
--- 2 of 3 --
-
 Landlord Heaven file copy RL-ENGLAND-HMO-SHARED-HOUSE-TA-TENANCY-001
 
 -- 3 of 3 --

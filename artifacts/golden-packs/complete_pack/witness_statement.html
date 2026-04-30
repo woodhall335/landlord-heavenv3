@@ -314,6 +314,429 @@ em {
 
 
 
+body.lh-support-doc {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  color: #1f1635;
+  background: #fff;
+}
+
+body.lh-support-doc h1,
+body.lh-support-doc h2,
+body.lh-support-doc h3,
+body.lh-support-doc h4 {
+  text-transform: none;
+  letter-spacing: 0;
+  color: #24173f;
+}
+
+.lh-pack-masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1em;
+  margin: 0 0 1.25em 0;
+  padding: 0 0 0.9em 0;
+  border-bottom: 1.5px solid #d9d7f7;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.lh-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+
+.lh-brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.lh-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+}
+
+.lh-brand-name {
+  font-size: 12pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #2e1065;
+}
+
+.lh-brand-tag {
+  font-size: 7.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6d6790;
+}
+
+.lh-pack-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55em;
+}
+
+.lh-pack-meta-item {
+  min-width: 86px;
+  padding: 0.45em 0.65em;
+  border: 1px solid #ddd9f8;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fbfaff 0%, #f4f1ff 100%);
+}
+
+.lh-pack-meta-item span {
+  display: block;
+  margin-bottom: 0.2em;
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7b7397;
+}
+
+.lh-pack-meta-item strong {
+  display: block;
+  font-size: 8.8pt;
+  line-height: 1.35;
+  color: #271b45;
+}
+
+body.lh-support-doc .doc-header,
+body.lh-support-doc .header,
+body.lh-support-doc .bundle-header,
+body.lh-support-doc .court-header,
+body.lh-support-doc .document-header,
+body.lh-support-doc .cover,
+body.lh-support-doc .schedule-header {
+  margin-bottom: 1.3em;
+  padding: 0.9em 1em 1em;
+  border: 1px solid #ddd9f8;
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(180deg, #ffffff 0%, #faf8ff 100%);
+  box-shadow: inset 0 -1px 0 #ece8ff;
+}
+
+body.lh-support-doc .doc-header h1,
+body.lh-support-doc .header h1,
+body.lh-support-doc .bundle-header h1,
+body.lh-support-doc .court-header h1,
+body.lh-support-doc .doc-title h1,
+body.lh-support-doc .document-title,
+body.lh-support-doc .cover h1,
+body.lh-support-doc .schedule-header h2 {
+  margin-bottom: 0.2em;
+  font-size: 16pt;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #251744;
+}
+
+body.lh-support-doc .doc-header h2,
+body.lh-support-doc .header h2,
+body.lh-support-doc .bundle-header h2,
+body.lh-support-doc .court-header h2,
+body.lh-support-doc .claim-number,
+body.lh-support-doc .bundle-kicker,
+body.lh-support-doc .document-subtitle,
+body.lh-support-doc .cover-subtitle,
+body.lh-support-doc .schedule-title,
+body.lh-support-doc .cover-topline,
+body.lh-support-doc .agreement-date,
+body.lh-support-doc .doc-date {
+  color: #645b84;
+  font-size: 9pt;
+  font-weight: 500;
+}
+
+body.lh-support-doc .doc-badge,
+body.lh-support-doc .form-number,
+body.lh-support-doc .premium-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.38em 0.9em;
+  border: 1px solid #7048d7;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+  color: #fff;
+  font-size: 8.6pt;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+body.lh-support-doc .doc-title {
+  margin: 1.3em 0;
+  padding: 1em 1.15em;
+  border: 1px solid #d9d7f7;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #2e1065 0%, #4c1d95 100%);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(47, 20, 95, 0.12);
+}
+
+body.lh-support-doc .summary-box,
+body.lh-support-doc .details-box,
+body.lh-support-doc .case-details,
+body.lh-support-doc .timeline-box,
+body.lh-support-doc .warning-box,
+body.lh-support-doc .notes-section,
+body.lh-support-doc .callout,
+body.lh-support-doc .method-card,
+body.lh-support-doc .checklist-box,
+body.lh-support-doc .parties-block,
+body.lh-support-doc .overall-assessment,
+body.lh-support-doc .case-details,
+body.lh-support-doc .statement-of-truth,
+body.lh-support-doc .opening-statement,
+body.lh-support-doc .section,
+body.lh-support-doc .action-box,
+body.lh-support-doc .compliance-item,
+body.lh-support-doc .party-details,
+body.lh-support-doc .legal-notice,
+body.lh-support-doc .important-box,
+body.lh-support-doc .explainer-box,
+body.lh-support-doc .property-highlight,
+body.lh-support-doc .premium-section,
+body.lh-support-doc .subsection,
+body.lh-support-doc .signature-block,
+body.lh-support-doc .witness-section {
+  border-color: #ddd9f8;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfaff 100%);
+  box-shadow: 0 8px 24px rgba(42, 22, 80, 0.06);
+}
+
+body.lh-support-doc .summary-box,
+body.lh-support-doc .details-box,
+body.lh-support-doc .timeline-box,
+body.lh-support-doc .warning-box,
+body.lh-support-doc .notes-section,
+body.lh-support-doc .callout,
+body.lh-support-doc .opening-statement,
+body.lh-support-doc .case-details,
+body.lh-support-doc .statement-of-truth {
+  padding: 1em 1.05em;
+}
+
+body.lh-support-doc .case-details,
+body.lh-support-doc .summary-box,
+body.lh-support-doc .details-box,
+body.lh-support-doc .timeline-box,
+body.lh-support-doc .warning-box,
+body.lh-support-doc .notes-section,
+body.lh-support-doc .callout,
+body.lh-support-doc .method-card,
+body.lh-support-doc .checklist-box,
+body.lh-support-doc .section,
+body.lh-support-doc .compliance-item,
+body.lh-support-doc .action-box {
+  margin-bottom: 1.15em;
+}
+
+body.lh-support-doc .callout {
+  border-left: 4px solid #7c3aed;
+  background: linear-gradient(180deg, #fbf9ff 0%, #f6f2ff 100%);
+}
+
+body.lh-support-doc .callout.warning,
+body.lh-support-doc .warning-box,
+body.lh-support-doc .compliance-item-header.warning,
+body.lh-support-doc .action-box.recommended .action-box-header {
+  border-color: #d97706;
+  background: linear-gradient(180deg, #fff8ee 0%, #fff2de 100%);
+}
+
+body.lh-support-doc .callout.critical,
+body.lh-support-doc .compliance-item-header.fail,
+body.lh-support-doc .action-box.critical .action-box-header {
+  border-color: #b91c1c;
+  background: linear-gradient(180deg, #fff3f3 0%, #fee2e2 100%);
+}
+
+body.lh-support-doc .callout.success,
+body.lh-support-doc .overall-assessment.ready,
+body.lh-support-doc .compliance-item-header.pass {
+  border-color: #15803d;
+  background: linear-gradient(180deg, #f3fdf5 0%, #dcfce7 100%);
+}
+
+body.lh-support-doc .summary-grid dt,
+body.lh-support-doc .details-grid dt,
+body.lh-support-doc .case-details dt,
+body.lh-support-doc .case-details-grid dt {
+  font-size: 8.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6d6790;
+}
+
+body.lh-support-doc .summary-grid dd,
+body.lh-support-doc .details-grid dd,
+body.lh-support-doc .case-details dd,
+body.lh-support-doc .case-details-grid dd {
+  color: #251744;
+  font-weight: 600;
+}
+
+body.lh-support-doc .summary-item,
+body.lh-support-doc .compliance-item-content,
+body.lh-support-doc .action-box-content {
+  border-color: #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+body.lh-support-doc .section h2,
+body.lh-support-doc .section h3,
+body.lh-support-doc .method-card .heading,
+body.lh-support-doc .checklist-box .heading,
+body.lh-support-doc .section-title,
+body.lh-support-doc .section-header,
+body.lh-support-doc .statement-section h2,
+body.lh-support-doc .subsection-title,
+body.lh-support-doc .signature-title,
+body.lh-support-doc .legal-notice-title,
+body.lh-support-doc .important-title,
+body.lh-support-doc .explainer-title,
+body.lh-support-doc .warning-title,
+body.lh-support-doc .party-label {
+  color: #251744;
+}
+
+body.lh-support-doc .section h2,
+body.lh-support-doc .section h3,
+body.lh-support-doc .method-card .heading,
+body.lh-support-doc .checklist-box .heading,
+body.lh-support-doc .section-title {
+  padding: 0.7em 0.95em;
+  border: 0;
+  border-bottom: 1px solid #e7e2ff;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(180deg, #f8f6ff 0%, #f1ecff 100%);
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+
+body.lh-support-doc .section-title {
+  margin-top: 1.35em;
+}
+
+body.lh-support-doc .section-number {
+  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+  box-shadow: 0 8px 18px rgba(76, 29, 149, 0.18);
+}
+
+body.lh-support-doc .property-highlight,
+body.lh-support-doc .property-detail-item {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+body.lh-support-doc .property-highlight {
+  background: linear-gradient(135deg, #5b34c6 0%, #2d1f53 100%);
+}
+
+body.lh-support-doc .statement-section h2 {
+  border-bottom-color: #ddd9f8;
+}
+
+body.lh-support-doc .statement-section h2 .num,
+body.lh-support-doc .section-header .num {
+  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+}
+
+body.lh-support-doc .index-table,
+body.lh-support-doc .arrears-table,
+body.lh-support-doc table {
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0.95em 0;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+body.lh-support-doc .index-table th,
+body.lh-support-doc .arrears-table th,
+body.lh-support-doc table th {
+  border-color: #5b34c6;
+  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+  color: #fff;
+  font-size: 8.8pt;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+body.lh-support-doc .index-table td,
+body.lh-support-doc .arrears-table td,
+body.lh-support-doc table td {
+  border-color: #ddd9f8;
+  background: #fff;
+  color: #271b45;
+}
+
+body.lh-support-doc .index-table tr:nth-child(even) td,
+body.lh-support-doc .arrears-table tr:nth-child(even) td,
+body.lh-support-doc table tr:nth-child(even) td {
+  background: #fbfaff;
+}
+
+body.lh-support-doc .section-header td,
+body.lh-support-doc .total-row td,
+body.lh-support-doc .total-row {
+  background: #f2edff !important;
+  color: #251744 !important;
+  font-weight: 700;
+}
+
+body.lh-support-doc .checklist li {
+  border-bottom-color: #ebe7ff;
+}
+
+body.lh-support-doc .checklist li::before,
+body.lh-support-doc .checkbox {
+  border-color: #7c3aed;
+  border-radius: 4px;
+}
+
+body.lh-support-doc .footer,
+body.lh-support-doc .doc-footer,
+body.lh-support-doc .footer-info {
+  margin-top: 1.6em;
+  padding-top: 0.9em;
+  border-top: 1px solid #ddd9f8;
+  color: #736b91;
+  font-size: 8.5pt;
+}
+
+body.lh-support-doc .lh-fragment-support-doc > h1:first-child {
+  margin-bottom: 0.3em;
+  text-align: left;
+  font-size: 17pt;
+}
+
+body.lh-support-doc .lh-fragment-support-doc > p:first-of-type {
+  color: #5f567d;
+}
+
+
+
 .mt-0 { margin-top: 0 !important; }
 .mt-1 { margin-top: 0.5em !important; }
 .mt-2 { margin-top: 1em !important; }
@@ -644,7 +1067,7 @@ th {
     }
   </style>
 </head>
-<body>
+<body class="lh-support-doc">
 
 <!-- Court Header -->
 <div class="court-header">
@@ -721,10 +1144,10 @@ LS8 2PF</strong>, will say as follows:
 
 Ground 8 is a mandatory ground for possession. Ground 8 requires that at least 3 months' rent be unpaid both at the date of the notice and at the date of the hearing.
 
-At the date of service of the Form 3A notice (28 April 2026), the total rent arrears stood at &#163;3,600.00, representing approximately 3.0 months' rent.
+At the date of service of the Form 3A notice (30 April 2026), the total rent arrears stood at &#163;3,600.00, representing approximately 3.0 months' rent.
 This significantly exceeds the Ground 8 threshold of 3 months' rent (&#163;3,600.00).
 
-As at the date of this statement (28 April 2026), the total rent arrears amount to &#163;3,600.00, representing approximately 3.0 months of unpaid rent.
+As at the date of this statement (30 April 2026), the total rent arrears amount to &#163;3,600.00, representing approximately 3.0 months of unpaid rent.
 
 A detailed Schedule of Arrears (Exhibit DM1) showing the period-by-period breakdown of rent due and payments received is attached to this pack.
 
@@ -738,7 +1161,7 @@ Ground 10 is a discretionary ground which applies where some rent is unpaid both
 <div class="statement-section">
   <h2><span class="num">5</span> Timeline of Events</h2>
   <div class="statement-content">
-    <ul><li>1 January 2024: Tenancy began</li><li>1 January 2026: The first unpaid rent period began</li><li>28 April 2026: The Form 3A notice was served by post</li><li>26 May 2026: The notice period expired</li></ul>
+    <ul><li>1 January 2024: Tenancy began</li><li>1 January 2026: The first unpaid rent period began</li><li>30 April 2026: The Form 3A notice was served by post</li><li>28 May 2026: The notice period expired</li></ul>
   </div>
 </div>
 
@@ -806,7 +1229,7 @@ Ground 10 is a discretionary ground which applies where some rent is unpaid both
 
 <!-- Footer -->
 <div class="doc-footer">
-  <p><strong>Generated:</strong> 28 April 2026</p>
+  <p><strong>Generated:</strong> 30 April 2026</p>
 </div>
 
 </body>

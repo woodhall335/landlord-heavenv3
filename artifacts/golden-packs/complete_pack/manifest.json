@@ -1,6 +1,6 @@
 {
   "key": "complete_pack",
-  "displayName": "Complete Eviction Pack",
+  "displayName": "Section 8 Complete Eviction Pack",
   "outputDir": "complete_pack",
   "documentCount": 11,
   "documents": [
@@ -175,7 +175,7 @@
         "html": "complete_pack/arrears_engagement_letter.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

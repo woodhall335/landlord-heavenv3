@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-hmo-tenancy-001
+Jurisdictionengland
+Generated30 April 2026
 Pre-Tenancy Compliance Checklist
 England
 12 Example Street, London, SW1A 1AA
@@ -27,12 +33,12 @@ Gas Safety (Installation and Use) Regulations 1998
 Valid EPC with minimum E rating
 The property must have an EPC rating of E or above. Properties rated F or G cannot be let unless a valid exemption
 is registered. The EPC must be valid (less than 10 years old).
-☐ EPC provided to tenant
-Tenants must receive a copy of the EPC free of charge at the earliest opportunity.
-Energy Performance of Buildings (England and Wales) Regulations 2012 | MEES Regulations 2015
 
 -- 1 of 5 --
 
+☐ EPC provided to tenant
+Tenants must receive a copy of the EPC free of charge at the earliest opportunity.
+Energy Performance of Buildings (England and Wales) Regulations 2012 | MEES Regulations 2015
 4. Electrical Safety (EICR)
 ☐
 Electrical Installation Condition Report (EICR)

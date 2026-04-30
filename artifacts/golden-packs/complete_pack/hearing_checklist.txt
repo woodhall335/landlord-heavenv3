@@ -1,18 +1,19 @@
-HEARING CHECKLIST
-Prepare the hearing file and speaking points for the possession hearing - with Ground 8 arrears kept
-under review
-Property 16 Willow Mews York YO24 3HX
-Tenant Ivy Carleton
-Court York County Court and Family Court
-Hearing date To be notified by court
+Hearing Checklist
+Prepare the hearing file and speaking points for the possession hearing - with Ground 8 arrears kept under review
+PROPERTY 16 Willow Mews York YO24 3HX
+TENANT Ivy Carleton
+COURT York County Court and Family Court
+HEARING DATE To be notified by court
 Notice timeline
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
 Ground 10 (Any rent arrears).
-Form 3A notice served on 28 April 2026, expiring on 26 May 2026, with proceedings not intended before 26
+Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28
 May 2026.
-Notice service date 28 April 2026
-Notice expiry date 26 May 2026
-Earliest proceedings date 26 May 2026
+NOTICE SERVICE DATE 30 April 2026
+NOTICE EXPIRY DATE 28 May 2026
+EARLIEST PROCEEDINGS
+DATE
+28 May 2026
 Before the hearing
 Review the notice, service record, witness statement, and bundle index together so the pack remains internally
 consistent.
@@ -28,7 +29,7 @@ At the hearing
 Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of £3,600.00
 at the hearing.
 If the case changes
-Date: 28 April 2026
+Date: 30 April 2026
 Indexed court bundle
 Original tenancy agreement
 Form 3A notice

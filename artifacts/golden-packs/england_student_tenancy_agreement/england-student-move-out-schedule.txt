@@ -1,3 +1,9 @@
+LH
+LANDLORDHEAVEN
+Legal documents for landlords
+Case IDgolden-student-tenancy-001
+JurisdictionEngland
+Generated30 April 2026
 FOR PROPERTIES IN ENGLAND
 STUDENT MOVE-OUT & GUARANTOR
 SCHEDULE
@@ -22,6 +28,9 @@ LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
 Telephone: 07123 456789
+
+-- 1 of 3 --
+
 TENANT 1 Aisha Student
 12 Example Street, London, SW1A 1AA
 Email: aisha@example.com
@@ -30,9 +39,6 @@ TENANT 2 Ben Student
 12 Example Street, London, SW1A 1AA
 Email: ben@example.com
 Telephone: 07000 200002
-
--- 1 of 3 --
-
 TENANT 3 Cara Student
 12 Example Street, London, SW1A 1AA
 Email: cara@example.com
@@ -41,6 +47,9 @@ DEFINED TERMS
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Aisha Student
+
+-- 2 of 3 --
+
 OPERATIVE PROVISIONS
 1. Student Move-Out and Guarantor Schedule
 GUARANTOR
@@ -65,9 +74,6 @@ Professional-clean standard for kitchen and bathrooms.
 END-OF-TERM
 RETURN STANDARD
 Rooms to be returned clean and with all keys.
-
--- 2 of 3 --
-
 EXECUTION
 Keep this schedule with the student agreement, any guarantor deed, and the check-out file.
 FILE OWNER

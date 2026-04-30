@@ -52,7 +52,7 @@
         "html": "england_premium_tenancy_agreement/england-keys-handover-record.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -124,7 +124,7 @@
         "html": "england_premium_tenancy_agreement/deposit_protection_certificate.html"
       },
       "extraction": {
-        "pageCount": 6,
+        "pageCount": 5,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -142,7 +142,7 @@
         "html": "england_premium_tenancy_agreement/prescribed_information_pack.html"
       },
       "extraction": {
-        "pageCount": 9,
+        "pageCount": 7,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

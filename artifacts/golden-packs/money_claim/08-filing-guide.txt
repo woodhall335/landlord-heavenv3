@@ -1,40 +1,42 @@
-MONEY CLAIM FILING GUIDE
+LH LANDLORDHEAVEN
+LEGAL DOCUMENTS FOR LANDLORDS
+CASE ID
+golden-money-claim-001
+JURISDICTION
+england
+GENERATED
+30 April 2026
+Money Claim Filing Guide
 Practical steps for issuing your England money claim for rent arrears and related losses.
 Overview of your claim
 Claim type: Money claim for rent arrears and additional losses
-Claim amount: £2943.55
+Claim amount: £2944.81
 Court fee: £205.00
-Total at issue: £3148.55
+Total at issue: £3149.81
 Before you file
 Checklist before issue
 Sent a Letter Before Claim and allowed the defendant at least 30 days to respond
 Included the Information Sheet and Reply Form with that letter
-Considered any reply, payment proposal, or request for documents before issuing
-the claim
-Checked the figures in the Particulars of Claim, arrears schedule, and interest
-calculation
-Gathered the documents you may need to rely on such as the tenancy agreement,
-ledger, bank statements, invoices, and photographs
-Made sure the defendant name and address are correct on every document in the
-pack
-Important: If the pre-action letter has not gone out properly, or 30 days have not passed,
-sort that out first. The court can take a poor view of claims that skip the debt protocol.
+Considered any reply, payment proposal, or request for documents before issuing the claim
+Checked the figures in the Particulars of Claim, arrears schedule, and interest calculation
+Gathered the documents you may need to rely on such as the tenancy agreement, ledger, bank
+statements, invoices, and photographs
+Made sure the defendant name and address are correct on every document in the pack
+Important: If the pre-action letter has not gone out properly, or 30 days have not passed, sort that out first.
+The court can take a poor view of claims that skip the debt protocol.
 How to issue the claim
 You have two main ways to issue a money claim in England:
-1. Online through Money Claim Online (MCOL) where the claim is suitable for online
-issue
-2. By post to the County Court Money Claims Centre if you prefer a paper route or the
-claim needs it
-
--- 1 of 7 --
-
+1. Online through Money Claim Online (MCOL) where the claim is suitable for online issue
+2. By post to the County Court Money Claims Centre if you prefer a paper route or the claim needs it
 Option 1: File online through MCOL
 Why landlords usually choose MCOL
 Lower court fee: usually cheaper than paper issue
 Faster issue: claims are often processed more quickly
 Clear online tracking: easier to follow updates on the case
-Simpler follow-up steps: some judgment and enforcement requests can also be made
-online
+Simpler follow-up steps: some judgment and enforcement requests can also be made online
+
+-- 1 of 6 --
+
 Available at any time: useful if you want to prepare the filing outside court-office hours
 Step by step: issuing through MCOL
 Step 1: Create your account
@@ -53,22 +55,21 @@ Postcode: E1 1AA
 Email: alice@example.com
 Telephone: 02070000001
 Step 4: Enter defendant details
-Use the defendant name and address consistently across the claim form, particulars, and
-covering documents:
-
--- 2 of 7 --
-
+Use the defendant name and address consistently across the claim form, particulars, and covering
+documents:
 Defendant name: Tom Tenant
 Address: 2 High Street London
 Postcode: E1 2BB
 Step 5: Enter the amount claimed
-Important: MCOL expects amounts as numbers only, with no pound sign. Enter 2943.55,
-not "£2943.55".
-Claim amount: 2943.55
+Important: MCOL expects amounts as numbers only, with no pound sign. Enter 2944.81, not "£2944.81".
+Claim amount: 2944.81
 Court fee: £205.00 (usually calculated by MCOL)
+
+-- 2 of 6 --
+
 Step 6: Add the brief details of claim
-MCOL only gives a short box for the headline summary. Keep it aligned with the full
-Particulars of Claim and always finish with "Particulars of Claim attached".
+MCOL only gives a short box for the headline summary. Keep it aligned with the full Particulars of Claim and
+always finish with "Particulars of Claim attached".
 Copy this wording:
 Claim for unpaid rent and property damage relating to tenancy at 2 High Street London. The
 defendant occupied the property under an assured shorthold tenancy commencing 1 January 2024.
@@ -76,31 +77,31 @@ Rent was £950.00 monthly. The defendant failed to pay rent as it fell due, resu
 arrears of £2430.00. The defendant also caused damage beyond fair wear and tear, totalling
 £380.00. Interest is claimed under section 69 County Courts Act 1984 at 8% per annum.
 Particulars of Claim attached.
-Tip: copy the wording above directly into MCOL so the short summary stays consistent with
-the formal particulars in this pack.
+Tip: copy the wording above directly into MCOL so the short summary stays consistent with the formal
+particulars in this pack.
 Step 7: Attach the supporting documents
 1. Attach the Particulars of Claim from this pack
 2. Attach the Schedule of Arrears
 3. Attach the Interest Calculation
-Note: online attachment limits apply. If you need to upload several documents, combine
-them into one clear PDF bundle.
+Note: online attachment limits apply. If you need to upload several documents, combine them into one clear
+PDF bundle.
 Step 8: Review the statement of truth
-Read the statement carefully before you confirm it. The court expects the online claim, the
-particulars, and the supporting figures to match.
+Read the statement carefully before you confirm it. The court expects the online claim, the particulars, and the
+supporting figures to match.
 Step 9: Pay and issue the claim
 1. Check the claim summary one last time
-
--- 3 of 7 --
-
 2. Pay the court fee
 3. Submit the claim
-Once the claim is issued, keep the claim number, the sealed claim form, and any email
-confirmation with the rest of your pack.
+Once the claim is issued, keep the claim number, the sealed claim form, and any email confirmation with the
+rest of your pack.
 Option 2: File by post
 When paper filing may be the better route
 If you prefer a paper file
 If online issue is not suitable for the claim
 If the claim is over £100,000 or otherwise outside the MCOL route
+
+-- 3 of 6 --
+
 Step by step: filing by post
 Step 1: Print the claim form
 1. Print the completed Form N1 from this pack
@@ -116,11 +117,8 @@ Keep the paper file in a clear order:
 6. Photographs, invoices, or quotes supporting the damage claim
 Tip: keep the bundle neat and secure. A stapler or treasury tag is better than loose papers.
 Step 3: Check the court fee
-Your claim amount is £2943.55, so the court fee is £205.00.
+Your claim amount is £2944.81, so the court fee is £205.00.
 Court fees vary by claim value:
-
--- 4 of 7 --
-
 Claim Amount Court Fee (Online) Court Fee (Paper)
 Up to £300 £35 £35
 £300.01 to £500 £50 £50
@@ -135,6 +133,9 @@ You can usually pay by:
 Cheque payable to "HM Courts & Tribunals Service"
 Postal order payable to "HM Courts & Tribunals Service"
 Do not send cash.
+
+-- 4 of 6 --
+
 Step 5: Send the pack
 Send the claim to:
 County Court Money Claims Centre
@@ -148,9 +149,6 @@ After receipt, the court will usually:
 2. Issue the claim and assign a claim number
 3. Serve the claim on the defendant
 4. Send a Notice of Issue
-
--- 5 of 7 --
-
 What happens after issue
 Typical timeline
 Stage What usually happens
@@ -162,26 +160,25 @@ After acknowledgment The defendant usually has up to 28 days from service to fil
 Likely outcomes
 1. The defendant pays in full and the claim can be brought to an end
 2. The defendant does not respond and you can ask for default judgment
-3. The defendant admits the claim but asks to pay by instalments and you can decide
-whether to accept the proposal
+3. The defendant admits the claim but asks to pay by instalments and you can decide whether to accept
+the proposal
 4. The defendant files a defence and the court gives directions for the case to move on
 If judgment is entered but payment still does not follow
 If you obtain judgment and the defendant still does not pay, the next step is enforcement.
 Warrant of Control if the defendant has goods worth seizing
 Attachment of Earnings if the defendant is in employment
+
+-- 5 of 6 --
+
 Third Party Debt Order if you know where money is held for the defendant
 Charging Order if the defendant owns property
-Use the Enforcement Guide in this pack to decide which route best matches the
-defendant's circumstances.
+Use the Enforcement Guide in this pack to decide which route best matches the defendant's circumstances.
 Help and support
 MCOL Help: 0300 123 1057
 County Court Money Claims Centre: 0300 123 1372
 HMCTS guidance: www.gov.uk/make-money-claim
-This guide is practical support for issuing the claim. If the matter becomes defended or
-more complex, independent legal advice may still be worth taking.
+This guide is practical support for issuing the claim. If the matter becomes defended or more complex,
+independent legal advice may still be worth taking.
+Generated on 30 April 2026 • Document reference: golden-money-claim-001
 
--- 6 of 7 --
-
-Generated on 28 April 2026 • Document reference: golden-money-claim-001
-
--- 7 of 7 --
+-- 6 of 6 --
