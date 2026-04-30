@@ -130,7 +130,7 @@ export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'en
     return {
       title: 'This case looks ready for the full possession pack',
       reason:
-        'You are already building the notice around Ground 8 arrears. If you expect to issue proceedings after service, moving into the Complete Eviction Pack now keeps the notice, arrears schedule, N5, N119, and witness statement aligned from the start.',
+        'You are already building this notice around Ground 8 arrears. If you expect to go to court after service, moving into the Complete Eviction Pack now keeps the notice, arrears schedule, N5, N119, and witness statement aligned from the start.',
       benefits: [
         'Keeps the notice and court forms consistent from the same answers',
         'Adds the N5, N119, witness statement, and court bundle support',
@@ -143,7 +143,7 @@ export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'en
     return {
       title: 'Consider upgrading if this is likely to reach court',
       reason:
-        'This notice is relying on multiple or more involved possession grounds. The Complete Eviction Pack is a better fit when you want the notice, court forms, and supporting documents prepared together.',
+        'This notice relies on multiple or more involved possession grounds. The Complete Eviction Pack is a better fit when you want the notice, court forms, and supporting documents prepared together.',
       benefits: [
         'Adds the court claim forms and bundle support',
         'Helps keep evidence and particulars aligned with the notice',
@@ -262,7 +262,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'parties',
     label: 'Who and where?',
-    description: 'Landlord, tenant, and service identity details',
+    description: 'Landlord, tenant, and notice service details',
     isComplete: (facts) =>
       Boolean(facts.landlord_full_name) &&
       Boolean(facts.landlord_address_line1) &&
@@ -273,7 +273,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'property',
     label: 'Property',
-    description: 'Property address used across the notice pack',
+    description: 'The property address that appears on the notice',
     isComplete: (facts) =>
       Boolean(facts.property_address_line1) &&
       Boolean(facts.property_address_town) &&
@@ -282,7 +282,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'tenancy',
     label: 'Tenancy details',
-    description: 'Tenancy dates, rent, and payment pattern',
+    description: 'Tenancy dates, rent, and how rent is paid',
     isComplete: (facts) =>
       Boolean(facts.tenancy_start_date) &&
       Boolean(facts.rent_amount) &&

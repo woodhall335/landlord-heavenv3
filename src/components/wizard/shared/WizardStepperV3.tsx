@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 import { type StepMetadata } from './stepMetadata';
 
@@ -19,9 +19,60 @@ interface WizardStepperV3Props {
 
 export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Props) {
   const isHeader = variant === 'header';
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const hasAlignedOnceRef = useRef(false);
+  const currentStepIndex = tabs.findIndex((tab) => tab.isCurrent);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const activeButton = currentStepIndex >= 0 ? buttonRefs.current[currentStepIndex] : null;
+
+    if (!container || !activeButton) {
+      return;
+    }
+
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const frame = window.requestAnimationFrame(() => {
+      const containerWidth = container.clientWidth;
+      const scrollWidth = container.scrollWidth;
+      const activeStart = activeButton.offsetLeft;
+      const activeWidth = activeButton.offsetWidth;
+      const activeEnd = activeStart + activeWidth;
+      const visibleStart = container.scrollLeft;
+      const visibleEnd = visibleStart + containerWidth;
+      const comfortPadding = Math.min(56, Math.max(24, Math.round(containerWidth * 0.14)));
+      const comfortablyVisible =
+        activeStart >= visibleStart + comfortPadding &&
+        activeEnd <= visibleEnd - comfortPadding;
+
+      const targetLeft = activeStart + activeWidth / 2 - containerWidth / 2;
+      const maxScrollLeft = Math.max(scrollWidth - containerWidth, 0);
+      const clampedTarget = Math.min(Math.max(targetLeft, 0), maxScrollLeft);
+
+      if (comfortablyVisible) {
+        hasAlignedOnceRef.current = true;
+        return;
+      }
+
+      container.scrollTo({
+        left: clampedTarget,
+        behavior: !hasAlignedOnceRef.current || reduceMotion ? 'auto' : 'smooth',
+      });
+      hasAlignedOnceRef.current = true;
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [currentStepIndex, tabs.length]);
 
   return (
-    <div className="overflow-x-auto pb-1">
+    <div ref={containerRef} className="overflow-x-auto pb-1">
       <ol className="flex min-w-max items-center">
         {tabs.map((tab, index) => {
           const isCurrent = tab.isCurrent;
@@ -43,7 +94,12 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
           return (
             <li key={tab.id} className="flex items-center">
               <button
+                ref={(node) => {
+                  buttonRefs.current[index] = node;
+                }}
                 onClick={tab.onClick}
+                aria-current={isCurrent ? 'step' : undefined}
+                data-step-id={tab.id}
                 className={[
                   'group inline-flex items-center gap-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300',
                   isHeader

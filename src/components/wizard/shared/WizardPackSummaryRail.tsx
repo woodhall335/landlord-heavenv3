@@ -37,14 +37,15 @@ export function WizardPackSummaryRail({
   const visibleOutstandingSections = mobile ? summary.outstandingSections.slice(0, 3) : summary.outstandingSections;
   const hiddenOutstandingCount = summary.outstandingSections.length - visibleOutstandingSections.length;
   const cardClassName = mobile
-    ? 'rounded-[1.25rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-3.5 shadow-[0_14px_32px_rgba(76,29,149,0.07)]'
-    : 'rounded-[1.8rem] border border-[#e6dcff] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,243,255,0.94))] p-5 shadow-[0_20px_60px_rgba(76,29,149,0.10)]';
+    ? 'rounded-[1.35rem] border border-[#e5dbff] bg-[linear-gradient(180deg,rgba(255,255,255,0.985),rgba(248,243,255,0.955))] p-3.5 shadow-[0_16px_36px_rgba(76,29,149,0.075)]'
+    : 'rounded-[1.95rem] border border-[#e5dbff] bg-[linear-gradient(180deg,rgba(255,255,255,0.985),rgba(248,243,255,0.955))] p-5 shadow-[0_22px_64px_rgba(76,29,149,0.11)]';
   const selectedPreview =
     previewEntries.find((entry) => entry.title === selectedPreviewTitle) ?? previewEntries[0] ?? null;
 
   const content = (
     <>
-      <div className={cardClassName}>
+      <div className={`${cardClassName} relative overflow-hidden`}>
+        <div className="pointer-events-none absolute inset-[1px] rounded-[inherit] border border-white/70" />
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7b56d8]">
@@ -55,13 +56,13 @@ export function WizardPackSummaryRail({
             </h3>
             <p className={`mt-1 text-[#60597a] ${mobile ? 'text-xs leading-5' : 'text-sm leading-6'}`}>{summary.subheading}</p>
           </div>
-          <span className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1 text-xs font-semibold text-[#5b36b3] shadow-sm">
+          <span className="rounded-full border border-[#ddd0ff] bg-white/92 px-3 py-1 text-xs font-semibold text-[#5b36b3] shadow-sm">
             Live pack
           </span>
         </div>
 
         {currentStepLabel ? (
-          <div className="mt-4 rounded-2xl border border-[#efe7ff] bg-white/80 px-4 py-3">
+          <div className="mt-4 rounded-[1.35rem] border border-[#ece3ff] bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,245,255,0.92))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7b56d8]">
               Current step
             </p>
@@ -78,7 +79,7 @@ export function WizardPackSummaryRail({
             {summary.currentStepDocuments.map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-[#ddd0ff] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm"
+                className="rounded-full border border-[#ddd0ff] bg-white/92 px-3 py-1.5 text-xs font-semibold text-[#5b36b3] shadow-sm transition-transform duration-200 hover:-translate-y-[1px]"
               >
                 {item}
               </span>
@@ -116,8 +117,8 @@ export function WizardPackSummaryRail({
               {summary.proofCards.map((card) => (
                 <div
                   key={card.title}
-                  className="rounded-2xl border border-[#e9e0ff] bg-white/85 px-4 py-3 shadow-sm"
-                >
+                className="rounded-[1.35rem] border border-[#e9e0ff] bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(250,246,255,0.9))] px-4 py-3 shadow-[0_12px_30px_rgba(76,29,149,0.06)]"
+              >
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-sm font-semibold text-[#241247]">{card.title}</p>
@@ -125,7 +126,7 @@ export function WizardPackSummaryRail({
                         {card.detail}
                       </p>
                     </div>
-                    <span className="rounded-full border border-[#ddd0ff] bg-[#f8f3ff] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b46c1]">
+                    <span className="rounded-full border border-[#ddd0ff] bg-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b46c1] shadow-sm">
                       Live sample
                     </span>
                   </div>
@@ -142,7 +143,7 @@ export function WizardPackSummaryRail({
               <RiFileList3Line className="h-4 w-4 text-[#6d28d9]" />
               <h4 className="text-sm font-semibold text-[#241247]">Visual document proof</h4>
             </div>
-            <div className="mt-3 rounded-[1.35rem] border border-[#e3dbff] bg-white/90 p-3 shadow-sm">
+            <div className="mt-3 rounded-[1.45rem] border border-[#e3dbff] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(249,245,255,0.92))] p-3 shadow-[0_14px_34px_rgba(76,29,149,0.07)]">
               <div className="overflow-hidden rounded-[1rem] border border-[#e8ddff] bg-[#f8f5ff]">
                 <img
                   src={selectedPreview.thumbnailHref}
@@ -162,7 +163,7 @@ export function WizardPackSummaryRail({
                 <button
                   type="button"
                   onClick={() => setIsPreviewModalOpen(true)}
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#ddd0ff] bg-[#f8f3ff] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-[#6b46c1] transition hover:bg-white"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#ddd0ff] bg-white/92 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-[#6b46c1] shadow-sm transition hover:-translate-y-[1px] hover:bg-white"
                 >
                   <RiFullscreenLine className="h-3.5 w-3.5" />
                   Open sample
@@ -177,7 +178,7 @@ export function WizardPackSummaryRail({
                       onClick={() => setSelectedPreviewTitle(entry.title)}
                       className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] transition ${
                         entry.title === selectedPreview.title
-                          ? 'border-[#cdbbff] bg-white text-[#5b36b3] shadow-sm'
+                      ? 'border-[#cdbbff] bg-white text-[#5b36b3] shadow-sm'
                           : 'border-[#e4d9ff] bg-[#faf7ff] text-[#766c91] hover:bg-white'
                       }`}
                     >
@@ -212,7 +213,7 @@ export function WizardPackSummaryRail({
         ) : null}
 
         {summary.sectionsNeedingAttention.length > 0 ? (
-          <section className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+          <section className="mt-5 rounded-[1.35rem] border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,0.96),rgba(255,247,214,0.92))] px-4 py-3 shadow-[0_10px_24px_rgba(217,119,6,0.07)]">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-900">
               Needs attention
             </p>
@@ -226,7 +227,7 @@ export function WizardPackSummaryRail({
           </section>
         ) : null}
 
-        <div className="mt-5 rounded-2xl border border-[#efe7ff] bg-white/80 px-4 py-3">
+        <div className="mt-5 rounded-[1.3rem] border border-[#efe7ff] bg-white/88 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]">
           <p className="text-sm leading-6 text-[#5b5670]">
             Preview before payment. You can still change your answers before we prepare the final documents.
           </p>

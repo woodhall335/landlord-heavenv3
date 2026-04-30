@@ -143,7 +143,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'parties',
     label: 'Who and where?',
-    description: 'Landlord, tenant, and service identity details',
+    description: 'Landlord, tenant, and notice service details',
     isComplete: (facts) =>
       Boolean(facts.landlord_full_name) &&
       Boolean(facts.landlord_address_line1) &&
@@ -154,7 +154,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'property',
     label: 'Property',
-    description: 'Property address used across the pack and claim documents',
+    description: 'The property address used across the notice and court papers',
     isComplete: (facts) =>
       Boolean(facts.property_address_line1) &&
       Boolean(facts.property_address_town) &&
@@ -163,7 +163,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'tenancy',
     label: 'Tenancy details',
-    description: 'Tenancy dates, rent, and payment pattern',
+    description: 'Tenancy dates, rent, and how rent is paid',
     isComplete: (facts) =>
       Boolean(facts.tenancy_start_date) &&
       Boolean(facts.rent_amount) &&
@@ -173,7 +173,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'notice',
     label: 'When will you serve?',
-    description: 'Notice, service, and N215 details before claim drafting',
+    description: 'Notice date, service method, and N215 details before the claim is prepared',
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
@@ -197,7 +197,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'ground_details',
     label: 'Ground details',
-    description: 'Facts and evidence for any selected specialist grounds',
+    description: 'The facts and evidence behind any specialist grounds you selected',
     routes: ['section_8'],
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
@@ -213,7 +213,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'section8_arrears',
     label: 'About the arrears',
-    description: 'Section 8 particulars with arrears support where needed',
+    description: 'Arrears details and supporting facts for Section 8 where needed',
     routes: ['section_8'],
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
@@ -267,7 +267,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'evidence',
     label: 'Evidence summary',
-    description: 'Service proof, chronology, supporting records, and readiness checks',
+    description: 'Service proof, chronology, supporting records, and final checks before court',
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
@@ -379,7 +379,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   {
     id: 'court_signing',
     label: 'Prepare your court claim',
-    description: 'Court details, signing, and claim-form assembly',
+    description: 'Court details, signing details, and the claim forms',
     isComplete: (facts) =>
       Boolean(facts.court_name) &&
       Boolean(facts.signatory_name) &&
@@ -387,8 +387,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'review',
-    label: 'Review your court-ready pack',
-    description: 'Open the completed documents and check court-pack readiness',
+    label: 'Review your court documents',
+    description: 'Open the completed documents and make sure everything is ready to file',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -399,7 +399,7 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
   {
     id: 'scotland_basics',
     label: 'Case Basics',
-    description: 'Private Residential Tenancy (Scotland)',
+    description: 'Scottish Private Residential Tenancy case',
     jurisdictions: ['scotland'],
     isComplete: () => true, // Auto-complete as Scotland is pre-selected
   },
@@ -428,7 +428,7 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
   {
     id: 'tenancy',
     label: 'Tenancy',
-    description: 'Tenancy details and rent',
+    description: 'Tenancy details and rent information',
     jurisdictions: ['scotland'],
     isComplete: (facts) =>
       Boolean(facts.tenancy_start_date) &&
@@ -449,7 +449,7 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
   {
     id: 'scotland_grounds',
     label: 'Grounds',
-    description: 'Select eviction ground (all discretionary)',
+    description: 'Choose the eviction ground you want to rely on',
     jurisdictions: ['scotland'],
     isComplete: (facts) => Boolean(facts.scotland_eviction_ground),
     hasWarnings: () => [
@@ -480,7 +480,7 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
   {
     id: 'evidence',
     label: 'Evidence',
-    description: 'Supporting documents',
+    description: 'Supporting documents and records',
     jurisdictions: ['scotland'],
     isComplete: (facts) => Boolean(facts.evidence_reviewed || facts.uploaded_documents?.length > 0),
   },
@@ -497,7 +497,7 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review and generate your case bundle',
+    description: 'Review the documents and generate them',
     jurisdictions: ['scotland'],
     isComplete: () => false, // Always navigable for final review
   },
@@ -1034,7 +1034,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                {uploadsInProgress ? 'Uploading...' : 'Generate Case Bundle'}
+                {uploadsInProgress ? 'Uploading...' : 'Generate documents'}
               </button>
             ) : (
               <button

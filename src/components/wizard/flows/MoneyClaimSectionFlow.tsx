@@ -90,7 +90,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'claimant',
     label: 'Claimant',
-    description: 'Your contact details as the landlord or company',
+    description: 'Your details as the landlord or company making the claim',
     isComplete: (facts) =>
       Boolean(facts.landlord_full_name || (facts.landlord_is_company && facts.company_name)) &&
       Boolean(facts.landlord_address_line1) &&
@@ -123,7 +123,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'tenancy',
     label: 'Tenancy',
-    description: 'Tenancy agreement details',
+    description: 'Tenancy details relevant to the claim',
     isComplete: (facts) =>
       Boolean(facts.tenancy_start_date) &&
       Boolean(facts.rent_amount) &&
@@ -140,7 +140,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'claim_details',
     label: 'Claim Details',
-    description: 'What you are claiming',
+    description: 'What you want the court to award',
     isComplete: (facts) => {
       // Must select at least one claim type
       // Interest decision moved to Claim Statement section
@@ -171,7 +171,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'arrears',
     label: 'Arrears',
-    description: 'Rent arrears schedule',
+    description: 'Missed rent and the arrears schedule',
     isComplete: (facts) => {
       // Only complete if user explicitly said they're NOT claiming rent arrears,
       // OR if they ARE claiming and have provided arrears items
@@ -201,7 +201,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'damages',
     label: 'Damages',
-    description: 'Property damage and other costs',
+    description: 'Property damage, cleaning, and other costs',
     isComplete: (facts) => {
       // Only complete if user explicitly said they're NOT claiming damages/other,
       // OR if they ARE claiming and have provided damage items
@@ -232,7 +232,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'claim_statement',
     label: 'Claim Statement',
-    description: 'Statement, occupancy status, and interest',
+    description: 'Your claim statement, occupancy position, and interest',
     isComplete: (facts) => isMoneyClaimClaimStatementSectionComplete(facts),
     hasBlockers: (facts, jurisdiction) => {
       const result = getSectionValidation('claim_statement', facts, jurisdiction || 'england');
@@ -246,7 +246,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'preaction',
     label: 'Pre-Action',
-    description: 'Letter Before Claim (PAP-DEBT compliance)',
+    description: 'Letter Before Claim and pre-action steps',
     isComplete: (facts) =>
       // Complete if user has either:
       // - Already sent a letter (letter_before_claim_sent or pap_letter_date)
@@ -266,7 +266,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'evidence',
     label: 'Evidence',
-    description: 'Supporting documents',
+    description: 'Supporting documents for the claim',
     // Optional section - only complete when user has uploaded evidence or confirmed none needed
     isComplete: (facts) => Boolean(facts.evidence_reviewed || facts.uploaded_documents?.length > 0),
     hasWarnings: (facts) => {
@@ -277,7 +277,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review and generate your case bundle',
+    description: 'Review the documents and generate them',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -829,7 +829,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                Continue to generate the money claim pack
+                          Continue to generate your money claim documents
               </button>
             ) : (
               <button
@@ -851,7 +851,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     >
       {currentBlockers.length > 0 && (
         <div className="mb-6 rounded-[1.4rem] border border-red-200 bg-red-50 p-4">
-          <h3 className="mb-2 text-sm font-medium text-red-800">You need to fix these before this pack is ready</h3>
+                <h3 className="mb-2 text-sm font-medium text-red-800">You need to fix these before your documents are ready</h3>
           <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
             {currentBlockers.map((blocker, i) => (
               <li key={i}>{blocker}</li>

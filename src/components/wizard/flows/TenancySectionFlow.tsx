@@ -182,8 +182,8 @@ const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
         agreementType: 'Assured Periodic Tenancy Agreement',
         standardTier: 'Standard Assured Periodic Tenancy Agreement',
         premiumTier: 'Premium Assured Periodic Tenancy Agreement',
-        standardDescription: 'England assured periodic tenancy agreement updated for the current framework on standard lets.',
-        premiumDescription: 'Premium England assured periodic tenancy agreement with fuller ordinary-residential drafting, guarantor support, and enhanced operational terms for the current framework.',
+        standardDescription: 'A straightforward England assured periodic tenancy agreement for most standard lets.',
+        premiumDescription: 'A fuller England assured periodic tenancy agreement with guarantor support and more detailed day-to-day terms.',
       };
   }
 };
@@ -266,13 +266,13 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'product',
     label: 'Product',
-    description: 'Choose your tenancy agreement type',
+    description: 'Choose the agreement that fits this let',
     isComplete: (facts) => Boolean(facts.product_tier),
   },
   {
     id: 'property',
     label: 'Property',
-    description: 'Rental property address and details',
+    description: 'The rental property address and key details',
     isComplete: (facts) =>
       Boolean(facts.property_address_line1) &&
       Boolean(facts.property_address_town) &&
@@ -282,7 +282,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'landlord',
     label: 'Landlord',
-    description: 'Landlord contact and service address',
+    description: 'Landlord contact details and service address',
     isComplete: (facts) => {
       const baseComplete =
         Boolean(facts.landlord_full_name) &&
@@ -301,7 +301,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'tenants',
     label: 'Tenants',
-    description: 'Tenant details',
+    description: 'Who is moving in and who should be named on the agreement',
     isComplete: (facts) => {
       const tenants = facts.tenants || [];
       if (!facts.number_of_tenants) return false;
@@ -314,7 +314,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'tenancy',
     label: 'Tenancy',
-    description: 'Tenancy start date',
+    description: 'Tenancy start date and term details',
     isComplete: (facts) => {
       // Start date is always required
       if (!facts.tenancy_start_date) return false;
@@ -330,7 +330,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'rent',
     label: 'Rent',
-    description: 'Rent amount and payment details',
+    description: 'Rent amount, frequency, and payment details',
     isComplete: (facts) =>
       Boolean(facts.rent_amount) &&
       Boolean(facts.rent_period) &&
@@ -339,7 +339,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'deposit',
     label: 'Deposit',
-    description: 'Deposit and protection scheme',
+    description: 'Deposit amount and protection details',
     isComplete: (facts) => isTenancyDepositSectionComplete(facts),
     hasBlockers: (facts) => {
       const depositCap = getEnglandDepositCapResult(facts);
@@ -354,7 +354,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'document_details',
     label: 'Document details',
-    description: 'Details specific to this residential letting document',
+    description: 'Extra details needed for this document',
     isComplete: (facts) => {
       const residentialProduct = getResidentialStandaloneProduct(facts);
       if (!residentialProduct) return true;
@@ -453,7 +453,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'bills',
     label: 'Bills',
-    description: 'Utilities and bills responsibility',
+    description: 'Who pays which bills and utilities',
     isComplete: (facts) =>
       Boolean(facts.council_tax_responsibility) &&
       Boolean(facts.utilities_responsibility),
@@ -461,7 +461,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'compliance',
     label: 'Compliance',
-    description: 'Safety certificates and legal requirements',
+    description: 'Safety certificates and key legal checks',
     isComplete: (facts) => {
       const baseComplete =
         Boolean(facts.epc_rating) &&
@@ -486,7 +486,7 @@ const SECTIONS: WizardSection[] = [
 
       if (facts.how_to_rent_guide_provided === false) {
         blockers.push(
-          'England written information or any government guidance you provide should be recorded for the tenancy file',
+          'Record any England written information or government guidance you give the tenant, and keep proof that it was provided.',
         );
       }
       if (facts.england_rent_in_advance_compliant === false) {
@@ -510,7 +510,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'terms',
     label: 'Terms',
-    description: 'Property rules and access',
+    description: 'House rules, access, and day-to-day terms',
     isComplete: (facts) =>
       facts.pets_allowed !== undefined &&
       facts.smoking_allowed !== undefined &&
@@ -519,7 +519,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'premium',
     label: 'Premium',
-    description: 'Premium features',
+    description: 'Extra clauses and premium features',
     premiumOnly: true,
     isComplete: (facts) => {
       // Only applicable for premium tier (jurisdiction-agnostic check)
@@ -531,7 +531,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review and generate your case bundle',
+    description: 'Review the agreement details and generate the documents',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -1017,7 +1017,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                Generate Case Bundle
+                Generate documents
               </button>
             ) : (
               <button
@@ -1533,7 +1533,7 @@ const TenantsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
             {i === 0 ? 'Lead Tenant' : `Tenant ${i + 1}`}
           </h3>
           {i === 0 && (
-            <p className="text-sm text-gray-500 mb-4">Primary tenant who will receive notices</p>
+            <p className="text-sm text-gray-500 mb-4">Main tenant contact for routine notices and updates</p>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
@@ -1857,7 +1857,7 @@ const DepositSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction 
         <InlineSectionHeaderV3
           title="Prescribed Information"
           iconSlug="deposit"
-          subtitle="Record the deposit information you give the tenant and keep evidence on file."
+          subtitle="Record the deposit information you will give the tenant and keep proof that it was provided."
         />
         {hasDeposit ? (
           <>
@@ -1980,10 +1980,10 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Certificates and Legal Pack Items</h3>
-        <p className="text-sm text-gray-500 mb-4">
-          These drive the legal validity summary.
-        </p>
+      <h3 className="text-lg font-medium text-gray-900 mb-4">Certificates and legal checks</h3>
+      <p className="text-sm text-gray-500 mb-4">
+        These details feed into the legal checks and summary for the agreement.
+      </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SelectField
             label="EPC rating"
@@ -2041,10 +2041,10 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
                 <h4 className="text-sm font-semibold text-amber-900">
                   England checks for new tenancies from 1 May 2026
                 </h4>
-                <p className="mt-1 text-sm text-amber-800">
-                  Use these confirmations to keep the tenancy file aligned with the current England
-                  rules before you issue the agreement.
-                </p>
+      <p className="mt-1 text-sm text-amber-800">
+        Use these confirmations to make sure the agreement and tenancy setup match the current England
+        rules before you issue it.
+      </p>
               </div>
               <div className="md:col-span-2">
                 <YesNoField
@@ -3326,7 +3326,7 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Review Your Information</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Check that all sections are complete before generating your tenancy agreement.
+          Check that everything looks right before you generate the agreement.
         </p>
       </div>
 
@@ -3358,13 +3358,13 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
         <div className="flex justify-between">
           <span className="text-sm text-gray-600">Rent</span>
           <span className="text-sm font-medium">
-            {facts.rent_amount ? `£${facts.rent_amount} per ${facts.rent_period}` : 'Not entered'}
+            {facts.rent_amount ? `${GBP_SYMBOL}${facts.rent_amount} per ${facts.rent_period}` : 'Not entered'}
           </span>
         </div>
         <div className="flex justify-between">
           <span className="text-sm text-gray-600">Deposit</span>
           <span className="text-sm font-medium">
-            {facts.deposit_amount ? `£${facts.deposit_amount}` : 'Not entered'}
+            {facts.deposit_amount ? `${GBP_SYMBOL}${facts.deposit_amount}` : 'Not entered'}
           </span>
         </div>
         <div className="flex justify-between">
@@ -3381,7 +3381,7 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
           <h4 className="font-medium text-amber-800 mb-2">Incomplete Sections</h4>
           <p className="text-sm text-amber-700">
-            Please complete all sections before generating your documents. Use the tabs above to navigate.
+            Please complete each section before generating the documents. Use the tabs above to move around the wizard.
           </p>
         </div>
       )}
@@ -3390,7 +3390,7 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
         <div className={isWizardUiV3Enabled ? "bg-violet-50 border border-violet-200 rounded-lg p-4" : "bg-green-50 border border-green-200 rounded-lg p-4"}>
           <h4 className={isWizardUiV3Enabled ? "font-medium text-violet-900 mb-2" : "font-medium text-green-800 mb-2"}>Ready to Generate</h4>
           <p className={isWizardUiV3Enabled ? "text-sm text-violet-700" : "text-sm text-green-700"}>
-            All sections are complete. Click "Generate Case Bundle" to create your tenancy agreement.
+            All sections are complete. Click "Generate documents" to create your tenancy agreement.
           </p>
         </div>
       )}
@@ -3484,14 +3484,14 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
         }`}
       >
         <p className={`text-[11px] font-semibold uppercase tracking-[0.16em] ${allComplete ? 'text-violet-700' : 'text-amber-700'}`}>
-          Review your tenancy file
+          Review your tenancy documents
         </p>
         <h3 className={`mt-2 text-xl font-semibold tracking-tight ${allComplete ? 'text-violet-950' : 'text-amber-950'}`}>
-          {allComplete ? 'This file is ready to generate' : 'You still need to finish a few sections before this file is ready'}
+          {allComplete ? 'Everything is ready to generate' : 'You still need to finish a few sections before the documents are ready'}
         </h3>
         <p className={`mt-2 text-sm leading-6 ${allComplete ? 'text-violet-800' : 'text-amber-800'}`}>
           {residentialProduct
-            ? `You are preparing ${RESIDENTIAL_LETTING_PRODUCTS[residentialProduct].label.toLowerCase()} documents from the tenancy facts you have entered.`
+            ? `You are preparing ${RESIDENTIAL_LETTING_PRODUCTS[residentialProduct].label.toLowerCase()} documents from the details you have entered.`
             : `You are preparing ${isPremiumTier(facts.product_tier) ? terminology.premiumTier.toLowerCase() : terminology.standardTier.toLowerCase()} documents for this let.`}
         </p>
       </section>
@@ -3499,7 +3499,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
       <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
         <h4 className="text-lg font-semibold tracking-tight text-[#20103f]">What you are preparing</h4>
         <p className="mt-2 text-sm leading-6 text-[#62597c]">
-          Check the tenancy facts below before you generate the file. This should read like the right agreement for the property, parties, and payment terms.
+          Check the details below before you generate the documents. They should read like the right agreement for the property, the people involved, and the payment terms.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {reviewSummary.map((item) => (
@@ -3519,7 +3519,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
               <div key={section} className="rounded-2xl border border-white/70 bg-white/75 px-4 py-4">
                 <p className="text-sm font-semibold text-amber-950">{section}</p>
                 <p className="mt-1 text-sm leading-6 text-amber-800">
-                  This section still needs answers before the tenancy file can be generated cleanly.
+                  This section still needs answers before the documents can be generated properly.
                 </p>
               </div>
             ))}
@@ -3528,7 +3528,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
           <div className="mt-3">
             <p className="text-sm font-medium text-amber-950">No incomplete sections are showing</p>
             <p className="mt-1 text-sm leading-6 text-amber-800">
-              The current tenancy facts cover the required sections for this file.
+              The current answers cover the required sections for these documents.
             </p>
           </div>
         )}
@@ -3537,7 +3537,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
       <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
         <h4 className="text-lg font-semibold tracking-tight text-[#20103f]">Included in your file</h4>
         <p className="mt-2 text-sm leading-6 text-[#62597c]">
-          These are the documents and supporting records this flow prepares from your answers.
+          These are the documents and supporting records this wizard prepares from your answers.
         </p>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {includedDocuments.map((document) => (
@@ -3554,7 +3554,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
         </h4>
         <p className={isWizardUiV3Enabled ? "mt-2 text-sm leading-6 text-violet-800" : "mt-2 text-sm leading-6 text-green-700"}>
           {allComplete
-            ? 'Everything needed for this tenancy file is in place. You can now continue to generate the documents.'
+            ? 'Everything needed for these documents is in place. You can now continue to generate them.'
             : 'Finish the remaining sections first, then come back here for one last check before generating.'}
         </p>
       </section>
