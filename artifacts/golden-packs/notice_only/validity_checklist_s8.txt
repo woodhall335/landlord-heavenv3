@@ -3,27 +3,29 @@ golden-notice-only-001
 JURISDICTION
 england
 GENERATED
-30 April 2026
+1 May 2026
 Service and Validity Checklist
 FORM 3A NOTICE
-Purpose: Use this checklist to verify that the Form 3A notice is internally consistent across the notice and support
-documents, has been served using a defensible method, and is ready for evidence use if a claim is issued.
-The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears), Ground 10
-(Any rent arrears).
-Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28 May
-2026.
+Purpose: Use this checklist to verify that the Form 3A notice is internally consistent across the notice
+and support documents, has been served using a defensible method, and is ready for evidence use if a
+claim is issued.
+The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
+Ground 10 (Any rent arrears).
+Form 3A notice served on 1 May 2026, expiring on 29 May 2026, with proceedings not intended before
+29 May 2026.
 LANDLORD Daniel Mercer
 TENANT Ivy Carleton
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANCY START DATE 1 January 2024
-NOTICE SERVICE DATE 30 April 2026
-NOTICE EXPIRY DATE 28 May 2026
+NOTICE SERVICE DATE 1 May 2026
+NOTICE EXPIRY DATE 29 May 2026
 EARLIEST PROCEEDINGS
 DATE
-28 May 2026
-GROUNDS RELIED ON Ground 8 - Serious rent arrears, Ground 10 - Rent arrears (some arrears)
-Current England notice periods after 1 May 2026: use the longest period that applies where multiple grounds are
-included.
+29 May 2026
+GROUNDS RELIED ON Ground 8 - Serious rent arrears, Ground 10 - Rent arrears (some
+arrears)
+Current England notice periods after 1 May 2026: use the longest period that applies where multiple
+grounds are included.
 4 months minimum: Grounds 1, 1A, 2, 2ZA, 2ZB, 2ZC, 2ZD, 4A, 6, 6B.
 2 months minimum: Grounds 5, 5A, 5B, 5C, 5H, 7, 9.
 4 weeks (28 days) minimum: Grounds 5E, 5F, 5G, 8, 10, 11, 18.
@@ -31,33 +33,38 @@ included.
 Immediate (0 days): Grounds 7A and 14.
 Where multiple grounds are relied on, use the MAXIMUM notice period.
 
--- 1 of 2 --
+-- 1 of 3 --
 
 Service Evidence
 Keep With The Pack
 Copy of the served notice
 Completed Form N215 certificate of service or service witness note
 Keep the proof of posting, a copy of the served Form 3A notice, and a record of the address used.
-If service is challenged, be ready to explain why the method chosen complied with the tenancy agreement and
-why the service date used in the pack is the correct date.
+If service is challenged, be ready to explain why the method chosen complied with the tenancy
+agreement and why the service date used in the pack is the correct date.
 Validity Checks
 Before You Rely On The Notice
-Check that the same party names, address, grounds, court name, and notice timeline appear consistently
-across the Form 3A notice, the support documents, and any court forms.
-Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of £3,600.00
-at the hearing.
-If arrears grounds are relied on, make sure the arrears schedule and the pleaded figures still match the current
-rent account.
-Notice periods: The required notice period depends on the grounds relied on and can change. If you alter the
-grounds, the service method, or the intended service date, regenerate the pack so every document uses the same
-recalculated dates.
+Check that the same party names, address, grounds, court name, and notice timeline appear
+consistently across the Form 3A notice, the support documents, and any court forms.
+Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of
+£3,600.00 at the hearing.
+If arrears grounds are relied on, make sure the arrears schedule and the pleaded figures still match
+the current rent account.
+Notice periods: The required notice period depends on the grounds relied on and can change. If you
+alter the grounds, the service method, or the intended service date, regenerate the pack so every
+document uses the same recalculated dates.
 After Service
 Do Not Do These Things
-Review the pack as a whole before issue so that dates, court details, and ground wording remain aligned.
-Remove empty or unused sections rather than leaving placeholder text or blank visual gaps in court-facing
-documents.
-Risk warning: A possession claim can be delayed or contested if the notice dates, service evidence, or grounds
-particulars are inconsistent across the pack, even where the underlying arrears or breach evidence is strong.
-Generated: 30 April 2026
+Review the pack as a whole before issue so that dates, court details, and ground wording remain
+aligned.
+Remove empty or unused sections rather than leaving placeholder text or blank visual gaps in court-
+facing documents.
 
--- 2 of 2 --
+-- 2 of 3 --
+
+Risk warning: A possession claim can be delayed or contested if the notice dates, service evidence, or
+grounds particulars are inconsistent across the pack, even where the underlying arrears or breach
+evidence is strong.
+Generated: 1 May 2026
+
+-- 3 of 3 --

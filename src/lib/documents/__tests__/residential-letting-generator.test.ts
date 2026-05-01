@@ -48,6 +48,10 @@ function createBaseEnglandAssuredFacts(overrides: Record<string, any> = {}) {
     england_rent_in_advance_compliant: true,
     england_no_bidding_confirmed: true,
     england_no_discrimination_confirmed: true,
+    tenant_is_individual: true,
+    main_home: true,
+    landlord_not_resident_confirmed: true,
+    not_holiday_or_licence_confirmed: true,
     tenant_improvements_allowed_with_consent: false,
     supported_accommodation_tenancy: false,
     relevant_gas_fitting_present: true,
@@ -744,6 +748,70 @@ describe('generateResidentialLettingDocuments', () => {
     expect(pack.documents[0].html).toContain('resident-landlord arrangement');
     expect(pack.documents[0].html).not.toContain('Section 13');
     expect(pack.documents[0].html).not.toContain('fit for human habitation');
+  });
+
+  test('uses post-1 May 2026 England written-information wording instead of How to Rent in modern assured packs', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      createBaseEnglandAssuredFacts(),
+      { outputFormat: 'html' }
+    );
+
+    const agreementHtml = pack.documents[0].html;
+    const checklistHtml =
+      pack.documents.find((document) => document.document_type === 'pre_tenancy_checklist_england')?.html || '';
+
+    expect(agreementHtml).toContain('England written information route');
+    expect(agreementHtml).toContain('Written tenancy terms recorded in this agreement');
+    expect(agreementHtml).not.toContain('How to Rent guide provided');
+    expect(checklistHtml).toContain('England written information prepared for this tenancy route');
+    expect(checklistHtml).toContain('England written information included');
+    expect(checklistHtml).not.toContain('How to Rent guide provided');
+  });
+
+  test('hard-stops the lodger route when the resident-landlord facts contradict the product', async () => {
+    await expect(
+      generateResidentialLettingDocuments(
+        'england_lodger_agreement',
+        {
+          ...baseFacts,
+          tenancy_start_date: '2026-05-02',
+          resident_landlord_confirmed: false,
+          shared_kitchen_or_bathroom: false,
+        },
+        { outputFormat: 'html' }
+      )
+    ).rejects.toThrow(/resident landlord/i);
+  });
+
+  test('hard-stops the HMO route when the shared-house facts do not justify it', async () => {
+    await expect(
+      generateResidentialLettingDocuments(
+        'england_hmo_shared_house_tenancy_agreement',
+        createBaseEnglandAssuredFacts({
+          is_hmo: false,
+          number_of_sharers: 1,
+          communal_areas: '',
+          shared_facilities: false,
+        }),
+        { outputFormat: 'html' }
+      )
+    ).rejects.toThrow(/HMO|shared-house/i);
+  });
+
+  test('renders the modern England assured baseline without fixed-term or section 21 wording', async () => {
+    const pack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      createBaseEnglandAssuredFacts(),
+      { outputFormat: 'html' }
+    );
+
+    const html = pack.documents[0].html;
+
+    expect(html).toContain('Form 4A');
+    expect(html).toContain('section 21 no-fault route');
+    expect(html).toContain('No separate fixed-term drafting is created by this document');
+    expect(html).not.toContain('assured shorthold tenancy');
   });
 
   test('adds the guarantor deed for the student product when selected', async () => {

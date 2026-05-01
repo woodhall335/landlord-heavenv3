@@ -1,20 +1,34 @@
-Case IDgolden-hmo-tenancy-001
-JurisdictionEngland
-Generated30 April 2026
+CASE ID
+golden-hmo-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
 FOR PROPERTIES IN ENGLAND
-UTILITIES & METER HANDOVER SHEET
+Utilities & Meter Handover Sheet
 HMO / Shared House Tenancy Agreement utilities handover record
-Use this sheet to record utility responsibility, supplier details, opening meter readings, and anything handed over to the tenant.
-PREPARED 16 April 2026 FILE REFERENCE RL-ENGLAND-HMO-SHARED-
-HOUSE-TA-TENANCY-001
-EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Utilities handover sheet
+Use this sheet to record utility responsibility, supplier details, opening meter readings, and anything
+handed over to the tenant.
+PREPARED 16 April 2026 FILE
+REFERENCE
+RL-ENGLAND-HMO-
+SHARED-HOUSE-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May 2026 DOCUMENT
+TYPE
+Utilities handover sheet
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Nina Sharer, Owen Sharer, Priya
-Sharer, Reece Sharer
-TERM / DATES 2 May 2026 to 1 May 2027
+TENANT(S) Nina Sharer, Owen
+Sharer, Priya Sharer,
+Reece Sharer
+TERM / DATES 2 May 2026 to 1 May
+2027
 RENT £1500.00 DEPOSIT £1500.00
-PARTIES
+Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+
+-- 1 of 3 --
+
 LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
@@ -35,26 +49,31 @@ TENANT 4 Reece Sharer
 12 Example Street, London, SW1A 1AA
 Email: reece@example.com
 Telephone: 07000 300004
-DEFINED TERMS
+Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
-
--- 1 of 2 --
-
 LANDLORD Jane Landlord
 TENANT Nina Sharer
-OPERATIVE PROVISIONS
+
+-- 2 of 3 --
+
+Operative Provisions
 1. Utilities and Bill Responsibility
-BILLS INCLUDED IN RENT Yes
-INCLUDED BILLS DETAIL Gas, Electricity, Internet / broadband
+BILLS INCLUDED
+IN RENT
+Yes
+INCLUDED BILLS
+DETAIL
+Gas, Electricity, Internet / broadband
 2. Opening Readings and Account Handover
 Record opening meter readings and photographs where relevant at the start of the occupation.
-Note current suppliers, council tax reference details, and any service account numbers that need transferring.
+Note current suppliers, council tax reference details, and any service account numbers that need
+transferring.
 Keep this sheet with the agreement, handover record, and any check-in paperwork.
-EXECUTION
+Execution
 Keep this sheet with the handover record, supplier correspondence, and any meter-reading photos.
 FILE OWNER
 Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-HMO-SHARED-HOUSE-TA-TENANCY-001
 
--- 2 of 2 --
+-- 3 of 3 --

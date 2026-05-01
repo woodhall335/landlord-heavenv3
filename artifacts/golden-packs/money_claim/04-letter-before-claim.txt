@@ -3,9 +3,9 @@ golden-money-claim-001
 JURISDICTION
 england
 GENERATED
-30 April 2026
+1 May 2026
 Letter Before Claim
-Date: 30 April 2026
+Date: 1 May 2026
 To:
 Tom Tenant
 2 High Street London
@@ -28,8 +28,8 @@ what may happen if you do not reply or pay.
 Rent arrears: £2430.00
 Property damage / other costs: £380.00
 Other charges: £80.00
-Interest to date (8% per annum): £54.81
-TOTAL AMOUNT OWED: £2944.81
+Interest to date (8% per annum): £55.44
+TOTAL AMOUNT OWED: £2945.44
 Interest continues to accrue at £0.63 per day until the debt is paid in full.
 
 -- 1 of 4 --
@@ -50,10 +50,10 @@ Interest
 I am entitled to claim interest on the outstanding rent and costs pursuant to section 69 of the County Courts
 Act 1984. Interest is calculated at 8% per annum from 2 February 2026 and continues to accrue at £0.63 per
 day until payment.
-The interest calculation to 30 April 2026 is £54.81. The full working is attached as Appendix 2.
+The interest calculation to 1 May 2026 is £55.44. The full working is attached as Appendix 2.
 3. What You Must Do Now
-You have 30 days from the date of this letter (i.e., until 30 May 2026) to do ONE of the following:
-1. Pay the full amount owed (£2944.81) to avoid court proceedings.
+You have 30 days from the date of this letter (i.e., until 31 May 2026) to do ONE of the following:
+1. Pay the full amount owed (£2945.44) to avoid court proceedings.
 2. Contact me to discuss a payment arrangement if you cannot pay in full.
 3. Complete the enclosed Reply Form if you dispute the debt or need time to seek advice.
 Payment Methods
@@ -85,7 +85,7 @@ me on your behalf.
 If you do not respond to this letter within 30 days, or if you do not make acceptable arrangements to pay, I will
 have no choice but to issue court proceedings against you without further warning.
 If I issue a court claim, I will ask the court for:
-the full amount owed (£2944.81) together with court fees and any recoverable costs;
+the full amount owed (£2945.44) together with court fees and any recoverable costs;
 the court fee, which is currently about £205.00;
 continuing interest at £0.63 per day until payment or judgment;
 a County Court Judgment, which can affect your credit record for six years if it is not paid in time; and

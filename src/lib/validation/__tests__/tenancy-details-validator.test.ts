@@ -18,6 +18,10 @@ describe('validateTenancyRequiredFacts', () => {
     property_address_postcode: 'E1 1AA',
     tenancy_start_date: '2026-01-01',
     is_fixed_term: false,
+    tenant_is_individual: true,
+    main_home: true,
+    landlord_not_resident_confirmed: true,
+    not_holiday_or_licence_confirmed: true,
     rent_amount: 1200,
     deposit_amount: 0,
     tenants: [
@@ -275,7 +279,6 @@ describe('validateTenancyRequiredFacts', () => {
         'electrical_safety_certificate',
         'smoke_alarms_fitted',
         'carbon_monoxide_alarms',
-        'how_to_rent_provided',
       ])
     );
   });
@@ -495,6 +498,62 @@ describe('validateTenancyRequiredFacts', () => {
     expect(result.missing_fields).not.toContain('tenant_notice_period');
     expect(result.missing_fields).not.toContain('rent_increase_method');
     expect(result.missing_fields).not.toContain('epc_rating');
+  });
+
+  it('requires the England route-safety confirmations for modern assured products', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      tenancy_start_date: '2026-05-02',
+      england_tenancy_purpose: 'new_agreement',
+      tenant_is_individual: undefined,
+      main_home: undefined,
+      landlord_not_resident_confirmed: undefined,
+      not_holiday_or_licence_confirmed: undefined,
+      england_rent_in_advance_compliant: true,
+      england_no_bidding_confirmed: true,
+      england_no_discrimination_confirmed: true,
+      rent_frequency: 'monthly',
+      rent_due_day_of_month: '1st',
+      payment_method: 'cash',
+      tenant_notice_period: '2 months',
+      rent_increase_method: 'Section 13 rent increase process',
+      bills_included_in_rent: 'no',
+      separate_bill_payments_taken: false,
+      tenant_improvements_allowed_with_consent: true,
+      supported_accommodation_tenancy: false,
+      relevant_gas_fitting_present: false,
+      epc_rating: 'C',
+      right_to_rent_check_date: '2026-04-20',
+      electrical_safety_certificate: true,
+      smoke_alarms_fitted: true,
+      carbon_monoxide_alarms: true,
+    }, { jurisdiction: 'england', product: 'england_standard_tenancy_agreement' });
+
+    expect(result.missing_fields).toEqual(
+      expect.arrayContaining([
+        'tenant_is_individual',
+        'main_home',
+        'landlord_not_resident_confirmed',
+        'not_holiday_or_licence_confirmed',
+      ])
+    );
+  });
+
+  it('rejects a lodger pack that is not confirmed as a resident-landlord shared-home arrangement', () => {
+    const result = validateTenancyRequiredFacts({
+      ...completeFacts,
+      __meta: { jurisdiction: 'england' },
+      resident_landlord_confirmed: false,
+      shared_kitchen_or_bathroom: false,
+    }, { jurisdiction: 'england', product: 'england_lodger_agreement' });
+
+    expect(result.invalid_fields).toEqual(
+      expect.arrayContaining([
+        'resident_landlord_confirmed',
+        'shared_kitchen_or_bathroom',
+      ])
+    );
   });
 
   it('does not require fixed-term fields for Scotland PRT', () => {

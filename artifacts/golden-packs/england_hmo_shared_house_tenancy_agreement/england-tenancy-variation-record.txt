@@ -1,20 +1,34 @@
-Case IDgolden-hmo-tenancy-001
-JurisdictionEngland
-Generated30 April 2026
+CASE ID
+golden-hmo-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
 FOR PROPERTIES IN ENGLAND
-TENANCY VARIATION RECORD
+Tenancy Variation Record
 HMO / Shared House Tenancy Agreement variation record
-Use this record to log agreed changes after the main agreement is signed, so the tenancy file stays clear and up to date.
-PREPARED 16 April 2026 FILE REFERENCE RL-ENGLAND-HMO-SHARED-
-HOUSE-TA-TENANCY-001
-EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Variation record
+Use this record to log agreed changes after the main agreement is signed, so the tenancy file stays
+clear and up to date.
+PREPARED 16 April 2026 FILE
+REFERENCE
+RL-ENGLAND-HMO-
+SHARED-HOUSE-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May 2026 DOCUMENT
+TYPE
+Variation record
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Nina Sharer, Owen Sharer, Priya
-Sharer, Reece Sharer
-TERM / DATES 2 May 2026 to 1 May 2027
+TENANT(S) Nina Sharer, Owen
+Sharer, Priya Sharer,
+Reece Sharer
+TERM / DATES 2 May 2026 to 1 May
+2027
 RENT £1500.00 DEPOSIT £1500.00
-PARTIES
+Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+
+-- 1 of 3 --
+
 LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
@@ -35,26 +49,28 @@ TENANT 4 Reece Sharer
 12 Example Street, London, SW1A 1AA
 Email: reece@example.com
 Telephone: 07000 300004
-DEFINED TERMS
+Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
-
--- 1 of 2 --
-
 LANDLORD Jane Landlord
 TENANT Nina Sharer
-OPERATIVE PROVISIONS
+
+-- 2 of 3 --
+
+Operative Provisions
 1. Variation Record Purpose
-UNDERLYING PRODUCT HMO / Shared House Tenancy Agreement
+UNDERLYING
+PRODUCT
+HMO / Shared House Tenancy Agreement
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT(S) Nina Sharer, Owen Sharer, Priya Sharer, Reece Sharer
 Use this record to note agreed changes after the tenancy starts without losing the original signed paperwork.
 Any important change should be dated, signed where appropriate, and stored with the main tenancy file.
-EXECUTION
+Execution
 Any material change should be dated and retained with the tenancy file.
 FILE OWNER
 Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-HMO-SHARED-HOUSE-TA-TENANCY-001
 
--- 2 of 2 --
+-- 3 of 3 --

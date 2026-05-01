@@ -1,4 +1,3 @@
-Landlord Heaven
 Rent Increase Justification Report
 This report explains why the proposed rent is supported by local comparable evidence.
 The proposed rent is supported by current market evidence and sits within the lower-to-mid range of
@@ -40,6 +39,7 @@ Landlord Heaven | Comparable analysis and justification Page 1 of 3
 
 -- 1 of 3 --
 
+Rent Increase Justification Report
 Comparable overview
 - Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the
 last 90 days and all source-backed
@@ -74,14 +74,15 @@ Source: scraped | https://example.com/leeds-rent-comparable-4
 Distance: 0.40 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
-5. Flat 11, Riverside Court, Leeds LS1 | £1305.00 monthly | adjusted £1305.00 pcm
-Source: scraped | https://example.com/leeds-rent-comparable-5
-Distance: 0.50 miles
-Source date (published): 15 March 2026
 Landlord Heaven | Comparable analysis and justification Page 2 of 3
 
 -- 2 of 3 --
 
+Rent Increase Justification Report
+5. Flat 11, Riverside Court, Leeds LS1 | £1305.00 monthly | adjusted £1305.00 pcm
+Source: scraped | https://example.com/leeds-rent-comparable-5
+Distance: 0.50 miles
+Source date (published): 15 March 2026
 Adjustments: none recorded
 6. Apartment 6, Wellington Street, Leeds LS1 | £1315.00 monthly | adjusted £1315.00 pcm
 Source: scraped | https://example.com/leeds-rent-comparable-6

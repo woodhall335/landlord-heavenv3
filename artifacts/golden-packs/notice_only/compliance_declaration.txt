@@ -3,28 +3,30 @@ golden-notice-only-001
 JURISDICTION
 england
 GENERATED
-30 April 2026
+1 May 2026
 Stage 1: Section 8 Notice & Service Pack
 Compliance Checklist
 READY TO SERVE
 This pack aligns the notice, service, and evidence so your case doesn't fall apart on technical errors.
-Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent those.
+Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent
+those.
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE TYPE Form 3A notice
 TENANCY START DATE 1 January 2024
-GENERATED 30 April 2026
+GENERATED 1 May 2026
 CRITICAL
-Resolve this before relying on the
-notice or moving on with the case.
+Resolve this before relying on
+the notice or moving on with
+the case.
 RISK
 This may not automatically
 invalidate the route, but it can
 weaken the file or create delay.
 OK
-The current pack data records this
-point, but you still need to retain
-the underlying evidence.
+The current pack data records
+this point, but you still need to
+retain the underlying evidence.
 Decision Engine
 OK
 Deposit compliance recorded
@@ -34,26 +36,26 @@ OK
 Gas safety evidence recorded
 Gas safety evidence is recorded on 10 January 2024.
 Action: Keep the gas safety record with the notice and court file.
+
+-- 1 of 2 --
+
 OK
 EPC record recorded
 EPC evidence is recorded.
 Action: Retain the EPC record with the case file.
-
--- 1 of 2 --
-
 OK
 How to Rent record recorded
 How to Rent service is recorded on 15 January 2024.
 Action: Keep the service record with the tenancy file.
 OK
 Notice timeline recorded
-Notice served on 30 April 2026 with earliest proceedings date 28 May 2026.
-Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and any court
-papers.
+Notice served on 1 May 2026 with earliest proceedings date 29 May 2026.
+Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and
+any court papers.
 Next move
 READY TO SERVE
 Serve the notice correctly using the service instructions in this pack.
-Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record, or legal
-advice on the facts of the case.
+Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record,
+or legal advice on the facts of the case.
 
 -- 2 of 2 --

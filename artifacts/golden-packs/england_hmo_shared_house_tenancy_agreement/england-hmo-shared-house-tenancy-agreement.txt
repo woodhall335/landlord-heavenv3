@@ -1,22 +1,34 @@
-Case IDgolden-hmo-tenancy-001
-JurisdictionEngland
-Generated30 April 2026
+CASE ID
+golden-hmo-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
 FOR PROPERTIES IN ENGLAND
-HMO / SHARED HOUSE TENANCY AGREEMENT
+HMO / Shared House Tenancy Agreement
 Tenancy agreement for an HMO or shared house in England
-This document records an England HMO or shared-house letting where communal-area and sharer detail need to be recorded
-expressly in the main agreement.
-PREPARED 16 April 2026 FILE REFERENCE RL-ENGLAND-HMO-SHARED-
-HOUSE-TA-TENANCY-001
-EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE HMO / shared-house tenancy
-agreement
+This document records an England HMO or shared-house letting where communal-area and sharer
+detail need to be recorded expressly in the main agreement.
+PREPARED 16 April 2026 FILE
+REFERENCE
+RL-ENGLAND-HMO-
+SHARED-HOUSE-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May 2026 DOCUMENT
+TYPE
+HMO / shared-house
+tenancy agreement
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Nina Sharer, Owen Sharer, Priya
-Sharer, Reece Sharer
+TENANT(S) Nina Sharer, Owen
+Sharer, Priya Sharer,
+Reece Sharer
 TERM / DATES 2 May 2026
 RENT £1500.00 DEPOSIT £1500.00
-PARTIES
+Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+
+-- 1 of 10 --
+
 LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
@@ -37,149 +49,230 @@ TENANT 4 Reece Sharer
 12 Example Street, London, SW1A 1AA
 Email: reece@example.com
 Telephone: 07000 300004
-
--- 1 of 5 --
-
-BACKGROUND
-DEFINED TERMS
+Background
+Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Nina Sharer
-OPERATIVE PROVISIONS
+The Landlord agrees to let the Property to the Tenant group for shared residential occupation on the
+terms set out in this agreement.
+A.
+The parties intend communal-area, sharer, and property-management detail to form part of the primary
+agreement.
+B.
+
+-- 2 of 10 --
+
+Operative Provisions
 1. Tenancy Status and Core Particulars
-The parties intend the tenant to occupy the Property as their main home on the assured periodic basis described in this document.
+The parties intend the tenant to occupy the Property as their main home on the assured periodic basis
+described in this document.
 TENANCY TYPE New periodic tenancy agreement
 PACK HMO / Shared House Tenancy Agreement
-FURNISHED STATUS furnished
-TENANCY START DATE 2 May 2026
-The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-term drafting is created by this document
-unless a solicitor-approved route is expressly used outside this product.
+FURNISHED
+STATUS
+furnished
+TENANCY START
+DATE
+2 May 2026
+The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-
+term drafting is created by this document unless a solicitor-approved route is expressly used outside this
+product.
+
+-- 3 of 10 --
+
 2. Rent, Payment Method, and Bill Treatment
 RENT £1500.00
 RENT PERIOD Monthly
 RENT DUE DAY 1st of each month
-PAYMENT METHOD Bank transfer
-BILLS INCLUDED IN RENT Yes
-INCLUDED BILLS DETAIL Gas, Electricity, Internet / broadband
+PAYMENT
+METHOD
+Bank transfer
+BILLS INCLUDED
+IN RENT
+Yes
+INCLUDED BILLS
+DETAIL
+Gas, Electricity, Internet / broadband
 ACCOUNT NAME Landlord Heaven Client Account
 SORT CODE 12-34-56
-ACCOUNT NUMBER 12345678
-The landlord confirms that any rent in advance taken for this tenancy is intended to stay within the limits permitted for England assured tenancies.
-Any rent increase for an England assured tenancy should follow the Section 13 statutory route or any later replacement process required by law.
-CPI, RPI, or fixed review wording is not intended to override that statutory process in this product.
+ACCOUNT
+NUMBER
+12345678
+The landlord confirms that no rent in advance is intended to be requested, encouraged, or accepted before
+the agreement is signed and that any rent in advance taken after signing is intended to stay within the current
+England limit of 1 month's rent.
+Any rent increase for an England assured tenancy should follow the Section 13 statutory route only. The
+landlord should use Form 4A, give at least 2 months' notice, avoid any increase in the first 12 months of a
+new tenancy, and should not seek more than one increase within the same 12-month period.
 3. Deposit Arrangements
-DEPOSIT AMOUNT £1500.00
-DEPOSIT PROTECTION
+DEPOSIT
+AMOUNT
+£1500.00
+DEPOSIT
+PROTECTION
 SCHEME
 DPS
-DEPOSIT REFERENCE DPS-EXAMPLE-2026-0001
-If a deposit is taken, it should be protected in an authorised England scheme within the statutory timeframe and the prescribed information should be
-served in time. The support documents in this pack are intended to help record those details.
-The Landlord agrees to let the Property to the Tenant group for shared residential occupation on the terms set out in this agreement. A.
-The parties intend communal-area, sharer, and property-management detail to form part of the primary agreement. B.
+DEPOSIT
+REFERENCE
+DPS-EXAMPLE-2026-0001
+If a deposit is taken, it should be protected in an authorised England scheme within the statutory timeframe
+and the prescribed information should be served in time. The support documents in this pack are intended to
+help record those details.
 
--- 2 of 5 --
+-- 4 of 10 --
 
 4. Tenant Ending the Tenancy
-RECORDED TENANT NOTICE
+RECORDED
+TENANT NOTICE
 PERIOD
 2 months
-The tenant may end the tenancy by giving at least 2 months written notice, ending on the appropriate day for the tenancy period unless the law
-changes or the parties later agree a lawful surrender.
-The tenant should return keys, remove belongings, leave the property reasonably clean, and provide a forwarding address for deposit and final
-correspondence purposes.
+The tenant may end the tenancy by giving at least 2 months written notice. For the current England assured-
+tenancy regime, that notice should end on the day the rent is due or the day before unless the law changes or
+the parties later agree a lawful surrender or shorter written notice.
+The tenant should return keys, remove belongings, leave the property reasonably clean, and provide a
+forwarding address for deposit and final correspondence purposes.
 5. Landlord Ending the Tenancy
-In most circumstances, the landlord may only end the tenancy by obtaining an order for possession and the execution of that order. The landlord
-cannot lawfully end the tenancy just by serving a private break clause or informal notice.
-If the landlord seeks possession, the landlord or one of any joint landlords will usually need to serve a possession notice using the correct form,
-specify the ground or grounds relied on, and give the minimum notice period that applies to that ground or those grounds before court proceedings
-begin.
-Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy, the ground should be identified clearly
-in writing now and supported by the relevant factual explanation.
+In most circumstances, the landlord may only end the tenancy by obtaining an order for possession and the
+execution of that order. The landlord cannot lawfully end the tenancy just by serving a private break clause or
+informal notice.
+If the landlord seeks possession, the landlord or one of any joint landlords will usually need to serve a
+possession notice using the correct form, specify the ground or grounds relied on, and give the minimum
+notice period that applies to that ground or those grounds before court proceedings begin.
+The landlord cannot rely on a section 21 no-fault route for a tenancy granted under the post-1 May 2026
+England assured-tenancy regime.
+Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy,
+the ground should be identified clearly in writing now and supported by the relevant factual explanation.
+
+-- 5 of 10 --
+
 6. Repairs, Fitness, Safety, and Access
 EPC RATING C
-GAS SAFETY CERTIFICATE
+GAS SAFETY
+CERTIFICATE
 PROVIDED
 Yes
-ELECTRICAL SAFETY
-CERTIFICATE PROVIDED
+ELECTRICAL
+SAFETY
+CERTIFICATE
+PROVIDED
 Yes
-SMOKE ALARMS FITTED AND
+SMOKE ALARMS
+FITTED AND
 TESTED
 Yes
-CARBON MONOXIDE ALARMS
-WHERE REQUIRED
+CARBON
+MONOXIDE
+ALARMS WHERE
+REQUIRED
 Yes
-RIGHT TO RENT CHECKS
+RIGHT TO RENT
+CHECKS
 COMPLETED
 25 April 2026
 Recorded access notice expectation: 24 hours.
-The landlord acknowledges that section 9A of the Landlord and Tenant Act 1985 requires the property to be fit for human habitation to the extent
-that section applies.
-The landlord acknowledges that section 11 of the Landlord and Tenant Act 1985 requires the structure and exterior, and the installations for
-water, gas, electricity, sanitation, space heating, and hot water, to be kept in repair to the extent that section applies.
-Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020 requires relevant electrical safety
-standards to be met during occupation, relevant electrical installations to be inspected and tested by a qualified person at least every 5 years or
-sooner if the most recent report requires it, and a copy of that report to be supplied to the tenant.
-Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998 requires any relevant gas fitting and flue to be kept in a safe condition,
-safety checks to be carried out by a Gas Safe registered engineer at intervals determined in accordance with the Regulations, and a copy of the
-safety record to be given to the tenant.
-Non-emergency access should normally take place on notice and at a reasonable time unless emergency circumstances justify immediate entry.
-7. Pets, Adaptations, and Equal Treatment
-The tenant may keep a pet at the property if the tenant asks to do so in line with section 16A of the Housing Act 1988 and the landlord gives
-consent.
-The landlord cannot unreasonably refuse consent to keep a pet and should deal with any pet request reasonably and within the time required by
-the law then in force.
-The landlord confirms that the tenancy was not offered or refused on an unlawful discriminatory basis in the recorded answers.
-The landlord confirms that the tenancy was not granted through a prohibited bidding process in the recorded answers.
+The landlord acknowledges that section 9A of the Landlord and Tenant Act 1985 requires the property to
+be fit for human habitation to the extent that section applies.
+The landlord acknowledges that section 11 of the Landlord and Tenant Act 1985 requires the structure and
+exterior, and the installations for water, gas, electricity, sanitation, space heating, and hot water, to be kept
+in repair to the extent that section applies.
+Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020
+requires relevant electrical safety standards to be met during occupation, relevant electrical installations to
+be inspected and tested by a qualified person at least every 5 years or sooner if the most recent report
+requires it, and a copy of that report to be supplied to the tenant.
+Regulation 36 of the Gas Safety (Installations and Use) Regulations 1998 requires any relevant gas fitting
+and flue to be kept in a safe condition, safety checks to be carried out by a Gas Safe registered engineer
+at intervals determined in accordance with the Regulations, and a copy of the safety record to be given to
+the tenant.
+Non-emergency access should normally take place on notice and at a reasonable time unless emergency
+circumstances justify immediate entry.
 
--- 3 of 5 --
+-- 6 of 10 --
+
+7. Pets, Adaptations, and Equal Treatment
+The tenant may keep a pet at the property if the tenant asks to do so in line with section 16A of the
+Housing Act 1988 and the landlord gives consent.
+The landlord cannot unreasonably refuse consent to keep a pet and should deal with any pet request
+reasonably and within the time required by the law then in force.
+The landlord confirms that the tenancy was not offered or refused on an unlawful discriminatory basis in
+the recorded answers.
+The landlord confirms that the tenancy was not granted through a prohibited bidding process in the
+recorded answers.
+The landlord confirms that the tenancy was not refused or offered on a prohibited children-or-benefits
+basis and was not handled on an unlawful discriminatory basis.
+
+-- 7 of 10 --
 
 8. Product-Specific Operational Terms
-PROPERTY IS HMO /
-LICENSABLE SHARED HOUSE
+PROPERTY IS
+HMO /
+LICENSABLE
+SHARED HOUSE
 Yes
-NUMBER OF SHARERS /
+NUMBER OF
+SHARERS /
 ROOMS
 5
-COMMUNAL AREAS Kitchen, lounge, bathroom, and garden
-COMMUNAL CLEANING Professional cleaner
+COMMUNAL
+AREAS
+Kitchen, lounge, bathroom, and garden
+COMMUNAL
+CLEANING
+Professional cleaner
 VISITOR POLICY Overnight guests only with prior written approval.
-WASTE AND RECYCLING
+WASTE AND
+RECYCLING
 ARRANGEMENTS
 Bins to be presented every Tuesday night.
-FIRE SAFETY NOTES Do not tamper with detectors and keep escape routes clear.
-This HMO / shared-house route records communal-area arrangements, sharer responsibilities, and HMO-related operational detail in the main
-agreement.
+FIRE SAFETY
+NOTES
+Do not tamper with detectors and keep escape routes clear.
+This HMO / shared-house route records communal-area arrangements, sharer responsibilities, and HMO-
+related operational detail in the main agreement.
 HMO licence status recorded: Currently licensed.
 Communal areas: Kitchen, lounge, bathroom, and garden.
 Communal cleaning: Professional cleaner.
 Visitor policy: Overnight guests only with prior written approval.
 Fire safety notes: Do not tamper with detectors and keep escape routes clear.
 9. Supporting Schedules and File Documents
-This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request
-addendum, tenancy variation record, and a dedicated HMO / shared-house rules appendix.
+This pack includes the main agreement together with a pre-tenancy checklist, keys handover record,
+utilities handover sheet, pet request addendum, tenancy variation record, and a dedicated HMO / shared-
+house rules appendix.
+
+-- 8 of 10 --
+
 10. Notices and Service Information
-LANDLORD SERVICE
+LANDLORD
+SERVICE
 ADDRESS
 3 Owner Road, London, SW1A 2BB
-LANDLORD EMAIL jane@example.com
-LANDLORD PHONE 07123 456789
-HOW TO RENT GUIDE
-PROVIDED
-Yes
-Formal notices should be sent to the landlord service address stated in this document unless the landlord later gives a valid written replacement
-address for service.
+LANDLORD
+EMAIL
+jane@example.com
+LANDLORD
+PHONE
+07123 456789
+ENGLAND
+WRITTEN
+INFORMATION
+ROUTE
+Written tenancy terms recorded in this agreement
+Formal notices should be sent to the landlord service address stated in this document unless the landlord later
+gives a valid written replacement address for service.
 File notes
-This document is intended to record the written terms for an England assured periodic tenancy and should be read with any deposit, guarantor,
-and pre-tenancy checklist documents in the pack.
-The HMO / shared-house pack is intended to travel with its house-rules appendix, handover record, utilities sheet, and shared-house support
-documents.
+This document is intended to record the written terms for an England assured periodic tenancy and
+should be read with any deposit, guarantor, and pre-tenancy checklist documents in the pack.
+The HMO / shared-house pack is intended to travel with its house-rules appendix, handover record,
+utilities sheet, and shared-house support documents.
+Drafting controls applied: post-1 May 2026 England assured periodic drafting, grounds-only landlord
+possession wording, Section 13 / Form 4A rent-review wording only, pet-request wording aligned to the
+current England regime, new-tenancy written-information treatment.
 
--- 4 of 5 --
+-- 9 of 10 --
 
-EXECUTION
-This HMO/shared-house agreement should be signed by the Landlord and the Tenant group and retained with the property records.
+Execution
+This HMO/shared-house agreement should be signed by the Landlord and the Tenant group and retained with
+the property records.
 LANDLORD
 Jane Landlord
 Signature Date
@@ -197,4 +290,4 @@ Reece Sharer
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-HMO-SHARED-HOUSE-TA-TENANCY-001
 
--- 5 of 5 --
+-- 10 of 10 --

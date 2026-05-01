@@ -1,17 +1,17 @@
 JURISDICTION
 England
 GENERATED
-30 April 2026
+1 May 2026
 Schedule of Rent Arrears
 STAGE 2: SECTION 8 COURT & POSSESSION PACK
 PROPERTY: 16 Willow Mews York YO24 3HX
 DEFENDANT: Ivy Carleton
 CLAIMANT: Daniel Mercer
 CLAIM REFERENCE: golden-complete-pack-001
-SCHEDULE DATE: 30 April 2026
+SCHEDULE DATE: 1 May 2026
 Arrears Position at Claim Date
-This schedule matches the figures relied on in the Section 8 notice and claim form (N119). Keep it updated to the
-latest practicable date before issuing.
+This schedule matches the figures relied on in the Section 8 notice and claim form (N119). Keep it
+updated to the latest practicable date before issuing.
 RENT AMOUNT
 £1200.00 monthly
 DUE DAY
@@ -29,19 +29,20 @@ January 2026
 1 February 2026 to 28
 February 2026
 1 February 2026 £1200.00 £0.00 £1200.00 £2400.00
-1 March 2026 to 31 March
-2026
+1 March 2026 to 31
+March 2026
 1 March 2026 £1200.00 £0.00 £1200.00 £3600.00
 Total Arrears Outstanding £3600.00 £3600.00
-Payment Allocation Method: Payments have been allocated using the FIFO (First In, First Out) method, applying
-payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears
-allocation.
 
 -- 1 of 2 --
 
-Evidence Requirements: Attach proof of payments received, bank statements, and rent ledgers behind this
-schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent frequency.
-Generated: 30 April 2026
+Payment Allocation Method: Payments have been allocated using the FIFO (First In, First Out)
+method, applying payments to the oldest outstanding rent periods first. This is the standard court-
+accepted method for arrears allocation.
+Evidence Requirements: Attach proof of payments received, bank statements, and rent ledgers behind
+this schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent
+frequency.
+Generated: 1 May 2026
 Stage 2: Section 8 Court & Possession Pack | England
 This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.
 

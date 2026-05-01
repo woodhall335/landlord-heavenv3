@@ -1,20 +1,35 @@
-Case IDgolden-student-tenancy-001
-JurisdictionEngland
-Generated30 April 2026
+CASE ID
+golden-student-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
 FOR PROPERTIES IN ENGLAND
-STUDENT MOVE-OUT & GUARANTOR SCHEDULE
+Student Move-Out & Guarantor Schedule
 Student move-out, replacement, and guarantor support schedule
-This schedule records the practical end-of-term, guarantor, and replacement details for the tenancy.
-PREPARED 16 April 2026 FILE REFERENCE RL-ENGLAND-STUDENT-TA-
+This schedule records the practical end-of-term, guarantor, and replacement details for the
+tenancy.
+PREPARED 16 April 2026 FILE
+REFERENCE
+RL-ENGLAND-
+STUDENT-TA-
 TENANCY-001
-EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Student move-out schedule
+EFFECTIVE DATE 2 May 2026 DOCUMENT
+TYPE
+Student move-out
+schedule
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Aisha Student, Ben Student, Cara
+TENANT(S) Aisha Student, Ben
+Student, Cara
 Student
-TERM / DATES 2 May 2026 to 1 May 2027
+TERM / DATES 2 May 2026 to 1 May
+2027
 RENT £1500.00 DEPOSIT £1500.00
-PARTIES
+Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+
+-- 1 of 4 --
+
 LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
@@ -31,35 +46,48 @@ TENANT 3 Cara Student
 12 Example Street, London, SW1A 1AA
 Email: cara@example.com
 Telephone: 07000 200003
-DEFINED TERMS
+Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Aisha Student
 
--- 1 of 2 --
+-- 2 of 4 --
 
-OPERATIVE PROVISIONS
+Operative Provisions
 1. Student Move-Out and Guarantor Schedule
-GUARANTOR REQUIRED Yes
-GUARANTOR SCOPE rent_and_all_tenant_obligations
-REPLACEMENT REQUEST
-NOTICE WINDOW
+GUARANTOR
+REQUIRED
+Yes
+GUARANTOR
+SCOPE
+rent_and_all_tenant_obligations
+REPLACEMENT
+REQUEST NOTICE
+WINDOW
 21_days
-REPLACEMENT COSTS outgoing_tenant
-MOVE-OUT KEYS AND RETURN
+REPLACEMENT
+COSTS
+outgoing_tenant
+MOVE-OUT KEYS
+AND RETURN
 PROCESS
 Keys to be returned to the managing agent office.
-CLEANING AND ROOM HAND-
+CLEANING AND
+ROOM HAND-
 BACK STANDARD
 Professional-clean standard for kitchen and bathrooms.
-END-OF-TERM RETURN
+END-OF-TERM
+RETURN
 STANDARD
 Rooms to be returned clean and with all keys.
-EXECUTION
+Execution
 Keep this schedule with the student agreement, any guarantor deed, and the check-out file.
 FILE OWNER
 Jane Landlord
 Signature Date
+
+-- 3 of 4 --
+
 Landlord Heaven file copy RL-ENGLAND-STUDENT-TA-TENANCY-001
 
--- 2 of 2 --
+-- 4 of 4 --

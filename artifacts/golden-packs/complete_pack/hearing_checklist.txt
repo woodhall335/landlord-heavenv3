@@ -3,10 +3,10 @@ golden-complete-pack-001
 JURISDICTION
 england
 GENERATED
-30 April 2026
+1 May 2026
 Hearing Preparation Guide
-Prepare the hearing file, updated arrears position, and speaking points for the possession hearing - with Ground 8 arrears
-kept under review
+Prepare the hearing file, updated arrears position, and speaking points for the possession hearing - with Ground 8
+arrears kept under review
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 COURT York County Court and Family Court
@@ -14,13 +14,13 @@ HEARING DATE To be notified by court
 Notice timeline
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
 Ground 10 (Any rent arrears).
-Form 3A notice served on 30 April 2026, expiring on 28 May 2026, with proceedings not intended before 28
-May 2026.
-NOTICE SERVICE DATE 30 April 2026
-NOTICE EXPIRY DATE 28 May 2026
+Form 3A notice served on 1 May 2026, expiring on 29 May 2026, with proceedings not intended before
+29 May 2026.
+NOTICE SERVICE DATE 1 May 2026
+NOTICE EXPIRY DATE 29 May 2026
 EARLIEST PROCEEDINGS
 DATE
-28 May 2026
+29 May 2026
 What the court will consider
 Is the notice valid?
 Was it served correctly?
@@ -32,13 +32,12 @@ Are the arrears proven?
 Before the hearing
 Bring to court
 Common failure points
-At the hearing
-Review the notice, service record, witness statement, and bundle index together so the pack remains internally
-consistent.
+Review the notice, service record, witness statement, and bundle index together so the pack remains
+internally consistent.
 Update the arrears schedule and check that the figure to be stated to the judge matches the latest rent
 account.
-Check whether the tenant has filed a defence, witness statement, or counterclaim and identify the documents
-that answer it.
+Check whether the tenant has filed a defence, witness statement, or counterclaim and identify the
+documents that answer it.
 Indexed court bundle
 Original tenancy agreement
 Form 3A notice
@@ -49,19 +48,20 @@ Copies of payment demands or arrears correspondence
 Inconsistent dates between the notice, N215, and claim papers.
 Missing or unclear service evidence.
 Arrears figures that do not match the latest schedule or payment history.
-Keep submissions short, factual, and tied to the pleaded ground or grounds.
-Explain the current arrears position, the rent cadence, and the documents supporting the running balance.
-Be ready to identify what you accept, what you dispute, and which exhibit addresses the point.
 
 -- 2 of 3 --
 
-Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of £3,600.00
-at the hearing.
+At the hearing
+Ground 8 should only be advanced as a mandatory ground if the arrears still satisfy the threshold of
+£3,600.00 at the hearing.
 If the case changes
-Date: 30 April 2026
+Date: 1 May 2026
+Keep submissions short, factual, and tied to the pleaded ground or grounds.
+Explain the current arrears position, the rent cadence, and the documents supporting the running balance.
+Be ready to identify what you accept, what you dispute, and which exhibit addresses the point.
 If the tenant raises disrepair, set-off, or a counterclaim, keep the response anchored to the pleadings and
 documents.
-If a payment is made shortly before the hearing, update the figures immediately and reconsider the effect on
-any mandatory arrears ground.
+If a payment is made shortly before the hearing, update the figures immediately and reconsider the effect
+on any mandatory arrears ground.
 
 -- 3 of 3 --

@@ -34,7 +34,7 @@
         "html": "money_claim/02-schedule-of-arrears.html"
       },
       "extraction": {
-        "pageCount": 1,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -160,7 +160,7 @@
         "html": "money_claim/09-enforcement-guide.html"
       },
       "extraction": {
-        "pageCount": 5,
+        "pageCount": 6,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

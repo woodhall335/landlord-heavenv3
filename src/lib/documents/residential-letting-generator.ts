@@ -9,6 +9,12 @@ import {
   shouldIncludeEnglandInformationSheet,
   type EnglandTenancyPurpose,
 } from '@/lib/tenancy/england-reform';
+import {
+  buildEnglandDraftingContext,
+  evaluateEnglandDraftingPolicy,
+  type EnglandDraftingDecision,
+  type EnglandModernTenancyDraftingProduct,
+} from '@/lib/tenancy/england-drafting-policy';
 
 export interface ResidentialGeneratedDocument {
   title: string;
@@ -163,6 +169,18 @@ type EnglandAssuredResidentialProduct =
 type EnglandModernTenancyProduct =
   | EnglandAssuredResidentialProduct
   | 'england_lodger_agreement';
+
+function isEnglandModernTenancyDraftingProduct(
+  product: ResidentialLettingProductSku
+): product is EnglandModernTenancyDraftingProduct {
+  return (
+    product === 'england_standard_tenancy_agreement' ||
+    product === 'england_premium_tenancy_agreement' ||
+    product === 'england_student_tenancy_agreement' ||
+    product === 'england_hmo_shared_house_tenancy_agreement' ||
+    product === 'england_lodger_agreement'
+  );
+}
 
 function joinAddress(...parts: Array<string | null | undefined>) {
   return parts.map(toText).filter(Boolean).join(', ');
@@ -2689,10 +2707,34 @@ function buildEnglandAssuredAdditionalTerms(shared: SharedResidentialData): stri
   return notes.length > 0 ? notes.join('\n\n') : '';
 }
 
+function buildEnglandDraftingControlsNote(
+  decision: EnglandDraftingDecision,
+  purpose: EnglandTenancyPurpose
+): string {
+  const controls = [
+    'post-1 May 2026 England assured periodic drafting',
+    'grounds-only landlord possession wording',
+    'Section 13 / Form 4A rent-review wording only',
+    'pet-request wording aligned to the current England regime',
+    purpose === 'existing_written_tenancy'
+      ? 'existing-written-tenancy transition treatment'
+      : purpose === 'existing_verbal_tenancy'
+        ? 'existing-verbal-tenancy written-statement treatment'
+        : 'new-tenancy written-information treatment',
+  ];
+
+  const warningText = [...decision.warnings, ...decision.complianceWarnings]
+    .filter(Boolean)
+    .join(' ');
+
+  return `Drafting controls applied: ${controls.join(', ')}.${warningText ? ` Review notes: ${warningText}` : ''}`;
+}
+
 function buildEnglandAssuredNotes(
   product: EnglandAssuredResidentialProduct,
   shared: SharedResidentialData,
-  purpose: EnglandTenancyPurpose
+  purpose: EnglandTenancyPurpose,
+  decision: EnglandDraftingDecision
 ): string {
   const parts = [
     purpose === 'existing_verbal_tenancy'
@@ -2713,6 +2755,7 @@ function buildEnglandAssuredNotes(
     product === 'england_hmo_shared_house_tenancy_agreement'
       ? 'The HMO / shared-house pack is intended to travel with its house-rules appendix, handover record, utilities sheet, and shared-house support documents.'
       : '',
+    buildEnglandDraftingControlsNote(decision, purpose),
     buildEnglandAssuredAdditionalTerms(shared),
   ].filter(Boolean);
 
@@ -2722,7 +2765,8 @@ function buildEnglandAssuredNotes(
 function buildEnglandAssuredSections(
   product: EnglandAssuredResidentialProduct,
   shared: SharedResidentialData,
-  purpose: EnglandTenancyPurpose
+  purpose: EnglandTenancyPurpose,
+  decision: EnglandDraftingDecision
 ): TemplateSection[] {
   const facts = shared.facts;
   const periodicNotice = formatNoticePeriod(facts.tenant_notice_period);
@@ -2771,12 +2815,12 @@ function buildEnglandAssuredSections(
         ...buildEnglandPaymentAccountRows(facts),
       ],
       bullets: [
-        'Any rent increase for an England assured tenancy should follow the Section 13 statutory route or any later replacement process required by law. CPI, RPI, or fixed review wording is not intended to override that statutory process in this product.',
+        'Any rent increase for an England assured tenancy should follow the Section 13 statutory route only. The landlord should use Form 4A, give at least 2 months’ notice, avoid any increase in the first 12 months of a new tenancy, and should not seek more than one increase within the same 12-month period.',
         ...separateBillBullets,
       ],
       paragraphs: [
         isTruthySelection(facts.england_rent_in_advance_compliant)
-          ? 'The landlord confirms that any rent in advance taken for this tenancy is intended to stay within the limits permitted for England assured tenancies.'
+          ? 'The landlord confirms that no rent in advance is intended to be requested, encouraged, or accepted before the agreement is signed and that any rent in advance taken after signing is intended to stay within the current England limit of 1 month’s rent.'
           : '',
       ],
     }),
@@ -2798,7 +2842,7 @@ function buildEnglandAssuredSections(
     createSection({
       heading: 'Tenant Ending the Tenancy',
       paragraphs: [
-        `The tenant may end the tenancy by giving at least ${periodicNotice} written notice, ending on the appropriate day for the tenancy period unless the law changes or the parties later agree a lawful surrender.`,
+        `The tenant may end the tenancy by giving at least ${periodicNotice} written notice. For the current England assured-tenancy regime, that notice should end on the day the rent is due or the day before unless the law changes or the parties later agree a lawful surrender or shorter written notice.`,
         'The tenant should return keys, remove belongings, leave the property reasonably clean, and provide a forwarding address for deposit and final correspondence purposes.',
       ],
       rows: [
@@ -2811,6 +2855,7 @@ function buildEnglandAssuredSections(
       paragraphs: [
         'In most circumstances, the landlord may only end the tenancy by obtaining an order for possession and the execution of that order. The landlord cannot lawfully end the tenancy just by serving a private break clause or informal notice.',
         'If the landlord seeks possession, the landlord or one of any joint landlords will usually need to serve a possession notice using the correct form, specify the ground or grounds relied on, and give the minimum notice period that applies to that ground or those grounds before court proceedings begin.',
+        'The landlord cannot rely on a section 21 no-fault route for a tenancy granted under the post-1 May 2026 England assured-tenancy regime.',
         'Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy, the ground should be identified clearly in writing now and supported by the relevant factual explanation.',
       ],
     }),
@@ -2878,11 +2923,20 @@ function buildEnglandAssuredSections(
         isTruthySelection(facts.england_no_bidding_confirmed)
           ? 'The landlord confirms that the tenancy was not granted through a prohibited bidding process in the recorded answers.'
           : '',
+        isTruthySelection(facts.england_no_discrimination_confirmed)
+          ? 'The landlord confirms that the tenancy was not refused or offered on a prohibited children-or-benefits basis and was not handled on an unlawful discriminatory basis.'
+          : '',
         buildStatementLine('Pets authorised at the start', yesNoText(facts.pets_allowed)),
         buildStatementLine('Smoking policy', buildEnglandSmokingPolicyText(facts.smoking_allowed)),
         buildStatementLine('Subletting / short-let policy', buildEnglandSublettingPolicyText(facts.subletting_allowed)),
       ],
     }),
+    decision.complianceWarnings.length > 0
+      ? createSection({
+          heading: 'Drafting Compliance Notes',
+          bullets: decision.complianceWarnings,
+        })
+      : null,
     createSection({
       heading:
         product === 'england_premium_tenancy_agreement'
@@ -3045,7 +3099,15 @@ function buildEnglandAssuredSections(
         { label: 'Landlord service address', value: shared.landlord_address },
         { label: 'Landlord email', value: shared.landlord_email },
         { label: 'Landlord phone', value: shared.landlord_phone },
-        { label: 'How to Rent guide provided', value: yesNoText(facts.how_to_rent_provided) },
+        {
+          label: 'England written information route',
+          value:
+            purpose === 'existing_written_tenancy'
+              ? 'Government information sheet for an existing written tenancy'
+              : purpose === 'existing_verbal_tenancy'
+                ? 'Written statement of terms for an existing verbal tenancy'
+                : 'Written tenancy terms recorded in this agreement',
+        },
       ],
       paragraphs: [
         'Formal notices should be sent to the landlord service address stated in this document unless the landlord later gives a valid written replacement address for service.',
@@ -3667,6 +3729,16 @@ async function generateModernEnglandPack(
   >
 ): Promise<ResidentialGeneratedPack> {
   const purpose = getEnglandTenancyPurpose(shared.facts.england_tenancy_purpose);
+  const draftingDecision = evaluateEnglandDraftingPolicy(
+    buildEnglandDraftingContext(product, shared.facts)
+  );
+
+  if (draftingDecision.hardStops.length > 0) {
+    throw new Error(
+      `England tenancy drafting policy blocked generation for ${product}:\n- ${draftingDecision.hardStops.join('\n- ')}`
+    );
+  }
+
   const packItems = getPackContents({
     product,
     jurisdiction: 'england',
@@ -3690,8 +3762,8 @@ async function generateModernEnglandPack(
             baseConfigs[assuredProduct],
             outputFormat,
             {
-              sections: buildEnglandAssuredSections(assuredProduct, shared, purpose),
-              notes: buildEnglandAssuredNotes(assuredProduct, shared, purpose),
+              sections: buildEnglandAssuredSections(assuredProduct, shared, purpose, draftingDecision),
+              notes: buildEnglandAssuredNotes(assuredProduct, shared, purpose, draftingDecision),
               tenancy_end_date: '',
             }
           )
@@ -3721,8 +3793,8 @@ async function generateModernEnglandPack(
         };
         documents.push(
           await generateTemplatedResidentialDocument(product, shared, config, outputFormat, {
-            sections: buildEnglandAssuredSections(product as EnglandAssuredResidentialProduct, shared, purpose),
-            notes: buildEnglandAssuredNotes(product as EnglandAssuredResidentialProduct, shared, purpose),
+            sections: buildEnglandAssuredSections(product as EnglandAssuredResidentialProduct, shared, purpose, draftingDecision),
+            notes: buildEnglandAssuredNotes(product as EnglandAssuredResidentialProduct, shared, purpose, draftingDecision),
             tenancy_end_date: '',
           })
         );

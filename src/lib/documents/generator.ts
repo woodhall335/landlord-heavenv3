@@ -666,6 +666,30 @@ export function isPremiumSupportingDocumentTemplatePath(templatePath: string): b
   return !isOfficialMappedTemplatePath(templatePath);
 }
 
+function getSupportDocumentFamily(
+  templatePath: string,
+  data: Record<string, any>
+): 'default' | 'tenancy' {
+  const normalizedPath = templatePath.replace(/\\/g, '/').toLowerCase();
+  const tenancySegments = [
+    '/templates/residential/',
+    '/templates/tenancy/',
+    '/templates/lodger/',
+    '/templates/deposit_protection_certificate.hbs',
+    '/templates/tenancy_deposit_information.hbs',
+  ];
+
+  if (
+    normalizedPath.includes('_shared/standalone/checklist_standalone.hbs') &&
+    typeof data.england_tenancy_purpose === 'string' &&
+    data.england_tenancy_purpose.trim().length > 0
+  ) {
+    return 'tenancy';
+  }
+
+  return tenancySegments.some(segment => normalizedPath.includes(segment)) ? 'tenancy' : 'default';
+}
+
 let supportDocumentLogoDataUri: string | null | undefined;
 
 function getSupportDocumentLogoDataUri(): string | null {
@@ -725,16 +749,42 @@ function buildSupportDocumentChrome(data: Record<string, any>): string {
   `.trim();
 }
 
-function injectSupportDocumentBodyClass(html: string): string {
+function injectSupportDocumentBodyClass(html: string, classNames: string[]): string {
+  const uniqueClasses = Array.from(new Set(classNames.filter(Boolean)));
+
   if (/<body\b[^>]*class=/i.test(html)) {
     return html.replace(/<body\b([^>]*)class=(["'])([^"']*)(["'])([^>]*)>/i, (_match, before, quoteOpen, classes, quoteClose, after) => {
-      const nextClasses = classes.includes('lh-support-doc') ? classes : `${classes} lh-support-doc`.trim();
+      const existingClasses = classes
+        .split(/\s+/)
+        .map(token => token.trim())
+        .filter(Boolean);
+      const nextClasses = Array.from(new Set([...existingClasses, ...uniqueClasses])).join(' ');
       return `<body${before}class=${quoteOpen}${nextClasses}${quoteClose}${after}>`;
     });
   }
 
   if (/<body\b/i.test(html)) {
-    return html.replace(/<body\b([^>]*)>/i, '<body$1 class="lh-support-doc">');
+    return html.replace(/<body\b([^>]*)>/i, `<body$1 class="${uniqueClasses.join(' ')}">`);
+  }
+
+  return html;
+}
+
+const SUPPORT_DOCUMENT_THEME_MARKER = 'lh-support-document-theme';
+
+function injectSupportDocumentThemeStyles(html: string, css: string): string {
+  if (html.includes(SUPPORT_DOCUMENT_THEME_MARKER)) {
+    return html;
+  }
+
+  const styleBlock = `<style data-theme="${SUPPORT_DOCUMENT_THEME_MARKER}">\n${css}\n</style>`;
+
+  if (/<\/head>/i.test(html)) {
+    return html.replace(/<\/head>/i, `${styleBlock}\n</head>`);
+  }
+
+  if (/<head\b[^>]*>/i.test(html)) {
+    return html.replace(/<head\b[^>]*>/i, matched => `${matched}\n${styleBlock}`);
   }
 
   return html;
@@ -753,10 +803,17 @@ export function applyPremiumSupportDocumentTheme(
     return html;
   }
 
+  const supportDocumentFamily = getSupportDocumentFamily(templatePath, data);
+  const bodyClasses = ['lh-support-doc'];
+  if (supportDocumentFamily === 'tenancy') {
+    bodyClasses.push('lh-support-doc--tenancy');
+  }
+
   const chrome = buildSupportDocumentChrome(data);
 
   if (isFullHtmlDocument(html)) {
-    let themedHtml = injectSupportDocumentBodyClass(html);
+    let themedHtml = injectSupportDocumentBodyClass(html, bodyClasses);
+    themedHtml = injectSupportDocumentThemeStyles(themedHtml, loadPrintCss());
 
     if (!hasSupportDocumentChromeMarkup(themedHtml) && /<body\b[^>]*>/i.test(themedHtml)) {
       themedHtml = themedHtml.replace(/<body\b[^>]*>/i, matched => `${matched}\n${chrome}\n`);
@@ -769,17 +826,17 @@ export function applyPremiumSupportDocumentTheme(
   return `
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <style>
-    ${nonFullHtmlPrintCss}
-  </style>
-</head>
-<body class="lh-support-doc">
-  ${chrome}
-  <div class="lh-fragment-support-doc">
-    ${html}
-  </div>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      ${nonFullHtmlPrintCss}
+    </style>
+  </head>
+  <body class="${bodyClasses.join(' ')}">
+    ${chrome}
+    <div class="lh-fragment-support-doc">
+      ${html}
+    </div>
 </body>
 </html>
   `.trim();

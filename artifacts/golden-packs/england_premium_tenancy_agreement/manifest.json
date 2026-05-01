@@ -16,7 +16,7 @@
         "html": "england_premium_tenancy_agreement/england-premium-tenancy-agreement.html"
       },
       "extraction": {
-        "pageCount": 5,
+        "pageCount": 9,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -34,7 +34,7 @@
         "html": "england_premium_tenancy_agreement/pre_tenancy_checklist_england.html"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 5,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -52,7 +52,7 @@
         "html": "england_premium_tenancy_agreement/england-keys-handover-record.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -160,7 +160,7 @@
         "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

@@ -3,7 +3,7 @@ golden-money-claim-001
 JURISDICTION
 england
 GENERATED
-30 April 2026
+1 May 2026
 Reply Form
 Use this form to respond to the Letter Before Claim
 YOUR DETAILS
@@ -16,8 +16,8 @@ Your telephone: _________________________________________
 Your email: _________________________________________
 CLAIMANT'S DETAILS
 Claimant's name: Alice Landlord
-Amount claimed: £2944.81
-Date of Letter Before Claim: 30 April 2026
+Amount claimed: £2945.44
+Date of Letter Before Claim: 1 May 2026
 YOUR RESPONSE
 Please tick ONE box below:
 ☐ Option 1: I will pay the debt in full

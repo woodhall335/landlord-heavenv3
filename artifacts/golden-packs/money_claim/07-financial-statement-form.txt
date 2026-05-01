@@ -3,7 +3,7 @@ golden-money-claim-001
 JURISDICTION
 england
 GENERATED
-30 April 2026
+1 May 2026
 Financial Statement Form
 Pre-Action Protocol for Debt Claims
 Use this form to show your income and outgoings
@@ -88,8 +88,8 @@ SECTION 3: YOUR AVAILABLE INCOME
 Total monthly income (from Section 1) £ _________________
 Total monthly outgoings (from Section 2) £ _________________
 Available income (income minus outgoings): £ _____________
-If your available income is negative (i.e., your outgoings are higher than your income), you should seek free debt
-advice urgently.
+If your available income is negative (i.e., your outgoings are higher than your income), you should seek free
+debt advice urgently.
 SECTION 4: YOUR ASSETS
 List any assets you own (e.g., property, savings, vehicles)
 Asset Estimated Value (£)
@@ -107,8 +107,8 @@ Based on the financial information above, what can you afford to pay towards thi
 I can afford to pay: £ _________ per _______
 Starting from (date): _____________________
 I will also continue to pay my current rent in full: ☐ Yes ☐ No
-Note: Any payment arrangement you propose must be realistic and sustainable. You should also continue paying
-your current rent in full (if you still live at the property) to prevent further arrears.
+Note: Any payment arrangement you propose must be realistic and sustainable. You should also continue
+paying your current rent in full (if you still live at the property) to prevent further arrears.
 SECTION 6: ADDITIONAL INFORMATION
 Is there anything else you would like the claimant to know about your financial situation?
 _________________________________________________________________
@@ -140,7 +140,7 @@ StepChange Debt Charity: 0800 138 1111 or www.stepchange.org
 National Debtline: 0808 808 4000 or www.nationaldebtline.org
 MoneyHelper: 0800 138 7777 or www.moneyhelper.org.uk
 Data Protection: The claimant will use the information on this form to consider your payment offer and, if
-necessary, for court proceedings. Your personal data will be processed in accordance with GDPR and the Data
-Protection Act 2018.
+necessary, for court proceedings. Your personal data will be processed in accordance with GDPR and the
+Data Protection Act 2018.
 
 -- 7 of 7 --

@@ -16,7 +16,7 @@
         "html": "complete_pack/eviction_case_summary.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

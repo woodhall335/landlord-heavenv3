@@ -72,6 +72,10 @@ function isEnglandModernAssuredProduct(value: string | null | undefined): boolea
   );
 }
 
+function isEnglandLodgerProduct(value: string | null | undefined): boolean {
+  return value === 'england_lodger_agreement';
+}
+
 function parseTenantNoticePeriodDays(value: unknown): number | null {
   const text = typeof value === 'string' ? value.trim().toLowerCase() : '';
   if (!text) return null;
@@ -222,6 +226,8 @@ export function validateTenancyRequiredFacts(
   );
   const isModernEnglandAssuredProduct =
     jurisdiction === 'england' && isEnglandModernAssuredProduct(product);
+  const isEnglandLodgerRoute =
+    jurisdiction === 'england' && isEnglandLodgerProduct(product);
 
   if (jurisdiction === 'england' && englandTenancyPurpose === 'existing_written_tenancy') {
     if (existingWrittenTransitionAcknowledged === undefined) {
@@ -284,6 +290,14 @@ export function validateTenancyRequiredFacts(
   }
 
   if (isModernEnglandAssuredProduct) {
+    const tenantIsIndividual = toOptionalBoolean(wizardFacts.tenant_is_individual);
+    const mainHome = toOptionalBoolean(wizardFacts.main_home);
+    const landlordNotResidentConfirmed = toOptionalBoolean(
+      wizardFacts.landlord_not_resident_confirmed
+    );
+    const notHolidayOrLicenceConfirmed = toOptionalBoolean(
+      wizardFacts.not_holiday_or_licence_confirmed
+    );
     const tenantNoticePeriod = wizardFacts.tenant_notice_period;
     const rentIncreaseMethod = wizardFacts.rent_increase_method;
     const billsIncludedInRent = wizardFacts.bills_included_in_rent;
@@ -301,6 +315,30 @@ export function validateTenancyRequiredFacts(
     const relevantGasFittingPresent = toOptionalBoolean(
       wizardFacts.relevant_gas_fitting_present
     );
+
+    if (tenantIsIndividual === undefined) {
+      missing.add('tenant_is_individual');
+    } else if (tenantIsIndividual !== true) {
+      invalid.add('tenant_is_individual');
+    }
+
+    if (mainHome === undefined) {
+      missing.add('main_home');
+    } else if (mainHome !== true) {
+      invalid.add('main_home');
+    }
+
+    if (landlordNotResidentConfirmed === undefined) {
+      missing.add('landlord_not_resident_confirmed');
+    } else if (landlordNotResidentConfirmed !== true) {
+      invalid.add('landlord_not_resident_confirmed');
+    }
+
+    if (notHolidayOrLicenceConfirmed === undefined) {
+      missing.add('not_holiday_or_licence_confirmed');
+    } else if (notHolidayOrLicenceConfirmed !== true) {
+      invalid.add('not_holiday_or_licence_confirmed');
+    }
 
     if (englandTenancyPurpose !== 'existing_written_tenancy') {
       if (isBlankString(tenantNoticePeriod)) {
@@ -423,9 +461,6 @@ export function validateTenancyRequiredFacts(
       if (toOptionalBoolean(wizardFacts.carbon_monoxide_alarms) === undefined) {
         missing.add('carbon_monoxide_alarms');
       }
-      if (toOptionalBoolean(wizardFacts.how_to_rent_provided) === undefined) {
-        missing.add('how_to_rent_provided');
-      }
 
       if (depositAmount !== null && depositAmount > 0 && isBlankString(wizardFacts.deposit_scheme_name)) {
         missing.add('deposit_scheme_name');
@@ -465,6 +500,23 @@ export function validateTenancyRequiredFacts(
           missing.add('prior_notice_supported_accommodation_details');
         }
       }
+    }
+  }
+
+  if (isEnglandLodgerRoute) {
+    const residentLandlordConfirmed = toOptionalBoolean(wizardFacts.resident_landlord_confirmed);
+    const sharedKitchenOrBathroom = toOptionalBoolean(wizardFacts.shared_kitchen_or_bathroom);
+
+    if (residentLandlordConfirmed === undefined) {
+      missing.add('resident_landlord_confirmed');
+    } else if (residentLandlordConfirmed !== true) {
+      invalid.add('resident_landlord_confirmed');
+    }
+
+    if (sharedKitchenOrBathroom === undefined) {
+      missing.add('shared_kitchen_or_bathroom');
+    } else if (sharedKitchenOrBathroom !== true) {
+      invalid.add('shared_kitchen_or_bathroom');
     }
   }
 

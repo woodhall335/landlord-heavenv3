@@ -1,20 +1,34 @@
-Case IDgolden-student-tenancy-001
-JurisdictionEngland
-Generated30 April 2026
+CASE ID
+golden-student-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
 FOR PROPERTIES IN ENGLAND
-STUDENT TENANCY AGREEMENT
+Student Tenancy Agreement
 Tenancy agreement for a student let in England
-This document records a student-focused England residential letting and the student-specific features recorded for the tenancy file.
-PREPARED 16 April 2026 FILE REFERENCE RL-ENGLAND-STUDENT-TA-
+This document records a student-focused England residential letting and the student-specific
+features recorded for the tenancy file.
+PREPARED 16 April 2026 FILE
+REFERENCE
+RL-ENGLAND-
+STUDENT-TA-
 TENANCY-001
-EFFECTIVE DATE 2 May 2026 DOCUMENT TYPE Student residential tenancy agreement
+EFFECTIVE DATE 2 May 2026 DOCUMENT
+TYPE
+Student residential
+tenancy agreement
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Aisha Student, Ben Student, Cara
+TENANT(S) Aisha Student, Ben
+Student, Cara
 Student
 TERM / DATES 2 May 2026
 RENT £1500.00 DEPOSIT £1500.00
-PARTIES
+Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+
+-- 1 of 10 --
+
 LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
@@ -31,150 +45,232 @@ TENANT 3 Cara Student
 12 Example Street, London, SW1A 1AA
 Email: cara@example.com
 Telephone: 07000 200003
-BACKGROUND
-DEFINED TERMS
+Background
+Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
-The Landlord agrees to let the Property to the Tenant group for student-focused residential occupation on the terms set out in this agreement. A.
-The parties intend student-specific sharer, guarantor, and hand-back expectations to be captured in the agreement. B.
-
--- 1 of 5 --
-
 LANDLORD Jane Landlord
 TENANT Aisha Student
-OPERATIVE PROVISIONS
+The Landlord agrees to let the Property to the Tenant group for student-focused residential occupation
+on the terms set out in this agreement.
+A.
+The parties intend student-specific sharer, guarantor, and hand-back expectations to be captured in the
+agreement.
+B.
+
+-- 2 of 10 --
+
+Operative Provisions
 1. Tenancy Status and Core Particulars
-The parties intend the tenant to occupy the Property as their main home on the assured periodic basis described in this document.
+The parties intend the tenant to occupy the Property as their main home on the assured periodic basis
+described in this document.
 TENANCY TYPE New periodic tenancy agreement
 PACK Student Tenancy Agreement
-FURNISHED STATUS furnished
-TENANCY START DATE 2 May 2026
-The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-term drafting is created by this document
-unless a solicitor-approved route is expressly used outside this product.
+FURNISHED
+STATUS
+furnished
+TENANCY START
+DATE
+2 May 2026
+The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-
+term drafting is created by this document unless a solicitor-approved route is expressly used outside this
+product.
+
+-- 3 of 10 --
+
 2. Rent, Payment Method, and Bill Treatment
 RENT £1500.00
 RENT PERIOD Monthly
 RENT DUE DAY 1st of each month
-PAYMENT METHOD Bank transfer
-BILLS INCLUDED IN RENT No
-INCLUDED BILLS DETAIL No bills are stated to be included in the rent unless this agreement expressly says otherwise.
+PAYMENT
+METHOD
+Bank transfer
+BILLS INCLUDED
+IN RENT
+No
+INCLUDED BILLS
+DETAIL
+No bills are stated to be included in the rent unless this agreement
+expressly says otherwise.
 ACCOUNT NAME Landlord Heaven Client Account
 SORT CODE 12-34-56
-ACCOUNT NUMBER 12345678
-The landlord confirms that any rent in advance taken for this tenancy is intended to stay within the limits permitted for England assured tenancies.
-Any rent increase for an England assured tenancy should follow the Section 13 statutory route or any later replacement process required by law.
-CPI, RPI, or fixed review wording is not intended to override that statutory process in this product.
+ACCOUNT
+NUMBER
+12345678
+The landlord confirms that no rent in advance is intended to be requested, encouraged, or accepted before
+the agreement is signed and that any rent in advance taken after signing is intended to stay within the current
+England limit of 1 month's rent.
+Any rent increase for an England assured tenancy should follow the Section 13 statutory route only. The
+landlord should use Form 4A, give at least 2 months' notice, avoid any increase in the first 12 months of a
+new tenancy, and should not seek more than one increase within the same 12-month period.
 3. Deposit Arrangements
-DEPOSIT AMOUNT £1500.00
-DEPOSIT PROTECTION
+DEPOSIT
+AMOUNT
+£1500.00
+DEPOSIT
+PROTECTION
 SCHEME
 DPS
-DEPOSIT REFERENCE DPS-EXAMPLE-2026-0001
-If a deposit is taken, it should be protected in an authorised England scheme within the statutory timeframe and the prescribed information should be
-served in time. The support documents in this pack are intended to help record those details.
+DEPOSIT
+REFERENCE
+DPS-EXAMPLE-2026-0001
+If a deposit is taken, it should be protected in an authorised England scheme within the statutory timeframe
+and the prescribed information should be served in time. The support documents in this pack are intended to
+help record those details.
+
+-- 4 of 10 --
+
 4. Tenant Ending the Tenancy
-RECORDED TENANT NOTICE
+RECORDED
+TENANT NOTICE
 PERIOD
 2 months
-The tenant may end the tenancy by giving at least 2 months written notice, ending on the appropriate day for the tenancy period unless the law
-changes or the parties later agree a lawful surrender.
-The tenant should return keys, remove belongings, leave the property reasonably clean, and provide a forwarding address for deposit and final
-correspondence purposes.
-
--- 2 of 5 --
-
+The tenant may end the tenancy by giving at least 2 months written notice. For the current England assured-
+tenancy regime, that notice should end on the day the rent is due or the day before unless the law changes or
+the parties later agree a lawful surrender or shorter written notice.
+The tenant should return keys, remove belongings, leave the property reasonably clean, and provide a
+forwarding address for deposit and final correspondence purposes.
 5. Landlord Ending the Tenancy
-In most circumstances, the landlord may only end the tenancy by obtaining an order for possession and the execution of that order. The landlord
-cannot lawfully end the tenancy just by serving a private break clause or informal notice.
-If the landlord seeks possession, the landlord or one of any joint landlords will usually need to serve a possession notice using the correct form,
-specify the ground or grounds relied on, and give the minimum notice period that applies to that ground or those grounds before court proceedings
-begin.
-Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy, the ground should be identified clearly
-in writing now and supported by the relevant factual explanation.
+In most circumstances, the landlord may only end the tenancy by obtaining an order for possession and the
+execution of that order. The landlord cannot lawfully end the tenancy just by serving a private break clause or
+informal notice.
+If the landlord seeks possession, the landlord or one of any joint landlords will usually need to serve a
+possession notice using the correct form, specify the ground or grounds relied on, and give the minimum
+notice period that applies to that ground or those grounds before court proceedings begin.
+The landlord cannot rely on a section 21 no-fault route for a tenancy granted under the post-1 May 2026
+England assured-tenancy regime.
+Where the landlord wishes to rely on a possession ground that requires prior notice at the start of the tenancy,
+the ground should be identified clearly in writing now and supported by the relevant factual explanation.
+
+-- 5 of 10 --
+
 6. Repairs, Fitness, Safety, and Access
 EPC RATING C
-GAS SAFETY CERTIFICATE
+GAS SAFETY
+CERTIFICATE
 PROVIDED
 No relevant gas fitting stated
-ELECTRICAL SAFETY
-CERTIFICATE PROVIDED
+ELECTRICAL
+SAFETY
+CERTIFICATE
+PROVIDED
 Yes
-SMOKE ALARMS FITTED AND
+SMOKE ALARMS
+FITTED AND
 TESTED
 Yes
-CARBON MONOXIDE ALARMS
-WHERE REQUIRED
+CARBON
+MONOXIDE
+ALARMS WHERE
+REQUIRED
 Yes
-RIGHT TO RENT CHECKS
+RIGHT TO RENT
+CHECKS
 COMPLETED
 25 April 2026
 Recorded access notice expectation: 24 hours.
-The landlord acknowledges that section 9A of the Landlord and Tenant Act 1985 requires the property to be fit for human habitation to the extent
-that section applies.
-The landlord acknowledges that section 11 of the Landlord and Tenant Act 1985 requires the structure and exterior, and the installations for
-water, gas, electricity, sanitation, space heating, and hot water, to be kept in repair to the extent that section applies.
-Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020 requires relevant electrical safety
-standards to be met during occupation, relevant electrical installations to be inspected and tested by a qualified person at least every 5 years or
-sooner if the most recent report requires it, and a copy of that report to be supplied to the tenant.
-Non-emergency access should normally take place on notice and at a reasonable time unless emergency circumstances justify immediate entry.
-7. Pets, Adaptations, and Equal Treatment
-The tenant may keep a pet at the property if the tenant asks to do so in line with section 16A of the Housing Act 1988 and the landlord gives
-consent.
-The landlord cannot unreasonably refuse consent to keep a pet and should deal with any pet request reasonably and within the time required by
-the law then in force.
-The landlord confirms that the tenancy was not offered or refused on an unlawful discriminatory basis in the recorded answers.
-The landlord confirms that the tenancy was not granted through a prohibited bidding process in the recorded answers.
+The landlord acknowledges that section 9A of the Landlord and Tenant Act 1985 requires the property to
+be fit for human habitation to the extent that section applies.
+The landlord acknowledges that section 11 of the Landlord and Tenant Act 1985 requires the structure and
+exterior, and the installations for water, gas, electricity, sanitation, space heating, and hot water, to be kept
+in repair to the extent that section applies.
+Regulation 3 of the Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020
+requires relevant electrical safety standards to be met during occupation, relevant electrical installations to
+be inspected and tested by a qualified person at least every 5 years or sooner if the most recent report
+requires it, and a copy of that report to be supplied to the tenant.
+Non-emergency access should normally take place on notice and at a reasonable time unless emergency
+circumstances justify immediate entry.
 
--- 3 of 5 --
+-- 6 of 10 --
+
+7. Pets, Adaptations, and Equal Treatment
+The tenant may keep a pet at the property if the tenant asks to do so in line with section 16A of the
+Housing Act 1988 and the landlord gives consent.
+The landlord cannot unreasonably refuse consent to keep a pet and should deal with any pet request
+reasonably and within the time required by the law then in force.
+The landlord confirms that the tenancy was not offered or refused on an unlawful discriminatory basis in
+the recorded answers.
+The landlord confirms that the tenancy was not granted through a prohibited bidding process in the
+recorded answers.
+The landlord confirms that the tenancy was not refused or offered on a prohibited children-or-benefits
+basis and was not handled on an unlawful discriminatory basis.
+
+-- 7 of 10 --
 
 8. Product-Specific Operational Terms
-ALL TENANTS FULL-TIME
+ALL TENANTS
+FULL-TIME
 STUDENTS
 Yes
 JOINT TENANCY Yes
-GUARANTOR REQUIRED Yes
-GUARANTOR SCOPE rent_and_all_tenant_obligations
-REPLACEMENT REQUEST
-NOTICE WINDOW
+GUARANTOR
+REQUIRED
+Yes
+GUARANTOR
+SCOPE
+rent_and_all_tenant_obligations
+REPLACEMENT
+REQUEST NOTICE
+WINDOW
 21_days
-REPLACEMENT COSTS outgoing_tenant
-MOVE-OUT KEYS AND RETURN
+REPLACEMENT
+COSTS
+outgoing_tenant
+MOVE-OUT KEYS
+AND RETURN
 PROCESS
 Keys to be returned to the managing agent office.
-CLEANING AND ROOM HAND-
+CLEANING AND
+ROOM HAND-
 BACK STANDARD
 Professional-clean standard for kitchen and bathrooms.
-This student tenancy route records sharer arrangements, guarantor expectations, and end-of-term return standards for the tenancy.
-A student tenant replacement process is intended to apply if the landlord agrees a suitable replacement and any required documents are completed.
-Recorded notice window: 21_days. Cost position: outgoing_tenant.
+This student tenancy route records sharer arrangements, guarantor expectations, and end-of-term return
+standards for the tenancy.
+A student tenant replacement process is intended to apply if the landlord agrees a suitable replacement and
+any required documents are completed. Recorded notice window: 21_days. Cost position: outgoing_tenant.
 Rooms to be returned clean and with all keys.
 Cleaning and room hand-back standard: Professional-clean standard for kitchen and bathrooms.
 9. Supporting Schedules and File Documents
-This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request
-addendum, tenancy variation record, and a student move-out / guarantor schedule.
+This pack includes the main agreement together with a pre-tenancy checklist, keys handover record,
+utilities handover sheet, pet request addendum, tenancy variation record, and a student move-out /
+guarantor schedule.
 A guarantor deed is also included because the recorded answers indicate that a guarantor is required.
+
+-- 8 of 10 --
+
 10. Notices and Service Information
-LANDLORD SERVICE
+LANDLORD
+SERVICE
 ADDRESS
 3 Owner Road, London, SW1A 2BB
-LANDLORD EMAIL jane@example.com
-LANDLORD PHONE 07123 456789
-HOW TO RENT GUIDE
-PROVIDED
-Yes
-Formal notices should be sent to the landlord service address stated in this document unless the landlord later gives a valid written replacement
-address for service.
+LANDLORD
+EMAIL
+jane@example.com
+LANDLORD
+PHONE
+07123 456789
+ENGLAND
+WRITTEN
+INFORMATION
+ROUTE
+Written tenancy terms recorded in this agreement
+Formal notices should be sent to the landlord service address stated in this document unless the landlord later
+gives a valid written replacement address for service.
 File notes
-This document is intended to record the written terms for an England assured periodic tenancy and should be read with any deposit, guarantor,
-and pre-tenancy checklist documents in the pack.
-Where a guarantor will be used, the guarantor deed should be signed and retained with this agreement before occupation begins or as soon as
-the tenancy file requires.
-The Student pack is intended to travel with its move-out schedule, handover record, utilities sheet, and any guarantor deed recorded for the
-tenancy file.
+This document is intended to record the written terms for an England assured periodic tenancy and
+should be read with any deposit, guarantor, and pre-tenancy checklist documents in the pack.
+Where a guarantor will be used, the guarantor deed should be signed and retained with this agreement
+before occupation begins or as soon as the tenancy file requires.
+The Student pack is intended to travel with its move-out schedule, handover record, utilities sheet, and
+any guarantor deed recorded for the tenancy file.
+Drafting controls applied: post-1 May 2026 England assured periodic drafting, grounds-only landlord
+possession wording, Section 13 / Form 4A rent-review wording only, pet-request wording aligned to the
+current England regime, new-tenancy written-information treatment.
 
--- 4 of 5 --
+-- 9 of 10 --
 
-EXECUTION
-This student agreement should be signed by the Landlord and the Tenant group and kept with any related guarantor documents.
+Execution
+This student agreement should be signed by the Landlord and the Tenant group and kept with any related
+guarantor documents.
 LANDLORD
 Jane Landlord
 Signature Date
@@ -189,4 +285,4 @@ Cara Student
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-STUDENT-TA-TENANCY-001
 
--- 5 of 5 --
+-- 10 of 10 --

@@ -34,6 +34,7 @@ import type {
 } from '@/lib/section13/types';
 
 const FORM_4A_PATH = path.join(process.cwd(), 'public', 'official-forms', 'Form_4A.pdf');
+const BRAND_LOGO_PATH = path.join(process.cwd(), 'public', 'images', 'logo.png');
 export const SECTION13_FORM_4A_VERSION = 'england_form_4a_2026-05-01_v1' as const;
 const PAGE_WIDTH = 595.28;
 const PAGE_HEIGHT = 841.89;
@@ -190,6 +191,21 @@ export const FORM_4A_OVERLAY_MAP: Record<string, Record<string, Section13FormOve
 };
 
 let cachedForm4AMetadata: { version: string; sha256: string } | null = null;
+let cachedBrandLogoBytes: Uint8Array | null | undefined;
+
+async function getBrandLogoBytes(): Promise<Uint8Array | null> {
+  if (cachedBrandLogoBytes !== undefined) {
+    return cachedBrandLogoBytes;
+  }
+
+  try {
+    cachedBrandLogoBytes = await fs.readFile(BRAND_LOGO_PATH);
+  } catch {
+    cachedBrandLogoBytes = null;
+  }
+
+  return cachedBrandLogoBytes;
+}
 
 export interface Section13EvidenceFile {
   upload: Section13EvidenceUpload;
@@ -755,17 +771,68 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
   const pdfDoc = await PDFDocument.create();
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const bold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const logoBytes = await getBrandLogoBytes();
+  const logoImage = logoBytes ? await pdfDoc.embedPng(logoBytes) : null;
   let page = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
   let cursorY = PAGE_HEIGHT - MARGIN_Y;
-  const brandFontSize = 8;
   const titleFontSize = 18;
   const headingFontSize = 12;
   const bodyFontSize = 10.5;
   const bodyLineHeight = 13.5;
+  const brandText = rgb(0.204, 0.141, 0.373);
+  const brandTextStrong = rgb(0.141, 0.09, 0.247);
+  const brandMuted = rgb(0.424, 0.365, 0.561);
+  const brandSurface = rgb(0.965, 0.945, 1);
+  const brandSurfaceStrong = rgb(0.929, 0.894, 1);
+  const brandPanel = rgb(0.984, 0.98, 1);
+  const brandBorder = rgb(0.847, 0.8, 0.965);
+  const brandBorderStrong = rgb(0.776, 0.714, 0.937);
+
+  const drawHeader = () => {
+    let headerY = PAGE_HEIGHT - MARGIN_Y;
+
+    if (logoImage) {
+      const scaled = logoImage.scaleToFit(168, 34);
+      page.drawImage(logoImage, {
+        x: MARGIN_X,
+        y: headerY - scaled.height + 2,
+        width: scaled.width,
+        height: scaled.height,
+      });
+      headerY -= scaled.height + 10;
+    } else {
+      page.drawText(safeText(SECTION13_BRAND_LABEL), {
+        x: MARGIN_X,
+        y: headerY,
+        font: bold,
+        size: 10,
+        color: brandText,
+      });
+      headerY -= 16;
+    }
+
+    page.drawText(safeText(title), {
+      x: MARGIN_X,
+      y: headerY,
+      font: bold,
+      size: titleFontSize,
+      color: brandTextStrong,
+    });
+    headerY -= 12;
+
+    page.drawLine({
+      start: { x: MARGIN_X, y: headerY },
+      end: { x: PAGE_WIDTH - MARGIN_X, y: headerY },
+      thickness: 1,
+      color: brandBorder,
+    });
+
+    cursorY = headerY - 14;
+  };
 
   const addPage = () => {
     page = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
-    cursorY = PAGE_HEIGHT - MARGIN_Y;
+    drawHeader();
   };
 
   const ensureSpace = (needed: number) => {
@@ -774,30 +841,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
     }
   };
 
-  page.drawText(safeText(SECTION13_BRAND_LABEL), {
-    x: MARGIN_X,
-    y: cursorY,
-    font,
-    size: brandFontSize,
-    color: rgb(0.42, 0.42, 0.46),
-  });
-  cursorY -= 14;
-
-  page.drawText(safeText(title), {
-    x: MARGIN_X,
-    y: cursorY,
-    font: bold,
-    size: titleFontSize,
-    color: rgb(0.12, 0.12, 0.12),
-  });
-  cursorY -= 12;
-  page.drawLine({
-    start: { x: MARGIN_X, y: cursorY },
-    end: { x: PAGE_WIDTH - MARGIN_X, y: cursorY },
-    thickness: 1,
-    color: rgb(0.84, 0.84, 0.88),
-  });
-  cursorY -= 14;
+  drawHeader();
 
   for (const [blockIndex, block] of blocks.entries()) {
     const blockFontSize = block.variant === 'intro' ? bodyFontSize : bodyFontSize;
@@ -820,14 +864,14 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         y: cursorY,
         font: bold,
         size: headingFontSize,
-        color: rgb(0.16, 0.16, 0.16),
+        color: brandTextStrong,
       });
       const headingWidth = bold.widthOfTextAtSize(safeText(block.heading), headingFontSize);
       page.drawLine({
         start: { x: MARGIN_X + headingWidth + 12, y: cursorY + 6 },
         end: { x: PAGE_WIDTH - MARGIN_X, y: cursorY + 6 },
         thickness: 0.7,
-        color: rgb(0.86, 0.86, 0.9),
+        color: brandBorder,
       });
       cursorY -= 18;
     }
@@ -843,9 +887,9 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         y: cursorY - panelHeight + 6,
         width: CONTENT_WIDTH,
         height: panelHeight,
-        color: block.variant === 'intro' ? rgb(0.965, 0.968, 0.978) : rgb(0.973, 0.963, 0.992),
-        borderColor: block.variant === 'intro' ? rgb(0.84, 0.86, 0.9) : rgb(0.86, 0.82, 0.95),
-        borderWidth: 0.8,
+        color: block.variant === 'intro' ? brandSurface : brandSurfaceStrong,
+        borderColor: block.variant === 'intro' ? brandBorder : brandBorderStrong,
+        borderWidth: 1,
       });
       cursorY -= panelPaddingY;
       if (block.variant === 'callout' && block.heading) {
@@ -854,7 +898,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
           y: cursorY,
           font: bold,
           size: 11.5,
-          color: rgb(0.16, 0.16, 0.16),
+          color: brandTextStrong,
         });
         cursorY -= 17;
       }
@@ -867,7 +911,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
             y: cursorY,
             font,
             size: blockFontSize,
-            color: rgb(0.18, 0.18, 0.18),
+            color: brandText,
           });
           cursorY -= blockLineHeight;
         }
@@ -886,7 +930,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
           y: cursorY,
           font,
           size: blockFontSize,
-          color: rgb(0.18, 0.18, 0.18),
+          color: brandText,
         });
         cursorY -= blockLineHeight;
       }
@@ -905,14 +949,14 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         start: { x: MARGIN_X, y: 36 },
         end: { x: PAGE_WIDTH - MARGIN_X, y: 36 },
         thickness: 0.5,
-        color: rgb(0.8, 0.8, 0.8),
+        color: brandBorder,
       });
       item.drawText(safeText(footer), {
         x: MARGIN_X,
         y: 20,
         font,
         size: 8,
-        color: rgb(0.45, 0.45, 0.45),
+        color: brandMuted,
       });
       const pageNumber = `Page ${index + 1} of ${pages.length}`;
       item.drawText(pageNumber, {
@@ -920,7 +964,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         y: 20,
         font,
         size: 8,
-        color: rgb(0.45, 0.45, 0.45),
+        color: brandMuted,
       });
     }
   }

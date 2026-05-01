@@ -318,7 +318,23 @@ body.lh-support-doc {
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   font-size: 10pt;
   line-height: 1.55;
-  color: #1f1635;
+  --lh-surface: #f6f1ff;
+  --lh-surface-strong: #ede4ff;
+  --lh-panel: #fbfaff;
+  --lh-border: #d8ccf6;
+  --lh-border-strong: #c6b6ef;
+  --lh-brand: #5b36b3;
+  --lh-text: #34245f;
+  --lh-text-strong: #24173f;
+  --lh-muted: #6c5d8f;
+  --lh-white: #fff;
+  --lh-ready: #edf7f1;
+  --lh-ready-border: #93b6a1;
+  --lh-warning: #fff5e7;
+  --lh-warning-border: #d4b074;
+  --lh-critical: #fbeaea;
+  --lh-critical-border: #cf9292;
+  color: var(--lh-text);
   background: #fff;
 }
 
@@ -328,18 +344,18 @@ body.lh-support-doc h3,
 body.lh-support-doc h4 {
   text-transform: none;
   letter-spacing: 0;
-  color: #24173f;
+  color: var(--lh-text-strong);
 }
 
 .lh-pack-masthead {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
-  gap: 1.25em;
-  margin: 0 0 1.25em 0;
-  padding: 0 0 0.9em 0;
-  border-bottom: 1.5px solid #d9d7f7;
+  align-items: flex-start;
+  gap: 0.8em;
+  margin: 0 0 0.95em 0;
+  padding: 0 0 0.7em 0;
+  border-bottom: 1.5px solid var(--lh-border);
   page-break-inside: avoid;
   break-inside: avoid;
 }
@@ -352,10 +368,144 @@ body.lh-support-doc h4 {
 }
 
 .lh-brand-mark {
-  width: 240px;
-  max-width: min(240px, 100%);
+  width: 168px;
+  max-width: min(168px, 100%);
   display: block;
   flex-shrink: 0;
+}
+
+body.lh-support-doc--tenancy .lh-pack-masthead {
+  align-items: flex-start;
+}
+
+body.lh-support-doc--tenancy .lh-brand-mark {
+  width: 168px;
+  max-width: min(168px, 100%);
+}
+
+body.lh-support-doc--tenancy .lh-pack-meta {
+  gap: 0.45em;
+}
+
+body.lh-support-doc--tenancy .lh-pack-meta-item {
+  min-width: 82px;
+  padding: 0.4em 0.55em;
+}
+
+body.lh-support-doc--tenancy .lh-pack-meta-item span {
+  font-size: 7pt;
+}
+
+body.lh-support-doc--tenancy .lh-pack-meta-item strong {
+  font-size: 8pt;
+}
+
+body.lh-support-doc .cover,
+body.lh-support-doc .header,
+body.lh-support-doc .note-panel,
+body.lh-support-doc .declaration,
+body.lh-support-doc .certification,
+body.lh-support-doc .room-card,
+body.lh-support-doc .appendix-card,
+body.lh-support-doc .property-address,
+body.lh-support-doc .checklist-footer,
+body.lh-support-doc .disclaimer,
+body.lh-support-doc .hmo-section,
+body.lh-support-doc .info-box,
+body.lh-support-doc .ground-block,
+body.lh-support-doc .multiline-field,
+body.lh-support-doc .part-label {
+  background: var(--lh-surface) !important;
+  border-color: var(--lh-border) !important;
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc .cover-intro {
+  background: var(--lh-surface) !important;
+  border-left-color: var(--lh-border-strong) !important;
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc .deed-warning {
+  background: #fff !important;
+  border-color: var(--lh-border-strong) !important;
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc .jurisdiction-badge,
+body.lh-support-doc .lh-pack-meta-item,
+body.lh-support-doc .lh-status-pill,
+body.lh-support-doc .lh-chip {
+  background: var(--lh-surface-strong) !important;
+  border-color: var(--lh-border) !important;
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc .cover-topline,
+body.lh-support-doc .eyebrow,
+body.lh-support-doc .signature-role,
+body.lh-support-doc .witness-label,
+body.lh-support-doc .guidance-text,
+body.lh-support-doc .legal-ref,
+body.lh-support-doc .small-text,
+body.lh-support-doc .footer,
+body.lh-support-doc .cover-subtitle,
+body.lh-support-doc .subtitle {
+  color: var(--lh-muted) !important;
+}
+
+body.lh-support-doc .section-title,
+body.lh-support-doc .section h2,
+body.lh-support-doc .doc-header,
+body.lh-support-doc .footer,
+body.lh-support-doc .witness-block,
+body.lh-support-doc .signature-line,
+body.lh-support-doc .line {
+  border-color: var(--lh-border-strong) !important;
+}
+
+body.lh-support-doc h1,
+body.lh-support-doc h2,
+body.lh-support-doc h3,
+body.lh-support-doc h4,
+body.lh-support-doc .clause-heading {
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc h3,
+body.lh-support-doc .hmo-section h3 {
+  border-left-color: var(--lh-border-strong) !important;
+}
+
+body.lh-support-doc table td,
+body.lh-support-doc table th,
+body.lh-support-doc .cover-meta td,
+body.lh-support-doc .parties-table td,
+body.lh-support-doc .detail-table td,
+body.lh-support-doc .meta-table td,
+body.lh-support-doc .summary-table td {
+  border-color: var(--lh-border) !important;
+}
+
+body.lh-support-doc table td,
+body.lh-support-doc .cover-meta td,
+body.lh-support-doc .parties-table td,
+body.lh-support-doc .detail-table td,
+body.lh-support-doc .meta-table td,
+body.lh-support-doc .summary-table td {
+  background: #fff !important;
+  color: #1f1635 !important;
+}
+
+body.lh-support-doc table th,
+body.lh-support-doc .summary-table th,
+body.lh-support-doc .cover-meta .label,
+body.lh-support-doc .parties-table .role,
+body.lh-support-doc .detail-table .label,
+body.lh-support-doc .meta-table .label,
+body.lh-support-doc .summary-table .label {
+  background: var(--lh-surface-strong) !important;
+  color: var(--lh-text) !important;
 }
 
 .lh-brand-logo {
@@ -383,9 +533,9 @@ body.lh-support-doc h4 {
 .lh-pack-meta-item {
   min-width: 86px;
   padding: 0.45em 0.65em;
-  border: 1px solid #ddd9f8;
-  border-radius: 10px;
-  background: #f4f1ff;
+  border: 1px solid var(--lh-border);
+  border-radius: 0;
+  background: var(--lh-surface-strong);
 }
 
 .lh-pack-meta-item span {
@@ -395,14 +545,14 @@ body.lh-support-doc h4 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #7b7397;
+  color: var(--lh-muted);
 }
 
 .lh-pack-meta-item strong {
   display: block;
   font-size: 8.8pt;
   line-height: 1.35;
-  color: #271b45;
+  color: var(--lh-text-strong);
 }
 
 body.lh-support-doc .doc-header,
@@ -414,11 +564,11 @@ body.lh-support-doc .cover,
 body.lh-support-doc .schedule-header {
   margin-bottom: 1.3em;
   padding: 0.9em 1em 1em;
-  border: 1px solid #ddd9f8;
+  border: 1px solid var(--lh-border);
   border-bottom: 0;
-  border-radius: 16px 16px 0 0;
-  background: #faf8ff;
-  box-shadow: inset 0 -1px 0 #ece8ff;
+  border-radius: 0;
+  background: var(--lh-panel);
+  box-shadow: none;
 }
 
 body.lh-support-doc .doc-header h1,
@@ -433,7 +583,7 @@ body.lh-support-doc .schedule-header h2 {
   font-size: 16pt;
   font-weight: 700;
   line-height: 1.2;
-  color: #251744;
+  color: var(--lh-text-strong);
 }
 
 body.lh-support-doc .doc-header h2,
@@ -448,7 +598,7 @@ body.lh-support-doc .schedule-title,
 body.lh-support-doc .cover-topline,
 body.lh-support-doc .agreement-date,
 body.lh-support-doc .doc-date {
-  color: #645b84;
+  color: var(--lh-muted);
   font-size: 9pt;
   font-weight: 500;
 }
@@ -460,9 +610,9 @@ body.lh-support-doc .premium-badge {
   align-items: center;
   justify-content: center;
   padding: 0.38em 0.9em;
-  border: 1px solid #7048d7;
-  border-radius: 999px;
-  background: #5b36b3;
+  border: 1px solid var(--lh-brand);
+  border-radius: 0;
+  background: var(--lh-brand);
   color: #fff;
   font-size: 8.6pt;
   font-weight: 700;
@@ -473,11 +623,11 @@ body.lh-support-doc .premium-badge {
 body.lh-support-doc .doc-title {
   margin: 1.3em 0;
   padding: 1em 1.15em;
-  border: 1px solid #d9d7f7;
-  border-radius: 16px;
-  background: #f1ecff;
-  color: #251744;
-  box-shadow: 0 10px 30px rgba(47, 20, 95, 0.08);
+  border: 1px solid var(--lh-border);
+  border-radius: 0;
+  background: var(--lh-surface);
+  color: var(--lh-text-strong);
+  box-shadow: none;
 }
 
 body.lh-support-doc .summary-box,
@@ -506,10 +656,10 @@ body.lh-support-doc .premium-section,
 body.lh-support-doc .subsection,
 body.lh-support-doc .signature-block,
 body.lh-support-doc .witness-section {
-  border-color: #ddd9f8;
-  border-radius: 16px;
-  background: #fbfaff;
-  box-shadow: 0 8px 24px rgba(42, 22, 80, 0.06);
+  border-color: var(--lh-border);
+  border-radius: 0;
+  background: var(--lh-panel);
+  box-shadow: none;
 }
 
 body.lh-support-doc .summary-box,
@@ -540,30 +690,30 @@ body.lh-support-doc .action-box {
 }
 
 body.lh-support-doc .callout {
-  border-left: 4px solid #7c3aed;
-  background: #f6f2ff;
+  border-left: 4px solid var(--lh-brand);
+  background: var(--lh-surface);
 }
 
 body.lh-support-doc .callout.warning,
 body.lh-support-doc .warning-box,
 body.lh-support-doc .compliance-item-header.warning,
 body.lh-support-doc .action-box.recommended .action-box-header {
-  border-color: #d97706;
-  background: #fff2de;
+  border-color: var(--lh-warning-border);
+  background: var(--lh-warning);
 }
 
 body.lh-support-doc .callout.critical,
 body.lh-support-doc .compliance-item-header.fail,
 body.lh-support-doc .action-box.critical .action-box-header {
-  border-color: #b91c1c;
-  background: #fee2e2;
+  border-color: var(--lh-critical-border);
+  background: var(--lh-critical);
 }
 
 body.lh-support-doc .callout.success,
 body.lh-support-doc .overall-assessment.ready,
 body.lh-support-doc .compliance-item-header.pass {
-  border-color: #15803d;
-  background: #dcfce7;
+  border-color: var(--lh-ready-border);
+  background: var(--lh-ready);
 }
 
 body.lh-support-doc .summary-grid dt,
@@ -574,22 +724,22 @@ body.lh-support-doc .case-details-grid dt {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #6d6790;
+  color: var(--lh-muted);
 }
 
 body.lh-support-doc .summary-grid dd,
 body.lh-support-doc .details-grid dd,
 body.lh-support-doc .case-details dd,
 body.lh-support-doc .case-details-grid dd {
-  color: #251744;
+  color: var(--lh-text-strong);
   font-weight: 600;
 }
 
 body.lh-support-doc .summary-item,
 body.lh-support-doc .compliance-item-content,
 body.lh-support-doc .action-box-content {
-  border-color: #ece8ff;
-  border-radius: 12px;
+  border-color: var(--lh-border);
+  border-radius: 0;
   background: #fff;
 }
 
@@ -607,7 +757,7 @@ body.lh-support-doc .important-title,
 body.lh-support-doc .explainer-title,
 body.lh-support-doc .warning-title,
 body.lh-support-doc .party-label {
-  color: #251744;
+  color: var(--lh-text-strong);
 }
 
 body.lh-support-doc .section h2,
@@ -617,9 +767,9 @@ body.lh-support-doc .checklist-box .heading,
 body.lh-support-doc .section-title {
   padding: 0.7em 0.95em;
   border: 0;
-  border-bottom: 1px solid #e7e2ff;
-  border-radius: 16px 16px 0 0;
-  background: #f1ecff;
+  border-bottom: 1px solid var(--lh-border);
+  border-radius: 0;
+  background: var(--lh-surface-strong);
   font-size: 10.5pt;
   font-weight: 700;
 }
@@ -629,29 +779,29 @@ body.lh-support-doc .section-title {
 }
 
 body.lh-support-doc .section-number {
-  background: #e7defe;
-  color: #251744;
-  box-shadow: 0 8px 18px rgba(76, 29, 149, 0.18);
+  background: var(--lh-surface-strong);
+  color: var(--lh-text-strong);
+  box-shadow: none;
 }
 
 body.lh-support-doc .property-highlight,
 body.lh-support-doc .property-detail-item {
-  color: #251744;
-  border-color: #d4cbf0;
+  color: var(--lh-text-strong);
+  border-color: var(--lh-border);
 }
 
 body.lh-support-doc .property-highlight {
-  background: #e8e1fb;
+  background: var(--lh-surface-strong);
 }
 
 body.lh-support-doc .statement-section h2 {
-  border-bottom-color: #ddd9f8;
+  border-bottom-color: var(--lh-border);
 }
 
 body.lh-support-doc .statement-section h2 .num,
 body.lh-support-doc .section-header .num {
-  background: #e7defe;
-  color: #251744;
+  background: var(--lh-surface-strong);
+  color: var(--lh-text-strong);
 }
 
 body.lh-support-doc .index-table,
@@ -661,15 +811,15 @@ body.lh-support-doc table {
   border-spacing: 0;
   margin: 0.95em 0;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 0;
 }
 
 body.lh-support-doc .index-table th,
 body.lh-support-doc .arrears-table th,
 body.lh-support-doc table th {
-  border-color: #5b34c6;
-  background: #ede7ff;
-  color: #251744;
+  border-color: var(--lh-border-strong);
+  background: var(--lh-surface-strong);
+  color: var(--lh-text-strong);
   font-size: 8.8pt;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -678,33 +828,33 @@ body.lh-support-doc table th {
 body.lh-support-doc .index-table td,
 body.lh-support-doc .arrears-table td,
 body.lh-support-doc table td {
-  border-color: #ddd9f8;
+  border-color: var(--lh-border);
   background: #fff;
-  color: #271b45;
+  color: var(--lh-text-strong);
 }
 
 body.lh-support-doc .index-table tr:nth-child(even) td,
 body.lh-support-doc .arrears-table tr:nth-child(even) td,
 body.lh-support-doc table tr:nth-child(even) td {
-  background: #fbfaff;
+  background: var(--lh-panel);
 }
 
 body.lh-support-doc .section-header td,
 body.lh-support-doc .total-row td,
 body.lh-support-doc .total-row {
-  background: #f2edff !important;
-  color: #251744 !important;
+  background: var(--lh-surface) !important;
+  color: var(--lh-text-strong) !important;
   font-weight: 700;
 }
 
 body.lh-support-doc .checklist li {
-  border-bottom-color: #ebe7ff;
+  border-bottom-color: var(--lh-border);
 }
 
 body.lh-support-doc .checklist li::before,
 body.lh-support-doc .checkbox {
-  border-color: #7c3aed;
-  border-radius: 4px;
+  border-color: var(--lh-brand);
+  border-radius: 0;
 }
 
 body.lh-support-doc .footer,
@@ -712,8 +862,8 @@ body.lh-support-doc .doc-footer,
 body.lh-support-doc .footer-info {
   margin-top: 1.6em;
   padding-top: 0.9em;
-  border-top: 1px solid #ddd9f8;
-  color: #736b91;
+  border-top: 1px solid var(--lh-border);
+  color: var(--lh-muted);
   font-size: 8.5pt;
 }
 
@@ -724,7 +874,7 @@ body.lh-support-doc .lh-fragment-support-doc > h1:first-child {
 }
 
 body.lh-support-doc .lh-fragment-support-doc > p:first-of-type {
-  color: #5f567d;
+  color: var(--lh-muted);
 }
 
 
@@ -1534,7 +1684,7 @@ Total arrears: &#163;3600.00. A detailed schedule of arrears is attached.</p>
   <span class="section-number">5</span>
   <p class="section-label">The court proceedings will not begin earlier than:</p>
   <p class="section-value" style="font-size: 12pt; font-weight: 700;">
-      28/05/2026
+      29/05/2026
   </p>
 </div>
 
@@ -1589,7 +1739,7 @@ LS8 2PF</p>
     <div class="date-field">
       <label>Date:</label>
       <span class="value">
-          30/04/2026
+          01/05/2026
       </span>
     </div>
   </div>

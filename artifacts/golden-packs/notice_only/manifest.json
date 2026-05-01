@@ -16,7 +16,7 @@
         "html": "notice_only/case_summary.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -52,7 +52,7 @@
         "html": "notice_only/service_instructions_s8.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -70,7 +70,7 @@
         "html": "notice_only/validity_checklist_s8.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

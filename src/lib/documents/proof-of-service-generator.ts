@@ -19,6 +19,9 @@
  * This ensures we do not fabricate evidence about how service was performed.
  */
 
+import fs from 'fs/promises';
+import path from 'path';
+
 import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { toWinAnsiSafeText } from './pdf-safe-text';
 
@@ -43,6 +46,23 @@ export interface ProofOfServiceData {
   // time_of_service - text field, left empty
   // tracking_number - text field, left empty
   // server_name - text field, left empty (may be different from landlord)
+}
+
+const BRAND_LOGO_PATH = path.join(process.cwd(), 'public', 'images', 'logo.png');
+let cachedBrandLogoBytes: Uint8Array | null | undefined;
+
+async function getBrandLogoBytes(): Promise<Uint8Array | null> {
+  if (cachedBrandLogoBytes !== undefined) {
+    return cachedBrandLogoBytes;
+  }
+
+  try {
+    cachedBrandLogoBytes = await fs.readFile(BRAND_LOGO_PATH);
+  } catch {
+    cachedBrandLogoBytes = null;
+  }
+
+  return cachedBrandLogoBytes;
 }
 
 /**
@@ -78,17 +98,20 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   // Embed fonts
   const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const logoBytes = await getBrandLogoBytes();
+  const logoImage = logoBytes ? await pdfDoc.embedPng(logoBytes) : null;
 
   // Add a page (A4 size)
   const page = pdfDoc.addPage([595.28, 841.89]); // A4 in points
   const { width, height } = page.getSize();
 
   // Colors
-  const black = rgb(0, 0, 0);
-  const gray = rgb(0.4, 0.4, 0.4);
-  const lightGray = rgb(0.9, 0.9, 0.9);
-  const warningYellow = rgb(1, 0.92, 0.8);
-  const warningBorder = rgb(0.95, 0.72, 0.3);
+  const black = rgb(0.141, 0.09, 0.247);
+  const gray = rgb(0.424, 0.365, 0.561);
+  const lightGray = rgb(0.965, 0.945, 1);
+  const panelWhite = rgb(0.984, 0.98, 1);
+  const warningYellow = rgb(0.965, 0.945, 1);
+  const warningBorder = rgb(0.776, 0.714, 0.937);
 
   // Layout constants
   const margin = 50;
@@ -112,6 +135,16 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   };
 
   // === HEADER ===
+  if (logoImage) {
+    const scaled = logoImage.scaleToFit(168, 34);
+    page.drawImage(logoImage, {
+      x: margin,
+      y: y - scaled.height + 2,
+      width: scaled.width,
+      height: scaled.height,
+    });
+    y -= scaled.height + 14;
+  }
   drawText('CERTIFICATE OF SERVICE', margin, y, helveticaBold, 18);
   y -= 10;
   drawText('(Proof of Service - support record only, not a prescribed court form)', margin, y, helvetica, 12, gray);
@@ -122,7 +155,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   y -= 25;
 
   // === WARNING BOX ===
-  page.drawRectangle({ x: margin, y: y - 55, width: width - margin * 2, height: 55, color: warningYellow, borderColor: warningBorder, borderWidth: 2 });
+  page.drawRectangle({ x: margin, y: y - 55, width: width - margin * 2, height: 55, color: warningYellow, borderColor: warningBorder, borderWidth: 1.5 });
   y -= 10;
   drawText('IMPORTANT: This is a support record, not an official prescribed form', margin + 10, y, helveticaBold, 10);
   y -= 15;
@@ -291,7 +324,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   y -= 35;
 
   // === SECTION 5: NOTES ===
-  drawRect(margin, y - 70, width - margin * 2, 75, true);
+  drawRect(margin, y - 70, width - margin * 2, 75, true, panelWhite);
   y -= 5;
 
   drawText('IMPORTANT NOTES FOR COURT', margin + 10, y, helveticaBold, 10);

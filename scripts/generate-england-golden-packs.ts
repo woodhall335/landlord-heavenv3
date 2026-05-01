@@ -42,7 +42,9 @@ function installScriptModuleShims() {
       return path.join(process.cwd(), 'scripts', 'empty-module.js');
     }
     if (typeof request === 'string' && request.startsWith('@/')) {
-      const mapped = path.join(process.cwd(), 'src', request.slice(2));
+      const mapped = request.startsWith('@/config/')
+        ? path.join(process.cwd(), request.slice(2))
+        : path.join(process.cwd(), 'src', request.slice(2));
       return originalResolveFilename.call(this, mapped, parent, isMain, options);
     }
     return originalResolveFilename.call(this, request, parent, isMain, options);
@@ -240,6 +242,10 @@ function createBaseEnglandAssuredFacts(overrides: Record<string, any> = {}): Bas
     england_rent_in_advance_compliant: true,
     england_no_bidding_confirmed: true,
     england_no_discrimination_confirmed: true,
+    tenant_is_individual: true,
+    main_home: true,
+    landlord_not_resident_confirmed: true,
+    not_holiday_or_licence_confirmed: true,
     tenant_improvements_allowed_with_consent: false,
     supported_accommodation_tenancy: false,
     relevant_gas_fitting_present: true,
@@ -562,6 +568,7 @@ async function generateLodgerGolden(): Promise<GoldenPackDocumentInput[]> {
     createBaseEnglandAssuredFacts({
       case_id: 'golden-lodger-001',
       resident_landlord_confirmed: true,
+      landlord_not_resident_confirmed: false,
       landlord_lives_at_property: true,
       shared_kitchen_or_bathroom: true,
       house_rules_notes: 'No overnight guests without prior agreement.',

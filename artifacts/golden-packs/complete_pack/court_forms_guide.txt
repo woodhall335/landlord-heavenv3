@@ -3,10 +3,11 @@ golden-complete-pack-001
 JURISDICTION
 england
 GENERATED
-30 April 2026
+1 May 2026
 STAGE 2: SECTION 8 COURT & POSSESSION PACK
 Court Forms
-These forms are completed using the same facts, dates, and grounds as your notice and service record.
+These forms are completed using the same facts, dates, and grounds as your notice and service
+record.
 This pack turns the served notice into a court-ready possession file that stays consistent under scrutiny.
 INCLUDED
 Form N5
@@ -21,10 +22,10 @@ grounds
 arrears figures
 dates
 Alignment warning
-Inconsistency between the served notice and the claim is one of the most common reasons possession cases are
-delayed or challenged.
-Keep the Section 8 notice, N215, arrears schedule, Form N5, and Form N119 reading from the same timeline and
-figures.
+Inconsistency between the served notice and the claim is one of the most common reasons possession
+cases are delayed or challenged.
+Keep the Section 8 notice, N215, arrears schedule, Form N5, and Form N119 reading from the same
+timeline and figures.
 Next step
 Review the claim forms against the served notice and issue them only when the notice timeline allows
 proceedings.
