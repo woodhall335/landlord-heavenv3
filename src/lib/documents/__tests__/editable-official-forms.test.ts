@@ -337,6 +337,105 @@ describe('Editable Official Forms - No Flatten', () => {
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText()).toContain('Ground 1A');
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.earliestDate).getText()).toBe('01102026');
     });
+
+    it('maps every native Form 3A field from the case data into the official May PDF', async () => {
+      const pdfBytes = await fillForm3AForm({
+        ...COMPLETE_FORM3A_CASE_DATA,
+        tenant_full_name: 'Sonia Shezadi',
+        tenant_2_name: 'Hamza Shezadi',
+        tenant_3_name: 'Mina Shezadi',
+        property_address_line1: '35 Woodhall Park Avenue',
+        property_address_line2: 'Flat 2',
+        property_city: 'Pudsey',
+        property_county: 'West Yorkshire',
+        property_postcode: 'LS28 7HF',
+        landlord_full_name: 'Amir Agent',
+        landlord_address_line1: '45 Park Lane',
+        landlord_address_line2: 'Suite 4',
+        landlord_city: 'Leeds',
+        landlord_county: 'West Yorkshire',
+        landlord_postcode: 'LS1 1AA',
+        landlord_phone: '01135550101',
+        landlord_email: 'agent@example.com',
+        ground_codes: ['1A', '4', '6', '7B', '8', '10', '12', '13', '14', '17'],
+        form3a_grounds_text:
+          'Ground 1A - Sale of dwelling house.\nGround 4 - Student accommodation.\nGround 6 - Redevelopment.\nGround 7B - No right to rent.\nGround 8 - Serious rent arrears.\nGround 10 - Any rent arrears.\nGround 12 - Tenancy breach.\nGround 13 - Deterioration.\nGround 14 - Anti-social behaviour.\nGround 17 - False statement.',
+        form3a_explanation:
+          'The claimant relies on the full spread of grounds selected in the wizard, and the notice needs each official Form 3A checkbox to align with the same internal case narrative. The supporting explanation is intentionally long enough to remain user-authored rather than being replaced by drafted fallback wording.',
+        signatory_name: 'Amir Agent',
+        signatory_capacity: 'agent',
+        signature_date: '2026-06-01',
+        form3a_joint_signatories: [
+          { name: 'Joint One', address: '1 Joint Street\nLeeds\nLS1 2AB', capacity: 'agent' },
+          { name: 'Joint Two', address: '2 Joint Street\nLeeds\nLS1 2AC', capacity: 'agent' },
+          { name: 'Joint Three', address: '3 Joint Street\nLeeds\nLS1 2AD', capacity: 'agent' },
+        ],
+        form3a_extra_sheet_text: 'See attached chronology, exhibit list, and account summary.',
+        extra_sheet_signature: 'Amir Agent',
+        extra_sheet_signature_date: '2026-06-02',
+      });
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const form = pdfDoc.getForm();
+
+      expect(form.getFields()).toHaveLength(38);
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.tenantNames).getText()).toBe(
+        'Sonia Shezadi\nHamza Shezadi\nMina Shezadi'
+      );
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine1).getText()).toBe('35 Woodhall Park Avenue');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine2).getText()).toBe('Flat 2');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyCity).getText()).toBe('Pudsey');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyCounty).getText()).toBe('West Yorkshire');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyPostcode).getText()).toBe('LS287HF');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.earliestDate).getText()).toBe('01102026');
+
+      [
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.rentArrearsSerious,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.rentArrearsOther,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.useOrSale,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.studentsOrWorkers,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.redevelopment,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.asbOrLegalBreach,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.tenancyBreach,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.deterioration,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.noRightToRent,
+        FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.other,
+      ].forEach((fieldName) => {
+        expect(form.getCheckBox(fieldName).isChecked()).toBe(true);
+      });
+
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText()).toContain('Ground 17 - False statement.');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText()).toContain(
+        'the notice needs each official Form 3A checkbox to align'
+      );
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signature).getText()).toBe('Amir Agent');
+      expect(form.getCheckBox(FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.capacityLandlord).isChecked()).toBe(false);
+      expect(form.getCheckBox(FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.capacityAgent).isChecked()).toBe(true);
+      expect(form.getCheckBox(FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.capacityLicensor).isChecked()).toBe(false);
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatureDate).getText()).toBe('01062026');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryName).getText()).toBe('Amir Agent');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryLine1).getText()).toBe('45 Park Lane');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryLine2).getText()).toBe('Suite 4');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryCity).getText()).toBe('Leeds');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryCounty).getText()).toBe('West Yorkshire');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryPostcode).getText()).toBe('LS11AA');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryPhone).getText()).toBe('01135550101');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryEmail).getText()).toBe('agent@example.com');
+
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory1).getText()).toBe(
+        'Joint One\n1 Joint Street\nLeeds\nLS1 2AB\nagent'
+      );
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory2).getText()).toBe(
+        'Joint Two\n2 Joint Street\nLeeds\nLS1 2AC\nagent'
+      );
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory3).getText()).toBe(
+        'Joint Three\n3 Joint Street\nLeeds\nLS1 2AD\nagent'
+      );
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText).getText()).toBe(
+        'See attached chronology, exhibit list, and account summary.'
+      );
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetSignature).getText()).toBe('Amir Agent');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetDate).getText()).toBe('02062026');
+    });
   });
 
   describe('N325 Form - Warrant Request', () => {

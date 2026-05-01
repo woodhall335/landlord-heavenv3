@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lodger House Rules Appendix</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 16mm 18mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 10.7pt;
+      line-height: 1.52;
+      color: #18181b;
+      background: #fff;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      page-break-after: avoid;
+      color: #111827;
+    }
+
+    .cover {
+      border: 1.5pt solid #1f2937;
+      padding: 20pt 22pt 18pt;
+      margin-bottom: 16pt;
+    }
+
+    .cover-topline {
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 7.9pt;
+      color: #4b5563;
+      margin-bottom: 8pt;
+    }
+
+    .cover h1 {
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-size: 18.5pt;
+      line-height: 1.15;
+    }
+
+    .cover-subtitle {
+      margin-top: 7pt;
+      font-size: 10.35pt;
+      color: #374151;
+    }
+
+    .cover-intro {
+      margin-top: 12pt;
+      padding: 10pt 12pt;
+      border-left: 3pt solid #374151;
+      background: #f8fafc;
+      color: #1f2937;
+      text-align: justify;
+    }
+
+    .cover-meta,
+    .parties-table,
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12pt;
+      font-size: 9.35pt;
+    }
+
+    .cover-meta td,
+    .parties-table td,
+    .detail-table td {
+      border: 0.75pt solid #9ca3af;
+      padding: 6pt 8pt;
+      vertical-align: top;
+    }
+
+    .cover-meta .label,
+    .parties-table .role,
+    .detail-table .label {
+      width: 24%;
+      background: #f3f4f6;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #374151;
+    }
+
+    .section-title {
+      font-size: 11.9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1pt solid #111827;
+      padding-bottom: 4pt;
+      margin: 14pt 0 9pt;
+    }
+
+    .opening,
+    .clause p,
+    .clause-intro,
+    .execution-copy {
+      margin: 0 0 7pt 0;
+      text-align: justify;
+    }
+
+    .party-name {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .party-detail {
+      margin-top: 2pt;
+    }
+
+    .recitals {
+      margin: 0 0 8pt 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: recital;
+    }
+
+    .recitals li {
+      margin: 0 0 6pt 0;
+      padding-left: 28pt;
+      position: relative;
+      text-align: justify;
+    }
+
+    .recitals li::before {
+      counter-increment: recital;
+      content: counter(recital, upper-alpha) ".";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    .clause {
+      margin: 11pt 0 0;
+      page-break-inside: avoid;
+    }
+
+    .clause-heading {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10.85pt;
+      font-weight: 700;
+      margin-bottom: 5pt;
+      color: #111827;
+    }
+
+    .subpoints {
+      margin: 4pt 0 7pt 18pt;
+      padding: 0;
+    }
+
+    .subpoints li {
+      margin: 0 0 6pt 0;
+      text-align: justify;
+    }
+
+    .note-panel {
+      margin-top: 12pt;
+      padding: 10pt 12pt;
+      border: 0.75pt solid #9ca3af;
+      background: #f9fafb;
+    }
+
+    .note-panel p {
+      margin: 6pt 0 0;
+      white-space: pre-line;
+      text-align: justify;
+    }
+
+    .deed-warning {
+      margin-top: 10pt;
+      padding: 9pt 11pt;
+      border: 0.75pt solid #92400e;
+      background: #fff7ed;
+      color: #7c2d12;
+      page-break-inside: avoid;
+    }
+
+    .execution {
+      margin-top: 18pt;
+      page-break-inside: avoid;
+    }
+
+    .signatures {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220pt, 1fr));
+      gap: 12pt;
+    }
+
+    .signature-card {
+      border: 0.75pt solid #9ca3af;
+      padding: 10pt 11pt;
+      min-height: 152pt;
+      page-break-inside: avoid;
+    }
+
+    .signature-role {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4b5563;
+    }
+
+    .signature-name {
+      margin-top: 4pt;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .signature-line {
+      margin-top: 22pt;
+      border-bottom: 1pt solid #1f2937;
+      height: 16pt;
+    }
+
+    .signature-meta {
+      margin-top: 6pt;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.75pt;
+      color: #4b5563;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12pt;
+    }
+
+    .witness-block {
+      margin-top: 12pt;
+      padding-top: 8pt;
+      border-top: 0.75pt dashed #9ca3af;
+    }
+
+    .witness-label {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #4b5563;
+    }
+
+    .witness-note {
+      margin-top: 6pt;
+      font-size: 8.9pt;
+      color: #374151;
+      text-align: justify;
+    }
+
+    .footer {
+      margin-top: 14pt;
+      padding-top: 8pt;
+      border-top: 0.75pt solid #9ca3af;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.15pt;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 10pt;
+    }
+
+    @media print {
+      .section-title,
+      .clause-heading,
+      .signature-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+<style data-theme="lh-support-document-theme">
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4;
+  margin: 0.75in 0.75in 1in 0.75in; 
+}
+
+html {
+  font-size: 12pt; 
+}
+
+body {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.5;
+  color: #000;
+  background: #fff;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "clig" 0;
+
+  
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+
+
+
+h1 {
+  font-size: 14pt;
+  font-weight: bold;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h1 + h1 {
+  margin-top: 0.5em; 
+}
+
+
+h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  text-align: center;
+  margin: 0 0 1em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+h3 {
+  font-size: 12pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+h4 {
+  font-size: 11pt;
+  font-weight: bold;
+  line-height: 1.4;
+  margin: 1em 0 0.5em 0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+p {
+  margin: 0 0 0.75em 0;
+  line-height: 1.5;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+
+ul, ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+
+.link, a {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all; 
+}
+
+
+
+
+.info-box {
+  border: 2px solid #000;
+  padding: 1em;
+  margin: 1em 0 1.5em 0;
+  background-color: #f9f9f9;
+
+  page-break-inside: avoid;
+}
+
+.info-box h3,
+.info-box h4 {
+  margin-top: 0;
+}
+
+.info-box p:first-of-type {
+  margin-top: 0;
+}
+
+
+.section {
+  margin: 1.5em 0;
+
+  
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.field-group {
+  display: grid;
+  grid-template-columns: minmax(1.9in, auto) minmax(0, 1fr);
+  column-gap: 0.18in;
+  row-gap: 0.15em;
+  align-items: start;
+  margin: 0.75em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.field-label {
+  font-weight: bold;
+  margin: 0;
+  padding-top: 0.2em;
+  display: block;
+  line-height: 1.4;
+}
+
+.field-value {
+  margin: 0;
+  border-bottom: 1px dotted #666;
+  min-height: 1.4em;
+  padding: 0.15em 0 0.2em 0;
+  display: block;
+  line-height: 1.4;
+}
+
+.field-value:empty::after {
+  content: "\00a0"; 
+}
+
+
+.multiline-field {
+  margin: 0;
+  border: 1px solid #ccc;
+  padding: 0.45em 0.55em;
+  min-height: 3em;
+  background-color: #fafafa;
+  line-height: 1.45;
+}
+
+
+.ground-block {
+  margin: 1em 0 1em 0.25in;
+  padding: 0.75em;
+  border-left: 3px solid #666;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ground-block p:first-child {
+  margin-top: 0;
+}
+
+
+.part-label {
+  font-weight: bold;
+  font-size: 11pt;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0.25em 0 0.25em 0.5em;
+  border-left: 4px solid #333;
+  background-color: #f0f0f0;
+
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+.signature-block {
+  margin-top: 2em;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.checkbox {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #000;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  background-color: #fff;
+}
+
+
+
+
+.avoid-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+.keep-with-next {
+  page-break-after: avoid;
+  break-after: avoid-page;
+}
+
+
+.page-break-before {
+  page-break-before: always;
+  break-before: page;
+}
+
+
+.page-break-after {
+  page-break-after: always;
+  break-after: page;
+}
+
+
+.allow-break {
+  page-break-inside: auto;
+  break-inside: auto;
+}
+
+
+
+.guidance-section {
+  margin-top: 2em;
+  padding-top: 1.5em;
+  border-top: 2px solid #000;
+
+  
+  page-break-before: auto;
+}
+
+.guidance-section h2 {
+  text-align: left; 
+  font-size: 12pt;
+  margin: 1.5em 0 0.5em 0;
+}
+
+.guidance-section h3 {
+  font-size: 11pt;
+  margin: 1em 0 0.5em 0;
+}
+
+
+
+body.lh-support-doc {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  --lh-surface: #f6f1ff;
+  --lh-surface-strong: #ede4ff;
+  --lh-panel: #fbfaff;
+  --lh-border: #d8ccf6;
+  --lh-border-strong: #c6b6ef;
+  --lh-brand: #5b36b3;
+  --lh-text: #34245f;
+  --lh-text-strong: #24173f;
+  --lh-muted: #6c5d8f;
+  --lh-white: #fff;
+  --lh-ready: #edf7f1;
+  --lh-ready-border: #93b6a1;
+  --lh-warning: #fff5e7;
+  --lh-warning-border: #d4b074;
+  --lh-critical: #fbeaea;
+  --lh-critical-border: #cf9292;
+  color: var(--lh-text);
+  background: #fff;
+}
+
+body.lh-support-doc h1,
+body.lh-support-doc h2,
+body.lh-support-doc h3,
+body.lh-support-doc h4 {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--lh-text-strong);
+}
+
+.lh-pack-masthead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8em;
+  margin: 0 0 0.95em 0;
+  padding: 0 0 0.7em 0;
+  border-bottom: 1.5px solid var(--lh-border);
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.lh-brand-lockup {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.lh-brand-mark {
+  width: 168px;
+  max-width: min(168px, 100%);
+  display: block;
+  flex-shrink: 0;
+}
+
+body.lh-support-doc--tenancy .lh-pack-masthead {
+  align-items: flex-start;
+}
+
+body.lh-support-doc--tenancy .lh-brand-mark {
+  width: 168px;
+  max-width: min(168px, 100%);
+}
+
+body.lh-support-doc--tenancy .lh-pack-meta {
+  gap: 0.45em;
+}
+
+body.lh-support-doc--tenancy .lh-pack-meta-item {
+  min-width: 82px;
+  padding: 0.4em 0.55em;
+}
+
+body.lh-support-doc--tenancy .lh-pack-meta-item span {
+  font-size: 7pt;
+}
+
+body.lh-support-doc--tenancy .lh-pack-meta-item strong {
+  font-size: 8pt;
+}
+
+body.lh-support-doc .cover,
+body.lh-support-doc .header,
+body.lh-support-doc .note-panel,
+body.lh-support-doc .declaration,
+body.lh-support-doc .certification,
+body.lh-support-doc .room-card,
+body.lh-support-doc .appendix-card,
+body.lh-support-doc .property-address,
+body.lh-support-doc .checklist-footer,
+body.lh-support-doc .disclaimer,
+body.lh-support-doc .hmo-section,
+body.lh-support-doc .info-box,
+body.lh-support-doc .ground-block,
+body.lh-support-doc .multiline-field,
+body.lh-support-doc .part-label {
+  background: var(--lh-surface) !important;
+  border-color: var(--lh-border) !important;
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc .cover-intro {
+  background: var(--lh-surface) !important;
+  border-left-color: var(--lh-border-strong) !important;
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc .deed-warning {
+  background: #fff !important;
+  border-color: var(--lh-border-strong) !important;
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc .jurisdiction-badge,
+body.lh-support-doc .lh-pack-meta-item,
+body.lh-support-doc .lh-status-pill,
+body.lh-support-doc .lh-chip {
+  background: var(--lh-surface-strong) !important;
+  border-color: var(--lh-border) !important;
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc .cover-topline,
+body.lh-support-doc .eyebrow,
+body.lh-support-doc .signature-role,
+body.lh-support-doc .witness-label,
+body.lh-support-doc .guidance-text,
+body.lh-support-doc .legal-ref,
+body.lh-support-doc .small-text,
+body.lh-support-doc .footer,
+body.lh-support-doc .cover-subtitle,
+body.lh-support-doc .subtitle {
+  color: var(--lh-muted) !important;
+}
+
+body.lh-support-doc .section-title,
+body.lh-support-doc .section h2,
+body.lh-support-doc .doc-header,
+body.lh-support-doc .footer,
+body.lh-support-doc .witness-block,
+body.lh-support-doc .signature-line,
+body.lh-support-doc .line {
+  border-color: var(--lh-border-strong) !important;
+}
+
+body.lh-support-doc h1,
+body.lh-support-doc h2,
+body.lh-support-doc h3,
+body.lh-support-doc h4,
+body.lh-support-doc .clause-heading {
+  color: var(--lh-text) !important;
+}
+
+body.lh-support-doc h3,
+body.lh-support-doc .hmo-section h3 {
+  border-left-color: var(--lh-border-strong) !important;
+}
+
+body.lh-support-doc table td,
+body.lh-support-doc table th,
+body.lh-support-doc .cover-meta td,
+body.lh-support-doc .parties-table td,
+body.lh-support-doc .detail-table td,
+body.lh-support-doc .meta-table td,
+body.lh-support-doc .summary-table td {
+  border-color: var(--lh-border) !important;
+}
+
+body.lh-support-doc table td,
+body.lh-support-doc .cover-meta td,
+body.lh-support-doc .parties-table td,
+body.lh-support-doc .detail-table td,
+body.lh-support-doc .meta-table td,
+body.lh-support-doc .summary-table td {
+  background: #fff !important;
+  color: #1f1635 !important;
+}
+
+body.lh-support-doc table th,
+body.lh-support-doc .summary-table th,
+body.lh-support-doc .cover-meta .label,
+body.lh-support-doc .parties-table .role,
+body.lh-support-doc .detail-table .label,
+body.lh-support-doc .meta-table .label,
+body.lh-support-doc .summary-table .label {
+  background: var(--lh-surface-strong) !important;
+  color: var(--lh-text) !important;
+}
+
+.lh-brand-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lh-brand-fallback {
+  display: inline-block;
+  font-size: 12pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #2e1065;
+  white-space: nowrap;
+}
+
+.lh-pack-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55em;
+}
+
+.lh-pack-meta-item {
+  min-width: 86px;
+  padding: 0.45em 0.65em;
+  border: 1px solid var(--lh-border);
+  border-radius: 0;
+  background: var(--lh-surface-strong);
+}
+
+.lh-pack-meta-item span {
+  display: block;
+  margin-bottom: 0.2em;
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--lh-muted);
+}
+
+.lh-pack-meta-item strong {
+  display: block;
+  font-size: 8.8pt;
+  line-height: 1.35;
+  color: var(--lh-text-strong);
+}
+
+body.lh-support-doc .doc-header,
+body.lh-support-doc .header,
+body.lh-support-doc .bundle-header,
+body.lh-support-doc .court-header,
+body.lh-support-doc .document-header,
+body.lh-support-doc .cover,
+body.lh-support-doc .schedule-header {
+  margin-bottom: 1.3em;
+  padding: 0.9em 1em 1em;
+  border: 1px solid var(--lh-border);
+  border-bottom: 0;
+  border-radius: 0;
+  background: var(--lh-panel);
+  box-shadow: none;
+}
+
+body.lh-support-doc .doc-header h1,
+body.lh-support-doc .header h1,
+body.lh-support-doc .bundle-header h1,
+body.lh-support-doc .court-header h1,
+body.lh-support-doc .doc-title h1,
+body.lh-support-doc .document-title,
+body.lh-support-doc .cover h1,
+body.lh-support-doc .schedule-header h2 {
+  margin-bottom: 0.2em;
+  font-size: 16pt;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--lh-text-strong);
+}
+
+body.lh-support-doc .doc-header h2,
+body.lh-support-doc .header h2,
+body.lh-support-doc .bundle-header h2,
+body.lh-support-doc .court-header h2,
+body.lh-support-doc .claim-number,
+body.lh-support-doc .bundle-kicker,
+body.lh-support-doc .document-subtitle,
+body.lh-support-doc .cover-subtitle,
+body.lh-support-doc .schedule-title,
+body.lh-support-doc .cover-topline,
+body.lh-support-doc .agreement-date,
+body.lh-support-doc .doc-date {
+  color: var(--lh-muted);
+  font-size: 9pt;
+  font-weight: 500;
+}
+
+body.lh-support-doc .doc-badge,
+body.lh-support-doc .form-number,
+body.lh-support-doc .premium-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.38em 0.9em;
+  border: 1px solid var(--lh-brand);
+  border-radius: 0;
+  background: var(--lh-brand);
+  color: #fff;
+  font-size: 8.6pt;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+body.lh-support-doc .doc-title {
+  margin: 1.3em 0;
+  padding: 1em 1.15em;
+  border: 1px solid var(--lh-border);
+  border-radius: 0;
+  background: var(--lh-surface);
+  color: var(--lh-text-strong);
+  box-shadow: none;
+}
+
+body.lh-support-doc .summary-box,
+body.lh-support-doc .details-box,
+body.lh-support-doc .case-details,
+body.lh-support-doc .timeline-box,
+body.lh-support-doc .warning-box,
+body.lh-support-doc .notes-section,
+body.lh-support-doc .callout,
+body.lh-support-doc .method-card,
+body.lh-support-doc .checklist-box,
+body.lh-support-doc .parties-block,
+body.lh-support-doc .overall-assessment,
+body.lh-support-doc .case-details,
+body.lh-support-doc .statement-of-truth,
+body.lh-support-doc .opening-statement,
+body.lh-support-doc .section,
+body.lh-support-doc .action-box,
+body.lh-support-doc .compliance-item,
+body.lh-support-doc .party-details,
+body.lh-support-doc .legal-notice,
+body.lh-support-doc .important-box,
+body.lh-support-doc .explainer-box,
+body.lh-support-doc .property-highlight,
+body.lh-support-doc .premium-section,
+body.lh-support-doc .subsection,
+body.lh-support-doc .signature-block,
+body.lh-support-doc .witness-section {
+  border-color: var(--lh-border);
+  border-radius: 0;
+  background: var(--lh-panel);
+  box-shadow: none;
+}
+
+body.lh-support-doc .summary-box,
+body.lh-support-doc .details-box,
+body.lh-support-doc .timeline-box,
+body.lh-support-doc .warning-box,
+body.lh-support-doc .notes-section,
+body.lh-support-doc .callout,
+body.lh-support-doc .opening-statement,
+body.lh-support-doc .case-details,
+body.lh-support-doc .statement-of-truth {
+  padding: 1em 1.05em;
+}
+
+body.lh-support-doc .case-details,
+body.lh-support-doc .summary-box,
+body.lh-support-doc .details-box,
+body.lh-support-doc .timeline-box,
+body.lh-support-doc .warning-box,
+body.lh-support-doc .notes-section,
+body.lh-support-doc .callout,
+body.lh-support-doc .method-card,
+body.lh-support-doc .checklist-box,
+body.lh-support-doc .section,
+body.lh-support-doc .compliance-item,
+body.lh-support-doc .action-box {
+  margin-bottom: 1.15em;
+}
+
+body.lh-support-doc .callout {
+  border-left: 4px solid var(--lh-brand);
+  background: var(--lh-surface);
+}
+
+body.lh-support-doc .callout.warning,
+body.lh-support-doc .warning-box,
+body.lh-support-doc .compliance-item-header.warning,
+body.lh-support-doc .action-box.recommended .action-box-header {
+  border-color: var(--lh-warning-border);
+  background: var(--lh-warning);
+}
+
+body.lh-support-doc .callout.critical,
+body.lh-support-doc .compliance-item-header.fail,
+body.lh-support-doc .action-box.critical .action-box-header {
+  border-color: var(--lh-critical-border);
+  background: var(--lh-critical);
+}
+
+body.lh-support-doc .callout.success,
+body.lh-support-doc .overall-assessment.ready,
+body.lh-support-doc .compliance-item-header.pass {
+  border-color: var(--lh-ready-border);
+  background: var(--lh-ready);
+}
+
+body.lh-support-doc .summary-grid dt,
+body.lh-support-doc .details-grid dt,
+body.lh-support-doc .case-details dt,
+body.lh-support-doc .case-details-grid dt {
+  font-size: 8.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lh-muted);
+}
+
+body.lh-support-doc .summary-grid dd,
+body.lh-support-doc .details-grid dd,
+body.lh-support-doc .case-details dd,
+body.lh-support-doc .case-details-grid dd {
+  color: var(--lh-text-strong);
+  font-weight: 600;
+}
+
+body.lh-support-doc .summary-item,
+body.lh-support-doc .compliance-item-content,
+body.lh-support-doc .action-box-content {
+  border-color: var(--lh-border);
+  border-radius: 0;
+  background: #fff;
+}
+
+body.lh-support-doc .section h2,
+body.lh-support-doc .section h3,
+body.lh-support-doc .method-card .heading,
+body.lh-support-doc .checklist-box .heading,
+body.lh-support-doc .section-title,
+body.lh-support-doc .section-header,
+body.lh-support-doc .statement-section h2,
+body.lh-support-doc .subsection-title,
+body.lh-support-doc .signature-title,
+body.lh-support-doc .legal-notice-title,
+body.lh-support-doc .important-title,
+body.lh-support-doc .explainer-title,
+body.lh-support-doc .warning-title,
+body.lh-support-doc .party-label {
+  color: var(--lh-text-strong);
+}
+
+body.lh-support-doc .section h2,
+body.lh-support-doc .section h3,
+body.lh-support-doc .method-card .heading,
+body.lh-support-doc .checklist-box .heading,
+body.lh-support-doc .section-title {
+  padding: 0.7em 0.95em;
+  border: 0;
+  border-bottom: 1px solid var(--lh-border);
+  border-radius: 0;
+  background: var(--lh-surface-strong);
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+
+body.lh-support-doc .section-title {
+  margin-top: 1.35em;
+}
+
+body.lh-support-doc .section-number {
+  background: var(--lh-surface-strong);
+  color: var(--lh-text-strong);
+  box-shadow: none;
+}
+
+body.lh-support-doc .property-highlight,
+body.lh-support-doc .property-detail-item {
+  color: var(--lh-text-strong);
+  border-color: var(--lh-border);
+}
+
+body.lh-support-doc .property-highlight {
+  background: var(--lh-surface-strong);
+}
+
+body.lh-support-doc .statement-section h2 {
+  border-bottom-color: var(--lh-border);
+}
+
+body.lh-support-doc .statement-section h2 .num,
+body.lh-support-doc .section-header .num {
+  background: var(--lh-surface-strong);
+  color: var(--lh-text-strong);
+}
+
+body.lh-support-doc .index-table,
+body.lh-support-doc .arrears-table,
+body.lh-support-doc table {
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0.95em 0;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+body.lh-support-doc .index-table th,
+body.lh-support-doc .arrears-table th,
+body.lh-support-doc table th {
+  border-color: var(--lh-border-strong);
+  background: var(--lh-surface-strong);
+  color: var(--lh-text-strong);
+  font-size: 8.8pt;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+body.lh-support-doc .index-table td,
+body.lh-support-doc .arrears-table td,
+body.lh-support-doc table td {
+  border-color: var(--lh-border);
+  background: #fff;
+  color: var(--lh-text-strong);
+}
+
+body.lh-support-doc .index-table tr:nth-child(even) td,
+body.lh-support-doc .arrears-table tr:nth-child(even) td,
+body.lh-support-doc table tr:nth-child(even) td {
+  background: var(--lh-panel);
+}
+
+body.lh-support-doc .section-header td,
+body.lh-support-doc .total-row td,
+body.lh-support-doc .total-row {
+  background: var(--lh-surface) !important;
+  color: var(--lh-text-strong) !important;
+  font-weight: 700;
+}
+
+body.lh-support-doc .checklist li {
+  border-bottom-color: var(--lh-border);
+}
+
+body.lh-support-doc .checklist li::before,
+body.lh-support-doc .checkbox {
+  border-color: var(--lh-brand);
+  border-radius: 0;
+}
+
+body.lh-support-doc .footer,
+body.lh-support-doc .doc-footer,
+body.lh-support-doc .footer-info {
+  margin-top: 1.6em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--lh-border);
+  color: var(--lh-muted);
+  font-size: 8.5pt;
+}
+
+body.lh-support-doc .lh-fragment-support-doc > h1:first-child {
+  margin-bottom: 0.3em;
+  text-align: left;
+  font-size: 17pt;
+}
+
+body.lh-support-doc .lh-fragment-support-doc > p:first-of-type {
+  color: var(--lh-muted);
+}
+
+
+
+.mt-0 { margin-top: 0 !important; }
+.mt-1 { margin-top: 0.5em !important; }
+.mt-2 { margin-top: 1em !important; }
+.mt-3 { margin-top: 1.5em !important; }
+.mt-4 { margin-top: 2em !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: 0.5em !important; }
+.mb-2 { margin-bottom: 1em !important; }
+.mb-3 { margin-bottom: 1.5em !important; }
+.mb-4 { margin-bottom: 2em !important; }
+
+.ml-0 { margin-left: 0 !important; }
+.ml-1 { margin-left: 0.25in !important; }
+.ml-2 { margin-left: 0.5in !important; }
+
+
+
+.text-center { text-align: center !important; }
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+
+.font-small { font-size: 10pt !important; }
+.font-normal { font-size: 12pt !important; }
+.font-large { font-size: 14pt !important; }
+
+.font-italic { font-style: italic !important; }
+.font-bold { font-weight: bold !important; }
+
+
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  
+  a[href^="http"]:after {
+    content: none; 
+  }
+
+  
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+}
+
+
+
+
+.scotland-title {
+  font-size: 18pt;
+  margin: 0.5em 0;
+}
+
+
+.scotland-ground-block {
+  margin: 1em 0;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75em 0;
+
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+th, td {
+  padding: 0.35em 0.45em;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+  font-size: 10.5pt;
+}
+
+th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+</style>
+</head>
+<body class="lh-support-doc lh-support-doc--tenancy">
+<div class="lh-pack-masthead" aria-hidden="true">
+      <div class="lh-brand-lockup">
+        <div class="lh-brand-mark"><img class="lh-brand-logo" src="data:image/png;base64,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" alt="" /></div>
+      </div>
+      <div class="lh-pack-meta">
+        <div class="lh-pack-meta-item"><span>Case ID</span><strong>golden-lodger-001</strong></div>
+        <div class="lh-pack-meta-item"><span>Jurisdiction</span><strong>England</strong></div>
+        <div class="lh-pack-meta-item"><span>Generated</span><strong>1 May 2026</strong></div>
+      </div>
+    </div>
+
+  <section class="cover">
+    <div class="cover-topline">
+      For properties in England
+    </div>
+    <h1>Lodger House Rules Appendix</h1>
+    <div class="cover-subtitle">Resident-landlord room-let house-rules appendix</div>
+    <div class="cover-intro">This appendix records the practical shared-home rules and room-let expectations for the room let.</div>
+
+    <table class="cover-meta">
+      <tr>
+        <td class="label">Prepared</td>
+        <td>16 April 2026</td>
+        <td class="label">File reference</td>
+        <td>RL-ENGLAND-LODGER-AGREEMENT-LODGER-001</td>
+      </tr>
+      <tr>
+        <td class="label">Effective date</td>
+        <td>2 May 2026</td>
+        <td class="label">Document type</td>
+        <td>House rules appendix</td>
+      </tr>
+      <tr>
+        <td class="label">Property</td>
+        <td colspan="3">12 Example Street, London, SW1A 1AA</td>
+      </tr>
+      <tr>
+        <td class="label">Tenant(s)</td>
+        <td>Alice Tenant</td>
+        <td class="label">Term / dates</td>
+        <td>
+          2 May 2026
+           to 1 May 2027
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Rent</td>
+        <td>&#163;1500.00</td>
+        <td class="label">Deposit</td>
+        <td>&#163;1500.00</td>
+      </tr>
+    </table>
+  </section>
+
+  <h2 class="section-title">Parties</h2>
+  <p class="opening">
+      This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+  </p>
+
+  <table class="parties-table">
+      <tr>
+        <td class="role">Landlord</td>
+        <td>
+          <div class="party-name">Jane Landlord</div>
+          <div class="party-detail">3 Owner Road, London, SW1A 2BB</div>
+          <div class="party-detail">Email: jane@example.com</div>
+          <div class="party-detail">Telephone: 07123 456789</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="role">Tenant</td>
+        <td>
+          <div class="party-name">Alice Tenant</div>
+          <div class="party-detail">12 Example Street, London, SW1A 1AA</div>
+          <div class="party-detail">Email: alice@example.com</div>
+          <div class="party-detail">Telephone: 07000 111111</div>
+        </td>
+      </tr>
+  </table>
+
+
+    <h2 class="section-title">Defined Terms</h2>
+    <table class="detail-table">
+        <tr>
+          <td class="label">Property</td>
+          <td>12 Example Street, London, SW1A 1AA</td>
+        </tr>
+        <tr>
+          <td class="label">Landlord</td>
+          <td>Jane Landlord</td>
+        </tr>
+        <tr>
+          <td class="label">Tenant</td>
+          <td>Alice Tenant</td>
+        </tr>
+    </table>
+
+  <h2 class="section-title">Operative Provisions</h2>
+    <section class="clause">
+      <div class="clause-heading">1. Lodger House Rules Appendix</div>
+
+      
+
+        <table class="detail-table">
+            <tr>
+              <td class="label">House rules</td>
+              <td>No overnight guests without prior agreement.</td>
+            </tr>
+        </table>
+
+
+
+    </section>
+
+
+
+  <section class="execution">
+    <h2 class="section-title">Execution</h2>
+    <p class="execution-copy">Keep this appendix with the lodger agreement, checklist, and key handover record.</p>
+    <div class="signatures">
+        <div class="signature-card">
+          <div class="signature-role">File owner</div>
+          <div class="signature-name">Jane Landlord</div>
+          <div class="signature-line"></div>
+          <div class="signature-meta">
+            <span>Signature</span>
+            <span>Date</span>
+          </div>
+
+        </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>Landlord Heaven file copy</span>
+    <span>RL-ENGLAND-LODGER-AGREEMENT-LODGER-001</span>
+  </div>
+</body>
+</html>

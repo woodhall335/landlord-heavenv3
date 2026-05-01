@@ -1,0 +1,54 @@
+CASE ID
+golden-lodger-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
+FOR PROPERTIES IN ENGLAND
+Lodger House Rules Appendix
+Resident-landlord room-let house-rules appendix
+This appendix records the practical shared-home rules and room-let expectations for the room let.
+PREPARED 16 April
+2026
+FILE
+REFERENCE
+RL-ENGLAND-LODGER-
+AGREEMENT-LODGER-001
+EFFECTIVE DATE 2 May
+2026
+DOCUMENT
+TYPE
+House rules appendix
+PROPERTY 12 Example Street, London, SW1A 1AA
+TENANT(S) Alice
+Tenant
+TERM / DATES 2 May 2026 to 1 May 2027
+RENT £1500.00 DEPOSIT £1500.00
+Parties
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+LANDLORD Jane Landlord
+3 Owner Road, London, SW1A 2BB
+Email: jane@example.com
+Telephone: 07123 456789
+TENANT Alice Tenant
+12 Example Street, London, SW1A 1AA
+Email: alice@example.com
+Telephone: 07000 111111
+
+-- 1 of 2 --
+
+Defined Terms
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Alice Tenant
+Operative Provisions
+1. Lodger House Rules Appendix
+HOUSE RULES No overnight guests without prior agreement.
+Execution
+Keep this appendix with the lodger agreement, checklist, and key handover record.
+FILE OWNER
+Jane Landlord
+Signature Date
+Landlord Heaven file copy RL-ENGLAND-LODGER-AGREEMENT-LODGER-001
+
+-- 2 of 2 --

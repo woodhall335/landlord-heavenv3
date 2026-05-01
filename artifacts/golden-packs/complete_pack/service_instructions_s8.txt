@@ -1,0 +1,68 @@
+CASE ID
+golden-complete-pack-001
+JURISDICTION
+england
+GENERATED
+1 May 2026
+Stage 2: Section 8 Court & Possession Pack
+Service Playbook
+Form 3A notice is the current Form 3A Section 8 notice for England.
+This pack turns the served notice into a court-ready possession file that stays consistent under scrutiny.
+Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent
+those.
+PROPERTY 16 Willow Mews York YO24 3HX
+TENANT Ivy Carleton
+NOTICE Form 3A notice
+NOTICE SERVICE DATE 1 May 2026
+NOTICE EXPIRY DATE 29 May 2026
+EARLIEST PROCEEDINGS
+DATE
+29 May 2026
+Service Playbook
+STEP 1 - PREPARE
+Prepare the notice pack before anything is served
+Print or save the Form 3A notice, keep a clean copy, and make sure the notice date, expiry date, and
+earliest proceedings date all match the rest of the file.
+Keep one clean copy for service and one copy for your records.
+Check that the grounds, dates, and arrears schedule line up before the notice leaves your hands.
+Keep the compliance snapshot with the file so you know what still needs attention.
+
+-- 1 of 3 --
+
+STEP 2 - SERVE
+Serve the Form 3A notice in a way you can prove later
+Use first class post and keep the proof of posting. This is usually the cleanest option when you need a
+straightforward service record.
+Serve the same notice that appears in this pack.
+Record the exact date of service and the method used.
+Do not alter the service record after the event unless you are correcting it transparently across the
+whole file.
+STEP 3 - RECORD
+Build the service evidence immediately
+Keep proof of posting, delivery notes, photographs, or attendance notes straight away. Service evidence
+is often what saves or weakens the case later.
+Keep proof of posting or a written attendance note.
+Keep the served notice copy with the same dates shown on the N215 certificate.
+Store every service document in the same case file so nothing has to be rebuilt later.
+STEP 4 - ALIGN
+Keep the notice, N215, and later court file saying the same thing
+Most possession cases fail on inconsistency, not because the landlord lacked a form. Keep the notice,
+service record, arrears evidence, and any later court paperwork aligned from the start.
+Check the notice date, expiry date, and earliest proceedings date against the whole file.
+Make sure the grounds and arrears position stay consistent if the case moves into court.
+Carry the same facts into Form N5, Form N119, the witness statement, and the hearing bundle.
+FAILURE RISK
+Incorrect service can delay or undermine the claim
+If the tenant disputes service or the dates do not match across the notice, N215, and later court papers,
+the case can be delayed or weakened even where the underlying grounds are sound.
+Action: Keep the service record complete and aligned before you move on.
+
+-- 2 of 3 --
+
+File Notes
+The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
+Ground 10 (Any rent arrears).
+Form 3A notice served on 1 May 2026, expiring on 29 May 2026, with proceedings not intended before
+29 May 2026.
+
+-- 3 of 3 --

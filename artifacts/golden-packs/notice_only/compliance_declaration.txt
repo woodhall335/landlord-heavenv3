@@ -20,9 +20,10 @@ Resolve this before relying on
 the notice or moving on with
 the case.
 RISK
-This may not automatically
-invalidate the route, but it can
-weaken the file or create delay.
+Significant risk: This may not
+automatically invalidate the
+route, but it can weaken the
+file or create delay.
 OK
 The current pack data records
 this point, but you still need to

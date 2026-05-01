@@ -176,11 +176,11 @@
 </head>
 <body>
   <div class="hero">
-    <h2>{{pack_title}}</h2>
+    <h2>{{#if pack_title}}{{pack_title}}{{else}}Section 8 pre-service review{{/if}}</h2>
     <h1>{{#if checklist_title}}{{checklist_title}}{{else}}Compliance Checklist{{/if}}</h1>
-    <p><strong>{{status_label}}</strong></p>
-    <p>{{pack_supporting_line}}</p>
-    <p class="muted">{{risk_line}}</p>
+    <p><strong>{{#if status_label}}{{status_label}}{{else}}Review the file before relying on the notice{{/if}}</strong></p>
+    <p>{{#if pack_supporting_line}}{{pack_supporting_line}}{{else}}Use this checklist to confirm what is recorded, what is still unknown, and which issues need to be cured before the file is relied on.{{/if}}</p>
+    <p class="muted">{{#if risk_line}}{{risk_line}}{{else}}Unknown or inconsistent compliance records can create avoidable challenge, delay, or credibility risk.{{/if}}</p>
   </div>
 
   <div class="summary-box">
@@ -207,7 +207,7 @@
     </div>
     <div class="legend-item">
       <div class="status-chip risk">Risk</div>
-      <p>{{#if legend_risk_text}}{{legend_risk_text}}{{else}}This may not automatically invalidate the route, but it can weaken the file or create delay.{{/if}}</p>
+      <p><strong>Significant risk:</strong> {{#if legend_risk_text}}{{legend_risk_text}}{{else}}This may not automatically invalidate the route, but it can weaken the file or create delay.{{/if}}</p>
     </div>
     <div class="legend-item">
       <div class="status-chip ok">OK</div>
@@ -219,22 +219,51 @@
   <h2 class="section-title">{{#if status_reasoning_title}}{{status_reasoning_title}}{{else}}Status reasoning{{/if}}</h2>
   <div class="action-box">
     <h3>{{status_label}}</h3>
-    <p><strong>Reason:</strong> {{primary_status_item.title}}</p>
-    <p><strong>Impact:</strong> {{primary_status_item.detail}}</p>
-    <p><strong>Action:</strong> {{primary_status_item.action}}</p>
+    <p><strong>Reason:</strong> {{#if primary_status_item.title}}{{primary_status_item.title}}{{else}}Important compliance information is missing or needs to be corrected before the file is relied on.{{/if}}</p>
+    <p><strong>Impact:</strong> {{#if primary_status_item.detail}}{{primary_status_item.detail}}{{else}}The current record may not be strong enough if the notice or later court file is challenged.{{/if}}</p>
+    <p><strong>Action:</strong> {{#if primary_status_item.action}}{{primary_status_item.action}}{{else}}Confirm the missing records and correct any blocker before moving on.{{/if}}</p>
   </div>
   {{/if}}
 
   <h2 class="section-title">{{#if decision_engine_title}}{{decision_engine_title}}{{else}}Decision Engine{{/if}}</h2>
   <div class="items">
+    {{#if compliance_status_items.length}}
     {{#each compliance_status_items}}
     <div class="item {{severity}}">
-      <div class="status-chip {{severity}}">{{severity}}</div>
+      <div class="status-chip {{severity}}">
+        {{#if (eq severity "risk")}}Significant risk{{else if (eq severity "ok")}}OK{{else}}Critical{{/if}}
+      </div>
       <h3>{{title}}</h3>
       <p>{{detail}}</p>
       <p><strong>Action:</strong> {{action}}</p>
     </div>
     {{/each}}
+    {{else}}
+    <div class="item ok">
+      <div class="status-chip ok">OK</div>
+      <h3>Deposit position not confirmed in the file</h3>
+      <p>Deposit protection status is not confirmed in the current pack data.</p>
+      <p><strong>Action:</strong> Check the tenancy file and record the deposit position before relying on the notice.</p>
+    </div>
+    <div class="item risk">
+      <div class="status-chip risk">Significant risk</div>
+      <h3>Gas safety record not confirmed</h3>
+      <p>No gas safety provision is recorded in the current pack data. This does not automatically invalidate a Section 8 notice, but it can create regulatory or evidential risk.</p>
+      <p><strong>Action:</strong> Locate the gas safety record or document why it does not apply before the file is challenged.</p>
+    </div>
+    <div class="item risk">
+      <div class="status-chip risk">Significant risk</div>
+      <h3>EPC record not confirmed</h3>
+      <p>No EPC provision is recorded in the current pack data. This is not treated here as automatic Section 8 invalidity, but it remains a legal and evidential risk that should be addressed.</p>
+      <p><strong>Action:</strong> Locate the EPC record or explain the position in the evidence file.</p>
+    </div>
+    <div class="item ok">
+      <div class="status-chip ok">OK</div>
+      <h3>How to Rent record not confirmed</h3>
+      <p>How to Rent service is not confirmed in the current pack data.</p>
+      <p><strong>Action:</strong> Check the tenancy file and record what was served so the file stays complete.</p>
+    </div>
+    {{/if}}
   </div>
 
   <h2 class="section-title">{{#if next_move_title}}{{next_move_title}}{{else}}Next move{{/if}}</h2>

@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-05-01T12:30:56.924Z
+Generated: 2026-05-01T14:20:55.952Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):
@@ -32,6 +32,39 @@ Documents:
 - Merged tribunal bundle PDF [section13_tribunal_bundle]
 - Tribunal bundle ZIP [section13_tribunal_bundle_zip]
 
+## HMO / Shared House Tenancy Agreement
+Folder: england_hmo_shared_house_tenancy_agreement
+Documents: 9
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- HMO / Shared House Tenancy Agreement [england_hmo_shared_house_tenancy_agreement]
+- Pre-Tenancy Checklist (England) [pre_tenancy_checklist_england]
+- Keys & Handover Record [england_keys_handover_record]
+- Utilities & Meter Handover Sheet [england_utilities_handover_sheet]
+- Pet Request / Consent Addendum [england_pet_request_addendum]
+- Tenancy Variation Record [england_tenancy_variation_record]
+- Deposit Protection Certificate [deposit_protection_certificate]
+- Prescribed Information Pack [tenancy_deposit_information]
+- HMO / Shared House Rules Appendix [england_hmo_house_rules_appendix]
+
+## Lodger Agreement
+Folder: england_lodger_agreement
+Documents: 4
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Room Let / Lodger Agreement [england_lodger_agreement]
+- Room Let / Lodger Checklist [england_lodger_checklist]
+- Keys & Handover Record [england_keys_handover_record]
+- Lodger House Rules Appendix [england_lodger_house_rules_appendix]
+
 ## Money Claim Pack
 Folder: money_claim
 Documents: 10
@@ -51,6 +84,25 @@ Documents:
 - Money Claims Filing Guide [court_filing_guide]
 - Enforcement Guide [enforcement_guide]
 - Form N1 (official PDF) [n1_claim]
+
+## Premium Tenancy Agreement
+Folder: england_premium_tenancy_agreement
+Documents: 9
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Premium Tenancy Agreement [england_premium_tenancy_agreement]
+- Pre-Tenancy Checklist (England) [pre_tenancy_checklist_england]
+- Keys & Handover Record [england_keys_handover_record]
+- Utilities & Meter Handover Sheet [england_utilities_handover_sheet]
+- Pet Request / Consent Addendum [england_pet_request_addendum]
+- Tenancy Variation Record [england_tenancy_variation_record]
+- Deposit Protection Certificate [deposit_protection_certificate]
+- Prescribed Information Pack [tenancy_deposit_information]
+- Premium Management Schedule [england_premium_management_schedule]
 
 ## Stage 1: Section 8 Notice & Service Pack
 Folder: notice_only
@@ -72,7 +124,7 @@ Documents:
 
 ## Stage 2: Section 8 Court & Possession Pack
 Folder: complete_pack
-Documents: 12
+Documents: 16
 Score: 
 What works: 
 Issues found: 
@@ -88,9 +140,13 @@ Documents:
 - Form 3A notice [section8_notice]
 - Service Continuity Notes [service_record_notes]
 - Certificate of Service (Form N215) [proof_of_service]
+- Witness Statement [witness_statement]
+- Court Bundle Index [court_bundle_index]
 - Evidence Required for Hearing [evidence_checklist]
 - Hearing Preparation Guide [hearing_checklist]
+- Arrears Engagement Letter [arrears_engagement_letter]
 - What Happens Next [what_happens_next]
+- Service Instructions [service_instructions]
 
 ## Standard Section 13 Pack
 Folder: section13_standard
@@ -123,6 +179,26 @@ Documents:
 - Tenancy Variation Record [england_tenancy_variation_record]
 - Deposit Protection Certificate [deposit_protection_certificate]
 - Prescribed Information Pack [tenancy_deposit_information]
+
+## Student Tenancy Agreement
+Folder: england_student_tenancy_agreement
+Documents: 10
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Student Tenancy Agreement [england_student_tenancy_agreement]
+- Pre-Tenancy Checklist (England) [pre_tenancy_checklist_england]
+- Keys & Handover Record [england_keys_handover_record]
+- Utilities & Meter Handover Sheet [england_utilities_handover_sheet]
+- Pet Request / Consent Addendum [england_pet_request_addendum]
+- Tenancy Variation Record [england_tenancy_variation_record]
+- Deposit Protection Certificate [deposit_protection_certificate]
+- Prescribed Information Pack [tenancy_deposit_information]
+- Guarantor Agreement [guarantor_agreement]
+- Student Move-Out & Guarantor Schedule [england_student_move_out_schedule]
 
 ## England Tenancy Agreements Hub
 Product key: ast

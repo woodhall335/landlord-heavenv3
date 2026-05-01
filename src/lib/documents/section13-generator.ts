@@ -1586,6 +1586,12 @@ async function generateSection13Form4A(
   setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.signature, signatoryName);
   setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.printName, signatoryName);
   setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.signatureDate, formatCombDateValue(serviceDate));
+  setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.jointSignatory1, '');
+  setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.jointSignatory2, '');
+  setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.jointSignatory3, '');
+  setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.continuationText, '');
+  setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.continuationSignature, '');
+  setEditableTextFieldValue(form, FORM_4A_OFFICIAL_FIELD_NAMES.text.continuationDate, '');
 
   form.updateFieldAppearances(font);
 

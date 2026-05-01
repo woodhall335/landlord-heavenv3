@@ -789,7 +789,7 @@ function buildCaseSummaryComplianceItems(params: {
         buildComplianceStatusItem(
           'critical',
           'Deposit protection not confirmed',
-          'Deposit protection status is not confirmed in the available pack data. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.',
+          'Deposit protection status is not confirmed in the current pack data. For most post-1 May 2026 private-rented-sector grounds, the court will not make a possession order until the deposit position is clear.',
           'Check the tenancy file and confirm the deposit position before serving or issuing.',
         ),
       );
@@ -798,7 +798,7 @@ function buildCaseSummaryComplianceItems(params: {
         buildComplianceStatusItem(
           'ok',
           'Deposit position not confirmed in pack data',
-          'Deposit protection status is not confirmed in the available pack data.',
+          'Deposit protection status is not confirmed in the current pack data.',
           'Check the file and record the deposit position so the evidence set stays complete.',
         ),
       );
@@ -886,7 +886,7 @@ function buildCaseSummaryComplianceItems(params: {
       buildComplianceStatusItem(
         'ok',
         'How to Rent record not confirmed',
-        'No How to Rent service record is shown. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.',
+        'How to Rent service is not confirmed in the current pack data. That does not automatically invalidate a Section 8 notice, but it is worth checking the tenancy file and recording what was served.',
         'Check the tenancy file and record the position so the file stays complete.',
       ),
     );
@@ -1100,15 +1100,23 @@ function reorderEnglandSection8Stage2Documents(documents: EvictionPackDocument[]
     'section8_notice',
     'service_record_notes',
     'proof_of_service',
+    'witness_statement',
+    'court_bundle_index',
     'evidence_checklist',
     'hearing_checklist',
+    'arrears_engagement_letter',
     'what_happens_next',
   ];
   const byType = new Map(documents.map((document) => [document.document_type, document]));
 
-  return preferredOrder
+  const orderedDocuments = preferredOrder
     .map((documentType) => byType.get(documentType))
     .filter((document): document is EvictionPackDocument => Boolean(document));
+
+  const orderedTypes = new Set(orderedDocuments.map((document) => document.document_type));
+  const remainingDocuments = documents.filter((document) => !orderedTypes.has(document.document_type));
+
+  return [...orderedDocuments, ...remainingDocuments];
 }
 
 function buildEnglandSection8PackSummaryData(params: {
@@ -1978,6 +1986,23 @@ async function generateProofOfService(
   const jurisdiction = evictionCase.jurisdiction;
 
   if (jurisdiction === 'england') {
+    const noticeType = templateData.notice_name || getNoticeTypeLabel(evictionCase);
+    const serviceDate =
+      templateData.notice_service_date ||
+      templateData.notice_served_date ||
+      templateData.service_date ||
+      templateData.notice_date ||
+      serviceDetails?.service_date;
+    const expiryDate =
+      templateData.notice_expiry_date ||
+      templateData.earliest_possession_date ||
+      templateData.earliest_proceedings_date ||
+      serviceDetails?.expiry_date;
+    const earliestProceedingsDate =
+      templateData.earliest_proceedings_date ||
+      templateData.notice_expiry_date ||
+      templateData.earliest_possession_date ||
+      serviceDetails?.expiry_date;
     const pdf = await generateEnglandN215PDF({
       court_name: String(templateData.court_name || evictionCase.court_name || '').trim(),
       claim_number: String(templateData.claim_number || '').trim(),
@@ -2072,7 +2097,32 @@ async function generateProofOfService(
       fax_number: String(templateData.fax_number || '').trim(),
       recipient_email: String(templateData.notice_service_recipient_email || templateData.tenant_email || '').trim(),
       other_electronic_identification: String(templateData.other_electronic_identification || '').trim(),
-      document_served: templateData.notice_name || getNoticeTypeLabel(evictionCase),
+      document_served: noticeType,
+    });
+
+    const proofTemplateDoc = await generateDocument({
+      templatePath: 'shared/templates/proof_of_service.hbs',
+      data: {
+        ...evictionCase,
+        ...templateData,
+        notice_type: noticeType,
+        service_date_formatted: serviceDate ? formatUKLegalDate(serviceDate) : '',
+        earliest_possession_date_formatted: expiryDate ? formatUKLegalDate(expiryDate) : '',
+        notice_expiry_date_formatted: expiryDate ? formatUKLegalDate(expiryDate) : '',
+        earliest_proceedings_date_formatted: earliestProceedingsDate
+          ? formatUKLegalDate(earliestProceedingsDate)
+          : '',
+        notice_expiry_date: expiryDate,
+        earliest_proceedings_date: earliestProceedingsDate,
+        service_method: mapServiceMethodForTemplate(
+          templateData.service_method || templateData.notice_service_method || serviceDetails?.service_method
+        ),
+        current_date: formatUKLegalDate(new Date().toISOString().split('T')[0]),
+        current_date_short: new Date().toISOString().split('T')[0].replace(/-/g, ''),
+        served_by: '',
+      },
+      isPreview: false,
+      outputFormat: 'html',
     });
 
     return {
@@ -2080,7 +2130,7 @@ async function generateProofOfService(
       description: 'Official editable N215 certificate of service for the notice in this pack',
       category: 'evidence_tool',
       document_type: 'proof_of_service',
-      html: undefined,
+      html: proofTemplateDoc.html,
       pdf: Buffer.from(pdf),
       file_name: 'form_n215_certificate_of_service.pdf',
     };
@@ -4602,6 +4652,7 @@ export async function generateNoticeOnlyPack(
         risk_line: buildPackRiskLine(),
         status_label: stage1SummaryData.status_label,
         compliance_status_items: stage1SummaryData.compliance_status_items,
+        primary_status_item: stage1SummaryData.primary_status_item,
         key_risk_titles: stage1SummaryData.key_risk_titles,
         what_this_pack_does: stage1SummaryData.what_this_pack_does,
         next_step_text: stage1SummaryData.next_step_text,

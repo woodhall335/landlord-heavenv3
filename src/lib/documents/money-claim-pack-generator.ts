@@ -476,6 +476,10 @@ async function generateEnglandMoneyClaimPack(
   const formattedSignatureDate = formatUKLegalDate(claim.signature_date || generationDate);
   const formattedTenancyStartDate = formatUKLegalDate(claim.tenancy_start_date);
   const formattedInterestStartDate = formatUKLegalDate(claim.interest_start_date);
+  const formattedArrearsSchedule = (claim.arrears_schedule || []).map((entry) => ({
+    ...entry,
+    due_date: formatUKLegalDate(entry.due_date) || entry.due_date,
+  }));
   const claimantReference = resolveClaimantReference(claim);
   const paymentAccountName = claim.payment_account_name?.trim() || claim.landlord_full_name;
   const paymentSortCode = claim.payment_sort_code?.trim() || '';
@@ -497,7 +501,7 @@ async function generateEnglandMoneyClaimPack(
     tenancy_start_date: formattedTenancyStartDate,
     interest_start_date: formattedInterestStartDate,
     total_principal: totals.arrears_total + totals.damages_total + totals.other_total,
-    arrears_schedule: claim.arrears_schedule || [],
+    arrears_schedule: formattedArrearsSchedule,
     damage_items: claim.damage_items || [],
     other_charges: claim.other_charges || [],
     pre_action_summary: buildPreActionSummary(claim),

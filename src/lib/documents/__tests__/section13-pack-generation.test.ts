@@ -120,6 +120,10 @@ function expectFieldMatchesSource(
   expect(getFieldRectangle(renderedPdf, fieldName)).toEqual(getFieldRectangle(sourcePdf, fieldName));
 }
 
+function getNormalizedTextFieldValue(pdfDoc: PDFDocument, fieldName: string): string {
+  return pdfDoc.getForm().getTextField(fieldName).getText() ?? '';
+}
+
 const MAY_OFFICIAL_FORM_4A_FIELD_NAMES = [
   ...Object.values(FORM_4A_OFFICIAL_FIELD_NAMES.text),
   ...Object.values(FORM_4A_OFFICIAL_FIELD_NAMES.checkboxes),
@@ -194,6 +198,99 @@ describe('Section 13 document generation hardening', () => {
     expect(form.getFieldMaybe('form4a_supporting_reference')).toBeUndefined();
     expect(form.getFieldMaybe('form4a_final_signature')).toBeUndefined();
 
+  }, 120000);
+
+  it('maps every native Form 4A field from the Section 13 state into the official May PDF', async () => {
+    const { state, comparables } = buildState();
+    state.tenancy.propertyAddressLine2 = 'Flat 2';
+    state.landlord.landlordAddressLine2 = 'Suite 4';
+    state.landlord.agentName = 'Priya Agent';
+    state.landlord.agentAddressLine1 = '99 Agency Parade';
+    state.landlord.agentAddressLine2 = 'Floor 3';
+    state.landlord.agentTownCity = 'Leeds';
+    state.landlord.agentPostcodeRaw = 'LS3 3CC';
+    state.landlord.agentPostcodeNormalized = 'LS3 3CC';
+    state.landlord.agentPhone = '01135550999';
+    state.landlord.agentEmail = 'agent@example.com';
+    state.includedCharges = [
+      { key: 'council_tax', label: 'Council tax', included: true, currentAmount: 150, proposedAmount: 165 },
+      { key: 'water', label: 'Water', included: false, currentAmount: null, proposedAmount: null },
+      { key: 'electricity_gas_fuel', label: 'Electricity / gas / fuel', included: true, currentAmount: 95.5, proposedAmount: 98.25 },
+      { key: 'communication_services', label: 'Communication services', included: false, currentAmount: null, proposedAmount: null },
+      { key: 'fixed_service_charges', label: 'Fixed service charges', included: true, currentAmount: 45, proposedAmount: 45 },
+    ];
+
+    const docs = await generateSection13CoreDocuments({
+      caseId: 'case-section13-full-field-audit',
+      productType: 'section13_standard',
+      state,
+      comparables,
+      evidenceFiles: [],
+    });
+
+    const form4A = docs.find((doc) => doc.document_type === 'section13_form_4a');
+    expect(form4A).toBeDefined();
+
+    const pdfDoc = await PDFDocument.load(form4A!.pdf);
+    const form = pdfDoc.getForm();
+
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.tenantNames).getText()).toBe('Alex Tenant\nJordan Tenant');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.propertyAddressLine1).getText()).toBe('10 Sample Road');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.propertyAddressLine2).getText()).toBe('Flat 2');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.propertyTownCity).getText()).toBe('Leeds');
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.propertyCounty)).toBe('');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.propertyPostcode).getText()).toBe('LS11AA');
+
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordName).getText()).toBe('Taylor Landlord');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordAddressLine1).getText()).toBe('1 Landlord Terrace');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordAddressLine2).getText()).toBe('Suite 4');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordTownCity).getText()).toBe('Leeds');
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordCounty)).toBe('');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordPostcode).getText()).toBe('LS22BB');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordPhone).getText()).toBe('01130000000');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordEmail).getText()).toBe('landlord@example.com');
+
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.agentName).getText()).toBe('Priya Agent');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.agentAddressLine1).getText()).toBe('99 Agency Parade');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.agentAddressLine2).getText()).toBe('Floor 3');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.agentTownCity).getText()).toBe('Leeds');
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.agentCounty)).toBe('');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.agentPostcode).getText()).toBe('LS33CC');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.agentPhone).getText()).toBe('01135550999');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.agentEmail).getText()).toBe('agent@example.com');
+
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.currentRentAmount).getText()).toBe('1200.00');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.currentRentFrequency).getText()).toBe('Monthly');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.tenancyStartDate).getText()).toBe('01032025');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.lastIncreaseDate).getText()).toBe('01042025');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.firstIncreaseDate).getText()).toBe('01042025');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.proposedRentAmount).getText()).toBe('1285.00');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.proposedRentFrequency).getText()).toBe('Monthly');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.proposedStartDate).getText()).toBe('01062026');
+
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[0].current).getText()).toBe('150.00');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[0].proposed).getText()).toBe('165.00');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[1].current).getText()).toBe('nil');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[1].proposed).getText()).toBe('nil');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[2].current).getText()).toBe('95.50');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[2].proposed).getText()).toBe('98.25');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[3].current).getText()).toBe('nil');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[3].proposed).getText()).toBe('nil');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[4].current).getText()).toBe('45.00');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows[4].proposed).getText()).toBe('45.00');
+
+    expect(form.getCheckBox(FORM_4A_OFFICIAL_FIELD_NAMES.checkboxes.signAsLandlord).isChecked()).toBe(false);
+    expect(form.getCheckBox(FORM_4A_OFFICIAL_FIELD_NAMES.checkboxes.signAsAgent).isChecked()).toBe(true);
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.signature).getText()).toBe('Priya Agent');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.printName).getText()).toBe('Priya Agent');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.signatureDate).getText()).toBe('25032026');
+
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.jointSignatory1)).toBe('');
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.jointSignatory2)).toBe('');
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.jointSignatory3)).toBe('');
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.continuationText)).toBe('');
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.continuationSignature)).toBe('');
+    expect(getNormalizedTextFieldValue(pdfDoc, FORM_4A_OFFICIAL_FIELD_NAMES.text.continuationDate)).toBe('');
   }, 120000);
 
   it('keeps native May Form 4A widgets aligned with the source official PDF', async () => {

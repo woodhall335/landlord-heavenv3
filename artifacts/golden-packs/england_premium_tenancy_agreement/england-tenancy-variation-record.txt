@@ -1,0 +1,62 @@
+CASE ID
+golden-premium-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
+FOR PROPERTIES IN ENGLAND
+Tenancy Variation Record
+Premium Tenancy Agreement variation record
+Use this record to log agreed changes after the main agreement is signed, so the tenancy file stays
+clear and up to date.
+PREPARED 16 April
+2026
+FILE
+REFERENCE
+RL-ENGLAND-PREMIUM-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May
+2026
+DOCUMENT
+TYPE
+Variation record
+PROPERTY 12 Example Street, London, SW1A 1AA
+TENANT(S) Alice
+Tenant
+TERM / DATES 2 May 2026 to 1 May 2027
+RENT £1500.00 DEPOSIT £1500.00
+Parties
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+LANDLORD Jane Landlord
+3 Owner Road, London, SW1A 2BB
+Email: jane@example.com
+Telephone: 07123 456789
+TENANT Alice Tenant
+12 Example Street, London, SW1A 1AA
+Email: alice@example.com
+Telephone: 07000 111111
+
+-- 1 of 2 --
+
+Defined Terms
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Alice Tenant
+Operative Provisions
+1. Variation Record Purpose
+UNDERLYING
+PRODUCT
+Premium Tenancy Agreement
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT(S) Alice Tenant
+Use this record to note agreed changes after the tenancy starts without losing the original signed paperwork.
+Any important change should be dated, signed where appropriate, and stored with the main tenancy file.
+Execution
+Any material change should be dated and retained with the tenancy file.
+FILE OWNER
+Jane Landlord
+Signature Date
+Landlord Heaven file copy RL-ENGLAND-PREMIUM-TA-TENANCY-001
+
+-- 2 of 2 --

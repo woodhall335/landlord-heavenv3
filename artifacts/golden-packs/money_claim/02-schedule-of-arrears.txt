@@ -21,9 +21,9 @@ TENANCY START DATE
 TOTAL ARREARS CLAIMED
 £2430.00
 Period Due Date Rent Due Paid Arrears Running Balance
-December 2025 01/12/2025 £950.00 £0.00 £950.00 £0.00
-January 2026 01/01/2026 £950.00 £0.00 £950.00 £0.00
-February 2026 01/02/2026 £950.00 £420.00 £530.00 £0.00
+December 2025 1 December 2025 £950.00 £0.00 £950.00 £0.00
+January 2026 1 January 2026 £950.00 £0.00 £950.00 £0.00
+February 2026 1 February 2026 £950.00 £420.00 £530.00 £0.00
 Total Arrears Outstanding £2430.00 £2430.00
 Payment Allocation Method: Payments have been allocated using the FIFO (First In, First Out)
 method, applying payments to the oldest outstanding rent periods first. This is the standard court-

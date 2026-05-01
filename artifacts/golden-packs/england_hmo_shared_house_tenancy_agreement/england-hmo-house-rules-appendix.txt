@@ -1,0 +1,81 @@
+CASE ID
+golden-hmo-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
+FOR PROPERTIES IN ENGLAND
+HMO / Shared House Rules Appendix
+Communal areas and sharer house-rules appendix
+This appendix records the practical communal-area and shared-house rules for the tenancy.
+PREPARED 16 April 2026 FILE
+REFERENCE
+RL-ENGLAND-HMO-
+SHARED-HOUSE-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May 2026 DOCUMENT
+TYPE
+House rules appendix
+PROPERTY 12 Example Street, London, SW1A 1AA
+TENANT(S) Nina Sharer, Owen
+Sharer, Priya Sharer,
+Reece Sharer
+TERM / DATES 2 May 2026 to 1 May
+2027
+RENT £1500.00 DEPOSIT £1500.00
+Parties
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+
+-- 1 of 3 --
+
+LANDLORD Jane Landlord
+3 Owner Road, London, SW1A 2BB
+Email: jane@example.com
+Telephone: 07123 456789
+TENANT 1 Nina Sharer
+12 Example Street, London, SW1A 1AA
+Email: nina@example.com
+Telephone: 07000 300001
+TENANT 2 Owen Sharer
+12 Example Street, London, SW1A 1AA
+Email: owen@example.com
+Telephone: 07000 300002
+TENANT 3 Priya Sharer
+12 Example Street, London, SW1A 1AA
+Email: priya@example.com
+Telephone: 07000 300003
+TENANT 4 Reece Sharer
+12 Example Street, London, SW1A 1AA
+Email: reece@example.com
+Telephone: 07000 300004
+Defined Terms
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Nina Sharer
+
+-- 2 of 3 --
+
+Operative Provisions
+1. HMO / Shared House Rules Appendix
+COMMUNAL
+AREAS
+Kitchen, lounge, bathroom, and garden
+COMMUNAL
+CLEANING
+Professional cleaner
+VISITOR POLICY Overnight guests only with prior written approval.
+WASTE AND
+RECYCLING
+ARRANGEMENTS
+Bins to be presented every Tuesday night.
+FIRE SAFETY
+NOTES
+Do not tamper with detectors and keep escape routes clear.
+Execution
+Keep this appendix with the HMO / shared-house agreement and any property-management notes.
+FILE OWNER
+Jane Landlord
+Signature Date
+Landlord Heaven file copy RL-ENGLAND-HMO-SHARED-HOUSE-TA-TENANCY-001
+
+-- 3 of 3 --

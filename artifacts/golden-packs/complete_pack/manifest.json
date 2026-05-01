@@ -2,7 +2,7 @@
   "key": "complete_pack",
   "displayName": "Stage 2: Section 8 Court & Possession Pack",
   "outputDir": "complete_pack",
-  "documentCount": 12,
+  "documentCount": 16,
   "documents": [
     {
       "title": "Case Summary — Stage 2 Court & Possession",
@@ -154,10 +154,47 @@
       "fileName": "form_n215_certificate_of_service.pdf",
       "files": {
         "pdf": "complete_pack/form_n215_certificate_of_service.pdf",
-        "text": "complete_pack/form_n215_certificate_of_service.txt"
+        "text": "complete_pack/form_n215_certificate_of_service.txt",
+        "html": "complete_pack/form_n215_certificate_of_service.html"
       },
       "extraction": {
         "pageCount": 5,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Witness Statement",
+      "description": "Court-ready witness statement for possession proceedings",
+      "category": "court_form",
+      "documentType": "witness_statement",
+      "fileName": "witness_statement.pdf",
+      "files": {
+        "pdf": "complete_pack/witness_statement.pdf",
+        "text": "complete_pack/witness_statement.txt",
+        "html": "complete_pack/witness_statement.html"
+      },
+      "extraction": {
+        "pageCount": 3,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Court Bundle Index",
+      "description": "Index of all documents for court filing",
+      "category": "evidence_tool",
+      "documentType": "court_bundle_index",
+      "fileName": "court_bundle_index.pdf",
+      "files": {
+        "pdf": "complete_pack/court_bundle_index.pdf",
+        "text": "complete_pack/court_bundle_index.txt",
+        "html": "complete_pack/court_bundle_index.html"
+      },
+      "extraction": {
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -200,6 +237,24 @@
       }
     },
     {
+      "title": "Arrears Engagement Letter",
+      "description": "Pre-action engagement letter for rent arrears",
+      "category": "bonus",
+      "documentType": "arrears_engagement_letter",
+      "fileName": "arrears_engagement_letter.pdf",
+      "files": {
+        "pdf": "complete_pack/arrears_engagement_letter.pdf",
+        "text": "complete_pack/arrears_engagement_letter.txt",
+        "html": "complete_pack/arrears_engagement_letter.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
       "title": "What Happens Next",
       "description": "Clear next steps after notice and through the court stage",
       "category": "guidance",
@@ -212,6 +267,24 @@
       },
       "extraction": {
         "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Service Instructions",
+      "description": "Service playbook for the Form 3A notice and court file",
+      "category": "guidance",
+      "documentType": "service_instructions",
+      "fileName": "service_instructions_s8.pdf",
+      "files": {
+        "pdf": "complete_pack/service_instructions_s8.pdf",
+        "text": "complete_pack/service_instructions_s8.txt",
+        "html": "complete_pack/service_instructions_s8.html"
+      },
+      "extraction": {
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

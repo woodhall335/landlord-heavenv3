@@ -1,0 +1,108 @@
+CASE ID
+golden-premium-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
+FOR PROPERTIES IN ENGLAND
+Premium Management Schedule
+Premium operational and management schedule
+This Premium schedule records the operational and management detail that sits behind the main
+agreement.
+PREPARED 16 April
+2026
+FILE
+REFERENCE
+RL-ENGLAND-PREMIUM-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May
+2026
+DOCUMENT
+TYPE
+Management schedule
+PROPERTY 12 Example Street, London, SW1A 1AA
+TENANT(S) Alice
+Tenant
+TERM / DATES 2 May 2026 to 1 May 2027
+RENT £1500.00 DEPOSIT £1500.00
+Parties
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+LANDLORD Jane Landlord
+3 Owner Road, London, SW1A 2BB
+Email: jane@example.com
+Telephone: 07123 456789
+TENANT Alice Tenant
+12 Example Street, London, SW1A 1AA
+Email: alice@example.com
+Telephone: 07000 111111
+
+-- 1 of 4 --
+
+Defined Terms
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Alice Tenant
+
+-- 2 of 4 --
+
+Operative Provisions
+1. Premium Management Schedule
+PRIMARY
+MANAGEMENT
+CONTACT
+CHANNEL
+Email
+REPAIRS
+REPORTING
+CONTACT
+Landlord direct by email
+REPAIRS
+RESPONSE
+EXPECTATION
+Within 24 hours
+ROUTINE
+INSPECTION
+WINDOW
+Quarterly weekday daytime visits
+KEYS AND
+ACCESS DEVICES
+2 front-door keys and 1 fob
+CONTRACTOR
+ACCESS
+PROCEDURE
+Tenant to be notified before contractor attendance.
+CONTRACTOR
+KEY RELEASE
+POLICY
+Keys released to contractors only against a signed key register and same-
+day return expectation.
+HAND-BACK
+EXPECTATIONS
+Return all keys and provide final meter readings.
+This schedule sits behind the Premium agreement and records the fuller day-to-day management detail that
+does not belong in the Standard route.
+
+-- 3 of 4 --
+
+2. Premium Check-In and Utilities Protocol
+CHECK-IN
+PAPERWORK
+EXPECTATION
+Tenant to review the signed inventory, meter readings, and key record at
+check-in.
+UTILITIES AND
+ACCOUNT
+TRANSFER
+EXPECTATION
+Tenant to open supplier accounts from the tenancy start date using the
+recorded opening readings.
+Use this section alongside the keys handover record, utilities handover sheet, and any signed inventory or
+meter evidence kept with the tenancy file.
+Execution
+Keep this schedule with the Premium agreement and handover file.
+FILE OWNER
+Jane Landlord
+Signature Date
+Landlord Heaven file copy RL-ENGLAND-PREMIUM-TA-TENANCY-001
+
+-- 4 of 4 --

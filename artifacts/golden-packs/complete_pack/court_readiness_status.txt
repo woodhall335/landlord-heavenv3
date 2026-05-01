@@ -20,10 +20,10 @@ Resolve this before issuing
 proceedings or relying on the
 file in court.
 RISK
-This may not stop issue
-automatically, but it can
-weaken the file or create delay
-if left unmanaged.
+Significant risk: This may not
+stop issue automatically, but it
+can weaken the file or create
+delay if left unmanaged.
 OK
 The current pack data records
 this point, but you still need to
