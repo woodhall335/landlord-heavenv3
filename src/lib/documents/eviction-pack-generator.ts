@@ -3100,14 +3100,17 @@ export async function generateCompleteEvictionPack(
                           wizardFacts?.notice?.served_date ||
                           null;
 
-        const rentFrequencyLabel = rentFrequency ? formatRentFrequencyLabel(rentFrequency) : null;
-        const usualPaymentWeekday =
-          wizardFacts?.usual_payment_weekday ||
-          wizardFacts?.tenancy?.usual_payment_weekday ||
-          (caseData as any)?.usual_payment_weekday ||
-          undefined;
+	        const rentFrequencyLabel = rentFrequency ? formatRentFrequencyLabel(rentFrequency) : null;
+	        const usualPaymentWeekday =
+	          wizardFacts?.usual_payment_weekday ||
+	          wizardFacts?.tenancy?.usual_payment_weekday ||
+	          (caseData as any)?.usual_payment_weekday ||
+	          undefined;
+	        const periodsMissed =
+	          (canonicalArrears?.schedule ?? arrearsData.arrears_schedule).filter((entry) => entry.arrears > 0).length ||
+	          arrearsData.arrears_schedule.length;
 
-        const scheduleDoc = await generateDocument({
+	        const scheduleDoc = await generateDocument({
           templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
           data: {
             // Header fields for schedule of arrears
@@ -3140,13 +3143,13 @@ export async function generateCompleteEvictionPack(
             rent_frequency: rentFrequencyLabel,
             // Add generation date (legacy alias)
             generated_date: today,
-            pack_context_label: 'Stage 2: Section 8 Court & Possession Pack',
-            arrears_position_heading: 'Arrears Position at Claim Date',
-            arrears_position_note:
-              'This schedule matches the figures relied on in the Section 8 notice and claim form (N119). Keep it updated to the latest practicable date before issuing.',
-            periods_missed: canonicalArrears?.arrearsPeriods ?? arrearsData.arrears_schedule.length,
-            schedule_role_note:
-              'This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.',
+	            pack_context_label: 'Stage 2: Section 8 Court & Possession Pack',
+	            arrears_position_heading: 'Arrears Position at Claim Date',
+	            arrears_position_note:
+	              'This schedule matches the figures relied on in the Section 8 notice and claim form (N119). Keep it updated to the latest practicable date before issuing.',
+	            periods_missed: periodsMissed,
+	            schedule_role_note:
+	              'This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.',
           },
           isPreview: false,
           outputFormat: 'both',
