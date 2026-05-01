@@ -62,6 +62,24 @@
     },
     {
       "jurisdiction": "england",
+      "product": "notice_only",
+      "route": "section_8",
+      "officialFormKey": "n215",
+      "pdfPath": "public/official-forms/N215.pdf",
+      "notes": "Certificate of service used alongside the Section 8 notice",
+      "version": "2026-05"
+    },
+    {
+      "jurisdiction": "england",
+      "product": "eviction_pack",
+      "route": "section_8",
+      "officialFormKey": "n215",
+      "pdfPath": "public/official-forms/N215.pdf",
+      "notes": "Certificate of service used alongside the Section 8 notice and claim file",
+      "version": "2026-05"
+    },
+    {
+      "jurisdiction": "england",
       "product": "money_claim",
       "route": "money_claim",
       "officialFormKey": "n1",

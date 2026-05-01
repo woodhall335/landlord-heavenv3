@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const OFFICIAL_FORMS_DIR = path.join(process.cwd(), 'public', 'official-forms');
+const ARCHIVE_DIRECTORIES = new Set(['may', 'archive', 'archives', '_archive']);
 
 const BLOCKERS: { regex: RegExp; reason: string }[] = [
   { regex: /_(\d{10,})\.pdf$/i, reason: 'timestamped suffix (_##########.pdf) not allowed' },
@@ -25,6 +26,9 @@ function collectFiles(dir: string): string[] {
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
+      if (dir === OFFICIAL_FORMS_DIR && ARCHIVE_DIRECTORIES.has(entry.name.toLowerCase())) {
+        continue;
+      }
       files.push(...collectFiles(fullPath));
     } else {
       files.push(fullPath);

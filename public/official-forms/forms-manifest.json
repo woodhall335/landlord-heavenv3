@@ -18,6 +18,14 @@
           "status": "active",
           "historicAliases": ["Section 13 notice", "Rent increase notice"]
         },
+        "N215.pdf": {
+          "name": "N215 - Certificate of Service",
+          "canonicalLabel": "Certificate of Service (Form N215)",
+          "canonicalTitle": "N215 - Certificate of Service",
+          "fillable": true,
+          "status": "active",
+          "historicAliases": ["Form N215", "Certificate of service"]
+        },
         "n5-eng.pdf": {
           "name": "N5 - Claim for Possession",
           "fillable": true

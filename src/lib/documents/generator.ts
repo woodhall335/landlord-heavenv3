@@ -756,7 +756,7 @@ function injectSupportDocumentBodyClass(html: string, classNames: string[]): str
     return html.replace(/<body\b([^>]*)class=(["'])([^"']*)(["'])([^>]*)>/i, (_match, before, quoteOpen, classes, quoteClose, after) => {
       const existingClasses = classes
         .split(/\s+/)
-        .map(token => token.trim())
+        .map((token: string) => token.trim())
         .filter(Boolean);
       const nextClasses = Array.from(new Set([...existingClasses, ...uniqueClasses])).join(' ');
       return `<body${before}class=${quoteOpen}${nextClasses}${quoteClose}${after}>`;

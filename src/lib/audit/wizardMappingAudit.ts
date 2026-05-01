@@ -83,6 +83,7 @@ const productSlugMap: Record<string, Product> = {
 };
 const ORPHAN_WHITELIST_PATH = path.join(process.cwd(), "audit", "orphan-whitelist.json");
 const OFFICIAL_FORMS_REGISTRY_PATH = path.join(process.cwd(), "config", "officialFormsRegistry.json");
+const OFFICIAL_FORM_ARCHIVE_DIRECTORIES = new Set(["may", "archive", "archives", "_archive"]);
 
 function loadWhitelist(): { templates: Set<string>; pdfs: Set<string> } {
   if (!fs.existsSync(ORPHAN_WHITELIST_PATH)) return { templates: new Set(), pdfs: new Set() };
@@ -261,12 +262,16 @@ export function collectPdfCoverage(templatePaths: Iterable<string>, additionalRe
 export function findAllPdfFiles(): Set<string> {
   const results = new Set<string>();
   const roots = [path.join(process.cwd(), "config", "jurisdictions"), path.join(process.cwd(), "public", "official-forms")];
+  const officialFormsRoot = path.join(process.cwd(), "public", "official-forms");
 
   function walk(dir: string) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
+        if (dir === officialFormsRoot && OFFICIAL_FORM_ARCHIVE_DIRECTORIES.has(entry.name.toLowerCase())) {
+          continue;
+        }
         walk(fullPath);
       } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".pdf")) {
         results.add(path.normalize(path.relative(process.cwd(), fullPath)));
@@ -417,19 +422,20 @@ export function collectOfficialFormCoverage(
     return false;
   }
 
+  for (const entry of registryEntries) {
+    const normalizedPath = normalizePdfPath(entry.pdfPath);
+    referenced.add(normalizedPath);
+    if (!existing.has(normalizedPath) && !whitelist.pdfs.has(normalizedPath)) {
+      missing.add(normalizedPath);
+    }
+  }
+
   for (const flow of flows) {
     for (const route of flow.routes) {
       const key = `${flow.jurisdiction}/${flow.product}/${route}`;
       const entries = entriesByFlow.get(key) ?? [];
       if (requiresOfficialForm(flow) && entries.length === 0) {
         flowsMissingRegistry.push(key);
-      }
-      for (const entry of entries) {
-        const normalizedPath = normalizePdfPath(entry.pdfPath);
-        referenced.add(normalizedPath);
-        if (!existing.has(normalizedPath) && !whitelist.pdfs.has(normalizedPath)) {
-          missing.add(normalizedPath);
-        }
       }
     }
   }
