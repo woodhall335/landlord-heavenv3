@@ -44,8 +44,6 @@ const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_X * 2;
 const DEFAULT_FONT_SIZE = 11;
 const LINE_HEIGHT = 14;
 
-const SECTION13_DISCLAIMER =
-  'This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful and reasonable. You remain responsible for compliance with all applicable laws.';
 const SECTION13_TRIBUNAL_WARNING =
   'The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The tribunal can set a lower rent, but not higher than the rent proposed in the notice.';
 const SECTION13_BRAND_LABEL = 'Landlord Heaven';
@@ -1602,24 +1600,26 @@ async function buildCoverLetterPdf(
   const resolvedState = getSnapshotState(state, snapshot);
   const preview = getResolvedPreview(resolvedState, snapshot);
   const casePosition = getCasePositionVariants({ state: resolvedState, snapshot });
+  const contactName =
+    resolvedState.landlord.agentName || resolvedState.landlord.landlordName || 'the landlord';
   return createNarrativePdf(
     'Section 13 Rent Increase Cover Letter',
     [
       {
         variant: 'intro',
         lines: [
-          'This cover letter explains the proposed rent increase and points the tenant to the notice and supporting evidence.',
+          'Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the market evidence relied on.',
           casePosition.cover,
           `Property: ${buildPropertyAddress(resolvedState)}`,
           `Tenant(s): ${resolvedState.tenancy.tenantNames.join(', ')}`,
         ],
       },
       {
-        heading: 'What to do now',
+        heading: 'What is enclosed',
         lines: [
-          '1. Serve Form 4A correctly using the method you have recorded in this pack.',
-          '2. Keep the proof of service record with the completed notice so you can show when and how the notice was served.',
-          '3. Retain the justification report with your comparable evidence in case the tenant challenges the proposed rent.',
+          '1. Form 4A showing the proposed rent and the proposed start date.',
+          '2. A rent summary identifying the comparable evidence and the landlord position on market level.',
+          `3. Contact details for ${contactName} if the tenant wants to discuss the proposal before the new rent date.`,
         ],
       },
       {
@@ -1636,12 +1636,12 @@ async function buildCoverLetterPdf(
         ],
       },
       {
-        heading: 'Keep with the notice',
+        heading: 'Response window and service record',
         lines: [
-          `Service method recorded: ${buildServiceMethodLabel(resolvedState)}`,
-          `Service date recorded: ${formatDateUk(resolvedState.proposal.serviceDate) || 'Not recorded'}`,
+          `Recorded service method: ${buildServiceMethodLabel(resolvedState)}`,
+          `Recorded service date: ${formatDateUk(resolvedState.proposal.serviceDate) || 'Not recorded'}`,
           SECTION13_TRIBUNAL_WARNING,
-          SECTION13_DISCLAIMER,
+          'If the tenant queries the figure, answer from the same rent figures, dates, and comparable evidence shown in Form 4A and the justification report.',
         ],
       },
     ],
@@ -1716,11 +1716,14 @@ async function buildJustificationReportPdf(
       heading: 'Comparables and adjustments',
       lines: buildComparableLines(resolvedComparables),
     },
-    {
-      heading: 'Tribunal note',
-      lines: [SECTION13_TRIBUNAL_WARNING, SECTION13_DISCLAIMER],
-    },
-  ];
+      {
+        heading: 'Final checks before service or filing',
+        lines: [
+          SECTION13_TRIBUNAL_WARNING,
+          'Check that the service date, proposed start date, and rent figures match the final Form 4A notice, the proof of service record, and the comparable evidence file before sending or relying on them.',
+        ],
+      },
+    ];
 
   return createNarrativePdf(
     'Rent Increase Justification Report',
@@ -1785,22 +1788,36 @@ async function buildLandlordResponseTemplatePdf(state: Section13State): Promise<
       {
         variant: 'intro',
         lines: [
-          'Use this template when responding to a tenant application for a market rent determination.',
+          'Suggested wording for a landlord reply if the tenant asks the tribunal to determine the market rent.',
           casePosition.justification,
+          `Property: ${buildPropertyAddress(state)}`,
         ],
       },
       {
         heading: 'Suggested response',
         lines: [
-          'I confirm that the notice under section 13(2) of the Housing Act 1988 was served on the tenant and that the proposed rent is supported by current open-market comparables for similar homes in the same area.',
-          `The comparable analysis shows an adjusted median market rent of ${formatCurrency(preview?.median)} per month, with the proposed rent sitting ${getMedianPositionFragment(state)}.`,
-          'The landlord therefore asks the tribunal to determine that the proposed rent is supported by the market evidence, or alternatively to set the market rent at the closest figure supported by the evidence bundle.',
+          `I am the landlord or authorised agent for ${buildPropertyAddress(state)}. Form 4A was served on ${formatDateUk(state.proposal.serviceDate) || 'the recorded service date'} proposing a rent of ${formatCurrency(state.proposal.proposedRentAmount)} ${frequencyLabel(state.tenancy.currentRentFrequency)} from ${formatDateUk(state.proposal.proposedStartDate) || 'the proposed start date'}.`,
+          `The tenancy is currently charged at ${formatCurrency(state.tenancy.currentRentAmount)} ${frequencyLabel(state.tenancy.currentRentFrequency)}. The notice date and proposed start date were selected so the rent review timetable recorded in the file is met.`,
+          `The landlord relies on the comparable evidence exhibited with the justification report. The analysis shows an adjusted median market rent of ${formatCurrency(preview?.median)} per month, with the proposed rent sitting ${getMedianPositionFragment(state)}.`,
+          'The comparable schedule uses nearby properties of similar size and adjusts them to a monthly equivalent so that like is compared with like. The proposal is based on that market evidence, not on a target percentage increase from the historic rent alone.',
+          'The landlord therefore asks the tribunal to determine that the proposed rent is supported by the market evidence, or alternatively to set the market rent at the nearest figure supported by the exhibited comparables.',
         ],
       },
       {
-        heading: 'Attach with response',
+        heading: 'Points to confirm in any witness statement or reply',
         lines: [
-          'Attach the completed Form 4A, proof of service record, justification report, Tribunal Argument Summary, relevant evidence exhibits, and any correspondence showing attempts to resolve the issue before a hearing.',
+          `1. Service method and service date: ${buildServiceMethodLabel(state)} on ${formatDateUk(state.proposal.serviceDate) || 'the recorded date'}.`,
+          `2. Proposed start date: ${formatDateUk(state.proposal.proposedStartDate) || 'Not entered'}.`,
+          `3. Comparable base: ${buildComparableGrounding(state, [], null)}.`,
+          `4. Current banding: challenge risk is ${preview?.challengeBandLabel || 'Not calculated'} and evidence strength is ${preview?.evidenceBandLabel || 'Not calculated'}.`,
+          '5. Any manual adjustment or override should be tied back to a recorded factual difference in the comparable schedule and not left as an unexplained preference.',
+        ],
+      },
+      {
+        heading: 'Evidence to attach',
+        lines: [
+          'Attach the completed Form 4A, proof of service record, justification report, Tribunal Argument Summary, relevant exhibits, and any correspondence showing attempts to resolve the issue before a hearing.',
+          'If photos, EPC records, or tenancy documents are relied on, label them consistently with the bundle index so the tribunal can move from the statement to the exhibit without confusion.',
         ],
       },
     ],
@@ -1839,6 +1856,20 @@ async function buildLegalBriefingPdf(state: Section13State): Promise<Uint8Array>
         lines: [
           `Current banding: ${state.preview?.challengeBandLabel || 'Not calculated'} | ${state.preview?.evidenceBandLabel || 'Not calculated'}.`,
           'Stay consistent with the report wording. Do not overstate the data. If the evidence is mixed, acknowledge that plainly and explain why the proposed figure still sits within a reasonable market range.',
+        ],
+      },
+      {
+        heading: 'Points the file still has to prove',
+        lines: [
+          'The landlord still needs to show that the notice was validly served, that the proposed start date satisfies the statutory timing rules, and that the proposed rent is the figure best supported by the comparable evidence on the tribunal date.',
+          'A clean service record, a stable chronology, and current comparables usually matter more than broad statements that the increase felt reasonable at the time it was proposed.',
+        ],
+      },
+      {
+        heading: 'Common weakness points',
+        lines: [
+          'Watch for stale comparables, missing source dates, unsupported manual overrides, or a mismatch between the dates in Form 4A, the proof of service record, and the narrative documents.',
+          'If one comparable is challenged, be ready to show why the remaining comparables still support the proposed rent or where the nearest supported alternative figure sits.',
         ],
       },
     ],
@@ -1961,13 +1992,14 @@ async function buildNegotiationEmailTemplatePdf(state: Section13State): Promise<
 }
 
 async function createBundleCoverPdf(state: Section13State, productType: Section13ProductSku): Promise<Uint8Array> {
+  const packLabel = productType === 'section13_defensive' ? 'Section 13 Defensive Pack' : 'Section 13 Standard Pack';
   return createNarrativePdf(
     'Tribunal Bundle Cover Sheet',
     [
       {
         variant: 'intro',
         lines: [
-          `Pack: ${productType === 'section13_defensive' ? 'Section 13 Defensive Pack' : 'Section 13 Standard Pack'}`,
+          `Pack: ${packLabel}`,
           `Property: ${buildPropertyAddress(state)}`,
           `Tenant(s): ${state.tenancy.tenantNames.join(', ')}`,
           `Prepared on: ${formatDateUk(new Date().toISOString().slice(0, 10))}`,
@@ -1975,13 +2007,16 @@ async function createBundleCoverPdf(state: Section13State, productType: Section1
         ],
       },
       {
-        heading: 'Purpose',
+        heading: 'Bundle purpose',
         lines: [
-          'This bundle brings together the Form 4A notice, market-rent justification, Tribunal Argument Summary, service record, and any uploaded supporting evidence for a tribunal-ready response pack.',
+          'Prepared for any tenant challenge to the proposed rent under section 13 of the Housing Act 1988.',
+          `Recorded service method and date: ${buildServiceMethodLabel(state)} on ${formatDateUk(state.proposal.serviceDate) || 'Not recorded'}.`,
+          `Recorded proposed new rent and start date: ${formatCurrency(state.proposal.proposedRentAmount)} ${frequencyLabel(state.tenancy.currentRentFrequency)} from ${formatDateUk(state.proposal.proposedStartDate) || 'Not entered'}.`,
+          'Core exhibits are the signed Form 4A notice, the market-rent justification report, the argument summary, the service record, and the supporting response materials relied on by the landlord.',
         ],
       },
     ],
-    'Section 13 Defensive Pack | Bundle cover'
+    `${packLabel} | Bundle cover`
   );
 }
 

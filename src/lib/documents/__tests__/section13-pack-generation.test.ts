@@ -361,7 +361,7 @@ describe('Section 13 document generation hardening', () => {
     expect(proofForm.getCheckBox('method_post').isChecked()).toBe(true);
   }, 120000);
 
-  it('elevates the Standard cover letter with clearer next steps', async () => {
+  it('elevates the Standard cover letter with a tenant-facing service summary', async () => {
     const { state, comparables } = buildState();
 
     const docs = await generateSection13CoreDocuments({
@@ -376,12 +376,13 @@ describe('Section 13 document generation hardening', () => {
     expect(coverLetter).toBeDefined();
 
     const coverText = (await extractPdfText(coverLetter!.pdf)).text.replace(/\s+/g, ' ').trim();
-    expect(coverText).toContain('This cover letter explains the proposed rent increase and points the tenant to the notice and supporting evidence.');
+    expect(coverText).toContain('Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the market evidence relied on.');
     expect(coverText).toContain('This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles');
-    expect(coverText).toContain('What to do now');
-    expect(coverText).toContain('Serve Form 4A correctly');
-    expect(coverText).toContain('Keep the proof of service record');
-    expect(coverText).toContain('Retain the justification report');
+    expect(coverText).toContain('What is enclosed');
+    expect(coverText).toContain('Response window and service record');
+    expect(coverText).toContain('Recorded service method: First class post');
+    expect(coverText).not.toContain('What to do now');
+    expect(coverText).not.toContain('This tool provides assistance only');
   }, 120000);
 
   it('adds the Tribunal Argument Summary and places it directly after the justification report in the bundle', async () => {
@@ -429,9 +430,20 @@ describe('Section 13 document generation hardening', () => {
     expect(mergedTitles.indexOf('Tribunal Argument Summary')).toBe(
       mergedTitles.indexOf('Rent increase justification report') + 1
     );
+
+    const mergedBundle = bundle.documents.find((doc) => doc.document_type === 'section13_tribunal_bundle');
+    expect(mergedBundle).toBeDefined();
+
+    const bundleText = (await extractPdfText(mergedBundle!.pdf)).text.replace(/\s+/g, ' ').trim();
+    expect(bundleText).toContain('Prepared for any tenant challenge to the proposed rent under section 13 of the Housing Act 1988.');
+    expect(bundleText).toContain(
+      'Core exhibits are the signed Form 4A notice, the market-rent justification report, the argument summary, the service record, and the supporting response materials relied on by the landlord.'
+    );
+    expect(bundleText).not.toContain('This bundle brings together');
+    expect(bundleText).not.toContain('This tool provides assistance only');
   }, 120000);
 
-  it('adds premium key summary blocks and distinct case-position phrasing across narrative documents', async () => {
+  it('adds practical Section 13 wording across the defensive narrative documents', async () => {
     const { state, comparables } = buildState();
 
     const docs = await generateSection13CoreDocuments({
@@ -446,25 +458,35 @@ describe('Section 13 document generation hardening', () => {
     const justificationReport = docs.find((doc) => doc.document_type === 'section13_justification_report');
     const argumentSummary = docs.find((doc) => doc.document_type === 'section13_tribunal_argument_summary');
     const defenceGuide = docs.find((doc) => doc.document_type === 'section13_tribunal_defence_guide');
+    const legalBriefing = docs.find((doc) => doc.document_type === 'section13_legal_briefing');
+    const responseTemplate = docs.find((doc) => doc.document_type === 'section13_landlord_response_template');
 
     expect(coverLetter).toBeDefined();
     expect(justificationReport).toBeDefined();
     expect(argumentSummary).toBeDefined();
     expect(defenceGuide).toBeDefined();
+    expect(legalBriefing).toBeDefined();
+    expect(responseTemplate).toBeDefined();
 
     const coverText = (await extractPdfText(coverLetter!.pdf)).text.replace(/\s+/g, ' ').trim();
     const justificationText = (await extractPdfText(justificationReport!.pdf)).text.replace(/\s+/g, ' ').trim();
     const argumentText = (await extractPdfText(argumentSummary!.pdf)).text.replace(/\s+/g, ' ').trim();
     const defenceText = (await extractPdfText(defenceGuide!.pdf)).text.replace(/\s+/g, ' ').trim();
+    const legalText = (await extractPdfText(legalBriefing!.pdf)).text.replace(/\s+/g, ' ').trim();
+    const responseText = (await extractPdfText(responseTemplate!.pdf)).text.replace(/\s+/g, ' ').trim();
 
     expect(justificationText).toContain('Key points');
     expect(justificationText).toContain('Comparable overview');
     expect(justificationText).toContain('Comparable base: 8 comparable two-bedroom properties within 0.5 miles');
     expect(justificationText).toContain('Flat 2, The Calls, Leeds LS1');
+    expect(justificationText).toContain('Final checks before service or filing');
+    expect(justificationText).not.toContain('This tool provides assistance only');
 
     expect(coverText).toContain(
       'This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles'
     );
+    expect(coverText).toContain('What is enclosed');
+    expect(coverText).not.toContain('What to do now');
     expect(justificationText).toContain(
       'The recorded comparables support the proposed rent and place it below the adjusted median'
     );
@@ -474,6 +496,12 @@ describe('Section 13 document generation hardening', () => {
     expect(defenceText).toContain(
       "The landlord relies on the comparable evidence in this file and says the proposed rent of £1285.00 per month should be judged against that market evidence, not against the size of the increase alone."
     );
+    expect(legalText).toContain('Points the file still has to prove');
+    expect(legalText).toContain('Common weakness points');
+    expect(responseText).toContain('Suggested wording for a landlord reply if the tenant asks the tribunal to determine the market rent.');
+    expect(responseText).toContain('Points to confirm in any witness statement or reply');
+    expect(responseText).toContain('Evidence to attach');
+    expect(responseText).not.toContain('Use this template');
     expect(coverText).not.toContain('The recorded comparables support the proposed rent and place it below the adjusted median');
     expect(justificationText).not.toContain('This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles');
   }, 120000);

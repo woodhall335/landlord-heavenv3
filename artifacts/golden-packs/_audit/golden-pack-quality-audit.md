@@ -1,6 +1,6 @@
 # Golden Pack Full Quality Audit
 
-Generated: 2026-05-01T18:03:46.635Z
+Generated: 2026-05-01T18:35:15.105Z
 Scope: All manifests and extracted text artifacts in `artifacts/golden-packs`.
 
 ## Summary
@@ -13,14 +13,14 @@ Scope: All manifests and extracted text artifacts in `artifacts/golden-packs`.
 - `england_student_tenancy_agreement`: 8.3/10 | keep=10, rewrite=0, merge=0, remove=0, critical=0, high=0, medium=3
 - `money_claim`: 8.3/10 | keep=10, rewrite=0, merge=0, remove=0, critical=0, high=0, medium=3
 - `notice_only`: 8.3/10 | keep=7, rewrite=0, merge=0, remove=0, critical=0, high=0, medium=3
-- `section13_defensive`: 5.7/10 | keep=8, rewrite=2, merge=0, remove=0, critical=0, high=0, medium=6
-- `section13_standard`: 8.4/10 | keep=3, rewrite=1, merge=0, remove=0, critical=0, high=0, medium=2
+- `section13_defensive`: 9.4/10 | keep=10, rewrite=0, merge=0, remove=0, critical=0, high=0, medium=1
+- `section13_standard`: 10.0/10 | keep=4, rewrite=0, merge=0, remove=0, critical=0, high=0, medium=0
 
 ## Cross-Pack Systemic Issues
 
 - Mojibake/encoding defects: 0 documents
 - Blank manifest categories: 0 documents
-- Thin documents relative to purpose: 4 documents
+- Thin documents relative to purpose: 2 documents
 - Raw internal values visible to users: 0 documents
 
 ## Stage 2: Section 8 Court & Possession Pack (`complete_pack`)
@@ -150,37 +150,34 @@ Score: 8.3/10
 
 ## Challenge-Ready Section 13 Defence Pack (`section13_defensive`)
 
-Score: 5.7/10
+Score: 9.4/10
 
 | Document | Category | Pages | Words | Disposition | Findings |
 | --- | --- | ---: | ---: | --- | --- |
 | Form 4A rent increase notice | notice | 9 | 2104 | keep | none |
-| Landlord response template | court_form | 1 | 180 | keep | medium: Document is thin for its category (180 words; expected around 350+). |
-| Merged tribunal bundle PDF | evidence | 20 | 4806 | rewrite | medium: Heavy generic boilerplate detected (8 generic phrases).<br>medium: Disclaimer language may be crowding out practical content. |
+| Landlord response template | court_form | 1 | 390 | keep | none |
+| Merged tribunal bundle PDF | evidence | 20 | 5198 | keep | none |
 | Proof of service record | evidence | 1 | 234 | keep | none |
-| Rent increase cover letter | guidance | 1 | 364 | rewrite | medium: Heavy generic boilerplate detected (4 generic phrases).<br>medium: Disclaimer language may be crowding out practical content. |
-| Rent increase justification report | evidence | 3 | 812 | keep | medium: Disclaimer language may be crowding out practical content. |
+| Rent increase cover letter | guidance | 1 | 358 | keep | none |
+| Rent increase justification report | evidence | 3 | 822 | keep | none |
 | Tribunal Argument Summary | guidance | 1 | 393 | keep | none |
 | Tribunal bundle ZIP | evidence | 0 | 0 | keep | medium: No extracted text artifact available for quality review. |
 | Tribunal defence guide | guidance | 1 | 348 | keep | none |
-| Tribunal legal briefing | guidance | 1 | 215 | keep | medium: Document is thin for its category (215 words; expected around 220+). |
+| Tribunal legal briefing | guidance | 1 | 346 | keep | none |
 
 ## Standard Section 13 Pack (`section13_standard`)
 
-Score: 8.4/10
+Score: 10.0/10
 
 | Document | Category | Pages | Words | Disposition | Findings |
 | --- | --- | ---: | ---: | --- | --- |
 | Form 4A rent increase notice | notice | 9 | 2104 | keep | none |
 | Proof of service record | evidence | 1 | 234 | keep | none |
-| Rent increase cover letter | guidance | 1 | 364 | rewrite | medium: Heavy generic boilerplate detected (4 generic phrases).<br>medium: Disclaimer language may be crowding out practical content. |
-| Rent increase justification report | evidence | 3 | 812 | keep | medium: Disclaimer language may be crowding out practical content. |
+| Rent increase cover letter | guidance | 1 | 358 | keep | none |
+| Rent increase justification report | evidence | 3 | 822 | keep | none |
 
 ## Highest Priority Document Fixes
 
-- `section13_defensive/section13_cover_letter` -> rewrite: Heavy generic boilerplate detected (4 generic phrases). Disclaimer language may be crowding out practical content.
-- `section13_defensive/section13_tribunal_bundle` -> rewrite: Heavy generic boilerplate detected (8 generic phrases). Disclaimer language may be crowding out practical content.
-- `section13_standard/section13_cover_letter` -> rewrite: Heavy generic boilerplate detected (4 generic phrases). Disclaimer language may be crowding out practical content.
 - `england_lodger_agreement/england_lodger_house_rules_appendix` -> remove: 
 
 ## Notes

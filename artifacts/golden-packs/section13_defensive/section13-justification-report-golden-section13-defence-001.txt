@@ -99,11 +99,11 @@ Source: scraped | https://example.com/leeds-rent-comparable-8
 Distance: 0.50 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
-Tribunal note
+Final checks before service or filing
 The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
 tribunal can set a lower rent, but not higher than the rent proposed in the notice.
-This tool provides assistance only. It does not constitute legal advice. Rent increases must be lawful and
-reasonable. You remain responsible for compliance with all applicable laws.
+Check that the service date, proposed start date, and rent figures match the final Form 4A notice, the proof
+of service record, and the comparable evidence file before sending or relying on them.
 Landlord Heaven | Comparable analysis and justification Page 3 of 3
 
 -- 3 of 3 --

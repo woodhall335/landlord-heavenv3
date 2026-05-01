@@ -1,18 +1,36 @@
 Landlord Response Template
-Use this template when responding to a tenant application for a market rent determination.
+Suggested wording for a landlord reply if the tenant asks the tribunal to determine the market rent.
 The recorded comparables support the proposed rent and place it below the adjusted median of
 £1297.50 pcm.
+Property: 10 Sample Road, Leeds, LS1 1AA
 Suggested response
-I confirm that the notice under section 13(2) of the Housing Act 1988 was served on the tenant and that the
-proposed rent is supported by current open-market comparables for similar homes in the same area.
-The comparable analysis shows an adjusted median market rent of £1297.50 per month, with the proposed
-rent sitting below the adjusted median of £1297.50 pcm.
+I am the landlord or authorised agent for 10 Sample Road, Leeds, LS1 1AA. Form 4A was served on 25
+March 2026 proposing a rent of £1285.00 per month from 01 June 2026.
+The tenancy is currently charged at £1200.00 per month. The notice date and proposed start date were
+selected so the rent review timetable recorded in the file is met.
+The landlord relies on the comparable evidence exhibited with the justification report. The analysis shows
+an adjusted median market rent of £1297.50 per month, with the proposed rent sitting below the adjusted
+median of £1297.50 pcm.
+The comparable schedule uses nearby properties of similar size and adjusts them to a monthly equivalent
+so that like is compared with like. The proposal is based on that market evidence, not on a target
+percentage increase from the historic rent alone.
 The landlord therefore asks the tribunal to determine that the proposed rent is supported by the market
-evidence, or alternatively to set the market rent at the closest figure supported by the evidence bundle.
-Attach with response
+evidence, or alternatively to set the market rent at the nearest figure supported by the exhibited
+comparables.
+Points to confirm in any witness statement or reply
+1. Service method and service date: First class post on 25 March 2026.
+2. Proposed start date: 01 June 2026.
+3. Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the last 90
+days and all source-backed.
+4. Current banding: challenge risk is Moderate likelihood of challenge and evidence strength is Strong
+evidence.
+5. Any manual adjustment or override should be tied back to a recorded factual difference in the
+comparable schedule and not left as an unexplained preference.
+Evidence to attach
 Attach the completed Form 4A, proof of service record, justification report, Tribunal Argument Summary,
-relevant evidence exhibits, and any correspondence showing attempts to resolve the issue before a
-hearing.
+relevant exhibits, and any correspondence showing attempts to resolve the issue before a hearing.
+If photos, EPC records, or tenancy documents are relied on, label them consistently with the bundle index
+so the tribunal can move from the statement to the exhibit without confusion.
 Section 13 Defensive Pack | Landlord response template Page 1 of 1
 
 -- 1 of 1 --
