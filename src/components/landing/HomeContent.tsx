@@ -37,6 +37,8 @@ type RouteCard = {
   eyebrow: string;
   description: string;
   whyRoute: string;
+  includes?: string[];
+  complianceNote?: string;
   ctaLabel: string;
   href: string;
   imageSrc: string;
@@ -89,11 +91,18 @@ const accentIconByType = {
 const routeSelectionCards: RouteCard[] = [
   {
     title: 'Tenant not paying rent',
-    eyebrow: 'Usually start with notice',
+    eyebrow: 'Usually the first step',
     description:
-      'Start with the Eviction Notice Generator when you need to serve a Section 8 notice correctly before you move any further.',
+      'If the tenant is in arrears and you have not served notice yet, start here. This route helps you prepare the Section 8 notice before you move into court paperwork.',
     whyRoute:
-      'This is the right route when the next practical step is serving notice, checking the grounds, and keeping the arrears file straight.',
+      'It is designed for the point where you need to choose the right grounds, calculate the dates properly, and keep the notice and arrears record aligned from the start.',
+    includes: [
+      'Official Form 3A notice for England',
+      'Ground checks, notice dates, service guidance, and arrears support',
+      'A cleaner handoff into court if the case later needs to move on',
+    ],
+    complianceNote:
+      'Built around the updated England possession route from 1 May 2026, so the notice wording, timing, and supporting checks follow the post-Renters\' Rights framework.',
     ctaLabel: 'Go to eviction notice route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     imageSrc: '/images/tenant-not-paying-rent.webp',
@@ -104,11 +113,18 @@ const routeSelectionCards: RouteCard[] = [
   },
   {
     title: 'Tenant will not leave',
-    eyebrow: 'Often court-stage, sometimes notice first',
+    eyebrow: 'When notice is not the whole job',
     description:
-      'Move into the Complete Eviction Pack when the tenancy problem is already heading toward possession paperwork and court steps. If you have not served notice yet, you may still need to start there first.',
+      'Use the Complete Eviction Pack when the case is already moving toward possession paperwork and court steps, or when you want the full route joined up in one place.',
     whyRoute:
-      'This is the better route when notice is not the whole job anymore and you need the notice, claim forms, and filing path joined up, while still recognising that some cases begin with notice first.',
+      'This is the better fit when you need more than the notice alone and want the claim forms, witness evidence, service record, and filing path working together.',
+    includes: [
+      'Form 3A, Form N5, and Form N119 prepared as one possession file',
+      'Certificate of service, witness statement, bundle index, and hearing support',
+      'A clearer route from served notice to court issue and possession steps',
+    ],
+    complianceNote:
+      'Built to keep the notice, service details, and court forms consistent with the updated England process from 1 May 2026, reducing avoidable mismatch problems later.',
     ctaLabel: 'Go to complete eviction route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     imageSrc: '/images/tenant-will-not-leave.webp',
@@ -124,6 +140,13 @@ const routeSelectionCards: RouteCard[] = [
       'Use the Money Claim Pack when the main goal is recovering what is owed, whether the tenant is still there or has already left.',
     whyRoute:
       'This route fits when the debt needs dealing with as a claim, instead of being mixed up with the possession route.',
+    includes: [
+      'Letter before claim, particulars, and money claim paperwork',
+      'Arrears schedule and debt breakdown support',
+      'A route focused on recovery rather than possession',
+    ],
+    complianceNote:
+      'Structured around the debt-claim paperwork flow so the money side is handled separately and more clearly.',
     ctaLabel: 'Go to money claim route',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
     imageSrc: '/images/recover-unpaid-money.webp',
@@ -139,6 +162,13 @@ const routeSelectionCards: RouteCard[] = [
       'Use the rent increase route to choose the right Section 13 pack before you generate anything.',
     whyRoute:
       'This is the right route when you need the notice, timing, and supporting paperwork handled properly for an England rent increase.',
+    includes: [
+      'Official Form 4A notice for England',
+      'Timing, service, and supporting rent increase documents',
+      'A standard route and a more defensive route if challenge risk is higher',
+    ],
+    complianceNote:
+      'Updated for the England assured tenancy rent increase route in force from 1 May 2026.',
     ctaLabel: 'Go to rent increase route',
     href: '/rent-increase',
     imageSrc: '/images/increase-rent.webp',
@@ -163,6 +193,20 @@ const routeSelectionCards: RouteCard[] = [
     product: 'ast',
   },
 ];
+
+const routeCardOverridesByProduct: Record<string, Partial<RouteCard>> = {
+  ast: {
+    whyRoute:
+      'This route fits when you are setting up a tenancy or replacing older paperwork and want the current England route for the tenancy you are creating.',
+    includes: [
+      'Standard, premium, student, HMO, and lodger routes',
+      'Supporting checklists, handover records, and addenda',
+      'A cleaner starting point for new or replacement tenancy paperwork',
+    ],
+    complianceNote:
+      'Positioned around the updated England framework from 1 May 2026, including the post-Renters\' Rights assured periodic routes.',
+  },
+};
 
 const whyLandlordsUseCards: ValueCard[] = [
   {
@@ -281,9 +325,15 @@ function RouteSelectionCard({
   accent,
   routeIntent,
   product,
+  includes,
+  complianceNote,
 }: RouteCard) {
   const accentStyles = getPublicCardAccentClasses(accent);
   const Icon = accentIconByType[accent];
+  const overrides = routeCardOverridesByProduct[product] ?? {};
+  const displayWhyRoute = overrides.whyRoute ?? whyRoute;
+  const displayIncludes = overrides.includes ?? includes ?? [];
+  const displayComplianceNote = overrides.complianceNote ?? complianceNote;
 
   return (
     <TrackedLink
@@ -326,8 +376,29 @@ function RouteSelectionCard({
         <p className="mt-4 text-[15px] leading-7 text-[#5a516d]">{description}</p>
         <div className="mt-5 flex items-start gap-2 text-sm font-semibold text-[#2f2148]">
           <RiCheckLine className="mt-0.5 h-4 w-4 shrink-0 text-[#7c3aed]" />
-          <span>{whyRoute}</span>
+          <span>{displayWhyRoute}</span>
         </div>
+        {displayIncludes.length > 0 ? (
+          <div className="mt-5 rounded-2xl border border-black/5 bg-white/70 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6b3fd1]">
+              What this includes
+            </p>
+            <ul className="mt-3 space-y-2 text-sm leading-6 text-[#4d4561]">
+              {displayIncludes.map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <RiCheckLine className="mt-1 h-4 w-4 shrink-0 text-[#7c3aed]" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {displayComplianceNote ? (
+          <p className="mt-4 text-sm leading-6 text-[#5d5672]">
+            <span className="font-semibold text-[#2f2148]">England update:</span>{' '}
+            {displayComplianceNote}
+          </p>
+        ) : null}
         <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#4f2a96]">
           {ctaLabel}
           <RiArrowRightLine className="h-4 w-4 transition group-hover:translate-x-1" />
