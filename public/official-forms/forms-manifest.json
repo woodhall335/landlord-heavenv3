@@ -10,6 +10,14 @@
           "status": "active",
           "historicAliases": ["Form 3", "Form 3 notice"]
         },
+        "Form_4A.pdf": {
+          "name": "Form 4A - Landlord's Notice Proposing a New Rent",
+          "canonicalLabel": "Form 4A rent increase notice",
+          "canonicalTitle": "Form 4A - Landlord's Notice Proposing a New Rent",
+          "fillable": true,
+          "status": "active",
+          "historicAliases": ["Section 13 notice", "Rent increase notice"]
+        },
         "n5-eng.pdf": {
           "name": "N5 - Claim for Possession",
           "fillable": true

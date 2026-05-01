@@ -87,6 +87,16 @@ function countTenantRecords(value: unknown): number {
   return 0;
 }
 
+function sanitizeEnglandPolicyText(value: string): string {
+  return value
+    .replace(/â€™/g, "'")
+    .replace(/â€œ/g, '"')
+    .replace(/â€/g, '"')
+    .replace(/â€“/g, '-')
+    .replace(/â€”/g, '-')
+    .replace(/â€¦/g, '...');
+}
+
 export function buildEnglandDraftingContext(
   product: EnglandModernTenancyDraftingProduct,
   facts: Record<string, any>
@@ -159,9 +169,9 @@ export function evaluateEnglandDraftingPolicy(
       route: 'resident_landlord_lodger',
       selectedClauses,
       omittedClauses,
-      warnings,
-      complianceWarnings,
-      hardStops,
+      warnings: warnings.map(sanitizeEnglandPolicyText),
+      complianceWarnings: complianceWarnings.map(sanitizeEnglandPolicyText),
+      hardStops: hardStops.map(sanitizeEnglandPolicyText),
     };
   }
 
@@ -278,8 +288,8 @@ export function evaluateEnglandDraftingPolicy(
     route: 'assured_periodic',
     selectedClauses,
     omittedClauses,
-    warnings,
-    complianceWarnings,
-    hardStops,
+    warnings: warnings.map(sanitizeEnglandPolicyText),
+    complianceWarnings: complianceWarnings.map(sanitizeEnglandPolicyText),
+    hardStops: hardStops.map(sanitizeEnglandPolicyText),
   };
 }

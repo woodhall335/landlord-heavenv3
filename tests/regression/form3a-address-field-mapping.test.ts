@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
 
 import { fillForm3AForm, type CaseData } from '@/lib/documents/official-forms-filler';
+import { FORM3A_OFFICIAL_FIELD_NAMES } from '@/lib/documents/england-official-form-fillers';
 
 describe('Form 3A address field mapping', () => {
   it('keeps city and postcode in their own boxes when only a multiline address is supplied', async () => {
@@ -27,14 +28,14 @@ describe('Form 3A address field mapping', () => {
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const form = pdfDoc.getForm();
 
-    expect(form.getTextField('form3a_property_line1').getText()).toBe('16 Willow Mews');
-    expect(form.getTextField('form3a_property_line2').getText()).toBe('York');
-    expect(form.getTextField('form3a_property_city').getText() || '').toBe('');
-    expect(form.getTextField('form3a_property_postcode').getText()).toBe('YO24 3HX');
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine1).getText()).toBe('16 Willow Mews');
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine2).getText()).toBe('York');
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyCity).getText() || '').toBe('');
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyPostcode).getText()).toBe('YO243HX');
 
-    expect(form.getTextField('form3a_signatory_line1').getText()).toBe('27 Rowan Avenue');
-    expect(form.getTextField('form3a_signatory_line2').getText()).toBe('Leeds');
-    expect(form.getTextField('form3a_signatory_city').getText() || '').toBe('');
-    expect(form.getTextField('form3a_signatory_postcode').getText()).toBe('LS8 2PF');
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryLine1).getText()).toBe('27 Rowan Avenue');
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryLine2).getText()).toBe('Leeds');
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryCity).getText() || '').toBe('');
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryPostcode).getText()).toBe('LS82PF');
   });
 });

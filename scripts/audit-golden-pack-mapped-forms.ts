@@ -3,6 +3,8 @@ import path from 'path';
 
 import { PDFDocument } from 'pdf-lib';
 
+import { FORM3A_OFFICIAL_FIELD_NAMES } from '../src/lib/documents/england-official-form-fillers.ts';
+import { FORM_4A_OFFICIAL_FIELD_NAMES } from '../src/lib/documents/section13-generator.ts';
 import { extractPdfText } from '../src/lib/evidence/extract-pdf-text.ts';
 
 type GoldenPackDocumentRecord = {
@@ -38,6 +40,15 @@ type AuditResult = {
 const OUTPUT_ROOT = path.join(process.cwd(), 'artifacts', 'golden-packs');
 const AUDIT_ROOT = path.join(OUTPUT_ROOT, '_audit');
 const POSTCODE_REGEX = /\b([A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2})\b/i;
+const FORM_3A_OFFICIAL_FIELD_NAME_LIST = [
+  ...Object.values(FORM3A_OFFICIAL_FIELD_NAMES.text),
+  ...Object.values(FORM3A_OFFICIAL_FIELD_NAMES.checkboxes),
+].sort();
+const FORM_4A_OFFICIAL_FIELD_NAME_LIST = [
+  ...Object.values(FORM_4A_OFFICIAL_FIELD_NAMES.text),
+  ...Object.values(FORM_4A_OFFICIAL_FIELD_NAMES.checkboxes),
+  ...FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows.flatMap(({ current, proposed }) => [current, proposed]),
+].sort();
 
 async function readJson<T>(filePath: string): Promise<T> {
   return JSON.parse(await fs.readFile(filePath, 'utf8')) as T;
@@ -47,11 +58,13 @@ async function loadFieldValues(pdfPath: string): Promise<{
   pageCount: number;
   fieldCount: number;
   filledFieldCount: number;
+  fieldNames: string[];
   values: Map<string, string>;
 }> {
   const pdfBytes = await fs.readFile(pdfPath);
   const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const form = pdfDoc.getForm();
+  const fieldNames = form.getFields().map((field) => field.getName()).sort();
   const values = new Map<string, string>();
 
   for (const field of form.getFields()) {
@@ -74,8 +87,9 @@ async function loadFieldValues(pdfPath: string): Promise<{
 
   return {
     pageCount: pdfDoc.getPageCount(),
-    fieldCount: form.getFields().length,
+    fieldCount: fieldNames.length,
     filledFieldCount: values.size,
+    fieldNames,
     values,
   };
 }
@@ -112,16 +126,37 @@ async function auditSection8Notice(pack: string, title: string, pdfPath: string)
   const fieldAudit = await loadFieldValues(pdfPath);
   const findings: AuditFinding[] = [];
 
-  requireValue(findings, fieldAudit.values, 'form3a_tenant_names', 'Tenant names');
-  requireValue(findings, fieldAudit.values, 'form3a_property_line1', 'Property address line 1');
-  requireValue(findings, fieldAudit.values, 'form3a_property_line2', 'Property address line 2 / town');
-  requirePattern(findings, fieldAudit.values, 'form3a_property_postcode', POSTCODE_REGEX, 'Property postcode');
-  requireValue(findings, fieldAudit.values, 'form3a_grounds_text', 'Grounds text');
-  requireValue(findings, fieldAudit.values, 'form3a_explanation_text', 'Grounds explanation');
-  requireValue(findings, fieldAudit.values, 'form3a_signature', 'Signature');
-  requirePattern(findings, fieldAudit.values, 'form3a_signatory_postcode', POSTCODE_REGEX, 'Signatory postcode');
+  const missingOfficialFields = FORM_3A_OFFICIAL_FIELD_NAME_LIST.filter(
+    (fieldName) => !fieldAudit.fieldNames.includes(fieldName),
+  );
+  const unexpectedOfficialFields = fieldAudit.fieldNames.filter(
+    (fieldName) => !FORM_3A_OFFICIAL_FIELD_NAME_LIST.includes(fieldName),
+  );
 
-  const propertyCity = String(fieldAudit.values.get('form3a_property_city') || '').trim();
+  if (missingOfficialFields.length > 0) {
+    findings.push({
+      level: 'error',
+      message: `Form 3A is missing expected official fields: ${missingOfficialFields.join(', ')}.`,
+    });
+  }
+
+  if (unexpectedOfficialFields.length > 0) {
+    findings.push({
+      level: 'error',
+      message: `Form 3A contains unexpected fields: ${unexpectedOfficialFields.join(', ')}.`,
+    });
+  }
+
+  requireValue(findings, fieldAudit.values, FORM3A_OFFICIAL_FIELD_NAMES.text.tenantNames, 'Tenant names');
+  requireValue(findings, fieldAudit.values, FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine1, 'Property address line 1');
+  requireValue(findings, fieldAudit.values, FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine2, 'Property address line 2 / town');
+  requirePattern(findings, fieldAudit.values, FORM3A_OFFICIAL_FIELD_NAMES.text.propertyPostcode, POSTCODE_REGEX, 'Property postcode');
+  requireValue(findings, fieldAudit.values, FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText, 'Grounds text');
+  requireValue(findings, fieldAudit.values, FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText, 'Grounds explanation');
+  requireValue(findings, fieldAudit.values, FORM3A_OFFICIAL_FIELD_NAMES.text.signature, 'Signature');
+  requirePattern(findings, fieldAudit.values, FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryPostcode, POSTCODE_REGEX, 'Signatory postcode');
+
+  const propertyCity = String(fieldAudit.values.get(FORM3A_OFFICIAL_FIELD_NAMES.text.propertyCity) || '').trim();
   if (POSTCODE_REGEX.test(propertyCity)) {
     findings.push({
       level: 'error',
@@ -129,7 +164,7 @@ async function auditSection8Notice(pack: string, title: string, pdfPath: string)
     });
   }
 
-  const signatoryCity = String(fieldAudit.values.get('form3a_signatory_city') || '').trim();
+  const signatoryCity = String(fieldAudit.values.get(FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryCity) || '').trim();
   if (POSTCODE_REGEX.test(signatoryCity)) {
     findings.push({
       level: 'error',
@@ -285,6 +320,7 @@ async function auditForm4A(pack: string, title: string, pdfPath: string): Promis
   const pdfBytes = await fs.readFile(pdfPath);
   const pdfDoc = await PDFDocument.load(pdfBytes);
   const form = pdfDoc.getForm();
+  const fieldNames = form.getFields().map((field) => field.getName()).sort();
   const fieldValues = new Map(
     form.getFields().map((field) => [
       field.getName(),
@@ -300,12 +336,31 @@ async function auditForm4A(pack: string, title: string, pdfPath: string): Promis
   const extraction = await extractPdfText(Buffer.from(await flattened.save()), 20);
   const findings: AuditFinding[] = [];
   const text = extraction.text.replace(/\s+/g, ' ');
+  const missingOfficialFields = FORM_4A_OFFICIAL_FIELD_NAME_LIST.filter(
+    (fieldName) => !fieldNames.includes(fieldName),
+  );
+  const unexpectedOfficialFields = fieldNames.filter(
+    (fieldName) => !FORM_4A_OFFICIAL_FIELD_NAME_LIST.includes(fieldName),
+  );
+
+  if (missingOfficialFields.length > 0) {
+    findings.push({
+      level: 'error',
+      message: `Form 4A is missing expected official fields: ${missingOfficialFields.join(', ')}.`,
+    });
+  }
+
+  if (unexpectedOfficialFields.length > 0) {
+    findings.push({
+      level: 'error',
+      message: `Form 4A contains unexpected fields: ${unexpectedOfficialFields.join(', ')}.`,
+    });
+  }
 
   const requiredSnippets = [
     'Alex Tenant',
     'Jordan Tenant',
     '10 Sample Road',
-    'LS1 1AA',
     'Taylor Landlord',
     '1285.00',
     '1200.00',
@@ -320,9 +375,14 @@ async function auditForm4A(pack: string, title: string, pdfPath: string): Promis
     }
   }
 
-  if (fieldValues.get('form4a_first_increase_day') !== '01'
-    || fieldValues.get('form4a_first_increase_month') !== '04'
-    || fieldValues.get('form4a_first_increase_year') !== '2025') {
+  if (fieldValues.get(FORM_4A_OFFICIAL_FIELD_NAMES.text.propertyPostcode) !== 'LS11AA') {
+    findings.push({
+      level: 'error',
+      message: 'Form 4A should populate the property postcode field with the compact official postcode value LS11AA.',
+    });
+  }
+
+  if (fieldValues.get(FORM_4A_OFFICIAL_FIELD_NAMES.text.firstIncreaseDate) !== '01042025') {
     findings.push({
       level: 'error',
       message: 'Form 4A should populate question 4.4 with the first increase after 11 February 2003 in the golden sample.',

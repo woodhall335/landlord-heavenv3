@@ -5,13 +5,12 @@ import { describe, expect, it } from 'vitest';
 import { PDFCheckBox, PDFDocument, PDFTextField } from 'pdf-lib';
 
 import {
-  FORM_4A_OVERLAY_MAP,
+  FORM_4A_OFFICIAL_FIELD_NAMES,
   generateSection13CoreDocuments,
   generateSection13Pack,
   generateSection13TribunalBundle,
   SECTION13_BUNDLE_DOCUMENT_TYPES,
   SECTION13_DEFENSIVE_DOCUMENT_TYPES,
-  SECTION13_FORM_4A_VERSION,
 } from '@/lib/documents/section13-generator';
 import { extractPdfText } from '@/lib/evidence/extract-pdf-text';
 import { createEmptySection13State } from '@/lib/section13/facts';
@@ -105,287 +104,36 @@ function getFieldRectangle(pdfDoc: PDFDocument, fieldName: string) {
   return widget.getRectangle();
 }
 
-function expectFieldWithin(
-  pdfDoc: PDFDocument,
-  fieldName: string,
-  region: { x: number; y: number; width: number; height: number }
-) {
-  const rect = getFieldRectangle(pdfDoc, fieldName);
-  expect(rect.x).toBeGreaterThanOrEqual(region.x);
-  expect(rect.x).toBeLessThanOrEqual(region.x + region.width);
-  expect(rect.y).toBeGreaterThanOrEqual(region.y);
-  expect(rect.y).toBeLessThanOrEqual(region.y + region.height);
+function listFieldNames(pdfDoc: PDFDocument): string[] {
+  return pdfDoc
+    .getForm()
+    .getFields()
+    .map((field) => field.getName())
+    .sort();
 }
 
-describe('Section 13 document generation hardening', () => {
-  it('pins the page 4 overlay coordinates for page 4 rent fields and charges cells', () => {
-    const overlay =
-      FORM_4A_OVERLAY_MAP['england_assured_section13_2026-05-01'][SECTION13_FORM_4A_VERSION];
+function expectFieldMatchesSource(
+  sourcePdf: PDFDocument,
+  fieldName: string,
+  renderedPdf: PDFDocument
+) {
+  expect(getFieldRectangle(renderedPdf, fieldName)).toEqual(getFieldRectangle(sourcePdf, fieldName));
+}
 
-    expect({
-      currentRentAmount: overlay.currentRentAmount,
-      currentRentFrequency: overlay.currentRentFrequency,
-      tenancyStartDay: overlay.tenancyStartDay,
-      tenancyStartMonth: overlay.tenancyStartMonth,
-      tenancyStartYear: overlay.tenancyStartYear,
-      lastIncreaseDay: overlay.lastIncreaseDay,
-      lastIncreaseMonth: overlay.lastIncreaseMonth,
-      lastIncreaseYear: overlay.lastIncreaseYear,
-      firstIncreaseDay: overlay.firstIncreaseDay,
-      firstIncreaseMonth: overlay.firstIncreaseMonth,
-      firstIncreaseYear: overlay.firstIncreaseYear,
-      proposedRentAmount: overlay.proposedRentAmount,
-      proposedRentFrequency: overlay.proposedRentFrequency,
-      proposedStartDay: overlay.proposedStartDay,
-      proposedStartMonth: overlay.proposedStartMonth,
-      proposedStartYear: overlay.proposedStartYear,
-      includedChargeRows: overlay.includedChargeRows,
-    }).toMatchInlineSnapshot(`
-      {
-        "currentRentAmount": {
-          "fontSize": 10,
-          "height": 16,
-          "pageIndex": 3,
-          "width": 140,
-          "x": 67,
-          "y": 754,
-        },
-        "currentRentFrequency": {
-          "fontSize": 10,
-          "height": 16,
-          "pageIndex": 3,
-          "width": 158,
-          "x": 245,
-          "y": 754,
-        },
-        "firstIncreaseDay": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 30,
-          "x": 56,
-          "y": 548,
-        },
-        "firstIncreaseMonth": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 40,
-          "x": 101,
-          "y": 548,
-        },
-        "firstIncreaseYear": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 52,
-          "x": 146,
-          "y": 548,
-        },
-        "includedChargeRows": [
-          {
-            "current": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 199,
-              "y": 270,
-            },
-            "proposed": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 313,
-              "y": 270,
-            },
-          },
-          {
-            "current": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 199,
-              "y": 247,
-            },
-            "proposed": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 313,
-              "y": 247,
-            },
-          },
-          {
-            "current": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 199,
-              "y": 220,
-            },
-            "proposed": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 313,
-              "y": 220,
-            },
-          },
-          {
-            "current": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 199,
-              "y": 188,
-            },
-            "proposed": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 313,
-              "y": 188,
-            },
-          },
-          {
-            "current": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 199,
-              "y": 161,
-            },
-            "proposed": {
-              "align": "center",
-              "fontSize": 9,
-              "height": 14,
-              "pageIndex": 3,
-              "width": 76,
-              "x": 313,
-              "y": 161,
-            },
-          },
-        ],
-        "lastIncreaseDay": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 30,
-          "x": 56,
-          "y": 619,
-        },
-        "lastIncreaseMonth": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 40,
-          "x": 101,
-          "y": 619,
-        },
-        "lastIncreaseYear": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 52,
-          "x": 146,
-          "y": 619,
-        },
-        "proposedRentAmount": {
-          "fontSize": 10,
-          "height": 16,
-          "pageIndex": 3,
-          "width": 140,
-          "x": 67,
-          "y": 474,
-        },
-        "proposedRentFrequency": {
-          "fontSize": 10,
-          "height": 16,
-          "pageIndex": 3,
-          "width": 158,
-          "x": 245,
-          "y": 474,
-        },
-        "proposedStartDay": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 30,
-          "x": 56,
-          "y": 403,
-        },
-        "proposedStartMonth": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 40,
-          "x": 101,
-          "y": 403,
-        },
-        "proposedStartYear": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 52,
-          "x": 146,
-          "y": 403,
-        },
-        "tenancyStartDay": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 30,
-          "x": 56,
-          "y": 684,
-        },
-        "tenancyStartMonth": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 40,
-          "x": 101,
-          "y": 684,
-        },
-        "tenancyStartYear": {
-          "align": "center",
-          "fontSize": 10,
-          "height": 14,
-          "pageIndex": 3,
-          "width": 52,
-          "x": 146,
-          "y": 684,
-        },
-      }
-    `);
+const MAY_OFFICIAL_FORM_4A_FIELD_NAMES = [
+  ...Object.values(FORM_4A_OFFICIAL_FIELD_NAMES.text),
+  ...Object.values(FORM_4A_OFFICIAL_FIELD_NAMES.checkboxes),
+  ...FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows.flatMap(({ current, proposed }) => [current, proposed]),
+].sort();
+
+describe('Section 13 document generation hardening', () => {
+  it('pins the May official Form 4A field inventory for the live asset', async () => {
+    const sourcePath = path.join(process.cwd(), 'public', 'official-forms', 'Form_4A.pdf');
+    const sourceBytes = await fs.readFile(sourcePath);
+    const sourcePdf = await PDFDocument.load(sourceBytes);
+
+    expect(sourcePdf.getPageCount()).toBe(9);
+    expect(listFieldNames(sourcePdf)).toEqual(MAY_OFFICIAL_FORM_4A_FIELD_NAMES);
   });
 
   it('keeps Defensive pack generation to core documents only', async () => {
@@ -423,34 +171,36 @@ describe('Section 13 document generation hardening', () => {
     const form4A = docs.find((doc) => doc.document_type === 'section13_form_4a');
     expect(form4A).toBeDefined();
 
-      const renderedPdf = await PDFDocument.load(form4A!.pdf);
-      expect(renderedPdf.getPageCount()).toBe(sourcePdf.getPageCount());
-      expect(renderedPdf.getForm().getFields().length).toBeGreaterThan(40);
+    const renderedPdf = await PDFDocument.load(form4A!.pdf);
+    expect(renderedPdf.getPageCount()).toBe(sourcePdf.getPageCount());
+    expect(listFieldNames(renderedPdf)).toEqual(MAY_OFFICIAL_FORM_4A_FIELD_NAMES);
 
-      const form = renderedPdf.getForm();
-      expect(form.getTextField('form4a_tenant_names').getText()).toContain('Alex Tenant');
-      expect(form.getTextField('form4a_tenant_names').getText()).toContain('Jordan Tenant');
-      expect(form.getTextField('form4a_property_address_line1').getText()).toBe('10 Sample Road');
-      expect(form.getTextField('form4a_property_postcode').getText()).toBe('LS1 1AA');
-      expect(form.getTextField('form4a_landlord_name').getText()).toBe('Taylor Landlord');
-      expect(form.getTextField('form4a_current_rent_amount').getText()).toBe('1200.00');
-      expect(form.getTextField('form4a_first_increase_day').getText()).toBe('01');
-      expect(form.getTextField('form4a_first_increase_month').getText()).toBe('04');
-      expect(form.getTextField('form4a_first_increase_year').getText()).toBe('2025');
-      expect(form.getTextField('form4a_proposed_rent_amount').getText()).toBe('1285.00');
-      expect(form.getTextField('form4a_print_name').getText()).toBe('Taylor Landlord');
-      expect(form.getCheckBox('form4a_sign_as_landlord').isChecked()).toBe(true);
-      expect(form.getCheckBox('form4a_sign_as_agent').isChecked()).toBe(false);
-      expect(form.getFieldMaybe('form4a_service_method')).toBeUndefined();
-      expect(form.getFieldMaybe('form4a_supporting_reference')).toBeUndefined();
-      expect(form.getFieldMaybe('form4a_final_signature')).toBeUndefined();
+    const form = renderedPdf.getForm();
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.tenantNames).getText()).toContain('Alex Tenant');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.tenantNames).getText()).toContain('Jordan Tenant');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.propertyAddressLine1).getText()).toBe('10 Sample Road');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.propertyPostcode).getText()).toBe('LS11AA');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.landlordName).getText()).toBe('Taylor Landlord');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.currentRentAmount).getText()).toBe('1200.00');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.currentRentFrequency).getText()).toBe('Monthly');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.firstIncreaseDate).getText()).toBe('01042025');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.proposedRentAmount).getText()).toBe('1285.00');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.proposedRentFrequency).getText()).toBe('Monthly');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.printName).getText()).toBe('Taylor Landlord');
+    expect(form.getTextField(FORM_4A_OFFICIAL_FIELD_NAMES.text.signatureDate).getText()).toBe('25032026');
+    expect(form.getCheckBox(FORM_4A_OFFICIAL_FIELD_NAMES.checkboxes.signAsLandlord).isChecked()).toBe(true);
+    expect(form.getCheckBox(FORM_4A_OFFICIAL_FIELD_NAMES.checkboxes.signAsAgent).isChecked()).toBe(false);
+    expect(form.getFieldMaybe('form4a_service_method')).toBeUndefined();
+    expect(form.getFieldMaybe('form4a_supporting_reference')).toBeUndefined();
+    expect(form.getFieldMaybe('form4a_final_signature')).toBeUndefined();
 
   }, 120000);
 
-  it('keeps editable Form 4A field widgets inside the intended amount, date, and charges cells', async () => {
-      const { state, comparables } = buildState();
-      const overlay =
-        FORM_4A_OVERLAY_MAP['england_assured_section13_2026-05-01'][SECTION13_FORM_4A_VERSION];
+  it('keeps native May Form 4A widgets aligned with the source official PDF', async () => {
+    const { state, comparables } = buildState();
+    const sourcePath = path.join(process.cwd(), 'public', 'official-forms', 'Form_4A.pdf');
+    const sourceBytes = await fs.readFile(sourcePath);
+    const sourcePdf = await PDFDocument.load(sourceBytes);
 
     const docs = await generateSection13CoreDocuments({
       caseId: 'case-section13-page4-validation',
@@ -460,30 +210,25 @@ describe('Section 13 document generation hardening', () => {
       evidenceFiles: [],
     });
 
-      const form4A = docs.find((doc) => doc.document_type === 'section13_form_4a');
-      expect(form4A).toBeDefined();
+    const form4A = docs.find((doc) => doc.document_type === 'section13_form_4a');
+    expect(form4A).toBeDefined();
 
-      const renderedPdf = await PDFDocument.load(form4A!.pdf);
+    const renderedPdf = await PDFDocument.load(form4A!.pdf);
 
-      expectFieldWithin(renderedPdf, 'form4a_current_rent_amount', overlay.currentRentAmount);
-      expectFieldWithin(renderedPdf, 'form4a_current_rent_frequency', overlay.currentRentFrequency);
-      expectFieldWithin(renderedPdf, 'form4a_tenancy_start_day', overlay.tenancyStartDay);
-      expectFieldWithin(renderedPdf, 'form4a_tenancy_start_month', overlay.tenancyStartMonth);
-      expectFieldWithin(renderedPdf, 'form4a_tenancy_start_year', overlay.tenancyStartYear);
-      expectFieldWithin(renderedPdf, 'form4a_last_increase_day', overlay.lastIncreaseDay);
-      expectFieldWithin(renderedPdf, 'form4a_last_increase_month', overlay.lastIncreaseMonth);
-      expectFieldWithin(renderedPdf, 'form4a_last_increase_year', overlay.lastIncreaseYear);
-      expectFieldWithin(renderedPdf, 'form4a_proposed_rent_amount', overlay.proposedRentAmount);
-      expectFieldWithin(renderedPdf, 'form4a_proposed_rent_frequency', overlay.proposedRentFrequency);
-      expectFieldWithin(renderedPdf, 'form4a_proposed_start_day', overlay.proposedStartDay);
-      expectFieldWithin(renderedPdf, 'form4a_proposed_start_month', overlay.proposedStartMonth);
-      expectFieldWithin(renderedPdf, 'form4a_proposed_start_year', overlay.proposedStartYear);
-
-      overlay.includedChargeRows.forEach((fields, index) => {
-        expectFieldWithin(renderedPdf, `form4a_included_charge_${index + 1}_current`, fields.current);
-        expectFieldWithin(renderedPdf, `form4a_included_charge_${index + 1}_proposed`, fields.proposed);
-      });
-    }, 120000);
+    [
+      FORM_4A_OFFICIAL_FIELD_NAMES.text.currentRentAmount,
+      FORM_4A_OFFICIAL_FIELD_NAMES.text.currentRentFrequency,
+      FORM_4A_OFFICIAL_FIELD_NAMES.text.tenancyStartDate,
+      FORM_4A_OFFICIAL_FIELD_NAMES.text.lastIncreaseDate,
+      FORM_4A_OFFICIAL_FIELD_NAMES.text.firstIncreaseDate,
+      FORM_4A_OFFICIAL_FIELD_NAMES.text.proposedRentAmount,
+      FORM_4A_OFFICIAL_FIELD_NAMES.text.proposedRentFrequency,
+      FORM_4A_OFFICIAL_FIELD_NAMES.text.proposedStartDate,
+      ...FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows.flatMap(({ current, proposed }) => [current, proposed]),
+    ].forEach((fieldName) => {
+      expectFieldMatchesSource(sourcePdf, fieldName, renderedPdf);
+    });
+  }, 120000);
 
   it('uses tribunal-ready empty-evidence wording and Section 13 proof-of-service branding', async () => {
     const { state, comparables } = buildState();

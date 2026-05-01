@@ -8,7 +8,7 @@
  * 4. Defendant service postcode is populated with fallbacks
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
 import { generateSection8Notice } from '../section8-generator';
 import {
@@ -23,6 +23,7 @@ import {
   assertPdfHasFields,
   listFormFieldNames,
 } from '../official-forms-filler';
+import { FORM3A_OFFICIAL_FIELD_NAMES } from '../england-official-form-fillers';
 
 // =============================================================================
 // TEST DATA
@@ -259,14 +260,15 @@ describe('Editable Official Forms - No Flatten', () => {
   });
 
   describe('Form 3A - England Possession Notice', () => {
-    it('should produce an editable PDF with the custom AcroForm overlay retained', async () => {
+    it('should produce an editable PDF with the native official AcroForm fields retained', async () => {
       const pdfBytes = await fillForm3AForm(COMPLETE_FORM3A_CASE_DATA);
       const pdfDoc = await PDFDocument.load(pdfBytes);
       const form = pdfDoc.getForm();
 
-      expect(form.getFields().length).toBeGreaterThanOrEqual(30);
-      expect(form.getTextField('form3a_tenant_names').getText()).toContain('Sonia Shezadi');
-      expect(form.getTextField('form3a_grounds_text').getText()).toContain('Ground 1A');
+      expect(form.getFields()).toHaveLength(38);
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.tenantNames).getText()).toContain('Sonia Shezadi');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText()).toContain('Ground 1A');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.signatureDate).getText()).toBe('01062026');
     });
 
     it('uses the drafted explanation when the landlord narrative is too thin', async () => {
@@ -280,7 +282,7 @@ describe('Editable Official Forms - No Flatten', () => {
       });
       const pdfDoc = await PDFDocument.load(pdfBytes);
       const form = pdfDoc.getForm();
-      const explanation = form.getTextField('form3a_explanation_text').getText();
+      const explanation = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText();
 
       expect(explanation).toContain('Ground 8 is relied on as the serious rent arrears ground.');
       expect(explanation).toContain('The tenancy began on');
@@ -330,9 +332,10 @@ describe('Editable Official Forms - No Flatten', () => {
       const pdfDoc = await PDFDocument.load(generated.pdf!);
       const form = pdfDoc.getForm();
 
-      expect(form.getFields().length).toBeGreaterThan(0);
-      expect(form.getTextField('form3a_tenant_names').getText()).toContain('Sonia Shezadi');
-      expect(form.getTextField('form3a_grounds_text').getText()).toContain('Ground 1A');
+      expect(form.getFields()).toHaveLength(38);
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.tenantNames).getText()).toContain('Sonia Shezadi');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText()).toContain('Ground 1A');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.earliestDate).getText()).toBe('01102026');
     });
   });
 

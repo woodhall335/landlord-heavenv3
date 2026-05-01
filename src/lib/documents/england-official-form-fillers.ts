@@ -17,6 +17,51 @@ export interface EnglandOfficialFormOptions {
   flatten?: boolean;
 }
 
+export const FORM3A_OFFICIAL_FIELD_NAMES = {
+  text: {
+    tenantNames: 'Text Field 132',
+    propertyLine1: 'Text Field 116',
+    propertyLine2: 'Text Field 115',
+    propertyCity: 'Text Field 114',
+    propertyCounty: 'Text Field 113',
+    propertyPostcode: 'Text Field 112',
+    earliestDate: 'Text Field 117',
+    groundsText: 'Text Field 133',
+    explanationText: 'Text Field 134',
+    signature: 'Text Field 119',
+    signatureDate: 'Text Field 130',
+    signatoryName: 'Text Field 135',
+    signatoryLine1: 'Text Field 103',
+    signatoryLine2: 'Text Field 102',
+    signatoryCity: 'Text Field 101',
+    signatoryCounty: 'Text Field 100',
+    signatoryPostcode: 'Text Field 99',
+    signatoryPhone: 'Text Field 120',
+    signatoryEmail: 'Text Field 104',
+    jointSignatory1: 'Text Field 1024',
+    jointSignatory2: 'Text Field 128',
+    jointSignatory3: 'Text Field 127',
+    extraSheetText: 'Text Field 136',
+    extraSheetSignature: 'Text Field 137',
+    extraSheetDate: 'Text Field 129',
+  },
+  checkboxes: {
+    rentArrearsSerious: 'Check Box 69',
+    rentArrearsOther: 'Check Box 70',
+    useOrSale: 'Check Box 71',
+    studentsOrWorkers: 'Check Box 72',
+    redevelopment: 'Check Box 73',
+    asbOrLegalBreach: 'Check Box 74',
+    tenancyBreach: 'Check Box 75',
+    deterioration: 'Check Box 76',
+    noRightToRent: 'Check Box 77',
+    other: 'Check Box 78',
+    capacityLandlord: 'Check Box 42',
+    capacityAgent: 'Check Box 41',
+    capacityLicensor: 'Check Box 43',
+  },
+} as const;
+
 type OverlayFieldDefinition =
   | {
       name: string;
@@ -121,6 +166,11 @@ function splitDate(dateString?: string | null): { day: string; month: string; ye
   return { day, month, year };
 }
 
+function formatCombDateValue(dateString?: string | null): string {
+  const { day, month, year } = splitDate(dateString);
+  return `${day}${month}${year}`;
+}
+
 function normalizeList(value: unknown): string[] {
   if (!value) return [];
   if (Array.isArray(value)) {
@@ -149,6 +199,10 @@ function normalizePostcode(postcode?: string | null): string {
     return compact;
   }
   return `${compact.slice(0, -3)} ${compact.slice(-3)}`;
+}
+
+function formatOfficialPostcodeFieldValue(postcode?: string | null): string {
+  return normalizePostcode(postcode).replace(/\s+/g, '');
 }
 
 function extractPostcodeFromLines(lines: string[]): string {
@@ -342,15 +396,11 @@ export async function fillForm3AForm(
   const pdfDoc = await loadOfficialForm('Form_3A.pdf');
   const form = pdfDoc.getForm();
 
-  if (form.getFields().length === 0) {
-    createForm3AOverlay(form, pdfDoc);
-  }
-
   const property = getAddressParts(data, 'property');
   const landlord = getAddressParts(data, 'landlord');
-  const earliestCourtDate = splitDate(calculateEarliestCourtDate(data));
-  const signatureDate = splitDate(data.signature_date || new Date().toISOString().split('T')[0]);
-  const extraSheetDate = splitDate(data.extra_sheet_signature_date || data.signature_date || '');
+  const earliestCourtDate = calculateEarliestCourtDate(data);
+  const signatureDate = data.signature_date || new Date().toISOString().split('T')[0];
+  const extraSheetDate = data.extra_sheet_signature_date || data.signature_date || '';
   const tenantNames = [
     data.tenant_full_name,
     data.tenant_2_name,
@@ -366,58 +416,62 @@ export async function fillForm3AForm(
   const signatoryCapacity = String(data.signatory_capacity || 'landlord').toLowerCase();
   const draftedExplanation = buildEnglandForm3AExplanation(data);
   const rawExplanation = String(data.form3a_explanation || '').trim();
+  const signatoryName = data.signatory_name || data.landlord_full_name || '';
   const form3AExplanation =
     rawExplanation && !isThinEnglandNarrative(rawExplanation)
       ? rawExplanation
       : draftedExplanation || rawExplanation || data.particulars_of_claim || '';
 
-  setTextValue(form, 'form3a_tenant_names', tenantNames);
-  setTextValue(form, 'form3a_property_line1', property.line1);
-  setTextValue(form, 'form3a_property_line2', property.line2);
-  setTextValue(form, 'form3a_property_city', property.city);
-  setTextValue(form, 'form3a_property_county', property.county);
-  setTextValue(form, 'form3a_property_postcode', property.postcode);
-  setTextValue(form, 'form3a_earliest_day', earliestCourtDate.day);
-  setTextValue(form, 'form3a_earliest_month', earliestCourtDate.month);
-  setTextValue(form, 'form3a_earliest_year', earliestCourtDate.year);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.tenantNames, tenantNames);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine1, property.line1);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine2, property.line2);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.propertyCity, property.city);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.propertyCounty, property.county);
+  setTextValue(
+    form,
+    FORM3A_OFFICIAL_FIELD_NAMES.text.propertyPostcode,
+    formatOfficialPostcodeFieldValue(property.postcode),
+  );
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.earliestDate, formatCombDateValue(earliestCourtDate));
 
-  setCheckboxValue(form, 'form3a_reason_rent_arrears_serious', checkboxValues.rent_arrears_serious);
-  setCheckboxValue(form, 'form3a_reason_rent_arrears_other', checkboxValues.rent_arrears_other);
-  setCheckboxValue(form, 'form3a_reason_use_or_sale', checkboxValues.use_or_sale);
-  setCheckboxValue(form, 'form3a_reason_students_or_workers', checkboxValues.students_or_workers);
-  setCheckboxValue(form, 'form3a_reason_redevelopment', checkboxValues.redevelopment);
-  setCheckboxValue(form, 'form3a_reason_asb_or_legal_breach', checkboxValues.asb_or_legal_breach);
-  setCheckboxValue(form, 'form3a_reason_tenancy_breach', checkboxValues.tenancy_breach);
-  setCheckboxValue(form, 'form3a_reason_deterioration', checkboxValues.deterioration);
-  setCheckboxValue(form, 'form3a_reason_no_right_to_rent', checkboxValues.no_right_to_rent);
-  setCheckboxValue(form, 'form3a_reason_other', checkboxValues.other);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.rentArrearsSerious, checkboxValues.rent_arrears_serious);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.rentArrearsOther, checkboxValues.rent_arrears_other);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.useOrSale, checkboxValues.use_or_sale);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.studentsOrWorkers, checkboxValues.students_or_workers);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.redevelopment, checkboxValues.redevelopment);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.asbOrLegalBreach, checkboxValues.asb_or_legal_breach);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.tenancyBreach, checkboxValues.tenancy_breach);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.deterioration, checkboxValues.deterioration);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.noRightToRent, checkboxValues.no_right_to_rent);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.other, checkboxValues.other);
 
-  setTextValue(form, 'form3a_grounds_text', data.form3a_grounds_text || data.ground_particulars || '');
-  setTextValue(form, 'form3a_explanation_text', form3AExplanation);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText, data.form3a_grounds_text || data.ground_particulars || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText, form3AExplanation);
 
-  setTextValue(form, 'form3a_signature', data.signatory_name || data.landlord_full_name || '');
-  setCheckboxValue(form, 'form3a_capacity_landlord', signatoryCapacity === 'landlord');
-  setCheckboxValue(form, 'form3a_capacity_agent', signatoryCapacity === 'agent' || signatoryCapacity === 'solicitor');
-  setCheckboxValue(form, 'form3a_capacity_licensor', signatoryCapacity === 'licensor');
-  setTextValue(form, 'form3a_signature_day', signatureDate.day);
-  setTextValue(form, 'form3a_signature_month', signatureDate.month);
-  setTextValue(form, 'form3a_signature_year', signatureDate.year);
-  setTextValue(form, 'form3a_signatory_name', data.signatory_name || data.landlord_full_name || '');
-  setTextValue(form, 'form3a_signatory_line1', landlord.line1);
-  setTextValue(form, 'form3a_signatory_line2', landlord.line2);
-  setTextValue(form, 'form3a_signatory_city', landlord.city);
-  setTextValue(form, 'form3a_signatory_county', landlord.county);
-  setTextValue(form, 'form3a_signatory_postcode', landlord.postcode);
-  setTextValue(form, 'form3a_signatory_phone', data.landlord_phone || data.service_phone || '');
-  setTextValue(form, 'form3a_signatory_email', data.landlord_email || data.service_email || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signature, signatoryName);
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.capacityLandlord, signatoryCapacity === 'landlord');
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.capacityAgent, signatoryCapacity === 'agent' || signatoryCapacity === 'solicitor');
+  setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.capacityLicensor, signatoryCapacity === 'licensor');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signatureDate, formatCombDateValue(signatureDate));
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryName, signatoryName);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryLine1, landlord.line1);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryLine2, landlord.line2);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryCity, landlord.city);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryCounty, landlord.county);
+  setTextValue(
+    form,
+    FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryPostcode,
+    formatOfficialPostcodeFieldValue(landlord.postcode),
+  );
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryPhone, data.landlord_phone || data.service_phone || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signatoryEmail, data.landlord_email || data.service_email || '');
 
-  setTextValue(form, 'form3a_joint_signatory_1', jointSignatories[0] || '');
-  setTextValue(form, 'form3a_joint_signatory_2', jointSignatories[1] || '');
-  setTextValue(form, 'form3a_joint_signatory_3', jointSignatories[2] || '');
-  setTextValue(form, 'form3a_extra_sheet_signature', data.extra_sheet_signature || '');
-  setTextValue(form, 'form3a_extra_sheet_day', extraSheetDate.day);
-  setTextValue(form, 'form3a_extra_sheet_month', extraSheetDate.month);
-  setTextValue(form, 'form3a_extra_sheet_year', extraSheetDate.year);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory1, jointSignatories[0] || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory2, jointSignatories[1] || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory3, jointSignatories[2] || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText, data.form3a_extra_sheet_text || data.extra_sheet_text || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetSignature, data.extra_sheet_signature || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetDate, formatCombDateValue(extraSheetDate));
 
   const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
   form.updateFieldAppearances(helvetica);

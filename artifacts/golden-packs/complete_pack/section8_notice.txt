@@ -8,29 +8,6 @@ occupancy in the private rented sector
 Housing Act 1988 section 8, as amended
 This notice tells you that your landlord would like you to
 leave their property.
-For use in the private rented sector in England only. For tenancies in the
-social rented sector, Form 3 should be used.
-Information for the tenant
-This form has been completed by your landlord or their agent and
-explains the reasons you are being asked to leave the property you rent
-so that your landlord can regain possession.
-Your landlord intends to begin court proceedings for possession of the
-property they rent to you, which is identified in question 1.2 below.
-You do not have to leave immediately. If you choose not to leave, your
-landlord must apply to the court to evict you. If your landlord makes an
-application to the court, the court will decide whether or not you will
-need to leave. It is illegal for your landlord to try to force you to leave, for
-example by changing the locks or harassing you. They must follow the
-correct legal process.
-You should read this notice in full immediately and seek advice on
-your options.
-If you want to stay, you may be able to resolve the situation with your
-landlord or challenge the claim in court.
-There is information in Section 6 on the next steps and where you can
-find advice. Section 6 also includes information for those with rent
-arrears and other debt problems.
-Further guidance on this form, for both landlords and tenants, can be
-accessed at: https://www.gov.uk/guidance/assured-tenancy-forms
 Note: If you have an
 assured agricultural
 occupancy you may
@@ -43,19 +20,44 @@ references in this notice to
 a landlord include a licensor
 and references to tenant(s)
 include licensee(s).
+For use in the private rented sector in England only. For tenancies in the
+social rented sector, Form 3 should be used.
+Information for the tenant
+This form has been completed by your landlord or their agent and
+explains the reasons you are being asked to leave the property you rent
+so that your landlord can regain possession.
+Your landlord intends to begin court proceedings for possession of the
+property they rent to you, which is identified in question 1.2 below.
+You do not have to leave immediately. If you choose not to leave, your
+landlord must apply to the court to evict you. If your landlord makes an
+application to the court, the court will decide whether or not you will
+need to leave. It is illegal for your landlord to try to force you to leave,
+for example by changing the locks or harassing you. They must follow the
+correct legal process.
+You should read this notice in full immediately and seek advice on
+your options.
+If you want to stay, you may be able to resolve the situation with your
+landlord or challenge the claim in court.
+There is information in Section 6 on the next steps and where you can
+find advice. Section 6 also includes information for those with rent
+arrears and other debt problems.
+Further guidance on this form, for both landlords and tenants, can be
+accessed at: https://www.gov.uk/guidance/assured-tenancy-forms
 
 -- 1 of 10 --
 
-Page 2
-Form 3A Notice seeking possession of a property let on an assured tenancy or an assured agricultural
-occupancy in the private rented sector (05.26)
-1. The tenant(s) details Notes to the landlord
+1. The tenant(s) details
+1.1 Full name(s) of tenant(s)
+Notes to the landlord
 You can complete and sign
-1.1 Full name(s) of tenant(s) this notice electronically or
+this notice electronically or
 by hand.
 Note 1.1: If it is a joint
 tenancy you must list all of
 the tenants.
+Page 2
+Form 3A Notice seeking possession of a property let on an assured tenancy or an assured agricultural
+occupancy in the private rented sector (05.26)
 1.2 Your landlord is seeking possession of the following property:
 First line of address
 Second line of address
@@ -66,16 +68,6 @@ Postcode
 regain possession
 2.1 Your landlord cannot begin court proceedings for
 possession earlier than
-Day Month Year
-3. Latest date your landlord can apply to court to
-regain possession
-The latest date that your landlord can apply to court for a
-possession order is 12 months from the date of service of this
-notice. After this the notice will no longer be valid.
-This time limit may be extended if you enter a breathing space
-under the Debt Respite Scheme (Breathing Space Moratorium and
-Mental Health Crisis Moratorium) (England and Wales)
-Regulations 2020.
 Note 2.1: Before you can
 apply to the court to begin
 possession proceedings
@@ -111,12 +103,19 @@ guidance for private
 landlords at: https://www.
 gov.uk/guidance/assured-
 tenancy-forms
+Day Month Year
+3. Latest date your landlord can apply to court to
+regain possession
+The latest date that your landlord can apply to court for a
+possession order is 12 months from the date of service of this
+notice. After this the notice will no longer be valid.
+This time limit may be extended if you enter a breathing space
+under the Debt Respite Scheme (Breathing Space Moratorium and
+Mental Health Crisis Moratorium) (England and Wales)
+Regulations 2020.
 
 -- 2 of 10 --
 
-Page 3
-Form 3A Notice seeking possession of a property let on an assured tenancy or an assured agricultural
-occupancy in the private rented sector (05.26)
 4. Landlord's reasons for asking you to leave
 Your landlord must explain why they are seeking possession of the
 property. This means they must give you reasons why they want you
@@ -135,6 +134,25 @@ Questions 4.2 and 4.3 are mandatory. Your landlord will set
 out the grounds that they are relying on in question 4.2 and an
 explanation for using those grounds in question 4.3.
 4.1 Common reasons for seeking possession include:
+question 4.2
+you are seeking to rely on in
+each possession ground
+the full legal wording for
+not listed above)'. Provide
+select 'Other (ground(s)
+the listed grounds apply,
+possession. If none of
+reason(s) you are seeking
+the boxes to indicate the
+understanding you can tick
+To aid your tenant(s)
+grounds for possession.
+This is a list of common
+Note to the landlord 4.1:
+.
+Page 3
+Form 3A Notice seeking possession of a property let on an assured tenancy or an assured agricultural
+occupancy in the private rented sector (05.26)
 You have rent arrears of more than 13 weeks or 3 months
 (depending on whether your tenancy is weekly, fortnightly or
 monthly) (Ground 8)
@@ -152,32 +170,16 @@ You have allowed the condition of the property or furniture to
 deteriorate (Grounds 13 or 15)
 You do not have the right to rent in the UK (Ground 7B)
 Other (ground(s) not listed above)
-Note to the landlord 4.1:
-This is a list of common
-grounds for possession.
-To aid your tenant(s)
-understanding you can tick
-the boxes to indicate the
-reason(s) you are seeking
-possession. If none of
-the listed grounds apply,
-select 'Other (ground(s)
-not listed above)'. Provide
-the full legal wording for
-each possession ground
-you are seeking to rely on in
-question 4.2.
 
 -- 3 of 10 --
 
-Page 4
-Form 3A Notice seeking possession of a property let on an assured tenancy or an assured agricultural
-occupancy in the private rented sector (05.26)
-4.2 Possession ground(s) as set out in schedule 2 to the Note to the landlord 4.2:
-Housing Act 1988 For this notice to be valid,
+4.2 Possession ground(s) as set out in schedule 2 to the
+Housing Act 1988
 Below are the grounds your landlord is using to try to regain
 possession of the property. Read this carefully and seek advice if
 you do not understand.
+Note to the landlord 4.2:
+For this notice to be valid,
 tenants must be given
 notice of the legal grounds
 the landlord is using to seek
@@ -207,6 +209,9 @@ are advised to supply this
 explanation here alongside
 the legal wording, as it
 appears in the guidance.
+Page 4
+Form 3A Notice seeking possession of a property let on an assured tenancy or an assured agricultural
+occupancy in the private rented sector (05.26)
 
 -- 4 of 10 --
 
@@ -215,9 +220,9 @@ Form 3A Notice seeking possession of a property let on an assured tenancy or an 
 occupancy in the private rented sector (05.26)
 4.3 Landlord's explanation of why each possession ground is being used Note to the landlord 4.3:
 Write a heading for each
-This is your landlord's explanation of how and why they believe they ground you are using and
-are legally able to use the grounds for possession in questions 4.1 explain in your own words
-and 4.2. why you believe you can
+ground you are using and
+explain in your own words
+why you believe you can
 use that ground. You should
 include as much evidence
 as possible.
@@ -225,6 +230,9 @@ If necessary, continue on a
 separate sheet, making it
 clear which question you
 are answering.
+This is your landlord's explanation of how and why they believe they
+are legally able to use the grounds for possession in questions 4.1
+and 4.2.
 
 -- 5 of 10 --
 
@@ -233,15 +241,7 @@ Form 3A Notice seeking possession of a property let on an assured tenancy or an 
 occupancy in the private rented sector (05.26)
 5. Contact details of the landlord, licensor
 or agent
-5.1 Signed
-5.2 I am the
-Landlord
-Agent
-Licensor
-5.3 Date
-Day Month Year
-5.4 Name of landlord, licensor, or agent
-Notes to the landlord
+5.1 Signed Notes to the landlord
 Note 5.1: This notice must
 be signed and completed
 by the landlord, licensor, or
@@ -255,14 +255,20 @@ signatures box below, or
 agree for one landlord or
 licensor to sign this notice on
 behalf of you all.
-Note 5.4: Give the details
+5.2 I am the
+Landlord
+Agent
+Licensor
+5.3 Date
+Day Month Year
+5.4 Name of landlord, licensor, or agent Note 5.4: Give the details
 of the landlord, licensor, or
 agent who completed and
 signed this notice.
-5.5 Address of landlord, licensor, or agent
 You must give this notice
 to the tenant(s) and keep a
 copy for yourself.
+5.5 Address of landlord, licensor, or agent
 First line of address
 Second line of address
 Town or city
@@ -381,9 +387,10 @@ Form 3A Notice seeking possession of a property let on an assured tenancy or an 
 occupancy in the private rented sector (05.26)
 Extra sheets
 Include the number of the section and question which is being continued.
-Signature If necessary, continue on a
+If necessary, continue on a
 separate sheet, remembering
 to sign and date it.
+Signature
 Date
 Day Month Year
 

@@ -1,15 +1,43 @@
+import crypto from 'crypto';
 import { describe, expect, it } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
+import { FORM3A_OFFICIAL_FIELD_NAMES } from '@/lib/documents/england-official-form-fillers';
+import {
+  FORM_4A_OFFICIAL_FIELD_NAMES,
+  getSection13Form4AAssetMetadata,
+  SECTION13_FORM_4A_VERSION,
+} from '@/lib/documents/section13-generator';
+
 const formsRoot = path.join(process.cwd(), 'public', 'official-forms');
+const FORM_3A_MAY_FIELD_NAMES = [
+  ...Object.values(FORM3A_OFFICIAL_FIELD_NAMES.text),
+  ...Object.values(FORM3A_OFFICIAL_FIELD_NAMES.checkboxes),
+].sort();
+const FORM_4A_MAY_FIELD_NAMES = [
+  ...Object.values(FORM_4A_OFFICIAL_FIELD_NAMES.text),
+  ...Object.values(FORM_4A_OFFICIAL_FIELD_NAMES.checkboxes),
+  ...FORM_4A_OFFICIAL_FIELD_NAMES.includedChargeRows.flatMap(({ current, proposed }) => [current, proposed]),
+].sort();
 
 async function loadFieldNames(formFile: string): Promise<Set<string>> {
   const pdfBytes = await fs.readFile(path.join(formsRoot, formFile));
   const pdfDoc = await PDFDocument.load(pdfBytes);
   const form = pdfDoc.getForm();
   return new Set(form.getFields().map((field) => field.getName()));
+}
+
+async function loadFieldInventory(formFile: string): Promise<{ pageCount: number; fieldNames: string[] }> {
+  const pdfBytes = await fs.readFile(path.join(formsRoot, formFile));
+  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const form = pdfDoc.getForm();
+
+  return {
+    pageCount: pdfDoc.getPageCount(),
+    fieldNames: form.getFields().map((field) => field.getName()).sort(),
+  };
 }
 
 async function logFieldCount(formFile: string): Promise<number> {
@@ -74,6 +102,30 @@ describe('Scotland official forms', () => {
     const expected = ['1', '2', '3', '4', '5', '6', '7', 'grounds', 'reqd attach', 'TEL', 'eml'];
 
     expected.forEach((name) => expect(fields.has(name)).toBe(true));
+  });
+});
+
+describe('England May official notice assets', () => {
+  it('pins the live Form 3A May field inventory', async () => {
+    const inventory = await loadFieldInventory('Form_3A.pdf');
+
+    expect(inventory.pageCount).toBe(10);
+    expect(inventory.fieldNames).toEqual(FORM_3A_MAY_FIELD_NAMES);
+  });
+
+  it('pins the live Form 4A May field inventory', async () => {
+    const inventory = await loadFieldInventory('Form_4A.pdf');
+
+    expect(inventory.pageCount).toBe(9);
+    expect(inventory.fieldNames).toEqual(FORM_4A_MAY_FIELD_NAMES);
+  });
+
+  it('keeps Section 13 Form 4A asset metadata aligned with the live PDF', async () => {
+    const sourceBytes = await fs.readFile(path.join(formsRoot, 'Form_4A.pdf'));
+    const metadata = await getSection13Form4AAssetMetadata();
+
+    expect(metadata.version).toBe(SECTION13_FORM_4A_VERSION);
+    expect(metadata.sha256).toBe(crypto.createHash('sha256').update(sourceBytes).digest('hex'));
   });
 });
 

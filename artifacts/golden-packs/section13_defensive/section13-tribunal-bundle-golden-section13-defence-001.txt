@@ -40,16 +40,6 @@ To propose a new rent for an assured agricultural occupancy in the social
 rented sector use Form 5, and in the private rented sector use Form 5A.
 This notice must be served on the tenant(s) at least two months
 before the new rent can start.
-Information for the tenant
-This notice is given by your landlord to propose that you pay an increased
-rent from the date in question 4.6. You should read this notice in full
-immediately.
-If you disagree with the proposed rent or have any questions about this
-notice you should discuss it with your landlord and/or seek advice.
-To challenge the proposed rent you must take action before the date
-given in question 4.6.
-There is information in Section 5 on how to take action if you disagree
-with the proposed rent and where you can find advice.
 Note to landlord: You
 need to be able to evidence
 that you served the notice
@@ -63,24 +53,36 @@ tenant in person, leaving
 it at the tenant's address
 or sending it by registered
 post.
+Information for the tenant
+This notice is given by your landlord to propose that you pay an increased
+rent from the date in question 4.6. You should read this notice in full
+immediately.
+If you disagree with the proposed rent or have any questions about this
+notice you should discuss it with your landlord and/or seek advice.
+To challenge the proposed rent you must take action before the date
+given in question 4.6.
+There is information in Section 5 on how to take action if you disagree
+with the proposed rent and where you can find advice.
 
 -- 3 of 22 --
 
 Page 2
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
-1. The tenant(s) details Notes to landlord: You
+1. The tenant(s) details
+1.1 Name(s) of tenant(s)
+Notes to landlord: You
 can complete and sign this
-1.1 Name(s) of tenant(s) notice electronically or by
+notice electronically or by
 hand.
 Note 1.1: If it is a joint
 tenancy, provide the names
 of each of the tenants.
-Postcode
 1.2 Address of premises to which the tenancy relates
 First line of address
 Second line of address
 Town or city
 County (optional)
+Postcode
 2. Details of the landlord
 2.1 Name Note 2.1: It is important
 that your tenant(s) can
@@ -97,10 +99,7 @@ Postcode
 
 Page 3
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
-2.3 Contact details
-Phone number
-Email
-Note to landlord 2.3:
+2.3 Contact details Note to landlord 2.3:
 Phone number and email are
 recommended but optional.
 If you provide an email
@@ -108,6 +107,8 @@ address, you agree that the
 tenant and the tribunal may
 use this address to serve
 documents on you.
+Phone number
+Email
 3. Details of the agent (if applicable)
 3.1 Name
 3.2 Contact address
@@ -116,10 +117,7 @@ Second line of address
 Town or city
 County (optional)
 Postcode
-3.3 Contact details
-Phone number
-Email
-Note to agent 3.3: Phone
+3.3 Contact details Note to agent 3.3: Phone
 number and email are
 recommended but optional.
 If you provide an email
@@ -127,38 +125,13 @@ address, you agree that the
 tenant and the tribunal may
 use this address to serve
 documents on you.
+Phone number
+Email
 
 -- 5 of 22 --
 
-Page 4
-Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
 4. The rent
-4.1 Current rent Frequency (per week, per month)
-£
-4.2 The tenancy started on
-Day Month Year
-4.3 The most recent rent increase (if applicable) was on
-Day Month Year
-4.4 Give the date of the first rent increase after 11 February 2003.
-Day Month Year
-4.5 The landlord is proposing a new rent of
-Amount Frequency (per week, per month)
-£
-4.6 The new rent will start on
-Day Month Year
-4.7 Payments for certain bills or charges may be included in your rent.
-The amount of the charges per tenancy period (if any) are:
-Amount included and separately
-identified (enter 'nil' if appropriate)
-Charges Existing charge Proposed new
-charge
-Council tax £ £
-Water charges £ £
-Electricity, gas or
-other fuel £ £
-Communication
-services £ £
-Fixed service charges £ £
+4.1 Current rent
 Notes to landlord
 Note 4.1: Insert how often
 the rent is paid, such as per
@@ -166,10 +139,17 @@ week, fortnight, four weeks,
 month. This is the tenancy
 period. This must be a
 month or less.
+£
+Frequency (per week, per month)
+4.2 The tenancy started on
+Day Month Year
+4.3 The most recent rent increase (if applicable) was on
 Note 4.3: If there has not
 been a rent increase since
 the start of the tenancy,
 leave blank.
+Day Month Year
+4.4 Give the date of the first rent increase after 11 February 2003.
 Note 4.4: This question is
 required to show whether
 52 weeks or 53 weeks
@@ -178,18 +158,27 @@ increase. See Note A3.
 If there has not been an
 increase since 11 February
 2003, leave blank.
-Note 4.5: Insert how often
+Day Month Year
+4.5 The landlord is proposing a new rent of Note 4.5: Insert how often
 the rent should be paid,
 such as per week, fortnight,
 four weeks, month. This is
 the tenancy period. This
 must be a month or less.
+Amount
+£
+Frequency (per week, per month)
+Page 4
+Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
+4.6 The new rent will start on
 Note 4.6: There are rules
 about how soon this date
 can be. See guidance in
 Note A at the end of this
 notice.
-Note 4.7: It is helpful for
+Day Month Year
+4.7 Payments for certain bills or charges may be included in your rent.
+The amount of the charges per tenancy period (if any) are: Note 4.7: It is helpful for
 the tenants to understand
 the breakdown of charges
 included in the rent.
@@ -211,22 +200,32 @@ internet, cable TV and
 Satellite TV.
 Follow the guidance in Note
 B at the end of this notice.
+Amount included and separately
+identified (enter 'nil' if appropriate)
+Charges Existing charge Proposed new
+charge
+Council tax £ £
+Water charges £ £
+Electricity, gas or
+other fuel £ £
+Communication
+services £ £
+Fixed service charges £ £
 
 -- 6 of 22 --
 
-Page 5
-Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
-Signed
-Landlord
-Landlord's Agent
-Print name
-Note to landlord: If you
+Signed Note to landlord: If you
 are joint landlords either
 each sign this notice using
 the additional signatures
 box below, or agree for one
 landlord to sign this notice
 on behalf of you all.
+Page 5
+Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
+Landlord
+Landlord's Agent
+Print name
 Date
 Day Month Year
 Additional signatures for joint landlords
@@ -344,9 +343,10 @@ Page 9
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
 Extra sheets
 Include the number of the section and question which is being continued.
-Signature If necessary, continue on a
+If necessary, continue on a
 separate sheet, remembering
 to sign and date it.
+Signature
 Date
 Day Month Year
 

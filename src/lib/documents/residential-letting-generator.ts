@@ -2245,6 +2245,39 @@ function buildDocumentReferenceSuffix(shared: SharedResidentialData): string {
   return segments[0] || toText(shared.current_date).replace(/-/g, '');
 }
 
+function sanitizeResidentialRenderedString(value: string): string {
+  return value
+    .replace(/â€™/g, "'")
+    .replace(/â€œ/g, '"')
+    .replace(/â€/g, '"')
+    .replace(/â€“/g, '-')
+    .replace(/â€”/g, '-')
+    .replace(/â€¦/g, '...')
+    .replace(/Ã‚Â£/g, '£')
+    .replace(/Â£/g, '£');
+}
+
+function sanitizeResidentialTemplateData<T>(value: T): T {
+  if (typeof value === 'string') {
+    return sanitizeResidentialRenderedString(value) as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeResidentialTemplateData(item)) as T;
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, entryValue]) => [
+        key,
+        sanitizeResidentialTemplateData(entryValue),
+      ])
+    ) as T;
+  }
+
+  return value;
+}
+
 function buildTemplateData(
   product: ResidentialLettingProductSku,
   shared: SharedResidentialData,
@@ -3611,14 +3644,14 @@ async function generateEnglandChecklistDocument(
 ): Promise<ResidentialGeneratedDocument> {
   const rendered = await generateDocument({
     templatePath: '_shared/standalone/checklist_standalone.hbs',
-    data: {
+    data: sanitizeResidentialTemplateData({
       jurisdiction: 'england',
       property_address: shared.property_address,
       landlord_name: shared.landlord_name,
       current_date: shared.current_date,
       case_id: toText(shared.facts.case_id),
       england_tenancy_purpose: getEnglandTenancyPurpose(shared.facts.england_tenancy_purpose),
-    },
+    }),
     outputFormat,
   });
 
@@ -3656,7 +3689,7 @@ async function generateEnglandDepositSupportDocument(
 
   const rendered = await generateDocument({
     templatePath: config.templatePath,
-    data: buildEnglandDepositSupportData(shared),
+    data: sanitizeResidentialTemplateData(buildEnglandDepositSupportData(shared)),
     outputFormat,
   });
 
@@ -4054,10 +4087,10 @@ async function generateTemplatedResidentialDocument(
   outputFormat: ResidentialDocumentOutputFormat,
   dataOverrides: Record<string, any> = {}
 ): Promise<ResidentialGeneratedDocument> {
-  const data = {
+  const data = sanitizeResidentialTemplateData({
     ...buildTemplateData(product, shared, config),
     ...dataOverrides,
-  };
+  });
   const rendered = await generateDocument({
     templatePath: config.templatePath,
     data,
@@ -4442,7 +4475,7 @@ export async function generateResidentialLettingDocuments(
 
     const rendered = await generateDocument({
       templatePath: inventoryTemplate,
-      data: inventoryData,
+      data: sanitizeResidentialTemplateData(inventoryData),
       outputFormat,
     });
 
@@ -4458,7 +4491,7 @@ export async function generateResidentialLettingDocuments(
   } else if (product === 'rent_arrears_letter') {
     const rendered = await generateDocument({
       templatePath: arrearsTemplate,
-      data: buildRentArrearsLetterData(shared),
+      data: sanitizeResidentialTemplateData(buildRentArrearsLetterData(shared)),
       outputFormat,
     });
 

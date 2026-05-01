@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { PDFDocument } from 'pdf-lib';
 
-import { fillForm3AForm, type CaseData } from '../england-official-form-fillers';
+import {
+  fillForm3AForm,
+  FORM3A_OFFICIAL_FIELD_NAMES,
+  type CaseData,
+} from '../england-official-form-fillers';
 import {
   buildEnglandForm3AGroundsText,
   getEnglandGroundLegalWording,
@@ -58,7 +62,7 @@ describe('Form 3A legal wording regression', () => {
 
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const form = pdfDoc.getForm();
-    const groundsText = form.getTextField('form3a_grounds_text').getText();
+    const groundsText = form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText();
 
     expect(groundsText).toBe(builtGroundsText);
     expect(groundsText).toContain('Ground 8 - Rent arrears');

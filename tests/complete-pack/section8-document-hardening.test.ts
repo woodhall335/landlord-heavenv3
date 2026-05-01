@@ -11,6 +11,7 @@ import {
   buildN119ReasonForPossessionText,
   buildN119StepsTakenText,
 } from '../../src/lib/england-possession/pack-drafting';
+import { FORM3A_OFFICIAL_FIELD_NAMES } from '../../src/lib/documents/england-official-form-fillers';
 import { buildEnglandSection8CompletePackFacts } from '../../src/lib/testing/fixtures/complete-pack';
 
 function buildArrearsItems(periods: number) {
@@ -153,7 +154,7 @@ describe('Section 8 document hardening', () => {
       const officialForm = officialPdf.getForm();
 
       expect(officialForm.getFields().length).toBeGreaterThan(0);
-      expect(officialForm.getTextField('form3a_tenant_names').getText()).toContain('Jane Doe');
+      expect(officialForm.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.tenantNames).getText()).toContain('Jane Doe');
     },
     { timeout: 120000 }
   );
