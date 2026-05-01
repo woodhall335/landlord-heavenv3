@@ -90,8 +90,6 @@ vi.mock('@/lib/documents/section13-generator', () => ({
       'section13_tribunal_defence_guide',
       'section13_landlord_response_template',
       'section13_legal_briefing',
-      'section13_evidence_checklist',
-      'section13_negotiation_email_template',
     ].includes(documentType)
   ),
   generateSection13PreviewableDocument: mocks.generateSection13PreviewableDocument,

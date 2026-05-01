@@ -980,6 +980,19 @@ describe('generateResidentialLettingDocuments', () => {
     expect(
       studentPack.documents.find((document) => document.document_type === 'england_student_move_out_schedule')?.html
     ).toContain('Student Move-Out and Guarantor Schedule');
+    const studentScheduleHtml =
+      studentPack.documents.find((document) => document.document_type === 'england_student_move_out_schedule')?.html ?? '';
+    expect(studentScheduleHtml).toContain('Rent and all tenant obligations');
+    expect(studentScheduleHtml).toContain('21 days');
+    expect(studentScheduleHtml).toContain('Outgoing tenant');
+    expect(studentScheduleHtml).not.toContain('rent_and_all_tenant_obligations');
+    expect(studentScheduleHtml).not.toContain('21_days');
+    expect(studentScheduleHtml).not.toContain('outgoing_tenant');
+    const studentAgreementHtml = studentPack.documents[0].html ?? '';
+    expect(studentAgreementHtml).toContain('Recorded notice window: 21 days.');
+    expect(studentAgreementHtml).toContain('Cost position: Outgoing tenant.');
+    expect(studentAgreementHtml).not.toContain('21_days');
+    expect(studentAgreementHtml).not.toContain('outgoing_tenant');
 
     expect(hmoPack.documents.map((document) => document.document_type)).toContain(
       'england_hmo_house_rules_appendix'

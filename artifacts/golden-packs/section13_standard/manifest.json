@@ -7,6 +7,7 @@
     {
       "title": "Form 4A rent increase notice",
       "description": "Official Form 4A completed from your Section 13 wizard answers.",
+      "category": "notice",
       "documentType": "section13_form_4a",
       "fileName": "section13-form-4a-golden-section13-standard-001.pdf",
       "files": {
@@ -23,6 +24,7 @@
     {
       "title": "Rent increase justification report",
       "description": "Comparable rent evidence and adjusted market analysis.",
+      "category": "evidence",
       "documentType": "section13_justification_report",
       "fileName": "section13-justification-report-golden-section13-standard-001.pdf",
       "files": {
@@ -39,6 +41,7 @@
     {
       "title": "Proof of service record",
       "description": "Service method record for the Section 13 notice.",
+      "category": "evidence",
       "documentType": "section13_proof_of_service_record",
       "fileName": "section13-proof-of-service-golden-section13-standard-001.pdf",
       "files": {
@@ -55,6 +58,7 @@
     {
       "title": "Rent increase cover letter",
       "description": "Plain-English cover letter to accompany the notice.",
+      "category": "guidance",
       "documentType": "section13_cover_letter",
       "fileName": "section13-cover-letter-golden-section13-standard-001.pdf",
       "files": {

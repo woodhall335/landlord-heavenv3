@@ -557,22 +557,6 @@ export function getSection13Documents(product: 'section13_standard' | 'section13
       category: 'Defensive',
     },
     {
-      id: 'section13-evidence-checklist',
-      title: 'Evidence Checklist',
-      description: 'Checklist for uploaded exhibits and bundle-readiness checks.',
-      icon: 'checklist',
-      pages: '1-2 pages',
-      category: 'Defensive',
-    },
-    {
-      id: 'section13-negotiation-email-template',
-      title: 'Negotiation Email Template',
-      description: 'Structured wording template for pre-hearing negotiation correspondence.',
-      icon: 'guidance',
-      pages: '1 page',
-      category: 'Defensive',
-    },
-    {
       id: 'section13-tribunal-bundle-pdf',
       title: 'Merged Tribunal Bundle PDF',
       description: 'Deterministic merged bundle with cover, index, core docs, and exhibits.',

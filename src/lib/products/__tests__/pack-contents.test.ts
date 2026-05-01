@@ -26,7 +26,7 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'validity_checklist')).toBeDefined();
         expect(items.find(i => i.key === 'compliance_declaration')).toBeDefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
-        expect(items.find(i => i.key === 'what_happens_next')).toBeDefined();
+        expect(items.find(i => i.key === 'what_happens_next')).toBeUndefined();
         expect(items.find(i => i.key === 'section21_notice')).toBeUndefined();
       });
 
@@ -153,19 +153,20 @@ describe('getPackContents', () => {
 
         expect(items[0]?.key).toBe('case_summary');
         expect(items[1]?.key).toBe('court_readiness_status');
-        expect(items[2]?.key).toBe('court_forms_guide');
+        expect(items[2]?.key).toBe('n5_claim');
         expect(items.find(i => i.key === 'section8_notice')?.title).toContain('Form 3A');
         expect(items.find(i => i.key === 'n5_claim')).toBeDefined();
         expect(items.find(i => i.key === 'n119_particulars')).toBeDefined();
         expect(items.find(i => i.key === 'arrears_schedule')).toBeDefined();
-        expect(items.find(i => i.key === 'service_record_notes')).toBeDefined();
+        expect(items.find(i => i.key === 'court_forms_guide')).toBeUndefined();
+        expect(items.find(i => i.key === 'service_record_notes')).toBeUndefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
-        expect(items.find(i => i.key === 'evidence_checklist')?.title).toBe('Evidence Required for Hearing');
+        expect(items.find(i => i.key === 'evidence_checklist')).toBeUndefined();
         expect(items.find(i => i.key === 'hearing_checklist')?.title).toBe('Hearing Preparation Guide');
-        expect(items.find(i => i.key === 'what_happens_next')).toBeDefined();
-        expect(items.find(i => i.key === 'service_instructions')).toBeUndefined();
-        expect(items.find(i => i.key === 'witness_statement')).toBeUndefined();
-        expect(items.find(i => i.key === 'court_bundle_index')).toBeUndefined();
+        expect(items.find(i => i.key === 'what_happens_next')).toBeUndefined();
+        expect(items.find(i => i.key === 'service_instructions')).toBeDefined();
+        expect(items.find(i => i.key === 'witness_statement')).toBeDefined();
+        expect(items.find(i => i.key === 'court_bundle_index')).toBeDefined();
         expect(items.find(i => i.key === 'n5b_claim')).toBeUndefined();
       });
 

@@ -1093,19 +1093,15 @@ function reorderEnglandSection8Stage2Documents(documents: EvictionPackDocument[]
   const preferredOrder = [
     'case_summary',
     'court_readiness_status',
-    'court_forms_guide',
     'n5_claim',
     'n119_particulars',
     'arrears_schedule',
     'section8_notice',
-    'service_record_notes',
     'proof_of_service',
     'witness_statement',
     'court_bundle_index',
-    'evidence_checklist',
     'hearing_checklist',
     'arrears_engagement_letter',
-    'what_happens_next',
   ];
   const byType = new Map(documents.map((document) => [document.document_type, document]));
 
@@ -3181,8 +3177,10 @@ export async function generateCompleteEvictionPack(
   // Keeping court filing guide and evidence tools only
 
   // 3. Generate evidence tools
-  const evidenceChecklist = await generateEvidenceChecklist(evictionCase, groundsData);
-  documents.push(evidenceChecklist);
+  if (jurisdiction !== 'england') {
+    const evidenceChecklist = await generateEvidenceChecklist(evictionCase, groundsData);
+    documents.push(evidenceChecklist);
+  }
 
   // Extract service details from wizard facts for proof of service
   // FIX 3 (Jan 2026): Ensure expiry_date is always populated for cross-document consistency
@@ -3731,64 +3729,6 @@ export async function generateCompleteEvictionPack(
       file_name: 'court_readiness_status.pdf',
     });
 
-    const courtFormsGuideDoc = await generateDocument({
-      templatePath: 'uk/england/templates/eviction/court_forms_guide.hbs',
-      data: stage2SummaryData,
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    documents.push({
-      title: 'Court Forms',
-      description: 'Alignment note for the claim forms so the court papers stay consistent with the served notice and service record.',
-      category: 'guidance',
-      document_type: 'court_forms_guide',
-      html: courtFormsGuideDoc.html,
-      pdf: courtFormsGuideDoc.pdf,
-      file_name: 'court_forms_guide.pdf',
-    });
-
-    const serviceRecordNotesDoc = await generateDocument({
-      templatePath: 'uk/england/templates/eviction/service_record_notes.hbs',
-      data: stage2SummaryData,
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    documents.push({
-      title: 'Service Continuity Notes',
-      description: 'Continuity note tying the served notice, Form N215, and the court claim into one file.',
-      category: 'guidance',
-      document_type: 'service_record_notes',
-      html: serviceRecordNotesDoc.html,
-      pdf: serviceRecordNotesDoc.pdf,
-      file_name: 'service_record_notes.pdf',
-    });
-
-    const evidenceChecklistDoc = await generateDocument({
-      templatePath: 'uk/england/templates/eviction/evidence_checklist_court_stage.hbs',
-      data: {
-        ...stage2SummaryData,
-        evidence_required_sections: buildStage2CourtEvidenceSections(evictionCase),
-      },
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    const existingEvidenceChecklistIndex = documents.findIndex(
-      (document) => document.document_type === 'evidence_checklist',
-    );
-    const stage2EvidenceChecklist: EvictionPackDocument = {
-      title: 'Evidence Required for Hearing',
-      description: 'Court-facing checklist of the documents and proof needed for the possession hearing.',
-      category: 'guidance',
-      document_type: 'evidence_checklist',
-      html: evidenceChecklistDoc.html,
-      pdf: evidenceChecklistDoc.pdf,
-      file_name: 'evidence_required_for_hearing.pdf',
-    };
-    if (existingEvidenceChecklistIndex >= 0) {
-      documents.splice(existingEvidenceChecklistIndex, 1, stage2EvidenceChecklist);
-    } else {
-      documents.push(stage2EvidenceChecklist);
-    }
   }
 
   const caseSummaryDoc = await generateDocument({
@@ -3806,23 +3746,6 @@ export async function generateCompleteEvictionPack(
     html: caseSummaryDoc.html,
     pdf: caseSummaryDoc.pdf,
     file_name: 'eviction_case_summary.pdf',
-  });
-
-  const whatHappensNextDoc = await generateDocument({
-    templatePath: 'uk/england/templates/eviction/what_happens_next_section_8.hbs',
-    data: stage2SummaryData,
-    isPreview: false,
-    outputFormat: 'both',
-  });
-
-  documents.push({
-    title: 'What Happens Next',
-    description: 'Clear next steps after notice and through the court stage',
-    category: 'guidance',
-    document_type: 'what_happens_next',
-    html: whatHappensNextDoc.html,
-    pdf: whatHappensNextDoc.pdf,
-    file_name: 'what_happens_next.pdf',
   });
 
   if (isEnglandSection8Case) {
@@ -4865,25 +4788,6 @@ export async function generateNoticeOnlyPack(
         }
       }
 
-      try {
-        const whatHappensNextDoc = await generateDocument({
-          templatePath: 'uk/england/templates/eviction/what_happens_next_section_8.hbs',
-          data: stage1SummaryData,
-          isPreview: false,
-          outputFormat: 'both',
-        });
-        documents.push({
-          title: 'What Happens Next',
-          description: 'What to do after the notice is served and how Stage 2 continues the same case file',
-          category: 'guidance',
-          document_type: 'what_happens_next',
-          html: whatHappensNextDoc.html,
-          pdf: whatHappensNextDoc.pdf,
-          file_name: 'what_happens_next.pdf',
-        });
-      } catch (err) {
-        console.warn('Failed to generate what happens next guidance:', err);
-      }
     }
   } else if (jurisdiction === 'scotland') {
     const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);

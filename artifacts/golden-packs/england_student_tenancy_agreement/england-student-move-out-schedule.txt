@@ -60,14 +60,14 @@ REQUIRED
 Yes
 GUARANTOR
 SCOPE
-rent_and_all_tenant_obligations
+Rent and all tenant obligations
 REPLACEMENT
 REQUEST NOTICE
 WINDOW
-21_days
+21 days
 REPLACEMENT
 COSTS
-outgoing_tenant
+Outgoing tenant
 MOVE-OUT KEYS
 AND RETURN
 PROCESS

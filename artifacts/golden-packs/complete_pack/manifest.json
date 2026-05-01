@@ -2,7 +2,7 @@
   "key": "complete_pack",
   "displayName": "Stage 2: Section 8 Court & Possession Pack",
   "outputDir": "complete_pack",
-  "documentCount": 16,
+  "documentCount": 12,
   "documents": [
     {
       "title": "Case Summary — Stage 2 Court & Possession",
@@ -35,24 +35,6 @@
       },
       "extraction": {
         "pageCount": 2,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
-      }
-    },
-    {
-      "title": "Court Forms",
-      "description": "Alignment note for the claim forms so the court papers stay consistent with the served notice and service record.",
-      "category": "guidance",
-      "documentType": "court_forms_guide",
-      "fileName": "court_forms_guide.pdf",
-      "files": {
-        "pdf": "complete_pack/court_forms_guide.pdf",
-        "text": "complete_pack/court_forms_guide.txt",
-        "html": "complete_pack/court_forms_guide.html"
-      },
-      "extraction": {
-        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -129,24 +111,6 @@
       }
     },
     {
-      "title": "Service Continuity Notes",
-      "description": "Continuity note tying the served notice, Form N215, and the court claim into one file.",
-      "category": "guidance",
-      "documentType": "service_record_notes",
-      "fileName": "service_record_notes.pdf",
-      "files": {
-        "pdf": "complete_pack/service_record_notes.pdf",
-        "text": "complete_pack/service_record_notes.txt",
-        "html": "complete_pack/service_record_notes.html"
-      },
-      "extraction": {
-        "pageCount": 1,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
-      }
-    },
-    {
       "title": "Certificate of Service (Form N215)",
       "description": "Official editable N215 certificate of service for the notice in this pack",
       "category": "evidence_tool",
@@ -201,24 +165,6 @@
       }
     },
     {
-      "title": "Evidence Required for Hearing",
-      "description": "Court-facing checklist of the documents and proof needed for the possession hearing.",
-      "category": "guidance",
-      "documentType": "evidence_checklist",
-      "fileName": "evidence_required_for_hearing.pdf",
-      "files": {
-        "pdf": "complete_pack/evidence_required_for_hearing.pdf",
-        "text": "complete_pack/evidence_required_for_hearing.txt",
-        "html": "complete_pack/evidence_required_for_hearing.html"
-      },
-      "extraction": {
-        "pageCount": 1,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
-      }
-    },
-    {
       "title": "Hearing Preparation Guide",
       "description": "Court-facing hearing guide covering validity, service, grounds, arrears, and the documents to bring.",
       "category": "guidance",
@@ -249,24 +195,6 @@
       },
       "extraction": {
         "pageCount": 2,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
-      }
-    },
-    {
-      "title": "What Happens Next",
-      "description": "Clear next steps after notice and through the court stage",
-      "category": "guidance",
-      "documentType": "what_happens_next",
-      "fileName": "what_happens_next.pdf",
-      "files": {
-        "pdf": "complete_pack/what_happens_next.pdf",
-        "text": "complete_pack/what_happens_next.txt",
-        "html": "complete_pack/what_happens_next.html"
-      },
-      "extraction": {
-        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

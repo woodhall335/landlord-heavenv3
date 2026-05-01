@@ -176,7 +176,7 @@ function buildAutomatedReply(params: {
       return [
         'For tribunal readiness, keep the generated Form 4A, the justification report, the proof of service record, and your uploaded evidence in one consistent bundle.',
         `You currently have ${evidenceUploadCount} uploaded evidence file${evidenceUploadCount === 1 ? '' : 's'}.`,
-        'The checklist is designed around EPC, safety certificates where relevant, photos, local housing allowance evidence, and any negotiation correspondence.',
+        'Focus on evidence that supports the proposed rent and service record, such as EPC or safety material where relevant, clear property photos, market comparables, and any tenant correspondence.',
       ].join('\n\n');
 
     case 'bundle_steps':
@@ -195,7 +195,7 @@ function buildAutomatedReply(params: {
 
     case 'negotiation_guidance':
       return [
-        'Use the negotiation email template to stay consistent with the generated report rather than introducing new rent figures or new evidence claims.',
+        'If you contact the tenant before any hearing, keep the wording consistent with the generated report rather than introducing new rent figures or unsupported evidence claims.',
         `The safe anchor is the existing summary: ${snapshot?.justificationSummaryText || 'No justification summary is available yet.'}`,
         'You can explain the comparable position and invite the tenant to share their own evidence, but avoid predicting the tribunal outcome.',
       ].join('\n\n');

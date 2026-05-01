@@ -93,7 +93,6 @@ const LIKELY_MERGE_DOCS = new Set([
   'service_record_notes',
   'evidence_checklist',
   'what_happens_next',
-  'section13_negotiation_email_template',
 ]);
 
 const LIKELY_REMOVE_DOCS = new Set([

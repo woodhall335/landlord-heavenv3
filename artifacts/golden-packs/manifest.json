@@ -1,16 +1,17 @@
 {
-  "generatedAt": "2026-05-01T14:20:55.952Z",
+  "generatedAt": "2026-05-01T18:02:23.915Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
       "key": "section13_defensive",
       "displayName": "Challenge-Ready Section 13 Defence Pack",
       "outputDir": "section13_defensive",
-      "documentCount": 12,
+      "documentCount": 10,
       "documents": [
         {
           "title": "Form 4A rent increase notice",
           "description": "Official Form 4A completed from your Section 13 wizard answers.",
+          "category": "notice",
           "documentType": "section13_form_4a",
           "fileName": "section13-form-4a-golden-section13-defence-001.pdf",
           "files": {
@@ -27,6 +28,7 @@
         {
           "title": "Rent increase justification report",
           "description": "Comparable rent evidence and adjusted market analysis.",
+          "category": "evidence",
           "documentType": "section13_justification_report",
           "fileName": "section13-justification-report-golden-section13-defence-001.pdf",
           "files": {
@@ -43,6 +45,7 @@
         {
           "title": "Tribunal Argument Summary",
           "description": "One-page case-specific summary of the landlord position and consistent argument points.",
+          "category": "guidance",
           "documentType": "section13_tribunal_argument_summary",
           "fileName": "section13-tribunal-argument-summary-golden-section13-defence-001.pdf",
           "files": {
@@ -59,6 +62,7 @@
         {
           "title": "Proof of service record",
           "description": "Service method record for the Section 13 notice.",
+          "category": "evidence",
           "documentType": "section13_proof_of_service_record",
           "fileName": "section13-proof-of-service-golden-section13-defence-001.pdf",
           "files": {
@@ -75,6 +79,7 @@
         {
           "title": "Rent increase cover letter",
           "description": "Plain-English cover letter to accompany the notice.",
+          "category": "guidance",
           "documentType": "section13_cover_letter",
           "fileName": "section13-cover-letter-golden-section13-defence-001.pdf",
           "files": {
@@ -91,6 +96,7 @@
         {
           "title": "Tribunal defence guide",
           "description": "Step-by-step preparation guide for a challenged rent increase.",
+          "category": "guidance",
           "documentType": "section13_tribunal_defence_guide",
           "fileName": "section13-tribunal-defence-guide-golden-section13-defence-001.pdf",
           "files": {
@@ -107,6 +113,7 @@
         {
           "title": "Landlord response template",
           "description": "Template response aligned to the current rent determination process.",
+          "category": "court_form",
           "documentType": "section13_landlord_response_template",
           "fileName": "section13-landlord-response-template-golden-section13-defence-001.pdf",
           "files": {
@@ -123,6 +130,7 @@
         {
           "title": "Tribunal legal briefing",
           "description": "Short legal and practical hearing briefing.",
+          "category": "guidance",
           "documentType": "section13_legal_briefing",
           "fileName": "section13-legal-briefing-golden-section13-defence-001.pdf",
           "files": {
@@ -137,40 +145,9 @@
           }
         },
         {
-          "title": "Evidence checklist",
-          "description": "Checklist of the evidence to prepare or upload.",
-          "documentType": "section13_evidence_checklist",
-          "fileName": "section13-evidence-checklist-golden-section13-defence-001.pdf",
-          "files": {
-            "pdf": "section13_defensive/section13-evidence-checklist-golden-section13-defence-001.pdf",
-            "text": "section13_defensive/section13-evidence-checklist-golden-section13-defence-001.txt"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Negotiation email template",
-          "description": "Landlord-side negotiation wording to send to the tenant before any hearing.",
-          "documentType": "section13_negotiation_email_template",
-          "fileName": "section13-negotiation-email-template-golden-section13-defence-001.pdf",
-          "files": {
-            "pdf": "section13_defensive/section13-negotiation-email-template-golden-section13-defence-001.pdf",
-            "text": "section13_defensive/section13-negotiation-email-template-golden-section13-defence-001.txt"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
           "title": "Merged tribunal bundle PDF",
           "description": "Indexed hearing bundle with exhibits and supporting documents.",
+          "category": "evidence",
           "documentType": "section13_tribunal_bundle",
           "fileName": "section13-tribunal-bundle-golden-section13-defence-001.pdf",
           "files": {
@@ -187,6 +164,7 @@
         {
           "title": "Tribunal bundle ZIP",
           "description": "ZIP export containing the merged bundle and all supporting files.",
+          "category": "evidence",
           "documentType": "section13_tribunal_bundle_zip",
           "fileName": "section13-tribunal-bundle-golden-section13-defence-001.zip",
           "files": {
@@ -806,7 +784,7 @@
       "key": "notice_only",
       "displayName": "Stage 1: Section 8 Notice & Service Pack",
       "outputDir": "notice_only",
-      "documentCount": 8,
+      "documentCount": 7,
       "documents": [
         {
           "title": "Case Summary — Stage 1 Notice & Service",
@@ -933,24 +911,6 @@
             "isMetadataOnly": false,
             "method": "pdf_parse"
           }
-        },
-        {
-          "title": "What Happens Next",
-          "description": "What to do after the notice is served and how Stage 2 continues the same case file",
-          "category": "guidance",
-          "documentType": "what_happens_next",
-          "fileName": "what_happens_next.pdf",
-          "files": {
-            "pdf": "notice_only/what_happens_next.pdf",
-            "text": "notice_only/what_happens_next.txt",
-            "html": "notice_only/what_happens_next.html"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
         }
       ]
     },
@@ -958,7 +918,7 @@
       "key": "complete_pack",
       "displayName": "Stage 2: Section 8 Court & Possession Pack",
       "outputDir": "complete_pack",
-      "documentCount": 16,
+      "documentCount": 12,
       "documents": [
         {
           "title": "Case Summary — Stage 2 Court & Possession",
@@ -991,24 +951,6 @@
           },
           "extraction": {
             "pageCount": 2,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Court Forms",
-          "description": "Alignment note for the claim forms so the court papers stay consistent with the served notice and service record.",
-          "category": "guidance",
-          "documentType": "court_forms_guide",
-          "fileName": "court_forms_guide.pdf",
-          "files": {
-            "pdf": "complete_pack/court_forms_guide.pdf",
-            "text": "complete_pack/court_forms_guide.txt",
-            "html": "complete_pack/court_forms_guide.html"
-          },
-          "extraction": {
-            "pageCount": 1,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1085,24 +1027,6 @@
           }
         },
         {
-          "title": "Service Continuity Notes",
-          "description": "Continuity note tying the served notice, Form N215, and the court claim into one file.",
-          "category": "guidance",
-          "documentType": "service_record_notes",
-          "fileName": "service_record_notes.pdf",
-          "files": {
-            "pdf": "complete_pack/service_record_notes.pdf",
-            "text": "complete_pack/service_record_notes.txt",
-            "html": "complete_pack/service_record_notes.html"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
           "title": "Certificate of Service (Form N215)",
           "description": "Official editable N215 certificate of service for the notice in this pack",
           "category": "evidence_tool",
@@ -1157,24 +1081,6 @@
           }
         },
         {
-          "title": "Evidence Required for Hearing",
-          "description": "Court-facing checklist of the documents and proof needed for the possession hearing.",
-          "category": "guidance",
-          "documentType": "evidence_checklist",
-          "fileName": "evidence_required_for_hearing.pdf",
-          "files": {
-            "pdf": "complete_pack/evidence_required_for_hearing.pdf",
-            "text": "complete_pack/evidence_required_for_hearing.txt",
-            "html": "complete_pack/evidence_required_for_hearing.html"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
           "title": "Hearing Preparation Guide",
           "description": "Court-facing hearing guide covering validity, service, grounds, arrears, and the documents to bring.",
           "category": "guidance",
@@ -1211,24 +1117,6 @@
           }
         },
         {
-          "title": "What Happens Next",
-          "description": "Clear next steps after notice and through the court stage",
-          "category": "guidance",
-          "documentType": "what_happens_next",
-          "fileName": "what_happens_next.pdf",
-          "files": {
-            "pdf": "complete_pack/what_happens_next.pdf",
-            "text": "complete_pack/what_happens_next.txt",
-            "html": "complete_pack/what_happens_next.html"
-          },
-          "extraction": {
-            "pageCount": 1,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
           "title": "Service Instructions",
           "description": "Service playbook for the Form 3A notice and court file",
           "category": "guidance",
@@ -1257,6 +1145,7 @@
         {
           "title": "Form 4A rent increase notice",
           "description": "Official Form 4A completed from your Section 13 wizard answers.",
+          "category": "notice",
           "documentType": "section13_form_4a",
           "fileName": "section13-form-4a-golden-section13-standard-001.pdf",
           "files": {
@@ -1273,6 +1162,7 @@
         {
           "title": "Rent increase justification report",
           "description": "Comparable rent evidence and adjusted market analysis.",
+          "category": "evidence",
           "documentType": "section13_justification_report",
           "fileName": "section13-justification-report-golden-section13-standard-001.pdf",
           "files": {
@@ -1289,6 +1179,7 @@
         {
           "title": "Proof of service record",
           "description": "Service method record for the Section 13 notice.",
+          "category": "evidence",
           "documentType": "section13_proof_of_service_record",
           "fileName": "section13-proof-of-service-golden-section13-standard-001.pdf",
           "files": {
@@ -1305,6 +1196,7 @@
         {
           "title": "Rent increase cover letter",
           "description": "Plain-English cover letter to accompany the notice.",
+          "category": "guidance",
           "documentType": "section13_cover_letter",
           "fileName": "section13-cover-letter-golden-section13-standard-001.pdf",
           "files": {

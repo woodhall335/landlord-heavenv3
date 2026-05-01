@@ -271,6 +271,7 @@ export interface Section13EvidenceFile {
 export interface Section13PersistableDocument {
   title: string;
   description?: string;
+  category?: string;
   document_type: string;
   file_name: string;
   pdf: Buffer;
@@ -305,8 +306,6 @@ export const SECTION13_DEFENSIVE_DOCUMENT_TYPES = [
   'section13_tribunal_defence_guide',
   'section13_landlord_response_template',
   'section13_legal_briefing',
-  'section13_evidence_checklist',
-  'section13_negotiation_email_template',
 ] as const;
 
 export const SECTION13_PREVIEWABLE_DOCUMENT_TYPES = SECTION13_DEFENSIVE_DOCUMENT_TYPES;
@@ -328,8 +327,6 @@ export const SECTION13_BUNDLE_SOURCE_DOCUMENT_TYPES = [
   'section13_tribunal_defence_guide',
   'section13_landlord_response_template',
   'section13_legal_briefing',
-  'section13_evidence_checklist',
-  'section13_negotiation_email_template',
 ] as const;
 
 export function isSection13PreviewableDocumentType(
@@ -2043,17 +2040,9 @@ async function mergePdfArtifacts(
 
   for (const doc of generatedDocs) {
     const logicalSection =
-      doc.document_type === 'section13_form_4a'
-        ? 'core_notice'
-        : doc.document_type === 'section13_negotiation_email_template'
-          ? 'correspondence'
-          : 'supporting_report';
+      doc.document_type === 'section13_form_4a' ? 'core_notice' : 'supporting_report';
     const assetType =
-      doc.document_type === 'section13_form_4a'
-        ? 'form'
-        : doc.document_type === 'section13_negotiation_email_template'
-          ? 'correspondence'
-          : 'report';
+      doc.document_type === 'section13_form_4a' ? 'form' : 'report';
     await addPdf(doc.title, doc.pdf, logicalSection, assetType, 'generated_document', true, {
       documentType: doc.document_type,
       sourceDocumentId: doc.sourceDocumentId || null,
@@ -2204,6 +2193,7 @@ export async function generateSection13PreviewableDocument(params: {
       return {
         title: 'Form 4A rent increase notice',
         description: 'Official Form 4A completed from your Section 13 wizard answers.',
+        category: 'notice',
         document_type: 'section13_form_4a',
         file_name: `section13-form-4a-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
@@ -2218,6 +2208,7 @@ export async function generateSection13PreviewableDocument(params: {
       return {
         title: 'Rent increase justification report',
         description: 'Comparable rent evidence and adjusted market analysis.',
+        category: 'evidence',
         document_type: 'section13_justification_report',
         file_name: `section13-justification-report-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
@@ -2247,6 +2238,7 @@ export async function generateSection13PreviewableDocument(params: {
       return {
         title: 'Proof of service record',
         description: 'Service method record for the Section 13 notice.',
+        category: 'evidence',
         document_type: 'section13_proof_of_service_record',
         file_name: `section13-proof-of-service-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
@@ -2257,6 +2249,7 @@ export async function generateSection13PreviewableDocument(params: {
       return {
         title: 'Rent increase cover letter',
         description: 'Plain-English cover letter to accompany the notice.',
+        category: 'guidance',
         document_type: 'section13_cover_letter',
         file_name: `section13-cover-letter-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
@@ -2272,6 +2265,7 @@ export async function generateSection13PreviewableDocument(params: {
         title: 'Tribunal Argument Summary',
         description:
           'One-page case-specific summary of the landlord position and consistent argument points.',
+        category: 'guidance',
         document_type: 'section13_tribunal_argument_summary',
         file_name: `section13-tribunal-argument-summary-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
@@ -2282,6 +2276,7 @@ export async function generateSection13PreviewableDocument(params: {
       return {
         title: 'Tribunal defence guide',
         description: 'Step-by-step preparation guide for a challenged rent increase.',
+        category: 'guidance',
         document_type: 'section13_tribunal_defence_guide',
         file_name: `section13-tribunal-defence-guide-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
@@ -2292,6 +2287,7 @@ export async function generateSection13PreviewableDocument(params: {
       return {
         title: 'Landlord response template',
         description: 'Template response aligned to the current rent determination process.',
+        category: 'court_form',
         document_type: 'section13_landlord_response_template',
         file_name: `section13-landlord-response-template-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
@@ -2302,31 +2298,9 @@ export async function generateSection13PreviewableDocument(params: {
       return {
         title: 'Tribunal legal briefing',
         description: 'Short legal and practical hearing briefing.',
+        category: 'guidance',
         document_type: 'section13_legal_briefing',
         file_name: `section13-legal-briefing-${caseId}.pdf`,
-        pdf: Buffer.from(pdfBytes),
-      };
-    }
-    case 'section13_evidence_checklist': {
-      const pdfBytes = await buildEvidenceChecklistPdf(
-        resolvedState,
-        evidenceFiles.map((item) => item.upload)
-      );
-      return {
-        title: 'Evidence checklist',
-        description: 'Checklist of the evidence to prepare or upload.',
-        document_type: 'section13_evidence_checklist',
-        file_name: `section13-evidence-checklist-${caseId}.pdf`,
-        pdf: Buffer.from(pdfBytes),
-      };
-    }
-    case 'section13_negotiation_email_template': {
-      const pdfBytes = await buildNegotiationEmailTemplatePdf(resolvedState);
-      return {
-        title: 'Negotiation email template',
-        description: 'Landlord-side negotiation wording to send to the tenant before any hearing.',
-        document_type: 'section13_negotiation_email_template',
-        file_name: `section13-negotiation-email-template-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
       };
     }
@@ -2391,15 +2365,11 @@ async function buildSection13BundleDocuments(params: {
       logicalSection:
         doc.document_type === 'section13_form_4a'
           ? ('core_notice' as const)
-          : doc.document_type === 'section13_negotiation_email_template'
-            ? ('correspondence' as const)
-            : ('supporting_report' as const),
+          : ('supporting_report' as const),
       assetType:
         doc.document_type === 'section13_form_4a'
           ? ('form' as const)
-          : doc.document_type === 'section13_negotiation_email_template'
-            ? ('correspondence' as const)
-            : ('report' as const),
+          : ('report' as const),
       sourceKind: 'generated_document' as const,
       includeInMerged: true,
       status: 'generated' as const,
@@ -2450,6 +2420,7 @@ async function buildSection13BundleDocuments(params: {
   const bundlePdfDocument: Section13PersistableDocument = {
     title: 'Merged tribunal bundle PDF',
     description: 'Indexed hearing bundle with exhibits and supporting documents.',
+    category: 'evidence',
     document_type: 'section13_tribunal_bundle',
     file_name: `section13-tribunal-bundle-${caseId}.pdf`,
     pdf: Buffer.from(bundleBytes),
@@ -2459,6 +2430,7 @@ async function buildSection13BundleDocuments(params: {
   const zipDocument: Section13PersistableDocument = {
     title: 'Tribunal bundle ZIP',
     description: 'ZIP export containing the merged bundle and all supporting files.',
+    category: 'evidence',
     document_type: 'section13_tribunal_bundle_zip',
     file_name: `section13-tribunal-bundle-${caseId}.zip`,
     pdf: Buffer.from(zipBytes),

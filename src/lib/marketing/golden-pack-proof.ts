@@ -159,7 +159,6 @@ const PREVIEW_HINTS: Partial<Record<GoldenPackKey, Record<string, string[]>>> = 
     section13_form_4a: ['form 4a'],
     section13_justification_report: ['justification report'],
     section13_cover_letter: ['cover letter'],
-    section13_evidence_checklist: ['evidence checklist'],
     section13_tribunal_argument_summary: ['tribunal argument summary'],
   },
 };

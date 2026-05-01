@@ -352,6 +352,37 @@ function formatPremiumOption(value: unknown): string {
   return PREMIUM_VALUE_LABELS[text] || formatSelectionValue(text);
 }
 
+const STUDENT_GUARANTOR_SCOPE_LABELS: Record<string, string> = {
+  rent_only: 'Rent only',
+  rent_and_all_tenant_obligations: 'Rent and all tenant obligations',
+};
+
+const STUDENT_REPLACEMENT_NOTICE_WINDOW_LABELS: Record<string, string> = {
+  '7_days': '7 days',
+  '14_days': '14 days',
+  '21_days': '21 days',
+  '28_days': '28 days',
+};
+
+const STUDENT_REPLACEMENT_COST_LABELS: Record<string, string> = {
+  outgoing_tenant: 'Outgoing tenant',
+  incoming_tenant: 'Incoming tenant',
+  shared_between_tenants: 'Shared between tenants',
+  landlord_absorbs_cost: 'Landlord absorbs cost',
+};
+
+function formatStudentGuarantorScope(value: unknown): string {
+  return formatSelectionValue(value, STUDENT_GUARANTOR_SCOPE_LABELS);
+}
+
+function formatStudentReplacementNoticeWindow(value: unknown): string {
+  return formatSelectionValue(value, STUDENT_REPLACEMENT_NOTICE_WINDOW_LABELS);
+}
+
+function formatStudentReplacementCosts(value: unknown): string {
+  return formatSelectionValue(value, STUDENT_REPLACEMENT_COST_LABELS);
+}
+
 function buildLabeledObservation(label: string, value: unknown): string | undefined {
   const text = toText(value);
   return text ? `${label}: ${text}` : undefined;
@@ -3032,7 +3063,7 @@ function buildEnglandAssuredSections(
               ? [
                   'This student tenancy route records sharer arrangements, guarantor expectations, and end-of-term return standards for the tenancy.',
                   isTruthySelection(facts.student_replacement_procedure)
-                    ? `A student tenant replacement process is intended to apply if the landlord agrees a suitable replacement and any required documents are completed. Recorded notice window: ${firstNonEmpty(facts.replacement_notice_window, 'Not stated')}. Cost position: ${firstNonEmpty(facts.replacement_cost_responsibility, 'Not stated')}.`
+                    ? `A student tenant replacement process is intended to apply if the landlord agrees a suitable replacement and any required documents are completed. Recorded notice window: ${formatStudentReplacementNoticeWindow(facts.replacement_notice_window)}. Cost position: ${formatStudentReplacementCosts(facts.replacement_cost_responsibility)}.`
                     : '',
                   toText(facts.student_end_of_term_expectations),
                   firstNonEmpty(
@@ -3059,15 +3090,15 @@ function buildEnglandAssuredSections(
       rows:
         product === 'england_student_tenancy_agreement'
           ? cleanRows([
-              { label: 'All tenants full-time students', value: yesNoText(facts.all_tenants_full_time_students) },
-              { label: 'Joint tenancy', value: yesNoText(facts.joint_tenancy) },
-              { label: 'Guarantor required', value: yesNoText(facts.guarantor_required) },
-              { label: 'Guarantor scope', value: facts.student_guarantor_scope },
-              { label: 'Replacement request notice window', value: facts.replacement_notice_window },
-              { label: 'Replacement costs', value: facts.replacement_cost_responsibility },
-              { label: 'Vacation / non-occupation notes', value: facts.vacation_period_notes },
-              { label: 'Move-out keys and return process', value: facts.student_move_out_keys_process },
-              { label: 'Cleaning and room hand-back standard', value: facts.student_cleaning_standard },
+	              { label: 'All tenants full-time students', value: yesNoText(facts.all_tenants_full_time_students) },
+	              { label: 'Joint tenancy', value: yesNoText(facts.joint_tenancy) },
+	              { label: 'Guarantor required', value: yesNoText(facts.guarantor_required) },
+	              { label: 'Guarantor scope', value: formatStudentGuarantorScope(facts.student_guarantor_scope) },
+	              { label: 'Replacement request notice window', value: formatStudentReplacementNoticeWindow(facts.replacement_notice_window) },
+	              { label: 'Replacement costs', value: formatStudentReplacementCosts(facts.replacement_cost_responsibility) },
+	              { label: 'Vacation / non-occupation notes', value: facts.vacation_period_notes },
+	              { label: 'Move-out keys and return process', value: facts.student_move_out_keys_process },
+	              { label: 'Cleaning and room hand-back standard', value: facts.student_cleaning_standard },
             ])
           : product === 'england_premium_tenancy_agreement'
             ? cleanRows([
@@ -3453,16 +3484,16 @@ function buildEnglandStudentMoveOutScheduleSections(shared: SharedResidentialDat
   const facts = shared.facts;
 
   return cleanTemplateSections([
-    createSection({
-      heading: 'Student Move-Out and Guarantor Schedule',
-      rows: [
-        { label: 'Guarantor required', value: yesNoText(facts.guarantor_required) },
-        { label: 'Guarantor scope', value: facts.student_guarantor_scope },
-        { label: 'Replacement request notice window', value: facts.replacement_notice_window },
-        { label: 'Replacement costs', value: facts.replacement_cost_responsibility },
-        { label: 'Move-out keys and return process', value: facts.student_move_out_keys_process },
-        { label: 'Cleaning and room hand-back standard', value: facts.student_cleaning_standard },
-        { label: 'End-of-term return standard', value: facts.student_end_of_term_expectations },
+	    createSection({
+	      heading: 'Student Move-Out and Guarantor Schedule',
+	      rows: [
+	        { label: 'Guarantor required', value: yesNoText(facts.guarantor_required) },
+	        { label: 'Guarantor scope', value: formatStudentGuarantorScope(facts.student_guarantor_scope) },
+	        { label: 'Replacement request notice window', value: formatStudentReplacementNoticeWindow(facts.replacement_notice_window) },
+	        { label: 'Replacement costs', value: formatStudentReplacementCosts(facts.replacement_cost_responsibility) },
+	        { label: 'Move-out keys and return process', value: facts.student_move_out_keys_process },
+	        { label: 'Cleaning and room hand-back standard', value: facts.student_cleaning_standard },
+	        { label: 'End-of-term return standard', value: facts.student_end_of_term_expectations },
       ],
     }),
   ]);

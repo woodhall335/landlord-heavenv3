@@ -91,20 +91,6 @@ function getEnglandSection13Contents(product: string): PackItem[] {
       required: true,
     },
     {
-      key: 'section13_evidence_checklist',
-      title: 'Evidence checklist',
-      description: 'Checklist of the evidence to print or upload for a tribunal-ready bundle.',
-      category: 'Checklists',
-      required: true,
-    },
-    {
-      key: 'section13_negotiation_email_template',
-      title: 'Negotiation email template',
-      description: 'Template wording to open discussions before a tribunal challenge.',
-      category: 'Guidance',
-      required: true,
-    },
-    {
       key: 'section13_tribunal_bundle',
       title: 'Merged tribunal bundle PDF',
       description: 'Indexed hearing bundle with exhibits, page numbers, and supporting documents.',
@@ -541,14 +527,6 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
     });
   }
 
-  items.push({
-    key: 'what_happens_next',
-    title: 'What Happens Next',
-    description: 'Next-step guide covering service, notice expiry, and the Stage 2 court handoff.',
-    category: 'Guidance',
-    required: true,
-  });
-
   return items;
 }
 
@@ -567,13 +545,6 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       title: 'Court Readiness Status',
       description: 'Decision-engine status page showing whether the file is ready for issue, carries risk, or should not yet be issued.',
       category: 'Checklists',
-      required: true,
-    },
-    {
-      key: 'court_forms_guide',
-      title: 'Court Forms',
-      description: 'Alignment note for the court forms so the claim papers stay consistent with the notice and service record.',
-      category: 'Guidance',
       required: true,
     },
     {
@@ -605,13 +576,6 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       required: true,
     },
     {
-      key: 'service_record_notes',
-      title: 'Service Continuity Notes',
-      description: `Continuity note tying the served ${ENGLAND_SECTION8_NOTICE_NAME} to Form N215 and the claim file.`,
-      category: 'Guidance',
-      required: true,
-    },
-    {
       key: 'proof_of_service',
       title: 'Certificate of Service (Form N215)',
       description: `Official editable Form N215 certificate of service for how and when the ${ENGLAND_SECTION8_NOTICE_NAME} was served.`,
@@ -633,13 +597,6 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       required: true,
     },
     {
-      key: 'evidence_checklist',
-      title: 'Evidence Required for Hearing',
-      description: 'Court-facing checklist of the documents and proof needed for the possession hearing.',
-      category: 'Checklists',
-      required: true,
-    },
-    {
       key: 'hearing_checklist',
       title: 'Hearing Preparation Guide',
       description: 'Practical hearing guide covering the main questions, failure points, and documents to bring.',
@@ -652,13 +609,6 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       description: 'Pre-action arrears engagement letter to show reasonable attempts to resolve the rent debt before issue.',
       category: 'Guidance',
       required: false,
-    },
-    {
-      key: 'what_happens_next',
-      title: 'What Happens Next',
-      description: 'Next-step guide covering issue, hearing, possession, and enforcement continuity.',
-      category: 'Guidance',
-      required: true,
     },
     {
       key: 'service_instructions',

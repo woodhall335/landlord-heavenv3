@@ -2,7 +2,7 @@
   "key": "notice_only",
   "displayName": "Stage 1: Section 8 Notice & Service Pack",
   "outputDir": "notice_only",
-  "documentCount": 8,
+  "documentCount": 7,
   "documents": [
     {
       "title": "Case Summary — Stage 1 Notice & Service",
@@ -125,24 +125,6 @@
       },
       "extraction": {
         "pageCount": 2,
-        "isLowText": false,
-        "isMetadataOnly": false,
-        "method": "pdf_parse"
-      }
-    },
-    {
-      "title": "What Happens Next",
-      "description": "What to do after the notice is served and how Stage 2 continues the same case file",
-      "category": "guidance",
-      "documentType": "what_happens_next",
-      "fileName": "what_happens_next.pdf",
-      "files": {
-        "pdf": "notice_only/what_happens_next.pdf",
-        "text": "notice_only/what_happens_next.txt",
-        "html": "notice_only/what_happens_next.html"
-      },
-      "extraction": {
-        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

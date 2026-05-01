@@ -207,14 +207,14 @@ REQUIRED
 Yes
 GUARANTOR
 SCOPE
-rent_and_all_tenant_obligations
+Rent and all tenant obligations
 REPLACEMENT
 REQUEST NOTICE
 WINDOW
-21_days
+21 days
 REPLACEMENT
 COSTS
-outgoing_tenant
+Outgoing tenant
 MOVE-OUT KEYS
 AND RETURN
 PROCESS
@@ -226,7 +226,7 @@ Professional-clean standard for kitchen and bathrooms.
 This student tenancy route records sharer arrangements, guarantor expectations, and end-of-term return
 standards for the tenancy.
 A student tenant replacement process is intended to apply if the landlord agrees a suitable replacement and
-any required documents are completed. Recorded notice window: 21_days. Cost position: outgoing_tenant.
+any required documents are completed. Recorded notice window: 21 days. Cost position: Outgoing tenant.
 Rooms to be returned clean and with all keys.
 Cleaning and room hand-back standard: Professional-clean standard for kitchen and bathrooms.
 9. Supporting Schedules and File Documents

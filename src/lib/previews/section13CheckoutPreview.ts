@@ -7,8 +7,6 @@ const SECTION13_THUMBNAIL_DOCUMENT_TYPES_BY_ID: Record<string, string> = {
   'section13-tribunal-defence-guide': 'section13_tribunal_defence_guide',
   'section13-landlord-response-template': 'section13_landlord_response_template',
   'section13-legal-briefing': 'section13_legal_briefing',
-  'section13-evidence-checklist': 'section13_evidence_checklist',
-  'section13-negotiation-email-template': 'section13_negotiation_email_template',
 };
 
 function getSection13CheckoutDocumentType(documentId: string): string | undefined {

@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-05-01T14:20:55.952Z
+Generated: 2026-05-01T18:02:23.915Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):
@@ -12,7 +12,7 @@ Suggested scoring rubric (/10):
 
 ## Challenge-Ready Section 13 Defence Pack
 Folder: section13_defensive
-Documents: 12
+Documents: 10
 Score: 
 What works: 
 Issues found: 
@@ -27,8 +27,6 @@ Documents:
 - Tribunal defence guide [section13_tribunal_defence_guide]
 - Landlord response template [section13_landlord_response_template]
 - Tribunal legal briefing [section13_legal_briefing]
-- Evidence checklist [section13_evidence_checklist]
-- Negotiation email template [section13_negotiation_email_template]
 - Merged tribunal bundle PDF [section13_tribunal_bundle]
 - Tribunal bundle ZIP [section13_tribunal_bundle_zip]
 
@@ -106,7 +104,7 @@ Documents:
 
 ## Stage 1: Section 8 Notice & Service Pack
 Folder: notice_only
-Documents: 8
+Documents: 7
 Score: 
 What works: 
 Issues found: 
@@ -120,11 +118,10 @@ Documents:
 - Pre-Service Compliance Declaration [compliance_declaration]
 - Certificate of Service (Form N215) [proof_of_service]
 - Rent Schedule / Arrears Statement [arrears_schedule]
-- What Happens Next [what_happens_next]
 
 ## Stage 2: Section 8 Court & Possession Pack
 Folder: complete_pack
-Documents: 16
+Documents: 12
 Score: 
 What works: 
 Issues found: 
@@ -133,19 +130,15 @@ What would move this to 9/10:
 Documents:
 - Case Summary — Stage 2 Court & Possession [case_summary]
 - Court Readiness Status [court_readiness_status]
-- Court Forms [court_forms_guide]
 - Form N5 - Claim for Possession [n5_claim]
 - Form N119 - Particulars of Claim [n119_particulars]
 - Schedule of Arrears [arrears_schedule]
 - Form 3A notice [section8_notice]
-- Service Continuity Notes [service_record_notes]
 - Certificate of Service (Form N215) [proof_of_service]
 - Witness Statement [witness_statement]
 - Court Bundle Index [court_bundle_index]
-- Evidence Required for Hearing [evidence_checklist]
 - Hearing Preparation Guide [hearing_checklist]
 - Arrears Engagement Letter [arrears_engagement_letter]
-- What Happens Next [what_happens_next]
 - Service Instructions [service_instructions]
 
 ## Standard Section 13 Pack
