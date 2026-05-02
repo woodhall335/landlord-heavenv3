@@ -89,6 +89,21 @@ describe('Regenerate Endpoint Business Logic', () => {
       const previewsToKeep = previewDocs.filter((d) => d.is_preview);
       expect(previewsToKeep).toHaveLength(1);
     });
+
+    it('upgraded cases regenerate the Complete Pack rather than preserving a separate Stage 1 bundle', () => {
+      const activePaidOrder = {
+        product_type: 'complete_pack',
+        metadata: {
+          upgrade_kind: 'post_purchase_product_upgrade',
+          upgrade_from_product: 'notice_only',
+        },
+      };
+
+      const expectedPackAfterRegeneration = activePaidOrder.product_type;
+
+      expect(expectedPackAfterRegeneration).toBe('complete_pack');
+      expect(activePaidOrder.metadata.upgrade_from_product).toBe('notice_only');
+    });
   });
 
   describe('Expired edit window', () => {

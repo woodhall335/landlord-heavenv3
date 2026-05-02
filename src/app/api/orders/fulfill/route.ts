@@ -21,11 +21,30 @@ import {
   isMetadataColumnMissingError,
   setMetadataColumnExists,
 } from '@/lib/payments/safe-order-metadata';
+import { selectActiveCaseOrder } from '@/lib/payments/active-order';
 import {
   sanitizeComplianceIssues,
   type ComplianceTimingBlockResponse,
   type FulfillOrderResponse,
 } from '@/lib/documents/compliance-timing-types';
+
+type PaidOrderRow = {
+  id: string;
+  payment_status: 'paid';
+  fulfillment_status:
+    | 'pending'
+    | 'ready_to_generate'
+    | 'processing'
+    | 'fulfilled'
+    | 'failed'
+    | 'requires_action'
+    | null;
+  product_type: string;
+  user_id: string | null;
+  paid_at: string | null;
+  created_at: string | null;
+  metadata?: unknown;
+};
 
 export interface FulfillOrderRequest {
   case_id: string;
@@ -79,21 +98,24 @@ export async function POST(request: Request) {
 
     // Find the order for this case
     const ORDER_SELECT_WITH_METADATA =
-      'id, payment_status, fulfillment_status, product_type, user_id, metadata';
+      'id, payment_status, fulfillment_status, product_type, user_id, paid_at, created_at, metadata';
     const ORDER_SELECT_WITHOUT_METADATA =
-      'id, payment_status, fulfillment_status, product_type, user_id';
+      'id, payment_status, fulfillment_status, product_type, user_id, paid_at, created_at';
 
     let orderQueryWithMetadata = adminClient
       .from('orders')
       .select(ORDER_SELECT_WITH_METADATA)
       .eq('case_id', case_id)
+      .eq('payment_status', 'paid')
       .order('created_at', { ascending: false });
 
     if (product) {
       orderQueryWithMetadata = orderQueryWithMetadata.eq('product_type', product);
     }
 
-    let { data: orders, error: orderError } = await orderQueryWithMetadata.limit(1);
+    const metadataResult = await orderQueryWithMetadata.limit(20);
+    let orders: PaidOrderRow[] | null = (metadataResult.data as PaidOrderRow[] | null) ?? null;
+    let orderError = metadataResult.error;
 
     if (orderError && isMetadataColumnMissingError(orderError)) {
       setMetadataColumnExists(false);
@@ -102,14 +124,15 @@ export async function POST(request: Request) {
         .from('orders')
         .select(ORDER_SELECT_WITHOUT_METADATA)
         .eq('case_id', case_id)
+        .eq('payment_status', 'paid')
         .order('created_at', { ascending: false });
 
       if (product) {
         orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('product_type', product);
       }
 
-      const fallbackResult = await orderQueryWithoutMetadata.limit(1);
-      orders = fallbackResult.data as any;
+      const fallbackResult = await orderQueryWithoutMetadata.limit(20);
+      orders = fallbackResult.data as PaidOrderRow[] | null;
       orderError = fallbackResult.error;
     }
 
@@ -121,7 +144,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const order = orders?.[0];
+    const order = selectActiveCaseOrder<PaidOrderRow>(orders as PaidOrderRow[] | null | undefined);
 
     if (!order) {
       return NextResponse.json(
@@ -153,7 +176,7 @@ export async function POST(request: Request) {
     // Check if final documents already exist (idempotency)
     let documentsQuery = (userIsAdmin ? adminClient : supabase)
       .from('documents')
-      .select('id', { count: 'exact', head: true })
+      .select('id, metadata')
       .eq('case_id', case_id)
       .eq('is_preview', false);
 
@@ -161,7 +184,17 @@ export async function POST(request: Request) {
       documentsQuery = documentsQuery.eq('user_id', user.id);
     }
 
-    const { count: existingDocCount } = await documentsQuery;
+    const { data: existingDocs } = await documentsQuery;
+    const existingDocCount = (existingDocs || []).filter((doc: any) => {
+      const docOrderId = doc.metadata?.order_id;
+      const docPackType = doc.metadata?.pack_type;
+
+      if (docOrderId) {
+        return docOrderId === order.id;
+      }
+
+      return docPackType === order.product_type;
+    }).length;
 
     if (existingDocCount && existingDocCount > 0) {
       // Documents exist, mark as fulfilled if not already

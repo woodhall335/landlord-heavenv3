@@ -108,6 +108,31 @@ describe('Fulfill Endpoint Business Logic', () => {
     expect(expectedResponse.status).toBe('already_fulfilled');
   });
 
+  it('upgrade orders should ignore old Stage 1 documents when checking fulfillment', () => {
+    const existingDocs = [
+      { metadata: { order_id: 'old-notice-order', pack_type: 'notice_only' } },
+      { metadata: { order_id: 'old-notice-order', pack_type: 'notice_only' } },
+    ];
+
+    const activeOrder = {
+      id: 'new-complete-pack-order',
+      product_type: 'complete_pack',
+    };
+
+    const matchingDocCount = existingDocs.filter((doc) => {
+      const docOrderId = doc.metadata?.order_id;
+      const docPackType = doc.metadata?.pack_type;
+
+      if (docOrderId) {
+        return docOrderId === activeOrder.id;
+      }
+
+      return docPackType === activeOrder.product_type;
+    }).length;
+
+    expect(matchingDocCount).toBe(0);
+  });
+
   it('missing order.user_id and case.user_id returns 422', () => {
     // Scenario: Cannot resolve user for fulfillment
     const orderState = {

@@ -119,6 +119,14 @@ export interface ProductConfig {
   productPageHref?: string;
 }
 
+export function getProductUpgradeAmount(from: ProductSku, to: ProductSku): number | null {
+  if (from === 'notice_only' && to === 'complete_pack') {
+    return Number((SEO_PRICES.evictionBundle.amount - SEO_PRICES.evictionNotice.amount).toFixed(2));
+  }
+
+  return null;
+}
+
 export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   notice_only: {
     sku: 'notice_only',

@@ -29,6 +29,17 @@ import {
 } from '@/lib/documents/compliance-timing-types';
 import { validateComplianceTiming } from '@/lib/documents/court-ready-validator';
 import { buildComplianceTimingDataFromFacts } from '@/lib/documents/compliance-timing-facts';
+import { selectActiveCaseOrder } from '@/lib/payments/active-order';
+
+type PaidOrderRow = {
+  id: string;
+  payment_status: 'paid';
+  product_type: string;
+  user_id: string | null;
+  paid_at: string | null;
+  created_at: string | null;
+  metadata?: unknown;
+};
 
 export interface RegenerateOrderRequest {
   case_id: string;
@@ -88,9 +99,9 @@ export async function POST(request: Request) {
 
     // Build order query - find the paid order for this case
     const ORDER_SELECT_WITH_METADATA =
-      'id, payment_status, product_type, user_id, paid_at, metadata';
+      'id, payment_status, product_type, user_id, paid_at, created_at, metadata';
     const ORDER_SELECT_WITHOUT_METADATA =
-      'id, payment_status, product_type, user_id, paid_at';
+      'id, payment_status, product_type, user_id, paid_at, created_at';
 
     let orderQueryWithMetadata = adminClient
       .from('orders')
@@ -107,10 +118,13 @@ export async function POST(request: Request) {
       orderQueryWithMetadata = orderQueryWithMetadata.eq('product_type', product);
     }
 
-    let { data: order, error: orderError } = await orderQueryWithMetadata
+    const metadataResult = await orderQueryWithMetadata
       .order('paid_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    let orders: PaidOrderRow[] | null = (metadataResult.data as PaidOrderRow[] | null) ?? null;
+    let orderError = metadataResult.error;
 
     if (orderError && isMetadataColumnMissingError(orderError)) {
       setMetadataColumnExists(false);
@@ -131,10 +145,10 @@ export async function POST(request: Request) {
 
       const fallbackResult = await orderQueryWithoutMetadata
         .order('paid_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .order('created_at', { ascending: false })
+        .limit(20);
 
-      order = fallbackResult.data as any;
+      orders = fallbackResult.data as PaidOrderRow[] | null;
       orderError = fallbackResult.error;
     }
 
@@ -145,6 +159,8 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
+
+    const order = selectActiveCaseOrder<PaidOrderRow>(orders);
 
     if (!order) {
       const productMsg = product ? ` for product "${product}"` : '';

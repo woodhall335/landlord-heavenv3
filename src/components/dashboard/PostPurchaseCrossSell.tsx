@@ -37,6 +37,8 @@ interface PostPurchaseCrossSellProps {
   caseId?: string;
   /** Additional CSS classes */
   className?: string;
+  /** Product keys to suppress for context-specific upgrades */
+  excludeProducts?: string[];
 }
 
 const CROSS_SELL_MAP: Record<string, CrossSellItem[]> = {
@@ -120,6 +122,7 @@ export function PostPurchaseCrossSell({
   jurisdiction = null,
   caseId,
   className = '',
+  excludeProducts = [],
 }: PostPurchaseCrossSellProps) {
   const normalizedJurisdiction =
     jurisdiction === 'england' ||
@@ -129,6 +132,10 @@ export function PostPurchaseCrossSell({
       ? (jurisdiction as WizardJurisdiction)
       : null;
   const crossSellItems = (CROSS_SELL_MAP[purchasedProduct] || []).filter((item) => {
+    if (excludeProducts.includes(item.product)) {
+      return false;
+    }
+
     if (!normalizedJurisdiction) {
       return true;
     }

@@ -29,7 +29,7 @@ import { deriveDisplayStatus } from '@/lib/case-status';
 import { validateUrlProduct, type CanonicalJurisdiction } from '@/lib/tenancy/product-normalization';
 import { doesDocumentTypeMatch, getDashboardDocumentTitle } from '@/lib/documents/dashboard-document-display';
 import { ASK_HEAVEN_CTA } from '@/constants/askHeavenCta';
-import { PRODUCTS } from '@/lib/pricing/products';
+import { formatPriceLabel, getProductUpgradeAmount, PRODUCTS } from '@/lib/pricing/products';
 import {
   getEnglandCanonicalTenancyProduct,
   getEnglandTenancyProductLabel,
@@ -55,6 +55,7 @@ interface Document {
   is_preview: boolean;
   pdf_url: string | null;
   created_at: string;
+  metadata?: Record<string, any> | null;
 }
 
 interface Section13SupportRequestState {
@@ -181,6 +182,8 @@ export default function CaseDetailPage() {
   // Delete/Archive modal state
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpgradingPack, setIsUpgradingPack] = useState(false);
+  const [upgradeError, setUpgradeError] = useState<string | null>(null);
 
   const handleDocumentDownload = async (docId: string, documentType?: string) => {
     setDownloadingDocId(docId);
@@ -938,6 +941,89 @@ export default function CaseDetailPage() {
     }
   };
 
+  const visibleDocuments = documents.filter((doc) => {
+    if (!orderStatus?.paid || !orderStatus.order_id) {
+      return true;
+    }
+
+    const docOrderId = doc.metadata?.order_id;
+    const docPackType = doc.metadata?.pack_type;
+
+    if (docOrderId) {
+      return docOrderId === orderStatus.order_id;
+    }
+
+    if (docPackType && orderStatus.product_type) {
+      return docPackType === orderStatus.product_type;
+    }
+
+    return true;
+  });
+
+  const completePackUpgradeAmount = getProductUpgradeAmount('notice_only', 'complete_pack');
+  const effectiveRoute =
+    caseDetails?.collected_facts?.selected_notice_route ||
+    caseDetails?.collected_facts?.eviction_route ||
+    caseDetails?.collected_facts?.route ||
+    null;
+  const isCompletePackUpgradeEligible =
+    orderStatus?.paid === true &&
+    orderStatus.product_type === 'notice_only' &&
+    caseDetails?.case_type === 'eviction' &&
+    caseDetails?.jurisdiction === 'england' &&
+    effectiveRoute === 'section_8' &&
+    completePackUpgradeAmount !== null;
+  const isUpgradedCompletePackCase =
+    orderStatus?.paid === true &&
+    orderStatus?.product_type === 'complete_pack' &&
+    orderStatus?.metadata?.upgrade_kind === 'post_purchase_product_upgrade' &&
+    orderStatus?.metadata?.upgrade_from_product === 'notice_only';
+
+  const handleUpgradeToCompletePack = async () => {
+    if (!completePackUpgradeAmount) return;
+
+    setIsUpgradingPack(true);
+    setUpgradeError(null);
+
+    try {
+      const baseUrl = window.location.origin;
+      const response = await fetch('/api/checkout/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_type: 'complete_pack',
+          case_id: caseId,
+          upgrade_from_product: 'notice_only',
+          success_url: `${baseUrl}/dashboard/cases/${caseId}?payment=success&upgraded=complete_pack`,
+          cancel_url: `${baseUrl}/dashboard/cases/${caseId}?upgrade=cancelled`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Unable to start the Complete Pack upgrade checkout.');
+      }
+
+      if (data.status === 'already_paid' && data.redirect_url) {
+        window.location.href = data.redirect_url;
+        return;
+      }
+
+      const checkoutUrl = data.checkout_url || data.session_url;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+        return;
+      }
+
+      throw new Error('Unable to start the Complete Pack upgrade checkout.');
+    } catch (err: any) {
+      console.error('Upgrade checkout failed:', err);
+      setUpgradeError(err?.message || 'Unable to start the Complete Pack upgrade checkout.');
+      setIsUpgradingPack(false);
+    }
+  };
+
   const handleContinueWizard = () => {
     // SAFETY GUARD: For paid cases, always use the order's product_type
     // This prevents accidental downgrade from complete_pack to notice_only
@@ -963,7 +1049,11 @@ export default function CaseDetailPage() {
       : product;
 
     const productParam = normalizedProduct ? `&product=${normalizedProduct}` : '';
-    router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${jurisdiction}&case_id=${caseId}${productParam}`);
+    const upgradeParams =
+      isUpgradedCompletePackCase && normalizedProduct === 'complete_pack'
+        ? '&entry=steps&upgrade_from=notice_only'
+        : '';
+    router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${jurisdiction}&case_id=${caseId}${productParam}${upgradeParams}`);
   };
 
   const handleDeleteCase = async () => {
@@ -1165,7 +1255,7 @@ export default function CaseDetailPage() {
 
       <Container size="large" className="py-8">
         {/* Payment Success Banner */}
-        {showPaymentSuccess && orderStatus?.paid && (
+        {showPaymentSuccess && orderStatus?.paid && !isUpgradedCompletePackCase && (
           <div className="mb-6 p-6 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -1191,6 +1281,35 @@ export default function CaseDetailPage() {
                     className="text-green-600 hover:text-green-800 font-medium"
                   >
                     Dismiss
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showPaymentSuccess && isUpgradedCompletePackCase && (
+          <div className="mb-6 rounded-xl border border-primary/20 bg-primary/5 p-6">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <RiCheckboxCircleLine className="w-5 h-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">
+                  Stage 2 unlocked on this same case
+                </h3>
+                <p className="mt-1 text-gray-700">
+                  Your paid upgrade has switched this case into the Complete Pack. Stage 1 stays carried over, and the next step is to finish the remaining court-only sections before generating the full combined file.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Button variant="primary" onClick={handleContinueWizard}>
+                    Continue into Stage 2
+                  </Button>
+                  <button
+                    onClick={() => downloadsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    className="text-primary hover:text-primary-dark font-medium"
+                  >
+                    Jump to documents
                   </button>
                 </div>
               </div>
@@ -1298,6 +1417,46 @@ export default function CaseDetailPage() {
                     </ol>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isCompletePackUpgradeEligible && completePackUpgradeAmount !== null && (
+          <div className="mb-6 rounded-xl border border-primary/20 bg-primary/5 p-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-3xl">
+                <h3 className="text-xl font-semibold text-charcoal">
+                  Upgrade this case to the Complete Pack for {formatPriceLabel(completePackUpgradeAmount)}
+                </h3>
+                <p className="mt-2 text-gray-700">
+                  Stage 2 already includes Stage 1. We keep this same case, keep your notice answers, and unlock the court claim paperwork, witness statement, and hearing support without making you start again.
+                </p>
+                <p className="mt-2 text-sm text-gray-600">
+                  You will move into the first court-only step that still needs attention, and future regeneration will rebuild the Complete Pack for this case.
+                </p>
+                {upgradeError && (
+                  <p className="mt-3 text-sm text-red-600">{upgradeError}</p>
+                )}
+              </div>
+              <div className="flex flex-col gap-3 lg:min-w-[240px]">
+                <Button
+                  variant="primary"
+                  onClick={handleUpgradeToCompletePack}
+                  disabled={isUpgradingPack}
+                >
+                  {isUpgradingPack ? (
+                    <>
+                      <RiLoader4Line className="mr-2 h-4 w-4 animate-spin" />
+                      Starting upgrade...
+                    </>
+                  ) : (
+                    `Upgrade for ${formatPriceLabel(completePackUpgradeAmount)}`
+                  )}
+                </Button>
+                <p className="text-xs text-gray-600">
+                  Same case. No Stage 1 answers lost.
+                </p>
               </div>
             </div>
           </div>
@@ -1515,7 +1674,7 @@ export default function CaseDetailPage() {
                   <h2 className="text-xl font-semibold text-charcoal">
                     {orderStatus?.paid ? 'Your Documents' : 'Documents'}
                   </h2>
-                  {orderStatus?.paid && documents.length > 0 && (
+                  {orderStatus?.paid && visibleDocuments.length > 0 && (
                     <span className="text-sm text-green-600 font-medium flex items-center gap-1">
                       <RiCheckboxCircleLine className="w-4 h-4" />
                       Ready to download
@@ -1556,7 +1715,7 @@ export default function CaseDetailPage() {
                   </div>
                 )}
 
-                {documents.length === 0 ? (
+                {visibleDocuments.length === 0 ? (
                   <div className="text-center py-8">
                     {isPolling ? (
                       <div className="space-y-3">
@@ -1578,7 +1737,7 @@ export default function CaseDetailPage() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {documents.map((doc) => (
+                    {visibleDocuments.map((doc) => (
                       <div
                         key={doc.id}
                         className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-purple-200 transition-colors"
@@ -1704,6 +1863,7 @@ export default function CaseDetailPage() {
                 purchasedProduct={getEffectiveProduct()}
                 jurisdiction={caseDetails?.jurisdiction}
                 caseId={caseId}
+                excludeProducts={isCompletePackUpgradeEligible ? ['complete_pack'] : []}
               />
             )}
           </div>

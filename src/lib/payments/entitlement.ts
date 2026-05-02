@@ -7,6 +7,7 @@
 
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
+import { selectActiveCaseOrder } from '@/lib/payments/active-order';
 
 export interface PaidEntitlementInput {
   caseId: string;
@@ -27,6 +28,15 @@ export interface EntitlementResult {
   product_type: string;
   case_id: string;
   paid_at?: string | null;
+  created_at?: string | null;
+}
+
+function getEntitledProductTypes(product: string): string[] {
+  if (product === 'notice_only') {
+    return ['notice_only', 'complete_pack'];
+  }
+
+  return [product];
 }
 
 /**
@@ -40,14 +50,19 @@ export async function assertPaidEntitlement({
   product,
 }: PaidEntitlementInput): Promise<EntitlementResult> {
   const supabase = createAdminClient();
+  const entitledProductTypes = getEntitledProductTypes(product);
 
-  const { data: order, error } = await supabase
+  const { data: orders, error } = await supabase
     .from('orders')
-    .select('id, payment_status, fulfillment_status, product_type, case_id, paid_at')
+    .select('id, payment_status, fulfillment_status, product_type, case_id, paid_at, created_at')
     .eq('case_id', caseId)
-    .eq('product_type', product)
+    .in('product_type', entitledProductTypes)
     .eq('payment_status', 'paid')
-    .maybeSingle();
+    .order('paid_at', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  const order = selectActiveCaseOrder(orders as EntitlementResult[] | null | undefined);
 
   if (error || !order) {
     throw NextResponse.json(
@@ -77,14 +92,19 @@ export async function checkPaidEntitlement({
   order: EntitlementResult | null;
 }> {
   const supabase = createAdminClient();
+  const entitledProductTypes = getEntitledProductTypes(product);
 
-  const { data: order, error } = await supabase
+  const { data: orders, error } = await supabase
     .from('orders')
-    .select('id, payment_status, fulfillment_status, product_type, case_id, paid_at')
+    .select('id, payment_status, fulfillment_status, product_type, case_id, paid_at, created_at')
     .eq('case_id', caseId)
-    .eq('product_type', product)
+    .in('product_type', entitledProductTypes)
     .eq('payment_status', 'paid')
-    .maybeSingle();
+    .order('paid_at', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  const order = selectActiveCaseOrder(orders as EntitlementResult[] | null | undefined);
 
   if (error || !order) {
     return { isPaid: false, order: null };
@@ -114,15 +134,20 @@ export async function assertPreviewAllowed({
   order: EntitlementResult | null;
 }> {
   const supabase = createAdminClient();
+  const entitledProductTypes = getEntitledProductTypes(product);
 
   // Check if there's a paid order
-  const { data: order } = await supabase
+  const { data: orders } = await supabase
     .from('orders')
-    .select('id, payment_status, fulfillment_status, product_type, case_id, paid_at')
+    .select('id, payment_status, fulfillment_status, product_type, case_id, paid_at, created_at')
     .eq('case_id', caseId)
-    .eq('product_type', product)
+    .in('product_type', entitledProductTypes)
     .eq('payment_status', 'paid')
-    .maybeSingle();
+    .order('paid_at', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  const order = selectActiveCaseOrder(orders as EntitlementResult[] | null | undefined);
 
   const isPaid = !!order;
 
@@ -150,7 +175,7 @@ export async function getCasePaymentStatus(
 
   const { data: orders, error } = await supabase
     .from('orders')
-    .select('id, payment_status, fulfillment_status, product_type, case_id, paid_at')
+    .select('id, payment_status, fulfillment_status, product_type, case_id, paid_at, created_at')
     .eq('case_id', caseId)
     .eq('payment_status', 'paid')
     .order('paid_at', { ascending: false });
@@ -166,6 +191,6 @@ export async function getCasePaymentStatus(
   return {
     hasPaidOrder: true,
     paidProducts: orders.map((o) => o.product_type).filter(Boolean) as string[],
-    latestOrder: orders[0] as unknown as EntitlementResult,
+    latestOrder: selectActiveCaseOrder(orders as EntitlementResult[] | null | undefined) as EntitlementResult | null,
   };
 }

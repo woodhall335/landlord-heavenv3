@@ -22,6 +22,27 @@ import {
 } from '@/lib/payments/safe-order-metadata';
 import { isAdmin } from '@/lib/auth';
 import { isGeneratedPackDocument } from '@/lib/documents/document-origin';
+import { selectActiveCaseOrder } from '@/lib/payments/active-order';
+
+type OrderRow = {
+  id: string;
+  payment_status: 'pending' | 'paid' | 'failed' | 'refunded' | 'partially_refunded';
+  fulfillment_status:
+    | 'pending'
+    | 'ready_to_generate'
+    | 'processing'
+    | 'fulfilled'
+    | 'failed'
+    | 'requires_action'
+    | null;
+  paid_at: string | null;
+  created_at: string | null;
+  stripe_session_id: string | null;
+  total_amount: number | string | null;
+  currency: string | null;
+  product_type: string | null;
+  metadata?: unknown;
+};
 
 export interface OrderStatusResponse {
   paid: boolean;
@@ -64,8 +85,8 @@ export interface OrderStatusResponse {
 }
 
 // Fields to select - with and without metadata
-const ORDER_SELECT_WITH_METADATA = 'id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, product_type, metadata';
-const ORDER_SELECT_WITHOUT_METADATA = 'id, payment_status, fulfillment_status, paid_at, stripe_session_id, total_amount, currency, product_type';
+const ORDER_SELECT_WITH_METADATA = 'id, payment_status, fulfillment_status, paid_at, created_at, stripe_session_id, total_amount, currency, product_type, metadata';
+const ORDER_SELECT_WITHOUT_METADATA = 'id, payment_status, fulfillment_status, paid_at, created_at, stripe_session_id, total_amount, currency, product_type';
 
 export async function GET(request: Request) {
   try {
@@ -101,7 +122,9 @@ export async function GET(request: Request) {
       orderQueryWithMetadata = orderQueryWithMetadata.eq('product_type', product);
     }
 
-    let { data: orders, error: orderError } = await orderQueryWithMetadata.limit(1);
+    const metadataResult = await orderQueryWithMetadata.limit(20);
+    let orders: OrderRow[] | null = (metadataResult.data as OrderRow[] | null) ?? null;
+    let orderError = metadataResult.error;
 
     // Handle metadata column missing error (42703)
     if (orderError && isMetadataColumnMissingError(orderError)) {
@@ -127,8 +150,8 @@ export async function GET(request: Request) {
         orderQueryWithoutMetadata = orderQueryWithoutMetadata.eq('product_type', product);
       }
 
-      const fallbackResult = await orderQueryWithoutMetadata.limit(1);
-      orders = fallbackResult.data as any;
+      const fallbackResult = await orderQueryWithoutMetadata.limit(20);
+      orders = fallbackResult.data as OrderRow[] | null;
       orderError = fallbackResult.error;
     }
 
@@ -160,8 +183,25 @@ export async function GET(request: Request) {
       // Don't fail the whole request, just report 0
     }
 
-    const generatedDocs = ((finalDocs as any[]) || []).filter((doc) => isGeneratedPackDocument(doc));
-    const order = orders?.[0] || null;
+    const order = selectActiveCaseOrder<OrderRow>(orders as OrderRow[] | null | undefined);
+    const generatedDocs = ((finalDocs as any[]) || []).filter((doc) => {
+      if (!isGeneratedPackDocument(doc)) {
+        return false;
+      }
+
+      if (!order) {
+        return true;
+      }
+
+      const docOrderId = doc.metadata?.order_id;
+      const docPackType = doc.metadata?.pack_type;
+
+      if (docOrderId) {
+        return docOrderId === order.id;
+      }
+
+      return docPackType === order.product_type;
+    });
     const documentCount = generatedDocs.length;
     const lastFinalDocCreatedAt = generatedDocs[0]?.created_at || null;
 

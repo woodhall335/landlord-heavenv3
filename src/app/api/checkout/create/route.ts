@@ -20,7 +20,7 @@ import { ensureUserProfileExists } from '@/lib/supabase/ensure-user';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { stripe, PRICE_IDS, assertValidPriceId, StripePriceIdError } from '@/lib/stripe';
-import { PRODUCTS, type ProductSku, isValidProductSku } from '@/lib/pricing/products';
+import { PRODUCTS, getProductUpgradeAmount, type ProductSku, isValidProductSku } from '@/lib/pricing/products';
 import { logger } from '@/lib/logger';
 import {
   validateNoticeOnlyCase,
@@ -167,6 +167,7 @@ const createCheckoutSchema = z.object({
   case_id: z.string().uuid().optional(),
   success_url: z.string().url().optional(),
   cancel_url: z.string().url().optional(),
+  upgrade_from_product: z.enum(['notice_only']).optional(),
   // Attribution fields (Migration 012)
   landing_path: z.string().max(500).nullable().optional(),
   utm_source: z.string().max(200).nullable().optional(),
@@ -191,10 +192,12 @@ function generateIdempotencyKey(
   caseId: string,
   productType: string,
   userId: string,
-  addOns: string[] = []
+  addOns: string[] = [],
+  contextKey?: string
 ): string {
   const normalizedAddOns = [...addOns].sort().join(',');
-  const input = `checkout:${caseId}:${productType}:${normalizedAddOns}:${userId}`;
+  const normalizedContext = contextKey || 'default';
+  const input = `checkout:${caseId}:${productType}:${normalizedAddOns}:${normalizedContext}:${userId}`;
   return crypto.createHash('sha256').update(input).digest('hex').substring(0, 64);
 }
 
@@ -266,6 +269,9 @@ export async function POST(request: Request) {
       product_type,
       add_ons,
       case_id,
+      success_url,
+      cancel_url,
+      upgrade_from_product,
       // Attribution fields
       landing_path,
       utm_source,
@@ -308,6 +314,11 @@ export async function POST(request: Request) {
     const adminSupabase = createAdminClient();
 
     const normalizedProductType = normalizeToPaymentSku(String(product_type));
+    const normalizedUpgradeFromProduct = upgrade_from_product
+      ? normalizeToPaymentSku(String(upgrade_from_product))
+      : null;
+    const isNoticeOnlyToCompletePackUpgrade =
+      normalizedProductType === 'complete_pack' && normalizedUpgradeFromProduct === 'notice_only';
     if (!case_id && isLegacyOnlyPublicCheckoutSku(String(product_type))) {
       const fallbackCaseType =
         product_type.startsWith('prt_') ||
@@ -387,11 +398,12 @@ export async function POST(request: Request) {
     // Get product details from source of truth (products.ts)
     const productSku: ProductSku = normalizedProductType as ProductSku;
     const product = PRODUCTS[productSku];
+    let primaryChargeAmount = product.price;
     let permittedAddOnSkus = requestedAddOnSkus.filter((sku) =>
       (ADD_ON_ELIGIBLE_PRODUCTS as readonly string[]).includes(sku)
     );
     let addOnProducts = permittedAddOnSkus.map((sku) => PRODUCTS[sku]);
-    let totalAmount = product.price + addOnProducts.reduce((sum, item) => sum + item.price, 0);
+    let totalAmount = primaryChargeAmount + addOnProducts.reduce((sum, item) => sum + item.price, 0);
 
     // If case_id provided, validate jurisdiction match and ownership
     if (case_id) {
@@ -421,6 +433,95 @@ export async function POST(request: Request) {
           { error: 'Case not found. Please ensure the case is linked to your account.' },
           { status: 404 }
         );
+      }
+
+      if (isNoticeOnlyToCompletePackUpgrade) {
+        if (requestedAddOnSkus.length > 0) {
+          return NextResponse.json(
+            { error: 'Add-ons are not supported during the Stage 1 to Stage 2 upgrade checkout.' },
+            { status: 400 }
+          );
+        }
+
+        const routeFacts = ((caseData as any).collected_facts || {}) as Record<string, any>;
+        const selectedRoute =
+          routeFacts.selected_notice_route ||
+          routeFacts.eviction_route ||
+          routeFacts.route_recommendation?.recommended_route ||
+          null;
+
+        if (caseData.case_type !== 'eviction' || caseData.jurisdiction !== 'england' || selectedRoute !== 'section_8') {
+          return NextResponse.json(
+            {
+              error: 'This paid upgrade is only available for England Section 8 notice cases moving into the Complete Pack.',
+              code: 'UPGRADE_NOT_ELIGIBLE',
+            },
+            { status: 409 }
+          );
+        }
+
+        const { data: upgradeOrders, error: upgradeOrdersError } = await adminSupabase
+          .from('orders')
+          .select('id, product_type, payment_status')
+          .eq('case_id', case_id)
+          .eq('user_id', user.id)
+          .in('product_type', ['notice_only', 'complete_pack']);
+
+        if (upgradeOrdersError) {
+          logger.error('Failed to validate upgrade order state', {
+            caseId: case_id,
+            userId: user.id,
+            error: upgradeOrdersError.message,
+          });
+          return NextResponse.json(
+            { error: 'Unable to verify your existing purchase. Please try again.' },
+            { status: 500 }
+          );
+        }
+
+        const hasPaidNoticeOnly = (upgradeOrders || []).some(
+          (order) => order.product_type === 'notice_only' && order.payment_status === 'paid'
+        );
+        const hasPaidCompletePack = (upgradeOrders || []).some(
+          (order) => order.product_type === 'complete_pack' && order.payment_status === 'paid'
+        );
+
+        if (hasPaidCompletePack) {
+          const response: CheckoutAlreadyPaidResponse = {
+            status: 'already_paid',
+            redirect_url: `/dashboard/cases/${case_id}`,
+            order_id:
+              (upgradeOrders || []).find(
+                (order) => order.product_type === 'complete_pack' && order.payment_status === 'paid'
+              )?.id || '',
+            message: 'This case already has the Complete Pack unlocked.',
+          };
+
+          return NextResponse.json(response, { status: 200 });
+        }
+
+        if (!hasPaidNoticeOnly) {
+          return NextResponse.json(
+            {
+              error: 'A paid Stage 1 Notice & Service Pack is required before this upgrade can be used.',
+              code: 'UPGRADE_BASE_PURCHASE_REQUIRED',
+            },
+            { status: 409 }
+          );
+        }
+
+        const upgradeAmount = getProductUpgradeAmount('notice_only', 'complete_pack');
+        if (upgradeAmount === null) {
+          return NextResponse.json(
+            { error: 'Upgrade pricing is not available for this product change.' },
+            { status: 500 }
+          );
+        }
+
+        primaryChargeAmount = upgradeAmount;
+        addOnProducts = [];
+        permittedAddOnSkus = [];
+        totalAmount = primaryChargeAmount;
       }
 
 
@@ -682,7 +783,7 @@ export async function POST(request: Request) {
           ])
         ) as ProductSku[];
         addOnProducts = permittedAddOnSkus.map((sku) => PRODUCTS[sku]);
-        totalAmount = product.price + addOnProducts.reduce((sum, item) => sum + item.price, 0);
+        totalAmount = primaryChargeAmount + addOnProducts.reduce((sum, item) => sum + item.price, 0);
       }
     }
 
@@ -710,7 +811,9 @@ export async function POST(request: Request) {
       } else if (existingOrders && existingOrders.length > 0) {
         // Check for PAID order first (highest priority)
         const paidOrder = existingOrders.find(
-          (o) => o.payment_status === 'paid' && Number(o.total_amount || 0) === totalAmount
+          (o) =>
+            o.payment_status === 'paid' &&
+            (isNoticeOnlyToCompletePackUpgrade || Number(o.total_amount || 0) === totalAmount)
         );
         if (paidOrder) {
           logger.info('Checkout blocked: already paid', {
@@ -807,7 +910,13 @@ export async function POST(request: Request) {
     // Generate idempotency key for Stripe API call (if case_id provided)
     // Use normalizedProductType for consistent idempotency keys
     const idempotencyKey = case_id
-      ? generateIdempotencyKey(case_id, normalizedProductType, user.id, permittedAddOnSkus)
+      ? generateIdempotencyKey(
+          case_id,
+          normalizedProductType,
+          user.id,
+          permittedAddOnSkus,
+          isNoticeOnlyToCompletePackUpgrade ? 'upgrade:notice_only_to_complete_pack' : undefined
+        )
       : undefined;
 
     // Create order record using admin client to avoid RLS issues
@@ -818,7 +927,7 @@ export async function POST(request: Request) {
         case_id: case_id || null,
         product_type: normalizedProductType, // Use normalized payment SKU for order storage
         product_name: product.label,
-        amount: product.price,
+        amount: primaryChargeAmount,
         currency: 'GBP',
         total_amount: totalAmount,
         payment_status: 'pending',
@@ -836,6 +945,14 @@ export async function POST(request: Request) {
         metadata: {
           add_ons: permittedAddOnSkus,
           requested_product_type: product_type,
+          ...(isNoticeOnlyToCompletePackUpgrade
+            ? {
+                upgrade_from_product: 'notice_only',
+                upgrade_case_id: case_id,
+                upgrade_amount: primaryChargeAmount,
+                upgrade_kind: 'post_purchase_product_upgrade',
+              }
+            : {}),
         },
       };
 
@@ -905,6 +1022,14 @@ export async function POST(request: Request) {
       (process.env.NODE_ENV === 'production'
         ? 'https://landlordheaven.co.uk'
         : 'http://localhost:5000');
+    const resolvedSuccessUrl =
+      success_url ||
+      (case_id
+        ? `${baseUrl}/dashboard/cases/${case_id}?payment=success`
+        : `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`);
+    const resolvedCancelUrl =
+      cancel_url ||
+      (case_id ? `${baseUrl}/wizard/preview/${case_id}?payment=cancelled&product=${product_type}` : `${baseUrl}/dashboard`);
 
     // Use idempotency key if we have a case_id (prevents duplicate Stripe sessions)
     const stripeOptions = idempotencyKey ? { idempotencyKey } : undefined;
@@ -920,9 +1045,11 @@ export async function POST(request: Request) {
               currency: 'gbp',
               product_data: {
                 name: product.label,
-                description: product.description,
+                description: isNoticeOnlyToCompletePackUpgrade
+                  ? 'Upgrade from the paid Stage 1 notice file into the full Stage 2 court and possession pack for the same case.'
+                  : product.description,
               },
-              unit_amount: Math.round(product.price * 100),
+              unit_amount: Math.round(primaryChargeAmount * 100),
             },
             quantity: 1,
           },
@@ -944,6 +1071,8 @@ export async function POST(request: Request) {
           product_type,
           add_ons: permittedAddOnSkus.join(','),
           case_id: case_id || '',
+          upgrade_from_product: isNoticeOnlyToCompletePackUpgrade ? 'notice_only' : '',
+          upgrade_amount: isNoticeOnlyToCompletePackUpgrade ? String(primaryChargeAmount) : '',
           // Attribution for webhook processing (Stripe metadata max 500 chars per value)
           landing_path: (landing_path || '').substring(0, 500),
           utm_source: (utm_source || '').substring(0, 200),
@@ -955,8 +1084,8 @@ export async function POST(request: Request) {
           first_touch_at: first_touch_at || '',
           ga_client_id: ga_client_id || '',
         },
-        success_url: `${baseUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${baseUrl}/dashboard`,
+        success_url: resolvedSuccessUrl,
+        cancel_url: resolvedCancelUrl,
         allow_promotion_codes: true,
       },
       stripeOptions
