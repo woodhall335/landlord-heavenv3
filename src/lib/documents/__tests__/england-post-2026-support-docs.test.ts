@@ -65,6 +65,8 @@ describe('England Section 8 support document templates', () => {
     expect(template).toContain('{{status_label}}');
     expect(template).toContain('{{#each compliance_status_items}}');
     expect(template).toContain('{{#each what_this_pack_does}}');
+    expect(template).toContain('{{#each journey_steps}}');
+    expect(template).toContain('{{journey_title}}');
     expect(template).toContain('{{next_step_text}}');
     expect(template).toContain('Case Risks &amp; Compliance');
   });

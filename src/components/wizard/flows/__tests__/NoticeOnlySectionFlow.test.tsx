@@ -255,20 +255,20 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     vi.clearAllMocks();
   });
 
-  it('should show the Eviction Notice Generator shell title for England', async () => {
+  it('should show the Stage 1 Section 8 shell title for England', async () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
 
     // Wait for component to load
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    expect(screen.getByText(/Eviction Notice Generator/)).toBeDefined();
+    expect(screen.getByText(/Stage 1: Section 8 Notice & Service Pack/)).toBeDefined();
   });
 
   it('should render "Tenancy" tab label for England (not "Occupation Contract")', async () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
 
     // Wait for component to load
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     // England should show "Tenancy" not "Occupation Contract"
     expect(getStepButton('Tenancy details')).toBeDefined();
@@ -287,7 +287,7 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     render(<NoticeOnlySectionFlow {...propsWithSection8} />);
 
     // Wait for component to load
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     expect(screen.getByRole('heading', { name: /What's going on\?/i })).toBeDefined();
     const selectableSection21Routes = screen.queryAllByRole('radio').filter(
@@ -308,7 +308,7 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     render(<NoticeOnlySectionFlow {...propsWithSection8} />);
 
     // Wait for component to load
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     // The flow should be set up for Section 8
     expect(getStepButton('Tenancy details')).toBeDefined();
@@ -377,14 +377,14 @@ describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
 
     // Wait for component to load
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     expect(screen.queryByRole('button', { name: /Compliance/i })).toBeNull();
   });
 });
 
 describe('NoticeOnlySectionFlow - Header and Title', () => {
-  it('should show "Eviction Notice Generator" for England jurisdiction', async () => {
+  it('should show the Stage 1 Section 8 title for England jurisdiction', async () => {
     render(
       <NoticeOnlySectionFlow
         caseId="test"
@@ -393,9 +393,12 @@ describe('NoticeOnlySectionFlow - Header and Title', () => {
       />
     );
 
-    await screen.findByText(/Eviction Notice Generator/);
-    expect(screen.getByText(/Eviction Notice Generator/)).toBeDefined();
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
+    expect(screen.getByText(/Stage 1: Section 8 Notice & Service Pack/)).toBeDefined();
     expect(screen.getByText(/Tenant is not paying rent/i)).toBeDefined();
+    expect(screen.getByText(/Serve Notice/i)).toBeDefined();
+    expect(screen.getByText(/Notice Expires/i)).toBeDefined();
+    expect(screen.getByText(/Issue Claim/i)).toBeDefined();
   });
 
   it('should show "Wales Eviction Notice" for Wales jurisdiction', async () => {
@@ -749,7 +752,7 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     };
 
     render(<NoticeOnlySectionFlow {...englandProps} />);
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     expect(getStepButton("What's going on?")).toBeDefined();
     expect(getStepButton('Who and where?')).toBeDefined();
@@ -774,7 +777,7 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     };
 
     render(<NoticeOnlySectionFlow {...englandProps} />);
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     expect(getStepButton("What's going on?")).toBeDefined();
     expect(queryStepButton('Ground details')).toBeNull();
@@ -794,7 +797,7 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
       />
     );
 
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     expect(queryStepButton('Ground details')).toBeNull();
     expect(getStepButton('About the arrears')).toBeDefined();
@@ -813,7 +816,7 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
       />
     );
 
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     expect(getStepButton('Ground details')).toBeDefined();
     expect(queryStepButton('About the arrears')).toBeNull();
@@ -832,7 +835,7 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
       />
     );
 
-    await screen.findByText(/Eviction Notice Generator/);
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     expect(getStepButton('Ground details')).toBeDefined();
     expect(getStepButton('About the arrears')).toBeDefined();

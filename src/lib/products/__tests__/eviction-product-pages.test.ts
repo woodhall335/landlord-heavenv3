@@ -14,6 +14,7 @@ describe('Section 8 eviction product pages', () => {
     expect(source).toContain('the next practical step is serving notice');
     expect(source).toContain('This is not just a notice template.');
     expect(source).toContain('You need to serve first and want the notice, service record, and evidence lined up');
+    expect(source).toContain('Section8JourneyTimeline');
   });
 
   it('keeps Complete Pack positioned as the combined Stage 1 plus Stage 2 route', () => {
@@ -23,6 +24,7 @@ describe('Section 8 eviction product pages', () => {
     expect(source).toContain('This pack includes the Stage 1 notice and service file as well as the Stage 2 claim forms');
     expect(source).toContain('What you get in the combined pack');
     expect(source).toContain('without buying Stage 1 separately first');
+    expect(source).toContain('Section8JourneyTimeline');
   });
 
   it('keeps the shared public descriptors aligned with the combined-pack positioning', () => {

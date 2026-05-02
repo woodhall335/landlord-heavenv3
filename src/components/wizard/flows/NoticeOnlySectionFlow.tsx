@@ -48,6 +48,7 @@ import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine, RiArrowRightSLine } from 'react-icons/ri';
 
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { Section8JourneyTimeline } from '@/components/eviction/Section8JourneyTimeline';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/EnglandPossessionWorkspaceShell';
@@ -1614,6 +1615,15 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         </>
       )}
     >
+      {jurisdiction === 'england' ? (
+        <Section8JourneyTimeline
+          stage="stage1"
+          showHeader={false}
+          compact
+          className="mb-6"
+        />
+      ) : null}
+
       {/* Blockers */}
       {currentBlockers.length > 0 && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">

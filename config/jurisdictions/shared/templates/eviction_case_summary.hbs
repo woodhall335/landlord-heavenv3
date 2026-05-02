@@ -90,6 +90,7 @@
 
     .facts-grid,
     .panel-grid,
+    .journey-grid,
     .risk-grid,
     .status-grid {
       display: grid;
@@ -102,9 +103,116 @@
     }
 
     .panel-grid,
+    .journey-grid,
     .risk-grid,
     .status-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .journey-section {
+      margin-bottom: 1.1em;
+    }
+
+    .journey-title {
+      margin: 0 0 0.3em 0;
+      font-size: 12pt;
+      font-weight: 700;
+      color: #231942;
+    }
+
+    .journey-intro {
+      margin: 0 0 0.8em 0;
+      color: #5b5370;
+    }
+
+    .journey-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      position: relative;
+      gap: 0.55em;
+    }
+
+    .journey-grid::before {
+      content: "";
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 2.35em;
+      border-top: 1px solid #d8d4e6;
+      z-index: 0;
+    }
+
+    .journey-step {
+      position: relative;
+      z-index: 1;
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+      padding: 0.75em;
+      min-height: 8.6em;
+    }
+
+    .journey-step.highlighted {
+      border-color: #ddd6fe;
+      background: #faf8ff;
+    }
+
+    .journey-step.emphasized {
+      border-color: #c9b8f8;
+      background: #f6f1ff;
+    }
+
+    .journey-step-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55em;
+      margin-bottom: 0.55em;
+    }
+
+    .journey-image-shell {
+      width: 2.3em;
+      height: 2.3em;
+      flex: 0 0 2.3em;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .journey-step.highlighted .journey-image-shell {
+      border-color: #e6dcff;
+    }
+
+    .journey-step.emphasized .journey-image-shell {
+      border-color: #d5c7fb;
+    }
+
+    .journey-image-shell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .journey-label {
+      display: block;
+      font-size: 9.2pt;
+      font-weight: 700;
+      color: #231942;
+      margin-bottom: 0.15em;
+    }
+
+    .journey-status {
+      display: block;
+      font-size: 7.8pt;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #6b6481;
+    }
+
+    .journey-step p {
+      margin: 0;
+      font-size: 8.7pt;
+      line-height: 1.45;
+      color: #4b5565;
     }
 
     .fact-card,
@@ -244,7 +352,30 @@
       <strong>Generated:</strong> {{format_date generated_date "long"}}
       {{/if}}
     </div>
-    <div class="risk-line">{{risk_line}}</div>
+  <div class="risk-line">{{risk_line}}</div>
+  </div>
+
+  <div class="journey-section">
+    <h2 class="journey-title">{{journey_title}}</h2>
+    <p class="journey-intro">{{journey_supporting_text}}</p>
+    <div class="journey-grid">
+      {{#each journey_steps}}
+      <div class="journey-step{{#if is_highlighted}} highlighted{{/if}}{{#if is_emphasized}} emphasized{{/if}}">
+        <div class="journey-step-top">
+          <div class="journey-image-shell">
+            {{#if image_data_uri}}
+            <img src="{{image_data_uri}}" alt="" />
+            {{/if}}
+          </div>
+          <div>
+            <span class="journey-label">{{label}}</span>
+            {{#if status}}<span class="journey-status">{{status}}</span>{{/if}}
+          </div>
+        </div>
+        <p>{{text}}</p>
+      </div>
+      {{/each}}
+    </div>
   </div>
 
   <div class="facts-grid">

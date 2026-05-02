@@ -59,10 +59,14 @@ export function WizardStepperV3({ tabs, variant = 'surface' }: WizardStepperV3Pr
         return;
       }
 
-      container.scrollTo({
-        left: clampedTarget,
-        behavior: !hasAlignedOnceRef.current || reduceMotion ? 'auto' : 'smooth',
-      });
+      if (typeof container.scrollTo === 'function') {
+        container.scrollTo({
+          left: clampedTarget,
+          behavior: !hasAlignedOnceRef.current || reduceMotion ? 'auto' : 'smooth',
+        });
+      } else {
+        container.scrollLeft = clampedTarget;
+      }
       hasAlignedOnceRef.current = true;
     });
 

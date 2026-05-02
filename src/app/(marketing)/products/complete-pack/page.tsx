@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
+import { Section8JourneyTimeline } from '@/components/eviction/Section8JourneyTimeline';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -99,6 +100,13 @@ export default function CompleteEvictionPackPage() {
       showTrustPositioningBar: true,
       trustPositioningPreset: 'complete_pack',
     },
+    postHeroContent: (
+      <Section8JourneyTimeline
+        stage="stage2"
+        title="See the full notice-to-court path"
+        intro="The Complete Pack carries the same England Section 8 case from notice through expiry, claim, and hearing, so the landlord can see the whole route before starting."
+      />
+    ),
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:

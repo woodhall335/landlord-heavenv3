@@ -39,6 +39,7 @@ import {
 import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
 import { computeRiskAssessment } from '@/lib/case-intel/risk-assessment';
 import fs from 'fs/promises';
+import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 import {
@@ -94,6 +95,11 @@ import {
   ENGLAND_SECTION8_NOTICE_TITLE,
   ENGLAND_SECTION8_NOTICE_TYPE_LABEL,
 } from '@/lib/england-possession/section8-terminology';
+import {
+  getSection8JourneySteps,
+  getSection8JourneySummary,
+  type EnglandSection8JourneyStage,
+} from '@/lib/england-possession/section8-journey';
 import { isDebugStampEnabled } from './debug-stamp';
 import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
 
@@ -332,6 +338,55 @@ type CourtFacingRenderOptions = {
   cleanOutput: boolean;
   courtMode: boolean;
 };
+
+const SECTION8_JOURNEY_IMAGE_CACHE = new Map<string, string | null>();
+
+function getSection8JourneyImageDataUri(imageSrc: string): string | null {
+  const cached = SECTION8_JOURNEY_IMAGE_CACHE.get(imageSrc);
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  const normalizedPath = imageSrc.replace(/^\/+/, '');
+  const absolutePath = path.join(process.cwd(), 'public', normalizedPath);
+
+  if (!existsSync(absolutePath)) {
+    SECTION8_JOURNEY_IMAGE_CACHE.set(imageSrc, null);
+    return null;
+  }
+
+  try {
+    const extension = path.extname(absolutePath).toLowerCase();
+    const mimeType =
+      extension === '.webp'
+        ? 'image/webp'
+        : extension === '.png'
+          ? 'image/png'
+          : extension === '.jpg' || extension === '.jpeg'
+            ? 'image/jpeg'
+            : 'application/octet-stream';
+    const buffer = readFileSync(absolutePath);
+    const dataUri = `data:${mimeType};base64,${buffer.toString('base64')}`;
+    SECTION8_JOURNEY_IMAGE_CACHE.set(imageSrc, dataUri);
+    return dataUri;
+  } catch {
+    SECTION8_JOURNEY_IMAGE_CACHE.set(imageSrc, null);
+    return null;
+  }
+}
+
+function buildSection8JourneyRenderData(stage: EnglandSection8JourneyStage) {
+  const steps = getSection8JourneySteps(stage).map((step) => ({
+    ...step,
+    image_data_uri: getSection8JourneyImageDataUri(step.imageSrc),
+  }));
+
+  return {
+    journey_title: 'Eviction journey',
+    journey_supporting_text: getSection8JourneySummary(stage),
+    journey_steps: steps,
+  };
+}
 
 function resolveCanonicalCourtName(...sources: Array<Record<string, any> | null | undefined>): string | undefined {
   for (const source of sources) {
@@ -1171,6 +1226,7 @@ function buildEnglandSection8PackSummaryData(params: {
     noticeServedDate,
     earliestProceedingsDate,
   });
+  const journeyData = buildSection8JourneyRenderData(stage);
   const stageTitle =
     stage === 'stage1'
       ? 'Case Summary — Stage 1 Notice & Service'
@@ -1208,6 +1264,7 @@ function buildEnglandSection8PackSummaryData(params: {
     pack_summary_title: stageTitle,
     pack_strapline: buildPackStrapline(stage),
     pack_supporting_line: buildPackSupportingLine(stage),
+    ...journeyData,
     risk_line: buildPackRiskLine(),
     status_label: buildPackStatusLabel(stage, complianceStatusItems),
     primary_status_item: buildPrimaryStatusItem(complianceStatusItems),

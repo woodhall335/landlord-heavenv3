@@ -19,6 +19,7 @@ import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow
 import { ResidentialStandaloneSectionFlow } from '@/components/wizard/flows/ResidentialStandaloneSectionFlow';
 import { Section13WizardFlow } from '@/components/wizard/flows/Section13WizardFlow';
 import { EnglandTenancyProductChooser } from '@/components/wizard/EnglandTenancyProductChooser';
+import { Section8JourneyTimeline } from '@/components/eviction/Section8JourneyTimeline';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { trackWizardStartWithAttribution } from '@/lib/analytics';
 import {
@@ -632,6 +633,14 @@ function WizardFlowContent() {
                     <p className={`mt-4 text-sm leading-6 ${isActive ? 'text-violet-50' : 'text-slate-600'}`}>
                       {choice.description}
                     </p>
+                    <div className="mt-5">
+                      <Section8JourneyTimeline
+                        stage={choice.key === 'notice_only' ? 'stage1' : 'stage2'}
+                        showHeader={false}
+                        compact
+                        className="border-white/70 bg-white/95"
+                      />
+                    </div>
                     <div
                       className={`mt-6 inline-flex items-center text-sm font-semibold ${
                         isActive ? 'text-white' : 'text-slate-900'

@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
+import { Section8JourneyTimeline } from '@/components/eviction/Section8JourneyTimeline';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -98,6 +99,13 @@ export default function NoticeOnlyPage() {
       showTrustPositioningBar: true,
       trustPositioningPreset: 'notice_only',
     },
+    postHeroContent: (
+      <Section8JourneyTimeline
+        stage="stage1"
+        title="See where Stage 1 takes the case"
+        intro="This pack covers the live notice stage and the wait for expiry, so the landlord can see exactly where service sits in the wider possession route."
+      />
+    ),
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
