@@ -738,6 +738,9 @@ function WizardFlowContent() {
         key={`eviction-${evictionFlowProduct}-${caseId}`}
         caseId={caseId}
         jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
+        upgradeFromNoticeOnly={
+          jurisdiction === 'england' && searchParams.get('upgrade_from') === 'notice_only'
+        }
       />
     );
   }

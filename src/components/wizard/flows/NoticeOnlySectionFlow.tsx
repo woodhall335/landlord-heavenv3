@@ -134,7 +134,7 @@ export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'en
       benefits: [
         'Keeps the notice and court forms consistent from the same answers',
         'Adds the N5, N119, witness statement, and court bundle support',
-        'Reduces the risk of re-keying facts when the case moves into court',
+        'Moves this same case into Stage 2 without re-entering the notice basics',
       ],
     };
   }
@@ -145,9 +145,9 @@ export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'en
       reason:
         'This notice relies on multiple or more involved possession grounds. The Stage 2 Court & Possession Pack is a better fit when you want the notice, court forms, and supporting documents prepared together.',
       benefits: [
-        'Adds the court claim forms and bundle support',
+        'Adds the combined Stage 1 plus Stage 2 court claim file',
         'Helps keep evidence and particulars aligned with the notice',
-        'Gives you a stronger claim pack if the tenant does not leave',
+        'Lets you continue from the first court-only step that still needs attention',
       ],
     };
   }
@@ -1494,7 +1494,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                 Switch to Stage 2 Court & Possession Pack
               </button>
               <p className="text-xs leading-5 text-[#6a627f]">
-                Your saved answers carry across so you can keep building from the same case.
+                We keep this case and move you into the first court-only step that still needs attention.
               </p>
             </div>
           </div>

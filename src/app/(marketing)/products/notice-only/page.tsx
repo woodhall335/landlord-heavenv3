@@ -79,10 +79,10 @@ export default function NoticeOnlyPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 8 notice and service pack | built to hold up if challenged',
+      trustText: 'England Section 8 notice and service pack | start correctly before court',
       title: descriptor.displayName,
       subtitle:
-        'Start the eviction process correctly, or risk the case failing before court. This pack aligns the notice, service, and evidence so the file does not fall apart on technical errors.',
+        'Start with Stage 1 when the next practical step is serving notice. This pack aligns the notice, service record, and supporting evidence so you can serve correctly now and carry the file forward later if court becomes necessary.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -92,16 +92,30 @@ export default function NoticeOnlyPage() {
         href: '/products/complete-pack',
       },
       feature:
-        'Most possession cases fail on notice, service, or consistency errors — this pack is designed to prevent those.',
+        'Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent those before court is even in view.',
       mediaSrc: '/images/notice_bundles.webp',
       mediaAlt: 'Preview of the England Section 8 notice pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'notice_only',
     },
+    earlyProofBand: {
+      priceLabel: product.displayPrice,
+      valueSummary:
+        'Stage 1 is the best fit when you need to serve first, keep the service record straight, and avoid turning a notice-stage job into a court-stage rebuild later.',
+      includedBullets: [
+        'Official Form 3A notice prepared from the case facts',
+        'Service guidance and Form N215 support kept with the notice file',
+        'Arrears and validity checks aligned before anything is served',
+      ],
+      bestFor:
+        'You need to serve first and want the notice, service record, and evidence lined up before deciding whether a possession claim is necessary.',
+      notFor:
+        'You already expect the matter to continue into court and want the notice file plus the possession claim documents working together from the start.',
+    },
     whatYouGet: {
       title: 'What you get in Stage 1',
       intro:
-        'This is not just a notice template. It is a Stage 1 notice and service file built to start possession on the right footing and reduce the risk of technical failure.',
+        'This is not just a notice template. It is a Stage 1 notice and service file built for the point where the next real step is service, not issue.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -244,7 +258,7 @@ export default function NoticeOnlyPage() {
     cta: {
       title: 'Start Stage 1 with more confidence',
       body:
-        'Start here if you need the notice, service, and evidence aligned before anything is served, with a direct path into Stage 2 if the case later moves to court.',
+        'Start here if you need the notice, service, and evidence aligned before anything is served, with a direct upgrade into the first court-only step if the case later moves into Stage 2.',
       primary: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,

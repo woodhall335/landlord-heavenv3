@@ -5,7 +5,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { getCaseFacts } from '@/lib/wizard/facts-client';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -38,6 +39,19 @@ vi.mock('@/components/wizard/AskHeavenPanel', () => ({
 }));
 
 import { EvictionSectionFlow } from '../EvictionSectionFlow';
+
+const mockedGetCaseFacts = vi.mocked(getCaseFacts);
+
+beforeAll(() => {
+  Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
+    value: vi.fn(),
+    writable: true,
+  });
+});
+
+beforeEach(() => {
+  mockedGetCaseFacts.mockResolvedValue({});
+});
 
 function escapeStepLabel(label: string): string {
   return label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -131,7 +145,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
   it('shows the complete-pack shell title and key court-ready steps', async () => {
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Complete Eviction Pack/i);
+    await screen.findByText(/Choose the main reason you need possession/i);
     expect(screen.getByText(/Tenant is not paying rent/i)).toBeDefined();
     expect(getStepButton("What's going on?")).toBeDefined();
     expect(getStepButton('Who and where?')).toBeDefined();
@@ -140,24 +154,24 @@ describe('EvictionSectionFlow - England complete pack', () => {
     expect(getStepButton('About the arrears')).toBeDefined();
     expect(getStepButton('Evidence summary')).toBeDefined();
     expect(getStepButton('Prepare your court claim')).toBeDefined();
-    expect(getStepButton('Review your court-ready pack')).toBeDefined();
+    expect(getStepButton('Review your court documents')).toBeDefined();
   });
 
   it('surfaces the court-pack evidence and claim assembly checkpoints', async () => {
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Complete Eviction Pack/i);
+    await screen.findByText(/Choose the main reason you need possession/i);
 
     expect(screen.getAllByText(/Step 1 of 9/i).length).toBeGreaterThan(0);
     expect(getStepButton('Prepare your court claim')).toBeDefined();
-    expect(getStepButton('Review your court-ready pack')).toBeDefined();
+    expect(getStepButton('Review your court documents')).toBeDefined();
     expect(screen.getAllByTestId('ask-heaven-panel').length).toBeGreaterThan(0);
   });
 
   it('skips ground details for arrears-only complete-pack cases', async () => {
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Complete Eviction Pack/i);
+    await screen.findByText(/Choose the main reason you need possession/i);
 
     expect(screen.queryByRole('button', { name: stepButtonName('Ground details') })).toBeNull();
     expect(getStepButton('About the arrears')).toBeDefined();
@@ -178,7 +192,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
       />
     );
 
-    await screen.findByText(/Complete Eviction Pack/i);
+    await screen.findByText(/Choose the main reason you need possession/i);
 
     expect(getStepButton('Ground details')).toBeDefined();
     expect(screen.queryByRole('button', { name: stepButtonName('About the arrears') })).toBeNull();
@@ -195,7 +209,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
       />
     );
 
-    await screen.findByText(/Complete Eviction Pack/i);
+    await screen.findByText(/Choose the main reason you need possession/i);
 
     expect(getStepButton('Ground details')).toBeDefined();
     expect(getStepButton('About the arrears')).toBeDefined();
@@ -206,13 +220,66 @@ describe('EvictionSectionFlow - England complete pack', () => {
 
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Complete Eviction Pack/i);
-    await user.click(getStepButton('Review your court-ready pack'));
+    await screen.findByText(/Choose the main reason you need possession/i);
+    await user.click(getStepButton('Review your court documents'));
 
     await screen.findByText(/This pack is ready to generate|You still need to fix a few things before this pack is ready/i);
     expect(screen.getByText(/What must be fixed before you continue/i)).toBeDefined();
     expect(screen.getByText(/What could slow things down later/i)).toBeDefined();
     expect(screen.getByText(/Sections in this pack/i)).toBeDefined();
+  });
+
+  it('upgrades a Stage 1 case into the first incomplete court-only step instead of restarting the flow', async () => {
+    const user = userEvent.setup();
+
+    mockedGetCaseFacts.mockResolvedValueOnce({
+      __meta: { product: 'notice_only', jurisdiction: 'england' },
+      eviction_route: 'section_8',
+      landlord_full_name: 'Jane Landlord',
+      landlord_address_line1: '1 Owner Road',
+      landlord_address_town: 'London',
+      landlord_address_postcode: 'SW1A 1AA',
+      tenant_full_name: 'Tom Tenant',
+      property_address_line1: '2 Example Street',
+      property_address_town: 'London',
+      property_address_postcode: 'E1 1AA',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 950,
+      rent_frequency: 'monthly',
+      rent_due_day: 1,
+      section8_grounds: ['Ground 8 - Serious rent arrears'],
+      section8_details: 'The tenant has failed to pay rent.',
+      notice_served_date: '2026-04-20',
+      notice_service_method: 'first_class_post',
+      notice_service_location: 'usual_residence',
+      notice_service_recipient_capacity: 'defendant',
+      arrears_items: [
+        {
+          period_start: '2026-01-01',
+          period_end: '2026-01-31',
+          rent_due: 950,
+          rent_paid: 0,
+          amount_owed: 950,
+        },
+      ],
+    });
+
+    render(
+      <EvictionSectionFlow
+        caseId="upgrade-stage1-to-stage2"
+        jurisdiction="england"
+        upgradeFromNoticeOnly
+      />
+    );
+
+    await screen.findByText(/Stage 1 upgraded into Stage 2/i);
+    expect(screen.getByText(/court-only sections are already complete|You still need to complete:/i)).toBeDefined();
+    expect(getStepButton('Evidence summary')).toHaveAttribute('aria-current', 'step');
+    expect(screen.queryByText(/Choose the main reason you need possession/i)).toBeNull();
+
+    await user.click(getStepButton('When will you serve?'));
+    expect(screen.getByText(/Have you already served a valid notice on the tenant/i)).toBeDefined();
+    expect(screen.getByRole('radio', { name: /No, I need to generate a notice/i })).toBeChecked();
   });
 });
 

@@ -44,8 +44,8 @@ const CROSS_SELL_MAP: Record<string, CrossSellItem[]> = {
   notice_only: [
     {
       product: 'complete_pack',
-      title: 'Need court forms?',
-      description: 'Upgrade to the Complete Pack for N5, N119, witness statement, and filing guide.',
+      title: 'Need the full court pack too?',
+      description: 'Move into the combined pack with your Stage 1 notice file, N5, N119, witness statement, and hearing support.',
       price: PRODUCTS.complete_pack.displayPrice,
       href: '/wizard?product=complete_pack&src=dashboard_crosssell',
       icon: <FileText className="w-5 h-5 text-primary" />,
@@ -86,7 +86,7 @@ const CROSS_SELL_MAP: Record<string, CrossSellItem[]> = {
     {
       product: 'complete_pack',
       title: 'Full eviction pack',
-      description: 'Complete court-ready package with N5, N119, and witness statement.',
+      description: 'Combined notice and court pack with Form 3A, N5, N119, witness statement, and hearing support.',
       price: PRODUCTS.complete_pack.displayPrice,
       href: '/wizard?product=complete_pack&src=dashboard_crosssell',
       icon: <FileText className="w-5 h-5 text-primary" />,

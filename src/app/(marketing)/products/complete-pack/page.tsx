@@ -80,10 +80,10 @@ export default function CompleteEvictionPackPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England possession pack | carry the case into court without breaking the file',
+      trustText: 'England possession pack | includes Stage 1 notice and Stage 2 court paperwork together',
       title: descriptor.displayName,
       subtitle:
-        'Prepare and file a full Section 8 possession case with both the notice/service stage and the court stage working from the same file.',
+        'Choose Stage 2 when you want the full combined route from notice through court. This pack includes the Stage 1 notice and service file as well as the Stage 2 claim forms, evidence structure, and hearing support.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -93,16 +93,30 @@ export default function CompleteEvictionPackPage() {
         href: '/products/notice-only',
       },
       feature:
-        'Most possession cases fail on notice, service, or consistency errors — this complete pack is designed to prevent those across both stages.',
+        'You do not need to buy Stage 1 separately if you already want the court pack - this route keeps the full file aligned from the start.',
       mediaSrc: '/images/eviction_packs.webp',
       mediaAlt: 'Preview of the England Stage 2 court and possession pack',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'complete_pack',
     },
+    earlyProofBand: {
+      priceLabel: product.displayPrice,
+      valueSummary:
+        'This is the combined route for landlords who already expect the case may need to continue into possession proceedings and want the notice file plus the court file built together.',
+      includedBullets: [
+        'Stage 1 Form 3A notice and service file included in the same case',
+        'N5, N119, witness statement, and court bundle support added from the start',
+        'One joined-up possession file instead of separate notice and court rebuilds',
+      ],
+      bestFor:
+        'The case is likely to continue into court, or you want the notice and possession claim prepared together from the beginning.',
+      notFor:
+        'You only need to serve the notice first and want a lighter Stage 1 route before deciding whether a possession claim is necessary.',
+    },
     whatYouGet: {
-      title: 'What you get in Stage 2',
+      title: 'What you get in the combined pack',
       intro:
-        'This is the full combined pack. It includes the Stage 1 notice and service documents as well as the Stage 2 court documents, so the case moves from service into possession proceedings without breaking the file.',
+        'This is the full combined pack. It includes the full Stage 1 notice and service file plus the Stage 2 court documents, so the case moves from first service into possession proceedings without breaking the file.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -257,7 +271,7 @@ export default function CompleteEvictionPackPage() {
     cta: {
       title: 'Start Stage 2 now',
       body:
-        'Start here if you want the complete combined pack with the notice, service record, claim forms, and hearing support prepared together as one England possession file.',
+        'Start here if you want the complete combined pack with the notice, service record, claim forms, and hearing support prepared together as one England possession file, without buying Stage 1 separately first.',
       primary: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,

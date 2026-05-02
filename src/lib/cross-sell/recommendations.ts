@@ -97,7 +97,7 @@ const NOTICE_ONLY_FOR_MONEY_CLAIM: CrossSellRecommendation = {
 const COMPLETE_PACK_FOR_MONEY_CLAIM: CrossSellRecommendation = {
   product: 'complete_pack',
   title: 'Complete Eviction Pack',
-  description: 'Need to go to court? Get all forms including possession claim.',
+  description: 'Need the full possession route? Get the Stage 1 notice file plus the court claim pack together.',
   price: PRODUCTS.complete_pack.displayPrice,
   ctaText: 'View Complete Pack',
   angle: 'court_proceedings',
@@ -123,7 +123,7 @@ const NOTICE_ONLY_FOR_TENANCY: CrossSellRecommendation = {
 const COMPLETE_PACK_FOR_TENANCY: CrossSellRecommendation = {
   product: 'complete_pack',
   title: 'Complete Eviction Pack',
-  description: 'Get everything you need to regain possession, including court forms.',
+  description: 'Get the full notice and court-possession file together if a tenancy later becomes contested.',
   price: PRODUCTS.complete_pack.displayPrice,
   ctaText: 'View Complete Pack',
   angle: 'full_eviction',
@@ -221,7 +221,7 @@ export const SECTION8_TOOL_CROSS_SELLS: CrossSellConfig = {
   secondary: {
     product: 'complete_pack',
     title: 'Complete Eviction Pack',
-    description: 'For court proceedings: N5B, witness statements, and more.',
+    description: 'For the full possession route: Stage 1 notice file plus N5, N119, witness statement, and more.',
     price: PRODUCTS.complete_pack.displayPrice,
     ctaText: 'View Complete Pack',
     angle: 'court_proceedings',
@@ -287,8 +287,8 @@ export const RENT_DEMAND_CROSS_SELLS: CrossSellConfig = {
 export const NOTICE_ONLY_PRODUCT_CROSS_SELLS: CrossSellConfig = {
   primary: {
     product: 'complete_pack',
-    title: 'Need Court Forms Too?',
-    description: 'The Complete Pack includes everything for court proceedings.',
+    title: 'Need the full Stage 1 plus Stage 2 pack?',
+    description: 'The Complete Pack includes the notice file as well as the court-stage possession documents.',
     price: PRODUCTS.complete_pack.displayPrice,
     ctaText: 'View Complete Pack',
     angle: 'upsell',

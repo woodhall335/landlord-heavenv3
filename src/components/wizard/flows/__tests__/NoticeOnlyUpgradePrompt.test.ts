@@ -22,6 +22,9 @@ describe('getNoticeOnlyUpgradePrompt', () => {
 
     expect(prompt).not.toBeNull();
     expect(prompt?.title).toMatch(/full possession pack/i);
+    expect(prompt?.benefits).toContain(
+      'Moves this same case into Stage 2 without re-entering the notice basics'
+    );
   });
 
   it('does not recommend complete pack for a non-England or low-complexity notice flow', () => {

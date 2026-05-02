@@ -64,7 +64,7 @@ const PACK_CONTENTS: Record<
   },
   complete_pack: {
     heading: 'Your court-ready pack',
-    subheading: 'Notice plus possession claim paperwork',
+    subheading: 'Stage 1 notice plus Stage 2 possession claim paperwork',
     includedDocuments: [
       'Form 3A notice',
       'Form N5',

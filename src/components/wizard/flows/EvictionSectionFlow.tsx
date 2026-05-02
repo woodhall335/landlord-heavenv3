@@ -516,6 +516,56 @@ interface EvictionSectionFlowProps {
   jurisdiction: 'england' | 'wales' | 'scotland';
   /** Pre-loaded facts from notice-only flow (for data reuse) */
   initialFacts?: WizardFacts;
+  /** True when the user is continuing from the England notice-only flow */
+  upgradeFromNoticeOnly?: boolean;
+}
+
+const COMPLETE_PACK_UPGRADE_SECTION_ORDER = ['evidence', 'court_signing', 'review'] as const;
+
+function normalizeCompletePackFacts(
+  facts: WizardFacts,
+  jurisdiction: 'england' | 'wales' | 'scotland',
+  upgradeFromNoticeOnly: boolean
+): WizardFacts {
+  const normalizedFacts: WizardFacts = {
+    ...facts,
+    __meta: {
+      ...(facts.__meta || {}),
+      product: 'complete_pack',
+      original_product:
+        facts.__meta?.original_product ?? facts.__meta?.product ?? (upgradeFromNoticeOnly ? 'notice_only' : 'complete_pack'),
+      jurisdiction,
+    },
+  };
+
+  if (
+    upgradeFromNoticeOnly &&
+    jurisdiction === 'england' &&
+    normalizedFacts.notice_already_served === undefined
+  ) {
+    normalizedFacts.notice_already_served = false;
+  }
+
+  return normalizedFacts;
+}
+
+function getCompletePackUpgradeTargetSection(
+  sections: WizardSection[],
+  facts: WizardFacts,
+  jurisdiction: 'england' | 'wales' | 'scotland'
+): string {
+  for (const sectionId of COMPLETE_PACK_UPGRADE_SECTION_ORDER) {
+    const section = sections.find((candidate) => candidate.id === sectionId);
+    if (!section) {
+      continue;
+    }
+
+    if (sectionId === 'review' || !section.isComplete(facts, jurisdiction)) {
+      return sectionId;
+    }
+  }
+
+  return 'review';
 }
 
 /**
@@ -526,6 +576,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   caseId,
   jurisdiction,
   initialFacts,
+  upgradeFromNoticeOnly = false,
 }) => {
   const router = useRouter();
 
@@ -533,17 +584,25 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   const { hasErrors, uploadsInProgress } = useValidationContext();
 
   // State
-  const [facts, setFacts] = useState<WizardFacts>(initialFacts || { __meta: { product: 'complete_pack', original_product: 'complete_pack', jurisdiction } });
+  const [facts, setFacts] = useState<WizardFacts>(
+    normalizeCompletePackFacts(
+      initialFacts || { __meta: { product: 'complete_pack', original_product: 'complete_pack', jurisdiction } },
+      jurisdiction,
+      upgradeFromNoticeOnly,
+    )
+  );
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [upgradeLandingSectionId, setUpgradeLandingSectionId] = useState<string | null>(null);
 
   // Debounce ref for save operations to prevent excessive API calls
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingFactsRef = useRef<WizardFacts | null>(null);
   const saveResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const upgradeEntryAppliedRef = useRef(false);
 
   // Smart Review state (hydrated from persisted facts.__smart_review)
   const [smartReviewWarnings, setSmartReviewWarnings] = useState<SmartReviewWarningItem[]>([]);
@@ -556,16 +615,22 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         setLoading(true);
         const loadedFacts = await getCaseFacts(caseId);
         if (loadedFacts && Object.keys(loadedFacts).length > 0) {
-          setFacts((prev) => ({
-            ...prev,
-            ...loadedFacts,
-            __meta: {
-              ...prev.__meta,
-              ...loadedFacts.__meta,
-              product: 'complete_pack',
+          setFacts((prev) =>
+            normalizeCompletePackFacts(
+              {
+                ...prev,
+                ...loadedFacts,
+                __meta: {
+                  ...prev.__meta,
+                  ...loadedFacts.__meta,
+                  product: 'complete_pack',
+                  jurisdiction,
+                },
+              },
               jurisdiction,
-            },
-          }));
+              upgradeFromNoticeOnly,
+            )
+          );
 
           // Hydrate Smart Review state from persisted data
           const sr = (loadedFacts as any).__smart_review;
@@ -582,7 +647,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     };
 
     void loadFacts();
-  }, [caseId, jurisdiction]);
+  }, [caseId, jurisdiction, upgradeFromNoticeOnly]);
 
   // Get visible sections based on jurisdiction and eviction route
   const visibleSections = useMemo(() => {
@@ -657,6 +722,27 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       setCurrentSectionIndex(Math.max(visibleSections.length - 1, 0));
     }
   }, [currentSectionIndex, visibleSections.length]);
+
+  useEffect(() => {
+    if (
+      !upgradeFromNoticeOnly ||
+      jurisdiction !== 'england' ||
+      loading ||
+      visibleSections.length === 0 ||
+      upgradeEntryAppliedRef.current
+    ) {
+      return;
+    }
+
+    const targetSectionId = getCompletePackUpgradeTargetSection(visibleSections, facts, jurisdiction);
+    const targetIndex = visibleSections.findIndex((section) => section.id === targetSectionId);
+
+    if (targetIndex >= 0) {
+      setCurrentSectionIndex(targetIndex);
+      setUpgradeLandingSectionId(targetSectionId);
+      upgradeEntryAppliedRef.current = true;
+    }
+  }, [facts, jurisdiction, loading, upgradeFromNoticeOnly, visibleSections]);
 
   // Save facts to backend using the facts-client helper
   const saveFactsToServer = useCallback(
@@ -849,6 +935,21 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   // Get blockers and warnings for current section
   const currentBlockers = currentSection?.hasBlockers?.(facts) || [];
   const currentWarnings = currentSection?.hasWarnings?.(facts) || [];
+  const showUpgradeRecap =
+    upgradeFromNoticeOnly &&
+    jurisdiction === 'england' &&
+    Boolean(upgradeLandingSectionId) &&
+    currentSection?.id === upgradeLandingSectionId;
+  const upgradeOutstandingSteps = visibleSections
+    .filter(
+      (section) =>
+        COMPLETE_PACK_UPGRADE_SECTION_ORDER.includes(
+          section.id as (typeof COMPLETE_PACK_UPGRADE_SECTION_ORDER)[number]
+        ) &&
+        section.id !== 'review' &&
+        !section.isComplete(facts, jurisdiction)
+    )
+    .map((section) => section.label);
 
   // Render section content
   const renderSection = () => {
@@ -1054,6 +1155,39 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         </>
       )}
     >
+      {showUpgradeRecap && (
+        <div className="mb-6 rounded-[1.55rem] border border-[#e4d7ff] bg-[linear-gradient(180deg,#fcfaff_0%,#f5eeff_100%)] p-5 shadow-sm">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7b56d8]">
+            Stage 1 upgraded into Stage 2
+          </p>
+          <h3 className="mt-2 text-base font-semibold tracking-tight text-[#241247]">
+            Your notice-stage answers have been carried into the combined court pack
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-[#5f5877]">
+            This case now includes the Stage 1 notice and service file, plus the Stage 2 claim forms,
+            witness statement, and court bundle support.
+          </p>
+          <ul className="mt-3 space-y-1.5 text-sm leading-6 text-[#473d63]">
+            <li className="flex items-start gap-2">
+              <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#7c3aed]" />
+              <span>Stage 1 notice basics, grounds, tenancy details, and arrears facts stay on this case.</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#7c3aed]" />
+              <span>Stage 2 adds N5, N119, the witness statement, and the court bundle structure.</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#7c3aed]" />
+              <span>
+                {upgradeOutstandingSteps.length > 0
+                  ? `You still need to complete: ${upgradeOutstandingSteps.join(', ')}.`
+                  : 'The court-only sections are already complete, so you can review the full combined pack now.'}
+              </span>
+            </li>
+          </ul>
+        </div>
+      )}
+
       {/* Blockers */}
             {currentBlockers.length > 0 && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
