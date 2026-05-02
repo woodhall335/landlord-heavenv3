@@ -14,6 +14,7 @@ describe('Section 8 eviction product pages', () => {
     expect(source).toContain('the next practical step is serving notice');
     expect(source).toContain('Choose Stage 1 if serving the Section 8 notice is the next real step');
     expect(source).toContain('see the actual Section 8 notice file before you pay');
+    expect(source).toContain("imageSrc: '/images/notice-only-pack.webp'");
     expect(source).toContain('This is not just a notice template.');
     expect(source).toContain('Start the notice-first wizard');
     expect(source).toContain('Serve the Section 8 notice correctly now');
@@ -28,6 +29,7 @@ describe('Section 8 eviction product pages', () => {
     expect(source).toContain('Choose Stage 2 if you want the full Section 8 court route from the start');
     expect(source).toContain('You do not need to buy Stage 1 separately first');
     expect(source).toContain('see the actual Section 8 notice, claim forms, and court file before paying');
+    expect(source).toContain("imageSrc: '/images/complete-pack.webp'");
     expect(source).toContain('This pack includes the Stage 1 notice and service file as well as the Stage 2 claim forms');
     expect(source).toContain('What you get in the combined pack');
     expect(source).toContain('Start the full Section 8 court route');

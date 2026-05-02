@@ -110,6 +110,8 @@ export default function NoticeOnlyPage() {
       priceLabel: product.displayPrice,
       valueSummary:
         'Stage 1 is the best fit when you need to serve first, keep the service record straight, and see the actual Section 8 notice file before you pay instead of guessing what the pack will contain.',
+      imageSrc: '/images/notice-only-pack.webp',
+      imageAlt: 'Preview of the Stage 1 Section 8 notice-only pack',
       includedBullets: [
         'Official Form 3A notice prepared from the case facts',
         'Service guidance and Form N215 support kept with the notice file',

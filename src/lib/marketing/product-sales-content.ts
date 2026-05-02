@@ -72,6 +72,8 @@ export interface ProductSalesEarlyProofBand {
   bestFor?: string;
   notFor?: string;
   preview?: ReactNode;
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 export interface ProductSalesStep {

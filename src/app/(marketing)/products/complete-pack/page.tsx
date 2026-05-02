@@ -111,6 +111,8 @@ export default function CompleteEvictionPackPage() {
       priceLabel: product.displayPrice,
       valueSummary:
         'This is the combined route for landlords who already expect the case may need to continue into possession proceedings and want to see the actual Section 8 notice, claim forms, and court file before paying.',
+      imageSrc: '/images/complete-pack.webp',
+      imageAlt: 'Preview of the complete Section 8 eviction pack',
       includedBullets: [
         'Stage 1 Form 3A notice and service file included in the same case',
         'N5, N119, witness statement, and court bundle support added from the start',

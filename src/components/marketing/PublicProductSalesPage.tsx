@@ -424,8 +424,9 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
   const hasChecklist = Boolean(content.includedBullets?.length);
   const hasFitSummary = Boolean(content.bestFor || content.notFor);
   const hasPreview = Boolean(content.preview);
+  const hasImage = Boolean(content.imageSrc);
 
-  if (!content.priceLabel && !content.valueSummary && !hasChecklist && !hasFitSummary && !hasPreview) {
+  if (!content.priceLabel && !content.valueSummary && !hasChecklist && !hasFitSummary && !hasPreview && !hasImage) {
     return null;
   }
 
@@ -494,9 +495,22 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
               ) : null}
             </div>
 
-            {hasPreview ? (
+            {hasPreview || hasImage ? (
               <div className="min-w-0">
-                {content.preview}
+                {hasPreview ? content.preview : null}
+                {content.imageSrc ? (
+                  <div className="relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]">
+                    <div className="relative aspect-[4/3] w-full">
+                      <Image
+                        src={content.imageSrc}
+                        alt={content.imageAlt ?? 'Product pack preview'}
+                        fill
+                        sizes="(min-width: 1024px) 34vw, 100vw"
+                        className="object-cover object-center"
+                      />
+                    </div>
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>
