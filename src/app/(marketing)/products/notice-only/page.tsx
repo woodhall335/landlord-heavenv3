@@ -346,6 +346,8 @@ export default function NoticeOnlyPage() {
       title: 'How it works',
       intro:
         'The workflow keeps the notice route focused on the facts that matter for a current England Section 8 case.',
+      imageSrc: '/images/how-it-works-notice-only.webp',
+      imageAlt: 'How the Section 8 notice-only pack works',
       steps: [
         {
           step: 'Step 01',

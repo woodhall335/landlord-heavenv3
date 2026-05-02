@@ -139,6 +139,8 @@ export interface ProductSalesPageContent {
     title: string;
     intro: ReactNode;
     steps: ProductSalesStep[];
+    imageSrc?: string;
+    imageAlt?: string;
   };
   cta: ProductSalesCta;
   faq: {

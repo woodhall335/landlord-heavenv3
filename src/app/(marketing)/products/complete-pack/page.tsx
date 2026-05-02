@@ -359,6 +359,8 @@ export default function CompleteEvictionPackPage() {
       title: 'How it works',
       intro:
         'The workflow is built for the landlord who already knows the matter may need to go all the way from notice to court.',
+      imageSrc: '/images/how-it-works-complete-pack.webp',
+      imageAlt: 'How the complete Section 8 pack works from notice to court',
       steps: [
         {
           step: 'Step 01',
