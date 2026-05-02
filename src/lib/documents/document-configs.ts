@@ -1,4 +1,4 @@
-import { DocumentInfo } from '@/components/preview/DocumentCard';
+import type { DocumentInfo } from '@/components/preview/DocumentCard';
 import { PRODUCTS } from '@/lib/pricing/products';
 import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,

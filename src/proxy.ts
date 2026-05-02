@@ -1,5 +1,5 @@
 /**
- * Next.js Middleware
+ * Next.js Proxy
  *
  * Handles:
  * - Supabase session refresh (critical for auth to work)
@@ -10,22 +10,17 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
-/**
- * Get allowed origins based on environment
- */
 function getAllowedOrigins(): string[] {
-  // Check for explicit allowed origins from env
   const envOrigins = process.env.ALLOWED_ORIGINS;
   if (envOrigins) {
     return envOrigins.split(',').map((o) => o.trim());
   }
 
-  // Check environment
-  const isProduction = process.env.VERCEL_ENV === 'production' ||
+  const isProduction =
+    process.env.VERCEL_ENV === 'production' ||
     (process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV);
 
   if (isProduction) {
-    // Production: Only allow canonical domains
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://landlordheaven.co.uk';
     return [
       siteUrl,
@@ -34,7 +29,6 @@ function getAllowedOrigins(): string[] {
     ];
   }
 
-  // Development/Preview: Allow localhost and Vercel preview URLs
   return [
     'http://localhost:3000',
     'http://localhost:5000',
@@ -43,18 +37,12 @@ function getAllowedOrigins(): string[] {
   ];
 }
 
-/**
- * Check if origin is allowed
- */
 function isOriginAllowed(origin: string | null): boolean {
   if (!origin) return false;
 
   const allowedOrigins = getAllowedOrigins();
-
-  // Exact match
   if (allowedOrigins.includes(origin)) return true;
 
-  // Check for Vercel preview URLs in non-production
   const isProduction = process.env.VERCEL_ENV === 'production';
   if (!isProduction && origin.includes('.vercel.app')) {
     return true;
@@ -63,9 +51,6 @@ function isOriginAllowed(origin: string | null): boolean {
   return false;
 }
 
-/**
- * Add CORS headers to response
- */
 function addCorsHeaders(
   response: NextResponse,
   origin: string | null
@@ -90,15 +75,10 @@ function addCorsHeaders(
   return response;
 }
 
-/**
- * Refresh Supabase session
- * This is critical for auth to work across server and client
- */
 async function refreshSupabaseSession(request: NextRequest, response: NextResponse) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // Skip if Supabase not configured
   if (!supabaseUrl || !supabaseAnonKey) {
     return response;
   }
@@ -119,33 +99,28 @@ async function refreshSupabaseSession(request: NextRequest, response: NextRespon
     },
   });
 
-  // Refresh session - this updates the cookies if needed
   await supabase.auth.getUser();
 
   return response;
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const origin = request.headers.get('origin');
 
-  // Handle CORS preflight for API routes
   if (pathname.startsWith('/api/') && request.method === 'OPTIONS') {
     const response = new NextResponse(null, { status: 204 });
     return addCorsHeaders(response, origin);
   }
 
-  // Create base response
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   });
 
-  // Refresh Supabase session for all routes
   response = await refreshSupabaseSession(request, response);
 
-  // Add CORS headers for API routes
   if (pathname.startsWith('/api/')) {
     response = addCorsHeaders(response, origin);
   }
@@ -155,13 +130,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder files
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

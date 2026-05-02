@@ -121,14 +121,6 @@ export function EnglandTenancyPage({
         showTrustPositioningBar
       />
 
-      {isSalesMode && salesContent?.sampleProof ? (
-        <section className="bg-white py-10 md:py-12">
-          <Container>
-            <div className="mx-auto max-w-6xl">{salesContent.sampleProof}</div>
-          </Container>
-        </section>
-      ) : null}
-
       <Container className="py-12 md:py-16">
         {legacyNotice ? (
           <div className="mb-10 rounded-[1.8rem] border border-[#E8DCC0] bg-[#FFF8EA] p-6 text-[#5A4720] shadow-[0_12px_28px_rgba(43,33,12,0.06)]">

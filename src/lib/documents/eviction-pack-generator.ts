@@ -340,6 +340,12 @@ type CourtFacingRenderOptions = {
 };
 
 const SECTION8_JOURNEY_IMAGE_CACHE = new Map<string, string | null>();
+const SECTION8_JOURNEY_IMAGE_PATHS: Record<string, string> = {
+  '/images/notice.webp': path.join(process.cwd(), 'public', 'images', 'notice.webp'),
+  '/images/expiry.webp': path.join(process.cwd(), 'public', 'images', 'expiry.webp'),
+  '/images/claim.webp': path.join(process.cwd(), 'public', 'images', 'claim.webp'),
+  '/images/hearing.webp': path.join(process.cwd(), 'public', 'images', 'hearing.webp'),
+};
 
 function getSection8JourneyImageDataUri(imageSrc: string): string | null {
   const cached = SECTION8_JOURNEY_IMAGE_CACHE.get(imageSrc);
@@ -347,8 +353,12 @@ function getSection8JourneyImageDataUri(imageSrc: string): string | null {
     return cached;
   }
 
-  const normalizedPath = imageSrc.replace(/^\/+/, '');
-  const absolutePath = path.join(process.cwd(), 'public', normalizedPath);
+  const absolutePath = SECTION8_JOURNEY_IMAGE_PATHS[imageSrc];
+
+  if (!absolutePath) {
+    SECTION8_JOURNEY_IMAGE_CACHE.set(imageSrc, null);
+    return null;
+  }
 
   if (!existsSync(absolutePath)) {
     SECTION8_JOURNEY_IMAGE_CACHE.set(imageSrc, null);

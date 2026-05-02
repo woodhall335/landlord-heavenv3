@@ -61,16 +61,16 @@ export default function LodgerAgreementEnglandPage() {
       <EnglandTenancyPage
         pagePath="/lodger-agreement"
         title="Lodger Agreement England"
-        subtitle="Use this England lodger agreement when you live in the property and are taking in a lodger. It is designed for resident-landlord room lets, with clearer wording on shared living, house rules, and notice than a standard residential pack would usually provide."
+        subtitle="Use this England lodger agreement when you live in the property and are taking in a lodger, so the room let, house rules, and shared-home expectations are set out clearly from the start."
         primaryCtaLabel="Start lodger agreement"
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for a lodger agreement, a room let agreement, a lodger agreement template, or a resident landlord agreement in England, this is the dedicated option for a room let in your own home from 1 May 2026 rather than a standard tenancy agreement adapted after the fact."
-        introTitle="Built for room lets in the landlord's home"
+        legacyNotice="If you searched for a lodger agreement, room let agreement, lodger agreement template, or resident-landlord agreement in England, this is the dedicated option for a room let in your own home from 1 May 2026 rather than a standard tenancy agreement adapted afterwards."
+        introTitle="Choose this when you are renting out a room in your own home"
         introBody={[
-          'This pack is for room lets where the landlord lives at the property and the occupier is sharing the home. It is intentionally separate from the Standard and Premium assured periodic packs, plus the Student and HMO / Shared House packs, because a resident-landlord arrangement works differently in practice.',
-          'Instead of trying to force a lodger setup into a general tenancy product, this pack is built around the points that usually matter most in a room let: shared facilities, house rules, key handling, notice expectations, and the practical realities of living under the same roof.',
+          'This pack is for room lets where the landlord lives at the property and the occupier is sharing the home. It is kept separate from the Standard, Premium, Student, and HMO / Shared House packs because a resident-landlord setup works differently in practice.',
+          'It is built around the points that usually matter most in a lodger arrangement: shared kitchens or bathrooms, house rules, key handling, notice expectations, guests, and the practical reality of living under the same roof.',
         ]}
         highlights={[
           'Resident-landlord room-let agreement built for shared living',
@@ -96,7 +96,7 @@ export default function LodgerAgreementEnglandPage() {
         idealFor={[
           'the landlord lives in the property and the occupier is sharing the home',
           'you want a room-let agreement with clearer wording on house rules and shared spaces',
-          'you want notice and occupation expectations set out more clearly from the start',
+          'you want notice and day-to-day expectations set out clearly from the start',
           'you want the resident-landlord setup kept separate from standard tenancy and HMO products',
           'you want practical room-let paperwork alongside the main agreement',
         ]}
@@ -144,7 +144,7 @@ export default function LodgerAgreementEnglandPage() {
           whyYouNeedThis: {
             title: 'Why a lodger arrangement needs its own paperwork',
             intro:
-              'A resident-landlord room let creates a different kind of day-to-day risk from a standard tenancy. The shared-home expectations need to be documented in a way that matches the practical reality of the arrangement.',
+              'A resident-landlord room let creates a different kind of day-to-day risk from a standard tenancy. The shared-home expectations need to be written down in a way that matches the practical reality of the arrangement.',
             cards: [
               {
                 title: 'Shared-home rules need to be explicit',
@@ -166,12 +166,12 @@ export default function LodgerAgreementEnglandPage() {
           howThisHelps: {
             title: 'How this helps you',
             intro:
-              'The pack gives the landlord cleaner room-let paperwork that is easier to manage, easier to explain, and better aligned to a shared-home arrangement.',
+              'The pack helps the landlord make the room-let terms clearer, start the arrangement on a better footing, and avoid treating a shared-home setup like a whole-property tenancy.',
             cards: [
               {
                 title: 'It keeps the house rules in writing',
                 body:
-                  'The appendix turns shared-home expectations into something clear and visible instead of leaving them as informal understanding.',
+                  'The appendix turns shared-home expectations into something clear and visible instead of leaving them as an informal understanding.',
               },
               {
                 title: 'It supports a cleaner move-in',

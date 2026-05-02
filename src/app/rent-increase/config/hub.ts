@@ -19,15 +19,15 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
   primaryKeyword: 'increase rent england',
   intentLabel: 'rent increase / section 13 landlord pack',
   introAngle:
-    'Check the England route properly first so you do not serve a rent increase notice before validating the date, the figure, and the challenge risk.',
+    'Check the England route properly first so you do not serve a rent increase notice before you are comfortable with the date, the figure, and the challenge risk.',
   heroImage: '/images/wizard-icons/41-rent.png',
   heroAlt: 'Rent increase process overview illustration',
   secondaryCta: RENT_INCREASE_LINKS.section13,
   quickAnswer: [
     'This page helps landlords increase rent in the right order. Instead of treating a rent increase like a one-form task, it shows the England workflow from start to finish: check the tenancy facts, work out the earliest valid date, review the local comparables, decide the figure, complete Form 4A, serve it properly, and keep the file together if the tenant challenges the increase.',
-    'Each linked page answers a different landlord question. One explains what a Section 13 notice is. One focuses on Form 4A. One helps you think about market rent. The challenge and tribunal pages pick up the next stage if the tenant pushes back. That keeps the content aligned to what landlords are actually searching for at each step.',
+    'Each linked page answers a different landlord question. One explains what a Section 13 notice is. One focuses on Form 4A. One helps you think about market rent. The challenge and tribunal pages pick up the next stage if the tenant pushes back, which keeps the content aligned to what landlords are actually searching for at each step.',
     'If you remember one thing from this page, make it this: do not serve the notice until the story behind it is clear. A neat form with weak reasoning is fragile. A clear date, a sensible figure, and a joined-up evidence file are much easier to stand behind later.',
-    'That is also why the guide separates “how do I increase the rent?” from “how do I defend the increase?” Those are related questions, but they are not the same job. Landlords usually make better decisions when they can read the standard route first and then move into the challenge route only when the case really needs it.',
+    'That is why the guide separates "how do I increase the rent?" from "how do I defend the increase?" Those are related questions, but they are not the same job. Landlords usually make better decisions when they read the standard route first and move into the challenge route only when the case really needs it.',
   ],
   sections: sections({
     whatIsIt: [
@@ -43,7 +43,7 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
       'That order matters because it cuts out the panic edits that happen when the form gets filled in too early. If you decide the date and the figure first, the finished notice, report, and service record read like one deliberate file instead of a form that had to be corrected afterwards.',
     ],
     commonMistakes: [
-      'A common landlord mistake is thinking the file is strong because the form looks complete. That is procedural confidence, not evidential confidence. The stronger question is whether the figure is supportable and whether the explanation still makes sense when someone reads the notice, the report, and your follow-up emails together.',
+      'A common landlord mistake is thinking the file is strong because the form looks complete. That is procedural confidence, not evidential confidence. The better question is whether the figure is supportable and whether the explanation still makes sense when someone reads the notice, the report, and your follow-up emails together.',
       'Another mistake is poor record-keeping. Missing service details, weak comparables, and inconsistent wording between the notice and the report make the file harder to defend than it needs to be. The documents do not need legal theatre. They just need to tell one clear story from start to finish.',
     ],
     tribunalRisks: [

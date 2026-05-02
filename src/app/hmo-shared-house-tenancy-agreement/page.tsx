@@ -63,21 +63,21 @@ export default function HmoSharedHouseTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/hmo-shared-house-tenancy-agreement"
         title="HMO / Shared House Tenancy Agreement England"
-        subtitle="Use this England HMO / Shared House tenancy agreement generator when people are sharing the property and you need clearer wording on communal areas, house rules, shared living arrangements, and day-to-day management than a general residential pack usually provides."
+        subtitle="Use this England HMO / Shared House agreement when the property is being shared and you want the agreement, house rules, and day-to-day paperwork to match how the house is actually run."
         primaryCtaLabel="Start HMO / Shared House agreement"
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for an HMO tenancy agreement, a shared house agreement, or a tenancy agreement for sharers in England, this is the dedicated option for shared-house occupation from 1 May 2026 rather than a standard residential agreement adapted after the fact."
-        introTitle="Built for shared houses and HMO-style lets"
+        legacyNotice="If you searched for an HMO tenancy agreement, shared house agreement, or sharers' tenancy agreement in England, this is the dedicated option for shared occupation from 1 May 2026 rather than a standard residential pack with shared-house points bolted on afterwards."
+        introTitle="Choose this when the property is being shared"
         introBody={[
-          'This pack is designed for England lets where the real complexity comes from people sharing the property, using communal areas, and living under shared-house rules that need to be made clear from the start.',
-          'Instead of trying to force a shared house into a general residential agreement, this pack is built for the issues that usually matter in HMOs and shared houses: occupiers sharing kitchens and bathrooms, house rules, shared responsibilities, visitor expectations, handover arrangements, and practical day-to-day management.',
+          'This pack is for England lets where the real work is managing shared occupation well. If several occupiers are sharing kitchens, bathrooms, entrances, bins, and day-to-day expectations, the paperwork should say that plainly from the start.',
+          'It is built for the friction points that usually show up first in shared houses: communal areas, visitors, quiet hours, cleaning expectations, repair reporting, handover records, and the practical rules that keep the house easier to run.',
         ]}
         highlights={[
-          'HMO and shared-house wording built around sharers and communal living',
-          'Clearer treatment of house rules, communal areas, and shared responsibilities',
-          'Separate from Standard, Premium, Student, and Lodger packs',
+          'Agreement wording built around sharers and communal living',
+          'House rules and communal-area expectations kept clear from the outset',
+          'Separate from Standard, Premium, Student, and Lodger routes',
           'Guided generator with a preview before payment',
         ]}
         compliancePoints={[
@@ -97,16 +97,16 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           'shared house agreement england',
         ]}
         idealFor={[
-          'the real complexity is shared occupation, communal living, or HMO-style management',
-          'you want clearer wording for communal areas, house rules, visitor expectations, and shared-house responsibilities',
-          'you need a tenancy agreement that reflects sharers rather than a straightforward whole-property household',
-          'you want shared-house wording without trying to stretch a standard residential agreement beyond its natural use',
-          'you want supporting paperwork for handover, utilities, and later tenancy changes',
+          'the real complexity is shared occupation, communal living, or house management between sharers',
+          'you want clearer wording for communal areas, house rules, visitors, cleaning, and shared responsibilities',
+          'you need the paperwork to reflect a shared house rather than a simple whole-property household',
+          'you want one pack that covers the agreement, the rules, and the records you will actually use later',
+          'you want handover, utilities, and later changes kept in the same file from day one',
         ]}
         notFor={[
           'the landlord lives at the property and the arrangement is really a lodger or resident-landlord room let',
-          'the let is a straightforward whole-property residential tenancy and does not need communal-area or sharer wording',
-          'the real issue is a student-focused household with guarantors, replacement requests, and end-of-term turnover rather than shared-house management itself',
+          'the let is a straightforward whole-property tenancy with no real need for communal-area or sharer wording',
+          'the main issue is a student household with guarantors, replacement requests, and end-of-term turnover rather than shared-house control itself',
         ]}
         routeComparison={[
           {
@@ -140,7 +140,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         ]}
         salesContent={{
           packIntro:
-              'The HMO / Shared House pack is built for communal occupation. It gives you the main agreement plus the rules, handover, and supporting paperwork that shared houses need if the landlord wants the paperwork to match how the property is really run.',
+              'The HMO / Shared House pack gives you the main agreement plus the rules, handover records, and supporting paperwork that usually make the difference between a shared house that feels organised and one that starts drifting into avoidable disputes.',
           defaultPackItems: hmoPackBreakdown.defaultItems,
           conditionalPackItems: hmoPackBreakdown.conditionalItems,
           conditionalTitle: 'Included when your answers require it',
@@ -150,44 +150,44 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           whyYouNeedThis: {
             title: 'Why shared houses need fuller paperwork',
             intro:
-              'A shared-house let does not just need a main agreement. It also needs rules and records that deal with the communal reality of the property, otherwise the paperwork misses the part of the tenancy that usually causes the most friction.',
+              'A shared-house let usually breaks down on the practical points first, not the headline rent clause. If the communal rules and records are missing, the paperwork often says much less than the landlord actually needs it to say.',
             cards: [
               {
                 title: 'Communal occupation needs written rules',
                 body:
-                  'If shared spaces, visitors, cleaning, waste, and quiet hours are left unwritten, the landlord has less to point back to when the house starts drifting into conflict.',
+                  'If shared spaces, visitors, cleaning, bins, and quiet hours are left unwritten, the landlord has much less to point back to when the house starts drifting into conflict.',
               },
               {
                 title: 'Shared houses create more everyday evidence points',
                 body:
-                  'Keys, handover, utilities, and later changes matter more because multiple occupiers are using the property at the same time.',
+                  'Keys, handover, utilities, and later changes matter more because several occupiers are using the property at the same time.',
               },
               {
                 title: 'Standard paperwork is often too broad for a shared house',
                 body:
-                  'If a communal let is documented like a simple whole-property tenancy, the paperwork can miss the rules that make shared living manageable in practice.',
+                  'If a communal let is documented like a simple whole-property tenancy, the paperwork often misses the rules that make shared living manageable in practice.',
               },
             ],
           },
           howThisHelps: {
             title: 'How this helps you',
             intro:
-              'The pack gives the landlord shared-house paperwork that is clearer for occupiers, easier to manage day to day, and easier to rely on when communal issues appear.',
+              'The pack helps the landlord set the tone earlier, keep the records together, and deal with shared-house issues with something better than informal messages and memory.',
             cards: [
               {
                 title: 'It makes the house rules visible',
                 body:
-                  'The appendix keeps the shared-living expectations where everyone can see them instead of relying on informal messages or assumptions.',
+                  'The appendix keeps the shared-living expectations visible instead of relying on informal messages or assumptions.',
               },
               {
                 title: 'It keeps the practical records together',
                 body:
-                  'The handover, utilities, and variation documents help the landlord keep the communal tenancy paperwork in one place.',
+                  'The handover, utilities, and variation documents help the landlord keep the communal paperwork in one place.',
               },
               {
                 title: 'It matches the reality of shared occupation',
                 body:
-                  'The pack is built for sharers and communal areas, not for an ordinary household being forced into a standard template.',
+                  'The pack is built for sharers and communal areas, not for an ordinary household being squeezed into the wrong paperwork.',
               },
             ],
           },
@@ -257,7 +257,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               'That is usually a Lodger or resident-landlord arrangement rather than an HMO / Shared House tenancy, so it is usually better to compare the Lodger product instead.',
           },
         ]}
-        finalCtaBody="Use the HMO / Shared House pack when the real complexity is shared occupation, communal areas, and day-to-day house management. If the tenants are sharers and you want the agreement to reflect how shared-house living actually works in practice, this is usually a better fit than the Standard or Premium assured periodic packs. If you are still deciding, compare it against the other England tenancy products on the main comparison page."
+        finalCtaBody="Use the HMO / Shared House pack when the real complexity is shared occupation, communal areas, and day-to-day house management. If the occupiers are sharers and you want the agreement to reflect how the house is actually going to be lived in, this is usually a better fit than the Standard or Premium packs."
       />
     </div>
   );

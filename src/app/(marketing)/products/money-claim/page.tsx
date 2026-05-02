@@ -69,7 +69,11 @@ export default function MoneyClaimPage() {
   const sampleProof = getGoldenPackProofData('money_claim');
 
   const content: ProductSalesPageContent = {
-    postHeroContent: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+    analytics: {
+      pagePath: descriptor.landingHref,
+      pageType: 'product_page',
+      routeIntent: 'money_claim',
+    },
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
@@ -82,7 +86,7 @@ export default function MoneyClaimPage() {
         href: descriptor.wizardHref,
       },
       secondaryCta: {
-        label: 'Need possession as well?',
+        label: 'Need possession as well? See the full eviction route',
         href: '/products/complete-pack',
       },
       feature:
@@ -92,9 +96,53 @@ export default function MoneyClaimPage() {
       showTrustPositioningBar: true,
       trustPositioningPreset: 'money_claim',
     },
+    decisionBlock: {
+      title: 'Choose this pack when the next job is recovering money',
+      intro:
+        'This page is for landlords whose main goal is getting unpaid rent, damage, bills, or guarantor debt paid back. If the immediate issue is removing the tenant from the property, you need the possession route instead.',
+      cards: [
+        {
+          eyebrow: 'Best fit',
+          tone: 'positive',
+          title: 'Choose this if you need to chase debt properly',
+          body:
+            'Use the money claim pack when the tenant owes rent or other tenancy debt and you want the pre-action letter, the figures, and the court paperwork kept together from the start.',
+        },
+        {
+          eyebrow: 'Choose a different route',
+          tone: 'warning',
+          title: 'Do not start here if the main problem is getting possession',
+          body:
+            'If the real pressure point is serving notice or taking the case through possession proceedings, start with the Section 8 route instead and keep the debt claim separate unless you genuinely need both.',
+        },
+      ],
+      primary: {
+        label: 'Start a landlord money claim pack',
+        href: descriptor.wizardHref,
+      },
+      secondary: {
+        label: 'Need the possession route instead?',
+        href: '/products/complete-pack',
+      },
+    },
+    earlyProofBand: {
+      priceLabel: product.displayPrice,
+      valueSummary:
+        'See the actual debt-recovery file before you pay. The preview shows that this is not just one claim form. It is the pre-action letter, the schedules, the claim narrative, and the follow-through paperwork kept together as one working file.',
+      includedBullets: [
+        'Pre-action letter before claim',
+        'Reply form and financial statement',
+        'Particulars of Claim and debt schedules',
+        'Filing guidance and enforcement support',
+      ],
+      bestFor:
+        'Best when the tenant owes money and you want to start with a clear debt-recovery file rather than improvising the paperwork yourself.',
+      notFor:
+        'Not the right fit if your immediate next step is possession, service of a Section 8 notice, or court possession forms such as N5 and N119.',
+      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+    },
     whatYouGet: {
-      hideSection: true,
-      title: 'What you get in the Money Claim Pack',
+      title: 'What is included in the Money Claim Pack',
       intro:
         'This is a debt-recovery system, not just a claim form. Each part of the pack exists to move the case from pre-action pressure into court and then into enforcement if the tenant still does not pay.',
       items: [
@@ -181,6 +229,77 @@ export default function MoneyClaimPage() {
           includedByDefault: true,
         },
       ],
+    },
+    comparisonBlock: {
+      title: 'Compare the debt route with the possession route',
+      intro:
+        'Some landlords need money recovery. Some need the tenant to leave. Some need both, but not always in the same product. This comparison helps you start in the right place.',
+      routeGridClassName: 'mt-8 grid gap-5 lg:grid-cols-2',
+      routeCards: [
+        {
+          name: descriptor.displayName,
+          priceLabel: product.displayPrice,
+          whatItIs:
+            'The route for unpaid rent, damage, bills, guarantor debt, and other tenancy-related money claims.',
+          problemItSolves:
+            'Gives you the pre-action letter, the figures, and the court paperwork needed to pursue the debt properly.',
+          riskIfWrong:
+            'If you use a debt route when the real issue is possession, you can lose time while the occupation problem is still sitting there.',
+          landlordOutcome:
+            'Best when recovering money is the main job.',
+          href: descriptor.landingHref,
+          ctaLabel: 'Start the money claim route',
+        },
+        {
+          name: 'Stage 2: Section 8 Court & Possession Pack',
+          priceLabel: PRODUCTS.complete_pack.displayPrice,
+          whatItIs:
+            'The full Section 8 route for landlords who need the notice, the court claim, and the possession file kept together.',
+          problemItSolves:
+            'Handles the notice-to-court possession route when the real issue is recovering the property instead of chasing a standalone debt claim.',
+          riskIfWrong:
+            'If you buy a possession route when you only need money recovery, you can end up paying for the wrong workflow and still needing a debt file afterwards.',
+          landlordOutcome:
+            'Best when possession is the real next step.',
+          href: '/products/complete-pack',
+          ctaLabel: 'Compare the Complete Eviction Pack',
+        },
+      ],
+    },
+    objectionBlock: {
+      title: 'Common money-claim questions before you start',
+      intro:
+        'Most hesitation comes down to scope. These are the points landlords usually want cleared up before they commit to the debt-recovery route.',
+      items: [
+        {
+          question: 'Can I use this after the tenant has already left?',
+          answer:
+            'Yes. If the debt remains after the tenancy has ended, the pack still helps you build the demand letter, the schedules, and the claim file properly.',
+        },
+        {
+          question: 'Can I claim for more than just rent arrears?',
+          answer:
+            'Yes. The pack can cover rent arrears, damage, cleaning costs, bills, and other tenancy-related debt where you have figures and evidence to support the claim.',
+        },
+        {
+          question: 'What if I also need possession?',
+          answer:
+            'If the immediate problem is getting the tenant out, the Section 8 possession route is usually the better first step. Use the money claim pack when recovering the debt is the job you need to do now.',
+        },
+      ],
+    },
+    midPageCta: {
+      title: 'Ready to turn the debt into a cleaner court file?',
+      body:
+        'Start a landlord money claim pack now so the pre-action letter, the debt schedules, and the filing steps stay joined up from the outset instead of being rebuilt later.',
+      primary: {
+        label: 'Start a landlord money claim pack',
+        href: descriptor.wizardHref,
+      },
+      secondary: {
+        label: 'Need the possession route instead?',
+        href: '/products/complete-pack',
+      },
     },
     whyYouNeedThis: {
       title: 'Why a landlord money claim needs more than one form',
