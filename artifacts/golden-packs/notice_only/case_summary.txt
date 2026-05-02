@@ -14,6 +14,8 @@ READY TO SERVE - NOTICE FILE ALIGNED
 Case ID: golden-notice-only-001 | Jurisdiction: england | Generated: 2 May 2026
 Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and
 under review as the case moves forward.
+Eviction journey
+Stage 1 covers service of the notice and the wait for expiry before the case can move on.
 PROPERTY
 16 Willow Mews York YO24 3HX
 TENANT
@@ -31,6 +33,25 @@ EARLIEST PROCEEDINGS DATE
 30 May 2026
 CLAIMANT
 Daniel Mercer
+Serve Notice
+CURRENT STAGE
+Prepare and serve the
+Section 8 notice correctly
+Notice Expires
+NEXT
+Wait for the notice period
+to end before action
+Issue Claim
+LATER
+Submit possession claim
+to the court
+Court Hearing
+LATER
+Present your case and
+evidence to the judge
+
+-- 1 of 4 --
+
 What this pack does
 Prepares a Section 8 notice and service
 record that can be relied on without the case
@@ -45,9 +66,6 @@ instructions in this pack.
 Court: Central London County Court
 Rent due: 1st day of each month
 Arrears at notice date: £3600.00
-
--- 1 of 4 --
-
 GROUND 8 WARNING
 Ground 8 arrears threshold stays live throughout the case
 Ground 8 must usually be satisfied at both the notice stage and the hearing. If payments reduce arrears
@@ -77,6 +95,9 @@ Gas safety evidence is recorded on 10 January
 2024.
 Action: Keep the gas safety record with the
 notice and court file.
+
+-- 2 of 4 --
+
 EPC RECORD RECORDED
 OK
 EPC evidence is recorded.
@@ -87,9 +108,6 @@ How to Rent service is recorded on 15 January
 2024.
 Action: Keep the service record with the tenancy
 file.
-
--- 2 of 4 --
-
 NOTICE TIMELINE RECORDED
 OK
 Notice served on 2 May 2026 with earliest
@@ -115,15 +133,15 @@ part of one possession case, while each statutory ground remains separately plea
 Form 3A notice served on 2 May 2026, expiring on 30 May 2026, with proceedings not intended before
 30 May 2026.
 Additional case detail supplied by the landlord: [object Object]
+
+-- 3 of 4 --
+
 Procedural Notes
 The rent account first shows an unpaid or short-paid period from 1 January 2026. The most recent
 affected rental period is 1 March 2026. The current arrears total is £3,600.00 across 3 missed or short-
 paid rental periods.
 The Form 3A notice service milestone currently recorded is 2 May 2026. The possession / proceedings
 date currently recorded in the file is 30 May 2026.
-
--- 3 of 4 --
-
 Defendant Circumstances
 The claimant is not aware of any further information about the defendant's circumstances beyond the
 matters set out in the claim papers and any information the defendant may wish to place before the court.

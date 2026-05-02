@@ -16,6 +16,8 @@ READY FOR COURT - CLAIM FILE ALIGNED
 Case ID: golden-complete-pack-001 | Jurisdiction: england | Generated: 2 May 2026
 Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and
 under review as the case moves forward.
+Eviction journey
+Stage 2 carries the same case from the notice timeline into the court claim and hearing path.
 PROPERTY
 16 Willow Mews York YO24 3HX
 TENANT
@@ -33,6 +35,22 @@ EARLIEST PROCEEDINGS DATE
 30 May 2026
 CLAIMANT
 Daniel Mercer
+Serve Notice
+FOUNDATION
+Prepare and serve the
+Section 8 notice correctly
+Notice Expires
+TIMING CHECK
+Wait for the notice period
+to end before action
+Issue Claim
+CURRENT STAGE
+Submit possession claim
+to the court
+Court Hearing
+NEXT
+Present your case and
+evidence to the judge
 
 -- 1 of 4 --
 
