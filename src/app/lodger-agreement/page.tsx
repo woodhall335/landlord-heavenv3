@@ -61,28 +61,28 @@ export default function LodgerAgreementEnglandPage() {
       <EnglandTenancyPage
         pagePath="/lodger-agreement"
         title="Lodger Agreement England"
-        subtitle="Use this England lodger agreement when you live in the property and are taking in a lodger. It is designed for resident-landlord room lets, with clearer wording on shared living, house rules, and notice than the updated standard residential routes would usually provide."
+        subtitle="Use this England lodger agreement when you live in the property and are taking in a lodger. It is designed for resident-landlord room lets, with clearer wording on shared living, house rules, and notice than a standard residential pack would usually provide."
         primaryCtaLabel="Start lodger agreement"
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for a lodger agreement, a room let agreement, a lodger agreement template, or a resident landlord agreement in England, this is the dedicated route for a room let in your own home within the updated current England framework from 1 May 2026 rather than a standard tenancy agreement adapted after the fact."
+        legacyNotice="If you were searching for a lodger agreement, a room let agreement, a lodger agreement template, or a resident landlord agreement in England, this is the dedicated option for a room let in your own home from 1 May 2026 rather than a standard tenancy agreement adapted after the fact."
         introTitle="Built for room lets in the landlord's home"
         introBody={[
-          'This route is for room lets where the landlord lives at the property and the occupier is sharing the home. It is intentionally separate from the Standard and Premium assured periodic routes, plus the Student and HMO / Shared House routes, because a resident-landlord arrangement works differently in practice.',
+          'This pack is for room lets where the landlord lives at the property and the occupier is sharing the home. It is intentionally separate from the Standard and Premium assured periodic packs, plus the Student and HMO / Shared House packs, because a resident-landlord arrangement works differently in practice.',
           'Instead of trying to force a lodger setup into a general tenancy product, this pack is built around the points that usually matter most in a room let: shared facilities, house rules, key handling, notice expectations, and the practical realities of living under the same roof.',
         ]}
         highlights={[
           'Resident-landlord room-let agreement built for shared living',
           'Clearer wording on house rules, shared spaces, and notice',
-          'Separate from standard tenancy, student, and HMO routes',
+          'Separate from standard tenancy, student, and HMO packs',
           'Guided generator with a preview before payment',
         ]}
         compliancePoints={[
-          'Keeps the resident-landlord route separate from the main England tenancy products inside the updated current framework from 1 May 2026.',
+          'Keeps the resident-landlord option separate from the main England tenancy products from 1 May 2026.',
           'Captures shared-facility, notice, and house-rule expectations directly in the guided flow.',
           'Helps avoid treating a lodger arrangement like a standard whole-property tenancy.',
-          'Includes practical file paperwork for room-let setup and handover.',
+          'Includes practical supporting paperwork for room-let setup and handover.',
           'Use the main England comparison page if you are unsure whether the arrangement is really a lodger setup.',
         ]}
         keywordTargets={[
@@ -97,7 +97,7 @@ export default function LodgerAgreementEnglandPage() {
           'the landlord lives in the property and the occupier is sharing the home',
           'you want a room-let agreement with clearer wording on house rules and shared spaces',
           'you want notice and occupation expectations set out more clearly from the start',
-          'you want the resident-landlord route kept separate from standard tenancy and HMO products',
+          'you want the resident-landlord setup kept separate from standard tenancy and HMO products',
           'you want practical room-let paperwork alongside the main agreement',
         ]}
         notFor={[
@@ -111,7 +111,7 @@ export default function LodgerAgreementEnglandPage() {
             description:
               'If you are not sure whether the arrangement is really a lodger setup, compare it against the full England tenancy-agreement comparison page first.',
             href: '/products/ast',
-            ctaLabel: 'Compare England routes',
+            ctaLabel: 'Compare England options',
           },
           {
             title: 'HMO / Shared House',
@@ -159,14 +159,14 @@ export default function LodgerAgreementEnglandPage() {
               {
                 title: 'Wrong-route paperwork muddies the position',
                 body:
-                  'If a lodger setup is documented like a standard tenancy, the file can become harder to explain because it does not match the resident-landlord reality.',
+                  'If a lodger setup is documented like a standard tenancy, the paperwork can become harder to explain because it does not match the resident-landlord reality.',
               },
             ],
           },
           howThisHelps: {
             title: 'How this helps you',
             intro:
-              'The pack gives the landlord a cleaner room-let file that is easier to manage, easier to explain, and better aligned to a shared-home arrangement.',
+              'The pack gives the landlord cleaner room-let paperwork that is easier to manage, easier to explain, and better aligned to a shared-home arrangement.',
             cards: [
               {
                 title: 'It keeps the house rules in writing',
@@ -179,7 +179,7 @@ export default function LodgerAgreementEnglandPage() {
                   'The checklist and handover record help the arrangement start with clearer expectations and better admin.',
               },
               {
-                title: 'It fits the resident-landlord route properly',
+                title: 'It fits the resident-landlord setup properly',
                 body:
                   "The pack is built for a room let in the landlord's own home rather than forcing the arrangement into whole-property tenancy paperwork.",
               },
@@ -206,13 +206,13 @@ export default function LodgerAgreementEnglandPage() {
                 step: 'Step 03',
                 title: 'Generate the full Lodger pack',
                 body:
-                  "Download the agreement, checklist, handover record, and house-rules appendix as one room-let file for the landlord's home.",
+                  "Download the agreement, checklist, handover record, and house-rules appendix as one room-let pack for the landlord's home.",
               },
             ],
           },
           ctaTitle: 'Start the Lodger agreement pack',
           ctaBody:
-            "Use this route when you live at the property and want the room-let agreement, the shared-home rules, and the extra paperwork prepared together.",
+            "Use this option when you live at the property and want the room-let agreement, the shared-home rules, and the extra paperwork prepared together.",
         }}
         faqs={[
           {
@@ -221,37 +221,37 @@ export default function LodgerAgreementEnglandPage() {
               "Because a room let in the landlord's own home is different from a standard tenancy. Where the occupier is sharing the property with a resident landlord, it helps to use wording built for shared living, house rules, and room-let expectations rather than relying on a general tenancy agreement.",
           },
           {
-            question: 'Is Lodger separate from the normal tenancy agreement route?',
+            question: 'Is Lodger separate from the normal tenancy agreement pack?',
             answer:
-              'Yes. Lodger is a dedicated England route for resident-landlord room lets and licence-style arrangements. It is kept separate from the standard tenancy, student, and HMO / shared-house products.',
+              'Yes. Lodger is a dedicated England product for resident-landlord room lets and licence-style arrangements. It is kept separate from the standard tenancy, student, and HMO / shared-house products.',
           },
           {
             question: 'Should I use this if I do not live at the property?',
             answer:
-              'Usually not. If the landlord is not resident, compare the Standard, Premium, Student, and HMO / Shared House routes instead, because the arrangement is less likely to be a true lodger setup.',
+              'Usually not. If the landlord is not resident, compare the Standard, Premium, Student, and HMO / Shared House packs instead, because the arrangement is less likely to be a true lodger setup.',
           },
           {
             question: 'What if I only rent out one room but I do not live there?',
             answer:
-              'That is not automatically a lodger arrangement. A single room let can still fall into a different route if the landlord is not resident, so it is better to compare the England products properly rather than assuming lodger is correct just because only one room is being let.',
+              'That is not automatically a lodger arrangement. A single room let can still fall into a different category if the landlord is not resident, so it is better to compare the England products properly rather than assuming lodger is correct just because only one room is being let.',
           },
           {
             question: 'Does this help with house rules and shared facilities?',
             answer:
-              'Yes. One of the main reasons to use this route is to deal more clearly with practical shared-living points such as kitchens, bathrooms, access, visitors, quiet enjoyment within a shared home, and house-rule expectations.',
+              'Yes. One of the main reasons to use this pack is to deal more clearly with practical shared-living points such as kitchens, bathrooms, access, visitors, quiet enjoyment within a shared home, and house-rule expectations.',
           },
           {
             question: 'What if I am unsure whether my setup is lodger, HMO, or standard tenancy?',
             answer:
-              'That is exactly where route confusion tends to happen. If you are unsure, compare the products on the main England comparison page first so the arrangement can be matched more closely to how the property is actually occupied.',
+              'That is exactly where confusion tends to happen. If you are unsure, compare the products on the main England comparison page first so the arrangement can be matched more closely to how the property is actually occupied.',
           },
           {
             question: 'Is this suitable for licence-style room lets?',
             answer:
-              'Usually yes. This route is intended for resident-landlord room-let arrangements where the occupier is sharing the home and the setup needs to be documented as that kind of occupation, rather than as a standard whole-property tenancy.',
+              'Usually yes. This pack is intended for resident-landlord room-let arrangements where the occupier is sharing the home and the setup needs to be documented as that kind of occupation, rather than as a standard whole-property tenancy.',
           },
         ]}
-        finalCtaBody="Use the Lodger route when the landlord lives at the property and the occupier is sharing the home. If you want the agreement to reflect the practical reality of a room let, shared facilities, and house rules in a resident-landlord setup under the updated current England framework, this is usually the right fit. If that is not the arrangement, compare the other England tenancy products instead."
+        finalCtaBody="Use the Lodger pack when the landlord lives at the property and the occupier is sharing the home. If you want the agreement to reflect the practical reality of a room let, shared facilities, and house rules in a resident-landlord setup, this is usually the right fit. If that is not the arrangement, compare the other England tenancy products instead."
       />
     </div>
   );

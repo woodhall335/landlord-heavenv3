@@ -109,7 +109,7 @@ export default function NoticeOnlyPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Stage 1 is the best fit when you need to serve first, keep the service record straight, and avoid turning a notice-stage job into a court-stage rebuild later.',
+        'Stage 1 is the best fit when you need to serve first, keep the service record straight, and see the actual Section 8 notice file before you pay instead of guessing what the pack will contain.',
       includedBullets: [
         'Official Form 3A notice prepared from the case facts',
         'Service guidance and Form N215 support kept with the notice file',
@@ -120,10 +120,39 @@ export default function NoticeOnlyPage() {
       notFor:
         'You already expect the matter to continue into court and want the notice file plus the possession claim documents working together from the start.',
     },
+    decisionBlock: {
+      title: 'Choose Stage 1 if serving the Section 8 notice is the next real step',
+      intro:
+        'This page is built for landlords who need to get the notice, service method, and supporting record right before court is even on the table. It is not a stripped-down teaser product. It is the full serve-first route.',
+      cards: [
+        {
+          eyebrow: 'Choose this route',
+          title: 'Serve the notice correctly now',
+          body:
+            'Use Stage 1 when the immediate job is to prepare Form 3A, line up the grounds and arrears support, and keep a clean service record that can carry forward later if the tenant does not leave.',
+          tone: 'positive',
+        },
+        {
+          eyebrow: 'Choose the other route',
+          title: 'Do not stop here if you already want N5, N119, and court paperwork',
+          body:
+            'If you already know the case is likely to become a possession claim, the Complete Pack is the better fit because it includes this Stage 1 file and the court-stage documents together from the outset.',
+          tone: 'warning',
+        },
+      ],
+      primary: {
+        label: 'Start the Section 8 notice route',
+        href: descriptor.wizardHref,
+      },
+      secondary: {
+        label: 'Need the full court pack instead?',
+        href: '/products/complete-pack',
+      },
+    },
     whatYouGet: {
       title: 'What you get in Stage 1',
       intro:
-        'This is not just a notice template. It is a Stage 1 notice and service file built for the point where the next real step is service, not issue.',
+        'This is not just a notice template. It is the actual Section 8 notice file you can inspect before buying, built for the point where the next real step is service, not issue.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -187,6 +216,79 @@ export default function NoticeOnlyPage() {
         },
       ],
       sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+    },
+    comparisonBlock: {
+      title: 'Stage 1 and Stage 2 solve different Section 8 jobs',
+      intro:
+        'If you are comparing the two routes, the question is simple: are you serving notice now, or do you want the full possession claim file already built as well?',
+      routeCards: [
+        {
+          name: 'Stage 1: Serve the Section 8 notice first',
+          whatItIs:
+            'Best when the next practical step is serving Form 3A correctly and keeping the service record straight.',
+          problemItSolves:
+            'Stops notice, service, and validity mistakes before they weaken the case.',
+          riskIfWrong:
+            'If you really need court paperwork already, stopping at Stage 1 means you will still need the wider possession file afterwards.',
+          landlordOutcome:
+            'Lets you serve with confidence now and move into Stage 2 later if the case needs to continue.',
+          href: '/products/notice-only',
+          ctaLabel: 'This is my route',
+          priceLabel: product.displayPrice,
+          imageSrc: '/images/notice.webp',
+          imageAlt: 'Section 8 notice stage',
+        },
+        {
+          name: 'Stage 2: Start with the full court pack',
+          whatItIs:
+            'Best when you want the Section 8 notice, N5, N119, and hearing support prepared together in one case file.',
+          problemItSolves:
+            'Prevents a notice-stage file from later being rebuilt into a separate court file.',
+          riskIfWrong:
+            'If you only need to serve notice now, Stage 2 may be more than you need at this point.',
+          landlordOutcome:
+            'Gives you the full possession route from notice through claim without buying Stage 1 separately first.',
+          href: '/products/complete-pack',
+          ctaLabel: 'See the full court route',
+          imageSrc: '/images/claim.webp',
+          imageAlt: 'Section 8 court route',
+        },
+      ],
+    },
+    objectionBlock: {
+      title: 'Common questions before you start Stage 1',
+      intro:
+        'The preview shows the real pack structure. These are the points landlords usually want answered before choosing the notice-first route.',
+      items: [
+        {
+          question: 'Can I still move into court later?',
+          answer:
+            'Yes. Stage 1 is designed to keep the notice, service record, and supporting facts aligned so the same case can continue into the court route later if the tenant does not leave.',
+        },
+        {
+          question: 'Will I need to start over?',
+          answer:
+            'No. If the matter later needs the Complete Pack, the Section 8 notice route can carry forward instead of forcing you to rebuild the whole file from scratch.',
+        },
+        {
+          question: 'Does this include the official Form 3A?',
+          answer:
+            'Yes. The pack generates the current official England Form 3A notice together with the supporting service and arrears paperwork needed to serve it properly.',
+        },
+      ],
+    },
+    midPageCta: {
+      title: 'Ready to serve the Section 8 notice correctly?',
+      body:
+        'Start Stage 1 if your immediate goal is to get the notice, service steps, and supporting record aligned before anything is sent to the tenant.',
+      primary: {
+        label: 'Start the notice-first wizard',
+        href: descriptor.wizardHref,
+      },
+      secondary: {
+        label: 'I need the court pack instead',
+        href: '/products/complete-pack',
+      },
     },
     whyYouNeedThis: {
       title: 'Why Stage 1 needs more than a blank notice',
@@ -268,11 +370,11 @@ export default function NoticeOnlyPage() {
       body:
         'Start here if you need the notice, service, and evidence aligned before anything is served, with a direct upgrade into the first court-only step if the case later moves into Stage 2.',
       primary: {
-        label: descriptor.primaryCtaLabel,
+        label: 'Serve the Section 8 notice correctly now',
         href: descriptor.wizardHref,
       },
       secondary: {
-        label: 'Switch to Stage 2 Court Pack',
+        label: 'Need the full court route instead?',
         href: '/products/complete-pack',
       },
       guideLinks: descriptor.defaultGuideLinks,

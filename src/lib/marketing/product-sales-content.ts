@@ -32,6 +32,39 @@ export interface ProductSalesCard {
   imageAlt?: string;
 }
 
+export interface ProductSalesDecisionCard {
+  title: string;
+  body: string;
+  eyebrow?: string;
+  tone?: 'positive' | 'warning' | 'neutral';
+}
+
+export interface ProductSalesDecisionBlock {
+  title: string;
+  intro: ReactNode;
+  cards: ProductSalesDecisionCard[];
+  primary?: ProductSalesCtaLink;
+  secondary?: ProductSalesCtaLink;
+}
+
+export interface ProductSalesComparisonBlock {
+  title: string;
+  intro: ReactNode;
+  routeCards: ProductSalesRouteCard[];
+  routeGridClassName?: string;
+}
+
+export interface ProductSalesObjectionItem {
+  question: string;
+  answer: ReactNode;
+}
+
+export interface ProductSalesObjectionBlock {
+  title: string;
+  intro?: ReactNode;
+  items: ProductSalesObjectionItem[];
+}
+
 export interface ProductSalesEarlyProofBand {
   priceLabel?: string;
   valueSummary?: ReactNode;
@@ -73,6 +106,7 @@ export interface ProductSalesPageContent {
   hero: ProductSalesHero;
   postHeroContent?: ReactNode;
   earlyProofBand?: ProductSalesEarlyProofBand;
+  decisionBlock?: ProductSalesDecisionBlock;
   whatYouGet: {
     hideSection?: boolean;
     title: string;
@@ -86,6 +120,9 @@ export interface ProductSalesPageContent {
     preview?: ReactNode;
     sampleProof?: ReactNode;
   };
+  comparisonBlock?: ProductSalesComparisonBlock;
+  objectionBlock?: ProductSalesObjectionBlock;
+  midPageCta?: ProductSalesCta;
   whyYouNeedThis: {
     title: string;
     intro: ReactNode;

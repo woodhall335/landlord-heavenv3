@@ -141,6 +141,212 @@ export function EnglandTenancyPage({
         {isSalesMode && salesContent ? (
           <>
             <section className="mb-12">
+              <div className="max-w-4xl">
+                <h2 className="text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                  {introTitle}
+                </h2>
+                <div className="mt-4 space-y-4 text-lg leading-8 text-[#546075]">
+                  {introBody.map((paragraph, index) => (
+                    <p key={`sales-intro-${index}`}>{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section className="mb-12 grid gap-8 lg:grid-cols-2">
+              <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
+                <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                  Choose this agreement if
+                </h2>
+                <ul className="mt-5 space-y-3 text-[#465066]">
+                  {idealFor.map((item) => (
+                    <li key={item} className="flex items-start gap-3 leading-7">
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#2F855A]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-[2rem] border border-[#F0DCC7] bg-[#FFF8F1] p-6 shadow-[0_14px_32px_rgba(124,72,18,0.06)]">
+                <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                  Choose a different agreement if
+                </h2>
+                <ul className="mt-5 space-y-3 text-[#465066]">
+                  {notFor.map((item) => (
+                    <li key={item} className="flex items-start gap-3 leading-7">
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#C26A1B]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+
+            <section className="mb-12 grid gap-8 lg:grid-cols-2">
+              <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]">
+                <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                  What this agreement covers
+                </h2>
+                <ul className="mt-5 space-y-3 text-[#465066]">
+                  {highlights.map((item) => (
+                    <li key={item} className="flex items-start gap-3 leading-7">
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)]">
+                <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
+                  How this fits the current England rules
+                </h2>
+                <ul className="mt-5 space-y-3 text-[#465066]">
+                  {compliancePoints.map((item) => (
+                    <li key={item} className="flex items-start gap-3 leading-7">
+                      <RiCheckboxCircleLine className="mt-1 h-5 w-5 shrink-0 text-[#7C3AED]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+
+            {salesContent.sampleProof ? (
+              <section className="mb-12">
+                <div className="rounded-[2rem] border border-[#E8E1D7] bg-white p-4 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-6">
+                  <div className="max-w-3xl">
+                    <h2 className="text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                      See the actual pack before you pay
+                    </h2>
+                    <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
+                      The preview lets you inspect the actual agreement pack, not just read a promise about it.
+                    </p>
+                  </div>
+                  <div className="mt-6">{salesContent.sampleProof}</div>
+                </div>
+              </section>
+            ) : null}
+
+            <section className="mb-12">
+              <div className="max-w-3xl">
+                <h2 className="text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                  What you get
+                </h2>
+                <div className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
+                  {salesContent.packIntro}
+                </div>
+              </div>
+
+              <div className="mt-8 grid gap-5 lg:grid-cols-2">
+                {salesContent.defaultPackItems.map((item) => (
+                  <article
+                    key={item.name}
+                    className="rounded-[1.8rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
+                  >
+                    <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">{item.name}</h3>
+                    <dl className="mt-4 space-y-3 text-sm leading-7 text-[#546075] md:text-base">
+                      <div>
+                        <dt className="font-semibold text-[#141B2D]">In plain English</dt>
+                        <dd>{item.plainEnglish}</dd>
+                      </div>
+                      <div>
+                        <dt className="font-semibold text-[#141B2D]">What this covers</dt>
+                        <dd>{item.function}</dd>
+                      </div>
+                      <div>
+                        <dt className="font-semibold text-[#141B2D]">What can go wrong without it</dt>
+                        <dd>{item.riskIfMissing}</dd>
+                      </div>
+                      <div>
+                        <dt className="font-semibold text-[#141B2D]">How it helps you</dt>
+                        <dd>{item.landlordOutcome}</dd>
+                      </div>
+                    </dl>
+                  </article>
+                ))}
+              </div>
+
+              {salesContent.conditionalPackItems?.length ? (
+                <div className="mt-10 rounded-[2rem] border border-[#E8E1D7] bg-[#FCFAFF] p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
+                  <div className="max-w-3xl">
+                    <h3 className="text-2xl font-semibold tracking-tight text-[#141B2D]">
+                      {salesContent.conditionalTitle || 'Included when your answers require it'}
+                    </h3>
+                    {salesContent.conditionalIntro ? (
+                      <div className="mt-3 text-base leading-8 text-[#546075]">
+                        {salesContent.conditionalIntro}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="mt-6 grid gap-5 lg:grid-cols-2">
+                    {salesContent.conditionalPackItems.map((item) => (
+                      <article
+                        key={item.name}
+                        className="rounded-[1.8rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
+                      >
+                        <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">{item.name}</h3>
+                        <dl className="mt-4 space-y-3 text-sm leading-7 text-[#546075] md:text-base">
+                          <div>
+                            <dt className="font-semibold text-[#141B2D]">In plain English</dt>
+                            <dd>{item.plainEnglish}</dd>
+                          </div>
+                          <div>
+                            <dt className="font-semibold text-[#141B2D]">What this covers</dt>
+                            <dd>{item.function}</dd>
+                          </div>
+                          <div>
+                            <dt className="font-semibold text-[#141B2D]">What can go wrong without it</dt>
+                            <dd>{item.riskIfMissing}</dd>
+                          </div>
+                          <div>
+                            <dt className="font-semibold text-[#141B2D]">How it helps you</dt>
+                            <dd>{item.landlordOutcome}</dd>
+                          </div>
+                        </dl>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </section>
+
+            {routeComparison.length ? (
+              <section className="mb-12">
+                <div className="max-w-3xl">
+                  <h2 className="text-3xl font-bold tracking-tight text-[#141B2D]">
+                    Compare England agreement options
+                  </h2>
+                  <p className="mt-3 text-base leading-7 text-[#546075]">
+                    Use the comparison below if you are still checking whether this is the right agreement before you start generating the pack.
+                  </p>
+                </div>
+                <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                  {routeComparison.map((route) => (
+                    <div
+                      key={route.title}
+                      className="flex h-full flex-col rounded-[1.8rem] border border-[#E5E8F0] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
+                    >
+                      <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
+                        {route.title}
+                      </h3>
+                      <p className="mt-3 flex-1 text-base leading-7 text-[#546075]">
+                        {route.description}
+                      </p>
+                      <Link
+                        href={route.href}
+                        className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
+                      >
+                        {route.ctaLabel || 'See agreement'}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            <section className="mb-12">
               <div className="max-w-3xl">
                 <h2 className="text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
                   {salesContent.whyYouNeedThis.title}
@@ -284,7 +490,7 @@ export function EnglandTenancyPage({
               <section className="mb-12 grid gap-8 lg:grid-cols-2">
                 <div className="rounded-[2rem] border border-[#D9EAD7] bg-[#F5FBF2] p-6 shadow-[0_14px_32px_rgba(29,92,54,0.06)]">
                   <h2 className="text-2xl font-bold tracking-tight text-[#141B2D]">
-                    This agreement is usually right if
+                    Choose this agreement if
                   </h2>
                   <ul className="mt-5 space-y-3 text-[#465066]">
                     {idealFor.map((item) => (
@@ -350,7 +556,7 @@ export function EnglandTenancyPage({
               <section className="mb-12">
                 <div className="max-w-3xl">
                   <h2 className="text-3xl font-bold tracking-tight text-[#141B2D]">
-                    Compare England tenancy agreements
+                    Compare England tenancy agreement options
                   </h2>
                   <p className="mt-3 text-base leading-7 text-[#546075]">
                     Pick the agreement that matches the way the property is actually being let. That

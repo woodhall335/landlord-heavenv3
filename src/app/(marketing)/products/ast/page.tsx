@@ -54,11 +54,11 @@ const routeCards: ProductSalesRouteCard[] = [
       tenancyProducts.find((product) => product.key === 'england_standard_tenancy_agreement')
         ?.priceLabel,
     whatItIs:
-      'The updated current England assured periodic agreement for a straightforward whole-property let.',
+      'The current England assured periodic agreement for a straightforward whole-property let.',
     problemItSolves:
-      "Gives landlords a clean starting point when the tenancy is ordinary and does not need specialist student, shared-house, or resident-landlord wording, including landlords who searched for a periodic tenancy agreement and need the updated mainstream England route after the Renters' Rights Act changes.",
+      "Gives landlords a clean starting point when the tenancy is ordinary and does not need specialist student, shared-house, or resident-landlord wording, including landlords who searched for a periodic tenancy agreement and need the mainstream England option after the Renters' Rights Act changes.",
     riskIfWrong:
-      'If you use a more specialist route by mistake, the paperwork becomes more complicated than it needs to be. If you use something older or vaguer, the core tenancy terms can feel too light.',
+      'If you use a more specialist option by mistake, the paperwork becomes more complicated than it needs to be. If you use something older or vaguer, the core tenancy terms can feel too light.',
     landlordOutcome:
       'Gets the tenancy in place with a clear England agreement and the practical setup paperwork most straightforward lets need.',
     href: '/standard-tenancy-agreement',
@@ -72,9 +72,9 @@ const routeCards: ProductSalesRouteCard[] = [
       tenancyProducts.find((product) => product.key === 'england_premium_tenancy_agreement')
         ?.priceLabel,
     whatItIs:
-      'The updated fuller current England assured periodic route for ordinary residential lets that need stronger management wording.',
+      'The fuller current England assured periodic option for ordinary residential lets that need stronger management wording.',
     problemItSolves:
-      "Helps when the landlord wants more detail around access, reporting, inspections, keys, repairs, and hand-back from the outset, while still staying on the updated ordinary England periodic route after the Renters' Rights Act changes.",
+      "Helps when the landlord wants more detail around access, reporting, inspections, keys, repairs, and hand-back from the outset, while still staying on the ordinary England periodic option after the Renters' Rights Act changes.",
     riskIfWrong:
       'If a more involved let is forced into a lighter agreement, avoidable management arguments can start because the paperwork never set expectations clearly enough.',
     landlordOutcome:
@@ -107,11 +107,11 @@ const routeCards: ProductSalesRouteCard[] = [
       tenancyProducts.find(
         (product) => product.key === 'england_hmo_shared_house_tenancy_agreement'
       )?.priceLabel,
-    whatItIs: 'The shared-house route for occupiers living together and using communal areas.',
+    whatItIs: 'The shared-house agreement for occupiers living together and using communal areas.',
     problemItSolves:
       'Deals with house rules, communal spaces, sharer expectations, and shared living arrangements more directly than a standard tenancy agreement.',
     riskIfWrong:
-      'If a shared house is documented like a straightforward whole-property let, the file can miss the rules that stop everyday shared-living disputes from escalating.',
+      'If a shared house is documented like a straightforward whole-property let, the paperwork can miss the rules that stop everyday shared-living disputes from escalating.',
     landlordOutcome:
       'Helps the landlord run a communal property with paperwork that fits the real shared-house setup.',
     href: '/hmo-shared-house-tenancy-agreement',
@@ -144,7 +144,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Why are there separate Standard, Premium, Student, HMO, and Lodger products?',
     answer:
-      'Because each route solves a different tenancy risk. The public pages now match the setup more honestly instead of pretending one agreement suits every kind of let.',
+      'Because each option solves a different tenancy risk. The public pages now match the setup more honestly instead of pretending one agreement suits every kind of let.',
   },
   {
     question: 'Should I still use this if I searched for AST?',
@@ -154,12 +154,12 @@ const faqs: FAQItem[] = [
   {
     question: 'What if I searched for periodic tenancy agreement or assured periodic tenancy agreement?',
     answer:
-      "That is still the right kind of search for this England tenancy journey. Standard and Premium are the updated current England assured periodic routes under the post-Renters' Rights Act framework, so use this page to choose the exact product and the periodic support guides if you want the terminology explained first.",
+      "That is still the right kind of search for this England tenancy journey. Standard and Premium are the current England assured periodic options, so use this page to choose the exact product and the periodic support guides if you want the terminology explained first.",
   },
   {
     question: 'Where do I get the full pack breakdown for each agreement?',
     answer:
-      'Use this page to choose the right route, then open the exact product page for the full agreement and document-by-document pack breakdown.',
+      'Use this page to choose the right option, then open the exact product page for the full agreement and document-by-document pack breakdown.',
   },
 ];
 
@@ -179,7 +179,7 @@ export default function EnglandTenancyHubPage() {
       title: 'Choose the right England',
       highlightTitle: 'tenancy agreement for the let',
       subtitle:
-        "If the tenancy is a straightforward whole-property let, start with Standard. Use Premium when you want fuller drafting. Standard and Premium are the updated current England assured periodic routes under the post-Renters' Rights Act framework from 1 May 2026.",
+        "If the tenancy is a straightforward whole-property let, start with Standard. Use Premium when you want fuller drafting. Standard and Premium are the current England assured periodic options from 1 May 2026.",
       primaryCta: {
         label: 'Open Standard Tenancy Agreement',
         href: '/standard-tenancy-agreement',
@@ -189,16 +189,80 @@ export default function EnglandTenancyHubPage() {
         href: '/premium-tenancy-agreement',
       },
     },
+    decisionBlock: {
+      title: 'Choose the England agreement before you start the wizard',
+      intro:
+        'This page exists to stop landlords buying the wrong agreement pack. The real decision is not which template sounds best, but which letting setup you are actually documenting.',
+      cards: [
+        {
+          eyebrow: 'Most common choice',
+          title: 'Start with Standard or Premium for an ordinary whole-property let',
+          body:
+            'If the property is being let as a normal residential home in England, Standard is the clean mainstream option and Premium is the fuller management option. Those are the right starting points for most ordinary lets.',
+          tone: 'positive',
+        },
+        {
+          eyebrow: 'Specialist products',
+          title: 'Use Student, HMO / Shared House, or Lodger only when the facts really point there',
+          body:
+            'If the occupiers are students, the property is being shared with communal rules, or the landlord is taking in a lodger at home, use the dedicated specialist product instead of trying to adapt a general agreement afterwards.',
+          tone: 'warning',
+        },
+      ],
+      primary: {
+        label: 'Open Standard Tenancy Agreement',
+        href: '/standard-tenancy-agreement',
+      },
+      secondary: {
+        label: 'Open Premium Tenancy Agreement',
+        href: '/premium-tenancy-agreement',
+      },
+    },
     whatYouGet: {
       title: 'Choose the agreement that fits the tenancy',
       intro:
-        'Use this page to compare the five agreement routes properly. Standard is the usual ordinary-let start, Premium is the fuller residential route, and the specialist options below are for student, shared-house, and lodger setups that need their own wording.',
+        'Use this page to compare the five agreement products properly. Standard is the usual ordinary-let start, Premium is the fuller residential option, and the specialist choices below are for student, shared-house, and lodger setups that need their own wording.',
       routeCards,
     },
-    whyYouNeedThis: {
-      title: 'Why you need the right route first',
+    objectionBlock: {
+      title: 'Common landlord questions before choosing an England tenancy agreement',
       intro:
-        'Most agreement problems start before the document is generated. They start when the landlord picks a route that does not match the occupiers, the property, or the way the let will actually be managed.',
+        'Most mistakes happen before the agreement is generated. These are the points landlords usually need cleared up first.',
+      items: [
+        {
+          question: 'I searched for AST or periodic tenancy agreement. Where should I start?',
+          answer:
+            'Usually with Standard or Premium. Those are the current England whole-property options, and this page is here to help you decide whether you need the cleaner mainstream pack or the fuller management pack.',
+        },
+        {
+          question: 'How do I know if I need a specialist product?',
+          answer:
+            'Use Student if the real issue is student occupation and guarantors, HMO / Shared House if the real issue is communal living and house rules, and Lodger if the landlord lives in the property and is taking in an occupier at home.',
+        },
+        {
+          question: 'What if I buy the wrong agreement type?',
+          answer:
+            'That is exactly what this comparison page is meant to prevent. The comparison cards and product pages are there so the paperwork matches the way the property is actually being let from the start.',
+        },
+      ],
+    },
+    midPageCta: {
+      title: 'Ready to choose the right England agreement?',
+      body:
+        'Open Standard for the mainstream whole-property option, move to Premium when you want fuller management wording, and use the specialist products only when the tenancy facts clearly point there.',
+      primary: {
+        label: 'Open Standard Tenancy Agreement',
+        href: '/standard-tenancy-agreement',
+      },
+      secondary: {
+        label: 'Open Premium Tenancy Agreement',
+        href: '/premium-tenancy-agreement',
+      },
+    },
+    whyYouNeedThis: {
+      title: 'Why you need the right agreement first',
+      intro:
+        'Most agreement problems start before the document is generated. They start when the landlord picks an option that does not match the occupiers, the property, or the way the let will actually be managed.',
       cards: [
         {
           title: 'Different lets create different risks',
@@ -206,12 +270,12 @@ export default function EnglandTenancyHubPage() {
             'A student household, a shared house, and a resident-landlord room let are not the same job even if they all look like tenancy paperwork at first glance.',
         },
         {
-          title: 'Wrong-route paperwork weakens the file early',
+          title: 'Wrong paperwork weakens the tenancy early',
           body:
             'If the agreement does not match the real arrangement, the paperwork can feel vague or misaligned before the tenancy has properly begun.',
         },
         {
-          title: 'The exact product pages do the detailed selling',
+          title: 'The exact product pages do the detail',
           body:
             'This comparison page helps you choose. Each exact agreement page then explains the full pack and what every included document is doing for the landlord.',
         },
@@ -225,7 +289,7 @@ export default function EnglandTenancyHubPage() {
         {
           title: 'It narrows the choice fast',
           body:
-            'Instead of browsing generic agreement pages, landlords can see which route matches the kind of tenancy they are actually setting up, even if they started with broad searches like tenancy agreement template or periodic tenancy agreement.',
+            'Instead of browsing generic agreement pages, landlords can see which option matches the kind of tenancy they are actually setting up, even if they started with broad searches like tenancy agreement template or periodic tenancy agreement.',
         },
         {
           title: 'It keeps the product promise honest',
@@ -233,7 +297,7 @@ export default function EnglandTenancyHubPage() {
             'Each agreement page can rank for its exact intent because this page is doing the comparison job and the exact page owns the full product explanation.',
         },
         {
-          title: 'It reduces route confusion before checkout',
+          title: 'It reduces confusion before checkout',
           body:
             'Landlords can compare the practical difference between Standard, Premium, Student, HMO, and Lodger before they start generating anything.',
         },
@@ -242,11 +306,11 @@ export default function EnglandTenancyHubPage() {
     howItWorks: {
       title: 'How it works',
       intro:
-        'Use this page to compare the routes first, then move into the exact product page that matches the tenancy you are about to put in place.',
+        'Use this page to compare the options first, then move into the exact product page that matches the tenancy you are about to put in place.',
       steps: [
         {
           step: 'Step 01',
-          title: 'Match the let to the right route',
+          title: 'Match the let to the right product',
           body:
             'Decide whether the tenancy is straightforward, more detailed, student-focused, shared-house based, or a resident-landlord room let. If you came in on periodic wording, that usually means Standard or Premium.',
         },
@@ -254,7 +318,7 @@ export default function EnglandTenancyHubPage() {
           step: 'Step 02',
           title: 'Open the exact agreement page',
           body:
-            'Read the full pack breakdown for that route so you can see exactly what the landlord receives and why each document is there.',
+            'Read the full pack breakdown so you can see exactly what the landlord receives and why each document is there.',
         },
         {
           step: 'Step 03',
@@ -267,7 +331,7 @@ export default function EnglandTenancyHubPage() {
     cta: {
       title: 'Start with the agreement that fits the let',
       body:
-        'If the tenancy is a straightforward whole-property let, open the Standard agreement first. Move to Premium when you want the fuller residential route. Use the specialist cards above only when the occupiers or letting setup clearly point you there.',
+        'If the tenancy is a straightforward whole-property let, open the Standard agreement first. Move to Premium when you want the fuller residential option. Use the specialist cards above only when the occupiers or letting setup clearly point you there.',
       primary: {
         label: 'Open Standard Tenancy Agreement',
         href: '/standard-tenancy-agreement',

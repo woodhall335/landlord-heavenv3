@@ -8,7 +8,9 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import type {
   ProductSalesBreakdownItem,
   ProductSalesCard,
+  ProductSalesDecisionBlock,
   ProductSalesEarlyProofBand,
+  ProductSalesObjectionBlock,
   ProductSalesPageContent,
   ProductSalesRouteCard,
 } from '@/lib/marketing/product-sales-content';
@@ -186,6 +188,238 @@ function InfoCards({
   );
 }
 
+function DecisionBlock({
+  content,
+  analytics,
+}: {
+  content: ProductSalesDecisionBlock;
+  analytics?: ProductSalesPageContent['analytics'];
+}) {
+  const toneClasses: Record<NonNullable<NonNullable<ProductSalesDecisionBlock['cards']>[number]['tone']>, string> = {
+    positive: 'border-[#D9F2E7] bg-[#F2FBF6]',
+    warning: 'border-[#F3E4D0] bg-[#FFF8EF]',
+    neutral: 'border-[#E8E1F8] bg-white',
+  };
+  const eyebrowClasses: Record<NonNullable<NonNullable<ProductSalesDecisionBlock['cards']>[number]['tone']>, string> = {
+    positive: 'text-[#0D7A5A]',
+    warning: 'text-[#A55A0F]',
+    neutral: 'text-[#6D28D9]',
+  };
+
+  return (
+    <section id="route-fit" className="scroll-mt-24 bg-white py-10 md:py-12">
+      <Container>
+        <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+              {content.title}
+            </h2>
+            <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">{content.intro}</div>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            {content.cards.map((card) => {
+              const tone = card.tone ?? 'neutral';
+              return (
+                <article
+                  key={card.title}
+                  className={`rounded-[1.8rem] border p-6 shadow-[0_14px_34px_rgba(24,11,49,0.04)] ${toneClasses[tone]}`}
+                >
+                  {card.eyebrow ? (
+                    <p className={`text-xs font-semibold uppercase tracking-[0.12em] ${eyebrowClasses[tone]}`}>
+                      {card.eyebrow}
+                    </p>
+                  ) : null}
+                  <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#17142B]">
+                    {card.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">{card.body}</p>
+                </article>
+              );
+            })}
+          </div>
+
+          {content.primary || content.secondary ? (
+            <div className="mt-8 flex flex-wrap gap-3">
+              {content.primary ? (
+                <TrackedLink
+                  href={content.primary.href}
+                  pagePath={analytics?.pagePath || '/rent-increase'}
+                  pageType={analytics?.pageType || 'entry_page'}
+                  ctaLabel={content.primary.label}
+                  ctaPosition="section"
+                  eventName="entry_page_primary_cta_click"
+                  routeIntent={analytics?.routeIntent}
+                  product={inferProductFromHref(content.primary.href)}
+                  className="hero-btn-primary"
+                >
+                  {content.primary.label}
+                </TrackedLink>
+              ) : null}
+              {content.secondary ? (
+                <TrackedLink
+                  href={content.secondary.href}
+                  pagePath={analytics?.pagePath || '/rent-increase'}
+                  pageType={analytics?.pageType || 'entry_page'}
+                  ctaLabel={content.secondary.label}
+                  ctaPosition="section"
+                  eventName="entry_page_secondary_cta_click"
+                  routeIntent={analytics?.routeIntent}
+                  product={inferProductFromHref(content.secondary.href)}
+                  className="hero-btn-secondary"
+                >
+                  {content.secondary.label}
+                </TrackedLink>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function ComparisonBlock({
+  content,
+  analytics,
+}: {
+  content: NonNullable<ProductSalesPageContent['comparisonBlock']>;
+  analytics?: ProductSalesPageContent['analytics'];
+}) {
+  return (
+    <section id="route-compare" className="scroll-mt-24 bg-[#FCFAFF] py-12 md:py-16">
+      <Container>
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+              {content.title}
+            </h2>
+            <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">{content.intro}</div>
+          </div>
+
+          <div className={content.routeGridClassName ?? 'mt-8 grid gap-5 lg:grid-cols-2'}>
+            {content.routeCards.map((item) => (
+              <RouteCard
+                key={item.name}
+                item={item}
+                pagePath={analytics?.pagePath || '/rent-increase'}
+                pageType={analytics?.pageType || 'entry_page'}
+                routeIntent={analytics?.routeIntent}
+              />
+            ))}
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function ObjectionBlock({ content }: { content: ProductSalesObjectionBlock }) {
+  return (
+    <section id="common-questions" className="scroll-mt-24 bg-white py-12 md:py-16">
+      <Container>
+        <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+              {content.title}
+            </h2>
+            {content.intro ? (
+              <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">{content.intro}</div>
+            ) : null}
+          </div>
+
+          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+            {content.items.map((item) => (
+              <article
+                key={item.question}
+                className="rounded-[1.8rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_14px_34px_rgba(24,11,49,0.04)]"
+              >
+                <h3 className="text-xl font-semibold tracking-tight text-[#17142B]">{item.question}</h3>
+                <div className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">{item.answer}</div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function CtaBand({
+  cta,
+  analytics,
+  sectionId,
+  ctaPosition,
+}: {
+  cta: ProductSalesPageContent['cta'];
+  analytics?: ProductSalesPageContent['analytics'];
+  sectionId: string;
+  ctaPosition: 'section' | 'final';
+}) {
+  return (
+    <section id={sectionId} className="scroll-mt-24 bg-white py-12 md:py-16">
+      <Container>
+        <div className="mx-auto max-w-5xl rounded-[2.4rem] bg-gradient-to-br from-[#201739] via-[#31205B] to-[#5D3DB3] p-8 text-white shadow-[0_28px_72px_rgba(46,29,86,0.28)] md:p-10">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{cta.title}</h2>
+            <div className="mt-4 text-base leading-8 text-[#E5DFFD] md:text-lg">{cta.body}</div>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <TrackedLink
+              href={cta.primary.href}
+              pagePath={analytics?.pagePath || '/rent-increase'}
+              pageType={analytics?.pageType || 'entry_page'}
+              ctaLabel={cta.primary.label}
+              ctaPosition={ctaPosition}
+              eventName="entry_page_primary_cta_click"
+              routeIntent={analytics?.routeIntent}
+              product={inferProductFromHref(cta.primary.href)}
+              className="hero-btn-primary"
+            >
+              {cta.primary.label}
+            </TrackedLink>
+            {cta.secondary ? (
+              <TrackedLink
+                href={cta.secondary.href}
+                pagePath={analytics?.pagePath || '/rent-increase'}
+                pageType={analytics?.pageType || 'entry_page'}
+                ctaLabel={cta.secondary.label}
+                ctaPosition={ctaPosition}
+                eventName="entry_page_secondary_cta_click"
+                routeIntent={analytics?.routeIntent}
+                product={inferProductFromHref(cta.secondary.href)}
+                className="hero-btn-secondary"
+              >
+                {cta.secondary.label}
+              </TrackedLink>
+            ) : null}
+          </div>
+
+          {cta.guideLinks?.length ? (
+            <div className="mt-8 border-t border-white/15 pt-6">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#D5CCF6]">
+                Want the guide first?
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {cta.guideLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/15"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
 function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
   const hasChecklist = Boolean(content.includedBullets?.length);
   const hasFitSummary = Boolean(content.bestFor || content.notFor);
@@ -273,7 +507,22 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
 }
 
 export function PublicProductSalesPage({ content }: { content: ProductSalesPageContent }) {
-  const { analytics, hero, postHeroContent, earlyProofBand, whatYouGet, whyYouNeedThis, howThisHelps, howItWorks, cta, faq } = content;
+  const {
+    analytics,
+    hero,
+    postHeroContent,
+    earlyProofBand,
+    decisionBlock,
+    whatYouGet,
+    comparisonBlock,
+    objectionBlock,
+    midPageCta,
+    whyYouNeedThis,
+    howThisHelps,
+    howItWorks,
+    cta,
+    faq,
+  } = content;
   const hasRouteCards = Boolean(whatYouGet.routeCards?.length);
   const hasProofBlock = Boolean(whatYouGet.preview || whatYouGet.sampleProof);
   const shouldShowProofAsPrimaryWhatYouGet = hasProofBlock && !hasRouteCards;
@@ -285,6 +534,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
     <>
       <UniversalHero {...hero}>{hero.children}</UniversalHero>
       {postHeroContent ? <section className="scroll-mt-24 bg-white py-10 md:py-12"><Container><div className="mx-auto max-w-6xl">{postHeroContent}</div></Container></section> : null}
+      {decisionBlock ? <DecisionBlock content={decisionBlock} analytics={analytics} /> : null}
       {earlyProofBand ? <EarlyProofBand content={earlyProofBand} /> : null}
 
       {shouldRenderWhatYouGet ? (
@@ -373,6 +623,10 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
         </section>
       ) : null}
 
+      {comparisonBlock ? <ComparisonBlock content={comparisonBlock} analytics={analytics} /> : null}
+      {objectionBlock ? <ObjectionBlock content={objectionBlock} /> : null}
+      {midPageCta ? <CtaBand cta={midPageCta} analytics={analytics} sectionId="next-step" ctaPosition="section" /> : null}
+
       <InfoCards
         title={whyYouNeedThis.title}
         intro={whyYouNeedThis.intro}
@@ -419,66 +673,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
         </Container>
       </section>
 
-      <section id="start-now" className="scroll-mt-24 bg-white py-12 md:py-16">
-        <Container>
-          <div className="mx-auto max-w-5xl rounded-[2.4rem] bg-gradient-to-br from-[#201739] via-[#31205B] to-[#5D3DB3] p-8 text-white shadow-[0_28px_72px_rgba(46,29,86,0.28)] md:p-10">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{cta.title}</h2>
-              <div className="mt-4 text-base leading-8 text-[#E5DFFD] md:text-lg">{cta.body}</div>
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <TrackedLink
-                href={cta.primary.href}
-                pagePath={analytics?.pagePath || '/rent-increase'}
-                pageType={analytics?.pageType || 'entry_page'}
-                ctaLabel={cta.primary.label}
-                ctaPosition="final"
-                eventName="entry_page_primary_cta_click"
-                routeIntent={analytics?.routeIntent}
-                product={inferProductFromHref(cta.primary.href)}
-                className="hero-btn-primary"
-              >
-                {cta.primary.label}
-              </TrackedLink>
-              {cta.secondary ? (
-                <TrackedLink
-                  href={cta.secondary.href}
-                  pagePath={analytics?.pagePath || '/rent-increase'}
-                  pageType={analytics?.pageType || 'entry_page'}
-                  ctaLabel={cta.secondary.label}
-                  ctaPosition="final"
-                  eventName="entry_page_secondary_cta_click"
-                  routeIntent={analytics?.routeIntent}
-                  product={inferProductFromHref(cta.secondary.href)}
-                  className="hero-btn-secondary"
-                >
-                  {cta.secondary.label}
-                </TrackedLink>
-              ) : null}
-            </div>
-
-            {cta.guideLinks?.length ? (
-              <div className="mt-8 border-t border-white/15 pt-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#D5CCF6]">
-                  Want the guide first?
-                </p>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  {cta.guideLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/15"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </Container>
-      </section>
+      <CtaBand cta={cta} analytics={analytics} sectionId="start-now" ctaPosition="final" />
 
       <FAQSection
         title={faq.title}

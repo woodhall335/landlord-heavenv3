@@ -65,29 +65,29 @@ export default function PremiumTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/premium-tenancy-agreement"
         title="Premium Tenancy Agreement England"
-        subtitle="Use this more detailed England tenancy agreement when the tenancy is still a standard residential let, but you want fuller wording around access, repairs, handover, keys, and day-to-day management than the updated Standard assured periodic route provides."
+        subtitle="Use this more detailed England tenancy agreement when the tenancy is still a standard residential let, but you want fuller wording around access, repairs, handover, keys, and day-to-day management than the Standard assured periodic pack provides."
         primaryCtaLabel="Start premium tenancy agreement"
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Read assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"
-        legacyNotice="If you were searching for a premium tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator with fuller drafting, this is the more detailed assured periodic route for ordinary residential lets that need stronger management and handover wording under the post-Renters' Rights Act framework."
+        legacyNotice="If you were searching for a premium tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator with fuller drafting, this is the more detailed assured periodic option for ordinary residential lets that need stronger management and handover wording."
         introTitle="For a standard residential let with more detail built in"
         introBody={[
-          "This page is for landlords who need more than the standard assured periodic agreement but do not need a separate Student, HMO / Shared House, or Lodger product. It is the more detailed England tenancy agreement route under the post-Renters' Rights Act framework.",
-          'Premium keeps the tenancy on the standard residential route, while adding fuller wording around inspections, repairs reporting, key handling, contractor access, utilities handover, and move-out expectations.',
+          "This page is for landlords who need more than the standard assured periodic agreement but do not need a separate Student, HMO / Shared House, or Lodger product. It is the more detailed England tenancy agreement option for an ordinary residential let.",
+          'Premium keeps the tenancy on the standard residential track while adding fuller wording around inspections, repairs reporting, key handling, contractor access, utilities handover, and move-out expectations.',
         ]}
         highlights={[
-          'Premium assured periodic route for standard residential lets that need more detail than the standard version',
+          'Premium assured periodic pack for standard residential lets that need more detail than the standard version',
           'Adds fuller wording around management and handover',
           'Separate from Student, HMO / Shared House, and Lodger routes',
           'Guided generator with a preview before payment',
         ]}
         compliancePoints={[
           'Built on the same current England assured periodic route as Standard from 1 May 2026.',
-          "Positioned as the updated fuller England route for landlords who still want Renters' Rights Act-compliant wording on an ordinary residential let.",
+          "Positioned as the fuller England option for landlords who still want current wording on an ordinary residential let.",
           'Designed for users looking for an updated England tenancy agreement, without suggesting Premium is a separate statutory form.',
           'Adds more depth without treating HMO, student, or lodger arrangements as if they were all the same thing.',
-          'Includes the practical written information and file paperwork that sit alongside the agreement.',
+          'Includes the practical written information and supporting paperwork that sit alongside the agreement.',
           'Not positioned as an old fixed-term AST shortcut product.',
         ]}
         keywordTargets={[
@@ -102,8 +102,8 @@ export default function PremiumTenancyAgreementPage() {
           'premium tenancy agreement generator england',
         ]}
         idealFor={[
-          'the let is still a standard whole-property tenancy in England, but you want fuller drafting than the standard assured periodic route',
-          'you want a new tenancy agreement generator for the current England route, but need more management detail than Standard provides',
+          'the let is still a standard whole-property tenancy in England, but you want fuller drafting than the standard assured periodic pack',
+          'you want a new tenancy agreement generator for the current England option, but need more management detail than Standard provides',
           'you want clearer wording around repairs reporting, access, contractor attendance, key control, and hand-back expectations',
           'you want a stronger pack with a management schedule and handover records',
         ]}
@@ -117,7 +117,7 @@ export default function PremiumTenancyAgreementPage() {
           {
             title: 'Assured Periodic Tenancy Agreement',
             description:
-              'Choose the standard assured periodic route if the let is straightforward and you do not need the fuller management and handover wording included in Premium.',
+              'Choose the standard assured periodic option if the let is straightforward and you do not need the fuller management and handover wording included in Premium.',
             href: '/standard-tenancy-agreement',
             ctaLabel: 'Compare standard assured periodic route',
           },
@@ -152,12 +152,12 @@ export default function PremiumTenancyAgreementPage() {
         ]}
         salesContent={{
           packIntro:
-            'The Premium pack is for ordinary residential lets that need more detail than the Standard route provides. It gives you the main agreement plus the management schedule, handover records, and pack paperwork that stop the file from feeling too light for a more involved tenancy.',
+            'The Premium pack is for ordinary residential lets that need more detail than the Standard pack provides. It gives you the main agreement plus the management schedule, handover records, and supporting paperwork that stop the paperwork from feeling too light for a more involved tenancy.',
           defaultPackItems: premiumPackBreakdown.defaultItems,
           conditionalPackItems: premiumPackBreakdown.conditionalItems,
           conditionalTitle: 'Included when your answers require it',
           conditionalIntro:
-            'Where the tenancy includes a deposit or guarantor support, the pack adds the relevant documents so those risks are covered properly rather than being left outside the main file.',
+            'Where the tenancy includes a deposit or guarantor support, the pack adds the relevant documents so those risks are covered properly rather than being left outside the main pack.',
           sampleProof: premiumSampleProof ? <GoldenPackProof data={premiumSampleProof} /> : undefined,
           whyYouNeedThis: {
             title: 'Why landlords choose Premium',
@@ -192,14 +192,14 @@ export default function PremiumTenancyAgreementPage() {
                   'The management schedule and support records make it easier to handle inspections, repairs, access, and hand-back consistently.',
               },
               {
-                title: 'It keeps the file joined up',
+                title: 'It keeps the paperwork joined up',
                 body:
                   'The agreement and supporting paperwork are built to read together instead of feeling like separate documents added later.',
               },
               {
                 title: 'It stays on the right legal route',
                 body:
-                  'You get a fuller England tenancy pack for an ordinary residential let without pretending the case is really student, HMO, or lodger by nature.',
+                  'You get a fuller England tenancy pack for an ordinary residential let without pretending the setup is really student, HMO, or lodger by nature.',
               },
             ],
           },
@@ -224,24 +224,24 @@ export default function PremiumTenancyAgreementPage() {
                 step: 'Step 03',
                 title: 'Generate the full Premium pack',
                 body:
-                  'Download the agreement, schedules, and pack paperwork as one England tenancy file built for a more detailed residential let.',
+                  'Download the agreement, schedules, and supporting paperwork as one England tenancy pack built for a more detailed residential let.',
               },
             ],
           },
           ctaTitle: 'Start the Premium agreement pack',
           ctaBody:
-            'Use this route when the tenancy is still an ordinary residential let, but the paperwork needs more drafting depth and stronger day-to-day management support than Standard provides.',
+            'Use this option when the tenancy is still an ordinary residential let, but the paperwork needs more drafting depth and stronger day-to-day management support than Standard provides.',
         }}
         faqs={[
           {
             question: 'When should I choose Premium over the standard assured periodic route?',
             answer:
-              'Choose Premium when the let is still a standard residential arrangement but you want fuller drafting, more operational detail, or a more tailored agreement than the standard assured periodic route provides.',
+              'Choose Premium when the let is still a standard residential arrangement but you want fuller drafting, more operational detail, or a more tailored agreement than the standard assured periodic pack provides.',
           },
           {
             question: 'If I searched for a Renters Rights Act tenancy agreement, when do I need Premium?',
             answer:
-              'Choose Premium when you still need the current England assured periodic route, but want more than the standard wording. It is usually the better fit when management detail, handover controls, access wording, and contractor attendance need to be built in from the start.',
+              'Choose Premium when you still need the current England assured periodic option, but want more than the standard wording. It is usually the better fit when management detail, handover controls, access wording, and contractor attendance need to be built in from the start.',
           },
           {
             question: 'Do I need Premium for an HMO or student let?',
@@ -251,12 +251,12 @@ export default function PremiumTenancyAgreementPage() {
           {
             question: 'Is the Premium route still updated for the new England system?',
             answer:
-              'Yes. Premium sits on the same current England assured periodic route as the standard version. The difference is the level of detail and coverage, not the legal route itself, so it works as the fuller England tenancy agreement generator for standard residential lets.',
+              'Yes. Premium sits on the same current England assured periodic basis as the standard version. The difference is the level of detail and coverage, not a different legal form, so it works as the fuller England tenancy agreement generator for standard residential lets.',
           },
           {
             question: 'What if I am still using an older agreement?',
             answer:
-              'Many older tenancy agreements are still in circulation, but they can be harder to rely on if they use outdated wording or structure. Using an agreement that does not reflect the current England framework can create avoidable uncertainty, especially on more involved lets.',
+              'Many older tenancy agreements are still in circulation, but they can be harder to rely on if they use outdated wording or structure. Using an agreement that does not reflect the current England position can create avoidable uncertainty, especially on more involved lets.',
           },
           {
             question: 'Can I still use the standard assured periodic route if the let is straightforward?',
@@ -264,7 +264,7 @@ export default function PremiumTenancyAgreementPage() {
               'Yes. If the tenancy is relatively simple, the standard assured periodic agreement is usually the more proportionate choice.',
           },
         ]}
-        finalCtaBody="Use the Premium assured periodic route when you want a more detailed England tenancy agreement generator for a standard residential let. If you were searching for a Renters' Rights Act tenancy agreement but the property needs more management, handover, and day-to-day detail than Standard provides, this updated fuller route is usually the better fit. If the arrangement is really student, shared-house, or lodger, use the dedicated product instead."
+        finalCtaBody="Use the Premium assured periodic option when you want a more detailed England tenancy agreement generator for a standard residential let. If you were searching for a Renters' Rights Act tenancy agreement but the property needs more management, handover, and day-to-day detail than Standard provides, this fuller option is usually the better fit. If the arrangement is really student, shared-house, or lodger, use the dedicated product instead."
       />
     </div>
   );

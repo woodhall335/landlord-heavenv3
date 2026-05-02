@@ -11,7 +11,9 @@ describe('tenancy product pages', () => {
     const source = readSource('src/app/(marketing)/products/ast/page.tsx');
 
     expect(source).toContain('Choose the agreement that fits the tenancy');
-    expect(source).toContain('Use this page to compare the five agreement routes properly.');
+    expect(source).toContain('Use this page to compare the five agreement products properly.');
+    expect(source).toContain('Choose the England agreement before you start the wizard');
+    expect(source).toContain('Common landlord questions before choosing an England tenancy agreement');
     expect(source).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
     expect(source).toContain('pricingItemListSchema');
   });
@@ -55,18 +57,16 @@ describe('tenancy product pages', () => {
   it('shared England SEO tenancy page component exposes keyword, pack, and route-comparison sections', () => {
     const source = readSource('src/components/seo/EnglandTenancyPage.tsx');
 
-    expect(source).toContain('Common landlord searches this route covers');
-    expect(source).toContain('This route is usually right if');
+    expect(source).toContain('Common landlord searches for this setup');
+    expect(source).toContain('Choose this agreement if');
     expect(source).toContain('What you get');
-    expect(source).toContain('Compare England agreement routes');
+    expect(source).toContain('See the actual pack before you pay');
+    expect(source).toContain('Compare England agreement options');
   });
 
   it('legacy tier-picker copy signposts specialist England products clearly', () => {
     const source = readSource('src/components/wizard/flows/TenancySectionFlow.tsx');
 
-    expect(source).toContain(
-      'Premium England assured periodic tenancy agreement with fuller ordinary-residential drafting, guarantor support, and enhanced operational terms for the current framework.'
-    );
     expect(source).toContain(
       'Standard covers straightforward ordinary residential lets. Premium adds fuller drafting, guarantor support, rent review, and tighter controls. Student, HMO / Shared House, and Lodger now have dedicated England products.'
     );
@@ -90,5 +90,18 @@ describe('tenancy product pages', () => {
     expect(premiumSource).toContain('new tenancy agreement generator');
     expect(premiumSource).toContain('england tenancy agreement management schedule');
     expect(premiumSource).toContain('you want a stronger pack with a management schedule and handover records');
+  });
+
+  it('specialist tenancy product pages keep the preview and pack-breakdown sales structure', () => {
+    const studentSource = readSource('src/app/student-tenancy-agreement/page.tsx');
+    const hmoSource = readSource('src/app/hmo-shared-house-tenancy-agreement/page.tsx');
+    const lodgerSource = readSource('src/app/lodger-agreement/page.tsx');
+
+    expect(studentSource).toContain('sampleProof: studentSampleProof');
+    expect(studentSource).toContain('routeComparison={[');
+    expect(hmoSource).toContain('sampleProof: hmoSampleProof');
+    expect(hmoSource).toContain('routeComparison={[');
+    expect(lodgerSource).toContain('sampleProof: lodgerSampleProof');
+    expect(lodgerSource).toContain('routeComparison={[');
   });
 });

@@ -110,7 +110,7 @@ export default function CompleteEvictionPackPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'This is the combined route for landlords who already expect the case may need to continue into possession proceedings and want the notice file plus the court file built together.',
+        'This is the combined route for landlords who already expect the case may need to continue into possession proceedings and want to see the actual Section 8 notice, claim forms, and court file before paying.',
       includedBullets: [
         'Stage 1 Form 3A notice and service file included in the same case',
         'N5, N119, witness statement, and court bundle support added from the start',
@@ -121,10 +121,39 @@ export default function CompleteEvictionPackPage() {
       notFor:
         'You only need to serve the notice first and want a lighter Stage 1 route before deciding whether a possession claim is necessary.',
     },
+    decisionBlock: {
+      title: 'Choose Stage 2 if you want the full Section 8 court route from the start',
+      intro:
+        'This page is for landlords who do not just want a notice. It is for the full possession route: notice, service record, N5, N119, court readiness, and hearing support kept together in one case file.',
+      cards: [
+        {
+          eyebrow: 'Choose this route',
+          title: 'Start with the full possession route now',
+          body:
+            'Use the Complete Pack when you already expect the case may need to continue into possession proceedings and you want the Section 8 notice and the court paperwork aligned from day one.',
+          tone: 'positive',
+        },
+        {
+          eyebrow: 'Important fit point',
+          title: 'You do not need to buy Stage 1 separately first',
+          body:
+            'The Complete Pack already includes the Stage 1 Section 8 notice and service file. If you want N5, N119, witness statement, and hearing support as well, this is the right route from the start.',
+          tone: 'neutral',
+        },
+      ],
+      primary: {
+        label: 'Start the full Section 8 court route',
+        href: descriptor.wizardHref,
+      },
+      secondary: {
+        label: 'Only serving notice first?',
+        href: '/products/notice-only',
+      },
+    },
     whatYouGet: {
       title: 'What you get in the combined pack',
       intro:
-        'This is the full combined pack. It includes the full Stage 1 notice and service file plus the Stage 2 court documents, so the case moves from first service into possession proceedings without breaking the file.',
+        'This is the full combined pack. It includes the Stage 1 Section 8 notice file plus the court-stage possession paperwork, so you can inspect the joined-up notice, claim forms, and court support before buying.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -200,6 +229,79 @@ export default function CompleteEvictionPackPage() {
         },
       ],
       sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+    },
+    comparisonBlock: {
+      title: 'Stage 2 is for the full court route, not just extra forms',
+      intro:
+        'The key difference is not simply price or document count. Stage 2 is the route for landlords who want the notice and the possession claim built together instead of serving first and deciding later.',
+      routeCards: [
+        {
+          name: 'Stage 1: Notice and service first',
+          whatItIs:
+            'Best when you only need to serve Form 3A correctly and keep the service record straight for now.',
+          problemItSolves:
+            'Stops notice-stage mistakes before they undermine the case.',
+          riskIfWrong:
+            'If you really need to issue proceedings soon, you may still need to step up into the wider court file afterwards.',
+          landlordOutcome:
+            'Lets you serve the notice properly and move onward later only if needed.',
+          href: '/products/notice-only',
+          ctaLabel: 'See the notice-first route',
+          imageSrc: '/images/notice.webp',
+          imageAlt: 'Serve Section 8 notice first',
+        },
+        {
+          name: 'Stage 2: Notice, claim forms, and hearing support together',
+          whatItIs:
+            'Best when you want the Section 8 notice, N5, N119, court readiness, and hearing support in one route.',
+          problemItSolves:
+            'Stops the notice file and the court file drifting apart or being rebuilt separately.',
+          riskIfWrong:
+            'If you only need to serve the notice now, the full court route can be more than you need at this stage.',
+          landlordOutcome:
+            'Gives you a joined-up possession file from notice through court without buying Stage 1 separately first.',
+          href: '/products/complete-pack',
+          ctaLabel: 'This is my route',
+          priceLabel: product.displayPrice,
+          imageSrc: '/images/hearing.webp',
+          imageAlt: 'Section 8 claim and hearing route',
+        },
+      ],
+    },
+    objectionBlock: {
+      title: 'Common questions before you start the Complete Pack',
+      intro:
+        'The preview is there to prove that this is a real court-facing file, not a loose bundle. These are the questions most landlords ask before choosing the full route.',
+      items: [
+        {
+          question: 'Do I need Stage 1 first?',
+          answer:
+            'No. The Complete Pack already includes the full Stage 1 Section 8 notice and service file, so you do not need to buy that pack separately if you already want the court route.',
+        },
+        {
+          question: 'Is this only court forms?',
+          answer:
+            'No. It includes the Section 8 notice, service record, and supporting notice-stage file as well as N5, N119, witness statement, court bundle support, and hearing preparation.',
+        },
+        {
+          question: 'Does this include the Section 8 notice and service record too?',
+          answer:
+            'Yes. The whole point of the Complete Pack is that the notice stage and the court stage stay aligned in one possession file instead of being prepared separately.',
+        },
+      ],
+    },
+    midPageCta: {
+      title: 'Ready to start the full Section 8 court route?',
+      body:
+        'Choose the Complete Pack if you want the notice, claim forms, and hearing support prepared together in one England possession file.',
+      primary: {
+        label: 'Start the full court-route wizard',
+        href: descriptor.wizardHref,
+      },
+      secondary: {
+        label: 'I only need to serve notice first',
+        href: '/products/notice-only',
+      },
     },
     whyYouNeedThis: {
       title: 'Why Stage 2 works better than isolated forms',
@@ -281,11 +383,11 @@ export default function CompleteEvictionPackPage() {
       body:
         'Start here if you want the complete combined pack with the notice, service record, claim forms, and hearing support prepared together as one England possession file, without buying Stage 1 separately first.',
       primary: {
-        label: descriptor.primaryCtaLabel,
+        label: 'Start the full Section 8 court route',
         href: descriptor.wizardHref,
       },
       secondary: {
-        label: 'Switch to Stage 1 Notice Pack',
+        label: 'Only serving notice first?',
         href: '/products/notice-only',
       },
       guideLinks: descriptor.defaultGuideLinks,

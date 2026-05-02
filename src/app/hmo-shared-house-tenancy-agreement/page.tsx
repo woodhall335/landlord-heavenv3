@@ -63,30 +63,30 @@ export default function HmoSharedHouseTenancyAgreementPage() {
       <EnglandTenancyPage
         pagePath="/hmo-shared-house-tenancy-agreement"
         title="HMO / Shared House Tenancy Agreement England"
-        subtitle="Use this England HMO / Shared House tenancy agreement generator when people are sharing the property and you need clearer wording on communal areas, house rules, shared living arrangements, and day-to-day management than the updated general residential routes usually provide."
+        subtitle="Use this England HMO / Shared House tenancy agreement generator when people are sharing the property and you need clearer wording on communal areas, house rules, shared living arrangements, and day-to-day management than a general residential pack usually provides."
         primaryCtaLabel="Start HMO / Shared House agreement"
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
-        legacyNotice="If you were searching for an HMO tenancy agreement, a shared house agreement, or a tenancy agreement for sharers in England, this is the dedicated route for shared-house occupation within the updated current England framework from 1 May 2026 rather than a standard residential agreement adapted after the fact."
+        legacyNotice="If you were searching for an HMO tenancy agreement, a shared house agreement, or a tenancy agreement for sharers in England, this is the dedicated option for shared-house occupation from 1 May 2026 rather than a standard residential agreement adapted after the fact."
         introTitle="Built for shared houses and HMO-style lets"
         introBody={[
-          'This route is designed for England lets where the real complexity comes from people sharing the property, using communal areas, and living under shared-house rules that need to be made clear from the start, while still sitting inside the updated current England framework from 1 May 2026.',
+          'This pack is designed for England lets where the real complexity comes from people sharing the property, using communal areas, and living under shared-house rules that need to be made clear from the start.',
           'Instead of trying to force a shared house into a general residential agreement, this pack is built for the issues that usually matter in HMOs and shared houses: occupiers sharing kitchens and bathrooms, house rules, shared responsibilities, visitor expectations, handover arrangements, and practical day-to-day management.',
         ]}
         highlights={[
           'HMO and shared-house wording built around sharers and communal living',
           'Clearer treatment of house rules, communal areas, and shared responsibilities',
-          'Separate from Standard, Premium, Student, and Lodger routes',
+          'Separate from Standard, Premium, Student, and Lodger packs',
           'Guided generator with a preview before payment',
         ]}
         compliancePoints={[
-          'Built around the current England route from 1 May 2026 for the main tenancy wording.',
-          'Kept separate from the updated Standard and Premium assured periodic routes so shared-house occupation is not forced into an ordinary residential product.',
+          'Built around the current England position from 1 May 2026 for the main tenancy wording.',
+          'Kept separate from the Standard and Premium assured periodic packs so shared-house occupation is not forced into an ordinary residential product.',
           'Captures shared-house and HMO-style occupation more directly in the guided flow.',
           'Keeps communal-living wording separate from ordinary residential drafting.',
-          'Includes practical file paperwork for shared-house setup, handover, and ongoing variation.',
-          'If the landlord lives in the property and shares the home with the occupier, compare the Lodger route instead.',
+          'Includes practical supporting paperwork for shared-house setup, handover, and ongoing variation.',
+          'If the landlord lives in the property and shares the home with the occupier, compare the Lodger pack instead.',
         ]}
         keywordTargets={[
           'hmo tenancy agreement england',
@@ -112,7 +112,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           {
             title: 'Premium Tenancy Agreement',
             description:
-              'Premium is for ordinary residential lets that need more detailed day-to-day drafting, but it is not the default route for HMO or shared-house setups.',
+              'Premium is for ordinary residential lets that need more detailed day-to-day drafting, but it is not the default option for HMO or shared-house setups.',
             href: '/premium-tenancy-agreement',
             ctaLabel: 'Compare Premium',
           },
@@ -140,7 +140,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         ]}
         salesContent={{
           packIntro:
-            'The HMO / Shared House pack is built for communal occupation. It gives you the main agreement plus the rules, handover, and support paperwork that shared houses need if the landlord wants the file to match how the property is really run.',
+              'The HMO / Shared House pack is built for communal occupation. It gives you the main agreement plus the rules, handover, and supporting paperwork that shared houses need if the landlord wants the paperwork to match how the property is really run.',
           defaultPackItems: hmoPackBreakdown.defaultItems,
           conditionalPackItems: hmoPackBreakdown.conditionalItems,
           conditionalTitle: 'Included when your answers require it',
@@ -148,7 +148,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
             'Where the tenancy includes a deposit or guarantor support, the pack adds the extra pack paperwork needed to keep those points properly covered as well.',
           sampleProof: hmoSampleProof ? <GoldenPackProof data={hmoSampleProof} /> : undefined,
           whyYouNeedThis: {
-            title: 'Why shared houses need a fuller file',
+            title: 'Why shared houses need fuller paperwork',
             intro:
               'A shared-house let does not just need a main agreement. It also needs rules and records that deal with the communal reality of the property, otherwise the paperwork misses the part of the tenancy that usually causes the most friction.',
             cards: [
@@ -165,14 +165,14 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               {
                 title: 'Standard paperwork is often too broad for a shared house',
                 body:
-                  'If a communal let is documented like a simple whole-property tenancy, the file can miss the rules that make shared living manageable in practice.',
+                  'If a communal let is documented like a simple whole-property tenancy, the paperwork can miss the rules that make shared living manageable in practice.',
               },
             ],
           },
           howThisHelps: {
             title: 'How this helps you',
             intro:
-              'The pack gives the landlord a shared-house file that is clearer for occupiers, easier to manage day to day, and easier to rely on when communal issues appear.',
+              'The pack gives the landlord shared-house paperwork that is clearer for occupiers, easier to manage day to day, and easier to rely on when communal issues appear.',
             cards: [
               {
                 title: 'It makes the house rules visible',
@@ -182,7 +182,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               {
                 title: 'It keeps the practical records together',
                 body:
-                  'The handover, utilities, and variation documents help the landlord keep the communal tenancy file in one place.',
+                  'The handover, utilities, and variation documents help the landlord keep the communal tenancy paperwork in one place.',
               },
               {
                 title: 'It matches the reality of shared occupation',
@@ -194,7 +194,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           howItWorks: {
             title: 'How it works',
             intro:
-              'The workflow captures the shared-house details that need to be on the file before the occupiers move in.',
+              'The workflow captures the shared-house details that need to be on the paperwork before the occupiers move in.',
             steps: [
               {
                 step: 'Step 01',
@@ -212,13 +212,13 @@ export default function HmoSharedHouseTenancyAgreementPage() {
                 step: 'Step 03',
                 title: 'Generate the full HMO / Shared House pack',
                 body:
-                  'Download the agreement, the shared-house appendix, and the pack paperwork as one England communal-living file.',
+                  'Download the agreement, the shared-house appendix, and the supporting paperwork as one England communal-living pack.',
               },
             ],
           },
           ctaTitle: 'Start the HMO / Shared House agreement pack',
           ctaBody:
-            'Use this route when the property is being shared and you want the agreement, the communal rules, and the supporting records prepared together from the start.',
+            'Use this option when the property is being shared and you want the agreement, the communal rules, and the supporting records prepared together from the start.',
         }}
         faqs={[
           {
@@ -229,7 +229,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           {
             question: 'Is HMO / Shared House still just part of Premium?',
             answer:
-              'No. HMO / Shared House is now its own England route with its own drafting and positioning. Premium is for ordinary residential lets that need fuller operational wording; HMO / Shared House is for cases where sharers, communal areas, and house management are the real complexity.',
+              'No. HMO / Shared House is now its own England product with its own drafting and positioning. Premium is for ordinary residential lets that need fuller operational wording; HMO / Shared House is for cases where sharers, communal areas, and house management are the real complexity.',
           },
           {
             question: 'Should I still use Premium for a shared house?',
@@ -239,25 +239,25 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           {
             question: 'Is this suitable for sharers living together in one property?',
             answer:
-              'Usually yes. This route is intended for situations where people are sharing the property and the agreement needs to reflect that more clearly than a standard whole-property tenancy would.',
+              'Usually yes. This pack is intended for situations where people are sharing the property and the agreement needs to reflect that more clearly than a standard whole-property tenancy would.',
           },
           {
             question: 'Does this help with house rules and communal areas?',
             answer:
-              'Yes. One of the main reasons to use this route is to deal more clearly with communal-living points such as shared areas, practical house rules, and how occupation works in a shared-house setting.',
+              'Yes. One of the main reasons to use this pack is to deal more clearly with communal-living points such as shared areas, practical house rules, and how occupation works in a shared-house setting.',
           },
           {
             question: 'What if some of the occupiers are students?',
             answer:
-              'If the real complexity is still shared-house management, communal controls, and HMO-style occupation, this route may still be the better fit. If the specialist issue is really student guarantors, replacement requests, and end-of-term turnover, compare it against the Student route.',
+              'If the real complexity is still shared-house management, communal controls, and HMO-style occupation, this pack may still be the better fit. If the specialist issue is really student guarantors, replacement requests, and end-of-term turnover, compare it against the Student pack.',
           },
           {
             question: 'What if the landlord lives in the property?',
             answer:
-              'That is usually a Lodger or resident-landlord arrangement rather than an HMO / Shared House tenancy route, so it is usually better to compare the Lodger product instead.',
+              'That is usually a Lodger or resident-landlord arrangement rather than an HMO / Shared House tenancy, so it is usually better to compare the Lodger product instead.',
           },
         ]}
-        finalCtaBody="Use the HMO / Shared House route when the real complexity is shared occupation, communal areas, and day-to-day house management under the updated current England framework. If the tenants are sharers and you want the agreement to reflect how shared-house living actually works in practice, this is usually a better fit than the Standard or Premium assured periodic routes. If you are still deciding, compare it against the other England tenancy routes on the main comparison page."
+        finalCtaBody="Use the HMO / Shared House pack when the real complexity is shared occupation, communal areas, and day-to-day house management. If the tenants are sharers and you want the agreement to reflect how shared-house living actually works in practice, this is usually a better fit than the Standard or Premium assured periodic packs. If you are still deciding, compare it against the other England tenancy products on the main comparison page."
       />
     </div>
   );
