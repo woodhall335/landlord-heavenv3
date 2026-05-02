@@ -118,6 +118,7 @@ export default function RentIncreaseLandingPage() {
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 rent increase workflow',
       showReviewPill: true,
+      reviewPillLayout: 'stacked',
       showTrustPositioningBar: true,
       trustPositioningPreset: 'section13',
       actionsSlot: (

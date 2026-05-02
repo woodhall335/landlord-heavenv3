@@ -61,6 +61,7 @@ export type UniversalHeroProps = {
   showTrustPositioningBar?: boolean;
   trustPositioningPreset?: PositioningPreset;
   trustPositioningHeadline?: string;
+  reviewPillLayout?: 'auto' | 'inline' | 'stacked';
 };
 
 const warnedMessages = new Set<string>();
@@ -104,6 +105,7 @@ export function UniversalHero({
   showReviewPill,
   showUsageCounter,
   backgroundImageSrc = '/images/bg.webp',
+  reviewPillLayout = 'auto',
 }: UniversalHeroProps) {
   const mobileTitleParts = title.split('Legal Documents');
   const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
@@ -126,7 +128,11 @@ export function UniversalHero({
   );
   const showTrustDescriptor = Boolean(resolvedTrustText) && !trustTextLooksLikeReview;
   const shouldUseStackedDesktopReviewPill =
-    showTrustDescriptor && resolvedTrustText.trim().length > 60;
+    reviewPillLayout === 'stacked'
+      ? true
+      : reviewPillLayout === 'inline'
+        ? false
+        : showTrustDescriptor && resolvedTrustText.trim().length > 60;
   const isCenter = align === 'center';
   const shouldRenderMedia = !hideMedia && mediaSrc !== null;
 

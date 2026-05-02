@@ -22,6 +22,7 @@ describe('Phase 1 commercial positioning', () => {
   it('updates Notice Only and Complete Pack value framing for the new pricing and service position', () => {
     const noticeSource = readSource('src/app/(marketing)/products/notice-only/page.tsx');
     const completePackSource = readSource('src/app/(marketing)/products/complete-pack/page.tsx');
+    const rentIncreaseHubSource = readSource('src/app/rent-increase/page.tsx');
 
     expect(noticeSource).toContain('start correctly before court');
     expect(noticeSource).toContain('the next practical step is serving notice');
@@ -30,6 +31,8 @@ describe('Phase 1 commercial positioning', () => {
     expect(completePackSource).toContain('includes Stage 1 notice and Stage 2 court paperwork together');
     expect(completePackSource).toContain('The Complete Pack already includes the full Stage 1 Section 8 notice and service file');
     expect(completePackSource).toContain('N5, N119, witness statement, and court bundle support added from the start');
+
+    expect(rentIncreaseHubSource).toContain("reviewPillLayout: 'stacked'");
   });
 
   it('keeps money-claim product copy transactional rather than broad-owner led', () => {
