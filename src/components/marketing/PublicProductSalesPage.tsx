@@ -519,7 +519,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
                         alt={content.imageAlt ?? 'Product pack preview'}
                         fill
                         sizes="(min-width: 1024px) 34vw, 100vw"
-                        className="object-cover object-center"
+                        className="object-cover object-top"
                       />
                     </div>
                   </div>
@@ -672,7 +672,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
       <section id="how-it-works" className="scroll-mt-24 bg-[#F7F1FF] py-12 md:py-16">
         <Container>
           <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_18px_46px_rgba(24,11,49,0.07)] md:p-10">
-            <div className={hasHowItWorksImage ? 'grid gap-8 lg:grid-cols-[0.56fr_0.44fr] lg:items-start' : ''}>
+            <div className={hasHowItWorksImage ? 'grid gap-8 lg:grid-cols-[0.56fr_0.44fr] lg:items-stretch' : ''}>
               <div>
                 <div className="max-w-3xl">
                   <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
@@ -702,9 +702,9 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
               </div>
 
               {howItWorks.imageSrc ? (
-                <div className="min-w-0">
-                  <div className="relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]">
-                    <div className="relative aspect-[4/5] w-full">
+                <div className="min-w-0 lg:flex lg:h-full">
+                  <div className="relative h-72 w-full overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] lg:h-full">
+                    <div className="relative h-full min-h-[22rem] w-full">
                       <Image
                         src={howItWorks.imageSrc}
                         alt={howItWorks.imageAlt ?? 'How it works illustration'}
