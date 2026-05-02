@@ -425,6 +425,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
   const hasFitSummary = Boolean(content.bestFor || content.notFor);
   const hasPreview = Boolean(content.preview);
   const hasImage = Boolean(content.imageSrc);
+  const hasStandaloneImage = hasImage && !hasPreview;
 
   if (!content.priceLabel && !content.valueSummary && !hasChecklist && !hasFitSummary && !hasPreview && !hasImage) {
     return null;
@@ -434,7 +435,11 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
     <section id="hero-proof" className="scroll-mt-24 bg-white py-10 md:py-12">
       <Container>
         <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
-          <div className="grid gap-8 lg:grid-cols-[0.58fr_0.42fr] lg:items-start">
+          <div
+            className={`grid gap-8 lg:grid-cols-[0.58fr_0.42fr] ${
+              hasStandaloneImage ? 'lg:items-stretch' : 'lg:items-start'
+            }`}
+          >
             <div>
               <div className="flex flex-wrap items-center gap-3">
                 {content.priceLabel ? (
@@ -496,11 +501,19 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
             </div>
 
             {hasPreview || hasImage ? (
-              <div className="min-w-0">
+              <div className={`min-w-0 ${hasStandaloneImage ? 'lg:flex lg:h-full' : ''}`}>
                 {hasPreview ? content.preview : null}
                 {content.imageSrc ? (
-                  <div className="relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]">
-                    <div className="relative aspect-[4/3] w-full">
+                  <div
+                    className={`relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] ${
+                      hasStandaloneImage ? 'h-72 w-full lg:h-full' : ''
+                    }`}
+                  >
+                    <div
+                      className={`relative w-full ${
+                        hasStandaloneImage ? 'h-full min-h-[22rem]' : 'aspect-[4/3]'
+                      }`}
+                    >
                       <Image
                         src={content.imageSrc}
                         alt={content.imageAlt ?? 'Product pack preview'}
