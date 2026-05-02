@@ -3,7 +3,7 @@ golden-hmo-tenancy-001
 JURISDICTION
 England
 GENERATED
-1 May 2026
+2 May 2026
 FOR PROPERTIES IN ENGLAND
 HMO Setup Summary
 HMO / Shared House Tenancy Agreement & House Management Pack summary and readiness page
@@ -88,17 +88,19 @@ Do not tamper with detectors and keep escape routes clear.
 STATUS READY TO SIGN
 This agreement forms the core of the tenancy record and the HMO / shared-house rules appendix should be
 kept with it as the practical house-management record.
+Status meaning: the sharer, licensing, and communal-management facts currently recorded are aligned
+enough for signature.
 If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including
 possession.
+
+-- 3 of 4 --
+
 2. Key Risks
 Core party, property, payment, and start-date details are recorded clearly.
 Deposit support documents are included so the protection record can stay with the file.
 The shared-house rules appendix is included so communal living expectations stay with the main tenancy
 file.
 Right to rent checks are recorded for 25 April 2026.
-
--- 3 of 4 --
-
 3. What This Pack Does
 Supporting documents included: Main tenancy agreement; Pre-tenancy checklist; Keys and handover record;
 Utilities and meter handover sheet; Pet request / consent addendum; Tenancy variation record; HMO / shared-

@@ -3,7 +3,7 @@ golden-complete-pack-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 Stage 2: Section 8 Court & Possession Pack
 Court Readiness Status
 READY FOR COURT - CLAIM FILE ALIGNED
@@ -15,7 +15,7 @@ PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE TYPE Form 3A notice
 TENANCY START DATE 1 January 2024
-GENERATED 1 May 2026
+GENERATED 2 May 2026
 CRITICAL
 Resolve this before issuing
 proceedings or relying on the
@@ -52,13 +52,13 @@ How to Rent service is recorded on 15 January 2024.
 Action: Keep the service record with the tenancy file.
 OK
 Notice timeline recorded
-Notice served on 1 May 2026 with earliest proceedings date 29 May 2026.
+Notice served on 2 May 2026 with earliest proceedings date 30 May 2026.
 Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and
 any court papers.
 Issue decision
 READY FOR COURT - CLAIM FILE ALIGNED
 Prepare and issue the possession claim using the forms and guidance in this pack once the claim is
-eligible on or after 29 May 2026.
+eligible on or after 30 May 2026.
 Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record,
 or legal advice on the facts of the case.
 

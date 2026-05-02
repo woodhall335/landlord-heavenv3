@@ -3,7 +3,7 @@ golden-notice-only-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 Service and Validity Checklist
 FORM 3A NOTICE
 Purpose: Use this checklist to verify that the Form 3A notice is internally consistent across the notice
@@ -11,17 +11,17 @@ and support documents, has been served using a defensible method, and is ready f
 claim is issued.
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
 Ground 10 (Any rent arrears).
-Form 3A notice served on 1 May 2026, expiring on 29 May 2026, with proceedings not intended before
-29 May 2026.
+Form 3A notice served on 2 May 2026, expiring on 30 May 2026, with proceedings not intended before
+30 May 2026.
 LANDLORD Daniel Mercer
 TENANT Ivy Carleton
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANCY START DATE 1 January 2024
-NOTICE SERVICE DATE 1 May 2026
-NOTICE EXPIRY DATE 29 May 2026
+NOTICE SERVICE DATE 2 May 2026
+NOTICE EXPIRY DATE 30 May 2026
 EARLIEST PROCEEDINGS
 DATE
-29 May 2026
+30 May 2026
 GROUNDS RELIED ON Ground 8 - Serious rent arrears, Ground 10 - Rent arrears (some
 arrears)
 Current England notice periods after 1 May 2026: use the longest period that applies where multiple
@@ -65,6 +65,6 @@ facing documents.
 Risk warning: A possession claim can be delayed or contested if the notice dates, service evidence, or
 grounds particulars are inconsistent across the pack, even where the underlying arrears or breach
 evidence is strong.
-Generated: 1 May 2026
+Generated: 2 May 2026
 
 -- 3 of 3 --

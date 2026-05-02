@@ -16,7 +16,7 @@
         "html": "england_lodger_agreement/england-room-let-summary.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

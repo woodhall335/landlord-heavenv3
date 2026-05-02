@@ -208,6 +208,11 @@ function firstNonEmpty(...values: unknown[]): string {
   return '';
 }
 
+function withTrailingFullStop(value: unknown): string {
+  const text = toText(value).replace(/[.?!]+$/, '');
+  return text ? `${text}.` : '';
+}
+
 function formatIsoDateText(value: unknown): string {
   const text = toText(value);
   const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -947,7 +952,8 @@ function getNamedTenantParties(shared: SharedResidentialData, label = 'Tenant'):
 
 function getPartyDetails(
   product: ResidentialLettingProductSku,
-  shared: SharedResidentialData
+  shared: SharedResidentialData,
+  counterpartyLabel = 'Tenant'
 ): TemplateParty[] {
   const facts = shared.facts;
   const parties: TemplateParty[] = [];
@@ -969,7 +975,7 @@ function getPartyDetails(
 
   switch (product) {
     case 'guarantor_agreement':
-      parties.push(...getNamedTenantParties(shared));
+      parties.push(...getNamedTenantParties(shared, counterpartyLabel));
       addParty({
         label: 'Guarantor',
         name: toText(facts.guarantor_name),
@@ -1027,7 +1033,7 @@ function getPartyDetails(
       });
       return parties;
     default:
-      parties.push(...getNamedTenantParties(shared));
+      parties.push(...getNamedTenantParties(shared, counterpartyLabel));
       return parties;
   }
 }
@@ -2186,6 +2192,12 @@ function buildDefinedTerms(
   const tenant = shared.tenant_primary_name || shared.tenant_names || 'the Tenant';
 
   switch (product) {
+    case 'england_lodger_agreement':
+      return cleanDefinedTerms([
+        { term: 'Property', meaning: firstNonEmpty(shared.property_address, 'the property identified in this document') },
+        { term: 'Resident Landlord', meaning: landlord },
+        { term: 'Lodger', meaning: tenant },
+      ]);
     case 'guarantor_agreement':
       return cleanDefinedTerms([
         {
@@ -2319,7 +2331,7 @@ function buildTemplateData(
   const rentAmountDisplay = formatMoney(shared.rent_amount) || toText(shared.rent_amount);
   const depositAmountDisplay = formatMoney(shared.deposit_amount) || toText(shared.deposit_amount);
   const documentReference = buildDocumentReference(product, shared);
-  const parties = getPartyDetails(product, shared);
+  const parties = getPartyDetails(product, shared, config.counterpartyLabel);
   const signatureParties = getSignatureParties(product, shared, config);
   const inspectionRooms =
     product === 'rental_inspection_report' ? buildStructuredInspectionRooms(shared.facts) : [];
@@ -3017,8 +3029,8 @@ function buildEnglandAssuredNotes(
 ): string {
   const parts = [
     purpose === 'existing_verbal_tenancy'
-      ? 'This document is intended to provide the written statement of terms for an existing verbal England assured tenancy and should be given to the tenant alongside any supporting compliance documents.'
-      : 'This document is intended to record the written terms for an England assured periodic tenancy and should be read with any deposit, guarantor, and pre-tenancy checklist documents in the pack.',
+      ? 'The written statement provides the recorded terms for an existing verbal England assured tenancy and should be given to the tenant alongside any supporting compliance documents.'
+      : 'The agreement records the written terms for an England assured periodic tenancy and should be read alongside the supporting setup, evidence, and compliance records in the file.',
     Number(shared.deposit_amount) > 0 && !toText(shared.facts.deposit_reference_number)
       ? 'Deposit protection reference: use the placeholder wording in the support documents until the final scheme reference is available, then update the served pack within the statutory deadline.'
       : '',
@@ -3026,13 +3038,13 @@ function buildEnglandAssuredNotes(
       ? 'Where a guarantor will be used, the guarantor deed should be signed and retained with this agreement before occupation begins or as soon as the tenancy file requires.'
       : '',
     product === 'england_premium_tenancy_agreement'
-      ? 'The Premium pack is intended to travel with its management schedule, keys handover record, utilities handover sheet, pet-request addendum, and tenancy variation record.'
+      ? 'The Premium pack should be retained alongside its management schedule, keys handover record, utilities handover sheet, pet-request addendum, and tenancy variation record.'
       : '',
     product === 'england_student_tenancy_agreement'
-      ? 'The Student pack is intended to travel with its move-out schedule, handover record, utilities sheet, and any guarantor deed recorded for the tenancy file.'
+      ? 'The Student pack should be retained alongside its move-out schedule, handover record, utilities sheet, and any guarantor deed recorded for the tenancy file.'
       : '',
     product === 'england_hmo_shared_house_tenancy_agreement'
-      ? 'The HMO / shared-house pack is intended to travel with its house-rules appendix, handover record, utilities sheet, and shared-house support documents.'
+      ? 'The HMO / shared-house pack should be retained alongside its house-rules appendix, handover record, utilities sheet, and shared-house support documents.'
       : '',
     buildEnglandDraftingControlsNote(decision, purpose),
     buildEnglandAssuredAdditionalTerms(shared),
@@ -3069,10 +3081,12 @@ function buildEnglandAssuredSections(
         purpose === 'existing_verbal_tenancy'
           ? 'This written statement records the key contractual and statutory terms of an existing verbal England assured tenancy. It is intended to help the landlord provide the required written information without treating the tenancy as a fresh grant.'
           : product === 'england_premium_tenancy_agreement'
-            ? 'This premium agreement forms the core of the tenancy record for an England periodic residential let and records the operational detail that helps prevent common disputes during the tenancy.'
+            ? 'The premium agreement anchors the tenancy record for an England periodic residential let and records the operational detail that helps prevent common day-to-day disputes.'
+            : product === 'england_student_tenancy_agreement'
+              ? 'The agreement anchors the tenancy record for an England student periodic let and sits alongside the guarantor, sharer, and move-out records kept for the file.'
             : product === 'england_hmo_shared_house_tenancy_agreement'
-              ? 'This agreement forms the core of the tenancy record for an England shared-house letting and should be kept with the supporting documents and house rules in this pack.'
-              : 'This agreement forms the core of the tenancy record for an England periodic residential let and should be kept with the supporting documents in this pack.',
+              ? 'The agreement anchors the tenancy record for an England shared-house letting and sits alongside the supporting records and house rules kept for the file.'
+            : 'The agreement anchors the tenancy record for an England periodic residential let and sits alongside the supporting setup records kept for the file.',
       rows: [
         { label: 'Tenancy type', value: purposeLabel },
         { label: 'Pack', value: formatEnglandProductLabel(product) },
@@ -3084,6 +3098,13 @@ function buildEnglandAssuredSections(
       ],
       paragraphs: [
         'The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-term drafting is created by this document unless a solicitor-approved route is expressly used outside this product.',
+        product === 'england_standard_tenancy_agreement'
+          ? 'Treat the pack as the baseline landlord file for the rent terms, notice position, safety record, and handover evidence so later issues do not have to be rebuilt from scattered notes.'
+          : product === 'england_premium_tenancy_agreement'
+            ? 'Treat the pack as the working management file for the tenancy so inspections, reporting lines, keys, contractor access, and hand-back expectations stay aligned from the start.'
+            : product === 'england_student_tenancy_agreement'
+              ? 'Treat the pack as the working student file so sharer responsibility, guarantor support, replacement requests, and move-out expectations stay aligned from the start.'
+              : 'Treat the pack as the working shared-house file so communal living controls, fire-safety expectations, and household management records stay aligned from the start.',
         'If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including possession.',
       ],
     }),
@@ -3106,6 +3127,13 @@ function buildEnglandAssuredSections(
         isTruthySelection(facts.england_rent_in_advance_compliant)
           ? 'The landlord confirms that no rent in advance is intended to be requested, encouraged, or accepted before the agreement is signed and that any rent in advance taken after signing is intended to stay within the current England limit of 1 month’s rent.'
           : '',
+        product === 'england_student_tenancy_agreement'
+          ? 'Keep the rent amount, due date, payer expectation, and any sharer arrangement consistent across the student agreement, guarantor deed, and move-out schedule.'
+          : product === 'england_hmo_shared_house_tenancy_agreement'
+            ? 'Keep the rent position, bills treatment, and any fair-use expectation consistent across the main agreement and the shared-house rules appendix so the sharer file stays clear.'
+            : product === 'england_premium_tenancy_agreement'
+              ? 'Keep the rent position aligned with the management schedule, repairs route, and hand-back record so operational issues do not produce conflicting paperwork later.'
+              : 'Keep the rent amount, payment route, and bills treatment aligned across the agreement, handover sheet, and later tenancy records.',
       ],
     }),
     createSection({
@@ -3229,12 +3257,14 @@ function buildEnglandAssuredSections(
       paragraphs:
         product === 'england_standard_tenancy_agreement'
           ? [
-              'This standard product is intended for an ordinary whole-property residential let and records the core occupation, payment, access, and house-rule terms without the wider operational clauses used in the premium route.',
+              'This standard pack is the mainstream route for a straightforward periodic residential let. It keeps the essential occupation, payment, access, and handover points in one clean file without layering on the wider management controls used in the premium route.',
+              'It is intended to give the landlord a file that is clear enough to run the tenancy day to day and coherent enough to support later enforcement or possession if the relationship breaks down.',
               buildStatementLine('Inspection frequency recorded', buildEnglandInspectionFrequencyText(facts.inspection_frequency)),
             ]
           : product === 'england_premium_tenancy_agreement'
             ? [
-                'This premium product is still an ordinary residential tenancy route, but it records fuller operational detail for inspections, reporting lines, keys, hand-back expectations, and management arrangements.',
+                'This premium pack is still an ordinary residential tenancy route, but it is designed to keep management control points in writing from the start rather than leave them to ad hoc email chains later.',
+                'It should be used as the central management file for inspections, reporting lines, keys, contractor access, and hand-back expectations so the landlord can evidence what process was agreed if a dispute arises.',
                 buildStatementLine('Inspection frequency recorded', buildEnglandInspectionFrequencyText(facts.inspection_frequency)),
                 firstNonEmpty(
                   facts.management_contact_channel
@@ -3281,7 +3311,8 @@ function buildEnglandAssuredSections(
               ]
             : product === 'england_student_tenancy_agreement'
               ? [
-                  'This student tenancy route records sharer arrangements, guarantor expectations, and end-of-term return standards for the tenancy.',
+                  'This student tenancy route is intended to keep the sharer, guarantor, replacement, and end-of-term expectations in one working file rather than split them across informal messages.',
+                  'Use it to keep the student-specific pressure points clear from the outset: who is responsible, whether a guarantor is required, how a replacement request is handled, and what return standard applies when occupation ends.',
                   isTruthySelection(facts.student_replacement_procedure)
                     ? `A student tenant replacement process is intended to apply if the landlord agrees a suitable replacement and any required documents are completed. Recorded notice window: ${formatStudentReplacementNoticeWindow(facts.replacement_notice_window)}. Cost position: ${formatStudentReplacementCosts(facts.replacement_cost_responsibility)}.`
                     : '',
@@ -3294,7 +3325,8 @@ function buildEnglandAssuredSections(
                   ),
                 ].filter(Boolean)
               : [
-                  'This HMO / shared-house route records communal-area arrangements, sharer responsibilities, and HMO-related operational detail in the main agreement.',
+                  'This HMO / shared-house route is intended to keep communal-area arrangements, sharer responsibility, and safety expectations together in one file that matches the way the property is actually managed.',
+                  'Use it to keep the tenant group, house rules appendix, and communal management record aligned so cleaning, guests, inspections, waste, and fire-safety issues are not left to informal understanding alone.',
                   'The tenant group is jointly responsible for complying with the tenancy terms and shared-house rules unless this agreement states otherwise.',
                   buildStatementLine('HMO licence status recorded', buildEnglandHmoLicenceStatusText(facts.hmo_licence_status)),
                   buildStatementLine('Communal areas', facts.communal_areas),
@@ -3358,24 +3390,24 @@ function buildEnglandAssuredSections(
       bullets:
         product === 'england_standard_tenancy_agreement'
           ? [
-              'This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, and tenancy variation record so the tenancy file stays complete from the start.',
+              'Included in the file are the main agreement, pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, and tenancy variation record so the landlord can keep one complete setup record from the start.',
             ]
           : product === 'england_premium_tenancy_agreement'
             ? [
-                'This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a Premium Management Schedule so the management record stays aligned with the agreement.',
+                'Included in the file are the main agreement, pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a Premium Management Schedule so the management record stays aligned with the agreement.',
                 shouldIncludeGuarantorDeed(product, facts)
                   ? 'A guarantor deed is also included because the recorded answers indicate that a guarantor is expected.'
                   : '',
               ]
             : product === 'england_student_tenancy_agreement'
               ? [
-                  'This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a student move-out / guarantor schedule.',
+                  'Included in the file are the main agreement, pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a student move-out / guarantor schedule so the student file stays complete from move-in to hand-back.',
                   shouldIncludeGuarantorDeed(product, facts)
                     ? 'A guarantor deed is also included because the recorded answers indicate that a guarantor is required.'
                     : '',
                 ]
               : [
-                  'This pack includes the main agreement together with a pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a dedicated HMO / shared-house rules appendix so the operational house file stays together.',
+                  'Included in the file are the main agreement, pre-tenancy checklist, keys handover record, utilities handover sheet, pet request addendum, tenancy variation record, and a dedicated HMO / shared-house rules appendix so the operational house file stays together.',
                 ],
     }),
     createSection({
@@ -3497,6 +3529,9 @@ function buildEnglandLodgerAgreementSections(shared: SharedResidentialData): Tem
         { label: 'Smoking policy', value: buildEnglandSmokingPolicyText(facts.smoking_allowed) },
         { label: 'Pets authorised at start', value: yesNoText(facts.pets_allowed) },
       ],
+      paragraphs: [
+        'Shared-home expectations should be practical and specific. Kitchen, bathroom, laundry, food storage, and quiet-hours arrangements should be clear enough that the resident landlord and lodger can refer back to the same record if there is a disagreement later.',
+      ],
       bullets: [
         'The Lodger should respect the resident landlord, neighbours, and any other occupiers and use shared facilities reasonably.',
         'Any guest, overnight stay, cleaning, kitchen, bathroom, laundry, or rubbish arrangements should follow the house rules recorded in this document.',
@@ -3512,6 +3547,18 @@ function buildEnglandLodgerAgreementSections(shared: SharedResidentialData): Tem
       paragraphs: [
         'Because the resident landlord lives at the property, day-to-day access and use of common parts should work cooperatively and reasonably. Even so, the lodger should be told about practical arrangements for privacy, quiet hours, and shared-space use.',
         'If the room let is not set up clearly and consistently, it can make later issues around notice, conduct, and hand-back harder to manage.',
+      ],
+    }),
+    createSection({
+      heading: 'Privacy, Conduct, and Shared-Home Escalation',
+      rows: [
+        { label: 'Privacy and room-access note', value: firstNonEmpty(facts.privacy_and_room_access, 'Explain when the resident landlord may need access to the room and how notice will usually be given.') },
+        { label: 'Shared expenses note', value: firstNonEmpty(facts.shared_expenses_note, 'Record any agreed shared household costs or state that none are charged separately.') },
+      ],
+      bullets: [
+        'Issues should be raised promptly and confirmed in writing if they are serious, repeated, or likely to affect notice or hand-back later.',
+        'Repeated guest breaches, noise problems, cleaning failures, or misuse of shared facilities should be recorded clearly so the shared-home file reflects what actually happened.',
+        'The resident landlord should keep the room-let file proportionate but clear, especially where conduct concerns or a possible early exit are in view.',
       ],
     }),
     createSection({
@@ -3587,7 +3634,7 @@ function buildEnglandTenancySetupSummarySections(
     createSection({
       heading: 'Tenancy Setup Summary',
       intro:
-        'This summary gives the landlord a calm front-page view of what the file does, what still needs checking, and what should happen next before signature.',
+        'The front sheet shows whether the tenancy file is ready for signature, what still needs attention, and which supporting records should stay with the agreement after sign-up.',
       rows: [
         { label: 'Property', value: shared.property_address },
         { label: 'Landlord', value: shared.landlord_name },
@@ -3601,8 +3648,13 @@ function buildEnglandTenancySetupSummarySections(
       ],
       paragraphs: [
         product === 'england_premium_tenancy_agreement'
-          ? 'This premium agreement forms the core of the tenancy record and the Premium Management Schedule should be followed alongside it so reporting, inspections, keys, contractor access, and hand-back expectations stay aligned.'
-          : 'This agreement forms the core of the tenancy record for a straightforward England periodic residential let and should be kept with the supporting documents in this pack.',
+          ? 'The premium agreement anchors the tenancy record and the Premium Management Schedule should be followed alongside it so reporting, inspections, keys, contractor access, and hand-back expectations stay aligned.'
+          : 'The agreement anchors the tenancy record for a straightforward England periodic residential let and should be retained alongside the supporting documents in the file.',
+        status.label === 'READY TO SIGN'
+          ? 'Status meaning: the core tenancy facts are in place and no structured blocker is currently recorded.'
+          : status.label === 'SIGN WITH CHECKS'
+            ? 'Status meaning: the agreement can be used, but the landlord should clear the recorded checks before relying on the file as complete.'
+            : 'Status meaning: essential information or a drafting blocker still needs attention before signature.',
         'If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including possession.',
       ],
     }),
@@ -3611,11 +3663,11 @@ function buildEnglandTenancySetupSummarySections(
       bullets: checks,
     }),
     createSection({
-      heading: 'What This Pack Does',
+      heading: 'How the File Works',
       bullets: [
-        'Sets up the tenancy clearly and keeps the core file together from the start.',
-        'Helps avoid avoidable disputes over rent, deposit records, utilities, and handover.',
-        'Keeps the agreement and support records aligned so later enforcement or possession work does not have to be rebuilt.',
+        'Sets up the tenancy clearly and keeps the core landlord file together from the start.',
+        'Keeps the payment, deposit, utilities, and handover records aligned with the signed agreement.',
+        'Reduces the risk of later confusion, missing evidence, or rebuilding the file when enforcement or possession issues appear.',
       ],
       paragraphs: [
         `Supporting documents included: ${buildTenancySummarySupportList(product).join('; ')}.`,
@@ -3683,6 +3735,9 @@ function buildEnglandHmoSetupSummarySections(
       ],
       paragraphs: [
         'This agreement forms the core of the tenancy record and the HMO / shared-house rules appendix should be kept with it as the practical house-management record.',
+        status.label === 'READY TO SIGN'
+          ? 'Status meaning: the sharer, licensing, and communal-management facts currently recorded are aligned enough for signature.'
+          : 'Status meaning: clear the recorded checks before relying on the shared-house file as complete.',
         'If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including possession.',
       ],
     }),
@@ -3733,6 +3788,9 @@ function buildEnglandRoomLetSummarySections(
       ],
       paragraphs: [
         'This agreement is intended for a room let in the landlord’s own home where the landlord remains resident. It is not intended to create an assured tenancy.',
+        status.label === 'READY TO SIGN'
+          ? 'Status meaning: the core room-let facts are recorded clearly enough for signature and handover.'
+          : 'Status meaning: clear the recorded checks before relying on the room-let file as complete.',
         'If the room let is not set up clearly and consistently, it can make later issues around notice, conduct, and hand-back harder to manage.',
       ],
     }),
@@ -3997,27 +4055,47 @@ function buildEnglandLodgerHouseRulesAppendixSections(shared: SharedResidentialD
         { label: 'Key return expectations', value: facts.key_return_expectations },
       ],
       paragraphs: [
-        'These house rules form part of the shared-home record and should be kept with the room-let agreement and handover notes.',
+        'These house rules form part of the shared-home record and should sit alongside the room-let agreement and handover notes.',
       ],
     }),
     createSection({
-      heading: 'Shared Home Expectations',
+      heading: 'Guests, Quiet Hours, and Shared Facilities',
       bullets: [
-        firstNonEmpty(facts.house_rules_notes ? `General shared-home note: ${facts.house_rules_notes}.` : '', 'Shared-home expectations should be made clear from the start.'),
-        firstNonEmpty(facts.guest_policy ? `Guests and overnight guests: ${facts.guest_policy}.` : '', 'Guest and overnight guest expectations should be recorded clearly.'),
-        firstNonEmpty(facts.quiet_hours ? `Quiet hours: ${facts.quiet_hours}.` : '', 'Quiet hours should be agreed clearly.'),
+        firstNonEmpty(
+          facts.house_rules_notes ? `General shared-home note: ${withTrailingFullStop(facts.house_rules_notes)}` : '',
+          'Shared-home expectations should be made clear from the start.'
+        ),
+        firstNonEmpty(
+          facts.guest_policy ? `Guests and overnight guests: ${withTrailingFullStop(facts.guest_policy)}` : '',
+          'Guest and overnight guest expectations should be recorded clearly.'
+        ),
+        firstNonEmpty(
+          facts.quiet_hours ? `Quiet hours: ${withTrailingFullStop(facts.quiet_hours)}` : '',
+          'Quiet hours should be agreed clearly.'
+        ),
         'Kitchen, bathroom, laundry, food storage, and fridge use should be handled respectfully and in line with the shared-home routine.',
         'Smoking, vaping, alcohol, or drugs should follow the resident-landlord house policy and be dealt with promptly if an issue arises.',
       ],
     }),
     createSection({
-      heading: 'Cleaning, Security, and Privacy',
+      heading: 'Cleaning, Storage, and Household Routine',
       bullets: [
-        firstNonEmpty(facts.shared_space_cleaning ? `Cleaning arrangement: ${facts.shared_space_cleaning}.` : '', 'The resident landlord and lodger should understand the shared-space cleaning arrangement.'),
+        firstNonEmpty(
+          facts.shared_space_cleaning ? `Cleaning arrangement: ${withTrailingFullStop(facts.shared_space_cleaning)}` : '',
+          'The resident landlord and lodger should understand the shared-space cleaning arrangement.'
+        ),
         'Rubbish and recycling should be dealt with in line with the household arrangements.',
+        'Food, fridge space, cupboards, and bathroom storage should be used in the way the resident landlord has recorded for the shared home.',
+        'Any shared household expenses or consumables that sit outside the licence fee should be explained clearly and updated in writing if they change.',
+      ],
+    }),
+    createSection({
+      heading: 'Security, Privacy, and Respectful Conduct',
+      bullets: [
         'Keys should be kept secure and returned at the end of the arrangement.',
         'The resident landlord should explain privacy and room-access expectations clearly as part of the shared-home arrangement.',
         'Respectful behaviour is expected in the room, shared areas, and around neighbours or other occupiers.',
+        'The lodger should not interfere with safety equipment, building security, or access arrangements for the home.',
       ],
     }),
     createSection({
@@ -4644,7 +4722,7 @@ async function generateModernEnglandPack(
             natureOfDocument: 'House rules appendix',
             intro: 'This appendix records the practical shared-home rules and room-let expectations for the room let.',
             sections: buildEnglandLodgerHouseRulesAppendixSections(shared),
-            executionStatement: 'Keep this appendix with the lodger agreement, checklist, and key handover record.',
+            executionStatement: 'Store the appendix alongside the lodger agreement, checklist, and key handover record.',
           })
         );
         break;
@@ -4716,7 +4794,7 @@ export async function generateResidentialLettingDocuments(
       title: 'Standard Tenancy Agreement & Setup Pack',
       subtitle: 'Periodic tenancy agreement for a residential let in England',
       intro:
-        'This agreement forms the core of the tenancy record for a straightforward England periodic residential let and should be kept with the supporting documents in this pack.',
+        'The agreement anchors the tenancy record for a straightforward England periodic residential let and should be retained alongside the supporting documents in the landlord file.',
       description:
         'Standard periodic tenancy agreement and setup pack for a residential let in England.',
       category: 'agreement',
@@ -4727,7 +4805,7 @@ export async function generateResidentialLettingDocuments(
       natureOfDocument: 'Residential tenancy agreement',
       recitals: [
         'The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out in this agreement.',
-        'The parties intend this document to record the principal occupation, payment, and management terms for the letting so the tenancy file stays clear from the start.',
+        'The parties intend this document to anchor the tenancy file from the start so the rent terms, handover record, and later support documents all follow one clear written position.',
       ],
       executionStatement:
         'This agreement should be signed by the Landlord and the Tenant and then kept with the tenancy records.',
@@ -4736,7 +4814,7 @@ export async function generateResidentialLettingDocuments(
       title: 'Premium Tenancy Agreement & Management Pack',
       subtitle: 'Periodic tenancy agreement with fuller management controls for a residential let in England',
       intro:
-        'This premium agreement records the operational detail that helps prevent common disputes during the tenancy and should be kept with the supporting documents in this pack.',
+        'The premium agreement records the operational detail that helps prevent common disputes during the tenancy and should be retained alongside the supporting documents in the landlord file.',
       description:
         'Premium periodic tenancy agreement and management pack for a residential let in England.',
       category: 'agreement',
@@ -4747,7 +4825,7 @@ export async function generateResidentialLettingDocuments(
       natureOfDocument: 'Premium residential tenancy agreement',
       recitals: [
         'The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out in this premium agreement.',
-        'The parties intend fuller operational and management detail to be recorded in the agreement while keeping the letting within one clear tenancy file.',
+        'The parties intend fuller operational and management detail to be recorded in the agreement so inspections, reporting lines, keys, and hand-back expectations stay in one clear tenancy file.',
       ],
       executionStatement:
         'This premium agreement should be signed by the Landlord and the Tenant and retained with the tenancy records.',
@@ -4756,7 +4834,7 @@ export async function generateResidentialLettingDocuments(
       title: 'Student Tenancy Agreement',
       subtitle: 'Tenancy agreement for a student let in England',
       intro:
-        'This document records a student-focused England residential letting and the student-specific features recorded for the tenancy file.',
+        'The agreement records a student-focused England residential letting and the student-specific features kept with the tenancy file.',
       description:
         'England student tenancy agreement with sharer, guarantor, and end-of-term detail.',
       category: 'agreement',
@@ -4767,7 +4845,7 @@ export async function generateResidentialLettingDocuments(
       natureOfDocument: 'Student residential tenancy agreement',
       recitals: [
         'The Landlord agrees to let the Property to the Tenant group for student-focused residential occupation on the terms set out in this agreement.',
-        'The parties intend student-specific sharer, guarantor, and hand-back expectations to be captured in the agreement.',
+        'The parties intend the student-specific sharer, guarantor, replacement, and hand-back expectations to be captured in one working tenancy file.',
       ],
       executionStatement:
         'This student agreement should be signed by the Landlord and the Tenant group and kept with any related guarantor documents.',
@@ -4776,7 +4854,7 @@ export async function generateResidentialLettingDocuments(
       title: 'HMO / Shared House Tenancy Agreement & House Management Pack',
       subtitle: 'Periodic tenancy agreement for an HMO or shared house in England',
       intro:
-        'This document forms the core of the tenancy record for an England HMO or shared-house letting and should be kept with the house-management documents in this pack.',
+        'The agreement anchors the tenancy record for an England HMO or shared-house letting and should be retained alongside the house-management documents in the file.',
       description:
         'England HMO / shared-house tenancy agreement and house management pack.',
       category: 'agreement',
@@ -4787,7 +4865,7 @@ export async function generateResidentialLettingDocuments(
       natureOfDocument: 'HMO / shared-house tenancy agreement',
       recitals: [
         'The Landlord agrees to let the Property to the Tenant group for shared residential occupation on the terms set out in this agreement.',
-        'The parties intend communal-area, sharer, and property-management detail to form part of one coherent shared-house file.',
+        'The parties intend communal-area, sharer, and property-management detail to form part of one coherent shared-house file rather than sit in disconnected notes or messages.',
       ],
       executionStatement:
         'This HMO/shared-house agreement should be signed by the Landlord and the Tenant group and retained with the property records.',
@@ -4807,7 +4885,7 @@ export async function generateResidentialLettingDocuments(
       natureOfDocument: 'Resident-landlord room-let agreement',
       recitals: [
         'The resident Landlord permits the Lodger to occupy the agreed room at the Property and to use the shared facilities identified in this agreement.',
-        'The parties intend this document to record the practical room-let terms, house rules, and notice arrangements that apply to the occupation.',
+        'The parties intend this document to record the practical room-let terms, house rules, and notice arrangements so the shared-home file stays clear if issues arise later.',
       ],
       executionStatement:
         'This lodger agreement should be signed by the resident Landlord and the Lodger and kept with the room-let records.',

@@ -3,14 +3,16 @@ golden-premium-tenancy-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 Pre-Tenancy Compliance Checklist
 England
 12 Example Street, London, SW1A 1AA
-NON-CONTRACTUAL GUIDANCE
-This checklist is provided as guidance only and does not form part of the tenancy agreement. It summarises key
-legal obligations for landlords. For detailed requirements, consult the relevant legislation or seek professional legal
-advice.
+FILE-USE NOTE
+Use this checklist as the landlord's setup record before move-in. Tick each item when the evidence is complete, note
+the completion date, and keep the finished checklist with the agreement, handover records, and compliance
+documents for the tenancy.
+It is a practical file tool, not the agreement itself. If a requirement is unusual, disputed, or unclear, verify the point
+before relying on the file as complete.
 1. Deposit Protection (Mandatory)
 ☐
 Deposit protected within 30 days
@@ -119,9 +121,8 @@ Right to Rent checks completed ☐ Yes ______________
 Smoke alarms tested ☐ Yes ______________
 CO alarms tested (if applicable) ☐ Yes ☐ N/A ______________
 HMO licence (if applicable) ☐ Yes ☐ N/A ______________
-Important: Non-compliance with these requirements may affect enforceability, result in penalties, or leave you
-exposed to legal claims. This checklist is for guidance only - always verify current requirements with the relevant
-authorities and seek professional advice where needed.
+Final check: The tenancy file should only be treated as ready when the completed checklist, the supporting
+evidence, and the signed agreement all match each other.
 Generated on 16 April 2026 | Document ID: CHK-golden-premium-tenancy-001
 
 -- 5 of 5 --

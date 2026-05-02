@@ -3,7 +3,7 @@ golden-complete-pack-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 Hearing Preparation Guide
 Prepare the hearing file, updated arrears position, and speaking points for the possession hearing - with Ground 8
 kept under review at both notice and hearing stage
@@ -14,13 +14,13 @@ HEARING DATE To be notified by court
 Notice timeline
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
 Ground 10 (Any rent arrears).
-Form 3A notice served on 1 May 2026, expiring on 29 May 2026, with proceedings not intended before
-29 May 2026.
-NOTICE SERVICE DATE 1 May 2026
-NOTICE EXPIRY DATE 29 May 2026
+Form 3A notice served on 2 May 2026, expiring on 30 May 2026, with proceedings not intended before
+30 May 2026.
+NOTICE SERVICE DATE 2 May 2026
+NOTICE EXPIRY DATE 30 May 2026
 EARLIEST PROCEEDINGS
 DATE
-29 May 2026
+30 May 2026
 What the court will consider
 Is the notice valid?
 Was it served correctly?
@@ -98,7 +98,7 @@ Do not sign the statement of truth unless the current file is accurate.
 -- 4 of 5 --
 
 If the case changes
-Date: 1 May 2026
+Date: 2 May 2026
 If the tenant raises disrepair, set-off, or a counterclaim, keep the response anchored to the pleadings and
 documents.
 If a payment is made shortly before the hearing, update the figures immediately and reconsider the effect

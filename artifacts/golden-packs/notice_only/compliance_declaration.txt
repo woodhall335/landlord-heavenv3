@@ -3,7 +3,7 @@ golden-notice-only-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 Stage 1: Section 8 Notice & Service Pack
 Compliance Checklist
 READY TO SERVE - NOTICE FILE ALIGNED
@@ -14,7 +14,7 @@ PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE TYPE Form 3A notice
 TENANCY START DATE 1 January 2024
-GENERATED 1 May 2026
+GENERATED 2 May 2026
 CRITICAL
 Resolve this before relying on
 the notice or moving on with
@@ -50,7 +50,7 @@ How to Rent service is recorded on 15 January 2024.
 Action: Keep the service record with the tenancy file.
 OK
 Notice timeline recorded
-Notice served on 1 May 2026 with earliest proceedings date 29 May 2026.
+Notice served on 2 May 2026 with earliest proceedings date 30 May 2026.
 Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and
 any court papers.
 Next move

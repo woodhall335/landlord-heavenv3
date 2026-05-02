@@ -3,7 +3,7 @@ golden-complete-pack-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 ENGLAND POSSESSION FILE
 Court Bundle Index
 Claim for possession of residential property
@@ -16,12 +16,12 @@ COURT York County Court and Family Court
 CLAIMANT Daniel Mercer
 DEFENDANT Ivy Carleton
 PROPERTY 16 Willow Mews York YO24 3HX
-NOTICE SERVICE DATE 1 May 2026
-NOTICE EXPIRY DATE 29 May 2026
+NOTICE SERVICE DATE 2 May 2026
+NOTICE EXPIRY DATE 30 May 2026
 EARLIEST PROCEEDINGS
 DATE
-29 May 2026
-BUNDLE PREPARED 1 May 2026
+30 May 2026
+BUNDLE PREPARED 2 May 2026
 
 -- 1 of 3 --
 
@@ -62,6 +62,6 @@ Keep the court-facing bundle free from unused sections, stray technical notes, a
 -- 2 of 3 --
 
 Prepared by: Daniel Mercer
-Date: 1 May 2026
+Date: 2 May 2026
 
 -- 3 of 3 --

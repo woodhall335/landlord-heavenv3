@@ -1,0 +1,14 @@
+
+> landlord-heavenv3@0.1.0 generate:golden-packs C:\Users\t_moh\Documents\GitHub\landlord-heavenv3
+> set NODE_OPTIONS=--conditions=react-server && npx -p node@20 -p tsx tsx scripts/generate-england-golden-packs.ts "--" "--only=england_lodger_agreement"
+
+
+Starting golden pack batch: Room Let / Lodger Agreement & Shared Home Pack
+Generating golden pack: Room Let / Lodger Agreement & Shared Home Pack
+Completed Room Let / Lodger Agreement & Shared Home Pack in 134.6s.
+
+Golden pack batch summary:
+- Room Let / Lodger Agreement & Shared Home Pack: completed in 134.6s
+Totals: 1 completed, 0 skipped, 0 failed.
+
+Golden packs written to: C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\artifacts\golden-packs

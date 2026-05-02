@@ -3,20 +3,20 @@ golden-money-claim-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 Interest Calculation (s.69 County Courts Act 1984)
 Principal claimed: £2890.00
 Interest rate: 8% per annum
 Interest start date: 2 February 2026
-Calculation date: 1 May 2026
-Days of interest: 88 days
+Calculation date: 2 May 2026
+Days of interest: 89 days
 Daily rate: £0.63 (8% / 365)
-Accrued interest to date: £55.44
+Accrued interest to date: £56.07
 Working
 Step 1 - Daily rate: (£2890.00 x 8%) / 365 = £0.63 per day
-Step 2 - Interest accrued: £0.63 x 88 days = £55.44
+Step 2 - Interest accrued: £0.63 x 89 days = £56.07
 Interest continues
-Interest continues to accrue at £0.63 per day from 1 May 2026 until judgment or earlier payment.
+Interest continues to accrue at £0.63 per day from 2 May 2026 until judgment or earlier payment.
 Note: Update this calculation if you file after the above calculation date. You may claim interest up to and
 including the date of issue.
 

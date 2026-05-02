@@ -453,6 +453,10 @@ describe('Section 13 document generation hardening', () => {
 
     expect(summaryText).toContain('Rent Increase Summary');
     expect(summaryText).toContain('If referred to the tribunal, the question is the open-market rent');
+    expect(summaryText).toContain('Evidence footing');
+    expect(summaryText).toContain('Service and validity checks');
+    expect(summaryText).toContain('two months\' notice');
+    expect(summaryText).toContain('same comparable evidence');
     expect(summaryText).toContain('Next step');
     expect(propertyConditionText).toContain('Property Condition Comparison Sheet');
     expect(propertyConditionText).toContain('Subject property condition');

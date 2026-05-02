@@ -3,7 +3,7 @@ golden-lodger-001
 JURISDICTION
 England
 GENERATED
-1 May 2026
+2 May 2026
 FOR PROPERTIES IN ENGLAND
 Lodger House Rules Appendix
 Resident-landlord room-let house-rules appendix
@@ -32,7 +32,7 @@ LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
 Telephone: 07123 456789
-TENANT Alice Tenant
+LODGER Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
@@ -41,32 +41,41 @@ Telephone: 07000 111111
 
 Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
-LANDLORD Jane Landlord
-TENANT Alice Tenant
+RESIDENT
+LANDLORD
+Jane Landlord
+LODGER Alice Tenant
 Operative Provisions
 1. Lodger House Rules Appendix
 LICENCE FEE £1500.00
-These house rules form part of the shared-home record and should be kept with the room-let agreement and
+These house rules form part of the shared-home record and should sit alongside the room-let agreement and
 handover notes.
-2. Shared Home Expectations
-General shared-home note: No overnight guests without prior agreement..
+2. Guests, Quiet Hours, and Shared Facilities
+General shared-home note: No overnight guests without prior agreement.
 Guest and overnight guest expectations should be recorded clearly.
 Quiet hours should be agreed clearly.
 Kitchen, bathroom, laundry, food storage, and fridge use should be handled respectfully and in line with
 the shared-home routine.
 Smoking, vaping, alcohol, or drugs should follow the resident-landlord house policy and be dealt with
 promptly if an issue arises.
-3. Cleaning, Security, and Privacy
+3. Cleaning, Storage, and Household Routine
 The resident landlord and lodger should understand the shared-space cleaning arrangement.
 Rubbish and recycling should be dealt with in line with the household arrangements.
+Food, fridge space, cupboards, and bathroom storage should be used in the way the resident landlord has
+recorded for the shared home.
+Any shared household expenses or consumables that sit outside the licence fee should be explained
+clearly and updated in writing if they change.
+
+-- 2 of 3 --
+
+4. Security, Privacy, and Respectful Conduct
 Keys should be kept secure and returned at the end of the arrangement.
 The resident landlord should explain privacy and room-access expectations clearly as part of the shared-
 home arrangement.
 Respectful behaviour is expected in the room, shared areas, and around neighbours or other occupiers.
-
--- 2 of 3 --
-
-4. Conflict Handling and End of Arrangement
+The lodger should not interfere with safety equipment, building security, or access arrangements for the
+home.
+5. Conflict Handling and End of Arrangement
 Issues should be raised promptly and a short written note kept where there is a dispute or repeated
 problem.
 The resident landlord may end the arrangement on notice, and serious misconduct may justify shorter
@@ -76,7 +85,7 @@ reasonably clean, and settle any unpaid licence fees or agreed shared charges.
 A forwarding address should be given if the resident landlord may need to send post-arrangement
 correspondence.
 Execution
-Keep this appendix with the lodger agreement, checklist, and key handover record.
+Store the appendix alongside the lodger agreement, checklist, and key handover record.
 FILE OWNER
 Jane Landlord
 Signature Date

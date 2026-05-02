@@ -3,7 +3,7 @@ golden-complete-pack-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 IN THE YORK COUNTY COURT AND FAMILY COURT
 Claim No:
 Daniel Mercer CLAIMANT
@@ -31,9 +31,9 @@ balance of arrears.
 I am seeking possession of the property relying on Ground 8 and Ground 10 of Schedule 2 to the Housing Act
 1988. Ground 8 is a mandatory ground for possession. Ground 8 requires that at least 3 months' rent be
 unpaid both at the date of the notice and at the date of the hearing. At the date of service of the Form 3A
-notice (1 May 2026), the total rent arrears stood at £3,600.00, representing approximately 3.0 months' rent.
+notice (2 May 2026), the total rent arrears stood at £3,600.00, representing approximately 3.0 months' rent.
 This significantly exceeds the Ground 8 threshold of 3 months' rent (£3,600.00). As at the date of this
-statement (1 May 2026), the total rent arrears amount to £3,600.00, representing approximately 3.0 months of
+statement (2 May 2026), the total rent arrears amount to £3,600.00, representing approximately 3.0 months of
 unpaid rent. A detailed Schedule of Arrears (Exhibit DM1) showing the period-by-period breakdown of rent due
 and payments received is attached to this pack. I will provide an updated Schedule of Arrears to the court
 before the hearing to confirm the arrears position at that date. Ground 10 is a discretionary ground which
@@ -42,8 +42,8 @@ discretion to make a possession order if it considers it reasonable to do so.
 5 Timeline of Events
 1 January 2024: Tenancy began
 1 January 2026: The first unpaid rent period began
-1 May 2026: The Form 3A notice was served by post
-29 May 2026: The notice period expired
+2 May 2026: The Form 3A notice was served by post
+30 May 2026: The notice period expired
 6 Defendant Circumstances
 The claimant is not aware of any further information about the defendant's circumstances beyond the matters
 set out in the claim papers and any information the defendant may wish to place before the court.
@@ -84,6 +84,6 @@ Important Notes
 3. If you are represented by a solicitor, they will verify this statement.
 4. Keep a copy for your records and bring the original to any court hearing.
 5. Do not alter this statement after signing. If you need to make changes, create a supplemental witness statement.
-Generated: 1 May 2026
+Generated: 2 May 2026
 
 -- 3 of 3 --

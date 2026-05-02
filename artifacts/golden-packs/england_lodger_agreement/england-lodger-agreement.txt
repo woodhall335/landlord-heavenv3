@@ -3,7 +3,7 @@ golden-lodger-001
 JURISDICTION
 England
 GENERATED
-1 May 2026
+2 May 2026
 FOR PROPERTIES IN ENGLAND
 Room Let / Lodger Agreement & Shared Home Pack
 Room let agreement for a resident-landlord arrangement in England
@@ -34,7 +34,7 @@ LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
 Telephone: 07123 456789
-TENANT Alice Tenant
+LODGER Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
@@ -44,8 +44,10 @@ Telephone: 07000 111111
 Background
 Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
-LANDLORD Jane Landlord
-TENANT Alice Tenant
+RESIDENT
+LANDLORD
+Jane Landlord
+LODGER Alice Tenant
 Operative Provisions
 1. Room Let and Occupation Basis
 The resident landlord permits the Lodger to occupy the agreed room and use the shared parts of the property
@@ -70,7 +72,7 @@ The resident Landlord permits the Lodger to occupy the agreed room at the Proper
 shared facilities identified in this agreement.
 A.
 The parties intend this document to record the practical room-let terms, house rules, and notice
-arrangements that apply to the occupation.
+arrangements so the shared-home file stays clear if issues arise later.
 B.
 
 -- 2 of 5 --
@@ -96,6 +98,9 @@ HOUSE RULES
 AND SHARED-
 SPACE NOTES
 No overnight guests without prior agreement.
+Shared-home expectations should be practical and specific. Kitchen, bathroom, laundry, food storage, and
+quiet-hours arrangements should be clear enough that the resident landlord and lodger can refer back to the
+same record if there is a disagreement later.
 The Lodger should respect the resident landlord, neighbours, and any other occupiers and use shared
 facilities reasonably.
 Any guest, overnight stay, cleaning, kitchen, bathroom, laundry, or rubbish arrangements should follow the
@@ -121,7 +126,26 @@ cooperatively and reasonably. Even so, the lodger should be told about practical
 quiet hours, and shared-space use.
 If the room let is not set up clearly and consistently, it can make later issues around notice, conduct, and
 hand-back harder to manage.
-5. Notice and Ending the Room Let
+5. Privacy, Conduct, and Shared-Home Escalation
+PRIVACY AND
+ROOM-ACCESS
+NOTE
+Explain when the resident landlord may need access to the room and how
+notice will usually be given.
+SHARED
+EXPENSES NOTE
+Record any agreed shared household costs or state that none are charged
+separately.
+Issues should be raised promptly and confirmed in writing if they are serious, repeated, or likely to affect
+notice or hand-back later.
+Repeated guest breaches, noise problems, cleaning failures, or misuse of shared facilities should be
+recorded clearly so the shared-home file reflects what actually happened.
+The resident landlord should keep the room-let file proportionate but clear, especially where conduct
+concerns or a possible early exit are in view.
+
+-- 4 of 5 --
+
+6. Notice and Ending the Room Let
 LICENCE NOTICE
 PERIOD
 28 days
@@ -130,9 +154,6 @@ serious misconduct or both parties agree an earlier move-out date in writing.
 At the end of the arrangement the lodger should return keys, clear the room, leave any shared areas in the
 expected condition, settle any unpaid licence fees or agreed shared charges, and provide a forwarding
 address if needed.
-
--- 4 of 5 --
-
 Execution
 This lodger agreement should be signed by the resident Landlord and the Lodger and kept with the room-let
 records.

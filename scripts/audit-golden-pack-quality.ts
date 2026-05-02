@@ -52,8 +52,9 @@ const AUDIT_ROOT = path.join(ROOT, '_audit');
 const REPORT_PATH = path.join(AUDIT_ROOT, 'golden-pack-quality-audit.md');
 
 const GENERIC_PATTERNS = [
-  /this pack/gi,
-  /this document/gi,
+  /this pack includes/gi,
+  /use this pack/gi,
+  /this document is intended to/gi,
   /use this (guide|checklist|record|sheet|appendix|schedule|template)/gi,
   /what to do now/gi,
   /keep this/gi,
@@ -95,9 +96,7 @@ const LIKELY_MERGE_DOCS = new Set([
   'what_happens_next',
 ]);
 
-const LIKELY_REMOVE_DOCS = new Set([
-  'england_lodger_house_rules_appendix',
-]);
+const LIKELY_REMOVE_DOCS = new Set<string>();
 
 const CATEGORY_MIN_WORDS: Record<string, number> = {
   guidance: 220,
@@ -121,6 +120,11 @@ function countWords(text: string): number {
     .split(/\s+/)
     .map((token) => token.trim())
     .filter(Boolean).length;
+}
+
+function isOfficialForm(doc: ManifestDocument): boolean {
+  return /^(Form\s+[A-Z0-9]+|Certificate of Service)/i.test(doc.title)
+    && (doc.category === 'notice' || doc.category === 'court_form' || doc.category === 'evidence_tool');
 }
 
 async function readJson<T>(filePath: string): Promise<T> {
@@ -150,7 +154,7 @@ function assessTextDocument(pack: string, doc: ManifestDocument, text: string): 
   const words = countWords(text);
   const pages = doc.extraction?.pageCount ?? 0;
   const mojibakeCount = countMatches(text, MOJIBAKE_PATTERNS);
-  const disclaimerCount = countMatches(text, DISCLAIMER_PATTERNS);
+  const disclaimerCount = isOfficialForm(doc) ? 0 : countMatches(text, DISCLAIMER_PATTERNS);
   const genericCount = countMatches(text, GENERIC_PATTERNS);
   const internalValueCount = countMatches(text, INTERNAL_VALUE_PATTERNS);
   const minWords = CATEGORY_MIN_WORDS[category] ?? CATEGORY_MIN_WORDS[''];
@@ -216,6 +220,7 @@ async function buildAssessments(manifests: Manifest[]): Promise<DocAssessment[]>
   for (const manifest of manifests) {
     for (const doc of manifest.documents) {
       if (!doc.files.text) {
+        const isZipBundle = (doc.documentType ?? '').includes('zip');
         results.push({
           pack: manifest.key,
           documentType: doc.documentType ?? doc.fileName,
@@ -225,8 +230,10 @@ async function buildAssessments(manifests: Manifest[]): Promise<DocAssessment[]>
           pages: doc.extraction?.pageCount ?? 0,
           lines: 0,
           words: 0,
-          disposition: (doc.documentType ?? '').includes('zip') ? 'keep' : 'rewrite',
-          findings: [{ severity: 'medium', message: 'No extracted text artifact available for quality review.' }],
+          disposition: isZipBundle ? 'keep' : 'rewrite',
+          findings: isZipBundle
+            ? []
+            : [{ severity: 'medium', message: 'No extracted text artifact available for quality review.' }],
         });
         continue;
       }

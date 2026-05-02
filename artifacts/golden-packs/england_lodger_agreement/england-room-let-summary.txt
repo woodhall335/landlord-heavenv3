@@ -3,7 +3,7 @@ golden-lodger-001
 JURISDICTION
 England
 GENERATED
-1 May 2026
+2 May 2026
 FOR PROPERTIES IN ENGLAND
 Room Let Summary
 Resident-landlord room-let summary and readiness page
@@ -33,17 +33,22 @@ LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
 Telephone: 07123 456789
-TENANT Alice Tenant
+LODGER Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
 
--- 1 of 3 --
+-- 1 of 4 --
 
 Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
-LANDLORD Jane Landlord
-TENANT Alice Tenant
+RESIDENT
+LANDLORD
+Jane Landlord
+LODGER Alice Tenant
+
+-- 2 of 4 --
+
 Operative Provisions
 1. Room Let Summary
 This summary keeps the resident-landlord room-let file clear so the shared-home arrangement is practical,
@@ -69,13 +74,14 @@ Record to be completed at handover
 STATUS SIGN WITH CHECKS
 This agreement is intended for a room let in the landlord's own home where the landlord remains resident. It is
 not intended to create an assured tenancy.
+Status meaning: clear the recorded checks before relying on the room-let file as complete.
 If the room let is not set up clearly and consistently, it can make later issues around notice, conduct, and
 hand-back harder to manage.
-
--- 2 of 3 --
-
 2. Key Setup Checks
 Record the key return and room hand-back expectation.
+
+-- 3 of 4 --
+
 3. What This Pack Does
 Supporting documents included: Room let / shared home pack agreement; Room let checklist; Keys and
 handover record; Lodger house rules appendix.
@@ -90,4 +96,4 @@ Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-LODGER-AGREEMENT-LODGER-001
 
--- 3 of 3 --
+-- 4 of 4 --

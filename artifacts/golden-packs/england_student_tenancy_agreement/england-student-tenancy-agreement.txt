@@ -3,12 +3,12 @@ golden-student-tenancy-001
 JURISDICTION
 England
 GENERATED
-1 May 2026
+2 May 2026
 FOR PROPERTIES IN ENGLAND
 Student Tenancy Agreement
 Tenancy agreement for a student let in England
-This document records a student-focused England residential letting and the student-specific
-features recorded for the tenancy file.
+The agreement records a student-focused England residential letting and the student-specific
+features kept with the tenancy file.
 PREPARED 16 April 2026 FILE
 REFERENCE
 RL-ENGLAND-
@@ -55,16 +55,16 @@ TENANT Aisha Student
 The Landlord agrees to let the Property to the Tenant group for student-focused residential occupation
 on the terms set out in this agreement.
 A.
-The parties intend student-specific sharer, guarantor, and hand-back expectations to be captured in the
-agreement.
+The parties intend the student-specific sharer, guarantor, replacement, and hand-back expectations to
+be captured in one working tenancy file.
 B.
 
 -- 2 of 10 --
 
 Operative Provisions
 1. Tenancy Status and Core Particulars
-This agreement forms the core of the tenancy record for an England periodic residential let and should be kept
-with the supporting documents in this pack.
+The agreement anchors the tenancy record for an England student periodic let and sits alongside the
+guarantor, sharer, and move-out records kept for the file.
 TENANCY TYPE New periodic tenancy agreement
 PACK Student Tenancy Agreement
 FURNISHED
@@ -76,6 +76,8 @@ DATE
 The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-
 term drafting is created by this document unless a solicitor-approved route is expressly used outside this
 product.
+Treat the pack as the working student file so sharer responsibility, guarantor support, replacement requests,
+and move-out expectations stay aligned from the start.
 If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including
 possession.
 
@@ -103,9 +105,14 @@ NUMBER
 The landlord confirms that no rent in advance is intended to be requested, encouraged, or accepted before
 the agreement is signed and that any rent in advance taken after signing is intended to stay within the current
 England limit of 1 month's rent.
+Keep the rent amount, due date, payer expectation, and any sharer arrangement consistent across the
+student agreement, guarantor deed, and move-out schedule.
 Any rent increase for an England assured tenancy should follow the Section 13 statutory route only. The
 landlord should use Form 4A, give at least 2 months' notice, avoid any increase in the first 12 months of a
 new tenancy, and should not seek more than one increase within the same 12-month period.
+
+-- 4 of 10 --
+
 3. Deposit Arrangements
 DEPOSIT
 AMOUNT
@@ -120,9 +127,6 @@ DPS-EXAMPLE-2026-0001
 If a deposit is taken, it should be protected in an authorised England scheme within the statutory timeframe
 and the prescribed information should be served in time. The support documents in this pack are intended to
 help record those details.
-
--- 4 of 10 --
-
 4. Tenant Ending the Tenancy
 RECORDED
 TENANT NOTICE
@@ -227,16 +231,19 @@ CLEANING AND
 ROOM HAND-
 BACK STANDARD
 Professional-clean standard for kitchen and bathrooms.
-This student tenancy route records sharer arrangements, guarantor expectations, and end-of-term return
-standards for the tenancy.
+This student tenancy route is intended to keep the sharer, guarantor, replacement, and end-of-term
+expectations in one working file rather than split them across informal messages.
+Use it to keep the student-specific pressure points clear from the outset: who is responsible, whether a
+guarantor is required, how a replacement request is handled, and what return standard applies when
+occupation ends.
 A student tenant replacement process is intended to apply if the landlord agrees a suitable replacement and
 any required documents are completed. Recorded notice window: 21 days. Cost position: Outgoing tenant.
 Rooms to be returned clean and with all keys.
 Cleaning and room hand-back standard: Professional-clean standard for kitchen and bathrooms.
 9. Supporting Schedules and File Documents
-This pack includes the main agreement together with a pre-tenancy checklist, keys handover record,
-utilities handover sheet, pet request addendum, tenancy variation record, and a student move-out /
-guarantor schedule.
+Included in the file are the main agreement, pre-tenancy checklist, keys handover record, utilities
+handover sheet, pet request addendum, tenancy variation record, and a student move-out / guarantor
+schedule so the student file stays complete from move-in to hand-back.
 A guarantor deed is also included because the recorded answers indicate that a guarantor is required.
 
 -- 8 of 10 --
@@ -260,12 +267,12 @@ Written tenancy terms recorded in this agreement
 Formal notices should be sent to the landlord service address stated in this document unless the landlord later
 gives a valid written replacement address for service.
 File notes
-This document is intended to record the written terms for an England assured periodic tenancy and
-should be read with any deposit, guarantor, and pre-tenancy checklist documents in the pack.
+The agreement records the written terms for an England assured periodic tenancy and should be read
+alongside the supporting setup, evidence, and compliance records in the file.
 Where a guarantor will be used, the guarantor deed should be signed and retained with this agreement
 before occupation begins or as soon as the tenancy file requires.
-The Student pack is intended to travel with its move-out schedule, handover record, utilities sheet, and
-any guarantor deed recorded for the tenancy file.
+The Student pack should be retained alongside its move-out schedule, handover record, utilities sheet,
+and any guarantor deed recorded for the tenancy file.
 Drafting controls applied: post-1 May 2026 England assured periodic drafting, grounds-only landlord
 possession wording, Section 13 / Form 4A rent-review wording only, pet-request wording aligned to the
 current England regime, new-tenancy written-information treatment.

@@ -1687,10 +1687,27 @@ async function buildRentIncreaseSummaryPdf(
         ],
       },
       {
+        heading: 'Evidence footing',
+        lines: [
+          buildComparableGroundingSentence(resolvedState, comparables, snapshot),
+          `Current case position: ${buildConclusionSentence(resolvedState, snapshot)}`,
+          preview?.warnings?.length
+            ? `Current warnings: ${preview.warnings.join(' ')}`
+            : 'No immediate structured warning is recorded from the current comparable and service checks, but the file should still be reviewed before service.',
+        ],
+      },
+      {
         heading: 'What this file does',
         lines: [
           'It keeps Form 4A, the market evidence, and the proof-of-service record together so the proposed increase can be explained consistently.',
           'If referred to the tribunal, the question is the open-market rent for the property on comparable terms, not simply whether the increase feels large or small.',
+        ],
+      },
+      {
+        heading: 'Service and validity checks',
+        lines: [
+          'Final check before service: use the correct Form 4A, give at least two months\' notice, keep the service method recorded, and make sure the current and proposed rent figures match across the notice and supporting papers.',
+          'If the tenant queries the increase, reply from the same comparable evidence and consider a written agreement if a revised figure or later start date is accepted.',
         ],
       },
       {

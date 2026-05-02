@@ -1,0 +1,426 @@
+
+> landlord-heavenv3@0.1.0 build C:\Users\t_moh\Documents\GitHub\landlord-heavenv3
+> npm run validate:yaml-config && next build --webpack
+
+npm WARN lifecycle The node binary used for scripts is C:\Users\t_moh\AppData\Roaming\npm-cache\_npx\17216\node_modules\node\bin\node.exe but npm is using C:\Program Files\nodejs\node.exe itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+
+> landlord-heavenv3@0.1.0 validate:yaml-config C:\Users\t_moh\Documents\GitHub\landlord-heavenv3
+> npx -p node@20 -p tsx tsx scripts/validate-yaml-config.ts
+
+Validated 40 YAML config files.
+▲ Next.js 16.1.1 (webpack)
+- Experiments (use with caution):
+  · serverActions
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.2min
+  Running TypeScript ...
+  Collecting page data using 1 worker ...
+  Generating static pages using 1 worker (0/447) ...
+  Generating static pages using 1 worker (111/447) 
+  Generating static pages using 1 worker (223/447) 
+  Generating static pages using 1 worker (335/447) 
+✓ Generating static pages using 1 worker (447/447) in 56s
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /6-month-tenancy-agreement-template
+├ ○ /about
+├ ○ /accelerated-possession-guide
+├ ƒ /api/admin/ask-heaven/debug/slug/[slug]
+├ ƒ /api/admin/ask-heaven/questions
+├ ƒ /api/admin/ask-heaven/questions/[slug]
+├ ƒ /api/admin/ask-heaven/questions/[slug]/approve
+├ ƒ /api/admin/ask-heaven/questions/[slug]/canonical
+├ ƒ /api/admin/cases
+├ ƒ /api/admin/cases/[id]/regenerate
+├ ƒ /api/admin/cases/[id]/reopen-edit-window
+├ ƒ /api/admin/cases/[id]/resume-fulfillment
+├ ƒ /api/admin/cases/[id]/retry-fulfillment
+├ ƒ /api/admin/check-access
+├ ƒ /api/admin/leads
+├ ƒ /api/admin/legal-change/check-now
+├ ƒ /api/admin/legal-change/cron-runs
+├ ƒ /api/admin/legal-change/events
+├ ƒ /api/admin/legal-change/events/[id]
+├ ƒ /api/admin/legal-change/events/[id]/actions
+├ ƒ /api/admin/legal-change/events/[id]/push-pr
+├ ƒ /api/admin/orders
+├ ƒ /api/admin/orders/refund
+├ ƒ /api/admin/orders/resend-email
+├ ƒ /api/admin/orders/retry-fulfillment
+├ ƒ /api/admin/stats
+├ ƒ /api/admin/test-artifacts/complete-pack/download
+├ ƒ /api/admin/test-artifacts/complete-pack/england/section21
+├ ƒ /api/admin/test-artifacts/complete-pack/england/section8
+├ ƒ /api/admin/users
+├ ƒ /api/admin/users/[id]
+├ ƒ /api/admin/users/metrics
+├ ƒ /api/ask-heaven/case
+├ ƒ /api/ask-heaven/chat
+├ ƒ /api/ask-heaven/enhance-answer
+├ ƒ /api/auth/callback
+├ ƒ /api/auth/change-password
+├ ƒ /api/auth/forgot-password
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/signup
+├ ƒ /api/auth/user
+├ ƒ /api/cases
+├ ƒ /api/cases/[id]
+├ ƒ /api/cases/[id]/documents
+├ ƒ /api/cases/[id]/link
+├ ƒ /api/cases/claim-orphans
+├ ƒ /api/cases/stats
+├ ƒ /api/checkout/create
+├ ƒ /api/checkout/session/[id]
+├ ƒ /api/checkout/subscription
+├ ƒ /api/councils
+├ ƒ /api/cron/compliance-check
+├ ƒ /api/cron/legal-change-check
+├ ƒ /api/documents
+├ ƒ /api/documents/[id]
+├ ƒ /api/documents/generate
+├ ƒ /api/documents/thumbnail/[id]
+├ ƒ /api/e2e/seed-case
+├ ƒ /api/evidence/download
+├ ƒ /api/golden-pack-samples/[packKey]/[documentType]
+├ ƒ /api/golden-pack-samples/[packKey]/[documentType]/embed
+├ ƒ /api/golden-pack-samples/[packKey]/[documentType]/thumbnail
+├ ƒ /api/grounds/[jurisdiction]
+├ ƒ /api/hmo/properties
+├ ƒ /api/hmo/properties/[id]
+├ ƒ /api/hmo/stats
+├ ƒ /api/hmo/tenants
+├ ƒ /api/hmo/tenants/[id]
+├ ƒ /api/leads/capture
+├ ƒ /api/leads/email-report
+├ ƒ /api/money-claim/embed/[caseId]
+├ ƒ /api/money-claim/pack/[caseId]
+├ ƒ /api/money-claim/preview/[caseId]
+├ ƒ /api/money-claim/thumbnail/[caseId]
+├ ƒ /api/notice-only/embed/[caseId]
+├ ƒ /api/notice-only/preview/[caseId]
+├ ƒ /api/notice-only/thumbnail/[caseId]
+├ ƒ /api/notice-only/validate/[caseId]
+├ ƒ /api/notices/validate-dates
+├ ƒ /api/orders/by-session
+├ ƒ /api/orders/fulfill
+├ ƒ /api/orders/regenerate
+├ ƒ /api/orders/resume-fulfillment
+├ ƒ /api/orders/status
+├ ƒ /api/section13/ask-heaven
+├ ƒ /api/section13/embed/[caseId]
+├ ƒ /api/section13/import-csv
+├ ƒ /api/section13/recalculate
+├ ƒ /api/section13/recover
+├ ƒ /api/section13/save-step
+├ ƒ /api/section13/scrape
+├ ƒ /api/section13/send-recovery-link
+├ ƒ /api/section13/thumbnail/[caseId]
+├ ƒ /api/section13/tribunal-bundle
+├ ƒ /api/section13/upload-evidence
+├ ƒ /api/seo/cron/daily
+├ ƒ /api/seo/generate
+├ ƒ /api/seo/indexnow
+├ ƒ /api/seo/pages
+├ ƒ /api/seo/queue
+├ ƒ /api/stripe/customer-portal
+├ ƒ /api/stripe/invoice
+├ ƒ /api/stripe/webhook
+├ ƒ /api/subscription/cancel
+├ ƒ /api/subscription/resume
+├ ƒ /api/subscription/status
+├ ƒ /api/subscription/upgrade
+├ ƒ /api/tenancy-agreement/thumbnail/[caseId]
+├ ƒ /api/users/me
+├ ƒ /api/webhooks/stripe
+├ ƒ /api/wizard/analyze
+├ ƒ /api/wizard/answer
+├ ƒ /api/wizard/answer-questions
+├ ƒ /api/wizard/case/[id]
+├ ƒ /api/wizard/checkpoint
+├ ƒ /api/wizard/claim
+├ ƒ /api/wizard/generate
+├ ƒ /api/wizard/mqs
+├ ƒ /api/wizard/next-question
+├ ƒ /api/wizard/preview/[caseId]
+├ ƒ /api/wizard/save-facts
+├ ƒ /api/wizard/start
+├ ƒ /api/wizard/upload-evidence
+├ ƒ /api/wizard/validate
+├ ○ /apple-icon.png
+├ ○ /apply-possession-order-landlord
+├ ƒ /ask-heaven
+├ ƒ /ask-heaven/[slug]
+├ ○ /assured-periodic-tenancy-agreement
+├ ○ /assured-shorthold-tenancy-agreement
+├ ○ /assured-shorthold-tenancy-agreement-template
+├ ○ /ast-agreement-template
+├ ○ /ast-template-england
+├ ○ /ast-tenancy-agreement-template
+├ ○ /auth/confirm
+├ ○ /auth/forgot-password
+├ ○ /auth/login
+├ ○ /auth/reset-password
+├ ○ /auth/signup
+├ ○ /auth/verify-email
+├ ○ /bailiff-eviction-process
+├ ○ /blog
+├ ● /blog/[slug]
+│ ├ /blog/england
+│ ├ /blog/eviction-guides
+│ ├ /blog/rent-arrears
+│ └ [+123 more paths]
+├ ○ /can-a-landlord-evict-for-noise-complaints
+├ ○ /can-a-landlord-evict-for-pets
+├ ○ /can-you-evict-a-tenant-for-property-damage
+├ ƒ /checkout/e2e-started
+├ ○ /claim-rent-arrears-tenant
+├ ○ /common-prt-tenancy-mistakes-scotland
+├ ○ /contact
+├ ○ /cookies
+├ ○ /county-court-claim-form-guide
+├ ○ /court-bailiff-eviction-guide
+├ ○ /court-possession-order-guide
+├ ○ /dashboard
+├ ○ /dashboard/admin
+├ ○ /dashboard/admin/ai-usage
+├ ○ /dashboard/admin/ask-heaven
+├ ƒ /dashboard/admin/ask-heaven/[slug]
+├ ○ /dashboard/admin/cases
+├ ○ /dashboard/admin/email-previews
+├ ○ /dashboard/admin/failed-payments
+├ ○ /dashboard/admin/leads
+├ ○ /dashboard/admin/legal-changes
+├ ƒ /dashboard/admin/legal-changes/[id]
+├ ○ /dashboard/admin/legal-changes/inbox
+├ ○ /dashboard/admin/orders
+├ ○ /dashboard/admin/users
+├ ƒ /dashboard/admin/users/[id]
+├ ○ /dashboard/billing
+├ ○ /dashboard/cases
+├ ƒ /dashboard/cases/[id]
+├ ○ /dashboard/documents
+├ ○ /dashboard/hmo
+├ ○ /dashboard/hmo/properties
+├ ƒ /dashboard/hmo/properties/[id]
+├ ○ /dashboard/hmo/properties/new
+├ ○ /dashboard/hmo/tenants
+├ ○ /dashboard/hmo/tenants/new
+├ ○ /dashboard/profile
+├ ○ /dashboard/settings
+├ ƒ /downloads/renters-rights-act-information-sheet-2026
+├ ○ /eicr-landlord-requirements
+├ ○ /evict-tenant-anti-social-behaviour
+├ ○ /evict-tenant-for-damage
+├ ○ /evict-tenant-not-paying-rent
+├ ○ /eviction-cost-uk
+├ ○ /eviction-court-forms-england
+├ ○ /eviction-court-hearing-guide
+├ ○ /eviction-guides
+├ ○ /eviction-notice-england
+├ ○ /eviction-notice-template
+├ ○ /eviction-process-england
+├ ○ /eviction-process-scotland
+├ ○ /eviction-process-uk
+├ ○ /eviction-process-wales
+├ ○ /eviction-timeline-england
+├ ○ /eviction-timeline-uk
+├ ○ /fixed-term-periodic-occupation-contract-wales
+├ ○ /fixed-term-periodic-tenancy-england
+├ ○ /fixed-term-tenancy-agreement-northern-ireland
+├ ○ /fixed-term-tenancy-agreement-template
+├ ○ /form-3-section-8
+├ ○ /form-6a-section-21
+├ ○ /help
+├ ○ /hmo-shared-house-tenancy-agreement
+├ ○ /hmo-tenancy-agreement-template
+├ ○ /how-long-after-court-order-do-bailiffs-evict
+├ ○ /how-long-does-bailiff-eviction-take
+├ ○ /how-long-does-eviction-take
+├ ○ /how-to-evict-a-tenant-england
+├ ○ /how-to-evict-a-tenant-uk
+├ ○ /how-to-evict-tenant
+├ ○ /how-to-rent-guide
+├ ○ /how-to-speed-up-eviction-uk
+├ ○ /how-to-sue-tenant-for-unpaid-rent
+├ ○ /icon.png
+├ ○ /joint-occupation-contract-wales
+├ ○ /joint-prt-tenancy-agreement-scotland
+├ ○ /joint-tenancy-agreement-england
+├ ○ /joint-tenancy-agreement-northern-ireland
+├ ○ /joint-tenancy-agreement-template
+├ ○ /landlord-documents-england
+├ ○ /landlord-eviction-checklist
+├ ○ /lodger-agreement
+├ ○ /lodger-agreement-template
+├ ○ /manifest.webmanifest
+├ ○ /money-claim
+├ ○ /money-claim-abandoned-goods
+├ ○ /money-claim-appliance-damage
+├ ○ /money-claim-bathroom-damage
+├ ○ /money-claim-carpet-damage
+├ ○ /money-claim-ccj-enforcement
+├ ○ /money-claim-cleaning-costs
+├ ○ /money-claim-council-tax
+├ ○ /money-claim-deposit-shortfall
+├ ○ /money-claim-early-termination
+├ ○ /money-claim-former-tenant
+├ ○ /money-claim-garden-damage
+├ ○ /money-claim-guarantor
+├ ○ /money-claim-letter-before-action
+├ ○ /money-claim-n1-claim-form
+├ ○ /money-claim-online-mcol
+├ ○ /money-claim-pap-financial-statement
+├ ○ /money-claim-property-damage
+├ ○ /money-claim-rent-arrears
+├ ○ /money-claim-schedule-of-debt
+├ ○ /money-claim-small-claims-landlord
+├ ○ /money-claim-tenant-defends
+├ ○ /money-claim-unpaid-bills
+├ ○ /money-claim-unpaid-rent
+├ ○ /money-claim-unpaid-utilities
+├ ○ /money-claim-wall-damage
+├ ○ /n5-n119-possession-claim
+├ ○ /n5b-form-guide
+├ ○ /n5b-possession-claim-form
+├ ○ /n5b-possession-claim-guide
+├ ○ /ni-private-tenancy-agreement
+├ ○ /ni-tenancy-agreement-template-free
+├ ○ /no-fault-eviction
+├ ○ /northern-ireland-tenancy-agreement-template
+├ ○ /notice-to-quit-guide
+├ ○ /notice-to-quit-northern-ireland-guide
+├ ○ /occupation-contract-template-wales
+├ ○ /opengraph-image.png
+├ ○ /periodic-tenancy-agreement
+├ ○ /possession-claim-guide
+├ ○ /possession-order-process
+├ ○ /possession-order-timeline
+├ ○ /pre-action-protocol-debt
+├ ○ /premium-tenancy-agreement
+├ ○ /pricing
+├ ○ /privacy
+├ ○ /private-residential-tenancy-agreement-scotland
+├ ○ /private-residential-tenancy-agreement-template
+├ ○ /products/ast
+├ ○ /products/complete-pack
+├ ○ /products/money-claim
+├ ○ /products/notice-only
+├ ○ /products/rent-increase
+├ ○ /products/section-13-defence
+├ ○ /products/section-13-standard
+├ ○ /prt-template-scotland
+├ ○ /prt-tenancy-agreement-template-scotland
+├ ○ /recover-rent-arrears-after-eviction
+├ ○ /refunds
+├ ○ /renew-tenancy-agreement-england
+├ ○ /rent-arrears-eviction-guide
+├ ○ /rent-arrears-landlord-guide
+├ ○ /rent-arrears-letter-template
+├ ○ /rent-increase
+├ ● /rent-increase/[slug]
+│ ├ /rent-increase/section-13-notice
+│ ├ /rent-increase/how-to-increase-rent
+│ ├ /rent-increase/rent-increase-rules-uk
+│ └ [+4 more paths]
+├ ○ /renters-rights-act-eviction-rules
+├ ○ /renters-rights-act-information-sheet-2026
+├ ○ /renters-rights-bill-tenancy-agreement
+├ ○ /renting-homes-wales-written-statement
+├ ○ /robots.txt
+├ ○ /rolling-tenancy-agreement
+├ ○ /scotland-eviction-notices
+├ ○ /scotland-prt-model-agreement-guide
+├ ○ /scottish-tenancy-agreement-template
+├ ○ /section-21-ban
+├ ○ /section-21-ban-uk
+├ ○ /section-21-checklist
+├ ○ /section-21-expired-what-next
+├ ○ /section-21-notice
+├ ○ /section-21-notice-guide
+├ ○ /section-21-notice-period
+├ ○ /section-21-notice-template
+├ ○ /section-21-validity-checklist
+├ ○ /section-21-vs-section-8
+├ ○ /section-8-eviction-process
+├ ○ /section-8-grounds-explained
+├ ○ /section-8-notice
+├ ○ /section-8-notice-guide
+├ ○ /section-8-notice-template
+├ ○ /section-8-rent-arrears-eviction
+├ ○ /section-8-vs-section-21
+├ ○ /serve-section-21-notice
+├ ○ /serve-section-8-notice
+├ ƒ /sitemap.xml
+├ ○ /standard-occupation-contract-wales
+├ ○ /standard-tenancy-agreement
+├ ○ /student-tenancy-agreement
+├ ƒ /success/[product]/[caseId]
+├ ○ /tenancy-agreement
+├ ○ /tenancy-agreement-england-2026
+├ ○ /tenancy-agreement-northern-ireland
+├ ○ /tenancy-agreement-template
+├ ○ /tenancy-agreement-template-free
+├ ○ /tenancy-agreement-template-northern-ireland
+├ ○ /tenancy-agreement-template-uk
+├ ○ /tenancy-agreements/england
+├ ○ /tenancy-agreements/northern-ireland
+├ ○ /tenancy-agreements/scotland
+├ ○ /tenancy-agreements/wales
+├ ○ /tenant-abandoned-property
+├ ○ /tenant-anti-social-behaviour
+├ ○ /tenant-breach-of-tenancy
+├ ○ /tenant-damaging-property
+├ ○ /tenant-ignores-section-21
+├ ○ /tenant-ignores-section-8
+├ ○ /tenant-left-without-paying-rent
+├ ○ /tenant-not-paying-rent
+├ ○ /tenant-refuses-to-leave-after-notice
+├ ○ /tenant-refusing-access
+├ ○ /tenant-refusing-inspection
+├ ○ /tenant-stopped-paying-rent
+├ ○ /tenant-subletting-without-permission
+├ ○ /tenant-wont-leave
+├ ○ /terms
+├ ○ /tools
+├ ○ /tools/free-rent-demand-letter
+├ ○ /tools/hmo-license-checker
+├ ○ /tools/rent-arrears-calculator
+├ ○ /twitter-image.png
+├ ○ /update-occupation-contract-wales
+├ ○ /update-prt-tenancy-agreement-scotland
+├ ○ /update-tenancy-agreement-northern-ireland
+├ ○ /wales-eviction-notices
+├ ○ /wales-tenancy-agreement-template
+├ ○ /warrant-of-possession
+├ ○ /warrant-of-possession-guide
+├ ○ /what-happens-after-section-21
+├ ○ /what-happens-after-section-8
+├ ƒ /wizard
+├ ○ /wizard/flow
+├ ƒ /wizard/preview/[caseId]
+├ ○ /wizard/review
+└ ƒ /wizard/upload-evidence
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> landlord-heavenv3@0.1.0 postbuild C:\Users\t_moh\Documents\GitHub\landlord-heavenv3
+> node scripts/indexnow-submit.mjs
+
+📤 Submitting sitemap to IndexNow...
+📋 Found 214 URLs in sitemap
+✅ https://api.indexnow.org/indexnow - Success (200)
+✅ https://www.bing.com/indexnow - Success (200)
+✨ IndexNow submission complete!

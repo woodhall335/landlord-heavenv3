@@ -3,7 +3,7 @@ golden-lodger-001
 JURISDICTION
 England
 GENERATED
-1 May 2026
+2 May 2026
 FOR PROPERTIES IN ENGLAND
 Room Let / Lodger Checklist
 Resident-landlord handover and room-let checklist
@@ -33,7 +33,7 @@ LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
 Email: jane@example.com
 Telephone: 07123 456789
-TENANT Alice Tenant
+LODGER Alice Tenant
 12 Example Street, London, SW1A 1AA
 Email: alice@example.com
 Telephone: 07000 111111
@@ -42,8 +42,10 @@ Telephone: 07000 111111
 
 Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
-LANDLORD Jane Landlord
-TENANT Alice Tenant
+RESIDENT
+LANDLORD
+Jane Landlord
+LODGER Alice Tenant
 Operative Provisions
 1. Before Move-In
 Confirm the room to be occupied, any furniture or household items included, and the house rules applying

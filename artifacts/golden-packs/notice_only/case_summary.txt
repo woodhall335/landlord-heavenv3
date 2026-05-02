@@ -3,7 +3,7 @@ golden-notice-only-001
 JURISDICTION
 england
 GENERATED
-1 May 2026
+2 May 2026
 Stage 1: Section 8 Notice & Service Pack
 Case Summary - Stage 1
 Notice & Service
@@ -11,7 +11,7 @@ Built to hold up if challenged
 This pack aligns the notice, service, and evidence so
 your case does not fall apart on technical errors.
 READY TO SERVE - NOTICE FILE ALIGNED
-Case ID: golden-notice-only-001 | Jurisdiction: england | Generated: 1 May 2026
+Case ID: golden-notice-only-001 | Jurisdiction: england | Generated: 2 May 2026
 Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and
 under review as the case moves forward.
 PROPERTY
@@ -24,11 +24,11 @@ Ground 8 (mandatory), Ground 10
 ARREARS
 £3600.00
 NOTICE SERVED
-1 May 2026
+2 May 2026
 NOTICE EXPIRY DATE
-29 May 2026
+30 May 2026
 EARLIEST PROCEEDINGS DATE
-29 May 2026
+30 May 2026
 CLAIMANT
 Daniel Mercer
 What this pack does
@@ -92,8 +92,8 @@ file.
 
 NOTICE TIMELINE RECORDED
 OK
-Notice served on 1 May 2026 with earliest
-proceedings date 29 May 2026.
+Notice served on 2 May 2026 with earliest
+proceedings date 30 May 2026.
 Action: Keep the service date, expiry date, and
 proceedings date aligned across the notice,
 N215, and any court papers.
@@ -103,7 +103,7 @@ Ground 10 (Any rent arrears).
 The tenancy began on 1 January 2024. The contractual rent is £1,200.00 payable monthly on the 1st day
 of each rental period.
 Ground 8 is relied on as the serious rent arrears ground.
-At the date of service of the Form 3A notice on 1 May 2026, the arrears stood at £3,600.00.
+At the date of service of the Form 3A notice on 2 May 2026, the arrears stood at £3,600.00.
 That figure is presented as exceeding the statutory Ground 8 threshold of £3,600.00 (3 months).
 The rent account and arrears schedule show the unpaid or short-paid periods between 1 January 2026
 and 31 March 2026, 3 missed payments.
@@ -112,15 +112,15 @@ part of the claim history.
 The arrears balance relied on for Ground 10 is £3,600.00.
 The arrears history, service chronology, and any further tenancy concerns should be read together as
 part of one possession case, while each statutory ground remains separately pleaded.
-Form 3A notice served on 1 May 2026, expiring on 29 May 2026, with proceedings not intended before
-29 May 2026.
+Form 3A notice served on 2 May 2026, expiring on 30 May 2026, with proceedings not intended before
+30 May 2026.
 Additional case detail supplied by the landlord: [object Object]
 Procedural Notes
 The rent account first shows an unpaid or short-paid period from 1 January 2026. The most recent
 affected rental period is 1 March 2026. The current arrears total is £3,600.00 across 3 missed or short-
 paid rental periods.
-The Form 3A notice service milestone currently recorded is 1 May 2026. The possession / proceedings
-date currently recorded in the file is 29 May 2026.
+The Form 3A notice service milestone currently recorded is 2 May 2026. The possession / proceedings
+date currently recorded in the file is 30 May 2026.
 
 -- 3 of 4 --
 
@@ -131,7 +131,7 @@ Financial Position
 The claimant seeks possession and, if the court thinks fit, judgment for rent arrears currently quantified at
 £3,600.00.
 The contractual rent is £1,200.00 payable monthly.
-Form 3A notice served on 1 May 2026, expiring on 29 May 2026, with proceedings not intended before
-29 May 2026.
+Form 3A notice served on 2 May 2026, expiring on 30 May 2026, with proceedings not intended before
+30 May 2026.
 
 -- 4 of 4 --

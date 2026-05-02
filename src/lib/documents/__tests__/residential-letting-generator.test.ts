@@ -774,6 +774,8 @@ describe('generateResidentialLettingDocuments', () => {
     expect(agreementHtml).toContain('England written information route');
     expect(agreementHtml).toContain('Written tenancy terms recorded in this agreement');
     expect(agreementHtml).not.toContain('How to Rent guide provided');
+    expect(checklistHtml).toContain('FILE-USE NOTE');
+    expect(checklistHtml).toContain("Use this checklist as the landlord's setup record before move-in");
     expect(checklistHtml).toContain('England written information prepared for this tenancy route');
     expect(checklistHtml).toContain('England written information included');
     expect(checklistHtml).not.toContain('How to Rent guide provided');
@@ -817,6 +819,8 @@ describe('generateResidentialLettingDocuments', () => {
     const standardSupportHtml = getDocumentHtml(standardPack, 'england_keys_handover_record');
     const lodgerSummaryHtml = getDocumentHtml(lodgerPack, 'england_room_let_summary');
     const lodgerChecklistHtml = getDocumentHtml(lodgerPack, 'england_lodger_checklist');
+    const lodgerAgreementHtml = getDocumentHtml(lodgerPack, 'england_lodger_agreement');
+    const lodgerHouseRulesHtml = getDocumentHtml(lodgerPack, 'england_lodger_house_rules_appendix');
 
     expect(standardSupportHtml).toContain('Reference period (not fixed term)');
     expect(standardSupportHtml).not.toContain('Term / dates');
@@ -824,6 +828,10 @@ describe('generateResidentialLettingDocuments', () => {
     expect(lodgerSummaryHtml).toContain('Room Let Summary');
     expect(lodgerChecklistHtml).toContain('Lodger');
     expect(lodgerChecklistHtml).not.toContain('Tenant(s)');
+    expect(lodgerAgreementHtml).toContain('LODGER');
+    expect(lodgerAgreementHtml).not.toContain('>TENANT<');
+    expect(lodgerHouseRulesHtml).toContain('LODGER');
+    expect(lodgerHouseRulesHtml).not.toContain('>TENANT<');
   });
 
   test('hard-stops the lodger route when the resident-landlord facts contradict the product', async () => {
