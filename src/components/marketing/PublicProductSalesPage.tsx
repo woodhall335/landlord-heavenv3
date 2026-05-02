@@ -702,17 +702,15 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
               </div>
 
               {howItWorks.imageSrc ? (
-                <div className="min-w-0 lg:flex lg:h-full">
-                  <div className="relative h-72 w-full overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] lg:h-full">
-                    <div className="relative h-full min-h-[22rem] w-full">
-                      <Image
-                        src={howItWorks.imageSrc}
-                        alt={howItWorks.imageAlt ?? 'How it works illustration'}
-                        fill
-                        sizes="(min-width: 1024px) 34vw, 100vw"
-                        className="object-cover object-center"
-                      />
-                    </div>
+                <div className="min-w-0 lg:self-stretch">
+                  <div className="relative h-72 w-full overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] lg:h-full lg:min-h-full">
+                    <Image
+                      src={howItWorks.imageSrc}
+                      alt={howItWorks.imageAlt ?? 'How it works illustration'}
+                      fill
+                      sizes="(min-width: 1024px) 34vw, 100vw"
+                      className="object-cover object-top"
+                    />
                   </div>
                 </div>
               ) : null}
