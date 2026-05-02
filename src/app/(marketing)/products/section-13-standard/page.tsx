@@ -91,7 +91,7 @@ export default function Section13StandardProductPage() {
       guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
-      title: 'Standard Section 13 Pack FAQs',
+      title: 'Standard Section 13 Rent Increase Pack FAQs',
       items: config.faqs,
     },
   };
@@ -111,7 +111,7 @@ export default function Section13StandardProductPage() {
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
           { name: 'Pricing', url: getCanonicalUrl('/pricing') },
-          { name: 'Standard Section 13 Pack', url: canonicalUrl },
+          { name: 'Standard Section 13 Rent Increase Pack', url: canonicalUrl },
         ])}
       />
       <PublicProductSalesPage content={content} />

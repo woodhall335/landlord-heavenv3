@@ -23,6 +23,8 @@ statutory timing rules, and that the proposed rent is the figure best supported 
 on the tribunal date.
 A clean service record, a stable chronology, and current comparables usually matter more than broad
 statements that the increase felt reasonable at the time it was proposed.
+If service is not valid or cannot be proved, the tribunal may reject or discount the notice file before
+considering market rent.
 Common weakness points
 Watch for stale comparables, missing source dates, unsupported manual overrides, or a mismatch between
 the dates in Form 4A, the proof of service record, and the narrative documents.

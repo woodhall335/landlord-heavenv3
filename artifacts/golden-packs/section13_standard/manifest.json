@@ -1,9 +1,26 @@
 {
   "key": "section13_standard",
-  "displayName": "Standard Section 13 Pack",
+  "displayName": "Standard Section 13 Rent Increase Pack",
   "outputDir": "section13_standard",
-  "documentCount": 4,
+  "documentCount": 5,
   "documents": [
+    {
+      "title": "Rent Increase Summary",
+      "description": "Front-page summary of the proposed increase, evidence position, and next step.",
+      "category": "guidance",
+      "documentType": "section13_rent_increase_summary",
+      "fileName": "section13-rent-increase-summary-golden-section13-standard-001.pdf",
+      "files": {
+        "pdf": "section13_standard/section13-rent-increase-summary-golden-section13-standard-001.pdf",
+        "text": "section13_standard/section13-rent-increase-summary-golden-section13-standard-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
     {
       "title": "Form 4A rent increase notice",
       "description": "Official Form 4A completed from your Section 13 wizard answers.",

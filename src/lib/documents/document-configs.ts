@@ -485,6 +485,14 @@ export function getMoneyClaimDocuments(jurisdiction: string): DocumentInfo[] {
 export function getSection13Documents(product: 'section13_standard' | 'section13_defensive'): DocumentInfo[] {
   const standardDocuments: DocumentInfo[] = [
     {
+      id: 'section13-rent-increase-summary',
+      title: 'Rent Increase Summary',
+      description: 'Front-page summary of the proposed increase, evidence strength, challenge band, and next step.',
+      icon: 'guidance',
+      pages: '1 page',
+      category: 'Guidance',
+    },
+    {
       id: 'section13-form-4a',
       title: 'Form 4A Rent Increase Notice',
       description: 'Official assured tenancy rent increase notice for England.',
@@ -524,6 +532,22 @@ export function getSection13Documents(product: 'section13_standard' | 'section13
 
   return [
     ...standardDocuments,
+    {
+      id: 'section13-property-condition-comparison-sheet',
+      title: 'Property Condition Comparison Sheet',
+      description: 'Condition-led comparison sheet for the subject property and the saved comparables.',
+      icon: 'evidence',
+      pages: '1-3 pages',
+      category: 'Defensive',
+    },
+    {
+      id: 'section13-tenant-argument-response-guide',
+      title: 'Tenant Argument and Landlord Response Guide',
+      description: 'Challenge-ready table matching likely tenant objections to the evidence and reply points.',
+      icon: 'guidance',
+      pages: '2 pages',
+      category: 'Defensive',
+    },
     {
       id: 'section13-tribunal-argument-summary',
       title: 'Tribunal Argument Summary',

@@ -46,7 +46,7 @@ export const productLinks = {
   },
   premiumTenancyAgreement: {
     href: '/premium-tenancy-agreement',
-    title: 'Premium Tenancy Agreement',
+    title: 'Premium Tenancy Agreement & Management Pack',
     description: 'Fuller ordinary-residential drafting with broader management schedules and support documents.',
     icon: 'document' as const,
     type: 'product' as const,
@@ -1041,14 +1041,14 @@ export const tenancyAgreementEnglandLinks = [
   productLinks.tenancyAgreement,
   {
     href: '/standard-tenancy-agreement',
-    title: 'Standard Tenancy Agreement',
+    title: 'Standard Tenancy Agreement & Setup Pack',
     description: 'Baseline England residential route for straightforward whole-property lets.',
     icon: 'document' as const,
     type: 'page' as const,
   },
   {
     href: '/premium-tenancy-agreement',
-    title: 'Premium Tenancy Agreement',
+    title: 'Premium Tenancy Agreement & Management Pack',
     description:
       'Ordinary-residential premium route with fuller management and operational detail.',
     icon: 'document' as const,
@@ -1063,14 +1063,14 @@ export const tenancyAgreementEnglandLinks = [
   },
   {
     href: '/hmo-shared-house-tenancy-agreement',
-    title: 'HMO / Shared House Tenancy Agreement',
+    title: 'HMO / Shared House Tenancy Agreement & House Management Pack',
     description: 'England shared-house route with communal-area controls and sharer drafting.',
     icon: 'home' as const,
     type: 'page' as const,
   },
   {
     href: '/lodger-agreement',
-    title: 'Room Let / Lodger Agreement',
+    title: 'Room Let / Lodger Agreement & Shared Home Pack',
     description:
       'Resident-landlord room-let route kept separate from the assured-tenancy products.',
     icon: 'home' as const,
@@ -1174,14 +1174,14 @@ export const tenancyFunnelPages = {
   },
   standardTenancyAgreement: {
     href: '/standard-tenancy-agreement',
-    title: 'Standard Tenancy Agreement',
+    title: 'Standard Tenancy Agreement & Setup Pack',
     description: 'Baseline England residential route for straightforward whole-property lets.',
     icon: 'document' as const,
     type: 'page' as const,
   },
   premiumTenancyAgreement: {
     href: '/premium-tenancy-agreement',
-    title: 'Premium Tenancy Agreement',
+    title: 'Premium Tenancy Agreement & Management Pack',
     description: 'Ordinary-residential premium route with fuller management and operational detail.',
     icon: 'document' as const,
     type: 'page' as const,
@@ -1195,14 +1195,14 @@ export const tenancyFunnelPages = {
   },
   hmoSharedHouseTenancyAgreement: {
     href: '/hmo-shared-house-tenancy-agreement',
-    title: 'HMO / Shared House Tenancy Agreement',
+    title: 'HMO / Shared House Tenancy Agreement & House Management Pack',
     description: 'England shared-house route with communal-area controls and sharer drafting.',
     icon: 'home' as const,
     type: 'page' as const,
   },
   lodgerAgreement: {
     href: '/lodger-agreement',
-    title: 'Room Let / Lodger Agreement',
+    title: 'Room Let / Lodger Agreement & Shared Home Pack',
     description: 'Resident-landlord room-let route kept separate from the assured-tenancy products.',
     icon: 'home' as const,
     type: 'page' as const,

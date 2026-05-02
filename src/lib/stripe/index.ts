@@ -70,12 +70,12 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     category: 'money_claim',
   },
   [PRICE_IDS.SECTION13_STANDARD]: {
-    name: 'Section 13 Wizard',
+    name: 'Standard Section 13 Rent Increase Pack',
     type: 'one_time',
     category: 'rent_increase',
   },
   [PRICE_IDS.SECTION13_DEFENSIVE]: {
-    name: 'Section 13 Defensive Pack',
+    name: 'Challenge-Ready Section 13 Defence Pack',
     type: 'one_time',
     category: 'rent_increase',
   },
@@ -95,12 +95,12 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     category: 'tenancy_agreement',
   },
   [PRICE_IDS.HMO_SHARED_TENANCY]: {
-    name: 'HMO / Shared House Tenancy Agreement',
+    name: 'HMO / Shared House Tenancy Agreement & House Management Pack',
     type: 'one_time',
     category: 'tenancy_agreement',
   },
   [PRICE_IDS.LODGER_AGREEMENT]: {
-    name: 'Room Let / Lodger Agreement',
+    name: 'Room Let / Lodger Agreement & Shared Home Pack',
     type: 'one_time',
     category: 'tenancy_agreement',
   },

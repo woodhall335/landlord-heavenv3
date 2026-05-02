@@ -6,7 +6,7 @@ GENERATED
 1 May 2026
 FOR PROPERTIES IN ENGLAND
 Utilities & Meter Handover Sheet
-Premium Tenancy Agreement utilities handover record
+Premium Tenancy Agreement & Management Pack utilities handover record
 Use this sheet to record utility responsibility, supplier details, opening meter readings, and anything
 handed over to the tenant.
 PREPARED 16 April
@@ -23,7 +23,11 @@ Utilities handover sheet
 PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Alice
 Tenant
-TERM / DATES 2 May 2026 to 1 May 2027
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on a
+periodic basis
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.

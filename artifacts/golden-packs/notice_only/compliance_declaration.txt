@@ -6,10 +6,10 @@ GENERATED
 1 May 2026
 Stage 1: Section 8 Notice & Service Pack
 Compliance Checklist
-READY TO SERVE
-This pack aligns the notice, service, and evidence so your case doesn't fall apart on technical errors.
-Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent
-those.
+READY TO SERVE - NOTICE FILE ALIGNED
+This pack aligns the notice, service, and evidence so your case does not fall apart on technical errors.
+Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and under
+review as the case moves forward.
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE TYPE Form 3A notice
@@ -54,7 +54,7 @@ Notice served on 1 May 2026 with earliest proceedings date 29 May 2026.
 Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and
 any court papers.
 Next move
-READY TO SERVE
+READY TO SERVE - NOTICE FILE ALIGNED
 Serve the notice correctly using the service instructions in this pack.
 Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record,
 or legal advice on the facts of the case.

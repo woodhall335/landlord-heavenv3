@@ -2,8 +2,25 @@
   "key": "section13_defensive",
   "displayName": "Challenge-Ready Section 13 Defence Pack",
   "outputDir": "section13_defensive",
-  "documentCount": 10,
+  "documentCount": 13,
   "documents": [
+    {
+      "title": "Rent Increase Summary",
+      "description": "Front-page summary of the proposed increase, evidence position, and next step.",
+      "category": "guidance",
+      "documentType": "section13_rent_increase_summary",
+      "fileName": "section13-rent-increase-summary-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-rent-increase-summary-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-rent-increase-summary-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
     {
       "title": "Form 4A rent increase notice",
       "description": "Official Form 4A completed from your Section 13 wizard answers.",
@@ -33,6 +50,40 @@
       },
       "extraction": {
         "pageCount": 3,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Property condition comparison sheet",
+      "description": "Condition-led comparison sheet for the subject property and saved comparables.",
+      "category": "evidence",
+      "documentType": "section13_property_condition_comparison_sheet",
+      "fileName": "section13-property-condition-comparison-sheet-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-property-condition-comparison-sheet-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-property-condition-comparison-sheet-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Tenant argument and landlord response guide",
+      "description": "Challenge-ready table for likely tenant objections and the supporting landlord response.",
+      "category": "guidance",
+      "documentType": "section13_tenant_argument_response_guide",
+      "fileName": "section13-tenant-argument-response-guide-golden-section13-defence-001.pdf",
+      "files": {
+        "pdf": "section13_defensive/section13-tenant-argument-response-guide-golden-section13-defence-001.pdf",
+        "text": "section13_defensive/section13-tenant-argument-response-guide-golden-section13-defence-001.txt"
+      },
+      "extraction": {
+        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

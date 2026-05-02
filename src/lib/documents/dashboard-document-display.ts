@@ -8,6 +8,9 @@
 export type DashboardDocumentCategory = 'eviction' | 'money_claim' | 'tenancy_agreement' | 'rent_increase' | 'other';
 
 const TENANCY_SUPPORT_DOCUMENT_TYPES = new Set([
+  'england_tenancy_setup_summary',
+  'england_hmo_setup_summary',
+  'england_room_let_summary',
   'inventory_schedule',
   'pre_tenancy_checklist_england',
   'pre_tenancy_checklist_wales',
@@ -146,7 +149,10 @@ export function getDashboardDocumentCategory(documentType: string): DashboardDoc
   if (
     [
       'section13_form_4a',
+      'section13_rent_increase_summary',
       'section13_justification_report',
+      'section13_property_condition_comparison_sheet',
+      'section13_tenant_argument_response_guide',
       'section13_proof_of_service_record',
       'section13_cover_letter',
       'section13_tribunal_argument_summary',
@@ -170,11 +176,14 @@ export function getDashboardDocumentCategory(documentType: string): DashboardDoc
  */
 export function getDashboardDocumentTitle(documentType: string): string {
   const explicitTitles: Record<string, string> = {
-    england_standard_tenancy_agreement: 'Standard Tenancy Agreement',
-    england_premium_tenancy_agreement: 'Premium Tenancy Agreement',
+    england_standard_tenancy_agreement: 'Standard Tenancy Agreement & Setup Pack',
+    england_premium_tenancy_agreement: 'Premium Tenancy Agreement & Management Pack',
     england_student_tenancy_agreement: 'Student Tenancy Agreement',
-    england_hmo_shared_house_tenancy_agreement: 'HMO / Shared House Tenancy Agreement',
-    england_lodger_agreement: 'Room Let / Lodger Agreement',
+    england_hmo_shared_house_tenancy_agreement: 'HMO / Shared House Tenancy Agreement & House Management Pack',
+    england_lodger_agreement: 'Room Let / Lodger Agreement & Shared Home Pack',
+    england_tenancy_setup_summary: 'Tenancy Setup Summary',
+    england_hmo_setup_summary: 'HMO Setup Summary',
+    england_room_let_summary: 'Room Let Summary',
     england_written_statement_of_terms: 'England Written Statement of Terms',
     england_tenancy_transition_guidance: 'England Tenancy Transition Guidance',
     england_lodger_checklist: 'Room Let / Lodger Checklist',
@@ -201,8 +210,11 @@ export function getDashboardDocumentTitle(documentType: string): string {
     lease_assignment_agreement: 'Lease Assignment Agreement',
     rent_arrears_letter: 'Rent Arrears Letter',
     repayment_plan_agreement: 'Repayment Plan Agreement',
+    section13_rent_increase_summary: 'Rent Increase Summary',
     section13_form_4a: 'Form 4A Rent Increase Notice',
     section13_justification_report: 'Rent Increase Justification Report',
+    section13_property_condition_comparison_sheet: 'Property Condition Comparison Sheet',
+    section13_tenant_argument_response_guide: 'Tenant Argument and Landlord Response Guide',
     section13_proof_of_service_record: 'Proof of Service Record',
     section13_cover_letter: 'Rent Increase Cover Letter',
     section13_tribunal_argument_summary: 'Tribunal Argument Summary',

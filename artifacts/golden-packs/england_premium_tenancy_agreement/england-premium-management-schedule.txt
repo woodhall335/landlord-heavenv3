@@ -23,7 +23,11 @@ Management schedule
 PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Alice
 Tenant
-TERM / DATES 2 May 2026 to 1 May 2027
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on a
+periodic basis
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
@@ -36,14 +40,14 @@ TENANT Alice Tenant
 Email: alice@example.com
 Telephone: 07000 111111
 
--- 1 of 4 --
+-- 1 of 5 --
 
 Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Alice Tenant
 
--- 2 of 4 --
+-- 2 of 5 --
 
 Operative Provisions
 1. Premium Management Schedule
@@ -79,10 +83,10 @@ day return expectation.
 HAND-BACK
 EXPECTATIONS
 Return all keys and provide final meter readings.
-This schedule sits behind the Premium agreement and records the fuller day-to-day management detail that
-does not belong in the Standard route.
+This schedule forms part of the practical management record for the tenancy and should be followed
+alongside the Premium agreement.
 
--- 3 of 4 --
+-- 3 of 5 --
 
 2. Premium Check-In and Utilities Protocol
 CHECK-IN
@@ -98,6 +102,28 @@ Tenant to open supplier accounts from the tenancy start date using the
 recorded opening readings.
 Use this section alongside the keys handover record, utilities handover sheet, and any signed inventory or
 meter evidence kept with the tenancy file.
+3. Arrears Handling and File Discipline
+RENT DUE DATE 1st of each month
+PAYMENT
+METHOD
+Bank transfer
+If payment is late, the landlord should record the missed payment clearly and keep the rent record up to
+date.
+The tenant should raise any payment issue promptly so the file reflects what has happened in real time.
+Persistent arrears may affect later possession grounds, so the payment history should stay aligned with
+the main tenancy file.
+4. Issue Escalation Framework
+Missed inspections, access refusals, or repeated difficulty arranging contractor attendance should be
+recorded in writing.
+If repairs are not reported promptly, the landlord should record what was known, when, and what was
+done next.
+Repeated breach of agreed management rules should be logged clearly with the date, the issue, and the
+written follow-up.
+Where an issue arises, the landlord should record it clearly, communicate in writing, and keep the tenancy
+file updated.
+
+-- 4 of 5 --
+
 Execution
 Keep this schedule with the Premium agreement and handover file.
 FILE OWNER
@@ -105,4 +131,4 @@ Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-PREMIUM-TA-TENANCY-001
 
--- 4 of 4 --
+-- 5 of 5 --

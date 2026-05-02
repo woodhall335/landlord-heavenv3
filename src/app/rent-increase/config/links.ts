@@ -39,11 +39,11 @@ export const RENT_INCREASE_LINKS = {
   },
   wizard: {
     href: RENT_INCREASE_WIZARD_HREF,
-    label: 'Start the Standard Section 13 Pack',
+    label: 'Start the Standard Section 13 Rent Increase Pack',
   },
   standardProduct: {
     href: '/products/section-13-standard',
-    label: 'Standard Section 13 Pack',
+    label: 'Standard Section 13 Rent Increase Pack',
   },
   defenceProduct: {
     href: '/products/section-13-defence',

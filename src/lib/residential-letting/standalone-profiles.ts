@@ -178,7 +178,7 @@ function buildEnglandTenancyProfile(params: {
 const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfileSeed> = {
   england_standard_tenancy_agreement: buildEnglandTenancyProfile({
     product: 'england_standard_tenancy_agreement',
-    eyebrow: 'Standard Tenancy Agreement',
+    eyebrow: 'Standard Tenancy Agreement & Setup Pack',
     heroTitle: 'Create the ordinary England residential agreement for a straightforward whole-property let.',
     heroSubtitle:
       'This is the baseline England tenancy product for a standard residential letting where the landlord is not resident and the setup is not student, HMO/shared-house, or lodger-led.',
@@ -199,10 +199,10 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       'Rent, deposit, and payment terms',
       'Rules, repairs, and access',
     ],
-    landingTitle: 'Standard Tenancy Agreement England | Ordinary Residential Let',
+    landingTitle: 'Standard Tenancy Agreement & Setup Pack England | Periodic Residential Let',
     landingDescription:
       'Create a Standard England tenancy agreement for an ordinary whole-property residential letting.',
-    landingH1: 'Standard Tenancy Agreement for England',
+    landingH1: 'Standard Tenancy Agreement & Setup Pack for England',
     landingSubheading:
       'The baseline England residential agreement for straightforward whole-property lets.',
     overview:
@@ -253,7 +253,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
   }),
   england_premium_tenancy_agreement: buildEnglandTenancyProfile({
     product: 'england_premium_tenancy_agreement',
-    eyebrow: 'Premium Tenancy Agreement',
+    eyebrow: 'Premium Tenancy Agreement & Management Pack',
     heroTitle: 'Create the fuller ordinary-residential England agreement without treating Premium as HMO by default.',
     heroSubtitle:
       'Premium is now a distinct England residential product for landlords who want broader drafting and more operational detail on an otherwise ordinary let.',
@@ -275,10 +275,10 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       'Inspection, repairs, keys, and contractor access',
       'Rules, repairs, and access',
     ],
-    landingTitle: 'Premium Tenancy Agreement England | Fuller Ordinary Residential Drafting',
+    landingTitle: 'Premium Tenancy Agreement & Management Pack England | Fuller Management Controls',
     landingDescription:
       'Create a Premium England tenancy agreement with fuller drafting for an ordinary residential let.',
-    landingH1: 'Premium Tenancy Agreement for England',
+    landingH1: 'Premium Tenancy Agreement & Management Pack for England',
     landingSubheading:
       'A fuller England residential agreement for landlords who want more drafting depth without sliding into HMO or student logic.',
     overview:
@@ -407,7 +407,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
   }),
   england_hmo_shared_house_tenancy_agreement: buildEnglandTenancyProfile({
     product: 'england_hmo_shared_house_tenancy_agreement',
-    eyebrow: 'HMO / Shared House Tenancy Agreement',
+    eyebrow: 'HMO / Shared House Tenancy Agreement & House Management Pack',
     heroTitle: 'Create the dedicated England HMO / shared-house product instead of treating HMO as Premium.',
     heroSubtitle:
       'This route is for shared houses and HMO-style occupation where communal areas, sharers, and licensing detail need their own product path.',
@@ -429,10 +429,10 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
       'Sharer controls and access',
       'House rules appendix and operational controls',
     ],
-    landingTitle: 'HMO / Shared House Tenancy Agreement England | Dedicated Shared-House Product',
+    landingTitle: 'HMO / Shared House Tenancy Agreement & House Management Pack England',
     landingDescription:
       'Create a dedicated England HMO / Shared House Tenancy Agreement with communal-area, sharer, and licence-status detail.',
-    landingH1: 'HMO / Shared House Tenancy Agreement for England',
+    landingH1: 'HMO / Shared House Tenancy Agreement & House Management Pack for England',
     landingSubheading:
       'A dedicated product for England HMO and shared-house setups, separate from Premium.',
     overview:
@@ -484,7 +484,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
   }),
   england_lodger_agreement: buildEnglandTenancyProfile({
     product: 'england_lodger_agreement',
-    eyebrow: 'Room Let / Lodger Agreement',
+    eyebrow: 'Room Let / Lodger Agreement & Shared Home Pack',
     heroTitle: 'Create the dedicated resident-landlord lodger product instead of forcing a room let into AST/HMO logic.',
     heroSubtitle:
       'Use the lodger route when the landlord lives in the property and the occupier is taking a room with shared facilities.',
@@ -509,7 +509,7 @@ const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfil
     landingTitle: 'Lodger Agreement England | Resident-Landlord Room Let Product',
     landingDescription:
       'Create a dedicated England Lodger Agreement for resident-landlord room lets and licence-style arrangements.',
-    landingH1: 'Room Let / Lodger Agreement for England',
+    landingH1: 'Room Let / Lodger Agreement & Shared Home Pack for England',
     landingSubheading:
       'A dedicated resident-landlord agreement for England room lets, separate from the ordinary tenancy products.',
     overview:

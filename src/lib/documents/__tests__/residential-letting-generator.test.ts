@@ -67,6 +67,13 @@ function createBaseEnglandAssuredFacts(overrides: Record<string, any> = {}) {
   };
 }
 
+function getDocumentHtml(
+  pack: Awaited<ReturnType<typeof generateResidentialLettingDocuments>>,
+  documentType: string
+): string {
+  return pack.documents.find((document) => document.document_type === documentType)?.html ?? '';
+}
+
 describe('generateResidentialLettingDocuments', () => {
   test('renders guarantor agreements as deeds with witness execution', async () => {
     const pack = await generateResidentialLettingDocuments(
@@ -458,6 +465,7 @@ describe('generateResidentialLettingDocuments', () => {
 
     expect(pack.documents.map((document) => document.document_type)).toEqual(
       expect.arrayContaining([
+        'england_tenancy_setup_summary',
         'england_standard_tenancy_agreement',
         'pre_tenancy_checklist_england',
         'england_keys_handover_record',
@@ -469,7 +477,7 @@ describe('generateResidentialLettingDocuments', () => {
       ])
     );
 
-    const html = pack.documents[0].html;
+    const html = getDocumentHtml(pack, 'england_standard_tenancy_agreement');
     expect(html).toContain('Section 13');
     expect(html).toContain('obtaining an order for possession and the execution of that order');
     expect(html).toContain('serve a possession notice using the correct form');
@@ -511,7 +519,7 @@ describe('generateResidentialLettingDocuments', () => {
       'tenancy_deposit_information'
     );
 
-    const html = pack.documents[0].html;
+    const html = getDocumentHtml(pack, 'england_standard_tenancy_agreement');
     expect(html).toContain('No tenancy deposit is stated');
     expect(html).toContain('No bills are stated to be included in the rent unless this agreement expressly says otherwise.');
     expect(html).toContain('serve a possession notice using the correct form');
@@ -562,7 +570,7 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const html = pack.documents[0].html;
+    const html = getDocumentHtml(pack, 'england_standard_tenancy_agreement');
 
     expect(html).toContain('Alice Tenant');
     expect(html).toContain('Ben Tenant');
@@ -594,7 +602,7 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const html = pack.documents[0].html.replace(/&#163;/g, '£');
+    const html = getDocumentHtml(pack, 'england_standard_tenancy_agreement').replace(/&#163;/g, '£');
 
     expect(html).toContain('Amount or pricing basis: £35 per month or the invoiced amount notified in writing.');
     expect(html).toContain('When due or how notified: monthly with the rent unless a later written invoice date is given.');
@@ -622,7 +630,7 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const html = pack.documents[0].html;
+    const html = getDocumentHtml(pack, 'england_standard_tenancy_agreement');
 
     expect(html).toContain('Landlord 1');
     expect(html).toContain('Landlord 2');
@@ -740,14 +748,16 @@ describe('generateResidentialLettingDocuments', () => {
     );
 
     expect(pack.documents.map((document) => document.document_type)).toEqual([
+      'england_room_let_summary',
       'england_lodger_agreement',
       'england_lodger_checklist',
       'england_keys_handover_record',
       'england_lodger_house_rules_appendix',
     ]);
-    expect(pack.documents[0].html).toContain('resident-landlord arrangement');
-    expect(pack.documents[0].html).not.toContain('Section 13');
-    expect(pack.documents[0].html).not.toContain('fit for human habitation');
+    const lodgerAgreementHtml = getDocumentHtml(pack, 'england_lodger_agreement');
+    expect(lodgerAgreementHtml).toContain('resident-landlord arrangement');
+    expect(lodgerAgreementHtml).not.toContain('Section 13');
+    expect(lodgerAgreementHtml).not.toContain('fit for human habitation');
   });
 
   test('uses post-1 May 2026 England written-information wording instead of How to Rent in modern assured packs', async () => {
@@ -757,7 +767,7 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const agreementHtml = pack.documents[0].html;
+    const agreementHtml = getDocumentHtml(pack, 'england_standard_tenancy_agreement');
     const checklistHtml =
       pack.documents.find((document) => document.document_type === 'pre_tenancy_checklist_england')?.html || '';
 
@@ -767,6 +777,53 @@ describe('generateResidentialLettingDocuments', () => {
     expect(checklistHtml).toContain('England written information prepared for this tenancy route');
     expect(checklistHtml).toContain('England written information included');
     expect(checklistHtml).not.toContain('How to Rent guide provided');
+  });
+
+  test('puts the new England summary documents first and avoids fixed-term TERM / DATES wording in support docs', async () => {
+    const standardPack = await generateResidentialLettingDocuments(
+      'england_standard_tenancy_agreement',
+      createBaseEnglandAssuredFacts(),
+      { outputFormat: 'html' }
+    );
+
+    const hmoPack = await generateResidentialLettingDocuments(
+      'england_hmo_shared_house_tenancy_agreement',
+      createBaseEnglandAssuredFacts({
+        is_hmo: 'yes',
+        number_of_sharers: 4,
+        communal_areas: 'Kitchen and lounge',
+        hmo_licence_status: 'currently_licensed',
+        communal_cleaning: 'professional_cleaner',
+        fire_safety_notes: 'Keep escape routes clear.',
+      }),
+      { outputFormat: 'html' }
+    );
+
+    const lodgerPack = await generateResidentialLettingDocuments(
+      'england_lodger_agreement',
+      {
+        ...baseFacts,
+        tenancy_start_date: '2026-05-02',
+        resident_landlord_confirmed: true,
+        shared_kitchen_or_bathroom: true,
+      },
+      { outputFormat: 'html' }
+    );
+
+    expect(standardPack.documents[0].document_type).toBe('england_tenancy_setup_summary');
+    expect(hmoPack.documents[0].document_type).toBe('england_hmo_setup_summary');
+    expect(lodgerPack.documents[0].document_type).toBe('england_room_let_summary');
+
+    const standardSupportHtml = getDocumentHtml(standardPack, 'england_keys_handover_record');
+    const lodgerSummaryHtml = getDocumentHtml(lodgerPack, 'england_room_let_summary');
+    const lodgerChecklistHtml = getDocumentHtml(lodgerPack, 'england_lodger_checklist');
+
+    expect(standardSupportHtml).toContain('Reference period (not fixed term)');
+    expect(standardSupportHtml).not.toContain('Term / dates');
+    expect(standardSupportHtml).not.toContain('2 May 2026 to 1 May 2027');
+    expect(lodgerSummaryHtml).toContain('Room Let Summary');
+    expect(lodgerChecklistHtml).toContain('Lodger');
+    expect(lodgerChecklistHtml).not.toContain('Tenant(s)');
   });
 
   test('hard-stops the lodger route when the resident-landlord facts contradict the product', async () => {
@@ -806,7 +863,7 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const html = pack.documents[0].html;
+    const html = getDocumentHtml(pack, 'england_standard_tenancy_agreement');
 
     expect(html).toContain('Form 4A');
     expect(html).toContain('section 21 no-fault route');
@@ -971,8 +1028,9 @@ describe('generateResidentialLettingDocuments', () => {
     expect(
       premiumPack.documents.find((document) => document.document_type === 'england_premium_management_schedule')?.html
     ).toContain('Check-in paperwork expectation');
-    expect(premiumPack.documents[0].html).toContain('Premium Handover, Reporting, and Evidence Protocol');
-    expect(premiumPack.documents[0].html).toContain('Utilities and account transfer expectation');
+    const premiumAgreementHtml = getDocumentHtml(premiumPack, 'england_premium_tenancy_agreement');
+    expect(premiumAgreementHtml).toContain('Premium Handover, Reporting, and Evidence Protocol');
+    expect(premiumAgreementHtml).toContain('Utilities and account transfer expectation');
 
     expect(studentPack.documents.map((document) => document.document_type)).toContain(
       'england_student_move_out_schedule'
@@ -988,7 +1046,7 @@ describe('generateResidentialLettingDocuments', () => {
     expect(studentScheduleHtml).not.toContain('rent_and_all_tenant_obligations');
     expect(studentScheduleHtml).not.toContain('21_days');
     expect(studentScheduleHtml).not.toContain('outgoing_tenant');
-    const studentAgreementHtml = studentPack.documents[0].html ?? '';
+    const studentAgreementHtml = getDocumentHtml(studentPack, 'england_student_tenancy_agreement');
     expect(studentAgreementHtml).toContain('Recorded notice window: 21 days.');
     expect(studentAgreementHtml).toContain('Cost position: Outgoing tenant.');
     expect(studentAgreementHtml).not.toContain('21_days');
@@ -1035,9 +1093,9 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const standardHtml = standardPack.documents[0].html.replace(/&#163;/g, '£');
-    const hmoHtml = hmoPack.documents[0].html.replace(/&#163;/g, '£');
-    const lodgerHtml = lodgerPack.documents[0].html.replace(/&#163;/g, '£');
+    const standardHtml = getDocumentHtml(standardPack, 'england_standard_tenancy_agreement').replace(/&#163;/g, '£');
+    const hmoHtml = getDocumentHtml(hmoPack, 'england_hmo_shared_house_tenancy_agreement').replace(/&#163;/g, '£');
+    const lodgerHtml = getDocumentHtml(lodgerPack, 'england_lodger_agreement').replace(/&#163;/g, '£');
 
     expect(standardHtml).not.toContain('Pets authorised at the start: .');
     expect(standardHtml).not.toContain('Smoking policy: Not stated.');
@@ -1075,8 +1133,8 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const standardHtml = standardPack.documents[0].html.replace(/&#163;/g, '£');
-    const lodgerHtml = lodgerPack.documents[0].html.replace(/&#163;/g, '£');
+    const standardHtml = getDocumentHtml(standardPack, 'england_standard_tenancy_agreement').replace(/&#163;/g, '£');
+    const lodgerHtml = getDocumentHtml(lodgerPack, 'england_lodger_agreement').replace(/&#163;/g, '£');
 
     expect(standardHtml).toContain('RL-ENGLAND-STANDARD-TA-TENANCY-001');
     expect(standardHtml).not.toContain('RL-ENGLAND-STANDARD-TA-ANCY-001');

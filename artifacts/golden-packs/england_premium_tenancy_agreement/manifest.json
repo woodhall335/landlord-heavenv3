@@ -1,12 +1,30 @@
 {
   "key": "england_premium_tenancy_agreement",
-  "displayName": "Premium Tenancy Agreement",
+  "displayName": "Premium Tenancy Agreement & Management Pack",
   "outputDir": "england_premium_tenancy_agreement",
-  "documentCount": 9,
+  "documentCount": 10,
   "documents": [
     {
-      "title": "Premium Tenancy Agreement",
-      "description": "Premium tenancy agreement for a residential let in England with fuller drafting.",
+      "title": "Tenancy Setup Summary",
+      "description": "Front-page summary of the England periodic tenancy setup, key checks, and next step.",
+      "category": "guidance",
+      "documentType": "england_tenancy_setup_summary",
+      "fileName": "england-tenancy-setup-summary.pdf",
+      "files": {
+        "pdf": "england_premium_tenancy_agreement/england-tenancy-setup-summary.pdf",
+        "text": "england_premium_tenancy_agreement/england-tenancy-setup-summary.txt",
+        "html": "england_premium_tenancy_agreement/england-tenancy-setup-summary.html"
+      },
+      "extraction": {
+        "pageCount": 5,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Premium Tenancy Agreement & Management Pack",
+      "description": "Premium periodic tenancy agreement and management pack for a residential let in England.",
       "category": "agreement",
       "documentType": "england_premium_tenancy_agreement",
       "fileName": "england-premium-tenancy-agreement.pdf",
@@ -160,7 +178,7 @@
         "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 5,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

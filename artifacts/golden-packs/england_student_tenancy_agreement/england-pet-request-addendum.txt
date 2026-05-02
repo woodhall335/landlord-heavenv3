@@ -21,8 +21,11 @@ PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Aisha Student, Ben
 Student, Cara
 Student
-TERM / DATES 2 May 2026 to 1 May
-2027
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on
+a periodic basis
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
@@ -56,7 +59,7 @@ TENANT(S) Aisha Student, Ben Student, Cara Student
 Use this addendum to record the tenant request, the landlord decision, any conditions attached to consent,
 and the date the request was decided.
 If a pet is approved, keep the signed addendum with the tenancy agreement, inventory, and any cleaning or
-damage notes that may matter later.
+damage notes that may matter later so the tenancy file stays complete.
 
 -- 2 of 3 --
 

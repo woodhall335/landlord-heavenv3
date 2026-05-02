@@ -42,7 +42,7 @@ function buildComparable(index: number, monthlyEquivalent: number): Section13Com
     rawRentValue: monthlyEquivalent,
     rawRentFrequency: 'pcm',
     monthlyEquivalent,
-    weeklyEquivalent: Number((monthlyEquivalent * 12 / 52).toFixed(2)),
+    weeklyEquivalent: Number(((monthlyEquivalent * 12) / 52).toFixed(2)),
     adjustedMonthlyEquivalent: monthlyEquivalent,
     isManual: false,
     sortOrder: index,
@@ -158,6 +158,29 @@ describe('Section 13 document generation hardening', () => {
     expect(pack.workflowStatus).toBe('fulfilled');
   });
 
+  it('puts the new rent increase summary first in both Section 13 pack variants', async () => {
+    const { state, comparables } = buildState();
+
+    const standardDocs = await generateSection13CoreDocuments({
+      caseId: 'case-section13-standard-summary-order',
+      productType: 'section13_standard',
+      state,
+      comparables,
+      evidenceFiles: [],
+    });
+
+    const defensiveDocs = await generateSection13CoreDocuments({
+      caseId: 'case-section13-defensive-summary-order',
+      productType: 'section13_defensive',
+      state,
+      comparables,
+      evidenceFiles: [],
+    });
+
+    expect(standardDocs[0]?.document_type).toBe('section13_rent_increase_summary');
+    expect(defensiveDocs[0]?.document_type).toBe('section13_rent_increase_summary');
+  });
+
   it('renders Form 4A with the expected page count, editable fields, and injected case text', async () => {
     const { state, comparables } = buildState();
     const sourcePath = path.join(process.cwd(), 'public', 'official-forms', 'Form_4A.pdf');
@@ -197,7 +220,6 @@ describe('Section 13 document generation hardening', () => {
     expect(form.getFieldMaybe('form4a_service_method')).toBeUndefined();
     expect(form.getFieldMaybe('form4a_supporting_reference')).toBeUndefined();
     expect(form.getFieldMaybe('form4a_final_signature')).toBeUndefined();
-
   }, 120000);
 
   it('maps every native Form 4A field from the Section 13 state into the official May PDF', async () => {
@@ -215,7 +237,13 @@ describe('Section 13 document generation hardening', () => {
     state.includedCharges = [
       { key: 'council_tax', label: 'Council tax', included: true, currentAmount: 150, proposedAmount: 165 },
       { key: 'water', label: 'Water', included: false, currentAmount: null, proposedAmount: null },
-      { key: 'electricity_gas_fuel', label: 'Electricity / gas / fuel', included: true, currentAmount: 95.5, proposedAmount: 98.25 },
+      {
+        key: 'electricity_gas_fuel',
+        label: 'Electricity / gas / fuel',
+        included: true,
+        currentAmount: 95.5,
+        proposedAmount: 98.25,
+      },
       { key: 'communication_services', label: 'Communication services', included: false, currentAmount: null, proposedAmount: null },
       { key: 'fixed_service_charges', label: 'Fixed service charges', included: true, currentAmount: 45, proposedAmount: 45 },
     ];
@@ -376,8 +404,12 @@ describe('Section 13 document generation hardening', () => {
     expect(coverLetter).toBeDefined();
 
     const coverText = (await extractPdfText(coverLetter!.pdf)).text.replace(/\s+/g, ' ').trim();
-    expect(coverText).toContain('Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the market evidence relied on.');
-    expect(coverText).toContain('This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles');
+    expect(coverText).toContain(
+      'Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the market evidence relied on.'
+    );
+    expect(coverText).toContain(
+      'This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles'
+    );
     expect(coverText).toContain('What is enclosed');
     expect(coverText).toContain('Response window and service record');
     expect(coverText).toContain('Recorded service method: First class post');
@@ -385,7 +417,7 @@ describe('Section 13 document generation hardening', () => {
     expect(coverText).not.toContain('This tool provides assistance only');
   }, 120000);
 
-  it('adds the Tribunal Argument Summary and places it directly after the justification report in the bundle', async () => {
+  it('adds the new defensive support documents and keeps them in the merged tribunal bundle order', async () => {
     const { state, comparables } = buildState();
 
     const docs = await generateSection13CoreDocuments({
@@ -396,13 +428,43 @@ describe('Section 13 document generation hardening', () => {
       evidenceFiles: [],
     });
 
+    const rentIncreaseSummary = docs.find((doc) => doc.document_type === 'section13_rent_increase_summary');
+    const propertyConditionSheet = docs.find(
+      (doc) => doc.document_type === 'section13_property_condition_comparison_sheet'
+    );
+    const tenantArgumentGuide = docs.find(
+      (doc) => doc.document_type === 'section13_tenant_argument_response_guide'
+    );
     const argumentSummary = docs.find((doc) => doc.document_type === 'section13_tribunal_argument_summary');
+
+    expect(rentIncreaseSummary).toBeDefined();
+    expect(propertyConditionSheet).toBeDefined();
+    expect(tenantArgumentGuide).toBeDefined();
     expect(argumentSummary).toBeDefined();
 
+    const summaryText = (await extractPdfText(rentIncreaseSummary!.pdf)).text.replace(/\s+/g, ' ').trim();
+    const propertyConditionText = (await extractPdfText(propertyConditionSheet!.pdf)).text
+      .replace(/\s+/g, ' ')
+      .trim();
+    const tenantArgumentText = (await extractPdfText(tenantArgumentGuide!.pdf)).text
+      .replace(/\s+/g, ' ')
+      .trim();
     const argumentText = (await extractPdfText(argumentSummary!.pdf)).text.replace(/\s+/g, ' ').trim();
+
+    expect(summaryText).toContain('Rent Increase Summary');
+    expect(summaryText).toContain('If referred to the tribunal, the question is the open-market rent');
+    expect(summaryText).toContain('Next step');
+    expect(propertyConditionText).toContain('Property Condition Comparison Sheet');
+    expect(propertyConditionText).toContain('Subject property condition');
+    expect(propertyConditionText).toContain('Adjustment and reason');
+    expect(tenantArgumentText).toContain('Tenant Argument and Landlord Response Guide');
+    expect(tenantArgumentText).toContain('Rent increase is too high');
+    expect(tenantArgumentText).toContain('Property condition is worse than comparables');
+    expect(tenantArgumentText).toContain('Notice served incorrectly');
+    expect(tenantArgumentText).toContain('Tenant cannot afford it');
     expect(argumentText).toContain('Tribunal Argument Summary');
     expect(argumentText).toContain("This is the landlord's concise argument brief for the hearing file.");
-    expect(argumentText).toContain('The proposed rent of £1285.00 per month is supported by current comparable evidence');
+    expect(argumentText).toContain('1285.00 per month');
     expect(argumentText).toContain('If challenged, say this');
     expect(argumentText).toContain('1. Anchor to evidence');
     expect(argumentText).toContain('2. Position in the range');
@@ -425,20 +487,56 @@ describe('Section 13 document generation hardening', () => {
     const mergedTitles = bundle.bundleAssets
       .filter((asset) => asset.includeInMerged)
       .map((asset) => asset.title);
+    const mergedDocumentTypes = bundle.bundleAssets
+      .filter((asset) => asset.includeInMerged)
+      .map((asset) => asset.metadata?.document_type)
+      .filter((value): value is string => typeof value === 'string');
 
-    expect(mergedTitles.indexOf('Rent increase justification report')).toBeGreaterThan(-1);
-    expect(mergedTitles.indexOf('Tribunal Argument Summary')).toBe(
-      mergedTitles.indexOf('Rent increase justification report') + 1
+    expect(mergedTitles).toEqual(
+      expect.arrayContaining([
+        'Rent Increase Summary',
+        'Rent increase justification report',
+        'Tribunal Argument Summary',
+      ])
+    );
+    expect(mergedDocumentTypes).toEqual(
+      expect.arrayContaining([
+        'section13_rent_increase_summary',
+        'section13_form_4a',
+        'section13_justification_report',
+        'section13_property_condition_comparison_sheet',
+        'section13_tenant_argument_response_guide',
+        'section13_tribunal_argument_summary',
+      ])
+    );
+    expect(mergedDocumentTypes.indexOf('section13_rent_increase_summary')).toBeLessThan(
+      mergedDocumentTypes.indexOf('section13_form_4a')
+    );
+    expect(mergedDocumentTypes.indexOf('section13_form_4a')).toBeLessThan(
+      mergedDocumentTypes.indexOf('section13_justification_report')
+    );
+    expect(mergedDocumentTypes.indexOf('section13_justification_report')).toBeLessThan(
+      mergedDocumentTypes.indexOf('section13_property_condition_comparison_sheet')
+    );
+    expect(mergedDocumentTypes.indexOf('section13_property_condition_comparison_sheet')).toBeLessThan(
+      mergedDocumentTypes.indexOf('section13_tenant_argument_response_guide')
+    );
+    expect(mergedDocumentTypes.indexOf('section13_tenant_argument_response_guide')).toBeLessThan(
+      mergedDocumentTypes.indexOf('section13_tribunal_argument_summary')
     );
 
     const mergedBundle = bundle.documents.find((doc) => doc.document_type === 'section13_tribunal_bundle');
     expect(mergedBundle).toBeDefined();
 
     const bundleText = (await extractPdfText(mergedBundle!.pdf)).text.replace(/\s+/g, ' ').trim();
-    expect(bundleText).toContain('Prepared for any tenant challenge to the proposed rent under section 13 of the Housing Act 1988.');
+    expect(bundleText).toContain(
+      'Prepared for any tenant challenge to the proposed rent under section 13 of the Housing Act 1988.'
+    );
     expect(bundleText).toContain(
       'Core exhibits are the signed Form 4A notice, the market-rent justification report, the argument summary, the service record, and the supporting response materials relied on by the landlord.'
     );
+    expect(bundleText).toContain('Property condition comparison sheet');
+    expect(bundleText).toContain('Tenant argument and landlord response guide');
     expect(bundleText).not.toContain('This bundle brings together');
     expect(bundleText).not.toContain('This tool provides assistance only');
   }, 120000);
@@ -479,7 +577,9 @@ describe('Section 13 document generation hardening', () => {
     expect(justificationText).toContain('Comparable overview');
     expect(justificationText).toContain('Comparable base: 8 comparable two-bedroom properties within 0.5 miles');
     expect(justificationText).toContain('Flat 2, The Calls, Leeds LS1');
+    expect(justificationText).toContain('Condition and adjustment check');
     expect(justificationText).toContain('Final checks before service or filing');
+    expect(justificationText).toContain('If the tenant queries the increase, respond using the same market evidence.');
     expect(justificationText).not.toContain('This tool provides assistance only');
 
     expect(coverText).toContain(
@@ -490,19 +590,34 @@ describe('Section 13 document generation hardening', () => {
     expect(justificationText).toContain(
       'The recorded comparables support the proposed rent and place it below the adjusted median'
     );
+    expect(argumentText).toContain('1285.00 per month');
     expect(argumentText).toContain(
-      "The landlord relies on the comparable evidence in this file and says the proposed rent of £1285.00 per month should be judged against that market evidence, not against the size of the increase alone."
+      'should be judged against that market evidence, not against the size of the increase alone.'
     );
+    expect(defenceText).toContain('1285.00 per month');
     expect(defenceText).toContain(
-      "The landlord relies on the comparable evidence in this file and says the proposed rent of £1285.00 per month should be judged against that market evidence, not against the size of the increase alone."
+      'should be judged against that market evidence, not against the size of the increase alone.'
+    );
+    expect(defenceText).toContain('Negotiation and settlement');
+    expect(defenceText).toContain(
+      'If service is not valid or cannot be proved, the tribunal may reject or discount the notice file before considering market rent.'
     );
     expect(legalText).toContain('Points the file still has to prove');
     expect(legalText).toContain('Common weakness points');
-    expect(responseText).toContain('Suggested wording for a landlord reply if the tenant asks the tribunal to determine the market rent.');
+    expect(legalText).toContain(
+      'If service is not valid or cannot be proved, the tribunal may reject or discount the notice file before considering market rent.'
+    );
+    expect(responseText).toContain(
+      'Suggested wording for a landlord reply if the tenant asks the tribunal to determine the market rent.'
+    );
     expect(responseText).toContain('Points to confirm in any witness statement or reply');
     expect(responseText).toContain('Evidence to attach');
     expect(responseText).not.toContain('Use this template');
-    expect(coverText).not.toContain('The recorded comparables support the proposed rent and place it below the adjusted median');
-    expect(justificationText).not.toContain('This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles');
+    expect(coverText).not.toContain(
+      'The recorded comparables support the proposed rent and place it below the adjusted median'
+    );
+    expect(justificationText).not.toContain(
+      'This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles'
+    );
   }, 120000);
 });

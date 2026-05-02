@@ -1367,8 +1367,8 @@ const COMMON_RULES = {
 const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowConfig> = {
   england_standard_tenancy_agreement: {
     product: 'england_standard_tenancy_agreement',
-    documentTitle: 'Standard Tenancy Agreement',
-    reviewTitle: 'Standard tenancy agreement review',
+    documentTitle: 'Standard Tenancy Agreement & Setup Pack',
+    reviewTitle: 'Standard tenancy setup pack review',
     warnings: [
       'Use this route for an ordinary England whole-property assured tenancy or, where relevant, a written statement of terms for an existing verbal tenancy.',
       'If the landlord lives in the property, the lodger agreement route is usually a better fit.',
@@ -1386,7 +1386,7 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
     requiredFacts: createEnglandAssuredRequiredFacts([]),
     completionRules: createEnglandAssuredCompletionRules('england_standard_tenancy_agreement'),
     steps: [
-      commonEnglandTenancyPurposeStep('Standard Tenancy Agreement'),
+      commonEnglandTenancyPurposeStep('Standard Tenancy Agreement & Setup Pack'),
       commonEnglandTransitionReferenceStep(),
       {
         id: 'suitability',
@@ -1424,8 +1424,8 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
   },
   england_premium_tenancy_agreement: {
     product: 'england_premium_tenancy_agreement',
-    documentTitle: 'Premium Tenancy Agreement',
-    reviewTitle: 'Premium tenancy agreement review',
+    documentTitle: 'Premium Tenancy Agreement & Management Pack',
+    reviewTitle: 'Premium tenancy management pack review',
     warnings: [
       'Premium is now a fuller ordinary-residential England agreement, not the HMO shortcut.',
       'Choose the HMO / Shared or Lodger route if the occupation setup is materially different.',
@@ -1467,7 +1467,7 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
           : null,
     ],
     steps: [
-      commonEnglandTenancyPurposeStep('Premium Tenancy Agreement'),
+      commonEnglandTenancyPurposeStep('Premium Tenancy Agreement & Management Pack'),
       commonEnglandTransitionReferenceStep(),
       {
         id: 'suitability',
@@ -1849,8 +1849,8 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
   },
   england_hmo_shared_house_tenancy_agreement: {
     product: 'england_hmo_shared_house_tenancy_agreement',
-    documentTitle: 'HMO / Shared House Tenancy Agreement',
-    reviewTitle: 'HMO / shared house tenancy review',
+    documentTitle: 'HMO / Shared House Tenancy Agreement & House Management Pack',
+    reviewTitle: 'HMO / shared house management pack review',
     warnings: [
       'Use this route for sharer and communal-area setups instead of treating HMO as a Premium synonym.',
       'Licensing and local HMO requirements still need factual confirmation outside the wizard.',
@@ -1876,7 +1876,7 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
     ]),
     completionRules: createEnglandAssuredCompletionRules('england_hmo_shared_house_tenancy_agreement'),
     steps: [
-      commonEnglandTenancyPurposeStep('HMO / Shared House Tenancy Agreement'),
+      commonEnglandTenancyPurposeStep('HMO / Shared House Tenancy Agreement & House Management Pack'),
       commonEnglandTransitionReferenceStep(),
       {
         id: 'suitability',
@@ -1965,8 +1965,8 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
   },
   england_lodger_agreement: {
     product: 'england_lodger_agreement',
-    documentTitle: 'Room Let / Lodger Agreement',
-    reviewTitle: 'Room let / lodger agreement review',
+    documentTitle: 'Room Let / Lodger Agreement & Shared Home Pack',
+    reviewTitle: 'Room let / shared home pack review',
     warnings: [
       'Use this route when the landlord lives at the property and the arrangement is a resident-landlord room let.',
       'This is separate from the ordinary residential tenancy products.',

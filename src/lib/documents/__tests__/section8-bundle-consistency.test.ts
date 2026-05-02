@@ -42,10 +42,14 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('Latest proceedings date');
-    expect(content).toContain('Step 1 — Prepare');
-    expect(content).toContain('Step 4 — Align');
+    expect(content).toContain('Step 1 - Prepare');
+    expect(content).toContain('Step 4 - Align');
     expect(content).toContain('{{notice_name}}');
     expect(content).toContain('Form 3A');
+    expect(content).toContain(
+      'any valid method permitted by the tenancy agreement, rules, or court practice'
+    );
+    expect(content).toContain('Ground 8 may not be available');
   });
 
   test('checklist renders both canonical Section 8 support dates', () => {
@@ -66,20 +70,26 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('Latest proceedings date');
     expect(content).toContain('{{notice_name}}');
-    expect(content).toContain("{{#unless (or (eq service_method 'hand') (eq service_method 'post') (eq service_method 'recorded_delivery'))}}");
+    expect(content).toContain(
+      "{{#unless (or (eq service_method 'hand') (eq service_method 'post') (eq service_method 'recorded_delivery'))}}"
+    );
   });
 
   test('hearing checklist includes the practical contingencies section', () => {
     const templatePath = path.join(TEMPLATES_BASE, 'eviction/hearing_checklist.hbs');
     const content = fs.readFileSync(templatePath, 'utf-8');
 
-    expect(content).toContain('{{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}');
+    expect(content).toContain(
+      '{{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}'
+    );
     expect(content).toContain('Latest proceedings date');
     expect(content).toContain('What the court will consider');
-    expect(content).toContain('Common failure points');
-    expect(content).toContain('If the case changes');
-    expect(content).toContain('The tenant attends with a defence.');
-    expect(content).toContain('The tenant raises housing disrepair or a counterclaim.');
+    expect(content).toContain('Ground 8 reminder:');
+    expect(content).toContain('Suggested court bundle order');
+    expect(content).toContain('Tenant defence anticipation');
+    expect(content).toContain('Procedural warnings');
+    expect(content).toContain('Payments not credited.');
+    expect(content).toContain('Hardship or adjournment request.');
     expect(content).not.toContain('[Enter court name]');
   });
 
@@ -99,6 +109,7 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('{{#if (hasValue earliest_proceedings_date)}}');
     expect(content).toContain('{{pack_summary_title}}');
     expect(content).toContain('{{#each compliance_status_items}}');
+    expect(content).toContain('Case Risks &amp; Compliance');
     expect(content).toContain('drafting_model.caseSummary.defendantCircumstancesParagraphs.length');
   });
 
@@ -108,10 +119,7 @@ describe('Section 8 bundle consistency', () => {
       process.cwd(),
       'config/jurisdictions/shared/templates/evidence_collection_checklist.hbs',
     );
-    const coverLetterPath = path.join(
-      TEMPLATES_BASE,
-      'eviction/cover_letter_to_tenant.hbs',
-    );
+    const coverLetterPath = path.join(TEMPLATES_BASE, 'eviction/cover_letter_to_tenant.hbs');
 
     const caseSummaryContent = fs.readFileSync(caseSummaryPath, 'utf-8');
     const evidenceChecklistContent = fs.readFileSync(evidenceChecklistPath, 'utf-8');

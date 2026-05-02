@@ -144,7 +144,7 @@ const PACK_CONTENTS: Record<
     ],
   },
   section13_standard: {
-    heading: 'Your Standard Section 13 Pack',
+    heading: 'Your Standard Section 13 Rent Increase Pack',
     subheading: 'Form 4A notice, service record, and evidence-led support',
     includedDocuments: [
       'Form 4A rent increase notice',
@@ -273,8 +273,8 @@ const STEP_DOCUMENT_FOCUS: Partial<Record<WizardProduct, Record<string, string[]
     charges: ['Rent increase justification report', 'Rent increase cover letter'],
     comparables: ['Rent increase justification report', 'Form 4A rent increase notice'],
     adjustments: ['Rent increase justification report', 'Form 4A rent increase notice'],
-    preview: ['Form 4A rent increase notice', 'Standard Section 13 Pack'],
-    outputs: ['Standard Section 13 Pack'],
+    preview: ['Form 4A rent increase notice', 'Standard Section 13 Rent Increase Pack'],
+    outputs: ['Standard Section 13 Rent Increase Pack'],
   },
   section13_defensive: {
     tenancy: ['Form 4A rent increase notice', 'Rent increase justification report'],

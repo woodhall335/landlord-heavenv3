@@ -20,9 +20,11 @@ DOCUMENT
 TYPE
 House rules appendix
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Alice
+LODGER Alice
 Tenant
-TERM / DATES 2 May 2026 to 1 May 2027
+ROOM LET
+START DATE
+2 May 2026
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
@@ -35,7 +37,7 @@ TENANT Alice Tenant
 Email: alice@example.com
 Telephone: 07000 111111
 
--- 1 of 2 --
+-- 1 of 3 --
 
 Defined Terms
 PROPERTY 12 Example Street, London, SW1A 1AA
@@ -43,7 +45,36 @@ LANDLORD Jane Landlord
 TENANT Alice Tenant
 Operative Provisions
 1. Lodger House Rules Appendix
-HOUSE RULES No overnight guests without prior agreement.
+LICENCE FEE £1500.00
+These house rules form part of the shared-home record and should be kept with the room-let agreement and
+handover notes.
+2. Shared Home Expectations
+General shared-home note: No overnight guests without prior agreement..
+Guest and overnight guest expectations should be recorded clearly.
+Quiet hours should be agreed clearly.
+Kitchen, bathroom, laundry, food storage, and fridge use should be handled respectfully and in line with
+the shared-home routine.
+Smoking, vaping, alcohol, or drugs should follow the resident-landlord house policy and be dealt with
+promptly if an issue arises.
+3. Cleaning, Security, and Privacy
+The resident landlord and lodger should understand the shared-space cleaning arrangement.
+Rubbish and recycling should be dealt with in line with the household arrangements.
+Keys should be kept secure and returned at the end of the arrangement.
+The resident landlord should explain privacy and room-access expectations clearly as part of the shared-
+home arrangement.
+Respectful behaviour is expected in the room, shared areas, and around neighbours or other occupiers.
+
+-- 2 of 3 --
+
+4. Conflict Handling and End of Arrangement
+Issues should be raised promptly and a short written note kept where there is a dispute or repeated
+problem.
+The resident landlord may end the arrangement on notice, and serious misconduct may justify shorter
+notice where lawful and reasonable.
+At the end of the arrangement the lodger should return keys, clear the room, leave shared areas
+reasonably clean, and settle any unpaid licence fees or agreed shared charges.
+A forwarding address should be given if the resident landlord may need to send post-arrangement
+correspondence.
 Execution
 Keep this appendix with the lodger agreement, checklist, and key handover record.
 FILE OWNER
@@ -51,4 +82,4 @@ Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-LODGER-AGREEMENT-LODGER-001
 
--- 2 of 2 --
+-- 3 of 3 --

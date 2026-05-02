@@ -5,10 +5,10 @@ England
 GENERATED
 1 May 2026
 FOR PROPERTIES IN ENGLAND
-Standard Tenancy Agreement
-Tenancy agreement for a residential let in England
-This agreement records the core terms for a straightforward residential letting of the property in
-England.
+Standard Tenancy Agreement & Setup Pack
+Periodic tenancy agreement for a residential let in England
+This agreement forms the core of the tenancy record for a straightforward England periodic
+residential let and should be kept with the supporting documents in this pack.
 PREPARED 16 April
 2026
 FILE
@@ -23,7 +23,9 @@ Residential tenancy agreement
 PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Alice
 Tenant
-TERM / DATES 2 May 2026
+TENANCY START
+DATE
+2 May 2026
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
@@ -45,10 +47,10 @@ LANDLORD Jane Landlord
 TENANT Alice Tenant
 Operative Provisions
 1. Tenancy Status and Core Particulars
-The parties intend the tenant to occupy the Property as their main home on the assured periodic basis
-described in this document.
+This agreement forms the core of the tenancy record for an England periodic residential let and should be kept
+with the supporting documents in this pack.
 TENANCY TYPE New periodic tenancy agreement
-PACK Standard Tenancy Agreement
+PACK Standard Tenancy Agreement & Setup Pack
 FURNISHED
 STATUS
 furnished
@@ -58,11 +60,13 @@ DATE
 The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-
 term drafting is created by this document unless a solicitor-approved route is expressly used outside this
 product.
+If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including
+possession.
 The Landlord agrees to let the Property to the Tenant for residential occupation on the terms set out in
 this agreement.
 A.
 The parties intend this document to record the principal occupation, payment, and management terms
-for the letting.
+for the letting so the tenancy file stays clear from the start.
 B.
 
 -- 2 of 7 --
@@ -199,7 +203,8 @@ occupation, payment, access, and house-rule terms without the wider operational 
 premium route.
 9. Supporting Schedules and File Documents
 This pack includes the main agreement together with a pre-tenancy checklist, keys handover record,
-utilities handover sheet, pet request addendum, and tenancy variation record.
+utilities handover sheet, pet request addendum, and tenancy variation record so the tenancy file stays
+complete from the start.
 
 -- 6 of 7 --
 

@@ -45,7 +45,7 @@ export const RESIDENTIAL_LETTING_PRICE_RANGE = formatPriceRangeLabel([
 export const RESIDENTIAL_LETTING_PRODUCTS = {
   england_standard_tenancy_agreement: {
     sku: 'england_standard_tenancy_agreement',
-    label: 'Standard Tenancy Agreement',
+    label: 'Standard Tenancy Agreement & Setup Pack',
     shortLabel: 'Standard',
     description:
       'Ordinary England residential tenancy agreement for a straightforward whole-property let',
@@ -56,10 +56,10 @@ export const RESIDENTIAL_LETTING_PRODUCTS = {
   },
   england_premium_tenancy_agreement: {
     sku: 'england_premium_tenancy_agreement',
-    label: 'Premium Tenancy Agreement',
+    label: 'Premium Tenancy Agreement & Management Pack',
     shortLabel: 'Premium',
     description:
-      'Ordinary England residential premium tenancy agreement with fuller drafting and management options',
+      'England periodic tenancy agreement with fuller management controls and operational support',
     price: ENGLAND_PREMIUM_TENANCY_PRICE,
     displayPrice: ENGLAND_PREMIUM_TENANCY_DISPLAY,
     topic: 'tenancy',
@@ -78,7 +78,7 @@ export const RESIDENTIAL_LETTING_PRODUCTS = {
   },
   england_hmo_shared_house_tenancy_agreement: {
     sku: 'england_hmo_shared_house_tenancy_agreement',
-    label: 'HMO / Shared House Tenancy Agreement',
+    label: 'HMO / Shared House Tenancy Agreement & House Management Pack',
     shortLabel: 'HMO / Shared',
     description:
       'England shared-house and HMO tenancy agreement with communal-area and sharer drafting',
@@ -89,7 +89,7 @@ export const RESIDENTIAL_LETTING_PRODUCTS = {
   },
   england_lodger_agreement: {
     sku: 'england_lodger_agreement',
-    label: 'Room Let / Lodger Agreement',
+    label: 'Room Let / Lodger Agreement & Shared Home Pack',
     shortLabel: 'Lodger',
     description:
       'England resident-landlord lodger agreement for a room let or licence-style arrangement',

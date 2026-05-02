@@ -443,49 +443,65 @@ describe('getPackContents', () => {
   describe('modern England tenancy agreement products', () => {
     const englandProducts: Array<{
       product: GetPackContentsArgs['product'];
+      firstKey: string;
+      firstTitle: string;
       key: string;
       title: string;
       supportKey: string;
     }> = [
       {
         product: 'england_standard_tenancy_agreement',
+        firstKey: 'england_tenancy_setup_summary',
+        firstTitle: 'Tenancy Setup Summary',
         key: 'england_standard_tenancy_agreement',
-        title: 'Standard Tenancy Agreement',
+        title: 'Standard Tenancy Agreement & Setup Pack',
         supportKey: 'pre_tenancy_checklist_england',
       },
       {
         product: 'england_premium_tenancy_agreement',
+        firstKey: 'england_tenancy_setup_summary',
+        firstTitle: 'Tenancy Setup Summary',
         key: 'england_premium_tenancy_agreement',
-        title: 'Premium Tenancy Agreement',
+        title: 'Premium Tenancy Agreement & Management Pack',
         supportKey: 'pre_tenancy_checklist_england',
       },
       {
         product: 'england_student_tenancy_agreement',
+        firstKey: 'england_student_tenancy_agreement',
+        firstTitle: 'Student Tenancy Agreement',
         key: 'england_student_tenancy_agreement',
         title: 'Student Tenancy Agreement',
         supportKey: 'pre_tenancy_checklist_england',
       },
       {
         product: 'england_hmo_shared_house_tenancy_agreement',
+        firstKey: 'england_hmo_setup_summary',
+        firstTitle: 'HMO Setup Summary',
         key: 'england_hmo_shared_house_tenancy_agreement',
-        title: 'HMO / Shared House Tenancy Agreement',
+        title: 'HMO / Shared House Tenancy Agreement & House Management Pack',
         supportKey: 'pre_tenancy_checklist_england',
       },
       {
         product: 'england_lodger_agreement',
+        firstKey: 'england_room_let_summary',
+        firstTitle: 'Room Let Summary',
         key: 'england_lodger_agreement',
-        title: 'Room Let / Lodger Agreement',
+        title: 'Room Let / Lodger Agreement & Shared Home Pack',
         supportKey: 'england_lodger_checklist',
       },
     ];
 
-    it.each(englandProducts)('$product returns its own primary agreement document plus its support document for England', ({ product, key, title, supportKey }) => {
+    it.each(englandProducts)('$product returns its own primary agreement document plus its support document for England', ({ product, firstKey, firstTitle, key, title, supportKey }) => {
       const items = getPackContents({
         product,
         jurisdiction: 'england',
       });
 
       expect(items[0]).toMatchObject({
+        key: firstKey,
+        title: firstTitle,
+      });
+      expect(items.find((item) => item.key === key)).toMatchObject({
         key,
         title,
         category: 'Tenancy agreement',

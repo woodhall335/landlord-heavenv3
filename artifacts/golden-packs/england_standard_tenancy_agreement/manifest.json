@@ -1,12 +1,30 @@
 {
   "key": "england_standard_tenancy_agreement",
-  "displayName": "Standard Tenancy Agreement",
+  "displayName": "Standard Tenancy Agreement & Setup Pack",
   "outputDir": "england_standard_tenancy_agreement",
-  "documentCount": 8,
+  "documentCount": 9,
   "documents": [
     {
-      "title": "Standard Tenancy Agreement",
-      "description": "Standard tenancy agreement for a residential let in England.",
+      "title": "Tenancy Setup Summary",
+      "description": "Front-page summary of the England periodic tenancy setup, key checks, and next step.",
+      "category": "guidance",
+      "documentType": "england_tenancy_setup_summary",
+      "fileName": "england-tenancy-setup-summary.pdf",
+      "files": {
+        "pdf": "england_standard_tenancy_agreement/england-tenancy-setup-summary.pdf",
+        "text": "england_standard_tenancy_agreement/england-tenancy-setup-summary.txt",
+        "html": "england_standard_tenancy_agreement/england-tenancy-setup-summary.html"
+      },
+      "extraction": {
+        "pageCount": 3,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Standard Tenancy Agreement & Setup Pack",
+      "description": "Standard periodic tenancy agreement and setup pack for a residential let in England.",
       "category": "agreement",
       "documentType": "england_standard_tenancy_agreement",
       "fileName": "england-standard-tenancy-agreement.pdf",

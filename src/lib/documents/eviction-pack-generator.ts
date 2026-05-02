@@ -936,12 +936,12 @@ function buildPackStrapline(stage: EnglandSection8PackStage): string {
 
 function buildPackSupportingLine(stage: EnglandSection8PackStage): string {
   return stage === 'stage1'
-    ? 'This pack aligns the notice, service, and evidence so your case doesn’t fall apart on technical errors.'
-    : 'This pack turns the served notice into a court-ready possession file that stays consistent under scrutiny.';
+    ? 'This pack aligns the notice, service, and evidence so your case does not fall apart on technical errors.'
+    : 'This pack builds a possession claim that can be issued and relied on in court without breaking on inconsistency.';
 }
 
 function buildPackRiskLine(): string {
-  return 'Most possession cases fail on notice, service, or consistency errors — this pack is designed to prevent those.';
+  return 'Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and under review as the case moves forward.';
 }
 
 function buildPackStatusLabel(
@@ -950,30 +950,34 @@ function buildPackStatusLabel(
 ): string {
   const hasCritical = items.some((item) => item.severity === 'critical');
   if (hasCritical) {
-    return stage === 'stage1' ? 'DO NOT SERVE YET' : 'DO NOT ISSUE - CASE MAY FAIL';
+    return stage === 'stage1' ? 'DO NOT SERVE - CASE MAY FAIL' : 'DO NOT ISSUE - CASE MAY FAIL';
   }
 
   const hasRisk = items.some((item) => item.severity === 'risk');
   if (hasRisk) {
-    return stage === 'stage1' ? 'SERVE WITH RISKS' : 'PREPARE WITH RISKS';
+    return stage === 'stage1'
+      ? 'SERVE WITH RISKS - CHECK BEFORE SERVICE'
+      : 'PREPARE WITH RISKS - REVIEW BEFORE ISSUE';
   }
 
-  return stage === 'stage1' ? 'READY TO SERVE' : 'READY FOR COURT';
+  return stage === 'stage1'
+    ? 'READY TO SERVE - NOTICE FILE ALIGNED'
+    : 'READY FOR COURT - CLAIM FILE ALIGNED';
 }
 
 function buildPackOutcomeBullets(stage: EnglandSection8PackStage): string[] {
   if (stage === 'stage1') {
     return [
-      'Generates a legally structured Section 8 notice',
-      'Aligns service and evidence',
-      'Reduces risk of rejection or delay',
+      'Prepares a Section 8 notice and service record that can be relied on without the case being rejected on avoidable technical errors.',
+      'Keeps the notice, service route, and supporting evidence aligned in one file.',
+      'Reduces the risk of rejection, delay, or inconsistency before the case reaches court.',
     ];
   }
 
   return [
-    'Prepares a possession claim file that can be issued and defended without inconsistency across notice, service, and evidence',
-    'Carries the served notice, claim forms, service record, and arrears evidence in one continuous case file',
-    'Reduces the risk of delay, contradiction, or avoidable challenge in court',
+    'Builds a possession claim that can be issued and relied on in court without breaking on inconsistency.',
+    'Carries the served notice, claim forms, service record, and arrears evidence in one continuous case file.',
+    'Reduces the risk of delay, contradiction, or avoidable challenge in court.',
   ];
 }
 

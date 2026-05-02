@@ -33,7 +33,7 @@ export const ENGLAND_TENANCY_PRODUCT_IMAGES = {
   },
   england_lodger_agreement: {
     src: '/images/room_let_agreement.webp',
-    alt: 'Room Let / Lodger Agreement document preview',
+    alt: 'Room Let / Lodger Agreement & Shared Home Pack document preview',
   },
 } as const satisfies Record<EnglandModernTenancyProductSku, EnglandTenancyProductImage>;
 
@@ -99,15 +99,15 @@ export function getEnglandTenancyProductLabel(
 ): string {
   switch (getEnglandCanonicalTenancyProduct(value) ?? value) {
     case 'england_standard_tenancy_agreement':
-      return 'Standard Tenancy Agreement';
+      return 'Standard Tenancy Agreement & Setup Pack';
     case 'england_premium_tenancy_agreement':
-      return 'Premium Tenancy Agreement';
+      return 'Premium Tenancy Agreement & Management Pack';
     case 'england_student_tenancy_agreement':
       return 'Student Tenancy Agreement';
     case 'england_hmo_shared_house_tenancy_agreement':
-      return 'HMO / Shared House Tenancy Agreement';
+      return 'HMO / Shared House Tenancy Agreement & House Management Pack';
     case 'england_lodger_agreement':
-      return 'Room Let / Lodger Agreement';
+      return 'Room Let / Lodger Agreement & Shared Home Pack';
     default:
       return 'England Tenancy Agreement';
   }

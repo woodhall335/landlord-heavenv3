@@ -1,0 +1,93 @@
+CASE ID
+golden-lodger-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
+FOR PROPERTIES IN ENGLAND
+Room Let Summary
+Resident-landlord room-let summary and readiness page
+Use this summary as the front sheet for the shared-home file so the room-let position, key controls,
+and next step are easy to follow.
+PREPARED 16 April
+2026
+FILE
+REFERENCE
+RL-ENGLAND-LODGER-
+AGREEMENT-LODGER-001
+EFFECTIVE DATE 2 May
+2026
+DOCUMENT
+TYPE
+Room let summary
+PROPERTY 12 Example Street, London, SW1A 1AA
+LODGER Alice
+Tenant
+ROOM LET
+START DATE
+2 May 2026
+RENT £1500.00 DEPOSIT £1500.00
+Parties
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+LANDLORD Jane Landlord
+3 Owner Road, London, SW1A 2BB
+Email: jane@example.com
+Telephone: 07123 456789
+TENANT Alice Tenant
+12 Example Street, London, SW1A 1AA
+Email: alice@example.com
+Telephone: 07000 111111
+
+-- 1 of 3 --
+
+Defined Terms
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Alice Tenant
+Operative Provisions
+1. Room Let Summary
+This summary keeps the resident-landlord room-let file clear so the shared-home arrangement is practical,
+well recorded, and easy to follow later.
+RESIDENT
+LANDLORD
+CONFIRMED
+Yes
+LODGER Alice Tenant
+ROOM / AREA
+OCCUPIED
+Room within the property
+START DATE 2 May 2026
+LICENCE FEE £1500.00
+BILLS INCLUDED Gas, Electricity, Internet / broadband
+NOTICE PERIOD 28 days
+HOUSE RULES
+STATUS
+No overnight guests without prior agreement.
+KEY HANDOVER
+STATUS
+Record to be completed at handover
+STATUS SIGN WITH CHECKS
+This agreement is intended for a room let in the landlord's own home where the landlord remains resident. It is
+not intended to create an assured tenancy.
+If the room let is not set up clearly and consistently, it can make later issues around notice, conduct, and
+hand-back harder to manage.
+
+-- 2 of 3 --
+
+2. Key Setup Checks
+Record the key return and room hand-back expectation.
+3. What This Pack Does
+Supporting documents included: Room let / shared home pack agreement; Room let checklist; Keys and
+handover record; Lodger house rules appendix.
+Next step: clear the recorded checks and confirm the room-let expectations before signature.
+Protects the shared-home arrangement with clear room-let, key, and house-rule records.
+Helps avoid avoidable disputes over guests, cleaning, shared-space use, and hand-back.
+Keeps the room-let file complete if conduct, notice, or move-out issues arise later.
+Execution
+This document should be signed and dated by the parties and retained with the tenancy records.
+FILE OWNER
+Jane Landlord
+Signature Date
+Landlord Heaven file copy RL-ENGLAND-LODGER-AGREEMENT-LODGER-001
+
+-- 3 of 3 --

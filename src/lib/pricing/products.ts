@@ -156,9 +156,9 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   section13_standard: {
     sku: 'section13_standard',
-    label: 'Standard Section 13 Pack',
+    label: 'Standard Section 13 Rent Increase Pack',
     shortLabel: 'Standard Section 13',
-    description: 'Generate Form 4A, proof of service, and a clear rent increase report before you serve',
+    description: 'Propose a rent increase with Form 4A, market evidence, and the service record kept together',
     price: SEO_PRICES.section13Standard.amount,
     displayPrice: SEO_PRICES.section13Standard.display,
     priceNote: 'For landlords in England',
@@ -211,10 +211,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   england_standard_tenancy_agreement: {
     sku: 'england_standard_tenancy_agreement',
-    label: 'Standard Tenancy Agreement',
+    label: 'Standard Tenancy Agreement & Setup Pack',
     shortLabel: 'Standard',
     description:
-      'Ordinary England residential tenancy agreement for a straightforward whole-property let',
+      'Clean England periodic tenancy setup pack for a straightforward whole-property let',
     price: SEO_PRICES.tenancyStandard.amount,
     displayPrice: SEO_PRICES.tenancyStandard.display,
     wizardHref:
@@ -223,10 +223,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   england_premium_tenancy_agreement: {
     sku: 'england_premium_tenancy_agreement',
-    label: 'Premium Tenancy Agreement',
+    label: 'Premium Tenancy Agreement & Management Pack',
     shortLabel: 'Premium',
     description:
-      'Ordinary England residential premium tenancy agreement with fuller drafting and management options',
+      'England periodic tenancy agreement with fuller management controls and operational support',
     price: SEO_PRICES.tenancyPremium.amount,
     displayPrice: SEO_PRICES.tenancyPremium.display,
     wizardHref:
@@ -247,10 +247,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   england_hmo_shared_house_tenancy_agreement: {
     sku: 'england_hmo_shared_house_tenancy_agreement',
-    label: 'HMO / Shared House Tenancy Agreement',
+    label: 'HMO / Shared House Tenancy Agreement & House Management Pack',
     shortLabel: 'HMO / Shared',
     description:
-      'England shared-house and HMO tenancy agreement with sharer, communal-area, and licensing detail',
+      'England shared-house and HMO tenancy pack with communal rules, sharer controls, and licensing detail',
     price: SEO_PRICES.tenancyHmoShared.amount,
     displayPrice: SEO_PRICES.tenancyHmoShared.display,
     wizardHref:
@@ -259,10 +259,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   england_lodger_agreement: {
     sku: 'england_lodger_agreement',
-    label: 'Room Let / Lodger Agreement',
+    label: 'Room Let / Lodger Agreement & Shared Home Pack',
     shortLabel: 'Lodger',
     description:
-      'England resident-landlord lodger agreement for a room let or licence-style arrangement',
+      'England resident-landlord room let pack built to protect the home and set shared living expectations clearly',
     price: SEO_PRICES.tenancyLodger.amount,
     displayPrice: SEO_PRICES.tenancyLodger.display,
     wizardHref:

@@ -292,6 +292,7 @@ export interface Section13GeneratedBundle {
 }
 
 export const SECTION13_CORE_DOCUMENT_TYPES = [
+  'section13_rent_increase_summary',
   'section13_form_4a',
   'section13_justification_report',
   'section13_proof_of_service_record',
@@ -300,6 +301,8 @@ export const SECTION13_CORE_DOCUMENT_TYPES = [
 
 export const SECTION13_DEFENSIVE_DOCUMENT_TYPES = [
   ...SECTION13_CORE_DOCUMENT_TYPES,
+  'section13_property_condition_comparison_sheet',
+  'section13_tenant_argument_response_guide',
   'section13_tribunal_argument_summary',
   'section13_tribunal_defence_guide',
   'section13_landlord_response_template',
@@ -317,8 +320,11 @@ export const SECTION13_BUNDLE_DOCUMENT_TYPES = [
 ] as const;
 
 export const SECTION13_BUNDLE_SOURCE_DOCUMENT_TYPES = [
+  'section13_rent_increase_summary',
   'section13_form_4a',
   'section13_justification_report',
+  'section13_property_condition_comparison_sheet',
+  'section13_tenant_argument_response_guide',
   'section13_tribunal_argument_summary',
   'section13_proof_of_service_record',
   'section13_cover_letter',
@@ -1593,6 +1599,179 @@ async function generateSection13Form4A(
   return pdfDoc.save();
 }
 
+function buildSection13NextStepText(state: Section13State, snapshot?: Section13OutputSnapshot | null): string {
+  const resolvedState = getSnapshotState(state, snapshot);
+  const preview = getResolvedPreview(resolvedState, snapshot);
+
+  if (preview?.warnings?.length) {
+    return 'Clear the recorded notice-date or evidence warnings before service, then keep the notice, market evidence, and proof-of-service record together.';
+  }
+
+  return 'Serve Form 4A using the recorded method, keep the market evidence and service record with it, and answer any tenant query from the same figures and comparables.';
+}
+
+function buildPropertyConditionComparisonLines(comparables: Section13Comparable[]): string[] {
+  if (comparables.length === 0) {
+    return ['No comparable properties have been added yet. Add recent comparables before relying on this sheet.'];
+  }
+
+  return comparables.flatMap((comparable, index) => {
+    const readMeta = (key: string): string => {
+      const value = comparable.metadata?.[key];
+      return typeof value === 'string' && value.trim().length > 0 ? value.trim() : '';
+    };
+    const adjustments = comparable.adjustments?.length
+      ? comparable.adjustments.map((adjustment) => `${adjustment.category}: ${adjustment.reason}`).join('; ')
+      : 'No recorded adjustment beyond the saved comparable figure.';
+
+    return [
+      `${index + 1}. Comparable: ${comparable.addressSnippet || 'Address not recorded'} | ${formatCurrency(comparable.adjustedMonthlyEquivalent)} pcm adjusted | ${comparable.distanceMiles ?? 0} miles`,
+      `   Subject property condition: ${readMeta('subjectPropertyCondition') || 'No separate condition note recorded'}.`,
+      `   Comparable condition: ${readMeta('comparableCondition') || 'No separate condition note recorded'}.`,
+      `   Features and furnishings: ${readMeta('featureComparison') || readMeta('furnishingComparison') || 'No separate feature comparison recorded'}.`,
+      `   Size / bedrooms: ${comparable.bedrooms ?? 'Unknown'} bedroom(s).`,
+      `   Adjustment and reason: ${adjustments}`,
+      `   Photos / evidence reference: ${readMeta('photoReference') || comparable.sourceUrl || 'Use the saved comparable source and any supporting photos.'}`,
+    ];
+  });
+}
+
+function buildTenantArgumentResponseLines(
+  state: Section13State,
+  comparables: Section13Comparable[],
+  snapshot?: Section13OutputSnapshot | null
+): string[] {
+  const resolvedState = getSnapshotState(state, snapshot);
+  const preview = getResolvedPreview(resolvedState, snapshot);
+  const firstComparable = comparables[0];
+
+  return [
+    `1. Tenant argument: Rent increase is too high | Response: Keep the reply anchored to the comparable evidence and the proposed market position. | Evidence to check: justification report, adjusted range, challenge band (${preview?.challengeBandLabel || 'Not available'}). | Document to refer to: Rent Increase Summary and Justification Report.`,
+    `2. Tenant argument: Property condition is worse than comparables | Response: Deal with condition directly and explain any adjustment or why none was required on the saved evidence. | Evidence to check: property condition comparison sheet, photographs, inspection notes. | Document to refer to: Property Condition Comparison Sheet.`,
+    `3. Tenant argument: Comparable properties are not similar | Response: Point to locality, bedroom count, and the nearest source-backed examples${firstComparable?.addressSnippet ? ` such as ${firstComparable.addressSnippet}` : ''}. | Evidence to check: comparable table, distance, source dates. | Document to refer to: Justification Report and Tribunal Argument Summary.`,
+    `4. Tenant argument: Notice served incorrectly | Response: Keep the reply tied to the recorded method, service date, and the same Form 4A that appears in the file. | Evidence to check: proof of service record and service chronology. | Document to refer to: Proof of Service Record and Cover Letter.`,
+    `5. Tenant argument: Start date is invalid | Response: Check the two-month notice rule, tenancy-period alignment, and 52/53-week timing before taking a fixed position. | Evidence to check: preview warnings and date calculations. | Document to refer to: Rent Increase Summary and Justification Report.`,
+    `6. Tenant argument: Tenant cannot afford it | Response: Keep the reply respectful but focused on the tribunal test, which is open-market rent rather than affordability alone. | Evidence to check: open-market comparable evidence and any written proposal for a revised figure or later date. | Document to refer to: Cover Letter and Landlord Response Template.`,
+  ];
+}
+
+async function buildRentIncreaseSummaryPdf(
+  state: Section13State,
+  comparables: Section13Comparable[],
+  snapshot?: Section13OutputSnapshot | null
+): Promise<Uint8Array> {
+  const resolvedState = getSnapshotState(state, snapshot);
+  const preview = getResolvedPreview(resolvedState, snapshot);
+
+  return createNarrativePdf(
+    'Rent Increase Summary',
+    [
+      {
+        variant: 'intro',
+        lines: [
+          'This summary keeps the proposed rent increase, service record, and market evidence aligned on one front page.',
+          `Property: ${buildPropertyAddress(resolvedState)}`,
+          `Tenant(s): ${resolvedState.tenancy.tenantNames.join(', ')}`,
+        ],
+      },
+      {
+        heading: 'Core facts',
+        lines: [
+          `Current rent: ${formatCurrency(resolvedState.tenancy.currentRentAmount)} ${frequencyLabel(resolvedState.tenancy.currentRentFrequency)}`,
+          `Proposed rent: ${formatCurrency(resolvedState.proposal.proposedRentAmount)} ${frequencyLabel(resolvedState.tenancy.currentRentFrequency)}`,
+          `Proposed start date: ${formatDateUk(resolvedState.proposal.proposedStartDate) || 'Not entered'}`,
+          `Service date: ${formatDateUk(resolvedState.proposal.serviceDate) || 'Not recorded'}`,
+          `Evidence strength: ${preview?.evidenceBandLabel || 'Not available'}`,
+          `Challenge band: ${preview?.challengeBandLabel || 'Not available'}`,
+          `Comparable count: ${preview?.comparableCount ?? comparables.length}`,
+        ],
+      },
+      {
+        heading: 'What this file does',
+        lines: [
+          'It keeps Form 4A, the market evidence, and the proof-of-service record together so the proposed increase can be explained consistently.',
+          'If referred to the tribunal, the question is the open-market rent for the property on comparable terms, not simply whether the increase feels large or small.',
+        ],
+      },
+      {
+        heading: 'Next step',
+        lines: [
+          buildSection13NextStepText(resolvedState, snapshot),
+        ],
+      },
+    ],
+    'Landlord Heaven | Section 13 rent increase summary'
+  );
+}
+
+async function buildPropertyConditionComparisonSheetPdf(
+  state: Section13State,
+  comparables: Section13Comparable[],
+  snapshot?: Section13OutputSnapshot | null
+): Promise<Uint8Array> {
+  const resolvedState = getSnapshotState(state, snapshot);
+
+  return createNarrativePdf(
+    'Property Condition Comparison Sheet',
+    [
+      {
+        variant: 'intro',
+        lines: [
+          'Use this sheet if the tenant says the property condition or specification is weaker than the comparables relied on.',
+          `Property: ${buildPropertyAddress(resolvedState)}`,
+        ],
+      },
+      {
+        heading: 'Comparison sheet',
+        lines: buildPropertyConditionComparisonLines(comparables),
+      },
+      {
+        heading: 'How to use this sheet',
+        lines: [
+          'If a comparable needs a condition-based adjustment, say what the difference is and why it matters to market rent.',
+          'If no adjustment was applied, explain why the subject property and comparable were treated as close enough on the saved evidence.',
+        ],
+      },
+    ],
+    'Section 13 Defensive Pack | Property condition comparison sheet'
+  );
+}
+
+async function buildTenantArgumentResponseGuidePdf(
+  state: Section13State,
+  comparables: Section13Comparable[],
+  snapshot?: Section13OutputSnapshot | null
+): Promise<Uint8Array> {
+  const resolvedState = getSnapshotState(state, snapshot);
+
+  return createNarrativePdf(
+    'Tenant Argument and Landlord Response Guide',
+    [
+      {
+        variant: 'intro',
+        lines: [
+          'This guide helps the landlord answer the most common challenge points without breaking alignment across the notice, service record, and evidence file.',
+          `Property: ${buildPropertyAddress(resolvedState)}`,
+        ],
+      },
+      {
+        heading: 'Argument and response table',
+        lines: buildTenantArgumentResponseLines(resolvedState, comparables, snapshot),
+      },
+      {
+        heading: 'Negotiation strategy',
+        lines: [
+          'Stand firm where the comparable evidence is current, consistent, and clearly supports the proposed figure.',
+          'Consider a small concession or later start date where the evidence is mixed, a condition point is fair, or a written agreement would avoid an unnecessary tribunal reference.',
+          'Record any settlement in writing and make sure any agreed variation does not conflict with the Form 4A position or service record already relied on.',
+          'If service is not valid or cannot be proved, the tribunal may reject or discount the notice file before considering market rent.',
+        ],
+      },
+    ],
+    'Section 13 Defensive Pack | Tenant argument and landlord response guide'
+  );
+}
+
 async function buildCoverLetterPdf(
   state: Section13State,
   snapshot?: Section13OutputSnapshot | null
@@ -1642,6 +1821,7 @@ async function buildCoverLetterPdf(
           `Recorded service date: ${formatDateUk(resolvedState.proposal.serviceDate) || 'Not recorded'}`,
           SECTION13_TRIBUNAL_WARNING,
           'If the tenant queries the figure, answer from the same rent figures, dates, and comparable evidence shown in Form 4A and the justification report.',
+          'If a revised figure or later start date is agreed, record that in writing so the negotiated position does not drift away from the notice file.',
         ],
       },
     ],
@@ -1701,6 +1881,16 @@ async function buildJustificationReportPdf(
       ],
     },
     {
+      heading: 'Condition and adjustment check',
+      lines: [
+        'Condition considered: use the saved comparable notes, photographs, and any inspection material kept with the file to explain whether the subject property is stronger, weaker, or broadly similar.',
+        `Size and bedroom count considered: ${resolvedState.tenancy.bedrooms ?? 'Unknown'} bedroom property compared against the saved comparable schedule.`,
+        resolvedComparables.some((item) => item.adjustments?.length)
+          ? 'Adjustments applied: see the comparable schedule and the property condition comparison sheet for the recorded reasons behind each material adjustment.'
+          : 'Adjustments applied: no separate manual adjustment is recorded beyond the comparable figures saved in the file, so the landlord position should explain why the chosen comparables were treated as sufficiently similar.',
+      ],
+    },
+    {
       variant: 'callout',
       heading: 'Comparable overview',
       lines: buildComparableOverviewLines(resolvedState, resolvedComparables, snapshot),
@@ -1720,7 +1910,10 @@ async function buildJustificationReportPdf(
         heading: 'Final checks before service or filing',
         lines: [
           SECTION13_TRIBUNAL_WARNING,
+          'Check that Form 4A is the current prescribed notice and that the completed notice matches the final figures in the report.',
+          'Confirm that at least two months notice is given, that the proposed start date aligns with the tenancy period, and that the 52/53-week timing rule has been checked.',
           'Check that the service date, proposed start date, and rent figures match the final Form 4A notice, the proof of service record, and the comparable evidence file before sending or relying on them.',
+          'If the tenant queries the increase, respond using the same market evidence. If a revised figure or later start date is agreed, record that agreement in writing so it does not conflict with the notice file.',
         ],
       },
     ];
@@ -1768,10 +1961,18 @@ async function buildDefenceGuidePdf(state: Section13State): Promise<Uint8Array> 
         ],
       },
       {
+        heading: 'Negotiation and settlement',
+        lines: [
+          'Stand firm where the comparable evidence is current, consistent, and clearly supports the proposed figure.',
+          'Consider a small concession or later start date where the evidence is mixed or a condition point is fairly raised, but record any agreement in writing so it stays aligned with the notice file.',
+        ],
+      },
+      {
         heading: 'Keep your position consistent',
         lines: [
           ...buildConsistencyLines(state, [], null),
           'Be ready to explain property condition, tenancy-period alignment, and how the earliest valid start date was calculated under the post-1 May 2026 rules.',
+          'If service is not valid or cannot be proved, the tribunal may reject or discount the notice file before considering market rent.',
         ],
       },
     ],
@@ -1863,6 +2064,7 @@ async function buildLegalBriefingPdf(state: Section13State): Promise<Uint8Array>
         lines: [
           'The landlord still needs to show that the notice was validly served, that the proposed start date satisfies the statutory timing rules, and that the proposed rent is the figure best supported by the comparable evidence on the tribunal date.',
           'A clean service record, a stable chronology, and current comparables usually matter more than broad statements that the increase felt reasonable at the time it was proposed.',
+          'If service is not valid or cannot be proved, the tribunal may reject or discount the notice file before considering market rent.',
         ],
       },
       {
@@ -2223,6 +2425,21 @@ export async function generateSection13PreviewableDocument(params: {
   }
 
   switch (documentType) {
+    case 'section13_rent_increase_summary': {
+      const pdfBytes = await buildRentIncreaseSummaryPdf(
+        resolvedState,
+        resolvedComparables,
+        snapshot
+      );
+      return {
+        title: 'Rent Increase Summary',
+        description: 'Front-page summary of the proposed increase, evidence position, and next step.',
+        category: 'guidance',
+        document_type: 'section13_rent_increase_summary',
+        file_name: `section13-rent-increase-summary-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
     case 'section13_form_4a': {
       const pdfBytes = await generateSection13Form4A(resolvedState, snapshot);
       return {
@@ -2287,6 +2504,36 @@ export async function generateSection13PreviewableDocument(params: {
         category: 'guidance',
         document_type: 'section13_cover_letter',
         file_name: `section13-cover-letter-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_property_condition_comparison_sheet': {
+      const pdfBytes = await buildPropertyConditionComparisonSheetPdf(
+        resolvedState,
+        resolvedComparables,
+        snapshot
+      );
+      return {
+        title: 'Property condition comparison sheet',
+        description: 'Condition-led comparison sheet for the subject property and saved comparables.',
+        category: 'evidence',
+        document_type: 'section13_property_condition_comparison_sheet',
+        file_name: `section13-property-condition-comparison-sheet-${caseId}.pdf`,
+        pdf: Buffer.from(pdfBytes),
+      };
+    }
+    case 'section13_tenant_argument_response_guide': {
+      const pdfBytes = await buildTenantArgumentResponseGuidePdf(
+        resolvedState,
+        resolvedComparables,
+        snapshot
+      );
+      return {
+        title: 'Tenant argument and landlord response guide',
+        description: 'Challenge-ready table for likely tenant objections and the supporting landlord response.',
+        category: 'guidance',
+        document_type: 'section13_tenant_argument_response_guide',
+        file_name: `section13-tenant-argument-response-guide-${caseId}.pdf`,
         pdf: Buffer.from(pdfBytes),
       };
     }

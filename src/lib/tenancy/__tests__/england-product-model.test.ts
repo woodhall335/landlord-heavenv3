@@ -48,10 +48,18 @@ describe('england-product-model', () => {
   });
 
   it('returns stable display labels for the England tenancy products', () => {
-    expect(getEnglandTenancyProductLabel('england_standard_tenancy_agreement')).toBe('Standard Tenancy Agreement');
-    expect(getEnglandTenancyProductLabel('england_premium_tenancy_agreement')).toBe('Premium Tenancy Agreement');
+    expect(getEnglandTenancyProductLabel('england_standard_tenancy_agreement')).toBe(
+      'Standard Tenancy Agreement & Setup Pack'
+    );
+    expect(getEnglandTenancyProductLabel('england_premium_tenancy_agreement')).toBe(
+      'Premium Tenancy Agreement & Management Pack'
+    );
     expect(getEnglandTenancyProductLabel('england_student_tenancy_agreement')).toBe('Student Tenancy Agreement');
-    expect(getEnglandTenancyProductLabel('england_hmo_shared_house_tenancy_agreement')).toBe('HMO / Shared House Tenancy Agreement');
-    expect(getEnglandTenancyProductLabel('england_lodger_agreement')).toBe('Room Let / Lodger Agreement');
+    expect(getEnglandTenancyProductLabel('england_hmo_shared_house_tenancy_agreement')).toBe(
+      'HMO / Shared House Tenancy Agreement & House Management Pack'
+    );
+    expect(getEnglandTenancyProductLabel('england_lodger_agreement')).toBe(
+      'Room Let / Lodger Agreement & Shared Home Pack'
+    );
   });
 });

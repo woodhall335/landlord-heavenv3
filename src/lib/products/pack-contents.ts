@@ -27,6 +27,13 @@ export type PackItemCategory =
 function getEnglandSection13Contents(product: string): PackItem[] {
   const baseItems: PackItem[] = [
     {
+      key: 'section13_rent_increase_summary',
+      title: 'Rent Increase Summary',
+      description: 'Front-page summary of the proposed increase, evidence position, challenge band, and next step.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
       key: 'section13_form_4a',
       title: 'Form 4A rent increase notice',
       description: 'Official England Form 4A completed from your Section 13 wizard answers.',
@@ -62,6 +69,20 @@ function getEnglandSection13Contents(product: string): PackItem[] {
 
   return [
     ...baseItems,
+    {
+      key: 'section13_property_condition_comparison_sheet',
+      title: 'Property condition comparison sheet',
+      description: 'Condition-led comparison sheet showing how the subject property lines up against each comparable used in the file.',
+      category: 'Evidence',
+      required: true,
+    },
+    {
+      key: 'section13_tenant_argument_response_guide',
+      title: 'Tenant argument and landlord response guide',
+      description: 'Challenge-ready table matching likely tenant objections to the evidence and documents to rely on.',
+      category: 'Guidance',
+      required: true,
+    },
     {
       key: 'section13_tribunal_argument_summary',
       title: 'Tribunal Argument Summary',
@@ -150,10 +171,10 @@ function getEnglandResidentialLettingContents(args: GetPackContentsArgs): PackIt
   const takesDeposit = depositTaken === true;
 
   const assuredAgreementTitles: Record<string, string> = {
-    england_standard_tenancy_agreement: 'Standard Tenancy Agreement',
-    england_premium_tenancy_agreement: 'Premium Tenancy Agreement',
+    england_standard_tenancy_agreement: 'Standard Tenancy Agreement & Setup Pack',
+    england_premium_tenancy_agreement: 'Premium Tenancy Agreement & Management Pack',
     england_student_tenancy_agreement: 'Student Tenancy Agreement',
-    england_hmo_shared_house_tenancy_agreement: 'HMO / Shared House Tenancy Agreement',
+    england_hmo_shared_house_tenancy_agreement: 'HMO / Shared House Tenancy Agreement & House Management Pack',
   };
 
   if (product in assuredAgreementTitles) {
@@ -176,7 +197,33 @@ function getEnglandResidentialLettingContents(args: GetPackContentsArgs): PackIt
       ];
     }
 
+    const summaryItems: PackItem[] =
+      isExistingVerbalTenancy
+        ? []
+        : product === 'england_hmo_shared_house_tenancy_agreement'
+          ? [
+              {
+                key: 'england_hmo_setup_summary',
+                title: 'HMO Setup Summary',
+                description: 'Front-page summary of the shared-house setup, operational risks, and next step for the landlord file.',
+                category: 'Guidance',
+                required: true,
+              },
+            ]
+          : product === 'england_standard_tenancy_agreement' || product === 'england_premium_tenancy_agreement'
+            ? [
+                {
+                  key: 'england_tenancy_setup_summary',
+                  title: 'Tenancy Setup Summary',
+                  description: 'Front-page summary of the England periodic tenancy setup, key checks, and next step.',
+                  category: 'Guidance',
+                  required: true,
+                },
+              ]
+            : [];
+
     const items: PackItem[] = [
+      ...summaryItems,
       {
         key: isExistingVerbalTenancy ? 'england_written_statement_of_terms' : product,
         title: isExistingVerbalTenancy
@@ -291,8 +338,15 @@ function getEnglandResidentialLettingContents(args: GetPackContentsArgs): PackIt
     case 'england_lodger_agreement':
       return [
         {
+          key: 'england_room_let_summary',
+          title: 'Room Let Summary',
+          description: 'Front-page summary of the resident-landlord room let, key controls, and next step.',
+          category: 'Guidance',
+          required: true,
+        },
+        {
           key: 'england_lodger_agreement',
-          title: 'Room Let / Lodger Agreement',
+          title: 'Room Let / Lodger Agreement & Shared Home Pack',
           description: 'England resident-landlord lodger agreement for a room let or licence arrangement',
           category: 'Tenancy agreement',
           required: true,

@@ -1,13 +1,30 @@
 {
-  "generatedAt": "2026-05-01T18:35:08.719Z",
+  "generatedAt": "2026-05-01T21:27:20.037Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
       "key": "section13_defensive",
       "displayName": "Challenge-Ready Section 13 Defence Pack",
       "outputDir": "section13_defensive",
-      "documentCount": 10,
+      "documentCount": 13,
       "documents": [
+        {
+          "title": "Rent Increase Summary",
+          "description": "Front-page summary of the proposed increase, evidence position, and next step.",
+          "category": "guidance",
+          "documentType": "section13_rent_increase_summary",
+          "fileName": "section13-rent-increase-summary-golden-section13-defence-001.pdf",
+          "files": {
+            "pdf": "section13_defensive/section13-rent-increase-summary-golden-section13-defence-001.pdf",
+            "text": "section13_defensive/section13-rent-increase-summary-golden-section13-defence-001.txt"
+          },
+          "extraction": {
+            "pageCount": 1,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
         {
           "title": "Form 4A rent increase notice",
           "description": "Official Form 4A completed from your Section 13 wizard answers.",
@@ -37,6 +54,40 @@
           },
           "extraction": {
             "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Property condition comparison sheet",
+          "description": "Condition-led comparison sheet for the subject property and saved comparables.",
+          "category": "evidence",
+          "documentType": "section13_property_condition_comparison_sheet",
+          "fileName": "section13-property-condition-comparison-sheet-golden-section13-defence-001.pdf",
+          "files": {
+            "pdf": "section13_defensive/section13-property-condition-comparison-sheet-golden-section13-defence-001.pdf",
+            "text": "section13_defensive/section13-property-condition-comparison-sheet-golden-section13-defence-001.txt"
+          },
+          "extraction": {
+            "pageCount": 2,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Tenant argument and landlord response guide",
+          "description": "Challenge-ready table for likely tenant objections and the supporting landlord response.",
+          "category": "guidance",
+          "documentType": "section13_tenant_argument_response_guide",
+          "fileName": "section13-tenant-argument-response-guide-golden-section13-defence-001.pdf",
+          "files": {
+            "pdf": "section13_defensive/section13-tenant-argument-response-guide-golden-section13-defence-001.pdf",
+            "text": "section13_defensive/section13-tenant-argument-response-guide-golden-section13-defence-001.txt"
+          },
+          "extraction": {
+            "pageCount": 1,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -175,13 +226,31 @@
     },
     {
       "key": "england_hmo_shared_house_tenancy_agreement",
-      "displayName": "HMO / Shared House Tenancy Agreement",
+      "displayName": "HMO / Shared House Tenancy Agreement & House Management Pack",
       "outputDir": "england_hmo_shared_house_tenancy_agreement",
-      "documentCount": 9,
+      "documentCount": 10,
       "documents": [
         {
-          "title": "HMO / Shared House Tenancy Agreement",
-          "description": "England HMO / shared-house tenancy agreement with communal-area and sharer drafting.",
+          "title": "HMO Setup Summary",
+          "description": "Front-page summary of the shared-house setup, operational risks, and next step for the landlord file.",
+          "category": "guidance",
+          "documentType": "england_hmo_setup_summary",
+          "fileName": "england-hmo-setup-summary.pdf",
+          "files": {
+            "pdf": "england_hmo_shared_house_tenancy_agreement/england-hmo-setup-summary.pdf",
+            "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-setup-summary.txt",
+            "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-setup-summary.html"
+          },
+          "extraction": {
+            "pageCount": 4,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "HMO / Shared House Tenancy Agreement & House Management Pack",
+          "description": "England HMO / shared-house tenancy agreement and house management pack.",
           "category": "agreement",
           "documentType": "england_hmo_shared_house_tenancy_agreement",
           "fileName": "england-hmo-shared-house-tenancy-agreement.pdf",
@@ -335,87 +404,7 @@
             "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.html"
           },
           "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        }
-      ]
-    },
-    {
-      "key": "england_lodger_agreement",
-      "displayName": "Lodger Agreement",
-      "outputDir": "england_lodger_agreement",
-      "documentCount": 4,
-      "documents": [
-        {
-          "title": "Room Let / Lodger Agreement",
-          "description": "England resident-landlord lodger agreement for a room let or licence-style arrangement.",
-          "category": "agreement",
-          "documentType": "england_lodger_agreement",
-          "fileName": "england-lodger-agreement.pdf",
-          "files": {
-            "pdf": "england_lodger_agreement/england-lodger-agreement.pdf",
-            "text": "england_lodger_agreement/england-lodger-agreement.txt",
-            "html": "england_lodger_agreement/england-lodger-agreement.html"
-          },
-          "extraction": {
             "pageCount": 4,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Room Let / Lodger Checklist",
-          "description": "Resident-landlord room-let checklist covering handover, house rules, and key practical compliance points.",
-          "category": "checklist",
-          "documentType": "england_lodger_checklist",
-          "fileName": "england-lodger-checklist.pdf",
-          "files": {
-            "pdf": "england_lodger_agreement/england-lodger-checklist.pdf",
-            "text": "england_lodger_agreement/england-lodger-checklist.txt",
-            "html": "england_lodger_agreement/england-lodger-checklist.html"
-          },
-          "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Keys & Handover Record",
-          "description": "Practical handover record for keys, access devices, and move-in confirmations.",
-          "category": "checklist",
-          "documentType": "england_keys_handover_record",
-          "fileName": "england-keys-handover-record.pdf",
-          "files": {
-            "pdf": "england_lodger_agreement/england-keys-handover-record.pdf",
-            "text": "england_lodger_agreement/england-keys-handover-record.txt",
-            "html": "england_lodger_agreement/england-keys-handover-record.html"
-          },
-          "extraction": {
-            "pageCount": 3,
-            "isLowText": false,
-            "isMetadataOnly": false,
-            "method": "pdf_parse"
-          }
-        },
-        {
-          "title": "Lodger House Rules Appendix",
-          "description": "Resident-landlord appendix for guests, quiet hours, shared-space cleaning, and room hand-back expectations.",
-          "category": "schedule",
-          "documentType": "england_lodger_house_rules_appendix",
-          "fileName": "england-lodger-house-rules-appendix.pdf",
-          "files": {
-            "pdf": "england_lodger_agreement/england-lodger-house-rules-appendix.pdf",
-            "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt",
-            "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html"
-          },
-          "extraction": {
-            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -612,13 +601,31 @@
     },
     {
       "key": "england_premium_tenancy_agreement",
-      "displayName": "Premium Tenancy Agreement",
+      "displayName": "Premium Tenancy Agreement & Management Pack",
       "outputDir": "england_premium_tenancy_agreement",
-      "documentCount": 9,
+      "documentCount": 10,
       "documents": [
         {
-          "title": "Premium Tenancy Agreement",
-          "description": "Premium tenancy agreement for a residential let in England with fuller drafting.",
+          "title": "Tenancy Setup Summary",
+          "description": "Front-page summary of the England periodic tenancy setup, key checks, and next step.",
+          "category": "guidance",
+          "documentType": "england_tenancy_setup_summary",
+          "fileName": "england-tenancy-setup-summary.pdf",
+          "files": {
+            "pdf": "england_premium_tenancy_agreement/england-tenancy-setup-summary.pdf",
+            "text": "england_premium_tenancy_agreement/england-tenancy-setup-summary.txt",
+            "html": "england_premium_tenancy_agreement/england-tenancy-setup-summary.html"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Premium Tenancy Agreement & Management Pack",
+          "description": "Premium periodic tenancy agreement and management pack for a residential let in England.",
           "category": "agreement",
           "documentType": "england_premium_tenancy_agreement",
           "fileName": "england-premium-tenancy-agreement.pdf",
@@ -772,7 +779,105 @@
             "html": "england_premium_tenancy_agreement/england-premium-management-schedule.html"
           },
           "extraction": {
-            "pageCount": 4,
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        }
+      ]
+    },
+    {
+      "key": "england_lodger_agreement",
+      "displayName": "Room Let / Lodger Agreement & Shared Home Pack",
+      "outputDir": "england_lodger_agreement",
+      "documentCount": 5,
+      "documents": [
+        {
+          "title": "Room Let Summary",
+          "description": "Front-page summary of the resident-landlord room let, key controls, and next step.",
+          "category": "guidance",
+          "documentType": "england_room_let_summary",
+          "fileName": "england-room-let-summary.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-room-let-summary.pdf",
+            "text": "england_lodger_agreement/england-room-let-summary.txt",
+            "html": "england_lodger_agreement/england-room-let-summary.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Room Let / Lodger Agreement & Shared Home Pack",
+          "description": "England resident-landlord lodger agreement for a room let or licence-style arrangement.",
+          "category": "agreement",
+          "documentType": "england_lodger_agreement",
+          "fileName": "england-lodger-agreement.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-lodger-agreement.pdf",
+            "text": "england_lodger_agreement/england-lodger-agreement.txt",
+            "html": "england_lodger_agreement/england-lodger-agreement.html"
+          },
+          "extraction": {
+            "pageCount": 5,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Room Let / Lodger Checklist",
+          "description": "Resident-landlord room-let checklist covering handover, house rules, and key practical compliance points.",
+          "category": "checklist",
+          "documentType": "england_lodger_checklist",
+          "fileName": "england-lodger-checklist.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-lodger-checklist.pdf",
+            "text": "england_lodger_agreement/england-lodger-checklist.txt",
+            "html": "england_lodger_agreement/england-lodger-checklist.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Keys & Handover Record",
+          "description": "Practical handover record for keys, access devices, and move-in confirmations.",
+          "category": "checklist",
+          "documentType": "england_keys_handover_record",
+          "fileName": "england-keys-handover-record.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-keys-handover-record.pdf",
+            "text": "england_lodger_agreement/england-keys-handover-record.txt",
+            "html": "england_lodger_agreement/england-keys-handover-record.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Lodger House Rules Appendix",
+          "description": "Resident-landlord appendix for guests, quiet hours, shared-space cleaning, and room hand-back expectations.",
+          "category": "schedule",
+          "documentType": "england_lodger_house_rules_appendix",
+          "fileName": "england-lodger-house-rules-appendix.pdf",
+          "files": {
+            "pdf": "england_lodger_agreement/england-lodger-house-rules-appendix.pdf",
+            "text": "england_lodger_agreement/england-lodger-house-rules-appendix.txt",
+            "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html"
+          },
+          "extraction": {
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1092,7 +1197,7 @@
             "html": "complete_pack/hearing_checklist.html"
           },
           "extraction": {
-            "pageCount": 3,
+            "pageCount": 5,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1138,10 +1243,27 @@
     },
     {
       "key": "section13_standard",
-      "displayName": "Standard Section 13 Pack",
+      "displayName": "Standard Section 13 Rent Increase Pack",
       "outputDir": "section13_standard",
-      "documentCount": 4,
+      "documentCount": 5,
       "documents": [
+        {
+          "title": "Rent Increase Summary",
+          "description": "Front-page summary of the proposed increase, evidence position, and next step.",
+          "category": "guidance",
+          "documentType": "section13_rent_increase_summary",
+          "fileName": "section13-rent-increase-summary-golden-section13-standard-001.pdf",
+          "files": {
+            "pdf": "section13_standard/section13-rent-increase-summary-golden-section13-standard-001.pdf",
+            "text": "section13_standard/section13-rent-increase-summary-golden-section13-standard-001.txt"
+          },
+          "extraction": {
+            "pageCount": 1,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
         {
           "title": "Form 4A rent increase notice",
           "description": "Official Form 4A completed from your Section 13 wizard answers.",
@@ -1214,13 +1336,31 @@
     },
     {
       "key": "england_standard_tenancy_agreement",
-      "displayName": "Standard Tenancy Agreement",
+      "displayName": "Standard Tenancy Agreement & Setup Pack",
       "outputDir": "england_standard_tenancy_agreement",
-      "documentCount": 8,
+      "documentCount": 9,
       "documents": [
         {
-          "title": "Standard Tenancy Agreement",
-          "description": "Standard tenancy agreement for a residential let in England.",
+          "title": "Tenancy Setup Summary",
+          "description": "Front-page summary of the England periodic tenancy setup, key checks, and next step.",
+          "category": "guidance",
+          "documentType": "england_tenancy_setup_summary",
+          "fileName": "england-tenancy-setup-summary.pdf",
+          "files": {
+            "pdf": "england_standard_tenancy_agreement/england-tenancy-setup-summary.pdf",
+            "text": "england_standard_tenancy_agreement/england-tenancy-setup-summary.txt",
+            "html": "england_standard_tenancy_agreement/england-tenancy-setup-summary.html"
+          },
+          "extraction": {
+            "pageCount": 3,
+            "isLowText": false,
+            "isMetadataOnly": false,
+            "method": "pdf_parse"
+          }
+        },
+        {
+          "title": "Standard Tenancy Agreement & Setup Pack",
+          "description": "Standard periodic tenancy agreement and setup pack for a residential let in England.",
           "category": "agreement",
           "documentType": "england_standard_tenancy_agreement",
           "fileName": "england-standard-tenancy-agreement.pdf",

@@ -57,8 +57,8 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   },
   'england-section-13-rent-increase-pack-after-renters-rights-act': {
     href: '/products/section-13-standard',
-    label: 'Standard Section 13 Pack',
-    anchorText: 'Start the Standard Section 13 Pack',
+    label: 'Standard Section 13 Rent Increase Pack',
+    anchorText: 'Start the Standard Section 13 Rent Increase Pack',
     description: 'Build Form 4A with comparable-listing support and rent justification.',
     secondaryHref: '/products/section-13-defence',
     secondaryLabel: 'Section 13 Defence Pack',
@@ -69,7 +69,7 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
     anchorText: 'Start the Section 13 Defence Pack',
     description: 'Prepare stronger challenge-response and tribunal-facing rent evidence.',
     secondaryHref: '/products/section-13-standard',
-    secondaryLabel: 'Standard Section 13 Pack',
+    secondaryLabel: 'Standard Section 13 Rent Increase Pack',
   },
   'england-standard-tenancy-agreement-after-1-may-2026': {
     href: '/standard-tenancy-agreement',

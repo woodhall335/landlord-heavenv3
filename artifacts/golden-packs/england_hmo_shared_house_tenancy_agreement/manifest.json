@@ -1,12 +1,30 @@
 {
   "key": "england_hmo_shared_house_tenancy_agreement",
-  "displayName": "HMO / Shared House Tenancy Agreement",
+  "displayName": "HMO / Shared House Tenancy Agreement & House Management Pack",
   "outputDir": "england_hmo_shared_house_tenancy_agreement",
-  "documentCount": 9,
+  "documentCount": 10,
   "documents": [
     {
-      "title": "HMO / Shared House Tenancy Agreement",
-      "description": "England HMO / shared-house tenancy agreement with communal-area and sharer drafting.",
+      "title": "HMO Setup Summary",
+      "description": "Front-page summary of the shared-house setup, operational risks, and next step for the landlord file.",
+      "category": "guidance",
+      "documentType": "england_hmo_setup_summary",
+      "fileName": "england-hmo-setup-summary.pdf",
+      "files": {
+        "pdf": "england_hmo_shared_house_tenancy_agreement/england-hmo-setup-summary.pdf",
+        "text": "england_hmo_shared_house_tenancy_agreement/england-hmo-setup-summary.txt",
+        "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-setup-summary.html"
+      },
+      "extraction": {
+        "pageCount": 4,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "HMO / Shared House Tenancy Agreement & House Management Pack",
+      "description": "England HMO / shared-house tenancy agreement and house management pack.",
       "category": "agreement",
       "documentType": "england_hmo_shared_house_tenancy_agreement",
       "fileName": "england-hmo-shared-house-tenancy-agreement.pdf",
@@ -160,7 +178,7 @@
         "html": "england_hmo_shared_house_tenancy_agreement/england-hmo-house-rules-appendix.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 4,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

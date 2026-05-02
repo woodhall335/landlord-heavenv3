@@ -61,7 +61,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
     cta: 'See pack details',
   },
   {
-    name: 'Standard Section 13 Pack',
+    name: 'Standard Section 13 Rent Increase Pack',
     productSku: 'section13_standard',
     price: PRODUCTS.section13_standard.displayPrice,
     coverage: 'For landlords in England',
@@ -122,7 +122,7 @@ export const PRICING_SCHEMA_ITEMS = [
   { sku: 'notice_only', name: 'Stage 1: Section 8 Notice & Service Pack', url: '/products/notice-only' },
   { sku: 'complete_pack', name: 'Stage 2: Section 8 Court & Possession Pack', url: '/products/complete-pack' },
   { sku: 'money_claim', name: 'Money Claim Pack', url: '/products/money-claim' },
-  { sku: 'section13_standard', name: 'Standard Section 13 Pack', url: '/products/section-13-standard' },
+  { sku: 'section13_standard', name: 'Standard Section 13 Rent Increase Pack', url: '/products/section-13-standard' },
   { sku: 'section13_defensive', name: 'Challenge-Ready Section 13 Defence Pack', url: '/products/section-13-defence' },
   { sku: 'ast_standard', name: 'England Tenancy Agreements', url: '/products/ast' },
   { sku: 'ast_premium', name: 'England Tenancy Agreements', url: '/products/ast' },

@@ -101,7 +101,7 @@ const specialistRoutes: Array<{
   },
   {
     sku: 'england_lodger_agreement',
-    title: 'Room Let / Lodger Agreement',
+    title: 'Room Let / Lodger Agreement & Shared Home Pack',
     href: '/lodger-agreement',
     summary:
       'Use this when the landlord lives at the property and the occupier is sharing the home rather than taking the ordinary assured periodic route.',

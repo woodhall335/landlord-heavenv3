@@ -1,0 +1,260 @@
+
+> landlord-heavenv3@0.1.0 generate:golden-packs C:\Users\t_moh\Documents\GitHub\landlord-heavenv3
+> set NODE_OPTIONS=--conditions=react-server && npx -p node@20 -p tsx tsx scripts/generate-england-golden-packs.ts
+
+
+Starting golden pack batch: Stage 1: Section 8 Notice & Service Pack, Stage 2: Section 8 Court & Possession Pack, Money Claim Pack, Standard Section 13 Rent Increase Pack, Challenge-Ready Section 13 Defence Pack, Standard Tenancy Agreement & Setup Pack, Premium Tenancy Agreement & Management Pack, Student Tenancy Agreement, HMO / Shared House Tenancy Agreement & House Management Pack, Room Let / Lodger Agreement & Shared Home Pack
+Generating golden pack: Stage 1: Section 8 Notice & Service Pack
+
+📄 Generating ootice Only Pack for england...
+[normalizeSection8Facts] Backfilled arrears_total=3600 from alternative location
+[normalizeSection8Facts] Backfilled ground_particulars.ground_8.summary from arrears data/section8_details
+[normalizeSection8Facts] Backfilled ground_particulars.ground_10.summary from arrears data/section8_details
+[generateooticeOnlyPack] Document type selection: {
+  jurisdiction: 'england',
+  raw_notice_route: 'section_8',
+  normalized_route: 'section_8',
+  selected_notice_route: 'section_8'
+}
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Ivy Carleton
+[Normalize] Landlord name: Daniel Mercer
+[Normalize] Case facts normalization complete
+🔍 [N5B-BUILDER] buildN5BFields called with wizardFacts keys: [
+  '__meta',
+  'landlord_name',
+  'landlord_address_line1',
+  'landlord_city',
+  'landlord_postcode',
+  'landlord_email',
+  'landlord_phone',
+  'tenant1_name',
+  'tenant1_email',
+  'tenant1_phone',
+  'property_address_line1',
+  'property_city',
+  'property_postcode',
+  'tenancy_start_date',
+  'rent_amount',
+  'rent_frequency',
+  'rent_due_day',
+  'notice_type',
+  'notice_date',
+  'notice_served_date',
+  'selected_notice_route',
+  'recommended_route',
+  'eviction_route',
+  'section8_grounds',
+  'arrears_breakdown',
+  'total_arrears',
+  'notice_service_method',
+  'court_name',
+  'arrears_items',
+  'deposit_amount',
+  'deposit_protected',
+  'deposit_protection_date',
+  'deposit_scheme_name',
+  'prescribed_info_served',
+  'prescribed_info_given',
+  'prescribed_information_date',
+  'relevant_gas_fitting_present',
+  'has_gas_at_property',
+  'gas_safety_certificate',
+  'gas_safety_provided',
+  'gas_safety_check_date',
+  'epc_provided',
+  'epc_rating',
+  'how_to_rent_provided',
+  'how_to_rent_date',
+  'rent_arrears_amount',
+  'case_facts',
+  'clean_output',
+  'arrears_total',
+  'arrears_amount',
+  'ground_particulars'
+]
+🔍 [N5B-BUILDER] Found N5B-relevant fields: {
+  "epc_provided": true,
+  "has_gas_at_property": true,
+  "gas_safety_provided": true,
+  "how_to_rent_provided": true,
+  "how_to_rent_date": "2024-01-15",
+  "notice_service_method": "first_class_post"
+}
+🔍 [N5B-BUILDER] buildN5BFields output: {
+  "notice_service_method": "first_class_post",
+  "epc_provided": true,
+  "has_gas_at_property": true,
+  "gas_safety_provided": true,
+  "gas_safety_check_date": "2024-01-10",
+  "how_to_rent_provided": true,
+  "how_to_rent_date": "2024-01-15"
+}
+[generateDocument] ISO date sanitizer fixed 1 date(s) in uk/england/templates/money_claims/schedule_of_arrears.hbs. This indicates a normalization gap that should be fixed upstream.
+✅ Generated 7 documents for ootice Only pack
+Completed Stage 1: Section 8 Notice & Service Pack in 87.2s.
+Generating golden pack: Stage 2: Section 8 Court & Possession Pack
+
+📦 Generating Complete Eviction Pack for england...
+================================================================================
+[Normalize] Property address concatenated: 3 parts
+[Normalize] Tenant name: Ivy Carleton
+[Normalize] Landlord name: Daniel Mercer
+[Normalize] Case facts normalization complete
+🔍 [N5B-BUILDER] buildN5BFields called with wizardFacts keys: [
+  '__meta',
+  'landlord_name',
+  'landlord_address_line1',
+  'landlord_city',
+  'landlord_postcode',
+  'landlord_email',
+  'landlord_phone',
+  'tenant1_name',
+  'tenant1_email',
+  'tenant1_phone',
+  'property_address_line1',
+  'property_city',
+  'property_postcode',
+  'tenancy_start_date',
+  'rent_amount',
+  'rent_frequency',
+  'rent_due_day',
+  'notice_type',
+  'notice_date',
+  'notice_served_date',
+  'selected_notice_route',
+  'recommended_route',
+  'eviction_route',
+  'section8_grounds',
+  'arrears_breakdown',
+  'total_arrears',
+  'notice_service_method',
+  'court_name',
+  'arrears_items',
+  'deposit_amount',
+  'deposit_protected',
+  'deposit_protection_date',
+  'deposit_scheme_name',
+  'prescribed_info_served',
+  'prescribed_info_given',
+  'prescribed_information_date',
+  'relevant_gas_fitting_present',
+  'has_gas_at_property',
+  'gas_safety_certificate',
+  'gas_safety_provided',
+  'gas_safety_check_date',
+  'epc_provided',
+  'epc_rating',
+  'how_to_rent_provided',
+  'how_to_rent_date',
+  'rent_arrears_amount',
+  'case_facts',
+  'clean_output',
+  'court_mode',
+  'arrears_total'
+]
+🔍 [N5B-BUILDER] Found N5B-relevant fields: {
+  "epc_provided": true,
+  "has_gas_at_property": true,
+  "gas_safety_provided": true,
+  "how_to_rent_provided": true,
+  "how_to_rent_date": "2024-01-15",
+  "notice_service_method": "first_class_post"
+}
+🔍 [N5B-BUILDER] buildN5BFields output: {
+  "notice_service_method": "first_class_post",
+  "epc_provided": true,
+  "has_gas_at_property": true,
+  "gas_safety_provided": true,
+  "gas_safety_check_date": "2024-01-10",
+  "how_to_rent_provided": true,
+  "how_to_rent_date": "2024-01-15"
+}
+📄 Filling N5 form (Claim for possession) - using n5-eng.pdf...
+✅ [N5] Template validation passed (9 required fields verified)
+✅ N5 form filled successfully (54 fields available, key fields set)
+📄 N5 form preserved as editable (AcroForm fields retained)
+📄 Filling N119 form (Particulars of claim) - using n119-eng.pdf...
+✅ [N119] Template validation passed (12 required fields verified)
+✅ N119 form filled successfully (54 fields in form, key fields set)
+📄 N119 form preserved as editable (AcroForm fields retained)
+[generateDocument] ISO date sanitizer fixed 1 date(s) in uk/england/templates/money_claims/schedule_of_arrears.hbs. This indicates a normalization gap that should be fixed upstream.
+✅ Generated schedule of arrears
+📝 Using deterministic witness statement builder for Section 8 case
+✅ Generated witness statement
+✅ Generated court bundle index (Section 8)
+✅ Generated hearing checklist (Section 8)
+[ARREARS_DEBUG] {
+  "timestamp": "2026-05-01T21:03:10.863Z",
+  "caseId": "golden-complete-pack-001",
+  "wizardFactsPaths": {
+    "wizardFacts.total_arrears": 3600,
+    "wizardFacts.arrears_total": 3600,
+    "evictionCase.current_arrears": 3600
+  },
+  "arrearsScheduleData": {
+    "total": 3600,
+    "itemCount": 3,
+    "isAuthoritative": true
+  },
+  "finalComputedValue": 3600,
+  "sourceUsed": "arrears_schedule_mapper (authoritative)"
+}
+✅ Wrote arrears debug log to tests/output/arrears-letter-debug.json
+✅ Generated arrears engagement letter (final form)
+✅ Generated 12 documents for complete eviction pack
+Completed Stage 2: Section 8 Court & Possession Pack in 102.3s.
+Generating golden pack: Money Claim Pack
+[money-claim-validator] Computed totals: {
+  arrears: 2430,
+  damages: 380,
+  other: 80,
+  principal: 2890,
+  interest: 57.8,
+  total: 2947.8
+}
+[money-claim-pack] Pre-generation validation passed
+[money-claim-pack] Computed totals: {
+  arrears_total: 2430,
+  damages_total: 380,
+  other_charges_total: 80,
+  principal_total: 2890,
+  interest_amount: 57.8,
+  claim_total: 2947.8
+}
+[money-claim] Interest claimed at 8% (user opted in). Days: 88, Interest to date: £55.44, Daily rate: £0.63
+📄 Filling N1 form (Money claim)...
+✅ [N1] Template validation passed (9 required fields verified)
+✅ [N1] Data validation passed
+✅ N1 form filled successfully
+📄 N1 form preserved as editable (AcroForm fields retained)
+Completed Money Claim Pack in 106.4s.
+Generating golden pack: Standard Section 13 Rent Increase Pack
+Completed Standard Section 13 Rent Increase Pack in 1.2s.
+Generating golden pack: Challenge-Ready Section 13 Defence Pack
+Completed Challenge-Ready Section 13 Defence Pack in 2.7s.
+Generating golden pack: Standard Tenancy Agreement & Setup Pack
+Completed Standard Tenancy Agreement & Setup Pack in 110.3s.
+Generating golden pack: Premium Tenancy Agreement & Management Pack
+Completed Premium Tenancy Agreement & Management Pack in 117.9s.
+Generating golden pack: Student Tenancy Agreement
+Completed Student Tenancy Agreement in 75.0s.
+Generating golden pack: HMO / Shared House Tenancy Agreement & House Management Pack
+Completed HMO / Shared House Tenancy Agreement & House Management Pack in 140.8s.
+Generating golden pack: Room Let / Lodger Agreement & Shared Home Pack
+Completed Room Let / Lodger Agreement & Shared Home Pack in 93.9s.
+
+Golden pack batch summary:
+- Stage 1: Section 8 Notice & Service Pack: completed in 87.2s
+- Stage 2: Section 8 Court & Possession Pack: completed in 102.3s
+- Money Claim Pack: completed in 106.4s
+- Standard Section 13 Rent Increase Pack: completed in 1.2s
+- Challenge-Ready Section 13 Defence Pack: completed in 2.7s
+- Standard Tenancy Agreement & Setup Pack: completed in 110.3s
+- Premium Tenancy Agreement & Management Pack: completed in 117.9s
+- Student Tenancy Agreement: completed in 75.0s
+- HMO / Shared House Tenancy Agreement & House Management Pack: completed in 140.8s
+- Room Let / Lodger Agreement & Shared Home Pack: completed in 93.9s
+Totals: 10 completed, 0 skipped, 0 failed.
+
+Golden packs written to: C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\artifacts\golden-packs

@@ -6,7 +6,7 @@ GENERATED
 1 May 2026
 FOR PROPERTIES IN ENGLAND
 Keys & Handover Record
-Premium Tenancy Agreement move-in handover record
+Premium Tenancy Agreement & Management Pack move-in handover record
 Use this handover record alongside the agreement to note keys, fobs, alarm codes, and the points
 confirmed at move-in.
 PREPARED 16 April
@@ -23,7 +23,11 @@ Handover record
 PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Alice
 Tenant
-TERM / DATES 2 May 2026 to 1 May 2027
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on a
+periodic basis
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
@@ -44,15 +48,15 @@ LANDLORD Jane Landlord
 TENANT Alice Tenant
 Operative Provisions
 1. Handover Summary
-PACK Premium Tenancy Agreement
+PACK Premium Tenancy Agreement & Management Pack
 PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Alice Tenant
 START DATE 2 May 2026
 KEYS AND
 ACCESS DEVICES
 2 front-door keys and 1 fob
-Use this record to note the physical handover items provided at move-in and the items expected back at the
-end of occupation.
+Use this record to keep the handover clear from the start and to avoid later disputes over keys, access
+devices, and what was provided at move-in.
 2. Practical Checks
 Record the number of keys, fobs, gate controls, or alarm codes handed over.
 Confirm meter readings, appliance instructions, and any property-specific access rules on the handover

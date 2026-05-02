@@ -7,9 +7,9 @@ GENERATED
 Stage 1: Section 8 Notice & Service Pack
 Service Playbook
 Form 3A notice is the current Form 3A Section 8 notice for England.
-This pack aligns the notice, service, and evidence so your case doesn't fall apart on technical errors.
-Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent
-those.
+This pack aligns the notice, service, and evidence so your case does not fall apart on technical errors.
+Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and under
+review as the case moves forward.
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE Form 3A notice
@@ -31,8 +31,8 @@ Keep the compliance snapshot with the file so you know what still needs attentio
 
 STEP 2 - SERVE
 Serve the Form 3A notice in a way you can prove later
-Use first class post and keep the proof of posting. This is usually the cleanest option when you need a
-straightforward service record.
+First class post is common when you need a straightforward service record, but any valid method
+permitted by the tenancy agreement, rules, or court practice may be used if it can be proved.
 Serve the same notice that appears in this pack.
 Record the exact date of service and the method used.
 Do not alter the service record after the event unless you are correcting it transparently across the

@@ -1,0 +1,133 @@
+CASE ID
+golden-premium-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
+FOR PROPERTIES IN ENGLAND
+Tenancy Setup Summary
+Premium Tenancy Agreement & Management Pack summary and readiness page
+Use this summary as the front sheet for the tenancy file so the readiness position, key checks, and
+next step are easy to understand at a glance.
+PREPARED 16 April
+2026
+FILE
+REFERENCE
+RL-ENGLAND-PREMIUM-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May
+2026
+DOCUMENT
+TYPE
+Tenancy setup summary
+PROPERTY 12 Example Street, London, SW1A 1AA
+TENANT(S) Alice
+Tenant
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on a
+periodic basis
+RENT £1500.00 DEPOSIT £1500.00
+Parties
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+LANDLORD Jane Landlord
+3 Owner Road, London, SW1A 2BB
+Email: jane@example.com
+Telephone: 07123 456789
+TENANT Alice Tenant
+12 Example Street, London, SW1A 1AA
+Email: alice@example.com
+Telephone: 07000 111111
+
+-- 1 of 5 --
+
+Defined Terms
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Alice Tenant
+Operative Provisions
+1. Tenancy Setup Summary
+This summary gives the landlord a calm front-page view of what the file does, what still needs checking, and
+what should happen next before signature.
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Alice Tenant
+TENANCY START
+DATE
+2 May 2026
+TENANCY TYPE England assured periodic tenancy
+RENT £1500.00
+DEPOSIT £1500.00
+BILLS INCLUDED No bills are stated to be included in the rent unless this agreement
+expressly says otherwise.
+STATUS READY TO SIGN
+This premium agreement forms the core of the tenancy record and the Premium Management Schedule
+should be followed alongside it so reporting, inspections, keys, contractor access, and hand-back
+expectations stay aligned.
+If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including
+possession.
+
+-- 2 of 5 --
+
+2. Key Setup Checks
+Core party, property, payment, and start-date details are recorded clearly.
+Deposit support documents are included so the protection record can stay with the file.
+The Premium Management Schedule is included so the management process sits beside the agreement.
+Right to rent checks are recorded for 25 April 2026.
+3. What This Pack Does
+Supporting documents included: Main tenancy agreement; Pre-tenancy checklist; Keys and handover record;
+Utilities and meter handover sheet; Pet request / consent addendum; Tenancy variation record; Premium
+Management Schedule.
+Next step: sign the agreement, complete handover, and keep the full pack together as the tenancy record.
+Sets up the tenancy clearly and keeps the core file together from the start.
+Helps avoid avoidable disputes over rent, deposit records, utilities, and handover.
+Keeps the agreement and support records aligned so later enforcement or possession work does not
+have to be rebuilt.
+
+-- 3 of 5 --
+
+4. Premium Management Controls
+MANAGEMENT
+CONTACT
+CHANNEL
+Email
+REPAIRS
+REPORTING
+PROCESS
+Landlord direct by email
+INSPECTION
+WINDOW
+Quarterly weekday daytime visits
+CONTRACTOR
+ACCESS
+PROCESS
+Tenant to be notified before contractor attendance.
+KEY RELEASE
+POLICY
+Keys released to contractors only against a signed key register and same-
+day return expectation.
+UTILITIES
+TRANSFER
+EXPECTATION
+Tenant to open supplier accounts from the tenancy start date using the
+recorded opening readings.
+HAND-BACK
+EXPECTATION
+Return all keys and provide final meter readings.
+If payment is late, the landlord should keep payment records up to date and the tenant should raise any
+issue promptly in writing.
+Persistent arrears may affect later possession grounds, so the tenancy file should stay current.
+Where an issue arises, the landlord should record it clearly, communicate in writing, and keep the tenancy
+file updated.
+
+-- 4 of 5 --
+
+Execution
+This document should be signed and dated by the parties and retained with the tenancy records.
+FILE OWNER
+Jane Landlord
+Signature Date
+Landlord Heaven file copy RL-ENGLAND-PREMIUM-TA-TENANCY-001
+
+-- 5 of 5 --

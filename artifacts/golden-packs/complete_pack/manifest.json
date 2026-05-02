@@ -176,7 +176,7 @@
         "html": "complete_pack/hearing_checklist.html"
       },
       "extraction": {
-        "pageCount": 3,
+        "pageCount": 5,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

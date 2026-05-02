@@ -22,7 +22,9 @@ PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Aisha Student, Ben
 Student, Cara
 Student
-TERM / DATES 2 May 2026
+TENANCY START
+DATE
+2 May 2026
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
@@ -61,8 +63,8 @@ B.
 
 Operative Provisions
 1. Tenancy Status and Core Particulars
-The parties intend the tenant to occupy the Property as their main home on the assured periodic basis
-described in this document.
+This agreement forms the core of the tenancy record for an England periodic residential let and should be kept
+with the supporting documents in this pack.
 TENANCY TYPE New periodic tenancy agreement
 PACK Student Tenancy Agreement
 FURNISHED
@@ -74,6 +76,8 @@ DATE
 The tenancy is intended to continue on a periodic basis unless lawfully brought to an end. No separate fixed-
 term drafting is created by this document unless a solicitor-approved route is expressly used outside this
 product.
+If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including
+possession.
 
 -- 3 of 10 --
 

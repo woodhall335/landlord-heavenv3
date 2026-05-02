@@ -6,7 +6,7 @@ GENERATED
 1 May 2026
 FOR PROPERTIES IN ENGLAND
 Tenancy Variation Record
-HMO / Shared House Tenancy Agreement variation record
+HMO / Shared House Tenancy Agreement & House Management Pack variation record
 Use this record to log agreed changes after the main agreement is signed, so the tenancy file stays
 clear and up to date.
 PREPARED 16 April 2026 FILE
@@ -21,8 +21,11 @@ PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Nina Sharer, Owen
 Sharer, Priya Sharer,
 Reece Sharer
-TERM / DATES 2 May 2026 to 1 May
-2027
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on
+a periodic basis
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
@@ -60,12 +63,13 @@ Operative Provisions
 1. Variation Record Purpose
 UNDERLYING
 PRODUCT
-HMO / Shared House Tenancy Agreement
+HMO / Shared House Tenancy Agreement & House Management Pack
 PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT(S) Nina Sharer, Owen Sharer, Priya Sharer, Reece Sharer
 Use this record to note agreed changes after the tenancy starts without losing the original signed paperwork.
-Any important change should be dated, signed where appropriate, and stored with the main tenancy file.
+Any important change should be dated, signed where appropriate, and stored with the main tenancy file so
+later enforcement or possession work does not depend on conflicting informal notes.
 Execution
 Any material change should be dated and retained with the tenancy file.
 FILE OWNER

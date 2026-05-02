@@ -1,11 +1,29 @@
 {
   "key": "england_lodger_agreement",
-  "displayName": "Lodger Agreement",
+  "displayName": "Room Let / Lodger Agreement & Shared Home Pack",
   "outputDir": "england_lodger_agreement",
-  "documentCount": 4,
+  "documentCount": 5,
   "documents": [
     {
-      "title": "Room Let / Lodger Agreement",
+      "title": "Room Let Summary",
+      "description": "Front-page summary of the resident-landlord room let, key controls, and next step.",
+      "category": "guidance",
+      "documentType": "england_room_let_summary",
+      "fileName": "england-room-let-summary.pdf",
+      "files": {
+        "pdf": "england_lodger_agreement/england-room-let-summary.pdf",
+        "text": "england_lodger_agreement/england-room-let-summary.txt",
+        "html": "england_lodger_agreement/england-room-let-summary.html"
+      },
+      "extraction": {
+        "pageCount": 3,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Room Let / Lodger Agreement & Shared Home Pack",
       "description": "England resident-landlord lodger agreement for a room let or licence-style arrangement.",
       "category": "agreement",
       "documentType": "england_lodger_agreement",
@@ -16,7 +34,7 @@
         "html": "england_lodger_agreement/england-lodger-agreement.html"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 5,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -70,7 +88,7 @@
         "html": "england_lodger_agreement/england-lodger-house-rules-appendix.html"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

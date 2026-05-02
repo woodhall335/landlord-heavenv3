@@ -1,0 +1,74 @@
+Property Condition Comparison Sheet
+Use this sheet if the tenant says the property condition or specification is weaker than the
+comparables relied on.
+Property: 10 Sample Road, Leeds, LS1 1AA
+Comparison sheet
+1. Comparable: Flat 2, The Calls, Leeds LS1 | £1240.00 pcm adjusted | 0.2 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-1
+2. Comparable: Apartment 14, Sovereign Street, Leeds LS1 | £1265.00 pcm adjusted | 0.3 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-2
+3. Comparable: Flat 5, Brewery Wharf, Leeds LS10 | £1275.00 pcm adjusted | 0.4 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-3
+4. Comparable: Apartment 8, Park Row, Leeds LS1 | £1290.00 pcm adjusted | 0.4 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-4
+5. Comparable: Flat 11, Riverside Court, Leeds LS1 | £1305.00 pcm adjusted | 0.5 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Section 13 Defensive Pack | Property condition comparison sheet Page 1 of 2
+
+-- 1 of 2 --
+
+Property Condition Comparison Sheet
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-5
+6. Comparable: Apartment 6, Wellington Street, Leeds LS1 | £1315.00 pcm adjusted | 0.5 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-6
+7. Comparable: Flat 3, Dock Street, Leeds LS10 | £1330.00 pcm adjusted | 0.5 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-7
+8. Comparable: Apartment 21, East Parade, Leeds LS1 | £1345.00 pcm adjusted | 0.5 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-8
+How to use this sheet
+If a comparable needs a condition-based adjustment, say what the difference is and why it matters to
+market rent.
+If no adjustment was applied, explain why the subject property and comparable were treated as close
+enough on the saved evidence.
+Section 13 Defensive Pack | Property condition comparison sheet Page 2 of 2
+
+-- 2 of 2 --

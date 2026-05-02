@@ -106,7 +106,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need more than a blank Form 4A?',
     intro:
       'Check local comparable listings, judge whether the proposed rent looks supportable, and build Form 4A with the justification pack.',
-    ctaLabel: 'Start the Standard Section 13 Pack',
+    ctaLabel: 'Start the Standard Section 13 Rent Increase Pack',
     bullets: [
       'Uses live comparable listings to support the proposed rent.',
       'Helps avoid unsupported increases that attract challenge.',

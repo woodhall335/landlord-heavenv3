@@ -310,12 +310,16 @@
         <td colspan="3">{{#if property_address}}{{property_address}}{{else}}Not stated{{/if}}</td>
       </tr>
       <tr>
-        <td class="label">Tenant(s)</td>
-        <td>{{#if tenant_names}}{{tenant_names}}{{else}}Not stated{{/if}}</td>
-        <td class="label">Term / dates</td>
+        <td class="label">{{#if counterparty_label_display}}{{counterparty_label_display}}{{else}}Tenant(s){{/if}}</td>
+        <td>{{#if tenant_names}}{{tenant_names}}{{else}}{{#if counterparty_name}}{{counterparty_name}}{{else}}Not stated{{/if}}{{/if}}</td>
+        <td class="label">{{#if term_label}}{{term_label}}{{else}}Term / dates{{/if}}</td>
         <td>
-          {{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}Not stated{{/if}}
-          {{#if tenancy_end_date}} to {{formatUKDate tenancy_end_date}}{{/if}}
+          {{#if term_value}}
+            {{term_value}}
+          {{else}}
+            {{#if tenancy_start_date}}{{formatUKDate tenancy_start_date}}{{else}}Not stated{{/if}}
+            {{#if tenancy_end_date}} to {{formatUKDate tenancy_end_date}}{{/if}}
+          {{/if}}
         </td>
       </tr>
       <tr>

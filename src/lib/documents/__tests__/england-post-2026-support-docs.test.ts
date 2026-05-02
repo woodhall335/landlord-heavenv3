@@ -39,13 +39,17 @@ describe('England Section 8 support document templates', () => {
     );
 
     expect(template).toContain('{{notice_name}}');
-    expect(template).toContain('Step 1 — Prepare');
-    expect(template).toContain('Step 2 — Serve');
-    expect(template).toContain('Step 3 — Record');
-    expect(template).toContain('Step 4 — Align');
+    expect(template).toContain('Step 1 - Prepare');
+    expect(template).toContain('Step 2 - Serve');
+    expect(template).toContain('Step 3 - Record');
+    expect(template).toContain('Step 4 - Align');
     expect(template).toContain('Earliest proceedings date');
     expect(template).toContain('Latest proceedings date');
     expect(template).toContain('Form 3A');
+    expect(template).toContain(
+      'any valid method permitted by the tenancy agreement, rules, or court practice'
+    );
+    expect(template).toContain('Ground 8 may not be available');
   });
 
   it('renders the shared eviction case summary as a stage-aware front page', () => {
@@ -62,6 +66,7 @@ describe('England Section 8 support document templates', () => {
     expect(template).toContain('{{#each compliance_status_items}}');
     expect(template).toContain('{{#each what_this_pack_does}}');
     expect(template).toContain('{{next_step_text}}');
+    expect(template).toContain('Case Risks &amp; Compliance');
   });
 
   it('renders the what-happens-next page for England Section 8 packs', () => {

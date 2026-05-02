@@ -21,8 +21,11 @@ PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Aisha Student, Ben
 Student, Cara
 Student
-TERM / DATES 2 May 2026 to 1 May
-2027
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on
+a periodic basis
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
@@ -61,7 +64,8 @@ PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT(S) Aisha Student, Ben Student, Cara Student
 Use this record to note agreed changes after the tenancy starts without losing the original signed paperwork.
-Any important change should be dated, signed where appropriate, and stored with the main tenancy file.
+Any important change should be dated, signed where appropriate, and stored with the main tenancy file so
+later enforcement or possession work does not depend on conflicting informal notes.
 Execution
 Any material change should be dated and retained with the tenancy file.
 FILE OWNER

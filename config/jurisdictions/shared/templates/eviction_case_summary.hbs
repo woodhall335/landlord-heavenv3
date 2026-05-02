@@ -232,7 +232,7 @@
         <p>{{pack_supporting_line}}</p>
       </div>
       <div>
-        <span class="status-pill{{#if (eq status_label "SERVE WITH RISKS")}} risk{{/if}}{{#if (eq status_label "PREPARE WITH RISKS")}} risk{{/if}}{{#if (eq status_label "DO NOT SERVE YET")}} critical{{/if}}{{#if (eq status_label "DO NOT ISSUE YET")}} critical{{/if}}{{#if (eq status_label "DO NOT ISSUE - CASE MAY FAIL")}} critical{{/if}}">{{status_label}}</span>
+        <span class="status-pill{{#if (eq status_label "SERVE WITH RISKS - CHECK BEFORE SERVICE")}} risk{{/if}}{{#if (eq status_label "PREPARE WITH RISKS - REVIEW BEFORE ISSUE")}} risk{{/if}}{{#if (eq status_label "DO NOT SERVE - CASE MAY FAIL")}} critical{{/if}}{{#if (eq status_label "DO NOT ISSUE - CASE MAY FAIL")}} critical{{/if}}">{{status_label}}</span>
       </div>
     </div>
     <div class="muted">
@@ -306,7 +306,16 @@
     </div>
   </div>
 
-  <h2 class="section-title">Key Risks</h2>
+  {{#if (contains groundsReliedUpon "Ground 8")}}
+  <div class="risk-card risk" style="margin-top: 1.1em;">
+    <div class="chip">ground 8 warning</div>
+    <h3>Ground 8 arrears threshold stays live throughout the case</h3>
+    <p>Ground 8 must usually be satisfied at both the notice stage and the hearing. If payments reduce arrears below the threshold, the mandatory ground may fail and the claim may depend on discretionary grounds.</p>
+    <p><strong>Action:</strong> Update the arrears schedule to the latest practicable date and keep the grounds position under review.</p>
+  </div>
+  {{/if}}
+
+  <h2 class="section-title">Case Risks &amp; Compliance</h2>
   <div class="risk-grid">
     {{#if key_risk_titles.length}}
       {{#each compliance_status_items}}
@@ -322,8 +331,8 @@
     {{else}}
       <div class="risk-card ok">
         <div class="chip">ok</div>
-        <h3>No critical or risk items recorded</h3>
-        <p>The current pack data does not show a blocker or elevated risk in the structured compliance snapshot.</p>
+        <h3>No immediate blocker identified from the structured checks</h3>
+        <p>The current pack data does not show an immediate blocker from the structured checks, but the file should stay under review as facts change.</p>
         <p><strong>Action:</strong> Keep the notice, service, and evidence file aligned as the case progresses.</p>
       </div>
     {{/if}}

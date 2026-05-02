@@ -21,9 +21,11 @@ DOCUMENT
 TYPE
 Resident-landlord checklist
 PROPERTY 12 Example Street, London, SW1A 1AA
-TENANT(S) Alice
+LODGER Alice
 Tenant
-TERM / DATES 2 May 2026 to 1 May 2027
+ROOM LET
+START DATE
+2 May 2026
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.

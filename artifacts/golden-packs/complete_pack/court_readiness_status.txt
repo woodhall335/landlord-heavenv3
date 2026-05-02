@@ -6,10 +6,11 @@ GENERATED
 1 May 2026
 Stage 2: Section 8 Court & Possession Pack
 Court Readiness Status
-READY FOR COURT
-This pack turns the served notice into a court-ready possession file that stays consistent under scrutiny.
-Most possession cases fail on notice, service, or consistency errors - this pack is designed to prevent
-those.
+READY FOR COURT - CLAIM FILE ALIGNED
+This pack builds a possession claim that can be issued and relied on in court without breaking on
+inconsistency.
+Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and under
+review as the case moves forward.
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE TYPE Form 3A notice
@@ -55,7 +56,7 @@ Notice served on 1 May 2026 with earliest proceedings date 29 May 2026.
 Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and
 any court papers.
 Issue decision
-READY FOR COURT
+READY FOR COURT - CLAIM FILE ALIGNED
 Prepare and issue the possession claim using the forms and guidance in this pack once the claim is
 eligible on or after 29 May 2026.
 Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record,

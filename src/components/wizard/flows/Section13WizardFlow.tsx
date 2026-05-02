@@ -133,7 +133,7 @@ const PLAN_FEATURES: Record<Section13ProductSku, string[]> = {
 };
 
 const SECTION13_PLAN_TITLES: Record<Section13ProductSku, string> = {
-  section13_standard: 'Standard Section 13 Pack',
+  section13_standard: 'Standard Section 13 Rent Increase Pack',
   section13_defensive: 'Challenge-Ready Section 13 Defence Pack',
 };
 
@@ -368,7 +368,7 @@ export function Section13WizardFlow({
   const checkoutButtonLabel =
     effectiveState.selectedPlan === 'section13_defensive'
       ? 'Continue with the Challenge-Ready Section 13 Defence Pack'
-      : 'Continue with the Standard Section 13 Pack';
+      : 'Continue with the Standard Section 13 Rent Increase Pack';
   const section13PreviewProofEntries = useMemo(
     () =>
       [
@@ -2294,7 +2294,7 @@ export function Section13WizardFlow({
 
   return (
     <WizardShellV3
-      title={product === 'section13_defensive' ? 'Challenge-Ready Section 13 Defence Pack' : 'Standard Section 13 Pack'}
+      title={product === 'section13_defensive' ? 'Challenge-Ready Section 13 Defence Pack' : 'Standard Section 13 Rent Increase Pack'}
       completedCount={completedCount}
       totalCount={STEP_CONFIG.length}
       progress={(completedCount / STEP_CONFIG.length) * 100}

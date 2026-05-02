@@ -20,13 +20,16 @@ PROPERTY 12 Example Street, London, SW1A 1AA
 TENANT(S) Nina Sharer, Owen
 Sharer, Priya Sharer,
 Reece Sharer
-TERM / DATES 2 May 2026 to 1 May
-2027
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on
+a periodic basis
 RENT £1500.00 DEPOSIT £1500.00
 Parties
 This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
 
--- 1 of 3 --
+-- 1 of 4 --
 
 LANDLORD Jane Landlord
 3 Owner Road, London, SW1A 2BB
@@ -53,24 +56,48 @@ PROPERTY 12 Example Street, London, SW1A 1AA
 LANDLORD Jane Landlord
 TENANT Nina Sharer
 
--- 2 of 3 --
+-- 2 of 4 --
 
 Operative Provisions
 1. HMO / Shared House Rules Appendix
+TENANT GROUP
+RESPONSIBILITY
+The tenant group is jointly responsible for complying with the tenancy terms
+and shared-house rules unless the agreement states otherwise.
 COMMUNAL
 AREAS
 Kitchen, lounge, bathroom, and garden
-COMMUNAL
 CLEANING
+ARRANGEMENT
 Professional cleaner
-VISITOR POLICY Overnight guests only with prior written approval.
-WASTE AND
-RECYCLING
-ARRANGEMENTS
-Bins to be presented every Tuesday night.
-FIRE SAFETY
-NOTES
-Do not tamper with detectors and keep escape routes clear.
+BILLS INCLUDED Gas, Electricity, Internet / broadband
+This appendix forms the practical house-management record for the tenancy and should be read with the
+main agreement rather than as a separate informal note.
+2. Communal Living Rules
+Cleaning rota or cleaner arrangement: Professional cleaner.
+Kitchen, bathroom, and laundry areas should be used considerately and left in a reasonable shared
+condition after use.
+Guest and overnight guest position: Overnight guests only with prior written approval..
+Quiet hours should be set clearly for the shared house.
+Waste and recycling arrangement: Bins to be presented every Tuesday night..
+3. Safety, Security, and Repairs
+Fire safety and escape route note: Do not tamper with detectors and keep escape routes clear..
+Do not interfere with fire doors, alarms, detectors, or escape routes.
+Keys, fobs, and building access devices should be kept secure and reported promptly if lost.
+Repairs affecting shared areas or safety should be reported promptly so the file stays up to date.
+Reasonable notice may be given for communal-area inspections, safety checks, and contractor visits.
+
+-- 3 of 4 --
+
+4. Fair Use and Escalation
+Where bills are included, the expectation is fair domestic use. Excessive or unreasonable use may be
+raised with the tenant group and should be dealt with reasonably.
+Damage to communal areas, repeated cleaning failures, guest breaches, or antisocial behaviour should
+be recorded in writing.
+Fire safety interference, refusal to cooperate with reasonable inspections, or repeated shared-house
+breaches should be escalated in writing and kept on the tenancy file.
+Disputes between sharers should be raised promptly so the landlord record shows what issue arose and
+what was said or agreed next.
 Execution
 Keep this appendix with the HMO / shared-house agreement and any property-management notes.
 FILE OWNER
@@ -78,4 +105,4 @@ Jane Landlord
 Signature Date
 Landlord Heaven file copy RL-ENGLAND-HMO-SHARED-HOUSE-TA-TENANCY-001
 
--- 3 of 3 --
+-- 4 of 4 --

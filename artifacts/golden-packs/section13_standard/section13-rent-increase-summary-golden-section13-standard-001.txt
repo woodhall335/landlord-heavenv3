@@ -1,0 +1,24 @@
+Rent Increase Summary
+This summary keeps the proposed rent increase, service record, and market evidence aligned on one
+front page.
+Property: 10 Sample Road, Leeds, LS1 1AA
+Tenant(s): Alex Tenant, Jordan Tenant
+Core facts
+Current rent: £1200.00 per month
+Proposed rent: £1285.00 per month
+Proposed start date: 01 June 2026
+Service date: 25 March 2026
+Evidence strength: Strong evidence
+Challenge band: Moderate likelihood of challenge
+Comparable count: 8
+What this file does
+It keeps Form 4A, the market evidence, and the proof-of-service record together so the proposed increase
+can be explained consistently.
+If referred to the tribunal, the question is the open-market rent for the property on comparable terms, not
+simply whether the increase feels large or small.
+Next step
+Serve Form 4A using the recorded method, keep the market evidence and service record with it, and
+answer any tenant query from the same figures and comparables.
+Landlord Heaven | Section 13 rent increase summary Page 1 of 1
+
+-- 1 of 1 --

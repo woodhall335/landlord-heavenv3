@@ -179,8 +179,8 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
 
             <CtaBand
               title="Ready to turn this into a cleaner landlord file?"
-              body="Move from reading to action with the Standard Section 13 Pack. It keeps the timeline checks, the comparables, and the notice outputs lined up before you serve."
-              primaryLabel="Start the Standard Section 13 Pack"
+              body="Move from reading to action with the Standard Section 13 Rent Increase Pack. It keeps the timeline checks, the comparables, and the notice outputs lined up before you serve."
+              primaryLabel="Start the Standard Section 13 Rent Increase Pack"
             />
 
             {sampleProof ? <GoldenPackProof data={sampleProof} /> : null}
@@ -192,7 +192,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
                   <CtaBand
                     title={config.midCtaTitle}
                     body={config.midCtaBody}
-                    primaryLabel="Start the Standard Section 13 Pack"
+                    primaryLabel="Start the Standard Section 13 Rent Increase Pack"
                   />
                 ) : null}
               </div>
@@ -202,7 +202,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
               <CtaBand
                 title={config.finalCtaTitle}
                 body={config.finalCtaBody}
-                primaryLabel="Start the Standard Section 13 Pack"
+                primaryLabel="Start the Standard Section 13 Rent Increase Pack"
               />
             </section>
           </div>

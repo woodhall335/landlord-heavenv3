@@ -59,7 +59,7 @@ const tenancyAgreementLinks: NavItem[] = [
   { href: '/premium-tenancy-agreement', label: 'Premium Tenancy Agreement' },
   { href: '/student-tenancy-agreement', label: 'Student Tenancy Agreement' },
   { href: '/hmo-shared-house-tenancy-agreement', label: 'HMO / Shared House Tenancy Agreement' },
-  { href: '/lodger-agreement', label: 'Room Let / Lodger Agreement' },
+  { href: '/lodger-agreement', label: 'Room Let / Lodger Agreement & Shared Home Pack' },
 ];
 
 const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({

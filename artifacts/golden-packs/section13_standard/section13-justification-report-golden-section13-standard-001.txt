@@ -35,11 +35,19 @@ evidence. The proposed rent reflects recent local listings, condition, and curre
 similar two-bedroom homes.
 Case-specific note: The proposed rent reflects recent local listings, condition, and current market
 positioning for similar two-bedroom homes.
+Condition and adjustment check
+Condition considered: use the saved comparable notes, photographs, and any inspection material kept with
+the file to explain whether the subject property is stronger, weaker, or broadly similar.
 Landlord Heaven | Comparable analysis and justification Page 1 of 3
 
 -- 1 of 3 --
 
 Rent Increase Justification Report
+Size and bedroom count considered: 2 bedroom property compared against the saved comparable
+schedule.
+Adjustments applied: no separate manual adjustment is recorded beyond the comparable figures saved in
+the file, so the landlord position should explain why the chosen comparables were treated as sufficiently
+similar.
 Comparable overview
 - Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the
 last 90 days and all source-backed
@@ -71,14 +79,14 @@ Source date (published): 15 March 2026
 Adjustments: none recorded
 4. Apartment 8, Park Row, Leeds LS1 | £1290.00 monthly | adjusted £1290.00 pcm
 Source: scraped | https://example.com/leeds-rent-comparable-4
-Distance: 0.40 miles
-Source date (published): 15 March 2026
-Adjustments: none recorded
 Landlord Heaven | Comparable analysis and justification Page 2 of 3
 
 -- 2 of 3 --
 
 Rent Increase Justification Report
+Distance: 0.40 miles
+Source date (published): 15 March 2026
+Adjustments: none recorded
 5. Flat 11, Riverside Court, Leeds LS1 | £1305.00 monthly | adjusted £1305.00 pcm
 Source: scraped | https://example.com/leeds-rent-comparable-5
 Distance: 0.50 miles
@@ -102,8 +110,14 @@ Adjustments: none recorded
 Final checks before service or filing
 The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
 tribunal can set a lower rent, but not higher than the rent proposed in the notice.
+Check that Form 4A is the current prescribed notice and that the completed notice matches the final figures
+in the report.
+Confirm that at least two months notice is given, that the proposed start date aligns with the tenancy period,
+and that the 52/53-week timing rule has been checked.
 Check that the service date, proposed start date, and rent figures match the final Form 4A notice, the proof
 of service record, and the comparable evidence file before sending or relying on them.
+If the tenant queries the increase, respond using the same market evidence. If a revised figure or later start
+date is agreed, record that agreement in writing so it does not conflict with the notice file.
 Landlord Heaven | Comparable analysis and justification Page 3 of 3
 
 -- 3 of 3 --

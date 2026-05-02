@@ -8,7 +8,7 @@ export const LANDLORD_GUIDANCE_DISCLAIMER =
   'Guided document preparation and practical support for landlords. Not a solicitor service or legal representation.';
 
 export const SECTION13_STANDARD_SUMMARY =
-  'Use the Standard Section 13 Pack when you want to propose a new rent properly, check the timing first, and serve a Form 4A backed by market evidence.';
+  'Use the Standard Section 13 Rent Increase Pack when you want to propose a new rent properly, check the timing first, and serve a Form 4A backed by market evidence.';
 
 export const SECTION13_DEFENCE_SUMMARY =
   'Use the Challenge-Ready Section 13 Defence Pack when the tenant is likely to challenge the increase and you want a more complete tribunal-ready file, guidance, and response tools.';

@@ -365,7 +365,7 @@ export default function PricingPage() {
           {
             question: 'Do you list Section 13 pricing here too?',
             answer:
-              'Yes. The pricing page includes both the Standard Section 13 Pack and the Challenge-Ready Section 13 Defence Pack, with prices pulled from the same central product pricing used across the site.',
+              'Yes. The pricing page includes both the Standard Section 13 Rent Increase Pack and the Challenge-Ready Section 13 Defence Pack, with prices pulled from the same central product pricing used across the site.',
           },
         ]}
         showContactCTA={false}

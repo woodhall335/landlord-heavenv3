@@ -40,7 +40,7 @@ export type Section13ProductPageConfig = {
 
 export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   slug: 'section-13-standard',
-  title: `Standard Section 13 Pack for England Landlords | ${PRODUCTS.section13_standard.displayPrice}`,
+  title: `Standard Section 13 Rent Increase Pack for England Landlords | ${PRODUCTS.section13_standard.displayPrice}`,
   description:
     'Increase rent in England using Section 13 and Form 4A with market evidence, service records, and landlord-facing support in one pack.',
   keywords: [
@@ -50,11 +50,11 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     'rent increase section 13',
     'increase rent section 13',
   ],
-  heroTitle: 'Standard Section 13 Pack for England landlords',
+  heroTitle: 'Standard Section 13 Rent Increase Pack for England landlords',
   heroSubtitle:
     'Increase the rent with live comparable-listing evidence, timing checks, and supporting paperwork that still makes sense if the tenant asks why the figure has changed.',
   productSku: 'section13_standard',
-  ctaLabel: `Start Standard Section 13 Pack - ${PRODUCTS.section13_standard.displayPrice}`,
+  ctaLabel: `Start Standard Section 13 Rent Increase Pack - ${PRODUCTS.section13_standard.displayPrice}`,
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
     'Built for landlords who want more than a blank Form 4A: the notice, live comparable-listing evidence, and service record all read as one joined-up rent increase file.',
@@ -179,7 +179,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
       },
       {
         step: 'Step 03',
-        title: 'Generate the Standard Section 13 pack',
+        title: 'Generate the Standard Section 13 rent increase pack',
         body:
           'Review the completed file, then serve the notice with the supporting explanation and service record kept together.',
       },
@@ -406,14 +406,14 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     title: 'Prepare the stronger Section 13 defence file now',
     body:
       'Start here if you expect the rent increase to be challenged and want the live market evidence, response material, and tribunal bundle prepared before the file starts drifting.',
-    secondaryLabel: 'See the Standard Section 13 Pack',
+    secondaryLabel: 'See the Standard Section 13 Rent Increase Pack',
     secondaryHref: '/products/section-13-standard',
   },
   faqs: [
     {
       question: 'Do I need this pack for every rent increase?',
       answer:
-        'No. Many landlords only need the Standard Section 13 Pack. The Challenge-Ready Section 13 Defence Pack is for cases where challenge risk is real or tribunal preparation is already in view.',
+        'No. Many landlords only need the Standard Section 13 Rent Increase Pack. The Challenge-Ready Section 13 Defence Pack is for cases where challenge risk is real or tribunal preparation is already in view.',
     },
     {
       question: 'Does this include the core Section 13 notice documents as well?',

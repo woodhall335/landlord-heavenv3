@@ -1,0 +1,118 @@
+CASE ID
+golden-hmo-tenancy-001
+JURISDICTION
+England
+GENERATED
+1 May 2026
+FOR PROPERTIES IN ENGLAND
+HMO Setup Summary
+HMO / Shared House Tenancy Agreement & House Management Pack summary and readiness page
+Use this summary as the front sheet for the HMO or shared-house file so the sharer position,
+operational risks, and next step stay clear.
+PREPARED 16 April 2026 FILE
+REFERENCE
+RL-ENGLAND-HMO-
+SHARED-HOUSE-TA-
+TENANCY-001
+EFFECTIVE DATE 2 May 2026 DOCUMENT
+TYPE
+HMO setup summary
+PROPERTY 12 Example Street, London, SW1A 1AA
+TENANT(S) Nina Sharer, Owen
+Sharer, Priya Sharer,
+Reece Sharer
+REFERENCE
+PERIOD (NOT
+FIXED TERM)
+2 May 2026 onward on
+a periodic basis
+RENT £1500.00 DEPOSIT £1500.00
+Parties
+This agreement is made on 16 April 2026 by the parties identified below in relation to the Property in England.
+
+-- 1 of 4 --
+
+LANDLORD Jane Landlord
+3 Owner Road, London, SW1A 2BB
+Email: jane@example.com
+Telephone: 07123 456789
+TENANT 1 Nina Sharer
+12 Example Street, London, SW1A 1AA
+Email: nina@example.com
+Telephone: 07000 300001
+TENANT 2 Owen Sharer
+12 Example Street, London, SW1A 1AA
+Email: owen@example.com
+Telephone: 07000 300002
+TENANT 3 Priya Sharer
+12 Example Street, London, SW1A 1AA
+Email: priya@example.com
+Telephone: 07000 300003
+TENANT 4 Reece Sharer
+12 Example Street, London, SW1A 1AA
+Email: reece@example.com
+Telephone: 07000 300004
+Defined Terms
+PROPERTY 12 Example Street, London, SW1A 1AA
+LANDLORD Jane Landlord
+TENANT Nina Sharer
+
+-- 2 of 4 --
+
+Operative Provisions
+1. HMO Setup Summary
+This summary keeps the shared-house file focused on the operational points that most often cause dispute,
+inconsistency, or licensing trouble later.
+PROPERTY 12 Example Street, London, SW1A 1AA
+TENANT GROUP Nina Sharer, Owen Sharer, Priya Sharer, Reece Sharer
+TENANCY START
+DATE
+2 May 2026
+HMO / LICENSING
+STATUS
+Currently licensed
+NUMBER OF
+SHARERS /
+ROOMS
+5
+COMMUNAL
+AREAS
+Kitchen, lounge, bathroom, and garden
+BILLS INCLUDED Gas, Electricity, Internet / broadband
+CLEANING
+ARRANGEMENT
+Professional cleaner
+FIRE SAFETY
+NOTES
+Do not tamper with detectors and keep escape routes clear.
+STATUS READY TO SIGN
+This agreement forms the core of the tenancy record and the HMO / shared-house rules appendix should be
+kept with it as the practical house-management record.
+If the tenancy is not set up clearly and consistently, it can affect how issues are handled later, including
+possession.
+2. Key Risks
+Core party, property, payment, and start-date details are recorded clearly.
+Deposit support documents are included so the protection record can stay with the file.
+The shared-house rules appendix is included so communal living expectations stay with the main tenancy
+file.
+Right to rent checks are recorded for 25 April 2026.
+
+-- 3 of 4 --
+
+3. What This Pack Does
+Supporting documents included: Main tenancy agreement; Pre-tenancy checklist; Keys and handover record;
+Utilities and meter handover sheet; Pet request / consent addendum; Tenancy variation record; HMO / shared-
+house rules appendix.
+Next step: sign the agreement, confirm house rules with the tenant group, and keep the appendix with the
+signed file.
+Sets up the shared-house tenancy clearly and keeps communal expectations in one place.
+Helps avoid avoidable disputes over cleaning, guests, waste, safety, and shared-space use.
+Supports later enforcement or possession if the tenancy file has to be relied on.
+Execution
+This document should be signed and dated by the parties and retained with the tenancy records.
+FILE OWNER
+Jane Landlord
+Signature Date
+Landlord Heaven file copy RL-ENGLAND-HMO-SHARED-HOUSE-TA-TENANCY-001
+
+-- 4 of 4 --

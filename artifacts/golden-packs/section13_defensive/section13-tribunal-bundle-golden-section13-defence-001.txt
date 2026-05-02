@@ -12,21 +12,49 @@ Core exhibits are the signed Form 4A notice, the market-rent justification repor
 the service record, and the supporting response materials relied on by the landlord.
 Section 13 Defensive Pack | Bundle cover Page 1 of 1
 
--- 1 of 20 --
+-- 1 of 24 --
 
 Tribunal Bundle Index
 Bundle cover sheet (1 page)
-Exhibit A: Form 4A rent increase notice (9 pages)
-Exhibit B: Rent increase justification report (3 pages)
-Exhibit C: Tribunal Argument Summary (1 page)
-Exhibit D: Proof of service record (1 page)
-Exhibit E: Rent increase cover letter (1 page)
-Exhibit F: Tribunal defence guide (1 page)
-Exhibit G: Landlord response template (1 page)
-Exhibit H: Tribunal legal briefing (1 page)
+Exhibit A: Rent Increase Summary (1 page)
+Exhibit B: Form 4A rent increase notice (9 pages)
+Exhibit C: Rent increase justification report (3 pages)
+Exhibit D: Property condition comparison sheet (2 pages)
+Exhibit E: Tenant argument and landlord response guide (1 page)
+Exhibit F: Tribunal Argument Summary (1 page)
+Exhibit G: Proof of service record (1 page)
+Exhibit H: Rent increase cover letter (1 page)
+Exhibit I: Tribunal defence guide (1 page)
+Exhibit J: Landlord response template (1 page)
+Exhibit K: Tribunal legal briefing (1 page)
 Section 13 Defensive Pack | Bundle index Page 1 of 1
 
--- 2 of 20 --
+-- 2 of 24 --
+
+Rent Increase Summary
+This summary keeps the proposed rent increase, service record, and market evidence aligned on one
+front page.
+Property: 10 Sample Road, Leeds, LS1 1AA
+Tenant(s): Alex Tenant, Jordan Tenant
+Core facts
+Current rent: £1200.00 per month
+Proposed rent: £1285.00 per month
+Proposed start date: 01 June 2026
+Service date: 25 March 2026
+Evidence strength: Strong evidence
+Challenge band: Moderate likelihood of challenge
+Comparable count: 8
+What this file does
+It keeps Form 4A, the market evidence, and the proof-of-service record together so the proposed increase
+can be explained consistently.
+If referred to the tribunal, the question is the open-market rent for the property on comparable terms, not
+simply whether the increase feels large or small.
+Next step
+Serve Form 4A using the recorded method, keep the market evidence and service record with it, and
+answer any tenant query from the same figures and comparables.
+Landlord Heaven | Section 13 rent increase summary Page 1 of 1
+
+-- 3 of 24 --
 
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26) ©Crown copyright 2026
 Page 1
@@ -65,7 +93,7 @@ given in question 4.6.
 There is information in Section 5 on how to take action if you disagree
 with the proposed rent and where you can find advice.
 
--- 3 of 20 --
+-- 4 of 24 --
 
 Page 2
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -96,7 +124,7 @@ Town or city
 County (optional)
 Postcode
 
--- 4 of 20 --
+-- 5 of 24 --
 
 Page 3
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -129,7 +157,7 @@ documents on you.
 Phone number
 Email
 
--- 5 of 20 --
+-- 6 of 24 --
 
 4. The rent
 4.1 Current rent
@@ -213,7 +241,7 @@ Communication
 services £ £
 Fixed service charges £ £
 
--- 6 of 20 --
+-- 7 of 24 --
 
 Signed Note to landlord: If you
 are joint landlords either
@@ -234,7 +262,7 @@ Additional signatures for joint landlords
 2. Signature, full name, address, and capacity of signatory (landlord).
 3. Signature, full name, address, and capacity of signatory (landlord).
 
--- 7 of 20 --
+-- 8 of 24 --
 
 Page 6
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -278,7 +306,7 @@ rent amount until the tribunal has made its decision.
 You might find it helpful to check similar properties in your area to get an
 idea of the market rate.
 
--- 8 of 20 --
+-- 9 of 24 --
 
 Page 7
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -322,7 +350,7 @@ starts on the 20th of April, the new rent must start on the 20th day of
 the month when the increase begins. Second example: if a weekly
 tenancy started on a Monday, the new rent must begin on a Monday.
 
--- 9 of 20 --
+-- 10 of 24 --
 
 Page 8
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -338,7 +366,7 @@ Do not include any variable service charges (within the meaning of
 section 18 of the Landlord and Tenant Act 1985) that change based
 on costs.
 
--- 10 of 20 --
+-- 11 of 24 --
 
 Page 9
 Form 4A Landlord's notice proposing a new rent for assured tenancies in the private rented sector (05.26)
@@ -351,7 +379,7 @@ Signature
 Date
 Day Month Year
 
--- 11 of 20 --
+-- 12 of 24 --
 
 Rent Increase Justification Report
 This report explains why the proposed rent is supported by local comparable evidence.
@@ -390,11 +418,19 @@ evidence. The proposed rent reflects recent local listings, condition, and curre
 similar two-bedroom homes.
 Case-specific note: The proposed rent reflects recent local listings, condition, and current market
 positioning for similar two-bedroom homes.
+Condition and adjustment check
+Condition considered: use the saved comparable notes, photographs, and any inspection material kept with
+the file to explain whether the subject property is stronger, weaker, or broadly similar.
 Landlord Heaven | Comparable analysis and justification Page 1 of 3
 
--- 12 of 20 --
+-- 13 of 24 --
 
 Rent Increase Justification Report
+Size and bedroom count considered: 2 bedroom property compared against the saved comparable
+schedule.
+Adjustments applied: no separate manual adjustment is recorded beyond the comparable figures saved in
+the file, so the landlord position should explain why the chosen comparables were treated as sufficiently
+similar.
 Comparable overview
 - Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the
 last 90 days and all source-backed
@@ -426,14 +462,14 @@ Source date (published): 15 March 2026
 Adjustments: none recorded
 4. Apartment 8, Park Row, Leeds LS1 | £1290.00 monthly | adjusted £1290.00 pcm
 Source: scraped | https://example.com/leeds-rent-comparable-4
+Landlord Heaven | Comparable analysis and justification Page 2 of 3
+
+-- 14 of 24 --
+
+Rent Increase Justification Report
 Distance: 0.40 miles
 Source date (published): 15 March 2026
 Adjustments: none recorded
-Landlord Heaven | Comparable analysis and justification Page 2 of 3
-
--- 13 of 20 --
-
-Rent Increase Justification Report
 5. Flat 11, Riverside Court, Leeds LS1 | £1305.00 monthly | adjusted £1305.00 pcm
 Source: scraped | https://example.com/leeds-rent-comparable-5
 Distance: 0.50 miles
@@ -457,11 +493,131 @@ Adjustments: none recorded
 Final checks before service or filing
 The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
 tribunal can set a lower rent, but not higher than the rent proposed in the notice.
+Check that Form 4A is the current prescribed notice and that the completed notice matches the final figures
+in the report.
+Confirm that at least two months notice is given, that the proposed start date aligns with the tenancy period,
+and that the 52/53-week timing rule has been checked.
 Check that the service date, proposed start date, and rent figures match the final Form 4A notice, the proof
 of service record, and the comparable evidence file before sending or relying on them.
+If the tenant queries the increase, respond using the same market evidence. If a revised figure or later start
+date is agreed, record that agreement in writing so it does not conflict with the notice file.
 Landlord Heaven | Comparable analysis and justification Page 3 of 3
 
--- 14 of 20 --
+-- 15 of 24 --
+
+Property Condition Comparison Sheet
+Use this sheet if the tenant says the property condition or specification is weaker than the
+comparables relied on.
+Property: 10 Sample Road, Leeds, LS1 1AA
+Comparison sheet
+1. Comparable: Flat 2, The Calls, Leeds LS1 | £1240.00 pcm adjusted | 0.2 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-1
+2. Comparable: Apartment 14, Sovereign Street, Leeds LS1 | £1265.00 pcm adjusted | 0.3 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-2
+3. Comparable: Flat 5, Brewery Wharf, Leeds LS10 | £1275.00 pcm adjusted | 0.4 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-3
+4. Comparable: Apartment 8, Park Row, Leeds LS1 | £1290.00 pcm adjusted | 0.4 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-4
+5. Comparable: Flat 11, Riverside Court, Leeds LS1 | £1305.00 pcm adjusted | 0.5 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Section 13 Defensive Pack | Property condition comparison sheet Page 1 of 2
+
+-- 16 of 24 --
+
+Property Condition Comparison Sheet
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-5
+6. Comparable: Apartment 6, Wellington Street, Leeds LS1 | £1315.00 pcm adjusted | 0.5 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-6
+7. Comparable: Flat 3, Dock Street, Leeds LS10 | £1330.00 pcm adjusted | 0.5 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-7
+8. Comparable: Apartment 21, East Parade, Leeds LS1 | £1345.00 pcm adjusted | 0.5 miles
+Subject property condition: No separate condition note recorded.
+Comparable condition: No separate condition note recorded.
+Features and furnishings: No separate feature comparison recorded.
+Size / bedrooms: 2 bedroom(s).
+Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
+Photos / evidence reference: https://example.com/leeds-rent-comparable-8
+How to use this sheet
+If a comparable needs a condition-based adjustment, say what the difference is and why it matters to
+market rent.
+If no adjustment was applied, explain why the subject property and comparable were treated as close
+enough on the saved evidence.
+Section 13 Defensive Pack | Property condition comparison sheet Page 2 of 2
+
+-- 17 of 24 --
+
+Tenant Argument and Landlord Response Guide
+This guide helps the landlord answer the most common challenge points without breaking alignment
+across the notice, service record, and evidence file.
+Property: 10 Sample Road, Leeds, LS1 1AA
+Argument and response table
+1. Tenant argument: Rent increase is too high | Response: Keep the reply anchored to the comparable
+evidence and the proposed market position. | Evidence to check: justification report, adjusted range,
+challenge band (Moderate likelihood of challenge). | Document to refer to: Rent Increase Summary and
+Justification Report.
+2. Tenant argument: Property condition is worse than comparables | Response: Deal with condition directly
+and explain any adjustment or why none was required on the saved evidence. | Evidence to check: property
+condition comparison sheet, photographs, inspection notes. | Document to refer to: Property Condition
+Comparison Sheet.
+3. Tenant argument: Comparable properties are not similar | Response: Point to locality, bedroom count,
+and the nearest source-backed examples such as Flat 2, The Calls, Leeds LS1. | Evidence to check:
+comparable table, distance, source dates. | Document to refer to: Justification Report and Tribunal
+Argument Summary.
+4. Tenant argument: Notice served incorrectly | Response: Keep the reply tied to the recorded method,
+service date, and the same Form 4A that appears in the file. | Evidence to check: proof of service record
+and service chronology. | Document to refer to: Proof of Service Record and Cover Letter.
+5. Tenant argument: Start date is invalid | Response: Check the two-month notice rule, tenancy-period
+alignment, and 52/53-week timing before taking a fixed position. | Evidence to check: preview warnings and
+date calculations. | Document to refer to: Rent Increase Summary and Justification Report.
+6. Tenant argument: Tenant cannot afford it | Response: Keep the reply respectful but focused on the
+tribunal test, which is open-market rent rather than affordability alone. | Evidence to check: open-market
+comparable evidence and any written proposal for a revised figure or later date. | Document to refer to:
+Cover Letter and Landlord Response Template.
+Negotiation strategy
+Stand firm where the comparable evidence is current, consistent, and clearly supports the proposed figure.
+Consider a small concession or later start date where the evidence is mixed, a condition point is fair, or a
+written agreement would avoid an unnecessary tribunal reference.
+Record any settlement in writing and make sure any agreed variation does not conflict with the Form 4A
+position or service record already relied on.
+If service is not valid or cannot be proved, the tribunal may reject or discount the notice file before
+considering market rent.
+Section 13 Defensive Pack | Tenant argument and landlord response guide Page 1 of 1
+
+-- 18 of 24 --
 
 Tribunal Argument Summary
 This is the landlord's concise argument brief for the hearing file.
@@ -504,7 +660,7 @@ This summary is a concise argument brief drawn from the saved case facts and com
 supports presentation of the case, but it does not guarantee a tribunal outcome.
 Section 13 Defensive Pack | Tribunal argument summary Page 1 of 1
 
--- 15 of 20 --
+-- 19 of 24 --
 
 CERTIFICATE OF SERVICE
 (Proof of Service - support record only, not a prescribed court form)
@@ -540,145 +696,4 @@ Name of person who served:
 Signature:
 Generated by Landlord Heaven This form is editable - complete and print after service
 
--- 16 of 20 --
-
-Section 13 Rent Increase Cover Letter
-Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the
-market evidence relied on.
-This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles, with all
-listed within the last 90 days and all source-backed and sits below the adjusted median of £1297.50
-pcm. The notice file is ready to serve on the recorded facts.
-Property: 10 Sample Road, Leeds, LS1 1AA
-Tenant(s): Alex Tenant, Jordan Tenant
-What is enclosed
-1. Form 4A showing the proposed rent and the proposed start date.
-2. A rent summary identifying the comparable evidence and the landlord position on market level.
-3. Contact details for Taylor Landlord if the tenant wants to discuss the proposal before the new rent date.
-Rent position in brief
-Current rent: £1200.00 per month
-Proposed rent: £1285.00 per month
-Proposed start date: 01 June 2026
-The proposed rent is supported by current market evidence and sits within the lower-to-mid range of
-comparable properties locally.
-Comparable footing: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the last 90
-days and all source-backed.
-Assessment: Moderate likelihood of challenge; Strong evidence.
-The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
-month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),
-the proposed increase is presented as reasonable with a moderate likelihood of challenge and strong
-evidence. The proposed rent reflects recent local listings, condition, and current market positioning for
-similar two-bedroom homes.
-Response window and service record
-Recorded service method: First class post
-Recorded service date: 25 March 2026
-The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
-tribunal can set a lower rent, but not higher than the rent proposed in the notice.
-If the tenant queries the figure, answer from the same rent figures, dates, and comparable evidence shown
-in Form 4A and the justification report.
-Landlord Heaven | Section 13 rent increase pack Page 1 of 1
-
--- 17 of 20 --
-
-Tribunal Defence Guide
-This guide shows how to present the Section 13 file clearly if the tenant refers the notice to the
-tribunal.
-The landlord relies on the comparable evidence in this file and says the proposed rent of £1285.00 per
-month should be judged against that market evidence, not against the size of the increase alone.
-Challenge band: Moderate likelihood of challenge. Evidence band: Strong evidence.
-If the tenant applies
-If the tenant refers the notice to the tribunal before the proposed start date, review the application promptly
-and answer from the same evidence base used in this pack.
-Keep the Form 4A notice, proof of service record, justification report, Tribunal Argument Summary, photos,
-EPC, safety documents, and any negotiation correspondence together in one hearing file.
-What to file and bring
-Bring the merged tribunal bundle, printed copies of supporting evidence, and a short chronology covering
-the tenancy start date, any earlier increase, and the proposed effective date.
-Use the same band wording throughout: Moderate likelihood of challenge and Strong evidence.
-How to explain the evidence
-Explain why the chosen comparables are relevant, how each adjustment affects the monthly equivalent,
-and why any user override was applied.
-If a point is weak or missing, acknowledge it briefly and return to the strongest nearby comparables rather
-than overstating the file.
-Keep your position consistent
-Keep returning to the same market anchor: the proposal is based on 8 comparable two-bedroom properties
-within 0.5 miles, with all listed within the last 90 days and all source-backed, not on a target percentage
-increase.
-If challenged, refer back to the recorded comparable table and the adjustments already applied.
-Describe the proposal as below the adjusted median market rent and keep the explanation tied to the Form
-4A, proof of service, and justification report rather than speculation about what the tribunal may do.
-Be ready to explain property condition, tenancy-period alignment, and how the earliest valid start date was
-calculated under the post-1 May 2026 rules.
-Section 13 Defensive Pack | Tribunal defence guide Page 1 of 1
-
--- 18 of 20 --
-
-Landlord Response Template
-Suggested wording for a landlord reply if the tenant asks the tribunal to determine the market rent.
-The recorded comparables support the proposed rent and place it below the adjusted median of
-£1297.50 pcm.
-Property: 10 Sample Road, Leeds, LS1 1AA
-Suggested response
-I am the landlord or authorised agent for 10 Sample Road, Leeds, LS1 1AA. Form 4A was served on 25
-March 2026 proposing a rent of £1285.00 per month from 01 June 2026.
-The tenancy is currently charged at £1200.00 per month. The notice date and proposed start date were
-selected so the rent review timetable recorded in the file is met.
-The landlord relies on the comparable evidence exhibited with the justification report. The analysis shows
-an adjusted median market rent of £1297.50 per month, with the proposed rent sitting below the adjusted
-median of £1297.50 pcm.
-The comparable schedule uses nearby properties of similar size and adjusts them to a monthly equivalent
-so that like is compared with like. The proposal is based on that market evidence, not on a target
-percentage increase from the historic rent alone.
-The landlord therefore asks the tribunal to determine that the proposed rent is supported by the market
-evidence, or alternatively to set the market rent at the nearest figure supported by the exhibited
-comparables.
-Points to confirm in any witness statement or reply
-1. Service method and service date: First class post on 25 March 2026.
-2. Proposed start date: 01 June 2026.
-3. Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the last 90
-days and all source-backed.
-4. Current banding: challenge risk is Moderate likelihood of challenge and evidence strength is Strong
-evidence.
-5. Any manual adjustment or override should be tied back to a recorded factual difference in the
-comparable schedule and not left as an unexplained preference.
-Evidence to attach
-Attach the completed Form 4A, proof of service record, justification report, Tribunal Argument Summary,
-relevant exhibits, and any correspondence showing attempts to resolve the issue before a hearing.
-If photos, EPC records, or tenancy documents are relied on, label them consistently with the bundle index
-so the tribunal can move from the statement to the exhibit without confusion.
-Section 13 Defensive Pack | Landlord response template Page 1 of 1
-
--- 19 of 20 --
-
-Tribunal Legal Briefing
-This briefing pulls together the main statutory and practical points that sit behind the landlord evidence
-file.
-The recorded comparables support the proposed rent and place it below the adjusted median of
-£1297.50 pcm.
-Statutory framework
-This pack is prepared on the basis of Housing Act 1988 section 13(2) and section 13(4), as amended for
-assured tenancies from 1 May 2026.
-The new rent must be proposed on Form 4A, served with at least two months notice, aligned to the tenancy
-period, and timed so that the 52-week / 53-week anti-drift rule is satisfied.
-What the tribunal considers
-The tribunal considers the market rent for the property on the open market, assuming the same terms,
-letting circumstances, and tenant obligations unless the evidence shows a meaningful difference.
-Comparable selection, adjustment discipline, and evidence freshness are therefore central. Unsupported or
-stale comparables weaken the landlord case even where the notice itself is valid.
-Practical hearing points
-Current banding: Moderate likelihood of challenge | Strong evidence.
-Stay consistent with the report wording. Do not overstate the data. If the evidence is mixed, acknowledge
-that plainly and explain why the proposed figure still sits within a reasonable market range.
-Points the file still has to prove
-The landlord still needs to show that the notice was validly served, that the proposed start date satisfies the
-statutory timing rules, and that the proposed rent is the figure best supported by the comparable evidence
-on the tribunal date.
-A clean service record, a stable chronology, and current comparables usually matter more than broad
-statements that the increase felt reasonable at the time it was proposed.
-Common weakness points
-Watch for stale comparables, missing source dates, unsupported manual overrides, or a mismatch between
-the dates in Form 4A, the proof of service record, and the narrative documents.
-If one comparable is challenged, be ready to show why the remaining comparables still support the
-proposed rent or where the nearest supported alternative figure sits.
-Section 13 Defensive Pack | Legal briefing Page 1 of 1
-
--- 20 of 20 --
+-- 20 of 24 --
