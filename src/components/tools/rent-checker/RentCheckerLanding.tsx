@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowRight, BarChart3, MapPin, ShieldCheck, Sparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/Button';
@@ -49,17 +50,27 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
               Check if your rent is fair or ready to increase
             </h1>
             <p className="max-w-3xl text-lg leading-8 text-slate-600">
-              Compare the current rent and proposed increase against local market evidence and see whether a Section 13 rent increase is likely to be supportable, risky, or under-evidenced.
+              Compare the current rent and proposed increase against local market evidence and see
+              whether a Section 13 rent increase is likely to be supportable, risky, or
+              under-evidenced.
             </p>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button size="large" onClick={onStart} className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
+            <Button
+              size="large"
+              onClick={onStart}
+              className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300"
+            >
               Check rent now
               <ArrowRight className="h-4 w-4" />
             </Button>
             <a href="/products/section-13-standard?src=rent_checker_landing" className="inline-flex">
-              <Button variant="outline" size="large" className="border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700">
+              <Button
+                variant="outline"
+                size="large"
+                className="border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700"
+              >
                 Already increasing rent? Generate Section 13 pack
               </Button>
             </a>
@@ -67,7 +78,10 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
 
           <div className="grid gap-3 sm:grid-cols-2">
             {trustBullets.map((bullet) => (
-              <div key={bullet} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm font-medium text-slate-700">
+              <div
+                key={bullet}
+                className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm font-medium text-slate-700"
+              >
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                   <ShieldCheck className="h-4 w-4" />
                 </span>
@@ -77,27 +91,16 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
           </div>
         </div>
 
-        <div className="space-y-4 rounded-[1.75rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-[0_20px_50px_rgba(15,23,42,0.18)]">
-          <div className="flex items-center justify-between rounded-2xl bg-white/10 px-4 py-3 text-sm text-white/80">
-            <span>Estimated market range</span>
-            <span className="font-semibold text-white">£950 - £1,250 pcm</span>
-          </div>
-          <div className="rounded-2xl bg-white px-5 py-5 text-slate-950">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">Sample outcome</p>
-            <h2 className="mt-3 text-2xl font-bold">This increase looks supportable but could be challenged</h2>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl bg-violet-50 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">Potential uplift</p>
-                <p className="mt-2 text-xl font-bold text-slate-950">+£200/month</p>
-              </div>
-              <div className="rounded-2xl bg-amber-50 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">Challenge risk</p>
-                <p className="mt-2 text-xl font-bold text-slate-950">Moderate</p>
-              </div>
-            </div>
-            <p className="mt-5 text-sm leading-6 text-slate-600">
-              See the supportable range, the evidence strength, and the next paid route before you serve anything.
-            </p>
+        <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50 shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
+          <div className="relative aspect-[4/4.7] w-full">
+            <Image
+              src="/images/rent-increase-challenge-tool.webp"
+              alt="Rent Increase & Challenge Checker preview"
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="(min-width: 1024px) 360px, 100vw"
+            />
           </div>
         </div>
       </div>

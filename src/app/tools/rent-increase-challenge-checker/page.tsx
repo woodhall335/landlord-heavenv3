@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function RentIncreaseChallengeCheckerPage() {
   return (
     <>
-      <HeaderConfig mode="autoOnScroll" />
+      <HeaderConfig mode="solid" />
       <RentIncreaseChallengeChecker />
     </>
   );
