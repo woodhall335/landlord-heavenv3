@@ -13,4 +13,5 @@ export {
   ProductComparisonStrip,
   BundleUpsellBlock,
   DisclaimerBlock,
+  RentCheckerInsufficientEvidencePage,
 } from './RentCheckerResultPage';

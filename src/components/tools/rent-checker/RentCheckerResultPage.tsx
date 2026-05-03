@@ -16,6 +16,20 @@ interface RentCheckerResultPageProps {
   onRestart: () => void;
 }
 
+export interface RentCheckerSourceStatus {
+  source: 'rightmove' | 'openrent';
+  route: string | null;
+  ok: boolean;
+  count: number;
+  detail: string;
+}
+
+export interface RentCheckerInsufficientEvidenceState {
+  code: 'insufficient_live_comparables';
+  message: string;
+  sourceStatuses: RentCheckerSourceStatus[];
+}
+
 function formatCurrency(value: number | null | undefined): string {
   if (value == null || Number.isNaN(Number(value))) {
     return 'Unavailable';
@@ -637,6 +651,166 @@ export function DisclaimerBlock({ result }: { result: RentCheckerResult }) {
       <div className="flex items-start gap-3">
         <AlertTriangle className="mt-1 h-5 w-5 text-slate-500" />
         <p className="text-sm leading-6 text-slate-600">{result.disclaimer}</p>
+      </div>
+    </div>
+  );
+}
+
+function sourceNameLabel(source: RentCheckerSourceStatus['source']) {
+  return source === 'rightmove' ? 'Rightmove' : 'OpenRent';
+}
+
+export function RentCheckerInsufficientEvidencePage({
+  failure,
+  onRetry,
+  onEditDetails,
+}: {
+  failure: RentCheckerInsufficientEvidenceState;
+  onRetry: () => void;
+  onEditDetails: () => void;
+}) {
+  return (
+    <div className="space-y-8">
+      <div className="overflow-hidden rounded-3xl border border-amber-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+        <div className="h-2 w-full bg-gradient-to-r from-amber-500 to-orange-500" />
+        <div className="space-y-5 p-7 sm:p-8">
+          <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">
+            More evidence needed
+          </span>
+          <div className="space-y-3">
+            <h2 className="text-3xl font-bold leading-tight text-slate-950 sm:text-4xl">
+              We could not gather enough live comparables for a grounded result
+            </h2>
+            <p className="max-w-3xl text-base leading-7 text-slate-600 sm:text-lg">
+              {failure.message}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-700">
+              What this means
+            </p>
+            <p className="mt-2 text-base leading-7 text-slate-700">
+              We only show a supportability result when we can ground it on at least 3 real live
+              comparable listings. That protects the checker from giving a false sense of certainty.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_360px]">
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 className="text-xl font-semibold text-slate-950">Live source check</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              This is what each live source returned during the search.
+            </p>
+
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {failure.sourceStatuses.map((status) => (
+                <div
+                  key={status.source}
+                  className={clsx(
+                    'rounded-2xl border p-5',
+                    status.ok
+                      ? 'border-emerald-200 bg-emerald-50/70'
+                      : 'border-slate-200 bg-slate-50'
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        {sourceNameLabel(status.source)}
+                      </p>
+                      <p className="mt-2 text-lg font-semibold text-slate-950">
+                        {status.count} live listing{status.count === 1 ? '' : 's'}
+                      </p>
+                    </div>
+                    <span
+                      className={clsx(
+                        'inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]',
+                        status.ok ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'
+                      )}
+                    >
+                      {status.ok ? 'Usable' : 'No match'}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">{status.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 className="text-xl font-semibold text-slate-950">What should I do next?</h3>
+            <ul className="mt-4 space-y-3">
+              {[
+                'Retry the live search in case new listings or a temporary source issue changes the result.',
+                'Check the postcode, bedroom count, and property type if the search area was too narrow.',
+                'Use real linked comparables in the paid Section 13 flow if you already have suitable market evidence.',
+              ].map((step) => (
+                <li key={step} className="flex items-start gap-3 text-base leading-7 text-slate-600">
+                  <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
+                    <Check className="h-4 w-4" />
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_20px_45px_rgba(15,23,42,0.08)] sm:p-7">
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+                <ShieldCheck className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Next action
+                </p>
+                <h3 className="text-xl font-semibold text-slate-950">Strengthen the evidence first</h3>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-slate-50 p-4">
+              <p className="text-sm text-slate-600">Best path from here</p>
+              <p className="mt-1 text-lg font-semibold text-slate-950">
+                Retry the live search or move into the Standard pack with real linked evidence
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Button
+                onClick={onRetry}
+                size="large"
+                fullWidth
+                className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300"
+              >
+                Retry live search
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+              <p className="text-sm leading-6 text-slate-500">
+                Run the search again before serving Form 4A.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Button
+                variant="outline"
+                onClick={onEditDetails}
+                size="large"
+                fullWidth
+                className="border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700"
+              >
+                Edit property details
+              </Button>
+              <p className="text-sm leading-6 text-slate-500">
+                Change the postcode or property details and try again.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

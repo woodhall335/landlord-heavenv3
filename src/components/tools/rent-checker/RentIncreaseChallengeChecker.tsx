@@ -10,7 +10,11 @@ import { trackEvent } from '@/lib/analytics';
 import type { RentCheckerInput, RentCheckerResult } from '@/lib/section13';
 import { RentCheckerLanding } from './RentCheckerLanding';
 import { RentCheckerForm } from './RentCheckerForm';
-import { RentCheckerResultPage } from './RentCheckerResultPage';
+import {
+  RentCheckerInsufficientEvidencePage,
+  RentCheckerResultPage,
+  type RentCheckerInsufficientEvidenceState,
+} from './RentCheckerResultPage';
 
 type StepId = 'property' | 'condition' | 'review';
 
@@ -68,6 +72,8 @@ export function RentIncreaseChallengeChecker() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<RentCheckerResult | null>(null);
+  const [insufficientEvidence, setInsufficientEvidence] =
+    useState<RentCheckerInsufficientEvidenceState | null>(null);
   const [started, setStarted] = useState(false);
   const formRef = useRef<HTMLDivElement | null>(null);
   const hasTrackedStart = useRef(false);
@@ -150,6 +156,7 @@ export function RentIncreaseChallengeChecker() {
 
     setLoading(true);
     setErrors({});
+    setInsufficientEvidence(null);
 
     try {
       const response = await fetch('/api/tools/rent-increase-challenge-checker/analyze', {
@@ -163,10 +170,22 @@ export function RentIncreaseChallengeChecker() {
 
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
+        if (response.status === 422 && data.code === 'insufficient_live_comparables') {
+          setInsufficientEvidence({
+            code: 'insufficient_live_comparables',
+            message:
+              data.error || 'We could not gather enough live comparable evidence for a grounded result.',
+            sourceStatuses: Array.isArray(data.sourceStatuses) ? data.sourceStatuses : [],
+          });
+          setResult(null);
+          return;
+        }
+
         setErrors({ submit: data.error || 'Failed to analyse the rent position.' });
         return;
       }
 
+      setInsufficientEvidence(null);
       setResult(data.result);
     } catch (error) {
       console.error(error);
@@ -178,6 +197,7 @@ export function RentIncreaseChallengeChecker() {
 
   const restart = () => {
     setResult(null);
+    setInsufficientEvidence(null);
     setStep('property');
     setErrors({});
     setInput({
@@ -185,6 +205,12 @@ export function RentIncreaseChallengeChecker() {
       sessionId: makeSessionId(),
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const editDetails = () => {
+    setInsufficientEvidence(null);
+    setStep('property');
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -215,6 +241,12 @@ export function RentIncreaseChallengeChecker() {
 
           {result ? (
             <RentCheckerResultPage result={result} onRestart={restart} />
+          ) : insufficientEvidence ? (
+            <RentCheckerInsufficientEvidencePage
+              failure={insufficientEvidence}
+              onRetry={() => void handleSubmit()}
+              onEditDetails={editDetails}
+            />
           ) : (
             <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
               <RentCheckerForm
