@@ -16,6 +16,18 @@ interface RentCheckerResultPageProps {
   onRestart: () => void;
 }
 
+function formatCurrency(value: number | null | undefined): string {
+  if (value == null || Number.isNaN(Number(value))) {
+    return 'Unavailable';
+  }
+
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    maximumFractionDigits: 0,
+  }).format(Number(value));
+}
+
 function getToneClasses(result: RentCheckerResult) {
   switch (result.resultState) {
     case 'landlord_low_risk':
@@ -23,22 +35,12 @@ function getToneClasses(result: RentCheckerResult) {
         badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
         accent: 'from-emerald-500 to-teal-500',
         border: 'border-emerald-100',
-        icon: 'text-emerald-600',
       };
     case 'landlord_moderate_risk':
-    case 'tenant_within_market':
       return {
         badge: 'bg-amber-50 text-amber-700 border-amber-200',
         accent: 'from-amber-500 to-orange-500',
         border: 'border-amber-100',
-        icon: 'text-amber-600',
-      };
-    case 'tenant_challengeable':
-      return {
-        badge: 'bg-sky-50 text-sky-700 border-sky-200',
-        accent: 'from-sky-500 to-indigo-500',
-        border: 'border-sky-100',
-        icon: 'text-sky-600',
       };
     case 'landlord_high_risk':
     default:
@@ -46,7 +48,6 @@ function getToneClasses(result: RentCheckerResult) {
         badge: 'bg-rose-50 text-rose-700 border-rose-200',
         accent: 'from-rose-500 to-red-500',
         border: 'border-rose-100',
-        icon: 'text-rose-600',
       };
   }
 }
@@ -120,13 +121,11 @@ function CtaLink({
 export function ResultHeroCard({ result }: { result: RentCheckerResult }) {
   const tone = getToneClasses(result);
   const badgeLabel =
-    result.resultState === 'tenant_challengeable'
-      ? 'Tenant route'
-      : result.challengeRiskLabel === 'Low'
-        ? 'Supportable'
-        : result.challengeRiskLabel === 'Moderate'
-          ? 'Prepare well'
-          : 'Higher risk';
+    result.challengeRiskLabel === 'Low'
+      ? 'Supportable'
+      : result.challengeRiskLabel === 'Moderate'
+        ? 'Prepare well'
+        : 'Higher risk';
 
   return (
     <div className={clsx('overflow-hidden rounded-3xl border bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]', tone.border)}>
@@ -157,20 +156,20 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
           <dt>Estimated range</dt>
           <dd className="font-semibold text-slate-950">
             {result.marketLow != null && result.marketHigh != null
-              ? `£${Math.round(result.marketLow)} – £${Math.round(result.marketHigh)} pcm`
+              ? `${formatCurrency(result.marketLow)} - ${formatCurrency(result.marketHigh)} pcm`
               : 'Unavailable'}
           </dd>
         </div>
         <div className="flex items-start justify-between gap-4">
           <dt>Market median</dt>
           <dd className="font-semibold text-slate-950">
-            {result.marketMedian != null ? `£${Math.round(result.marketMedian)} pcm` : 'Unavailable'}
+            {result.marketMedian != null ? `${formatCurrency(result.marketMedian)} pcm` : 'Unavailable'}
           </dd>
         </div>
         <div className="flex items-start justify-between gap-4">
           <dt>Current rent</dt>
           <dd className="text-right">
-            <div className="font-semibold text-slate-950">£{Math.round(result.currentRent)} pcm</div>
+            <div className="font-semibold text-slate-950">{formatCurrency(result.currentRent)} pcm</div>
             <div className="text-xs uppercase tracking-[0.18em] text-slate-500">{result.currentPositionLabel}</div>
           </dd>
         </div>
@@ -178,7 +177,7 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
           <div className="flex items-start justify-between gap-4">
             <dt>Proposed rent</dt>
             <dd className="text-right">
-              <div className="font-semibold text-slate-950">£{Math.round(result.proposedRent)} pcm</div>
+              <div className="font-semibold text-slate-950">{formatCurrency(result.proposedRent)} pcm</div>
               <div className="text-xs uppercase tracking-[0.18em] text-slate-500">{result.proposedPositionLabel}</div>
             </dd>
           </div>
@@ -214,6 +213,73 @@ export function RiskEvidenceCard({ result }: { result: RentCheckerResult }) {
           <dd className="mt-2 text-sm font-semibold text-slate-950">{result.freshnessLabel}</dd>
         </div>
       </dl>
+    </div>
+  );
+}
+
+export function ComparableListingsCard({ result }: { result: RentCheckerResult }) {
+  if (result.comparableListings.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h3 className="text-xl font-semibold text-slate-950">Comparable listings used</h3>
+          <p className="mt-1 text-sm leading-6 text-slate-600">
+            These nearby homes were used to place the rent against the local market.
+          </p>
+        </div>
+        <p className="max-w-sm text-right text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+          {result.scrapeSummary}
+        </p>
+      </div>
+
+      <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {result.comparableListings.map((item) => (
+          <article key={`${item.address}-${item.monthlyRent}`} className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50/60">
+            <div className="aspect-[4/3] bg-slate-100">
+              {item.imageUrl ? (
+                <img
+                  src={item.imageUrl}
+                  alt={item.address}
+                  className="h-full w-full object-cover object-center"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center text-sm text-slate-400">No image available</div>
+              )}
+            </div>
+            <div className="space-y-3 p-4">
+              <div>
+                <h4 className="text-base font-semibold leading-6 text-slate-950">{item.address}</h4>
+                <p className="mt-1 text-sm text-slate-600">
+                  {[item.propertyType, item.bedrooms != null ? `${item.bedrooms} bed` : null].filter(Boolean).join(' • ') || 'Comparable property'}
+                </p>
+              </div>
+              <div className="flex items-end justify-between gap-3">
+                <div>
+                  <p className="text-sm text-slate-500">Listed rent</p>
+                  <p className="text-lg font-semibold text-slate-950">{formatCurrency(item.monthlyRent)} pcm</p>
+                </div>
+                {item.sourceUrl ? (
+                  <a
+                    href={item.sourceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+                  >
+                    View source
+                  </a>
+                ) : null}
+              </div>
+              <p className="text-xs leading-5 text-slate-500">{item.sourceLabel}</p>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   );
 }
@@ -403,7 +469,7 @@ export function EmailReportCapture({ result }: { result: RentCheckerResult }) {
         <div>
           <h3 className="text-xl font-semibold text-slate-950">Get your full rent evidence report</h3>
           <p className="mt-2 text-base leading-7 text-slate-600">
-            We’ll email your market range, risk band, evidence strength, and recommended next step.
+            We'll email your market range, risk band, evidence strength, and recommended next step.
           </p>
         </div>
       </div>
@@ -441,7 +507,7 @@ export function EmailReportCapture({ result }: { result: RentCheckerResult }) {
               Send my report
             </Button>
             <button type="button" onClick={() => setStatus('idle')} className="text-sm font-medium text-slate-500 hover:text-slate-700">
-              No thanks, I’ll continue
+              No thanks, I'll continue
             </button>
           </div>
           <p className="text-xs leading-5 text-slate-500">
@@ -458,7 +524,7 @@ const comparisonRows = [
   { label: 'Rent summary', standard: true, defence: true },
   { label: 'Market justification report', standard: true, defence: true },
   { label: 'Proof of service', standard: true, defence: true },
-  { label: 'Tenant response handling', standard: false, defence: true },
+  { label: 'Challenge response handling', standard: false, defence: true },
   { label: 'Tribunal argument summary', standard: false, defence: true },
   { label: 'Tribunal bundle', standard: false, defence: true },
   { label: 'Legal briefing', standard: false, defence: true },
@@ -484,17 +550,19 @@ export function ProductComparisonStrip({ result }: { result: RentCheckerResult }
             {comparisonRows.map((row) => (
               <tr key={row.label}>
                 <td className="px-6 py-4 font-medium text-slate-900">{row.label}</td>
-                <td className="px-6 py-4 text-slate-600">{row.standard ? 'Included' : '—'}</td>
-                <td className="px-6 py-4 text-slate-600">{row.defence ? 'Included' : '—'}</td>
+                <td className="px-6 py-4 text-slate-600">{row.standard ? 'Included' : '-'}</td>
+                <td className="px-6 py-4 text-slate-600">{row.defence ? 'Included' : '-'}</td>
                 <td className="px-6 py-4">
-                  <span className={clsx(
-                    'inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]',
-                    result.recommendedProduct === 'section13_standard' && row.standard
-                      ? 'bg-indigo-50 text-indigo-700'
-                      : result.recommendedProduct === 'section13_defensive' && row.defence
+                  <span
+                    className={clsx(
+                      'inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]',
+                      result.recommendedProduct === 'section13_standard' && row.standard
                         ? 'bg-indigo-50 text-indigo-700'
-                        : 'bg-slate-100 text-slate-500'
-                  )}>
+                        : result.recommendedProduct === 'section13_defensive' && row.defence
+                          ? 'bg-indigo-50 text-indigo-700'
+                          : 'bg-slate-100 text-slate-500'
+                    )}
+                  >
                     {result.recommendedProduct === 'section13_standard'
                       ? row.standard ? 'Recommended' : 'Optional'
                       : row.defence ? 'Recommended' : 'Optional'}
@@ -556,7 +624,7 @@ export function BundleUpsellBlock({ result }: { result: RentCheckerResult }) {
           </Button>
         </Link>
         <p className="text-sm text-slate-500">
-          Bundle recommendation only — phase one routes to the existing Standard and Defence products.
+          Bundle recommendation only - phase one routes to the existing Standard and Defence products.
         </p>
       </div>
     </div>
@@ -576,6 +644,7 @@ export function DisclaimerBlock({ result }: { result: RentCheckerResult }) {
 
 export function RentCheckerResultPage({ result, onRestart }: RentCheckerResultPageProps) {
   const [showStickyCta, setShowStickyCta] = useState(false);
+
   const onStickyCtaClick = () => {
     trackProductCta(result, result.recommendedProduct);
     if (result.primaryCtaTracksCheckout) {
@@ -606,6 +675,7 @@ export function RentCheckerResultPage({ result, onRestart }: RentCheckerResultPa
             <MarketPositionCard result={result} />
             <RiskEvidenceCard result={result} />
           </div>
+          <ComparableListingsCard result={result} />
         </div>
         <RecommendedActionCard result={result} />
       </div>
@@ -628,16 +698,14 @@ export function RentCheckerResultPage({ result, onRestart }: RentCheckerResultPa
 
       {showStickyCta ? (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur md:hidden">
-          <Link href={result.primaryCtaHref} onClick={onStickyCtaClick} className="block">
-            <Button fullWidth className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
-              {result.resultState.startsWith('tenant')
-                ? 'Check challenge options'
-                : result.recommendedProduct === 'section13_standard'
-                  ? 'Generate Section 13 notice'
-                  : 'Prepare for challenge'}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
+            <Link href={result.primaryCtaHref} onClick={onStickyCtaClick} className="block">
+              <Button fullWidth className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
+              {result.recommendedProduct === 'section13_standard'
+                ? 'Generate Section 13 notice'
+                : 'Prepare for challenge'}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
         </div>
       ) : null}
     </div>

@@ -12,8 +12,6 @@ const resultSchema = z.object({
     'landlord_low_risk',
     'landlord_moderate_risk',
     'landlord_high_risk',
-    'tenant_challengeable',
-    'tenant_within_market',
   ]),
   recommendedProduct: z.enum(['section13_standard', 'section13_defensive']),
   postcodeOutcode: z.string(),

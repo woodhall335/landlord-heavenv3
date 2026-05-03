@@ -18,12 +18,12 @@ const trustBullets = [
 const steps = [
   {
     title: 'Compare against the local market',
-    copy: 'Check where the current or proposed rent sits against comparable listings nearby.',
+    copy: 'See where the current and proposed rent sit against live comparable listings nearby.',
     icon: MapPin,
   },
   {
-    title: 'See risk and evidence strength',
-    copy: 'Understand whether the increase looks supportable, challenge-prone, or under-evidenced.',
+    title: 'See supportability and challenge risk',
+    copy: 'Understand whether the increase looks supportable, borderline, or needs stronger evidence first.',
     icon: BarChart3,
   },
   {
@@ -46,10 +46,10 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
 
           <div className="space-y-5">
             <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
-              Check if your rent is fair — or ready to increase
+              Check if your rent is fair or ready to increase
             </h1>
             <p className="max-w-3xl text-lg leading-8 text-slate-600">
-              Compare the current rent against local market evidence and see whether a Section 13 rent increase is likely to be safe, risky, or challengeable.
+              Compare the current rent and proposed increase against local market evidence and see whether a Section 13 rent increase is likely to be supportable, risky, or under-evidenced.
             </p>
           </div>
 
@@ -80,11 +80,11 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
         <div className="space-y-4 rounded-[1.75rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-[0_20px_50px_rgba(15,23,42,0.18)]">
           <div className="flex items-center justify-between rounded-2xl bg-white/10 px-4 py-3 text-sm text-white/80">
             <span>Estimated market range</span>
-            <span className="font-semibold text-white">£950 – £1,250 pcm</span>
+            <span className="font-semibold text-white">£950 - £1,250 pcm</span>
           </div>
           <div className="rounded-2xl bg-white px-5 py-5 text-slate-950">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">Sample outcome</p>
-            <h2 className="mt-3 text-2xl font-bold">This increase looks supportable — but could be challenged</h2>
+            <h2 className="mt-3 text-2xl font-bold">This increase looks supportable but could be challenged</h2>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl bg-violet-50 p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">Potential uplift</p>

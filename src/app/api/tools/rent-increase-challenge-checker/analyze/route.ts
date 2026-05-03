@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { createAdminClient } from '@/lib/supabase/server';
 import {
   buildRentCheckerResult,
-  scrapeRightmoveComparables,
+  scrapeLiveComparables,
   type RentCheckerInput,
 } from '@/lib/section13';
 
@@ -12,7 +12,7 @@ export const runtime = 'nodejs';
 
 const payloadSchema = z.object({
   sessionId: z.string().optional().nullable(),
-  userType: z.enum(['landlord', 'tenant']),
+  userType: z.literal('landlord'),
   postcode: z.string().min(3),
   bedrooms: z.number().int().min(0).max(20),
   propertyType: z.enum(['flat', 'house', 'room', 'hmo', 'other']),
@@ -82,14 +82,25 @@ export async function POST(request: Request) {
     }
 
     const input = parsed.data;
-    if (input.userType === 'landlord' && input.proposedRent == null) {
+    if (input.proposedRent == null) {
       return NextResponse.json(
         { error: 'Landlords must enter the proposed rent to calculate supportability.' },
         { status: 400 }
       );
     }
 
-    const scrape = await scrapeRightmoveComparables(input.postcode, input.bedrooms);
+    const scrape = await scrapeLiveComparables(input.postcode, input.bedrooms);
+    if (!scrape.success) {
+      return NextResponse.json(
+        {
+          error: scrape.summary,
+          sourceStatuses: scrape.sourceStatuses,
+          code: scrape.reason,
+        },
+        { status: 422 }
+      );
+    }
+
     const result = buildRentCheckerResult({
       input,
       comparables: scrape.comparables,

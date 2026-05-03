@@ -10,7 +10,7 @@ import {
   normalizeSection13State,
   replaceSection13Comparables,
   saveSection13State,
-  scrapeRightmoveComparables,
+  scrapeLiveComparables,
 } from '@/lib/section13';
 
 export const runtime = 'nodejs';
@@ -46,7 +46,18 @@ export async function POST(request: Request) {
     });
     if (accessError) return accessError;
 
-    const scrape = await scrapeRightmoveComparables(postcode, bedrooms);
+    const scrape = await scrapeLiveComparables(postcode, bedrooms);
+    if (!scrape.success) {
+      return NextResponse.json(
+        {
+          error: scrape.summary,
+          sourceStatuses: scrape.sourceStatuses,
+          code: scrape.reason,
+        },
+        { status: 422 }
+      );
+    }
+
     const persistedComparables = await replaceSection13Comparables(supabase, caseId, scrape.comparables);
     const nextState = normalizeSection13State({
       ...state,
@@ -87,4 +98,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

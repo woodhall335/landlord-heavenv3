@@ -5,9 +5,9 @@ import { clsx } from 'clsx';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
-import type { RentCheckerInput, RentCheckerUserType } from '@/lib/section13';
+import type { RentCheckerInput } from '@/lib/section13';
 
-type StepId = 'user_type' | 'property' | 'condition' | 'review';
+type StepId = 'property' | 'condition' | 'review';
 
 interface RentCheckerFormProps {
   step: StepId;
@@ -21,39 +21,10 @@ interface RentCheckerFormProps {
 }
 
 const stepOrder: Array<{ id: StepId; label: string }> = [
-  { id: 'user_type', label: 'User type' },
   { id: 'property', label: 'Property basics' },
   { id: 'condition', label: 'Condition & evidence' },
   { id: 'review', label: 'Review & calculate' },
 ];
-
-function ChoiceCard({
-  selected,
-  title,
-  description,
-  onClick,
-}: {
-  selected: boolean;
-  title: string;
-  description: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={clsx(
-        'rounded-3xl border p-5 text-left transition-all',
-        selected
-          ? 'border-indigo-400 bg-indigo-50 shadow-[0_10px_30px_rgba(79,70,229,0.12)]'
-          : 'border-slate-200 bg-white hover:border-indigo-200 hover:shadow-sm'
-      )}
-    >
-      <h3 className="text-lg font-semibold text-slate-950">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
-    </button>
-  );
-}
 
 function StepHeader({ step }: { step: StepId }) {
   const currentIndex = stepOrder.findIndex((item) => item.id === step);
@@ -100,27 +71,7 @@ export function RentCheckerForm({
   onBack,
   onSubmit,
 }: RentCheckerFormProps) {
-  const isLandlord = input.userType === 'landlord';
   const renderStep = () => {
-    if (step === 'user_type') {
-      return (
-        <div className="grid gap-4 md:grid-cols-2">
-          <ChoiceCard
-            selected={input.userType === 'landlord'}
-            title="I am a landlord"
-            description="I want to increase the rent or check whether my proposed figure looks supportable."
-            onClick={() => onChange('userType', 'landlord' as RentCheckerUserType)}
-          />
-          <ChoiceCard
-            selected={input.userType === 'tenant'}
-            title="I am a tenant"
-            description="I want to check whether the current or proposed rent may be too high or challengeable."
-            onClick={() => onChange('userType', 'tenant' as RentCheckerUserType)}
-          />
-        </div>
-      );
-    }
-
     if (step === 'property') {
       return (
         <div className="grid gap-5 md:grid-cols-2">
@@ -182,17 +133,15 @@ export function RentCheckerForm({
             <option value="fortnightly">Per fortnight</option>
             <option value="4-weekly">Every 4 weeks</option>
           </Select>
-          {isLandlord ? (
-            <Input
-              label="Proposed rent"
-              type="number"
-              min={1}
-              value={input.proposedRent == null ? '' : String(input.proposedRent)}
-              onChange={(event) => onChange('proposedRent', event.target.value ? Number(event.target.value) : null)}
-              error={errors.proposedRent}
-              fullWidth
-            />
-          ) : null}
+          <Input
+            label="Proposed rent"
+            type="number"
+            min={1}
+            value={input.proposedRent == null ? '' : String(input.proposedRent)}
+            onChange={(event) => onChange('proposedRent', event.target.value ? Number(event.target.value) : null)}
+            error={errors.proposedRent}
+            fullWidth
+          />
           <Input
             label="Tenancy start date"
             type="date"
@@ -208,15 +157,13 @@ export function RentCheckerForm({
             onChange={(event) => onChange('lastRentIncreaseDate', event.target.value || null)}
             fullWidth
           />
-          {isLandlord ? (
-            <Input
-              label="Desired increase start date"
-              type="date"
-              value={input.desiredIncreaseStartDate || ''}
-              onChange={(event) => onChange('desiredIncreaseStartDate', event.target.value || null)}
-              fullWidth
-            />
-          ) : null}
+          <Input
+            label="Desired increase start date"
+            type="date"
+            value={input.desiredIncreaseStartDate || ''}
+            onChange={(event) => onChange('desiredIncreaseStartDate', event.target.value || null)}
+            fullWidth
+          />
         </div>
       );
     }
@@ -273,23 +220,21 @@ export function RentCheckerForm({
         <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
           <h3 className="text-lg font-semibold text-slate-950">Checker summary</h3>
           <dl className="mt-4">
-            <ReviewRow label="User type" value={input.userType === 'landlord' ? 'Landlord' : 'Tenant'} />
-            <ReviewRow label="Postcode" value={input.postcode || '—'} />
+            <ReviewRow label="Audience" value="Landlord" />
+            <ReviewRow label="Postcode" value={input.postcode || '-'} />
             <ReviewRow label="Bedrooms" value={String(input.bedrooms)} />
-            <ReviewRow label="Current rent" value={input.currentRent ? `£${input.currentRent}` : '—'} />
-            {isLandlord ? (
-              <ReviewRow label="Proposed rent" value={input.proposedRent ? `£${input.proposedRent}` : '—'} />
-            ) : null}
+            <ReviewRow label="Current rent" value={input.currentRent ? `£${input.currentRent}` : '-'} />
+            <ReviewRow label="Proposed rent" value={input.proposedRent ? `£${input.proposedRent}` : '-'} />
             <ReviewRow label="Evidence available" value={input.comparableEvidenceAvailable.replace('_', ' ')} />
           </dl>
         </div>
         <div className="rounded-3xl border border-slate-200 bg-white p-5">
-          <h3 className="text-lg font-semibold text-slate-950">What you’ll get</h3>
+          <h3 className="text-lg font-semibold text-slate-950">What you'll get</h3>
           <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600">
             <li>Estimated local market range and median.</li>
-            <li>Current and proposed rent positioning.</li>
-            <li>Evidence strength and challenge risk.</li>
-            <li>A recommended Section 13 route with the right CTA.</li>
+            <li>Proposed rent positioning against live comparable evidence.</li>
+            <li>Evidence strength and challenge risk before you serve Form 4A.</li>
+            <li>A recommended Section 13 route with the right landlord CTA.</li>
           </ul>
         </div>
       </div>
@@ -304,7 +249,7 @@ export function RentCheckerForm({
         {errors.submit ? <p className="text-sm text-rose-700">{errors.submit}</p> : null}
       </div>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
-        <Button variant="outline" onClick={onBack} disabled={step === 'user_type' || loading}>
+        <Button variant="outline" onClick={onBack} disabled={step === 'property' || loading}>
           Back
         </Button>
         {step === 'review' ? (

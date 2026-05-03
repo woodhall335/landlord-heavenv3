@@ -18,7 +18,7 @@ import type {
   Section13State,
 } from './types';
 
-export type RentCheckerUserType = 'landlord' | 'tenant';
+export type RentCheckerUserType = 'landlord';
 export type RentCheckerPropertyType = 'flat' | 'house' | 'room' | 'hmo' | 'other';
 export type RentCheckerFurnishedStatus = 'unfurnished' | 'part_furnished' | 'furnished';
 export type RentCheckerPropertyCondition = 'below_average' | 'average' | 'good' | 'excellent';
@@ -27,10 +27,19 @@ export type RentCheckerChallengeRisk = 'low' | 'moderate' | 'high';
 export type RentCheckerResultState =
   | 'landlord_low_risk'
   | 'landlord_moderate_risk'
-  | 'landlord_high_risk'
-  | 'tenant_challengeable'
-  | 'tenant_within_market';
+  | 'landlord_high_risk';
 export type RentCheckerEvidenceStrength = Capitalize<Section13EvidenceStrengthBand>;
+
+export interface RentCheckerComparableListing {
+  address: string;
+  propertyType: string | null;
+  bedrooms: number | null;
+  monthlyRent: number;
+  sourceUrl: string | null;
+  imageUrl: string | null;
+  sourceLabel: string;
+  distanceMiles: number | null;
+}
 
 export interface RentCheckerInput {
   sessionId?: string | null;
@@ -82,6 +91,7 @@ export interface RentCheckerResult {
   sourceBackedCount: number;
   freshComparableCount: number;
   freshnessLabel: string;
+  comparableListings: RentCheckerComparableListing[];
   whatThisMeans: string;
   nextSteps: string[];
   primaryCtaLabel: string;
@@ -93,7 +103,7 @@ export interface RentCheckerResult {
   secondaryCtaTracksCheckout?: boolean;
   bundleCtaHref: string;
   disclaimer: string;
-  scrapeSource: 'direct' | 'proxy' | 'puppeteer' | 'demo';
+  scrapeSource: string;
   scrapeSummary: string;
   dateWarnings: string[];
   preview: Section13PreviewMetrics;
@@ -102,7 +112,7 @@ export interface RentCheckerResult {
 export interface RentCheckerAnalysisArgs {
   input: RentCheckerInput;
   comparables: Section13Comparable[];
-  scrapeSource: 'direct' | 'proxy' | 'puppeteer' | 'demo';
+  scrapeSource: string;
   scrapeSummary: string;
   now?: Date;
 }
@@ -228,9 +238,38 @@ function buildFreshnessLabel(comparableCount: number, freshComparableCount: numb
   return `${freshComparableCount} of ${comparableCount} within 90 days`;
 }
 
+function buildComparableSourceLabel(item: Section13Comparable): string {
+  const sourceName =
+    item.sourceDomain?.includes('openrent')
+      ? 'OpenRent'
+      : item.sourceDomain?.includes('rightmove')
+        ? 'Rightmove'
+        : item.sourceDomain || 'Market listing';
+  const listed = item.sourceDateValue ? `Listed ${item.sourceDateValue}` : null;
+  const distance = item.distanceMiles != null ? `${item.distanceMiles.toFixed(1)} miles away` : null;
+  return [sourceName, listed, distance].filter(Boolean).join(' | ');
+}
+
+function buildComparableImageUrl(item: Section13Comparable): string | null {
+  const imageUrl = item.metadata?.imageUrl;
+  return typeof imageUrl === 'string' && imageUrl.trim() ? imageUrl.trim() : null;
+}
+
+function buildComparableListings(comparables: Section13Comparable[]): RentCheckerComparableListing[] {
+  return comparables.slice(0, 6).map((item) => ({
+    address: item.addressSnippet || 'Comparable listing',
+    propertyType: item.propertyType || null,
+    bedrooms: item.bedrooms ?? null,
+    monthlyRent: item.monthlyEquivalent,
+    sourceUrl: item.sourceUrl || null,
+    imageUrl: buildComparableImageUrl(item),
+    sourceLabel: buildComparableSourceLabel(item),
+    distanceMiles: item.distanceMiles ?? null,
+  }));
+}
+
 function buildSyntheticState(input: RentCheckerInput, now = new Date()): Section13State {
-  const selectedPlan: Section13ProductSku =
-    input.userType === 'tenant' ? 'section13_defensive' : 'section13_standard';
+  const selectedPlan: Section13ProductSku = 'section13_standard';
   const base = createEmptySection13State(selectedPlan);
   const serviceDate = now.toISOString().slice(0, 10);
   const desiredStartDateCandidate =
@@ -271,10 +310,7 @@ function buildSyntheticState(input: RentCheckerInput, now = new Date()): Section
     },
     proposal: {
       ...base.proposal,
-      proposedRentAmount:
-        input.userType === 'tenant'
-          ? roundCurrency(input.currentRent + 0.01)
-          : roundCurrency(input.proposedRent),
+      proposedRentAmount: roundCurrency(input.proposedRent),
       proposedStartDate,
       serviceDate,
       serviceMethod: 'post',
@@ -299,22 +335,15 @@ function deriveEvidenceStrength(args: {
   freshComparableCount: number;
   sourceBackedCount: number;
   comparableEvidenceAvailable: RentCheckerComparableEvidenceAvailability;
-  scrapeSource: 'direct' | 'proxy' | 'puppeteer' | 'demo';
 }): RentCheckerEvidenceStrength {
   const {
     comparableCount,
     freshComparableCount,
     sourceBackedCount,
     comparableEvidenceAvailable,
-    scrapeSource,
   } = args;
 
-  if (
-    comparableCount < 3 ||
-    freshComparableCount < 3 ||
-    comparableEvidenceAvailable === 'no' ||
-    scrapeSource === 'demo'
-  ) {
+  if (comparableCount < 3 || freshComparableCount < 3 || comparableEvidenceAvailable === 'no') {
     return 'Weak';
   }
 
@@ -492,97 +521,6 @@ function buildHighRiskResult(
   };
 }
 
-function buildTenantChallengeableResult(
-  base: Omit<
-    RentCheckerResult,
-    | 'resultState'
-    | 'headline'
-    | 'subheadline'
-    | 'moneyImpactLabel'
-    | 'moneyImpactValue'
-    | 'whatThisMeans'
-    | 'nextSteps'
-    | 'primaryCtaLabel'
-    | 'primaryCtaHref'
-    | 'primaryCtaSubtext'
-    | 'primaryCtaTracksCheckout'
-  >
-): RentCheckerResult {
-  return {
-    ...base,
-    resultState: 'tenant_challengeable',
-    headline: 'This rent may be above market and challengeable',
-    subheadline:
-      'Based on the information entered, the rent appears higher than comparable local market evidence.',
-    moneyImpactLabel: 'Possible over-market amount:',
-    moneyImpactValue: `~${formatMoney(Math.abs(base.monthlyDiff))}/month (~${formatMoney(Math.abs(base.annualDiff))}/year)`,
-    whatThisMeans:
-      'The rent appears above the current comparable market range. If the landlord has served a valid Section 13 notice, you may be able to challenge the proposed rent before the new rent start date.',
-    nextSteps: [
-      'Check the Form 4A start date.',
-      'Check how the notice was served.',
-      'Compare similar homes nearby.',
-      'Prepare your response before the deadline.',
-    ],
-    primaryCtaLabel: 'Check how to challenge this rent',
-    primaryCtaHref: buildLandingHref('section13_defensive', 'tenant_challengeable', {
-      audience: 'tenant',
-    }),
-    primaryCtaSubtext:
-      'Review the notice, compare market evidence, and prepare your response before the deadline.',
-    primaryCtaTracksCheckout: false,
-  };
-}
-
-function buildTenantWithinMarketResult(
-  base: Omit<
-    RentCheckerResult,
-    | 'resultState'
-    | 'headline'
-    | 'subheadline'
-    | 'moneyImpactLabel'
-    | 'moneyImpactValue'
-    | 'whatThisMeans'
-    | 'nextSteps'
-    | 'primaryCtaLabel'
-    | 'primaryCtaHref'
-    | 'primaryCtaSubtext'
-    | 'primaryCtaTracksCheckout'
-    | 'secondaryCtaLabel'
-    | 'secondaryCtaHref'
-    | 'secondaryCtaTracksCheckout'
-  >
-): RentCheckerResult {
-  return {
-    ...base,
-    resultState: 'tenant_within_market',
-    headline: 'This rent appears broadly within market range',
-    subheadline:
-      'The rent does not obviously sit above comparable local market evidence, but the notice still needs to be valid.',
-    moneyImpactLabel: 'Estimated market position:',
-    moneyImpactValue: 'within range',
-    whatThisMeans:
-      'The rent appears broadly consistent with similar local properties. However, a Section 13 notice can still fail if the wrong form, dates, timing, or service method were used.',
-    nextSteps: [
-      'Check the notice is Form 4A.',
-      'Check the new rent start date.',
-      'Check the service method.',
-      'Get advice quickly if the deadline is close.',
-    ],
-    primaryCtaLabel: 'Check notice validity',
-    primaryCtaHref: '/rent-increase?src=rent_checker&intent=notice_validity',
-    primaryCtaSubtext:
-      'Review the notice, timing, and service method before you decide whether to challenge it.',
-    primaryCtaTracksCheckout: false,
-    secondaryCtaLabel: 'Review challenge options',
-    secondaryCtaHref: buildLandingHref('section13_defensive', 'tenant_within_market', {
-      audience: 'tenant',
-      intent: 'challenge_options',
-    }),
-    secondaryCtaTracksCheckout: false,
-  };
-}
-
 export function buildRentCheckerResult({
   input,
   comparables,
@@ -601,14 +539,11 @@ export function buildRentCheckerResult({
     freshComparableCount,
     sourceBackedCount,
     comparableEvidenceAvailable: input.comparableEvidenceAvailable,
-    scrapeSource,
   });
 
   const currentRentMonthly = roundCurrency(getMonthlyEquivalent(input.currentRent, input.rentFrequency));
   const proposedRentMonthly =
-    input.userType === 'landlord' && input.proposedRent != null
-      ? roundCurrency(getMonthlyEquivalent(input.proposedRent, input.rentFrequency))
-      : null;
+    input.proposedRent != null ? roundCurrency(getMonthlyEquivalent(input.proposedRent, input.rentFrequency)) : null;
 
   const marketLow = preview.lowerQuartile;
   const marketMedian = preview.median;
@@ -621,28 +556,18 @@ export function buildRentCheckerResult({
     marketHigh
   );
   const postcodeOutcode = getOutcode(input.postcode);
-  const hasDateWarnings = input.userType === 'landlord' && preview.validationIssues.length > 0;
+  const hasDateWarnings = preview.validationIssues.length > 0;
   const proposedVsMedian =
-    input.userType === 'landlord' && proposedRentMonthly != null && marketMedian
-      ? proposedRentMonthly / marketMedian
-      : 0;
+    proposedRentMonthly != null && marketMedian ? proposedRentMonthly / marketMedian : 0;
 
-  const risk =
-    input.userType === 'landlord'
-      ? deriveLandlordRisk({
-          proposedVsMedian,
-          evidenceStrength,
-          tenantAlreadyObjected: input.tenantAlreadyObjected,
-          hasDateWarnings,
-        })
-      : currentRentMonthly >= (marketMedian || 0) * 1.05
-        ? 'high'
-        : 'moderate';
+  const risk = deriveLandlordRisk({
+    proposedVsMedian,
+    evidenceStrength,
+    tenantAlreadyObjected: input.tenantAlreadyObjected,
+    hasDateWarnings,
+  });
 
-  const monthlyDiff =
-    input.userType === 'landlord'
-      ? roundCurrency((proposedRentMonthly || 0) - currentRentMonthly)
-      : roundCurrency(currentRentMonthly - (marketMedian || currentRentMonthly));
+  const monthlyDiff = roundCurrency((proposedRentMonthly || 0) - currentRentMonthly);
   const annualDiff = roundCurrency(monthlyDiff * 12);
 
   const base: Omit<
@@ -678,8 +603,7 @@ export function buildRentCheckerResult({
     proposedRent: proposedRentMonthly,
     currentPositionLabel,
     proposedPositionLabel,
-    overallPositionLabel:
-      input.userType === 'tenant' ? currentPositionLabel : proposedPositionLabel || currentPositionLabel,
+    overallPositionLabel: proposedPositionLabel || currentPositionLabel,
     challengeRisk: risk,
     challengeRiskLabel: toChallengeRiskLabel(risk),
     evidenceStrength,
@@ -687,32 +611,18 @@ export function buildRentCheckerResult({
     sourceBackedCount,
     freshComparableCount,
     freshnessLabel: buildFreshnessLabel(comparableCount, freshComparableCount),
+    comparableListings: buildComparableListings(comparables),
     bundleCtaHref: buildLandingHref(
       'section13_defensive',
-      input.userType === 'tenant' ? 'tenant_challengeable' : 'landlord_high_risk',
+      'landlord_high_risk',
       { offer: 'full_protection_route' }
     ),
     disclaimer: FULL_DISCLAIMER_TEXT,
     scrapeSource,
     scrapeSummary,
-    dateWarnings: input.userType === 'landlord' ? preview.validationIssues : [],
+    dateWarnings: preview.validationIssues,
     preview,
   };
-
-  if (input.userType === 'tenant') {
-    const tenantBase = {
-      ...base,
-      recommendedProduct: 'section13_defensive' as const,
-      showBundleUpsell: false,
-      showDefenceSecondary: false,
-    };
-
-    if (currentRentMonthly >= (marketMedian || 0) * 1.05) {
-      return buildTenantChallengeableResult(tenantBase);
-    }
-
-    return buildTenantWithinMarketResult(tenantBase);
-  }
 
   if (risk === 'low') {
     return buildLowRiskResult({

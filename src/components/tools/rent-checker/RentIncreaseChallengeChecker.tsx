@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ShieldCheck, TriangleAlert } from 'lucide-react';
 
 import { Container } from '@/components/ui/Container';
@@ -12,9 +12,9 @@ import { RentCheckerLanding } from './RentCheckerLanding';
 import { RentCheckerForm } from './RentCheckerForm';
 import { RentCheckerResultPage } from './RentCheckerResultPage';
 
-type StepId = 'user_type' | 'property' | 'condition' | 'review';
+type StepId = 'property' | 'condition' | 'review';
 
-const STEP_SEQUENCE: StepId[] = ['user_type', 'property', 'condition', 'review'];
+const STEP_SEQUENCE: StepId[] = ['property', 'condition', 'review'];
 
 function defaultInput(): RentCheckerInput {
   return {
@@ -46,7 +46,7 @@ function makeSessionId() {
 
 function buildResultViewedPayload(result: RentCheckerResult) {
   return {
-    userType: result.userType,
+    userType: 'landlord',
     postcodeOutcode: result.postcodeOutcode,
     bedrooms: result.bedrooms,
     currentRent: result.currentRent,
@@ -64,7 +64,7 @@ export function RentIncreaseChallengeChecker() {
     ...defaultInput(),
     sessionId: makeSessionId(),
   }));
-  const [step, setStep] = useState<StepId>('user_type');
+  const [step, setStep] = useState<StepId>('property');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<RentCheckerResult | null>(null);
@@ -77,13 +77,8 @@ export function RentIncreaseChallengeChecker() {
     trackEvent('result_viewed', buildResultViewedPayload(result));
   }, [result]);
 
-  const helperSummary = useMemo(
-    () =>
-      input.userType === 'landlord'
-        ? 'Check whether the increase looks supportable before you serve Form 4A.'
-        : 'Check whether the current or proposed rent may be above market before the deadline.',
-    [input.userType]
-  );
+  const helperSummary =
+    'Check whether the proposed increase looks supportable before you serve Form 4A.';
 
   const startTool = () => {
     setStarted(true);
@@ -93,7 +88,7 @@ export function RentIncreaseChallengeChecker() {
       hasTrackedStart.current = true;
       trackEvent('tool_started', {
         toolName: 'rent_increase_challenge_checker',
-        userType: input.userType,
+        userType: 'landlord',
         jurisdiction: 'england',
       });
     }
@@ -106,17 +101,12 @@ export function RentIncreaseChallengeChecker() {
   const validateStep = (stepId: StepId) => {
     const nextErrors: Record<string, string> = {};
 
-    if (stepId === 'user_type') {
-      if (!input.userType) nextErrors.userType = 'Choose whether you are a landlord or a tenant.';
-      return nextErrors;
-    }
-
     if (stepId === 'property') {
       if (!input.postcode.trim()) nextErrors.postcode = 'Enter the postcode.';
       if (input.bedrooms < 0) nextErrors.bedrooms = 'Enter a valid bedroom count.';
       if (!input.currentRent || input.currentRent <= 0) nextErrors.currentRent = 'Enter the current rent.';
       if (!input.tenancyStartDate) nextErrors.tenancyStartDate = 'Enter the tenancy start date.';
-      if (input.userType === 'landlord' && (!input.proposedRent || input.proposedRent <= 0)) {
+      if (!input.proposedRent || input.proposedRent <= 0) {
         nextErrors.proposedRent = 'Enter the proposed rent to assess the increase.';
       }
       return nextErrors;
@@ -136,9 +126,9 @@ export function RentIncreaseChallengeChecker() {
       setStep(nextStep);
       trackEvent('step_completed', {
         toolName: 'rent_increase_challenge_checker',
-        step: step,
+        step,
         nextStep,
-        userType: input.userType,
+        userType: 'landlord',
       });
     }
   };
@@ -165,7 +155,10 @@ export function RentIncreaseChallengeChecker() {
       const response = await fetch('/api/tools/rent-increase-challenge-checker/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(input),
+        body: JSON.stringify({
+          ...input,
+          userType: 'landlord',
+        }),
       });
 
       const data = await response.json().catch(() => ({}));
@@ -185,7 +178,7 @@ export function RentIncreaseChallengeChecker() {
 
   const restart = () => {
     setResult(null);
-    setStep('user_type');
+    setStep('property');
     setErrors({});
     setInput({
       ...defaultInput(),
@@ -209,7 +202,7 @@ export function RentIncreaseChallengeChecker() {
           <div className="flex items-start justify-between gap-6 rounded-[2rem] border border-violet-100 bg-white px-6 py-5 shadow-sm">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">Rent checker flow</p>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950">Check the market range, risk, and next Section 13 route</h2>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-950">Check the market range, evidence, and next Section 13 route</h2>
               <p className="mt-2 max-w-3xl text-base leading-7 text-slate-600">{helperSummary}</p>
             </div>
             {!started ? (
@@ -244,10 +237,10 @@ export function RentIncreaseChallengeChecker() {
                     <h3 className="text-lg font-semibold text-slate-950">What the result will answer</h3>
                   </div>
                   <ul className="mt-5 space-y-3 text-sm leading-6 text-slate-600">
-                    <li>What does this mean for the rent?</li>
+                    <li>Does the proposed increase look supportable?</li>
                     <li>Is the market evidence strong enough?</li>
                     <li>How likely is a tenant challenge?</li>
-                    <li>What should I do next?</li>
+                    <li>Should you use Standard, Defence, or fuller protection?</li>
                   </ul>
                 </div>
 

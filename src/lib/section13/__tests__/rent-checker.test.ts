@@ -42,6 +42,9 @@ function makeComparables(values: number[]) {
         rawRentFrequency: 'pcm',
         isManual: false,
         adjustments: [],
+        metadata: {
+          imageUrl: `https://example.com/image-${index + 1}.jpg`,
+        },
       },
       index
     )
@@ -62,8 +65,12 @@ describe('buildRentCheckerResult', () => {
 
     expect(result.resultState).toBe('landlord_low_risk');
     expect(result.recommendedProduct).toBe('section13_standard');
+    expect(result.userType).toBe('landlord');
     expect(result.evidenceStrength).toBe('Strong');
     expect(result.challengeRisk).toBe('low');
+    expect(result.comparableListings).toHaveLength(6);
+    expect(result.comparableListings[0]?.imageUrl).toBe('https://example.com/image-1.jpg');
+    expect(result.comparableListings[0]?.address).toBe('1 Example Street');
   });
 
   it('returns landlord_moderate_risk with strong evidence near the median', () => {
@@ -96,39 +103,17 @@ describe('buildRentCheckerResult', () => {
     expect(result.showBundleUpsell).toBe(true);
   });
 
-  it('returns tenant_challengeable when current rent is above median', () => {
+  it('keeps the moderate landlord route landlord-facing even with strong evidence', () => {
     const result = buildRentCheckerResult({
-      input: makeInput({
-        userType: 'tenant',
-        currentRent: 1350,
-        proposedRent: null,
-      }),
-      comparables: makeComparables([1000, 1020, 1040, 1060, 1080, 1100]),
+      input: makeInput({ currentRent: 925, proposedRent: 1030 }),
+      comparables: makeComparables([980, 990, 1000, 1010, 1020, 1030]),
       scrapeSource: 'direct',
       scrapeSummary: 'Imported comparables',
       now,
     });
 
-    expect(result.resultState).toBe('tenant_challengeable');
-    expect(result.recommendedProduct).toBe('section13_defensive');
-    expect(result.primaryCtaLabel).toBe('Check how to challenge this rent');
-  });
-
-  it('returns tenant_within_market when rent sits inside the range', () => {
-    const result = buildRentCheckerResult({
-      input: makeInput({
-        userType: 'tenant',
-        currentRent: 1040,
-        proposedRent: null,
-      }),
-      comparables: makeComparables([1000, 1020, 1040, 1060, 1080, 1100]),
-      scrapeSource: 'direct',
-      scrapeSummary: 'Imported comparables',
-      now,
-    });
-
-    expect(result.resultState).toBe('tenant_within_market');
-    expect(result.primaryCtaLabel).toBe('Check notice validity');
-    expect(result.secondaryCtaLabel).toBe('Review challenge options');
+    expect(result.resultState).toBe('landlord_moderate_risk');
+    expect(result.primaryCtaLabel).toBe('Prepare for a tenant challenge');
+    expect(result.secondaryCtaLabel).toBe('Start with standard notice pack');
   });
 });

@@ -886,7 +886,7 @@ export function Section13WizardFlow({
 
     setScrapeLoading(true);
     setSaveError(null);
-    setScrapeMessage('Searching Rightmove...');
+    setScrapeMessage('Searching live comparables from Rightmove and OpenRent...');
 
     try {
       const response = await fetch('/api/section13/scrape', {
@@ -926,7 +926,8 @@ export function Section13WizardFlow({
     } catch (error: any) {
       setSaveError(error?.message || 'Scrape failed');
       setScrapeMessage(
-        'Retrying with backup method is unavailable right now. Upload a CSV or add a listing link manually to keep moving.'
+        error?.message ||
+          'We could not gather enough live comparable evidence. Try again, broaden the evidence, or add real linked listings manually to keep moving.'
       );
     } finally {
       setScrapeLoading(false);
@@ -937,7 +938,7 @@ export function Section13WizardFlow({
     if (!file) return;
     setCsvImportLoading(true);
     setSaveError(null);
-    setScrapeMessage('Retrying with backup method...');
+    setScrapeMessage('Retrying live comparable search...');
 
     try {
       const csvText = await file.text();
