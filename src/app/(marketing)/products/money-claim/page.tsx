@@ -139,96 +139,12 @@ export default function MoneyClaimPage() {
         'Best when the tenant owes money and you want to start with a clear debt-recovery file rather than improvising the paperwork yourself.',
       notFor:
         'Not the right fit if your immediate next step is possession, service of a Section 8 notice, or court possession forms such as N5 and N119.',
-      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     whatYouGet: {
-      title: 'What is included in the Money Claim Pack',
+      title: 'Sample pack proof',
       intro:
-        'This is a debt-recovery system, not just a claim form. Each part of the pack exists to move the case from pre-action pressure into court and then into enforcement if the tenant still does not pay.',
-      items: [
-        {
-          name: 'Letter Before Claim',
-          plainEnglish: 'The formal demand letter sent before court action starts.',
-          function:
-            'Sets out the debt and gives the tenant the pre-action opportunity to respond or pay.',
-          riskIfMissing:
-            'If you skip the pre-action letter stage, the claim can look procedurally weak before it even reaches the substance of the debt.',
-          landlordOutcome:
-            'Puts pressure on the tenant to resolve the matter early and helps the claim start on the right footing if payment is not made.',
-          includedByDefault: true,
-        },
-        {
-          name: 'Reply Form & Financial Statement',
-          plainEnglish:
-            'The tenant response documents that sit alongside the pre-action letter.',
-          function:
-            'Lets the tenant respond properly and disclose their financial position where the protocol expects that process to be offered.',
-          riskIfMissing:
-            'If the pre-action paperwork is incomplete, the landlord risks looking non-compliant when the matter reaches court.',
-          landlordOutcome:
-            'Strengthens the file by showing the claim was handled properly before proceedings were issued.',
-          includedByDefault: true,
-        },
-        {
-          name: 'Particulars of Claim',
-          plainEnglish: 'The detailed written case explaining what is owed and why.',
-          function:
-            "Sets out the arrears, damage, bills, or other debt so the court can understand the landlord's claim clearly.",
-          riskIfMissing:
-            'If the claim is vague or poorly structured, the tenant has more room to dispute it and the court has more work to do to understand it.',
-          landlordOutcome:
-            'Helps the claim read as a clear debt case instead of a loose collection of figures.',
-          includedByDefault: true,
-        },
-        {
-          name: 'Arrears Schedule',
-          plainEnglish:
-            'A full rent and debt schedule showing what is owed and how the balance is made up.',
-          function:
-            'Supports the claim with a clear financial record that the tenant and the court can follow.',
-          riskIfMissing:
-            'If the numbers are unclear or inconsistent, the credibility of the claim drops quickly.',
-          landlordOutcome:
-            'Makes it easier to prove the debt and keeps the claim value grounded in one written schedule.',
-          includedByDefault: true,
-        },
-        {
-          name: 'Interest Calculation',
-          plainEnglish:
-            'A worked calculation of interest that can be added to the claim where appropriate.',
-          function:
-            'Helps you calculate the claim value more accurately instead of guessing the total due.',
-          riskIfMissing:
-            'If the interest figure is missing or wrong, the landlord risks under-claiming or weakening part of the money case unnecessarily.',
-          landlordOutcome:
-            'Improves the accuracy of the debt claim and helps you recover the full amount you are entitled to pursue.',
-          includedByDefault: true,
-        },
-        {
-          name: 'Filing Guide (MCOL)',
-          plainEnglish:
-            'Step-by-step guidance on issuing the money claim through the England court process.',
-          function:
-            'Explains how to take the finished paperwork into the court filing stage, including the Money Claim Online route where relevant.',
-          riskIfMissing:
-            'If the filing stage is handled badly, the claim can be delayed or rejected even when the debt paperwork itself is sound.',
-          landlordOutcome:
-            'Helps you submit the claim more smoothly and with fewer avoidable mistakes.',
-          includedByDefault: true,
-        },
-        {
-          name: 'Enforcement Guide',
-          plainEnglish:
-            'A guide to the practical steps after judgment if the tenant still does not pay.',
-          function:
-            'Explains how to move from judgment into enforcement options such as bailiffs or other recovery steps.',
-          riskIfMissing:
-            'Many landlords win the claim but then stall because they do not know how to turn judgment into actual recovery.',
-          landlordOutcome:
-            'Keeps the pack focused on getting paid, not just on winning paperwork.',
-          includedByDefault: true,
-        },
-      ],
+        'See a real sample pack before you pay so the debt-recovery paperwork stands on its own instead of being squeezed beside another section.',
+      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     comparisonBlock: {
       title: 'Compare the debt route with the possession route',

@@ -39,7 +39,8 @@ describe('Phase 1 commercial positioning', () => {
     const source = readSource('src/app/(marketing)/products/money-claim/page.tsx');
 
     expect(source).toContain('Start a landlord money claim pack');
-    expect(source).toContain('What is included in the Money Claim Pack');
+    expect(source).toContain('Sample pack proof');
+    expect(source).not.toContain('What is included in the Money Claim Pack');
     expect(source).toContain('Choose this pack when the next job is recovering money');
   });
 

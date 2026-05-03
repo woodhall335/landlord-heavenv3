@@ -22,6 +22,13 @@ export const freeTools: ToolLink[] = [
     featured: true,
   },
   {
+    href: '/tools/rent-increase-challenge-checker',
+    label: 'Rent Increase & Challenge Checker',
+    description: 'Compare the rent to local market evidence and see Section 13 challenge risk.',
+    category: 'checker',
+    featured: true,
+  },
+  {
     href: '/tools/hmo-license-checker',
     label: 'HMO License Checker',
     description: 'Check if your property needs an HMO license.',
