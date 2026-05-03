@@ -1,5 +1,6 @@
 export * from './csv';
 export * from './facts';
+export * from './market-calculation';
 export * from './postcode';
 export * from './rent-checker';
 export * from './rent-checker-email';

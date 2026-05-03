@@ -2,11 +2,13 @@ import type {
   Section13ChallengeLikelihoodBand,
   Section13Comparable,
   Section13EvidenceStrengthBand,
+  Section13MarketCalculation,
   Section13PlanRecommendation,
   Section13PreviewMetrics,
   Section13RentFrequency,
   Section13State,
 } from './types';
+import { buildSection13MarketCalculation } from './market-calculation';
 import { SECTION13_RULES_VERSION } from './types';
 
 export const SECTION13_CHALLENGE_EXPLAINER =
@@ -218,6 +220,12 @@ export function getEvidenceStrengthBand(comparables: Section13Comparable[], now 
   return 'weak';
 }
 
+function getEvidenceStrengthBandFromCalculation(
+  calculation: Section13MarketCalculation
+): Section13EvidenceStrengthBand {
+  return calculation.evidenceStrength;
+}
+
 export function getChallengeLikelihoodBand(
   proposedRentMonthly: number | null,
   lowerQuartile: number | null,
@@ -352,7 +360,13 @@ export function buildSection13JustificationSummaryText(
   state: Pick<Section13State, 'proposal' | 'tenancy'>,
   preview: Pick<
     Section13PreviewMetrics,
-    'proposedRentMonthly' | 'median' | 'challengeBandLabel' | 'evidenceBandLabel'
+    | 'proposedRentMonthly'
+    | 'median'
+    | 'upperQuartile'
+    | 'challengeBandLabel'
+    | 'evidenceBandLabel'
+    | 'evidenceBand'
+    | 'challengeReasonSummary'
   > | null | undefined
 ): string {
   if (!preview || preview.proposedRentMonthly == null || preview.median == null) {
@@ -365,6 +379,14 @@ export function buildSection13JustificationSummaryText(
       : preview.proposedRentMonthly > preview.median
         ? 'above'
         : 'equal to';
+
+  if (
+    preview.evidenceBand === 'strong' &&
+    preview.upperQuartile != null &&
+    preview.proposedRentMonthly > preview.upperQuartile
+  ) {
+    return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the adjusted median market rent of ${formatCurrencyValue(preview.median)} per month. The evidence base is strong, but the proposed figure still sits above the supported market position and is likely to attract challenge. ${preview.challengeReasonSummary || ''}`.trim();
+  }
 
   return `The proposed rent of ${formatCurrencyValue(state.proposal.proposedRentAmount)} ${describeRentFrequency(state.tenancy.currentRentFrequency)} is ${position} the adjusted median market rent of ${formatCurrencyValue(preview.median)} per month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended), the proposed increase is presented as reasonable with a ${preview.challengeBandLabel.toLowerCase()} and ${preview.evidenceBandLabel.toLowerCase()}.`;
 }
@@ -481,21 +503,17 @@ export function validateSection13StartDate(input: {
 }
 
 export function computeSection13Preview(state: Section13State, comparables: Section13Comparable[], now = new Date()): Section13PreviewMetrics {
-  const adjustedValues = comparables
-    .map((item) => Number(item.adjustedMonthlyEquivalent || 0))
-    .filter((value) => value > 0)
-    .sort((a, b) => a - b);
-
-  const lowerQuartile = percentile(adjustedValues, 0.25);
-  const median = percentile(adjustedValues, 0.5);
-  const upperQuartile = percentile(adjustedValues, 0.75);
+  const marketCalculation = buildSection13MarketCalculation(state, comparables, now);
+  const lowerQuartile = marketCalculation.marketLow;
+  const median = marketCalculation.marketMedian;
+  const upperQuartile = marketCalculation.marketHigh;
   const proposedRentMonthly = state.proposal.proposedRentAmount == null
     ? null
     : getMonthlyEquivalent(state.proposal.proposedRentAmount, state.tenancy.currentRentFrequency);
   const challengeBand = getChallengeLikelihoodBand(proposedRentMonthly, lowerQuartile, median, upperQuartile);
-  const evidenceBand = getEvidenceStrengthBand(comparables, now);
-  const sourceBackedCount = getSourceBackedComparableCount(comparables);
-  const freshComparableCount = comparables.filter((item) => isFreshComparable(item, now)).length;
+  const evidenceBand = getEvidenceStrengthBandFromCalculation(marketCalculation);
+  const sourceBackedCount = marketCalculation.sourceBackedUsedCount;
+  const freshComparableCount = marketCalculation.fresh90UsedCount;
   const userOverrideCount = comparables.filter((item) => item.adjustments.some((adjustment) => adjustment.isOverride)).length;
   const dateValidation = validateSection13StartDate({
     tenancyStartDate: state.tenancy.tenancyStartDate,
@@ -506,7 +524,7 @@ export function computeSection13Preview(state: Section13State, comparables: Sect
     firstIncreaseAfter2003Date: state.tenancy.firstIncreaseAfter2003Date,
   });
 
-  const canAutoGenerateJustification = comparables.length >= 3 && sourceBackedCount >= 1;
+  const canAutoGenerateJustification = marketCalculation.usedComparableCount >= 3 && sourceBackedCount >= 1;
   const warnings: string[] = [];
   const validationIssues = [...dateValidation.issues];
   if (sourceBackedCount === 0) {
@@ -526,10 +544,10 @@ export function computeSection13Preview(state: Section13State, comparables: Sect
     validationIssues.push('The proposed rent must be higher than the current rent. This wizard is for rent increases only.');
   }
 
-  const previewSummary = comparables.length > 0 && state.comparablesMeta.bedrooms
-    ? `${comparables.length} comparable ${state.comparablesMeta.bedrooms}-bed homes within 0.5 miles`
-    : comparables.length > 0
-      ? `${comparables.length} comparable homes within 0.5 miles`
+  const previewSummary = marketCalculation.usedComparableCount > 0 && state.comparablesMeta.bedrooms
+    ? `${marketCalculation.usedComparableCount} used comparable ${state.comparablesMeta.bedrooms}-bed homes in the market calculation`
+    : marketCalculation.usedComparableCount > 0
+      ? `${marketCalculation.usedComparableCount} used comparable homes in the market calculation`
       : 'No comparables added yet';
 
   const proposedPositionLabel =
@@ -554,10 +572,10 @@ export function computeSection13Preview(state: Section13State, comparables: Sect
     proposedPositionLabel,
     challengeBand,
     challengeBandLabel: getChallengeBandLabel(challengeBand),
-    challengeBandExplainer: SECTION13_CHALLENGE_EXPLAINER,
+    challengeBandExplainer: marketCalculation.challengeReasonSummary || SECTION13_CHALLENGE_EXPLAINER,
     evidenceBand,
     evidenceBandLabel: getEvidenceBandLabel(evidenceBand),
-    evidenceBandExplainer: SECTION13_EVIDENCE_EXPLAINER,
+    evidenceBandExplainer: marketCalculation.explanationText.join(' '),
     previewSummary,
     defensibilitySummarySentence: buildSection13DefensibilitySummarySentence(
       state,
@@ -571,6 +589,9 @@ export function computeSection13Preview(state: Section13State, comparables: Sect
       }
     ),
     canAutoGenerateJustification,
+    marketCalculation,
+    challengeReasonSummary: marketCalculation.challengeReasonSummary,
+    saferRangeGuidance: marketCalculation.saferRangeGuidance,
     earliestValidStartDate: dateValidation.earliestValidStartDate,
     enteredStartDateValid: dateValidation.isValid,
     validationIssues,

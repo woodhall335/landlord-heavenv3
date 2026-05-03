@@ -30,6 +30,7 @@ import {
 import type {
   Section13BundleAsset,
   Section13Comparable,
+  Section13ComparableAssessment,
   Section13ComparableAdjustment,
   Section13EvidenceUpload,
   Section13PlanRecommendation,
@@ -163,6 +164,24 @@ function formatStatusLabel(value: string | null | undefined): string {
     .split('_')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
+}
+
+function getComparableAssessmentId(comparable: Section13Comparable): string {
+  return comparable.id || `${comparable.addressSnippet}|${comparable.sortOrder}`;
+}
+
+function getComparableReasonBadgeClass(assessment: Section13ComparableAssessment | null | undefined): string {
+  if (!assessment) return 'border-gray-200 bg-gray-50 text-gray-700';
+  if (assessment.usedInCalculation) return 'border-emerald-200 bg-emerald-50 text-emerald-800';
+  if (assessment.relevanceBand === 'outlier') return 'border-rose-200 bg-rose-50 text-rose-800';
+  return 'border-amber-200 bg-amber-50 text-amber-800';
+}
+
+function getComparableFreshnessBadgeClass(assessment: Section13ComparableAssessment | null | undefined): string {
+  if (!assessment) return 'border-gray-200 bg-gray-50 text-gray-700';
+  if (assessment.freshnessBand === 'fresh_90') return 'border-emerald-200 bg-emerald-50 text-emerald-800';
+  if (assessment.freshnessBand === 'extended_180') return 'border-amber-200 bg-amber-50 text-amber-800';
+  return 'border-rose-200 bg-rose-50 text-rose-800';
 }
 
 function getStepCompleteState(
@@ -346,6 +365,19 @@ export function Section13WizardFlow({
 
   const displayedScrapeMessage =
     scrapeMessage || effectiveState.comparablesMeta.lastScrapeSummary || null;
+  const marketCalculation = effectiveState.preview?.marketCalculation || null;
+  const comparableAssessmentMap = useMemo(() => {
+    const map = new Map<string, Section13ComparableAssessment>();
+    const allAssessments = [
+      ...(marketCalculation?.usedComparables || []),
+      ...(marketCalculation?.contextComparables || []),
+      ...(marketCalculation?.excludedComparables || []),
+    ];
+    allAssessments.forEach((assessment) => {
+      map.set(assessment.id, assessment);
+    });
+    return map;
+  }, [marketCalculation]);
 
   const purchasedPlan =
     orderStatus?.paid &&
@@ -1447,23 +1479,42 @@ export function Section13WizardFlow({
                     <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.upperQuartile)}</div>
                   </div>
                 </div>
+                {marketCalculation?.medianExplanation ? (
+                  <p className="mt-4 text-sm text-gray-700">{marketCalculation.medianExplanation}</p>
+                ) : null}
                 <p className="mt-4 text-sm text-gray-700">
                   {comparables.length > 0
                     ? effectiveState.preview?.previewSummary
                     : 'Run the local listings check next to turn this into a stronger market-backed estimate.'}
                 </p>
+                {comparables.length > 0 && marketCalculation?.explanationText.length ? (
+                  <ul className="mt-3 space-y-1 text-sm text-gray-600">
+                    {marketCalculation.explanationText.slice(1).map((line) => (
+                      <li key={line}>• {line}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
 
               <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
                 <p className="text-sm font-semibold text-violet-950">How supportable the proposed rent looks</p>
                 <p className="mt-3 text-sm font-semibold text-violet-900">{effectiveState.preview?.challengeBandLabel}</p>
                 <p className="text-sm text-violet-900/90">{effectiveState.preview?.challengeBandExplainer}</p>
+                {effectiveState.preview?.challengeReasonSummary ? (
+                  <p className="mt-2 text-sm text-violet-900/90">{effectiveState.preview.challengeReasonSummary}</p>
+                ) : null}
                 <p className="mt-3 text-sm font-semibold text-violet-900">{effectiveState.preview?.evidenceBandLabel}</p>
                 <p className="text-sm text-violet-900/90">
                   {comparables.length > 0
                     ? effectiveState.preview?.evidenceBandExplainer
                     : 'We will confirm the evidence strength once you pull comparable local listings.'}
                 </p>
+                {effectiveState.preview?.saferRangeGuidance ? (
+                  <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-800">Safer range guidance</p>
+                    <p className="mt-2 text-sm text-amber-900">{effectiveState.preview.saferRangeGuidance}</p>
+                  </div>
+                ) : null}
                 <div className="mt-4 rounded-2xl border border-violet-200 bg-white/80 p-4">
                   <p className="text-sm font-semibold text-gray-950">Defensibility summary</p>
                   <p className="mt-2 text-sm text-gray-700">
@@ -1569,7 +1620,36 @@ export function Section13WizardFlow({
           </div>
         );
 
-      case 'comparables':
+      case 'comparables': {
+        const comparableRows = comparables.map((comparable, index) => ({
+          comparable,
+          index,
+          assessment: comparableAssessmentMap.get(getComparableAssessmentId(comparable)) || null,
+        }));
+        const comparableGroups = [
+          {
+            key: 'used',
+            title: 'Used in market calculation',
+            description: 'These listings affect the market median and supportable range.',
+            items: comparableRows.filter((row) => row.assessment?.usedInCalculation),
+          },
+          {
+            key: 'context',
+            title: 'Context only',
+            description: 'These listings help with local context, but they do not change the median or range.',
+            items: comparableRows.filter(
+              (row) => row.assessment && !row.assessment.usedInCalculation && row.assessment.relevanceBand !== 'outlier'
+            ),
+          },
+          {
+            key: 'excluded',
+            title: 'Excluded / outlier',
+            description: 'These listings are shown for transparency, but they are not relied on in the calculation.',
+            items: comparableRows.filter((row) => row.assessment?.relevanceBand === 'outlier'),
+          },
+        ];
+        const uncategorisedRows = comparableRows.filter((row) => !row.assessment);
+
         return (
           <div className="space-y-6">
             <div className="rounded-2xl border border-gray-200 p-4">
@@ -1632,8 +1712,43 @@ export function Section13WizardFlow({
               ) : null}
 
               <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-                Stronger with 5+ live comparable listings. Keep the best-supported local examples rather than every result.
+                Stronger with 5+ live comparable listings. We now split the evidence into used, context-only, and excluded listings so you can see exactly which rents drive the median.
               </div>
+
+              {marketCalculation ? (
+                <div className="mt-4 grid gap-3 md:grid-cols-3">
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">Used in calculation</p>
+                    <p className="mt-2 text-2xl font-semibold text-emerald-950">{marketCalculation.usedComparableCount}</p>
+                    <p className="mt-2 text-sm text-emerald-900">{marketCalculation.medianExplanation}</p>
+                  </div>
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-800">Context only</p>
+                    <p className="mt-2 text-2xl font-semibold text-amber-950">{marketCalculation.contextComparables.length}</p>
+                    <p className="mt-2 text-sm text-amber-900">
+                      Nearby but weaker matches, older listings, or entries that help explain the market without moving the median.
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-800">Excluded / outlier</p>
+                    <p className="mt-2 text-2xl font-semibold text-rose-950">{marketCalculation.excludedComparables.length}</p>
+                    <p className="mt-2 text-sm text-rose-900">
+                      Listings that are too stale, mismatched, too distant, or otherwise too distorted to support the market figure.
+                    </p>
+                  </div>
+                </div>
+              ) : null}
+
+              {marketCalculation?.explanationText.length ? (
+                <div className="mt-4 rounded-2xl border border-violet-200 bg-violet-50 p-4">
+                  <p className="text-sm font-semibold text-violet-950">Calculation basis</p>
+                  <ul className="mt-2 space-y-1 text-sm text-violet-900/90">
+                    {marketCalculation.explanationText.map((line) => (
+                      <li key={line}>• {line}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
             </div>
 
             <div className="space-y-4">
@@ -1649,68 +1764,143 @@ export function Section13WizardFlow({
                 </div>
               ) : null}
 
-              {comparables.map((comparable, index) => (
-                <div key={`${comparable.id || 'comparable'}-${index}`} className="rounded-2xl border border-gray-200 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-sm font-semibold text-gray-900">Comparable {index + 1}</h3>
-                    <button
-                      type="button"
-                      className="text-sm text-rose-700"
-                      onClick={() => removeComparable(index)}
-                    >
-                      <RiDeleteBinLine className="inline h-4 w-4" /> Remove
-                    </button>
-                  </div>
+              {comparableGroups.map((group) =>
+                group.items.length > 0 ? (
+                  <div key={group.key} className="space-y-3">
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-950">{group.title}</h3>
+                      <p className="mt-1 text-sm text-gray-600">{group.description}</p>
+                    </div>
+                    {group.items.map(({ comparable, index, assessment }) => (
+                      <div key={`${getComparableAssessmentId(comparable)}-${index}`} className="rounded-2xl border border-gray-200 p-4">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <div>
+                            <h4 className="text-sm font-semibold text-gray-900">Comparable {index + 1}</h4>
+                            <p className="mt-1 text-sm text-gray-700">{comparable.addressSnippet || 'Address not added yet'}</p>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span
+                              className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] ${getComparableReasonBadgeClass(
+                                assessment
+                              )}`}
+                            >
+                              {assessment?.reasonLabel || 'Awaiting classification'}
+                            </span>
+                            <span
+                              className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] ${getComparableFreshnessBadgeClass(
+                                assessment
+                              )}`}
+                            >
+                              {assessment?.freshnessLabel || 'Freshness pending'}
+                            </span>
+                            <button
+                              type="button"
+                              className="text-sm text-rose-700"
+                              onClick={() => removeComparable(index)}
+                            >
+                              <RiDeleteBinLine className="inline h-4 w-4" /> Remove
+                            </button>
+                          </div>
+                        </div>
 
-                  <div className="mt-4 grid gap-4 md:grid-cols-2">
-                    {renderTextInput('Address snippet', comparable.addressSnippet, (value) =>
-                      updateComparable(index, { addressSnippet: value })
-                    )}
-                    {renderTextInput('Property type', comparable.propertyType, (value) =>
-                      updateComparable(index, { propertyType: value })
-                    )}
-                    {renderTextInput('Rent (pcm)', comparable.rawRentValue, (value) =>
-                      updateComparable(index, {
-                        rawRentValue: value ? Number(value) : 0,
-                        rawRentFrequency: 'pcm',
-                      })
-                    , { type: 'number', step: '0.01' })}
-                    {renderTextInput('Listing date', comparable.sourceDateValue, (value) =>
-                      updateComparable(index, {
-                        sourceDateValue: value || null,
-                        sourceDateKind: value ? 'published' : comparable.sourceDateKind,
-                      })
-                    , { type: 'date' })}
-                    {renderTextInput('Listing link', comparable.sourceUrl, (value) =>
-                      updateComparable(index, {
-                        sourceUrl: value || null,
-                        source: value ? 'manual_linked' : 'manual_unlinked',
-                      })
-                    )}
-                    {renderTextInput('Distance (miles)', comparable.distanceMiles, (value) =>
-                      updateComparable(index, { distanceMiles: value ? Number(value) : null })
-                    , { type: 'number', step: '0.01' })}
-                  </div>
+                        <div className="mt-4 grid gap-4 md:grid-cols-2">
+                          {renderTextInput('Address snippet', comparable.addressSnippet, (value) =>
+                            updateComparable(index, { addressSnippet: value })
+                          )}
+                          {renderTextInput('Property type', comparable.propertyType, (value) =>
+                            updateComparable(index, { propertyType: value })
+                          )}
+                          {renderTextInput('Rent (pcm)', comparable.rawRentValue, (value) =>
+                            updateComparable(index, {
+                              rawRentValue: value ? Number(value) : 0,
+                              rawRentFrequency: 'pcm',
+                            })
+                          , { type: 'number', step: '0.01' })}
+                          {renderTextInput('Listing date', comparable.sourceDateValue, (value) =>
+                            updateComparable(index, {
+                              sourceDateValue: value || null,
+                              sourceDateKind: value ? 'published' : comparable.sourceDateKind,
+                            })
+                          , { type: 'date' })}
+                          {renderTextInput('Listing link', comparable.sourceUrl, (value) =>
+                            updateComparable(index, {
+                              sourceUrl: value || null,
+                              source: value ? 'manual_linked' : 'manual_unlinked',
+                            })
+                          )}
+                          {renderTextInput('Distance (miles)', comparable.distanceMiles, (value) =>
+                            updateComparable(index, { distanceMiles: value ? Number(value) : null })
+                          , { type: 'number', step: '0.01' })}
+                        </div>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-700">
-                    <span>Monthly equivalent: {formatMoney(comparable.monthlyEquivalent)}</span>
-                    <span>Adjusted: {formatMoney(comparable.adjustedMonthlyEquivalent)}</span>
-                    {comparable.sourceUrl ? (
-                      <a
-                        href={comparable.sourceUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-violet-700"
-                      >
-                        Open listing <RiExternalLinkLine className="h-4 w-4" />
-                      </a>
-                    ) : null}
+                        <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                          <div className="rounded-2xl bg-gray-50 p-3 text-sm text-gray-700">
+                            <div className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Raw listed rent</div>
+                            <div className="mt-1 text-base font-semibold text-gray-950">{formatMoney(assessment?.rentPcmRaw ?? comparable.monthlyEquivalent)}</div>
+                          </div>
+                          <div className="rounded-2xl bg-gray-50 p-3 text-sm text-gray-700">
+                            <div className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Adjusted rent used</div>
+                            <div className="mt-1 text-base font-semibold text-gray-950">{formatMoney(assessment?.rentPcmAdjusted ?? comparable.adjustedMonthlyEquivalent)}</div>
+                          </div>
+                          <div className="rounded-2xl bg-gray-50 p-3 text-sm text-gray-700">
+                            <div className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Bedrooms / type</div>
+                            <div className="mt-1 text-base font-semibold text-gray-950">
+                              {comparable.bedrooms ?? '—'} bed · {comparable.propertyType || 'Unknown'}
+                            </div>
+                          </div>
+                          <div className="rounded-2xl bg-gray-50 p-3 text-sm text-gray-700">
+                            <div className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Distance / source</div>
+                            <div className="mt-1 text-base font-semibold text-gray-950">
+                              {comparable.distanceMiles != null ? `${comparable.distanceMiles.toFixed(1)} miles` : 'Distance unknown'}
+                            </div>
+                            <div className="mt-1 text-xs text-gray-500">
+                              {assessment?.sourceDomain || comparable.sourceDomain || comparable.source}
+                              {assessment?.listedDateLabel || comparable.sourceDateValue
+                                ? ` · ${assessment?.listedDateLabel || comparable.sourceDateValue}`
+                                : ''}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-4">
+                          <p className="text-sm font-semibold text-gray-950">Why this listing was {assessment?.usedInCalculation ? 'used' : assessment?.relevanceBand === 'outlier' ? 'excluded' : 'shown for context'}</p>
+                          <p className="mt-2 text-sm text-gray-700">
+                            {assessment?.reasonDetail || 'This listing will be classified once the preview recalculates.'}
+                          </p>
+                          <p className="mt-2 text-sm text-gray-700">
+                            Adjustment reason: {assessment?.adjustmentReason || 'No adjustment applied'}
+                          </p>
+                        </div>
+
+                        <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-700">
+                          <span>Monthly equivalent: {formatMoney(comparable.monthlyEquivalent)}</span>
+                          <span>Adjusted: {formatMoney(comparable.adjustedMonthlyEquivalent)}</span>
+                          {comparable.sourceUrl ? (
+                            <a
+                              href={comparable.sourceUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 text-violet-700"
+                            >
+                              Open listing <RiExternalLinkLine className="h-4 w-4" />
+                            </a>
+                          ) : null}
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                ) : null
+              )}
+
+              {uncategorisedRows.length > 0 ? (
+                <div className="rounded-2xl border border-dashed border-gray-300 p-4 text-sm text-gray-600">
+                  {uncategorisedRows.length} comparable listing{uncategorisedRows.length === 1 ? '' : 's'} still need classification. Re-run the local market check or adjust the details above.
                 </div>
-              ))}
+              ) : null}
             </div>
           </div>
         );
+      }
 
       case 'adjustments':
         return (
@@ -1812,15 +2002,37 @@ export function Section13WizardFlow({
                     <div className="font-semibold text-gray-900">{formatMoney(effectiveState.preview?.upperQuartile)}</div>
                   </div>
                 </div>
+                {marketCalculation?.medianExplanation ? (
+                  <p className="mt-4 text-sm text-gray-700">{marketCalculation.medianExplanation}</p>
+                ) : null}
                 <p className="mt-4 text-sm text-gray-700">{effectiveState.preview?.previewSummary}</p>
+                {marketCalculation?.explanationText.length ? (
+                  <ul className="mt-3 space-y-1 text-sm text-gray-600">
+                    {marketCalculation.explanationText.slice(1).map((line) => (
+                      <li key={line}>• {line}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
 
               <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4">
                 <p className="text-sm font-semibold text-violet-950">How supportable the proposed rent looks</p>
                 <p className="mt-3 text-sm font-semibold text-violet-900">{effectiveState.preview?.challengeBandLabel}</p>
                 <p className="text-sm text-violet-900/90">{effectiveState.preview?.challengeBandExplainer}</p>
+                {effectiveState.preview?.challengeReasonSummary ? (
+                  <div className="mt-3 rounded-2xl border border-violet-200 bg-white/80 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-violet-800">Why this risk band</p>
+                    <p className="mt-2 text-sm text-gray-700">{effectiveState.preview.challengeReasonSummary}</p>
+                  </div>
+                ) : null}
                 <p className="mt-3 text-sm font-semibold text-violet-900">{effectiveState.preview?.evidenceBandLabel}</p>
                 <p className="text-sm text-violet-900/90">{effectiveState.preview?.evidenceBandExplainer}</p>
+                {effectiveState.preview?.saferRangeGuidance ? (
+                  <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-800">Safer range guidance</p>
+                    <p className="mt-2 text-sm text-amber-900">{effectiveState.preview.saferRangeGuidance}</p>
+                  </div>
+                ) : null}
                 <p className="mt-3 text-xs text-violet-900/80">
                   These bands are evidence signals based on the comparable data and are not legal guarantees.
                 </p>
@@ -1832,6 +2044,22 @@ export function Section13WizardFlow({
               <p className="mt-2 text-sm text-gray-700">
                 {effectiveState.preview?.defensibilitySummarySentence}
               </p>
+              {marketCalculation ? (
+                <div className="mt-4 grid gap-3 md:grid-cols-3">
+                  <div className="rounded-2xl bg-gray-50 p-3 text-sm text-gray-700">
+                    <div className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Used in calculation</div>
+                    <div className="mt-1 text-base font-semibold text-gray-950">{marketCalculation.usedComparableCount}</div>
+                  </div>
+                  <div className="rounded-2xl bg-gray-50 p-3 text-sm text-gray-700">
+                    <div className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Context only</div>
+                    <div className="mt-1 text-base font-semibold text-gray-950">{marketCalculation.contextComparables.length}</div>
+                  </div>
+                  <div className="rounded-2xl bg-gray-50 p-3 text-sm text-gray-700">
+                    <div className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Excluded / outlier</div>
+                    <div className="mt-1 text-base font-semibold text-gray-950">{marketCalculation.excludedComparables.length}</div>
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             {section13PreviewProofEntries.length > 0 ? (
@@ -2254,8 +2482,8 @@ export function Section13WizardFlow({
             <dd>{formatMoney(effectiveState.proposal.proposedRentAmount)}</dd>
           </div>
           <div className="flex items-start justify-between gap-3">
-            <dt>Comparables</dt>
-            <dd>{comparables.length}</dd>
+            <dt>Used comparables</dt>
+            <dd>{marketCalculation?.usedComparableCount ?? comparables.length}</dd>
           </div>
           <div className="flex items-start justify-between gap-3">
             <dt>Plan</dt>
@@ -2272,8 +2500,19 @@ export function Section13WizardFlow({
         <h3 className="text-sm font-semibold text-violet-950">Supportable range signals</h3>
         <p className="mt-2 text-sm font-medium text-violet-900">{effectiveState.preview?.challengeBandLabel}</p>
         <p className="text-sm text-violet-900/90">{effectiveState.preview?.challengeBandExplainer}</p>
+        {effectiveState.preview?.challengeReasonSummary ? (
+          <p className="mt-2 text-sm text-violet-900/90">{effectiveState.preview.challengeReasonSummary}</p>
+        ) : null}
         <p className="mt-3 text-sm font-medium text-violet-900">{effectiveState.preview?.evidenceBandLabel}</p>
         <p className="text-sm text-violet-900/90">{effectiveState.preview?.evidenceBandExplainer}</p>
+        {marketCalculation?.medianExplanation ? (
+          <p className="mt-3 text-sm text-violet-900/90">{marketCalculation.medianExplanation}</p>
+        ) : null}
+        {effectiveState.preview?.saferRangeGuidance ? (
+          <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+            {effectiveState.preview.saferRangeGuidance}
+          </div>
+        ) : null}
       </div>
 
       <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">

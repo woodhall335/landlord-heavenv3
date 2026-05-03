@@ -37,6 +37,7 @@ function makeComparables(values: number[]) {
         propertyType: 'Flat',
         postcodeRaw: 'SW1A 1AA',
         postcodeNormalized: 'SW1A 1AA',
+        distanceMiles: 0.8,
         bedrooms: 2,
         rawRentValue: value,
         rawRentFrequency: 'pcm',
@@ -44,6 +45,11 @@ function makeComparables(values: number[]) {
         adjustments: [],
         metadata: {
           imageUrl: `https://example.com/image-${index + 1}.jpg`,
+          subjectPropertyType: 'flat',
+          subjectFurnishedStatus: 'furnished',
+          furnishedStatus: 'furnished',
+          subjectBillsIncluded: false,
+          allInclusive: false,
         },
       },
       index
@@ -68,9 +74,12 @@ describe('buildRentCheckerResult', () => {
     expect(result.userType).toBe('landlord');
     expect(result.evidenceStrength).toBe('Strong');
     expect(result.challengeRisk).toBe('low');
-    expect(result.comparableListings).toHaveLength(6);
-    expect(result.comparableListings[0]?.imageUrl).toBe('https://example.com/image-1.jpg');
-    expect(result.comparableListings[0]?.address).toBe('1 Example Street');
+    expect(result.usedComparableListings).toHaveLength(6);
+    expect(result.contextComparableListings).toHaveLength(0);
+    expect(result.excludedComparableListings).toHaveLength(0);
+    expect(result.usedComparableListings[0]?.imageUrl).toBe('https://example.com/image-1.jpg');
+    expect(result.usedComparableListings[0]?.address).toBe('1 Example Street');
+    expect(result.medianExplanation).toContain('Median calculated from 6 comparable listings');
   });
 
   it('returns landlord_moderate_risk with strong evidence near the median', () => {
@@ -101,6 +110,24 @@ describe('buildRentCheckerResult', () => {
     expect(result.recommendedProduct).toBe('section13_defensive');
     expect(result.evidenceStrength).toBe('Weak');
     expect(result.showBundleUpsell).toBe(true);
+  });
+
+  it('explains the difference between strong evidence and aggressive pricing', () => {
+    const result = buildRentCheckerResult({
+      input: makeInput({ currentRent: 800, proposedRent: 1800 }),
+      comparables: makeComparables([1200, 1250, 1300, 1350, 1400, 1450]),
+      scrapeSource: 'blended_live',
+      scrapeSummary: 'Imported comparables',
+      now,
+    });
+
+    expect(result.resultState).toBe('landlord_high_risk');
+    expect(result.evidenceStrength).toBe('Strong');
+    expect(result.challengeRisk).toBe('high');
+    expect(result.headline).toContain('above the supported market position');
+    expect(result.subheadline).toContain('Evidence strength is strong');
+    expect(result.challengeExplanation).toContain('proposed rent is high compared with the market calculation');
+    expect(result.saferRangeGuidance).toBeTruthy();
   });
 
   it('keeps the moderate landlord route landlord-facing even with strong evidence', () => {

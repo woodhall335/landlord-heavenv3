@@ -5,12 +5,11 @@ import {
   addCalendarMonths,
   computeSection13Preview,
   getMonthlyEquivalent,
-  getSourceBackedComparableCount,
-  isFreshComparable,
   validateSection13StartDate,
 } from './rules';
 import type {
   Section13Comparable,
+  Section13ComparableAssessment,
   Section13EvidenceStrengthBand,
   Section13ProductSku,
   Section13PreviewMetrics,
@@ -31,14 +30,22 @@ export type RentCheckerResultState =
 export type RentCheckerEvidenceStrength = Capitalize<Section13EvidenceStrengthBand>;
 
 export interface RentCheckerComparableListing {
+  id: string;
   address: string;
   propertyType: string | null;
   bedrooms: number | null;
-  monthlyRent: number;
+  rentPcmRaw: number;
+  rentPcmAdjusted: number;
   sourceUrl: string | null;
   imageUrl: string | null;
   sourceLabel: string;
   distanceMiles: number | null;
+  listedDate: string | null;
+  freshnessStatus: string;
+  reasonLabel: string;
+  reasonDetail: string;
+  adjustmentReason: string;
+  usedInCalculation: boolean;
 }
 
 export interface RentCheckerInput {
@@ -91,7 +98,13 @@ export interface RentCheckerResult {
   sourceBackedCount: number;
   freshComparableCount: number;
   freshnessLabel: string;
-  comparableListings: RentCheckerComparableListing[];
+  medianExplanation: string;
+  marketExplanation: string[];
+  challengeExplanation: string;
+  saferRangeGuidance: string | null;
+  usedComparableListings: RentCheckerComparableListing[];
+  contextComparableListings: RentCheckerComparableListing[];
+  excludedComparableListings: RentCheckerComparableListing[];
   whatThisMeans: string;
   nextSteps: string[];
   primaryCtaLabel: string;
@@ -238,33 +251,43 @@ function buildFreshnessLabel(comparableCount: number, freshComparableCount: numb
   return `${freshComparableCount} of ${comparableCount} within 90 days`;
 }
 
-function buildComparableSourceLabel(item: Section13Comparable): string {
+function buildComparableImageUrl(item: { metadata?: Record<string, unknown> }): string | null {
+  const imageUrl = item.metadata?.imageUrl;
+  return typeof imageUrl === 'string' && imageUrl.trim() ? imageUrl.trim() : null;
+}
+
+function buildComparableSourceLabel(item: Section13ComparableAssessment): string {
   const sourceName =
     item.sourceDomain?.includes('openrent')
       ? 'OpenRent'
       : item.sourceDomain?.includes('rightmove')
         ? 'Rightmove'
         : item.sourceDomain || 'Market listing';
-  const listed = item.sourceDateValue ? `Listed ${item.sourceDateValue}` : null;
+  const listed = item.listedDateLabel ? `Listed ${item.listedDateLabel}` : null;
   const distance = item.distanceMiles != null ? `${item.distanceMiles.toFixed(1)} miles away` : null;
   return [sourceName, listed, distance].filter(Boolean).join(' | ');
 }
 
-function buildComparableImageUrl(item: Section13Comparable): string | null {
-  const imageUrl = item.metadata?.imageUrl;
-  return typeof imageUrl === 'string' && imageUrl.trim() ? imageUrl.trim() : null;
-}
-
-function buildComparableListings(comparables: Section13Comparable[]): RentCheckerComparableListing[] {
-  return comparables.slice(0, 6).map((item) => ({
+function buildComparableListings(
+  comparables: Section13ComparableAssessment[]
+): RentCheckerComparableListing[] {
+  return comparables.map((item) => ({
+    id: item.id,
     address: item.addressSnippet || 'Comparable listing',
     propertyType: item.propertyType || null,
     bedrooms: item.bedrooms ?? null,
-    monthlyRent: item.monthlyEquivalent,
+    rentPcmRaw: item.rentPcmRaw,
+    rentPcmAdjusted: item.rentPcmAdjusted,
     sourceUrl: item.sourceUrl || null,
     imageUrl: buildComparableImageUrl(item),
     sourceLabel: buildComparableSourceLabel(item),
     distanceMiles: item.distanceMiles ?? null,
+    listedDate: item.listedDateLabel,
+    freshnessStatus: item.freshnessLabel,
+    reasonLabel: item.reasonLabel,
+    reasonDetail: item.reasonDetail,
+    adjustmentReason: item.adjustmentReason,
+    usedInCalculation: item.usedInCalculation,
   }));
 }
 
@@ -331,29 +354,20 @@ function buildSyntheticState(input: RentCheckerInput, now = new Date()): Section
 }
 
 function deriveEvidenceStrength(args: {
-  comparableCount: number;
-  freshComparableCount: number;
-  sourceBackedCount: number;
+  calculationBand: Section13EvidenceStrengthBand;
   comparableEvidenceAvailable: RentCheckerComparableEvidenceAvailability;
 }): RentCheckerEvidenceStrength {
-  const {
-    comparableCount,
-    freshComparableCount,
-    sourceBackedCount,
-    comparableEvidenceAvailable,
-  } = args;
+  const { calculationBand, comparableEvidenceAvailable } = args;
 
-  if (comparableCount < 3 || freshComparableCount < 3 || comparableEvidenceAvailable === 'no') {
+  if (comparableEvidenceAvailable === 'no') {
     return 'Weak';
   }
 
-  const sourceBackedRatio = comparableCount > 0 ? sourceBackedCount / comparableCount : 0;
-
-  if (comparableCount >= 6 && freshComparableCount >= 6 && sourceBackedRatio >= 0.7) {
+  if (calculationBand === 'strong') {
     return 'Strong';
   }
 
-  if (comparableCount >= 3 && freshComparableCount >= 3 && sourceBackedRatio >= 0.4) {
+  if (calculationBand === 'moderate') {
     return 'Moderate';
   }
 
@@ -492,16 +506,26 @@ function buildHighRiskResult(
     | 'secondaryCtaTracksCheckout'
   >
 ): RentCheckerResult {
+  const strongButHighPricing =
+    base.evidenceStrength === 'Strong' &&
+    base.proposedRent != null &&
+    base.marketHigh != null &&
+    base.proposedRent > base.marketHigh;
+
   return {
     ...base,
     resultState: 'landlord_high_risk',
-    headline: 'This increase needs stronger evidence before you serve notice',
-    subheadline:
-      'The proposed figure may be above the supported market range or the evidence is not strong enough yet.',
+    headline: strongButHighPricing
+      ? 'This increase is above the supported market position and likely to be challenged'
+      : 'This increase needs stronger evidence before you serve notice',
+    subheadline: strongButHighPricing
+      ? 'Evidence strength is strong, but the proposed figure sits above the supported market calculation.'
+      : 'The proposed figure may be above the supported market range or the evidence is not strong enough yet.',
     moneyImpactLabel: 'Potential uplift claimed:',
     moneyImpactValue: `${formatSignedMoney(base.monthlyDiff)}/month (${formatSignedMoney(base.annualDiff)}/year)`,
-    whatThisMeans:
-      'The proposed rent appears risky on the information entered. It may be above comparable market levels, supported by weak evidence, or likely to attract challenge. Serving now could increase the risk of a tenant referral or a reduced rent outcome.',
+    whatThisMeans: strongButHighPricing
+      ? 'The evidence base is strong enough to show the local market position, but the proposed rent still sits above the supported calculation. That makes challenge risk higher even though the comparable sourcing itself is solid.'
+      : 'The proposed rent appears risky on the information entered. It may be above comparable market levels, supported by weak evidence, or likely to attract challenge. Serving now could increase the risk of a tenant referral or a reduced rent outcome.',
     nextSteps: [
       'Do not serve the notice until the dates and evidence are checked.',
       'Add stronger comparable evidence.',
@@ -530,14 +554,13 @@ export function buildRentCheckerResult({
 }: RentCheckerAnalysisArgs): RentCheckerResult {
   const syntheticState = buildSyntheticState(input, now);
   const preview = computeSection13Preview(syntheticState, comparables, now);
+  const calculation = preview.marketCalculation;
 
-  const comparableCount = comparables.length;
-  const sourceBackedCount = getSourceBackedComparableCount(comparables);
-  const freshComparableCount = comparables.filter((item) => isFreshComparable(item, now)).length;
+  const comparableCount = calculation.usedComparableCount;
+  const sourceBackedCount = calculation.sourceBackedUsedCount;
+  const freshComparableCount = calculation.fresh90UsedCount;
   const evidenceStrength = deriveEvidenceStrength({
-    comparableCount,
-    freshComparableCount,
-    sourceBackedCount,
+    calculationBand: calculation.evidenceStrength,
     comparableEvidenceAvailable: input.comparableEvidenceAvailable,
   });
 
@@ -610,8 +633,14 @@ export function buildRentCheckerResult({
     comparableCount,
     sourceBackedCount,
     freshComparableCount,
-    freshnessLabel: buildFreshnessLabel(comparableCount, freshComparableCount),
-    comparableListings: buildComparableListings(comparables),
+    freshnessLabel: buildFreshnessLabel(calculation.usedComparableCount, freshComparableCount),
+    medianExplanation: calculation.medianExplanation,
+    marketExplanation: calculation.explanationText,
+    challengeExplanation: preview.challengeReasonSummary,
+    saferRangeGuidance: preview.saferRangeGuidance,
+    usedComparableListings: buildComparableListings(calculation.usedComparables),
+    contextComparableListings: buildComparableListings(calculation.contextComparables),
+    excludedComparableListings: buildComparableListings(calculation.excludedComparables),
     bundleCtaHref: buildLandingHref(
       'section13_defensive',
       'landlord_high_risk',

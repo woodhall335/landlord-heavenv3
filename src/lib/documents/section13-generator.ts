@@ -1051,6 +1051,13 @@ function getResolvedPreview(
   return snapshot?.previewMetrics || state.preview;
 }
 
+function getResolvedMarketCalculation(
+  state: Section13State,
+  snapshot?: Section13OutputSnapshot | null
+) {
+  return getResolvedPreview(state, snapshot)?.marketCalculation || null;
+}
+
 function buildBandSummaryLine(
   state: Section13State,
   snapshot?: Section13OutputSnapshot | null
@@ -1098,13 +1105,13 @@ function buildComparableGrounding(
   snapshot?: Section13OutputSnapshot | null
 ): string {
   const preview = getResolvedPreview(state, snapshot);
-  const comparableCount = preview?.comparableCount ?? comparables.length;
+  const marketCalculation = getResolvedMarketCalculation(state, snapshot);
+  const sourceBackedCount = marketCalculation?.sourceBackedUsedCount ?? preview?.sourceBackedCount ?? 0;
+  const freshComparableCount = marketCalculation?.fresh90UsedCount ?? preview?.freshComparableCount ?? 0;
+  const comparableCount = marketCalculation?.usedComparableCount ?? preview?.comparableCount ?? comparables.length;
   if (comparableCount <= 0) {
     return 'the recorded comparable evidence available for this tenancy';
   }
-
-  const sourceBackedCount = preview?.sourceBackedCount ?? 0;
-  const freshComparableCount = preview?.freshComparableCount ?? 0;
   const bedroomDescriptor = formatBedroomDescriptor(
     state.comparablesMeta.bedrooms || state.tenancy.bedrooms || null
   );
@@ -1134,7 +1141,7 @@ function buildComparableGrounding(
         ? `${sourceBackedCount} source-backed`
         : 'no source-backed entries';
 
-  return `${comparableCount} comparable ${descriptor} within 0.5 miles, with ${freshnessFragment} and ${sourceBackedFragment}`;
+  return `${comparableCount} comparable ${descriptor} used in the market calculation, with ${freshnessFragment} and ${sourceBackedFragment}`;
 }
 
 function buildComparableGroundingSentence(
@@ -1143,14 +1150,15 @@ function buildComparableGroundingSentence(
   snapshot?: Section13OutputSnapshot | null
 ): string {
   const preview = getResolvedPreview(state, snapshot);
-  const comparableCount = preview?.comparableCount ?? comparables.length;
+  const marketCalculation = getResolvedMarketCalculation(state, snapshot);
+  const comparableCount = marketCalculation?.usedComparableCount ?? preview?.comparableCount ?? comparables.length;
 
   if (comparableCount <= 0) {
     return 'Comparable analysis is not complete enough yet to describe the local market evidence base.';
   }
 
-  const sourceBackedCount = preview?.sourceBackedCount ?? 0;
-  const freshComparableCount = preview?.freshComparableCount ?? 0;
+  const sourceBackedCount = marketCalculation?.sourceBackedUsedCount ?? preview?.sourceBackedCount ?? 0;
+  const freshComparableCount = marketCalculation?.fresh90UsedCount ?? preview?.freshComparableCount ?? 0;
   const bedroomDescriptor = formatBedroomDescriptor(
     state.comparablesMeta.bedrooms || state.tenancy.bedrooms || null
   );
@@ -1171,10 +1179,10 @@ function buildComparableGroundingSentence(
         : 'no source-backed entries';
 
   if (freshComparableCount === comparableCount && sourceBackedCount === comparableCount) {
-    return `This proposal is grounded in ${comparableCount} comparable ${descriptor} within 0.5 miles, all listed within the last 90 days and all source-backed.`;
+    return `This proposal is grounded in ${comparableCount} comparable ${descriptor} used in the market calculation, all listed within the last 90 days and all source-backed.`;
   }
 
-  return `This proposal is grounded in ${comparableCount} comparable ${descriptor} within 0.5 miles, with ${freshnessFragment} and ${sourceBackedFragment}.`;
+  return `This proposal is grounded in ${comparableCount} comparable ${descriptor} used in the market calculation, with ${freshnessFragment} and ${sourceBackedFragment}.`;
 }
 
 function getMedianPositionFragment(
@@ -1296,6 +1304,10 @@ function buildConclusionSentence(
     return 'The proposed rent is supported by current market evidence and sits within the mid-to-upper range of comparable properties locally.';
   }
 
+  if (preview.evidenceBand === 'strong') {
+    return 'The evidence base is strong, but the proposed rent still sits above the supported market position and is likely to attract challenge.';
+  }
+
   return 'The proposed rent is supported by current market evidence and sits above the upper quartile of comparable properties locally.';
 }
 
@@ -1374,11 +1386,16 @@ function buildEvidenceStrengthSentence(
   snapshot?: Section13OutputSnapshot | null
 ): string {
   const preview = getResolvedPreview(state, snapshot);
+  const marketCalculation = getResolvedMarketCalculation(state, snapshot);
   if (!preview) {
     return 'Evidence strength cannot be described until comparable data has been added.';
   }
 
-  const base = `${preview.evidenceBandLabel} is based on ${preview.comparableCount} comparable home${preview.comparableCount === 1 ? '' : 's'}, ${preview.sourceBackedCount} source-backed entr${preview.sourceBackedCount === 1 ? 'y' : 'ies'}, and ${preview.freshComparableCount} comparables dated within the 90-day freshness window.`;
+  const usedComparableCount = marketCalculation?.usedComparableCount ?? preview.comparableCount;
+  const sourceBackedCount = marketCalculation?.sourceBackedUsedCount ?? preview.sourceBackedCount;
+  const freshComparableCount = marketCalculation?.fresh90UsedCount ?? preview.freshComparableCount;
+  const freshnessWindowUsed = marketCalculation?.freshnessWindowUsed ?? 90;
+  const base = `${preview.evidenceBandLabel} is based on ${usedComparableCount} comparable home${usedComparableCount === 1 ? '' : 's'} used in the market calculation, ${sourceBackedCount} source-backed entr${sourceBackedCount === 1 ? 'y' : 'ies'}, and ${freshComparableCount} comparables dated within the 90-day freshness window${freshnessWindowUsed === 180 ? ' with 180-day fallback used where needed' : ''}.`;
 
   if (preview.evidenceBand === 'strong') {
     return `${base} The file reads as a well-supported market review rather than a bare assertion.`;
@@ -1393,14 +1410,17 @@ function buildEvidenceStrengthSentence(
 }
 
 function buildComparableHighlights(
+  state: Section13State,
   comparables: Section13Comparable[],
+  snapshot?: Section13OutputSnapshot | null,
   limit = 3
 ): string[] {
-  return comparables.slice(0, limit).map((comparable, index) => {
+  const usedComparables = getResolvedMarketCalculation(state, snapshot)?.usedComparables || [];
+  return usedComparables.slice(0, limit).map((comparable, index) => {
     const sourceDate = comparable.sourceDateValue
       ? `, dated ${formatDateUk(comparable.sourceDateValue)}`
       : '';
-    return `Comparable ${index + 1}: ${comparable.addressSnippet} at ${formatCurrency(comparable.rawRentValue)} ${compactFrequency(comparable.rawRentFrequency)}, adjusting to ${formatCurrency(comparable.adjustedMonthlyEquivalent)} pcm${sourceDate}.`;
+    return `Comparable ${index + 1}: ${comparable.addressSnippet} at raw ${formatCurrency(comparable.rentPcmRaw)} pcm, adjusted to ${formatCurrency(comparable.rentPcmAdjusted)} pcm${sourceDate}. ${comparable.reasonDetail}`;
   });
 }
 
@@ -1411,13 +1431,15 @@ function buildKeyPointsLines(
 ): string[] {
   const preview = getResolvedPreview(state, snapshot);
   const proposedPosition = preview?.proposedPositionLabel || 'Position not yet calculated';
+  const marketCalculation = getResolvedMarketCalculation(state, snapshot);
 
   return [
     `- Proposed rent: ${formatCurrency(state.proposal.proposedRentAmount)} ${frequencyLabel(state.tenancy.currentRentFrequency)}`,
     `- Local median: ${formatCurrency(preview?.median)} pcm`,
     `- Position: ${proposedPosition}`,
     `- Evidence strength: ${preview?.evidenceBandLabel || 'Not available'}`,
-    `- Comparable count: ${preview?.comparableCount ?? comparables.length} total (${preview?.sourceBackedCount ?? 0} source-backed; ${preview?.freshComparableCount ?? 0} within 90 days)`,
+    `- Median basis: ${marketCalculation?.medianExplanation || 'Comparable basis not yet explained.'}`,
+    `- Comparable count: ${marketCalculation?.usedComparableCount ?? preview?.comparableCount ?? comparables.length} used in calculation (${marketCalculation?.sourceBackedUsedCount ?? preview?.sourceBackedCount ?? 0} source-backed; ${marketCalculation?.fresh90UsedCount ?? preview?.freshComparableCount ?? 0} within 90 days)`,
   ];
 }
 
@@ -1427,6 +1449,7 @@ function buildComparableOverviewLines(
   snapshot?: Section13OutputSnapshot | null
 ): string[] {
   const preview = getResolvedPreview(state, snapshot);
+  const marketCalculation = getResolvedMarketCalculation(state, snapshot);
   if ((preview?.comparableCount ?? comparables.length) <= 0) {
     return ['No comparable analysis is available yet.'];
   }
@@ -1435,6 +1458,7 @@ function buildComparableOverviewLines(
     `- Comparable base: ${buildComparableGrounding(state, comparables, snapshot)}`,
     `- Challenge band: ${preview?.challengeBandLabel || 'Not available'}`,
     `- Evidence band: ${preview?.evidenceBandLabel || 'Not available'}`,
+    ...(marketCalculation?.explanationText || []).map((line) => `- ${line}`),
   ];
 }
 
@@ -1476,21 +1500,42 @@ function buildChallengeScriptLines(
   ];
 }
 
-function buildComparableLines(comparables: Section13Comparable[]): string[] {
-  return comparables.flatMap((comparable, index) => {
-    const header = `${index + 1}. ${comparable.addressSnippet} | ${formatCurrency(comparable.rawRentValue)} ${compactFrequency(comparable.rawRentFrequency)} | adjusted ${formatCurrency(comparable.adjustedMonthlyEquivalent)} pcm`;
-    const details = [
-      `Source: ${comparable.source}${comparable.sourceUrl ? ` | ${comparable.sourceUrl}` : ''}`,
-      comparable.propertyType ? `Property type: ${comparable.propertyType}` : null,
-      comparable.distanceMiles != null ? `Distance: ${comparable.distanceMiles.toFixed(2)} miles` : null,
-      comparable.sourceDateValue ? `Source date (${comparable.sourceDateKind}): ${formatDateUk(comparable.sourceDateValue)}` : null,
-      comparable.adjustments.length > 0
-        ? `Adjustments: ${comparable.adjustments.map((item) => `${item.category} ${item.normalizedMonthlyDelta >= 0 ? '+' : ''}${formatCurrency(item.normalizedMonthlyDelta)} (${item.reason})`).join('; ')}`
-        : 'Adjustments: none recorded',
-    ].filter(Boolean) as string[];
+function buildComparableLines(
+  state: Section13State,
+  snapshot?: Section13OutputSnapshot | null
+): string[] {
+  const marketCalculation = getResolvedMarketCalculation(state, snapshot);
+  if (!marketCalculation) {
+    return ['No comparable analysis is available yet.'];
+  }
 
-    return [header, ...details, ''];
-  });
+  const groupLines = (
+    heading: string,
+    items: typeof marketCalculation.usedComparables
+  ): string[] => {
+    if (items.length === 0) return [];
+    return [
+      heading,
+      ...items.flatMap((comparable, index) => [
+        `${index + 1}. ${comparable.addressSnippet} | raw ${formatCurrency(comparable.rentPcmRaw)} pcm | adjusted ${formatCurrency(comparable.rentPcmAdjusted)} pcm`,
+        `   Included in calculation: ${comparable.usedInCalculation ? 'Yes' : 'No'}`,
+        `   Freshness: ${comparable.freshnessLabel}`,
+        `   Source: ${comparable.source}${comparable.sourceUrl ? ` | ${comparable.sourceUrl}` : ''}`,
+        comparable.propertyType ? `   Property type: ${comparable.propertyType}` : null,
+        comparable.distanceMiles != null ? `   Distance: ${comparable.distanceMiles.toFixed(2)} miles` : null,
+        comparable.sourceDateValue ? `   Source date (${comparable.sourceDateKind}): ${formatDateUk(comparable.sourceDateValue)}` : null,
+        `   Adjustment reason: ${comparable.adjustmentReason}`,
+        `   Use / exclusion reason: ${comparable.reasonDetail}`,
+        '',
+      ].filter(Boolean) as string[]),
+    ];
+  };
+
+  return [
+    ...groupLines('Used in market calculation', marketCalculation.usedComparables),
+    ...groupLines('Context only', marketCalculation.contextComparables),
+    ...groupLines('Excluded / outlier', marketCalculation.excludedComparables),
+  ];
 }
 
 function buildServiceMethodLabel(state: Section13State): string {
@@ -1683,7 +1728,7 @@ async function buildRentIncreaseSummaryPdf(
           `Service date: ${formatDateUk(resolvedState.proposal.serviceDate) || 'Not recorded'}`,
           `Evidence strength: ${preview?.evidenceBandLabel || 'Not available'}`,
           `Challenge band: ${preview?.challengeBandLabel || 'Not available'}`,
-          `Comparable count: ${preview?.comparableCount ?? comparables.length}`,
+          `Comparable count: ${preview?.marketCalculation?.usedComparableCount ?? preview?.comparableCount ?? comparables.length} used in calculation`,
         ],
       },
       {
@@ -1691,6 +1736,7 @@ async function buildRentIncreaseSummaryPdf(
         lines: [
           buildComparableGroundingSentence(resolvedState, comparables, snapshot),
           `Current case position: ${buildConclusionSentence(resolvedState, snapshot)}`,
+          ...(preview?.marketCalculation?.explanationText || []),
           preview?.warnings?.length
             ? `Current warnings: ${preview.warnings.join(' ')}`
             : 'No immediate structured warning is recorded from the current comparable and service checks, but the file should still be reviewed before service.',
@@ -1884,6 +1930,8 @@ async function buildJustificationReportPdf(
         buildMarketPositionSentence(resolvedState, snapshot),
         getDefensibilitySummaryText(resolvedState, snapshot),
         buildEvidenceStrengthSentence(resolvedState, resolvedComparables, snapshot),
+        preview?.challengeReasonSummary || 'Challenge reasoning is not available yet.',
+        preview?.saferRangeGuidance || 'No safer-range guidance is currently needed from the market calculation.',
         `Challenge band: ${preview?.challengeBandLabel || 'Not available'} - ${SECTION13_CHALLENGE_EXPLAINER}`,
         `Evidence band: ${preview?.evidenceBandLabel || 'Not available'} - ${SECTION13_EVIDENCE_EXPLAINER}`,
       ],
@@ -1912,16 +1960,17 @@ async function buildJustificationReportPdf(
       heading: 'Comparable overview',
       lines: buildComparableOverviewLines(resolvedState, resolvedComparables, snapshot),
     },
-    {
-      heading: 'Comparable picture',
-      lines: [
-        preview?.previewSummary || 'No comparable summary available.',
-        ...buildComparableHighlights(resolvedComparables),
-      ],
-    },
+      {
+        heading: 'Comparable picture',
+        lines: [
+          preview?.previewSummary || 'No comparable summary available.',
+          ...(preview?.marketCalculation?.explanationText || []),
+          ...buildComparableHighlights(resolvedState, resolvedComparables, snapshot),
+        ],
+      },
     {
       heading: 'Comparables and adjustments',
-      lines: buildComparableLines(resolvedComparables),
+      lines: buildComparableLines(resolvedState, snapshot),
     },
       {
         heading: 'Final checks before service or filing',
@@ -2126,6 +2175,8 @@ async function buildTribunalArgumentSummaryPdf(
         lines: [
           'The proposal should be judged by reference to nearby open-market comparables, not by the size of the increase from the previous rent alone.',
           casePosition.defensive,
+          preview?.challengeReasonSummary || 'Challenge reasoning is not available yet.',
+          preview?.saferRangeGuidance || 'No safer-range guidance is currently needed from the market calculation.',
           buildJustificationNarrativeText(resolvedState, snapshot),
         ],
       },
@@ -2133,7 +2184,14 @@ async function buildTribunalArgumentSummaryPdf(
         heading: 'Strength of the evidence',
         lines: [
           buildEvidenceStrengthSentence(resolvedState, resolvedComparables, snapshot),
-          ...buildComparableHighlights(resolvedComparables, 2),
+          ...buildComparableHighlights(resolvedState, resolvedComparables, snapshot, 2),
+        ],
+      },
+      {
+        heading: 'Comparable calculation basis',
+        lines: [
+          resolvedState.preview?.marketCalculation?.medianExplanation || 'Comparable basis is not yet available.',
+          ...buildComparableLines(resolvedState, snapshot),
         ],
       },
       {

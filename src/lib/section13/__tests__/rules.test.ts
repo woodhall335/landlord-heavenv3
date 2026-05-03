@@ -120,6 +120,48 @@ describe('Section 13 evidence and preview metrics', () => {
     expect(preview.warnings[0]).toContain('No valid source-backed comparables');
   });
 
+  it('keeps strong evidence distinct from aggressive pricing in the challenge explanation', () => {
+    const state = createEmptySection13State();
+    state.tenancy.tenantNames = ['Alex Tenant'];
+    state.tenancy.propertyAddressLine1 = '1 Test Street';
+    state.tenancy.propertyTownCity = 'Leeds';
+    state.tenancy.postcodeRaw = 'LS1 1AA';
+    state.tenancy.tenancyStartDate = '2025-04-10';
+    state.tenancy.currentRentAmount = 800;
+    state.tenancy.currentRentFrequency = 'monthly';
+    state.tenancy.bedrooms = 3;
+    state.proposal.proposedRentAmount = 1800;
+    state.proposal.proposedStartDate = '2026-06-01';
+    state.proposal.serviceDate = '2026-03-15';
+
+    const comparables = [1200, 1250, 1300, 1350, 1400, 1450].map((rent, index) =>
+      buildComparable({
+        addressSnippet: `Comparable ${index + 1}`,
+        bedrooms: 3,
+        propertyType: 'House',
+        distanceMiles: 0.8,
+        monthlyEquivalent: rent,
+        rawRentValue: rent,
+        adjustedMonthlyEquivalent: rent,
+        sourceDateValue: '2026-04-01',
+        metadata: {
+          subjectPropertyType: 'house',
+          subjectFurnishedStatus: 'furnished',
+          furnishedStatus: 'furnished',
+          subjectBillsIncluded: false,
+          allInclusive: false,
+        },
+      })
+    );
+
+    const preview = computeSection13Preview(state, comparables, new Date('2026-05-03T00:00:00.000Z'));
+
+    expect(preview.evidenceBand).toBe('strong');
+    expect(preview.challengeBand).toBe('higher_likelihood');
+    expect(preview.challengeReasonSummary).toContain('proposed rent is high compared with the market calculation');
+    expect(preview.saferRangeGuidance).toContain('£');
+  });
+
   it('recommends Standard by default for lower-risk cases', () => {
     const recommendation = getSection13PlanRecommendation({
       comparableCount: 6,

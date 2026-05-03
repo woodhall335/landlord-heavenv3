@@ -25,6 +25,12 @@ export type Section13SourceDateKind =
   | 'unknown';
 export type Section13AdjustmentCategory = 'location' | 'condition' | 'amenities' | 'custom';
 export type Section13EvidenceStrengthBand = 'strong' | 'moderate' | 'weak';
+export type Section13ComparableFreshnessBand = 'fresh_90' | 'extended_180' | 'stale';
+export type Section13ComparableRelevanceBand =
+  | 'strong_match'
+  | 'partial_match'
+  | 'context_only'
+  | 'outlier';
 export type Section13ChallengeLikelihoodBand =
   | 'lower_likelihood'
   | 'moderate_likelihood'
@@ -102,6 +108,56 @@ export interface Section13Comparable {
   sortOrder: number;
   adjustments: Section13ComparableAdjustment[];
   metadata?: Record<string, unknown>;
+}
+
+export interface Section13ComparableAssessment {
+  id: string;
+  title: string;
+  addressSnippet: string;
+  source: Section13ComparableSourceKind;
+  sourceDomain?: string | null;
+  sourceUrl?: string | null;
+  sourceDateValue?: string | null;
+  sourceDateKind: Section13SourceDateKind;
+  bedrooms?: number | null;
+  propertyType?: string | null;
+  furnishedStatus?: string | null;
+  distanceMiles?: number | null;
+  rentPcmRaw: number;
+  rentPcmAdjusted: number;
+  freshnessDays: number | null;
+  freshnessBand: Section13ComparableFreshnessBand;
+  relevanceBand: Section13ComparableRelevanceBand;
+  usedInCalculation: boolean;
+  sourceBacked: boolean;
+  listedDateLabel: string | null;
+  freshnessLabel: string;
+  reasonLabel: string;
+  reasonDetail: string;
+  adjustmentReason: string;
+  exclusionReason?: string | null;
+  metadata?: Record<string, unknown>;
+}
+
+export interface Section13MarketCalculation {
+  usedComparables: Section13ComparableAssessment[];
+  contextComparables: Section13ComparableAssessment[];
+  excludedComparables: Section13ComparableAssessment[];
+  marketLow: number | null;
+  marketMedian: number | null;
+  marketHigh: number | null;
+  totalComparableCount: number;
+  usedComparableCount: number;
+  sourceBackedUsedCount: number;
+  fresh90UsedCount: number;
+  freshnessWindowUsed: 90 | 180;
+  calculationMethod: string;
+  explanationText: string[];
+  medianExplanation: string;
+  adjustmentsApplied: boolean;
+  saferRangeGuidance: string | null;
+  challengeReasonSummary: string;
+  evidenceStrength: Section13EvidenceStrengthBand;
 }
 
 export interface Section13EvidenceUpload {
@@ -199,6 +255,9 @@ export interface Section13PreviewMetrics {
   previewSummary: string;
   defensibilitySummarySentence: string;
   canAutoGenerateJustification: boolean;
+  marketCalculation: Section13MarketCalculation;
+  challengeReasonSummary: string;
+  saferRangeGuidance: string | null;
   earliestValidStartDate: string | null;
   enteredStartDateValid: boolean;
   validationIssues: string[];

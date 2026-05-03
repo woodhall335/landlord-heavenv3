@@ -176,8 +176,11 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
         </div>
         <div className="flex items-start justify-between gap-4">
           <dt>Market median</dt>
-          <dd className="font-semibold text-slate-950">
-            {result.marketMedian != null ? `${formatCurrency(result.marketMedian)} pcm` : 'Unavailable'}
+          <dd className="max-w-[14rem] text-right">
+            <div className="font-semibold text-slate-950">
+              {result.marketMedian != null ? `${formatCurrency(result.marketMedian)} pcm` : 'Unavailable'}
+            </div>
+            <div className="mt-1 text-xs leading-5 text-slate-500">{result.medianExplanation}</div>
           </dd>
         </div>
         <div className="flex items-start justify-between gap-4">
@@ -201,6 +204,14 @@ export function MarketPositionCard({ result }: { result: RentCheckerResult }) {
           <dd className="font-semibold text-slate-950">{result.overallPositionLabel}</dd>
         </div>
       </dl>
+      <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Calculation basis</p>
+        <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+          {result.marketExplanation.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -227,12 +238,42 @@ export function RiskEvidenceCard({ result }: { result: RentCheckerResult }) {
           <dd className="mt-2 text-sm font-semibold text-slate-950">{result.freshnessLabel}</dd>
         </div>
       </dl>
+      <div className="mt-5 space-y-3">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Why this risk band</p>
+          <p className="mt-2 text-sm leading-6 text-slate-700">{result.challengeExplanation}</p>
+        </div>
+        {result.saferRangeGuidance ? (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">Safer range guidance</p>
+            <p className="mt-2 text-sm leading-6 text-amber-900">{result.saferRangeGuidance}</p>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
 
 export function ComparableListingsCard({ result }: { result: RentCheckerResult }) {
-  if (result.comparableListings.length === 0) {
+  const groups = [
+    {
+      title: 'Used in market calculation',
+      copy: 'These listings directly affect the displayed market range and median.',
+      items: result.usedComparableListings,
+    },
+    {
+      title: 'Context only',
+      copy: 'These listings are nearby or relevant enough to show, but they do not directly support the final median or range.',
+      items: result.contextComparableListings,
+    },
+    {
+      title: 'Excluded / outlier',
+      copy: 'These listings are shown for transparency, but they were excluded from the market calculation.',
+      items: result.excludedComparableListings,
+    },
+  ].filter((group) => group.items.length > 0);
+
+  if (groups.length === 0) {
     return null;
   }
 
@@ -240,9 +281,9 @@ export function ComparableListingsCard({ result }: { result: RentCheckerResult }
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h3 className="text-xl font-semibold text-slate-950">Comparable listings used</h3>
+          <h3 className="text-xl font-semibold text-slate-950">Comparable evidence</h3>
           <p className="mt-1 text-sm leading-6 text-slate-600">
-            These nearby homes were used to place the rent against the local market.
+            Every listing is labelled so you can see whether it influenced the market calculation or is shown only for context.
           </p>
         </div>
         <p className="max-w-sm text-right text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
@@ -250,48 +291,87 @@ export function ComparableListingsCard({ result }: { result: RentCheckerResult }
         </p>
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {result.comparableListings.map((item) => (
-          <article key={`${item.address}-${item.monthlyRent}`} className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50/60">
-            <div className="aspect-[4/3] bg-slate-100">
-              {item.imageUrl ? (
-                <img
-                  src={item.imageUrl}
-                  alt={item.address}
-                  className="h-full w-full object-cover object-center"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center text-sm text-slate-400">No image available</div>
-              )}
+      <div className="mt-5 space-y-8">
+        {groups.map((group) => (
+          <section key={group.title} className="space-y-4">
+            <div>
+              <h4 className="text-lg font-semibold text-slate-950">{group.title}</h4>
+              <p className="mt-1 text-sm leading-6 text-slate-600">{group.copy}</p>
             </div>
-            <div className="space-y-3 p-4">
-              <div>
-                <h4 className="text-base font-semibold leading-6 text-slate-950">{item.address}</h4>
-                <p className="mt-1 text-sm text-slate-600">
-                  {[item.propertyType, item.bedrooms != null ? `${item.bedrooms} bed` : null].filter(Boolean).join(' • ') || 'Comparable property'}
-                </p>
-              </div>
-              <div className="flex items-end justify-between gap-3">
-                <div>
-                  <p className="text-sm text-slate-500">Listed rent</p>
-                  <p className="text-lg font-semibold text-slate-950">{formatCurrency(item.monthlyRent)} pcm</p>
-                </div>
-                {item.sourceUrl ? (
-                  <a
-                    href={item.sourceUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
-                  >
-                    View source
-                  </a>
-                ) : null}
-              </div>
-              <p className="text-xs leading-5 text-slate-500">{item.sourceLabel}</p>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {group.items.map((item) => (
+                <article key={item.id} className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50/60">
+                  <div className="aspect-[4/3] bg-slate-100">
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.address}
+                        className="h-full w-full object-cover object-center"
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-sm text-slate-400">No image available</div>
+                    )}
+                  </div>
+                  <div className="space-y-3 p-4">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span
+                          className={clsx(
+                            'inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]',
+                            item.usedInCalculation
+                              ? 'bg-emerald-50 text-emerald-700'
+                              : group.title.startsWith('Excluded')
+                                ? 'bg-rose-50 text-rose-700'
+                                : 'bg-slate-200 text-slate-700'
+                          )}
+                        >
+                          {item.reasonLabel}
+                        </span>
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                          {item.freshnessStatus}
+                        </span>
+                      </div>
+                      <h4 className="mt-2 text-base font-semibold leading-6 text-slate-950">{item.address}</h4>
+                      <p className="mt-1 text-sm text-slate-600">
+                        {[item.propertyType, item.bedrooms != null ? `${item.bedrooms} bed` : null]
+                          .filter(Boolean)
+                          .join(' • ') || 'Comparable property'}
+                      </p>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-2xl bg-white p-3">
+                        <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Raw listed rent</p>
+                        <p className="mt-1 text-base font-semibold text-slate-950">{formatCurrency(item.rentPcmRaw)} pcm</p>
+                      </div>
+                      <div className="rounded-2xl bg-white p-3">
+                        <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Adjusted rent used</p>
+                        <p className="mt-1 text-base font-semibold text-slate-950">{formatCurrency(item.rentPcmAdjusted)} pcm</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-sm leading-6 text-slate-600">
+                      <p><span className="font-medium text-slate-700">Adjustment:</span> {item.adjustmentReason}</p>
+                      <p><span className="font-medium text-slate-700">Reason:</span> {item.reasonDetail}</p>
+                    </div>
+                    <div className="flex items-end justify-between gap-3">
+                      <p className="text-xs leading-5 text-slate-500">{item.sourceLabel}</p>
+                      {item.sourceUrl ? (
+                        <a
+                          href={item.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="shrink-0 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+                        >
+                          View source
+                        </a>
+                      ) : null}
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
-          </article>
+          </section>
         ))}
       </div>
     </div>

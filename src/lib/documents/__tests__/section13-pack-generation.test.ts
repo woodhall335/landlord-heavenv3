@@ -408,13 +408,73 @@ describe('Section 13 document generation hardening', () => {
       'Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the market evidence relied on.'
     );
     expect(coverText).toContain(
-      'This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles'
+      'This proposed rent is supported by 8 comparable two-bedroom properties used in the market calculation'
     );
     expect(coverText).toContain('What is enclosed');
     expect(coverText).toContain('Response window and service record');
     expect(coverText).toContain('Recorded service method: First class post');
     expect(coverText).not.toContain('What to do now');
     expect(coverText).not.toContain('This tool provides assistance only');
+  }, 120000);
+
+  it('shows used, context, and excluded comparables separately in Section 13 reports', async () => {
+    const { state } = buildState();
+    const comparables = [
+      buildComparable(0, 1240),
+      buildComparable(1, 1265),
+      buildComparable(2, 1275),
+      buildComparable(3, 1290),
+      buildComparable(4, 1305),
+      buildComparable(5, 1315),
+      {
+        ...buildComparable(6, 1500),
+        addressSnippet: 'Older context listing, Leeds LS1',
+        sourceDateValue: '2025-12-10',
+      },
+      {
+        ...buildComparable(7, 2200),
+        addressSnippet: 'Excluded five-bed outlier, Leeds LS1',
+        bedrooms: 5,
+      },
+    ];
+
+    state.preview = computeSection13Preview(state, comparables, new Date('2026-04-08T00:00:00.000Z'));
+
+    const standardDocs = await generateSection13CoreDocuments({
+      caseId: 'case-section13-standard-comparable-transparency',
+      productType: 'section13_standard',
+      state,
+      comparables,
+      evidenceFiles: [],
+    });
+    const defensiveDocs = await generateSection13CoreDocuments({
+      caseId: 'case-section13-defensive-comparable-transparency',
+      productType: 'section13_defensive',
+      state,
+      comparables,
+      evidenceFiles: [],
+    });
+
+    const justificationReport = standardDocs.find((doc) => doc.document_type === 'section13_justification_report');
+    const tribunalArgumentSummary = defensiveDocs.find(
+      (doc) => doc.document_type === 'section13_tribunal_argument_summary'
+    );
+
+    expect(justificationReport).toBeDefined();
+    expect(tribunalArgumentSummary).toBeDefined();
+
+    const justificationText = (await extractPdfText(justificationReport!.pdf)).text.replace(/\s+/g, ' ').trim();
+    const tribunalText = (await extractPdfText(tribunalArgumentSummary!.pdf)).text.replace(/\s+/g, ' ').trim();
+
+    expect(justificationText).toContain('Used in market calculation');
+    expect(justificationText).toContain('Context only');
+    expect(justificationText).toContain('Excluded / outlier');
+    expect(justificationText).toContain('Median basis');
+    expect(justificationText).toContain('adjusted');
+
+    expect(tribunalText).toContain('Used in market calculation');
+    expect(tribunalText).toContain('Context only');
+    expect(tribunalText).toContain('Excluded / outlier');
   }, 120000);
 
   it('adds the new defensive support documents and keeps them in the merged tribunal bundle order', async () => {
@@ -579,7 +639,9 @@ describe('Section 13 document generation hardening', () => {
 
     expect(justificationText).toContain('Key points');
     expect(justificationText).toContain('Comparable overview');
-    expect(justificationText).toContain('Comparable base: 8 comparable two-bedroom properties within 0.5 miles');
+    expect(justificationText).toContain(
+      'Comparable base: 8 comparable two-bedroom properties used in the market calculation'
+    );
     expect(justificationText).toContain('Flat 2, The Calls, Leeds LS1');
     expect(justificationText).toContain('Condition and adjustment check');
     expect(justificationText).toContain('Final checks before service or filing');
@@ -587,7 +649,7 @@ describe('Section 13 document generation hardening', () => {
     expect(justificationText).not.toContain('This tool provides assistance only');
 
     expect(coverText).toContain(
-      'This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles'
+      'This proposed rent is supported by 8 comparable two-bedroom properties used in the market calculation'
     );
     expect(coverText).toContain('What is enclosed');
     expect(coverText).not.toContain('What to do now');
