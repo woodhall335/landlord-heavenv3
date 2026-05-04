@@ -1267,6 +1267,78 @@ function buildEnglandSection8PackSummaryData(params: {
     earliestProceedingsDate,
   });
   const journeyData = buildSection8JourneyRenderData(stage);
+  const resolvedDeemedServiceDate =
+    section8RenderData?.deemed_service_date ||
+    caseData?.deemed_service_date ||
+    wizardFacts?.deemed_service_date;
+  const resolvedCurrentArrearsTotal =
+    currentArrearsTotal ??
+    section8RenderData?.current_arrears_total ??
+    section8RenderData?.total_arrears ??
+    caseData?.current_arrears ??
+    caseData?.total_arrears ??
+    wizardFacts?.current_arrears ??
+    wizardFacts?.total_arrears ??
+    evictionCase.current_arrears;
+  const resolvedArrearsAtNoticeDate =
+    arrearsAtNoticeDate ??
+    section8RenderData?.arrears_at_notice_date ??
+    caseData?.arrears_at_notice_date ??
+    wizardFacts?.arrears_at_notice_date ??
+    resolvedCurrentArrearsTotal;
+  const validationSummarySource =
+    section8RenderData?.court_pack_validation_summary ||
+    caseData?.court_pack_validation_summary ||
+    wizardFacts?.court_pack_validation_summary ||
+    section8RenderData?.validation_summary ||
+    caseData?.validation_summary ||
+    wizardFacts?.validation_summary;
+  const resolvedGround8Threshold =
+    section8RenderData?.ground_8_threshold ||
+    caseData?.ground_8_threshold ||
+    wizardFacts?.ground_8_threshold ||
+    (typeof validationSummarySource?.ground_8_threshold === 'number' &&
+    validationSummarySource.ground_8_threshold > 0
+      ? validationSummarySource.ground_8_threshold
+      : undefined);
+  const resolvedGround8Status =
+    section8RenderData?.ground_8_status ||
+    caseData?.ground_8_status ||
+    wizardFacts?.ground_8_status ||
+    validationSummarySource?.ground_8_status;
+  const resolvedValidationSummary = validationSummarySource
+    ? {
+        ...validationSummarySource,
+        deemed_service_date:
+          validationSummarySource.deemed_service_date ||
+          resolvedDeemedServiceDate,
+        notice_expiry_date:
+          validationSummarySource.notice_expiry_date || noticeExpiryDate,
+        earliest_proceedings_date:
+          validationSummarySource.earliest_proceedings_date || earliestProceedingsDate,
+        total_arrears:
+          typeof validationSummarySource.total_arrears === 'number' &&
+          validationSummarySource.total_arrears > 0
+            ? validationSummarySource.total_arrears
+            : resolvedCurrentArrearsTotal,
+        ground_8_threshold:
+          typeof validationSummarySource.ground_8_threshold === 'number' &&
+          validationSummarySource.ground_8_threshold > 0
+            ? validationSummarySource.ground_8_threshold
+            : resolvedGround8Threshold,
+        ground_8_status:
+          validationSummarySource.ground_8_status || resolvedGround8Status,
+        all_consistency_checks_passed:
+          typeof validationSummarySource.all_consistency_checks_passed === 'boolean'
+            ? validationSummarySource.all_consistency_checks_passed
+            : Array.isArray(validationSummarySource.checks)
+              ? validationSummarySource.checks.every((check: any) => check?.status === 'passed')
+              : true,
+        checks: Array.isArray(validationSummarySource.checks)
+          ? validationSummarySource.checks
+          : [],
+      }
+    : undefined;
   const stageTitle =
     stage === 'stage1'
       ? 'Case Summary — Stage 1 Notice & Service'
@@ -1286,27 +1358,12 @@ function buildEnglandSection8PackSummaryData(params: {
     notice_served_date: noticeServedDate,
     notice_expiry_date: noticeExpiryDate,
     earliest_proceedings_date: earliestProceedingsDate,
-    deemed_service_date:
-      section8RenderData?.deemed_service_date ||
-      caseData?.deemed_service_date ||
-      wizardFacts?.deemed_service_date,
-    current_arrears_total: currentArrearsTotal,
-    arrears_at_notice_date: arrearsAtNoticeDate,
-    ground_8_threshold:
-      section8RenderData?.ground_8_threshold ||
-      caseData?.ground_8_threshold ||
-      wizardFacts?.ground_8_threshold,
-    ground_8_status:
-      section8RenderData?.ground_8_status ||
-      caseData?.ground_8_status ||
-      wizardFacts?.ground_8_status,
-    court_pack_validation_summary:
-      section8RenderData?.court_pack_validation_summary ||
-      caseData?.court_pack_validation_summary ||
-      wizardFacts?.court_pack_validation_summary ||
-      section8RenderData?.validation_summary ||
-      caseData?.validation_summary ||
-      wizardFacts?.validation_summary,
+    deemed_service_date: resolvedDeemedServiceDate,
+    current_arrears_total: resolvedCurrentArrearsTotal,
+    arrears_at_notice_date: resolvedArrearsAtNoticeDate,
+    ground_8_threshold: resolvedGround8Threshold,
+    ground_8_status: resolvedGround8Status,
+    court_pack_validation_summary: resolvedValidationSummary,
     grounds_summary_text: buildSection8GroundsSummary(evictionCase),
     case_narrative_text: buildN119ReasonForPossessionText(caseSummaryDraftingData),
     steps_taken_text: buildN119StepsTakenText(caseSummaryDraftingData),

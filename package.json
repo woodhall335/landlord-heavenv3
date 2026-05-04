@@ -18,6 +18,7 @@
     "law-monitor": "npx -p node@20 -p tsx tsx scripts/law-monitor-run.ts",
     "generate:england-tenancy-samples": "npx -p node@20 -p tsx tsx scripts/generate-england-tenancy-samples.ts",
     "generate:golden-packs": "set NODE_OPTIONS=--conditions=react-server && npx -p node@20 -p tsx tsx scripts/generate-england-golden-packs.ts",
+    "generate:golden-packs:section8-qa": "set NODE_OPTIONS=--conditions=react-server && npx -p node@20 -p tsx tsx scripts/generate-section8-court-pack-qa-golden-packs.ts",
     "generate:golden-packs:text": "npx -p node@20 -p tsx tsx scripts/refresh-golden-pack-text.ts",
     "audit:golden-pack-mapped-forms": "npx -p node@20 -p tsx tsx scripts/audit-golden-pack-mapped-forms.ts",
     "audit:golden-pack:quality": "npx -p node@20 -p tsx tsx scripts/audit-golden-pack-quality.ts",

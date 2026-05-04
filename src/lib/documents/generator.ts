@@ -1217,6 +1217,8 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       'metadata',          // Used by service_instructions.hbs: {{format_date metadata.generated_at}}
       'tenancy',           // Used by compliance_checklist.hbs: {{tenancy.start_date}}
       'drafting_model',    // Used by England possession support docs for shared narrative sections
+      'validation_summary', // Used by Section 8 court-pack docs for nested validation output
+      'court_pack_validation_summary', // Used by Section 8 support templates with dot notation
     ];
 
     const safeData = Object.entries(enrichedData).reduce((acc, [key, value]) => {

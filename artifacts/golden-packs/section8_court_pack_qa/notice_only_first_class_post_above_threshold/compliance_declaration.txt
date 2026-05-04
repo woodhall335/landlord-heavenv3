@@ -1,0 +1,72 @@
+CASE ID
+qa-notice-only-post-001
+JURISDICTION
+england
+GENERATED
+4 May 2026
+Stage 1: Section 8 Notice & Service Pack
+Compliance Checklist
+READY TO SERVE - NOTICE FILE ALIGNED
+This pack aligns the notice, service, and evidence so your case does not fall apart on technical errors.
+Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and under
+review as the case moves forward.
+PROPERTY 16 Willow Mews York YO24 3HX
+TENANT Ivy Carleton
+NOTICE TYPE Form 3A notice
+TENANCY START DATE 1 June 2024
+GENERATED 4 May 2026
+CRITICAL
+Resolve this before relying on
+the notice or moving on with
+the case.
+RISK
+Significant risk: This may not
+automatically invalidate the
+route, but it can weaken the
+file or create delay.
+OK
+The current pack data records
+this point, but you still need to
+retain the underlying evidence.
+Court-pack validation summary
+Deemed service date used: 6 March 2026
+Notice expiry date: 20 March 2026
+Earliest proceedings date: 20 March 2026
+Total arrears: £4800.00
+Ground 8 threshold: £3600.00 (ABOVE)
+passed: Arrears total aligned at £4800.00.
+passed: Minimum notice period is at least 14 days from deemed service.
+passed: Ground 8 threshold is satisfied above £3600.00.
+passed: No cross-document conflicts were detected against the recalculated court-pack values.
+
+-- 1 of 2 --
+
+Decision Engine
+OK
+Deposit compliance recorded
+Deposit protection and prescribed information are recorded with TDS on 15 January 2024.
+Action: Retain the scheme certificate and prescribed information record with the case file.
+OK
+Gas safety evidence recorded
+Gas safety evidence is recorded on 10 January 2024.
+Action: Keep the gas safety record with the notice and court file.
+OK
+EPC record recorded
+EPC evidence is recorded.
+Action: Retain the EPC record with the case file.
+OK
+How to Rent record recorded
+How to Rent service is recorded on 15 January 2024.
+Action: Keep the service record with the tenancy file.
+OK
+Notice timeline recorded
+Notice served on 4 March 2026 with earliest proceedings date 20 March 2026.
+Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and
+any court papers.
+Next move
+READY TO SERVE - NOTICE FILE ALIGNED
+Serve the notice correctly using the service instructions in this pack.
+Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record,
+or legal advice on the facts of the case.
+
+-- 2 of 2 --

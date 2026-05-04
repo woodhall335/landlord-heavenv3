@@ -1,0 +1,48 @@
+CASE ID
+qa-notice-only-post-001
+JURISDICTION
+england
+GENERATED
+4 May 2026
+Schedule of Rent Arrears
+STAGE 1: SECTION 8 NOTICE & SERVICE PACK
+PROPERTY: 16 Willow Mews York YO24 3HX
+DEFENDANT: Ivy Carleton
+CLAIMANT: Daniel Mercer
+CLAIM REFERENCE: qa-notice-only-post-001
+SCHEDULE DATE: 4 May 2026
+Arrears Summary
+RENT AMOUNT
+£1200.00 monthly
+DUE DAY
+1st of each month
+TENANCY START DATE
+1 June 2024
+TOTAL ARREARS CLAIMED
+£4800.00
+Period Due Date Rent Due Paid Arrears Running Balance
+1 December 2025 to 31
+December 2025
+1 December 2025 £1200.00 £0.00 £1200.00 £1200.00
+1 January 2026 to 31
+January 2026
+1 January 2026 £1200.00 £0.00 £1200.00 £2400.00
+1 February 2026 to 28
+February 2026
+1 February 2026 £1200.00 £0.00 £1200.00 £3600.00
+1 March 2026 to 30
+March 2026
+1 March 2026 £1200.00 £0.00 £1200.00 £4800.00
+Total Arrears Outstanding £4800.00 £4800.00
+Payment Allocation Method: Payments have been allocated using the FIFO (First In, First Out)
+method, applying payments to the oldest outstanding rent periods first. This is the standard court-
+accepted method for arrears allocation.
+
+-- 1 of 2 --
+
+Evidence Requirements: Attach proof of payments received, bank statements, and rent ledgers behind
+this schedule. The County Court expects a clear period-by-period breakdown matching the tenancy rent
+frequency.
+Generated: 4 May 2026
+
+-- 2 of 2 --

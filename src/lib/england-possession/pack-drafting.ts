@@ -236,6 +236,30 @@ function getFirstString(source: DraftingInput, ...paths: string[]): string {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+function narrativeValueToStrings(value: unknown): string[] {
+  if (!value) return [];
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    return trimmed ? [trimmed] : [];
+  }
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => narrativeValueToStrings(item));
+  }
+  if (typeof value === 'object') {
+    const objectValue = value as Record<string, unknown>;
+    const preferredKeys = ['summary', 'details', 'detail', 'narrative', 'text', 'description'];
+    const preferredValues = preferredKeys.flatMap((key) => narrativeValueToStrings(objectValue[key]));
+
+    if (preferredValues.length > 0) {
+      return preferredValues;
+    }
+
+    return Object.values(objectValue).flatMap((item) => narrativeValueToStrings(item));
+  }
+
+  return [];
+}
+
 function extractNarrativeCandidates(data: DraftingInput): string[] {
   return [
     data.form3a_explanation,
@@ -245,7 +269,7 @@ function extractNarrativeCandidates(data: DraftingInput): string[] {
     data.particulars_of_claim,
     data.case_summary,
   ]
-    .map((value) => String(value || '').trim())
+    .flatMap((value) => narrativeValueToStrings(value))
     .filter((value) => !isGeneratedArrearsSummary(value))
     .filter(Boolean);
 }
