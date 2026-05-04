@@ -34,6 +34,13 @@ const steps = [
   },
 ];
 
+const supportLinks = [
+  { href: '/tools/rent-increase-challenge-checker/guide', label: 'How to use the checker' },
+  { href: '/tools/rent-increase-challenge-checker/market-rent-evidence', label: 'Market-rent evidence guide' },
+  { href: '/tools/rent-increase-challenge-checker/challenge-risk', label: 'Challenge-risk guide' },
+  { href: '/tools/rent-increase-challenge-checker/section-13-notice-route', label: 'When to move into the Section 13 route' },
+];
+
 export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
   return (
     <section className="relative overflow-hidden rounded-[2rem] border border-violet-100 bg-white shadow-[0_28px_80px_rgba(88,28,135,0.08)]">
@@ -119,6 +126,22 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
               </div>
             );
           })}
+        </div>
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white px-5 py-4">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Rent checker guides
+          </p>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {supportLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm font-semibold text-violet-700 transition hover:text-violet-800"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>

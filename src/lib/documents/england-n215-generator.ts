@@ -9,13 +9,20 @@ if (typeof window === 'undefined' && typeof require !== 'undefined') {
 import fs from 'fs/promises';
 import path from 'path';
 import { PDFDocument, PDFForm, StandardFonts, type PDFCheckBox, type PDFTextField } from 'pdf-lib';
+import {
+  computeEnglandSection8DeemedServiceDate,
+  type EnglandSection8CourtPackServiceMethod,
+} from './england-section8-court-pack';
 
 export type EnglandProofOfServiceMethod =
   | 'hand_delivery'
   | 'letterbox'
   | 'first_class_post'
   | 'recorded_delivery'
+  | 'document_exchange'
+  | 'fax'
   | 'email'
+  | 'other_electronic'
   | 'other';
 
 export interface EnglandN215Data {
@@ -35,6 +42,7 @@ export interface EnglandN215Data {
   signature_date?: string;
   document_served?: string;
   service_date?: string;
+  deemed_service_date?: string;
   service_method?: EnglandProofOfServiceMethod;
   service_time?: string;
   service_address?: string;
@@ -91,9 +99,16 @@ export function normalizeEnglandProofOfServiceMethod(value: unknown): EnglandPro
     case 'signed_for':
     case 'signed_for_delivery':
       return 'recorded_delivery';
+    case 'document_exchange':
+    case 'dx':
+      return 'document_exchange';
+    case 'fax':
+      return 'fax';
     case 'email':
     case 'electronic':
       return 'email';
+    case 'other_electronic':
+      return 'other_electronic';
     case 'other':
       return 'other';
     default:
@@ -202,12 +217,35 @@ function normalizeServiceTime(value: unknown): string {
   return sanitizeFormText(value);
 }
 
+function mapToCourtPackServiceMethod(
+  method: EnglandProofOfServiceMethod | undefined,
+): EnglandSection8CourtPackServiceMethod {
+  switch (method) {
+    case 'first_class_post':
+    case 'recorded_delivery':
+      return 'first_class_post';
+    case 'hand_delivery':
+    case 'letterbox':
+      return 'personal';
+    case 'document_exchange':
+      return 'document_exchange';
+    case 'fax':
+      return 'fax';
+    case 'email':
+    case 'other_electronic':
+      return 'other_electronic';
+    default:
+      return 'unknown';
+  }
+}
+
 function mapServiceMethodToN215(form: PDFForm, method: EnglandProofOfServiceMethod | undefined, data: EnglandN215Data): void {
   if (!method) return;
 
   switch (method) {
     case 'first_class_post':
     case 'recorded_delivery':
+    case 'document_exchange':
       checkBox(form, 'Check Box3');
       break;
     case 'letterbox':
@@ -219,8 +257,10 @@ function mapServiceMethodToN215(form: PDFForm, method: EnglandProofOfServiceMeth
       setTextField(form, 'Text7', normalizeServiceTime(data.service_time));
       break;
     case 'email':
+    case 'fax':
+    case 'other_electronic':
       checkBox(form, 'Check Box13');
-      setTextField(form, 'Text14', 'Email');
+      setTextField(form, 'Text14', method === 'fax' ? 'Fax' : 'Email / electronic service');
       setTextField(form, 'Text19', data.recipient_email);
       setTextField(form, 'Text15', normalizeServiceTime(data.service_time));
       break;
@@ -343,7 +383,18 @@ export async function generateEnglandN215PDF(data: EnglandN215Data = {}): Promis
   const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
   const address = splitAddress(data);
+  const normalizedMethod = normalizeEnglandProofOfServiceMethod(data.service_method);
   const servedDate = formatDateForN215(data.service_date);
+  const deemedDateValue =
+    data.deemed_service_date ||
+    (data.service_date
+      ? await computeEnglandSection8DeemedServiceDate({
+          serviceDate: data.service_date,
+          serviceMethod: mapToCourtPackServiceMethod(normalizedMethod),
+          serviceTime: data.service_time,
+        })
+      : '');
+  const deemedDate = formatDateForN215(deemedDateValue);
   const recipientName = sanitizeFormText(data.recipient_name || data.defendant_name);
 
   setTextField(form, 'Text Field 1', data.court_name);
@@ -351,11 +402,11 @@ export async function generateEnglandN215PDF(data: EnglandN215Data = {}): Promis
   setTextField(form, 'Text Field 3', data.claimant_name);
   setTextField(form, 'Text Field 4', data.defendant_name);
   setTextField(form, 'Text Field 93', servedDate);
-  setTextField(form, 'Text Field 94', servedDate);
+  setTextField(form, 'Text Field 94', deemedDate || servedDate);
   setTextField(form, 'Text1', data.document_served || 'Form 3A notice');
   setTextField(form, 'Text2', recipientName);
 
-  mapServiceMethodToN215(form, normalizeEnglandProofOfServiceMethod(data.service_method), data);
+  mapServiceMethodToN215(form, normalizedMethod, data);
   fillRecipientCapacity(form, data.recipient_capacity || 'defendant');
   fillServiceLocation(form, data.service_location || 'usual_residence', data.service_location_other);
 

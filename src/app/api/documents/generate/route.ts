@@ -60,6 +60,10 @@ import { getEnglandGroundDefinition } from '@/lib/england-possession/ground-cata
 import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
 import { buildEnglandForm3AExplanation } from '@/lib/england-possession/pack-drafting';
 import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/support-document-context';
+import {
+  applyEnglandSection8CourtPackCalculation,
+  buildEnglandSection8CourtPackCalculation,
+} from '@/lib/documents/england-section8-court-pack';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -272,6 +276,36 @@ function ensurePropertyAddress(data: Record<string, any>) {
   }
 
   return data;
+}
+
+async function enrichEnglandSection8CaseDataForCourtPack(
+  caseId: string,
+  wizardFacts: Record<string, any>,
+  caseData: CaseData,
+): Promise<CaseData> {
+  const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData & Record<string, any>;
+  const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+  const isEnglandSection8 =
+    safeCaseData.jurisdiction === 'england' &&
+    safeCaseData.claim_type === 'section_8' &&
+    Array.isArray(evictionCase.grounds) &&
+    evictionCase.grounds.length > 0;
+
+  if (!isEnglandSection8) {
+    return safeCaseData;
+  }
+
+  const calculation = await buildEnglandSection8CourtPackCalculation({
+    wizardFacts,
+    caseData: safeCaseData,
+    evictionCase,
+  });
+
+  applyEnglandSection8CourtPackCalculation(wizardFacts, calculation);
+  applyEnglandSection8CourtPackCalculation(safeCaseData, calculation);
+  applyEnglandSection8CourtPackCalculation(evictionCase as any, calculation);
+
+  return safeCaseData;
 }
 
 function missingFieldsForSection8(caseData: Record<string, any>): string[] {
@@ -1212,7 +1246,7 @@ export async function POST(request: Request) {
          */
         case 'n5_claim': {
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
-          const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData;
+          const safeCaseData = await enrichEnglandSection8CaseDataForCourtPack(case_id, wizardFacts, caseData as CaseData);
 
           // Fill official N5 PDF form using pdf-lib
           const pdfBytes = await fillOfficialForm('n5', safeCaseData);
@@ -1228,7 +1262,7 @@ export async function POST(request: Request) {
 
         case 'n119_particulars': {
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
-          const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData;
+          const safeCaseData = await enrichEnglandSection8CaseDataForCourtPack(case_id, wizardFacts, caseData as CaseData);
 
           // Fill official N119 PDF form using pdf-lib
           const pdfBytes = await fillOfficialForm('n119', safeCaseData);
@@ -1659,7 +1693,10 @@ export async function POST(request: Request) {
 
         case 'proof_of_service': {
             // Generate editable proof-of-service PDF.
+            const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+            const safeCaseData = await enrichEnglandSection8CaseDataForCourtPack(case_id, wizardFacts, caseData as CaseData);
             const proofPropertyAddress =
+              (safeCaseData as any).property_address ||
               wizardFacts.property_address ||
               buildAddress(
                 wizardFacts.property_address_line1,
@@ -1712,11 +1749,16 @@ export async function POST(request: Request) {
                     service_address_postcode:
                       wizardFacts.property_address_postcode || wizardFacts.property_postcode,
                     service_date:
+                      (safeCaseData as any).notice_service_date ||
+                      (safeCaseData as any).notice_served_date ||
                       wizardFacts.notice_service_date ||
                       wizardFacts.notice_served_date ||
                       wizardFacts.notice_date,
+                    deemed_service_date: (safeCaseData as any).deemed_service_date,
                     signature_date:
                       wizardFacts.signature_date ||
+                      (safeCaseData as any).notice_service_date ||
+                      (safeCaseData as any).notice_served_date ||
                       wizardFacts.notice_service_date ||
                       wizardFacts.notice_served_date ||
                       wizardFacts.notice_date,

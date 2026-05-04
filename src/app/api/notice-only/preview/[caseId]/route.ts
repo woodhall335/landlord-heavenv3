@@ -20,6 +20,7 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
 import { generateDocument } from '@/lib/documents/generator';
 import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-filler';
+import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
 import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
@@ -46,6 +47,10 @@ import { enrichEnglandSection8SupportContext } from '@/lib/england-possession/su
 import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
 import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
 import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
+import {
+  applyEnglandSection8CourtPackCalculation,
+  buildEnglandSection8CourtPackCalculation,
+} from '@/lib/documents/england-section8-court-pack';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -88,6 +93,35 @@ function getEnglandSelectedGrounds(wizardFacts: Record<string, any>, templateDat
         .map(normalizeGround)
         .filter(Boolean)
     : [];
+}
+
+async function enrichEnglandSection8CaseDataForCourtPack(
+  caseId: string,
+  wizardFacts: Record<string, any>,
+  caseData: CaseData,
+): Promise<CaseData> {
+  const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+  const isEnglandSection8 =
+    caseData.jurisdiction === 'england' &&
+    caseData.claim_type === 'section_8' &&
+    Array.isArray(evictionCase.grounds) &&
+    evictionCase.grounds.length > 0;
+
+  if (!isEnglandSection8) {
+    return caseData;
+  }
+
+  const calculation = await buildEnglandSection8CourtPackCalculation({
+    wizardFacts,
+    caseData,
+    evictionCase,
+  });
+
+  applyEnglandSection8CourtPackCalculation(wizardFacts, calculation);
+  applyEnglandSection8CourtPackCalculation(caseData as any, calculation);
+  applyEnglandSection8CourtPackCalculation(evictionCase as any, calculation);
+
+  return caseData;
 }
 
 export async function GET(
@@ -261,6 +295,11 @@ export async function GET(
         normalized: 'section_8',
       });
       selected_route = 'section_8';
+    }
+
+    if (jurisdiction === 'england' && selected_route === 'section_8') {
+      const { caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+      await enrichEnglandSection8CaseDataForCourtPack(caseId, wizardFacts, caseData as CaseData);
     }
 
     console.log('[NOTICE-PREVIEW-API] Selected route (normalized):', selected_route);
@@ -953,6 +992,9 @@ export async function GET(
                   templateData.notice_service_date ||
                   templateData.service_date ||
                   templateData.notice_date,
+                deemed_service_date:
+                  wizardFacts.deemed_service_date ||
+                  templateData.deemed_service_date,
                 signature_date:
                   wizardFacts.signature_date ||
                   wizardFacts.notice_service_date ||

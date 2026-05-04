@@ -4,7 +4,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
-import { fillOfficialForm } from '@/lib/documents/official-forms-filler';
+import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-filler';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
@@ -16,6 +16,10 @@ import {
   type EvictionPackDocument,
 } from '@/lib/documents/eviction-pack-generator';
 import { buildHtmlEmbedShell, buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
+import {
+  applyEnglandSection8CourtPackCalculation,
+  buildEnglandSection8CourtPackCalculation,
+} from '@/lib/documents/england-section8-court-pack';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -68,6 +72,35 @@ async function getEnglandPackPreviewDocument(
       : await generateNoticeOnlyPack(enrichedFacts);
 
   return generatedPack.documents.find((document) => document.document_type === documentType) || null;
+}
+
+async function enrichEnglandSection8CaseDataForCourtPack(
+  caseId: string,
+  wizardFacts: Record<string, any>,
+  caseData: CaseData,
+): Promise<CaseData> {
+  const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+  const isEnglandSection8 =
+    caseData.jurisdiction === 'england' &&
+    caseData.claim_type === 'section_8' &&
+    Array.isArray(evictionCase.grounds) &&
+    evictionCase.grounds.length > 0;
+
+  if (!isEnglandSection8) {
+    return caseData;
+  }
+
+  const calculation = await buildEnglandSection8CourtPackCalculation({
+    wizardFacts,
+    caseData,
+    evictionCase,
+  });
+
+  applyEnglandSection8CourtPackCalculation(wizardFacts, calculation);
+  applyEnglandSection8CourtPackCalculation(caseData as any, calculation);
+  applyEnglandSection8CourtPackCalculation(evictionCase as any, calculation);
+
+  return caseData;
 }
 
 export async function GET(
@@ -142,6 +175,7 @@ export async function GET(
     }
 
     const { caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+    await enrichEnglandSection8CaseDataForCourtPack(caseId, wizardFacts, caseData);
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
 
     let title = '';
@@ -181,11 +215,16 @@ export async function GET(
         service_address_county: wizardFacts.property_address_county,
         service_address_postcode: wizardFacts.property_address_postcode || wizardFacts.property_postcode,
         service_date:
+          (caseData as any).notice_service_date ||
+          (caseData as any).notice_served_date ||
           wizardFacts.notice_service_date ||
           wizardFacts.notice_served_date ||
           wizardFacts.notice_date,
+        deemed_service_date: (caseData as any).deemed_service_date,
         signature_date:
           wizardFacts.signature_date ||
+          (caseData as any).notice_service_date ||
+          (caseData as any).notice_served_date ||
           wizardFacts.notice_service_date ||
           wizardFacts.notice_served_date ||
           wizardFacts.notice_date,

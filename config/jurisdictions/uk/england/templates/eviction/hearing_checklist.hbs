@@ -184,6 +184,26 @@
   </div>
   {{/if}}
 
+  {{#if court_pack_validation_summary}}
+  <div class="timeline-box">
+    <h3>Court-pack validation summary</h3>
+    <dl class="summary-grid">
+      <dt>Deemed service date used</dt>
+      <dd>{{format_date court_pack_validation_summary.deemed_service_date "long"}}</dd>
+      <dt>Notice expiry date</dt>
+      <dd>{{format_date court_pack_validation_summary.notice_expiry_date "long"}}</dd>
+      <dt>Earliest proceedings date</dt>
+      <dd>{{format_date court_pack_validation_summary.earliest_proceedings_date "long"}}</dd>
+      <dt>Total arrears</dt>
+      <dd>{{currency court_pack_validation_summary.total_arrears}}</dd>
+      <dt>Ground 8 threshold</dt>
+      <dd>{{currency court_pack_validation_summary.ground_8_threshold}}</dd>
+      <dt>Ground 8 status</dt>
+      <dd>{{court_pack_validation_summary.ground_8_status}}</dd>
+    </dl>
+  </div>
+  {{/if}}
+
   <div class="section">
     <h3>What the court will consider</h3>
     <ul class="checklist">

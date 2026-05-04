@@ -31,6 +31,11 @@ import {
   fillN325Form,
 } from './england-official-form-fillers';
 import {
+  applyEnglandSection8CourtPackCalculation,
+  buildEnglandSection8CourtPackCalculation,
+  EnglandSection8ConsistencyError,
+} from './england-section8-court-pack';
+import {
   buildN119DefendantCircumstancesText,
   buildN119FinancialInfoText,
   buildN119OtherBreachDetailsText,
@@ -766,8 +771,14 @@ export interface CaseData {
   section_21_notice_date?: string;
   notice_served_date?: string;
   notice_service_method?: string;  // REQUIRED for N5B: e.g. "First class post", "By hand"
+  notice_service_date?: string;
+  notice_service_time?: string;
+  service_time?: string;
   notice_expiry_date?: string;
+  earliest_proceedings_date?: string;
   particulars_of_claim?: string;
+  defendant_circumstances?: string;
+  first_unpaid_period_start?: string;
 
   // Amounts
   total_arrears?: number;
@@ -775,6 +786,8 @@ export interface CaseData {
   total_claim_amount?: number;
   court_fee?: number;
   solicitor_costs?: number;
+  validation_summary?: Record<string, any>;
+  court_pack_validation_summary?: Record<string, any>;
 
   // Money claim line items (for N1 brief details)
   damage_items?: Array<{ description: string; amount: number }>;
@@ -1671,6 +1684,34 @@ export async function fillN5BForm(data: CaseData, options: FormFillerOptions = {
     throw new Error(`[${ctx}] tenancy_start_date is required.`);
   }
 
+  const workingData = { ...data } as CaseData & Record<string, any>;
+  let section8CourtPackCalculation:
+    | Awaited<ReturnType<typeof buildEnglandSection8CourtPackCalculation>>
+    | null = null;
+
+  if (workingData.jurisdiction === 'england' && workingData.claim_type === 'section_8') {
+    try {
+      section8CourtPackCalculation = await buildEnglandSection8CourtPackCalculation({
+        caseData: workingData,
+      });
+      applyEnglandSection8CourtPackCalculation(workingData, section8CourtPackCalculation);
+    } catch (error) {
+      if (error instanceof EnglandSection8ConsistencyError) {
+        const conflictText =
+          error.conflicts.length > 0
+            ? error.conflicts
+                .map((conflict) => `${conflict.field} (${conflict.document || conflict.source})`)
+                .join(', ')
+            : error.validationSummary?.checks
+                .filter((check) => check.status === 'failed')
+                .map((check) => `${check.key}${check.documents?.length ? ` [${check.documents.join(', ')}]` : ''}`)
+                .join(', ');
+        throw new Error(`[${ctx}] Section 8 consistency validation failed: ${conflictText || error.message}`);
+      }
+      throw error;
+    }
+  }
+
   const pdfDoc = await loadOfficialForm(formFile);
   const form = pdfDoc.getForm();
 
@@ -2526,6 +2567,34 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
     throw new Error(`[${ctx}] tenancy_start_date is required.`);
   }
 
+  const workingData = { ...data } as CaseData & Record<string, any>;
+  let section8CourtPackCalculation:
+    | Awaited<ReturnType<typeof buildEnglandSection8CourtPackCalculation>>
+    | null = null;
+
+  if (workingData.jurisdiction === 'england' && workingData.claim_type === 'section_8') {
+    try {
+      section8CourtPackCalculation = await buildEnglandSection8CourtPackCalculation({
+        caseData: workingData,
+      });
+      applyEnglandSection8CourtPackCalculation(workingData, section8CourtPackCalculation);
+    } catch (error) {
+      if (error instanceof EnglandSection8ConsistencyError) {
+        const conflictText =
+          error.conflicts.length > 0
+            ? error.conflicts
+                .map((conflict) => `${conflict.field} (${conflict.document || conflict.source})`)
+                .join(', ')
+            : error.validationSummary?.checks
+                .filter((check) => check.status === 'failed')
+                .map((check) => `${check.key}${check.documents?.length ? ` [${check.documents.join(', ')}]` : ''}`)
+                .join(', ');
+        throw new Error(`[${ctx}] Section 8 consistency validation failed: ${conflictText || error.message}`);
+      }
+      throw error;
+    }
+  }
+
   const pdfDoc = await loadOfficialForm(formFile);
   const form = pdfDoc.getForm();
 
@@ -2533,54 +2602,44 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   console.log(`✅ [N119] Template validation passed (${N119_REQUIRED_PDF_FIELDS.length} required fields verified)`);
 
   // === HEADER FIELDS ===
-  setTextRequired(form, N119_FIELDS.COURT, data.court_name, ctx);
-  setTextOptional(form, N119_FIELDS.CLAIM_NO, data.claim_number, ctx);
-  setTextRequired(form, N119_FIELDS.CLAIMANT, data.landlord_full_name, ctx);
-  setTextRequired(form, N119_FIELDS.DEFENDANT, data.tenant_full_name, ctx);
-  setTextRequired(form, N119_FIELDS.POSSESSION_OF, data.property_address, ctx);
+  setTextRequired(form, N119_FIELDS.COURT, workingData.court_name, ctx);
+  setTextOptional(form, N119_FIELDS.CLAIM_NO, workingData.claim_number, ctx);
+  setTextRequired(form, N119_FIELDS.CLAIMANT, workingData.landlord_full_name, ctx);
+  setTextRequired(form, N119_FIELDS.DEFENDANT, workingData.tenant_full_name, ctx);
+  setTextRequired(form, N119_FIELDS.POSSESSION_OF, workingData.property_address, ctx);
 
   // === OCCUPANTS (Section 2 / Q2 - Persons in possession) ===
   // IMPORTANT: Only include tenants and known occupants that landlord has confirmed.
   // Do NOT invent or fabricate unknown persons.
-  const occupantsText = getPersonsInPossession(data);
+  const occupantsText = getPersonsInPossession(workingData);
   if (occupantsText) {
     setTextOptional(form, N119_FIELDS.OCCUPANTS, occupantsText, ctx);
   }
 
   // === TENANCY DETAILS (Section 3) ===
-  const tenancyType = data.tenancy_type || 'Assured Shorthold Tenancy';
+  const tenancyType =
+    workingData.jurisdiction === 'england' && workingData.claim_type === 'section_8'
+      ? 'Assured tenancy'
+      : workingData.tenancy_type || 'Assured Shorthold Tenancy';
   setTextOptional(form, N119_FIELDS.TENANCY_TYPE, tenancyType, ctx);
   // Format tenancy date in UK legal format (e.g., "14 July 2025")
-  const tenancyDateFormatted = data.tenancy_start_date ? formatUKLegalDate(data.tenancy_start_date) : '';
+  const tenancyDateFormatted = workingData.tenancy_start_date ? formatUKLegalDate(workingData.tenancy_start_date) : '';
   setTextOptional(form, N119_FIELDS.TENANCY_DATE, tenancyDateFormatted, ctx);
 
-  // Rent amount - ensure proper currency formatting without duplicates
-  if (data.rent_amount !== undefined) {
-    // Format as currency: ensure it's a number and add single £ prefix
-    const rentNum = typeof data.rent_amount === 'number' ? data.rent_amount :
-      parseFloat(String(data.rent_amount).replace(/[£,]/g, '')) || 0;
-    setTextOptional(form, N119_FIELDS.RENT, `£${rentNum.toFixed(2)}`, ctx);
-
-    // Tick ONLY the appropriate rent frequency (single selection, not multiple)
-    // Clear any that shouldn't be checked to ensure only one is marked
-    if (data.rent_frequency === 'weekly') {
-      setTextOptional(form, N119_FIELDS.RENT_WEEKLY, 'X', ctx);
-    } else if (data.rent_frequency === 'fortnightly') {
-      setTextOptional(form, N119_FIELDS.RENT_FORTNIGHTLY, 'X', ctx);
-    } else if (data.rent_frequency === 'monthly') {
-      setTextOptional(form, N119_FIELDS.RENT_MONTHLY, 'X', ctx);
-    } else if (data.rent_frequency) {
-      // Only use "other period" if it's not one of the standard options
-      setTextOptional(form, N119_FIELDS.RENT_OTHER_PERIOD, data.rent_frequency, ctx);
-    }
-
-    // Daily rate for arrears calculation (properly formatted)
-    const dailyRate = data.rent_frequency === 'weekly' ? rentNum / 7 :
-                      data.rent_frequency === 'fortnightly' ? rentNum / 14 :
-                      data.rent_frequency === 'monthly' ? rentNum / 30 :
-                      data.rent_frequency === 'quarterly' ? rentNum / 91 :
-                      rentNum / 30;
-    setTextOptional(form, N119_FIELDS.DAILY_RATE, dailyRate.toFixed(2), ctx);
+  // Rent amount and daily rate
+  if (workingData.rent_amount !== undefined) {
+    const normalizedRentAmount =
+      typeof workingData.rent_amount === 'number'
+        ? workingData.rent_amount
+        : parseFloat(String(workingData.rent_amount).replace(/[£,]/g, '')) || 0;
+    const correctedDailyRate = section8CourtPackCalculation?.dailyRentRate
+      ?? (workingData.rent_frequency === 'weekly' ? normalizedRentAmount / 7
+        : workingData.rent_frequency === 'fortnightly' ? normalizedRentAmount / 14
+        : workingData.rent_frequency === 'monthly' ? normalizedRentAmount / 30
+        : workingData.rent_frequency === 'quarterly' ? normalizedRentAmount / 91
+        : normalizedRentAmount / 30);
+    setTextOptional(form, N119_FIELDS.RENT, `${String.fromCharCode(163)}${normalizedRentAmount.toFixed(2)}`, ctx);
+    setTextOptional(form, N119_FIELDS.DAILY_RATE, correctedDailyRate.toFixed(2), ctx);
   }
 
   // === REASON FOR POSSESSION (Section 4) - Q4(a), Q4(b), Q4(c) ===
@@ -2591,41 +2650,42 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
 
   // Q4(a) - Rent Arrears
   // Fill from the shared post-2026 drafting helper before falling back to legacy text.
-  const reasonAText = buildN119ReasonForPossessionText(data);
+  const reasonAText = section8CourtPackCalculation?.q4aText || buildN119ReasonForPossessionText(workingData);
   if (reasonAText) {
     setTextOptional(form, N119_FIELDS.REASON_A, reasonAText, ctx);
   }
 
   // Legacy fallback retained for backwards compatibility with older data shapes.
-  if (!reasonAText && data.total_arrears && data.total_arrears > 0) {
-    const noticeLabel = data.jurisdiction === 'england' ? 'Form 3A notice' : 'Section 8 Notice';
+  if (!reasonAText && workingData.total_arrears && workingData.total_arrears > 0) {
+    const noticeLabel = workingData.jurisdiction === 'england' ? 'Form 3A notice' : 'Section 8 Notice';
+    const arrearsText = `${String.fromCharCode(163)}${Number(workingData.total_arrears).toFixed(2)}`;
     const arrearsStatement = `Rent lawfully due under the tenancy agreement has not been paid. ` +
-      `As at the date of service of the ${noticeLabel}, the arrears amounted to £${data.total_arrears.toFixed(2)}. ` +
+      `As at the date of service of the ${noticeLabel}, the arrears amounted to ${arrearsText}. ` +
       `Full details of rent periods, payments, and outstanding arrears are set out in the attached Schedule of Arrears.`;
     setTextOptional(form, N119_FIELDS.REASON_A, arrearsStatement, ctx);
-  } else if (!reasonAText && data.particulars_of_claim) {
+  } else if (!reasonAText && workingData.particulars_of_claim) {
     // Use custom particulars if provided
-    setTextOptional(form, N119_FIELDS.REASON_A, data.particulars_of_claim, ctx);
+    setTextOptional(form, N119_FIELDS.REASON_A, workingData.particulars_of_claim, ctx);
   }
 
   // Q4(b) - Other Breach Details
   // Use deterministic post-2026 drafting so the field is never silently blank
   // for arrears-only claims and still reflects any non-rent grounds where present.
-  const reasonBText = buildN119OtherBreachDetailsText(data);
+  const reasonBText = buildN119OtherBreachDetailsText(workingData);
   if (reasonBText) {
     setTextOptional(form, N119_FIELDS.REASON_B, reasonBText, ctx);
-  } else if (data.other_breach_details) {
-    setTextOptional(form, N119_FIELDS.REASON_B, data.other_breach_details, ctx);
+  } else if (workingData.other_breach_details) {
+    setTextOptional(form, N119_FIELDS.REASON_B, workingData.other_breach_details, ctx);
   }
 
   // Q4(c) - Statutory Grounds
   // MUST ALWAYS be populated for Section 8 cases with explicit statutory basis
   // This is legally mandatory for Ground 8 claims
-  const grounds = data.ground_numbers?.split(',').map(g => g.trim()) || [];
-  const hasGround8 = grounds.includes('8') || data.ground_codes?.includes('ground_8');
-  const hasGround10 = grounds.includes('10') || data.ground_codes?.includes('ground_10');
-  const hasGround11 = grounds.includes('11') || data.ground_codes?.includes('ground_11');
-  const statutoryBasisText = buildN119StatutoryGroundsText(data);
+  const grounds = workingData.ground_numbers?.split(',').map(g => g.trim()) || [];
+  const hasGround8 = grounds.includes('8') || workingData.ground_codes?.includes('ground_8') || workingData.ground_codes?.includes('8');
+  const hasGround10 = grounds.includes('10') || workingData.ground_codes?.includes('ground_10') || workingData.ground_codes?.includes('10');
+  const hasGround11 = grounds.includes('11') || workingData.ground_codes?.includes('ground_11') || workingData.ground_codes?.includes('11');
+  const statutoryBasisText = section8CourtPackCalculation?.statutoryGroundsText || buildN119StatutoryGroundsText(workingData);
   if (statutoryBasisText) {
     setTextOptional(form, N119_FIELDS.REASON_C, statutoryBasisText, ctx);
   }
@@ -2641,8 +2701,8 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
     statutoryGroundsParts.push('Ground 11, Schedule 2, Housing Act 1988 (discretionary ground for persistent delay)');
   }
   // If other grounds are specified, add them
-  if (statutoryGroundsParts.length === 0 && data.ground_numbers) {
-    statutoryGroundsParts.push(`Ground(s) ${data.ground_numbers}, Schedule 2, Housing Act 1988`);
+  if (statutoryGroundsParts.length === 0 && workingData.ground_numbers) {
+    statutoryGroundsParts.push(`Ground(s) ${workingData.ground_numbers}, Schedule 2, Housing Act 1988`);
   }
 
   if (!statutoryBasisText && statutoryGroundsParts.length > 0) {
@@ -2653,7 +2713,7 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
 
   // === STEPS TAKEN (Section 5 / Q5 - Steps to recover arrears) ===
   // CRITICAL: Do NOT fabricate steps. Use only recorded steps or a safe neutral default.
-  const stepsText = buildN119StepsTakenText(data);
+  const stepsText = section8CourtPackCalculation?.q5Text || buildN119StepsTakenText(workingData);
   if (stepsText) {
     setTextOptional(form, N119_FIELDS.STEPS_TAKEN, stepsText, ctx);
   }
@@ -2665,19 +2725,19 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   // For Section 21 cases, we use "Section 21 Notice"
 
   // Determine notice type based on claim type
-  const noticeType = data.claim_type === 'section_8'
-    ? data.jurisdiction === 'england'
+  const noticeType = section8CourtPackCalculation?.q6Text || (workingData.claim_type === 'section_8'
+    ? workingData.jurisdiction === 'england'
       ? 'Notice seeking possession (Form 3A)'
       : 'Notice seeking possession'
-    : data.claim_type === 'section_21'
+    : workingData.claim_type === 'section_21'
       ? 'Section 21 Notice'
-      : 'Notice seeking possession';
+      : 'Notice seeking possession');
   setTextOptional(form, N119_FIELDS.NOTICE_OTHER_TYPE, noticeType, ctx);
 
   // Notice served date - Q6 requires a complete, readable date
   // Day/month field: "DD Month" format (e.g., "19 January") - field is 88px wide
   // Year field: 2-digit year (e.g., "26") - field is only 22px wide
-  const noticeDate = data.section_8_notice_date || data.section_21_notice_date || data.notice_served_date;
+  const noticeDate = workingData.section_8_notice_date || workingData.section_21_notice_date || workingData.notice_served_date;
   if (noticeDate) {
     try {
       const date = new Date(noticeDate);
@@ -2709,12 +2769,12 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
     }
   }
 
-  const defendantCircumstances = buildN119DefendantCircumstancesText(data);
+  const defendantCircumstances = section8CourtPackCalculation?.q7Text || buildN119DefendantCircumstancesText(workingData);
   if (defendantCircumstances) {
     setTextOptional(form, N119_FIELDS.DEFENDANT_CIRCUMSTANCES, defendantCircumstances, ctx);
   }
 
-  const financialInfo = buildN119FinancialInfoText(data);
+  const financialInfo = section8CourtPackCalculation?.q8Text || buildN119FinancialInfoText(workingData);
   if (financialInfo) {
     setTextOptional(form, N119_FIELDS.FINANCIAL_INFO, financialInfo, ctx);
   }
@@ -2729,11 +2789,11 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   setTextOptional(form, N119_FIELDS.CLAIMANT_TYPE_DETAILS, 'Private landlord', ctx);
 
   // === STATEMENT OF TRUTH ===
-  setTextOptional(form, N119_FIELDS.STATEMENT_SIGNATURE, data.signatory_name, ctx);
-  setTextOptional(form, N119_FIELDS.SIGNATORY_NAME, data.signatory_name, ctx);
+  setTextOptional(form, N119_FIELDS.STATEMENT_SIGNATURE, workingData.signatory_name, ctx);
+  setTextOptional(form, N119_FIELDS.SIGNATORY_NAME, workingData.signatory_name, ctx);
 
-  if (data.signature_date) {
-    const sigDate = splitDate(data.signature_date);
+  if (workingData.signature_date) {
+    const sigDate = splitDate(workingData.signature_date);
     if (sigDate) {
       setTextOptional(form, N119_FIELDS.STATEMENT_DATE_DD, sigDate.day, ctx);
       setTextOptional(form, N119_FIELDS.STATEMENT_DATE_MM, sigDate.month, ctx);
@@ -2742,8 +2802,8 @@ export async function fillN119Form(data: CaseData, options: FormFillerOptions = 
   }
 
   // Statement of Truth checkboxes
-  if (data.solicitor_firm) {
-    setTextOptional(form, N119_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
+  if (workingData.solicitor_firm) {
+    setTextOptional(form, N119_FIELDS.SOLICITOR_FIRM, workingData.solicitor_firm, ctx);
     setTextOptional(form, N119_FIELDS.POSITION_HELD, 'Solicitor', ctx);
     setCheckbox(form, N119_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
     setCheckbox(form, N119_CHECKBOXES.SOT_AUTHORISED, true, ctx);

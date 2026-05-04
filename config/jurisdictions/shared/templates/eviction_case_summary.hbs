@@ -419,6 +419,32 @@
     </div>
   </div>
 
+  {{#if court_pack_validation_summary}}
+  <div class="panel" style="margin-top: 1.1em;">
+    <h3>Court-pack validation summary</h3>
+    <p>This summary shows the recalculated service and notice dates used across the court pack.</p>
+    <dl class="summary-grid">
+      <dt>Deemed service date used</dt>
+      <dd>{{format_date court_pack_validation_summary.deemed_service_date "long"}}</dd>
+      <dt>Notice expiry date</dt>
+      <dd>{{format_date court_pack_validation_summary.notice_expiry_date "long"}}</dd>
+      <dt>Earliest proceedings date</dt>
+      <dd>{{format_date court_pack_validation_summary.earliest_proceedings_date "long"}}</dd>
+      <dt>Total arrears</dt>
+      <dd>{{currency court_pack_validation_summary.total_arrears}}</dd>
+      <dt>Ground 8 threshold</dt>
+      <dd>{{currency court_pack_validation_summary.ground_8_threshold}}</dd>
+      <dt>Ground 8 status</dt>
+      <dd>{{court_pack_validation_summary.ground_8_status}}</dd>
+    </dl>
+    <ul>
+      {{#each court_pack_validation_summary.checks}}
+      <li><strong>{{status}}:</strong> {{message}}</li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
   <div class="panel-grid">
     <div class="panel">
       <h3>What this pack does</h3>

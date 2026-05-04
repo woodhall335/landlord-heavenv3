@@ -22,6 +22,8 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('Latest proceedings date');
+    expect(content).toContain('Court-pack validation summary');
+    expect(content).toContain('Deemed service date used');
   });
 
   test.each([
@@ -42,6 +44,7 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('Notice expiry date');
     expect(content).toContain('Earliest proceedings date');
     expect(content).toContain('Latest proceedings date');
+    expect(content).toContain('Validation summary');
     expect(content).toContain('Step 1 - Prepare');
     expect(content).toContain('Step 4 - Align');
     expect(content).toContain('{{notice_name}}');
@@ -83,6 +86,7 @@ describe('Section 8 bundle consistency', () => {
       '{{#if (or (hasValue notice_service_date) (hasValue notice_expiry_date) (hasValue earliest_proceedings_date))}}'
     );
     expect(content).toContain('Latest proceedings date');
+    expect(content).toContain('Court-pack validation summary');
     expect(content).toContain('What the court will consider');
     expect(content).toContain('Ground 8 reminder:');
     expect(content).toContain('Suggested court bundle order');
@@ -107,6 +111,7 @@ describe('Section 8 bundle consistency', () => {
 
     expect(content).toContain('{{#if (hasValue notice_expiry_date)}}');
     expect(content).toContain('{{#if (hasValue earliest_proceedings_date)}}');
+    expect(content).toContain('Court-pack validation summary');
     expect(content).toContain('{{pack_summary_title}}');
     expect(content).toContain('{{#each compliance_status_items}}');
     expect(content).toContain('Case Risks &amp; Compliance');
@@ -149,6 +154,7 @@ describe('Section 8 bundle consistency', () => {
     expect(content).toContain('{{status_label}}');
     expect(content).toContain('{{next_step_text}}');
     expect(content).toContain('Decision Engine');
+    expect(content).toContain('Court-pack validation summary');
   });
 
   test('what-happens-next template wires the stage handoff and next steps', () => {

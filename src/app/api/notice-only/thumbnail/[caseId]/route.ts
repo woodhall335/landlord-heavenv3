@@ -47,6 +47,10 @@ import {
   generateNoticeOnlyPack,
   type EvictionPackDocument,
 } from '@/lib/documents/eviction-pack-generator';
+import {
+  applyEnglandSection8CourtPackCalculation,
+  buildEnglandSection8CourtPackCalculation,
+} from '@/lib/documents/england-section8-court-pack';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -97,6 +101,35 @@ async function getEnglandPackPreviewDocument(
       : await generateNoticeOnlyPack(enrichedFacts);
 
   return generatedPack.documents.find((document) => document.document_type === documentType) || null;
+}
+
+async function enrichEnglandSection8CaseDataForCourtPack(
+  caseId: string,
+  wizardFacts: Record<string, any>,
+  caseData: Record<string, any>,
+): Promise<Record<string, any>> {
+  const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+  const isEnglandSection8 =
+    caseData.jurisdiction === 'england' &&
+    caseData.claim_type === 'section_8' &&
+    Array.isArray(evictionCase.grounds) &&
+    evictionCase.grounds.length > 0;
+
+  if (!isEnglandSection8) {
+    return caseData;
+  }
+
+  const calculation = await buildEnglandSection8CourtPackCalculation({
+    wizardFacts,
+    caseData,
+    evictionCase,
+  });
+
+  applyEnglandSection8CourtPackCalculation(wizardFacts, calculation);
+  applyEnglandSection8CourtPackCalculation(caseData, calculation);
+  applyEnglandSection8CourtPackCalculation(evictionCase as any, calculation);
+
+  return caseData;
 }
 
 /**
@@ -525,6 +558,10 @@ export async function GET(
         ? wizardFactsToEnglandWalesEviction(caseId, wizardFacts)
         : { caseData: null as any };
 
+    if (jurisdiction === 'england' && caseData) {
+      await enrichEnglandSection8CaseDataForCourtPack(caseId, wizardFacts, caseData);
+    }
+
     // Wales-specific fields
     if (jurisdiction === 'wales') {
       const contractStartDate = wizardFacts.contract_start_date || templateData.tenancy_start_date;
@@ -630,11 +667,17 @@ export async function GET(
         service_address_county: wizardFacts.property_address_county,
         service_address_postcode: wizardFacts.property_address_postcode || wizardFacts.property_postcode,
         service_date:
+          (caseData as any)?.notice_service_date ||
+          (caseData as any)?.notice_served_date ||
           wizardFacts.notice_service_date ||
           wizardFacts.notice_served_date ||
           wizardFacts.notice_date,
+        deemed_service_date:
+          (caseData as any)?.deemed_service_date,
         signature_date:
           wizardFacts.signature_date ||
+          (caseData as any)?.notice_service_date ||
+          (caseData as any)?.notice_served_date ||
           wizardFacts.notice_service_date ||
           wizardFacts.notice_served_date ||
           wizardFacts.notice_date,

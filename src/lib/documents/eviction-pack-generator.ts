@@ -96,6 +96,10 @@ import {
   ENGLAND_SECTION8_NOTICE_TYPE_LABEL,
 } from '@/lib/england-possession/section8-terminology';
 import {
+  applyEnglandSection8CourtPackCalculation,
+  buildEnglandSection8CourtPackCalculation,
+} from '@/lib/documents/england-section8-court-pack';
+import {
   getSection8JourneySteps,
   getSection8JourneySummary,
   type EnglandSection8JourneyStage,
@@ -127,6 +131,32 @@ function formatUKLegalDate(dateString: string | null | undefined): string {
   } catch {
     return '';
   }
+}
+
+async function syncEnglandSection8CourtPackState(params: {
+  jurisdiction: string | undefined;
+  route: string | null | undefined;
+  wizardFacts?: Record<string, any> | null;
+  caseData?: Record<string, any> | null;
+  evictionCase?: Record<string, any> | null;
+}): Promise<Awaited<ReturnType<typeof buildEnglandSection8CourtPackCalculation>> | null> {
+  const { jurisdiction, route, wizardFacts, caseData, evictionCase } = params;
+  const hasGrounds = Array.isArray(evictionCase?.grounds) && evictionCase.grounds.length > 0;
+  if (jurisdiction !== 'england' || route !== 'section8' || !hasGrounds) {
+    return null;
+  }
+
+  const calculation = await buildEnglandSection8CourtPackCalculation({
+    wizardFacts: wizardFacts || undefined,
+    caseData: caseData || undefined,
+    evictionCase: evictionCase || undefined,
+  });
+
+  applyEnglandSection8CourtPackCalculation(wizardFacts || undefined, calculation);
+  applyEnglandSection8CourtPackCalculation(caseData || undefined, calculation);
+  applyEnglandSection8CourtPackCalculation(evictionCase || undefined, calculation);
+
+  return calculation;
 }
 
 type DerivedEvictionRoute = 'section8' | 'section21';
@@ -1256,8 +1286,27 @@ function buildEnglandSection8PackSummaryData(params: {
     notice_served_date: noticeServedDate,
     notice_expiry_date: noticeExpiryDate,
     earliest_proceedings_date: earliestProceedingsDate,
+    deemed_service_date:
+      section8RenderData?.deemed_service_date ||
+      caseData?.deemed_service_date ||
+      wizardFacts?.deemed_service_date,
     current_arrears_total: currentArrearsTotal,
     arrears_at_notice_date: arrearsAtNoticeDate,
+    ground_8_threshold:
+      section8RenderData?.ground_8_threshold ||
+      caseData?.ground_8_threshold ||
+      wizardFacts?.ground_8_threshold,
+    ground_8_status:
+      section8RenderData?.ground_8_status ||
+      caseData?.ground_8_status ||
+      wizardFacts?.ground_8_status,
+    court_pack_validation_summary:
+      section8RenderData?.court_pack_validation_summary ||
+      caseData?.court_pack_validation_summary ||
+      wizardFacts?.court_pack_validation_summary ||
+      section8RenderData?.validation_summary ||
+      caseData?.validation_summary ||
+      wizardFacts?.validation_summary,
     grounds_summary_text: buildSection8GroundsSummary(evictionCase),
     case_narrative_text: buildN119ReasonForPossessionText(caseSummaryDraftingData),
     steps_taken_text: buildN119StepsTakenText(caseSummaryDraftingData),
@@ -1298,6 +1347,18 @@ function buildSection8TemplateData(
   const canonicalNotice = resolveSection8CanonicalNoticeData(evictionCase, wizardFacts, caseData);
   const serviceDate = canonicalNotice.serviceDate;
   const earliestPossessionDate = canonicalNotice.earliestPossessionDate;
+  const deemedServiceDate =
+    wizardFacts.deemed_service_date ||
+    (caseData as any)?.deemed_service_date ||
+    serviceDate;
+  const noticeExpiryDate =
+    wizardFacts.notice_expiry_date ||
+    (caseData as any)?.notice_expiry_date ||
+    earliestPossessionDate;
+  const earliestProceedingsDate =
+    wizardFacts.earliest_proceedings_date ||
+    (caseData as any)?.earliest_proceedings_date ||
+    noticeExpiryDate;
   const courtName =
     resolveCanonicalCourtName(caseData as Record<string, any>, evictionCase as Record<string, any>, wizardFacts) ||
     'County Court';
@@ -1424,8 +1485,9 @@ function buildSection8TemplateData(
     ),
     notice_service_date: serviceDate,
     notice_served_date: serviceDate,
-    notice_expiry_date: earliestPossessionDate,
-    earliest_proceedings_date: earliestPossessionDate,
+    deemed_service_date: deemedServiceDate,
+    notice_expiry_date: noticeExpiryDate,
+    earliest_proceedings_date: earliestProceedingsDate,
     court_name: courtName,
   });
 
@@ -1437,11 +1499,12 @@ function buildSection8TemplateData(
     notice_service_date: serviceDate,
     notice_date: serviceDate,
     intended_service_date: serviceDate,
-    earliest_possession_date: earliestPossessionDate,
-    notice_expiry_date: earliestPossessionDate,
-    earliest_proceedings_date: earliestPossessionDate,
-    section8_expiry_date: earliestPossessionDate,
-    expiry_date: earliestPossessionDate,
+    deemed_service_date: deemedServiceDate,
+    earliest_possession_date: noticeExpiryDate,
+    notice_expiry_date: noticeExpiryDate,
+    earliest_proceedings_date: earliestProceedingsDate,
+    section8_expiry_date: noticeExpiryDate,
+    expiry_date: noticeExpiryDate,
     tenancy_start_date: tenancyStartDate,
     payment_day: paymentDay,
     usual_payment_weekday: usualPaymentWeekday,
@@ -1450,10 +1513,11 @@ function buildSection8TemplateData(
       canonicalNotice.explanation || wizardFacts.earliest_possession_date_explanation,
     // Formatted dates for templates
     service_date_formatted: formatUKLegalDate(serviceDate),
+    deemed_service_date_formatted: formatUKLegalDate(deemedServiceDate),
     notice_date_formatted: formatUKLegalDate(serviceDate),
-    earliest_possession_date_formatted: formatUKLegalDate(earliestPossessionDate),
-    notice_expiry_date_formatted: formatUKLegalDate(earliestPossessionDate),
-    earliest_proceedings_date_formatted: formatUKLegalDate(earliestPossessionDate),
+    earliest_possession_date_formatted: formatUKLegalDate(noticeExpiryDate),
+    notice_expiry_date_formatted: formatUKLegalDate(noticeExpiryDate),
+    earliest_proceedings_date_formatted: formatUKLegalDate(earliestProceedingsDate),
     tenancy_start_date_formatted: formatUKLegalDate(tenancyStartDate),
     generated_date: formatUKLegalDate(now),
     current_date: now,
@@ -3101,8 +3165,17 @@ export async function generateCompleteEvictionPack(
     const { evictionCase: ewCase, caseData: ewCaseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
     evictionCase = { ...ewCase, jurisdiction: jurisdiction as Jurisdiction };
     caseData = ewCaseData; // Store for use throughout the function
+    const derivedRoute = deriveEvictionRoute(wizardFacts);
 
-    if (jurisdiction === 'england' && deriveEvictionRoute(wizardFacts) === 'section8' && evictionCase.grounds.length > 0) {
+    await syncEnglandSection8CourtPackState({
+      jurisdiction,
+      route: derivedRoute,
+      wizardFacts,
+      caseData,
+      evictionCase,
+    });
+
+    if (jurisdiction === 'england' && derivedRoute === 'section8' && evictionCase.grounds.length > 0) {
       section8CanonicalRenderData = harmonizeEnglandSection8CanonicalContext({
         wizardFacts,
         caseData,
@@ -4053,6 +4126,13 @@ export async function generateNoticeOnlyPack(
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
     const { evictionCase, caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
     evictionCase.jurisdiction = jurisdiction as Jurisdiction;
+    await syncEnglandSection8CourtPackState({
+      jurisdiction,
+      route: deriveEvictionRoute(wizardFacts),
+      wizardFacts,
+      caseData,
+      evictionCase,
+    });
 
     // Section 8 or Section 21
     const isSection21 = evictionCase.case_type === 'no_fault' ||
