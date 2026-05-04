@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { RentCheckerSeoPage } from '@/components/tools/rent-checker/RentCheckerSeoPage';
+import { getRentCheckerSeoLinks } from '@/components/tools/rent-checker/seo-links';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/challenge-risk');
@@ -29,7 +30,7 @@ export default function ChallengeRiskPage() {
           title: 'Read evidence strength and challenge risk separately',
           body: [
             'Evidence strength asks whether you have enough good material to justify the calculation. Challenge risk asks whether the proposed figure, service position, and overall case posture make a dispute more likely. Those can move in different directions.',
-            'A landlord can have strong comparables and still choose a figure that sits above the supported market position. In that case the answer is not “get more evidence and hope”. The answer is either lower the figure or prepare the file for challenge properly.',
+            'A landlord can have strong comparables and still choose a figure that sits above the supported market position. In that case the answer is not "get more evidence and hope". The answer is either lower the figure or prepare the file for challenge properly.',
           ],
         },
         {
@@ -43,8 +44,7 @@ export default function ChallengeRiskPage() {
       primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Check challenge risk now' }}
       secondaryCta={{ href: '/rent-increase', label: 'See the Defence route' }}
       relatedLinks={[
-        { href: '/tools/rent-increase-challenge-checker/guide', label: 'How to use the checker' },
-        { href: '/tools/rent-increase-challenge-checker/market-rent-evidence', label: 'How to read market-rent evidence' },
+        ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/challenge-risk').slice(0, 4),
         { href: '/rent-increase', label: 'Compare Standard and Defence Section 13 routes' },
       ]}
     />

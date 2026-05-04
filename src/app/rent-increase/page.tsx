@@ -97,6 +97,11 @@ const faqs: FAQItem[] = [
     answer:
       'Yes. The longer rent increase guide is still available if you want the full step-by-step explanation before you pick a route.',
   },
+  {
+    question: 'Can I check whether the figure looks supportable before I choose a pack?',
+    answer:
+      'Yes. The free Rent Increase & Challenge Checker lets landlords compare the current and proposed rent against live local comparables before moving into the Standard or Defence Section 13 route.',
+  },
 ];
 
 export default function RentIncreaseLandingPage() {
@@ -153,6 +158,20 @@ export default function RentIncreaseLandingPage() {
               See the challenge-ready defence route
             </TrackedLink>
           </div>
+          <div className="w-full sm:w-auto">
+            <TrackedLink
+              href="/tools/rent-increase-challenge-checker"
+              pagePath="/rent-increase"
+              pageType="entry_page"
+              ctaLabel="Run the free rent checker first"
+              ctaPosition="hero"
+              eventName="entry_page_secondary_cta_click"
+              routeIntent="rent_increase"
+              className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
+            >
+              Run the free rent checker first
+            </TrackedLink>
+          </div>
         </>
       ),
       children: (
@@ -160,6 +179,21 @@ export default function RentIncreaseLandingPage() {
           <li>Built for the current England Section 13 route using Form 4A.</li>
           <li>Lets landlords choose between the normal increase route and the stronger challenge-ready defence route.</li>
           <li>Keeps the long-form guide available without making every visitor read it first.</li>
+          <li>
+            Not sure which route fits yet?{' '}
+            <TrackedLink
+              href="/tools/rent-increase-challenge-checker"
+              pagePath="/rent-increase"
+              pageType="entry_page"
+              ctaLabel="Use the free rent checker first"
+              ctaPosition="hero"
+              eventName="entry_page_secondary_cta_click"
+              routeIntent="rent_increase"
+              className="font-semibold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white"
+            >
+              Use the free rent checker first.
+            </TrackedLink>
+          </li>
         </ul>
       ),
     },
@@ -252,6 +286,7 @@ export default function RentIncreaseLandingPage() {
         href: defenceDescriptor.landingHref,
       },
       guideLinks: [
+        { label: 'Check the supportable rent range first', href: '/tools/rent-increase-challenge-checker' },
         { label: 'Read the long-form guide', href: '/products/rent-increase' },
         { label: 'Section 13 notice guide', href: '/rent-increase/section-13-notice' },
         { label: 'Form 4A guide', href: '/rent-increase/form-4a-guide' },

@@ -20,8 +20,8 @@ comparables.
 Points to confirm in any witness statement or reply
 1. Service method and service date: First class post on 25 March 2026.
 2. Proposed start date: 01 June 2026.
-3. Comparable base: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the last 90
-days and all source-backed.
+3. Comparable base: 8 comparable two-bedroom properties used in the market calculation, with all listed
+within the last 90 days and all source-backed.
 4. Current banding: challenge risk is Moderate likelihood of challenge and evidence strength is Strong
 evidence.
 5. Any manual adjustment or override should be tied back to a recorded factual difference in the

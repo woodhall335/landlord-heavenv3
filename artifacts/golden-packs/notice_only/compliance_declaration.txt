@@ -3,7 +3,7 @@ golden-notice-only-001
 JURISDICTION
 england
 GENERATED
-2 May 2026
+4 May 2026
 Stage 1: Section 8 Notice & Service Pack
 Compliance Checklist
 READY TO SERVE - NOTICE FILE ALIGNED
@@ -14,7 +14,7 @@ PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE TYPE Form 3A notice
 TENANCY START DATE 1 January 2024
-GENERATED 2 May 2026
+GENERATED 4 May 2026
 CRITICAL
 Resolve this before relying on
 the notice or moving on with
@@ -28,6 +28,19 @@ OK
 The current pack data records
 this point, but you still need to
 retain the underlying evidence.
+Court-pack validation summary
+Deemed service date used: 6 May 2026
+Notice expiry date: 20 May 2026
+Earliest proceedings date: 20 May 2026
+Total arrears: £3600.00
+Ground 8 threshold: £3600.00 (AT)
+passed: Arrears total aligned at £3600.00.
+passed: Minimum notice period is at least 14 days from deemed service.
+passed: Ground 8 threshold is exactly met at £3600.00 and should be treated as a risk position.
+passed: No cross-document conflicts were detected against the recalculated court-pack values.
+
+-- 1 of 2 --
+
 Decision Engine
 OK
 Deposit compliance recorded
@@ -37,9 +50,6 @@ OK
 Gas safety evidence recorded
 Gas safety evidence is recorded on 10 January 2024.
 Action: Keep the gas safety record with the notice and court file.
-
--- 1 of 2 --
-
 OK
 EPC record recorded
 EPC evidence is recorded.
@@ -50,7 +60,7 @@ How to Rent service is recorded on 15 January 2024.
 Action: Keep the service record with the tenancy file.
 OK
 Notice timeline recorded
-Notice served on 2 May 2026 with earliest proceedings date 30 May 2026.
+Notice served on 4 May 2026 with earliest proceedings date 20 May 2026.
 Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and
 any court papers.
 Next move

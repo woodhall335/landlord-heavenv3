@@ -50,6 +50,12 @@ function CtaBand({
         >
           {primaryLabel}
         </Link>
+        <Link
+          href="/tools/rent-increase-challenge-checker"
+          className="rounded-lg border border-[#D8C8FF] bg-white px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]"
+        >
+          Check the supportable rent range first
+        </Link>
       </div>
     </section>
   );

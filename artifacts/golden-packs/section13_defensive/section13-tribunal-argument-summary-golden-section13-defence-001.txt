@@ -8,19 +8,98 @@ The proposal should be judged by reference to nearby open-market comparables, no
 increase from the previous rent alone.
 The landlord relies on the comparable evidence in this file and says the proposed rent of £1285.00 per
 month should be judged against that market evidence, not against the size of the increase alone.
+The proposed rent looks broadly aligned with the market calculation currently available.
+No safer-range guidance is currently needed from the market calculation.
 The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
 month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),
 the proposed increase is presented as reasonable with a moderate likelihood of challenge and strong
 evidence. The proposed rent reflects recent local listings, condition, and current market positioning for
 similar two-bedroom homes.
 Strength of the evidence
-Strong evidence is based on 8 comparable homes, 8 source-backed entries, and 8 comparables dated
-within the 90-day freshness window. The file reads as a well-supported market review rather than a bare
-assertion.
-Comparable 1: Flat 2, The Calls, Leeds LS1 at £1240.00 monthly, adjusting to £1240.00 pcm, dated 15
-March 2026.
-Comparable 2: Apartment 14, Sovereign Street, Leeds LS1 at £1265.00 monthly, adjusting to £1265.00
-pcm, dated 15 March 2026.
+Strong evidence is based on 8 comparable homes used in the market calculation, 8 source-backed entries,
+and 8 comparables dated within the 90-day freshness window. The file reads as a well-supported market
+review rather than a bare assertion.
+Comparable 1: Flat 2, The Calls, Leeds LS1 at raw £1240.00 pcm, adjusted to £1240.00 pcm, dated 15
+March 2026. Included because it is a close like-for-like market match.
+Comparable 2: Apartment 14, Sovereign Street, Leeds LS1 at raw £1265.00 pcm, adjusted to £1265.00
+pcm, dated 15 March 2026. Included because it is a close like-for-like market match.
+Comparable calculation basis
+Median calculated from 8 comparable listings used in the market calculation.
+Used in market calculation
+1. Flat 2, The Calls, Leeds LS1 | raw £1240.00 pcm | adjusted £1240.00 pcm
+Included in calculation: Yes
+Freshness: 24 days old
+Source: scraped | https://example.com/leeds-rent-comparable-1
+Distance: 0.20 miles
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
+2. Apartment 14, Sovereign Street, Leeds LS1 | raw £1265.00 pcm | adjusted £1265.00 pcm
+Included in calculation: Yes
+Freshness: 24 days old
+Source: scraped | https://example.com/leeds-rent-comparable-2
+Section 13 Defensive Pack | Tribunal argument summary Page 1 of 3
+
+-- 1 of 3 --
+
+Tribunal Argument Summary
+Distance: 0.30 miles
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
+3. Flat 5, Brewery Wharf, Leeds LS10 | raw £1275.00 pcm | adjusted £1275.00 pcm
+Included in calculation: Yes
+Freshness: 24 days old
+Source: scraped | https://example.com/leeds-rent-comparable-3
+Distance: 0.40 miles
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
+4. Apartment 8, Park Row, Leeds LS1 | raw £1290.00 pcm | adjusted £1290.00 pcm
+Included in calculation: Yes
+Freshness: 24 days old
+Source: scraped | https://example.com/leeds-rent-comparable-4
+Distance: 0.40 miles
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
+5. Flat 11, Riverside Court, Leeds LS1 | raw £1305.00 pcm | adjusted £1305.00 pcm
+Included in calculation: Yes
+Freshness: 24 days old
+Source: scraped | https://example.com/leeds-rent-comparable-5
+Distance: 0.50 miles
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
+6. Apartment 6, Wellington Street, Leeds LS1 | raw £1315.00 pcm | adjusted £1315.00 pcm
+Included in calculation: Yes
+Freshness: 24 days old
+Source: scraped | https://example.com/leeds-rent-comparable-6
+Distance: 0.50 miles
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
+7. Flat 3, Dock Street, Leeds LS10 | raw £1330.00 pcm | adjusted £1330.00 pcm
+Included in calculation: Yes
+Section 13 Defensive Pack | Tribunal argument summary Page 2 of 3
+
+-- 2 of 3 --
+
+Tribunal Argument Summary
+Freshness: 24 days old
+Source: scraped | https://example.com/leeds-rent-comparable-7
+Distance: 0.50 miles
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
+8. Apartment 21, East Parade, Leeds LS1 | raw £1345.00 pcm | adjusted £1345.00 pcm
+Included in calculation: Yes
+Freshness: 24 days old
+Source: scraped | https://example.com/leeds-rent-comparable-8
+Distance: 0.50 miles
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
 If challenged, say this
 1. Anchor to evidence
 Say: The proposed rent is based on comparable local properties and the recorded adjustments, not on a
@@ -37,6 +116,6 @@ and the supporting documents I rely on.
 Important limit
 This summary is a concise argument brief drawn from the saved case facts and comparable analysis. It
 supports presentation of the case, but it does not guarantee a tribunal outcome.
-Section 13 Defensive Pack | Tribunal argument summary Page 1 of 1
+Section 13 Defensive Pack | Tribunal argument summary Page 3 of 3
 
--- 1 of 1 --
+-- 3 of 3 --

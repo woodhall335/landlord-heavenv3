@@ -10,12 +10,14 @@ Proposed start date: 01 June 2026
 Service date: 25 March 2026
 Evidence strength: Strong evidence
 Challenge band: Moderate likelihood of challenge
-Comparable count: 8
+Comparable count: 8 used in calculation
 Evidence footing
-This proposal is grounded in 8 comparable two-bedroom homes within 0.5 miles, all listed within the last 90
-days and all source-backed.
+This proposal is grounded in 8 comparable two-bedroom homes used in the market calculation, all listed
+within the last 90 days and all source-backed.
 Current case position: The proposed rent is supported by current market evidence and sits within the
 lower-to-mid range of comparable properties locally.
+Median calculated from 8 comparable listings used in the market calculation.
+Listings are filtered for similar bedroom count, property type, distance, and freshness where possible.
 No immediate structured warning is recorded from the current comparable and service checks, but the file
 should still be reviewed before service.
 What this file does

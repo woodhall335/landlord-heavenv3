@@ -43,7 +43,7 @@ export default function Section13StandardProductPage() {
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
-      secondaryCta: { label: 'Read the rent increase guide', href: '/products/rent-increase' },
+      secondaryCta: { label: 'Check the supportable range first', href: '/tools/rent-increase-challenge-checker' },
       feature:
         'Built for landlords who want the notice, the evidence, and the service record to stay clear and consistent from the start.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
@@ -56,6 +56,7 @@ export default function Section13StandardProductPage() {
           {config.heroBullets.map((bullet) => (
             <li key={bullet}>{bullet}</li>
           ))}
+          <li>Need to test the figure first? Run the free rent checker before you open the paid pack.</li>
         </ul>
       ),
     },
@@ -197,7 +198,10 @@ export default function Section13StandardProductPage() {
       secondary: config.cta.secondaryLabel && config.cta.secondaryHref
         ? { label: config.cta.secondaryLabel, href: config.cta.secondaryHref }
         : undefined,
-      guideLinks: descriptor.defaultGuideLinks,
+      guideLinks: [
+        { label: 'Run the free rent checker first', href: '/tools/rent-increase-challenge-checker' },
+        ...descriptor.defaultGuideLinks,
+      ],
     },
     faq: {
       title: 'Standard Section 13 Rent Increase Pack FAQs',

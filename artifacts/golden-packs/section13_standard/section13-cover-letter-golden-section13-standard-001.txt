@@ -1,9 +1,9 @@
 Section 13 Rent Increase Cover Letter
 Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the
 market evidence relied on.
-This proposed rent is supported by 8 comparable two-bedroom properties within 0.5 miles, with all
-listed within the last 90 days and all source-backed and sits below the adjusted median of £1297.50
-pcm. The notice file is ready to serve on the recorded facts.
+This proposed rent is supported by 8 comparable two-bedroom properties used in the market
+calculation, with all listed within the last 90 days and all source-backed and sits below the adjusted
+median of £1297.50 pcm. The notice file is ready to serve on the recorded facts.
 Property: 10 Sample Road, Leeds, LS1 1AA
 Tenant(s): Alex Tenant, Jordan Tenant
 What is enclosed
@@ -16,8 +16,8 @@ Proposed rent: £1285.00 per month
 Proposed start date: 01 June 2026
 The proposed rent is supported by current market evidence and sits within the lower-to-mid range of
 comparable properties locally.
-Comparable footing: 8 comparable two-bedroom properties within 0.5 miles, with all listed within the last 90
-days and all source-backed.
+Comparable footing: 8 comparable two-bedroom properties used in the market calculation, with all listed
+within the last 90 days and all source-backed.
 Assessment: Moderate likelihood of challenge; Strong evidence.
 The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
 month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),

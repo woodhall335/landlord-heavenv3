@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { RentCheckerSeoPage } from '@/components/tools/rent-checker/RentCheckerSeoPage';
+import { getRentCheckerSeoLinks } from '@/components/tools/rent-checker/seo-links';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/market-rent-evidence');
@@ -43,8 +44,7 @@ export default function MarketRentEvidencePage() {
       primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Check the market-rent range now' }}
       secondaryCta={{ href: '/rent-increase', label: 'See the Section 13 landlord routes' }}
       relatedLinks={[
-        { href: '/tools/rent-increase-challenge-checker/guide', label: 'How to use the checker' },
-        { href: '/tools/rent-increase-challenge-checker/challenge-risk', label: 'How challenge risk changes the route' },
+        ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/market-rent-evidence').slice(0, 4),
         { href: '/products/rent-increase', label: 'View the paid Section 13 product page' },
       ]}
     />

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { RentCheckerSeoPage } from '@/components/tools/rent-checker/RentCheckerSeoPage';
+import { getRentCheckerSeoLinks } from '@/components/tools/rent-checker/seo-links';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/guide');
@@ -50,9 +51,7 @@ export default function RentCheckerGuidePage() {
       primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Run the free rent checker' }}
       secondaryCta={{ href: '/rent-increase', label: 'Compare the Section 13 routes' }}
       relatedLinks={[
-        { href: '/tools/rent-increase-challenge-checker/market-rent-evidence', label: 'Read the market-rent evidence guide' },
-        { href: '/tools/rent-increase-challenge-checker/challenge-risk', label: 'Read the challenge-risk guide' },
-        { href: '/tools/rent-increase-challenge-checker/section-13-notice-route', label: 'Read the Section 13 notice guide' },
+        ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/guide').slice(0, 5),
         { href: '/rent-increase', label: 'Open the main Section 13 route page' },
       ]}
     />

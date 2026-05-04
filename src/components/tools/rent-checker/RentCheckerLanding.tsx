@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { ArrowRight, BarChart3, MapPin, ShieldCheck, Sparkles } from 'lucide-react';
 
+import { rentCheckerSeoLinks } from '@/components/tools/rent-checker/seo-links';
 import { Button } from '@/components/ui/Button';
 
 interface RentCheckerLandingProps {
@@ -34,14 +35,9 @@ const steps = [
   },
 ];
 
-const supportLinks = [
-  { href: '/tools/rent-increase-challenge-checker/guide', label: 'How to use the checker' },
-  { href: '/tools/rent-increase-challenge-checker/market-rent-evidence', label: 'Market-rent evidence guide' },
-  { href: '/tools/rent-increase-challenge-checker/challenge-risk', label: 'Challenge-risk guide' },
-  { href: '/tools/rent-increase-challenge-checker/section-13-notice-route', label: 'When to move into the Section 13 route' },
-];
-
 export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
+  const supportLinks = rentCheckerSeoLinks.slice(0, 6);
+
   return (
     <section className="relative overflow-hidden rounded-[2rem] border border-violet-100 bg-white shadow-[0_28px_80px_rgba(88,28,135,0.08)]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(167,139,250,0.18),_transparent_42%),radial-gradient(circle_at_bottom_right,_rgba(129,140,248,0.12),_transparent_38%)]" />

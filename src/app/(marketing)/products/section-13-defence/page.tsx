@@ -43,7 +43,7 @@ export default function Section13DefenceProductPage() {
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
-      secondaryCta: { label: 'Read the rent increase guide', href: '/products/rent-increase' },
+      secondaryCta: { label: 'Check the challenge risk first', href: '/tools/rent-increase-challenge-checker' },
       feature:
         'Built for landlords who need the notice, the evidence, and the tribunal-facing argument to stay clear and consistent under challenge.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
@@ -56,6 +56,7 @@ export default function Section13DefenceProductPage() {
           {config.heroBullets.map((bullet) => (
             <li key={bullet}>{bullet}</li>
           ))}
+          <li>Need to test whether the figure itself is too aggressive? Run the free rent checker first.</li>
         </ul>
       ),
     },
@@ -197,7 +198,10 @@ export default function Section13DefenceProductPage() {
       secondary: config.cta.secondaryLabel && config.cta.secondaryHref
         ? { label: config.cta.secondaryLabel, href: config.cta.secondaryHref }
         : undefined,
-      guideLinks: descriptor.defaultGuideLinks,
+      guideLinks: [
+        { label: 'Run the free rent checker first', href: '/tools/rent-increase-challenge-checker' },
+        ...descriptor.defaultGuideLinks,
+      ],
     },
     faq: {
       title: 'Challenge-Ready Section 13 Defence Pack FAQs',

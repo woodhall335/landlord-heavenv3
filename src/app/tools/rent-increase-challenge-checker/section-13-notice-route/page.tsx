@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { RentCheckerSeoPage } from '@/components/tools/rent-checker/RentCheckerSeoPage';
+import { getRentCheckerSeoLinks } from '@/components/tools/rent-checker/seo-links';
 import { getCanonicalUrl } from '@/lib/seo';
 
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/section-13-notice-route');
@@ -17,7 +18,7 @@ export default function Section13NoticeRoutePage() {
     <RentCheckerSeoPage
       eyebrow="Section 13 notice route"
       title="When to move from the free rent check into the Standard Section 13 notice route"
-      intro="The best time to generate the formal Section 13 notice pack is after the supportable range, the dates, and the service plan make sense together — not before."
+      intro="The best time to generate the formal Section 13 notice pack is after the supportable range, the dates, and the service plan make sense together, not before."
       bullets={[
         'Use the checker before you generate Form 4A.',
         'Move into Standard when the increase is supportable.',
@@ -43,8 +44,7 @@ export default function Section13NoticeRoutePage() {
       primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Run the checker before you serve' }}
       secondaryCta={{ href: '/rent-increase', label: 'Open the Standard Section 13 route' }}
       relatedLinks={[
-        { href: '/tools/rent-increase-challenge-checker/guide', label: 'How to use the checker properly' },
-        { href: '/tools/rent-increase-challenge-checker/challenge-risk', label: 'When to switch into the Defence route' },
+        ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/section-13-notice-route').slice(0, 4),
         { href: '/products/rent-increase', label: 'Visit the public Section 13 product page' },
       ]}
     />
