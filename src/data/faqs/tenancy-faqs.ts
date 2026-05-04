@@ -67,7 +67,7 @@ export const rollingTenancyFAQs: FAQItem[] = [
   },
   {
     question: 'How do I end a rolling tenancy as a landlord?',
-    answer: 'Serve a Section 21 notice giving at least 2 months notice, or a Section 8 notice if there are grounds. The Section 21 notice must expire on the last day of a rental period.',
+    answer: 'For new England private-rented cases after 1 May 2026, Section 21 is no longer the live route. Use the current Form 3A / Section 8 process where you can prove a statutory ground, or agree a surrender with the tenant.',
   },
   {
     question: 'How much notice must a tenant give on a rolling tenancy?',
@@ -94,7 +94,7 @@ export const howToRentGuideFAQs: FAQItem[] = [
   },
   {
     question: 'Do I have to give the How to Rent guide to my tenant?',
-    answer: 'Yes, if your property is in England and let on an AST. Failure to provide the current version before the tenancy starts (or at renewal) means you cannot serve a valid Section 21 notice.',
+    answer: 'Yes, if your property is in England and let on an assured private tenancy where the guide applies. It remains part of good compliance, even though Section 21 is no longer the live route for new England private-rented cases after 1 May 2026.',
   },
   {
     question: 'Where do I get the How to Rent guide?',
@@ -110,6 +110,6 @@ export const howToRentGuideFAQs: FAQItem[] = [
   },
   {
     question: 'What happens if I gave the wrong version of How to Rent?',
-    answer: 'If you provided an outdated version, your Section 21 notice may be invalid. Provide the correct version and serve a new Section 21 notice. The notice period restarts from the new service date.',
+    answer: 'Provide the current version promptly and keep evidence of service. For post-1 May 2026 England possession cases, focus on the current Form 3A / Section 8 route and make sure all compliance documents are in order before court action.',
   },
 ];

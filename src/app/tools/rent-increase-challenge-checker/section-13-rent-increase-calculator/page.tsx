@@ -18,26 +18,26 @@ export default function Section13RentIncreaseCalculatorPage() {
     <RentCheckerSeoPage
       eyebrow="Section 13 calculator"
       title="Use a Section 13 rent increase calculator before you serve Form 4A"
-      intro="Landlords often search for a Section 13 rent increase calculator when what they really need is a market-checking step before they commit to the figure. The free checker is built for that exact job."
+      intro="If you already have a rent figure in mind, check it against the market before you serve it. The free checker shows whether the increase looks supportable, borderline, or likely to need stronger preparation."
       bullets={[
-        'Check the rent before you generate the notice.',
-        'Use live comparable evidence instead of guesswork.',
-        'Separate supportable pricing from challenge risk.',
-        'Move into the right paid route once the figure is clear.',
+        'Check the proposed rent before you generate the notice.',
+        'Use local comparable evidence instead of a guess.',
+        'See whether the issue is pricing, evidence, or challenge risk.',
+        'Choose the paid pack after the figure makes sense.',
       ]}
       sections={[
         {
-          title: 'A calculator should do more than add numbers',
+          title: 'The rent figure needs a reality check',
           body: [
-            'A simple calculator can tell you the difference between the current rent and the proposed rent, but it cannot tell you whether that figure is commercially supportable in the local market. That is why this tool uses comparable-rent evidence and challenge-risk logic rather than acting like a plain arithmetic widget.',
-            'For landlords, the key question is not just how much more rent you want. It is whether the market evidence and the Section 13 route can support that figure cleanly before the notice goes out.',
+            'It is easy to calculate the monthly uplift. The harder question is whether that uplift still looks sensible when it is compared with similar homes nearby.',
+            'Before you serve Form 4A, you want to know whether the market evidence supports the proposed rent and whether the file should stay on the Standard route or move into the Defence route.',
           ],
         },
         {
-          title: 'Why the checker is a better first step',
+          title: 'What to do with the result',
           body: [
-            'The checker gives you a supportable range, a market median, evidence strength, and the likely challenge posture. That turns the free result into a decision tool rather than a vague estimate.',
-            'Once the result is clear, the next move becomes much easier. Lower-risk files can move into the Standard Section 13 route, while higher-pressure cases can move straight into the Defence route.',
+            'If the rent sits in a supportable range, you can move into the Standard Section 13 pack with more confidence. If the figure is high against the evidence, the safer move is to prepare for challenge before the notice goes out.',
+            'That keeps the paid step practical. You are not buying a pack because the page says so; you are choosing the pack that matches the risk in front of you.',
           ],
         },
       ]}

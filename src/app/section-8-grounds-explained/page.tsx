@@ -66,10 +66,10 @@ const faqs: FAQItem[] = [
     answer:
       'Ground 8 for serious rent arrears is one of the most common mandatory grounds used by landlords where the tenant has fallen significantly behind on rent.',
   },
-  {
-    question: 'Can landlords still use Section 21 instead of Section 8?',
-    answer:
-      'Yes. Section 21 is a no-fault route, while Section 8 depends on breach grounds. Landlords often choose the route that best fits the facts of the tenancy.',
+    {
+      question: 'Can landlords still use Section 21 instead of Section 8?',
+      answer:
+        'For new England private-rented cases after 1 May 2026, no. Section 21 is no longer the live route, so landlords need to use the current Form 3A / Section 8 process and prove the ground or grounds relied on.',
   },
   {
     question: 'Does Section 8 always require a court hearing?',
@@ -217,8 +217,8 @@ export default function Page() {
               <p className="mt-4 leading-7 text-gray-700">
                 For many landlords, the most important point is this: Section 8 is a
                 breach-based route. That means success depends far more on evidence,
-                chronology, and hearing readiness than a typical Section 21 possession
-                claim. Landlords who treat the case like a structured legal workflow
+                  chronology, and hearing readiness than old-style no-fault possession
+                  claims. Landlords who treat the case like a structured legal workflow
                 usually do far better than landlords who treat the notice as the whole job.
               </p>
               <p className="mt-4 leading-7 text-gray-700">

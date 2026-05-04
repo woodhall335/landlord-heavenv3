@@ -7,41 +7,41 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/tenant-challenge');
 
 export const metadata: Metadata = {
-  title: 'Tenant Challenging a Rent Increase | What Landlords Should Do Next',
+  title: 'Tenant Pushing Back on a Rent Increase | Landlord Section 13 Guide',
   description:
-    'See what changes when a tenant challenges a rent increase and when landlords should move from the free checker into the stronger Section 13 Defence route.',
+    'See what changes when a tenant pushes back on a rent increase and when landlords should move from the free checker into the stronger Section 13 Defence route.',
   alternates: { canonical: canonicalUrl },
 };
 
 export default function TenantChallengePage() {
   return (
     <RentCheckerSeoPage
-      eyebrow="Tenant challenge"
-      title="What should a landlord do when a tenant challenges the rent increase?"
-      intro="Once challenge pressure is already visible, the job changes. The question is no longer just whether the increase can be served, but whether the file is ready to be defended with the same clarity."
+      eyebrow="Tenant pushback"
+      title="What should a landlord do when the tenant pushes back on the rent increase?"
+      intro="If the tenant is already questioning the increase, treat that as a signal to check the figure and the evidence before the dispute hardens. The goal is to know whether the rent is the problem, or whether the file just needs stronger preparation."
       bullets={[
-        'Challenge pressure changes the route, not just the messaging.',
-        'Strong evidence can still point to a lower safer figure.',
-        'The Defence route is for pressure-tested files.',
-        'Use the checker to see whether the pricing itself is the problem.',
+        'Check whether the figure is too ambitious.',
+        'Keep the comparables and service record together.',
+        'Use Defence when pushback is already likely.',
+        'Avoid rebuilding the file after the argument starts.',
       ]}
       sections={[
         {
-          title: 'Find out whether the issue is pricing or preparation',
+          title: 'Work out what the pushback is really about',
           body: [
-            'A tenant challenge can come from different places. Sometimes the evidence is thin. Sometimes the dates or service plan are messy. Sometimes the evidence is strong but the proposed figure still sits too high against the market calculation.',
-            'The checker helps separate those problems before you invest in the next document step. That matters because the best response to a pricing problem is not always more paperwork.',
+            'A tenant can push back for different reasons. The evidence might be thin, the dates might be messy, or the proposed rent might simply sit too high compared with the strongest local listings.',
+            'The checker helps separate those problems before you pay for the next document step. That matters because a pricing problem usually needs a pricing decision, not just more paperwork.',
           ],
         },
         {
-          title: 'Why this usually points toward the Defence route',
+          title: 'When the Defence route becomes the better fit',
           body: [
-            'If the tenant is already pushing back, the landlord usually benefits from the stronger Section 13 Defence route because the pack is built to keep the response materials, argument structure, and supporting evidence coherent under pressure.',
-            'The checker and the Defence route work best together when the first tool answers where the figure sits and the second route answers how the file should be prepared if the dispute continues.',
+            'If pushback is already likely, the Defence route is often the more sensible paid step because it keeps the response materials, argument structure, and supporting evidence together from the start.',
+            'Used together, the checker answers where the figure sits and the Defence route helps prepare the file if the tenant keeps pressing the point.',
           ],
         },
       ]}
-      primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Check the challenge position first' }}
+      primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Check the rent position first' }}
       secondaryCta={{ href: '/products/section-13-defence', label: 'Open the Defence route' }}
       relatedLinks={[
         ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/tenant-challenge').slice(0, 5),

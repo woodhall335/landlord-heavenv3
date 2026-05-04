@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Section 21 Related FAQ Data
  *
  * FAQs for Section 21 notice, Form 6A, no-fault eviction, and UK eviction notice pages
@@ -9,7 +9,7 @@ import type { FAQItem } from '@/components/marketing/FAQSection';
 export const section21NoticeTemplateFAQs: FAQItem[] = [
   {
     question: 'How much notice do I need to give for a Section 21 eviction?',
-    answer: 'You must give at least 2 months notice. The notice cannot expire before the end of any fixed term, and for periodic tenancies, the expiry date should align with the last day of a rental period.',
+    answer: 'For new England private-rented cases after 1 May 2026, landlords can no longer serve a new Section 21 notice. Current possession planning should use the prescribed Form 3A / Section 8 route where a statutory ground applies.',
   },
   {
     question: 'Can I serve a Section 21 notice by email?',
@@ -25,18 +25,18 @@ export const section21NoticeTemplateFAQs: FAQItem[] = [
   },
   {
     question: 'Can I use Section 21 if my tenant has rent arrears?',
-    answer: 'Yes, Section 21 is a no-fault notice so you can use it regardless of whether the tenant owes rent. However, Section 8 may be faster if they owe 2+ months rent.',
+    answer: 'For new England private-rented cases after 1 May 2026, use the current Section 8 / Form 3A route. Ground 8 now needs 3 months rent arrears if rent is monthly, or 13 weeks if rent is weekly or fortnightly, at both notice and hearing stage.',
   },
   {
     question: 'Is Section 21 being abolished?',
-    answer: 'The Renters Reform Bill proposes to abolish Section 21 in England. As of January 2026, Section 21 remains available, but landlords should prepare for changes. Check our Section 21 abolition guide for updates.',
+    answer: 'Yes. Section 21 ended for new England private-rented cases on 1 May 2026. Landlords now need to use the current possession grounds route and the prescribed Form 3A notice.',
   },
 ];
 
 export const form6aFAQs: FAQItem[] = [
   {
     question: 'Where can I download Form 6A?',
-    answer: 'You can download the blank Form 6A from gov.uk, or use our free generator to create a pre-filled form with your details already completed and validated.',
+    answer: 'Form 6A is the old Section 21 form. For new England private-rented cases after 1 May 2026, landlords should not start a new possession plan with Form 6A. Use the current Form 3A / Section 8 route where a ground applies.',
   },
   {
     question: 'Can I use Form 6A in Wales?',
@@ -52,53 +52,53 @@ export const form6aFAQs: FAQItem[] = [
   },
   {
     question: 'Do I need to give a reason on Form 6A?',
-    answer: 'No. Form 6A is for no-fault possession under Section 21. You do not need to state any reason for wanting possession.',
+    answer: 'Form 6A was the no-fault Section 21 notice. For current new England cases, landlords need a Section 8 ground and should use Form 3A instead.',
   },
   {
     question: 'What do I do after serving Form 6A?',
-    answer: 'Keep proof of service (posting receipt, witness statement, or photos). Wait for the notice period to expire. If the tenant has not left, apply to court using Form N5B for accelerated possession.',
+    answer: 'If a historic Form 6A was served before the reforms, take case-specific advice on transitional validity. For new England private-rented cases after 1 May 2026, use the current Form 3A / Section 8 process and keep proof of service.',
   },
 ];
 
 export const noFaultEvictionFAQs: FAQItem[] = [
   {
     question: 'What is a no-fault eviction?',
-    answer: 'A no-fault eviction allows landlords to regain possession without proving the tenant did anything wrong. In England, this is done using Section 21 of the Housing Act 1988.',
+    answer: 'A no-fault eviction was the old Section 21 route that allowed possession without proving tenant fault. For new England private-rented cases after 1 May 2026, that route is no longer live and landlords must rely on statutory possession grounds.',
   },
   {
     question: 'Why would a landlord use no-fault eviction?',
-    answer: 'Common reasons include: selling the property, moving back in, major renovations, or simply ending the tenancy. You do not need to explain your reason to the tenant or court.',
+    answer: 'Landlords previously used Section 21 for sale, moving back in, renovation, or simply ending the tenancy. Current England rules now require landlords to rely on the updated possession grounds where those facts apply.',
   },
   {
     question: 'How long does a no-fault eviction take?',
-    answer: 'Typically 4-6 months: 2 months notice period, then 6-10 weeks for court proceedings (if undefended), plus 4-6 weeks for bailiff enforcement if the tenant does not leave voluntarily.',
+    answer: 'For new England private-rented cases, no-fault eviction is no longer the live route. Timelines now depend on the Section 8 ground, notice period, court listing times, and whether enforcement is needed.',
   },
   {
     question: 'Is no-fault eviction being banned?',
-    answer: 'The Renters Reform Bill proposes to abolish no-fault eviction (Section 21) in England. The timeline remains uncertain. Scotland abolished no-fault eviction in 2017, and Wales extended notice periods significantly.',
+    answer: 'Yes. Section 21 no-fault eviction ended for new England private-rented cases on 1 May 2026. Scotland and Wales already operate different systems with their own notices and grounds.',
   },
   {
     question: 'Can a tenant fight a no-fault eviction?',
-    answer: 'Tenants can challenge the validity of the notice (wrong form, insufficient notice, non-compliance with requirements) but cannot dispute the landlord decision to end the tenancy itself.',
+    answer: 'For current new England cases, the landlord must prove a statutory ground through the Section 8 route. Tenants can respond to the ground, the evidence, the notice dates, and the service method.',
   },
   {
     question: 'Do I need a reason for no-fault eviction?',
-    answer: 'No. That is why it is called "no-fault" — you do not need to prove any breach or give any reason. However, you must have complied with all legal requirements (deposit protection, gas safety, etc.).',
+    answer: 'For new England private-rented cases after 1 May 2026, landlords do need a statutory possession ground. The old no-fault Section 21 route is no longer the live new-case route.',
   },
 ];
 
 export const evictionNoticeUKFAQs: FAQItem[] = [
   {
     question: 'What types of eviction notice are there in the UK?',
-    answer: 'England uses Section 21 (no-fault) and Section 8 (fault-based). Wales uses RHW notices under the Renting Homes Act. Scotland uses Notice to Leave. Northern Ireland uses Notice to Quit. Each region has different rules and forms.',
+    answer: 'England now uses the current Section 8 / Form 3A possession route for new private-rented cases. Wales uses RHW notices under the Renting Homes Act. Scotland uses Notice to Leave. Northern Ireland uses Notice to Quit. Each region has different rules and forms.',
   },
   {
     question: 'Which eviction notice should I use?',
-    answer: 'It depends on your region and situation. In England, use Section 21 for no-fault evictions or Section 8 if the tenant has breached the tenancy. In Wales, Scotland, or NI, you must use region-specific notices.',
+    answer: 'It depends on your region and situation. In England after 1 May 2026, use the current Section 8 / Form 3A route where a statutory ground applies. In Wales, Scotland, or Northern Ireland, use the region-specific notice system.',
   },
   {
     question: 'How much notice do I need to give in each UK region?',
-    answer: 'England Section 21: 2 months. England Section 8: 2 weeks to 2 months. Wales: 6 months (no-fault). Scotland: 28-84 days depending on ground. Northern Ireland: 4-12 weeks depending on tenancy length.',
+    answer: 'England Section 8 notice periods now depend on the ground, for example 4 weeks for Grounds 8, 10, and 11, and immediate court application for Ground 14 subject to the 14-day order restriction. Wales, Scotland, and Northern Ireland have separate notice systems and time limits.',
   },
   {
     question: 'Can I use an English eviction notice in Scotland?',
@@ -106,7 +106,7 @@ export const evictionNoticeUKFAQs: FAQItem[] = [
   },
   {
     question: 'What is the fastest way to evict a tenant UK?',
-    answer: 'In England, Section 8 Ground 8 (2+ months rent arrears) with standard procedure, or Section 21 accelerated procedure (no hearing). In serious cases like antisocial behaviour, immediate notice may be possible.',
+    answer: 'In England, speed depends on the ground, evidence, and court listing times. Ground 14 can allow an immediate court application after notice, while Ground 8 now requires the 3-month or 13-week arrears threshold and 4 weeks notice.',
   },
   {
     question: 'Is a verbal eviction notice valid?',
@@ -117,11 +117,11 @@ export const evictionNoticeUKFAQs: FAQItem[] = [
 export const evictionNoticeTemplateFAQs: FAQItem[] = [
   {
     question: 'What is the difference between Section 21 and Section 8 notices?',
-    answer: 'Section 21 is a no-fault notice requiring 2 months notice with no reason needed. Section 8 requires you to prove grounds such as rent arrears or breach of tenancy, with notice periods varying from immediate to 2 months depending on the ground.',
+    answer: 'Section 21 was the old no-fault route. For new England private-rented cases after 1 May 2026, landlords use the current Section 8 / Form 3A route and must prove grounds such as arrears, breach, sale, occupation, or antisocial behaviour.',
   },
   {
     question: 'Do I need a solicitor to serve an eviction notice?',
-    answer: 'No, landlords can serve notices themselves. However, the notice must be on the correct prescribed form (Form 6A for Section 21, Form 3 for Section 8) and served correctly. Mistakes invalidate the notice.',
+    answer: 'No, landlords can serve notices themselves. However, the notice must be on the correct prescribed form, and for current England private-rented cases that usually means Form 3A for Section 8. Mistakes in grounds, dates, or service can undermine the claim.',
   },
   {
     question: 'How do I serve an eviction notice?',

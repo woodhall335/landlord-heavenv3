@@ -18,26 +18,26 @@ export default function Form4AEvidencePage() {
     <RentCheckerSeoPage
       eyebrow="Form 4A evidence"
       title="What evidence should a landlord check before serving Form 4A?"
-      intro="Form 4A is only part of the Section 13 job. The figure, the comparables, and the service record need to hold together as one file if you want the increase to read well under scrutiny."
+      intro="Before you serve Form 4A, make sure the rent figure and the evidence behind it are telling the same story. The form is much easier to stand behind when the number has been checked first."
       bullets={[
-        'Form 4A is stronger when the figure is settled first.',
-        'Comparables should support the chosen rent, not just decorate it.',
-        'Service planning matters before the notice is sent.',
-        'The checker helps decide whether to use Standard or Defence next.',
+        'Settle the rent figure before you generate the form.',
+        'Use comparables that genuinely support the rent.',
+        'Keep the service record lined up with the notice.',
+        'Use Standard or Defence based on the risk shown.',
       ]}
       sections={[
         {
-          title: 'A notice without a story is weaker than it looks',
+          title: 'The form is not the whole file',
           body: [
-            'Landlords sometimes treat Form 4A as the main event, but the form is only one part of the file. The more important question is whether the figure can be explained using current market evidence and then served cleanly without the supporting story changing afterwards.',
-            'That is why the checker sits naturally before the paid pack. It helps you test the number and the market position before you lock them into the final notice route.',
+            'Form 4A matters, but it does not make a weak figure stronger by itself. If the tenant asks why the rent is going up, the answer has to come from the comparables and the way the file has been put together.',
+            'That is why the checker belongs before the paid pack. It helps you test the number and the market position before those details are locked into the final notice.',
           ],
         },
         {
-          title: 'Use the checker to settle the evidence before service',
+          title: 'Check the evidence before service',
           body: [
-            'The best use of the free tool is to decide whether the proposed figure belongs in the supportable range, whether challenge risk is already visible, and whether the case still looks like a Standard route or a Defence route.',
-            'That makes the paid pack a cleaner follow-on step because the evidence decision has already happened before the form is generated.',
+            'Use the free tool to see whether the proposed figure is in the supportable range and whether challenge risk is already visible.',
+            'Then the paid pack becomes a cleaner follow-on step: Standard if the file is straightforward, Defence if the rent or the likely response needs more preparation.',
           ],
         },
       ]}

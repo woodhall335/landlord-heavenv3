@@ -18,26 +18,26 @@ export default function HowMuchCanIIncreaseRentPage() {
     <RentCheckerSeoPage
       eyebrow="Landlord guide"
       title="How much can I increase rent in England before it becomes harder to defend?"
-      intro="There is no useful commercial answer to that question without looking at the market evidence. A landlord can usually increase rent further than is comfortable to defend, which is exactly why the checker exists."
+      intro="The useful answer is not just the biggest increase you can ask for. It is the increase you can explain with local evidence if the tenant questions it."
       bullets={[
-        'The legally possible figure is not always the commercially supportable figure.',
-        'Comparable evidence matters more than optimism.',
-        'Higher pricing can still be high-risk even with strong evidence.',
-        'The safer range is often nearer the market median than the top advert.',
+        'The biggest possible figure is not always the safest figure.',
+        'Comparable evidence matters more than hope.',
+        'A high rent can still be risky even with decent evidence.',
+        'The safer figure is often closer to the market median.',
       ]}
       sections={[
         {
-          title: 'The question is really about supportability',
+          title: 'Start with what you could justify',
           body: [
-            'Most landlords do not need a lecture on whether a rent increase is possible in theory. They need to know whether the proposed figure still looks supportable once the local market, the dates, and the risk of challenge are all looked at together.',
-            'That is why the strongest answer is evidence-led rather than absolute. A proposed rent can look fine in one cluster of comparables and too ambitious in another.',
+            'Most landlords are not looking for a theory lesson. They want to know whether the proposed rent still looks reasonable once the local market, the property details, and the chance of pushback are put together.',
+            'That is why the checker starts with comparable evidence. A figure can look fine in one set of listings and too ambitious in another, even in the same wider area.',
           ],
         },
         {
-          title: 'Why the supportable range matters',
+          title: 'Use the range before you pick the pack',
           body: [
-            'A supportable range helps you see where the stronger evidence currently points instead of anchoring on the highest listing in the area. That protects both the quality of the notice and the quality of the story behind it if the tenant questions the figure.',
-            'The checker turns that into a practical next step by showing the range, the evidence strength, and the route that fits the case before you generate the paid paperwork.',
+            'The supportable range helps you avoid anchoring on the highest advert you can find. It shows where the stronger evidence points now, which is the figure you may need to explain later.',
+            'Once you have that range, the next step is clearer: Standard when the increase is straightforward, Defence when the figure or the tenant response makes the case more exposed.',
           ],
         },
       ]}

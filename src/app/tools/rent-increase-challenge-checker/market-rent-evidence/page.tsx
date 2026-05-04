@@ -18,7 +18,7 @@ export default function MarketRentEvidencePage() {
     <RentCheckerSeoPage
       eyebrow="Market-rent evidence"
       title="How to judge market-rent evidence before a Section 13 rent increase"
-      intro="Most weak Section 13 files are not weak because the landlord forgot the form. They are weak because the figure was chosen before the comparables were read properly."
+      intro="The figure matters more than the form at the start. Before you serve Form 4A, check whether the comparables actually support the rent you want to charge."
       bullets={[
         'Look for the supportable cluster, not the highest advert.',
         'Fresh comparables matter more than random old listings.',
@@ -27,17 +27,17 @@ export default function MarketRentEvidencePage() {
       ]}
       sections={[
         {
-          title: 'Do not treat every nearby advert as equal',
+          title: 'Not every nearby advert carries the same weight',
           body: [
-            'Comparable evidence is not just a pile of listings. Some comparables genuinely support the market calculation, some only give context, and some are too stale or too mismatched to carry real weight. Landlords lose trust in the result when all of those listings are shown as though they mean the same thing.',
-            'That is why the checker now separates comparables used in the market calculation from context-only or excluded listings. It lets landlords see the real calculation basis instead of guessing why the median looks different from the noisiest listing on the page.',
+            'Some listings genuinely support the market calculation. Others are useful context. Some are too old, too different, or too extreme to carry much weight.',
+            'The checker separates those groups so you can see which comparables actually affected the median and which ones were shown for context only.',
           ],
         },
         {
-          title: 'Supportable does not mean maximum',
+          title: 'Supportable is not the same as maximum',
           body: [
-            'A supportable figure is not always the highest figure you can find in the area. It is the figure you can explain calmly using the best available comparables, the freshest evidence, and a clean story about why the property belongs in that part of the range.',
-            'If the strongest comparables point closer to the lower or middle part of the range, the commercially safer answer may be to serve a lower increase and keep the file cleaner rather than squeezing for the top end and inviting challenge.',
+            'A supportable rent is not always the highest advert you can find nearby. It is the figure you can explain calmly using the best available comparables.',
+            'If the strongest listings point closer to the middle of the range, the more sensible move may be to serve a lower increase and keep the file cleaner.',
           ],
         },
       ]}

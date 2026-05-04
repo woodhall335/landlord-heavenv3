@@ -36,7 +36,7 @@ export const tenantNotPayingRentFAQs: FAQItem[] = [
 export const tenantWontLeaveFAQs: FAQItem[] = [
   {
     question: 'What can I do if my tenant refuses to leave after the notice expires?',
-    answer: 'You must apply to the court for a possession order. Complete Form N5B (Section 21 accelerated) or Form N5 (Section 8/standard). The court will issue an order requiring the tenant to leave by a specific date.',
+    answer: 'You must apply to the court for a possession order. For new England private-rented cases after 1 May 2026, this usually means the current Section 8 / Form 3A route followed by a standard possession claim using Form N5 and the supporting particulars. The court will issue an order requiring the tenant to leave by a specific date if the claim succeeds.',
   },
   {
     question: 'Can I change the locks if my tenant will not leave?',
@@ -59,15 +59,15 @@ export const tenantWontLeaveFAQs: FAQItem[] = [
 export const howToEvictTenantFAQs: FAQItem[] = [
   {
     question: 'How do I legally evict a tenant in the UK?',
-    answer: 'You must: (1) serve the correct notice (Section 21 or Section 8 in England), (2) wait for the notice period to expire, (3) apply to court for a possession order, (4) if tenant does not leave, apply for a warrant of possession, (5) bailiffs execute the eviction. You cannot evict without a court order.',
+    answer: 'You must: (1) serve the correct legal notice for the jurisdiction and grounds, (2) wait for the required notice period where one applies, (3) apply to court for a possession order, (4) if the tenant does not leave, apply for a warrant of possession, and (5) use bailiffs for enforcement. In England private renting after 1 May 2026, new landlord claims generally rely on the current Section 8 / Form 3A route rather than Section 21.',
   },
   {
     question: 'How long does the eviction process take UK?',
-    answer: 'Typically 4-8 months from serving notice to bailiff eviction. Section 21 accelerated procedure (no hearing) can be faster if undefended. Court delays vary significantly by region.',
+    answer: 'Typically 4-8 months from serving notice to bailiff eviction, depending on the ground, evidence, court listing times, and whether the tenant defends the claim. Section 8 claims usually need a hearing, so a clean notice, arrears schedule, service proof, and witness evidence matter.',
   },
   {
     question: 'How much does it cost to evict a tenant UK?',
-    answer: 'Court fees are approximately £355 for accelerated possession (Section 21) or £355 for standard possession. Bailiff fees are around £130. Solicitor costs, if used, range from £500-3000 depending on complexity.',
+    answer: 'Court and enforcement fees change over time, but landlords should budget for the possession claim issue fee, possible bailiff or High Court enforcement fees, and any solicitor or document-preparation costs. Section 8 cases can cost more if evidence is weak or the hearing becomes contested.',
   },
   {
     question: 'Can I evict a tenant without going to court?',
@@ -109,5 +109,3 @@ export const tenantDamagingPropertyFAQs: FAQItem[] = [
     answer: 'Only if the property is returned significantly dirtier than at the start. Normal cleaning between tenancies is the landlord cost. Deductions for cleaning must be reasonable and evidenced.',
   },
 ];
-
-

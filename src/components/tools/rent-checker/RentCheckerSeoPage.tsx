@@ -60,7 +60,7 @@ export function RentCheckerSeoPage(props: RentCheckerSeoPageProps) {
 
               <aside className="rounded-[28px] border border-slate-200 bg-slate-50 p-6">
                 <h2 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
-                  What This Page Helps With
+                  Use This Page To
                 </h2>
                 <ul className="mt-5 space-y-3">
                   {bullets.map((bullet) => (
@@ -93,8 +93,8 @@ export function RentCheckerSeoPage(props: RentCheckerSeoPageProps) {
               <div className="rounded-[28px] border border-violet-200 bg-violet-50 p-6 shadow-sm">
                 <h2 className="text-xl font-semibold text-slate-950">Use the checker first</h2>
                 <p className="mt-3 text-sm leading-7 text-slate-600">
-                  The fastest way to turn this guidance into action is to run the free checker, see the supportable range,
-                  and decide whether the Standard or Defence route fits the case.
+                  Run the free checker before you pick a paid pack. It shows the supportable range, the evidence strength,
+                  and whether this looks like a Standard or Defence case.
                 </p>
                 <Link
                   href={primaryCta.href}
@@ -105,7 +105,7 @@ export function RentCheckerSeoPage(props: RentCheckerSeoPageProps) {
               </div>
 
               <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-950">Related landlord routes</h2>
+                <h2 className="text-xl font-semibold text-slate-950">Useful next reads</h2>
                 <ul className="mt-4 space-y-3">
                   {relatedLinks.map((link) => (
                     <li key={link.href}>

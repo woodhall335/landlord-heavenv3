@@ -208,7 +208,7 @@ export default function Section8NoticeTemplatePage() {
                 <a href="#what-a-valid-section-8-should-include" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">What a valid notice should include</a>
                 <a href="#common-grounds" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Common grounds</a>
                 <a href="#how-service-works" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">How service works</a>
-                <a href="#section-8-vs-section-21" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Section 8 vs Section 21</a>
+                  <a href="#section-8-vs-section-21" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Section 8 after Section 21</a>
                 <a href="#timeline-costs-evidence" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Timeline, costs, evidence</a>
                 <a href="#notice-only-vs-complete-pack" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Notice Only vs Complete Pack</a>
                 <a href="#final-cta" className="rounded-lg border border-[#E6DBFF] px-4 py-3 text-primary hover:bg-[#F8F4FF]">Next steps</a>
@@ -460,7 +460,7 @@ export default function Section8NoticeTemplatePage() {
                       <PoundSterling className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                       <div>
                         <span className="font-medium text-gray-900">Ground 8</span>
-                        <p className="text-sm text-gray-600">2+ months rent arrears threshold route</p>
+                        <p className="text-sm text-gray-600">3 months rent, or 13 weeks if paid weekly or fortnightly</p>
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
@@ -601,8 +601,8 @@ export default function Section8NoticeTemplatePage() {
                 <div className="bg-white rounded-xl p-6 border border-gray-200">
                   <h3 className="font-semibold text-gray-900 mb-3">Notice period</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>Shorter notice periods can apply for some arrears or conduct-based cases.</li>
-                    <li>Other grounds can run longer depending on the route used.</li>
+                    <li>Arrears grounds 8, 10, and 11 now require 4 weeks in England.</li>
+                    <li>Ground 14 can move straight to court, but the court cannot make the possession order for 14 days from notice.</li>
                     <li>Dates must match the actual grounds selected.</li>
                     <li>Typical possession timelines often extend well beyond notice expiry.</li>
                   </ul>
@@ -642,7 +642,7 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">
-                Section 8 vs Section 21: which should you use?
+                Section 8 after Section 21: what should landlords use?
               </h2>
               <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
                 The key difference is that Section 8 is grounds-based. That usually makes it more
@@ -662,7 +662,7 @@ export default function Section8NoticeTemplatePage() {
                     <tr>
                       <td className="p-4 text-gray-700">Reason required?</td>
                       <td className="p-4 text-center text-gray-700">Yes - grounds must be stated</td>
-                      <td className="p-4 text-center text-gray-700">No-fault logic where available</td>
+                      <td className="p-4 text-center text-gray-700">No longer the live route for new England private-rented cases</td>
                     </tr>
                     <tr>
                       <td className="p-4 text-gray-700">Evidence focus</td>
@@ -681,12 +681,12 @@ export default function Section8NoticeTemplatePage() {
                     <tr>
                       <td className="p-4 text-gray-700">Court hearing required?</td>
                       <td className="p-4 text-center text-gray-700">Usually yes</td>
-                      <td className="p-4 text-center text-gray-700">Often cleaner route where valid</td>
+                      <td className="p-4 text-center text-gray-700">Old accelerated route is not the live new-case route</td>
                     </tr>
                     <tr>
                       <td className="p-4 text-gray-700">Best for</td>
                       <td className="p-4 text-center text-gray-700">Arrears, breach, conduct cases</td>
-                      <td className="p-4 text-center text-gray-700">No-fault possession logic</td>
+                      <td className="p-4 text-center text-gray-700">Historic no-fault possession logic</td>
                     </tr>
                   </tbody>
                 </table>
@@ -928,12 +928,12 @@ export default function Section8NoticeTemplatePage() {
                 schedules, communication history, and service evidence.
               </p>
 
-              <h2>Section 8 vs Section 21</h2>
+              <h2>Section 8 after Section 21</h2>
               <p>
-                Section 8 is grounds-based and depends on proving specific statutory grounds, while
-                Section 21 has been used as a no-fault route where available. Section 8 usually
-                involves more evidence work, which is why many live landlord cases are better
-                handled through a guided notice workflow rather than a template alone.
+                Section 8 is grounds-based and depends on proving specific statutory grounds. For new
+                England private-rented cases after 1 May 2026, Section 21 is no longer the live route,
+                so landlords need a guided notice workflow that keeps the grounds, evidence, and service
+                record consistent.
               </p>
 
               <h3>How to Serve a Section 8 Notice</h3>
@@ -951,10 +951,10 @@ export default function Section8NoticeTemplatePage() {
                   <tr><th>Point</th><th>Section 8</th><th>Section 21</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>Basis</td><td>Grounds-based</td><td>No-fault route</td></tr>
+                  <tr><td>Basis</td><td>Grounds-based</td><td>Historic no-fault route</td></tr>
                   <tr><td>Form</td><td>Form 3</td><td>Form 6A</td></tr>
                   <tr><td>Evidence focus</td><td>Proof of ground</td><td>Compliance and service validity</td></tr>
-                  <tr><td>Best fit</td><td>Arrears, breach, conduct</td><td>No-fault possession logic</td></tr>
+                  <tr><td>Best fit</td><td>Arrears, breach, conduct</td><td>Not the live route for new England private-rented cases</td></tr>
                 </tbody>
               </table>
 

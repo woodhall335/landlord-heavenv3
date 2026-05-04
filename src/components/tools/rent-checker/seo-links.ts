@@ -27,7 +27,7 @@ export const rentCheckerSeoLinks: RentCheckerSeoLink[] = [
   },
   {
     href: '/tools/rent-increase-challenge-checker/tenant-challenge',
-    label: 'When a tenant challenges the rent',
+    label: 'When the tenant pushes back',
   },
   {
     href: '/tools/rent-increase-challenge-checker/section-13-notice-route',

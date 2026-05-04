@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Eviction Process FAQ Data
  *
  * FAQs for eviction process pages (England, Scotland, Wales),
@@ -17,17 +17,17 @@ export const evictionProcessEnglandFAQs: FAQItem[] = [
   {
     question: 'How long does the eviction process take in England?',
     answer:
-      'The eviction process in England typically takes 4-8 months from serving notice to bailiff enforcement. Section 21 accelerated procedure (no hearing) can be faster at 3-5 months if undefended. Court delays vary significantly by region and time of year.',
+      'The eviction process in England typically takes 4-8 months from serving notice to bailiff enforcement. Since 1 May 2026, new private-rented cases rely on the current grounds-based route rather than Section 21, so evidence quality and court listing times matter. Court delays vary significantly by region and time of year.',
   },
   {
     question: 'What is the difference between Section 21 and Section 8 eviction?',
     answer:
-      'Section 21 is a no-fault eviction requiring 2 months notice with no reason needed. Section 8 requires specific grounds (like rent arrears or breach) with variable notice periods. Section 21 uses accelerated procedure (paper-based), while Section 8 requires a court hearing.',
+      'Section 21 was the old no-fault route, but it is no longer the live route for new England private-rented cases after 1 May 2026. Section 8 / Form 3A requires specific grounds, the correct notice period, and evidence that proves the case at court.',
   },
   {
     question: 'How much does it cost to evict a tenant in England?',
     answer:
-      `Court fees are approximately £355 for possession claims. Bailiff fees for warrant of possession are around £130. If using a solicitor, expect £500-3000 depending on complexity. Our Complete Eviction Pack provides all documents you need for ${PRODUCTS.complete_pack.displayPrice}.`,
+      `Court fees are approximately Â£355 for possession claims. Bailiff fees for warrant of possession are around Â£130. If using a solicitor, expect Â£500-3000 depending on complexity. Our Complete Eviction Pack provides all documents you need for ${PRODUCTS.complete_pack.displayPrice}.`,
   },
   {
     question: 'Can I evict a tenant without going to court in England?',
@@ -143,7 +143,7 @@ export const possessionOrderFAQs: FAQItem[] = [
   {
     question: 'How much does a possession order cost?',
     answer:
-      'The court fee for both accelerated (N5B) and standard (N5) possession claims is currently £355. If you need a hearing, there are no additional court fees. Bailiff enforcement (warrant of possession) costs around £130.',
+      'The court fee for both accelerated (N5B) and standard (N5) possession claims is currently Â£355. If you need a hearing, there are no additional court fees. Bailiff enforcement (warrant of possession) costs around Â£130.',
   },
   {
     question: 'What is the difference between accelerated and standard possession?',
@@ -200,7 +200,7 @@ export const scotlandEvictionFAQs: FAQItem[] = [
   {
     question: 'How do I recover rent arrears in Scotland?',
     answer:
-      'For claims under £5,000, use the Sheriff Court Simple Procedure. For claims between £5,000 and £100,000, use Ordinary Cause. Note that the Money Claim Pack is for England only. Scotland has different court processes and forms.',
+      'For claims under Â£5,000, use the Sheriff Court Simple Procedure. For claims between Â£5,000 and Â£100,000, use Ordinary Cause. Note that the Money Claim Pack is for England only. Scotland has different court processes and forms.',
   },
 ];
 
@@ -237,7 +237,7 @@ export const walesEvictionFAQs: FAQItem[] = [
   {
     question: 'Can I recover rent arrears in Wales?',
     answer:
-      'Yes, rent recovery in Wales uses the County Court (same as England). You can claim through Money Claim Online (MCOL) for claims under £100,000. Note that our Money Claim Pack is currently for England only.',
+      'Yes, rent recovery in Wales uses the County Court (same as England). You can claim through Money Claim Online (MCOL) for claims under Â£100,000. Note that our Money Claim Pack is currently for England only.',
   },
 ];
 
@@ -249,7 +249,7 @@ export const claimRentArrearsFAQs: FAQItem[] = [
   {
     question: 'How do I claim unpaid rent from a tenant?',
     answer:
-      'Send a Letter Before Action giving 30 days to pay. If unpaid, file a claim through Money Claim Online (MCOL) for claims under £100,000. You will need the tenancy agreement, rent statements, and evidence of the debt.',
+      'Send a Letter Before Action giving 30 days to pay. If unpaid, file a claim through Money Claim Online (MCOL) for claims under Â£100,000. You will need the tenancy agreement, rent statements, and evidence of the debt.',
   },
   {
     question: 'Can I claim rent arrears after the tenant leaves?',
@@ -264,7 +264,7 @@ export const claimRentArrearsFAQs: FAQItem[] = [
   {
     question: 'How much does a money claim cost?',
     answer:
-      'Court fees depend on the claim amount: £35 for claims up to £300, £70 for £300-500, £105 for £500-1,000, £185 for £1,000-1,500, and percentage-based for higher amounts. Fees are up to £455 for claims to £10,000.',
+      'Court fees depend on the claim amount: Â£35 for claims up to Â£300, Â£70 for Â£300-500, Â£105 for Â£500-1,000, Â£185 for Â£1,000-1,500, and percentage-based for higher amounts. Fees are up to Â£455 for claims to Â£10,000.',
   },
   {
     question: 'Can I add interest to my money claim?',
@@ -274,7 +274,7 @@ export const claimRentArrearsFAQs: FAQItem[] = [
   {
     question: 'What if the tenant defends the claim?',
     answer:
-      'If the tenant files a defence, the case is allocated to a track (small claims under £10,000). You may need to attend a hearing. Prepare evidence: tenancy agreement, rent schedule, payment records, and correspondence.',
+      'If the tenant files a defence, the case is allocated to a track (small claims under Â£10,000). You may need to attend a hearing. Prepare evidence: tenancy agreement, rent schedule, payment records, and correspondence.',
   },
   {
     question: 'Can I claim from a guarantor?',
@@ -321,7 +321,7 @@ export const section8VsSection21FAQs: FAQItem[] = [
   {
     question: 'Which notice is cheaper to enforce?',
     answer:
-      'Court fees are the same (£355) for both. However, Section 21 accelerated procedure is simpler and rarely requires a solicitor. Section 8 hearings may benefit from legal representation, adding to costs.',
+      'For current England private-rented cases, focus less on comparing Section 21 costs and more on building a clean Section 8 / Form 3A file. Weak evidence, wrong dates, or a contested hearing can add more cost than the notice choice itself.',
   },
   {
     question: 'What if my Section 21 notice is invalid?',

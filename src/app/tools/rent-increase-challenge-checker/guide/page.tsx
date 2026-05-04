@@ -18,7 +18,7 @@ export default function RentCheckerGuidePage() {
     <RentCheckerSeoPage
       eyebrow="Section 13 tool guide"
       title="How to use the Rent Increase & Challenge Checker before you serve Form 4A"
-      intro="This landlord guide explains how to use the checker properly, what the market-rent result actually tells you, and when to move from the free result into the Standard or Defence Section 13 route."
+      intro="Use the checker when you know you want to increase rent, but you still need to know whether the figure is supportable and which Section 13 pack fits the risk."
       bullets={[
         'Use live local comparables before you serve anything.',
         'Read challenge risk separately from evidence strength.',
@@ -27,24 +27,24 @@ export default function RentCheckerGuidePage() {
       ]}
       sections={[
         {
-          title: 'Start with the real question',
+          title: 'Start with the decision in front of you',
           body: [
-            'The free checker is not there to replace judgment. It is there to stop landlords serving a rent increase before the figure, the evidence, and the challenge risk are clear enough to explain with confidence.',
-            'That matters because a Section 13 file can look tidy on the surface while still being weak underneath. A neat form does not fix a poor figure, stale evidence, or a story that changes once the tenant pushes back.',
+            'Before you serve Form 4A, you need to know whether the proposed rent is a sensible figure to stand behind. The checker gives you that first read before you commit to the paperwork.',
+            'That matters because a Section 13 file can look tidy on the surface while still being weak underneath. A clean form does not fix a poor figure, stale evidence, or a story that changes once the tenant pushes back.',
           ],
         },
         {
-          title: 'What the result should tell you',
+          title: 'Read the result like a landlord decision',
           body: [
-            'A useful result should answer three things quickly: where the current or proposed rent sits against the local market, how strong the evidence looks, and what route makes sense next. Those are different questions and landlords make better decisions when they are kept separate.',
-            'If the evidence is strong but the proposed figure sits high, the problem is not weak preparation. The problem is that the figure may be too ambitious for the market calculation. That distinction is exactly why the checker now separates evidence strength from challenge risk.',
+            'The useful result answers three questions quickly: where the rent sits against the local market, how strong the evidence looks, and what you should do next.',
+            'If the evidence is strong but the proposed figure sits high, the issue is not weak preparation. The issue may be that the figure is too ambitious for the current market calculation.',
           ],
         },
         {
-          title: 'When to move into the paid route',
+          title: 'Move into the right paid route',
           body: [
-            'Use the Standard Section 13 route when the figure looks supportable and you want the notice, the summary, and the service record to stay aligned. Use the Defence route when the increase may still be arguable but the tenant is likely to test it, question it, or push the matter toward tribunal.',
-            'The checker is most valuable when it shortens the gap between reading and action. Once the supportable range is clear, the next move should be a product route that matches the real risk instead of forcing every landlord through the same generic workflow.',
+            'Use the Standard Section 13 route when the figure looks supportable and you want the notice, rent summary, and service record aligned. Use Defence when the rent may still be arguable but the tenant is likely to test it.',
+            'That is the point of the free tool: it turns research into a practical next step instead of leaving you with a pile of guidance and no clear route.',
           ],
         },
       ]}

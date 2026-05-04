@@ -18,7 +18,7 @@ export default function Section13NoticeRoutePage() {
     <RentCheckerSeoPage
       eyebrow="Section 13 notice route"
       title="When to move from the free rent check into the Standard Section 13 notice route"
-      intro="The best time to generate the formal Section 13 notice pack is after the supportable range, the dates, and the service plan make sense together, not before."
+      intro="Generate the formal Section 13 notice pack once the rent figure, evidence, and service plan make sense together. The checker helps you get to that point before the form is created."
       bullets={[
         'Use the checker before you generate Form 4A.',
         'Move into Standard when the increase is supportable.',
@@ -27,17 +27,17 @@ export default function Section13NoticeRoutePage() {
       ]}
       sections={[
         {
-          title: 'What the Standard route is really for',
+          title: 'Use Standard when the increase looks straightforward',
           body: [
-            'The Standard Section 13 route is not just there to produce a form. Its real job is to keep the notice, the market justification, and the service record telling the same story before the increase is served.',
-            'That is why the checker matters commercially. It helps the landlord settle the figure first, so the paid route becomes a cleaner move from supported decision to supported notice rather than a paperwork exercise based on guesswork.',
+            'The Standard Section 13 pack is for landlords who have a supportable figure and want the notice, market justification, and service record to stay aligned.',
+            'Run the checker first, settle the figure, then generate the pack once the evidence and the proposed rent are pointing in the same direction.',
           ],
         },
         {
-          title: 'Why landlords should not jump straight to service',
+          title: 'Do not rush the notice if the figure is still uncertain',
           body: [
-            'A rushed notice can create its own problems. If the figure is still moving, the comparables have not been reviewed, or the challenge risk is already obvious, the landlord can end up serving a notice that later needs to be defended from a weaker position than necessary.',
-            'The stronger pattern is simple: run the checker, read the supportable range, decide whether the case is standard or challenge-heavy, and then choose the product route that fits that reality.',
+            'If the rent is still moving, the comparables have not been reviewed, or challenge risk is already obvious, serving the notice can put you on the back foot.',
+            'The cleaner pattern is simple: run the checker, read the supportable range, decide whether the case is Standard or Defence, and then generate the pack that fits.',
           ],
         },
       ]}

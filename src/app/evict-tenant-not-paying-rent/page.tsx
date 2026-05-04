@@ -71,7 +71,7 @@ const faqs: FAQItem[] = [
   {
     question: 'Can I use Section 21 instead?',
     answer:
-      'Sometimes yes, depending on the tenancy and compliance position. Section 21 is a no-fault route, while Section 8 is a breach-based route. The right choice depends on the facts and the strength of the file.',
+      'For new England private-rented cases after 1 May 2026, Section 21 is no longer the live route. Use the current Section 8 / Form 3A process and choose the arrears grounds that match the facts and evidence.',
   },
   {
     question: 'What evidence matters most in a rent arrears eviction case?',
