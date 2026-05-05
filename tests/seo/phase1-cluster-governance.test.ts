@@ -75,19 +75,14 @@ describe('Phase 1 cluster governance', () => {
 
   it('does not shadow retained live support pages behind retirement redirects', async () => {
     const activeSweepRoutes = [
-      '/section-21-notice-period',
-      '/serve-section-21-notice',
-      '/section-21-notice-template',
-      '/form-6a-section-21',
-      '/section-21-validity-checklist',
-      '/section-21-expired-what-next',
-      '/tenant-ignores-section-21',
-      '/what-happens-after-section-21',
-      '/section-8-vs-section-21',
-      '/accelerated-possession-guide',
-      '/n5b-possession-claim-guide',
       '/no-fault-eviction',
       '/section-8-rent-arrears-eviction',
+      '/eviction-process-uk',
+      '/how-to-evict-a-tenant-uk',
+      '/renters-rights-act-eviction-rules',
+      '/renters-rights-bill-tenancy-agreement',
+      '/tenancy-agreements/england',
+      '/tools/rent-increase-challenge-checker/guide',
     ];
 
     const redirects = await getRedirects();
@@ -122,19 +117,24 @@ describe('Phase 1 cluster governance', () => {
         '/student-tenancy-agreement',
         '/hmo-shared-house-tenancy-agreement',
         '/lodger-agreement',
-        '/form-6a-section-21',
-        '/section-21-notice-template',
-        '/section-21-validity-checklist',
-        '/section-21-expired-what-next',
-        '/section-21-notice-period',
-        '/serve-section-21-notice',
-        '/tenant-ignores-section-21',
-        '/what-happens-after-section-21',
-        '/section-8-vs-section-21',
-        '/accelerated-possession-guide',
-        '/n5b-possession-claim-guide',
         '/no-fault-eviction',
         '/section-8-rent-arrears-eviction',
+        '/eviction-cost-uk',
+        '/eviction-process-uk',
+        '/eviction-timeline-uk',
+        '/how-to-evict-a-tenant-uk',
+        '/refunds',
+        '/renters-rights-act-eviction-rules',
+        '/renters-rights-bill-tenancy-agreement',
+        '/tenancy-agreements/england',
+        '/tools/rent-increase-challenge-checker/challenge-risk',
+        '/tools/rent-increase-challenge-checker/form-4a-evidence',
+        '/tools/rent-increase-challenge-checker/guide',
+        '/tools/rent-increase-challenge-checker/how-much-can-i-increase-rent',
+        '/tools/rent-increase-challenge-checker/market-rent-evidence',
+        '/tools/rent-increase-challenge-checker/section-13-notice-route',
+        '/tools/rent-increase-challenge-checker/section-13-rent-increase-calculator',
+        '/tools/rent-increase-challenge-checker/tenant-challenge',
       ])
     );
 
@@ -151,6 +151,17 @@ describe('Phase 1 cluster governance', () => {
         '/lodger-agreement-template',
         '/hmo-tenancy-agreement-template',
         '/rent-increase/rent-increase-rules-uk',
+        '/section-21-notice-period',
+        '/serve-section-21-notice',
+        '/section-21-notice-template',
+        '/form-6a-section-21',
+        '/section-21-validity-checklist',
+        '/section-21-expired-what-next',
+        '/tenant-ignores-section-21',
+        '/what-happens-after-section-21',
+        '/section-8-vs-section-21',
+        '/accelerated-possession-guide',
+        '/n5b-possession-claim-guide',
       ])
     );
   });
@@ -193,10 +204,10 @@ describe('Phase 1 cluster governance', () => {
       })
     );
 
-    expect(getSeoPageTaxonomy('/form-6a-section-21')).toEqual(
+    expect(getSeoPageTaxonomy('/section-21-notice')).toEqual(
       expect.objectContaining({
-        canonicalTarget: '/form-6a-section-21',
-        consolidationStatus: 'bridge_live',
+        canonicalTarget: '/section-21-notice',
+        consolidationStatus: 'canonical',
       })
     );
 

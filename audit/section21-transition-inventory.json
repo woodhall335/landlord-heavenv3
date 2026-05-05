@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-15T10:56:26.379Z",
-  "scannedFiles": 2397,
+  "generatedAt": "2026-05-05T15:06:42.113Z",
+  "scannedFiles": 2612,
   "updatedPages": [
     "/form-3-section-8",
     "/section-8-notice",
@@ -18,32 +18,32 @@
     },
     {
       "slug": "section-8-notice",
-      "visibleWordCount": 1930,
+      "visibleWordCount": 1846,
       "passes": true
     },
     {
       "slug": "renters-rights-act-eviction-rules",
-      "visibleWordCount": 1873,
+      "visibleWordCount": 1871,
       "passes": true
     },
     {
       "slug": "eviction-notice-england",
-      "visibleWordCount": 1738,
+      "visibleWordCount": 1735,
       "passes": true
     },
     {
       "slug": "how-to-evict-a-tenant-england",
-      "visibleWordCount": 1703,
+      "visibleWordCount": 1702,
       "passes": true
     },
     {
       "slug": "eviction-process-england",
-      "visibleWordCount": 1585,
+      "visibleWordCount": 1584,
       "passes": true
     },
     {
       "slug": "eviction-notice-template",
-      "visibleWordCount": 1627,
+      "visibleWordCount": 1625,
       "passes": true
     }
   ],
@@ -69,6 +69,22 @@
       "line": 255,
       "term": "s21",
       "snippet": "\"slug\": \"defended-possession-claim-s8-s21\",",
+      "classification": "internal_compatibility",
+      "reason": "Non-owner source retained as internal compatibility or backlog content outside the public allowlist scan."
+    },
+    {
+      "file": "artifacts/post-2026-pack-audit/wizard-question-audit-2026-04-21.md",
+      "line": 18,
+      "term": "Section 21",
+      "snippet": "- `Complete Pack`: strong after the England Section 21 cleanup, but evidence collection is still too loose for a premium court-ready promise.",
+      "classification": "internal_compatibility",
+      "reason": "Non-owner source retained as internal compatibility or backlog content outside the public allowlist scan."
+    },
+    {
+      "file": "artifacts/post-2026-pack-audit/wizard-question-audit-2026-04-21.md",
+      "line": 50,
+      "term": "Section 21",
+      "snippet": "- The product boundary is now clean: no live England `Section 21`, no `N5`, no `N119`, no `PCOL` framing in Notice Only.",
       "classification": "internal_compatibility",
       "reason": "Non-owner source retained as internal compatibility or backlog content outside the public allowlist scan."
     },
@@ -138,7 +154,7 @@
     },
     {
       "file": "audit/orphan-whitelist.json",
-      "line": 169,
+      "line": 175,
       "term": "N5B",
       "snippet": "\"public/official-forms/n5b-eng.pdf\",",
       "classification": "test_or_audit",
@@ -4031,22 +4047,6 @@
       "snippet": "\"snippet\": \"\\\"term\\\": \\\"N5B\\\",\",",
       "classification": "approved_transition_hub",
       "reason": "Legacy terms are allowed on the four approved transition hubs only."
-    },
-    {
-      "file": "audit/section21-transition-inventory.json",
-      "line": 1998,
-      "term": "N5B",
-      "snippet": "\"term\": \"N5B\",",
-      "classification": "approved_transition_hub",
-      "reason": "Legacy terms are allowed on the four approved transition hubs only."
-    },
-    {
-      "file": "audit/section21-transition-inventory.json",
-      "line": 1999,
-      "term": "N5B",
-      "snippet": "\"snippet\": \"\\\"snippet\\\": \\\"\\\\\\\"snippet\\\\\\\": \\\\\\\"\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"snippet\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"officialForms\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\": \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"public/official-forms/n5-eng.pdf; public/official-forms/n119-eng.pdf; public/official-forms/n5b-eng.pdf\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\",\\\\\\\",\\\",\",",
-      "classification": "approved_transition_hub",
-      "reason": "Legacy terms are allowed on the four approved transition hubs only."
     }
   ],
   "legacyReferencesRemovedOrRetired": [
@@ -4177,6 +4177,54 @@
     {
       "source": "/n5b-possession-claim-guide",
       "destination": "/n5-n119-possession-claim"
+    },
+    {
+      "source": "/wales-eviction-notice-template",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/scotland-notice-to-leave-template",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/wales-eviction-notices",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/scotland-eviction-notices",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/eviction-process-wales",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/eviction-process-scotland",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/wales-tenancy-agreement-template",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/occupation-contract-template-wales",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/private-residential-tenancy-agreement-template",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/northern-ireland-tenancy-agreement-template",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/notice-to-quit-northern-ireland-guide",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/ni-tenancy-agreement-template-free",
+      "destination": "/products/ast"
     },
     {
       "source": "/blog/renters-reform-bill-what-landlords-need-to-know",
@@ -4333,6 +4381,54 @@
       "destination": "/n5-n119-possession-claim"
     },
     {
+      "source": "/wales-eviction-notice-template",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/scotland-notice-to-leave-template",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/wales-eviction-notices",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/scotland-eviction-notices",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/eviction-process-wales",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/eviction-process-scotland",
+      "destination": "/products/notice-only"
+    },
+    {
+      "source": "/wales-tenancy-agreement-template",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/occupation-contract-template-wales",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/private-residential-tenancy-agreement-template",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/northern-ireland-tenancy-agreement-template",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/notice-to-quit-northern-ireland-guide",
+      "destination": "/products/ast"
+    },
+    {
+      "source": "/ni-tenancy-agreement-template-free",
+      "destination": "/products/ast"
+    },
+    {
       "source": "/blog/renters-reform-bill-what-landlords-need-to-know",
       "destination": "/renters-rights-act-eviction-rules"
     },
@@ -4360,18 +4456,18 @@
   "itemsNeedingLegalReview": [],
   "form3TerminologyViolations": [],
   "summary": {
-    "totalLegacyMatches": 8911,
+    "totalLegacyMatches": 8768,
     "activeViolations": 0,
     "form3Violations": 0,
     "wordCountFailures": 0,
     "classificationCounts": {
-      "internal_compatibility": 3276,
-      "test_or_audit": 3177,
+      "internal_compatibility": 3161,
+      "test_or_audit": 3181,
       "approved_transition_hub": 1188,
       "approved_redirect_metadata": 3,
-      "inactive_retired_runtime_support": 4,
-      "deprecated_historical": 1239,
-      "devolved_historical_note": 24
+      "inactive_retired_runtime_support": 6,
+      "deprecated_historical": 1217,
+      "devolved_historical_note": 12
     }
   }
 }

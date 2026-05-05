@@ -94,6 +94,30 @@ describe('Sitemap Route Existence', () => {
     );
   });
 
+  it('includes the requested live self-canonical pages from the sitemap audit', () => {
+    expect(sitemapPaths).toEqual(
+      expect.arrayContaining([
+        '/common-prt-tenancy-mistakes-scotland',
+        '/eviction-cost-uk',
+        '/eviction-process-uk',
+        '/eviction-timeline-uk',
+        '/how-to-evict-a-tenant-uk',
+        '/refunds',
+        '/renters-rights-act-eviction-rules',
+        '/renters-rights-bill-tenancy-agreement',
+        '/tenancy-agreements/england',
+        '/tools/rent-increase-challenge-checker/challenge-risk',
+        '/tools/rent-increase-challenge-checker/form-4a-evidence',
+        '/tools/rent-increase-challenge-checker/guide',
+        '/tools/rent-increase-challenge-checker/how-much-can-i-increase-rent',
+        '/tools/rent-increase-challenge-checker/market-rent-evidence',
+        '/tools/rent-increase-challenge-checker/section-13-notice-route',
+        '/tools/rent-increase-challenge-checker/section-13-rent-increase-calculator',
+        '/tools/rent-increase-challenge-checker/tenant-challenge',
+      ])
+    );
+  });
+
   it('includes blog topic hubs and indexed landlord posts', () => {
     expect(sitemapPaths).toEqual(
       expect.arrayContaining([

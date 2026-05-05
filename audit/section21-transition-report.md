@@ -1,10 +1,10 @@
 # Section 21 Transition Audit
 
-Generated: 2026-04-15T10:56:26.379Z
+Generated: 2026-05-05T15:06:42.113Z
 
 ## Summary
-- Files scanned: 2397
-- Legacy-term matches: 8911
+- Files scanned: 2612
+- Legacy-term matches: 8768
 - Active current-facing violations: 0
 - Form 3 terminology violations: 0
 - Marketing pages below 1200 words: 0
@@ -20,12 +20,12 @@ Generated: 2026-04-15T10:56:26.379Z
 
 ## Marketing Word Counts
 - form-3-section-8: 2083 words
-- section-8-notice: 1930 words
-- renters-rights-act-eviction-rules: 1873 words
-- eviction-notice-england: 1738 words
-- how-to-evict-a-tenant-england: 1703 words
-- eviction-process-england: 1585 words
-- eviction-notice-template: 1627 words
+- section-8-notice: 1846 words
+- renters-rights-act-eviction-rules: 1871 words
+- eviction-notice-england: 1735 words
+- how-to-evict-a-tenant-england: 1702 words
+- eviction-process-england: 1584 words
+- eviction-notice-template: 1625 words
 
 ## Redirects Applied
 - /guarantor-agreement-england -> /tenancy-agreement-template
@@ -60,6 +60,18 @@ Generated: 2026-04-15T10:56:26.379Z
 - /n5b-form-guide -> /n5-n119-possession-claim
 - /n5b-possession-claim-form -> /n5-n119-possession-claim
 - /n5b-possession-claim-guide -> /n5-n119-possession-claim
+- /wales-eviction-notice-template -> /products/notice-only
+- /scotland-notice-to-leave-template -> /products/notice-only
+- /wales-eviction-notices -> /products/notice-only
+- /scotland-eviction-notices -> /products/notice-only
+- /eviction-process-wales -> /products/notice-only
+- /eviction-process-scotland -> /products/notice-only
+- /wales-tenancy-agreement-template -> /products/ast
+- /occupation-contract-template-wales -> /products/ast
+- /private-residential-tenancy-agreement-template -> /products/ast
+- /northern-ireland-tenancy-agreement-template -> /products/ast
+- /notice-to-quit-northern-ireland-guide -> /products/ast
+- /ni-tenancy-agreement-template-free -> /products/ast
 - /blog/renters-reform-bill-what-landlords-need-to-know -> /renters-rights-act-eviction-rules
 - /blog/what-is-section-21-notice -> /section-21-notice
 - /blog/section-21-vs-section-8 -> /section-21-vs-section-8
@@ -71,6 +83,8 @@ Generated: 2026-04-15T10:56:26.379Z
 - .github/PULL_REQUEST_TEMPLATE/validation-legal-critical.md:19 | Section 21 | internal_compatibility
 - artifacts/ask-heaven-indexability-audit.json:59 | N5B | internal_compatibility
 - artifacts/ask-heaven-indexability-audit.json:255 | s21 | internal_compatibility
+- artifacts/post-2026-pack-audit/wizard-question-audit-2026-04-21.md:18 | Section 21 | internal_compatibility
+- artifacts/post-2026-pack-audit/wizard-question-audit-2026-04-21.md:50 | Section 21 | internal_compatibility
 - audit/legal-validity-audit-v2.1.json:113 | N5B | test_or_audit
 - audit/legal-validity-audit-v2.1.json:352 | N5B | test_or_audit
 - audit/legal-validity-audit-v2.1.json:357 | N5B | test_or_audit
@@ -79,7 +93,7 @@ Generated: 2026-04-15T10:56:26.379Z
 - audit/legal-validity-audit-v2.1.md:16 | N5B | test_or_audit
 - audit/legal-validity-audit-v2.1.md:57 | N5B | test_or_audit
 - audit/legal-validity-audit-v2.1.md:59 | N5B | test_or_audit
-- audit/orphan-whitelist.json:169 | N5B | test_or_audit
+- audit/orphan-whitelist.json:175 | N5B | test_or_audit
 - audit/section21-transition-inventory.json:54 | Section 21 | approved_transition_hub
 - audit/section21-transition-inventory.json:55 | Section 21 | approved_transition_hub
 - audit/section21-transition-inventory.json:62 | N5B | approved_transition_hub
@@ -126,8 +140,6 @@ Generated: 2026-04-15T10:56:26.379Z
 - audit/section21-transition-inventory.json:223 | N5B | approved_transition_hub
 - audit/section21-transition-inventory.json:230 | N5B | approved_transition_hub
 - audit/section21-transition-inventory.json:231 | N5B | approved_transition_hub
-- audit/section21-transition-inventory.json:238 | N5B | approved_transition_hub
-- audit/section21-transition-inventory.json:239 | N5B | approved_transition_hub
 
 ## Items Needing Legal Review
 - None

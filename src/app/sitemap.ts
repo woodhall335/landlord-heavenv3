@@ -63,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Explicit legacy routes that have been retired and should never reappear in sitemap.
   // These have previously generated 404 coverage issues in Google Search Console.
-  const retiredPaths = new Set([
+  const legacyRetiredPaths = new Set([
     '/tools/validators/money-claim',
     '/tools/validators/scotland-notice-to-leave',
     '/tools/validators/tenancy-agreement',
@@ -107,7 +107,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/ast-tenancy-agreement-template',
     '/$',
     ...RETIRED_PUBLIC_ROUTES,
-    ...phase3SitemapExclusions,
   ]);
 
   // Core marketing pages - dynamic pages get stable date, legal pages omit lastModified
@@ -154,6 +153,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/rent-increase/market-rent-calculation', priority: 0.88, changeFrequency: 'weekly' as const },
     { path: '/rent-increase/rent-increase-challenge', priority: 0.88, changeFrequency: 'weekly' as const },
   ];
+
+  const requestedIndexablePages = [
+    { path: '/common-prt-tenancy-mistakes-scotland', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/eviction-cost-uk', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/eviction-process-uk', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/eviction-timeline-uk', priority: 0.85, changeFrequency: 'weekly' as const },
+    { path: '/how-to-evict-a-tenant-uk', priority: 0.95, changeFrequency: 'weekly' as const },
+    { path: '/refunds', priority: 0.3, changeFrequency: 'yearly' as const },
+    { path: '/renters-rights-act-eviction-rules', priority: 0.82, changeFrequency: 'weekly' as const },
+    { path: '/renters-rights-bill-tenancy-agreement', priority: 0.82, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreements/england', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-increase-challenge-checker/challenge-risk', priority: 0.76, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-increase-challenge-checker/form-4a-evidence', priority: 0.76, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-increase-challenge-checker/guide', priority: 0.76, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-increase-challenge-checker/how-much-can-i-increase-rent', priority: 0.76, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-increase-challenge-checker/market-rent-evidence', priority: 0.76, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-increase-challenge-checker/section-13-notice-route', priority: 0.76, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-increase-challenge-checker/section-13-rent-increase-calculator', priority: 0.76, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-increase-challenge-checker/tenant-challenge', priority: 0.76, changeFrequency: 'weekly' as const },
+  ];
+  const requestedIndexablePagePaths = new Set(requestedIndexablePages.map((page) => page.path));
 
   // Tenancy agreement pages - individual jurisdiction pages
   const tenancyPages: { path: string; priority: number; changeFrequency: 'weekly' }[] = [];
@@ -381,6 +401,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...productPages,
     ...wizardLandingPages,
     ...rentIncreasePages,
+    ...requestedIndexablePages,
     ...tenancyPages,
     ...landingPages,
     ...extraIndexablePages,
@@ -395,26 +416,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/tenancy-agreement-template-uk',
     '/wales-eviction-notices',
     '/scotland-eviction-notices',
-    '/refunds',
   ];
-  const englandOnlyDiscoveryExclusions = new Set<string>([
-    '/how-to-evict-a-tenant-uk',
-    '/eviction-process-uk',
-    '/eviction-cost-uk',
-    '/eviction-timeline-uk',
-  ]);
 
   // Keep intentional static exclusions here for any indexable route we explicitly want omitted.
   const intentionalStaticRouteExclusions = new Set<string>(sitemapAllowlist.intentionallyExcludedRoutes);
 
-  const isIndexablePath = (path: string) =>
-    !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
-    !isNonEnglandPublicDiscoveryPath(path) &&
-    !noindexPaths.includes(path) &&
-    !englandOnlyDiscoveryExclusions.has(path) &&
-    !retiredPaths.has(path) &&
-    !isRetiredPublicRoute(path) &&
-    !intentionalStaticRouteExclusions.has(path);
+  const isIndexablePath = (path: string) => {
+    const isExplicitlyRequested = requestedIndexablePagePaths.has(path);
+
+    return (
+      !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
+      !legacyRetiredPaths.has(path) &&
+      !isRetiredPublicRoute(path) &&
+      (isExplicitlyRequested ||
+        (!isNonEnglandPublicDiscoveryPath(path) &&
+          !noindexPaths.includes(path) &&
+          !phase3SitemapExclusions.has(path) &&
+          !intentionalStaticRouteExclusions.has(path)))
+    );
+  };
 
   // Build sitemap entries
   const marketingEntries = marketingPages.map((page) => {
