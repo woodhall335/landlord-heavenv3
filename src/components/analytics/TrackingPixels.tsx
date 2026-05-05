@@ -19,10 +19,25 @@
 
 import Script from 'next/script';
 
+function cleanTrackingId(value: string | undefined, pattern: RegExp): string | undefined {
+  const id = value?.trim();
+  if (!id || id.includes('XXXX')) return undefined;
+  return pattern.test(id) ? id : undefined;
+}
+
+function cleanFacebookPixelId(value: string | undefined): string | undefined {
+  const id = value?.trim();
+  if (!id || id === '123456789012345') return undefined;
+  return /^\d+$/.test(id) ? id : undefined;
+}
+
 export function TrackingPixels() {
-  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-  const fbPixelId = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
-  const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
+  const gaMeasurementId = cleanTrackingId(
+    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+    /^G-[A-Z0-9]+$/
+  );
+  const fbPixelId = cleanFacebookPixelId(process.env.NEXT_PUBLIC_FB_PIXEL_ID);
+  const googleAdsId = cleanTrackingId(process.env.NEXT_PUBLIC_GOOGLE_ADS_ID, /^AW-\d+$/);
 
   // Don't render if no tracking IDs configured
   if (!gaMeasurementId && !fbPixelId && !googleAdsId) return null;

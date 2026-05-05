@@ -57,4 +57,18 @@ describe('TrackingPixels', () => {
       'https://www.facebook.com/tr?id=1234567890&amp;ev=PageView&amp;noscript=1'
     );
   });
+
+  it('omits placeholder tracking IDs from production markup', () => {
+    vi.stubEnv('NEXT_PUBLIC_GA_MEASUREMENT_ID', 'G-XXXXXXXXX');
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_ADS_ID', 'AW-XXXXXXXXX');
+    vi.stubEnv('NEXT_PUBLIC_FB_PIXEL_ID', '123456789012345');
+
+    const markup = renderToStaticMarkup(<TrackingPixels />);
+
+    expect(markup).not.toContain('G-XXXXXXXXX');
+    expect(markup).not.toContain('AW-XXXXXXXXX');
+    expect(markup).not.toContain('123456789012345');
+    expect(markup).not.toContain('googletagmanager.com/gtag/js');
+    expect(markup).not.toContain('connect.facebook.net/en_US/fbevents.js');
+  });
 });
