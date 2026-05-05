@@ -1866,22 +1866,28 @@ function extractGroundCodes(section8Grounds: unknown): Array<number | string> {
       ? [section8Grounds]
       : [];
 
-  return values
-    .map((ground) => {
-      if (typeof ground === 'number') return ground;
-      const raw =
-        typeof ground === 'object' && ground
-          ? (ground as Record<string, any>).code ??
-            (ground as Record<string, any>).number ??
-            (ground as Record<string, any>).value ??
-            (ground as Record<string, any>).label
-          : ground;
-      if (raw === null || raw === undefined) return null;
-      const normalized = normalizeEnglandGroundCode(raw);
-      if (!normalized) return null;
-      return /^\d+$/.test(normalized) ? Number.parseInt(normalized, 10) : normalized;
-    })
-    .filter((code): code is number | string => code !== null && !(typeof code === 'number' && Number.isNaN(code)));
+  return values.reduce<Array<number | string>>((codes, ground) => {
+    if (typeof ground === 'number') {
+      if (!Number.isNaN(ground)) codes.push(ground);
+      return codes;
+    }
+
+    const raw =
+      typeof ground === 'object' && ground
+        ? (ground as Record<string, any>).code ??
+          (ground as Record<string, any>).number ??
+          (ground as Record<string, any>).value ??
+          (ground as Record<string, any>).label
+        : ground;
+
+    if (typeof raw !== 'string' && typeof raw !== 'number') return codes;
+
+    const normalized = normalizeEnglandGroundCode(raw);
+    if (!normalized) return codes;
+
+    codes.push(/^\d+$/.test(normalized) ? Number.parseInt(normalized, 10) : normalized);
+    return codes;
+  }, []);
 }
 
 export interface GroundClaim {
