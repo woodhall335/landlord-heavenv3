@@ -24,13 +24,13 @@ describe('Phase 1 commercial positioning', () => {
     const completePackSource = readSource('src/app/(marketing)/products/complete-pack/page.tsx');
     const rentIncreaseHubSource = readSource('src/app/rent-increase/page.tsx');
 
-    expect(noticeSource).toContain('start correctly before court');
-    expect(noticeSource).toContain('the next practical step is serving notice');
-    expect(noticeSource).toContain('serve-first route');
+    expect(noticeSource).toContain('serve before court');
+    expect(noticeSource).toContain('need to serve the Section 8 notice first');
+    expect(noticeSource).toContain('notice-and-service file');
 
-    expect(completePackSource).toContain('includes Stage 1 notice and Stage 2 court paperwork together');
-    expect(completePackSource).toContain('The Complete Pack already includes the full Stage 1 Section 8 notice and service file');
-    expect(completePackSource).toContain('N5, N119, witness statement, and court bundle support added from the start');
+    expect(completePackSource).toContain('notice and court paperwork together');
+    expect(completePackSource).toContain('The Complete Pack already includes the Stage 1 notice and service file');
+    expect(completePackSource).toContain('N5, N119, witness statement, and court bundle support');
 
     expect(rentIncreaseHubSource).toContain("reviewPillLayout: 'stacked'");
   });
@@ -41,7 +41,7 @@ describe('Phase 1 commercial positioning', () => {
     expect(source).toContain('Start a landlord money claim pack');
     expect(source).toContain('Sample pack proof');
     expect(source).not.toContain('What is included in the Money Claim Pack');
-    expect(source).toContain('Choose this pack when the next job is recovering money');
+    expect(source).toContain('Choose this pack when the job is recovering money');
   });
 
   it('removes England-default routing to old notice aliases and regional tenancy aliases from high-prominence surfaces', () => {

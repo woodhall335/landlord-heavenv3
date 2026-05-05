@@ -45,7 +45,7 @@ export default function Section13StandardProductPage() {
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
       secondaryCta: { label: 'Check the supportable range first', href: '/tools/rent-increase-challenge-checker' },
       feature:
-        'Built for landlords who want the notice, the evidence, and the service record to stay clear and consistent from the start.',
+        'Built for landlords who want the notice, evidence, and service record to stay clear from the start.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 rent increase documents',
       showReviewPill: true,
@@ -56,42 +56,42 @@ export default function Section13StandardProductPage() {
           {config.heroBullets.map((bullet) => (
             <li key={bullet}>{bullet}</li>
           ))}
-          <li>Need to test the figure first? Run the free rent checker before you open the paid pack.</li>
+          <li>Need to test the figure first? Run the free rent checker before opening the paid pack.</li>
         </ul>
       ),
     },
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'This is the right fit when you want to propose the rent increase properly, show the tenant how you reached the figure, and inspect the actual notice pack before you pay.',
+        'This is the right fit when you want to propose a rent increase, explain the figure, and inspect the notice pack before you pay.',
       includedBullets: [
-        'Official Form 4A notice prepared for the current England position',
-        'Comparable-listing evidence and justification report prepared together',
-        'Service record and tenant-facing communication kept aligned with the notice',
+        'Official Form 4A notice prepared for England',
+        'Comparable evidence and justification report prepared together',
+        'Service record and tenant cover letter kept with the notice',
       ],
       bestFor:
-        'You want a supportable Section 13 rent increase pack, but you do not yet need the fuller challenge-ready tribunal materials.',
+        'You want a supportable Section 13 rent increase pack and do not yet need tribunal-focused materials.',
       notFor:
-        'You already expect strong pushback or want the more defensive tribunal-facing pack from the start.',
+        'You already expect strong pushback or want the fuller challenge-ready pack from the start.',
       preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
     decisionBlock: {
-      title: 'Choose the Standard Section 13 option if you want to serve the increase properly now',
+      title: 'Choose Standard if you need to serve the rent increase now',
       intro:
-        'This pack is for landlords whose main goal is to set the new rent figure more carefully, support it with market evidence, and keep the notice and service record clean before the file hardens into a dispute.',
+        'This pack is for landlords who need to set a new rent figure, support it with market evidence, and keep the notice and service record clear.',
       cards: [
         {
           eyebrow: 'Choose this option',
           title: 'Propose the rent increase with a clear, evidence-backed pack',
           body:
-            'Use the Standard pack when you want Form 4A, comparable evidence, a justification report, and the service record working together so the increase reads as a reasoned landlord decision rather than a bare notice.',
+            'Use the Standard pack when you want Form 4A, comparable evidence, a short report, and proof of service working together.',
           tone: 'positive',
         },
         {
           eyebrow: 'Choose the other option',
-          title: 'Do not stop here if you already expect a challenge or tribunal scrutiny',
+          title: 'Choose Defence if a challenge is likely',
           body:
-            'If the tenant is likely to contest the increase or you want a stronger response-and-bundle layer from the outset, the Challenge-Ready Section 13 Defence Pack is the better fit.',
+            'If the tenant is likely to challenge the increase, the Challenge-Ready Section 13 Defence Pack is the better fit.',
           tone: 'warning',
         },
       ],
@@ -102,25 +102,25 @@ export default function Section13StandardProductPage() {
       },
     },
     whatYouGet: {
-      title: 'What you get in the standard rent increase file',
+      title: 'What you get in the standard rent increase pack',
       intro: config.packIntro,
       items: config.packBreakdown,
     },
     comparisonBlock: {
       title: 'Standard and defence solve different Section 13 jobs',
       intro:
-        'The key choice is whether you are mainly serving and evidencing the increase now, or whether you already want the more defensive challenge and tribunal materials built in from the start.',
+        'The key choice is whether you need to serve and explain the increase now, or whether you already need challenge and tribunal materials.',
       routeCards: [
         {
           name: 'Standard Section 13 Rent Increase Pack',
           whatItIs:
-            'Best when you want to propose the rent increase properly with Form 4A, market evidence, and a clean service record.',
+            'Best when you want to propose the increase with Form 4A, market evidence, and a clean service record.',
           problemItSolves:
-            'Stops the increase looking arbitrary or procedurally weak before the tenant has even seen the evidence.',
+            'Stops the increase looking unsupported before the tenant sees the evidence.',
           riskIfWrong:
-            'If a serious challenge is already likely, you may still need a stronger tribunal-facing file afterwards.',
+            'If a serious challenge is already likely, you may still need the stronger defence pack afterwards.',
           landlordOutcome:
-            'Lets you serve the increase more cleanly now and keep the evidence together from the outset.',
+            'Lets you serve the increase cleanly now and keep the evidence together.',
           href: '/products/section-13-standard',
           ctaLabel: 'This is my option',
           priceLabel: product.displayPrice,
@@ -130,13 +130,13 @@ export default function Section13StandardProductPage() {
         {
           name: 'Challenge-Ready Section 13 Defence Pack',
           whatItIs:
-            'Best when you want the fuller response, bundle, and tribunal-preparation materials as well as the core notice pack.',
+            'Best when you want response, bundle, and tribunal-preparation materials as well as the notice pack.',
           problemItSolves:
             'Prevents the rent increase pack from being rebuilt later when the tenant challenges the figure or the service.',
           riskIfWrong:
-            'If you only need to serve and explain the increase now, the defence route can be more than you need at this stage.',
+            'If you only need to serve and explain the increase now, the defence route may be more than you need.',
           landlordOutcome:
-            'Gives you the stronger challenge-ready pack from day one if pushback is already in view.',
+            'Gives you the stronger challenge-ready pack if pushback is already in view.',
           href: '/products/section-13-defence',
           ctaLabel: 'Compare the defence route',
           imageSrc: '/images/wizard-icons/41-rent.png',
@@ -147,29 +147,29 @@ export default function Section13StandardProductPage() {
     objectionBlock: {
       title: 'Common landlord questions before choosing the standard option',
       intro:
-        'The preview shows the real pack you are paying for. These are the questions landlords usually want answered before choosing the standard Section 13 pack.',
+        'These are the questions landlords usually ask before choosing the standard Section 13 pack.',
       items: [
         {
           question: 'Does this include the official Form 4A notice?',
           answer:
-            'Yes. The pack generates the current England Form 4A notice together with the market evidence, explanation materials, and service record that support it.',
+            'Yes. The pack generates the current England Form 4A notice with the market evidence, explanation materials, and service record that support it.',
         },
         {
           question: 'Is this enough if the tenant simply asks why the rent is going up?',
           answer:
-            'Usually yes. This pack is built for that exact situation: a clean notice, live comparables, a justification report, and a clearer landlord explanation of the proposed figure.',
+            'Usually yes. This pack gives you a clean notice, comparables, a short report, and a clearer explanation of the proposed figure.',
         },
         {
           question: 'What if the tenant is likely to challenge the increase formally?',
           answer:
-            'If challenge risk is already active, the defence pack is usually the better route because it adds the fuller challenge-response, tribunal-bundle, and preparation layer from the start.',
+            'If challenge risk is already active, the defence pack is usually better because it adds response materials, a tribunal bundle, and preparation support.',
         },
       ],
     },
     midPageCta: {
-      title: 'Ready to propose the increase with a cleaner pack?',
+      title: 'Ready to propose the increase?',
       body:
-        'Start here if you want more than a blank Form 4A and need the notice, comparables, and service record aligned before the tenant pushes back.',
+        'Start here if you want more than a blank Form 4A and need the notice, comparables, and service record aligned.',
       primary: { label: 'Start the standard rent increase wizard', href: product.wizardHref },
       secondary: {
         label: 'I need the challenge-ready defence route',

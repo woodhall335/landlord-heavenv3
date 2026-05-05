@@ -15,6 +15,28 @@ describe('pricing page product mapping', () => {
     expect(defenceCard?.href).toBe('/products/section-13-defence');
   });
 
+  it('keeps pricing cards in plain-English landlord wording', () => {
+    expect(PRICING_PACKAGE_CARDS).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          productSku: 'notice_only',
+          bestFor: expect.stringContaining('serve a Section 8 notice'),
+          points: expect.arrayContaining([
+            expect.stringContaining('notice, service steps, and key checks'),
+          ]),
+        }),
+        expect.objectContaining({
+          productSku: 'money_claim',
+          bestFor: expect.stringContaining('claim unpaid rent'),
+        }),
+        expect.objectContaining({
+          productSku: 'section13_standard',
+          bestFor: expect.stringContaining('Form 4A and clear evidence'),
+        }),
+      ])
+    );
+  });
+
   it('includes both Section 13 products in pricing structured data', () => {
     expect(PRICING_SCHEMA_ITEMS).toEqual(
       expect.arrayContaining([

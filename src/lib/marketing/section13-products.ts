@@ -42,7 +42,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   slug: 'section-13-standard',
   title: `Standard Section 13 Rent Increase Pack for England Landlords | ${PRODUCTS.section13_standard.displayPrice}`,
   description:
-    'Increase rent in England using Section 13 and Form 4A with market evidence, service records, and landlord-facing support in one pack.',
+    'Prepare an England Section 13 rent increase with Form 4A, market evidence, service records, and landlord support in one pack.',
   keywords: [
     'section 13 notice rent increase',
     'section 13 notice england',
@@ -52,55 +52,55 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   ],
   heroTitle: 'Standard Section 13 Rent Increase Pack for England landlords',
   heroSubtitle:
-    'Increase the rent with live comparable-listing evidence, timing checks, and supporting paperwork that still makes sense if the tenant asks why the figure has changed.',
+    'Propose a rent increase with Form 4A, timing checks, market evidence, and a clear explanation of the new figure.',
   productSku: 'section13_standard',
   ctaLabel: `Start Standard Section 13 Rent Increase Pack - ${PRODUCTS.section13_standard.displayPrice}`,
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
-    'Built for landlords who want more than a blank Form 4A: the notice, live comparable-listing evidence, and service record are kept together and make sense as one rent increase pack.',
+    'Built for landlords who want more than a blank Form 4A: the notice, market evidence, and service record stay together.',
     LANDLORD_GUIDANCE_DISCLAIMER,
   ],
   packIntro:
-    'This pack is for landlords who need more than a blank Form 4A. It helps you check live comparable rental listings, settle on a more supportable new rent, explain the increase properly, and reduce the risk of an avoidable challenge based on weak evidence.',
+    'This pack is for landlords who need more than a blank Form 4A. It helps you check comparable rents, choose a supportable figure, explain the increase, and keep the service record clear.',
   packBreakdown: [
     {
       name: 'Form 4A (Legal Rent Increase Notice)',
-      plainEnglish: 'The official statutory notice used to increase rent in England.',
+      plainEnglish: 'The official notice used to propose a rent increase in England.',
       function: 'Sets the proposed rent and the date it is meant to take effect.',
       riskIfMissing:
-        'If the notice is wrong or incomplete, the increase can be challenged, ignored, or delayed before the real issue is even discussed.',
+        'If the notice is wrong or incomplete, the increase can be challenged, ignored, or delayed.',
       landlordOutcome:
-        'Gives your rent increase a lawful starting point instead of leaving the change open to an easy procedural challenge.',
+        'Gives the rent increase the correct notice starting point.',
       includedByDefault: true,
     },
     {
       name: 'Rent Justification Report',
-      plainEnglish: 'A landlord-facing report explaining why the new rent figure is reasonable.',
-      function: 'Links the proposed increase to market evidence and your pricing rationale.',
+      plainEnglish: 'A report explaining why the new rent figure is reasonable.',
+      function: 'Links the proposed increase to market evidence and your reasons for the figure.',
       riskIfMissing:
-        'If the increase is served without a clear explanation behind it, the tenant has more room to say the figure was chosen arbitrarily.',
+        'If the increase is served without a clear explanation, the tenant has more room to say the figure was chosen without evidence.',
       landlordOutcome:
-        'Helps the paperwork read like a reasoned increase instead of a number dropped on the tenant without support.',
+        'Helps the paperwork show a reasoned increase instead of an unsupported number.',
       includedByDefault: true,
     },
     {
       name: 'Comparable Market Data',
-      plainEnglish: 'The local rental listings and market references used to support the proposed figure.',
+      plainEnglish: 'Local rental listings and market references used to support the proposed figure.',
       function: 'Shows how the rent compares with similar properties in the same area.',
       riskIfMissing:
         'If the comparables are weak, outdated, or absent, a challenged increase is much easier to reduce.',
       landlordOutcome:
-        'Gives you concrete evidence that the new figure still sits within a defensible local market range.',
+        'Gives you evidence that the new figure sits within a local market range you can explain.',
       includedByDefault: true,
     },
     {
       name: 'Cover Letter',
       plainEnglish: 'A plain-English letter that explains the increase to the tenant.',
-      function: 'Frames the notice as a documented, evidence-backed change rather than an abrupt demand.',
+      function: 'Explains the notice as a documented, evidence-backed change rather than an unexplained demand.',
       riskIfMissing:
-        'If the communication is poor, avoidable tenant pushback becomes more likely before they even look at the evidence.',
+        'If the communication is poor, avoidable pushback becomes more likely.',
       landlordOutcome:
-        'Improves the chance of the increase being understood and accepted without unnecessary conflict.',
+        'Gives the tenant a clearer explanation before the conversation becomes a dispute.',
       includedByDefault: true,
     },
     {
@@ -110,23 +110,23 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
       riskIfMissing:
         'If service is challenged and you cannot show what was done, the process can stall even when the rent figure itself is reasonable.',
       landlordOutcome:
-        'Protects the rent increase paperwork against avoidable procedural arguments about service.',
+        'Protects the rent increase from avoidable arguments about service.',
       includedByDefault: true,
     },
   ],
   whyYouNeedThis: {
     intro:
-      'Landlords do not lose time on rent increases only because the figure is too high. They lose time because the notice, the evidence, and the service record do not line up cleanly when the tenant pushes back.',
+      'Rent increases often go wrong because the notice, evidence, and service record do not line up when the tenant pushes back.',
     cards: [
       {
         title: 'A form alone does not justify the figure',
         body:
-          'Form 4A starts the process, but it does not explain why the rent should move to the number you want. The live comparables, justification report, and service record are what stop the increase looking arbitrary.',
+          'Form 4A starts the process, but it does not explain why the rent should change. Comparables, a short report, and a service record make the increase easier to justify.',
       },
       {
         title: 'Weak evidence gets challenged first',
         body:
-          'If the tenant asks how you arrived at the new rent, you need more than instinct or a rough comparison with another listing you saw last week. The pack pulls in real comparable listings and turns them into something you can actually rely on.',
+          'If the tenant asks how you chose the new rent, you need more than instinct or one rough comparison. The pack turns comparable listings into usable evidence.',
       },
       {
         title: 'Service errors can derail a sound increase',
@@ -137,33 +137,33 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   },
   howThisHelps: {
     intro:
-      'The pack is designed to make the increase easier to explain, easier to evidence, and harder to undermine if the tenant starts asking for detail.',
+      'The pack makes the increase easier to explain, easier to evidence, and harder to undermine if the tenant asks for detail.',
     cards: [
       {
         title: 'It helps you find a more supportable figure',
         body:
-          'The comparable-listings workflow is there to help you judge where the new rent should sit in the real local market, not just to fill space around the notice.',
+          'The comparable-listings workflow helps you judge where the new rent sits in the local market.',
       },
       {
         title: 'It makes the paperwork easier to trust',
         body:
-          'The notice, report, comparables, and service record all point in the same direction, which makes the increase feel planned rather than improvised.',
+          'The notice, report, comparables, and service record all point in the same direction.',
       },
       {
         title: 'It improves tenant communication',
         body:
-          'The cover letter and explanation report give you a calmer, clearer way to present the increase before the conversation turns into a dispute.',
+          'The cover letter and report give you a clearer way to explain the increase before it turns into a dispute.',
       },
       {
         title: 'It gives you a stronger position if challenged',
         body:
-          'If the tenant questions the rent, you already have the explanation and market evidence ready instead of trying to reconstruct it afterwards.',
+          'If the tenant questions the rent, you already have the explanation and market evidence ready.',
       },
     ],
   },
   howItWorks: {
     intro:
-      'The workflow keeps the notice and the supporting evidence together so the rent increase reads clearly from start to finish.',
+      'The workflow keeps the notice and evidence together so the rent increase reads clearly from start to finish.',
     steps: [
       {
         step: 'Step 01',
@@ -175,20 +175,20 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
         step: 'Step 02',
         title: 'Check live comparables and build the evidence',
         body:
-          'Scrape or import comparable local listings, keep the ones you want to rely on, and work through the service details so the notice and the rest of the pack read together cleanly.',
+          'Scrape or import local comparables, keep the ones you want to rely on, and add the service details.',
       },
       {
         step: 'Step 03',
         title: 'Generate the Standard Section 13 rent increase pack',
         body:
-          'Review the completed pack, then serve the notice with the supporting explanation and service record kept together.',
+          'Review the pack, then serve the notice with the explanation and service record kept together.',
       },
     ],
   },
   cta: {
     title: 'Increase the rent with a cleaner Section 13 pack',
     body:
-      'Start here if you want more than just Form 4A: the notice, the live market evidence, and the service record prepared together instead of piecing them together yourself.',
+      'Start here if you want Form 4A, market evidence, and the service record prepared together.',
     secondaryLabel: 'See the Challenge-Ready Section 13 Defence Pack',
     secondaryHref: '/products/section-13-defence',
   },
@@ -205,12 +205,12 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     {
       question: 'Why is the evidence pack included?',
       answer:
-        'Because the legal notice only starts the process. The evidence is what helps you explain the figure, show that it sits within a real market range, and defend it if the tenant questions the increase.',
+        'Because the notice only starts the process. The evidence helps you explain the figure, show the local market position, and respond if the tenant questions the increase.',
     },
     {
       question: 'Does this use real rental listings?',
       answer:
-        'Yes. The workflow is built to scrape or import comparable local rental listings so you can support the proposed figure with real market evidence rather than relying on guesswork alone.',
+        'Yes. The workflow can scrape or import comparable local rental listings so you can support the figure with real market evidence.',
     },
     {
       question: 'Does this replace legal advice?',
@@ -229,7 +229,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   slug: 'section-13-defence',
   title: `Challenge-Ready Section 13 Defence Pack for England Landlords | ${PRODUCTS.section13_defensive.displayPrice}`,
   description:
-    'Defend a Section 13 rent increase in England with a fuller tribunal-ready bundle, response templates, and market evidence built to stand up under challenge.',
+    'Prepare a challenged Section 13 rent increase in England with stronger evidence, response templates, and tribunal bundle support.',
   keywords: [
     'section 13 defence pack',
     'section 13 tribunal defence',
@@ -239,93 +239,93 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   ],
   heroTitle: 'Challenge-Ready Section 13 Defence Pack for England landlords',
   heroSubtitle:
-    'Defend the rent increase with a structured case pack built around live comparable-listing evidence, supportable pricing, and tribunal-ready organisation.',
+    'Prepare for a tenant challenge with market evidence, response materials, and a clearer tribunal-facing bundle.',
   productSku: 'section13_defensive',
   ctaLabel: `Start Challenge-Ready Section 13 Defence Pack - ${PRODUCTS.section13_defensive.displayPrice}`,
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
-    'Built for landlords who need the Section 13 paperwork to hold together under challenge, not just look fine on the day it is served. This is more than a Form 4A generator.',
+    'Built for landlords who need the Section 13 paperwork to stay clear if the tenant challenges the increase.',
     LANDLORD_GUIDANCE_DISCLAIMER,
   ],
   packIntro:
-    'This pack is for the harder Section 13 cases. It does not just help you serve the notice. It helps you use live comparable listings to support the rent level, organise the argument and evidence, and keep your response material clear when a challenge is active.',
+    'This pack is for harder Section 13 cases. It helps you support the rent level with comparables, organise the argument and evidence, and keep response material clear when a challenge is active.',
   packBreakdown: [
     {
       name: 'Full Tribunal Bundle (Indexed Exhibits)',
       plainEnglish: 'An organised hearing bundle with the core documents and exhibits indexed in one place.',
-      function: 'Puts the evidence into a judge-friendly order so the tribunal can follow the case without digging through loose documents.',
+      function: 'Puts the evidence in an order the tribunal can follow without digging through loose documents.',
       riskIfMissing:
-        'If the bundle is disorganised, even good evidence loses force because the paperwork feels harder to trust and harder to follow.',
+        'If the bundle is disorganised, good evidence is harder to trust and follow.',
       landlordOutcome:
-        'Helps you present the case as a professional, coherent bundle rather than a stack of unrelated documents.',
+        'Helps you present the case as a coherent bundle rather than a stack of unrelated documents.',
       includedByDefault: true,
     },
     {
       name: 'Tribunal Argument Summary',
-      plainEnglish: 'A concise written summary of why the proposed rent is reasonable.',
-      function: 'Draws the comparables, adjustments, and landlord position into a single argument the tribunal can understand quickly.',
+      plainEnglish: 'A short written summary of why the proposed rent is reasonable.',
+      function: 'Pulls the comparables, adjustments, and landlord position into one argument.',
       riskIfMissing:
-        'If the evidence is there but the argument is not, the tribunal has to do more of the work itself to understand your position.',
+        'If the evidence is there but the argument is unclear, the tribunal has to work harder to understand your position.',
       landlordOutcome:
         'Makes your case clearer from the start and helps the evidence land with more force.',
       includedByDefault: true,
     },
     {
       name: 'Justification Report (Comparables Analysis)',
-      plainEnglish: 'A fuller market-evidence report showing how the proposed rent compares locally.',
+      plainEnglish: 'A fuller market-evidence report showing how the proposed rent compares with local rents.',
       function: 'Anchors the new rent to real comparable properties and explains the adjustments behind the figure.',
       riskIfMissing:
         'If the comparables are weak or unsupported, the rent is easier to reduce when the tenant challenges it.',
       landlordOutcome:
-        'Gives your defence a factual backbone instead of relying on assertion alone.',
+        'Gives your defence a factual backbone instead of relying on assertion.',
       includedByDefault: true,
     },
     {
       name: 'Defence Guide',
       plainEnglish: 'A practical guide to presenting the rent increase case if the dispute reaches tribunal.',
-      function: 'Explains what to prepare, what to bring, and how to keep the hearing bundle in order.',
+      function: 'Explains what to prepare, what to bring, and how to keep the bundle in order.',
       riskIfMissing:
         'If you are unclear on how to present the case, good paperwork can still be undermined by a weak hearing approach.',
       landlordOutcome:
-        'Gives you more structure and confidence when the case moves beyond service into challenge territory.',
+        'Gives you more structure when the case moves beyond service into challenge territory.',
       includedByDefault: true,
     },
     {
       name: 'Landlord Response Template',
       plainEnglish: 'A structured reply you can use when the tenant raises objections.',
-      function: 'Keeps your response consistent with the notice and the evidence instead of turning into reactive back-and-forth.',
+      function: 'Keeps your response consistent with the notice and evidence.',
       riskIfMissing:
-        'If objections are answered casually or inconsistently, the tenant gets more room to say the position is unclear or shifting.',
+        'If objections are answered casually or inconsistently, the tenant has more room to say your position is unclear or changing.',
       landlordOutcome:
-        'Helps you answer challenges in a calmer and more disciplined way.',
+        'Helps you answer challenges in a calmer and more consistent way.',
       includedByDefault: true,
     },
     {
       name: 'Legal Briefing',
-      plainEnglish: 'A short briefing on the Section 13 legal test and what the tribunal will actually look at.',
+      plainEnglish: 'A short briefing on the Section 13 legal test and what the tribunal looks at.',
       function: 'Keeps your argument tied to the legal test instead of wandering into points that do not help the decision.',
       riskIfMissing:
-        'If you misunderstand the legal focus of the hearing, strong evidence can still be presented in the wrong way.',
+        'If you misunderstand the legal focus, strong evidence can still be presented in the wrong way.',
       landlordOutcome:
         'Keeps the defence aligned with the issues that actually matter in a Section 13 challenge.',
       includedByDefault: true,
     },
     {
       name: 'Evidence Checklist',
-      plainEnglish: 'A checklist showing which exhibits, comparables, and supporting records should be in place before the matter goes further.',
+      plainEnglish: 'A checklist of exhibits, comparables, and supporting records to prepare before the matter goes further.',
       function: 'Stops key exhibits or supporting records from being left out of the tribunal bundle.',
       riskIfMissing:
-        'If the bundle is incomplete, the strongest points can be weakened simply because an important exhibit was never included.',
+        'If the bundle is incomplete, strong points can be weakened because an important exhibit is missing.',
       landlordOutcome:
         'Helps you present a more complete and reliable case.',
       includedByDefault: true,
     },
     {
       name: 'Negotiation Email Template',
-      plainEnglish: 'A template for structured tenant communication before the matter hardens into a hearing.',
+      plainEnglish: 'A template for clear tenant communication before the matter hardens into a hearing.',
       function: 'Lets you set out the position clearly while still leaving room for a practical resolution.',
       riskIfMissing:
-        'If negotiation is poorly handled, the dispute can escalate faster than it needs to and the written record may not help you later.',
+        'If negotiation is poorly handled, the dispute can escalate faster and the written record may not help you later.',
       landlordOutcome:
         'Improves the chance of resolving the issue early while keeping the paper trail useful if you cannot.',
       includedByDefault: true,
@@ -333,17 +333,17 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   ],
   whyYouNeedThis: {
     intro:
-      'When challenge risk is active, the question stops being whether you can serve the notice. The real question becomes whether the whole pack still holds together when the tenant tests the figure.',
+      'When challenge risk is active, the issue is not just whether you can serve the notice. The issue is whether the whole file holds together when the tenant tests the figure.',
     cards: [
       {
         title: 'A challenged increase needs an argument, not just a form',
         body:
-          'The tribunal will care about the quality of the reasoning and the evidence behind the figure, not just whether a notice was served. Real comparables and clear adjustments matter.',
+          'The tribunal will care about the reasoning and evidence behind the figure, not just whether a notice was served.',
       },
       {
         title: 'Disorganised paperwork weakens good cases',
         body:
-          'If the evidence sits in different places and the explanations are inconsistent, the credibility of the case drops even before the substance is weighed.',
+          'If evidence sits in different places and explanations are inconsistent, the case is harder to trust.',
       },
       {
         title: 'Landlords often lose ground in the response stage',
@@ -354,58 +354,58 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   },
   howThisHelps: {
     intro:
-      'The Challenge-Ready Section 13 Defence Pack turns a served notice into a fuller landlord case that is easier to explain, easier to present, and harder to pick apart.',
+      'The Challenge-Ready Section 13 Defence Pack turns the notice into a fuller landlord file that is easier to explain and present.',
     cards: [
       {
         title: 'It helps you defend the rent level itself',
         body:
-          'The comparable-listings analysis is there to show why the number was chosen, helping you defend a more supportable figure instead of relying on bare assertion.',
+          'The comparable-listings analysis shows why the number was chosen, instead of relying on bare assertion.',
       },
       {
         title: 'It keeps the evidence joined up',
         body:
-          'The bundle, argument summary, and exhibits are built to read together instead of feeling like documents assembled in a rush.',
+          'The bundle, argument summary, and exhibits are built to read together.',
       },
       {
         title: 'It improves your response discipline',
         body:
-          'The response template and briefing help you answer objections in a way that stays consistent with the evidence already in the pack.',
+          'The response template and briefing help you answer objections in a way that stays consistent with the evidence.',
       },
       {
         title: 'It gets you closer to tribunal-ready',
         body:
-          'You are not starting from scratch if the increase is challenged because the structure, exhibits, and hearing preparation are already there.',
+          'If the increase is challenged, you already have the structure, exhibits, and hearing preparation in place.',
       },
     ],
   },
   howItWorks: {
     intro:
-      'The workflow is built for the landlord who expects pushback and wants the whole case prepared before that pushback turns into a tribunal problem.',
+      'The workflow is for landlords who expect pushback and want the file prepared before it becomes a tribunal problem.',
     steps: [
       {
         step: 'Step 01',
         title: 'Build the notice and the market case together',
         body:
-          'Start with the rent figure, the tenancy details, and scraped or imported comparable evidence so the defence is grounded in the same facts as the notice.',
+          'Add the rent figure, tenancy details, and comparable evidence so the defence uses the same facts as the notice.',
       },
       {
         step: 'Step 02',
         title: 'Prepare the challenge response pack',
         body:
-          'Generate the argument summary, response wording, bundle structure, and evidence checklist while the facts are still fresh and organised.',
+          'Generate the argument summary, response wording, bundle structure, and evidence checklist while the facts are organised.',
       },
       {
         step: 'Step 03',
         title: 'Move into service and challenge readiness',
         body:
-          'Review the pack, serve the notice, and keep the tribunal-ready materials alongside it in case the tenant contests the increase.',
+          'Review the pack, serve the notice, and keep the challenge materials ready if the tenant contests the increase.',
       },
     ],
   },
   cta: {
     title: 'Prepare the stronger Section 13 defence pack now',
-      body:
-      'Start here if you expect the rent increase to be challenged and want the live market evidence, response material, and tribunal bundle prepared before the case starts drifting.',
+    body:
+      'Start here if you expect the rent increase to be challenged and want the market evidence, response material, and tribunal bundle prepared early.',
     secondaryLabel: 'See the Standard Section 13 Rent Increase Pack',
     secondaryHref: '/products/section-13-standard',
   },

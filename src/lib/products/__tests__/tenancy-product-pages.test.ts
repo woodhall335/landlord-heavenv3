@@ -10,9 +10,9 @@ describe('tenancy product pages', () => {
   it('/products/ast acts as the England comparison owner page', () => {
     const source = readSource('src/app/(marketing)/products/ast/page.tsx');
 
-    expect(source).toContain('Choose the agreement that fits the tenancy');
-    expect(source).toContain('Use this page to compare the five agreement products properly.');
-    expect(source).toContain('Choose the England agreement before you start the wizard');
+    expect(source).toContain('Choose the agreement that fits the let');
+    expect(source).toContain('Compare the five England agreement options.');
+    expect(source).toContain('Choose the agreement before you start');
     expect(source).toContain('Common landlord questions before choosing an England tenancy agreement');
     expect(source).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
     expect(source).toContain('pricingItemListSchema');

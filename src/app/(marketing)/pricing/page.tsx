@@ -20,9 +20,9 @@ import { RiCheckLine } from 'react-icons/ri';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = generateMetadata({
-  title: 'Pricing for landlords in England | Eviction, rent increase, debt, and tenancy packs',
+  title: 'Landlord document pricing in England | Eviction, debt, rent increase, tenancy',
   description:
-    'Compare Landlord Heaven pricing for landlords in England across eviction, court possession, money claims, rent increases, and tenancy agreements.',
+    'See one-time prices for Landlord Heaven packs covering Section 8 notices, possession claims, money claims, rent increases, and England tenancy agreements.',
   path: '/pricing',
   keywords: [
     'landlord pricing england',
@@ -123,11 +123,11 @@ export default function PricingPage() {
 
       <UniversalHero
         preset="content_index"
-        badge="Transparent pricing for landlords in England"
-        trustText="One-time prices for eviction, debt, rent increase, and tenancy products"
-        title="See the price"
-        highlightTitle="and what each pack helps you do"
-        subtitle="If you need to serve notice, prepare for court, recover rent, increase the rent properly, or put the right tenancy agreement in place, this page shows the prices in one place for landlords in England."
+        badge="One-time prices for landlords in England"
+        trustText="Eviction, debt, rent increase, and tenancy agreement packs"
+        title="Compare landlord document prices"
+        highlightTitle="and choose the right next step"
+        subtitle="Use this page to compare prices for serving notice, preparing a possession claim, recovering tenancy debt, increasing rent, or putting an England tenancy agreement in place."
         primaryCta={{
           label: 'Choose the right product',
           href: '/wizard?topic=eviction&src=pricing_page',
@@ -138,7 +138,7 @@ export default function PricingPage() {
       >
         <p className="mt-3 text-sm text-white/88">All prices are one-time payments.</p>
         <p className="mt-2 max-w-3xl text-sm leading-7 text-white/76">
-          Prices below are for landlords in England who need the right product before they serve, file, or issue anything.
+          Prices below are for landlords in England who need the right paperwork before serving, filing, or issuing anything.
         </p>
       </UniversalHero>
 
@@ -147,14 +147,13 @@ export default function PricingPage() {
           <div className="mb-8 max-w-4xl">
             <span className="public-eyebrow">Public pricing</span>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-              Choose the pack that matches the problem in front of you
+              Choose the pack for the job you need to do
             </h2>
             <p className="mt-4 text-lg leading-8 text-[#5d5672]">
-              Read this page the same way you would think about the problem in
-              front of you. If you need possession, start with the eviction
-              products. If the tenant owes you money, use the money claim pack.
-              If you need to increase the rent, choose the Section 13 packs. If
-              you are putting a tenancy in place, choose the agreement that fits
+              Start with the practical problem. If you need possession, compare
+              the Section 8 packs. If the tenant owes money, use the money claim
+              pack. If you need to increase rent, compare the Section 13 packs.
+              If you are setting up a tenancy, choose the agreement that matches
               the let.
             </p>
           </div>
@@ -246,28 +245,25 @@ export default function PricingPage() {
               <div>
                 <span className="public-eyebrow">Tenancy agreement hub</span>
                 <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431]">
-                  Start with the England tenancy agreement hub
+                  Start with the England agreement hub
                 </h2>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5d5672]">
-                  Use the hub to choose the right England agreement route for the
-                  let, whether that is Standard, Premium, Student, HMO / Shared
-                  House, or Lodger. Standard and Premium are the updated current
-                  England assured periodic routes under the post-Renters' Rights
-                  Act framework from 1 May 2026.
+                  Use the hub to choose between Standard, Premium, Student, HMO /
+                  Shared House, and Lodger agreements. Standard and Premium are
+                  the current England assured periodic routes from 1 May 2026.
                 </p>
               </div>
             </div>
 
             <div className="mt-6 rounded-[1.8rem] border border-[#ece4ff] bg-white/88 p-6 shadow-[0_18px_40px_rgba(58,28,103,0.08)]">
               <h3 className="text-2xl font-semibold text-[#1d1532]">
-                One hub for the full England agreement range
+                One place to compare the agreement options
               </h3>
               <p className="mt-4 max-w-3xl text-sm leading-7 text-[#5d5672]">
-                Most landlords should start at the hub, then move into the exact
-                agreement page that fits the let. That keeps the updated
-                Standard and Premium assured periodic routes, plus the Student,
-                HMO / Shared House, and Lodger routes, in one place instead of
-                making you compare five separate pricing cards here.
+                Most landlords should start at the hub, then open the agreement
+                page that fits the property and occupiers. It keeps the Standard,
+                Premium, Student, HMO / Shared House, and Lodger routes clear
+                without overloading this pricing page.
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link href="/products/ast" className="hero-btn-primary text-center">
@@ -286,13 +282,12 @@ export default function PricingPage() {
           <section className={clsx(PUBLIC_LAYOUT_CLASSES.section, 'px-6 py-8 md:px-8')}>
             <span className="public-eyebrow">Cost comparison</span>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431]">
-              Why landlords compare us with a solicitor
+              Why landlords compare this with a solicitor
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5d5672]">
-              Many landlords are not trying to replace specialist advice in a
-              genuinely complex case. They are trying to get the right paperwork
-              started now and avoid paying solicitor rates just to prepare
-              the first documents.
+              Many landlords still want specialist advice for complex cases.
+              Others simply need the first paperwork prepared clearly, quickly,
+              and at a known price before deciding whether a solicitor is needed.
             </p>
             <div className="mt-6 overflow-x-auto">
               <table className="w-full text-sm">
@@ -356,7 +351,7 @@ export default function PricingPage() {
           {
             question: 'How much do solicitors charge for similar work?',
             answer:
-              'Typical solicitor pricing is often several hundred pounds per case. Many landlords use Landlord Heaven when they want to get the paperwork moving and prepare the documents before deciding whether a solicitor is still needed later.',
+              'Solicitor pricing is often several hundred pounds per case. Many landlords use Landlord Heaven to get the paperwork started before deciding whether they still need a solicitor.',
           },
           {
             question: 'Can I buy another product later?',
@@ -365,7 +360,7 @@ export default function PricingPage() {
           {
             question: 'Do you list Section 13 pricing here too?',
             answer:
-              'Yes. The pricing page includes both the Standard Section 13 Rent Increase Pack and the Challenge-Ready Section 13 Defence Pack, with prices pulled from the same central product pricing used across the site.',
+              'Yes. This page includes both the Standard Section 13 Rent Increase Pack and the Challenge-Ready Section 13 Defence Pack, using the same central prices as the rest of the site.',
           },
         ]}
         showContactCTA={false}
@@ -384,8 +379,8 @@ export default function PricingPage() {
               Still not sure which pack fits?
             </h2>
             <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-white/76">
-              Tell us what has gone wrong with the tenancy and we will help you
-              narrow the next step in plain English.
+              Tell us what has happened with the tenancy and we will help you
+              narrow down the next step in plain English.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link href="/contact" className="hero-btn-primary">
