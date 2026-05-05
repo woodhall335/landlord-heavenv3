@@ -429,10 +429,15 @@ describe('Complete eviction pack validation', () => {
         const todayStr = today.toISOString().split('T')[0];
 
         // Calculate arrears period dates dynamically
-        const twoMonthsAgo = new Date(today);
-        twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-        const oneMonthAgo = new Date(today);
-        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        const formatLocalISODate = (date: Date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        };
+        const threeMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 3, 1);
+        const twoMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+        const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 
         const section8Facts = {
           __meta: { case_id: 'TEST-S8-DYNAMIC', jurisdiction: 'england' },
@@ -457,26 +462,26 @@ describe('Complete eviction pack validation', () => {
           // Do NOT provide notice_expiry_date - let it auto-calculate
           notice_service_method: 'first_class_post',
           court_name: 'Central London County Court',
-          arrears_breakdown: 'Total arrears £2400',
+          arrears_breakdown: 'Total arrears £3600',
           total_arrears: 3600,
           arrears_items: [
             {
-              period_start: twoMonthsAgo.toISOString().split('T')[0],
-              period_end: new Date(twoMonthsAgo.getFullYear(), twoMonthsAgo.getMonth() + 1, 0).toISOString().split('T')[0],
+              period_start: formatLocalISODate(threeMonthsAgo),
+              period_end: formatLocalISODate(new Date(threeMonthsAgo.getFullYear(), threeMonthsAgo.getMonth() + 1, 0)),
               rent_due: 1200,
               rent_paid: 0,
               amount_owed: 1200,
             },
             {
-              period_start: oneMonthAgo.toISOString().split('T')[0],
-              period_end: new Date(oneMonthAgo.getFullYear(), oneMonthAgo.getMonth() + 1, 0).toISOString().split('T')[0],
+              period_start: formatLocalISODate(twoMonthsAgo),
+              period_end: formatLocalISODate(new Date(twoMonthsAgo.getFullYear(), twoMonthsAgo.getMonth() + 1, 0)),
               rent_due: 1200,
               rent_paid: 0,
               amount_owed: 1200,
             },
             {
-              period_start: todayStr,
-              period_end: new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0],
+              period_start: formatLocalISODate(oneMonthAgo),
+              period_end: formatLocalISODate(new Date(oneMonthAgo.getFullYear(), oneMonthAgo.getMonth() + 1, 0)),
               rent_due: 1200,
               rent_paid: 0,
               amount_owed: 1200,

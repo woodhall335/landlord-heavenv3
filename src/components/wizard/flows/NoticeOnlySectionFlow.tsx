@@ -97,7 +97,12 @@ import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 import { hasCompleteDefenceRiskAnswers } from '@/lib/england-possession/defence-risk';
-import { getSelectedGroundDetailPanels, hasSelectedGroundDetailPanels } from '../sections/eviction/ground-detail-config';
+import { normalizeEnglandGroundCode } from '@/lib/england-possession/ground-catalog';
+import {
+  getSelectedGroundDetailPanels,
+  hasSelectedArrearsGrounds,
+  hasSelectedGroundDetailPanels,
+} from '../sections/eviction/ground-detail-config';
 
 // Route types for England, Wales, and Scotland
 type EnglandRoute = 'section_8';
@@ -117,10 +122,9 @@ export function getNoticeOnlyUpgradePrompt(facts: WizardFacts, jurisdiction: 'en
   }
 
   const selectedGrounds = (facts.section8_grounds as string[]) || [];
-  const normalizedGrounds = selectedGrounds.join(' ').toLowerCase();
   const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
-  const hasGround8 = normalizedGrounds.includes('ground 8');
-  const hasArrearsGround = ['ground 8', 'ground 10', 'ground 11'].some((ground) => normalizedGrounds.includes(ground));
+  const hasGround8 = selectedGrounds.some((ground) => normalizeEnglandGroundCode(ground) === '8');
+  const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
   const hasMultipleGrounds = selectedGrounds.length >= 2;
   const hasSpecialistGround = selectedGrounds.some((ground) =>
     ['Ground 1', 'Ground 1A', 'Ground 6', 'Ground 7B', 'Ground 9', 'Ground 12', 'Ground 13', 'Ground 14', 'Ground 14A', 'Ground 15', 'Ground 17'].some((code) => ground.includes(code))
@@ -455,9 +459,7 @@ const SECTIONS: WizardSection[] = [
     isComplete: (facts) => {
       const depositTaken = facts.deposit_taken === true;
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      const hasArrearsGround = selectedGrounds.some((ground) =>
-        ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
-      );
+      const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
       const depositQuestionsComplete =
         facts.deposit_taken !== undefined &&
         (!depositTaken ||
@@ -552,9 +554,7 @@ const SECTIONS: WizardSection[] = [
       if (!hasSpecialistGrounds) return true;
 
       const panels = getSelectedGroundDetailPanels(selectedGrounds);
-      const hasArrearsGround = selectedGrounds.some((ground) =>
-        ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
-      );
+      const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
 
       const specialistFactsComplete = panels.every((panel) =>
         panel.fields.some((field) => Boolean(String((facts as Record<string, any>)[field.field] || '').trim()))
@@ -575,9 +575,7 @@ const SECTIONS: WizardSection[] = [
     routes: ['section_8'] as EvictionRoute[],
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      const hasArrearsGround = selectedGrounds.some((g) =>
-        ['Ground 8', 'Ground 10', 'Ground 11'].some((ag) => g.includes(ag))
-      );
+      const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
 
       if (!hasArrearsGround) return true;
 
@@ -590,7 +588,7 @@ const SECTIONS: WizardSection[] = [
     hasBlockers: (facts) => {
       const blockers: string[] = [];
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      const hasGround8 = selectedGrounds.some((g) => g.includes('Ground 8'));
+      const hasGround8 = selectedGrounds.some((g) => normalizeEnglandGroundCode(g) === '8');
 
       if (hasGround8) {
         const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
@@ -933,9 +931,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     const route = isWales ? normalizeWalesRoute(rawRoute) : rawRoute;
     const selectedGrounds = (facts.section8_grounds as string[]) || [];
     const hasSpecialistGrounds = hasSelectedGroundDetailPanels(selectedGrounds);
-    const hasArrearsGround = selectedGrounds.some((ground) =>
-      ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
-    );
+    const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
 
     // Determine if route is valid for this jurisdiction
     const hasValidRoute = isWales

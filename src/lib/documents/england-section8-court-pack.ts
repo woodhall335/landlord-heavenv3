@@ -1,5 +1,9 @@
 import { resolveNoticeServiceMethod } from '@/lib/case-facts/normalize';
-import { getEnglandGroundDefinition } from '@/lib/england-possession/ground-catalog';
+import {
+  calculateEnglandPossessionNoticePeriod,
+  getEnglandGroundDefinition,
+  normalizeEnglandGroundCode,
+} from '@/lib/england-possession/ground-catalog';
 
 type SourceRecord = Record<string, any> | null | undefined;
 
@@ -148,6 +152,18 @@ function addCalendarDays(value: string | Date, days: number): Date {
   if (!start) return new Date(NaN);
   const next = new Date(start.getTime());
   next.setDate(next.getDate() + days);
+  return next;
+}
+
+function addCalendarMonths(value: string | Date, months: number): Date {
+  const start = value instanceof Date ? new Date(value.getTime()) : parseISODateLocal(value);
+  if (!start) return new Date(NaN);
+  const next = new Date(start.getTime());
+  const originalDay = next.getDate();
+  next.setMonth(next.getMonth() + months);
+  if (next.getDate() !== originalDay) {
+    next.setDate(0);
+  }
   return next;
 }
 
@@ -326,22 +342,32 @@ function extractGroundCodesFromSources(sources: SourceRecord[]): string[] {
   if (directGroundCodes) {
     const parsed = directGroundCodes
       .split(',')
-      .map((entry) => String(entry).replace(/Ground\s*/gi, '').trim().toUpperCase())
-      .filter(Boolean);
+      .map((entry) => normalizeEnglandGroundCode(entry))
+      .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
     if (parsed.length > 0) return parsed;
   }
 
   for (const source of sources) {
-    const value = getNestedValue(source, 'ground_codes') ?? getNestedValue(source, 'grounds');
+    const value =
+      getNestedValue(source, 'ground_codes') ??
+      getNestedValue(source, 'section8_grounds') ??
+      getNestedValue(source, 'section8_grounds_selection') ??
+      getNestedValue(source, 'selected_grounds') ??
+      getNestedValue(source, 'grounds');
     if (Array.isArray(value)) {
       const parsed = value
         .map((entry) =>
-          String(typeof entry === 'object' && entry ? entry.code || entry.title || '' : entry)
-            .replace(/Ground\s*/gi, '')
-            .trim()
-            .toUpperCase(),
+          normalizeEnglandGroundCode(
+            typeof entry === 'object' && entry
+              ? (entry as Record<string, any>).code ||
+                (entry as Record<string, any>).number ||
+                (entry as Record<string, any>).value ||
+                (entry as Record<string, any>).label ||
+                ''
+              : entry,
+          ),
         )
-        .filter(Boolean);
+        .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
       if (parsed.length > 0) return parsed;
     }
   }
@@ -513,7 +539,6 @@ export async function buildEnglandSection8CourtPackCalculation(params: {
   const groundCodes = extractGroundCodesFromSources(sources);
   const hasGround8 = groundCodes.includes('8');
   const hasGround10 = groundCodes.includes('10');
-  const hasGround14 = groundCodes.includes('14') || groundCodes.includes('14A');
   const groundsText = buildStatutoryGroundsText(groundCodes);
 
   const ground8Threshold = Number((monthlyRent * 3).toFixed(2));
@@ -528,14 +553,21 @@ export async function buildEnglandSection8CourtPackCalculation(params: {
       'notice.expiry_date',
     ) || '';
 
-  const derivedExpiry =
-    hasGround8 || (hasGround10 && !hasGround14)
-      ? toISODate(addCalendarDays(deemedServiceDate, 14))
-      : existingExpiry || deemedServiceDate;
+  const noticePeriod = calculateEnglandPossessionNoticePeriod(groundCodes);
+  const monthPeriods = groundCodes
+    .map((code) => getEnglandGroundDefinition(code)?.noticePeriodMonths)
+    .filter((months): months is number => typeof months === 'number' && months > 0);
+  const requiredNoticeDate =
+    groundCodes.length === 0
+      ? parseISODateLocal(existingExpiry) || parseISODateLocal(deemedServiceDate)
+      : monthPeriods.length > 0
+        ? addCalendarMonths(deemedServiceDate, Math.max(...monthPeriods))
+        : addCalendarDays(deemedServiceDate, noticePeriod.noticePeriodDays);
+  const derivedExpiry = requiredNoticeDate ? toISODate(requiredNoticeDate) : existingExpiry || deemedServiceDate;
 
   const noticeExpiryDate = derivedExpiry;
   const earliestProceedingsDate =
-    hasGround8 || (hasGround10 && !hasGround14)
+    groundCodes.length > 0
       ? noticeExpiryDate
       : resolveStringField(sources, 'earliest_proceedings_date') || noticeExpiryDate;
 
@@ -574,9 +606,10 @@ export async function buildEnglandSection8CourtPackCalculation(params: {
       'Schedule of Arrears / N119 / Witness Statement',
     );
   }
+  const minimumNoticeDate = requiredNoticeDate || addCalendarDays(deemedServiceDate, noticePeriod.noticePeriodDays || 14);
   const minimumNoticeSatisfied =
     parseISODateLocal(earliestProceedingsDate) !== null &&
-    parseISODateLocal(earliestProceedingsDate)!.getTime() >= addCalendarDays(deemedServiceDate, 14).getTime();
+    parseISODateLocal(earliestProceedingsDate)!.getTime() >= minimumNoticeDate.getTime();
 
   const checks: EnglandSection8ValidationCheck[] = [
     {
@@ -593,8 +626,8 @@ export async function buildEnglandSection8CourtPackCalculation(params: {
       key: 'minimum_notice_period',
       status: minimumNoticeSatisfied ? 'passed' : 'failed',
       message: minimumNoticeSatisfied
-        ? 'Minimum notice period is at least 14 days from deemed service.'
-        : 'Earliest proceedings date falls too early for the 14-day minimum notice period.',
+        ? `Minimum notice period is satisfied from deemed service (${formatUKLegalDate(deemedServiceDate)}).`
+        : `Earliest proceedings date falls before the required minimum notice date of ${formatUKLegalDate(toISODate(minimumNoticeDate))}.`,
       documents: ['Form 3A', 'N215', 'N5', 'N119'],
     },
   ];

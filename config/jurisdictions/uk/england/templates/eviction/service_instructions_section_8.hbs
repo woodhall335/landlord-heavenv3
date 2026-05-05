@@ -158,11 +158,17 @@
 </head>
 <body>
   <div class="hero">
+    {{#if (hasValue pack_title)}}
     <h2>{{pack_title}}</h2>
+    {{/if}}
     <h1>Service Playbook</h1>
     <p><strong>{{notice_name}}</strong> is the current Form 3A Section 8 notice for England.</p>
+    {{#if (hasValue pack_supporting_line)}}
     <p>{{pack_supporting_line}}</p>
+    {{/if}}
+    {{#if (hasValue risk_line)}}
     <p class="muted">{{risk_line}}</p>
+    {{/if}}
   </div>
 
   <div class="summary-box">

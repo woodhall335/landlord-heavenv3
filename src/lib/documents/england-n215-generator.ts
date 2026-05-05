@@ -1,9 +1,5 @@
-if (typeof window === 'undefined' && typeof require !== 'undefined') {
-  try {
-    require('server-only');
-  } catch {
-    // Allow script/test environments to import this module outside Next server runtime.
-  }
+if (typeof window === 'undefined') {
+  void import('server-only').catch(() => undefined);
 }
 
 import fs from 'fs/promises';

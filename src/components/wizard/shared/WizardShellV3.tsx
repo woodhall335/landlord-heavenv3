@@ -75,6 +75,36 @@ export function WizardShellV3({
   stepIconPathOverride,
   getStepMetadataForId,
 }: WizardShellV3Props) {
+  const hasMountedRef = useRef(false);
+  const currentMeta: StepMetadata | undefined = currentStepId
+    ? (getStepMetadataForId ? getStepMetadataForId(currentStepId) : getStepMetadata(product, jurisdiction, currentStepId))
+    : undefined;
+
+  const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
+  const activeStepIndex = currentTabIndex >= 0 ? currentTabIndex : 0;
+  const issueCount = tabs.filter((tab) => tab.hasIssue).length;
+  const completionLabel = `${completedCount} of ${totalCount} sections complete`;
+  const percentageLabel = `${Math.round(progress)}% complete`;
+  const resolvedSaveLabel =
+    saveStatusLabel ||
+    (saveState === 'saving'
+      ? 'Saving your answers...'
+      : saveState === 'saved'
+        ? 'Saved just now'
+        : 'Auto-save is on');
+  const resolvedGuidancePanel = guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />;
+
+  useEffect(() => {
+    if (jurisdiction === 'england') {
+      return;
+    }
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+    scrollWizardViewportToTop('smooth');
+  }, [jurisdiction, currentStepId, activeStepIndex]);
+
   if (jurisdiction === 'england') {
     return (
       <EnglandPossessionWorkspaceShell
@@ -105,33 +135,6 @@ export function WizardShellV3({
       </EnglandPossessionWorkspaceShell>
     );
   }
-
-  const hasMountedRef = useRef(false);
-  const currentMeta: StepMetadata | undefined = currentStepId
-    ? (getStepMetadataForId ? getStepMetadataForId(currentStepId) : getStepMetadata(product, jurisdiction, currentStepId))
-    : undefined;
-
-  const currentTabIndex = tabs.findIndex((tab) => tab.isCurrent);
-  const activeStepIndex = currentTabIndex >= 0 ? currentTabIndex : 0;
-  const issueCount = tabs.filter((tab) => tab.hasIssue).length;
-  const completionLabel = `${completedCount} of ${totalCount} sections complete`;
-  const percentageLabel = `${Math.round(progress)}% complete`;
-  const resolvedSaveLabel =
-    saveStatusLabel ||
-    (saveState === 'saving'
-      ? 'Saving your answers...'
-      : saveState === 'saved'
-        ? 'Saved just now'
-        : 'Auto-save is on');
-  const resolvedGuidancePanel = guidancePanel ?? <GuidancePanelV3 metadata={currentMeta} askHeaven={sidebar} />;
-
-  useEffect(() => {
-    if (!hasMountedRef.current) {
-      hasMountedRef.current = true;
-      return;
-    }
-    scrollWizardViewportToTop('smooth');
-  }, [currentStepId, activeStepIndex]);
 
   return (
     <div

@@ -89,6 +89,7 @@ import {
   buildN119StatutoryGroundsText,
   buildN119StepsTakenText,
 } from '@/lib/england-possession/pack-drafting';
+import { normalizeEnglandGroundCode } from '@/lib/england-possession/ground-catalog';
 import {
   ENGLAND_SECTION8_FORM_NAME,
   ENGLAND_SECTION8_NOTICE_NAME,
@@ -1858,17 +1859,27 @@ function toEnglandDepositScheme(
   return undefined;
 }
 
-function extractGroundCodes(section8Grounds: any[]): Array<number | string> {
-  if (!Array.isArray(section8Grounds)) return [];
+function extractGroundCodes(section8Grounds: unknown): Array<number | string> {
+  const values = Array.isArray(section8Grounds)
+    ? section8Grounds
+    : section8Grounds
+      ? [section8Grounds]
+      : [];
 
-  return section8Grounds
-    .map((g) => {
-      if (typeof g === 'number') return g;
-      if (typeof g !== 'string') return null;
-      const match = g.match(/Ground\s+(\d+[A-Z]*)/i) || g.match(/ground[_\s](\d+[A-Z]*)/i);
-      if (!match) return null;
-      const normalized = match[1].toUpperCase();
-      return /^\d+$/.test(normalized) ? parseInt(normalized, 10) : normalized;
+  return values
+    .map((ground) => {
+      if (typeof ground === 'number') return ground;
+      const raw =
+        typeof ground === 'object' && ground
+          ? (ground as Record<string, any>).code ??
+            (ground as Record<string, any>).number ??
+            (ground as Record<string, any>).value ??
+            (ground as Record<string, any>).label
+          : ground;
+      if (raw === null || raw === undefined) return null;
+      const normalized = normalizeEnglandGroundCode(raw);
+      if (!normalized) return null;
+      return /^\d+$/.test(normalized) ? Number.parseInt(normalized, 10) : normalized;
     })
     .filter((code): code is number | string => code !== null && !(typeof code === 'number' && Number.isNaN(code)));
 }
@@ -3136,7 +3147,12 @@ export async function generateCompleteEvictionPack(
   // ============================================================================
 
   const selectedGroundCodes = extractGroundCodes(
-    wizardFacts?.section8_grounds || wizardFacts?.grounds || []
+    wizardFacts?.section8_grounds ||
+      wizardFacts?.section8_grounds_selection ||
+      wizardFacts?.selected_grounds ||
+      wizardFacts?.ground_codes ||
+      wizardFacts?.grounds ||
+      []
   );
 
   // Determine case type for validation
@@ -4135,7 +4151,12 @@ export async function generateNoticeOnlyPack(
   normalizeSection8Facts(wizardFacts || {});
 
   const selectedGroundCodes = extractGroundCodes(
-    wizardFacts?.section8_grounds || wizardFacts?.grounds || []
+    wizardFacts?.section8_grounds ||
+      wizardFacts?.section8_grounds_selection ||
+      wizardFacts?.selected_grounds ||
+      wizardFacts?.ground_codes ||
+      wizardFacts?.grounds ||
+      []
   );
 
   try {

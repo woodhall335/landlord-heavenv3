@@ -3,7 +3,7 @@ qa-complete-electronic-001
 JURISDICTION
 england
 GENERATED
-4 May 2026
+5 May 2026
 Stage 2: Section 8 Court & Possession Pack
 Case Summary - Stage
 2 Court & Possession
@@ -13,7 +13,7 @@ This pack builds a possession claim that can be
 issued and relied on in court without breaking on
 inconsistency.
 READY FOR COURT - CLAIM FILE ALIGNED
-Case ID: qa-complete-electronic-001 | Jurisdiction: england | Generated: 4 May 2026
+Case ID: qa-complete-electronic-001 | Jurisdiction: england | Generated: 5 May 2026
 Most possession cases fail on notice, service, or consistency errors. Keep the file aligned and
 under review as the case moves forward.
 Eviction journey
@@ -30,9 +30,9 @@ ARREARS
 NOTICE SERVED
 6 March 2026
 NOTICE EXPIRY DATE
-23 March 2026
+6 April 2026
 EARLIEST PROCEEDINGS DATE
-23 March 2026
+6 April 2026
 CLAIMANT
 Daniel Mercer
 Serve Notice
@@ -59,9 +59,9 @@ This summary shows the recalculated service and notice dates used across the cou
 DEEMED SERVICE DATE USED
 9 March 2026
 NOTICE EXPIRY DATE
-23 March 2026
+6 April 2026
 EARLIEST PROCEEDINGS DATE
-23 March 2026
+6 April 2026
 TOTAL ARREARS
 £4800.00
 GROUND 8 THRESHOLD
@@ -69,7 +69,7 @@ GROUND 8 THRESHOLD
 GROUND 8 STATUS
 ABOVE
 passed: Arrears total aligned at £4800.00.
-passed: Minimum notice period is at least 14 days from deemed service.
+passed: Minimum notice period is satisfied from deemed service (9 March 2026).
 passed: Ground 8 threshold is satisfied above £3600.00.
 passed: No cross-document conflicts were detected against the recalculated court-pack values.
 What this pack does
@@ -84,7 +84,7 @@ avoidable challenge in court.
 Next step
 Prepare and issue the possession claim using
 the forms and guidance in this pack once the
-claim is eligible on or after 23 March 2026.
+claim is eligible on or after 6 April 2026.
 Court: York County Court and Family Court
 Rent due: 1st day of each month
 Arrears at notice date: £4800.00
@@ -133,7 +133,7 @@ file.
 NOTICE TIMELINE RECORDED
 OK
 Notice served on 6 March 2026 with earliest
-proceedings date 23 March 2026.
+proceedings date 6 April 2026.
 Action: Keep the service date, expiry date, and
 proceedings date aligned across the notice,
 N215, and any court papers.
@@ -155,14 +155,14 @@ part of the claim history.
 The arrears balance relied on for Ground 10 is £4,800.00.
 The arrears history, service chronology, and any further tenancy concerns should be read together as
 part of one possession case, while each statutory ground remains separately pleaded.
-Form 3A notice served on 6 March 2026, expiring on 23 March 2026, with proceedings not intended
-before 23 March 2026.
+Form 3A notice served on 6 March 2026, expiring on 6 April 2026, with proceedings not intended before 6
+April 2026.
 Procedural Notes
 The rent account first shows an unpaid or short-paid period from 1 December 2025. The most recent
 affected rental period is 1 March 2026. The current arrears total is £4,800.00 across 4 missed or short-
 paid rental periods.
 The Form 3A notice service milestone currently recorded is 6 March 2026. The possession / proceedings
-date currently recorded in the file is 23 March 2026.
+date currently recorded in the file is 6 April 2026.
 Defendant Circumstances
 The claimant is not aware of any further information about the defendant's circumstances beyond the
 matters set out in the claim papers and any information the defendant may wish to place before the court.
@@ -173,7 +173,7 @@ Financial Position
 The claimant seeks possession and, if the court thinks fit, judgment for rent arrears currently quantified at
 £4,800.00.
 The contractual rent is £1,200.00 payable monthly.
-Form 3A notice served on 6 March 2026, expiring on 23 March 2026, with proceedings not intended
-before 23 March 2026.
+Form 3A notice served on 6 March 2026, expiring on 6 April 2026, with proceedings not intended before 6
+April 2026.
 
 -- 5 of 5 --

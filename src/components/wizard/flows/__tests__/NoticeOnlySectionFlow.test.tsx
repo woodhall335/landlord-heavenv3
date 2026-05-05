@@ -822,6 +822,25 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     expect(queryStepButton('About the arrears')).toBeNull();
   });
 
+  it('shows the ground-details step for non-arrears breach grounds', async () => {
+    render(
+      <NoticeOnlySectionFlow
+        caseId="test-england-breach-only"
+        jurisdiction="england"
+        initialFacts={{
+          __meta: { product: 'notice_only', jurisdiction: 'england' },
+          eviction_route: 'section_8',
+          section8_grounds: ['Ground 12 - Breach of tenancy'],
+        }}
+      />
+    );
+
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
+
+    expect(getStepButton('Ground details')).toBeDefined();
+    expect(queryStepButton('About the arrears')).toBeNull();
+  });
+
   it('shows both ground details and arrears for mixed England cases', async () => {
     render(
       <NoticeOnlySectionFlow

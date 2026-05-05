@@ -335,8 +335,8 @@ export const ENGLAND_POST_2026_GROUND_CATALOG: Record<EnglandGroundCode, England
       code: '8',
       title: 'Rent arrears',
       mandatory: true,
-      noticePeriodDays: 14,
-      noticePeriodLabel: '2 weeks',
+      noticePeriodDays: 28,
+      noticePeriodLabel: '4 weeks',
       commonReason: 'rent_arrears_serious',
       courtClaimPath: 'rent_only_pcol_or_paper',
       evidenceCategories: ['rent ledger', 'arrears schedule', 'bank statements'],
@@ -356,8 +356,8 @@ export const ENGLAND_POST_2026_GROUND_CATALOG: Record<EnglandGroundCode, England
       code: '10',
       title: 'Any rent arrears',
       mandatory: false,
-      noticePeriodDays: 14,
-      noticePeriodLabel: '2 weeks',
+      noticePeriodDays: 28,
+      noticePeriodLabel: '4 weeks',
       commonReason: 'rent_arrears_other',
       courtClaimPath: 'rent_only_pcol_or_paper',
       evidenceCategories: ['rent ledger', 'arrears schedule'],
@@ -471,7 +471,7 @@ const FORM3A_COMMON_REASON_ORDER: EnglandCommonReasonKey[] = [
 
 export function normalizeEnglandGroundCode(code: string | number): EnglandGroundCode | null {
   const raw = String(code).toUpperCase().trim();
-  const stripped = raw.replace(/^GROUND[\s_]*/i, '').trim();
+  const stripped = raw.replace(/^GROUND[\s_-]*/i, '').trim();
   const directCandidate = stripped.split(/\s*[-–—:]\s*/, 1)[0]?.trim() || stripped;
 
   if (directCandidate in ENGLAND_POST_2026_GROUND_CATALOG) {

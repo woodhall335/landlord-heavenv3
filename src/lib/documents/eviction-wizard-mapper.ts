@@ -13,6 +13,7 @@ import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 import { isGround8Eligible } from '@/lib/grounds/ground8-threshold';
 import { EvidenceCategory } from '@/lib/evidence/schema';
 import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
+import { getEnglandGroundDefinition, normalizeEnglandGroundCode } from '@/lib/england-possession/ground-catalog';
 import {
   buildN5BFields,
   logN5BFieldStatus,
@@ -200,15 +201,11 @@ function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
   return 'rent_arrears';
 }
 
-function parseGround(option: string): { code: string; codeNum: number | '14A'; title: string } {
-  // Match ground number in formats: "ground 8", "ground_8", "Ground 8", "Ground_8"
-  // Uses [\s_]* to allow spaces, underscores, or nothing between "ground" and the number
-  const match = option.match(/ground[\s_]*([0-9a-z]+)/i);
-  const codeStr = match ? match[1].toUpperCase() : '';
-  const codeNum = (codeStr === '14A' ? '14A' : parseInt(codeStr)) as number | '14A';
-  const code = codeStr ? `Ground ${codeStr}` : option.trim();
+function parseGround(option: string): { code: string; normalizedCode: string | null; title: string } {
+  const normalizedCode = normalizeEnglandGroundCode(option);
+  const code = normalizedCode ? `Ground ${normalizedCode}` : option.trim();
   const title = option.includes('-') ? option.split('-')[1].trim() : option.trim();
-  return { code, codeNum, title };
+  return { code, normalizedCode, title };
 }
 
 function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
@@ -234,17 +231,25 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
   });
 
   return selections.flatMap((selection) => {
-    const { code, codeNum, title } = parseGround(selection);
+    const { code, normalizedCode, title } = parseGround(selection);
 
     // Look up ground definition to get legal_basis and mandatory status
-    const groundDef = GROUND_DEFINITIONS[codeNum];
-    const legal_basis = groundDef?.legal_basis || 'Housing Act 1988, Schedule 2';
+    const post2026GroundDef = normalizedCode ? getEnglandGroundDefinition(normalizedCode) : null;
+    const legacyGroundKey = normalizedCode && /^\d+$/.test(normalizedCode)
+      ? Number.parseInt(normalizedCode, 10)
+      : normalizedCode;
+    const legacyGroundDef = legacyGroundKey
+      ? GROUND_DEFINITIONS[legacyGroundKey as keyof typeof GROUND_DEFINITIONS]
+      : undefined;
+    const groundDef = post2026GroundDef || legacyGroundDef;
+    const legal_basis =
+      normalizedCode ? `Housing Act 1988, Schedule 2, Ground ${normalizedCode}` : 'Housing Act 1988, Schedule 2';
     const mandatory = groundDef?.mandatory || false;
 
     let particulars = '';
 
     if (['Ground 8', 'Ground 10', 'Ground 11'].includes(code)) {
-      if (codeNum === 8 && !ground8Eligible) {
+      if (normalizedCode === '8' && !ground8Eligible) {
         return [];
       }
 

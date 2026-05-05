@@ -1,10 +1,5 @@
-if (typeof window === 'undefined' && typeof require !== 'undefined') {
-  try {
-    require('server-only');
-  } catch {
-    // Allow CLI audit/generation scripts to import this module outside Next's
-    // server-component runtime.
-  }
+if (typeof window === 'undefined') {
+  void import('server-only').catch(() => undefined);
 }
 
 import fs from 'fs/promises';

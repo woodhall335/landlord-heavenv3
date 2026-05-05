@@ -86,7 +86,7 @@ const CURATED_NEXT_STEPS_OVERRIDES: Record<string, NextStepsCTA[]> = {
     },
     {
       href: '/products/notice-only',
-      label: 'Eviction Notice Generator',
+      label: 'Notice Only Bundle',
       priority: 3,
     },
   ],
@@ -372,7 +372,7 @@ function getTenancyNextSteps(
       return [
         {
           href: '/tenancy-agreement-template',
-          label: 'England Tenancy Agreement Template',
+          label: 'England Tenancy Agreement Guide',
           priority: 1,
         },
         {
@@ -461,18 +461,18 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
 
   if (isSection21Related) {
     steps.push({
-      href: '/eviction-notice-template',
-      label: 'Eviction Notice Template',
+      href: SEO_PILLAR_ROUTES.section21Notice,
+      label: 'Section 21 Notice Transition Guide',
       priority: 1,
     });
     steps.push({
-      href: SEO_PILLAR_ROUTES.section21Notice,
-      label: 'Section 21 Notice Transition Guide',
+      href: SEO_PILLAR_ROUTES.section21BanUk,
+      label: 'Section 21 Ban UK Guide',
       priority: 2,
     });
     steps.push({
       href: SEO_PRODUCT_ROUTES.noticeOnly,
-      label: 'Eviction Notice Generator',
+      label: 'Notice Only Bundle',
       priority: 3,
     });
   }
@@ -492,13 +492,13 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
       priority: 1,
     });
     steps.push({
-      href: '/section-8-grounds-explained',
-      label: 'Section 8 Grounds Explained',
+      href: SEO_PILLAR_ROUTES.howToEvictTenant,
+      label: 'How to Evict a Tenant Guide',
       priority: 2,
     });
     steps.push({
       href: SEO_PRODUCT_ROUTES.noticeOnly,
-      label: 'Eviction Notice Generator',
+      label: 'Notice Only Bundle',
       priority: 3,
     });
   }
@@ -540,7 +540,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
         steps.push(getNonEnglandArrearsStep(jurisdiction));
         steps.push({
           href: SEO_PRODUCT_ROUTES.noticeOnly,
-          label: 'Eviction Notice Generator',
+          label: 'Notice Only Bundle',
           priority: 3,
         });
       } else {
@@ -587,7 +587,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     if (!steps.some((s) => s.href.includes('notice-only'))) {
       steps.push({
         href: SEO_PRODUCT_ROUTES.noticeOnly,
-        label: 'Eviction Notice Generator',
+        label: 'Notice Only Bundle',
         priority: 3,
       });
     }
@@ -614,7 +614,7 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     if (!steps.some((s) => s.href.includes('notice-only'))) {
       steps.push({
         href: SEO_PRODUCT_ROUTES.noticeOnly,
-        label: 'Eviction Notice Generator',
+        label: 'Notice Only Bundle',
         priority: 3,
       });
     }
@@ -627,7 +627,11 @@ export function getNextStepsCTAs(input: NextStepsCTAInput): NextStepsCTA[] {
     lowerSlug.includes('bailiff') ||
     lowerCategory.includes('eviction')
   ) {
-    if (!steps.some((s) => s.href === SEO_PRODUCT_ROUTES.completePack)) {
+    if (
+      !isSection21Related &&
+      !isSection8Related &&
+      !steps.some((s) => s.href === SEO_PRODUCT_ROUTES.completePack)
+    ) {
       steps.push({
         href: SEO_PILLAR_ROUTES.howToEvictTenant,
         label: 'How to Evict a Tenant Guide',

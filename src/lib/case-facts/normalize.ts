@@ -12,12 +12,14 @@ import { normalizeJurisdiction } from '../types/jurisdiction';
 import {
   calculateEnglandPossessionNoticePeriod,
   getEnglandGroundDefinition as getPost2026EnglandGroundDefinition,
+  normalizeEnglandGroundCode,
 } from '@/lib/england-possession/ground-catalog';
 import { calculateEarliestValidPossessionDate } from '@/lib/england-possession/post-2026-validation';
 import { calculateSection21ExpiryDate } from '../documents/notice-date-calculator';
 import { getArrearsScheduleData, type ArrearsScheduleData } from '../documents/arrears-schedule-mapper';
 import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 import { getGround8Threshold, isGround8Eligible } from '@/lib/grounds/ground8-threshold';
+import { getSection8StatutoryText } from '@/lib/grounds/section8-ground-definitions';
 
 // =============================================================================
 // DATE FORMATTING UTILITIES
@@ -2743,6 +2745,72 @@ function calculateRequiredNoticePeriod(selectedGrounds: (string | number)[]): nu
   return calculateEnglandPossessionNoticePeriod(selectedGrounds).noticePeriodDays;
 }
 
+const SECTION8_GROUND_SELECTION_PATHS = [
+  'case_facts.issues.section8_grounds.selected_grounds',
+  'section8.grounds',
+  'section8_grounds',
+  'section8_grounds_selection',
+  'selected_grounds',
+  'ground_codes',
+] as const;
+
+function extractGroundSelectionValues(value: any): Array<string | number> {
+  if (value === null || value === undefined || value === '') return [];
+
+  if (Array.isArray(value)) {
+    return value.flatMap((entry) => extractGroundSelectionValues(entry));
+  }
+
+  if (typeof value === 'object') {
+    const candidate =
+      value.code ??
+      value.number ??
+      value.value ??
+      value.label ??
+      value.title ??
+      value.ground;
+    return extractGroundSelectionValues(candidate);
+  }
+
+  if (typeof value === 'string' && value.includes(',')) {
+    return value
+      .split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+  }
+
+  return [value];
+}
+
+function extractFallbackGroundCode(input: string | number): string | null {
+  const normalized = normalizeEnglandGroundCode(input);
+  if (normalized) return normalized;
+
+  const raw = String(input).toUpperCase().trim();
+  const match =
+    raw.match(/^GROUND[\s_-]*(\d+[A-Z]*)\b/) ||
+    raw.match(/^(\d+[A-Z]*)\b/) ||
+    raw.match(/\b(\d+[A-Z]*)\b/);
+
+  return match ? match[1] : null;
+}
+
+function collectSection8GroundSelections(wizard: WizardFacts): Array<string | number> {
+  const selectedGrounds: Array<string | number> = [];
+  const seen = new Set<string>();
+
+  for (const path of SECTION8_GROUND_SELECTION_PATHS) {
+    for (const value of extractGroundSelectionValues(getWizardValue(wizard, path))) {
+      const key = extractFallbackGroundCode(value) || String(value).trim().toUpperCase();
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      selectedGrounds.push(value);
+    }
+  }
+
+  return selectedGrounds;
+}
+
 interface NormalizedSection8GroundDefinition {
   code: string;
   title: string;
@@ -2755,14 +2823,9 @@ interface NormalizedSection8GroundDefinition {
  * Build grounds array from wizard facts with proper structure for Form 3 compliance
  */
 function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any>): any[] {
-  const selectedGrounds = getFirstValue(wizard, [
-    'case_facts.issues.section8_grounds.selected_grounds',
-    'section8_grounds',
-    'section8_grounds_selection',
-    'selected_grounds',
-  ]);
+  const selectedGrounds = collectSection8GroundSelections(wizard);
 
-  if (!selectedGrounds || (Array.isArray(selectedGrounds) && selectedGrounds.length === 0)) {
+  if (selectedGrounds.length === 0) {
     return [];
   }
 
@@ -2810,25 +2873,87 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
   };
 
   const normalizeGroundCode = (input: string | number): string | null => {
-    if (typeof input === 'number') return String(input);
-    if (!input) return null;
-    const trimmed = input.trim();
-    const explicitMatch = trimmed.match(/ground[_\s-]*([0-9]+a?)/i);
-    if (explicitMatch) return explicitMatch[1].toUpperCase();
-    const numericOnly = trimmed.match(/^([0-9]+a?)$/i);
-    if (numericOnly) return numericOnly[1].toUpperCase();
-    const looseMatch = trimmed.match(/([0-9]+a?)/i);
-    return looseMatch ? looseMatch[1].toUpperCase() : null;
+    return extractFallbackGroundCode(input);
+  };
+
+  const groundDetailLabel = (key: string): string => {
+    const labels: Record<string, string> = {
+      affected_occupiers: 'Affected occupiers',
+      alternative_address: 'Alternative accommodation',
+      availability_date: 'Availability date',
+      breach_dates: 'Breach dates',
+      breach_evidence: 'Breach evidence',
+      breach_type: 'Breach relied on',
+      council_reference: 'Council or housing-management reference',
+      damage_cost: 'Estimated cost',
+      damage_description: 'Damage or deterioration',
+      damage_discovered_date: 'Damage discovered',
+      decision_date: 'Decision date',
+      decision_or_reference: 'Decision or reference',
+      discovery_date: 'Discovery date',
+      evidence_available: 'Evidence available',
+      factual_basis: 'Factual basis',
+      incident_count: 'Incident count',
+      incidents_description: 'Incidents or behaviour',
+      intended_occupier: 'Intended occupier',
+      intended_sale_timing: 'Intended sale timing',
+      intended_start_date: 'Intended start date',
+      notice_or_status_details: 'Notice or status details',
+      notice_source: 'Source material',
+      occupier_relationship: 'Relationship or status',
+      occupation_reason: 'Occupation reason',
+      planning_or_contractor_status: 'Project status',
+      police_reference: 'Police or court reference',
+      possession_requirement_reason: 'Why possession is needed',
+      qualifying_occupier: 'Qualifying occupier or category',
+      sale_reason: 'Sale reason',
+      sale_steps_taken: 'Sale steps taken',
+      statement_date: 'Statement date',
+      statement_made: 'Statement relied on',
+      status_basis: 'Status basis',
+      status_check_date: 'Status check date',
+      suitability_summary: 'Suitability summary',
+      supporting_evidence: 'Supporting evidence',
+      tenancy_clause: 'Tenancy clause or obligation',
+      trigger_date: 'Trigger date',
+      true_facts: 'True facts',
+      warnings_issued: 'Warnings or interventions',
+      works_description: 'Proposed works',
+    };
+
+    return labels[key] || key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   const pickParticularEntry = (code: string | number) => {
-    if (!groundParticulars || typeof groundParticulars !== 'object' || Array.isArray(groundParticulars)) return null;
     const normalized = normalizeGroundCode(code)?.toLowerCase();
     const possibleKeys = [
       normalized ? `ground_${normalized}` : null,
       normalized,
       typeof code === 'string' ? code : null,
     ].filter(Boolean) as string[];
+
+    for (const key of possibleKeys) {
+      const directEntry = getWizardValue(wizard, key);
+      if (directEntry && typeof directEntry === 'object' && !Array.isArray(directEntry)) {
+        return directEntry;
+      }
+    }
+
+    if (normalized) {
+      const flatPrefix = `ground_${normalized}.`;
+      const flatEntry = Object.entries(wizard).reduce<Record<string, any>>((acc, [key, value]) => {
+        if (key.startsWith(flatPrefix) && value !== null && value !== undefined && value !== '') {
+          acc[key.slice(flatPrefix.length)] = value;
+        }
+        return acc;
+      }, {});
+
+      if (Object.keys(flatEntry).length > 0) {
+        return flatEntry;
+      }
+    }
+
+    if (!groundParticulars || typeof groundParticulars !== 'object' || Array.isArray(groundParticulars)) return null;
 
     for (const key of possibleKeys) {
       if ((groundParticulars as any)[key]) {
@@ -2895,6 +3020,31 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       facts.push(`<strong>Factual summary:</strong> ${formatMultiline(factualSummary)}`);
     }
 
+    if (particularsEntry && typeof particularsEntry === 'object' && !Array.isArray(particularsEntry)) {
+      const ignoredKeys = new Set([
+        'amount',
+        'arrears_amount',
+        'arrears_period',
+        'details',
+        'evidence',
+        'evidence_available',
+        'factual_summary',
+        'narrative',
+        'particulars',
+        'period_of_arrears',
+        'summary',
+        'supporting_evidence',
+        'text',
+        'total_amount_owed',
+      ]);
+
+      Object.entries(particularsEntry)
+        .filter(([key, value]) => !ignoredKeys.has(key) && value !== null && value !== undefined && value !== '')
+        .forEach(([key, value]) => {
+          facts.push(`<strong>${groundDetailLabel(key)}:</strong> ${formatMultiline(value)}`);
+        });
+    }
+
     const evidenceText =
       particularsEntry?.evidence ||
       particularsEntry?.evidence_available ||
@@ -2909,9 +3059,9 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
     };
   };
 
-  const groundsList = Array.isArray(selectedGrounds) ? selectedGrounds : [selectedGrounds];
+  const groundsList = selectedGrounds;
 
-  const filteredGrounds = groundsList.filter((groundStr: string) => {
+  const filteredGrounds = groundsList.filter((groundStr: string | number) => {
     const groundNumStr = normalizeGroundCode(groundStr) || '';
     if (groundNumStr === '8') {
       return ground8Eligible;
@@ -2919,16 +3069,17 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
     return true;
   });
 
-  return filteredGrounds.map((groundStr: string) => {
+  return filteredGrounds.map((groundStr: string | number) => {
     const groundNumStr = normalizeGroundCode(groundStr) || '';
     const englandGround = getPost2026EnglandGroundDefinition(groundNumStr);
+    const statutoryText = groundNumStr ? getSection8StatutoryText(groundNumStr) : '';
     const groundDef = englandGround
       ? ({
           code: englandGround.code,
           title: englandGround.title,
           mandatory: englandGround.mandatory,
           legal_basis: `Housing Act 1988, Schedule 2, Ground ${englandGround.code}`,
-          full_text: '',
+          full_text: statutoryText,
         } satisfies NormalizedSection8GroundDefinition)
       : undefined;
 
@@ -2937,7 +3088,7 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       return {
         code: groundNumStr || groundStr,
         mandatory: false,
-        title: groundStr,
+        title: String(groundStr),
         legal_basis: 'Housing Act 1988, Schedule 2',
         full_text: '',
         statutory_text: '',
@@ -3034,13 +3185,17 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
         'The condition of the property has deteriorated.';
       particularLines.push(explanation);
       particularLines.push(`Ground ${normalizedGroundCode} is a DISCRETIONARY ground. The court will assess the extent of deterioration.`);
-    } else if (normalizedGroundCode === '14' || groundNumStr === '14A') {
+    } else if (['7A', '14', '14A', '14ZA'].includes(normalizedGroundCode)) {
       explanation =
         getWizardValue(wizard, 'section8_other_grounds_narrative') ||
         getWizardValue(wizard, 'section8_grounds_narrative') ||
         'The tenant or persons at the property have caused nuisance or annoyance.';
       particularLines.push(explanation);
-      particularLines.push(`Ground ${groundNumStr} is a DISCRETIONARY ground. The court will consider evidence of nuisance or anti-social behaviour.`);
+      particularLines.push(
+        groundDef.mandatory
+          ? `Ground ${groundNumStr} is a MANDATORY ground. The court will expect the statutory trigger and supporting conduct evidence to be proved.`
+          : `Ground ${groundNumStr} is a DISCRETIONARY ground. The court will consider evidence of nuisance or anti-social behaviour.`
+      );
     } else if (normalizedGroundCode === '17') {
       explanation =
         getWizardValue(wizard, 'section8_other_grounds_narrative') ||
@@ -4346,18 +4501,10 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // Calculate earliest_possession_date if not provided (SECTION 8 FALLBACK)
   // IMPORTANT: Notice period depends on selected grounds!
-  // Most grounds require 2 weeks (14 days); some require 2 months (60 days)
+  // Notice periods come from the post-1 May 2026 England ground catalogue.
   // NOTE: This block only runs if Section 21 calculation above didn't set earliest_possession_date
   if (!templateData.earliest_possession_date && templateData.service_date) {
-    // Get selected grounds to calculate required notice period
-    const selectedGrounds = getFirstValue(wizard, [
-      'case_facts.issues.section8_grounds.selected_grounds',
-      'section8_grounds',
-      'section8_grounds_selection',
-      'selected_grounds',
-    ]);
-
-    const groundsList = Array.isArray(selectedGrounds) ? selectedGrounds : (selectedGrounds ? [selectedGrounds] : []);
+    const groundsList = collectSection8GroundSelections(wizard);
 
     // Calculate notice period based on grounds (use max of all selected grounds)
     const calculatedNoticePeriod = calculateRequiredNoticePeriod(groundsList);
@@ -4368,8 +4515,17 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     // Store the calculated notice period for templates and validation
     templateData.notice_period_days = noticePeriodDays;
     templateData.notice_period_weeks = Math.ceil(noticePeriodDays / 7);
-    templateData.notice_period_months = noticePeriodDays >= 60 ? 2 : 0;
-    templateData.notice_period_description = noticePeriodDays >= 60 ? '2 months' : '2 weeks';
+    templateData.notice_period_months = noticePeriodDays >= 120 ? 4 : noticePeriodDays >= 60 ? 2 : 0;
+    templateData.notice_period_description =
+      noticePeriodDays === 0
+        ? 'immediate'
+        : noticePeriodDays >= 120
+          ? '4 months'
+          : noticePeriodDays >= 60
+            ? '2 months'
+            : noticePeriodDays >= 28
+              ? '4 weeks'
+              : '2 weeks';
 
     templateData.earliest_possession_date =
       calculateEarliestValidPossessionDate(templateData.service_date, groundsList) ||

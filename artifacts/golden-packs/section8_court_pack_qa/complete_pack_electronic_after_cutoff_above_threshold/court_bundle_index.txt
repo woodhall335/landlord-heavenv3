@@ -3,7 +3,7 @@ qa-complete-electronic-001
 JURISDICTION
 england
 GENERATED
-4 May 2026
+5 May 2026
 ENGLAND POSSESSION FILE
 Court Bundle Index
 Claim for possession of residential property
@@ -17,19 +17,19 @@ CLAIMANT Daniel Mercer
 DEFENDANT Ivy Carleton
 PROPERTY 16 Willow Mews York YO24 3HX
 NOTICE SERVICE DATE 6 March 2026
-NOTICE EXPIRY DATE 23 March 2026
+NOTICE EXPIRY DATE 6 April 2026
 EARLIEST PROCEEDINGS
 DATE
-23 March 2026
-BUNDLE PREPARED 4 May 2026
+6 April 2026
+BUNDLE PREPARED 5 May 2026
 Court-pack validation summary
 DEEMED SERVICE DATE
 USED
 9 March 2026
-NOTICE EXPIRY DATE 23 March 2026
+NOTICE EXPIRY DATE 6 April 2026
 EARLIEST PROCEEDINGS
 DATE
-23 March 2026
+6 April 2026
 TOTAL ARREARS £4800.00
 GROUND 8 THRESHOLD £3600.00
 GROUND 8 STATUS ABOVE
@@ -73,6 +73,6 @@ Keep the court-facing bundle free from unused sections, stray technical notes, a
 -- 2 of 3 --
 
 Prepared by: Daniel Mercer
-Date: 4 May 2026
+Date: 5 May 2026
 
 -- 3 of 3 --

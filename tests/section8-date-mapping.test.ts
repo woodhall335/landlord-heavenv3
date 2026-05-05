@@ -46,13 +46,13 @@ function createSection8WizardFacts() {
     jurisdiction: 'england',
     selected_notice_route: 'section_8',
     section8_grounds_selection: ['ground_8', 'ground_10'],
-    section8_grounds: ['Ground 8 - Serious rent arrears', 'Ground 10 - Some rent unpaid'],
+    section8_grounds: ['Ground 8 - Rent arrears', 'Ground 10 - Any rent arrears'],
     ground_particulars: {
       ground_8: {
-        factual_summary: 'Tenant owes two full months of rent.',
+        factual_summary: 'Tenant owes three full months of rent.',
         evidence: 'Bank statements and ledger',
-        total_amount_owed: 2400,
-        period_of_arrears: 'November 2025 - December 2025',
+        total_amount_owed: 3600,
+        period_of_arrears: 'October 2025 - December 2025',
       },
       ground_10: {
         factual_summary: 'Some rent remains unpaid from previous periods.',
@@ -70,10 +70,10 @@ function createSection8WizardFacts() {
     tenancy_start_date: '2023-06-15',
     rent_amount: 1200,
     rent_frequency: 'monthly',
-    total_arrears: 2400,
+    total_arrears: 3600,
     // Notice dates - using notice_service_date as primary
     notice_service_date: '2026-01-15',
-    notice_expiry_date: '2026-01-29', // 14 days for Ground 8
+    notice_expiry_date: '2026-02-12', // 28 days for Ground 8
   };
 }
 

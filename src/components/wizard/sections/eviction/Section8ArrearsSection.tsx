@@ -39,6 +39,7 @@ import {
   EVICTION_TEXTAREA_CLASS,
   EVICTION_TINTED_CARD_CLASS,
 } from '@/components/wizard/sections/eviction/ui';
+import { normalizeEnglandGroundCode } from '@/lib/england-possession/ground-catalog';
 
 interface Section8ArrearsSectionProps {
   facts: WizardFacts;
@@ -107,11 +108,15 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   onUpdate,
 }) => {
   const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  const selectedGroundCodes = useMemo(
+    () => selectedGrounds.map((ground) => normalizeEnglandGroundCode(ground)).filter(Boolean),
+    [selectedGrounds],
+  );
 
   // Check which arrears grounds are selected
-  const hasGround8 = selectedGrounds.some((g) => g.includes('Ground 8'));
-  const hasGround10 = selectedGrounds.some((g) => g.includes('Ground 10'));
-  const hasGround11 = selectedGrounds.some((g) => g.includes('Ground 11'));
+  const hasGround8 = selectedGroundCodes.includes('8');
+  const hasGround10 = selectedGroundCodes.includes('10');
+  const hasGround11 = selectedGroundCodes.includes('11');
   const hasAnyArrearsGround = hasGround8 || hasGround10 || hasGround11;
 
   // Get arrears items from facts
@@ -547,7 +552,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
 }) => {
   const particularsText = facts.section8_details || '';
   const hasArrearsGround = selectedGrounds.some((ground) =>
-    ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
+    ['8', '10', '11'].includes(normalizeEnglandGroundCode(ground) || '')
   );
   const ground8Threshold = useMemo(
     () => getGround8Threshold(facts.rent_amount || 0, facts.rent_frequency || 'monthly'),

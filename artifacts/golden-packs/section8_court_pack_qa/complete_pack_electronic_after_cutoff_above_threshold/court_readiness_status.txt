@@ -3,7 +3,7 @@ qa-complete-electronic-001
 JURISDICTION
 england
 GENERATED
-4 May 2026
+5 May 2026
 Stage 2: Section 8 Court & Possession Pack
 Court Readiness Status
 READY FOR COURT - CLAIM FILE ALIGNED
@@ -15,7 +15,7 @@ PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE TYPE Form 3A notice
 TENANCY START DATE 1 June 2024
-GENERATED 4 May 2026
+GENERATED 5 May 2026
 CRITICAL
 Resolve this before issuing
 proceedings or relying on the
@@ -32,12 +32,12 @@ retain the underlying evidence
 for court.
 Court-pack validation summary
 Deemed service date used: 9 March 2026
-Notice expiry date: 23 March 2026
-Earliest proceedings date: 23 March 2026
+Notice expiry date: 6 April 2026
+Earliest proceedings date: 6 April 2026
 Total arrears: £4800.00
 Ground 8 threshold: £3600.00 (ABOVE)
 passed: Arrears total aligned at £4800.00.
-passed: Minimum notice period is at least 14 days from deemed service.
+passed: Minimum notice period is satisfied from deemed service (9 March 2026).
 passed: Ground 8 threshold is satisfied above £3600.00.
 passed: No cross-document conflicts were detected against the recalculated court-pack values.
 
@@ -62,13 +62,13 @@ How to Rent service is recorded on 15 January 2024.
 Action: Keep the service record with the tenancy file.
 OK
 Notice timeline recorded
-Notice served on 6 March 2026 with earliest proceedings date 23 March 2026.
+Notice served on 6 March 2026 with earliest proceedings date 6 April 2026.
 Action: Keep the service date, expiry date, and proceedings date aligned across the notice, N215, and
 any court papers.
 Issue decision
 READY FOR COURT - CLAIM FILE ALIGNED
 Prepare and issue the possession claim using the forms and guidance in this pack once the claim is
-eligible on or after 23 March 2026.
+eligible on or after 6 April 2026.
 Use this checklist as a practical decision engine. It does not replace the tenancy file, the service record,
 or legal advice on the facts of the case.
 

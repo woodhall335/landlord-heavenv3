@@ -201,6 +201,27 @@ describe('EvictionSectionFlow - England complete pack', () => {
     expect(screen.queryByRole('button', { name: stepButtonName('About the arrears') })).toBeNull();
   });
 
+  it('shows ground details for non-arrears breach complete-pack cases', async () => {
+    render(
+      <EvictionSectionFlow
+        {...englandCompletePackProps}
+        initialFacts={{
+          ...englandCompletePackProps.initialFacts,
+          section8_grounds: ['Ground 12 - Breach of tenancy'],
+          section8_details: 'The tenant has kept a dog without consent.',
+          arrears_items: [],
+          total_arrears: 0,
+          arrears_at_notice_date: 0,
+        }}
+      />
+    );
+
+    await screen.findByText(/Choose the main reason you need possession/i);
+
+    expect(getStepButton('Ground details')).toBeDefined();
+    expect(screen.queryByRole('button', { name: stepButtonName('About the arrears') })).toBeNull();
+  });
+
   it('shows both ground details and arrears for mixed complete-pack cases', async () => {
     render(
       <EvictionSectionFlow

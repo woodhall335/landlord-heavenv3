@@ -81,7 +81,11 @@ import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 import { hasCompleteDefenceRiskAnswers } from '@/lib/england-possession/defence-risk';
-import { getSelectedGroundDetailPanels, hasSelectedGroundDetailPanels } from '../sections/eviction/ground-detail-config';
+import {
+  getSelectedGroundDetailPanels,
+  hasSelectedArrearsGrounds,
+  hasSelectedGroundDetailPanels,
+} from '../sections/eviction/ground-detail-config';
 
 // Validation context for live field validation
 import { ValidationProvider, useValidationContext } from '@/components/wizard/ValidationContext';
@@ -219,9 +223,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       const hasSelectedGrounds = selectedGrounds.length > 0;
-      const hasArrearsGround = selectedGrounds.some((g) =>
-        ['Ground 8', 'Ground 10', 'Ground 11'].some((ag) => g.includes(ag))
-      );
+      const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
       const hasParticulars = Boolean(String(facts.section8_details || '').trim());
 
       if (!hasSelectedGrounds) return false;
@@ -237,7 +239,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     hasBlockers: (facts) => {
       const blockers: string[] = [];
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      const hasGround8 = selectedGrounds.some((g) => g.includes('Ground 8'));
+      const hasGround8 = selectedGrounds.some((g) => normalizeEnglandGroundCode(g) === '8');
 
       if (hasGround8) {
         // Ground 8 requires the post-1 May 2026 statutory arrears threshold
@@ -308,9 +310,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
         depositQuestionsComplete &&
         propertyComplianceQuestionsComplete &&
         hasCompleteDefenceRiskAnswers(facts as Record<string, any>, {
-          requireArrearsContext: selectedGrounds.some((ground) =>
-            ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
-          ),
+          requireArrearsContext: hasSelectedArrearsGrounds(selectedGrounds),
         })
       );
     },
@@ -664,9 +664,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     const route = facts.eviction_route as string | undefined;
     const selectedGrounds = (facts.section8_grounds as string[]) || [];
     const hasSpecialistGrounds = hasSelectedGroundDetailPanels(selectedGrounds);
-    const hasArrearsGround = selectedGrounds.some((ground) =>
-      ['Ground 8', 'Ground 10', 'Ground 11'].some((arrearsGround) => ground.includes(arrearsGround))
-    );
+    const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
 
     // Wales routes don't have route-specific sections (like S21 compliance or S8 arrears)
     // so we show all non-route-specific sections once a valid route is selected

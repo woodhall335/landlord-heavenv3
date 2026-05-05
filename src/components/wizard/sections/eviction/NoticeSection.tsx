@@ -31,6 +31,7 @@ import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import {
+  calculateEnglandPossessionNoticePeriod,
   listEnglandGroundDefinitions,
   normalizeEnglandGroundCode,
   type EnglandGroundCode,
@@ -39,7 +40,7 @@ import {
   EVICTION_HINT_CLASS,
   EVICTION_LABEL_CLASS,
 } from '@/components/wizard/sections/eviction/ui';
-import { hasSelectedGroundDetailPanels } from './ground-detail-config';
+import { hasSelectedArrearsGrounds, hasSelectedGroundDetailPanels } from './ground-detail-config';
 
 interface NoticeSectionProps {
   facts: WizardFacts;
@@ -95,7 +96,10 @@ function getGroundSelectionHelperText(selectedGrounds: string[], noticeAlreadySe
     return '';
   }
 
-  const arrearsOnly = selectedGrounds.every((ground) => ARREARS_LED_GROUND_LABELS.has(ground));
+  const arrearsOnly = selectedGrounds.every((ground) => {
+    const normalized = normalizeEnglandGroundCode(ground);
+    return normalized ? ARREARS_LED_GROUND_LABELS.has(`Ground ${normalized}`) : false;
+  });
 
   if (arrearsOnly) {
     return noticeAlreadyServed
@@ -385,28 +389,28 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
     () => (Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : []),
     [facts.section8_grounds]
   );
-  const hasArrearsGround = selectedGrounds.some((ground) => ARREARS_LED_GROUND_LABELS.has(ground));
+  const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
   const hasSpecialistGroundDetails = hasSelectedGroundDetailPanels(selectedGrounds);
+  const calculatedNoticePeriod = useMemo(
+    () => (isSection8 && selectedGrounds.length > 0 ? calculateEnglandPossessionNoticePeriod(selectedGrounds) : null),
+    [isSection8, selectedGrounds],
+  );
 
   // Calculate minimum notice period based on selected grounds
   const minNoticePeriod = useMemo(() => {
     if (!isSection8) return 60;
     if (selectedGrounds.length === 0) return 28;
-    let maxPeriod = 28;
-    selectedGrounds.forEach((ground) => {
-      const groundInfo = SECTION_8_GROUNDS.find((g) => g.value === ground);
-      if (groundInfo && groundInfo.period > maxPeriod) {
-        maxPeriod = groundInfo.period;
-      }
-    });
-    return maxPeriod;
-  }, [isSection8, selectedGrounds]);
+    return calculatedNoticePeriod?.noticePeriodDays ?? 28;
+  }, [calculatedNoticePeriod, isSection8, selectedGrounds.length]);
 
   const minNoticePeriodLabel = useMemo(() => {
     if (!isSection8) return '2 months';
     if (selectedGrounds.length === 0) return 'depends on the ground you choose';
 
-    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => selectedGrounds.includes(ground.value));
+    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => {
+      const normalized = normalizeEnglandGroundCode(ground.value);
+      return normalized ? calculatedNoticePeriod?.drivingGrounds.includes(normalized) : false;
+    });
     if (matchingGrounds.length === 0) return `${minNoticePeriod} days`;
 
     const drivingLabels = Array.from(
@@ -418,7 +422,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
     );
 
     return drivingLabels.join(' / ');
-  }, [isSection8, selectedGrounds, minNoticePeriod]);
+  }, [calculatedNoticePeriod, isSection8, selectedGrounds.length, minNoticePeriod]);
 
   // Calculate suggested service and expiry dates
   const today = new Date().toISOString().split('T')[0];
@@ -426,10 +430,11 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
     // FIXED (Jan 2026): Check both notice_date (new) and notice_service_date (old)
     const serviceDate = facts.notice_date || facts.notice_service_date || today;
     const date = new Date(serviceDate);
-    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) =>
-      selectedGrounds.includes(ground.value) && ground.period === minNoticePeriod
-    );
-    const noticePeriodMonths = Math.max(...matchingGrounds.map((ground) => ground.periodMonths || 0), 0);
+    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => {
+      const normalized = normalizeEnglandGroundCode(ground.value);
+      return normalized ? calculatedNoticePeriod?.drivingGrounds.includes(normalized) : false;
+    });
+    const noticePeriodMonths = Math.max(0, ...matchingGrounds.map((ground) => ground.periodMonths || 0));
 
     if (noticePeriodMonths > 0) {
       date.setMonth(date.getMonth() + noticePeriodMonths);
@@ -437,7 +442,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
       date.setDate(date.getDate() + minNoticePeriod);
     }
     return date.toISOString().split('T')[0];
-  }, [facts.notice_date, facts.notice_service_date, minNoticePeriod, selectedGrounds, today]);
+  }, [calculatedNoticePeriod, facts.notice_date, facts.notice_service_date, minNoticePeriod, today]);
 
   // Initialize notice_date (and notice_service_date for backwards compat) when entering service step
   // This ensures the displayed default value is also saved to facts
@@ -1051,23 +1056,17 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
   // notice_already_served: true = already served, false = need to generate
   // In notice_only mode, we always treat it as "need to generate"
   const noticeAlreadyServed = isNoticeOnlyMode ? false : facts.notice_already_served;
+  const calculatedNoticePeriod = useMemo(
+    () => (isEngland && isSection8 && selectedGrounds.length > 0 ? calculateEnglandPossessionNoticePeriod(selectedGrounds) : null),
+    [isEngland, isSection8, selectedGrounds],
+  );
 
   // Calculate minimum notice period based on selected grounds
   const minNoticePeriod = useMemo(() => {
     if (!isSection8) return 60;
     if (selectedGrounds.length === 0) return isEngland ? 28 : 14;
-
-    // Find the maximum notice period among selected grounds
-    // (when multiple grounds, the longest period applies)
-    let maxPeriod = isEngland ? 28 : 14;
-    selectedGrounds.forEach((ground) => {
-      const groundInfo = SECTION_8_GROUNDS.find((g) => g.value === ground);
-      if (groundInfo && groundInfo.period > maxPeriod) {
-        maxPeriod = groundInfo.period;
-      }
-    });
-    return maxPeriod;
-  }, [isEngland, isSection8, selectedGrounds]);
+    return calculatedNoticePeriod?.noticePeriodDays ?? (isEngland ? 28 : 14);
+  }, [calculatedNoticePeriod, isEngland, isSection8, selectedGrounds.length]);
 
   const minNoticePeriodLabel = useMemo(() => {
     if (!isSection8) return '2 months';
@@ -1075,7 +1074,10 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       return isEngland ? 'depends on the ground you choose' : '2 weeks';
     }
 
-    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => selectedGrounds.includes(ground.value));
+    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => {
+      const normalized = normalizeEnglandGroundCode(ground.value);
+      return normalized ? calculatedNoticePeriod?.drivingGrounds.includes(normalized) : false;
+    });
     if (matchingGrounds.length === 0) return `${minNoticePeriod} days`;
 
     const drivingLabels = Array.from(
@@ -1087,17 +1089,18 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     );
 
     return drivingLabels.join(' / ');
-  }, [isEngland, isSection8, selectedGrounds, minNoticePeriod]);
+  }, [calculatedNoticePeriod, isEngland, isSection8, selectedGrounds.length, minNoticePeriod]);
 
   // Calculate suggested expiry date
   const suggestedExpiryDate = useMemo(() => {
     if (!facts.notice_served_date) return null;
     const servedDate = new Date(facts.notice_served_date);
     const expiryDate = new Date(servedDate);
-    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) =>
-      selectedGrounds.includes(ground.value) && ground.period === minNoticePeriod
-    );
-    const noticePeriodMonths = Math.max(...matchingGrounds.map((ground) => ground.periodMonths || 0), 0);
+    const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => {
+      const normalized = normalizeEnglandGroundCode(ground.value);
+      return normalized ? calculatedNoticePeriod?.drivingGrounds.includes(normalized) : false;
+    });
+    const noticePeriodMonths = Math.max(0, ...matchingGrounds.map((ground) => ground.periodMonths || 0));
 
     if (noticePeriodMonths > 0) {
       expiryDate.setMonth(expiryDate.getMonth() + noticePeriodMonths);
@@ -1105,7 +1108,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       expiryDate.setDate(expiryDate.getDate() + minNoticePeriod);
     }
     return expiryDate.toISOString().split('T')[0];
-  }, [facts.notice_served_date, minNoticePeriod, selectedGrounds]);
+  }, [calculatedNoticePeriod, facts.notice_served_date, minNoticePeriod]);
 
   // Handle ground selection
   const handleGroundToggle = (ground: string) => {
@@ -1381,7 +1384,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                           {ground.mandatory ? 'Mandatory' : 'Discretionary'}
                         </span>
                         <span className="text-xs text-gray-500">
-                          {ground.period} days notice
+                          {ground.periodLabel || `${ground.period} days`}
                         </span>
                       </div>
                     </div>

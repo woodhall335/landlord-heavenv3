@@ -6,6 +6,7 @@ import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnha
 import AskHeavenStepAutofill, { type AskHeavenStepDraftTarget } from '@/components/wizard/AskHeavenStepAutofill';
 import {
   getSelectedGroundDetailPanels,
+  hasSelectedArrearsGrounds,
   Section8GroundDetailPanels,
   type GroundDetailPanelConfig,
   type GroundDetailFieldConfig,
@@ -18,8 +19,6 @@ interface GroundDetailsSectionProps {
   product: 'notice_only' | 'complete_pack';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
-
-const ARREARS_GROUND_CODES = ['Ground 8', 'Ground 10', 'Ground 11'];
 
 function buildGroundFieldSeed(
   panel: GroundDetailPanelConfig,
@@ -88,9 +87,7 @@ export const GroundDetailsSection: React.FC<GroundDetailsSectionProps> = ({
 }) => {
   const selectedGrounds = (facts.section8_grounds as string[]) || [];
   const panels = useMemo(() => getSelectedGroundDetailPanels(selectedGrounds), [selectedGrounds]);
-  const hasArrearsGround = selectedGrounds.some((ground) =>
-    ARREARS_GROUND_CODES.some((arrearsGround) => ground.includes(arrearsGround)),
-  );
+  const hasArrearsGround = hasSelectedArrearsGrounds(selectedGrounds);
   const shouldShowGeneralParticulars = panels.length > 0 && !hasArrearsGround;
   const particularsText = String(facts.section8_details || '');
 

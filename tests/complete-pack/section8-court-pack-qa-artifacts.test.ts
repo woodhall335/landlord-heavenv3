@@ -83,7 +83,7 @@ describe('Section 8 court-pack QA golden artifacts', () => {
       'Ground 8 (mandatory) and Ground 10 (discretionary) of Schedule 2 to the Housing Act 1988.',
     );
     expect(n119Fields.get('5. The following steps have already been taken to recover any arrears:')).toContain(
-      'The notice expires on 20 March 2026.',
+      'The notice expires on 3 April 2026.',
     );
     expect(n119Fields.get('7. The following information is known about the defendant’s circumstances:')).toBe(
       "The claimant is not aware of any further information about the defendant's circumstances beyond the matters set out in the claim papers.",
@@ -138,7 +138,7 @@ describe('Section 8 court-pack QA golden artifacts', () => {
         'DEEMED SERVICE DATE USED',
         '6 March 2026',
         'NOTICE EXPIRY DATE',
-        '20 March 2026',
+        '3 April 2026',
         'EARLIEST PROCEEDINGS DATE',
         'TOTAL ARREARS',
         '£4800.00',
@@ -152,7 +152,7 @@ describe('Section 8 court-pack QA golden artifacts', () => {
     expect(courtReadiness).toContain('Court-pack validation summary');
     expect(courtReadiness).toContain('Ground 8 threshold:');
     expect(courtReadiness).toContain('&#163;3600.00 (ABOVE)');
-    expect(courtReadiness).toContain('Minimum notice period is at least 14 days from deemed service.');
+    expect(courtReadiness).toContain('Minimum notice period is satisfied from deemed service (6 March 2026).');
   });
 
   it('captures the personal-service-after-cutoff Stage 1 risk position without raw object leaks', async () => {
@@ -170,7 +170,7 @@ describe('Section 8 court-pack QA golden artifacts', () => {
       'DEEMED SERVICE DATE USED',
       '6 March 2026',
       'NOTICE EXPIRY DATE',
-      '20 March 2026',
+      '3 April 2026',
       'GROUND 8 STATUS',
       'AT',
       'Ground 8 threshold is exactly met at £3600.00 and should be treated as a risk position.',
@@ -194,9 +194,9 @@ describe('Section 8 court-pack QA golden artifacts', () => {
       'DEEMED SERVICE DATE USED',
       '9 March 2026',
       'NOTICE EXPIRY DATE',
-      '23 March 2026',
+      '6 April 2026',
       'EARLIEST PROCEEDINGS DATE',
-      '23 March 2026',
+      '6 April 2026',
       'GROUND 8 STATUS',
       'ABOVE',
     ]);

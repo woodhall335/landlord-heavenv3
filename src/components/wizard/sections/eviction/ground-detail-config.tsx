@@ -36,17 +36,33 @@ const ENGLAND_GROUND_MAP = new Map(
   ENGLAND_GROUND_DEFINITIONS.map((ground) => [ground.code, ground] as const),
 );
 
+const ARREARS_GROUND_CODES = new Set<EnglandGroundCode>(['8', '10', '11']);
+
 const OCCUPATION_STYLE_GROUND_CODES = new Set<EnglandGroundCode>([
   '2', '2ZA', '2ZB', '2ZC', '2ZD', '4', '4A', '5', '5A', '5B', '5C', '5E', '5F', '5G', '5H', '7', '18',
 ]);
+
+const CONDUCT_GROUND_CODES = new Set<EnglandGroundCode>(['7A', '14', '14A', '14ZA']);
+const DAMAGE_GROUND_CODES = new Set<EnglandGroundCode>(['13', '15']);
 
 export function groundFactPath(code: EnglandGroundCode, field: string): string {
   return `ground_${code.toLowerCase()}.${field}`;
 }
 
+export function hasSelectedArrearsGrounds(selectedGrounds: string[]): boolean {
+  return selectedGrounds.some((ground) => {
+    const code = normalizeEnglandGroundCode(ground);
+    return code ? ARREARS_GROUND_CODES.has(code) : false;
+  });
+}
+
 export function buildGroundDetailPanelConfig(code: EnglandGroundCode): GroundDetailPanelConfig | null {
   const definition = ENGLAND_GROUND_MAP.get(code);
   if (!definition) return null;
+
+  if (ARREARS_GROUND_CODES.has(code)) {
+    return null;
+  }
 
   if (code === '1') {
     return {
@@ -261,6 +277,165 @@ export function buildGroundDetailPanelConfig(code: EnglandGroundCode): GroundDet
     };
   }
 
+  if (code === '12') {
+    return {
+      code,
+      title: definition.title,
+      intro:
+        'Tell us which tenancy term was breached, what happened, when it happened, and what records support the allegation.',
+      fields: [
+        {
+          field: groundFactPath(code, 'tenancy_clause'),
+          label: 'Which tenancy clause or obligation was breached?',
+          helpText: 'Use the clause number if known, or describe the obligation clearly.',
+        },
+        {
+          field: groundFactPath(code, 'breach_type'),
+          label: 'What breach is relied on?',
+          helpText: 'For example: unauthorised subletting, keeping a pet without consent, or refusing access.',
+          type: 'textarea',
+        },
+        {
+          field: groundFactPath(code, 'breach_dates'),
+          label: 'When did the breach happen?',
+          helpText: 'Give dates or a short chronology.',
+          type: 'textarea',
+        },
+        {
+          field: groundFactPath(code, 'breach_evidence'),
+          label: 'What evidence supports the breach?',
+          helpText: 'List the records, photographs, inspection notes, messages, or witness material available.',
+          type: 'textarea',
+        },
+        {
+          field: groundFactPath(code, 'warnings_issued'),
+          label: 'Were warnings or requests to remedy sent?',
+          helpText: 'Summarise any warning letters, emails, calls, or chances to put the breach right.',
+          type: 'textarea',
+        },
+      ],
+    };
+  }
+
+  if (DAMAGE_GROUND_CODES.has(code)) {
+    const subject = code === '15' ? 'furniture or contents' : 'property';
+    return {
+      code,
+      title: definition.title,
+      intro:
+        `Tell us what deterioration or damage to the ${subject} is relied on, when it was identified, and how it is evidenced.`,
+      fields: [
+        {
+          field: groundFactPath(code, 'damage_description'),
+          label: `Describe the damage or deterioration to the ${subject}`,
+          helpText: 'Keep this factual and distinguish it from fair wear and tear where possible.',
+          type: 'textarea',
+        },
+        {
+          field: groundFactPath(code, 'damage_discovered_date'),
+          label: 'When was it discovered?',
+          helpText: 'Use the inspection, report, or discovery date if known.',
+          type: 'date',
+        },
+        {
+          field: groundFactPath(code, 'damage_cost'),
+          label: 'Estimated repair or replacement cost',
+          helpText: 'Use the best current estimate, quote, or invoice total if available.',
+        },
+        {
+          field: groundFactPath(code, 'evidence_available'),
+          label: 'What evidence supports this ground?',
+          helpText: 'For example: inventory, photographs, inspection notes, repair quotes, or contractor reports.',
+          type: 'textarea',
+        },
+      ],
+    };
+  }
+
+  if (CONDUCT_GROUND_CODES.has(code)) {
+    return {
+      code,
+      title: definition.title,
+      intro:
+        'Tell us the conduct relied on, who was affected, and what official or witness evidence supports the case.',
+      fields: [
+        {
+          field: groundFactPath(code, 'incidents_description'),
+          label: 'Describe the incidents or behaviour',
+          helpText: 'Include dates, locations, and what happened. Keep the wording factual and neutral.',
+          type: 'textarea',
+        },
+        {
+          field: groundFactPath(code, 'incident_count'),
+          label: 'How many incidents are currently recorded?',
+          helpText: 'Use the number of separate incidents in your evidence log, if known.',
+        },
+        {
+          field: groundFactPath(code, 'affected_parties'),
+          label: 'Who was affected?',
+          helpText: 'For example: neighbours, staff, other occupiers, visitors, or the landlord.',
+        },
+        {
+          field: groundFactPath(code, 'warnings_issued'),
+          label: 'Warnings, interventions, or reports',
+          helpText: 'Summarise warnings, police attendance, council involvement, injunctions, convictions, or other interventions.',
+          type: 'textarea',
+        },
+        {
+          field: groundFactPath(code, 'police_reference'),
+          label: 'Police or court reference',
+          helpText: 'Add a crime, incident, conviction, order, or case reference if available.',
+        },
+        {
+          field: groundFactPath(code, 'council_reference'),
+          label: 'Council or housing-management reference',
+          helpText: 'Add any environmental health, ASB team, managing-agent, or housing reference if available.',
+        },
+      ],
+    };
+  }
+
+  if (code === '17') {
+    return {
+      code,
+      title: definition.title,
+      intro:
+        'Tell us what statement was false, when it was made, what the true position was, and when the issue came to light.',
+      fields: [
+        {
+          field: groundFactPath(code, 'statement_made'),
+          label: 'What false statement is relied on?',
+          helpText: 'Summarise the statement made by or on behalf of the tenant.',
+          type: 'textarea',
+        },
+        {
+          field: groundFactPath(code, 'statement_date'),
+          label: 'When was the statement made?',
+          helpText: 'Use the application, reference, or tenancy-signing date if known.',
+          type: 'date',
+        },
+        {
+          field: groundFactPath(code, 'true_facts'),
+          label: 'What was the true position?',
+          helpText: 'Explain the facts said to show the statement was false.',
+          type: 'textarea',
+        },
+        {
+          field: groundFactPath(code, 'discovery_date'),
+          label: 'When was the false statement discovered?',
+          helpText: 'Use the date the landlord first had reliable evidence, if known.',
+          type: 'date',
+        },
+        {
+          field: groundFactPath(code, 'supporting_evidence'),
+          label: 'What evidence supports this ground?',
+          helpText: 'List application forms, references, verification records, messages, or other documents.',
+          type: 'textarea',
+        },
+      ],
+    };
+  }
+
   if (OCCUPATION_STYLE_GROUND_CODES.has(code)) {
     return {
       code,
@@ -306,7 +481,38 @@ export function buildGroundDetailPanelConfig(code: EnglandGroundCode): GroundDet
     };
   }
 
-  return null;
+  return {
+    code,
+    title: definition.title,
+    intro:
+      'Tell us why this ground is said to apply, the key dates, and the evidence that supports it.',
+    fields: [
+      {
+        field: groundFactPath(code, 'factual_basis'),
+        label: `Why is Ground ${code} said to apply?`,
+        helpText: 'Summarise the statutory facts in careful, neutral prose.',
+        type: 'textarea',
+      },
+      {
+        field: groundFactPath(code, 'trigger_date'),
+        label: 'Relevant trigger or event date',
+        helpText: 'Use the key date connected to this ground, if known.',
+        type: 'date',
+      },
+      {
+        field: groundFactPath(code, 'notice_or_status_details'),
+        label: 'Notice, status, or context details',
+        helpText: 'Add any prior notice, decision, status, scheme, or factual context that explains the ground.',
+        type: 'textarea',
+      },
+      {
+        field: groundFactPath(code, 'supporting_evidence'),
+        label: 'What evidence supports this ground?',
+        helpText: 'List the key documents, records, or witness material available.',
+        type: 'textarea',
+      },
+    ],
+  };
 }
 
 export function getSelectedGroundDetailPanels(selectedGrounds: string[]): GroundDetailPanelConfig[] {

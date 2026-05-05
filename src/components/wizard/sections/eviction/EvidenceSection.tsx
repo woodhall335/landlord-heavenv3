@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 import { RiCheckboxCircleLine, RiFileTextLine } from 'react-icons/ri';
 import { buildEnglandEvictionChronology } from '@/lib/england-possession/chronology';
@@ -190,27 +190,27 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
     [facts],
   );
 
-  const mergeEvidence = async (patch: Record<string, any>) => {
+  const mergeEvidence = useCallback(async (patch: Record<string, any>) => {
     await onUpdate({
       evidence: {
         ...evidence,
         ...patch,
       },
     });
-  };
+  }, [evidence, onUpdate]);
 
-  const mergeTimeline = async (patch: Record<string, any>) => {
+  const mergeTimeline = useCallback(async (patch: Record<string, any>) => {
     await onUpdate({
       communication_timeline: {
         ...communicationTimeline,
         ...patch,
       },
     });
-  };
+  }, [communicationTimeline, onUpdate]);
 
-  const mergeRisk = async (patch: Record<string, any>) => {
+  const mergeRisk = useCallback(async (patch: Record<string, any>) => {
     await onUpdate(mergeDefenceRiskUpdate({ ...facts, risk: riskFacts }, patch));
-  };
+  }, [facts, onUpdate, riskFacts]);
 
   const evidenceDraftTargets = useMemo<AskHeavenStepDraftTarget[]>(() => {
     const propertyAddress = [
@@ -360,6 +360,9 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
     generatedChronology.timelineItems,
     hasArrearsGround,
     knownTenantDefences,
+    mergeEvidence,
+    mergeRisk,
+    mergeTimeline,
     onUpdate,
     paymentPlanOffered,
     paymentPlanResponse,
