@@ -2,19 +2,21 @@
 
 import React, { useMemo } from 'react';
 import {
-  RiCheckboxCircleLine,
-  RiInformationLine,
-  RiFileSearchLine,
-  RiLightbulbLine,
   RiAlertLine,
+  RiCheckboxCircleLine,
+  RiFileListLine,
+  RiInformationLine,
+  RiLightbulbLine,
 } from 'react-icons/ri';
-import { UploadField, EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import {
-  buildEvidenceContext,
-  classifyAllEvidence,
-  type EvidenceClassificationSummary,
-  type MoneyClaimEvidenceType,
-} from '@/lib/evidence/money-claim-evidence-classifier';
+  buildMoneyClaimEvidenceSummary,
+  calculateMoneyClaimEvidenceStrength,
+  getMoneyClaimSelectedClaimTypes,
+  getVisibleMoneyClaimEvidenceCategories,
+  normalizeMoneyClaimEvidenceItems,
+  type MoneyClaimEvidenceCategory,
+  type MoneyClaimEvidenceItem,
+} from '@/lib/money-claim/evidence-checklist';
 
 interface SectionProps {
   facts: any;
@@ -23,597 +25,326 @@ interface SectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
-/**
- * Evidence category definition with conditional visibility
- */
-interface EvidenceCategory {
-  id: string;
-  label: string;
-  description: string;
-  /** Which claim types require this evidence */
-  requiredFor: Array<'rent_arrears' | 'property_damage' | 'cleaning' | 'unpaid_utilities' | 'unpaid_council_tax' | 'other_tenant_debt' | 'all'>;
-  /** Whether this is strongly recommended vs optional */
-  recommended?: boolean;
-  /** Tips for this evidence type */
-  tips?: string[];
+interface LegacyEvidenceFileSummary {
+  id?: string;
+  fileName?: string;
+  name?: string;
+  category?: string;
 }
 
-const EVIDENCE_CATEGORIES: EvidenceCategory[] = [
-  {
-    id: 'tenancy_agreement',
-    label: 'Tenancy agreement',
-    description: 'The signed tenancy agreement or most recent variation. This proves the contractual relationship.',
-    requiredFor: ['all'],
-    recommended: true,
-    tips: [
-      'Include any variations or addendums',
-      'Ensure all pages are legible',
-    ],
+const STRENGTH_STYLES = {
+  weak: {
+    border: 'border-red-200',
+    bg: 'bg-red-50',
+    text: 'text-red-900',
+    muted: 'text-red-700',
   },
-  {
-    id: 'rent_schedule',
-    label: 'Rent schedule / arrears ledger',
-    description: 'A spreadsheet or ledger showing rent due, payments received, and running balance over time.',
-    requiredFor: ['rent_arrears'],
-    recommended: true,
-    tips: [
-      'Show each payment period clearly',
-      'Include dates and amounts for all transactions',
-      'The court needs to see how arrears accumulated',
-    ],
+  fair: {
+    border: 'border-amber-200',
+    bg: 'bg-amber-50',
+    text: 'text-amber-900',
+    muted: 'text-amber-700',
   },
-  {
-    id: 'bank_statements',
-    label: 'Bank statements',
-    description: 'Bank statements showing missed or partial rent payments.',
-    requiredFor: ['rent_arrears'],
-    tips: [
-      'Highlight relevant transactions',
-      'Redact unrelated personal information',
-    ],
+  strong: {
+    border: 'border-green-200',
+    bg: 'bg-green-50',
+    text: 'text-green-900',
+    muted: 'text-green-700',
   },
-  {
-    id: 'demand_letters',
-    label: 'Rent demand letters',
-    description: 'Copies of any rent demand letters or reminders sent to the tenant.',
-    requiredFor: ['rent_arrears'],
-    tips: [
-      'Include proof of posting or email delivery',
-    ],
-  },
-  {
-    id: 'property_photos_before',
-    label: 'Check-in photos / inventory',
-    description: 'Photos or inventory report from the start of the tenancy showing the condition of the property.',
-    requiredFor: ['property_damage', 'cleaning'],
-    recommended: true,
-    tips: [
-      'Dated photos are best',
-      'Professional inventory reports carry more weight',
-    ],
-  },
-  {
-    id: 'property_photos_after',
-    label: 'Check-out photos / damage photos',
-    description: 'Photos showing the damage or condition at the end of tenancy.',
-    requiredFor: ['property_damage', 'cleaning'],
-    recommended: true,
-    tips: [
-      'Take photos from multiple angles',
-      'Include close-ups of specific damage',
-      'Ensure photos are clearly dated',
-    ],
-  },
-  {
-    id: 'repair_quotes',
-    label: 'Repair quotes / invoices',
-    description: 'Quotes or invoices for repair work needed to fix the damage.',
-    requiredFor: ['property_damage'],
-    recommended: true,
-    tips: [
-      'Get at least 2 quotes if possible',
-      'Itemise costs clearly',
-    ],
-  },
-  {
-    id: 'cleaning_invoice',
-    label: 'Cleaning quotes / invoices',
-    description: 'Professional cleaning quotes or invoices for end-of-tenancy clean.',
-    requiredFor: ['cleaning'],
-    recommended: true,
-    tips: [
-      'Include before/after photos if available',
-      'Itemise specific cleaning tasks',
-    ],
-  },
-  {
-    id: 'utility_bills',
-    label: 'Utility bills',
-    description: 'Utility bills in your name showing amounts owed by the tenant.',
-    requiredFor: ['unpaid_utilities'],
-    recommended: true,
-    tips: [
-      'Show the account is in your name',
-      'Highlight the period and amounts relating to the tenancy',
-    ],
-  },
-  {
-    id: 'council_tax_bills',
-    label: 'Council tax bills',
-    description: 'Council tax bills and statements showing arrears during the tenancy period.',
-    requiredFor: ['unpaid_council_tax'],
-    recommended: true,
-    tips: [
-      'Include the tenancy agreement clause making tenant liable',
-      'Show the periods when tenant was responsible',
-    ],
-  },
-  {
-    id: 'other_evidence',
-    label: 'Other supporting documents',
-    description: 'Any other documents that support your claim (e.g., correspondence, receipts, contracts).',
-    requiredFor: ['other_tenant_debt', 'all'],
-    tips: [
-      'Include any written agreements about additional payments',
-      'Keep correspondence showing the debt was acknowledged',
-    ],
-  },
-  {
-    id: 'letter_before_claim',
-    label: 'Letter Before Claim',
-    description: 'Copy of the Letter Before Claim (LBC) sent to the tenant, with proof of posting.',
-    requiredFor: ['all'],
-    recommended: true,
-    tips: [
-      'Include proof of posting (certificate of posting or tracked delivery)',
-      'Keep a copy of the exact letter sent',
-    ],
-  },
-];
+} as const;
 
-/**
- * Get the claim types selected from facts
- */
-function getSelectedClaimTypes(facts: any): Set<string> {
-  const types = new Set<string>();
-
-  if (facts.claiming_rent_arrears === true) {
-    types.add('rent_arrears');
-  }
-
-  const otherTypes: string[] = facts.money_claim?.other_amounts_types || [];
-  if (otherTypes.includes('property_damage') || facts.claiming_damages === true) {
-    types.add('property_damage');
-  }
-  if (otherTypes.includes('cleaning')) {
-    types.add('cleaning');
-  }
-  if (otherTypes.includes('unpaid_utilities')) {
-    types.add('unpaid_utilities');
-  }
-  if (otherTypes.includes('unpaid_council_tax')) {
-    types.add('unpaid_council_tax');
-  }
-  if (facts.claiming_other === true || otherTypes.includes('other_charges')) {
-    types.add('other_tenant_debt');
-  }
-
-  return types;
+function getLegacyFileName(file: LegacyEvidenceFileSummary): string {
+  return file.fileName || file.name || 'Uploaded evidence';
 }
 
-/**
- * Check if an evidence category should be shown based on selected claim types
- */
-function shouldShowCategory(category: EvidenceCategory, selectedTypes: Set<string>): boolean {
-  // 'all' means always show
-  if (category.requiredFor.includes('all')) {
-    return true;
-  }
+function mergeChecklistItems(
+  categories: MoneyClaimEvidenceCategory[],
+  savedItems: MoneyClaimEvidenceItem[],
+  legacyFileCategories: Set<string>
+): MoneyClaimEvidenceItem[] {
+  const savedByType = new Map(savedItems.map((item) => [item.type, item]));
 
-  // Check if any of the required claim types are selected
-  return category.requiredFor.some((type) => selectedTypes.has(type));
+  return categories.map((category) => {
+    const saved = savedByType.get(category.id);
+    return {
+      type: category.id,
+      label: category.label,
+      available: saved?.available === true || legacyFileCategories.has(category.id),
+      description: saved?.description || '',
+    };
+  });
 }
 
-export const EvidenceSection: React.FC<SectionProps> = ({
-  facts,
-  caseId,
-  onUpdate,
-}) => {
+export const EvidenceSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
   const evidence = facts.evidence || {};
-  const existingFiles: EvidenceFileSummary[] = evidence.files || [];
+  const existingFiles: LegacyEvidenceFileSummary[] = evidence.files || [];
+  const legacyFileCategories = useMemo(
+    () => new Set(existingFiles.map((file) => file.category).filter((category): category is string => Boolean(category))),
+    [existingFiles]
+  );
 
-  // Get selected claim types
-  const selectedClaimTypes = useMemo(() => getSelectedClaimTypes(facts), [facts]);
+  const selectedClaimTypes = useMemo(() => getMoneyClaimSelectedClaimTypes(facts), [facts]);
+  const visibleCategories = useMemo(
+    () => getVisibleMoneyClaimEvidenceCategories(selectedClaimTypes),
+    [selectedClaimTypes]
+  );
+  const savedItems = useMemo(
+    () =>
+      normalizeMoneyClaimEvidenceItems(
+        facts.money_claim?.evidence_items,
+        facts.money_claim?.evidence_types_available
+      ),
+    [facts.money_claim?.evidence_items, facts.money_claim?.evidence_types_available]
+  );
+  const checklistItems = useMemo(
+    () => mergeChecklistItems(visibleCategories, savedItems, legacyFileCategories),
+    [visibleCategories, savedItems, legacyFileCategories]
+  );
+  const selectedItems = checklistItems.filter((item) => item.available);
+  const recommendedCategories = visibleCategories.filter((category) => category.recommended);
+  const optionalCategories = visibleCategories.filter((category) => !category.recommended);
+  const evidenceStrength = calculateMoneyClaimEvidenceStrength(
+    selectedClaimTypes,
+    checklistItems,
+    visibleCategories
+  );
+  const strengthStyle = STRENGTH_STYLES[evidenceStrength.level];
 
-  // Filter categories to show based on claim types
-  const visibleCategories = useMemo(() => {
-    return EVIDENCE_CATEGORIES.filter((cat) => shouldShowCategory(cat, selectedClaimTypes));
-  }, [selectedClaimTypes]);
+  const persistChecklist = (nextItems: MoneyClaimEvidenceItem[]) => {
+    const evidenceTypesAvailable = nextItems
+      .filter((item) => item.available)
+      .map((item) => item.type);
 
-  // Group into recommended and optional
-  const recommendedCategories = visibleCategories.filter((c) => c.recommended);
-  const optionalCategories = visibleCategories.filter((c) => !c.recommended);
-
-  // Count uploaded files per category
-  const getFilesForCategory = (categoryId: string) => {
-    return existingFiles.filter((f) => f.category === categoryId);
-  };
-
-  const handleFilesChange = (files: EvidenceFileSummary[]) => {
     onUpdate({
-      evidence: {
-        ...evidence,
-        files,
+      money_claim: {
+        ...(facts.money_claim || {}),
+        evidence_items: nextItems,
+        evidence_types_available: evidenceTypesAvailable,
+        evidence_summary: buildMoneyClaimEvidenceSummary(nextItems),
       },
-      // Mark evidence as reviewed when files are uploaded
       evidence_reviewed: true,
     });
   };
 
-  // Mark as reviewed without uploading
+  const updateItem = (
+    category: MoneyClaimEvidenceCategory,
+    changes: Partial<MoneyClaimEvidenceItem>
+  ) => {
+    const nextItems = checklistItems.map((item) =>
+      item.type === category.id
+        ? {
+            ...item,
+            label: category.label,
+            ...changes,
+          }
+        : item
+    );
+    persistChecklist(nextItems);
+  };
+
   const markAsReviewed = () => {
-    onUpdate({
-      evidence_reviewed: true,
-    });
+    persistChecklist(checklistItems);
   };
 
-  // Summary of what's been uploaded
-  const totalUploaded = existingFiles.length;
-  const recommendedUploaded = recommendedCategories.filter(
-    (c) => getFilesForCategory(c.id).length > 0
-  ).length;
-
-  // Classify uploaded evidence for "What we've detected"
-  const evidenceClassification = useMemo(() => {
-    if (existingFiles.length === 0) return null;
-    // Map files to the format expected by the classifier
-    // EvidenceFileSummary has fileName (not name), and no type property
-    const filesForClassification = existingFiles.map((f) => ({
-      id: f.id,
-      name: f.fileName,
-      type: undefined, // Type is inferred from filename by the classifier
-      category: f.category,
-    }));
-    return classifyAllEvidence(filesForClassification);
-  }, [existingFiles]);
-
-  // Build evidence context for "What we still recommend"
-  const evidenceContext = useMemo(() => {
-    const filesForContext = existingFiles.map((f) => ({
-      id: f.id,
-      name: f.fileName,
-      type: undefined, // Type is inferred from filename by the classifier
-      category: f.category,
-    }));
-    return buildEvidenceContext(filesForContext);
-  }, [existingFiles]);
-
-  // Get missing recommended evidence based on claim types
-  const missingRecommendations = useMemo(() => {
-    const recommendations: { id: string; message: string; priority: 'high' | 'medium' }[] = [];
-
-    if (selectedClaimTypes.has('rent_arrears') && !evidenceContext.has_rent_ledger_bank_statement_evidence) {
-      recommendations.push({
-        id: 'rent_ledger',
-        message: 'Upload rent ledger or bank statements showing missed payments',
-        priority: 'high',
-      });
-    }
-
-    if ((selectedClaimTypes.has('property_damage') || selectedClaimTypes.has('cleaning'))) {
-      if (!evidenceContext.has_photo_evidence) {
-        recommendations.push({
-          id: 'photos',
-          message: 'Add photos showing the damage or property condition',
-          priority: 'high',
-        });
-      }
-      if (!evidenceContext.has_any_inventory_evidence) {
-        recommendations.push({
-          id: 'inventory',
-          message: 'Upload check-in/check-out inventory for before/after comparison',
-          priority: 'high',
-        });
-      }
-      if (!evidenceContext.has_invoice_quote_receipt_evidence) {
-        recommendations.push({
-          id: 'invoices',
-          message: 'Add repair quotes or cleaning invoices to substantiate costs',
-          priority: 'medium',
-        });
-      }
-    }
-
-    if (selectedClaimTypes.has('unpaid_utilities') && !evidenceContext.has_utility_bill_evidence) {
-      recommendations.push({
-        id: 'utility_bills',
-        message: 'Upload utility bills for the tenancy period',
-        priority: 'high',
-      });
-    }
-
-    if (selectedClaimTypes.has('unpaid_council_tax') && !evidenceContext.has_council_tax_statement_evidence) {
-      recommendations.push({
-        id: 'council_tax',
-        message: 'Upload council tax statements or bills',
-        priority: 'high',
-      });
-    }
-
-    if (!evidenceContext.has_tenancy_agreement_evidence) {
-      recommendations.push({
-        id: 'tenancy_agreement',
-        message: 'Upload your tenancy agreement (important for all claim types)',
-        priority: 'medium',
-      });
-    }
-
-    return recommendations;
-  }, [selectedClaimTypes, evidenceContext]);
-
-  // Map evidence type to display label
-  const getEvidenceTypeLabel = (type: MoneyClaimEvidenceType): string => {
-    const labels: Record<MoneyClaimEvidenceType, string> = {
-      photo: 'Photos',
-      tenancy_agreement: 'Tenancy Agreement',
-      inventory_checkin: 'Check-in Inventory',
-      inventory_checkout: 'Check-out Inventory',
-      invoice_quote_receipt: 'Invoices/Quotes',
-      rent_ledger_bank_statement: 'Rent Records',
-      correspondence: 'Correspondence',
-      council_tax_statement: 'Council Tax',
-      utility_bill: 'Utility Bills',
-      other: 'Other Documents',
+  const selectedClaimLabels = Array.from(selectedClaimTypes).map((type) => {
+    const labels: Record<string, string> = {
+      rent_arrears: 'rent arrears',
+      property_damage: 'property damage',
+      cleaning: 'cleaning costs',
+      unpaid_utilities: 'unpaid utilities',
+      unpaid_council_tax: 'unpaid council tax',
+      other_tenant_debt: 'other debt',
     };
     return labels[type] || type;
+  });
+
+  const renderCategoryCard = (category: MoneyClaimEvidenceCategory) => {
+    const item = checklistItems.find((currentItem) => currentItem.type === category.id);
+    const checked = item?.available === true;
+
+    return (
+      <div
+        key={category.id}
+        className={`rounded-lg border p-4 transition-colors ${
+          checked ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'
+        }`}
+      >
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={(event) => updateItem(category, { available: event.target.checked })}
+            className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+          />
+          <span className="flex-1">
+            <span className="flex items-center gap-2 text-sm font-medium text-charcoal">
+              {checked && <RiCheckboxCircleLine className="h-5 w-5 text-green-600" />}
+              {category.label}
+              {category.recommended && (
+                <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[11px] font-semibold text-purple-700">
+                  Recommended
+                </span>
+              )}
+            </span>
+            <span className="mt-1 block text-xs text-gray-600">{category.description}</span>
+          </span>
+        </label>
+
+        {category.tips && category.tips.length > 0 && (
+          <div className="mt-3 border-l-2 border-purple-200 pl-4">
+            <p className="mb-1 text-xs font-medium text-purple-700">Useful detail to mention:</p>
+            <ul className="space-y-0.5 text-xs text-purple-600">
+              {category.tips.map((tip) => (
+                <li key={tip}>- {tip}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {checked && (
+          <div className="mt-4">
+            <label className="mb-1 block text-xs font-medium text-gray-700" htmlFor={`evidence_${category.id}`}>
+              What does this evidence show?
+            </label>
+            <textarea
+              id={`evidence_${category.id}`}
+              value={item?.description || ''}
+              onChange={(event) => updateItem(category, { description: event.target.value })}
+              rows={3}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              placeholder="For example: signed AST dated 1 May 2024, or rent ledger showing missed payments from January to March."
+            />
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-gray-600">
-        Upload documents that support your claim. The evidence shown below is based on the
-        claim types you selected. Strong evidence significantly improves your chances of success.
-      </p>
-
-      {/* Summary card */}
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-        <div className="flex items-center justify-between">
+      <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+        <div className="flex items-start gap-2">
+          <RiInformationLine className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
           <div>
-            <p className="text-sm font-medium text-charcoal">
-              Evidence uploaded: {totalUploaded} {totalUploaded === 1 ? 'file' : 'files'}
-            </p>
-            <p className="text-xs text-gray-500 mt-0.5">
-              {recommendedUploaded} of {recommendedCategories.length} recommended categories completed
+            <p className="text-sm font-medium text-blue-900">No upload needed at this stage</p>
+            <p className="mt-1 text-sm text-blue-800">
+              Tick the evidence you already have and briefly say what it shows. We will use this
+              to strengthen the claim wording without pretending we have checked the documents.
             </p>
           </div>
-          {totalUploaded === 0 && (
-            <button
-              type="button"
-              onClick={markAsReviewed}
-              className="text-xs text-primary hover:underline"
-            >
-              Skip for now
-            </button>
-          )}
         </div>
       </div>
 
-      {/* What we've detected - Evidence Intelligence */}
-      {evidenceClassification && evidenceClassification.items.length > 0 && (
-        <div className="rounded-lg border border-green-200 bg-green-50 p-4 space-y-3">
-          <div className="flex items-center gap-2">
-            <RiFileSearchLine className="w-5 h-5 text-green-600" />
-            <h3 className="font-semibold text-green-900">What we&apos;ve detected</h3>
-          </div>
-          <p className="text-sm text-green-800">
-            Based on your uploads, we&apos;ve identified the following evidence types:
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {Array.from(evidenceClassification.typesPresent).map((type) => (
-              <span
-                key={type}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full"
-              >
-                <RiCheckboxCircleLine className="w-3 h-3" />
-                {getEvidenceTypeLabel(type)}
-              </span>
-            ))}
-          </div>
-          {evidenceClassification.items.length > 3 && (
-            <p className="text-xs text-green-700 italic">
-              {evidenceClassification.items.length} documents analyzed
+      <div className={`rounded-lg border p-4 ${strengthStyle.border} ${strengthStyle.bg}`}>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className={`text-sm font-semibold ${strengthStyle.text}`}>
+              Evidence strength: {evidenceStrength.label}
             </p>
-          )}
-        </div>
-      )}
-
-      {/* What we still recommend - Missing Evidence */}
-      {missingRecommendations.length > 0 && selectedClaimTypes.size > 0 && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 space-y-3">
-          <div className="flex items-center gap-2">
-            <RiLightbulbLine className="w-5 h-5 text-amber-600" />
-            <h3 className="font-semibold text-amber-900">What we still recommend</h3>
+            <p className={`mt-1 text-sm ${strengthStyle.muted}`}>{evidenceStrength.summary}</p>
+            <p className={`mt-2 text-xs ${strengthStyle.muted}`}>
+              {evidenceStrength.selectedRecommended} of {evidenceStrength.totalRecommended} recommended
+              evidence categories selected.
+            </p>
           </div>
-          <p className="text-sm text-amber-800">
-            To strengthen your case, consider adding:
-          </p>
-          <ul className="space-y-2">
-            {missingRecommendations.map((rec) => (
-              <li key={rec.id} className="flex items-start gap-2">
-                <RiAlertLine
-                  className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                    rec.priority === 'high' ? 'text-amber-600' : 'text-amber-500'
-                  }`}
-                />
-                <span className="text-sm text-amber-900">
-                  {rec.message}
-                  {rec.priority === 'high' && (
-                    <span className="ml-1 text-xs text-amber-700 font-medium">(recommended)</span>
-                  )}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <button
+            type="button"
+            onClick={markAsReviewed}
+            className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Mark reviewed
+          </button>
         </div>
-      )}
+      </div>
 
-      {/* Claim-specific context */}
       {selectedClaimTypes.size > 0 && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
           <div className="flex items-start gap-2">
-            <RiInformationLine className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
+            <RiFileListLine className="mt-0.5 h-5 w-5 shrink-0 text-gray-600" />
             <div>
-              <p className="text-sm font-medium text-blue-800">
-                Evidence tailored to your claim
-              </p>
-              <p className="text-xs text-blue-700 mt-1">
-                Based on your selections, we&apos;re showing evidence categories relevant to:{' '}
-                {Array.from(selectedClaimTypes)
-                  .map((t) => {
-                    const labels: Record<string, string> = {
-                      rent_arrears: 'rent arrears',
-                      property_damage: 'property damage',
-                      cleaning: 'cleaning costs',
-                      unpaid_utilities: 'unpaid utilities',
-                      unpaid_council_tax: 'unpaid council tax',
-                      other_tenant_debt: 'other debt',
-                    };
-                    return labels[t] || t;
-                  })
-                  .join(', ')}
+              <p className="text-sm font-medium text-charcoal">Evidence tailored to your claim</p>
+              <p className="mt-1 text-xs text-gray-600">
+                Based on your selections, we are showing evidence for: {selectedClaimLabels.join(', ')}.
               </p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Recommended evidence */}
+      {evidenceStrength.missingRecommendedLabels.length > 0 && selectedClaimTypes.size > 0 && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <div className="flex items-start gap-2">
+            <RiLightbulbLine className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+            <div>
+              <p className="text-sm font-semibold text-amber-900">Evidence that would strengthen this claim</p>
+              <p className="mt-1 text-sm text-amber-800">
+                If you have any of these, tick them below and describe them:
+              </p>
+              <ul className="mt-2 space-y-1 text-sm text-amber-900">
+                {evidenceStrength.missingRecommendedLabels.map((label) => (
+                  <li key={label} className="flex items-start gap-2">
+                    <RiAlertLine className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                    <span>{label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
       {recommendedCategories.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-charcoal flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-purple-500" />
-            Recommended Evidence
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-charcoal">
+            <span className="h-2 w-2 rounded-full bg-purple-500" />
+            Recommended evidence
           </h3>
-
-          {recommendedCategories.map((category) => {
-            const categoryFiles = getFilesForCategory(category.id);
-            const hasFiles = categoryFiles.length > 0;
-
-            return (
-              <div
-                key={category.id}
-                className={`rounded-lg border p-4 ${
-                  hasFiles ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      {hasFiles && (
-                        <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
-                      )}
-                      <span className="text-sm font-medium text-charcoal">
-                        {category.label}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-1">{category.description}</p>
-                  </div>
-                </div>
-
-                {category.tips && category.tips.length > 0 && (
-                  <div className="mb-3 pl-4 border-l-2 border-purple-200">
-                    <p className="text-xs font-medium text-purple-700 mb-1">Tips:</p>
-                    <ul className="text-xs text-purple-600 space-y-0.5">
-                      {category.tips.map((tip, i) => (
-                        <li key={i}>• {tip}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <UploadField
-                  caseId={caseId}
-                  questionId={`upload_${category.id}`}
-                  jurisdiction="england"
-                  label=""
-                  description=""
-                  evidenceCategory={category.id}
-                  required={false}
-                  value={categoryFiles}
-                  onChange={handleFilesChange}
-                />
-              </div>
-            );
-          })}
+          {recommendedCategories.map(renderCategoryCard)}
         </div>
       )}
 
-      {/* Optional evidence */}
       {optionalCategories.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-gray-600">
-            Additional Evidence (Optional)
-          </h3>
-
-          {optionalCategories.map((category) => {
-            const categoryFiles = getFilesForCategory(category.id);
-            const hasFiles = categoryFiles.length > 0;
-
-            return (
-              <div
-                key={category.id}
-                className={`rounded-lg border p-4 ${
-                  hasFiles ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      {hasFiles && (
-                        <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
-                      )}
-                      <span className="text-sm font-medium text-charcoal">
-                        {category.label}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-1">{category.description}</p>
-                  </div>
-                </div>
-
-                {category.tips && category.tips.length > 0 && (
-                  <div className="mb-3 pl-4 border-l-2 border-gray-200">
-                    <p className="text-xs font-medium text-gray-500 mb-1">Tips:</p>
-                    <ul className="text-xs text-gray-500 space-y-0.5">
-                      {category.tips.map((tip, i) => (
-                        <li key={i}>• {tip}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <UploadField
-                  caseId={caseId}
-                  questionId={`upload_${category.id}`}
-                  jurisdiction="england"
-                  label=""
-                  description=""
-                  evidenceCategory={category.id}
-                  required={false}
-                  value={categoryFiles}
-                  onChange={handleFilesChange}
-                />
-              </div>
-            );
-          })}
+          <h3 className="text-sm font-semibold text-gray-600">Additional evidence</h3>
+          {optionalCategories.map(renderCategoryCard)}
         </div>
       )}
 
-      {/* No claim types selected message */}
+      {selectedItems.length > 0 && (
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+          <p className="text-sm font-semibold text-green-900">Selected evidence summary</p>
+          <ul className="mt-2 space-y-2 text-sm text-green-800">
+            {selectedItems.map((item) => (
+              <li key={item.type}>
+                <span className="font-medium">{item.label}</span>
+                {item.description ? <span>: {item.description}</span> : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {existingFiles.length > 0 && (
+        <div className="rounded-lg border border-gray-200 bg-white p-4">
+          <p className="text-sm font-semibold text-gray-900">Previously uploaded files</p>
+          <p className="mt-1 text-xs text-gray-600">
+            These are still kept for older cases, but new claims can use the checklist above.
+          </p>
+          <ul className="mt-3 space-y-1 text-sm text-gray-700">
+            {existingFiles.map((file, index) => (
+              <li key={file.id || `${getLegacyFileName(file)}-${index}`}>
+                {getLegacyFileName(file)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {selectedClaimTypes.size === 0 && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
           <p className="text-sm text-amber-800">
-            Please go back to the <strong>Claim Details</strong> section and select what you&apos;re
-            claiming for. The evidence requirements will update based on your selections.
+            Please go back to <strong>What you&apos;re claiming</strong> and select what you want to
+            claim for. The evidence checklist will then narrow down to the relevant items.
           </p>
         </div>
       )}

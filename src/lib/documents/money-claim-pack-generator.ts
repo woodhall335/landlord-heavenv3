@@ -76,6 +76,13 @@ export interface ClaimLineItem {
   amount: number;
 }
 
+export interface MoneyClaimEvidenceItem {
+  type: string;
+  label: string;
+  available: boolean;
+  description?: string | null;
+}
+
 export interface MoneyClaimCase {
   jurisdiction: MoneyClaimJurisdiction;
   case_id?: string;
@@ -169,6 +176,8 @@ export interface MoneyClaimCase {
   // Evidence flags
   arrears_schedule_confirmed?: boolean;
   evidence_types_available?: string[];
+  evidence_items?: MoneyClaimEvidenceItem[];
+  evidence_summary?: string;
 
   // Explicit address-for-service override (if collected in wizard)
   service_address_line1?: string;
@@ -508,6 +517,8 @@ async function generateEnglandMoneyClaimPack(
     enforcement_preferences: claim.enforcement_preferences || [],
     enforcement_notes: claim.enforcement_notes,
     evidence_types_available: claim.evidence_types_available || [],
+    evidence_items: (claim.evidence_items || []).filter((item) => item.available),
+    evidence_summary: claim.evidence_summary,
     arrears_schedule_confirmed: claim.arrears_schedule_confirmed,
     ask_heaven: askHeavenDrafts,
   };

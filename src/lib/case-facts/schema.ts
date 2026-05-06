@@ -275,6 +275,12 @@ export interface MoneyClaimFacts {
   demand_letter_date?: string | null;
   second_demand_date?: string | null;
   evidence_summary?: string | null;
+  evidence_items?: Array<{
+    type: string;
+    label: string;
+    available: boolean;
+    description?: string | null;
+  }> | null;
   // Narrowed to the actual values the rest of the system expects
   basis_of_claim?: 'rent_arrears' | 'damages' | 'both' | null;
   arrears_schedule_confirmed?: boolean | null;
@@ -860,6 +866,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     demand_letter_date: null,
     second_demand_date: null,
     evidence_summary: null,
+    evidence_items: [],
     basis_of_claim: null,
     arrears_schedule_confirmed: null,
     evidence_types_available: null,

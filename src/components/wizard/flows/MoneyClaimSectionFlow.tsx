@@ -5,15 +5,15 @@
  * court-ready, jurisdiction-aware flow.
  *
  * Flow Structure:
- * 1. Claimant - Landlord/Company details
- * 2. Defendant - Tenant details
+ * 1. Your details - Landlord/Company details
+ * 2. Tenant details - Tenant details
  * 3. Tenancy - Start date, rent amount, frequency
- * 4. Claim details - Jurisdiction-specific claim info
+ * 4. What you're claiming - Jurisdiction-specific claim info
  * 5. Rent & arrears - Schedule of arrears breakdown
  * 6. Damages & costs - Additional claims
  * 7. Claim statement - Basis of claim and interest
- * 8. Pre-action steps - Letter before action
- * 9. Evidence - Supporting documents upload
+ * 8. Letter Before Claim - Pre-action steps
+ * 9. Evidence - Supporting evidence checklist
  * 10. Review & finish - Final review and checkout
  */
 
@@ -89,7 +89,7 @@ interface WizardSection {
 const SECTIONS: WizardSection[] = [
   {
     id: 'claimant',
-    label: 'Claimant',
+    label: 'Your details',
     description: 'Your details as the landlord or company making the claim',
     isComplete: (facts) =>
       Boolean(facts.landlord_full_name || (facts.landlord_is_company && facts.company_name)) &&
@@ -106,7 +106,7 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'defendant',
-    label: 'Defendant',
+    label: 'Tenant details',
     description: 'Tenant details for the claim',
     isComplete: (facts) =>
       Boolean(facts.tenant_full_name) &&
@@ -139,7 +139,7 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'claim_details',
-    label: 'Claim Details',
+    label: "What you're claiming",
     description: 'What you want the court to award',
     isComplete: (facts) => {
       // Must select at least one claim type
@@ -231,7 +231,7 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'claim_statement',
-    label: 'Claim Statement',
+    label: 'Claim wording',
     description: 'Your claim statement, occupancy position, and interest',
     isComplete: (facts) => isMoneyClaimClaimStatementSectionComplete(facts),
     hasBlockers: (facts, jurisdiction) => {
@@ -245,7 +245,7 @@ const SECTIONS: WizardSection[] = [
   },
   {
     id: 'preaction',
-    label: 'Pre-Action',
+    label: 'Letter Before Claim',
     description: 'Letter Before Claim and pre-action steps',
     isComplete: (facts) =>
       // Complete if user has either:
@@ -266,9 +266,15 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'evidence',
     label: 'Evidence',
-    description: 'Supporting documents for the claim',
-    // Optional section - only complete when user has uploaded evidence or confirmed none needed
-    isComplete: (facts) => Boolean(facts.evidence_reviewed || facts.uploaded_documents?.length > 0),
+    description: 'Evidence checklist for the claim',
+    // Optional section - complete when user has reviewed the checklist or legacy uploads exist
+    isComplete: (facts) =>
+      Boolean(
+        facts.evidence_reviewed ||
+          facts.uploaded_documents?.length > 0 ||
+          facts.evidence?.files?.length > 0 ||
+          facts.money_claim?.evidence_types_available?.length > 0
+      ),
     hasWarnings: (facts) => {
       const result = getSectionValidation('evidence', facts, facts.__meta?.jurisdiction || 'england');
       return result.warnings;
@@ -331,6 +337,112 @@ function getInitialClaimReasons(reason?: string, topic?: string): ClaimReasonTyp
     default:
       return [];
   }
+}
+
+function formatRoadmapCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    minimumFractionDigits: 2,
+  }).format(amount || 0);
+}
+
+function calculateRoadmapClaimValue(facts: any): number {
+  const arrearsItems = facts?.arrears_items || facts?.issues?.rent_arrears?.arrears_items || [];
+  const arrearsTotal = Array.isArray(arrearsItems) && arrearsItems.length > 0
+    ? arrearsItems.reduce(
+        (sum: number, item: any) => sum + ((Number(item.rent_due) || 0) - (Number(item.rent_paid) || 0)),
+        0
+      )
+    : Number(facts?.total_arrears || facts?.issues?.rent_arrears?.total_arrears || 0);
+  const damageItems = facts?.money_claim?.damage_items || facts?.damage_items || [];
+  const otherCharges = facts?.money_claim?.other_charges || [];
+  const damagesTotal = Array.isArray(damageItems)
+    ? damageItems.reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0)
+    : 0;
+  const otherTotal = Array.isArray(otherCharges)
+    ? otherCharges.reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0)
+    : 0;
+
+  return arrearsTotal + damagesTotal + otherTotal;
+}
+
+function getRoadmapNextDecision(sectionId?: string): string {
+  switch (sectionId) {
+    case 'claimant':
+      return 'Confirm who is making the claim.';
+    case 'defendant':
+      return 'Confirm where the tenant can be served.';
+    case 'tenancy':
+      return 'Set the rent facts that drive the arrears schedule.';
+    case 'claim_details':
+      return 'Choose the debts you want the court to award.';
+    case 'arrears':
+      return 'Check the missed rent periods and claim total.';
+    case 'damages':
+      return 'Add damage, cleaning, utility, council tax, or other costs.';
+    case 'claim_statement':
+      return 'Explain the claim and interest position.';
+    case 'preaction':
+      return 'Decide whether you need a Letter Before Claim generated.';
+    case 'evidence':
+      return 'Record the evidence you have before checkout.';
+    case 'review':
+      return 'Fix blockers, then generate the money claim pack.';
+    default:
+      return 'Work through the guided checklist.';
+  }
+}
+
+function MoneyClaimRoadmapPanel({
+  facts,
+  currentSection,
+  currentSectionIndex,
+  totalSections,
+}: {
+  facts: any;
+  currentSection?: WizardSection;
+  currentSectionIndex: number;
+  totalSections: number;
+}) {
+  const claimValue = calculateRoadmapClaimValue(facts);
+
+  return (
+    <div className="mb-6 rounded-[1.4rem] border border-violet-200 bg-violet-50 p-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold text-violet-950">Money claim roadmap</p>
+          <p className="mt-1 text-sm text-violet-800">
+            Build the N1, particulars, arrears schedule, Letter Before Claim, and filing guide in a
+            guided checklist.
+          </p>
+        </div>
+        <div className="rounded-xl border border-violet-200 bg-white px-3 py-2 text-right">
+          <p className="text-xs font-medium text-violet-700">Current claim value</p>
+          <p className="text-lg font-semibold text-violet-950">{formatRoadmapCurrency(claimValue)}</p>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3 md:grid-cols-4">
+        <div className="rounded-xl bg-white p-3">
+          <p className="text-xs font-medium text-gray-500">Estimated time</p>
+          <p className="mt-1 text-sm font-semibold text-gray-900">About 8 minutes</p>
+        </div>
+        <div className="rounded-xl bg-white p-3">
+          <p className="text-xs font-medium text-gray-500">Current section</p>
+          <p className="mt-1 text-sm font-semibold text-gray-900">
+            {currentSectionIndex + 1} of {totalSections}: {currentSection?.label}
+          </p>
+        </div>
+        <div className="rounded-xl bg-white p-3 md:col-span-2">
+          <p className="text-xs font-medium text-gray-500">Next decision</p>
+          <p className="mt-1 text-sm font-semibold text-gray-900">
+            {getRoadmapNextDecision(currentSection?.id)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
@@ -849,6 +961,15 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
         </>
       )}
     >
+      {currentSectionIndex === 0 && (
+        <MoneyClaimRoadmapPanel
+          facts={facts}
+          currentSection={currentSection}
+          currentSectionIndex={currentSectionIndex}
+          totalSections={visibleSections.length}
+        />
+      )}
+
       {currentBlockers.length > 0 && (
         <div className="mb-6 rounded-[1.4rem] border border-red-200 bg-red-50 p-4">
                 <h3 className="mb-2 text-sm font-medium text-red-800">You need to fix these before your documents are ready</h3>

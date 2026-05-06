@@ -9,6 +9,7 @@
 
 import type { ClaimReasonType } from '@/components/wizard/sections/money-claim/ClaimDetailsSection';
 import { getClaimReasonsFromFacts } from '@/lib/money-claim/statement-generator';
+import { normalizeMoneyClaimEvidenceItems } from '@/lib/money-claim/evidence-checklist';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
@@ -102,6 +103,14 @@ export interface MoneyClaimFacts {
     court_name?: string;
     /** Flag indicating we will generate PAP documents for the user */
     generate_pap_documents?: boolean;
+    evidence_items?: Array<{
+      type?: string;
+      label?: string;
+      available?: boolean;
+      description?: string | null;
+    }>;
+    evidence_types_available?: string[];
+    evidence_summary?: string | null;
     // Totals for combined claim amount calculation
     totals?: {
       rent_arrears?: number;
@@ -501,27 +510,40 @@ export function validateEvidenceSection(
   const blockers: string[] = [];
   const warnings: string[] = [];
 
-  const hasDocuments = (facts.uploaded_documents?.length || 0) > 0;
+  const selectedEvidenceItems = normalizeMoneyClaimEvidenceItems(
+    facts.money_claim?.evidence_items,
+    facts.money_claim?.evidence_types_available
+  ).filter((item) => item.available);
+  const selectedEvidenceTypes = new Set(selectedEvidenceItems.map((item) => item.type));
+  const hasDocuments =
+    (facts.uploaded_documents?.length || 0) > 0 ||
+    (((facts as any).evidence?.files?.length || 0) > 0);
+  const hasEvidence = hasDocuments || selectedEvidenceItems.length > 0;
+  const hasEvidenceType = (...types: string[]) =>
+    hasDocuments || types.some((type) => selectedEvidenceTypes.has(type));
   const hasReviewed = facts.evidence_reviewed;
 
-  if (!hasDocuments && !hasReviewed) {
+  if (!hasEvidence && !hasReviewed) {
     warnings.push(
-      'Consider uploading supporting evidence such as the tenancy agreement, rent statements, or photos of damage'
+      'Record supporting evidence such as the tenancy agreement, rent statements, or photos of damage'
     );
   }
 
   // Specific evidence warnings based on claim types
   const reasons = getClaimReasonsFromFacts(facts);
 
-  if (reasons.has('rent_arrears') && !hasDocuments) {
+  if (reasons.has('rent_arrears') && !hasEvidenceType('rent_schedule', 'bank_statements')) {
     warnings.push(
-      'For rent arrears claims, upload rent statements or bank records showing missed payments'
+      'For rent arrears claims, record rent statements or bank records showing missed payments'
     );
   }
 
-  if (reasons.has('property_damage') && !hasDocuments) {
+  if (
+    reasons.has('property_damage') &&
+    !hasEvidenceType('property_photos_before', 'property_photos_after', 'repair_quotes')
+  ) {
     warnings.push(
-      'For property damage claims, upload dated photos showing the damage and repair quotes'
+      'For property damage claims, record dated photos showing the damage and repair quotes'
     );
   }
 

@@ -1,8 +1,12 @@
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { MoneyClaimCase } from './money-claim-pack-generator';
 import type { ScotlandMoneyClaimCase } from './scotland-money-claim-pack-generator';
-import { mapArrearsItemsToEntries, getArrearsScheduleFromFacts } from './arrears-schedule-mapper';
+import { mapArrearsItemsToEntries } from './arrears-schedule-mapper';
 import { calculateMoneyClaimFee } from '@/lib/court-fees/hmcts-fees';
+import {
+  buildMoneyClaimEvidenceSummary,
+  normalizeMoneyClaimEvidenceItems,
+} from '@/lib/money-claim/evidence-checklist';
 
 /**
  * Build address string from components, with deduplication.
@@ -51,6 +55,13 @@ function normaliseFrequency(freq: CaseFacts['tenancy']['rent_frequency']): Money
   return 'monthly';
 }
 
+function getMoneyClaimEvidenceItems(facts: CaseFacts) {
+  return normalizeMoneyClaimEvidenceItems(
+    facts.money_claim.evidence_items,
+    facts.money_claim.evidence_types_available
+  ).filter((item) => item.available);
+}
+
 export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
   const rawFacts = facts as CaseFacts & Record<string, any>;
   const landlordAddress = buildAddress(
@@ -67,6 +78,9 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
   // Money Claim is ENGLAND-ONLY
   // Scotland uses Simple Procedure (sc_money_claim), Wales/NI not supported
   const jurisdiction: MoneyClaimCase['jurisdiction'] = 'england';
+  const evidenceItems = getMoneyClaimEvidenceItems(facts);
+  const evidenceSummary =
+    facts.money_claim.evidence_summary || buildMoneyClaimEvidenceSummary(evidenceItems) || undefined;
 
   return {
     jurisdiction,
@@ -145,6 +159,11 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     // Enforcement preferences for guidance
     enforcement_preferences: facts.money_claim.enforcement_preferences || undefined,
     enforcement_notes: facts.money_claim.enforcement_notes || undefined,
+
+    // Evidence checklist output. These are user-stated evidence descriptions, not verified uploads.
+    evidence_items: evidenceItems.length > 0 ? evidenceItems : undefined,
+    evidence_types_available: evidenceItems.length > 0 ? evidenceItems.map((item) => item.type) : undefined,
+    evidence_summary: evidenceSummary,
   };
 }
 
@@ -159,6 +178,7 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     facts.property.address_line2,
     facts.property.city
   );
+  const evidenceItems = getMoneyClaimEvidenceItems(facts);
 
   return {
     jurisdiction: 'scotland',
@@ -217,7 +237,7 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
 
     basis_of_claim: facts.money_claim.basis_of_claim || 'rent_arrears',
     attempts_to_resolve: facts.money_claim.attempts_to_resolve || undefined,
-    evidence_summary: facts.money_claim.evidence_summary || undefined,
+    evidence_summary: facts.money_claim.evidence_summary || buildMoneyClaimEvidenceSummary(evidenceItems) || undefined,
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
 
     signatory_name: facts.money_claim.signatory_name || facts.parties.landlord.name || undefined,

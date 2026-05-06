@@ -9,6 +9,10 @@ import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/re
 import { trackBeginCheckout, trackCheckoutStarted } from '@/lib/analytics';
 import { getCheckoutAttribution } from '@/lib/wizard/wizardAttribution';
 import type { SanitizedComplianceIssue } from '@/lib/documents/compliance-timing-types';
+import {
+  buildPreviewCheckoutReturnUrl,
+  buildSection13CheckoutFixHref,
+} from './checkoutNavigation';
 
 /**
  * Solicitor cost comparison data by product
@@ -45,6 +49,17 @@ interface ComplianceBlockState {
   message: string;
 }
 
+interface CheckoutActionBlockState {
+  title: string;
+  message: string;
+  href: string;
+  actionLabel: string;
+}
+
+function isSection13CheckoutProduct(product: string): boolean {
+  return product === 'section13_standard' || product === 'section13_defensive';
+}
+
 function getPreviewSubtitle(product: string, documentCount: number): string {
   if (product === 'notice_only' || product === 'complete_pack') {
     return `Your live eviction draft is ready to review with ${documentCount} documents assembled from this case.`;
@@ -71,6 +86,7 @@ export function PreviewPageLayout({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [complianceBlock, setComplianceBlock] = useState<ComplianceBlockState | null>(null);
+  const [checkoutActionBlock, setCheckoutActionBlock] = useState<CheckoutActionBlockState | null>(null);
   const e2eModeEnabled = process.env.NEXT_PUBLIC_E2E_MODE === 'true' || process.env.E2E_MODE === 'true';
   const previewSubtitle = getPreviewSubtitle(product, documents.length);
 
@@ -78,6 +94,7 @@ export function PreviewPageLayout({
     setIsLoading(true);
     setError(null);
     setComplianceBlock(null); // Clear any previous compliance block
+    setCheckoutActionBlock(null);
 
     try {
       if (e2eModeEnabled) {
@@ -91,7 +108,7 @@ export function PreviewPageLayout({
 
       if (!user) {
         // Redirect to signup with return URL
-        const returnUrl = `/wizard/preview/${caseId}`;
+        const returnUrl = buildPreviewCheckoutReturnUrl({ caseId, product, addOns });
         window.location.href = `/auth/signup?redirect=${encodeURIComponent(returnUrl)}&case_id=${caseId}`;
         return;
       }
@@ -137,6 +154,22 @@ export function PreviewPageLayout({
       }
 
       if (!response.ok) {
+        if (
+          isSection13CheckoutProduct(product) &&
+          (data.code === 'SECTION13_PREVIEW_REQUIRED' || data.code === 'SECTION13_REQUIRED_FIELDS_MISSING')
+        ) {
+          setCheckoutActionBlock({
+            title: 'Finish your Section 13 preview first',
+            message:
+              data.error ||
+              'The rent increase preview needs to be completed before Stripe checkout can start.',
+            href: buildSection13CheckoutFixHref({ caseId, product }),
+            actionLabel: 'Return to Section 13 wizard',
+          });
+          setIsLoading(false);
+          return;
+        }
+
         throw new Error(data.error || 'Failed to create checkout session');
       }
 
@@ -264,6 +297,28 @@ export function PreviewPageLayout({
 
               {error && (
                 <p className="text-red-600 text-sm mt-3 text-center">{error}</p>
+              )}
+
+              {checkoutActionBlock && (
+                <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-left">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="h-5 w-5 flex-shrink-0 text-amber-600" />
+                    <div>
+                      <h4 className="text-sm font-semibold text-amber-900">
+                        {checkoutActionBlock.title}
+                      </h4>
+                      <p className="mt-1 text-sm text-amber-800">
+                        {checkoutActionBlock.message}
+                      </p>
+                      <a
+                        href={checkoutActionBlock.href}
+                        className="mt-3 inline-flex items-center rounded-lg bg-amber-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-800"
+                      >
+                        {checkoutActionBlock.actionLabel}
+                      </a>
+                    </div>
+                  </div>
+                </div>
               )}
 
               {/* Compliance Timing Block UI */}

@@ -127,9 +127,9 @@ export const ArrearsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
       {arrearsItems.length > 0 && (
         <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
           <p className="text-sm text-purple-800">
-            <strong>Money Claim Note:</strong> This schedule will be attached to your N1 claim form
-            as evidence of the rent arrears. The court requires a clear breakdown showing each
-            period with rent due and amounts paid.
+            <strong>Money Claim Note:</strong> This schedule feeds your N1, particulars, arrears
+            schedule PDF, and claim total. The court still needs a clear breakdown showing each
+            period, the rent due, and the amount paid.
           </p>
         </div>
       )}

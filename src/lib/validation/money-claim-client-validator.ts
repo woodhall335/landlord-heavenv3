@@ -8,6 +8,8 @@
  * Returns tiered results: blockers, warnings, suggestions.
  */
 
+import { normalizeMoneyClaimEvidenceItems } from '@/lib/money-claim/evidence-checklist';
+
 export type RuleSeverity = 'blocker' | 'warning' | 'suggestion';
 
 export type ClaimType =
@@ -84,6 +86,14 @@ export interface MoneyClaimFacts {
     interest_start_date?: string;
     /** Flag indicating we will generate PAP documents for the user */
     generate_pap_documents?: boolean;
+    evidence_items?: Array<{
+      type?: string;
+      label?: string;
+      available?: boolean;
+      description?: string | null;
+    }>;
+    evidence_types_available?: string[];
+    evidence_summary?: string | null;
   };
   issues?: {
     rent_arrears?: {
@@ -442,15 +452,27 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
     }
   }
 
-  // No evidence
-  const hasDocuments = (facts.uploaded_documents?.length || 0) > 0;
-  if (!hasDocuments && !facts.evidence_reviewed) {
+  // Evidence: new cases use a checklist; legacy cases may still have uploaded files.
+  const selectedEvidenceItems = normalizeMoneyClaimEvidenceItems(
+    facts.money_claim?.evidence_items,
+    facts.money_claim?.evidence_types_available
+  ).filter((item) => item.available);
+  const selectedEvidenceTypes = new Set(selectedEvidenceItems.map((item) => item.type));
+  const hasLegacyDocuments =
+    (facts.uploaded_documents?.length || 0) > 0 ||
+    (((facts as any).evidence?.files?.length || 0) > 0);
+  const hasEvidence = hasLegacyDocuments || selectedEvidenceItems.length > 0;
+  const hasEvidenceType = (...types: string[]) =>
+    hasLegacyDocuments || types.some((type) => selectedEvidenceTypes.has(type));
+
+  if (!hasEvidence && !facts.evidence_reviewed) {
     warnings.push({
       id: 'no_evidence_uploaded',
       severity: 'warning',
-      message: 'Consider uploading supporting evidence (tenancy agreement, payment records, photos). Strong evidence improves your chances of success.',
+      message: 'Record the supporting evidence you have, such as the tenancy agreement, payment records, photos, or invoices.',
       section: 'evidence',
-      evidenceHint: 'Upload tenancy agreement, bank statements, photos, quotes, etc.',
+      field: 'money_claim.evidence_items',
+      evidenceHint: 'Use the evidence checklist. Uploads are optional for new claims.',
     });
   }
 
@@ -535,24 +557,32 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
   }
 
   // Property damage evidence warning
-  if (claimTypes.includes('property_damage') && !hasDocuments && !facts.evidence_reviewed) {
+  if (
+    claimTypes.includes('property_damage') &&
+    !hasEvidenceType('property_photos_before', 'property_photos_after', 'repair_quotes')
+  ) {
     warnings.push({
       id: 'property_damage_evidence_warning',
       severity: 'warning',
-      message: 'Property damage claims are difficult to prove without photographic evidence. Upload dated photos showing the damage, a check-in/check-out inventory, and repair quotes or invoices.',
+      message: 'Property damage claims are difficult to prove without evidence. Record photos, inventory evidence, and repair quotes or invoices if you have them.',
       section: 'damages',
-      evidenceHint: 'Required: Before/after photos, check-in inventory comparing condition, repair quotes or invoices.',
+      field: 'money_claim.evidence_items',
+      evidenceHint: 'Recommended: before/after photos, check-in inventory, and repair quotes or invoices.',
     });
   }
 
   // Cleaning evidence warning
-  if (claimTypes.includes('cleaning') && !hasDocuments && !facts.evidence_reviewed) {
+  if (
+    claimTypes.includes('cleaning') &&
+    !hasEvidenceType('property_photos_after', 'cleaning_invoice')
+  ) {
     warnings.push({
       id: 'cleaning_evidence_warning',
       severity: 'warning',
-      message: 'Cleaning cost claims should be supported by evidence. Upload photos showing the property condition and a copy of the professional cleaning invoice.',
+      message: 'Cleaning cost claims should be supported by evidence. Record photos showing condition and the cleaning invoice if you have them.',
       section: 'damages',
-      evidenceHint: 'Required: Check-out photos showing condition, cleaning company invoice with itemised costs.',
+      field: 'money_claim.evidence_items',
+      evidenceHint: 'Recommended: check-out photos and an itemised cleaning invoice.',
     });
   }
 
@@ -568,12 +598,13 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
   }
 
   // Council tax evidence warning
-  if (claimTypes.includes('unpaid_council_tax') && !hasDocuments) {
+  if (claimTypes.includes('unpaid_council_tax') && !hasEvidenceType('council_tax_bills')) {
     warnings.push({
       id: 'council_tax_evidence_required',
       severity: 'warning',
-      message: 'For council tax claims, upload the tenancy agreement (showing tenant liability clause) and council tax statements.',
+      message: 'For council tax claims, record the tenancy clause or other liability evidence and the council tax statements if you have them.',
       section: 'council_tax',
+      field: 'money_claim.evidence_items',
       evidenceHint: 'Tenancy agreement, council tax bills addressed to tenant.',
     });
   }
@@ -607,31 +638,34 @@ export function validateMoneyClaimClient(facts: MoneyClaimFacts): ClientValidati
   }
 
   // Evidence suggestions based on claim type
-  if (claimTypes.includes('rent_arrears') && !hasDocuments) {
+  if (claimTypes.includes('rent_arrears') && !hasEvidenceType('rent_schedule', 'bank_statements')) {
     suggestions.push({
       id: 'arrears_evidence_suggested',
       severity: 'suggestion',
-      message: 'Upload rent statements or bank records showing missed payments to support your arrears claim.',
+      message: 'Record the rent schedule, rent ledger, or bank records you have to support the arrears claim.',
       section: 'evidence',
       evidenceHint: 'Bank statements, rent ledger, or accounting records.',
     });
   }
 
-  if (claimTypes.includes('property_damage') && !hasDocuments) {
+  if (
+    claimTypes.includes('property_damage') &&
+    !hasEvidenceType('property_photos_before', 'property_photos_after', 'repair_quotes')
+  ) {
     suggestions.push({
       id: 'property_damage_evidence_suggested',
       severity: 'suggestion',
-      message: 'Upload dated photos showing the damage and repair quotes to support your property damage claim.',
+      message: 'Record dated photos, inventory evidence, and repair quotes to support your property damage claim.',
       section: 'evidence',
       evidenceHint: 'Before/after photos, check-in inventory, repair invoices.',
     });
   }
 
-  if (claimTypes.includes('cleaning') && !hasDocuments) {
+  if (claimTypes.includes('cleaning') && !hasEvidenceType('property_photos_after', 'cleaning_invoice')) {
     suggestions.push({
       id: 'cleaning_evidence_suggested',
       severity: 'suggestion',
-      message: 'Upload photos of the condition and cleaning invoices to support your cleaning costs claim.',
+      message: 'Record photos of the condition and cleaning invoices to support your cleaning costs claim.',
       section: 'evidence',
       evidenceHint: 'Check-out photos, cleaning company invoice.',
     });
@@ -680,15 +714,15 @@ export function groupBySection(
  */
 export function getSectionLabel(sectionId: string): string {
   const labels: Record<string, string> = {
-    claimant: 'Claimant Details',
-    defendant: 'Defendant Details',
+    claimant: 'Your Details',
+    defendant: 'Tenant Details',
     tenancy: 'Tenancy Information',
-    claim_details: 'Claim Details',
+    claim_details: "What You're Claiming",
     arrears: 'Rent Arrears Schedule',
     damages: 'Other Amounts Schedule',
     council_tax: 'Council Tax',
     utilities: 'Utilities',
-    preaction: 'Pre-Action Protocol',
+    preaction: 'Letter Before Claim',
     evidence: 'Evidence',
     amounts: 'Claim Amount',
     next_steps: 'Next Steps',

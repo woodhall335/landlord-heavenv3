@@ -9,6 +9,7 @@ import {
   RiLightbulbLine,
   RiArrowUpLine,
   RiFileListLine,
+  RiFileSearchLine,
   RiImageLine,
 } from 'react-icons/ri';
 import {
@@ -21,7 +22,11 @@ import {
 import { OutcomeConfidenceIndicator } from './OutcomeConfidenceIndicator';
 import { CourtFeeEstimator } from './CourtFeeEstimator';
 import { EvidenceGallery, getRelevantEvidenceCategories } from './EvidenceGallery';
-import { buildEvidenceContext, type EvidenceContext } from '@/lib/evidence/money-claim-evidence-classifier';
+import {
+  buildMoneyClaimEvidenceSummary,
+  calculateMoneyClaimEvidenceStrength,
+  normalizeMoneyClaimEvidenceItems,
+} from '@/lib/money-claim/evidence-checklist';
 import { scrollWizardViewportToTop } from '@/components/wizard/shared/scrollWizardViewportToTop';
 import {
   trackOutcomeConfidenceShown,
@@ -86,11 +91,11 @@ function getWizardSectionForField(field: string | null | undefined, section: str
 
   // Map field paths to wizard section identifiers
   const fieldToSection: Record<string, string> = {
-    'landlord_full_name': 'parties',
-    'landlord_address_line1': 'parties',
-    'landlord_address_postcode': 'parties',
-    'tenant_full_name': 'parties',
-    'defendant_address_line1': 'parties',
+    'landlord_full_name': 'claimant',
+    'landlord_address_line1': 'claimant',
+    'landlord_address_postcode': 'claimant',
+    'tenant_full_name': 'defendant',
+    'defendant_address_line1': 'defendant',
     'tenancy_start_date': 'tenancy',
     'tenancy_end_date': 'tenancy',
     'rent_amount': 'tenancy',
@@ -104,6 +109,8 @@ function getWizardSectionForField(field: string | null | undefined, section: str
     'money_claim.deposit_deductions_confirmed': 'claim_details',
     'letter_before_claim_sent': 'preaction',
     'pap_letter_date': 'preaction',
+    'money_claim.evidence_items': 'evidence',
+    'money_claim.evidence_types_available': 'evidence',
   };
 
   return fieldToSection[field] || null;
@@ -485,17 +492,32 @@ export const ReviewSection: React.FC<SectionProps> = ({
   // Calculate claim types for display
   const claimTypes = useMemo(() => getSelectedClaimTypes(facts), [facts]);
 
-  // Build evidence context for the intelligence components
-  const evidenceContext = useMemo(() => {
-    const files = facts?.evidence?.files || [];
-    return buildEvidenceContext(files);
-  }, [facts?.evidence?.files]);
-
   // Calculate totals for court fee estimator
   const totals = useMemo(() => calculateTotalsBreakdown(facts), [facts]);
 
   // Determine claim type IDs for evidence gallery filtering
   const claimTypeIds = useMemo(() => claimTypes.map((t) => t.id), [claimTypes]);
+
+  const checklistEvidenceItems = useMemo(
+    () =>
+      normalizeMoneyClaimEvidenceItems(
+        moneyClaim.evidence_items,
+        moneyClaim.evidence_types_available
+      ),
+    [moneyClaim.evidence_items, moneyClaim.evidence_types_available]
+  );
+
+  const selectedEvidenceItems = useMemo(
+    () => checklistEvidenceItems.filter((item) => item.available),
+    [checklistEvidenceItems]
+  );
+
+  const evidenceStrength = useMemo(
+    () => calculateMoneyClaimEvidenceStrength(claimTypeIds, checklistEvidenceItems),
+    [claimTypeIds, checklistEvidenceItems]
+  );
+
+  const evidenceSummary = moneyClaim.evidence_summary || buildMoneyClaimEvidenceSummary(checklistEvidenceItems);
 
   // Get relevant evidence categories based on claim types
   const relevantEvidenceCategories = useMemo(
@@ -655,6 +677,71 @@ export const ReviewSection: React.FC<SectionProps> = ({
         facts={facts}
         claimTypes={claimTypes}
       />
+
+      <div
+        className={`rounded-lg border p-4 ${
+          evidenceStrength.level === 'strong'
+            ? 'border-green-200 bg-green-50'
+            : evidenceStrength.level === 'fair'
+            ? 'border-amber-200 bg-amber-50'
+            : 'border-red-200 bg-red-50'
+        }`}
+      >
+        <div className="flex items-start gap-2">
+          <RiFileSearchLine
+            className={`mt-0.5 h-5 w-5 shrink-0 ${
+              evidenceStrength.level === 'strong'
+                ? 'text-green-600'
+                : evidenceStrength.level === 'fair'
+                ? 'text-amber-600'
+                : 'text-red-600'
+            }`}
+          />
+          <div className="flex-1">
+            <p
+              className={`text-sm font-semibold ${
+                evidenceStrength.level === 'strong'
+                  ? 'text-green-900'
+                  : evidenceStrength.level === 'fair'
+                  ? 'text-amber-900'
+                  : 'text-red-900'
+              }`}
+            >
+              Evidence strength: {evidenceStrength.label}
+            </p>
+            <p
+              className={`mt-1 text-sm ${
+                evidenceStrength.level === 'strong'
+                  ? 'text-green-800'
+                  : evidenceStrength.level === 'fair'
+                  ? 'text-amber-800'
+                  : 'text-red-800'
+              }`}
+            >
+              {evidenceStrength.summary}
+            </p>
+            {selectedEvidenceItems.length > 0 ? (
+              <ul className="mt-3 space-y-2 text-sm text-gray-800">
+                {selectedEvidenceItems.map((item) => (
+                  <li key={item.type}>
+                    <span className="font-medium">{item.label}</span>
+                    {item.description ? <span>: {item.description}</span> : null}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm text-gray-700">
+                No evidence has been selected yet. Use the Evidence section to tick what you have.
+              </p>
+            )}
+            {evidenceSummary && (
+              <p className="mt-3 text-xs text-gray-600">
+                This wording will be included cautiously in the claim output.
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* PAP Filing Status Banner - Critical for user understanding */}
       {validation.isValid && (
