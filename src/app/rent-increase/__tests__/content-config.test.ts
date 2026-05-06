@@ -101,7 +101,7 @@ describe('rent increase content config', () => {
   });
 
   it('keeps each page within the long-form target range', () => {
-    for (const key of RENT_INCREASE_GUIDE_ORDER) {
+    for (const key of RENT_INCREASE_GUIDE_SLUGS) {
       const page = RENT_INCREASE_GUIDE_PAGES[key];
       const textBlocks = [
         page.title,

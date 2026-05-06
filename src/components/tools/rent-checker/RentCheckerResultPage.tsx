@@ -8,12 +8,21 @@ import { clsx } from 'clsx';
 import { Button } from '@/components/ui/Button';
 import { captureLead } from '@/components/leads/useLeadCapture';
 import { trackEvent } from '@/lib/analytics';
+import type { GrowthCtaPosition } from '@/lib/analytics/growth-events';
 import { PRODUCTS } from '@/lib/pricing/products';
 import type { RentCheckerResult } from '@/lib/section13';
+
+export interface RentCheckerTrackingContext {
+  sourcePage: string;
+  pagePath?: string;
+  ctaPosition?: GrowthCtaPosition;
+  mode?: 'standalone' | 'embedded';
+}
 
 interface RentCheckerResultPageProps {
   result: RentCheckerResult;
   onRestart: () => void;
+  trackingContext?: RentCheckerTrackingContext;
 }
 
 export interface RentCheckerSourceStatus {
@@ -72,17 +81,41 @@ function recommendedRouteLabel(result: RentCheckerResult) {
     : 'Section 13 Defence Pack';
 }
 
-function trackProductCta(result: RentCheckerResult, clickedProduct: 'section13_standard' | 'section13_defensive') {
+const DEFAULT_TRACKING_CONTEXT: Required<RentCheckerTrackingContext> = {
+  sourcePage: '/tools/rent-increase-challenge-checker',
+  pagePath: '/tools/rent-increase-challenge-checker',
+  ctaPosition: 'bottom',
+  mode: 'standalone',
+};
+
+function resolveTrackingContext(
+  trackingContext?: RentCheckerTrackingContext
+): Required<RentCheckerTrackingContext> {
+  const sourcePage = trackingContext?.sourcePage || DEFAULT_TRACKING_CONTEXT.sourcePage;
+  return {
+    sourcePage,
+    pagePath: trackingContext?.pagePath || sourcePage,
+    ctaPosition: trackingContext?.ctaPosition || DEFAULT_TRACKING_CONTEXT.ctaPosition,
+    mode: trackingContext?.mode || DEFAULT_TRACKING_CONTEXT.mode,
+  };
+}
+
+function trackProductCta(
+  result: RentCheckerResult,
+  clickedProduct: 'section13_standard' | 'section13_defensive',
+  trackingContext?: RentCheckerTrackingContext
+) {
+  const context = resolveTrackingContext(trackingContext);
   const destination =
     clickedProduct === 'section13_standard'
       ? '/products/section-13-standard'
       : '/products/section-13-defence';
 
   trackEvent('product_cta_clicked', {
-    sourcePage: '/tools/rent-increase-challenge-checker',
-    pagePath: '/tools/rent-increase-challenge-checker',
+    sourcePage: context.sourcePage,
+    pagePath: context.pagePath,
     intent: 'rent_increase',
-    ctaPosition: 'bottom',
+    ctaPosition: context.ctaPosition,
     destination,
     recommendedProduct: result.recommendedProduct,
     clickedProduct,
@@ -91,6 +124,8 @@ function trackProductCta(result: RentCheckerResult, clickedProduct: 'section13_s
     resultState: result.resultState,
     challengeRisk: result.challengeRisk,
     evidenceStrength: result.evidenceStrength,
+    toolName: 'rent_increase_challenge_checker',
+    mode: context.mode,
   });
 }
 
@@ -390,21 +425,41 @@ export function ComparableListingsCard({ result }: { result: RentCheckerResult }
   );
 }
 
-export function RecommendedActionCard({ result }: { result: RentCheckerResult }) {
+function buildCheckoutPayload(
+  result: RentCheckerResult,
+  trackingContext?: RentCheckerTrackingContext
+) {
+  const context = resolveTrackingContext(trackingContext);
+  return {
+    sourcePage: context.sourcePage,
+    pagePath: context.pagePath,
+    intent: 'rent_increase',
+    ctaPosition: context.ctaPosition,
+    product: result.recommendedProduct,
+    productClicked: result.recommendedProduct,
+    recommendedProduct: result.recommendedProduct,
+    source: 'rent_checker',
+    userType: 'landlord',
+    resultState: result.resultState,
+    challengeRisk: result.challengeRisk,
+    evidenceStrength: result.evidenceStrength,
+    toolName: 'rent_increase_challenge_checker',
+    mode: context.mode,
+  };
+}
+
+export function RecommendedActionCard({
+  result,
+  trackingContext,
+}: {
+  result: RentCheckerResult;
+  trackingContext?: RentCheckerTrackingContext;
+}) {
   const product = PRODUCTS[result.recommendedProduct];
   const onPrimaryClick = () => {
-    trackProductCta(result, result.recommendedProduct);
+    trackProductCta(result, result.recommendedProduct, trackingContext);
     if (result.primaryCtaTracksCheckout) {
-      trackEvent('checkout_started', {
-        sourcePage: '/tools/rent-increase-challenge-checker',
-        pagePath: '/tools/rent-increase-challenge-checker',
-        intent: 'rent_increase',
-        product: result.recommendedProduct,
-        productClicked: result.recommendedProduct,
-        source: 'rent_checker',
-        userType: 'landlord',
-        resultState: result.resultState,
-      });
+      trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext));
     }
   };
 
@@ -414,7 +469,7 @@ export function RecommendedActionCard({ result }: { result: RentCheckerResult })
       result.secondaryCtaHref?.includes('section-13-standard')
         ? 'section13_standard'
         : 'section13_defensive';
-    trackProductCta(result, clickedProduct);
+    trackProductCta(result, clickedProduct, trackingContext);
   };
 
   return (
@@ -466,20 +521,17 @@ export function WhatThisMeansCard({ result }: { result: RentCheckerResult }) {
   );
 }
 
-export function NextStepsCard({ result }: { result: RentCheckerResult }) {
+export function NextStepsCard({
+  result,
+  trackingContext,
+}: {
+  result: RentCheckerResult;
+  trackingContext?: RentCheckerTrackingContext;
+}) {
   const onRepeatCtaClick = () => {
-    trackProductCta(result, result.recommendedProduct);
+    trackProductCta(result, result.recommendedProduct, trackingContext);
     if (result.primaryCtaTracksCheckout) {
-      trackEvent('checkout_started', {
-        sourcePage: '/tools/rent-increase-challenge-checker',
-        pagePath: '/tools/rent-increase-challenge-checker',
-        intent: 'rent_increase',
-        product: result.recommendedProduct,
-        productClicked: result.recommendedProduct,
-        source: 'rent_checker',
-        userType: 'landlord',
-        resultState: result.resultState,
-      });
+      trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext));
     }
   };
 
@@ -693,14 +745,27 @@ export function ProductComparisonStrip({ result }: { result: RentCheckerResult }
   );
 }
 
-export function BundleUpsellBlock({ result }: { result: RentCheckerResult }) {
+export function BundleUpsellBlock({
+  result,
+  trackingContext,
+}: {
+  result: RentCheckerResult;
+  trackingContext?: RentCheckerTrackingContext;
+}) {
   const onClick = () => {
+    const context = resolveTrackingContext(trackingContext);
     trackEvent('bundle_cta_clicked', {
+      sourcePage: context.sourcePage,
+      pagePath: context.pagePath,
+      ctaPosition: context.ctaPosition,
       recommendedProduct: result.recommendedProduct,
       clickedProduct: 'section13_defensive',
+      productClicked: 'section13_defensive',
       resultState: result.resultState,
       challengeRisk: result.challengeRisk,
       evidenceStrength: result.evidenceStrength,
+      toolName: 'rent_increase_challenge_checker',
+      mode: context.mode,
     });
   };
 
@@ -918,22 +983,17 @@ export function RentCheckerInsufficientEvidencePage({
   );
 }
 
-export function RentCheckerResultPage({ result, onRestart }: RentCheckerResultPageProps) {
+export function RentCheckerResultPage({
+  result,
+  onRestart,
+  trackingContext,
+}: RentCheckerResultPageProps) {
   const [showStickyCta, setShowStickyCta] = useState(false);
 
   const onStickyCtaClick = () => {
-    trackProductCta(result, result.recommendedProduct);
+    trackProductCta(result, result.recommendedProduct, trackingContext);
     if (result.primaryCtaTracksCheckout) {
-      trackEvent('checkout_started', {
-        sourcePage: '/tools/rent-increase-challenge-checker',
-        pagePath: '/tools/rent-increase-challenge-checker',
-        intent: 'rent_increase',
-        product: result.recommendedProduct,
-        productClicked: result.recommendedProduct,
-        source: 'rent_checker',
-        userType: 'landlord',
-        resultState: result.resultState,
-      });
+      trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext));
     }
   };
 
@@ -958,17 +1018,19 @@ export function RentCheckerResultPage({ result, onRestart }: RentCheckerResultPa
           </div>
           <ComparableListingsCard result={result} />
         </div>
-        <RecommendedActionCard result={result} />
+        <RecommendedActionCard result={result} trackingContext={trackingContext} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <WhatThisMeansCard result={result} />
-        <NextStepsCard result={result} />
+        <NextStepsCard result={result} trackingContext={trackingContext} />
       </div>
 
       <EmailReportCapture result={result} />
       <ProductComparisonStrip result={result} />
-      {result.showBundleUpsell ? <BundleUpsellBlock result={result} /> : null}
+      {result.showBundleUpsell ? (
+        <BundleUpsellBlock result={result} trackingContext={trackingContext} />
+      ) : null}
       <DisclaimerBlock result={result} />
 
       <div className="flex justify-end">

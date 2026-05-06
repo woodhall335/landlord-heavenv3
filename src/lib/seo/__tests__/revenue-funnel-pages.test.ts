@@ -38,16 +38,50 @@ describe('revenue-focused SEO funnels', () => {
   it('routes rent increase pages to the checker before Section 13 products', () => {
     const landing = readRepoFile('src', 'app', 'rent-increase', 'page.tsx');
     const guide = readRepoFile('src', 'app', 'rent-increase', 'RentIncreaseGuidePage.tsx');
+    const standaloneTool = readRepoFile('src', 'app', 'tools', 'rent-increase-challenge-checker', 'page.tsx');
     const form4a = readRepoFile('src', 'app', 'rent-increase', 'config', 'form-4a-guide.ts');
     const section13 = readRepoFile('src', 'app', 'rent-increase', 'config', 'section13-notice.ts');
 
-    expect(landing).toContain('RentIncreaseBridge');
+    expect(landing).toContain('RentIncreaseChallengeChecker');
+    expect(landing).toContain('mode="embedded"');
+    expect(landing).toContain('href="#rent-increase-checker"');
     expect(landing).toContain('Check rent increase risk');
     expect(landing.indexOf('Check rent increase risk')).toBeLessThan(landing.indexOf('Generate Section 13 pack'));
-    expect(guide).toContain("primaryCta={{ label: 'Check rent increase risk'");
-    expect(guide).toContain('RentIncreaseBridge');
+    expect(guide).toContain('RentIncreaseChallengeChecker');
+    expect(guide).toContain("config.slug === 'form-4a-guide'");
+    expect(guide).toContain('Check if your Form 4A rent is likely to be challenged');
+    expect(guide).toContain("href:");
+    expect(guide).toContain("'#rent-increase-checker'");
+    expect(standaloneTool).toContain('<RentIncreaseChallengeChecker />');
     expect(form4a).toContain('Form 4A Rent Increase 2026: Check If Your Rent Is Supportable');
     expect(section13).toContain('Section 13 Notice 2026: Increase Rent Properly in England');
+  });
+
+  it('rent checker product analytics use the embedding page as source context', () => {
+    const checker = readRepoFile(
+      'src',
+      'components',
+      'tools',
+      'rent-checker',
+      'RentIncreaseChallengeChecker.tsx'
+    );
+    const resultPage = readRepoFile(
+      'src',
+      'components',
+      'tools',
+      'rent-checker',
+      'RentCheckerResultPage.tsx'
+    );
+
+    expect(checker).toContain('sourcePage = STANDALONE_SOURCE_PAGE');
+    expect(checker).toContain("mode = 'standalone'");
+    expect(checker).toContain("mode?: RentCheckerMode");
+    expect(checker).toContain('sourcePage: trackingContext.sourcePage');
+    expect(resultPage).toContain('interface RentCheckerTrackingContext');
+    expect(resultPage).toContain('sourcePage: context.sourcePage');
+    expect(resultPage).toContain('pagePath: context.pagePath');
+    expect(resultPage).toContain('trackProductCta(result, result.recommendedProduct, trackingContext)');
+    expect(resultPage).toContain("trackEvent('checkout_started', buildCheckoutPayload(result, trackingContext))");
   });
 
   it('routes Section 8 and court-claim pages into the correct product choices', () => {

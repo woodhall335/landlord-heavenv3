@@ -1,4 +1,7 @@
-export { RentIncreaseChallengeChecker } from './RentIncreaseChallengeChecker';
+export {
+  RentIncreaseChallengeChecker,
+  type RentIncreaseChallengeCheckerProps,
+} from './RentIncreaseChallengeChecker';
 export { RentCheckerLanding } from './RentCheckerLanding';
 export { RentCheckerForm } from './RentCheckerForm';
 export {
@@ -14,4 +17,5 @@ export {
   BundleUpsellBlock,
   DisclaimerBlock,
   RentCheckerInsufficientEvidencePage,
+  type RentCheckerTrackingContext,
 } from './RentCheckerResultPage';

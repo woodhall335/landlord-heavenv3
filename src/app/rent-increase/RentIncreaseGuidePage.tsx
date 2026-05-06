@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { RentIncreaseBridge } from '@/components/marketing/CommercialBridge';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { RentIncreaseChallengeChecker } from '@/components/tools/rent-checker';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -100,7 +101,13 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
       <UniversalHero
         title={config.heroTitle}
         subtitle={config.heroSubtitle}
-        primaryCta={{ label: 'Check rent increase risk', href: '/tools/rent-increase-challenge-checker' }}
+        primaryCta={{
+          label: 'Check rent increase risk',
+          href:
+            config.slug === 'form-4a-guide'
+              ? '#rent-increase-checker'
+              : '/tools/rent-increase-challenge-checker',
+        }}
         secondaryCta={config.secondaryCta}
         mediaSrc={config.heroImage}
         mediaAlt={config.heroAlt}
@@ -165,17 +172,25 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
               </div>
             </article>
 
-            <CtaBand
-              title={
-                config.slug === 'form-4a-guide'
-                  ? 'Check if your Form 4A rent is likely to be challenged'
-                  : config.slug === 'section-13-notice'
+            {config.slug === 'form-4a-guide' ? (
+              <RentIncreaseChallengeChecker
+                mode="embedded"
+                sourcePage={config.path}
+                ctaPosition="top"
+                introTitle="Check if your Form 4A rent is likely to be challenged"
+                introCopy="Enter the proposed rent before you prepare the form. The checker reviews the market range, evidence strength, and challenge risk before recommending the Standard or Defence Section 13 route."
+              />
+            ) : (
+              <CtaBand
+                title={
+                  config.slug === 'section-13-notice'
                     ? 'Check the rent first, then choose the Section 13 route'
                     : 'Before you serve a rent increase, check if it is supportable'
-              }
-              sourcePage={config.path}
-              ctaPosition="top"
-            />
+                }
+                sourcePage={config.path}
+                ctaPosition="top"
+              />
+            )}
 
             {sampleProof ? <GoldenPackProof data={sampleProof} /> : null}
 

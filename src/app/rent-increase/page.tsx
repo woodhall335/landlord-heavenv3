@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
-import { RentIncreaseBridge } from '@/components/marketing/CommercialBridge';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
+import { RentIncreaseChallengeChecker } from '@/components/tools/rent-checker';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type {
   ProductSalesPageContent,
@@ -131,7 +131,7 @@ export default function RentIncreaseLandingPage() {
         <>
           <div className="w-full sm:w-auto">
             <TrackedLink
-              href="/tools/rent-increase-challenge-checker"
+              href="#rent-increase-checker"
               pagePath="/rent-increase"
               pageType="entry_page"
               ctaLabel="Check rent increase risk"
@@ -183,7 +183,7 @@ export default function RentIncreaseLandingPage() {
           <li>
             Not sure which route fits yet?{' '}
             <TrackedLink
-              href="/tools/rent-increase-challenge-checker"
+              href="#rent-increase-checker"
               pagePath="/rent-increase"
               pageType="entry_page"
               ctaLabel="Use the free rent checker first"
@@ -199,10 +199,12 @@ export default function RentIncreaseLandingPage() {
       ),
     },
     postHeroContent: (
-      <RentIncreaseBridge
+      <RentIncreaseChallengeChecker
+        mode="embedded"
         sourcePage="/rent-increase"
         ctaPosition="top"
-        headline="Before you serve a rent increase, check if it is supportable"
+        introTitle="Check how likely your rent increase is to be challenged"
+        introCopy="Use the checker before you serve Form 4A. It compares your proposed rent with local market evidence, shows the challenge risk, and recommends the Standard or Defence Section 13 route."
       />
     ),
     whatYouGet: {
@@ -294,7 +296,7 @@ export default function RentIncreaseLandingPage() {
         href: defenceDescriptor.landingHref,
       },
       guideLinks: [
-        { label: 'Check the supportable rent range first', href: '/tools/rent-increase-challenge-checker' },
+        { label: 'Check the supportable rent range first', href: '#rent-increase-checker' },
         { label: 'Read the long-form guide', href: '/products/rent-increase' },
         { label: 'Section 13 notice guide', href: '/rent-increase/section-13-notice' },
         { label: 'Form 4A guide', href: '/rent-increase/form-4a-guide' },
