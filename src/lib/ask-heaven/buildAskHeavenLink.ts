@@ -42,6 +42,8 @@ export interface AskHeavenLinkParams {
   utm_content?: string;
 }
 
+const CLEAN_PUBLIC_SOURCES = new Set<AskHeavenSource>(['blog', 'seo', 'page_cta']);
+
 /**
  * Build an Ask Heaven link with tracking and context parameters
  *
@@ -51,9 +53,30 @@ export interface AskHeavenLinkParams {
  *
  * @example
  * buildAskHeavenLink({ source: 'blog', prompt: 'How do I serve a Section 21?' })
- * // => '/ask-heaven?src=blog&q=How%20do%20I%20serve%20a%20Section%2021%3F'
+ * // => '/ask-heaven'
  */
 export function buildAskHeavenLink(params: AskHeavenLinkParams = {}): string {
+  const hasRoutingContext = Boolean(
+    params.topic ||
+      params.product ||
+      params.jurisdiction ||
+      params.prompt
+  );
+  const hasTrackingContext = Boolean(
+    params.source ||
+      params.utm_source ||
+      params.utm_medium ||
+      params.utm_campaign ||
+      params.utm_content
+  );
+
+  if (
+    (params.source && CLEAN_PUBLIC_SOURCES.has(params.source)) ||
+    (!hasRoutingContext && hasTrackingContext)
+  ) {
+    return '/ask-heaven';
+  }
+
   const searchParams = new URLSearchParams();
 
   if (params.source) {

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from 'next';
 import { StructuredData } from '@/lib/seo/structured-data';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { BlogFilteredList } from '@/components/blog/BlogFilteredList';
@@ -16,17 +17,19 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { blogHeroConfig } from '@/components/landing/heroConfigs';
 import { ArrowRight } from 'lucide-react';
-import { generateMetadata } from '@/lib/seo';
+import { generateMetadata as buildSeoMetadata } from '@/lib/seo';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getBlogImagesForPost } from '@/lib/blog/image-manifest';
 import { BLOG_TOPIC_HUBS, getPublicTopicHubs } from '@/lib/blog/topic-hubs';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
-export const metadata = generateMetadata({
+type BlogSearchParams = Record<string, string | string[] | undefined>;
+
+const blogMetadata = buildSeoMetadata({
   title: 'England Landlord Guides | Section 8, Possession & Tenancy Help',
   description:
-    'Read England landlord guides on Section 8 notices, possession claims, tenancy agreements, rent arrears, and practical compliance steps.',
+    'Read England landlord guides on Section 8 notices, possession claims, tenancy agreements, rent arrears, compliance steps, and the right product route.',
   path: '/blog',
   keywords: [
     'how to evict a tenant in england',
@@ -38,6 +41,25 @@ export const metadata = generateMetadata({
     'landlord compliance',
   ],
 });
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<BlogSearchParams> | BlogSearchParams;
+} = {}): Promise<Metadata> {
+  const resolvedSearchParams =
+    searchParams && typeof (searchParams as Promise<BlogSearchParams>).then === 'function'
+      ? await (searchParams as Promise<BlogSearchParams>)
+      : (searchParams as BlogSearchParams | undefined);
+  const hasQueryParams = Object.entries(resolvedSearchParams ?? {}).some(
+    ([, value]) => value !== undefined
+  );
+
+  return {
+    ...blogMetadata,
+    robots: hasQueryParams ? { index: false, follow: true } : blogMetadata.robots,
+  };
+}
 
 export default function BlogPage() {
   const publicPosts = blogPosts.filter((post) =>

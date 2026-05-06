@@ -25,6 +25,16 @@ describe('revenue-focused SEO funnels', () => {
     }
   });
 
+  it('product sales pages initialise attribution and product page view tracking', () => {
+    const page = readRepoFile('src', 'components', 'marketing', 'PublicProductSalesPage.tsx');
+    const tracker = readRepoFile('src', 'components', 'analytics', 'ProductPageTracker.tsx');
+
+    expect(page).toContain('ProductPageTracker');
+    expect(page).toContain("analytics?.pageType === 'product_page'");
+    expect(tracker).toContain('initializeAttribution');
+    expect(tracker).toContain('trackProductView');
+  });
+
   it('routes rent increase pages to the checker before Section 13 products', () => {
     const landing = readRepoFile('src', 'app', 'rent-increase', 'page.tsx');
     const guide = readRepoFile('src', 'app', 'rent-increase', 'RentIncreaseGuidePage.tsx');

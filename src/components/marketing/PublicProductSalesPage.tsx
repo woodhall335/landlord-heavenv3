@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { ProductPageTracker } from '@/components/analytics/ProductPageTracker';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui/Container';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -563,9 +564,22 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
     Boolean(whatYouGet.items?.length) || Boolean(whatYouGet.conditionalItems?.length);
   const shouldRenderWhatYouGet = !whatYouGet.hideSection;
   const hasHowItWorksImage = Boolean(howItWorks.imageSrc);
+  const productPageId =
+    analytics?.pageType === 'product_page'
+      ? analytics.routeIntent || inferProductFromHref(hero.primaryCta?.href || '') || analytics.pagePath
+      : null;
 
   return (
     <>
+      {analytics?.pageType === 'product_page' && productPageId ? (
+        <ProductPageTracker
+          pagePath={analytics.pagePath}
+          productId={productPageId}
+          productName={hero.title}
+          routeIntent={analytics.routeIntent}
+          priceLabel={earlyProofBand?.priceLabel}
+        />
+      ) : null}
       <UniversalHero {...hero}>{hero.children}</UniversalHero>
       {postHeroContent ? <section className="scroll-mt-24 bg-white py-10 md:py-12"><Container><div className="mx-auto max-w-6xl">{postHeroContent}</div></Container></section> : null}
       {decisionBlock ? <DecisionBlock content={decisionBlock} analytics={analytics} /> : null}

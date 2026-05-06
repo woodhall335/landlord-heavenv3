@@ -26,6 +26,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/supabase/types';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createAdminClient, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
+import { validateQualityGates } from './quality-gates';
 
 /**
  * Repository interface for Ask Heaven questions.
@@ -98,6 +99,23 @@ export interface AskHeavenQuestionRepository {
 }
 
 const QUESTIONS_TABLE = 'ask_heaven_questions';
+
+function isSitemapEligibleQuestion(question: AskHeavenQuestion): boolean {
+  return (
+    question.status === 'approved' &&
+    question.canonical_slug === null &&
+    validateQualityGates(question).passed
+  );
+}
+
+function toSitemapEntry(question: AskHeavenQuestion): AskHeavenQuestionSitemapEntry {
+  return {
+    slug: question.slug,
+    updated_at: question.updated_at,
+    status: question.status,
+    canonical_slug: question.canonical_slug,
+  };
+}
 
 export class AskHeavenNoRowsUpdatedError extends Error {
   readonly code = 'ASK_HEAVEN_NO_ROWS_UPDATED';
@@ -195,12 +213,16 @@ export class SupabaseQuestionRepository implements AskHeavenQuestionRepository {
   async getForSitemap(): Promise<AskHeavenQuestionSitemapEntry[]> {
     const { data, error } = await this.client
       .from(QUESTIONS_TABLE)
-      .select('slug, updated_at, status, canonical_slug')
+      .select(
+        'id, slug, question, answer_md, summary, primary_topic, jurisdictions, status, canonical_slug, related_slugs, created_at, updated_at, reviewed_at'
+      )
       .eq('status', 'approved')
       .is('canonical_slug', null);
 
     if (error) throw error;
-    return (data ?? []) as AskHeavenQuestionSitemapEntry[];
+    return ((data ?? []) as unknown as AskHeavenQuestion[])
+      .filter(isSitemapEligibleQuestion)
+      .map(toSitemapEntry);
   }
 
   async getRelatedQuestions(slugs: string[]): Promise<AskHeavenQuestionListItem[]> {
@@ -435,13 +457,8 @@ export class InMemoryQuestionRepository implements AskHeavenQuestionRepository {
 
   async getForSitemap(): Promise<AskHeavenQuestionSitemapEntry[]> {
     return Array.from(this.questions.values())
-      .filter((q) => q.status === 'approved' && q.canonical_slug === null)
-      .map((q) => ({
-        slug: q.slug,
-        updated_at: q.updated_at,
-        status: q.status,
-        canonical_slug: q.canonical_slug,
-      }));
+      .filter(isSitemapEligibleQuestion)
+      .map(toSitemapEntry);
   }
 
   async getRelatedQuestions(slugs: string[]): Promise<AskHeavenQuestionListItem[]> {

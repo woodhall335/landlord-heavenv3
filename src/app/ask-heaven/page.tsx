@@ -16,6 +16,11 @@ import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { analyzeContent } from '@/lib/seo/commercial-linking';
 import { NextStepWidget } from '@/components/journey/NextStepWidget';
 
+type AskHeavenSearchParams = {
+  [key: string]: string | string[] | undefined;
+  q?: string | string[];
+};
+
 // Compliance topics data for SSR section
 interface ComplianceTopic {
   id: AskHeavenTopic;
@@ -217,13 +222,10 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams?: Promise<{ q?: string }> | { q?: string };
-}): Promise<Metadata> {
-  const resolvedSearchParams =
-    searchParams && typeof (searchParams as Promise<{ q?: string }>).then === 'function'
-      ? await (searchParams as Promise<{ q?: string }>)
-      : (searchParams as { q?: string } | undefined);
-  const hasPrefill = Boolean(resolvedSearchParams?.q);
+  searchParams?: Promise<AskHeavenSearchParams> | AskHeavenSearchParams;
+} = {}): Promise<Metadata> {
+  const resolvedSearchParams = await resolveAskHeavenSearchParams(searchParams);
+  const hasQueryParams = hasAnySearchParams(resolvedSearchParams);
 
   return {
     title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
@@ -250,7 +252,7 @@ export async function generateMetadata({
       'carbon monoxide alarm landlord',
       'right to rent checks landlord',
     ],
-    robots: hasPrefill ? 'noindex, follow' : 'index, follow',
+    robots: hasQueryParams ? 'noindex, follow' : 'index, follow',
     openGraph: {
       title: 'Free Landlord Legal Q&A | UK | Ask Heaven',
       description:
@@ -267,12 +269,10 @@ export async function generateMetadata({
 export default async function AskHeavenPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ q?: string }> | { q?: string };
+  searchParams?: Promise<AskHeavenSearchParams> | AskHeavenSearchParams;
 }): Promise<React.ReactElement> {
-  const resolvedSearchParams =
-    searchParams && typeof (searchParams as Promise<{ q?: string }>).then === 'function'
-      ? await (searchParams as Promise<{ q?: string }>)
-      : (searchParams as { q?: string } | undefined);
+  const resolvedSearchParams = await resolveAskHeavenSearchParams(searchParams);
+  const initialQuery = getSingleSearchParam(resolvedSearchParams?.q);
   // Analyze page content for commercial linking
   // Ask Heaven discusses eviction, rent arrears, and tenancy agreements - all core products
   const commercialLinkingResult = analyzeContent({
@@ -299,7 +299,7 @@ export default async function AskHeavenPage({
       <UniversalHero
         title="Ask Heaven: Ask Your Landlord Question in Plain English"
         subtitle="Get a straight answer on notices, arrears, tenancy agreements, and compliance, then move to the right next step when you are ready."
-        primaryCta={{ label: 'Ask about your case ->', href: '/ask-heaven?q=My%20tenant%20has%20stopped%20paying%20rent' }}
+        primaryCta={{ label: 'Ask about your case ->', href: '/ask-heaven' }}
         trustPositioningPreset="ask_heaven"
         showTrustPositioningBar
         hideMedia
@@ -307,7 +307,7 @@ export default async function AskHeavenPage({
 
       {/* Client-side interactive widget - now prominently placed first */}
       <AskHeavenPageClient
-        initialQuery={resolvedSearchParams?.q ?? null}
+        initialQuery={initialQuery}
         chatSubheading="Free landlord assistant for England/Wales/Scotland/N. Ireland"
       />
 
@@ -538,5 +538,24 @@ export default async function AskHeavenPage({
       />
     </>
   );
+}
+
+async function resolveAskHeavenSearchParams(
+  searchParams?: Promise<AskHeavenSearchParams> | AskHeavenSearchParams
+): Promise<AskHeavenSearchParams | undefined> {
+  return searchParams && typeof (searchParams as Promise<AskHeavenSearchParams>).then === 'function'
+    ? (searchParams as Promise<AskHeavenSearchParams>)
+    : (searchParams as AskHeavenSearchParams | undefined);
+}
+
+function hasAnySearchParams(searchParams?: AskHeavenSearchParams): boolean {
+  return Object.entries(searchParams ?? {}).some(([, value]) => value !== undefined);
+}
+
+function getSingleSearchParam(value: string | string[] | undefined): string | null {
+  if (Array.isArray(value)) {
+    return value[0] ?? null;
+  }
+  return value ?? null;
 }
 

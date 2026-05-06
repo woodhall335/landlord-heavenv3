@@ -202,6 +202,14 @@ export function trackPurchase(
   });
 }
 
+export interface ProductViewTrackingContext {
+  sourcePage?: string;
+  pagePath?: string;
+  pageType?: MarketingPageType;
+  intent?: string;
+  userType?: string;
+}
+
 /**
  * Track product view
  */
@@ -209,12 +217,17 @@ export function trackProductView(
   productId: string,
   productName: string,
   category?: string,
-  price?: number
+  price?: number,
+  context: ProductViewTrackingContext = {}
 ): void {
   recordMarketingGrowthEvent('product_page_viewed', {
+    sourcePage: context.sourcePage || context.pagePath,
+    pagePath: context.pagePath,
+    pageType: context.pageType || 'product_page',
+    intent: context.intent || productId,
     productClicked: productId,
-    destination: typeof window !== 'undefined' ? window.location.pathname : undefined,
-    userType: 'landlord',
+    destination: context.pagePath || (typeof window !== 'undefined' ? window.location.pathname : undefined),
+    userType: context.userType || 'landlord',
   });
 
   trackEvent('view_item', {

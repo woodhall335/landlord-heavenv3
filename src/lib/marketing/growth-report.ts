@@ -1,5 +1,21 @@
 export const DAILY_REVENUE_TARGET_GBP = 250;
 
+const PRODUCT_REPORT_LABELS: Record<string, string> = {
+  notice_only: 'Notice Only Pack',
+  complete_pack: 'Complete Eviction Pack',
+  money_claim: 'Money Claim Pack',
+  section13_standard: 'Standard Section 13 Pack',
+  section13_defensive: 'Challenge-Ready Section 13 Defence Pack',
+  ast_standard: 'Standard Tenancy Agreement',
+  ast_premium: 'Premium Tenancy Agreement',
+  england_standard_tenancy_agreement: 'Standard Tenancy Agreement',
+  england_premium_tenancy_agreement: 'Premium Tenancy Agreement',
+  england_student_tenancy_agreement: 'Student Tenancy Agreement',
+  england_hmo_shared_house_tenancy_agreement: 'HMO Shared House Tenancy Agreement',
+  england_lodger_agreement: 'Lodger Agreement',
+  residential_tenancy_application: 'Residential Tenancy Application',
+};
+
 export interface GrowthOrderRow {
   id?: string;
   product_type?: string | null;
@@ -129,6 +145,10 @@ function groupLabel(value: string | null | undefined, fallback: string): string 
   return trimmed || fallback;
 }
 
+function productReportLabel(value: string): string {
+  return PRODUCT_REPORT_LABELS[value] || value;
+}
+
 function getOrderDate(order: GrowthOrderRow): Date | null {
   return parseDate(order.paid_at || order.created_at);
 }
@@ -145,12 +165,16 @@ function getSourceMedium(order: GrowthOrderRow): string {
   return 'direct / none';
 }
 
-function buildGroup(rows: GrowthOrderRow[], getKey: (row: GrowthOrderRow) => string): GrowthMetricGroup[] {
+function buildGroup(
+  rows: GrowthOrderRow[],
+  getKey: (row: GrowthOrderRow) => string,
+  getLabel: (key: string) => string = (key) => key
+): GrowthMetricGroup[] {
   const grouped = new Map<string, GrowthMetricGroup>();
 
   rows.forEach((row) => {
     const key = getKey(row);
-    const current = grouped.get(key) || { key, label: key, revenue: 0, orders: 0, aov: 0 };
+    const current = grouped.get(key) || { key, label: getLabel(key), revenue: 0, orders: 0, aov: 0 };
     current.revenue += safeAmount(row.total_amount);
     current.orders += 1;
     grouped.set(key, current);
@@ -290,7 +314,11 @@ export function buildGrowthReport(params: {
       rolling7DayGap: roundMoney(Math.max(0, rolling7DayTargetRevenue - rolling7DayRevenue)),
     },
     revenueByDay,
-    revenueByProduct: buildGroup(paidOrders, (order) => groupLabel(order.product_type, 'unknown')),
+    revenueByProduct: buildGroup(
+      paidOrders,
+      (order) => groupLabel(order.product_type, 'unknown'),
+      productReportLabel
+    ),
     revenueByLandingPath: buildGroup(paidOrders, (order) => groupLabel(order.landing_path, 'unknown')),
     revenueBySourceMedium: buildGroup(paidOrders, getSourceMedium),
     funnelRates: {

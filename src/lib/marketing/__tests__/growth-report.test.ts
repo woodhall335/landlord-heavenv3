@@ -54,6 +54,12 @@ describe('growth report builder', () => {
       rolling7DayRevenue: 228,
       rolling7DayGap: 1522,
     });
+    expect(report.revenueByProduct).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ key: 'money_claim', label: 'Money Claim Pack' }),
+        expect.objectContaining({ key: 'complete_pack', label: 'Complete Eviction Pack' }),
+      ])
+    );
     expect(report.revenueByLandingPath).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ key: 'unknown', revenue: 49, orders: 1 }),

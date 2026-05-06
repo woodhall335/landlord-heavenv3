@@ -40,6 +40,11 @@ import type { AskHeavenPrimaryTopic } from '@/lib/ask-heaven/questions/types';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { NextStepWidget } from '@/components/journey/NextStepWidget';
 import { JourneyStageUpdater } from '@/components/journey/JourneyStageUpdater';
+import {
+  ASK_HEAVEN_ACCEPTED_ANSWER_ANCHOR_ID,
+  buildAskHeavenQAPageSchema,
+  extractAskHeavenPlainText,
+} from '@/lib/ask-heaven/structured-data';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -132,45 +137,24 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
   const recommendedProduct = chatTopic
     ? getRecommendedProduct(chatTopic, resolvedJurisdiction, intent ?? undefined)
     : null;
+  const canonicalUrl = getCanonicalUrl(`/ask-heaven/${slug}`);
 
   // Build breadcrumb items
   const breadcrumbItems = [
     { name: 'Home', url: 'https://landlordheaven.co.uk' },
     { name: 'Ask Heaven', url: 'https://landlordheaven.co.uk/ask-heaven' },
-    { name: truncate(question.question, 50), url: `https://landlordheaven.co.uk/ask-heaven/${slug}` },
+    { name: truncate(question.question, 50), url: canonicalUrl },
   ];
 
   // Build FAQ schema (single Q&A)
   const faqItems = [
     {
       question: question.question,
-      answer: extractPlainText(question.summary),
+      answer: extractAskHeavenPlainText(question.summary),
     },
   ];
 
-  // Build QAPage schema
-  const qaPageSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'QAPage',
-    mainEntity: {
-      '@type': 'Question',
-      name: question.question,
-      text: question.question,
-      dateCreated: question.created_at,
-      dateModified: question.updated_at,
-      answerCount: 1,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: extractPlainText(question.summary),
-        dateCreated: question.created_at,
-        dateModified: question.updated_at,
-        author: {
-          '@type': 'Organization',
-          name: 'Landlord Heaven',
-        },
-      },
-    },
-  };
+  const qaPageSchema = buildAskHeavenQAPageSchema(question, canonicalUrl);
 
   return (
     <>
@@ -186,6 +170,7 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
       />
 
       <AskHeavenPageClient
+        acceptedAnswerAnchorId={ASK_HEAVEN_ACCEPTED_ANSWER_ANCHOR_ID}
         initialMessages={[
           {
             id: `seed-user-${question.id}`,
@@ -243,16 +228,6 @@ export default async function AskHeavenQuestionPage({ params }: PageProps) {
 function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength - 3) + '...';
-}
-
-function extractPlainText(markdown: string): string {
-  return markdown
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`[^`]+`/g, '')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/[#*_~]/g, '')
-    .replace(/\n+/g, ' ')
-    .trim();
 }
 
 function resolveChatJurisdiction(jurisdiction: AskHeavenQuestion['jurisdictions'][number]): Jurisdiction {

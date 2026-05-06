@@ -130,6 +130,7 @@ export interface AskHeavenChatShellProps {
   showReviewWarning?: boolean;
   chatHeading?: string | null;
   chatSubheading?: string | null;
+  acceptedAnswerAnchorId?: string;
   onNextStepsVisibilityChange?: (isVisible: boolean) => void;
   onJurisdictionChange?: (jurisdiction: Jurisdiction) => void;
 }
@@ -143,6 +144,7 @@ export default function AskHeavenChatShell({
   showReviewWarning,
   chatHeading,
   chatSubheading,
+  acceptedAnswerAnchorId,
   onNextStepsVisibilityChange,
   onJurisdictionChange,
 }: AskHeavenChatShellProps): React.ReactElement {
@@ -915,10 +917,17 @@ export default function AskHeavenChatShell({
             <div className="flex flex-col h-[600px]">
               {/* Messages Area - scrollable */}
               <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6">
-                {chatMessages.map((m) => (
+                {chatMessages.map((m, index) => {
+                  const isAcceptedAnswer =
+                    Boolean(acceptedAnswerAnchorId) &&
+                    m.role === 'assistant' &&
+                    chatMessages.findIndex((message) => message.role === 'assistant') === index;
+
+                  return (
                   <div
                     key={m.id}
-                    className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    id={isAcceptedAnswer ? acceptedAnswerAnchorId : undefined}
+                    className={`flex scroll-mt-24 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     {m.role === 'user' ? (
                       <div className="max-w-[85%] md:max-w-[70%]">
@@ -1065,7 +1074,8 @@ export default function AskHeavenChatShell({
                       </div>
                     )}
                   </div>
-                ))}
+                  );
+                })}
 
                 {/* Typing indicator */}
                 {isSending && (

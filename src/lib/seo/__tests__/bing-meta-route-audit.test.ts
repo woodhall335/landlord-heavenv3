@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { metadata as blogMetadata } from '@/app/(marketing)/blog/page';
+import { generateMetadata as generateBlogMetadata } from '@/app/(marketing)/blog/page';
 import { metadata as moneyClaimMetadata } from '@/app/money-claim/page';
 import { metadata as refundsMetadata } from '@/app/refunds/page';
 import { metadata as termsMetadata } from '@/app/terms/page';
@@ -168,7 +168,7 @@ const auditFixtures: BingAuditFixture[] = [
   {
     kind: 'page',
     url: '/blog',
-    resolveDescription: () => readDescription(blogMetadata.description),
+    resolveDescription: async () => readDescription((await generateBlogMetadata()).description),
     minDescriptionLength: 150,
     maxDescriptionLength: 160,
   },
