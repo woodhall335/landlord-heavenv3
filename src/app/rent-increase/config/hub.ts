@@ -13,9 +13,9 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
     'Covers timing, Form 4A, market-rent evidence, and challenge risk.',
     'Helps you move from guidance to a service-ready Section 13 pack.',
   ],
-  metaTitle: 'Increase Rent in England | Section 13 / Form 4A Pack for Landlords',
+  metaTitle: 'Rent Increase Guide 2026: Check If Your Rent Is Supportable',
   metaDescription:
-    'Increase rent lawfully in England using Section 13 and Form 4A. Check notice timing, market-rent evidence, challenge risk, and practical next steps before you serve.',
+    'England landlord rent increase guide. Check whether the rent is supportable, then choose the right Section 13 and Form 4A pack before serving notice.',
   primaryKeyword: 'increase rent england',
   intentLabel: 'rent increase / section 13 landlord pack',
   introAngle:

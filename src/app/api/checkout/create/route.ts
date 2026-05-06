@@ -178,6 +178,7 @@ const createCheckoutSchema = z.object({
   referrer: z.string().max(500).nullable().optional(),
   first_touch_at: z.string().nullable().optional(),
   ga_client_id: z.string().max(50).nullable().optional(),
+  marketing_session_id: z.string().max(200).nullable().optional(),
 });
 
 // =============================================================================
@@ -282,6 +283,7 @@ export async function POST(request: Request) {
       referrer,
       first_touch_at,
       ga_client_id,
+      marketing_session_id,
     } = validationResult.data;
 
     if (product_type === 'sc_money_claim') {
@@ -942,6 +944,7 @@ export async function POST(request: Request) {
         referrer: referrer || null,
         first_touch_at: first_touch_at || null,
         ga_client_id: ga_client_id || null,
+        marketing_session_id: marketing_session_id || null,
         metadata: {
           add_ons: permittedAddOnSkus,
           requested_product_type: product_type,
@@ -982,6 +985,7 @@ export async function POST(request: Request) {
       delete fallbackPayload.utm_term;
       delete fallbackPayload.utm_content;
       delete fallbackPayload.referrer;
+      delete fallbackPayload.marketing_session_id;
 
       const retryResult = await adminSupabase
         .from('orders')
@@ -1083,6 +1087,7 @@ export async function POST(request: Request) {
           referrer: (referrer || '').substring(0, 500),
           first_touch_at: first_touch_at || '',
           ga_client_id: ga_client_id || '',
+          marketing_session_id: (marketing_session_id || '').substring(0, 200),
         },
         success_url: resolvedSuccessUrl,
         cancel_url: resolvedCancelUrl,

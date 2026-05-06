@@ -5,6 +5,7 @@ import { StructuredData, breadcrumbSchema, articleSchema } from '@/lib/seo/struc
 import { Container } from '@/components/ui';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { moneyClaimSupportHeroConfig } from '@/components/landing/heroConfigs';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -30,9 +31,9 @@ import {
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Money Claim Online (MCOL) Guide for Landlords | Claim Unpaid Rent',
+  title: 'MCOL Rent Arrears Claim: Money Claim Pack for Landlords',
   description:
-    'Plain-English landlord guide to Money Claim Online, including fees, timelines, evidence, and when MCOL fits your tenant debt case.',
+    'Plain-English MCOL rent arrears guide for landlords. Prepare a Money Claim Pack with clear figures, particulars, evidence, and next steps.',
   keywords: [
     'money claim online',
     'MCOL',
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
     'MCOL process',
   ],
   openGraph: {
-    title: 'Money Claim Online (MCOL) Guide for Landlords | Claim Unpaid Rent',
+    title: 'MCOL Rent Arrears Claim: Money Claim Pack for Landlords',
     description:
       'Landlord guide to using Money Claim Online for tenant debt recovery and preparing the file behind the claim.',
     type: 'article',
@@ -175,6 +176,11 @@ export default function MoneyClaimOnlineMCOLPage() {
           <Container>
             <div className="mx-auto max-w-5xl">
               <SeoPageContextPanel pathname="/money-claim-online-mcol" />
+              <MoneyClaimBridge
+                sourcePage="/money-claim-online-mcol"
+                ctaPosition="top"
+                headline="Turn rent arrears into a court-ready claim"
+              />
             </div>
           </Container>
         </section>

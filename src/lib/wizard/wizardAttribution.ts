@@ -5,6 +5,8 @@
  * Captures UTM params, source, topic, and persists across page navigations.
  */
 
+import { getMarketingSessionId } from '../analytics/growth-events';
+
 export interface WizardAttributionPayload {
   src: string;
   topic: string;
@@ -36,6 +38,7 @@ export interface CheckoutAttributionPayload {
   referrer: string | null;
   first_touch_at: string | null;
   ga_client_id: string | null;
+  marketing_session_id: string | null;
 }
 
 export interface WizardFlowTrackingContext {
@@ -739,5 +742,6 @@ export function getCheckoutAttribution(): CheckoutAttributionPayload {
     referrer: attribution.referrer || null,
     first_touch_at: attribution.first_seen_at || null,
     ga_client_id: attribution.ga_client_id || null,
+    marketing_session_id: getMarketingSessionId(),
   };
 }

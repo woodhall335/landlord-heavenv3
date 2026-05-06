@@ -42,6 +42,7 @@ import { BlogProse } from '@/components/blog/BlogProse';
 import { BlogCtaProvider } from '@/components/blog/BlogCtaContext';
 import { BlogArticleStickyGuard } from '@/components/blog/BlogArticleStickyGuard';
 import { NextSteps } from '@/components/blog/NextSteps';
+import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
@@ -1085,6 +1086,13 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
               )}
 
               <BlogCtaProvider value={{ cta: productCta, postSlug: slug, category: post.category }}>
+                {slug === 'england-money-claim-online' ? (
+                  <MoneyClaimBridge
+                    sourcePage="/blog/england-money-claim-online"
+                    ctaPosition="top"
+                    headline="Turn arrears into a court-ready claim"
+                  />
+                ) : null}
                 <BlogProse
                   post={post}
                   cta={productCta}

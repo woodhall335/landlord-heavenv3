@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
+import { RentIncreaseBridge } from '@/components/marketing/CommercialBridge';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type {
@@ -130,17 +131,31 @@ export default function RentIncreaseLandingPage() {
         <>
           <div className="w-full sm:w-auto">
             <TrackedLink
-              href={standardDescriptor.landingHref}
+              href="/tools/rent-increase-challenge-checker"
               pagePath="/rent-increase"
               pageType="entry_page"
-              ctaLabel="Open the Standard Section 13 Rent Increase Pack"
+              ctaLabel="Check rent increase risk"
               ctaPosition="hero"
               eventName="entry_page_primary_cta_click"
               routeIntent="rent_increase"
-              product="section13_standard"
               className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
             >
-              Open the Standard Section 13 Rent Increase Pack
+              Check rent increase risk
+            </TrackedLink>
+          </div>
+          <div className="w-full sm:w-auto">
+            <TrackedLink
+              href={standardDescriptor.landingHref}
+              pagePath="/rent-increase"
+              pageType="entry_page"
+              ctaLabel="Generate Section 13 pack"
+              ctaPosition="hero"
+              eventName="entry_page_secondary_cta_click"
+              routeIntent="rent_increase"
+              product="section13_standard"
+              className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
+            >
+              Generate Section 13 pack
             </TrackedLink>
           </div>
           <div className="w-full sm:w-auto">
@@ -148,28 +163,14 @@ export default function RentIncreaseLandingPage() {
               href={defenceDescriptor.landingHref}
               pagePath="/rent-increase"
               pageType="entry_page"
-              ctaLabel="See the challenge-ready defence route"
+              ctaLabel="Prepare for tenant challenge"
               ctaPosition="hero"
               eventName="entry_page_secondary_cta_click"
               routeIntent="rent_increase"
               product="section13_defensive"
               className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
             >
-              See the challenge-ready defence route
-            </TrackedLink>
-          </div>
-          <div className="w-full sm:w-auto">
-            <TrackedLink
-              href="/tools/rent-increase-challenge-checker"
-              pagePath="/rent-increase"
-              pageType="entry_page"
-              ctaLabel="Run the free rent checker first"
-              ctaPosition="hero"
-              eventName="entry_page_secondary_cta_click"
-              routeIntent="rent_increase"
-              className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
-            >
-              Run the free rent checker first
+              Prepare for tenant challenge
             </TrackedLink>
           </div>
         </>
@@ -197,6 +198,13 @@ export default function RentIncreaseLandingPage() {
         </ul>
       ),
     },
+    postHeroContent: (
+      <RentIncreaseBridge
+        sourcePage="/rent-increase"
+        ctaPosition="top"
+        headline="Before you serve a rent increase, check if it is supportable"
+      />
+    ),
     whatYouGet: {
       title: 'Choose the Section 13 route that fits the case',
       intro:

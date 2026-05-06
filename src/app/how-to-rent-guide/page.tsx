@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import Link from 'next/link';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { Container } from '@/components/ui/Container';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { SeoLandingWrapper } from '@/components/seo/SeoLandingWrapper';
@@ -13,9 +14,9 @@ import { howToRentGuideFAQs } from '@/data/faqs';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'How to Rent Guide | Landlord Requirements UK 2026',
+  title: 'How to Rent Guide 2026: Landlord Checklist & Download',
   description:
-    'Guide to the How to Rent checklist for landlords. When to provide it, which version to use. Essential for valid Section 21 notices.',
+    'England landlord checklist for the How to Rent guide. Know when to provide it, how to evidence service, and what to do next.',
   keywords: [
     'how to rent guide',
     'how to rent checklist',
@@ -25,9 +26,9 @@ export const metadata: Metadata = {
     'prescribed information tenants',
   ],
   openGraph: {
-    title: 'How to Rent Guide | Landlord Heaven',
+    title: 'How to Rent Guide 2026: Landlord Checklist & Download',
     description:
-      'Landlord guide to the How to Rent checklist - required for valid Section 21 notices.',
+      'Landlord guide to the How to Rent checklist, evidence of service, and practical next steps.',
     type: 'article',
     url: getCanonicalUrl('/how-to-rent-guide'),
   },
@@ -42,6 +43,37 @@ const breadcrumbs = [
 ];
 const noticeOnlyHref = '/products/notice-only';
 const tenancyProductHref = '/products/ast';
+
+const actionChooserItems = [
+  {
+    title: 'Increase rent',
+    body: 'Check whether the proposed rent is supportable before serving notice.',
+    href: '/tools/rent-increase-challenge-checker',
+    label: 'Check rent increase risk',
+    product: undefined,
+  },
+  {
+    title: 'Serve notice',
+    body: 'Prepare the notice route, grounds, dates, and service record.',
+    href: '/products/notice-only',
+    label: 'Generate notice pack',
+    product: 'notice_only',
+  },
+  {
+    title: 'Create tenancy agreement',
+    body: 'Use an England tenancy pack that fits the property and letting setup.',
+    href: '/products/ast',
+    label: 'Create tenancy agreement',
+    product: 'ast_standard',
+  },
+  {
+    title: 'Recover rent arrears',
+    body: 'Turn unpaid rent into a structured money claim pack.',
+    href: '/products/money-claim',
+    label: 'Create money claim pack',
+    product: 'money_claim',
+  },
+] as const;
 
 export default function HowToRentGuidePage() {
   return (
@@ -193,7 +225,6 @@ export default function HowToRentGuidePage() {
             {/* FAQ Section */}
             <div className="mb-12">
               <FAQSection
-          showTrustPositioningBar
                 faqs={howToRentGuideFAQs}
                 title="How to Rent Guide FAQ"
                 showContactCTA={false}
@@ -201,21 +232,34 @@ export default function HowToRentGuidePage() {
               />
             </div>
 
-            {/* CTA */}
-            <div className="p-8 bg-purple-50 rounded-2xl text-center">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900">
-                Ready to Serve Section 21?
+            {/* Action chooser */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm md:p-8">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Choose the landlord action you need next
               </h2>
-              <p className="text-gray-600 mb-6">
-                Make sure you&apos;ve provided the How to Rent guide, then generate your notice.
+              <p className="mt-3 text-gray-600">
+                Use the compliance check as a starting point, then move into the task that actually needs doing.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/eviction-notice-template" className="hero-btn-primary">
-                  Generate Section 21 Notice
-                </Link>
-                <Link href="/eviction-notice-template" className="hero-btn-secondary">
-                  Start Notice Pack
-                </Link>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {actionChooserItems.map((item) => (
+                  <div key={item.title} className="rounded-lg border border-gray-200 bg-gray-50 p-5">
+                    <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
+                    <p className="mt-2 min-h-12 text-sm leading-6 text-gray-600">{item.body}</p>
+                    <TrackedLink
+                      href={item.href}
+                      pagePath="/how-to-rent-guide"
+                      pageType="guide"
+                      ctaLabel={item.label}
+                      ctaPosition="bottom"
+                      eventName="entry_page_secondary_cta_click"
+                      routeIntent={item.title.toLowerCase().replace(/\s+/g, '_')}
+                      product={item.product}
+                      className="mt-4 inline-flex rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:opacity-95"
+                    >
+                      {item.label}
+                    </TrackedLink>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

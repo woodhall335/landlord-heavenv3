@@ -26,7 +26,13 @@ export type SeoPageType = 'problem' | 'court' | 'money' | 'general' | 'tenancy' 
 export type SeoCtaVariant = 'hero' | 'section' | 'faq' | 'inline' | 'final';
 export type SeoCtaJurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | 'uk';
 
-type SeoProductKey = 'notice_only' | 'complete_pack' | 'money_claim' | 'ast';
+type SeoProductKey =
+  | 'notice_only'
+  | 'complete_pack'
+  | 'money_claim'
+  | 'section13_standard'
+  | 'section13_defensive'
+  | 'ast';
 
 interface SeoCtaBlockProps {
   /** Type of SEO page - determines CTA emphasis */
@@ -55,6 +61,8 @@ const PRODUCT_ROUTE_BY_KEY: Record<SeoProductKey, SeoProductRoute> = {
   notice_only: SEO_PRODUCT_ROUTES.noticeOnly,
   complete_pack: SEO_PRODUCT_ROUTES.completePack,
   money_claim: SEO_PRODUCT_ROUTES.moneyClaim,
+  section13_standard: SEO_PRODUCT_ROUTES.section13Standard,
+  section13_defensive: SEO_PRODUCT_ROUTES.section13Defence,
   ast: SEO_PRODUCT_ROUTES.ast,
 };
 
@@ -62,6 +70,8 @@ const ROUTE_TO_PRODUCT_KEY: Record<SeoProductRoute, SeoProductKey> = {
   [SEO_PRODUCT_ROUTES.noticeOnly]: 'notice_only',
   [SEO_PRODUCT_ROUTES.completePack]: 'complete_pack',
   [SEO_PRODUCT_ROUTES.moneyClaim]: 'money_claim',
+  [SEO_PRODUCT_ROUTES.section13Standard]: 'section13_standard',
+  [SEO_PRODUCT_ROUTES.section13Defence]: 'section13_defensive',
   [SEO_PRODUCT_ROUTES.ast]: 'ast',
 };
 
@@ -69,6 +79,8 @@ const PRODUCT_LABEL_BY_KEY: Record<SeoProductKey, string> = {
   notice_only: 'Get Court-Ready Notice',
   complete_pack: 'Get Complete Eviction Pack',
   money_claim: 'Start Money Claim',
+  section13_standard: 'Generate Section 13 Notice',
+  section13_defensive: 'Prepare for Tenant Challenge',
   ast: 'Create Your Agreement',
 };
 
@@ -76,6 +88,8 @@ const PRODUCT_SHORT_LABEL_BY_KEY: Record<SeoProductKey, string> = {
   notice_only: PRODUCTS.notice_only.shortLabel,
   complete_pack: PRODUCTS.complete_pack.shortLabel,
   money_claim: PRODUCTS.money_claim.shortLabel,
+  section13_standard: PRODUCTS.section13_standard.shortLabel,
+  section13_defensive: PRODUCTS.section13_defensive.shortLabel,
   ast: 'Tenancy Agreement Pack',
 };
 
@@ -83,6 +97,8 @@ const PRODUCT_PRICE_BY_KEY: Record<SeoProductKey, string> = {
   notice_only: PRODUCTS.notice_only.displayPrice,
   complete_pack: PRODUCTS.complete_pack.displayPrice,
   money_claim: PRODUCTS.money_claim.displayPrice,
+  section13_standard: PRODUCTS.section13_standard.displayPrice,
+  section13_defensive: PRODUCTS.section13_defensive.displayPrice,
   ast: TENANCY_AGREEMENT_FROM_PRICE,
 };
 

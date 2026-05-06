@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
+import { RentIncreaseBridge } from '@/components/marketing/CommercialBridge';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection } from '@/components/seo/FAQSection';
@@ -10,7 +10,6 @@ import { Container } from '@/components/ui/Container';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { getCanonicalUrl } from '@/lib/seo';
 import { articleSchema, breadcrumbSchema, faqPageSchema, StructuredData } from '@/lib/seo/structured-data';
-import { RENT_INCREASE_WIZARD_HREF } from './content';
 import type { RentIncreaseGuidePage, RentIncreaseGuideSection } from './content';
 
 export function getRentIncreaseGuideMetadata(config: RentIncreaseGuidePage): Metadata {
@@ -32,32 +31,15 @@ export function getRentIncreaseGuideMetadata(config: RentIncreaseGuidePage): Met
 
 function CtaBand({
   title,
-  body,
-  primaryLabel,
+  sourcePage,
+  ctaPosition,
 }: {
   title: string;
-  body: string;
-  primaryLabel: string;
+  sourcePage: string;
+  ctaPosition: 'top' | 'mid' | 'bottom';
 }) {
   return (
-    <section className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-      <h2 className="text-2xl font-semibold text-[#2a2161]">{title}</h2>
-      <p className="mt-4 leading-8 text-gray-700">{body}</p>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <Link
-          href={RENT_INCREASE_WIZARD_HREF}
-          className="rounded-lg bg-primary px-5 py-3 font-semibold text-white hover:opacity-95"
-        >
-          {primaryLabel}
-        </Link>
-        <Link
-          href="/tools/rent-increase-challenge-checker"
-          className="rounded-lg border border-[#D8C8FF] bg-white px-5 py-3 font-semibold text-primary hover:bg-[#F8F4FF]"
-        >
-          Check the supportable rent range first
-        </Link>
-      </div>
-    </section>
+    <RentIncreaseBridge sourcePage={sourcePage} ctaPosition={ctaPosition} headline={title} />
   );
 }
 
@@ -118,7 +100,7 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
       <UniversalHero
         title={config.heroTitle}
         subtitle={config.heroSubtitle}
-        primaryCta={{ label: 'Generate your Section 13 notice', href: RENT_INCREASE_WIZARD_HREF }}
+        primaryCta={{ label: 'Check rent increase risk', href: '/tools/rent-increase-challenge-checker' }}
         secondaryCta={config.secondaryCta}
         mediaSrc={config.heroImage}
         mediaAlt={config.heroAlt}
@@ -184,9 +166,15 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
             </article>
 
             <CtaBand
-              title="Ready to turn this into a cleaner landlord file?"
-              body="Move from reading to action with the Standard Section 13 Rent Increase Pack. It keeps the timeline checks, the comparables, and the notice outputs lined up before you serve."
-              primaryLabel="Start the Standard Section 13 Rent Increase Pack"
+              title={
+                config.slug === 'form-4a-guide'
+                  ? 'Check if your Form 4A rent is likely to be challenged'
+                  : config.slug === 'section-13-notice'
+                    ? 'Check the rent first, then choose the Section 13 route'
+                    : 'Before you serve a rent increase, check if it is supportable'
+              }
+              sourcePage={config.path}
+              ctaPosition="top"
             />
 
             {sampleProof ? <GoldenPackProof data={sampleProof} /> : null}
@@ -197,8 +185,8 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
                 {index === 2 ? (
                   <CtaBand
                     title={config.midCtaTitle}
-                    body={config.midCtaBody}
-                    primaryLabel="Start the Standard Section 13 Rent Increase Pack"
+                    sourcePage={config.path}
+                    ctaPosition="mid"
                   />
                 ) : null}
               </div>
@@ -207,8 +195,8 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
             <section id="final-cta">
               <CtaBand
                 title={config.finalCtaTitle}
-                body={config.finalCtaBody}
-                primaryLabel="Start the Standard Section 13 Rent Increase Pack"
+                sourcePage={config.path}
+                ctaPosition="bottom"
               />
             </section>
           </div>

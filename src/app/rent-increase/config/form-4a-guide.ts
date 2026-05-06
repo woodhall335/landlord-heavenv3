@@ -13,9 +13,9 @@ export const form4aGuidePage: RentIncreaseGuidePage = {
     'Explains how Form 4A fits into a full evidence-backed pack.',
     'Designed for landlords checking quality before service.',
   ],
-  metaTitle: 'Form 4A Guide: How to Complete a Section 13 Rent Increase Notice',
+  metaTitle: 'Form 4A Rent Increase 2026: Check If Your Rent Is Supportable',
   metaDescription:
-    'Detailed landlord guide to Form 4A completion in England. Learn what each section means, common mistakes, and how to keep your notice and evidence file consistent.',
+    'England landlord guide to Form 4A rent increases. Check whether the proposed rent is supportable before you prepare and serve the Section 13 notice.',
   primaryKeyword: 'form 4a rent increase',
   intentLabel: 'form completion / form-specific help',
   introAngle:

@@ -67,9 +67,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
 > = {
   'form-3-section-8': {
     slug: 'form-3-section-8',
-    title: 'Form 3A Section 8 Notice for England | Current Guide 2026',
+    title: 'Form 3A Section 8 Notice: Generate a Valid England Notice',
     description:
-      'Understand the current England Form 3A Section 8 notice, the prescribed form landlords use for a Section 8 route, how to choose the right grounds, and how to move into the current possession route after 1 May 2026.',
+      'Plain-English Form 3A Section 8 guide for England landlords. Choose Notice Only for service or Complete Pack for notice, claim, and court preparation.',
     keywords: [
       'form 3a section 8',
       'form 3a notice england',
@@ -235,8 +235,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Start your eviction notice pack', href: '/products/notice-only' },
-    secondaryCta: { label: 'Read Section 8 Notice', href: '/section-8-notice' },
+    primaryCta: { label: 'Generate notice pack', href: '/products/notice-only' },
+    secondaryCta: { label: 'Build complete eviction pack', href: '/products/complete-pack' },
   },
   'section-8-notice': {
     slug: 'section-8-notice',

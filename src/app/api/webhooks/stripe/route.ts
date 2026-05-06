@@ -278,6 +278,7 @@ export async function POST(request: Request) {
             referrer: session.metadata?.referrer || null,
             first_touch_at: session.metadata?.first_touch_at || null,
             ga_client_id: session.metadata?.ga_client_id || null,
+            marketing_session_id: session.metadata?.marketing_session_id || null,
           };
 
           const order = await findOrderForCheckoutSession(supabase, session);
@@ -331,6 +332,9 @@ export async function POST(request: Request) {
             }
             if (!(order as any).ga_client_id && stripeAttribution.ga_client_id) {
               orderUpdate.ga_client_id = stripeAttribution.ga_client_id;
+            }
+            if (!(order as any).marketing_session_id && stripeAttribution.marketing_session_id) {
+              orderUpdate.marketing_session_id = stripeAttribution.marketing_session_id;
             }
 
             await supabase

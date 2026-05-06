@@ -278,6 +278,7 @@ describe('wizardAttribution', () => {
         referrer: 'google.com',
         first_touch_at: '2026-01-14T10:00:00.000Z',
         ga_client_id: '1234567890.1705226400',
+        marketing_session_id: expect.stringMatching(/^mkt_/),
       });
     });
 
@@ -295,6 +296,7 @@ describe('wizardAttribution', () => {
       expect(checkoutData.utm_term).toBeNull();
       expect(checkoutData.utm_content).toBeNull();
       expect(checkoutData.referrer).toBeNull();
+      expect(checkoutData.marketing_session_id).toEqual(expect.stringMatching(/^mkt_/));
     });
   });
 
@@ -562,5 +564,6 @@ describe('Attribution end-to-end flow', () => {
     expect(checkoutData.utm_campaign).toBe('eviction_jan_2026');
     expect(checkoutData.landing_path).toBe('/how-to-evict-tenant');
     expect(checkoutData.ga_client_id).toBe('9876543210.1705226400');
+    expect(checkoutData.marketing_session_id).toEqual(expect.stringMatching(/^mkt_/));
   });
 });

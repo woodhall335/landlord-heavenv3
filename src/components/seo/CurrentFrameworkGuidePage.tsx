@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
+import { Section8Bridge } from '@/components/marketing/CommercialBridge';
 import { Container } from '@/components/ui/Container';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -38,6 +39,7 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
   const canonical = getCanonicalUrl(`/${config.slug}`);
   const frameworkLinks = getCurrentEnglandFrameworkLinks(`/${config.slug}`);
   const pagePath = `/${config.slug}`;
+  const isForm3Section8 = config.slug === 'form-3-section-8';
   const inferProduct = (href: string) => {
     if (href.includes('notice-only')) return 'notice_only';
     if (href.includes('complete-pack')) return 'complete_pack';
@@ -185,6 +187,14 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
       <section className="bg-white py-12">
         <Container>
           <div className="mx-auto max-w-5xl space-y-8">
+            {isForm3Section8 ? (
+              <Section8Bridge
+                sourcePage={pagePath}
+                ctaPosition="top"
+                headline="Choose Notice Only or Complete Pack before you serve Form 3A"
+              />
+            ) : null}
+
             {config.decisionBlock ? (
               <article className="rounded-3xl border border-[#cab6ff] bg-[#f8f4ff] p-6 md:p-8">
                 <h2 className="text-3xl font-bold text-[#2a2161]">{config.decisionBlock.title}</h2>
@@ -262,7 +272,16 @@ export function CurrentFrameworkGuidePage({ config }: { config: CurrentFramework
 
       <section className="bg-[#f7f2ff] py-12">
         <Container>
-          <div className="mx-auto max-w-5xl rounded-3xl border border-[#e6dbff] bg-white p-6 md:p-8">
+          <div className="mx-auto max-w-5xl">
+            {isForm3Section8 ? (
+              <Section8Bridge
+                sourcePage={pagePath}
+                ctaPosition="faq"
+                headline="Before the FAQs, choose the route that matches your next step"
+              />
+            ) : null}
+          </div>
+          <div className="mx-auto mt-8 max-w-5xl rounded-3xl border border-[#e6dbff] bg-white p-6 md:p-8">
             <h2 className="text-3xl font-bold text-[#2a2161]">Choose the next step for your case</h2>
             <p className="mt-4 max-w-3xl leading-8 text-gray-700">
               Move from guidance into the current England workflow that fits your case. If you already know the route, start the notice. If the case is likely to continue into court, use the fuller possession support and claim-stage guidance instead of piecing it together later.

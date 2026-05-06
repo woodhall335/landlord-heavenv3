@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { CommercialBridge } from '@/components/marketing/CommercialBridge';
 import { Container } from '@/components/ui/Container';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
@@ -22,16 +23,14 @@ const completePackProductHref = '/products/complete-pack';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'N5 and N119 Possession Claim Guide | Standard Possession Claim for Landlords | LandlordHeaven',
+  title: 'N5 and N119 Possession Claim Forms: Court Pack for Landlords',
   description:
-    'Plain-English landlord guide to the N5 and N119 possession claim route in England, including evidence, hearings, and how to keep the court file clear.',
+    'Plain-English England landlord guide to N5 and N119 possession claim forms, court evidence, and when to use the Complete Pack.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'N5 and N119 Possession Claim Guide | Standard Possession Claim for Landlords | LandlordHeaven',
+    title: 'N5 and N119 Possession Claim Forms: Court Pack for Landlords',
     description:
       'Plain-English guidance for landlords on the N5 and N119 court claim route, including evidence, hearing preparation, and common delay points.',
     url: canonical,
@@ -122,38 +121,41 @@ function Card({
 
 function CtaBand({
   title,
-  body,
-  primaryHref,
-  primaryLabel,
-  secondaryHref,
-  secondaryLabel,
 }: {
   title: string;
-  body: string;
-  primaryHref: string;
-  primaryLabel: string;
-  secondaryHref: string;
-  secondaryLabel: string;
 }) {
   return (
-    <div className="rounded-2xl border border-[#E6DBFF] bg-[#F8F4FF] p-6 md:p-8">
-      <h3 className="text-xl font-semibold text-[#2a2161]">{title}</h3>
-      <p className="mt-3 leading-7 text-gray-700">{body}</p>
-      <div className="mt-5 flex flex-wrap gap-3">
-        <Link
-          href={primaryHref}
-          className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
-        >
-          {primaryLabel}
-        </Link>
-        <Link
-          href={secondaryHref}
-          className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
-        >
-          {secondaryLabel}
-        </Link>
-      </div>
-    </div>
+    <CourtClaimBridge ctaPosition="mid" headline={title} />
+  );
+}
+
+function CourtClaimBridge({
+  ctaPosition,
+  headline = 'Need the complete court pack for N5 and N119?',
+}: {
+  ctaPosition: 'top' | 'mid' | 'bottom' | 'faq';
+  headline?: string;
+}) {
+  return (
+    <CommercialBridge
+      sourcePage="/n5-n119-possession-claim"
+      intent="section8"
+      headline={headline}
+      primaryProduct="complete_pack"
+      primaryHref={completePackProductHref}
+      primaryLabel="Build complete eviction pack"
+      secondaryProduct="notice_only"
+      secondaryHref={noticeOnlyProductHref}
+      secondaryLabel="Still at notice stage? Notice Only"
+      ctaPosition={ctaPosition}
+      riskMessage="A court claim needs more than a served notice"
+      proofPoints={[
+        'Prepare N5 and N119 together',
+        'Build the witness statement and chronology',
+        'Keep the arrears schedule, evidence, and readiness checks aligned',
+      ]}
+      body="Use Complete Pack when the case is moving toward court and the landlord needs the claim forms, evidence file, and hearing preparation to read as one coherent pack."
+    />
   );
 }
 
@@ -232,6 +234,7 @@ export default function Page() {
         <Container>
           <div className="mx-auto max-w-5xl">
             <SeoPageContextPanel pathname="/n5-n119-possession-claim" className="border border-[#CAB6FF] bg-[#FBF8FF]" />
+            <CourtClaimBridge ctaPosition="top" />
           </div>
         </Container>
       </section>
@@ -456,11 +459,6 @@ export default function Page() {
 
             <CtaBand
               title="Already moving toward court and need the standard possession route controlled properly?"
-              body="Complete Pack is usually the stronger fit where the notice stage has already happened and the case now needs broader claim, evidence, and hearing preparation. Notice Only is usually better where the main need is still preparing and serving the earlier notice correctly."
-              primaryHref={completePackProductHref}
-              primaryLabel="Start Complete Pack"
-              secondaryHref={noticeOnlyProductHref}
-              secondaryLabel="Still at notice stage? Notice Only"
             />
 
             <Card id="common-mistakes" title="Common Landlord Mistakes">
@@ -561,6 +559,14 @@ export default function Page() {
       </section>
 
       <section id="faqs" className="py-2">
+        <Container>
+          <div className="mx-auto max-w-5xl">
+            <CourtClaimBridge
+              ctaPosition="faq"
+              headline="Before the FAQs, decide whether this is already a court-pack job"
+            />
+          </div>
+        </Container>
         <FAQSection faqs={faqs} title="N5 and N119 Possession Claim FAQs" />
       </section>
 

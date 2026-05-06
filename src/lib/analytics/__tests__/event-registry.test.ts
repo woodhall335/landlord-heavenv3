@@ -26,4 +26,30 @@ describe('analytics event registry', () => {
       variant: 'derived',
     });
   });
+
+  it('registers first-party revenue funnel events', () => {
+    expect(getAnalyticsEventDefinition('commercial_bridge_viewed')).toMatchObject({
+      family: 'commercial_bridge_viewed',
+      class: 'view',
+      dedupeScope: 'page',
+    });
+
+    expect(getAnalyticsEventDefinition('commercial_bridge_clicked')).toMatchObject({
+      family: 'commercial_bridge_clicked',
+      class: 'interaction',
+      dedupeScope: 'none',
+    });
+
+    expect(getAnalyticsEventDefinition('tool_completed')).toMatchObject({
+      family: 'tool_completed',
+      class: 'milestone',
+      dedupeScope: 'session',
+    });
+
+    expect(getAnalyticsEventDefinition('purchase_completed')).toMatchObject({
+      family: 'purchase_completed',
+      class: 'milestone',
+      dedupeScope: 'none',
+    });
+  });
 });

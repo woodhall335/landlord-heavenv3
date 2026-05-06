@@ -16,6 +16,12 @@ import type {
 } from '@/lib/marketing/product-sales-content';
 
 function inferProductFromHref(href: string) {
+  if (href.includes('product=section13_standard')) return 'section13_standard';
+  if (href.includes('product=section13_defensive')) return 'section13_defensive';
+  if (href.includes('product=money_claim')) return 'money_claim';
+  if (href.includes('product=complete_pack')) return 'complete_pack';
+  if (href.includes('product=notice_only')) return 'notice_only';
+  if (href.includes('product=tenancy_agreement')) return 'tenancy_agreement';
   if (href.includes('section-13-standard')) return 'section13_standard';
   if (href.includes('section-13-defence')) return 'section13_defensive';
   if (href.includes('money-claim')) return 'money_claim';

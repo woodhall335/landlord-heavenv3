@@ -13,9 +13,9 @@ export const section13NoticePage: RentIncreaseGuidePage = {
     'Covers notice quality, not just form completion.',
     'Links to Form 4A, market-rent, and challenge pages for the next steps.',
   ],
-  metaTitle: 'Section 13 Notice UK: Landlord Guide to Form 4A and Rent Increase Process',
+  metaTitle: 'Section 13 Notice 2026: Increase Rent Properly in England',
   metaDescription:
-    'Detailed Section 13 notice guide for landlords in England. Learn what the notice does, legal timing rules, common errors, and how to reduce challenge risk.',
+    'Plain-English Section 13 notice guide for England landlords. Check rent support, choose Standard or Defence, and prepare Form 4A properly.',
   primaryKeyword: 'section 13 notice',
   intentLabel: 'notice explainer',
   introAngle:

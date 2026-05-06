@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { RiLockLine, RiGroupLine, RiFileTextLine, RiMoneyDollarCircleLine, RiWalletLine, RiMailLine, RiAlertLine, RiCpuLine, RiScales3Line } from 'react-icons/ri';
+import { RiLockLine, RiGroupLine, RiFileTextLine, RiMoneyDollarCircleLine, RiWalletLine, RiMailLine, RiAlertLine, RiCpuLine, RiScales3Line, RiBarChart2Line } from 'react-icons/ri';
 
 interface AdminStats {
   users: {
@@ -356,12 +356,19 @@ export default function AdminDashboardPage() {
               <p className="font-medium text-charcoal">Cases</p>
               <p className="text-xs text-gray-500">Support & ops</p>
             </Link>
-            <Link href="/dashboard/admin/orders" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
-                <RiFileTextLine className="w-5 h-5 text-blue-600" />
-              </div>
+          <Link href="/dashboard/admin/orders" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+              <RiFileTextLine className="w-5 h-5 text-blue-600" />
+            </div>
             <p className="font-medium text-charcoal">Orders</p>
             <p className="text-xs text-gray-500">Manage & refund</p>
+          </Link>
+          <Link href="/dashboard/admin/growth" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3">
+              <RiBarChart2Line className="w-5 h-5 text-emerald-600" />
+            </div>
+            <p className="font-medium text-charcoal">Growth</p>
+            <p className="text-xs text-gray-500">Revenue funnel</p>
           </Link>
           <Link href="/dashboard/admin/users" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
             <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">

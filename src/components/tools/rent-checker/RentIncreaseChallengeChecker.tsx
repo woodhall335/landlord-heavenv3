@@ -77,10 +77,24 @@ export function RentIncreaseChallengeChecker() {
   const [started, setStarted] = useState(false);
   const formRef = useRef<HTMLDivElement | null>(null);
   const hasTrackedStart = useRef(false);
+  const completedResultSession = useRef<string | null>(null);
 
   useEffect(() => {
     if (!result) return;
-    trackEvent('result_viewed', buildResultViewedPayload(result));
+    const payload = {
+      sourcePage: '/tools/rent-increase-challenge-checker',
+      pagePath: '/tools/rent-increase-challenge-checker',
+      intent: 'rent_increase',
+      toolName: 'rent_increase_challenge_checker',
+      ...buildResultViewedPayload(result),
+    };
+
+    trackEvent('result_viewed', payload);
+
+    if (completedResultSession.current !== result.sessionId) {
+      completedResultSession.current = result.sessionId;
+      trackEvent('tool_completed', payload);
+    }
   }, [result]);
 
   const helperSummary =
@@ -93,6 +107,9 @@ export function RentIncreaseChallengeChecker() {
     if (!hasTrackedStart.current) {
       hasTrackedStart.current = true;
       trackEvent('tool_started', {
+        sourcePage: '/tools/rent-increase-challenge-checker',
+        pagePath: '/tools/rent-increase-challenge-checker',
+        intent: 'rent_increase',
         toolName: 'rent_increase_challenge_checker',
         userType: 'landlord',
         jurisdiction: 'england',

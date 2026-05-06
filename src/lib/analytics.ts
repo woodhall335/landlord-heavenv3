@@ -29,6 +29,11 @@ import {
   markTrackedAnalyticsEvent,
   type AnalyticsDispatchOptions,
 } from './analytics/ga4-dispatch';
+import {
+  isMarketingGrowthEventName,
+  recordMarketingGrowthEvent,
+  type MarketingGrowthEventPayload,
+} from './analytics/growth-events';
 import { normalizeWizardStep } from './analytics/wizard-step-taxonomy';
 import { getWizardAttribution } from './wizard/wizardAttribution';
 
@@ -40,6 +45,10 @@ export function trackEvent(
   eventParams?: Record<string, any>,
   dispatchOptions?: AnalyticsDispatchOptions
 ): void {
+  if (isMarketingGrowthEventName(eventName)) {
+    recordMarketingGrowthEvent(eventName, eventParams as MarketingGrowthEventPayload);
+  }
+
   const hasGoogleTracking =
     typeof window !== 'undefined' && typeof window.gtag === 'function';
   const hasFacebookTracking =
@@ -185,6 +194,12 @@ export function trackPurchase(
       }),
     });
   }
+
+  recordMarketingGrowthEvent('purchase_completed', {
+    productClicked: attribution?.product_type || items?.[0]?.item_id,
+    destination: typeof window !== 'undefined' ? window.location.pathname : undefined,
+    userType: 'landlord',
+  });
 }
 
 /**
@@ -196,6 +211,12 @@ export function trackProductView(
   category?: string,
   price?: number
 ): void {
+  recordMarketingGrowthEvent('product_page_viewed', {
+    productClicked: productId,
+    destination: typeof window !== 'undefined' ? window.location.pathname : undefined,
+    userType: 'landlord',
+  });
+
   trackEvent('view_item', {
     currency: 'GBP',
     value: price || 0,
@@ -218,6 +239,11 @@ export function trackBeginCheckout(
   productName: string,
   value: number
 ): void {
+  recordMarketingGrowthEvent('checkout_started', {
+    productClicked: productId,
+    userType: 'landlord',
+  });
+
   // Google Analytics
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'begin_checkout', {
@@ -586,7 +612,11 @@ export type MarketingCtaPosition =
   | 'quick_answer'
   | 'section'
   | 'final'
-  | 'support';
+  | 'support'
+  | 'top'
+  | 'mid'
+  | 'bottom'
+  | 'faq';
 
 function getMarketingAttributionParams() {
   if (typeof window === 'undefined') {
@@ -670,6 +700,18 @@ export function trackMarketingCtaClick(params: {
     utm_campaign: attribution.utm_campaign,
     first_seen_at: attribution.first_seen_at,
   });
+
+  if (params.product || params.destinationPath.startsWith('/products/')) {
+    recordMarketingGrowthEvent('product_cta_clicked', {
+      sourcePage: params.pagePath,
+      pageType: params.pageType,
+      intent: params.routeIntent,
+      ctaPosition: params.ctaPosition,
+      destination: params.destinationPath,
+      productClicked: params.product,
+      userType: 'landlord',
+    });
+  }
 }
 
 /**

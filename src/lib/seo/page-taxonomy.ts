@@ -39,6 +39,7 @@ export type SeoCluster =
   | 'tenant-problems'
   | 'regional-eviction'
   | 'eviction-hub'
+  | 'rent-increase'
   | 'product-adjacent';
 
 export type SeoScenario =
@@ -53,6 +54,8 @@ export type SeoProductRoute =
   | '/products/notice-only'
   | '/products/complete-pack'
   | '/products/money-claim'
+  | '/products/section-13-standard'
+  | '/products/section-13-defence'
   | '/products/ast';
 
 export type ConsolidationStatus =
@@ -95,6 +98,8 @@ export const SEO_PRODUCT_ROUTES = {
   noticeOnly: '/products/notice-only',
   completePack: '/products/complete-pack',
   moneyClaim: '/products/money-claim',
+  section13Standard: '/products/section-13-standard',
+  section13Defence: '/products/section-13-defence',
   ast: '/products/ast',
 } as const satisfies Record<string, SeoProductRoute>;
 
@@ -110,6 +115,7 @@ export const SEO_PILLAR_ROUTES = {
   section21Notice: '/section-21-notice',
   section21BanUk: '/section-21-ban-uk',
   evictionGuides: '/eviction-guides',
+  rentIncrease: '/rent-increase',
   tenancyAgreementsEngland: '/tenancy-agreement-template',
   tenancyAgreementsWales: '/wales-tenancy-agreement-template',
   tenancyAgreementsScotland: '/private-residential-tenancy-agreement-template',
@@ -122,8 +128,6 @@ export const EXPLICIT_TAXONOMY_EXEMPTIONS = [
   '/landlord-documents-england',
   '/lodger-agreement-template',
   '/privacy',
-  '/products/section-13-defence',
-  '/products/section-13-standard',
   '/refunds',
   '/tenancy-agreements/england-wales',
   '/terms',
@@ -191,6 +195,16 @@ const anchorSets = {
     'money claim pack for unpaid rent',
     'recover unpaid rent through the county court',
     'rent arrears recovery pack',
+  ],
+  section13StandardProduct: [
+    'Standard Section 13 rent increase pack',
+    'Form 4A rent increase pack for landlords',
+    'supportable rent increase notice pack',
+  ],
+  section13DefenceProduct: [
+    'Challenge-Ready Section 13 Defence Pack',
+    'defend a challenged rent increase',
+    'tribunal-ready rent increase support',
   ],
   tenancyPillar: [
     'England tenancy agreements for landlords',
@@ -1746,6 +1760,66 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
         'what is included in the claim pack',
       ],
       product: [...anchorSets.moneyClaimProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'canonical',
+  }),
+  '/products/section-13-standard': makeEntry('/products/section-13-standard', {
+    pageType: 'notice',
+    pageRole: 'product-adjacent',
+    jurisdiction: 'england',
+    cluster: 'rent-increase',
+    primaryPillar: SEO_PILLAR_ROUTES.rentIncrease,
+    supportingPage: '/rent-increase/section-13-notice',
+    primaryProduct: SEO_PRODUCT_ROUTES.section13Standard,
+    secondaryProduct: SEO_PRODUCT_ROUTES.section13Defence,
+    primaryProductByScenario: {
+      default: SEO_PRODUCT_ROUTES.section13Standard,
+    },
+    canonicalTarget: SEO_PRODUCT_ROUTES.section13Standard,
+    anchorVariants: {
+      pillar: [
+        'Section 13 notice guide for landlords',
+        'Form 4A rent increase route',
+        'rent increase in England',
+      ],
+      supporting: [
+        'standard rent increase pack',
+        'serve Section 13 with Form 4A',
+        'support the proposed rent before service',
+      ],
+      product: [...anchorSets.section13StandardProduct],
+    },
+    section21TransitionEligible: false,
+    freshnessRequired: true,
+    consolidationStatus: 'canonical',
+  }),
+  '/products/section-13-defence': makeEntry('/products/section-13-defence', {
+    pageType: 'notice',
+    pageRole: 'product-adjacent',
+    jurisdiction: 'england',
+    cluster: 'rent-increase',
+    primaryPillar: SEO_PILLAR_ROUTES.rentIncrease,
+    supportingPage: '/rent-increase/section-13-tribunal',
+    primaryProduct: SEO_PRODUCT_ROUTES.section13Defence,
+    secondaryProduct: SEO_PRODUCT_ROUTES.section13Standard,
+    primaryProductByScenario: {
+      default: SEO_PRODUCT_ROUTES.section13Defence,
+    },
+    canonicalTarget: SEO_PRODUCT_ROUTES.section13Defence,
+    anchorVariants: {
+      pillar: [
+        'Section 13 challenge guide for landlords',
+        'rent increase tribunal preparation',
+        'defend a rent increase challenge',
+      ],
+      supporting: [
+        'challenge-ready Section 13 pack',
+        'prepare for a tenant rent challenge',
+        'rent increase evidence and response pack',
+      ],
+      product: [...anchorSets.section13DefenceProduct],
     },
     section21TransitionEligible: false,
     freshnessRequired: true,

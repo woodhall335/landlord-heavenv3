@@ -18,12 +18,11 @@ import {
 } from 'lucide-react';
 import {
   StructuredData,
-  buildProductAggregateRating,
   breadcrumbSchema,
   articleSchema,
 } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
-import { PRODUCT_PRICE_AMOUNT_STRINGS, PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCTS } from '@/lib/pricing/products';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
@@ -34,6 +33,7 @@ import {
 } from '@/lib/seo/internal-links';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { Section8Bridge } from '@/components/marketing/CommercialBridge';
 import { FAQSection } from '@/components/seo/FAQSection';
 import { section8NoticeTemplateFAQs } from '@/data/faqs';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
@@ -51,9 +51,9 @@ const noticeOnlyProductHref = '/products/notice-only';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Section 8 Notice Template | Form 3 Guide for Landlords in England',
+  title: 'Section 8 Notice Template 2026: Form 3A Guide for England',
   description:
-    'Plain-English Section 8 notice template and Form 3 landlord guide for England, covering grounds, service, evidence, and next steps.',
+    'Plain-English Section 8 notice template guide for England landlords. Choose Notice Only for Form 3A service or Complete Pack for notice and court preparation.',
   keywords: [
     'section 8 notice',
     'section 8 notice template',
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: 'Section 8 Notice Template | Form 3 Guide for Landlords in England',
+    title: 'Section 8 Notice Template 2026: Form 3A Guide for England',
     description:
       'Learn how Section 8 Form 3 works, what a valid notice should include, and when to use a guided Notice Only workflow.',
     type: 'article',
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Section 8 Notice Template | Form 3 Guide for Landlords in England',
+    title: 'Section 8 Notice Template 2026: Form 3A Guide for England',
     description:
       'Form 3 guidance, common grounds, notice content, service rules, and a guided Section 8 workflow for landlords.',
   },
@@ -104,21 +104,6 @@ export default function Section8NoticeTemplatePage() {
     description:
       'Section 8 notice template and Form 3 guidance for England grounds-based possession.',
     url: canonicalUrl,
-    mainEntity: {
-      '@type': 'Product',
-      name: 'Section 8 Notice Template',
-      description:
-        'Guided Section 8 Form 3 workflow for England landlords.',
-      offers: {
-        '@type': 'AggregateOffer',
-        lowPrice: '0',
-        highPrice: PRODUCT_PRICE_AMOUNT_STRINGS.complete_pack,
-        priceCurrency: 'GBP',
-        offerCount: '2',
-        availability: 'https://schema.org/InStock',
-      },
-      aggregateRating: buildProductAggregateRating(),
-    },
   };
 
   const enhancedFaqs = [
@@ -194,6 +179,11 @@ export default function Section8NoticeTemplatePage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto mb-6 max-w-5xl">
               <SeoPageContextPanel pathname="/section-8-notice-template" />
+              <Section8Bridge
+                sourcePage="/section-8-notice-template"
+                ctaPosition="top"
+                headline="Choose Notice Only or Complete Pack before relying on a template"
+              />
             </div>
             <nav
               aria-labelledby="section-8-links-heading"
@@ -1164,6 +1154,18 @@ export default function Section8NoticeTemplatePage() {
                 If several items on this list are incomplete, that is usually a sign the case now
                 belongs on a guided workflow rather than a template-only path.
               </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-5xl">
+              <Section8Bridge
+                sourcePage="/section-8-notice-template"
+                ctaPosition="faq"
+                headline="Before you check the FAQs, choose the route that fits the case"
+              />
             </div>
           </div>
         </section>

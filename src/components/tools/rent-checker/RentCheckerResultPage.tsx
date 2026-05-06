@@ -73,9 +73,21 @@ function recommendedRouteLabel(result: RentCheckerResult) {
 }
 
 function trackProductCta(result: RentCheckerResult, clickedProduct: 'section13_standard' | 'section13_defensive') {
+  const destination =
+    clickedProduct === 'section13_standard'
+      ? '/products/section-13-standard'
+      : '/products/section-13-defence';
+
   trackEvent('product_cta_clicked', {
+    sourcePage: '/tools/rent-increase-challenge-checker',
+    pagePath: '/tools/rent-increase-challenge-checker',
+    intent: 'rent_increase',
+    ctaPosition: 'bottom',
+    destination,
     recommendedProduct: result.recommendedProduct,
     clickedProduct,
+    productClicked: clickedProduct,
+    userType: 'landlord',
     resultState: result.resultState,
     challengeRisk: result.challengeRisk,
     evidenceStrength: result.evidenceStrength,
@@ -384,8 +396,13 @@ export function RecommendedActionCard({ result }: { result: RentCheckerResult })
     trackProductCta(result, result.recommendedProduct);
     if (result.primaryCtaTracksCheckout) {
       trackEvent('checkout_started', {
+        sourcePage: '/tools/rent-increase-challenge-checker',
+        pagePath: '/tools/rent-increase-challenge-checker',
+        intent: 'rent_increase',
         product: result.recommendedProduct,
+        productClicked: result.recommendedProduct,
         source: 'rent_checker',
+        userType: 'landlord',
         resultState: result.resultState,
       });
     }
@@ -454,8 +471,13 @@ export function NextStepsCard({ result }: { result: RentCheckerResult }) {
     trackProductCta(result, result.recommendedProduct);
     if (result.primaryCtaTracksCheckout) {
       trackEvent('checkout_started', {
+        sourcePage: '/tools/rent-increase-challenge-checker',
+        pagePath: '/tools/rent-increase-challenge-checker',
+        intent: 'rent_increase',
         product: result.recommendedProduct,
+        productClicked: result.recommendedProduct,
         source: 'rent_checker',
+        userType: 'landlord',
         resultState: result.resultState,
       });
     }
@@ -903,8 +925,13 @@ export function RentCheckerResultPage({ result, onRestart }: RentCheckerResultPa
     trackProductCta(result, result.recommendedProduct);
     if (result.primaryCtaTracksCheckout) {
       trackEvent('checkout_started', {
+        sourcePage: '/tools/rent-increase-challenge-checker',
+        pagePath: '/tools/rent-increase-challenge-checker',
+        intent: 'rent_increase',
         product: result.recommendedProduct,
+        productClicked: result.recommendedProduct,
         source: 'rent_checker',
+        userType: 'landlord',
         resultState: result.resultState,
       });
     }

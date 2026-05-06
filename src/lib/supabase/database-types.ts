@@ -920,6 +920,9 @@ export interface OrderRow {
   /** Google Analytics client ID for server-side event matching */
   ga_client_id: string | null;
 
+  /** First-party no-PII marketing session ID for joining events to orders */
+  marketing_session_id: string | null;
+
   /** Row creation timestamp */
   created_at: string | null;
 
@@ -956,6 +959,7 @@ export interface OrderInsert {
   referrer?: string | null;
   first_touch_at?: string | null;
   ga_client_id?: string | null;
+  marketing_session_id?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
 }
@@ -988,6 +992,7 @@ export interface OrderUpdate {
   referrer?: string | null;
   first_touch_at?: string | null;
   ga_client_id?: string | null;
+  marketing_session_id?: string | null;
   updated_at?: string | null;
 }
 
