@@ -291,7 +291,7 @@ export function PreviewPageLayout({
                     Processing...
                   </span>
                 ) : (
-                  'Get Your Documents'
+                  'Continue to secure payment'
                 )}
               </button>
 

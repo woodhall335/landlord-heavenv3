@@ -1134,7 +1134,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                {uploadsInProgress ? 'Uploading...' : 'Generate documents'}
+              {uploadsInProgress ? 'Uploading...' : 'Continue to document preview'}
               </button>
             ) : (
               <button

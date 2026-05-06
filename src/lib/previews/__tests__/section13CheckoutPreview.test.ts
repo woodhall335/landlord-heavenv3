@@ -15,12 +15,12 @@ describe('Section 13 checkout preview thumbnail mapping', () => {
       );
     }
 
-    expect(
-      getSection13CheckoutThumbnailUrl(caseId, documents[0].id)
-    ).toContain('section13_form_4a');
+    expect(getSection13CheckoutThumbnailUrl(caseId, documents[0].id)).toContain(
+      'section13_rent_increase_summary'
+    );
   });
 
-  it('keeps bundle-only defensive items on icon fallback', () => {
+  it('assigns thumbnail URLs to every defensive pack document card', () => {
     const documents = getSection13Documents('section13_defensive');
     const urlById = Object.fromEntries(
       documents.map((document) => [
@@ -29,8 +29,7 @@ describe('Section 13 checkout preview thumbnail mapping', () => {
       ])
     );
 
-    expect(urlById['section13-tribunal-bundle-pdf']).toBeUndefined();
-    expect(urlById['section13-tribunal-bundle-zip']).toBeUndefined();
+    expect(Object.values(urlById).every(Boolean)).toBe(true);
     expect(urlById['section13-tribunal-argument-summary']).toBe(
       `/api/section13/thumbnail/${caseId}?document_type=section13_tribunal_argument_summary`
     );

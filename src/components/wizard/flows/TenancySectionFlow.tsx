@@ -1017,7 +1017,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                Generate documents
+            Continue to document preview
               </button>
             ) : (
               <button
@@ -3390,7 +3390,7 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
         <div className={isWizardUiV3Enabled ? "bg-violet-50 border border-violet-200 rounded-lg p-4" : "bg-green-50 border border-green-200 rounded-lg p-4"}>
           <h4 className={isWizardUiV3Enabled ? "font-medium text-violet-900 mb-2" : "font-medium text-green-800 mb-2"}>Ready to Generate</h4>
           <p className={isWizardUiV3Enabled ? "text-sm text-violet-700" : "text-sm text-green-700"}>
-            All sections are complete. Click "Generate documents" to create your tenancy agreement.
+        All sections are complete. Continue to the document preview to check your tenancy agreement before payment.
           </p>
         </div>
       )}

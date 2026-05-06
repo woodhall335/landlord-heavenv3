@@ -11,7 +11,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Button, Card, ValidationErrors, type ValidationIssue } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
-import { SignupModal } from '@/components/modals/SignupModal';
 import { PreviewPageLayout, DocumentInfo, MultiPageViewer } from '@/components/preview';
 import {
   getNoticeOnlyDocuments,
@@ -60,6 +59,10 @@ import {
   getSection13CheckoutPreviewUrl,
   getSection13CheckoutThumbnailUrl,
 } from '@/lib/previews/section13CheckoutPreview';
+import {
+  getPreviewDocumentTypes,
+  resolveDocumentPreview,
+} from '@/lib/previews/documentPreviewResolver';
 
 interface CaseData {
   id: string;
@@ -82,9 +85,6 @@ function isSection13ProductSku(value: string | null | undefined): value is 'sect
   return value === 'section13_standard' || value === 'section13_defensive';
 }
 
-/**
- * Checkout button for AST (tenancy agreement) products
- */
 function ASTCheckoutButton({
   caseId,
   product,
@@ -285,7 +285,7 @@ function ASTCheckoutButton({
             Processing...
           </span>
         ) : (
-          'Get Your Tenancy Agreement'
+          'Continue to secure payment'
         )}
       </button>
       {error && (
@@ -1049,45 +1049,31 @@ export default function WizardPreviewPage() {
     // Enrich documents with generated document IDs for thumbnails
     return baseDocuments.map(doc => {
       // Try to find a matching generated document
-      const possibleTypes = docTypeMapping[doc.id] || [doc.id];
+      const possibleTypes = getPreviewDocumentTypes(doc);
       const matchingGenDoc = generatedDocs.find(
         gd => possibleTypes.includes(gd.document_type) ||
               gd.document_type === doc.id ||
               gd.document_type.replace(/_/g, '-') === doc.id ||
               doc.id.replace(/-/g, '_') === gd.document_type
       );
-
-      // For pre-purchase flows with in-memory previews, use dedicated thumbnail endpoints.
-      let thumbnailUrl: string | undefined;
-      let previewUrl: string | undefined;
-      if (product === 'notice_only') {
-        // Map config IDs to document_type for the thumbnail API
-        const docTypeForThumbnail = possibleTypes[0] || doc.id;
-        thumbnailUrl = `/api/notice-only/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
-        previewUrl = `/api/notice-only/embed/${caseId}?pack=notice_only&document_type=${encodeURIComponent(docTypeForThumbnail)}`;
-      } else if (product === 'complete_pack') {
-        const docTypeForThumbnail = possibleTypes[0] || doc.id;
-        thumbnailUrl = `/api/notice-only/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
-        previewUrl = `/api/notice-only/embed/${caseId}?pack=complete_pack&document_type=${encodeURIComponent(docTypeForThumbnail)}`;
-      } else if (product === 'money_claim' || product === 'sc_money_claim') {
-        // Map config IDs to document_type for the money claim thumbnail API
-        const docTypeForThumbnail = possibleTypes[0] || doc.id;
-        thumbnailUrl = `/api/money-claim/thumbnail/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
-        if (product === 'money_claim') {
-          previewUrl = `/api/money-claim/embed/${caseId}?document_type=${encodeURIComponent(docTypeForThumbnail)}`;
-        }
-      } else if (product === 'section13_standard' || product === 'section13_defensive') {
-        thumbnailUrl = getSection13CheckoutThumbnailUrl(caseId, doc.id);
-        previewUrl = getSection13CheckoutPreviewUrl(caseId, doc.id, product);
-      }
+      const previewResolution = resolveDocumentPreview({
+        caseId,
+        product,
+        document: doc,
+        possibleTypes,
+        jurisdiction,
+        noticeRoute,
+        variant: isResidentialLettingProductSku(product)
+          ? product
+          : product === 'ast_premium'
+            ? 'premium'
+            : 'standard',
+      });
 
       return {
         ...doc,
         documentId: matchingGenDoc?.id,
-        // For products with dedicated preview routes, use those thumbnail endpoints.
-        // For other products, DocumentCard will use documentId to fetch from /api/documents/thumbnail
-        thumbnailUrl: thumbnailUrl,
-        previewUrl: previewUrl,
+        ...previewResolution,
       };
     });
   };
@@ -1287,12 +1273,8 @@ export default function WizardPreviewPage() {
     ])
   );
 
-  // Determine if this is a tenancy agreement product (uses multi-page preview)
-  const isTenancyAgreement =
-    product === 'ast_standard' ||
-    product === 'ast_premium' ||
-    product === 'tenancy_agreement' ||
-    isResidentialLettingProductSku(product);
+  // Tenancy products now use the shared locked document-card checkout path.
+  const isTenancyAgreement = false;
 
   // Use a product-specific preview variant for modern England products while
   // preserving the legacy standard/premium preview cache keys for historical AST paths.
@@ -1492,19 +1474,6 @@ export default function WizardPreviewPage() {
           addOns={selectedAddOns}
         />
       )}
-
-      {/* Signup Modal */}
-      <SignupModal
-        isOpen={showSignupModal}
-        onClose={() => setShowSignupModal(false)}
-        onSuccess={async () => {
-          setShowSignupModal(false);
-          showToast('Account created! Proceeding to checkout...', 'success');
-          // Reload page to refresh auth state
-          window.location.reload();
-        }}
-        caseId={caseId}
-      />
     </>
   );
 }

@@ -104,9 +104,9 @@ const STEP_CONFIG: Array<{
   },
   {
     id: 'preview_checkout',
-    label: 'Checkout',
-    title: 'Preview, choose your recommended pack, and checkout',
-    description: 'Review the local market evidence, see how supportable the rent looks, and choose the pack that fits your case.',
+    label: 'Review & pack choice',
+    title: 'Review your rent increase pack choice',
+    description: 'Review the local market evidence, see how supportable the rent looks, and continue to the locked document preview before secure payment.',
   },
   {
     id: 'outputs',
@@ -399,8 +399,8 @@ export function Section13WizardFlow({
   const recommendedPlanTitle = SECTION13_PLAN_TITLES[planRecommendation.recommendedPlan];
   const checkoutButtonLabel =
     effectiveState.selectedPlan === 'section13_defensive'
-      ? 'Continue with the Challenge-Ready Section 13 Defence Pack'
-      : 'Continue with the Standard Section 13 Rent Increase Pack';
+      ? 'Continue to document preview with the Defence Pack'
+      : 'Continue to document preview with the Standard Pack';
   const section13PreviewProofEntries = useMemo(
     () =>
       [
@@ -576,7 +576,7 @@ export function Section13WizardFlow({
       });
       router.push(`/wizard/preview/${caseId}?${params.toString()}`);
     } catch (error: any) {
-      setCheckoutError(error?.message || 'Checkout preview could not be opened');
+      setCheckoutError(error?.message || 'Document preview could not be opened');
     } finally {
       setCheckoutLoading(false);
     }
@@ -2146,7 +2146,7 @@ export function Section13WizardFlow({
                   {checkoutLoading ? (
                     <>
                       <RiLoader4Line className="mr-2 h-4 w-4 animate-spin" />
-                      Opening checkout preview
+                    Opening document preview
                     </>
                   ) : (
                     <>{checkoutButtonLabel}</>
@@ -2204,7 +2204,7 @@ export function Section13WizardFlow({
               <p className="mt-2 text-sm text-gray-700">
                 {orderStatus?.paid
                   ? `Payment confirmed. Fulfillment status: ${formatStatusLabel(orderStatus.fulfillment_status)}.`
-                  : 'Complete checkout from the checkout step to unlock downloads.'}
+                  : 'Continue from review to unlock downloads.'}
               </p>
               {orderStatus?.has_final_documents ? (
                 <p className="mt-2 text-sm text-gray-700">
@@ -2590,7 +2590,7 @@ export function Section13WizardFlow({
                   : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_6px_16px_rgba(109,40,217,0.28)] hover:from-violet-700 hover:to-fuchsia-700'
               }`}
             >
-              {currentStep.id === 'preview_checkout' && !orderStatus?.paid ? 'Go to checkout preview' : 'Continue'}
+              {currentStep.id === 'preview_checkout' && !orderStatus?.paid ? 'Continue to document preview' : 'Continue'}
             </button>
           </div>
         </>

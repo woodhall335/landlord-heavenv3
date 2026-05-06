@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Lock, Download, FileText, ClipboardList, CheckSquare, Shield, Scale, FileCheck, Home, Users, BookOpen, Eye, X } from 'lucide-react';
+import { Lock, Download, FileText, ClipboardList, CheckSquare, Shield, Scale, FileCheck, Home, Users, BookOpen, Eye, X, AlertTriangle } from 'lucide-react';
 
 export interface DocumentInfo {
   id: string;
@@ -16,6 +16,8 @@ export interface DocumentInfo {
   thumbnailUrl?: string;
   /** Full preview URL for watermarked in-page document viewing */
   previewUrl?: string;
+  /** Clear reason to show when this document cannot be previewed before payment */
+  previewUnavailableReason?: string;
 }
 
 interface DocumentCardProps {
@@ -46,7 +48,8 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
   const thumbnailUrl = document.thumbnailUrl ||
     (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : null);
   const previewUrl = document.previewUrl || null;
-  const canPreview = Boolean(previewUrl || thumbnailUrl);
+  const previewUnavailableReason = document.previewUnavailableReason || (thumbnailError ? 'Preview temporarily unavailable' : null);
+  const canPreview = Boolean(previewUrl || thumbnailUrl) && !previewUnavailableReason;
 
   const handlePreviewClick = () => {
     if (canPreview) {
@@ -76,7 +79,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
           {/* Thumbnail or Icon */}
           {thumbnailUrl && !thumbnailError ? (
             <div
-              className="relative w-16 h-22 flex-shrink-0 cursor-pointer group overflow-hidden rounded-lg border bg-white shadow-sm"
+              className={`relative w-16 h-22 flex-shrink-0 group overflow-hidden rounded-lg border bg-white shadow-sm ${canPreview ? 'cursor-pointer' : ''}`}
               onClick={(event) => {
                 event.stopPropagation();
                 handlePreviewClick();
@@ -156,8 +159,16 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                   <Eye className="w-3.5 h-3.5" />
                   Preview
                 </span>
+              ) : previewUnavailableReason ? (
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-700">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                  Preview temporarily unavailable
+                </span>
               ) : null}
             </div>
+            {previewUnavailableReason ? (
+              <p className="mt-2 text-xs text-amber-700">{previewUnavailableReason}</p>
+            ) : null}
             <div className="flex items-center gap-3 mt-2">
               {document.pages && (
                 <span className="text-xs text-gray-400">{document.pages}</span>
@@ -198,7 +209,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
       </div>
 
       {/* Preview Modal */}
-      {showPreview && (previewUrl || thumbnailUrl) && (
+      {showPreview && canPreview && (previewUrl || thumbnailUrl) && (
         <div
           className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
           onClick={() => setShowPreview(false)}

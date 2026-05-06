@@ -26,13 +26,13 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
 import { htmlToPreviewThumbnail, generateDocument } from '@/lib/documents/generator';
-import { generateResidentialLettingDocuments } from '@/lib/documents/residential-letting-generator';
-import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
-import { getJurisdictionConfig, type TenancyJurisdiction, validateASTData } from '@/lib/documents/ast-generator';
+import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { getJurisdictionConfig, type TenancyJurisdiction } from '@/lib/documents/ast-generator';
 import {
   isResidentialLettingProductSku,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
+import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreviewDocuments';
 
 // Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
@@ -113,6 +113,7 @@ export async function GET(
     const url = new URL(request.url);
     const tier = (url.searchParams.get('tier') || 'standard') as 'standard' | 'premium';
     const requestedProduct = url.searchParams.get('product');
+    const requestedDocumentType = url.searchParams.get('document_type');
 
     if (!caseId) {
       return errorResponse('MISSING_CASE_ID', 'Case ID is required', 400);
@@ -156,27 +157,32 @@ export async function GET(
       return errorResponse('INVALID_JURISDICTION', 'Invalid or missing jurisdiction', 422);
     }
 
-    if (jurisdiction === 'england' && modernEnglandProduct) {
-      console.log('[Tenancy-Agreement-Thumbnail] Modern England thumbnail path:', {
+    if (requestedDocumentType || (jurisdiction === 'england' && modernEnglandProduct)) {
+      console.log('[Tenancy-Agreement-Thumbnail] Document thumbnail path:', {
         caseId,
-        product: modernEnglandProduct,
+        product: modernEnglandProduct || requestedProduct || tier,
+        requestedDocumentType,
       });
 
-      const generatedPack = await generateResidentialLettingDocuments(modernEnglandProduct, facts, {
-        outputFormat: 'html',
+      const previewDocument = await resolveTenancyPreviewDocumentHtml({
+        caseId,
+        facts,
+        jurisdiction,
+        tier,
+        product: jurisdiction === 'england' && modernEnglandProduct ? modernEnglandProduct : requestedProduct,
+        documentType: requestedDocumentType,
       });
-      const primaryDocument = generatedPack.documents[0];
 
-      if (!primaryDocument?.html) {
+      if (!previewDocument?.html) {
         return errorResponse(
           'THUMBNAIL_GENERATION_FAILED',
-          'No previewable document generated for the modern England product',
+          'No previewable document generated for this tenancy document',
           500,
-          { caseId, product: modernEnglandProduct }
+          { caseId, product: modernEnglandProduct || requestedProduct, documentType: requestedDocumentType }
         );
       }
 
-      const thumbnail = await htmlToPreviewThumbnail(primaryDocument.html, {
+      const thumbnail = await htmlToPreviewThumbnail(previewDocument.html, {
         quality: 75,
         watermarkText: 'PREVIEW',
       });
@@ -188,8 +194,9 @@ export async function GET(
         'Cache-Control': 'public, max-age=3600, s-maxage=3600',
         'X-Thumbnail-Runtime': 'nodejs',
         'X-Jurisdiction': jurisdiction,
-        'X-Tier': modernEnglandProduct,
-        'X-Product': modernEnglandProduct,
+        'X-Tier': modernEnglandProduct || tier,
+        'X-Product': modernEnglandProduct || requestedProduct || tier,
+        'X-Document-Type': previewDocument.document_type,
       };
 
       if (!isVercel) {

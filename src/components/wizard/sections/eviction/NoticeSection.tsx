@@ -545,7 +545,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
       <div className="flex items-center justify-between">
         <div>
           <h4 className="text-sm font-semibold text-purple-800">
-            Generate Notice - Step {currentStepNum} of {totalSteps}
+        Notice details - Step {currentStepNum} of {totalSteps}
           </h4>
           <p className="text-xs text-[#7C3AED] mt-1">
             Complete these questions to prepare your {noticeProductLabel}.

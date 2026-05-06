@@ -580,22 +580,6 @@ export function getSection13Documents(product: 'section13_standard' | 'section13
       pages: '2 pages',
       category: 'Defensive',
     },
-    {
-      id: 'section13-tribunal-bundle-pdf',
-      title: 'Merged Tribunal Bundle PDF',
-      description: 'Deterministic merged bundle with cover, index, core docs, and exhibits.',
-      icon: 'court-form',
-      pages: 'Variable',
-      category: 'Bundle',
-    },
-    {
-      id: 'section13-tribunal-bundle-zip',
-      title: 'Tribunal Bundle ZIP Export',
-      description: 'ZIP export containing bundle assets and supporting documents.',
-      icon: 'evidence',
-      pages: 'Download',
-      category: 'Bundle',
-    },
   ];
 }
 

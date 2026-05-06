@@ -1109,7 +1109,7 @@ function MoneyClaimReviewContent({
           disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
           aria-disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
         >
-          {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
+            {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Continue to document preview'}
         </Button>
       </div>
 
@@ -1887,7 +1887,7 @@ function EvictionReviewContent({
           disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
           aria-disabled={hasBlockingIssues || isRegenerating || isLoadingPaymentStatus}
         >
-          {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment & pack'}
+            {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Continue to document preview'}
         </Button>
       </div>
 
@@ -2740,7 +2740,7 @@ function NoticeOnlyReviewContent({
           disabled={hasBlockingIssues || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
           aria-disabled={hasBlockingIssues || (includesArrearsGrounds && !arrearsEvidenceStatus.complete) || isRegenerating || isLoadingPaymentStatus}
         >
-          {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Proceed to payment and pack'}
+            {isLoadingPaymentStatus ? 'Loading...' : isRegenerating ? 'Regenerating...' : isPaid ? 'Regenerate pack' : 'Continue to document preview'}
         </Button>
       </div>
 
@@ -3566,7 +3566,7 @@ function TenancyReviewContent({
                 ? 'Fix issues to proceed'
                 : isPaid
                   ? 'Regenerate pack'
-                  : 'Proceed to payment & pack'}
+                    : 'Continue to document preview'}
         </Button>
       </div>
 
@@ -3731,7 +3731,7 @@ function ResidentialLettingReviewContent({
               ? 'Regenerating...'
               : isPaid
                 ? 'Regenerate document'
-                : 'Proceed to payment & pack'}
+                    : 'Continue to document preview'}
         </Button>
       </div>
     </div>
@@ -4213,7 +4213,7 @@ function ResidentialStandaloneReviewContent({
               ? 'Regenerating...'
               : isPaid
                 ? 'Regenerate document'
-                : 'Proceed to payment & document'}
+                    : 'Continue to document preview'}
         </Button>
       </div>
     </div>

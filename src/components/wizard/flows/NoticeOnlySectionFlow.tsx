@@ -823,7 +823,7 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review and generate notice',
+    description: 'Review and preview notice',
     jurisdiction: 'scotland',
     isComplete: () => false, // Always navigable for final review
   },
@@ -1180,7 +1180,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     [visibleSections]
   );
 
-  // Generate notice - navigate to review page for analysis before payment
+  // Continue to review page for analysis before payment
   const handleGenerateNotice = useCallback(async () => {
     try {
       setGenerating(true);
@@ -1212,8 +1212,8 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       // Navigate to review page for compliance analysis
       router.push(`/wizard/review?case_id=${caseId}&product=notice_only`);
     } catch (err) {
-      console.error('Failed to generate notice:', err);
-      setError('Failed to generate notice. Please try again.');
+      console.error('Failed to open notice review:', err);
+      setError('Failed to open notice review. Please try again.');
     } finally {
       setGenerating(false);
     }
@@ -1591,7 +1591,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                {generating ? 'Generating...' : 'Generate Notice'}
+                {generating ? 'Preparing preview...' : 'Continue to document preview'}
               </button>
             ) : (
               <button
