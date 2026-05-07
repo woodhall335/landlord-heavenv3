@@ -2,7 +2,7 @@
 
 These QA-only sample packs are stored separately so they do not replace the main public-product golden packs.
 
-Generated at: 2026-05-05T12:10:22.061Z
+Generated at: 2026-05-07T13:06:24.378Z
 
 Scenarios:
 - `notice_only_first_class_post_above_threshold` (7 documents)

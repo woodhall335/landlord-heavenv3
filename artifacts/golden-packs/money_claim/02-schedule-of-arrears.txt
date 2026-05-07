@@ -3,14 +3,14 @@ golden-money-claim-001
 JURISDICTION
 england
 GENERATED
-5 May 2026
+7 May 2026
 Schedule of Rent Arrears
 POSSESSION SUPPORT SCHEDULE
 PROPERTY: 2 High Street London
 DEFENDANT: Tom Tenant
 CLAIMANT: Alice Landlord
 CLAIM REFERENCE: golden-money-claim-001
-SCHEDULE DATE: 5 May 2026
+SCHEDULE DATE: 7 May 2026
 Arrears Summary
 RENT AMOUNT
 £950.00 monthly
@@ -21,9 +21,9 @@ TENANCY START DATE
 TOTAL ARREARS CLAIMED
 £2430.00
 Period Due Date Rent Due Paid Arrears Running Balance
-December 2025 1 December 2025 £950.00 £0.00 £950.00 £0.00
-January 2026 1 January 2026 £950.00 £0.00 £950.00 £0.00
-February 2026 1 February 2026 £950.00 £420.00 £530.00 £0.00
+December 2025 1 December 2025 £950.00 £0.00 £950.00 £950.00
+January 2026 1 January 2026 £950.00 £0.00 £950.00 £1900.00
+February 2026 1 February 2026 £950.00 £420.00 £530.00 £2430.00
 Total Arrears Outstanding £2430.00 £2430.00
 Payment Allocation Method: Payments have been allocated using the FIFO (First In, First Out)
 method, applying payments to the oldest outstanding rent periods first. This is the standard court-
@@ -34,7 +34,7 @@ frequency.
 
 -- 1 of 2 --
 
-Generated: 5 May 2026
+Generated: 7 May 2026
 Landlord Heaven Possession Pack | England
 This schedule supports the pleaded arrears case and any later possession claim.
 

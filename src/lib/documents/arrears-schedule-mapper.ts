@@ -16,6 +16,7 @@
 import type { ArrearsItem, CaseFacts, TenancyFacts } from '@/lib/case-facts/schema';
 import type { ArrearsEntry } from './money-claim-pack-generator';
 import {
+  calculateArrearsInMonths,
   computeArrears,
   getAuthoritativeArrears,
   hasAuthoritativeArrearsData,
@@ -56,6 +57,56 @@ export interface ParticularsText {
 // ============================================================================
 // CORE MAPPING FUNCTIONS
 // ============================================================================
+
+function toFiniteNumber(value: unknown, fallback = 0): number {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : fallback;
+}
+
+function roundMoney(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
+function getLedgerDelta(entry: ArrearsEntry): number {
+  const amountDue = toFiniteNumber(entry.amount_due);
+  const amountPaid = toFiniteNumber(entry.amount_paid);
+  const explicitArrears = Number.isFinite(Number(entry.arrears))
+    ? toFiniteNumber(entry.arrears)
+    : amountDue - amountPaid;
+
+  const paidDelta = amountDue - amountPaid;
+  if (paidDelta < 0) {
+    return roundMoney(paidDelta);
+  }
+
+  return roundMoney(explicitArrears);
+}
+
+export function normalizeArrearsEntryRunningBalances(entries: ArrearsEntry[]): ArrearsEntry[] {
+  let ledgerBalance = 0;
+
+  return entries.map((entry) => {
+    const delta = getLedgerDelta(entry);
+    ledgerBalance = roundMoney(ledgerBalance + delta);
+
+    return {
+      ...entry,
+      amount_due: roundMoney(toFiniteNumber(entry.amount_due)),
+      amount_paid: roundMoney(toFiniteNumber(entry.amount_paid)),
+      arrears: roundMoney(toFiniteNumber(entry.arrears, delta)),
+      running_balance: roundMoney(Math.max(0, ledgerBalance)),
+    };
+  });
+}
+
+export function getFinalRunningBalance(entries: ArrearsEntry[]): number {
+  if (entries.length === 0) {
+    return 0;
+  }
+
+  const normalizedEntries = normalizeArrearsEntryRunningBalances(entries);
+  return normalizedEntries[normalizedEntries.length - 1]?.running_balance ?? 0;
+}
 
 /**
  * Convert ArrearsItem to ArrearsEntry for document templates.
@@ -109,15 +160,12 @@ export function mapArrearsItemToEntry(item: ArrearsItem, rentDueDay?: number | n
  * @param rentDueDay - The day of month rent is due (1-31), from wizard tenancy 'Day rent is due'
  */
 export function mapArrearsItemsToEntries(items: ArrearsItem[], rentDueDay?: number | null): ArrearsEntry[] {
-  let runningBalance = 0;
-  return (items || []).map((item) => {
+  const entries = (items || []).map((item) => {
     const entry = mapArrearsItemToEntry(item, rentDueDay);
-    runningBalance += entry.arrears;
-    return {
-      ...entry,
-      running_balance: Math.round(runningBalance * 100) / 100,
-    };
+    return entry;
   });
+
+  return normalizeArrearsEntryRunningBalances(entries);
 }
 
 /**
@@ -153,12 +201,15 @@ export function getArrearsScheduleData(params: {
 
   // Map to document format, passing rent_due_day for proper due date computation
   const arrears_schedule = mapArrearsItemsToEntries(computed.arrears_items, rent_due_day);
+  const arrears_total = arrears_schedule.length > 0
+    ? getFinalRunningBalance(arrears_schedule)
+    : roundMoney(Math.max(0, computed.total_arrears));
 
   return {
     arrears_schedule,
-    arrears_total: computed.total_arrears,
-    arrears_at_notice_date: computed.arrears_at_notice_date,
-    arrears_in_months: computed.arrears_in_months,
+    arrears_total,
+    arrears_at_notice_date: arrears_schedule.length > 0 ? arrears_total : computed.arrears_at_notice_date,
+    arrears_in_months: calculateArrearsInMonths(arrears_total, rent_amount, rent_frequency),
     is_authoritative: computed.is_authoritative,
     legacy_warning: computed.legacy_warning,
     include_schedule_pdf: include_schedule && arrears_schedule.length > 0,

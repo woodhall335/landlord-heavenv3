@@ -12,6 +12,10 @@
  */
 
 import type { MoneyClaimCase, ArrearsEntry, ClaimLineItem } from './money-claim-pack-generator';
+import {
+  getFinalRunningBalance,
+  normalizeArrearsEntryRunningBalances,
+} from './arrears-schedule-mapper';
 
 export interface ValidationIssue {
   code: string;
@@ -56,11 +60,11 @@ function sumLineItems(items?: ClaimLineItem[]): number {
 }
 
 /**
- * Sum arrears from schedule
+ * Calculate arrears outstanding from the schedule ledger.
  */
-function sumArrearsSchedule(schedule?: ArrearsEntry[]): number {
+function calculateArrearsOutstanding(schedule?: ArrearsEntry[]): number {
   if (!schedule || !Array.isArray(schedule)) return 0;
-  return schedule.reduce((sum, entry) => sum + (Number(entry.arrears) || 0), 0);
+  return getFinalRunningBalance(normalizeArrearsEntryRunningBalances(schedule));
 }
 
 /**
@@ -92,8 +96,8 @@ export function validateMoneyClaimData(claim: MoneyClaimCase): ValidationResult 
   // =========================================================================
   // 2. CLAIM AMOUNT VALIDATION
   // =========================================================================
-  const arrearsFromSchedule = sumArrearsSchedule(claim.arrears_schedule);
-  const arrearsTotal = claim.arrears_total || arrearsFromSchedule;
+  const arrearsFromSchedule = calculateArrearsOutstanding(claim.arrears_schedule);
+  const arrearsTotal = arrearsFromSchedule > 0 ? arrearsFromSchedule : claim.arrears_total || 0;
   const damagesTotal = sumLineItems(claim.damage_items);
   const otherChargesTotal = sumLineItems(claim.other_charges);
   const principalTotal = arrearsTotal + damagesTotal + otherChargesTotal;
@@ -117,8 +121,8 @@ export function validateMoneyClaimData(claim: MoneyClaimCase): ValidationResult 
         code: 'ARREARS_TOTAL_MISMATCH',
         severity: 'warning',
         field: 'arrears_total',
-        message: `Arrears total (£${claim.arrears_total.toFixed(2)}) doesn't match schedule sum (£${arrearsFromSchedule.toFixed(2)})`,
-        details: 'The stated arrears total should match the sum of arrears in the schedule. Please verify.',
+        message: `Arrears total (£${claim.arrears_total.toFixed(2)}) doesn't match schedule running balance (£${arrearsFromSchedule.toFixed(2)})`,
+        details: 'The stated arrears total should match the final running balance in the schedule. Please verify.',
       });
     }
   }

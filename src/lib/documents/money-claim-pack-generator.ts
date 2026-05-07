@@ -29,6 +29,10 @@ import { assertOfficialFormExists, fillN1Form, CaseData } from '@/lib/documents/
 import { buildServiceContact } from '@/lib/documents/service-contact';
 import { generateMoneyClaimAskHeavenDrafts } from './money-claim-askheaven';
 import { assertValidMoneyClaimData } from './money-claim-validator';
+import {
+  getFinalRunningBalance,
+  normalizeArrearsEntryRunningBalances,
+} from './arrears-schedule-mapper';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -258,9 +262,11 @@ function resolvePaymentReference(claim: MoneyClaimCase): string {
 }
 
 function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
+  const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
   const arrears_total = roundMoney(
-    claim.arrears_total ||
-    (claim.arrears_schedule || []).reduce((total, entry) => total + (entry.arrears || 0), 0)
+    normalizedArrearsSchedule.length > 0
+      ? getFinalRunningBalance(normalizedArrearsSchedule)
+      : claim.arrears_total || 0
   );
 
   const damages_total = roundMoney(sumLineItems(claim.damage_items));
@@ -451,6 +457,15 @@ async function generateEnglandMoneyClaimPack(
   claim: MoneyClaimCase,
   caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
+  const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
+  if (normalizedArrearsSchedule.length > 0) {
+    claim = {
+      ...claim,
+      arrears_schedule: normalizedArrearsSchedule,
+      arrears_total: getFinalRunningBalance(normalizedArrearsSchedule),
+    };
+  }
+
   // =========================================================================
   // PRE-GENERATION VALIDATION
   // Validate all required data and cross-document consistency BEFORE generating
@@ -485,7 +500,7 @@ async function generateEnglandMoneyClaimPack(
   const formattedSignatureDate = formatUKLegalDate(claim.signature_date || generationDate);
   const formattedTenancyStartDate = formatUKLegalDate(claim.tenancy_start_date);
   const formattedInterestStartDate = formatUKLegalDate(claim.interest_start_date);
-  const formattedArrearsSchedule = (claim.arrears_schedule || []).map((entry) => ({
+  const formattedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []).map((entry) => ({
     ...entry,
     due_date: formatUKLegalDate(entry.due_date) || entry.due_date,
   }));

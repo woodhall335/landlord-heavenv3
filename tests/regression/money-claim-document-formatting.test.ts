@@ -12,8 +12,14 @@
 
 import { describe, it, expect, beforeAll } from 'vitest';
 import { generateDocument, compileTemplate, loadTemplate } from '@/lib/documents/generator';
-import { mapArrearsItemsToEntries, getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
+import {
+  getFinalRunningBalance,
+  mapArrearsItemsToEntries,
+  getArrearsScheduleData,
+  normalizeArrearsEntryRunningBalances,
+} from '@/lib/documents/arrears-schedule-mapper';
 import type { ArrearsItem } from '@/lib/case-facts/schema';
+import type { ArrearsEntry } from '@/lib/documents/money-claim-pack-generator';
 
 // ============================================================================
 // TEST DATA
@@ -271,6 +277,31 @@ describe('Money Claim Document Formatting Regression Tests', () => {
       expect(html).toContain('1 October 2025');
       expect(html).not.toContain('<th class="notes-col">Notes</th>');
       expect(html).not.toContain('>Notes</th>');
+    });
+  });
+
+  describe('Running Balance Validation', () => {
+    it('should render cumulative running balances when money claim rows omit them', () => {
+      const templatePath = 'uk/england/templates/money_claims/schedule_of_arrears.hbs';
+      const templateContent = loadTemplate(templatePath);
+      const arrearsSchedule: ArrearsEntry[] = normalizeArrearsEntryRunningBalances([
+        { period: 'December 2025', due_date: '2025-12-01', amount_due: 950, amount_paid: 0, arrears: 950 },
+        { period: 'January 2026', due_date: '2026-01-01', amount_due: 950, amount_paid: 0, arrears: 950 },
+        { period: 'February 2026', due_date: '2026-02-01', amount_due: 950, amount_paid: 420, arrears: 530 },
+      ]);
+      const arrearsTotal = getFinalRunningBalance(arrearsSchedule);
+
+      const html = compileTemplate(templateContent, {
+        ...TEST_CLAIM_DATA,
+        arrears_schedule: arrearsSchedule,
+        arrears_total: arrearsTotal,
+      });
+
+      expect(html).toMatch(/balance-col"><strong>(?:£|&#163;)950\.00<\/strong>/);
+      expect(html).toMatch(/balance-col"><strong>(?:£|&#163;)1900\.00<\/strong>/);
+      expect(html).toMatch(/balance-col"><strong>(?:£|&#163;)2430\.00<\/strong>/);
+      expect(html).not.toMatch(/balance-col"><strong>(?:£|&#163;)0\.00<\/strong>/);
+      expect(html).toMatch(/<strong>(?:£|&#163;)2430\.00<\/strong>/);
     });
   });
 

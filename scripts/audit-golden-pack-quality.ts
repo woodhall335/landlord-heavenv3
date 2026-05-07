@@ -131,6 +131,22 @@ async function readJson<T>(filePath: string): Promise<T> {
   return JSON.parse(await fs.readFile(filePath, 'utf8')) as T;
 }
 
+function prefixNestedPackFiles(pack: Manifest, prefix: string): Manifest {
+  return {
+    ...pack,
+    key: `${prefix}/${pack.key}`,
+    outputDir: `${prefix}/${pack.outputDir}`,
+    documents: pack.documents.map((doc) => ({
+      ...doc,
+      files: {
+        pdf: doc.files.pdf ? `${prefix}/${doc.files.pdf}` : undefined,
+        html: doc.files.html ? `${prefix}/${doc.files.html}` : undefined,
+        text: doc.files.text ? `${prefix}/${doc.files.text}` : undefined,
+      },
+    })),
+  };
+}
+
 async function collectManifests(): Promise<Manifest[]> {
   const entries = await fs.readdir(ROOT, { withFileTypes: true });
   const manifests: Manifest[] = [];
@@ -138,7 +154,14 @@ async function collectManifests(): Promise<Manifest[]> {
     if (!entry.isDirectory() || entry.name === '_audit') continue;
     const manifestPath = path.join(ROOT, entry.name, 'manifest.json');
     try {
-      manifests.push(await readJson<Manifest>(manifestPath));
+      const manifest = await readJson<Manifest | { packs?: Manifest[] }>(manifestPath);
+      if ('key' in manifest && Array.isArray(manifest.documents)) {
+        manifests.push(manifest);
+        continue;
+      }
+      if (Array.isArray(manifest.packs)) {
+        manifests.push(...manifest.packs.map((pack) => prefixNestedPackFiles(pack, entry.name)));
+      }
     } catch {
       // Ignore non-pack directories.
     }

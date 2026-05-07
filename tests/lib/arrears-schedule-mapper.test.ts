@@ -8,12 +8,15 @@ import {
   mapArrearsItemToEntry,
   mapArrearsItemsToEntries,
   getArrearsScheduleData,
+  getFinalRunningBalance,
   generateArrearsParticulars,
   generateArrearsBreakdownForCourt,
+  normalizeArrearsEntryRunningBalances,
   shouldIncludeSchedulePdf,
   getLegacyArrearsWarning,
 } from '@/lib/documents/arrears-schedule-mapper';
 import type { ArrearsItem } from '@/lib/case-facts/schema';
+import type { ArrearsEntry } from '@/lib/documents/money-claim-pack-generator';
 
 describe('Arrears Schedule Mapper', () => {
   // ============================================================================
@@ -70,6 +73,49 @@ describe('Arrears Schedule Mapper', () => {
     it('should handle empty array', () => {
       const entries = mapArrearsItemsToEntries([]);
       expect(entries).toEqual([]);
+    });
+
+    it('should calculate cumulative running balances for missed and partial rent periods', () => {
+      const items: ArrearsItem[] = [
+        { period_start: '2025-12-01', period_end: '2025-12-31', rent_due: 950, rent_paid: 0, amount_owed: 950 },
+        { period_start: '2026-01-01', period_end: '2026-01-31', rent_due: 950, rent_paid: 0, amount_owed: 950 },
+        { period_start: '2026-02-01', period_end: '2026-02-28', rent_due: 950, rent_paid: 420, amount_owed: 530 },
+      ];
+
+      const entries = mapArrearsItemsToEntries(items);
+
+      expect(entries.map((entry) => entry.running_balance)).toEqual([950, 1900, 2430]);
+      expect(entries[entries.length - 1].running_balance).toBe(2430);
+      expect(entries.some((entry) => entry.running_balance === 0 && entry.arrears > 0)).toBe(false);
+    });
+
+    it('should carry overpayment credits through the running balance ledger', () => {
+      const items: ArrearsItem[] = [
+        { period_start: '2026-01-01', period_end: '2026-01-31', rent_due: 1000, rent_paid: 2000, amount_owed: 0 },
+        { period_start: '2026-02-01', period_end: '2026-02-28', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2026-03-01', period_end: '2026-03-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+      ];
+
+      const entries = mapArrearsItemsToEntries(items);
+
+      expect(entries.map((entry) => entry.running_balance)).toEqual([0, 0, 1000]);
+      expect(getFinalRunningBalance(entries)).toBe(1000);
+    });
+  });
+
+  describe('normalizeArrearsEntryRunningBalances', () => {
+    it('should repair money-claim schedule rows that omit running_balance', () => {
+      const entries: ArrearsEntry[] = [
+        { period: 'December 2025', due_date: '2025-12-01', amount_due: 950, amount_paid: 0, arrears: 950 },
+        { period: 'January 2026', due_date: '2026-01-01', amount_due: 950, amount_paid: 0, arrears: 950 },
+        { period: 'February 2026', due_date: '2026-02-01', amount_due: 950, amount_paid: 420, arrears: 530 },
+      ];
+
+      const normalized = normalizeArrearsEntryRunningBalances(entries);
+
+      expect(normalized.map((entry) => entry.running_balance)).toEqual([950, 1900, 2430]);
+      expect(getFinalRunningBalance(normalized)).toBe(2430);
+      expect(normalized.some((entry) => entry.running_balance === 0 && entry.arrears > 0)).toBe(false);
     });
   });
 
