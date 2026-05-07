@@ -142,7 +142,7 @@ function NoticeStatusCard({
   );
 }
 
-const N215QuestionFields: React.FC<N215QuestionFieldsProps> = ({ facts, onUpdate, mode }) => {
+export const N215QuestionFields: React.FC<N215QuestionFieldsProps> = ({ facts, onUpdate, mode }) => {
   const serviceMethod = String(facts.notice_service_method || '').trim();
   const recipientCapacity = String(facts.notice_service_recipient_capacity || 'defendant').trim();
   const serviceLocation = String(facts.notice_service_location || 'usual_residence').trim();
@@ -305,6 +305,250 @@ const N215QuestionFields: React.FC<N215QuestionFieldsProps> = ({ facts, onUpdate
   );
 };
 
+function getTodayIsoDate(): string {
+  return new Date().toISOString().split('T')[0];
+}
+
+function getSelectedSection8Grounds(facts: WizardFacts): string[] {
+  return Array.isArray(facts.section8_grounds) ? (facts.section8_grounds as string[]) : [];
+}
+
+function getNoticePeriodForGrounds(selectedGrounds: string[]) {
+  if (selectedGrounds.length === 0) {
+    return {
+      noticePeriodDays: 28,
+      noticePeriodLabel: 'depends on the ground you choose',
+      drivingGrounds: [] as EnglandGroundCode[],
+      noticePeriodMonths: 0,
+    };
+  }
+
+  const calculated = calculateEnglandPossessionNoticePeriod(selectedGrounds);
+  const matchingGrounds = SECTION_8_GROUNDS.filter((ground) => {
+    const normalized = normalizeEnglandGroundCode(ground.value);
+    return normalized ? calculated.drivingGrounds.includes(normalized) : false;
+  });
+  const drivingLabels = Array.from(
+    new Set(
+      matchingGrounds
+        .filter((ground) => ground.period === calculated.noticePeriodDays)
+        .map((ground) => ground.periodLabel || `${ground.period} days`)
+    )
+  );
+  const noticePeriodMonths = Math.max(0, ...matchingGrounds.map((ground) => ground.periodMonths || 0));
+
+  return {
+    noticePeriodDays: calculated.noticePeriodDays,
+    noticePeriodLabel: drivingLabels.join(' / ') || `${calculated.noticePeriodDays} days`,
+    drivingGrounds: calculated.drivingGrounds,
+    noticePeriodMonths,
+  };
+}
+
+export function getPlannedNoticeServiceDate(
+  facts: WizardFacts,
+  fallbackDate: string = getTodayIsoDate()
+): string {
+  return String(facts.notice_date || facts.notice_service_date || facts.notice_served_date || fallbackDate);
+}
+
+export function calculatePlannedNoticeExpiryDate(
+  facts: WizardFacts,
+  fallbackDate: string = getTodayIsoDate()
+): string {
+  const serviceDate = getPlannedNoticeServiceDate(facts, fallbackDate);
+  const expiryDate = new Date(serviceDate);
+  const period = getNoticePeriodForGrounds(getSelectedSection8Grounds(facts));
+
+  if (period.noticePeriodMonths > 0) {
+    expiryDate.setMonth(expiryDate.getMonth() + period.noticePeriodMonths);
+  } else {
+    expiryDate.setDate(expiryDate.getDate() + period.noticePeriodDays);
+  }
+
+  return expiryDate.toISOString().split('T')[0];
+}
+
+export function hasCompleteCollectibleN215ServiceFacts(facts: WizardFacts): boolean {
+  const serviceMethod = String(facts.notice_service_method || '').trim();
+  const serviceLocation = String(facts.notice_service_location || 'usual_residence').trim();
+
+  if (serviceMethod === 'email' && !String(facts.notice_service_recipient_email || facts.tenant_email || '').trim()) {
+    return false;
+  }
+
+  if (serviceLocation === 'other' && !String(facts.notice_service_location_other || '').trim()) {
+    return false;
+  }
+
+  return true;
+}
+
+export function isPlannedNoticeServiceReady(facts: WizardFacts): boolean {
+  const serviceDate = String(facts.notice_date || facts.notice_service_date || facts.notice_served_date || '').trim();
+
+  return (
+    Boolean(serviceDate) &&
+    Boolean(facts.notice_service_method) &&
+    hasCompleteCollectibleN215ServiceFacts(facts)
+  );
+}
+
+export function buildPlannedNoticeServiceDefaults(
+  facts: WizardFacts,
+  fallbackDate: string = getTodayIsoDate()
+): Record<string, any> {
+  const serviceDate = getPlannedNoticeServiceDate(facts, fallbackDate);
+  const updates: Record<string, any> = {
+    notice_date: serviceDate,
+    notice_service_date: serviceDate,
+    notice_served_date: serviceDate,
+  };
+
+  if (!facts.notice_expiry_date) {
+    updates.notice_expiry_date = calculatePlannedNoticeExpiryDate(
+      { ...facts, notice_date: serviceDate, notice_service_date: serviceDate, notice_served_date: serviceDate },
+      fallbackDate
+    );
+  }
+
+  if (facts.notice_service_method || facts.service_method) {
+    updates.notice_service_method = facts.notice_service_method || facts.service_method;
+  }
+
+  return updates;
+}
+
+interface PlannedNoticeServiceReviewPanelProps {
+  facts: WizardFacts;
+  onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  title?: string;
+  description?: string;
+}
+
+export const PlannedNoticeServiceReviewPanel: React.FC<PlannedNoticeServiceReviewPanelProps> = ({
+  facts,
+  onUpdate,
+  title = 'When will you serve this Form 3A notice?',
+  description = 'Confirm the planned service details before you move to document preview.',
+}) => {
+  const today = useMemo(() => getTodayIsoDate(), []);
+  const serviceDate = getPlannedNoticeServiceDate(facts, today);
+  const period = useMemo(
+    () => getNoticePeriodForGrounds(getSelectedSection8Grounds(facts)),
+    [facts.section8_grounds]
+  );
+  const suggestedExpiryDate = useMemo(
+    () => calculatePlannedNoticeExpiryDate(facts, today),
+    [facts, today]
+  );
+  const serviceReady = isPlannedNoticeServiceReady(facts);
+
+  useEffect(() => {
+    if (!facts.notice_date && !facts.notice_service_date && !facts.notice_served_date) {
+      void onUpdate({
+        notice_date: today,
+        notice_service_date: today,
+        notice_served_date: today,
+      });
+    }
+  }, [facts.notice_date, facts.notice_service_date, facts.notice_served_date, onUpdate, today]);
+
+  const handleServiceDateChange = (value: string) => {
+    void onUpdate({
+      notice_date: value,
+      notice_service_date: value,
+      notice_served_date: value,
+    });
+  };
+
+  return (
+    <section className="space-y-5 rounded-[1.6rem] border border-[#e6dcff] bg-white px-5 py-5 shadow-sm">
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7650cd]">
+          Final notice service details
+        </p>
+        <h3 className="mt-2 text-lg font-semibold tracking-tight text-[#20103f]">{title}</h3>
+        <p className="mt-2 text-sm leading-6 text-[#62597c]">{description}</p>
+      </div>
+
+      {!serviceReady && (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          Complete the service date, service method, and any required certificate details before continuing.
+        </div>
+      )}
+
+      <div className="grid gap-5 md:grid-cols-2">
+        <div className="space-y-2">
+          <label htmlFor="review_notice_date" className="block text-sm font-medium text-gray-700">
+            Date you will serve the notice
+            <span className="ml-1 text-red-500">*</span>
+          </label>
+          <input
+            id="review_notice_date"
+            type="date"
+            className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+            value={serviceDate}
+            onChange={(event) => handleServiceDateChange(event.target.value)}
+          />
+          <p className="text-xs text-gray-500">
+            This is the date you expect to hand deliver, post, email, or otherwise serve the notice.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="review_notice_service_method" className="block text-sm font-medium text-gray-700">
+            How will you serve the notice?
+            <span className="ml-1 text-red-500">*</span>
+          </label>
+          <select
+            id="review_notice_service_method"
+            className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+            value={facts.notice_service_method || ''}
+            onChange={(event) => void onUpdate({ notice_service_method: event.target.value })}
+          >
+            <option value="">Select service method...</option>
+            {SERVICE_METHODS.map((method) => (
+              <option key={method.value} value={method.value}>
+                {method.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <N215QuestionFields facts={facts} onUpdate={onUpdate} mode="planned" />
+
+      <div className="space-y-2">
+        <label htmlFor="review_notice_expiry_date" className="block text-sm font-medium text-gray-700">
+          Notice expiry date
+        </label>
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            id="review_notice_expiry_date"
+            type="date"
+            className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
+            value={facts.notice_expiry_date || ''}
+            onChange={(event) => void onUpdate({ notice_expiry_date: event.target.value })}
+          />
+          {!facts.notice_expiry_date && (
+            <button
+              type="button"
+              onClick={() => void onUpdate({ notice_expiry_date: suggestedExpiryDate })}
+              className="text-sm text-[#7C3AED] underline hover:text-purple-700"
+            >
+              Use suggested: {suggestedExpiryDate}
+            </button>
+          )}
+        </div>
+        <p className="text-xs text-gray-500">
+          Minimum {period.noticePeriodLabel} from service for your selected Form 3A grounds. You can override if needed.
+        </p>
+      </div>
+    </section>
+  );
+};
+
 // =============================================================================
 // INLINE NOTICE-ONLY SUBFLOW
 // =============================================================================
@@ -448,13 +692,13 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   // This ensures the displayed default value is also saved to facts
   // FIXED (Jan 2026): Use notice_date to match MSQ field ID
   useEffect(() => {
-    if (currentStep === 'service' && !facts.notice_date && !facts.notice_service_date) {
+    if (!isSection8 && currentStep === 'service' && !facts.notice_date && !facts.notice_service_date) {
       onUpdate({
         notice_date: today,
         notice_service_date: today  // Backwards compat
       });
     }
-  }, [currentStep, facts.notice_date, facts.notice_service_date, today, onUpdate]);
+  }, [currentStep, facts.notice_date, facts.notice_service_date, isSection8, today, onUpdate]);
 
   // Handle ground toggle
   const handleGroundToggle = (ground: string) => {
@@ -509,7 +753,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   const handleNext = () => {
     if (currentStep === 'compliance') {
       setCurrentStep('service');
-    } else if (currentStep === 'grounds') {
+    } else if (currentStep === 'grounds' && !isSection8) {
       setCurrentStep('service');
     } else if (currentStep === 'service') {
       // Auto-populate eviction wizard notice fields from subflow data
@@ -537,7 +781,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   };
 
   // Get step number and total
-  const totalSteps = isSection8 ? 2 : 2; // grounds/compliance + service
+  const totalSteps = 2; // grounds/compliance + service for legacy non-Section 8 routes
   const currentStepNum = currentStep === 'service' ? 2 : 1;
 
   return (
@@ -545,7 +789,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
       <div className="flex items-center justify-between">
         <div>
           <h4 className="text-sm font-semibold text-purple-800">
-        Notice details - Step {currentStepNum} of {totalSteps}
+            {isSection8 ? 'Form 3A notice grounds' : `Notice details - Step ${currentStepNum} of ${totalSteps}`}
           </h4>
           <p className="text-xs text-[#7C3AED] mt-1">
             Complete these questions to prepare your {noticeProductLabel}.
@@ -860,7 +1104,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
       )}
 
       {/* Service Details Step */}
-      {currentStep === 'service' && (
+      {!isSection8 && currentStep === 'service' && (
         <div className="space-y-4">
           <h5 className="text-sm font-medium text-gray-700">Notice Service Details</h5>
           <p className="text-xs text-gray-500">
@@ -978,6 +1222,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
       )}
 
       {/* Navigation buttons */}
+      {!isSection8 && (
       <div className="flex items-center justify-between pt-4 border-t border-purple-200">
         {currentStep === 'service' ? (
           <button
@@ -1005,6 +1250,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
           {currentStep === 'service' ? 'Complete Notice Setup →' : 'Next →'}
         </button>
       </div>
+      )}
     </div>
   );
 };
@@ -1464,7 +1710,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
       {/* ================================================================== */}
       {/* PATH B COMPLETE: Show confirmation after inline subflow */}
       {/* ================================================================== */}
-      {noticeAlreadyServed === false && subflowComplete && (
+      {noticeAlreadyServed === false && subflowComplete && !isSection8 && (
         <div className="space-y-4">
           <div className="rounded-[1.5rem] border border-green-200 bg-green-50 p-5">
             <h4 className="text-sm font-medium text-green-800 flex items-center gap-2">

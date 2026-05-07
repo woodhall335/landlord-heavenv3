@@ -7,7 +7,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import type { WizardFacts } from '@/lib/case-facts/schema';
-import { NoticeSection } from '../NoticeSection';
+import { NoticeSection, PlannedNoticeServiceReviewPanel } from '../NoticeSection';
 
 function renderControlledNoticeSection(initialFacts: WizardFacts, mode: 'complete_pack' | 'notice_only' = 'notice_only') {
   const updatesSpy = vi.fn();
@@ -92,6 +92,62 @@ describe('NoticeSection specialist England ground capture', () => {
     expect(screen.queryByText(/Notice checkpoint/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Section 21/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Form 6A/i)).not.toBeInTheDocument();
+  });
+
+  it('keeps generated England Section 8 notice setup focused on grounds only', () => {
+    renderControlledNoticeSection({
+      __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },
+      eviction_route: 'section_8',
+      section8_grounds: ['Ground 8'],
+    });
+
+    expect(screen.getByText(/Form 3A notice grounds/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Notice details - Step/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Notice Service Details/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Notice Will Be Generated/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Next/i })).not.toBeInTheDocument();
+  });
+
+  it('keeps already-served complete-pack service fields in the notice step', () => {
+    renderControlledNoticeSection({
+      __meta: { product: 'complete_pack', original_product: 'complete_pack', jurisdiction: 'england' },
+      eviction_route: 'section_8',
+      notice_already_served: true,
+      notice_served_date: '2026-03-12',
+      notice_service_method: 'first_class_post',
+      section8_grounds: ['Ground 8'],
+    }, 'complete_pack');
+
+    expect(screen.getByText(/Date notice was served/i)).toBeInTheDocument();
+    expect(screen.getByText(/How was the notice served/i)).toBeInTheDocument();
+  });
+
+  it('review service panel writes all notice service date aliases', () => {
+    const updatesSpy = vi.fn();
+
+    render(
+      <PlannedNoticeServiceReviewPanel
+        facts={{
+          __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction: 'england' },
+          eviction_route: 'section_8',
+          section8_grounds: ['Ground 8'],
+          notice_date: '2026-05-07',
+          notice_service_date: '2026-05-07',
+          notice_served_date: '2026-05-07',
+        }}
+        onUpdate={updatesSpy}
+      />
+    );
+
+    fireEvent.change(screen.getByLabelText(/Date you will serve the notice/i), {
+      target: { value: '2026-05-08' },
+    });
+
+    expect(updatesSpy).toHaveBeenCalledWith({
+      notice_date: '2026-05-08',
+      notice_service_date: '2026-05-08',
+      notice_served_date: '2026-05-08',
+    });
   });
 
   it('uses arrears-specific helper copy when only arrears grounds are selected', () => {

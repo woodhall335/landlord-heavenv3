@@ -51,7 +51,11 @@ import { CaseBasicsSection } from '../sections/eviction/CaseBasicsSection';
 import { PartiesSection } from '../sections/eviction/PartiesSection';
 import { PropertySection } from '../sections/eviction/PropertySection';
 import { TenancySection } from '../sections/eviction/TenancySection';
-import { NoticeSection } from '../sections/eviction/NoticeSection';
+import {
+  NoticeSection,
+  buildPlannedNoticeServiceDefaults,
+  isPlannedNoticeServiceReady,
+} from '../sections/eviction/NoticeSection';
 import { GroundDetailsSection } from '../sections/eviction/GroundDetailsSection';
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
 import { EvidenceSection } from '../sections/eviction/EvidenceSection';
@@ -121,6 +125,22 @@ function hasCompleteCollectibleN215Facts(facts: WizardFacts): boolean {
   return true;
 }
 
+function requiresPriorGroundNoticeConfirmation(facts: WizardFacts): boolean {
+  const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  return selectedGrounds.some((ground) => {
+    const normalized = normalizeEnglandGroundCode(ground);
+    return normalized ? getEnglandGroundDefinition(normalized)?.requiresPriorNotice === true : false;
+  });
+}
+
+function hasRequiredPriorGroundNoticeConfirmation(facts: WizardFacts): boolean {
+  return !requiresPriorGroundNoticeConfirmation(facts) || facts.ground_prerequisite_notice_served !== undefined;
+}
+
+function needsPlannedEnglandSection8ServiceReview(facts: WizardFacts, jurisdiction: string): boolean {
+  return jurisdiction === 'england' && facts.eviction_route === 'section_8' && facts.notice_already_served === false;
+}
+
 // Define all sections with their visibility rules
 // These sections apply to England and Wales
 // Valid routes by jurisdiction
@@ -180,21 +200,19 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
     description: 'Notice date, service method, and N215 details before the claim is prepared',
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      const requiresPriorNoticeConfirmation = selectedGrounds.some((ground) => {
-        const normalized = normalizeEnglandGroundCode(ground);
-        return normalized ? getEnglandGroundDefinition(normalized)?.requiresPriorNotice === true : false;
-      });
 
       // Must answer the gating question first
       if (facts.notice_already_served === undefined) return false;
 
-      // If already served: require served date and service method
-      // If generating: subflow populates notice_served_date and notice_service_method on completion
+      if (facts.notice_already_served === false) {
+        return selectedGrounds.length > 0 && hasRequiredPriorGroundNoticeConfirmation(facts);
+      }
+
       return (
         Boolean(facts.notice_served_date) &&
         Boolean(facts.notice_service_method) &&
         hasCompleteCollectibleN215Facts(facts) &&
-        (!requiresPriorNoticeConfirmation || facts.ground_prerequisite_notice_served !== undefined)
+        hasRequiredPriorGroundNoticeConfirmation(facts)
       );
     },
   },
@@ -899,6 +917,14 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
 
   // Handle wizard completion
   const handleComplete = useCallback(async () => {
+    if (
+      needsPlannedEnglandSection8ServiceReview(facts, jurisdiction) &&
+      !isPlannedNoticeServiceReady(facts)
+    ) {
+      setError('Complete the final notice service details before continuing.');
+      return;
+    }
+
     // Flush any pending debounced saves BEFORE navigating to review
     // This ensures all user edits are persisted to the database
     if (saveTimeoutRef.current) {
@@ -907,9 +933,18 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
     }
 
     // If there are pending facts to save, save them now and wait for completion
-    if (pendingFactsRef.current) {
+    const serviceDefaults = needsPlannedEnglandSection8ServiceReview(facts, jurisdiction)
+      ? buildPlannedNoticeServiceDefaults(pendingFactsRef.current || facts)
+      : {};
+    const factsToSave = pendingFactsRef.current
+      ? { ...pendingFactsRef.current, ...serviceDefaults }
+      : Object.keys(serviceDefaults).length > 0
+        ? { ...facts, ...serviceDefaults }
+        : null;
+
+    if (factsToSave) {
       try {
-        await saveCaseFacts(caseId, pendingFactsRef.current, {
+        await saveCaseFacts(caseId, factsToSave, {
           jurisdiction,
           caseType: 'eviction',
           product: 'complete_pack',
@@ -924,7 +959,7 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
 
     // Navigate to review page
     router.push(`/wizard/review?case_id=${caseId}&product=complete_pack`);
-  }, [caseId, jurisdiction, router]);
+  }, [caseId, facts, jurisdiction, router]);
 
   // Calculate progress
   const completedCount = visibleSections.filter((s) => s.isComplete(facts)).length;
@@ -933,6 +968,10 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
   // Get blockers and warnings for current section
   const currentBlockers = currentSection?.hasBlockers?.(facts) || [];
   const currentWarnings = currentSection?.hasWarnings?.(facts) || [];
+  const plannedNoticeServiceReady =
+    !needsPlannedEnglandSection8ServiceReview(facts, jurisdiction) || isPlannedNoticeServiceReady(facts);
+  const reviewContinueDisabled =
+    currentBlockers.length > 0 || hasErrors || uploadsInProgress || !plannedNoticeServiceReady;
   const showUpgradeRecap =
     upgradeFromNoticeOnly &&
     jurisdiction === 'england' &&
@@ -1125,10 +1164,10 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
             {currentSection?.id === 'review' ? (
               <button
                 onClick={handleComplete}
-                disabled={currentBlockers.length > 0 || hasErrors || uploadsInProgress}
+                disabled={reviewContinueDisabled}
                 className={`
                   px-7 py-2.5 text-sm font-semibold rounded-xl transition-all
-                  ${currentBlockers.length > 0 || hasErrors || uploadsInProgress
+                  ${reviewContinueDisabled
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}

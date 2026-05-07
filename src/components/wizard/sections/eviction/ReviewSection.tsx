@@ -22,6 +22,10 @@ import {
   RiErrorWarningLine,
 } from 'react-icons/ri';
 import { calculateFilingWindow, formatDate } from '@/lib/validators/s21-court-pack';
+import {
+  PlannedNoticeServiceReviewPanel,
+  isPlannedNoticeServiceReady,
+} from './NoticeSection';
 
 interface WizardSection {
   id: string;
@@ -48,9 +52,8 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   jurisdiction,
   caseId,
   sections,
-  onComplete,
   onJumpToSection,
-  onUpdate: _onUpdate,
+  onUpdate,
 }) => {
   const evictionRoute = facts.eviction_route as 'section_8' | 'section_21' | undefined;
 
@@ -130,7 +133,10 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
 
   const blockerItems = filingWindowBlocker ? [...blockers, filingWindowBlocker] : blockers;
   const warningItems = filingWindowWarning ? [...warnings, filingWindowWarning] : warnings;
-  const canProceed = blockerItems.length === 0 && incompleteRequired.length === 0;
+  const needsPlannedNoticeService =
+    jurisdiction === 'england' && evictionRoute === 'section_8' && facts.notice_already_served === false;
+  const plannedNoticeServiceReady = !needsPlannedNoticeService || isPlannedNoticeServiceReady(facts);
+  const canProceed = blockerItems.length === 0 && incompleteRequired.length === 0 && plannedNoticeServiceReady;
 
   const packTitle =
     jurisdiction === 'england'
@@ -176,10 +182,23 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           />
           <SummaryValue
             label="Notice served"
-            value={facts.notice_service_date ? formatDate(facts.notice_service_date as string) : 'Not yet recorded'}
+            value={
+              facts.notice_service_date || facts.notice_date || facts.notice_served_date
+                ? formatDate((facts.notice_service_date || facts.notice_date || facts.notice_served_date) as string)
+                : 'Not yet recorded'
+            }
           />
         </div>
       </ReviewCard>
+
+      {needsPlannedNoticeService && (
+        <PlannedNoticeServiceReviewPanel
+          facts={facts}
+          onUpdate={onUpdate}
+          title="When will you serve this Form 3A notice?"
+          description="Confirm the planned service details before you continue to the locked document preview."
+        />
+      )}
 
       <ReviewListCard
         title="What must be fixed before you continue"
@@ -187,6 +206,14 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
         emptyDescription="The pack is not missing any required answers or blocker-level checks at the moment."
         tone="danger"
         items={[
+          ...(!plannedNoticeServiceReady
+            ? [
+                {
+                  section: 'Final notice service details',
+                  message: 'Complete the planned service date, service method, and required certificate details before continuing.',
+                },
+              ]
+            : []),
           ...incompleteRequired.map((item) => ({
             section: item.section,
             message: 'This section still needs to be completed before the full pack can be generated cleanly.',
@@ -315,27 +342,11 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
         </div>
       </ReviewCard>
 
-      <div className="border-t border-[#ebe4ff] pt-2">
-        <button
-          type="button"
-          onClick={onComplete}
-          disabled={!canProceed}
-          className={`
-            w-full rounded-2xl px-6 py-4 text-base font-semibold transition-colors
-            ${canProceed
-              ? 'bg-[linear-gradient(135deg,#7c3aed,#5b21b6)] text-white shadow-[0_20px_40px_rgba(91,33,182,0.28)] hover:brightness-105'
-              : 'cursor-not-allowed bg-gray-200 text-gray-500'
-            }
-          `}
-        >
-          {canProceed ? 'Continue to generate the complete pack' : 'Fix the issues above to continue'}
-        </button>
-        <p className="mt-3 text-center text-sm text-[#6a627f]">
-          {canProceed
-            ? 'You will be able to preview the paperwork again before payment.'
-            : 'Use the section links above to finish the file cleanly before generating.'}
-        </p>
-      </div>
+      <p className="border-t border-[#ebe4ff] pt-4 text-center text-sm text-[#6a627f]">
+        {canProceed
+          ? 'Use the sticky button below to continue to the locked document preview.'
+          : 'Use the section links above to finish the file cleanly before continuing.'}
+      </p>
     </div>
   );
 };

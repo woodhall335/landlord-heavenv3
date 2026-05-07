@@ -62,7 +62,12 @@ import { TenancySection } from '../sections/eviction/TenancySection';
 import { Section21ComplianceSection } from '../sections/eviction/Section21ComplianceSection';
 import { Section8ComplianceSection } from '../sections/eviction/Section8ComplianceSection';
 import { Section8ArrearsSection } from '../sections/eviction/Section8ArrearsSection';
-import { NoticeSection } from '../sections/eviction/NoticeSection';
+import {
+  NoticeSection,
+  PlannedNoticeServiceReviewPanel,
+  buildPlannedNoticeServiceDefaults,
+  isPlannedNoticeServiceReady,
+} from '../sections/eviction/NoticeSection';
 import { GroundDetailsSection } from '../sections/eviction/GroundDetailsSection';
 
 // Wales-specific section components
@@ -96,7 +101,10 @@ import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 import { hasCompleteDefenceRiskAnswers } from '@/lib/england-possession/defence-risk';
-import { normalizeEnglandGroundCode } from '@/lib/england-possession/ground-catalog';
+import {
+  getEnglandGroundDefinition,
+  normalizeEnglandGroundCode,
+} from '@/lib/england-possession/ground-catalog';
 import {
   getSelectedGroundDetailPanels,
   hasSelectedArrearsGrounds,
@@ -202,6 +210,25 @@ function hasCompleteCollectibleN215Facts(facts: WizardFacts): boolean {
   }
 
   return true;
+}
+
+function requiresPriorGroundNoticeConfirmation(facts: WizardFacts): boolean {
+  const selectedGrounds = (facts.section8_grounds as string[]) || [];
+  return selectedGrounds.some((ground) => {
+    const normalized = normalizeEnglandGroundCode(ground);
+    return normalized ? getEnglandGroundDefinition(normalized)?.requiresPriorNotice === true : false;
+  });
+}
+
+function hasRequiredPriorGroundNoticeConfirmation(facts: WizardFacts): boolean {
+  return !requiresPriorGroundNoticeConfirmation(facts) || facts.ground_prerequisite_notice_served !== undefined;
+}
+
+function needsPlannedEnglandSection8ServiceReview(
+  facts: WizardFacts,
+  jurisdiction: 'england' | 'wales' | 'scotland'
+): boolean {
+  return jurisdiction === 'england' && facts.eviction_route === 'section_8';
 }
 
 function getNoticeOnlyReviewType(
@@ -444,7 +471,7 @@ const SECTIONS: WizardSection[] = [
       // England: Section 8 - need grounds selected + service method
       if (route === 'section_8') {
         const selectedGrounds = (facts.section8_grounds as string[]) || [];
-        return selectedGrounds.length > 0 && Boolean(facts.notice_service_method) && hasCompleteCollectibleN215Facts(facts);
+        return selectedGrounds.length > 0 && hasRequiredPriorGroundNoticeConfirmation(facts);
       }
 
       return false;
@@ -1182,6 +1209,14 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   // Continue to review page for analysis before payment
   const handleGenerateNotice = useCallback(async () => {
     try {
+      if (
+        needsPlannedEnglandSection8ServiceReview(facts, jurisdiction) &&
+        !isPlannedNoticeServiceReady(facts)
+      ) {
+        setError('Complete the final notice service details before continuing.');
+        return;
+      }
+
       setGenerating(true);
       setError(null);
 
@@ -1193,9 +1228,18 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       }
 
       // If there are pending facts to save, save them now and wait for completion
-      if (pendingFactsRef.current) {
+      const serviceDefaults = needsPlannedEnglandSection8ServiceReview(facts, jurisdiction)
+        ? buildPlannedNoticeServiceDefaults(pendingFactsRef.current || facts)
+        : {};
+      const factsToSave = pendingFactsRef.current
+        ? { ...pendingFactsRef.current, ...serviceDefaults }
+        : Object.keys(serviceDefaults).length > 0
+          ? { ...facts, ...serviceDefaults }
+          : null;
+
+      if (factsToSave) {
         try {
-          await saveCaseFacts(caseId, pendingFactsRef.current, {
+          await saveCaseFacts(caseId, factsToSave, {
             jurisdiction,
             caseType: 'eviction',
             product: 'notice_only',
@@ -1216,7 +1260,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     } finally {
       setGenerating(false);
     }
-  }, [caseId, jurisdiction, router]);
+  }, [caseId, facts, jurisdiction, router]);
 
   const handleUpgradeToCompletePack = useCallback(() => {
     router.push(`/wizard/flow?type=eviction&product=complete_pack&case_id=${caseId}&entry=steps&upgrade_from=notice_only`);
@@ -1231,9 +1275,11 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
   const currentWarnings = currentSection?.hasWarnings?.(facts) || [];
 
   // Check if all required sections are complete
+  const plannedNoticeServiceReady =
+    !needsPlannedEnglandSection8ServiceReview(facts, jurisdiction) || isPlannedNoticeServiceReady(facts);
   const allComplete = visibleSections
     .filter((s) => s.id !== 'review')
-    .every((s) => s.isComplete(facts, jurisdiction));
+    .every((s) => s.isComplete(facts, jurisdiction)) && plannedNoticeServiceReady;
   const useVioletTone = isWizardUiV3Enabled || isWizardThemeV2;
 
   // Get overall blockers
@@ -1357,10 +1403,22 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     const incompleteRequiredSections = visibleSections
       .filter((s) => s.id !== 'review' && !s.isComplete(facts, jurisdiction))
       .map((s) => s.label);
+    if (needsPlannedEnglandSection8ServiceReview(facts, jurisdiction) && !isPlannedNoticeServiceReady(facts)) {
+      incompleteRequiredSections.unshift('Final notice service details');
+    }
     const upgradePrompt = getNoticeOnlyUpgradePrompt(facts, jurisdiction);
 
     return (
       <div className="space-y-6">
+        {needsPlannedEnglandSection8ServiceReview(facts, jurisdiction) && (
+          <PlannedNoticeServiceReviewPanel
+            facts={facts}
+            onUpdate={handleUpdate}
+            title="When will you serve this Form 3A notice?"
+            description="Confirm the planned service details before you continue to the locked document preview."
+          />
+        )}
+
         {/* What still needs attention */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-gray-900">What still needs attention</h3>

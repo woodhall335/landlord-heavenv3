@@ -314,6 +314,30 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     expect(getStepButton('Tenancy details')).toBeDefined();
     expect(screen.queryByText(/Occupation Contract/)).toBeNull();
   });
+
+  it('shows planned service details on the final review instead of inside the notice step', async () => {
+    render(
+      <NoticeOnlySectionFlow
+        {...englandProps}
+        initialFacts={{
+          __meta: { product: 'notice_only', jurisdiction: 'england' },
+          eviction_route: 'section_8',
+          section8_grounds: ['Ground 8'],
+        }}
+      />
+    );
+
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
+
+    fireEvent.click(getStepButton('Your notice'));
+    expect(screen.getByText(/Form 3A notice grounds/i)).toBeDefined();
+    expect(screen.queryByText(/Notice details - Step/i)).toBeNull();
+    expect(screen.queryByText(/Notice Service Details/i)).toBeNull();
+
+    fireEvent.click(getStepButton('Review your pack'));
+    expect(screen.getByText(/Final notice service details/i)).toBeDefined();
+    expect(screen.getByText(/What still needs attention/i)).toBeDefined();
+  });
 });
 
 describe('NoticeOnlySectionFlow - Route Type Mapping', () => {
@@ -443,9 +467,10 @@ describe('NoticeOnlySectionFlow - Notice Details Section Completion', () => {
       return hasGrounds && hasServiceMethod && hasServiceDate;
     }
 
-    // England: Section 8 - need grounds selected + service method
+    // England: Section 8 - the notice step collects grounds only.
+    // Planned service details are collected on the final in-wizard review screen.
     const selectedGrounds = (facts.section8_grounds as string[]) || [];
-    return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+    return selectedGrounds.length > 0;
   };
 
   describe('Wales Section 173 (No-fault)', () => {
@@ -544,20 +569,18 @@ describe('NoticeOnlySectionFlow - Notice Details Section Completion', () => {
   });
 
   describe('England Section 8 notice route', () => {
-    it('should return true when section8_grounds and notice_service_method are set', () => {
+    it('should return true when section8_grounds are set', () => {
       const facts = {
         eviction_route: 'section_8',
         section8_grounds: ['Ground 8'],
-        notice_service_method: 'first_class_post',
       };
       expect(isNoticeComplete(facts)).toBe(true);
     });
 
-    it('should return true with multiple grounds', () => {
+    it('should return true with multiple grounds before service details are collected', () => {
       const facts = {
         eviction_route: 'section_8',
         section8_grounds: ['Ground 8', 'Ground 10', 'Ground 11'],
-        notice_service_method: 'hand_delivered',
       };
       expect(isNoticeComplete(facts)).toBe(true);
     });
@@ -579,20 +602,18 @@ describe('NoticeOnlySectionFlow - Notice Details Section Completion', () => {
       expect(isNoticeComplete(facts)).toBe(false);
     });
 
-    it('should return false when notice_service_method is missing', () => {
+    it('should not require notice_service_method in the grounds step', () => {
       const facts = {
         eviction_route: 'section_8',
         section8_grounds: ['Ground 8'],
       };
-      expect(isNoticeComplete(facts)).toBe(false);
+      expect(isNoticeComplete(facts)).toBe(true);
     });
 
-    it('should NOT require notice_date (preserves existing England behavior)', () => {
+    it('should NOT require notice_date in the grounds step', () => {
       const facts = {
         eviction_route: 'section_8',
         section8_grounds: ['Ground 8'],
-        notice_service_method: 'recorded_delivery',
-        // no notice_date - should still complete for England
       };
       expect(isNoticeComplete(facts)).toBe(true);
     });
@@ -2171,12 +2192,12 @@ describe('Scotland Ask Heaven Context', () => {
  * does NOT affect England or Wales flows.
  */
 describe('NoticeOnlySectionFlow - England/Wales Smoke Tests (unchanged behavior)', () => {
-  it('England notice_only should still require grounds and a service method for completion', () => {
+  it('England notice_only should complete the notice step from grounds before final service review', () => {
     const isEnglandNoticeComplete = (facts: Record<string, any>): boolean => {
       const route = facts.eviction_route as string;
       if (route === 'section_8') {
         const selectedGrounds = (facts.section8_grounds as string[]) || [];
-        return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+        return selectedGrounds.length > 0;
       }
       return false;
     };
@@ -2184,7 +2205,6 @@ describe('NoticeOnlySectionFlow - England/Wales Smoke Tests (unchanged behavior)
     expect(isEnglandNoticeComplete({
       eviction_route: 'section_8',
       section8_grounds: ['Ground 8'],
-      notice_service_method: 'first_class_post',
     })).toBe(true);
 
     expect(isEnglandNoticeComplete({

@@ -246,9 +246,25 @@ describe('EvictionSectionFlow - England complete pack', () => {
     await user.click(getStepButton('Review your court documents'));
 
     await screen.findByText(/This pack is ready to generate|You still need to fix a few things before this pack is ready/i);
+    expect(screen.getByText(/Final notice service details/i)).toBeDefined();
     expect(screen.getByText(/What must be fixed before you continue/i)).toBeDefined();
     expect(screen.getByText(/What could slow things down later/i)).toBeDefined();
     expect(screen.getByText(/Sections in this pack/i)).toBeDefined();
+    expect(screen.queryByRole('button', { name: /Continue to generate the complete pack/i })).toBeNull();
+  });
+
+  it('keeps the generated notice step on grounds only before final service review', async () => {
+    const user = userEvent.setup();
+
+    render(<EvictionSectionFlow {...englandCompletePackProps} />);
+
+    await screen.findByText(/Choose the main reason you need possession/i);
+    await user.click(getStepButton('When will you serve?'));
+
+    expect(screen.getByText(/Form 3A notice grounds/i)).toBeDefined();
+    expect(screen.queryByText(/Notice details - Step/i)).toBeNull();
+    expect(screen.queryByText(/Notice Service Details/i)).toBeNull();
+    expect(screen.queryByText(/Notice Will Be Generated/i)).toBeNull();
   });
 
   it('upgrades a Stage 1 case into the first incomplete court-only step instead of restarting the flow', async () => {
