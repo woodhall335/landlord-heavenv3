@@ -22,6 +22,9 @@ const DOCUMENT_TYPE_BY_PACK_KEY: Record<string, string> = {
   hearing_checklist: 'hearing_checklist',
   arrears_engagement_letter: 'arrears_engagement_letter',
   case_summary: 'case_summary',
+  court_readiness_status: 'court_readiness_status',
+  court_filing_guide: 'court_filing_guide',
+  what_happens_next: 'what_happens_next',
 };
 
 function getGroupMeta(category: PackItemCategory): { label: string; order: number } {

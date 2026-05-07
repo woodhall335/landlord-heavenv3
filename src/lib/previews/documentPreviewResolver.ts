@@ -8,6 +8,7 @@ import {
 export const DOCUMENT_PREVIEW_TYPE_MAPPING: Record<string, string[]> = {
   // Section 8 / Form 3
   'notice-section-8': ['section8_notice', 'form_3_section8'],
+  'notice-form-3a': ['section8_notice', 'form_3_section8'],
   // Section 21 / Form 6A
   'notice-section-21': ['section21_notice', 'form_6a_section21'],
   // Wales
@@ -22,18 +23,24 @@ export const DOCUMENT_PREVIEW_TYPE_MAPPING: Record<string, string[]> = {
   'form-e': ['form_e', 'tribunal_application', 'form_e_tribunal'],
   // AI/support documents
   'witness-statement': ['witness_statement'],
+  'case-summary-stage-1': ['case_summary'],
+  'case-summary-stage-2': ['case_summary'],
   'compliance-audit': ['compliance_audit'],
   'risk-assessment': ['risk_assessment'],
+  'court-readiness-status': ['court_readiness_status'],
+  'service-instructions-form-3a': ['service_instructions'],
   'service-instructions-s8': ['service_instructions'],
   'service-instructions-s21': ['service_instructions'],
   'service-instructions-s173': ['service_instructions'],
   'service-instructions-fault': ['service_instructions'],
   'service-instructions-ntl': ['service_instructions'],
+  'validity-checklist-form-3a': ['validity_checklist'],
   'validity-checklist-s8': ['service_checklist'],
   'validity-checklist-s21': ['service_checklist'],
   'validity-checklist-s173': ['service_checklist'],
   'validity-checklist-fault': ['service_checklist'],
   'validity-checklist-ntl': ['service_checklist'],
+  'compliance-checklist-form-3a': ['compliance_declaration'],
   'pre-service-compliance-s8': ['compliance_checklist', 'pre_service_compliance'],
   'pre-service-compliance-s21': ['compliance_checklist_section21', 'pre_service_compliance'],
   'pre-service-checklist-fault': ['compliance_checklist', 'pre_service_compliance'],
@@ -41,8 +48,13 @@ export const DOCUMENT_PREVIEW_TYPE_MAPPING: Record<string, string[]> = {
   'court-filing-guide': ['court_filing_guide'],
   'tribunal-lodging-guide': ['tribunal_lodging_guide'],
   'arrears-schedule': ['arrears_schedule'],
+  'arrears-schedule-complete': ['arrears_schedule'],
   'evidence-checklist': ['evidence_checklist'],
   'proof-of-service': ['proof_of_service', 'proof_of_service_certificate'],
+  'proof-of-service-form-3a': ['proof_of_service', 'proof_of_service_certificate'],
+  'hearing-checklist': ['hearing_checklist'],
+  'what-happens-next-stage-1': ['what_happens_next'],
+  'what-happens-next-stage-2': ['what_happens_next'],
 
   // Money claim
   'form-n1': ['form_n1', 'n1_claim', 'money_claim_form'],
@@ -159,7 +171,10 @@ export function resolveDocumentPreview({
 
   if (product === 'notice_only') {
     return {
-      thumbnailUrl: appendSearchParams(`/api/notice-only/thumbnail/${caseId}`, encodedDocumentParams),
+      thumbnailUrl: appendSearchParams(`/api/notice-only/thumbnail/${caseId}`, {
+        pack: 'notice_only',
+        document_type: documentType,
+      }),
       previewUrl: appendSearchParams(`/api/notice-only/embed/${caseId}`, {
         pack: 'notice_only',
         document_type: documentType,
@@ -169,7 +184,10 @@ export function resolveDocumentPreview({
 
   if (product === 'complete_pack') {
     return {
-      thumbnailUrl: appendSearchParams(`/api/notice-only/thumbnail/${caseId}`, encodedDocumentParams),
+      thumbnailUrl: appendSearchParams(`/api/notice-only/thumbnail/${caseId}`, {
+        pack: 'complete_pack',
+        document_type: documentType,
+      }),
       previewUrl: appendSearchParams(`/api/notice-only/embed/${caseId}`, {
         pack: 'complete_pack',
         document_type: documentType,

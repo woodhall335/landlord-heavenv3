@@ -20,7 +20,13 @@
 'use client';
 
 import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
-import { validateField, type ValidationRule } from '@/lib/validation/mqs-field-validator';
+import {
+  formatUKPostcodeInput,
+  isPostcodeField,
+  normalizeUKPostcodeInput,
+  validateField,
+  type ValidationRule,
+} from '@/lib/validation/mqs-field-validator';
 import { useValidationContextSafe } from './ValidationContext';
 
 // ============================================================================
@@ -138,16 +144,27 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
   // Handle value change
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = type === 'number' ? parseFloat(e.target.value) || '' : e.target.value;
+      const newValue = type === 'number'
+        ? parseFloat(e.target.value) || ''
+        : isPostcodeField(id)
+          ? normalizeUKPostcodeInput(e.target.value)
+          : e.target.value;
       onChange(newValue as string | number);
     },
-    [type, onChange]
+    [id, type, onChange]
   );
 
   // Mark field as touched on blur
   const handleBlur = useCallback(() => {
     setTouched(true);
-  }, []);
+    if (!isPostcodeField(id)) return;
+
+    const currentValue = inputRef.current?.value ?? String(value ?? '');
+    const formatted = formatUKPostcodeInput(currentValue);
+    if (formatted !== currentValue) {
+      onChange(formatted);
+    }
+  }, [id, onChange, value]);
 
   return (
     <div className={`space-y-1 ${className}`}>

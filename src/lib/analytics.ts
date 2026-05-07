@@ -110,14 +110,52 @@ function mapToFacebookEvent(gaEventName: string): string | null {
   return eventMap[gaEventName.toLowerCase()] || null;
 }
 
+export interface PageViewTrackingContext {
+  title?: string;
+  location?: string;
+  pageType?: string;
+  product?: string;
+  jurisdiction?: string;
+  route?: string;
+  source?: string;
+  topic?: string;
+}
+
+function removeUndefinedValues<T extends Record<string, any>>(value: T): T {
+  return Object.fromEntries(
+    Object.entries(value).filter(([, entryValue]) => entryValue !== undefined)
+  ) as T;
+}
+
+function resolvePageLocation(path: string, explicitLocation?: string): string | undefined {
+  if (explicitLocation) return explicitLocation;
+  if (typeof window === 'undefined') return undefined;
+  if (/^https?:\/\//i.test(path)) return path;
+
+  const normalisedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${window.location.origin}${normalisedPath}`;
+}
+
 /**
- * Track a page view in Google Analytics
+ * Track a page view in Google Analytics.
+ *
+ * The page path can be deliberately normalised for private/session pages
+ * such as wizard previews, so GA4 can report the funnel stage without
+ * splitting reports by unique case ids.
  */
-export function trackPageView(url: string): void {
+export function trackPageView(path: string, context: PageViewTrackingContext = {}): void {
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'page_view', {
-      page_path: url,
-    });
+    window.gtag('event', 'page_view', removeUndefinedValues({
+      page_path: path,
+      page_location: resolvePageLocation(path, context.location),
+      page_title: context.title || document.title,
+      page_type: context.pageType,
+      product: context.product,
+      jurisdiction: context.jurisdiction,
+      route: context.route,
+      source: context.source,
+      topic: context.topic,
+    }));
   }
 }
 

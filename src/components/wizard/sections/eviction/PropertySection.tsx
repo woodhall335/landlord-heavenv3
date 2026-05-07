@@ -78,7 +78,7 @@ export const PropertySection: React.FC<PropertySectionProps> = ({
             id="property_address_postcode"
             label="Postcode"
             value={facts.property_address_postcode as string}
-            onChange={(v) => onUpdate({ property_address_postcode: String(v).toUpperCase() })}
+            onChange={(v) => onUpdate({ property_address_postcode: v })}
             validation={{ required: true, pattern: '^[A-Z]{1,2}\\d[A-Z\\d]?\\s*\\d[A-Z]{2}$' }}
             required
             placeholder="e.g., M1 1AA"

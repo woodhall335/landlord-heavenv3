@@ -54,4 +54,27 @@ describe('DocumentCard', () => {
     expect(screen.getAllByText('Preview temporarily unavailable')[0]).toBeInTheDocument();
     expect(screen.queryByText('Preview')).not.toBeInTheDocument();
   });
+
+  it('keeps the full preview available if only the thumbnail fails', () => {
+    render(
+      <DocumentCard
+        document={{
+          ...baseDocument,
+          thumbnailUrl: '/api/money-claim/thumbnail/case-123?document_type=form_n1',
+          previewUrl: '/api/money-claim/embed/case-123?document_type=form_n1',
+        }}
+        isLocked
+        onUnlock={vi.fn()}
+      />
+    );
+
+    fireEvent.error(screen.getByAltText('Preview of N1 claim form'));
+    fireEvent.click(screen.getByText('Preview'));
+
+    expect(screen.getByTitle('N1 claim form full preview')).toHaveAttribute(
+      'src',
+      '/api/money-claim/embed/case-123?document_type=form_n1'
+    );
+    expect(screen.queryByText('Preview temporarily unavailable')).not.toBeInTheDocument();
+  });
 });

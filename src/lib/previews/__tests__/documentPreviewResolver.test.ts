@@ -46,6 +46,36 @@ describe('resolveDocumentPreview', () => {
     expectPreviewRoutes('section13_defensive', getSection13Documents('section13_defensive'));
   });
 
+  it('routes Notice Only config document ids through generated pack preview document types', () => {
+    const documents = getNoticeOnlyDocuments('england', 'section_8', { includeArrearsSchedule: true });
+    const expectedTypes: Record<string, string> = {
+      'case-summary-stage-1': 'case_summary',
+      'notice-form-3a': 'section8_notice',
+      'service-instructions-form-3a': 'service_instructions',
+      'validity-checklist-form-3a': 'validity_checklist',
+      'compliance-checklist-form-3a': 'compliance_declaration',
+      'proof-of-service-form-3a': 'proof_of_service',
+      'what-happens-next-stage-1': 'what_happens_next',
+      'arrears-schedule': 'arrears_schedule',
+    };
+
+    for (const document of documents) {
+      const expectedType = expectedTypes[document.id];
+      expect(expectedType, `missing expectation for ${document.id}`).toBeTruthy();
+
+      const resolution = resolveDocumentPreview({
+        caseId,
+        product: 'notice_only',
+        document,
+      });
+
+      expect(resolution.thumbnailUrl).toContain('pack=notice_only');
+      expect(resolution.thumbnailUrl).toContain(`document_type=${expectedType}`);
+      expect(resolution.previewUrl).toContain('pack=notice_only');
+      expect(resolution.previewUrl).toContain(`document_type=${expectedType}`);
+    }
+  });
+
   it('resolves legacy tenancy agreement documents through the tenancy preview endpoints', () => {
     expectPreviewRoutes(
       'ast_standard',

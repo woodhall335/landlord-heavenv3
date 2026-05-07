@@ -48,8 +48,9 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
   const thumbnailUrl = document.thumbnailUrl ||
     (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : null);
   const previewUrl = document.previewUrl || null;
-  const previewUnavailableReason = document.previewUnavailableReason || (thumbnailError ? 'Preview temporarily unavailable' : null);
-  const canPreview = Boolean(previewUrl || thumbnailUrl) && !previewUnavailableReason;
+  const previewUnavailableReason =
+    document.previewUnavailableReason || (!previewUrl && thumbnailError ? 'Preview temporarily unavailable' : null);
+  const canPreview = Boolean(previewUrl || (thumbnailUrl && !thumbnailError)) && !previewUnavailableReason;
 
   const handlePreviewClick = () => {
     if (canPreview) {

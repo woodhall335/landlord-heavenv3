@@ -87,6 +87,23 @@ export const UK_PATTERNS = {
   DATE_ISO: /^(\d{4})-(\d{2})-(\d{2})$/,
 };
 
+export function isPostcodeField(fieldId: string): boolean {
+  return fieldId.toLowerCase().includes('postcode');
+}
+
+export function normalizeUKPostcodeInput(postcode: string): string {
+  return postcode.toUpperCase();
+}
+
+export function formatUKPostcodeInput(postcode: string): string {
+  const clean = postcode.replace(/\s+/g, '').toUpperCase();
+  if (!clean || !UK_PATTERNS.POSTCODE.test(clean)) {
+    return clean;
+  }
+
+  return `${clean.slice(0, -3)} ${clean.slice(-3)}`;
+}
+
 // ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
@@ -238,7 +255,10 @@ export function validateField(
   // Skip further validation if empty (and not required)
   if (isEmpty(value)) return errors;
 
-  const stringValue = String(value);
+  const rawStringValue = String(value);
+  const stringValue = isPostcodeField(fieldId)
+    ? formatUKPostcodeInput(rawStringValue)
+    : rawStringValue;
 
   // Pattern validation
   if (validation?.pattern) {

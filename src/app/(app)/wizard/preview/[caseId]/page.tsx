@@ -7,7 +7,7 @@
 
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Button, Card, ValidationErrors, type ValidationIssue } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
@@ -25,7 +25,12 @@ import {
 } from '@/lib/validation/notice-only-case-validator';
 import { hasWalesArrearsGroundSelected } from '@/lib/wales';
 import { Loader2, Scale, CheckCircle, Download, Shield, Clock, FileText, List } from 'lucide-react';
-import { trackWizardPreviewViewed, trackCheckoutStarted, trackBeginCheckout } from '@/lib/analytics';
+import {
+  trackPageView,
+  trackWizardPreviewViewed,
+  trackCheckoutStarted,
+  trackBeginCheckout,
+} from '@/lib/analytics';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { getCheckoutRedirectUrls, type CheckoutProduct } from '@/lib/payments/redirects';
 import { getSessionTokenHeaders } from '@/lib/session-token';
@@ -324,6 +329,7 @@ export default function WizardPreviewPage() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [generatedDocs, setGeneratedDocs] = useState<GeneratedDocument[]>([]);
+  const hasTrackedPreviewPageView = useRef(false);
 
   const normalizeValidationIssues = (issues: any[] = []): ValidationIssue[] =>
     issues.map((issue) => ({
@@ -545,6 +551,17 @@ export default function WizardPreviewPage() {
           setSelectedProduct('notice_only');
         } else if (inferredProduct) {
           setSelectedProduct(inferredProduct);
+        }
+
+        if (!hasTrackedPreviewPageView.current) {
+          hasTrackedPreviewPageView.current = true;
+          trackPageView('/wizard/preview/[caseId]', {
+            title: 'Locked document preview',
+            pageType: 'wizard_preview',
+            product: inferredProduct || productFromFacts || 'unknown',
+            jurisdiction: fetchedCase.jurisdiction || 'unknown',
+            route: fetchedCase.recommended_route || 'unknown',
+          });
         }
 
         // E2E mode: skip preview generation dependencies so checkout CTA remains deterministic.

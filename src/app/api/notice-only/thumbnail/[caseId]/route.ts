@@ -76,10 +76,13 @@ const ENGLAND_PACK_DOCUMENT_TYPES = new Set([
   'n119_particulars',
   'evidence_checklist',
   'witness_statement',
+  'court_readiness_status',
   'court_bundle_index',
   'hearing_checklist',
   'arrears_engagement_letter',
   'case_summary',
+  'court_filing_guide',
+  'what_happens_next',
 ]);
 
 async function getEnglandPackPreviewDocument(
@@ -146,6 +149,9 @@ function errorResponse(code: string, message: string, status: number, details?: 
  */
 function resolveDocumentType(configId: string, jurisdiction: string): string | null {
   // Notice documents
+  if (configId === 'notice-form-3a' || configId === 'form-3a') {
+    return 'section8_notice';
+  }
   if (configId === 'notice-section-21' || configId === 'section21_notice') {
     return jurisdiction === 'england' ? 'section8_notice' : 'section21_notice';
   }
@@ -168,16 +174,21 @@ function resolveDocumentType(configId: string, jurisdiction: string): string | n
   }
 
   // Checklists
-  if (configId.startsWith('validity-checklist') || configId === 'service_checklist') {
+  if (configId.startsWith('validity-checklist') || configId === 'validity_checklist' || configId === 'service_checklist') {
     return 'validity_checklist';
   }
 
   // Arrears schedule
-  if (configId === 'arrears-schedule' || configId === 'arrears_schedule') {
+  if (configId === 'arrears-schedule' || configId === 'arrears-schedule-complete' || configId === 'arrears_schedule') {
     return 'arrears_schedule';
   }
 
-  if (configId === 'proof_of_service' || configId === 'form_n215' || configId === 'n215') {
+  if (
+    configId === 'proof_of_service' ||
+    configId === 'proof-of-service-form-3a' ||
+    configId === 'form_n215' ||
+    configId === 'n215'
+  ) {
     return 'proof_of_service';
   }
 
@@ -195,6 +206,7 @@ function resolveDocumentType(configId: string, jurisdiction: string): string | n
 
   // Pre-Service Compliance Declaration
   if (configId.startsWith('pre-service-compliance') ||
+      configId === 'compliance-checklist-form-3a' ||
       configId === 'compliance_checklist' ||
       configId === 'compliance_checklist_section21' ||
       configId === 'pre_service_compliance' ||
@@ -206,11 +218,15 @@ function resolveDocumentType(configId: string, jurisdiction: string): string | n
     return 'evidence_checklist';
   }
 
+  if (configId === 'court_readiness_status' || configId === 'court-readiness-status') {
+    return 'court_readiness_status';
+  }
+
   if (configId === 'court_bundle_index') {
     return 'court_bundle_index';
   }
 
-  if (configId === 'hearing_checklist') {
+  if (configId === 'hearing_checklist' || configId === 'hearing-checklist') {
     return 'hearing_checklist';
   }
 
@@ -218,8 +234,16 @@ function resolveDocumentType(configId: string, jurisdiction: string): string | n
     return 'arrears_engagement_letter';
   }
 
-  if (configId === 'case_summary') {
+  if (configId === 'court_filing_guide' || configId === 'court-filing-guide') {
+    return 'court_filing_guide';
+  }
+
+  if (configId === 'case_summary' || configId === 'case-summary-stage-1' || configId === 'case-summary-stage-2') {
     return 'case_summary';
+  }
+
+  if (configId === 'what_happens_next' || configId === 'what-happens-next-stage-1' || configId === 'what-happens-next-stage-2') {
+    return 'what_happens_next';
   }
 
   return null;
@@ -271,6 +295,12 @@ function getTemplatePath(
       return isSection21
         ? 'uk/england/templates/notice_only/form_6a_section21/compliance_checklist_section21.hbs'
         : 'uk/england/templates/eviction/compliance_checklist.hbs';
+    }
+    if (docType === 'what_happens_next') {
+      return 'uk/england/templates/eviction/what_happens_next_section_8.hbs';
+    }
+    if (docType === 'court_filing_guide') {
+      return 'uk/england/templates/eviction/court_filing_guide.hbs';
     }
   }
 

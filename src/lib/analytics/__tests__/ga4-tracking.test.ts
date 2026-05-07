@@ -62,6 +62,35 @@ describe('GA4 analytics dispatch', () => {
     );
   });
 
+  it('sends normalised page_view events for private wizard stages', async () => {
+    const { trackPageView } = await import('../../analytics');
+
+    window.history.replaceState({}, '', '/wizard/preview/case-123?product=notice_only');
+
+    trackPageView('/wizard/preview/[caseId]', {
+      title: 'Locked document preview',
+      pageType: 'wizard_preview',
+      product: 'notice_only',
+      jurisdiction: 'england',
+      route: 'section_8',
+    });
+
+    expect(gtag).toHaveBeenCalledTimes(1);
+    expect(gtag).toHaveBeenCalledWith(
+      'event',
+      'page_view',
+      expect.objectContaining({
+        page_path: '/wizard/preview/[caseId]',
+        page_location: `${window.location.origin}/wizard/preview/[caseId]`,
+        page_title: 'Locked document preview',
+        page_type: 'wizard_preview',
+        product: 'notice_only',
+        jurisdiction: 'england',
+        route: 'section_8',
+      })
+    );
+  });
+
   it('does not suppress interaction events by default', async () => {
     const { trackEvent } = await import('../../analytics');
 

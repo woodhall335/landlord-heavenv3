@@ -26,7 +26,7 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'validity_checklist')).toBeDefined();
         expect(items.find(i => i.key === 'compliance_declaration')).toBeDefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
-        expect(items.find(i => i.key === 'what_happens_next')).toBeUndefined();
+        expect(items.find(i => i.key === 'what_happens_next')).toBeDefined();
         expect(items.find(i => i.key === 'section21_notice')).toBeUndefined();
       });
 
@@ -163,7 +163,8 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
         expect(items.find(i => i.key === 'evidence_checklist')).toBeUndefined();
         expect(items.find(i => i.key === 'hearing_checklist')?.title).toBe('Hearing Preparation Guide');
-        expect(items.find(i => i.key === 'what_happens_next')).toBeUndefined();
+        expect(items.find(i => i.key === 'court_filing_guide')).toBeDefined();
+        expect(items.find(i => i.key === 'what_happens_next')).toBeDefined();
         expect(items.find(i => i.key === 'service_instructions')).toBeDefined();
         expect(items.find(i => i.key === 'witness_statement')).toBeDefined();
         expect(items.find(i => i.key === 'court_bundle_index')).toBeDefined();

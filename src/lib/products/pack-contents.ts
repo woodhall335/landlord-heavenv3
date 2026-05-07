@@ -571,6 +571,14 @@ function getEnglandNoticeOnlyContents(args: GetPackContentsArgs): PackItem[] {
     required: true,
   });
 
+  items.push({
+    key: 'what_happens_next',
+    title: 'What Happens Next',
+    description: 'Next-step guide covering service, notice expiry, and when to move into court preparation.',
+    category: 'Guidance',
+    required: true,
+  });
+
   if (has_arrears || include_arrears_schedule) {
     items.push({
       key: 'arrears_schedule',
@@ -654,6 +662,20 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       key: 'hearing_checklist',
       title: 'Hearing Preparation Guide',
       description: 'Practical hearing guide covering the main questions, failure points, and documents to bring.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'court_filing_guide',
+      title: 'Court Filing Guide',
+      description: 'Step-by-step guide for issuing the possession claim and keeping the court file aligned.',
+      category: 'Guidance',
+      required: true,
+    },
+    {
+      key: 'what_happens_next',
+      title: 'What Happens Next',
+      description: 'Next-step guide covering issue, hearing preparation, and enforcement handoff.',
       category: 'Guidance',
       required: true,
     },

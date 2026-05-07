@@ -24,6 +24,11 @@ import {
 } from '@/lib/tenancy/agreement-suitability';
 import { validateStepInline, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
 import { extractWizardUxIssues, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
+import {
+  formatUKPostcodeInput,
+  isPostcodeField,
+  normalizeUKPostcodeInput,
+} from '@/lib/validation/mqs-field-validator';
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import {
   ENGLAND_PREMIUM_ASSURED_PERIODIC_TIER_LABEL,
@@ -68,6 +73,14 @@ function normalizeOptions(options?: MQSOption[]): NormalizedOption[] {
     const label = String(opt.label ?? opt.name ?? value);
     return { key: value, value, label };
   }).filter(o => o.value);
+}
+
+function normalizeWizardTextInput(fieldId: string, value: string): string {
+  return isPostcodeField(fieldId) ? normalizeUKPostcodeInput(value) : value;
+}
+
+function formatWizardTextInput(fieldId: string, value: string): string {
+  return isPostcodeField(fieldId) ? formatUKPostcodeInput(value) : value;
 }
 
 // ====================================================================================
@@ -2654,7 +2667,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       type={field.inputType}
                       value={fieldValue}
                       onChange={(e) =>
-                        setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                        setCurrentAnswer({
+                          ...groupValue,
+                          [field.id]: normalizeWizardTextInput(field.id, e.target.value),
+                        })
+                      }
+                      onBlur={(e) =>
+                        setCurrentAnswer({
+                          ...groupValue,
+                          [field.id]: formatWizardTextInput(field.id, e.target.value),
+                        })
                       }
                       placeholder={field.placeholder}
                       disabled={loading}
@@ -2702,7 +2724,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <Input
             type="text"
             value={value}
-            onChange={(e) => setCurrentAnswer(e.target.value)}
+            onChange={(e) =>
+              setCurrentAnswer(normalizeWizardTextInput(currentQuestion.id, e.target.value))
+            }
+            onBlur={(e) =>
+              setCurrentAnswer(formatWizardTextInput(currentQuestion.id, e.target.value))
+            }
             placeholder={currentQuestion.placeholder}
             disabled={loading}
           />

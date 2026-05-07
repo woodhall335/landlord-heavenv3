@@ -16,6 +16,8 @@ import {
   calculateDepositCap,
   validateSection21Compliance,
   UK_PATTERNS,
+  formatUKPostcodeInput,
+  normalizeUKPostcodeInput,
 } from '../mqs-field-validator';
 
 describe('isEmpty', () => {
@@ -169,10 +171,24 @@ describe('validateField', () => {
       expect(validateField('property_postcode', 'SW1A 1AA', {})).toHaveLength(0);
       expect(validateField('property_postcode', 'M1 1AA', {})).toHaveLength(0);
       expect(validateField('property_postcode', 'EH1 1BB', {})).toHaveLength(0);
+      expect(validateField('property_postcode', 'sw1a 1aa', {})).toHaveLength(0);
+      expect(validateField('property_postcode', 'sw1a1aa', {})).toHaveLength(0);
+      expect(validateField('property_postcode', 'm1 1aa', {})).toHaveLength(0);
+      expect(validateField('property_postcode', 'ls28 7pw', {})).toHaveLength(0);
 
       // Invalid postcodes
       expect(validateField('property_postcode', 'INVALID', {})).toHaveLength(1);
       expect(validateField('property_postcode', '12345', {})).toHaveLength(1);
+      expect(validateField('property_postcode', 'SW1A', {})).toHaveLength(1);
+    });
+
+    it('normalises postcode values before pattern validation', () => {
+      const validation = {
+        pattern: '^[A-Z]{1,2}\\d[A-Z\\d]?\\s*\\d[A-Z]{2}$',
+      };
+
+      expect(validateField('landlord_address_postcode', 'sw1a 1aa', validation, 'Postcode')).toHaveLength(0);
+      expect(validateField('landlord_address_postcode', 'ls287pw', validation, 'Postcode')).toHaveLength(0);
     });
   });
 
@@ -439,6 +455,24 @@ describe('UK_PATTERNS', () => {
       it(`rejects invalid postcode: ${postcode}`, () => {
         expect(UK_PATTERNS.POSTCODE.test(postcode)).toBe(false);
       });
+    });
+  });
+
+  describe('postcode normalisation helpers', () => {
+    it('uppercases while preserving the entered spacing during typing', () => {
+      expect(normalizeUKPostcodeInput('sw1a 1aa')).toBe('SW1A 1AA');
+      expect(normalizeUKPostcodeInput('ls287pw')).toBe('LS287PW');
+    });
+
+    it('formats valid-looking postcodes with the standard inward-code space', () => {
+      expect(formatUKPostcodeInput('sw1a1aa')).toBe('SW1A 1AA');
+      expect(formatUKPostcodeInput('ls287pw')).toBe('LS28 7PW');
+      expect(formatUKPostcodeInput('m1 1aa')).toBe('M1 1AA');
+    });
+
+    it('keeps invalid postcodes uppercase without pretending they are valid', () => {
+      expect(formatUKPostcodeInput('abc')).toBe('ABC');
+      expect(formatUKPostcodeInput('12345')).toBe('12345');
     });
   });
 

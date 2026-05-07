@@ -17,10 +17,13 @@ import {
   RiFileList3Line,
 } from 'react-icons/ri';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
-import { trackWizardReviewViewWithAttribution, markWizardCompleted } from '@/lib/analytics';
+import {
+  trackPageView,
+  trackWizardReviewViewWithAttribution,
+  markWizardCompleted,
+} from '@/lib/analytics';
 import { getWizardAttribution } from '@/lib/wizard/wizardAttribution';
 import { getSessionTokenHeaders } from '@/lib/session-token';
-import { getPackContents } from '@/lib/products/pack-contents';
 
 // Scotland utilities
 import {
@@ -39,7 +42,6 @@ import {
   hasArrearsGround,
 } from '@/lib/grounds/notice-period-utils';
 import {
-  getGroundAwareSuggestions,
   isArrearsEvidenceComplete,
 } from '@/lib/grounds/evidence-suggestions';
 import { saveCaseFacts } from '@/lib/wizard/facts-client';
@@ -61,7 +63,6 @@ import { JurisdictionExplainer, ChecksSummaryBox } from '@/components/wizard/Rev
 // Tenancy product tier utilities - single source of truth for pricing and product resolution
 import {
   resolveEffectiveProduct,
-  getTenancyPricing,
   isPremiumSku,
   detectInventoryData,
   type TenancyProductSku,
@@ -90,7 +91,6 @@ import {
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
-import { PRODUCTS } from '@/lib/pricing/products';
 import {
   buildMoneyClaimAddOnRecommendation,
   isMoneyClaimAddOnEligible,
@@ -229,6 +229,15 @@ function ReviewPageInner() {
     if (analysis && !hasTrackedReview.current) {
       hasTrackedReview.current = true;
       const attribution = getWizardAttribution();
+      trackPageView('/wizard/review', {
+        title: 'Wizard review',
+        pageType: 'wizard_review',
+        product,
+        jurisdiction: jurisdiction || 'unknown',
+        route: analysis.recommended_route || 'unknown',
+        source: attribution.src,
+        topic: attribution.topic,
+      });
       trackWizardReviewViewWithAttribution({
         product: product,
         jurisdiction: jurisdiction || 'unknown',
@@ -657,30 +666,6 @@ function MoneyClaimReviewContent({
   const warnings = caseHealth?.warnings ?? [];
   const positives = caseHealth?.positives ?? [];
 
-  // Money claim specific documents
-  const moneyClaimDocs = jurisdiction === 'scotland'
-    ? [
-        { id: 'form_3a', title: 'Form 3A - Simple Procedure Claim', required: true },
-        { id: 'particulars', title: 'Particulars of Claim', required: true },
-        { id: 'schedule', title: 'Schedule of Arrears', required: true },
-        { id: 'interest', title: 'Interest Calculation', required: false },
-        { id: 'lba', title: 'Letter Before Claim', required: false },
-        { id: 'filing_guide', title: 'Filing Guide', required: false },
-      ]
-    : [
-        { id: 'form_n1', title: 'Form N1 - Money Claim Form', required: true },
-        { id: 'particulars', title: 'Particulars of Claim', required: true },
-        { id: 'schedule', title: 'Schedule of Arrears', required: true },
-        { id: 'interest', title: 'Interest Calculation', required: false },
-        { id: 'lba', title: 'Letter Before Claim (PAP-DEBT)', required: true },
-        { id: 'info_sheet', title: 'Information Sheet for Defendants', required: true },
-        { id: 'reply_form', title: 'Reply Form', required: false },
-        { id: 'financial_statement', title: 'Financial Statement Form', required: false },
-        { id: 'evidence_index', title: 'Evidence Index', required: false },
-        { id: 'filing_guide', title: 'Court Filing Guide', required: false },
-        { id: 'enforcement_guide', title: 'Enforcement Guide', required: false },
-      ];
-
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
       {/* Header */}
@@ -1029,31 +1014,6 @@ function MoneyClaimReviewContent({
         </Card>
       )}
 
-      {/* Documents to be generated */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <RiFileTextLine className="h-5 w-5 text-[#7C3AED]" />
-          Documents in Your Pack
-        </h2>
-        <p className="text-sm text-gray-600 mb-3">
-          Your money claim pack includes all documents needed for the Pre-Action Protocol
-          and court filing:
-        </p>
-        <ul className="grid md:grid-cols-2 gap-2">
-          {moneyClaimDocs.map((doc) => (
-            <li key={doc.id} className="flex items-center gap-2 text-sm">
-              <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-              <span className="font-medium">{doc.title}</span>
-              {doc.required && (
-                <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-600">
-                  Required
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
-      </Card>
-
       {/* Warnings */}
       {warnings.length > 0 && (
         <Card className="p-6 border-yellow-300 bg-yellow-50">
@@ -1190,29 +1150,6 @@ function EvictionReviewContent({
 }: EvictionReviewContentProps) {
   const recommendedRouteLabel: string =
     analysis.recommended_route_label || analysis.recommended_route || 'Recommended route';
-
-  type PreviewDocument = {
-    id: string;
-    title?: string;
-    document_title?: string;
-    type: string;
-    jurisdiction: string;
-    requiredToFile?: boolean;
-  };
-
-  const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_documents)
-    ? analysis.preview_documents
-    : [];
-  const canonicalPackDocuments =
-    jurisdiction === 'england' && (product === 'complete_pack' || product === 'notice_only')
-      ? getPackContents({
-          product,
-          jurisdiction,
-          route: analysis.recommended_route || 'section_8',
-          include_arrears_schedule: Boolean(evidence.rent_schedule_uploaded),
-          has_arrears: Boolean(evidence.rent_schedule_uploaded),
-        })
-      : [];
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -1473,35 +1410,6 @@ function EvictionReviewContent({
             })()}
           </Card>
 
-          {/* Scotland Documents */}
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <RiFileTextLine className="h-5 w-5 text-[#7C3AED]" />
-              Documents in Your Pack
-            </h2>
-            <ul className="space-y-2">
-              <li className="flex items-center gap-2 text-sm text-gray-700">
-                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
-                Notice to Leave
-              </li>
-              <li className="flex items-center gap-2 text-sm text-gray-700">
-                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
-                Form E - Eviction Application
-              </li>
-              <li className="flex items-center gap-2 text-sm text-gray-700">
-                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
-                Grounds Evidence Summary
-              </li>
-              <li className="flex items-center gap-2 text-sm text-gray-700">
-                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
-                Service Instructions
-              </li>
-              <li className="flex items-center gap-2 text-sm text-gray-700">
-                <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
-                Tribunal Process Guide
-              </li>
-            </ul>
-          </Card>
         </>
       )}
 
@@ -1749,96 +1657,6 @@ function EvictionReviewContent({
         </div>
       </Card>
 
-      {/* Documents to be generated */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">
-          <RiFileTextLine className="inline h-5 w-5 mr-2 text-[#7C3AED]" />
-          Documents that will be generated
-        </h2>
-        <p className="text-sm text-gray-600 mb-3">
-          Based on your case details and jurisdiction, the following documents will be prepared
-          in your pack:
-        </p>
-        <ul className="space-y-2">
-          {previewDocuments.length > 0 ? (
-            previewDocuments.map((doc) => (
-              <li key={doc.id} className="flex items-center gap-2 text-sm">
-                <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                <span className="font-medium">
-                  {doc.title ?? doc.document_title ?? 'Untitled document'}
-                </span>
-
-                {doc.requiredToFile && (
-                  <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-700">
-                    Required for filing
-                  </span>
-                )}
-              </li>
-            ))
-          ) : canonicalPackDocuments.length > 0 ? (
-            canonicalPackDocuments.map((doc) => (
-              <li key={doc.key} className="flex items-center gap-2 text-sm">
-                <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                {doc.title}
-              </li>
-            ))
-          ) : jurisdiction === 'scotland' ? (
-            <>
-              <li className="flex items-center gap-2 text-sm">
-                <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                Notice to Leave
-              </li>
-              {!product.includes('notice_only') && (
-                <li className="flex items-center gap-2 text-sm">
-                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                  Form E (Tribunal application)
-                </li>
-              )}
-            </>
-          ) : (
-            <>
-              {/* Route-specific notice display for England/Wales */}
-              {jurisdiction === 'england' ? (
-                <li className="flex items-center gap-2 text-sm">
-                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                          Form 3A notice
-                </li>
-              ) : analysis.recommended_route === 'section_21' ||
-                analysis.recommended_route === 'accelerated_possession' ||
-                analysis.recommended_route === 'accelerated_section21' ? (
-                <li className="flex items-center gap-2 text-sm">
-                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                  Section 21 notice (Form 6A)
-                </li>
-              ) : analysis.recommended_route === 'section_8' ||
-                analysis.recommended_route === 'section8_notice' ? (
-                <li className="flex items-center gap-2 text-sm">
-                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                        Form 3A notice
-                </li>
-              ) : (
-                <>
-                  <li className="flex items-center gap-2 text-sm">
-                    <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                        Form 3A notice
-                  </li>
-                  <li className="flex items-center gap-2 text-sm">
-                    <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                    Section 21 notice (Form 6A)
-                  </li>
-                </>
-              )}
-              {!product.includes('notice_only') && (
-                <li className="flex items-center gap-2 text-sm">
-                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
-                  Form N5 / N119 (court forms)
-                </li>
-              )}
-            </>
-          )}
-        </ul>
-      </Card>
-
       {/* Warnings (non-blocking) */}
       {analysis.decision_engine?.warnings?.length > 0 && (
         <Card className="p-6 border-yellow-300 bg-yellow-50">
@@ -2015,17 +1833,6 @@ function NoticeOnlyReviewContent({
   const hasWalesArrearsGround = walesFaultGrounds.includes('rent_arrears_serious') ||
                                  walesFaultGrounds.includes('rent_arrears_other');
   const walesArrearsScheduleComplete = hasWalesArrearsGround && arrearsItems.length > 0;
-
-  // Get ground-aware suggestions
-  const evidenceOverview = analysis?.evidence_overview || {};
-  const suggestions = getGroundAwareSuggestions(includedGroundCodes, {
-    tenancy_agreement_uploaded: evidenceOverview.tenancy_agreement_uploaded,
-    rent_schedule_uploaded: evidenceOverview.rent_schedule_uploaded,
-    bank_statements_uploaded: evidenceOverview.bank_statements_uploaded,
-    damage_photos_uploaded: evidenceOverview.damage_photos_uploaded,
-    authority_letters_uploaded: evidenceOverview.authority_letters_uploaded,
-    correspondence_uploaded: evidenceOverview.correspondence_uploaded,
-  });
 
   // Handler for toggle change - persists to case facts
   const handleIncludeRecommendedChange = async (checked: boolean) => {
@@ -2456,36 +2263,6 @@ function NoticeOnlyReviewContent({
             </Card>
           )}
 
-          {/* Ground-Aware Evidence Suggestions */}
-          {suggestions.length > 0 && (
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
-                <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
-                Suggestions to strengthen your case
-              </h2>
-              <p className="text-sm text-gray-600 mb-4">
-                Based on the grounds in your notice, consider gathering the following evidence:
-              </p>
-              <ul className="space-y-3">
-                {suggestions.slice(0, 5).map((suggestion, index) => (
-                  <li key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
-                    <span className={`text-xs px-2 py-0.5 rounded shrink-0 mt-0.5 ${
-                      suggestion.priority === 'high'
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-gray-200 text-gray-600'
-                    }`}>
-                      {suggestion.priority === 'high' ? 'Important' : 'Helpful'}
-                    </span>
-                    <div>
-                      <p className="font-medium text-gray-900">{suggestion.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{suggestion.description}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          )}
-
           {/* Notice Period Summary */}
           <Card className="p-6 bg-gray-50">
             <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -2531,8 +2308,8 @@ function NoticeOnlyReviewContent({
         </Card>
       )}
 
-      {/* Additional suggestions (non-S21, only if there are items and no ground-aware suggestions shown) */}
-      {hasComplianceIssues && !isSection21 && suggestions.length === 0 && (
+      {/* Additional suggestions */}
+      {hasComplianceIssues && !isSection21 && (
         <Card className="border-blue-200 bg-blue-50/50 p-6">
           <h2 className="text-lg font-semibold text-blue-800 mb-3 flex items-center gap-2">
             <RiInformationLine className="w-5 h-5" />
@@ -2593,113 +2370,6 @@ function NoticeOnlyReviewContent({
           </div>
         </Card>
       )}
-
-      {/* Documents in Pack */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <RiFileList3Line className="w-5 h-5 text-gray-600" />
-          Documents in Your Pack
-        </h2>
-        <ul className="space-y-2">
-          {isSection21 ? (
-            <>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Form 6A - Section 21 Notice
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Service Instructions
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Service & Validity Checklist
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Pre-Service Compliance Declaration
-              </li>
-            </>
-          ) : isSection8 ? (
-            <>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                        Form 3A notice
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Service Instructions
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Service & Validity Checklist
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Pre-Service Compliance Declaration
-              </li>
-              {includesArrearsGrounds && arrearsEvidenceStatus.complete && (
-                <li className="flex items-center gap-2 text-gray-700">
-                  <RiFileTextLine className="w-4 h-4 text-green-500" />
-                  Rent Schedule / Arrears Statement
-                </li>
-              )}
-            </>
-          ) : isWales ? (
-            <>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                {isWalesFaultBased ? 'Fault-Based Notice (RHW23)' : 'Section 173 Notice (RHW16/17)'}
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Service Instructions
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Service & Validity Checklist
-              </li>
-              {isWalesFaultBased && hasWalesArrearsGround && walesArrearsScheduleComplete && (
-                <li className="flex items-center gap-2 text-gray-700">
-                  <RiFileTextLine className="w-4 h-4 text-green-500" />
-                  Rent Schedule / Arrears Statement
-                </li>
-              )}
-            </>
-          ) : isScotland ? (
-            <>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Notice to Leave
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Service Instructions
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Eviction Grounds Summary
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Eviction Notice
-              </li>
-              <li className="flex items-center gap-2 text-gray-700">
-                <RiFileTextLine className="w-4 h-4 text-gray-400" />
-                Service Instructions
-              </li>
-            </>
-          )}
-        </ul>
-        <div className="mt-4 pt-4 border-t">
-          <p className="text-gray-600">
-            Price: <span className="font-semibold text-gray-900">{PRODUCTS.notice_only.displayPrice}</span>
-          </p>
-        </div>
-      </Card>
 
       {/* Smart Review Panel - Document analysis warnings (England pilot) */}
       {analysis?.case_facts?.__smart_review?.warnings?.length > 0 && (
@@ -3096,7 +2766,6 @@ function TenancyReviewContent({
     facts,
   });
   const isPremium = isPremiumSku(effectiveProduct);
-  const pricing = getTenancyPricing(effectiveProduct);
 
   // Use shared utility for consistent inventory detection across review/preview/generation
   const hasInventoryData = detectInventoryData(facts);
@@ -3117,53 +2786,6 @@ function TenancyReviewContent({
     scotland: 'Scotland',
     'northern-ireland': 'Northern Ireland',
   }[jurisdiction] || jurisdiction;
-  const englandTenancyPurpose = getEnglandTenancyPurpose(facts.england_tenancy_purpose);
-  const englandMissingPurposeWarning = getEnglandMissingPurposeWarning({
-    jurisdiction,
-    tenancyStartDate:
-      typeof facts.tenancy_start_date === 'string'
-        ? facts.tenancy_start_date
-        : typeof facts.start_date === 'string'
-          ? facts.start_date
-          : undefined,
-    purpose: facts.england_tenancy_purpose,
-  });
-
-  // Documents included in pack
-  const standardDocs = [
-    { title: `${terminology.agreementType} Agreement`, included: true },
-    { title: 'Property Details Schedule', included: true },
-    { title: 'Deposit Protection Information', included: true },
-    { title: 'Prescribed Information Template', included: jurisdiction === 'england' || jurisdiction === 'wales' },
-    {
-      title: 'Renters\' Rights Act Information Sheet 2026',
-      included:
-        jurisdiction === 'england' &&
-        englandTenancyPurpose === 'existing_written_tenancy',
-    },
-    { title: 'Easy Read Notes', included: jurisdiction === 'scotland' },
-    { title: 'Landlord Obligations Checklist', included: true },
-  ].filter(d => d.included);
-
-  // Premium documents with accurate inventory description based on wizard completion
-  const inventoryTitle = hasInventoryData
-    ? 'Inventory Schedule (Wizard-Completed)'
-    : 'Inventory Schedule (Ready to Complete)';
-  const inventoryDescription = hasInventoryData
-    ? 'Your inventory data from the wizard is included in Schedule 4'
-    : 'Structured template included in Schedule 4 for you to complete';
-
-  const premiumDocs = [
-    { title: 'Guarantor Agreement', included: true, description: 'Full guarantor deed with joint and several liability' },
-    { title: inventoryTitle, included: true, description: inventoryDescription },
-    { title: 'Check-in/Check-out Form', included: true },
-    { title: 'Premium Management Schedule', included: true, description: 'Operational notes for access, repairs, keys, and management arrangements' },
-                    { title: 'Section 13 Rent Increase Guidance', included: true, description: 'This file helps you follow the England Section 13 route properly, with the notice, the timing, and the support explanation reading as one joined-up landlord file.' },
-    { title: 'Maintenance Reporting Form', included: true },
-    { title: 'Tenancy Variation Record', included: true },
-    { title: 'Notice Templates Pack', included: true },
-  ].filter(d => d.included);
-
   const hasBlockers = validation.blockers.length > 0;
   const hasWarnings = validation.warnings.length > 0;
 
@@ -3476,72 +3098,6 @@ function TenancyReviewContent({
         <p className="text-xs text-blue-700 mt-4 pt-4 border-t border-blue-200">
           Your pack includes a comprehensive landlord obligations checklist specific to {jurisdictionLabel}.
         </p>
-      </Card>
-
-      {/* Documents in Pack */}
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <RiFileTextLine className="w-5 h-5 text-[#7C3AED]" />
-          Documents in Your Pack
-        </h2>
-        <div className="space-y-4">
-          <div>
-            <h3 className="font-medium text-gray-700 mb-2">Standard Documents</h3>
-            <ul className="space-y-2">
-              {standardDocs.map((doc, index) => (
-                <li key={index} className="flex items-center gap-2 text-sm text-gray-700">
-                  <RiCheckboxCircleLine className="w-4 h-4 text-[#7C3AED]" />
-                  {doc.title}
-                </li>
-              ))}
-            </ul>
-            {jurisdiction === 'england' && englandTenancyPurpose === 'existing_written_tenancy' && (
-              <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                Give every named tenant the exact local Information Sheet 2026 PDF by 31 May 2026.
-              </p>
-            )}
-            {jurisdiction === 'england' && englandTenancyPurpose === 'existing_verbal_tenancy' && (
-              <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                Give the tenant the required written information about the key terms by 31 May 2026.
-              </p>
-            )}
-            {englandMissingPurposeWarning && (
-              <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                {englandMissingPurposeWarning}
-              </p>
-            )}
-          </div>
-          {isPremium && (
-            <div>
-              <h3 className="font-medium text-gray-700 mb-2 flex items-center gap-2">
-                Premium Documents
-                <span className="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs font-medium">Premium</span>
-              </h3>
-              <ul className="space-y-2">
-                {premiumDocs.map((doc, index) => (
-                  <li key={index} className="flex items-center gap-2 text-sm text-gray-700">
-                    <RiCheckboxCircleLine className="w-4 h-4 text-purple-600" />
-                    {doc.title}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-        <div className="mt-4 pt-4 border-t">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Price</p>
-              <p className="text-2xl font-bold text-gray-900">{pricing.displayPrice}</p>
-            </div>
-            {pricing.originalPrice && (
-              <div className="text-right">
-                <p className="text-gray-400 line-through text-sm">{pricing.originalPrice}</p>
-                <p className="text-green-600 text-sm font-medium">{pricing.savings}</p>
-              </div>
-            )}
-          </div>
-        </div>
       </Card>
 
       {recommendations.length > 0 && !isPaid && (

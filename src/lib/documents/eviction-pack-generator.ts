@@ -1202,6 +1202,8 @@ function reorderEnglandSection8Stage2Documents(documents: EvictionPackDocument[]
     'court_bundle_index',
     'hearing_checklist',
     'arrears_engagement_letter',
+    'court_filing_guide',
+    'what_happens_next',
   ];
   const byType = new Map(documents.map((document) => [document.document_type, document]));
 
@@ -3972,6 +3974,46 @@ export async function generateCompleteEvictionPack(
   });
 
   if (isEnglandSection8Case) {
+    try {
+      const courtFilingGuideDoc = await generateDocument({
+        templatePath: 'uk/england/templates/eviction/court_filing_guide.hbs',
+        data: stage2SummaryData,
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: 'Court Filing Guide',
+        description: 'Step-by-step guide for issuing the possession claim and keeping the court file aligned.',
+        category: 'guidance',
+        document_type: 'court_filing_guide',
+        html: courtFilingGuideDoc.html,
+        pdf: courtFilingGuideDoc.pdf,
+        file_name: 'court_filing_guide.pdf',
+      });
+    } catch (error) {
+      console.error('Failed to generate court filing guide:', error);
+    }
+
+    try {
+      const whatHappensNextDoc = await generateDocument({
+        templatePath: 'uk/england/templates/eviction/what_happens_next_section_8.hbs',
+        data: stage2SummaryData,
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: 'What Happens Next',
+        description: 'Next-step guide covering issue, hearing preparation, and enforcement handoff.',
+        category: 'guidance',
+        document_type: 'what_happens_next',
+        html: whatHappensNextDoc.html,
+        pdf: whatHappensNextDoc.pdf,
+        file_name: 'what_happens_next.pdf',
+      });
+    } catch (error) {
+      console.error('Failed to generate what happens next guide:', error);
+    }
+
     const orderedStage2Documents = reorderEnglandSection8Stage2Documents(documents);
     documents.splice(0, documents.length, ...orderedStage2Documents);
   }
@@ -5021,6 +5063,26 @@ export async function generateNoticeOnlyPack(
         } catch (err) {
           console.warn('Failed to generate arrears schedule:', err);
         }
+      }
+
+      try {
+        const whatHappensNextDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/what_happens_next_section_8.hbs',
+          data: stage1SupportData,
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'What Happens Next',
+          description: 'Next-step guide covering service, notice expiry, and the Stage 2 court handoff.',
+          category: 'guidance',
+          document_type: 'what_happens_next',
+          html: whatHappensNextDoc.html,
+          pdf: whatHappensNextDoc.pdf,
+          file_name: 'what_happens_next.pdf',
+        });
+      } catch (err) {
+        console.warn('Failed to generate what happens next guide:', err);
       }
 
     }

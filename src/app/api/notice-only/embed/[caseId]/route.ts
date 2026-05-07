@@ -47,11 +47,44 @@ const ENGLAND_PACK_DOCUMENT_TYPES = new Set([
   'n119_particulars',
   'evidence_checklist',
   'witness_statement',
+  'court_readiness_status',
   'court_bundle_index',
   'hearing_checklist',
   'arrears_engagement_letter',
   'case_summary',
+  'court_filing_guide',
+  'what_happens_next',
 ]);
+
+function resolveEnglandPackDocumentType(documentType: string): string {
+  const aliases: Record<string, string> = {
+    'case-summary-stage-1': 'case_summary',
+    'case-summary-stage-2': 'case_summary',
+    'notice-form-3a': 'section8_notice',
+    'form-3a': 'section8_notice',
+    'service-instructions-form-3a': 'service_instructions',
+    'validity-checklist-form-3a': 'validity_checklist',
+    service_checklist: 'validity_checklist',
+    'compliance-checklist-form-3a': 'compliance_declaration',
+    compliance_checklist: 'compliance_declaration',
+    pre_service_compliance: 'compliance_declaration',
+    'proof-of-service-form-3a': 'proof_of_service',
+    form_n215: 'proof_of_service',
+    n215: 'proof_of_service',
+    form_n5: 'n5_claim',
+    form_n119: 'n119_particulars',
+    'arrears-schedule': 'arrears_schedule',
+    'arrears-schedule-complete': 'arrears_schedule',
+    'hearing-checklist': 'hearing_checklist',
+    'what-happens-next-stage-1': 'what_happens_next',
+    'what-happens-next-stage-2': 'what_happens_next',
+    'court-filing-guide': 'court_filing_guide',
+    'court-readiness-status': 'court_readiness_status',
+    'evidence-checklist': 'evidence_checklist',
+  };
+
+  return aliases[documentType] || documentType;
+}
 
 async function getEnglandPackPreviewDocument(
   pack: 'notice_only' | 'complete_pack',
@@ -109,10 +142,11 @@ export async function GET(
 ) {
   const { caseId } = await params;
   const url = new URL(request.url);
-  const documentType = (url.searchParams.get('document_type') || '').trim();
+  const requestedDocumentType = (url.searchParams.get('document_type') || '').trim();
+  const documentType = resolveEnglandPackDocumentType(requestedDocumentType);
   const pack = (url.searchParams.get('pack') || '').trim() as 'notice_only' | 'complete_pack' | '';
 
-  if (!documentType) {
+  if (!requestedDocumentType) {
     return errorResponse('MISSING_DOCUMENT_TYPE', 'document_type is required', 400);
   }
 
