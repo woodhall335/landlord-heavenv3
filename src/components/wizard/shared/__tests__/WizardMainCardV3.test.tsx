@@ -9,11 +9,10 @@ import { describe, expect, it } from 'vitest';
 import { WizardMainCardV3 } from '../WizardMainCardV3';
 
 describe('WizardMainCardV3', () => {
-  it('can hide the carry-forward helper for lighter specialist flows', () => {
+  it('does not render the carry-forward helper', () => {
     render(
       <WizardMainCardV3
         sectionTitle="Supportable rent position"
-        showStepCarryForwardHint={false}
         navigation={<button type="button">Continue</button>}
       >
         <p>Section 13 step content</p>
