@@ -1440,20 +1440,6 @@ export function Section13WizardFlow({
               <p className="mt-2 text-sm text-gray-700">
                 This helps you judge whether the proposed increase looks supportable before you finish the full evidence pack. It is more than just Form 4A.
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {[
-                  'Uses live comparable listings',
-                  'Helps you choose a more supportable figure',
-                  'Builds Form 4A and the justification pack together',
-                ].map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-medium text-violet-900"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
@@ -2546,6 +2532,7 @@ export function Section13WizardFlow({
       currentStepId={currentStep.id}
       saveState={saveState}
       statusChips={['Save answers as you go']}
+      showStepCarryForwardHint={false}
       banner={
         saveError ? (
           <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
@@ -2597,24 +2584,6 @@ export function Section13WizardFlow({
       }
     >
       <div className="space-y-4">
-        {currentStep.id !== 'outputs' ? (
-          <div className="rounded-2xl border border-violet-200 bg-[linear-gradient(180deg,#faf7ff_0%,#ffffff_100%)] px-4 py-3">
-            <div className="flex flex-wrap gap-2">
-              {[
-                'Uses live comparable listings',
-                'Helps you choose a more supportable figure',
-                'Builds Form 4A and the justification pack together',
-              ].map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-semibold text-violet-900"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        ) : null}
         {renderStepContent()}
         {checkoutError ? <p className="text-sm text-rose-700">{checkoutError}</p> : null}
       </div>

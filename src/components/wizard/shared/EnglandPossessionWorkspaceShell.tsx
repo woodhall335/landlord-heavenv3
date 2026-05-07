@@ -47,6 +47,7 @@ interface EnglandPossessionWorkspaceShellProps {
   statusChips?: string[];
   stepIconPathOverride?: string;
   getStepMetadataForId?: (stepId: string) => StepMetadata | undefined;
+  showStepCarryForwardHint?: boolean;
 }
 
 export function EnglandPossessionWorkspaceShell({
@@ -73,6 +74,7 @@ export function EnglandPossessionWorkspaceShell({
   statusChips,
   stepIconPathOverride,
   getStepMetadataForId,
+  showStepCarryForwardHint,
 }: EnglandPossessionWorkspaceShellProps) {
   const hasMountedRef = useRef(false);
   const resolveMetadataForStep = (stepId: string) =>
@@ -135,6 +137,7 @@ export function EnglandPossessionWorkspaceShell({
           totalSteps={tabs.length}
           stepMotionKey={currentStepId || sectionTitle}
           banner={banner}
+          showStepCarryForwardHint={showStepCarryForwardHint}
           navigation={
             navigation ? (
               <WizardFooterNavV3>{navigation}</WizardFooterNavV3>

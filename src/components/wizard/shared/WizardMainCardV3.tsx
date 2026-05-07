@@ -10,6 +10,7 @@ interface WizardMainCardV3Props {
   totalSteps?: number;
   stepMotionKey?: string;
   banner?: React.ReactNode;
+  showStepCarryForwardHint?: boolean;
   children: React.ReactNode;
   navigation: React.ReactNode;
 }
@@ -23,6 +24,7 @@ export function WizardMainCardV3({
   totalSteps,
   stepMotionKey,
   banner,
+  showStepCarryForwardHint = true,
   children,
   navigation,
 }: WizardMainCardV3Props) {
@@ -58,11 +60,13 @@ export function WizardMainCardV3({
         </div>
 
         <div className="min-h-0 px-4 pb-7 pt-5 sm:px-5 sm:pb-8 sm:pt-6 md:px-8 md:pb-9 md:pt-7">
-          <div className="mb-5 rounded-[1.15rem] border border-[#f0e8ff] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(250,247,255,0.88))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
-            <p className="text-[12px] font-medium leading-6 text-[#6d6488] sm:text-[13px]">
-              Work through this step carefully. We will carry these answers through the final documents automatically.
-            </p>
-          </div>
+          {showStepCarryForwardHint ? (
+            <div className="mb-5 rounded-[1.15rem] border border-[#f0e8ff] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(250,247,255,0.88))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+              <p className="text-[12px] font-medium leading-6 text-[#6d6488] sm:text-[13px]">
+                Work through this step carefully. We will carry these answers through the final documents automatically.
+              </p>
+            </div>
+          ) : null}
           <div key={stepMotionKey || sectionTitle} className="wizard-step-fade min-h-0 overflow-visible space-y-6">
             {children}
           </div>

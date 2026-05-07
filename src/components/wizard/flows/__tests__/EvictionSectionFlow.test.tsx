@@ -147,9 +147,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
 
     await screen.findByText(/Choose the main reason you need possession/i);
     expect(screen.getByText(/Tenant is not paying rent/i)).toBeDefined();
-    expect(screen.getByText(/Serve Notice/i)).toBeDefined();
-    expect(screen.getByText(/Issue Claim/i)).toBeDefined();
-    expect(screen.getByText(/Court Hearing/i)).toBeDefined();
+    expect(screen.queryByRole('region', { name: /Section 8 eviction journey timeline/i })).toBeNull();
     expect(getStepButton("What's going on?")).toBeDefined();
     expect(getStepButton('Who and where?')).toBeDefined();
     expect(getStepButton('Tenancy details')).toBeDefined();

@@ -37,7 +37,6 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Section8JourneyTimeline } from '@/components/eviction/Section8JourneyTimeline';
 import { WizardFlowShell } from '@/components/wizard/shared/WizardFlowShell';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { EnglandPossessionWorkspaceShell } from '@/components/wizard/shared/EnglandPossessionWorkspaceShell';
@@ -1154,15 +1153,6 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         </>
       )}
     >
-      {jurisdiction === 'england' ? (
-        <Section8JourneyTimeline
-          stage="stage2"
-          showHeader={false}
-          compact
-          className="mb-6"
-        />
-      ) : null}
-
       {showUpgradeRecap && (
         <div className="mb-6 rounded-[1.55rem] border border-[#e4d7ff] bg-[linear-gradient(180deg,#fcfaff_0%,#f5eeff_100%)] p-5 shadow-sm">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7b56d8]">

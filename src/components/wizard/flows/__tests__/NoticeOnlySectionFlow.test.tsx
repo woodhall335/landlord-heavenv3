@@ -396,9 +396,7 @@ describe('NoticeOnlySectionFlow - Header and Title', () => {
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
     expect(screen.getByText(/Stage 1: Section 8 Notice & Service Pack/)).toBeDefined();
     expect(screen.getByText(/Tenant is not paying rent/i)).toBeDefined();
-    expect(screen.getByText(/Serve Notice/i)).toBeDefined();
-    expect(screen.getByText(/Notice Expires/i)).toBeDefined();
-    expect(screen.getByText(/Issue Claim/i)).toBeDefined();
+    expect(screen.queryByRole('region', { name: /Section 8 eviction journey timeline/i })).toBeNull();
   });
 
   it('should show "Wales Eviction Notice" for Wales jurisdiction', async () => {

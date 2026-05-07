@@ -48,6 +48,7 @@ interface WizardShellV3Props {
   statusChips?: string[];
   stepIconPathOverride?: string;
   getStepMetadataForId?: (stepId: string) => StepMetadata | undefined;
+  showStepCarryForwardHint?: boolean;
 }
 
 export function WizardShellV3({
@@ -74,6 +75,7 @@ export function WizardShellV3({
   statusChips,
   stepIconPathOverride,
   getStepMetadataForId,
+  showStepCarryForwardHint,
 }: WizardShellV3Props) {
   const hasMountedRef = useRef(false);
   const currentMeta: StepMetadata | undefined = currentStepId
@@ -130,6 +132,7 @@ export function WizardShellV3({
         statusChips={statusChips}
         stepIconPathOverride={stepIconPathOverride}
         getStepMetadataForId={getStepMetadataForId}
+        showStepCarryForwardHint={showStepCarryForwardHint}
       >
         {children}
       </EnglandPossessionWorkspaceShell>
@@ -166,6 +169,7 @@ export function WizardShellV3({
           totalSteps={tabs.length}
           stepMotionKey={currentStepId || sectionTitle}
           banner={banner}
+          showStepCarryForwardHint={showStepCarryForwardHint}
           navigation={
             navigation ? (
               <WizardFooterNavV3>{navigation}</WizardFooterNavV3>
