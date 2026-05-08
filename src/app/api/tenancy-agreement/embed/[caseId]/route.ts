@@ -9,16 +9,15 @@
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
+import { htmlToPdf } from '@/lib/documents/generator';
+import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import type { TenancyJurisdiction } from '@/lib/documents/ast-generator';
 import {
   isResidentialLettingProductSku,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
-import {
-  addPreviewWatermark,
-  resolveTenancyPreviewDocumentHtml,
-} from '@/lib/previews/tenancyPreviewDocuments';
+import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreviewDocuments';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -70,19 +69,7 @@ export async function GET(
     }
 
     if (e2eEnabled) {
-      return htmlResponse(
-        addPreviewWatermark(`
-          <!doctype html>
-          <html lang="en">
-            <head><meta charset="utf-8"><title>Tenancy preview</title></head>
-            <body style="font-family: Arial, sans-serif; padding: 40px;">
-              <h1>Tenancy agreement preview</h1>
-              <p>This deterministic preview is used during end-to-end checkout audits.</p>
-            </body>
-          </html>
-        `),
-        { 'X-E2E-Mode': '1' }
-      );
+      return errorResponse('E2E_PREVIEW_UNAVAILABLE', 'Real tenancy PDF previews are not generated in E2E mode', 503);
     }
 
     const url = new URL(request.url);
@@ -143,10 +130,14 @@ export async function GET(
       });
     }
 
-    return htmlResponse(addPreviewWatermark(previewDocument.html), {
+    const pdfBytes = await htmlToPdf(previewDocument.html);
+    const html = buildPdfEmbedHtml(previewDocument.title, pdfBytes);
+
+    return htmlResponse(html, {
       'X-Jurisdiction': jurisdiction,
       'X-Tier': tier,
       'X-Document-Type': previewDocument.document_type,
+      'X-Preview-Source': 'generated-pdf',
       'X-Generation-Time': `${Date.now() - startTime}ms`,
     });
   } catch (error: any) {

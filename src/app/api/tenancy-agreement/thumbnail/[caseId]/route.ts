@@ -25,7 +25,7 @@
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
-import { htmlToPreviewThumbnail, generateDocument } from '@/lib/documents/generator';
+import { generateDocument, htmlToPdf, pdfBytesToPreviewThumbnail } from '@/lib/documents/generator';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { getJurisdictionConfig, type TenancyJurisdiction } from '@/lib/documents/ast-generator';
 import {
@@ -44,8 +44,6 @@ export const dynamic = 'force-dynamic';
 const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
 const isDev = process.env.NODE_ENV === 'development';
 const e2eEnabled = process.env.E2E_MODE === 'true' || process.env.NEXT_PUBLIC_E2E_MODE === 'true';
-const PLACEHOLDER_JPEG_BASE64 = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBAQEA8QEA8PDw8QDw8PDw8QFREWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGxAQGi0fHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAAEAAQMBIgACEQEDEQH/xAAXAAADAQAAAAAAAAAAAAAAAAAAAQID/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEAMQAAAB6AA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABBQL/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAgBAwEBPwF//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwF//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQAGPwJ//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQABPyF//9k=';
-const placeholderThumbnail = Buffer.from(PLACEHOLDER_JPEG_BASE64, 'base64');
 
 /**
  * Structured error response
@@ -97,16 +95,8 @@ export async function GET(
     const resolvedParams = await params;
     caseId = resolvedParams.caseId;
 
-    // E2E mode: return placeholder to avoid Supabase dependency during audits.
     if (e2eEnabled) {
-      return new NextResponse(new Uint8Array(placeholderThumbnail), {
-        status: 200,
-        headers: {
-          'Content-Type': 'image/jpeg',
-          'Cache-Control': 'no-store',
-          'X-E2E-Mode': '1',
-        },
-      });
+      return errorResponse('E2E_THUMBNAIL_UNAVAILABLE', 'Real tenancy thumbnails are not generated in E2E mode', 503);
     }
 
     // Parse query params
@@ -182,9 +172,11 @@ export async function GET(
         );
       }
 
-      const thumbnail = await htmlToPreviewThumbnail(previewDocument.html, {
+      const pdfBytes = await htmlToPdf(previewDocument.html);
+      const thumbnail = await pdfBytesToPreviewThumbnail(pdfBytes, {
         quality: 75,
         watermarkText: 'PREVIEW',
+        documentId: `${previewDocument.document_type}-${caseId}`,
       });
 
       const headers: Record<string, string> = {
@@ -197,6 +189,7 @@ export async function GET(
         'X-Tier': modernEnglandProduct || tier,
         'X-Product': modernEnglandProduct || requestedProduct || tier,
         'X-Document-Type': previewDocument.document_type,
+        'X-Thumbnail-Source': 'generated-pdf',
       };
 
       if (!isVercel) {
@@ -308,7 +301,7 @@ export async function GET(
       has_garden: facts.has_garden || false,
     };
 
-    // Generate HTML from template
+    // Generate HTML from template, then render it to the same PDF format used for delivery.
     const doc = await generateDocument({
       templatePath,
       data: templateData,
@@ -316,10 +309,11 @@ export async function GET(
       outputFormat: 'html',
     });
 
-    // Generate thumbnail from HTML
-    const thumbnail = await htmlToPreviewThumbnail(doc.html, {
+    const pdfBytes = await htmlToPdf(doc.html);
+    const thumbnail = await pdfBytesToPreviewThumbnail(pdfBytes, {
       quality: 75,
       watermarkText: 'PREVIEW',
+      documentId: `${jurisdiction}-${tier}-${caseId}`,
     });
 
     const elapsed = Date.now() - startTime;
@@ -340,6 +334,7 @@ export async function GET(
       'X-Thumbnail-Runtime': 'nodejs',
       'X-Jurisdiction': jurisdiction,
       'X-Tier': tier,
+      'X-Thumbnail-Source': 'generated-pdf',
     };
 
     // Only set Content-Length in non-Vercel environments

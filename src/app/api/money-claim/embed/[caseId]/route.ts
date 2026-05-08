@@ -3,14 +3,12 @@ import { NextResponse } from 'next/server';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import {
-  compileTemplate,
   generateDocument,
-  loadTemplate,
 } from '@/lib/documents/generator';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
 import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
 import { fillN1Form, type CaseData } from '@/lib/documents/official-forms-filler';
-import { buildHtmlEmbedShell, buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
+import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
@@ -332,8 +330,6 @@ export async function GET(
         }
       }
 
-      const templateContent = loadTemplate(templatePath);
-      const compiledHtml = compileTemplate(templateContent, templateData);
       const rendered = await generateDocument({
         templatePath,
         data: templateData,
@@ -342,7 +338,16 @@ export async function GET(
       });
 
       title = getDocumentTitle(resolvedDocType);
-      html = buildHtmlEmbedShell(title, rendered.html || compiledHtml);
+      if (!rendered.pdf) {
+        return errorResponse(
+          'PREVIEW_PDF_MISSING',
+          'Could not generate the real PDF for this preview',
+          500,
+          { caseId, documentType: resolvedDocType }
+        );
+      }
+
+      html = buildPdfEmbedHtml(title, rendered.pdf);
     }
 
     if (!html) {

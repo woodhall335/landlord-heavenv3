@@ -151,7 +151,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                   title={`${selectedEntry.title} embedded sample preview`}
                   className="h-[760px] w-full bg-white"
                   loading="lazy"
-                  sandbox="allow-scripts allow-same-origin"
+                  sandbox="allow-scripts"
                 />
               ) : (
                 <div className="flex h-[520px] items-center justify-center bg-white text-sm text-slate-500">
@@ -182,7 +182,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                   src={selectedEntry.embedHref}
                   title={`${selectedEntry.title} embedded sample preview`}
                   className="h-[78vh] min-h-[720px] w-full bg-white"
-                  sandbox="allow-scripts allow-same-origin"
+                  sandbox="allow-scripts"
                 />
               ) : null}
             </div>

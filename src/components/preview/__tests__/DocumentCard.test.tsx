@@ -34,6 +34,7 @@ describe('DocumentCard', () => {
       'src',
       '/api/money-claim/embed/case-123?document_type=form_n1'
     );
+    expect(screen.getByTitle('N1 claim form full preview')).toHaveAttribute('sandbox', 'allow-scripts');
     expect(
       screen.getByText('This is a watermarked preview. Downloads stay locked until payment.')
     ).toBeInTheDocument();

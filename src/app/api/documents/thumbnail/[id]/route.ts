@@ -14,7 +14,7 @@
  */
 
 import { getServerUser, tryCreateServerSupabaseClient } from '@/lib/supabase/server';
-import { htmlToPreviewThumbnail, pdfToPreviewThumbnail, getBrowserDiagnostics } from '@/lib/documents/generator';
+import { pdfToPreviewThumbnail, getBrowserDiagnostics } from '@/lib/documents/generator';
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
@@ -29,8 +29,6 @@ const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION
 const isDev = process.env.NODE_ENV === 'development';
 const isDebugMode = process.env.THUMBNAIL_DEBUG === '1';
 const e2eEnabled = process.env.E2E_MODE === 'true' || process.env.NEXT_PUBLIC_E2E_MODE === 'true';
-const PLACEHOLDER_JPEG_BASE64 = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBAQEA8QEA8PDw8QDw8PDw8QFREWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGxAQGi0fHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAAEAAQMBIgACEQEDEQH/xAAXAAADAQAAAAAAAAAAAAAAAAAAAQID/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEAMQAAAB6AA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABBQL/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAgBAwEBPwF//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwF//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQAGPwJ//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQABPyF//9k=';
-const placeholderThumbnail = Buffer.from(PLACEHOLDER_JPEG_BASE64, 'base64');
 
 /**
  * Structured debug log helper
@@ -90,16 +88,8 @@ export async function GET(
     const { id } = await params;
     documentId = id;
 
-    // E2E mode: return placeholder to avoid Supabase dependency during audits.
     if (e2eEnabled) {
-      return new NextResponse(new Uint8Array(placeholderThumbnail), {
-        status: 200,
-        headers: {
-          'Content-Type': 'image/jpeg',
-          'Cache-Control': 'no-store',
-          'X-E2E-Mode': '1',
-        },
-      });
+      return errorResponse('E2E_THUMBNAIL_UNAVAILABLE', 'Real document thumbnails are not generated in E2E mode', 503);
     }
 
     // Debug mode: return diagnostics instead of thumbnail (safe for production, requires env var)
@@ -218,29 +208,7 @@ export async function GET(
     let thumbnail: Buffer;
     let generationMethod: string;
 
-    if (docRecord.html_content) {
-      // HTML-based thumbnail
-      generationMethod = 'html';
-      console.log(`[Thumbnail API] Generating HTML thumbnail for ${docRecord.document_type}`);
-
-      try {
-        thumbnail = await htmlToPreviewThumbnail(docRecord.html_content, {
-          quality: 75,
-          watermarkText: 'PREVIEW',
-        });
-      } catch (htmlErr: any) {
-        return errorResponse(
-          'THUMBNAIL_HTML_ERROR',
-          'Failed to generate thumbnail from HTML',
-          500,
-          {
-            error: htmlErr.message,
-            stack: isDev ? htmlErr.stack : undefined,
-            docType: docRecord.document_type,
-          }
-        );
-      }
-    } else if (docRecord.pdf_url) {
+    if (docRecord.pdf_url) {
       // PDF-based thumbnail
       generationMethod = 'pdf';
 
@@ -329,8 +297,8 @@ export async function GET(
       }
     } else {
       return errorResponse(
-        'NO_CONTENT',
-        'No content available for thumbnail generation',
+        'NO_PDF_CONTENT',
+        'No PDF available for thumbnail generation',
         404,
         { docType: docRecord.document_type }
       );

@@ -39,6 +39,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   'evidence': ClipboardList,
 };
 
+const shouldLogThumbnailDebug = process.env.NODE_ENV === 'development';
+
 export function DocumentCard({ document, isLocked, onUnlock, onDownload }: DocumentCardProps) {
   const IconComponent = iconMap[document.icon] || FileText;
   const [showPreview, setShowPreview] = useState(false);
@@ -91,19 +93,18 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                 alt={`Preview of ${document.title}`}
                 className="h-full w-full object-contain bg-white"
                 onError={(e) => {
-                  // Log thumbnail load failure for debugging (works in both dev and production)
-                  const img = e.currentTarget;
-                  console.error('[DocumentCard] Thumbnail failed to load:', {
-                    url: thumbnailUrl,
-                    documentId: document.documentId,
-                    title: document.title,
-                    naturalWidth: img.naturalWidth,
-                    naturalHeight: img.naturalHeight,
-                  });
+                  if (shouldLogThumbnailDebug) {
+                    const img = e.currentTarget;
+                    console.warn('[DocumentCard] Thumbnail failed to load:', {
+                      url: thumbnailUrl,
+                      documentId: document.documentId,
+                      title: document.title,
+                      naturalWidth: img.naturalWidth,
+                      naturalHeight: img.naturalHeight,
+                    });
+                  }
 
-                  // Fetch actual error details - works in both dev AND production for debugging
-                  // This helps diagnose Vercel-specific failures
-                  if (thumbnailUrl) {
+                  if (thumbnailUrl && shouldLogThumbnailDebug) {
                     fetch(thumbnailUrl)
                       .then(async (res) => {
                         if (!res.ok) {
@@ -117,7 +118,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                             bodySnippet = '(could not read body)';
                           }
 
-                          console.error('[DocumentCard] Thumbnail API error:', {
+                          console.warn('[DocumentCard] Thumbnail API error:', {
                             status: res.status,
                             statusText: res.statusText,
                             contentType: res.headers.get('content-type'),
@@ -127,7 +128,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                         }
                       })
                       .catch(fetchErr => {
-                        console.error('[DocumentCard] Thumbnail fetch error:', fetchErr.message);
+                        console.warn('[DocumentCard] Thumbnail fetch error:', fetchErr.message);
                       });
                   }
 
@@ -235,7 +236,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                   title={`${document.title} full preview`}
                   className="h-[75vh] w-full rounded-lg border bg-white shadow-lg"
                   loading="lazy"
-                  sandbox="allow-scripts allow-same-origin"
+                  sandbox="allow-scripts"
                 />
               ) : thumbnailUrl ? (
                 <img

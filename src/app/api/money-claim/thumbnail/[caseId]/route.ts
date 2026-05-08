@@ -27,7 +27,7 @@
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
-import { htmlToPreviewThumbnail, pdfBytesToPreviewThumbnail, compileTemplate, loadTemplate } from '@/lib/documents/generator';
+import { htmlToPdf, pdfBytesToPreviewThumbnail, compileTemplate, loadTemplate } from '@/lib/documents/generator';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -45,8 +45,6 @@ export const dynamic = 'force-dynamic';
 const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
 const isDev = process.env.NODE_ENV === 'development';
 const e2eEnabled = process.env.E2E_MODE === 'true' || process.env.NEXT_PUBLIC_E2E_MODE === 'true';
-const PLACEHOLDER_JPEG_BASE64 = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBAQEA8QEA8PDw8QDw8PDw8QFREWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGxAQGi0fHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAAEAAQMBIgACEQEDEQH/xAAXAAADAQAAAAAAAAAAAAAAAAAAAQID/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEAMQAAAB6AA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABBQL/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAgBAwEBPwF//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwF//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQAGPwJ//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQABPyF//9k=';
-const placeholderThumbnail = Buffer.from(PLACEHOLDER_JPEG_BASE64, 'base64');
 
 /**
  * Structured error response
@@ -174,16 +172,8 @@ export async function GET(
     const resolvedParams = await params;
     caseId = resolvedParams.caseId;
 
-    // E2E mode: return placeholder to avoid Supabase dependency during audits.
     if (e2eEnabled) {
-      return new NextResponse(new Uint8Array(placeholderThumbnail), {
-        status: 200,
-        headers: {
-          'Content-Type': 'image/jpeg',
-          'Cache-Control': 'no-store',
-          'X-E2E-Mode': '1',
-        },
-      });
+      return errorResponse('E2E_THUMBNAIL_UNAVAILABLE', 'Real money-claim thumbnails are not generated in E2E mode', 503);
     }
 
     // Parse query params
@@ -411,10 +401,12 @@ export async function GET(
       return errorResponse('TEMPLATE_ERROR', `Failed to compile template: ${templateError.message}`, 500);
     }
 
-    // Generate thumbnail
-    const thumbnail = await htmlToPreviewThumbnail(html, {
+    // Render the same HTML source to a real PDF first, then thumbnail the PDF.
+    const pdfBytes = await htmlToPdf(html);
+    const thumbnail = await pdfBytesToPreviewThumbnail(pdfBytes, {
       quality: 75,
       watermarkText: 'PREVIEW',
+      documentId: `${resolvedDocType}-${caseId}`,
     });
 
     const elapsed = Date.now() - startTime;
@@ -433,6 +425,7 @@ export async function GET(
       'Cache-Control': 'public, max-age=3600, s-maxage=3600', // Cache for 1 hour
       'X-Thumbnail-Runtime': 'nodejs',
       'X-Document-Type': resolvedDocType,
+      'X-Thumbnail-Source': 'generated-pdf',
     };
 
     // Only set Content-Length in non-Vercel environments

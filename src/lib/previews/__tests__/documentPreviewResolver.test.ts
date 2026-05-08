@@ -76,6 +76,51 @@ describe('resolveDocumentPreview', () => {
     }
   });
 
+  it('routes Wales notice cards through the document types emitted by the pack generator', () => {
+    const section173Docs = getNoticeOnlyDocuments('wales', 'wales_section_173');
+    const faultBasedDocs = getNoticeOnlyDocuments('wales', 'wales_fault_based');
+    const expectedTypes: Record<string, string> = {
+      'notice-section-173': 'section173_notice',
+      'service-instructions-s173': 'service_instructions',
+      'validity-checklist-s173': 'validity_checklist',
+      'notice-fault-based': 'fault_based_notice',
+      'pre-service-checklist-fault': 'pre_service_compliance_checklist',
+      'service-instructions-fault': 'service_instructions',
+      'validity-checklist-fault': 'validity_checklist',
+    };
+
+    for (const document of [...section173Docs, ...faultBasedDocs]) {
+      const expectedType = expectedTypes[document.id];
+      expect(expectedType, `missing expectation for ${document.id}`).toBeTruthy();
+
+      const resolution = resolveDocumentPreview({
+        caseId,
+        product: 'notice_only',
+        document,
+      });
+
+      expect(resolution.thumbnailUrl).toContain(`document_type=${expectedType}`);
+      expect(resolution.previewUrl).toContain(`document_type=${expectedType}`);
+    }
+  });
+
+  it('routes the Scotland tribunal form through the generated complete-pack document type', () => {
+    const formEDocument = getCompletePackDocuments('scotland', 'notice_to_leave').find(
+      (document) => document.id === 'form-e'
+    );
+
+    expect(formEDocument).toBeTruthy();
+
+    const resolution = resolveDocumentPreview({
+      caseId,
+      product: 'complete_pack',
+      document: formEDocument!,
+    });
+
+    expect(resolution.thumbnailUrl).toContain('document_type=form_e_tribunal');
+    expect(resolution.previewUrl).toContain('document_type=form_e_tribunal');
+  });
+
   it('resolves legacy tenancy agreement documents through the tenancy preview endpoints', () => {
     expectPreviewRoutes(
       'ast_standard',

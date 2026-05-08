@@ -145,6 +145,8 @@ export function buildPdfEmbedHtml(title: string, pdfBytes: Uint8Array): string {
       const zoomOutBtn = document.getElementById('zoom-out');
       const zoomResetBtn = document.getElementById('zoom-reset');
       const zoomInBtn = document.getElementById('zoom-in');
+      const pdfjsLib = window['pdfjsLib'];
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
       let zoomScale = 1;
 
       function updateZoomButtons() {
@@ -172,7 +174,7 @@ export function buildPdfEmbedHtml(title: string, pdfBytes: Uint8Array): string {
       async function renderPdf() {
         try {
           const binary = Uint8Array.from(atob(pdfBase64), (char) => char.charCodeAt(0));
-          const pdf = await window['pdfjsLib'].getDocument({ data: binary }).promise;
+          const pdf = await pdfjsLib.getDocument({ data: binary }).promise;
           pagesEl.innerHTML = '';
           for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
             const page = await pdf.getPage(pageNumber);

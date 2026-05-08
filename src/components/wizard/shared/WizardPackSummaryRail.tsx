@@ -253,7 +253,7 @@ export function WizardPackSummaryRail({
                 title={`${selectedPreview.title} embedded sample preview`}
                 className="h-[78vh] min-h-[720px] w-full bg-white"
                 loading="lazy"
-                sandbox="allow-scripts allow-same-origin"
+              sandbox="allow-scripts"
               />
             </div>
           </div>

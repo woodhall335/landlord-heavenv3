@@ -8,7 +8,7 @@ import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
-import { generateDocument } from '@/lib/documents/generator';
+import { generateDocument, htmlToPdf } from '@/lib/documents/generator';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
 import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
 import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
@@ -17,7 +17,7 @@ import {
   generateNoticeOnlyPack,
   type EvictionPackDocument,
 } from '@/lib/documents/eviction-pack-generator';
-import { buildHtmlEmbedShell, buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
+import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
 import {
   applyEnglandSection8CourtPackCalculation,
   buildEnglandSection8CourtPackCalculation,
@@ -148,15 +148,22 @@ async function buildFallbackSection8NoticeHtml(
   </section>`;
 }
 
-const ENGLAND_PACK_DOCUMENT_TYPES = new Set([
+const PACK_PREVIEW_DOCUMENT_TYPES = new Set([
   'section8_notice',
+  'section21_notice',
+  'section173_notice',
+  'fault_based_notice',
+  'notice_to_leave',
   'service_instructions',
   'validity_checklist',
   'compliance_declaration',
+  'pre_service_compliance_checklist',
   'proof_of_service',
   'arrears_schedule',
   'n5_claim',
   'n119_particulars',
+  'n5b_claim',
+  'form_e_tribunal',
   'evidence_checklist',
   'witness_statement',
   'court_readiness_status',
@@ -168,23 +175,41 @@ const ENGLAND_PACK_DOCUMENT_TYPES = new Set([
   'what_happens_next',
 ]);
 
-function resolveEnglandPackDocumentType(documentType: string): string {
+function resolvePackDocumentType(documentType: string): string {
   const aliases: Record<string, string> = {
     'case-summary-stage-1': 'case_summary',
     'case-summary-stage-2': 'case_summary',
     'notice-form-3a': 'section8_notice',
     'form-3a': 'section8_notice',
+    'notice-section-21': 'section21_notice',
+    'notice-section-173': 'section173_notice',
+    'notice-fault-based': 'fault_based_notice',
+    'notice-to-leave': 'notice_to_leave',
     'service-instructions-form-3a': 'service_instructions',
+    'service-instructions-s8': 'service_instructions',
+    'service-instructions-s21': 'service_instructions',
+    'service-instructions-s173': 'service_instructions',
+    'service-instructions-fault': 'service_instructions',
+    'service-instructions-ntl': 'service_instructions',
+    'validity-checklist-s8': 'validity_checklist',
+    'validity-checklist-s21': 'validity_checklist',
+    'validity-checklist-s173': 'validity_checklist',
+    'validity-checklist-fault': 'validity_checklist',
+    'validity-checklist-ntl': 'validity_checklist',
     'validity-checklist-form-3a': 'validity_checklist',
     service_checklist: 'validity_checklist',
     'compliance-checklist-form-3a': 'compliance_declaration',
     compliance_checklist: 'compliance_declaration',
     pre_service_compliance: 'compliance_declaration',
+    'pre-service-checklist-fault': 'pre_service_compliance_checklist',
     'proof-of-service-form-3a': 'proof_of_service',
     form_n215: 'proof_of_service',
     n215: 'proof_of_service',
     form_n5: 'n5_claim',
     form_n119: 'n119_particulars',
+    'form-e': 'form_e_tribunal',
+    form_e: 'form_e_tribunal',
+    tribunal_application: 'form_e_tribunal',
     'arrears-schedule': 'arrears_schedule',
     'arrears-schedule-complete': 'arrears_schedule',
     'hearing-checklist': 'hearing_checklist',
@@ -198,7 +223,7 @@ function resolveEnglandPackDocumentType(documentType: string): string {
   return aliases[documentType] || documentType;
 }
 
-async function getEnglandPackPreviewDocument(
+async function getPackPreviewDocument(
   pack: 'notice_only' | 'complete_pack',
   wizardFacts: Record<string, any>,
   documentType: string
@@ -255,7 +280,7 @@ export async function GET(
   const { caseId } = await params;
   const url = new URL(request.url);
   const requestedDocumentType = (url.searchParams.get('document_type') || '').trim();
-  const documentType = resolveEnglandPackDocumentType(requestedDocumentType);
+  const documentType = resolvePackDocumentType(requestedDocumentType);
   const pack = (url.searchParams.get('pack') || '').trim() as 'notice_only' | 'complete_pack' | '';
 
   if (!requestedDocumentType) {
@@ -281,66 +306,60 @@ export async function GET(
     normalizeSection8Facts(wizardFacts);
 
     const jurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, wizardFacts);
-    if (jurisdiction !== 'england') {
-      return errorResponse('UNSUPPORTED_JURISDICTION', 'Only England eviction previews are supported here', 422, { jurisdiction });
-    }
 
-    if (pack && ENGLAND_PACK_DOCUMENT_TYPES.has(documentType)) {
+    if (pack && PACK_PREVIEW_DOCUMENT_TYPES.has(documentType)) {
       let previewDocument: EvictionPackDocument | null = null;
 
       try {
-        previewDocument = await getEnglandPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, documentType);
+        previewDocument = await getPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, documentType);
       } catch (err) {
-        console.warn('[Notice-Only-Embed] Pack preview generation failed; falling back to single-document preview:', {
+        console.error('[Notice-Only-Embed] Pack PDF generation failed:', {
           caseId,
           pack,
           documentType,
           error: err instanceof Error ? err.message : String(err),
         });
+        return errorResponse(
+          'PACK_PDF_GENERATION_FAILED',
+          'Could not generate the real pack PDF for this preview',
+          500,
+          { caseId, pack, documentType, error: err instanceof Error ? err.message : String(err) }
+        );
       }
 
-      if (previewDocument) {
-        const html = previewDocument.pdf
-          ? buildPdfEmbedHtml(previewDocument.title, previewDocument.pdf)
-          : previewDocument.html
-            ? buildHtmlEmbedShell(previewDocument.title, previewDocument.html)
-            : null;
-
-        if (!html) {
-          const fallbackHtml = buildHtmlEmbedShell(
-            getEnglandPreviewTitle(documentType),
-            buildFallbackCaseSummaryHtml({
-              title: getEnglandPreviewTitle(documentType),
-              wizardFacts,
-            }),
-          );
-
-          console.warn('[Notice-Only-Embed] Completed preview had no renderable body; using fallback preview:', {
-            caseId,
-            pack,
-            documentType,
-          });
-
-          return new NextResponse(fallbackHtml, {
-            status: 200,
-            headers: {
-              'Content-Type': 'text/html; charset=utf-8',
-              'Cache-Control': 'private, no-store, max-age=0',
-              'X-Content-Type-Options': 'nosniff',
-              'X-Preview-Fallback': '1',
-            },
-          });
-        }
-
-        return new NextResponse(html, {
-          status: 200,
-          headers: {
-            'Content-Type': 'text/html; charset=utf-8',
-            'Cache-Control': 'private, no-store, max-age=0',
-            'X-Content-Type-Options': 'nosniff',
-          },
-        });
+      if (!previewDocument) {
+        return errorResponse(
+          'PACK_DOCUMENT_NOT_FOUND',
+          'The generated pack did not include this document',
+          404,
+          { caseId, pack, documentType }
+        );
       }
+
+      if (!previewDocument.pdf) {
+        return errorResponse(
+          'PACK_DOCUMENT_PDF_MISSING',
+          'The generated pack document does not have a PDF body',
+          500,
+          { caseId, pack, documentType }
+        );
+      }
+
+      const html = buildPdfEmbedHtml(previewDocument.title, previewDocument.pdf);
+
+      return new NextResponse(html, {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'private, no-store, max-age=0',
+          'X-Content-Type-Options': 'nosniff',
+          'X-Preview-Source': 'generated-pack-pdf',
+        },
+      });
+    }
+
+    if (jurisdiction !== 'england') {
+      return errorResponse('UNSUPPORTED_JURISDICTION', 'Only pack-backed previews are supported for this jurisdiction', 422, { jurisdiction });
     }
 
     const { caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
@@ -500,11 +519,8 @@ export async function GET(
       });
     }
 
-    const html = pdfBytes
-      ? buildPdfEmbedHtml(title, pdfBytes)
-      : htmlContent
-        ? buildHtmlEmbedShell(title, htmlContent)
-        : null;
+    const previewPdfBytes = pdfBytes || (htmlContent ? await htmlToPdf(htmlContent) : null);
+    const html = previewPdfBytes ? buildPdfEmbedHtml(title, previewPdfBytes) : null;
 
     if (!html) {
       return errorResponse('PREVIEW_GENERATION_FAILED', 'Could not generate completed preview', 500, { caseId, documentType });

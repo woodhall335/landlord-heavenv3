@@ -22,9 +22,6 @@ const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION
 const isDev = process.env.NODE_ENV === 'development';
 const e2eEnabled =
   process.env.E2E_MODE === 'true' || process.env.NEXT_PUBLIC_E2E_MODE === 'true';
-const PLACEHOLDER_JPEG_BASE64 =
-  '/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBAQEA8QEA8PDw8QDw8PDw8QFREWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGxAQGi0fHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAAEAAQMBIgACEQEDEQH/xAAXAAADAQAAAAAAAAAAAAAAAAAAAQID/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEAMQAAAB6AA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABBQL/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAgBAwEBPwF//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwF//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQAGPwJ//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQABPyF//9k=';
-const placeholderThumbnail = Buffer.from(PLACEHOLDER_JPEG_BASE64, 'base64');
 
 function errorResponse(
   code: string,
@@ -89,14 +86,7 @@ export async function GET(
     caseId = resolvedParams.caseId;
 
     if (e2eEnabled) {
-      return new NextResponse(new Uint8Array(placeholderThumbnail), {
-        status: 200,
-        headers: {
-          'Content-Type': 'image/jpeg',
-          'Cache-Control': 'no-store',
-          'X-E2E-Mode': '1',
-        },
-      });
+      return errorResponse('E2E_THUMBNAIL_UNAVAILABLE', 'Real Section 13 thumbnails are not generated in E2E mode', 503);
     }
 
     const url = new URL(request.url);

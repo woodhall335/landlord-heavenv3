@@ -290,7 +290,7 @@ export function DocumentProofShowcase({
                   title={`${selectedEntry.title} full completed preview`}
                   className="h-full min-h-[58vh] w-full bg-white sm:min-h-[70vh]"
                   loading="lazy"
-                  sandbox="allow-scripts allow-same-origin"
+                  sandbox="allow-scripts"
                 />
               ) : (
                 <div className="h-full overflow-auto">

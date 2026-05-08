@@ -25,8 +25,8 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
 import {
-  htmlToPreviewThumbnail,
   pdfBytesToPreviewThumbnail,
+  htmlToPdf,
   generateDocument,
   compileTemplate,
   loadTemplate,
@@ -62,18 +62,23 @@ export const dynamic = 'force-dynamic';
 const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
 const isDev = process.env.NODE_ENV === 'development';
 const e2eEnabled = process.env.E2E_MODE === 'true' || process.env.NEXT_PUBLIC_E2E_MODE === 'true';
-const PLACEHOLDER_JPEG_BASE64 = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBAQEA8QEA8PDw8QDw8PDw8QFREWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGxAQGi0fHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAAEAAQMBIgACEQEDEQH/xAAXAAADAQAAAAAAAAAAAAAAAAAAAQID/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEAMQAAAB6AA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABBQL/xAAVEQEBAAAAAAAAAAAAAAAAAAABAP/aAAgBAwEBPwF//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwF//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQAGPwJ//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQABPyF//9k=';
-const placeholderThumbnail = Buffer.from(PLACEHOLDER_JPEG_BASE64, 'base64');
 
-const ENGLAND_PACK_DOCUMENT_TYPES = new Set([
+const PACK_PREVIEW_DOCUMENT_TYPES = new Set([
   'section8_notice',
+  'section21_notice',
+  'section173_notice',
+  'fault_based_notice',
+  'notice_to_leave',
   'service_instructions',
   'validity_checklist',
   'compliance_declaration',
+  'pre_service_compliance_checklist',
   'proof_of_service',
   'arrears_schedule',
   'n5_claim',
   'n119_particulars',
+  'n5b_claim',
+  'form_e_tribunal',
   'evidence_checklist',
   'witness_statement',
   'court_readiness_status',
@@ -85,7 +90,7 @@ const ENGLAND_PACK_DOCUMENT_TYPES = new Set([
   'what_happens_next',
 ]);
 
-async function getEnglandPackPreviewDocument(
+async function getPackPreviewDocument(
   pack: 'notice_only' | 'complete_pack',
   wizardFacts: Record<string, any>,
   documentType: string
@@ -178,6 +183,10 @@ function resolveDocumentType(configId: string, jurisdiction: string): string | n
     return 'validity_checklist';
   }
 
+  if (configId === 'pre-service-checklist-fault' || configId === 'pre_service_compliance_checklist') {
+    return 'pre_service_compliance_checklist';
+  }
+
   // Arrears schedule
   if (configId === 'arrears-schedule' || configId === 'arrears-schedule-complete' || configId === 'arrears_schedule') {
     return 'arrears_schedule';
@@ -198,6 +207,10 @@ function resolveDocumentType(configId: string, jurisdiction: string): string | n
 
   if (configId === 'n119_particulars' || configId === 'form_n119') {
     return 'n119_particulars';
+  }
+
+  if (configId === 'form_e_tribunal' || configId === 'form_e' || configId === 'form-e' || configId === 'tribunal_application') {
+    return 'form_e_tribunal';
   }
 
   if (configId === 'witness_statement') {
@@ -477,16 +490,8 @@ export async function GET(
     const resolvedParams = await params;
     caseId = resolvedParams.caseId;
 
-    // E2E mode: return placeholder to avoid Supabase dependency during audits.
     if (e2eEnabled) {
-      return new NextResponse(new Uint8Array(placeholderThumbnail), {
-        status: 200,
-        headers: {
-          'Content-Type': 'image/jpeg',
-          'Cache-Control': 'no-store',
-          'X-E2E-Mode': '1',
-        },
-      });
+      return errorResponse('E2E_THUMBNAIL_UNAVAILABLE', 'Real PDF thumbnails are not generated in E2E mode', 503);
     }
 
     // Parse query params
@@ -600,43 +605,49 @@ export async function GET(
       return errorResponse('INVALID_DOCUMENT_TYPE', `Unknown document type: ${documentType}`, 400);
     }
 
-    if (jurisdiction === 'england' && pack && ENGLAND_PACK_DOCUMENT_TYPES.has(resolvedDocType)) {
+    if (pack && PACK_PREVIEW_DOCUMENT_TYPES.has(resolvedDocType)) {
       let previewDocument: EvictionPackDocument | null = null;
 
       try {
-        previewDocument = await getEnglandPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, resolvedDocType);
+        previewDocument = await getPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, resolvedDocType);
       } catch (err) {
-        console.warn('[Notice-Only-Thumbnail] Pack preview generation failed; falling back to single-document preview:', {
+        console.error('[Notice-Only-Thumbnail] Pack PDF generation failed:', {
           caseId,
           pack,
           resolvedDocType,
           error: err instanceof Error ? err.message : String(err),
         });
+        return errorResponse(
+          'PACK_PDF_GENERATION_FAILED',
+          'Could not generate the real pack PDF for this thumbnail',
+          500,
+          { caseId, pack, resolvedDocType, error: err instanceof Error ? err.message : String(err) }
+        );
       }
 
-      if (previewDocument) {
-        let thumbnail: Buffer;
-        let usedPlaceholder = false;
+      if (!previewDocument) {
+        return errorResponse(
+          'PACK_DOCUMENT_NOT_FOUND',
+          'The generated pack did not include this document',
+          404,
+          { caseId, pack, resolvedDocType }
+        );
+      }
 
-        try {
-          thumbnail = previewDocument.pdf
-            ? await pdfBytesToPreviewThumbnail(previewDocument.pdf, {
-                watermarkText: 'PREVIEW',
-                documentId: `${caseId}-${resolvedDocType}`,
-              })
-            : await htmlToPreviewThumbnail(previewDocument.html || '', {
-                quality: 75,
-                watermarkText: 'PREVIEW',
-              });
-        } catch (err) {
-          usedPlaceholder = true;
-          thumbnail = placeholderThumbnail;
-          console.warn('[Notice-Only-Thumbnail] Thumbnail rendering failed; returning placeholder thumbnail:', {
-            caseId,
-            resolvedDocType,
-            error: err instanceof Error ? err.message : String(err),
-          });
-        }
+      if (!previewDocument.pdf) {
+        return errorResponse(
+          'PACK_DOCUMENT_PDF_MISSING',
+          'The generated pack document does not have a PDF body',
+          500,
+          { caseId, pack, resolvedDocType }
+        );
+      }
+
+      try {
+        const thumbnail = await pdfBytesToPreviewThumbnail(previewDocument.pdf, {
+          watermarkText: 'PREVIEW',
+          documentId: `${caseId}-${resolvedDocType}`,
+        });
 
         const headers: Record<string, string> = {
           'Content-Type': 'image/jpeg',
@@ -645,17 +656,27 @@ export async function GET(
           'Cache-Control': 'public, max-age=3600, s-maxage=3600',
           'X-Thumbnail-Runtime': 'nodejs',
           'X-Document-Type': resolvedDocType,
+          'X-Thumbnail-Source': 'generated-pack-pdf',
         };
-
-        if (usedPlaceholder) {
-          headers['X-Thumbnail-Fallback'] = '1';
-        }
 
         if (!isVercel) {
           headers['Content-Length'] = thumbnail.length.toString();
         }
 
         return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
+      } catch (err) {
+        console.error('[Notice-Only-Thumbnail] Pack PDF thumbnail rendering failed:', {
+          caseId,
+          pack,
+          resolvedDocType,
+          error: err instanceof Error ? err.message : String(err),
+        });
+        return errorResponse(
+          'PACK_PDF_THUMBNAIL_RENDER_FAILED',
+          'Could not render a thumbnail from the real generated PDF',
+          500,
+          { caseId, pack, resolvedDocType, error: err instanceof Error ? err.message : String(err) }
+        );
       }
     }
 
@@ -1000,55 +1021,63 @@ export async function GET(
       });
     }
 
-    // Generate thumbnail
-    let thumbnail: Buffer;
-    let usedPlaceholder = false;
+    // Legacy non-pack path: still render a real PDF first, then thumbnail the PDF.
+    // Checkout cards pass pack=notice_only/complete_pack and use the generated pack PDFs above.
+    let thumbnailSourcePdf: Buffer | Uint8Array | null = pdfThumbnail;
 
     try {
-      thumbnail =
-        pdfThumbnail ||
-        (await htmlToPreviewThumbnail(html || '', {
-          quality: 75,
-          watermarkText: 'PREVIEW',
-        }));
-    } catch (err) {
-      usedPlaceholder = true;
-      thumbnail = placeholderThumbnail;
-      console.warn('[Notice-Only-Thumbnail] Thumbnail rendering failed; returning placeholder thumbnail:', {
-        caseId,
-        resolvedDocType,
-        error: err instanceof Error ? err.message : String(err),
+      if (!thumbnailSourcePdf && html) {
+        thumbnailSourcePdf = await htmlToPdf(html);
+      }
+
+      if (!thumbnailSourcePdf) {
+        return errorResponse(
+          'PDF_SOURCE_MISSING',
+          'No real PDF was generated for this thumbnail',
+          500,
+          { caseId, resolvedDocType }
+        );
+      }
+
+      const thumbnail = await pdfBytesToPreviewThumbnail(thumbnailSourcePdf, {
+        quality: 75,
+        watermarkText: 'PREVIEW',
+        documentId: `${caseId}-${resolvedDocType}`,
       });
+
+      const elapsed = Date.now() - startTime;
+      console.log(`[Notice-Only-Thumbnail] Success:`, {
+        caseId,
+        docType: resolvedDocType,
+        size: thumbnail.length,
+        elapsed: `${elapsed}ms`,
+      });
+
+      // Return JPEG image
+      const headers: Record<string, string> = {
+        'Content-Type': 'image/jpeg',
+        'Content-Disposition': 'inline; filename="preview.jpg"',
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600', // Cache for 1 hour
+        'X-Thumbnail-Runtime': 'nodejs',
+        'X-Document-Type': resolvedDocType,
+        'X-Thumbnail-Source': 'generated-pdf',
+      };
+
+      // Only set Content-Length in non-Vercel environments
+      if (!isVercel) {
+        headers['Content-Length'] = thumbnail.length.toString();
+      }
+
+      return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
+    } catch (err) {
+      return errorResponse(
+        'PDF_THUMBNAIL_RENDER_FAILED',
+        'Could not render a thumbnail from the real generated PDF',
+        500,
+        { caseId, resolvedDocType, error: err instanceof Error ? err.message : String(err) }
+      );
     }
-
-    const elapsed = Date.now() - startTime;
-    console.log(`[Notice-Only-Thumbnail] Success:`, {
-      caseId,
-      docType: resolvedDocType,
-      size: thumbnail.length,
-      elapsed: `${elapsed}ms`,
-    });
-
-    // Return JPEG image
-    const headers: Record<string, string> = {
-      'Content-Type': 'image/jpeg',
-      'Content-Disposition': 'inline; filename="preview.jpg"',
-      'X-Content-Type-Options': 'nosniff',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600', // Cache for 1 hour
-      'X-Thumbnail-Runtime': 'nodejs',
-      'X-Document-Type': resolvedDocType,
-    };
-
-    if (usedPlaceholder) {
-      headers['X-Thumbnail-Fallback'] = '1';
-    }
-
-    // Only set Content-Length in non-Vercel environments
-    if (!isVercel) {
-      headers['Content-Length'] = thumbnail.length.toString();
-    }
-
-    return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
 
   } catch (error: any) {
     const elapsed = Date.now() - startTime;
