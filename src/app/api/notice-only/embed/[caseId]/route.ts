@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { mapNoticeOnlyFacts, wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -10,6 +10,8 @@ import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/
 import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
 import { generateDocument } from '@/lib/documents/generator';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
+import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
+import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
 import {
   generateCompleteEvictionPack,
   generateNoticeOnlyPack,
@@ -34,6 +36,116 @@ function buildAddress(...parts: Array<string | null | undefined>): string {
     .map((part) => (typeof part === 'string' ? part.trim() : part))
     .filter(Boolean)
     .join('\n');
+}
+
+function escapeHtml(value: unknown): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getEnglandSupportDocumentTemplate(documentType: string): string | null {
+  switch (documentType) {
+    case 'service_instructions':
+      return 'uk/england/templates/eviction/service_instructions_section_8.hbs';
+    case 'validity_checklist':
+      return 'uk/england/templates/eviction/checklist_section_8.hbs';
+    case 'compliance_declaration':
+      return 'uk/england/templates/eviction/compliance_checklist.hbs';
+    case 'what_happens_next':
+      return 'uk/england/templates/eviction/what_happens_next_section_8.hbs';
+    case 'court_filing_guide':
+      return 'uk/england/templates/eviction/court_filing_guide.hbs';
+    default:
+      return null;
+  }
+}
+
+function getEnglandPreviewTitle(documentType: string): string {
+  switch (documentType) {
+    case 'section8_notice':
+      return 'Form 3A notice';
+    case 'service_instructions':
+      return 'Service Instructions';
+    case 'validity_checklist':
+      return 'Service & Validity Checklist';
+    case 'compliance_declaration':
+      return 'Pre-Service Compliance Declaration';
+    case 'proof_of_service':
+      return 'Certificate of Service (Form N215)';
+    case 'arrears_schedule':
+      return 'Rent schedule / arrears statement';
+    case 'case_summary':
+      return 'Case Summary - Stage 1 Notice & Service';
+    case 'what_happens_next':
+      return 'What Happens Next';
+    case 'court_filing_guide':
+      return 'Court Filing Guide';
+    default:
+      return 'Document preview';
+  }
+}
+
+function buildFallbackCaseSummaryHtml(params: {
+  title: string;
+  wizardFacts: Record<string, any>;
+}): string {
+  const { title, wizardFacts } = params;
+  const landlord = wizardFacts.landlord_full_name || wizardFacts.landlord_name || 'Landlord';
+  const tenant = wizardFacts.tenant_full_name || wizardFacts.tenant_name || 'Tenant';
+  const property =
+    wizardFacts.property_address ||
+    buildAddress(
+      wizardFacts.property_address_line1,
+      wizardFacts.property_address_line2,
+      wizardFacts.property_address_town || wizardFacts.property_city,
+      wizardFacts.property_address_county,
+      wizardFacts.property_address_postcode,
+    );
+  const serviceDate = wizardFacts.notice_service_date || wizardFacts.notice_date || wizardFacts.notice_served_date;
+  const expiryDate = wizardFacts.notice_expiry_date || wizardFacts.earliest_possession_date;
+
+  return `<section style="font-family: Arial, sans-serif; color: #141124; padding: 28px;">
+    <p style="color:#6d28d9;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;">Notice pack preview</p>
+    <h1 style="font-size:28px;margin:10px 0 18px;">${escapeHtml(title)}</h1>
+    <div style="border:1px solid #d8c9ff;border-radius:14px;padding:16px;margin:12px 0;"><strong>Landlord</strong><br />${escapeHtml(landlord)}</div>
+    <div style="border:1px solid #d8c9ff;border-radius:14px;padding:16px;margin:12px 0;"><strong>Tenant</strong><br />${escapeHtml(tenant)}</div>
+    <div style="border:1px solid #d8c9ff;border-radius:14px;padding:16px;margin:12px 0;"><strong>Property</strong><br />${escapeHtml(property)}</div>
+    <div style="border:1px solid #d8c9ff;border-radius:14px;padding:16px;margin:12px 0;"><strong>Notice dates</strong><br />Service: ${escapeHtml(serviceDate || 'To confirm')}<br />Expiry: ${escapeHtml(expiryDate || 'Calculated from the notice period')}</div>
+  </section>`;
+}
+
+async function buildFallbackSection8NoticeHtml(
+  wizardFacts: Record<string, any>,
+  caseData: CaseData,
+): Promise<string> {
+  const selectedGrounds = [
+    ...(Array.isArray(wizardFacts.selected_grounds) ? wizardFacts.selected_grounds : []),
+    ...(Array.isArray(wizardFacts.section8_grounds) ? wizardFacts.section8_grounds : []),
+    ...(Array.isArray(wizardFacts.section8_grounds_selection) ? wizardFacts.section8_grounds_selection : []),
+  ]
+    .map((ground) =>
+      String((ground && typeof ground === 'object' ? ground.code || ground.value || ground.label : ground) || '').trim()
+    )
+    .filter(Boolean);
+  const groundsText = await buildEnglandForm3AGroundsText(selectedGrounds);
+
+  return `<section style="font-family: Arial, sans-serif; color: #111827; padding: 28px;">
+    <p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;font-weight:700;">England official notice preview</p>
+    <h1 style="font-size:28px;margin:8px 0 18px;">Form 3A notice</h1>
+    <div style="border:2px solid #111827;padding:18px;margin-bottom:16px;">
+      <h2 style="font-size:16px;margin:0 0 10px;">Tenant and property</h2>
+      <div><strong>Tenant:</strong> ${escapeHtml(caseData.tenant_full_name || wizardFacts.tenant_full_name)}</div>
+      <div><strong>Property:</strong> ${escapeHtml(caseData.property_address || wizardFacts.property_address)}</div>
+    </div>
+    <div style="border:2px solid #111827;padding:18px;margin-bottom:16px;">
+      <h2 style="font-size:16px;margin:0 0 10px;">Ground wording</h2>
+      <pre style="white-space:pre-wrap;font-family:Arial,sans-serif;font-size:13px;line-height:1.45;">${escapeHtml(groundsText)}</pre>
+    </div>
+  </section>`;
 }
 
 const ENGLAND_PACK_DOCUMENT_TYPES = new Set([
@@ -174,38 +286,61 @@ export async function GET(
     }
 
     if (pack && ENGLAND_PACK_DOCUMENT_TYPES.has(documentType)) {
-      const previewDocument = await getEnglandPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, documentType);
+      let previewDocument: EvictionPackDocument | null = null;
 
-      if (!previewDocument) {
-        return errorResponse('DOCUMENT_NOT_FOUND', 'The selected completed preview is not available for this pack', 404, {
+      try {
+        previewDocument = await getEnglandPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, documentType);
+      } catch (err) {
+        console.warn('[Notice-Only-Embed] Pack preview generation failed; falling back to single-document preview:', {
           caseId,
           pack,
           documentType,
+          error: err instanceof Error ? err.message : String(err),
         });
       }
 
-      const html = previewDocument.pdf
-        ? buildPdfEmbedHtml(previewDocument.title, previewDocument.pdf)
-        : previewDocument.html
-          ? buildHtmlEmbedShell(previewDocument.title, previewDocument.html)
-          : null;
+      if (previewDocument) {
+        const html = previewDocument.pdf
+          ? buildPdfEmbedHtml(previewDocument.title, previewDocument.pdf)
+          : previewDocument.html
+            ? buildHtmlEmbedShell(previewDocument.title, previewDocument.html)
+            : null;
 
-      if (!html) {
-        return errorResponse('PREVIEW_GENERATION_FAILED', 'Could not render the selected completed preview', 500, {
-          caseId,
-          pack,
-          documentType,
+        if (!html) {
+          const fallbackHtml = buildHtmlEmbedShell(
+            getEnglandPreviewTitle(documentType),
+            buildFallbackCaseSummaryHtml({
+              title: getEnglandPreviewTitle(documentType),
+              wizardFacts,
+            }),
+          );
+
+          console.warn('[Notice-Only-Embed] Completed preview had no renderable body; using fallback preview:', {
+            caseId,
+            pack,
+            documentType,
+          });
+
+          return new NextResponse(fallbackHtml, {
+            status: 200,
+            headers: {
+              'Content-Type': 'text/html; charset=utf-8',
+              'Cache-Control': 'private, no-store, max-age=0',
+              'X-Content-Type-Options': 'nosniff',
+              'X-Preview-Fallback': '1',
+            },
+          });
+        }
+
+        return new NextResponse(html, {
+          status: 200,
+          headers: {
+            'Content-Type': 'text/html; charset=utf-8',
+            'Cache-Control': 'private, no-store, max-age=0',
+            'X-Content-Type-Options': 'nosniff',
+          },
         });
       }
-
-      return new NextResponse(html, {
-        status: 200,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          'Cache-Control': 'private, no-store, max-age=0',
-          'X-Content-Type-Options': 'nosniff',
-        },
-      });
     }
 
     const { caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
@@ -216,9 +351,18 @@ export async function GET(
     let pdfBytes: Uint8Array | null = null;
     let htmlContent: string | null = null;
 
+    try {
     if (documentType === 'section8_notice') {
       title = 'Form 3A notice';
-      pdfBytes = await fillOfficialForm('form3a', caseData);
+      try {
+        pdfBytes = await fillOfficialForm('form3a', caseData);
+      } catch (err) {
+        console.warn('[Notice-Only-Embed] Form 3A PDF preview failed; using HTML fallback:', {
+          caseId,
+          error: err instanceof Error ? err.message : String(err),
+        });
+        htmlContent = await buildFallbackSection8NoticeHtml(wizardFacts, caseData);
+      }
     } else if (documentType === 'proof_of_service') {
       title = 'Certificate of Service (Form N215)';
       pdfBytes = await generateEnglandN215PDF({
@@ -297,33 +441,63 @@ export async function GET(
       });
       pdfBytes = witnessDoc.pdf || null;
       htmlContent = witnessDoc.html;
-    } else if (documentType === 'arrears_schedule') {
-      title = 'Rent schedule / arrears statement';
-      const arrearsItems = wizardFacts.arrears_items || [];
-      if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
-        return errorResponse('NO_ARREARS_DATA', 'No arrears data available for schedule', 400, { caseId });
-      }
-      const arrearsScheduleData = getArrearsScheduleData({
-        arrears_items: arrearsItems,
-        total_arrears: wizardFacts.total_arrears || null,
-        rent_amount: caseData.rent_amount || wizardFacts.rent_amount || 0,
-        rent_frequency: caseData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
-        include_schedule: true,
-      });
-      const arrearsDoc = await generateDocument({
-        templatePath: 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
+    } else if (documentType === 'case_summary') {
+      title = getEnglandPreviewTitle(documentType);
+      htmlContent = buildFallbackCaseSummaryHtml({ title, wizardFacts });
+    } else if (getEnglandSupportDocumentTemplate(documentType)) {
+      title = getEnglandPreviewTitle(documentType);
+      const templateData = await enrichEnglandSection8TemplateGrounds(mapNoticeOnlyFacts(wizardFacts));
+      const supportDoc = await generateDocument({
+        templatePath: getEnglandSupportDocumentTemplate(documentType)!,
         data: {
-          claimant_reference: caseId,
-          arrears_schedule: arrearsScheduleData.arrears_schedule,
-          arrears_total: arrearsScheduleData.arrears_total,
+          ...templateData,
+          pack_stage: 'stage1',
+          pack_stage_label: 'Stage 1',
+          pack_title: 'Stage 1: Section 8 Notice & Service Pack',
         },
         isPreview: true,
         outputFormat: 'both',
       });
-      pdfBytes = arrearsDoc.pdf || null;
-      htmlContent = arrearsDoc.html;
+      pdfBytes = supportDoc.pdf || null;
+      htmlContent = supportDoc.html;
+    } else if (documentType === 'arrears_schedule') {
+      title = 'Rent schedule / arrears statement';
+      const arrearsItems = wizardFacts.arrears_items || [];
+      if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
+        htmlContent = buildFallbackCaseSummaryHtml({ title, wizardFacts });
+      } else {
+        const arrearsScheduleData = getArrearsScheduleData({
+          arrears_items: arrearsItems,
+          total_arrears: wizardFacts.total_arrears || null,
+          rent_amount: caseData.rent_amount || wizardFacts.rent_amount || 0,
+          rent_frequency: caseData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+          include_schedule: true,
+        });
+        const arrearsDoc = await generateDocument({
+          templatePath: 'uk/england/templates/money_claims/schedule_of_arrears.hbs',
+          data: {
+            claimant_reference: caseId,
+            arrears_schedule: arrearsScheduleData.arrears_schedule,
+            arrears_total: arrearsScheduleData.arrears_total,
+          },
+          isPreview: true,
+          outputFormat: 'both',
+        });
+        pdfBytes = arrearsDoc.pdf || null;
+        htmlContent = arrearsDoc.html;
+      }
     } else {
       return errorResponse('UNSUPPORTED_DOCUMENT_TYPE', 'Unsupported preview document type', 400, { documentType });
+    }
+    } catch (err) {
+      title = title || getEnglandPreviewTitle(documentType);
+      pdfBytes = null;
+      htmlContent = buildFallbackCaseSummaryHtml({ title, wizardFacts });
+      console.warn('[Notice-Only-Embed] Document preview generation failed; using fallback embed:', {
+        caseId,
+        documentType,
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
 
     const html = pdfBytes

@@ -302,6 +302,9 @@ function getTemplatePath(
     if (docType === 'court_filing_guide') {
       return 'uk/england/templates/eviction/court_filing_guide.hbs';
     }
+    if (docType === 'case_summary') {
+      return 'CASE_SUMMARY_SPECIAL';
+    }
   }
 
   // Wales templates
@@ -376,6 +379,91 @@ function buildAddress(...parts: Array<string | null | undefined>): string {
     .map((part) => (typeof part === 'string' ? part.trim() : part))
     .filter(Boolean)
     .join('\n');
+}
+
+function escapeHtml(value: unknown): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildFallbackCaseSummaryHtml(params: {
+  title: string;
+  wizardFacts: Record<string, any>;
+  selectedRoute: string;
+  jurisdiction: CanonicalJurisdiction;
+}): string {
+  const { title, wizardFacts, selectedRoute, jurisdiction } = params;
+  const landlord = wizardFacts.landlord_full_name || wizardFacts.landlord_name || 'Landlord';
+  const tenant = wizardFacts.tenant_full_name || wizardFacts.tenant_name || 'Tenant';
+  const property =
+    wizardFacts.property_address ||
+    buildAddress(
+      wizardFacts.property_address_line1,
+      wizardFacts.property_address_line2,
+      wizardFacts.property_address_town || wizardFacts.property_city,
+      wizardFacts.property_address_county,
+      wizardFacts.property_address_postcode,
+    );
+  const serviceDate = wizardFacts.notice_service_date || wizardFacts.notice_date || wizardFacts.notice_served_date;
+  const expiryDate = wizardFacts.notice_expiry_date || wizardFacts.earliest_possession_date;
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>${escapeHtml(title)}</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #141124; padding: 32px; }
+    .eyebrow { color: #6d28d9; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { font-size: 28px; margin: 10px 0 18px; }
+    .card { border: 1px solid #d8c9ff; border-radius: 14px; padding: 16px; margin: 12px 0; }
+    .label { color: #5b536f; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .value { margin-top: 5px; font-size: 15px; line-height: 1.45; }
+  </style>
+</head>
+<body>
+  <div class="eyebrow">Notice pack preview</div>
+  <h1>${escapeHtml(title)}</h1>
+  <div class="card"><div class="label">Landlord</div><div class="value">${escapeHtml(landlord)}</div></div>
+  <div class="card"><div class="label">Tenant</div><div class="value">${escapeHtml(tenant)}</div></div>
+  <div class="card"><div class="label">Property</div><div class="value">${escapeHtml(property)}</div></div>
+  <div class="card"><div class="label">Route</div><div class="value">${escapeHtml(jurisdiction)} / ${escapeHtml(selectedRoute)}</div></div>
+  <div class="card"><div class="label">Notice dates</div><div class="value">Service: ${escapeHtml(serviceDate || 'To confirm')}<br />Expiry: ${escapeHtml(expiryDate || 'Calculated from the notice period')}</div></div>
+</body>
+</html>`;
+}
+
+function getFallbackDocumentTitle(docType: string): string {
+  switch (docType) {
+    case 'section8_notice':
+      return 'Form 3A notice';
+    case 'service_instructions':
+      return 'Service Instructions';
+    case 'validity_checklist':
+      return 'Service & Validity Checklist';
+    case 'compliance_declaration':
+      return 'Pre-Service Compliance Declaration';
+    case 'proof_of_service':
+      return 'Certificate of Service (Form N215)';
+    case 'arrears_schedule':
+      return 'Rent Schedule / Arrears Statement';
+    case 'case_summary':
+      return 'Case Summary - Stage 1 Notice & Service';
+    case 'what_happens_next':
+      return 'What Happens Next';
+    case 'n5_claim':
+      return 'Claim for possession (Form N5)';
+    case 'n119_particulars':
+      return 'Particulars of claim (Form N119)';
+    case 'witness_statement':
+      return 'Witness statement';
+    default:
+      return 'Document preview';
+  }
 }
 
 export async function GET(
@@ -513,41 +601,62 @@ export async function GET(
     }
 
     if (jurisdiction === 'england' && pack && ENGLAND_PACK_DOCUMENT_TYPES.has(resolvedDocType)) {
-      const previewDocument = await getEnglandPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, resolvedDocType);
+      let previewDocument: EvictionPackDocument | null = null;
 
-      if (!previewDocument) {
-        return errorResponse('DOCUMENT_NOT_FOUND', `No generated preview document found for ${resolvedDocType}`, 404, {
+      try {
+        previewDocument = await getEnglandPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, resolvedDocType);
+      } catch (err) {
+        console.warn('[Notice-Only-Thumbnail] Pack preview generation failed; falling back to single-document preview:', {
           caseId,
           pack,
           resolvedDocType,
+          error: err instanceof Error ? err.message : String(err),
         });
       }
 
-      const thumbnail =
-        previewDocument.pdf
-          ? await pdfBytesToPreviewThumbnail(previewDocument.pdf, {
-              watermarkText: 'PREVIEW',
-              documentId: `${caseId}-${resolvedDocType}`,
-            })
-          : await htmlToPreviewThumbnail(previewDocument.html || '', {
-              quality: 75,
-              watermarkText: 'PREVIEW',
-            });
+      if (previewDocument) {
+        let thumbnail: Buffer;
+        let usedPlaceholder = false;
 
-      const headers: Record<string, string> = {
-        'Content-Type': 'image/jpeg',
-        'Content-Disposition': 'inline; filename="preview.jpg"',
-        'X-Content-Type-Options': 'nosniff',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
-        'X-Thumbnail-Runtime': 'nodejs',
-        'X-Document-Type': resolvedDocType,
-      };
+        try {
+          thumbnail = previewDocument.pdf
+            ? await pdfBytesToPreviewThumbnail(previewDocument.pdf, {
+                watermarkText: 'PREVIEW',
+                documentId: `${caseId}-${resolvedDocType}`,
+              })
+            : await htmlToPreviewThumbnail(previewDocument.html || '', {
+                quality: 75,
+                watermarkText: 'PREVIEW',
+              });
+        } catch (err) {
+          usedPlaceholder = true;
+          thumbnail = placeholderThumbnail;
+          console.warn('[Notice-Only-Thumbnail] Thumbnail rendering failed; returning placeholder thumbnail:', {
+            caseId,
+            resolvedDocType,
+            error: err instanceof Error ? err.message : String(err),
+          });
+        }
 
-      if (!isVercel) {
-        headers['Content-Length'] = thumbnail.length.toString();
+        const headers: Record<string, string> = {
+          'Content-Type': 'image/jpeg',
+          'Content-Disposition': 'inline; filename="preview.jpg"',
+          'X-Content-Type-Options': 'nosniff',
+          'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+          'X-Thumbnail-Runtime': 'nodejs',
+          'X-Document-Type': resolvedDocType,
+        };
+
+        if (usedPlaceholder) {
+          headers['X-Thumbnail-Fallback'] = '1';
+        }
+
+        if (!isVercel) {
+          headers['Content-Length'] = thumbnail.length.toString();
+        }
+
+        return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
       }
-
-      return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
     }
 
     // Get template path
@@ -603,6 +712,7 @@ export async function GET(
     let html: string | null = null;
     let pdfThumbnail: Buffer | null = null;
 
+    try {
     if (templatePath === 'FORM3A_SPECIAL') {
       const selectedGrounds = [
         ...(Array.isArray(wizardFacts.selected_grounds) ? wizardFacts.selected_grounds : []),
@@ -801,26 +911,39 @@ export async function GET(
         : 'uk/wales/templates/notice_only/rhw16_section173_standard/notice.hbs';
       const content = loadTemplate(walesTemplate);
       html = compileTemplate(content, { ...templateData, ...section173Data });
+    } else if (resolvedDocType === 'case_summary') {
+      html = buildFallbackCaseSummaryHtml({
+        title: 'Case Summary - Stage 1 Notice & Service',
+        wizardFacts,
+        selectedRoute,
+        jurisdiction,
+      });
     } else if (resolvedDocType === 'arrears_schedule') {
       // Special handling for arrears schedule
       const arrearsItems = wizardFacts.arrears_items || [];
-      if (arrearsItems.length === 0) {
-        return errorResponse('NO_ARREARS_DATA', 'No arrears data available for schedule', 400);
+      if (!Array.isArray(arrearsItems) || arrearsItems.length === 0) {
+        html = buildFallbackCaseSummaryHtml({
+          title: 'Rent Schedule / Arrears Statement',
+          wizardFacts,
+          selectedRoute,
+          jurisdiction,
+        });
+      } else {
+        const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
+        const arrearsScheduleData = getArrearsScheduleData({
+          arrears_items: arrearsItems,
+          total_arrears: wizardFacts.total_arrears || null,
+          rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
+          rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+          include_schedule: true,
+        });
+        const content = loadTemplate(templatePath);
+        html = compileTemplate(content, {
+          claimant_reference: caseId,
+          arrears_schedule: arrearsScheduleData.arrears_schedule,
+          arrears_total: arrearsScheduleData.arrears_total,
+        });
       }
-      const { getArrearsScheduleData } = await import('@/lib/documents/arrears-schedule-mapper');
-      const arrearsScheduleData = getArrearsScheduleData({
-        arrears_items: arrearsItems,
-        total_arrears: wizardFacts.total_arrears || null,
-        rent_amount: templateData.rent_amount || wizardFacts.rent_amount || 0,
-        rent_frequency: templateData.rent_frequency || wizardFacts.rent_frequency || 'monthly',
-        include_schedule: true,
-      });
-      const content = loadTemplate(templatePath);
-      html = compileTemplate(content, {
-        claimant_reference: caseId,
-        arrears_schedule: arrearsScheduleData.arrears_schedule,
-        arrears_total: arrearsScheduleData.arrears_total,
-      });
     } else if (resolvedDocType === 'fault_based_notice') {
       // Special handling for Wales fault-based notice
       const faultBasedSection = wizardFacts.wales_fault_based_section || '';
@@ -862,14 +985,41 @@ export async function GET(
       const content = loadTemplate(templatePath);
       html = compileTemplate(content, templateData);
     }
+    } catch (err) {
+      pdfThumbnail = null;
+      html = buildFallbackCaseSummaryHtml({
+        title: getFallbackDocumentTitle(resolvedDocType),
+        wizardFacts,
+        selectedRoute,
+        jurisdiction,
+      });
+      console.warn('[Notice-Only-Thumbnail] Document preview generation failed; using fallback thumbnail source:', {
+        caseId,
+        resolvedDocType,
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
 
     // Generate thumbnail
-    const thumbnail =
-      pdfThumbnail ||
-      (await htmlToPreviewThumbnail(html || '', {
-        quality: 75,
-        watermarkText: 'PREVIEW',
-      }));
+    let thumbnail: Buffer;
+    let usedPlaceholder = false;
+
+    try {
+      thumbnail =
+        pdfThumbnail ||
+        (await htmlToPreviewThumbnail(html || '', {
+          quality: 75,
+          watermarkText: 'PREVIEW',
+        }));
+    } catch (err) {
+      usedPlaceholder = true;
+      thumbnail = placeholderThumbnail;
+      console.warn('[Notice-Only-Thumbnail] Thumbnail rendering failed; returning placeholder thumbnail:', {
+        caseId,
+        resolvedDocType,
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
 
     const elapsed = Date.now() - startTime;
     console.log(`[Notice-Only-Thumbnail] Success:`, {
@@ -888,6 +1038,10 @@ export async function GET(
       'X-Thumbnail-Runtime': 'nodejs',
       'X-Document-Type': resolvedDocType,
     };
+
+    if (usedPlaceholder) {
+      headers['X-Thumbnail-Fallback'] = '1';
+    }
 
     // Only set Content-Length in non-Vercel environments
     if (!isVercel) {
