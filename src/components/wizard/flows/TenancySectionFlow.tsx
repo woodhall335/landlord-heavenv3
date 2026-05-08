@@ -531,7 +531,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review the agreement details and generate the documents',
+    description: 'Review the agreement details before the locked document preview',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -3326,7 +3326,7 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Review Your Information</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Check that everything looks right before you generate the agreement.
+          Check that everything looks right before you continue to the document preview.
         </p>
       </div>
 
@@ -3381,14 +3381,14 @@ const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
           <h4 className="font-medium text-amber-800 mb-2">Incomplete Sections</h4>
           <p className="text-sm text-amber-700">
-            Please complete each section before generating the documents. Use the tabs above to move around the wizard.
+            Please complete each section before continuing to the document preview. Use the tabs above to move around the wizard.
           </p>
         </div>
       )}
 
       {allComplete && (
         <div className={isWizardUiV3Enabled ? "bg-violet-50 border border-violet-200 rounded-lg p-4" : "bg-green-50 border border-green-200 rounded-lg p-4"}>
-          <h4 className={isWizardUiV3Enabled ? "font-medium text-violet-900 mb-2" : "font-medium text-green-800 mb-2"}>Ready to Generate</h4>
+          <h4 className={isWizardUiV3Enabled ? "font-medium text-violet-900 mb-2" : "font-medium text-green-800 mb-2"}>Ready for preview</h4>
           <p className={isWizardUiV3Enabled ? "text-sm text-violet-700" : "text-sm text-green-700"}>
         All sections are complete. Continue to the document preview to check your tenancy agreement before payment.
           </p>
@@ -3487,7 +3487,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
           Review your tenancy documents
         </p>
         <h3 className={`mt-2 text-xl font-semibold tracking-tight ${allComplete ? 'text-violet-950' : 'text-amber-950'}`}>
-          {allComplete ? 'Everything is ready to generate' : 'You still need to finish a few sections before the documents are ready'}
+          {allComplete ? 'Everything is ready for preview' : 'You still need to finish a few sections before the documents are ready'}
         </h3>
         <p className={`mt-2 text-sm leading-6 ${allComplete ? 'text-violet-800' : 'text-amber-800'}`}>
           {residentialProduct
@@ -3499,7 +3499,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
       <section className="rounded-[1.6rem] border border-[#e7dbff] bg-white px-5 py-5 shadow-sm">
         <h4 className="text-lg font-semibold tracking-tight text-[#20103f]">What you are preparing</h4>
         <p className="mt-2 text-sm leading-6 text-[#62597c]">
-          Check the details below before you generate the documents. They should read like the right agreement for the property, the people involved, and the payment terms.
+          Check the details below before you continue to the document preview. They should read like the right agreement for the property, the people involved, and the payment terms.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {reviewSummary.map((item) => (
@@ -3519,7 +3519,7 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
               <div key={section} className="rounded-2xl border border-white/70 bg-white/75 px-4 py-4">
                 <p className="text-sm font-semibold text-amber-950">{section}</p>
                 <p className="mt-1 text-sm leading-6 text-amber-800">
-                  This section still needs answers before the documents can be generated properly.
+                  This section still needs answers before the document preview can be prepared properly.
                 </p>
               </div>
             ))}
@@ -3550,12 +3550,12 @@ const PremiumReviewSection: React.FC<SectionProps> = ({ facts }) => {
 
       <section className={isWizardUiV3Enabled ? "rounded-[1.6rem] border border-violet-200 bg-violet-50 px-5 py-5" : "rounded-[1.6rem] border border-green-200 bg-green-50 px-5 py-5"}>
         <h4 className={isWizardUiV3Enabled ? "text-lg font-semibold tracking-tight text-violet-950" : "text-lg font-semibold tracking-tight text-green-900"}>
-          {allComplete ? 'Ready to generate' : 'Almost ready'}
+          {allComplete ? 'Ready for preview' : 'Almost ready'}
         </h4>
         <p className={isWizardUiV3Enabled ? "mt-2 text-sm leading-6 text-violet-800" : "mt-2 text-sm leading-6 text-green-700"}>
           {allComplete
-            ? 'Everything needed for these documents is in place. You can now continue to generate them.'
-            : 'Finish the remaining sections first, then come back here for one last check before generating.'}
+            ? 'Everything needed for these documents is in place. You can now continue to the locked document preview.'
+            : 'Finish the remaining sections first, then come back here for one last check before preview.'}
         </p>
       </section>
     </div>

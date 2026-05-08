@@ -161,7 +161,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] opacity-75">Review your pack</p>
         <h3 className="mt-2 text-xl font-semibold tracking-tight">
-          {canProceed ? 'This pack is ready to generate' : 'You still need to fix a few things before this pack is ready'}
+          {canProceed ? 'This pack is ready for document preview' : 'You still need to fix a few things before this pack is ready'}
         </h3>
         <p className="mt-2 text-sm leading-6 opacity-90">{packTitle}</p>
       </section>

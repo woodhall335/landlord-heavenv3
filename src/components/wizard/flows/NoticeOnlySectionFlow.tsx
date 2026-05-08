@@ -1475,12 +1475,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           </div>
         )}
 
-        {/* Ready to generate */}
+        {/* Ready for preview */}
         {allComplete && overallBlockers.length === 0 && (
           <div className={useVioletTone ? "p-4 bg-violet-50 border border-violet-200 rounded-lg" : "p-4 bg-green-50 border border-green-200 rounded-lg"}>
             <h3 className={useVioletTone ? "text-sm font-medium text-violet-900 mb-2" : "text-sm font-medium text-green-800 mb-2"}>Your notice pack is ready</h3>
             <p className={useVioletTone ? "text-sm text-violet-700" : "text-sm text-green-700"}>
-              All sections are complete. Click the button below to generate your notice.
+              All sections are complete. Continue to the locked document preview before payment.
             </p>
           </div>
         )}

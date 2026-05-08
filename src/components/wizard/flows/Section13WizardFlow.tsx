@@ -111,7 +111,7 @@ const STEP_CONFIG: Array<{
   {
     id: 'outputs',
     label: 'Outputs',
-    title: 'Generate and manage outputs',
+    title: 'Download and manage outputs',
     description: 'Once paid, this is where you download the documents and build the tribunal bundle if you need it.',
   },
 ];

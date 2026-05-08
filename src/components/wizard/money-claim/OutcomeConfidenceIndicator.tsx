@@ -132,7 +132,7 @@ export function OutcomeConfidenceIndicator({
           {confidence.packQualityLevel === 'excellent' && (
             <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
               <RiCheckLine className="w-3 h-3" />
-              Ready to generate
+              Ready for preview
             </span>
           )}
           {confidence.packQualityLevel === 'good' && (

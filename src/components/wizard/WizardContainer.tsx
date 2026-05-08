@@ -337,7 +337,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         }
       }
 
-      message += '\n🎉 **Ready to generate your documents!**\n\nClick below to preview and purchase.';
+      message += '\n🎉 **Ready for document preview!**\n\nClick below to preview and purchase.';
       return message;
     },
     [caseType],

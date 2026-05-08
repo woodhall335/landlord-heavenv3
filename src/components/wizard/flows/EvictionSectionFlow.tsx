@@ -515,7 +515,7 @@ const SCOTLAND_SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review the documents and generate them',
+    description: 'Review the documents before the locked document preview',
     jurisdictions: ['scotland'],
     isComplete: () => false, // Always navigable for final review
   },

@@ -259,7 +259,7 @@ function SmartValidationSummary({
         {validation.isValid ? (
           <div className="flex items-center gap-1 text-green-700">
             <RiCheckboxCircleLine className="w-4 h-4" />
-            <span className="text-sm font-medium">Ready for document generation</span>
+            <span className="text-sm font-medium">Ready for document preview</span>
           </div>
         ) : (
           <>
@@ -324,7 +324,7 @@ function ValidationPanel({
           <RiCheckboxCircleLine className="w-5 h-5 text-green-600" />
           <p className="font-medium text-green-800">All validation checks passed</p>
         </div>
-        <p className="text-sm text-green-700 mt-1">Your case is ready for document generation.</p>
+        <p className="text-sm text-green-700 mt-1">Your case is ready for the locked document preview.</p>
       </div>
     );
   }
@@ -365,7 +365,7 @@ function ValidationPanel({
             <p className="font-semibold text-red-800">Required information missing</p>
           </div>
           <p className="text-sm text-red-700">
-            Please complete the following before you can generate your pack:
+            Please complete the following before you can continue to document preview:
           </p>
         </div>
       )}
@@ -768,7 +768,7 @@ export const ReviewSection: React.FC<SectionProps> = ({
               >
                 {papStatus.canFileInCourt
                   ? 'Ready to file your claim in court'
-                  : 'Ready to generate your document pack'}
+                  : 'Ready for document preview'}
               </p>
               <p
                 className={`text-sm ${

@@ -245,7 +245,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
     await screen.findByText(/Choose the main reason you need possession/i);
     await user.click(getStepButton('Review your court documents'));
 
-    await screen.findByText(/This pack is ready to generate|You still need to fix a few things before this pack is ready/i);
+    await screen.findByText(/This pack is ready for document preview|You still need to fix a few things before this pack is ready/i);
     expect(screen.getByText(/Final notice service details/i)).toBeDefined();
     expect(screen.getByText(/What must be fixed before you continue/i)).toBeDefined();
     expect(screen.getByText(/What could slow things down later/i)).toBeDefined();

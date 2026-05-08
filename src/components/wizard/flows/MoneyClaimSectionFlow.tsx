@@ -283,7 +283,7 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'review',
     label: 'Review',
-    description: 'Review the documents and generate them',
+    description: 'Review the claim details and continue to the locked document preview',
     isComplete: () => false, // Always navigable for final review
   },
 ];
@@ -388,7 +388,7 @@ function getRoadmapNextDecision(sectionId?: string): string {
     case 'evidence':
       return 'Record the evidence you have before checkout.';
     case 'review':
-      return 'Fix blockers, then generate the money claim pack.';
+      return 'Fix blockers, then continue to the locked document preview.';
     default:
       return 'Work through the guided checklist.';
   }
@@ -941,7 +941,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
                     : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-700 hover:to-fuchsia-700 shadow-[0_6px_16px_rgba(109,40,217,0.28)]'}
                 `}
               >
-                          Continue to generate your money claim documents
+                Continue to document preview
               </button>
             ) : (
               <button
