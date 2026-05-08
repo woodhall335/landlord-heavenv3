@@ -729,11 +729,27 @@ async function generateDocumentsForProduct(params: {
     const { generateNoticeOnlyPack, generateCompleteEvictionPack } = await import(
       '@/lib/documents/eviction-pack-generator'
     );
+    const { buildEvictionPackGenerationFacts } = await import(
+      '@/lib/documents/eviction-pack-facts'
+    );
+
+    const packFacts = buildEvictionPackGenerationFacts({
+      facts: wizardFacts,
+      caseId,
+      jurisdiction: jurisdiction as any,
+      product: productType,
+      selectedRoute:
+        wizardFacts.selected_notice_route ||
+        wizardFacts.eviction_route ||
+        wizardFacts.eviction_route_intent ||
+        wizardFacts.recommended_route ||
+        wizardFacts.route_recommendation?.recommended_route,
+    });
 
     const evictionPack =
       productType === 'notice_only'
-        ? await generateNoticeOnlyPack(wizardFacts)
-        : await generateCompleteEvictionPack(wizardFacts);
+        ? await generateNoticeOnlyPack(packFacts)
+        : await generateCompleteEvictionPack(packFacts);
 
     return persistGeneratedDocuments(supabase, {
       caseId,

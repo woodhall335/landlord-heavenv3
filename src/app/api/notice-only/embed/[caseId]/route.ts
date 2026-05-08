@@ -3,7 +3,7 @@ import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from 
 import { mapNoticeOnlyFacts, wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
-import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-filler';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
@@ -17,6 +17,7 @@ import {
   generateNoticeOnlyPack,
   type EvictionPackDocument,
 } from '@/lib/documents/eviction-pack-generator';
+import { buildEvictionPackGenerationFacts } from '@/lib/documents/eviction-pack-facts';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
 import {
   applyEnglandSection8CourtPackCalculation,
@@ -226,15 +227,20 @@ function resolvePackDocumentType(documentType: string): string {
 async function getPackPreviewDocument(
   pack: 'notice_only' | 'complete_pack',
   wizardFacts: Record<string, any>,
-  documentType: string
+  documentType: string,
+  context: {
+    caseId: string;
+    jurisdiction: CanonicalJurisdiction;
+    selectedRoute?: string | null;
+  },
 ): Promise<EvictionPackDocument | null> {
-  const enrichedFacts = {
-    ...wizardFacts,
-    __meta: {
-      ...(wizardFacts.__meta || {}),
-      case_id: wizardFacts.id || wizardFacts.case_id || wizardFacts.__meta?.case_id,
-    },
-  };
+  const enrichedFacts = buildEvictionPackGenerationFacts({
+    facts: wizardFacts,
+    caseId: context.caseId,
+    jurisdiction: context.jurisdiction,
+    product: pack,
+    selectedRoute: context.selectedRoute,
+  });
 
   const generatedPack =
     pack === 'complete_pack'
@@ -307,11 +313,28 @@ export async function GET(
 
     const jurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, wizardFacts);
 
+    if (!jurisdiction) {
+      return errorResponse('INVALID_JURISDICTION', 'Invalid or missing jurisdiction', 422, { caseId });
+    }
+
+    const selectedRoute =
+      wizardFacts.selected_notice_route ||
+      wizardFacts.eviction_route ||
+      wizardFacts.eviction_route_intent ||
+      caseRow.recommended_route ||
+      wizardFacts.route_recommendation?.recommended_route ||
+      null;
+
     if (pack && PACK_PREVIEW_DOCUMENT_TYPES.has(documentType)) {
       let previewDocument: EvictionPackDocument | null = null;
 
       try {
-        previewDocument = await getPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, documentType);
+        previewDocument = await getPackPreviewDocument(
+          pack,
+          wizardFacts,
+          documentType,
+          { caseId, jurisdiction, selectedRoute },
+        );
       } catch (err) {
         console.error('[Notice-Only-Embed] Pack PDF generation failed:', {
           caseId,

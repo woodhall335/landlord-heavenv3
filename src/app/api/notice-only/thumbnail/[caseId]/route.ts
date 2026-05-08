@@ -47,6 +47,7 @@ import {
   generateNoticeOnlyPack,
   type EvictionPackDocument,
 } from '@/lib/documents/eviction-pack-generator';
+import { buildEvictionPackGenerationFacts } from '@/lib/documents/eviction-pack-facts';
 import {
   applyEnglandSection8CourtPackCalculation,
   buildEnglandSection8CourtPackCalculation,
@@ -93,15 +94,20 @@ const PACK_PREVIEW_DOCUMENT_TYPES = new Set([
 async function getPackPreviewDocument(
   pack: 'notice_only' | 'complete_pack',
   wizardFacts: Record<string, any>,
-  documentType: string
+  documentType: string,
+  context: {
+    caseId: string;
+    jurisdiction: CanonicalJurisdiction;
+    selectedRoute?: string | null;
+  },
 ): Promise<EvictionPackDocument | null> {
-  const enrichedFacts = {
-    ...wizardFacts,
-    __meta: {
-      ...(wizardFacts.__meta || {}),
-      case_id: wizardFacts.id || wizardFacts.case_id || wizardFacts.__meta?.case_id,
-    },
-  };
+  const enrichedFacts = buildEvictionPackGenerationFacts({
+    facts: wizardFacts,
+    caseId: context.caseId,
+    jurisdiction: context.jurisdiction,
+    product: pack,
+    selectedRoute: context.selectedRoute,
+  });
 
   const generatedPack =
     pack === 'complete_pack'
@@ -548,6 +554,7 @@ export async function GET(
       wizardFacts.selected_notice_route ||
       wizardFacts.eviction_route ||
       wizardFacts.eviction_route_intent ||
+      caseRow.recommended_route ||
       wizardFacts.route_recommendation?.recommended_route;
 
     // Normalize Wales routes
@@ -609,7 +616,12 @@ export async function GET(
       let previewDocument: EvictionPackDocument | null = null;
 
       try {
-        previewDocument = await getPackPreviewDocument(pack, { ...wizardFacts, case_id: caseId, id: caseId }, resolvedDocType);
+        previewDocument = await getPackPreviewDocument(
+          pack,
+          wizardFacts,
+          resolvedDocType,
+          { caseId, jurisdiction, selectedRoute },
+        );
       } catch (err) {
         console.error('[Notice-Only-Thumbnail] Pack PDF generation failed:', {
           caseId,
