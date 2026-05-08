@@ -4,7 +4,6 @@ if (typeof window === 'undefined') {
 
 import fs from 'fs/promises';
 import path from 'path';
-import { PDFParse } from 'pdf-parse';
 import {
   type EnglandGroundCode,
   ENGLAND_POST_2026_GROUND_CATALOG,
@@ -21,6 +20,7 @@ export interface EnglandGroundLegalWording {
 
 let cachedGroundWordingPromise: Promise<Record<EnglandGroundCode, EnglandGroundLegalWording>> | null = null;
 let cachedLandlordGuidanceNoticePeriodsPromise: Promise<EnglandForm3ALandlordGuidanceNoticePeriods> | null = null;
+let cachedPDFParseClassPromise: Promise<any> | null = null;
 
 const LEGAL_WORDING_PATH = path.join(
   process.cwd(),
@@ -120,15 +120,99 @@ function extractLegalWordingBlocks(rawText: string): Record<EnglandGroundCode, E
   return entries;
 }
 
+function buildFallbackGroundWordings(): Record<EnglandGroundCode, EnglandGroundLegalWording> {
+  const entries = {} as Record<EnglandGroundCode, EnglandGroundLegalWording>;
+
+  for (const code of Object.keys(ENGLAND_POST_2026_GROUND_CATALOG) as EnglandGroundCode[]) {
+    const definition = ENGLAND_POST_2026_GROUND_CATALOG[code];
+    entries[code] = {
+      code,
+      title: definition.title,
+      explanation: definition.title,
+      legalWording: `Ground ${code}`,
+    };
+  }
+
+  return entries;
+}
+
+function buildFallbackGuidanceNoticePeriods(): EnglandForm3ALandlordGuidanceNoticePeriods {
+  const entries = Object.values(ENGLAND_POST_2026_GROUND_CATALOG);
+
+  return {
+    fourMonths: entries
+      .filter((entry) => entry.noticePeriodLabel === '4 months')
+      .map((entry) => entry.code),
+    twoMonths: entries
+      .filter((entry) => entry.noticePeriodLabel === '2 months')
+      .map((entry) => entry.code),
+    fourWeeks: entries
+      .filter((entry) => entry.noticePeriodLabel === '4 weeks')
+      .map((entry) => entry.code),
+    twoWeeks: entries
+      .filter((entry) => entry.noticePeriodLabel === '2 weeks')
+      .map((entry) => entry.code),
+    immediate: entries
+      .filter((entry) => entry.immediateApplicationAllowed || entry.noticePeriodLabel === 'Immediate application')
+      .map((entry) => entry.code),
+  };
+}
+
+async function ensurePdfParseDomGlobals(): Promise<void> {
+  if (typeof globalThis.DOMMatrix !== 'undefined') {
+    return;
+  }
+
+  try {
+    const canvas = await import('canvas');
+    const maybeDOMMatrix = (canvas as any).DOMMatrix;
+    const maybeImageData = (canvas as any).ImageData;
+
+    if (typeof maybeDOMMatrix !== 'undefined') {
+      (globalThis as any).DOMMatrix = maybeDOMMatrix;
+    }
+
+    if (typeof globalThis.ImageData === 'undefined' && typeof maybeImageData !== 'undefined') {
+      (globalThis as any).ImageData = maybeImageData;
+    }
+  } catch (error) {
+    console.warn('[legal-wording] Could not install canvas DOM globals for pdf-parse:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+async function getPDFParseClass(): Promise<any> {
+  if (!cachedPDFParseClassPromise) {
+    cachedPDFParseClassPromise = (async () => {
+      await ensurePdfParseDomGlobals();
+      const module = await import('pdf-parse');
+      const PDFParse = (module as any).PDFParse;
+
+      if (!PDFParse) {
+        throw new Error('PDFParse class not found in pdf-parse module');
+      }
+
+      return PDFParse;
+    })();
+  }
+
+  return cachedPDFParseClassPromise;
+}
+
 export async function getEnglandGroundLegalWordings(): Promise<
   Record<EnglandGroundCode, EnglandGroundLegalWording>
 > {
   if (!cachedGroundWordingPromise) {
     cachedGroundWordingPromise = (async () => {
-      const bytes = await fs.readFile(LEGAL_WORDING_PATH);
-      const parser = new PDFParse({ data: bytes });
-
       try {
+        const [bytes, PDFParse] = await Promise.all([
+          fs.readFile(LEGAL_WORDING_PATH),
+          getPDFParseClass(),
+        ]);
+        const parser = new PDFParse({ data: bytes });
+
+        try {
         const { text } = await parser.getText();
         const parsed = extractLegalWordingBlocks(text);
 
@@ -148,6 +232,12 @@ export async function getEnglandGroundLegalWordings(): Promise<
       } finally {
         await parser.destroy();
       }
+      } catch (error) {
+        console.warn('[legal-wording] Falling back to catalogue-only Form 3A ground wording:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+        return buildFallbackGroundWordings();
+      }
     })();
   }
 
@@ -157,14 +247,24 @@ export async function getEnglandGroundLegalWordings(): Promise<
 export async function getEnglandForm3ALandlordGuidanceNoticePeriods(): Promise<EnglandForm3ALandlordGuidanceNoticePeriods> {
   if (!cachedLandlordGuidanceNoticePeriodsPromise) {
     cachedLandlordGuidanceNoticePeriodsPromise = (async () => {
-      const bytes = await fs.readFile(LANDLORD_GUIDANCE_PATH);
-      const parser = new PDFParse({ data: bytes });
-
       try {
+        const [bytes, PDFParse] = await Promise.all([
+          fs.readFile(LANDLORD_GUIDANCE_PATH),
+          getPDFParseClass(),
+        ]);
+        const parser = new PDFParse({ data: bytes });
+
+        try {
         const { text } = await parser.getText();
         return extractLandlordGuidanceNoticePeriods(text);
       } finally {
         await parser.destroy();
+      }
+      } catch (error) {
+        console.warn('[legal-wording] Falling back to catalogue-only Form 3A guidance periods:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+        return buildFallbackGuidanceNoticePeriods();
       }
     })();
   }
