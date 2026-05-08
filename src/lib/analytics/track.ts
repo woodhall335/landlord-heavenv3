@@ -33,10 +33,12 @@ export interface WizardPreviewViewedProps {
   product?: string;
   route?: string;
   jurisdiction?: string;
+  caseId?: string;
 }
 
 export interface CheckoutStartedProps {
   product: string;
+  caseId?: string;
 }
 
 export interface PaymentSuccessLandedProps {
@@ -146,6 +148,7 @@ export function trackWizardPreviewViewed(props: WizardPreviewViewedProps): void 
       product: props.product || 'unknown',
       route: props.route || 'unknown',
       jurisdiction: props.jurisdiction || 'unknown',
+      ...(props.caseId ? { case_id: props.caseId } : {}),
     });
   } catch (error) {
     console.warn('[analytics] Failed to track wizard_preview_viewed:', error);
@@ -162,6 +165,7 @@ export function trackCheckoutStarted(props: CheckoutStartedProps): void {
   try {
     vercelTrack('checkout_started', {
       product: props.product,
+      ...(props.caseId ? { case_id: props.caseId } : {}),
     });
   } catch (error) {
     console.warn('[analytics] Failed to track checkout_started:', error);

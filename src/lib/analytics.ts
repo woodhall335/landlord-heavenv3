@@ -119,6 +119,8 @@ export interface PageViewTrackingContext {
   route?: string;
   source?: string;
   topic?: string;
+  caseId?: string;
+  paymentStatus?: string;
 }
 
 function removeUndefinedValues<T extends Record<string, any>>(value: T): T {
@@ -139,9 +141,8 @@ function resolvePageLocation(path: string, explicitLocation?: string): string | 
 /**
  * Track a page view in Google Analytics.
  *
- * The page path can be deliberately normalised for private/session pages
- * such as wizard previews, so GA4 can report the funnel stage without
- * splitting reports by unique case ids.
+ * Private/session pages may pass a case-specific page path when we need
+ * realtime funnel debugging for individual cases.
  */
 export function trackPageView(path: string, context: PageViewTrackingContext = {}): void {
   if (typeof window !== 'undefined' && window.gtag) {
@@ -155,6 +156,8 @@ export function trackPageView(path: string, context: PageViewTrackingContext = {
       route: context.route,
       source: context.source,
       topic: context.topic,
+      case_id: context.caseId,
+      payment_status: context.paymentStatus,
     }));
   }
 }
@@ -288,7 +291,8 @@ export function trackProductView(
 export function trackBeginCheckout(
   productId: string,
   productName: string,
-  value: number
+  value: number,
+  caseId?: string
 ): void {
   recordMarketingGrowthEvent('checkout_started', {
     productClicked: productId,
@@ -300,6 +304,7 @@ export function trackBeginCheckout(
     window.gtag('event', 'begin_checkout', {
       currency: 'GBP',
       value,
+      case_id: caseId,
       items: [
         {
           item_id: productId,
@@ -779,6 +784,7 @@ export function trackWizardReviewView(params: {
     event_category: 'wizard',
     product: params.product,
     jurisdiction: params.jurisdiction,
+    case_id: params.caseId,
     has_blockers: params.hasBlockers ?? false,
     has_warnings: params.hasWarnings ?? false,
   }, {
@@ -1034,6 +1040,7 @@ export function trackWizardReviewViewWithAttribution(params: {
     event_category: 'wizard',
     product: params.product,
     jurisdiction: params.jurisdiction,
+    case_id: params.caseId,
     has_blockers: params.hasBlockers ?? false,
     has_warnings: params.hasWarnings ?? false,
     source: params.src || 'direct',

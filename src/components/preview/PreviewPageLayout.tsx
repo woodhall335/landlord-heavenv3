@@ -191,10 +191,10 @@ export function PreviewPageLayout({
       if (checkoutUrl) {
         // Track checkout initiation in analytics (GA4 + FB Pixel)
         const priceValue = parseFloat(price.replace(/[£,]/g, '')) || 0;
-        trackBeginCheckout(product, productName, priceValue);
+        trackBeginCheckout(product, productName, priceValue, caseId);
 
         // Track checkout started (Vercel Analytics)
-        trackCheckoutStarted({ product });
+        trackCheckoutStarted({ product, caseId });
 
         window.location.href = checkoutUrl;
       }

@@ -20,6 +20,7 @@ const EVENT_DEFINITIONS: AnalyticsEventDefinition[] = [
   { name: 'ask_heaven_page_cta_click', family: 'ask_heaven_page_cta_click', class: 'interaction', dedupeScope: 'none' },
   { name: 'ask_heaven_question_submitted', family: 'ask_heaven_question_submitted', class: 'interaction', dedupeScope: 'none' },
   { name: 'ask_heaven_view', family: 'ask_heaven_view', class: 'view', dedupeScope: 'page' },
+  { name: 'checkout_cancelled', family: 'checkout_cancelled', class: 'milestone', dedupeScope: 'case' },
   { name: 'checkout_started', family: 'checkout_started', class: 'interaction', dedupeScope: 'none' },
   { name: 'clause_diff_upgrade_clicked', family: 'clause_diff_upgrade_clicked', class: 'interaction', dedupeScope: 'none' },
   { name: 'clause_diff_viewed', family: 'clause_diff_viewed', class: 'view', dedupeScope: 'page' },
@@ -74,6 +75,7 @@ const EVENT_DEFINITIONS: AnalyticsEventDefinition[] = [
   { name: 'wizard_entry_view', family: 'wizard_entry_view', class: 'view', dedupeScope: 'session' },
   { name: 'wizard_incompatible_choice', family: 'wizard_incompatible_choice', class: 'milestone', dedupeScope: 'session' },
   { name: 'wizard_review_view', family: 'wizard_review_view', class: 'milestone', dedupeScope: 'case' },
+  { name: 'wizard_preview_viewed', family: 'wizard_preview_viewed', class: 'milestone', dedupeScope: 'case' },
   { name: 'wizard_start', family: 'wizard_start', class: 'milestone', dedupeScope: 'session' },
   { name: 'wizard_step_complete', family: 'wizard_step_complete', class: 'milestone', dedupeScope: 'case', variant: 'canonical' },
 ];

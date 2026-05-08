@@ -100,12 +100,14 @@ describe('analytics/track', () => {
         product: 'complete_pack',
         route: 'section_8',
         jurisdiction: 'england',
+        caseId: 'case-123',
       });
 
       expect(vercelTrack).toHaveBeenCalledWith('wizard_preview_viewed', {
         product: 'complete_pack',
         route: 'section_8',
         jurisdiction: 'england',
+        case_id: 'case-123',
       });
     });
 
@@ -119,11 +121,12 @@ describe('analytics/track', () => {
       });
     });
 
-    it('trackCheckoutStarted calls vercel track with product', () => {
-      trackCheckoutStarted({ product: 'money_claim' });
+    it('trackCheckoutStarted calls vercel track with product and case id', () => {
+      trackCheckoutStarted({ product: 'money_claim', caseId: 'case-456' });
 
       expect(vercelTrack).toHaveBeenCalledWith('checkout_started', {
         product: 'money_claim',
+        case_id: 'case-456',
       });
     });
 

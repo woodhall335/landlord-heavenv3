@@ -229,14 +229,20 @@ function ReviewPageInner() {
     if (analysis && !hasTrackedReview.current) {
       hasTrackedReview.current = true;
       const attribution = getWizardAttribution();
-      trackPageView('/wizard/review', {
-        title: 'Wizard review',
+      const reviewPagePath =
+        typeof window !== 'undefined'
+          ? `${window.location.pathname}${window.location.search}`
+          : `/wizard/review?case_id=${caseId || ''}`;
+      trackPageView(reviewPagePath, {
+        title: `Wizard review - ${caseId || 'unknown case'}`,
+        location: typeof window !== 'undefined' ? window.location.href : undefined,
         pageType: 'wizard_review',
         product,
         jurisdiction: jurisdiction || 'unknown',
         route: analysis.recommended_route || 'unknown',
         source: attribution.src,
         topic: attribution.topic,
+        caseId: caseId ?? undefined,
       });
       trackWizardReviewViewWithAttribution({
         product: product,

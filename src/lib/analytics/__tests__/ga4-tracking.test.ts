@@ -91,6 +91,69 @@ describe('GA4 analytics dispatch', () => {
     );
   });
 
+  it('can send case-specific page_view events for private wizard stages', async () => {
+    const { trackPageView } = await import('../../analytics');
+
+    window.history.replaceState(
+      {},
+      '',
+      '/wizard/preview/case-123?payment=cancelled&product=notice_only'
+    );
+
+    trackPageView('/wizard/preview/case-123?payment=cancelled&product=notice_only', {
+      title: 'Locked document preview - case-123',
+      location: window.location.href,
+      pageType: 'wizard_preview',
+      product: 'notice_only',
+      jurisdiction: 'england',
+      route: 'section_8',
+      caseId: 'case-123',
+      paymentStatus: 'cancelled',
+    });
+
+    expect(gtag).toHaveBeenCalledWith(
+      'event',
+      'page_view',
+      expect.objectContaining({
+        page_path: '/wizard/preview/case-123?payment=cancelled&product=notice_only',
+        page_location: `${window.location.origin}/wizard/preview/case-123?payment=cancelled&product=notice_only`,
+        page_title: 'Locked document preview - case-123',
+        page_type: 'wizard_preview',
+        product: 'notice_only',
+        jurisdiction: 'england',
+        route: 'section_8',
+        case_id: 'case-123',
+        payment_status: 'cancelled',
+      })
+    );
+  });
+
+  it('sends case id on wizard review events', async () => {
+    const { trackWizardReviewViewWithAttribution } = await import('../../analytics');
+
+    trackWizardReviewViewWithAttribution({
+      product: 'notice_only',
+      jurisdiction: 'england',
+      hasBlockers: false,
+      hasWarnings: false,
+      caseId: 'case-review-1',
+      src: 'product_page',
+      topic: 'eviction',
+    });
+
+    expect(gtag).toHaveBeenCalledWith(
+      'event',
+      'wizard_review_view',
+      expect.objectContaining({
+        product: 'notice_only',
+        jurisdiction: 'england',
+        case_id: 'case-review-1',
+        source: 'product_page',
+        topic: 'eviction',
+      })
+    );
+  });
+
   it('does not suppress interaction events by default', async () => {
     const { trackEvent } = await import('../../analytics');
 

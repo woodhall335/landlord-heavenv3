@@ -27,6 +27,7 @@ import { hasWalesArrearsGroundSelected } from '@/lib/wales';
 import { Loader2, Scale, CheckCircle, Download, Shield, Clock, FileText, List } from 'lucide-react';
 import {
   trackPageView,
+  trackEvent,
   trackWizardPreviewViewed,
   trackCheckoutStarted,
   trackBeginCheckout,
@@ -221,8 +222,8 @@ function ASTCheckoutButton({
       const checkoutUrl = data.session_url || data.checkout_url;
       if (checkoutUrl) {
         const priceValue = parseFloat(price.replace(/[£,]/g, '')) || 0;
-        trackBeginCheckout(product, productName, priceValue);
-        trackCheckoutStarted({ product });
+        trackBeginCheckout(product, productName, priceValue, caseId);
+        trackCheckoutStarted({ product, caseId });
         window.location.href = checkoutUrl;
       }
     } catch (err) {
@@ -495,6 +496,7 @@ export default function WizardPreviewPage() {
           product: productFromFacts,
           route: fetchedCase.recommended_route || 'unknown',
           jurisdiction: fetchedCase.jurisdiction || 'unknown',
+          caseId,
         });
 
         // Try to generate/load preview
@@ -555,13 +557,55 @@ export default function WizardPreviewPage() {
 
         if (!hasTrackedPreviewPageView.current) {
           hasTrackedPreviewPageView.current = true;
-          trackPageView('/wizard/preview/[caseId]', {
-            title: 'Locked document preview',
+          const previewPagePath =
+            typeof window !== 'undefined'
+              ? `${window.location.pathname}${window.location.search}`
+              : `/wizard/preview/${caseId}`;
+          const paymentStatus = searchParams.get('payment') || undefined;
+          const previewProduct = inferredProduct || productFromFacts || 'unknown';
+          const previewJurisdiction = fetchedCase.jurisdiction || 'unknown';
+          const previewRoute = fetchedCase.recommended_route || 'unknown';
+
+          trackPageView(previewPagePath, {
+            title: `Locked document preview - ${caseId}`,
+            location: typeof window !== 'undefined' ? window.location.href : undefined,
             pageType: 'wizard_preview',
-            product: inferredProduct || productFromFacts || 'unknown',
-            jurisdiction: fetchedCase.jurisdiction || 'unknown',
-            route: fetchedCase.recommended_route || 'unknown',
+            product: previewProduct,
+            jurisdiction: previewJurisdiction,
+            route: previewRoute,
+            caseId,
+            paymentStatus,
           });
+
+          trackEvent('wizard_preview_viewed', {
+            event_category: 'wizard',
+            page_path: previewPagePath,
+            page_type: 'wizard_preview',
+            product: previewProduct,
+            jurisdiction: previewJurisdiction,
+            route: previewRoute,
+            case_id: caseId,
+            payment_status: paymentStatus,
+          }, {
+            dedupeScope: 'case',
+            dedupeKey: `${caseId}:preview:${paymentStatus || 'viewed'}`,
+          });
+
+          if (paymentStatus === 'cancelled') {
+            trackEvent('checkout_cancelled', {
+              event_category: 'checkout',
+              page_path: previewPagePath,
+              page_type: 'wizard_preview',
+              product: previewProduct,
+              jurisdiction: previewJurisdiction,
+              route: previewRoute,
+              case_id: caseId,
+              payment_status: paymentStatus,
+            }, {
+              dedupeScope: 'case',
+              dedupeKey: `${caseId}:checkout_cancelled:${previewProduct}`,
+            });
+          }
         }
 
         // E2E mode: skip preview generation dependencies so checkout CTA remains deterministic.
