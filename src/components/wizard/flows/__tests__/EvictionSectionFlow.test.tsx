@@ -151,7 +151,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
     expect(getStepButton("What's going on?")).toBeDefined();
     expect(getStepButton('Who and where?')).toBeDefined();
     expect(getStepButton('Tenancy details')).toBeDefined();
-    expect(getStepButton('When will you serve?')).toBeDefined();
+    expect(getStepButton('Your notice')).toBeDefined();
     expect(getStepButton('About the arrears')).toBeDefined();
     expect(getStepButton('Evidence summary')).toBeDefined();
     expect(getStepButton('Prepare your court claim')).toBeDefined();
@@ -259,7 +259,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
     await screen.findByText(/Choose the main reason you need possession/i);
-    await user.click(getStepButton('When will you serve?'));
+    await user.click(getStepButton('Your notice'));
 
     expect(screen.getByText(/Form 3A notice grounds/i)).toBeDefined();
     expect(screen.queryByText(/Notice details - Step/i)).toBeNull();
@@ -315,7 +315,7 @@ describe('EvictionSectionFlow - England complete pack', () => {
     expect(getStepButton('Evidence summary')).toHaveAttribute('aria-current', 'step');
     expect(screen.queryByText(/Choose the main reason you need possession/i)).toBeNull();
 
-    await user.click(getStepButton('When will you serve?'));
+    await user.click(getStepButton('Your notice'));
     expect(screen.getByText(/Have you already served a valid notice on the tenant/i)).toBeDefined();
     expect(screen.getByRole('radio', { name: /No, I need to generate a notice/i })).toBeChecked();
   });

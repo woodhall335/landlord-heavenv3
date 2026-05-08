@@ -196,8 +196,8 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
   },
   {
     id: 'notice',
-    label: 'When will you serve?',
-    description: 'Notice date, service method, and N215 details before the claim is prepared',
+    label: 'Your notice',
+    description: 'Confirm Form 3A grounds or any notice that has already been served',
     isComplete: (facts) => {
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
 
