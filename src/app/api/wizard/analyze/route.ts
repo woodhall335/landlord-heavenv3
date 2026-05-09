@@ -98,10 +98,46 @@ function isMoneyClaimCase(facts: CaseFacts): boolean {
   return values.some((val) => val.includes('money_claim'));
 }
 
+function hasText(value: unknown): boolean {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function normalizeGroundLabel(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const match = value.toLowerCase().match(/(?:ground[_\s-]*)?(\d+[a-z]*)/);
+  return match?.[1] || null;
+}
+
+function getSelectedSection8GroundIds(facts: CaseFacts): string[] {
+  const selected = facts.issues.section8_grounds.selected_grounds || [];
+  return Array.from(new Set(selected.map(normalizeGroundLabel).filter((ground): ground is string => !!ground)));
+}
+
+function getMonthlyRentForScoring(facts: CaseFacts): number | null {
+  const rent = facts.tenancy.rent_amount;
+  if (!rent || rent <= 0) return null;
+
+  switch (facts.tenancy.rent_frequency) {
+    case 'weekly':
+      return Number(((rent * 52) / 12).toFixed(2));
+    case 'fortnightly':
+      return Number(((rent * 26) / 12).toFixed(2));
+    case 'quarterly':
+      return Number((rent / 3).toFixed(2));
+    case 'yearly':
+      return Number((rent / 12).toFixed(2));
+    case 'monthly':
+    case 'other':
+    default:
+      return rent;
+  }
+}
+
 /**
- * Compute a richer case-strength score, with money-claim awareness.
+ * Compute a richer case-strength score, with money-claim and eviction awareness.
+ * This is a readiness/confidence indicator, not a guarantee of court outcome.
  */
-function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]; compliance: string[] } {
+export function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]; compliance: string[] } {
   const red_flags: string[] = [];
   const compliance: string[] = [];
 
@@ -110,6 +146,7 @@ function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]
   const isMoneyClaim = isMoneyClaimCase(facts);
   const arrears = facts.issues.rent_arrears.total_arrears ?? 0;
   const hasArrearsFlag = facts.issues.rent_arrears.has_arrears === true;
+  const evidence = normaliseEvidence(facts);
 
   // =======================================
   // Common landlord risk factors
@@ -226,12 +263,46 @@ function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]
     }
   } else {
     // =======================================
-    // Non-money-claim fallback (simple)
+    // Eviction/readiness scoring
     // =======================================
+    const selectedGroundIds = getSelectedSection8GroundIds(facts);
+    const hasSelectedGrounds = selectedGroundIds.length > 0;
+    const hasGround8 = selectedGroundIds.includes('8');
+    const hasArrearsSchedule = facts.issues.rent_arrears.arrears_items.length > 0;
+    const monthlyRent = getMonthlyRentForScoring(facts);
+    const ground8Threshold = monthlyRent ? monthlyRent * 3 : null;
+
     if (arrears > 0) {
       score += 10;
     } else if (hasArrearsFlag) {
       score += 5;
+    }
+
+    if (hasArrearsSchedule) {
+      score += 5;
+    } else if (arrears > 0 || hasArrearsFlag) {
+      compliance.push(
+        'Add a rent schedule showing each rent period, amount due and amount paid so the arrears evidence is court-ready.'
+      );
+      score -= 5;
+    }
+
+    if (hasSelectedGrounds) {
+      score += 5;
+    } else {
+      compliance.push('Select the possession grounds relied on so the notice and court claim can be assessed properly.');
+      score -= 5;
+    }
+
+    if (hasGround8 && ground8Threshold !== null) {
+      if (arrears >= ground8Threshold) {
+        score += 5;
+      } else {
+        red_flags.push('Ground 8 is selected but the arrears appear below the current three-month rent threshold.');
+        score -= 10;
+      }
+    } else if (hasGround8) {
+      compliance.push('Add the rent amount and frequency so Ground 8 threshold strength can be checked.');
     }
 
     if (facts.notice.notice_date) {
@@ -240,6 +311,31 @@ function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]
       red_flags.push(
         'No notice date recorded – check that the correct notice has been served before issuing proceedings.'
       );
+    }
+
+    if (facts.notice.service_date || facts.notice.service_method) {
+      score += 5;
+    } else {
+      compliance.push('Add the notice service date and method so service evidence can be checked.');
+    }
+
+    const hasCoreParties =
+      hasText(facts.parties.landlord.name) &&
+      facts.parties.tenants.some((tenant) => hasText(tenant.name)) &&
+      (hasText(facts.property.address_line1) || hasText(facts.property.address?.line1)) &&
+      (hasText(facts.property.postcode) || hasText(facts.property.address?.postcode));
+
+    if (hasCoreParties) {
+      score += 5;
+    } else {
+      compliance.push('Complete landlord, tenant and property details so the court-facing forms are fully populated.');
+      score -= 5;
+    }
+
+    if (evidence.tenancy_agreement_uploaded || evidence.other_evidence_uploaded) {
+      score += 5;
+    } else {
+      compliance.push('Have the tenancy agreement, rent account and any correspondence ready for the court bundle.');
     }
   }
 
