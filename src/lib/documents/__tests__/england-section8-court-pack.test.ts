@@ -77,4 +77,37 @@ describe('England Section 8 court-pack calculation', () => {
     expect(calculation.validationSummary.notice_expiry_date).toBe('2026-06-02');
     expect(calculation.validationSummary.ground_8_status).toBe('AT');
   });
+
+  test('harmonises stale arrears totals from the canonical schedule', async () => {
+    const calculation = await buildEnglandSection8CourtPackCalculation({
+      wizardFacts: {
+        jurisdiction: 'england',
+        claim_type: 'section_8',
+        notice_service_date: '2026-05-01',
+        notice_service_method: 'first_class_post',
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        total_arrears: 100,
+        arrears_at_notice_date: 50,
+        ground_numbers: '8,10',
+      },
+      caseData: {
+        jurisdiction: 'england',
+        claim_type: 'section_8',
+        arrears_items: [
+          { period_start: '2026-02-01', amount_owed: 1500 },
+          { period_start: '2026-03-01', amount_owed: 1500 },
+        ],
+      },
+      evictionCase: {
+        grounds: [{ code: 'Ground 8' }, { code: 'Ground 10' }],
+      },
+    });
+
+    expect(calculation.totalArrears).toBe(3000);
+    expect(calculation.arrearsAtNoticeDate).toBe(3000);
+    expect(calculation.validationSummary.total_arrears).toBe(3000);
+    expect(calculation.validationSummary.all_consistency_checks_passed).toBe(true);
+    expect(calculation.q4aText).toContain('£3000.00');
+  });
 });

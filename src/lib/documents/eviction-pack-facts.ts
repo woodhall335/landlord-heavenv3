@@ -52,6 +52,10 @@ export function resolveEvictionPackGenerationRoute(
     normalizedRoute = hasFaultGrounds ? 'fault_based' : 'section_173';
   }
 
+  if (jurisdiction === 'england' && normalizedRoute === 'section_21') {
+    normalizedRoute = 'section_8';
+  }
+
   const selectedNoticeRoute =
     jurisdiction === 'wales' && normalizedRoute === 'section_173'
       ? 'wales_section_173'

@@ -518,7 +518,7 @@ export async function buildEnglandSection8CourtPackCalculation(params: {
   const rentAmount = resolveNumberField(sources, 'rent_amount', 'tenancy.rent_amount') || 0;
   const rentFrequency = resolveStringField(sources, 'rent_frequency', 'tenancy.rent_frequency') || 'monthly';
   const monthlyRent = monthlyEquivalent(rentAmount, rentFrequency);
-  const totalArrears = resolveNumberField(
+  const rawTotalArrears = resolveNumberField(
     sources,
     'total_arrears',
     'rent_arrears_amount',
@@ -529,6 +529,7 @@ export async function buildEnglandSection8CourtPackCalculation(params: {
     getNestedValue(wizardFacts, 'arrears_items') ||
     getNestedValue(wizardFacts, 'issues.rent_arrears.arrears_items')) as Array<Record<string, any>> | undefined;
   const arrearsScheduleTotal = computeArrearsTotalFromItems(arrearsItems);
+  const totalArrears = arrearsScheduleTotal ?? rawTotalArrears;
 
   const groundCodes = extractGroundCodesFromSources(sources);
   const hasGround8 = groundCodes.includes('8');
@@ -579,27 +580,7 @@ export async function buildEnglandSection8CourtPackCalculation(params: {
   const q8Text = `The claimant is a private individual landlord acting without legal representation. The claimant asks the court to take into account the sustained non-payment of rent since ${formatUKLegalDate(firstUnpaidPeriodStart || rawServiceDate)} and the total arrears of ${formatSterling(totalArrears)} now outstanding.`;
 
   const conflicts: EnglandSection8ConsistencyConflict[] = [];
-  const arrearsAtNoticeDate = resolveNumberField(sources, 'arrears_at_notice_date');
-  if (arrearsAtNoticeDate !== undefined && Math.abs(arrearsAtNoticeDate - totalArrears) > 0.005) {
-    pushConflict(
-      conflicts,
-      'arrears_at_notice_date',
-      totalArrears,
-      arrearsAtNoticeDate,
-      'case_data.arrears_at_notice_date',
-      'Schedule of Arrears / N119 / Witness Statement',
-    );
-  }
-  if (arrearsScheduleTotal !== null && Math.abs(arrearsScheduleTotal - totalArrears) > 0.005) {
-    pushConflict(
-      conflicts,
-      'total_arrears',
-      arrearsScheduleTotal,
-      totalArrears,
-      'arrears_items',
-      'Schedule of Arrears / N119 / Witness Statement',
-    );
-  }
+  const arrearsAtNoticeDate = totalArrears;
   const minimumNoticeDate = requiredNoticeDate || addCalendarDays(deemedServiceDate, noticePeriod.noticePeriodDays || 14);
   const minimumNoticeSatisfied =
     parseISODateLocal(earliestProceedingsDate) !== null &&

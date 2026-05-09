@@ -39,6 +39,19 @@ describe('eviction pack generation facts', () => {
     expect(facts.pack_type).toBe('complete');
   });
 
+  it('coerces stale England Section 21 route data to the current Form 3A route', () => {
+    const facts = buildEvictionPackGenerationFacts({
+      facts: { selected_notice_route: 'section_21' },
+      caseId: 'case-123',
+      jurisdiction: 'england',
+      product: 'complete_pack',
+    });
+
+    expect(facts.selected_notice_route).toBe('section_8');
+    expect(facts.eviction_route).toBe('section_8');
+    expect(facts.recommended_route).toBe('section_8');
+  });
+
   it('keeps Wales selected routes compatible with validation while giving the generator canonical routes', () => {
     const route = resolveEvictionPackGenerationRoute(
       { wales_fault_grounds: ['rent_arrears_serious'] },
