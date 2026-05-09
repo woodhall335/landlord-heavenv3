@@ -927,6 +927,7 @@ export async function GET(
           }
         } catch (err) {
           console.error('[NOTICE-PREVIEW-API] Form 3A generation failed:', err);
+          throw err;
         }
       }
 

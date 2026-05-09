@@ -18,6 +18,20 @@ export interface EnglandGroundLegalWording {
   legalWording: string;
 }
 
+export type EnglandForm3AGroundId = `ground_${Lowercase<EnglandGroundCode>}`;
+
+export class EnglandForm3ALegalWordingError extends Error {
+  code = 'FORM3A_LEGAL_WORDING_MISSING';
+  statusCode = 422;
+  missingGrounds: string[];
+
+  constructor(message: string, missingGrounds: string[] = []) {
+    super(message);
+    this.name = 'EnglandForm3ALegalWordingError';
+    this.missingGrounds = missingGrounds;
+  }
+}
+
 let cachedGroundWordingPromise: Promise<Record<EnglandGroundCode, EnglandGroundLegalWording>> | null = null;
 let cachedLandlordGuidanceNoticePeriodsPromise: Promise<EnglandForm3ALandlordGuidanceNoticePeriods> | null = null;
 let cachedPDFParseClassPromise: Promise<any> | null = null;
@@ -60,11 +74,65 @@ function normaliseMatches(rawText: string): string {
     .replace(/\n{3,}/g, '\n\n');
 }
 
+function normalizeGroundCandidate(value: unknown): string {
+  if (value === null || value === undefined) {
+    return '';
+  }
+
+  if (typeof value === 'object') {
+    const entry = value as Record<string, unknown>;
+    return normalizeGroundCandidate(
+      entry.code ??
+        entry.ground_code ??
+        entry.groundCode ??
+        entry.number ??
+        entry.value ??
+        entry.id ??
+        entry.label ??
+        entry.title,
+    );
+  }
+
+  return String(value).trim();
+}
+
+export function parseEnglandForm3AGroundCodes(value: unknown): {
+  grounds: EnglandGroundCode[];
+  invalidGrounds: string[];
+} {
+  const rawEntries = Array.isArray(value)
+    ? value
+    : normalizeGroundCandidate(value)
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+
+  const grounds: EnglandGroundCode[] = [];
+  const invalidGrounds: string[] = [];
+  const seen = new Set<EnglandGroundCode>();
+
+  for (const rawEntry of rawEntries) {
+    const rawGround = normalizeGroundCandidate(rawEntry);
+    const normalized = normalizeEnglandGroundCode(rawGround);
+
+    if (!normalized) {
+      if (rawGround) {
+        invalidGrounds.push(rawGround);
+      }
+      continue;
+    }
+
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      grounds.push(normalized);
+    }
+  }
+
+  return { grounds, invalidGrounds };
+}
+
 function parseGroundCodes(value: string): EnglandGroundCode[] {
-  return value
-    .split(',')
-    .map((entry) => normalizeEnglandGroundCode(entry))
-    .filter((entry): entry is EnglandGroundCode => Boolean(entry));
+  return parseEnglandForm3AGroundCodes(value).grounds;
 }
 
 function normalizeGuidanceText(rawText: string): string {
@@ -97,43 +165,74 @@ function extractLandlordGuidanceNoticePeriods(rawText: string): EnglandForm3ALan
 }
 
 function extractLegalWordingBlocks(rawText: string): Record<EnglandGroundCode, EnglandGroundLegalWording> {
-  const normalizedText = normaliseMatches(rawText);
-  const headingRegex =
-    /Ground\s+([0-9A-Z]+)\s+[–-]\s+([^\n]+)\nExplanation\n([\s\S]*?)\nLegal wording\nGround\s+\1\n([\s\S]*?)(?=\nGround\s+[0-9A-Z]+\s+[–-]|\n--\s+\d+\s+of\s+\d+\s+--|$)/g;
+  return extractCanonicalLegalWordingBlocks(rawText);
+}
 
+function isGroundLegalWordingProductionReady(code: EnglandGroundCode, legalWording: string): boolean {
+  const normalized = legalWording.replace(/\s+/g, ' ').trim();
+  return normalized.length > `Ground ${code}`.length && normalized !== `Ground ${code}`;
+}
+
+function extractCanonicalLegalWordingBlocks(rawText: string): Record<EnglandGroundCode, EnglandGroundLegalWording> {
+  const normalizedText = normaliseMatches(rawText);
+  const headingRegex = /^Ground\s+([0-9A-Z]+)\s+(?:\u2013|â€“|-)\s+([^\n]+)$/gm;
+  const headings = [...normalizedText.matchAll(headingRegex)]
+    .map((match) => ({
+      code: normalizeEnglandGroundCode(match[1]),
+      title: match[2].trim(),
+      index: match.index ?? -1,
+    }))
+    .filter((match): match is { code: EnglandGroundCode; title: string; index: number } =>
+      Boolean(match.code) && match.index >= 0,
+    );
   const entries = {} as Record<EnglandGroundCode, EnglandGroundLegalWording>;
 
-  for (const match of normalizedText.matchAll(headingRegex)) {
-    const code = normalizeEnglandGroundCode(match[1]);
-    if (!code) {
+  for (const [index, heading] of headings.entries()) {
+    const nextHeadingIndex = headings[index + 1]?.index ?? normalizedText.length;
+    const block = normalizedText.slice(heading.index, nextHeadingIndex);
+    const legalMarker = new RegExp(`Legal wording\\nGround\\s+${heading.code}\\n`);
+    const legalMatch = block.match(legalMarker);
+
+    if (!legalMatch || legalMatch.index === undefined) {
       continue;
     }
 
-    entries[code] = {
-      code,
-      title: match[2].trim(),
-      explanation: cleanGroundText(match[3]),
-      legalWording: cleanGroundText(match[4]),
+    const headingLineEnd = block.indexOf('\n');
+    const explanation = cleanGroundText(
+      block
+        .slice(headingLineEnd + 1, legalMatch.index)
+        .replace(/^Explanation\s*\n?/i, ''),
+    );
+    const legalWording = cleanGroundText(
+      block
+        .slice(legalMatch.index + legalMatch[0].length)
+        .replace(/^(?:Mandatory|Discretionary) grounds\s*$/gim, ''),
+    );
+
+    if (!isGroundLegalWordingProductionReady(heading.code, legalWording)) {
+      continue;
+    }
+
+    entries[heading.code] = {
+      code: heading.code,
+      title: heading.title,
+      explanation,
+      legalWording,
     };
   }
 
   return entries;
 }
 
-function buildFallbackGroundWordings(): Record<EnglandGroundCode, EnglandGroundLegalWording> {
-  const entries = {} as Record<EnglandGroundCode, EnglandGroundLegalWording>;
+function toForm3AGroundId(code: EnglandGroundCode): EnglandForm3AGroundId {
+  return `ground_${code.toLowerCase()}` as EnglandForm3AGroundId;
+}
 
-  for (const code of Object.keys(ENGLAND_POST_2026_GROUND_CATALOG) as EnglandGroundCode[]) {
-    const definition = ENGLAND_POST_2026_GROUND_CATALOG[code];
-    entries[code] = {
-      code,
-      title: definition.title,
-      explanation: definition.title,
-      legalWording: `Ground ${code}`,
-    };
-  }
-
-  return entries;
+function createMissingLegalWordingError(missingGrounds: string[]): EnglandForm3ALegalWordingError {
+  return new EnglandForm3ALegalWordingError(
+    `Form 3A question 4.2 cannot be generated because statutory legal wording is missing for: ${missingGrounds.join(', ')}`,
+    missingGrounds,
+  );
 }
 
 function buildFallbackGuidanceNoticePeriods(): EnglandForm3ALandlordGuidanceNoticePeriods {
@@ -186,8 +285,8 @@ async function getPDFParseClass(): Promise<any> {
   if (!cachedPDFParseClassPromise) {
     cachedPDFParseClassPromise = (async () => {
       await ensurePdfParseDomGlobals();
-      const module = await import('pdf-parse');
-      const PDFParse = (module as any).PDFParse;
+      const pdfParseModule = await import('pdf-parse');
+      const PDFParse = (pdfParseModule as any).PDFParse;
 
       if (!PDFParse) {
         throw new Error('PDFParse class not found in pdf-parse module');
@@ -205,43 +304,42 @@ export async function getEnglandGroundLegalWordings(): Promise<
 > {
   if (!cachedGroundWordingPromise) {
     cachedGroundWordingPromise = (async () => {
-      try {
-        const [bytes, PDFParse] = await Promise.all([
-          fs.readFile(LEGAL_WORDING_PATH),
-          getPDFParseClass(),
-        ]);
-        const parser = new PDFParse({ data: bytes });
+      const [bytes, PDFParse] = await Promise.all([
+        fs.readFile(LEGAL_WORDING_PATH),
+        getPDFParseClass(),
+      ]);
+      const parser = new PDFParse({ data: bytes });
 
-        try {
+      try {
         const { text } = await parser.getText();
         const parsed = extractLegalWordingBlocks(text);
 
-        for (const code of Object.keys(ENGLAND_POST_2026_GROUND_CATALOG) as EnglandGroundCode[]) {
-          if (!parsed[code]) {
-            const definition = ENGLAND_POST_2026_GROUND_CATALOG[code];
-            parsed[code] = {
-              code,
-              title: definition.title,
-              explanation: definition.title,
-              legalWording: `Ground ${code}`,
-            };
-          }
+        if (Object.keys(parsed).length === 0) {
+          throw new EnglandForm3ALegalWordingError(
+            'Form 3A statutory legal wording source did not produce any possession ground wording.',
+          );
         }
 
         return parsed;
       } finally {
         await parser.destroy();
       }
-      } catch (error) {
-        console.warn('[legal-wording] Falling back to catalogue-only Form 3A ground wording:', {
-          error: error instanceof Error ? error.message : String(error),
-        });
-        return buildFallbackGroundWordings();
-      }
     })();
   }
 
   return cachedGroundWordingPromise;
+}
+
+export async function getEnglandForm3AGroundLegalWordingMap(): Promise<
+  Partial<Record<EnglandForm3AGroundId, EnglandGroundLegalWording>>
+> {
+  const groundWordings = await getEnglandGroundLegalWordings();
+  return Object.fromEntries(
+    Object.entries(groundWordings).map(([code, wording]) => [
+      toForm3AGroundId(code as EnglandGroundCode),
+      wording,
+    ]),
+  ) as Partial<Record<EnglandForm3AGroundId, EnglandGroundLegalWording>>;
 }
 
 export async function getEnglandForm3ALandlordGuidanceNoticePeriods(): Promise<EnglandForm3ALandlordGuidanceNoticePeriods> {
@@ -284,18 +382,30 @@ export async function getEnglandGroundLegalWording(
   return groundWordings[normalized] || null;
 }
 
-export async function buildEnglandForm3AGroundsText(
-  grounds: Array<string | number>,
-): Promise<string> {
-  const groundWordings = await getEnglandGroundLegalWordings();
+export async function buildEnglandForm3AGroundsText(grounds: unknown): Promise<string> {
+  const parsedGrounds = parseEnglandForm3AGroundCodes(grounds);
+  if (parsedGrounds.invalidGrounds.length > 0) {
+    throw createMissingLegalWordingError(parsedGrounds.invalidGrounds);
+  }
 
-  return grounds
-    .map((ground) => normalizeEnglandGroundCode(ground))
-    .filter((ground): ground is EnglandGroundCode => Boolean(ground))
+  if (parsedGrounds.grounds.length === 0) {
+    throw new EnglandForm3ALegalWordingError(
+      'Form 3A question 4.2 cannot be generated because no possession grounds were selected.',
+    );
+  }
+
+  const groundWordings = await getEnglandGroundLegalWordings();
+  const missingGrounds = parsedGrounds.grounds.filter((ground) => !groundWordings[ground]);
+
+  if (missingGrounds.length > 0) {
+    throw createMissingLegalWordingError(missingGrounds.map((ground) => `Ground ${ground}`));
+  }
+
+  return parsedGrounds.grounds
     .map((ground) => {
       const wording = groundWordings[ground];
       const title = getEnglandGroundDefinition(ground)?.title || wording.title;
-      return `Ground ${ground} - ${title}\n${wording.legalWording}`;
+      return `Ground ${ground} – ${title}\n${wording.legalWording}`;
     })
     .join('\n\n');
 }

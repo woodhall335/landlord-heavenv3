@@ -7,9 +7,16 @@ import {
   getEnglandCommonReasonCheckboxes,
   getEnglandGroundDefinition,
 } from '@/lib/england-possession/ground-catalog';
-import { buildEnglandForm3AExplanation, isThinEnglandNarrative } from '@/lib/england-possession/pack-drafting';
+import { buildEnglandForm3AExplanation } from '@/lib/england-possession/pack-drafting';
+import {
+  buildEnglandForm3AGroundsText,
+  EnglandForm3ALegalWordingError,
+  parseEnglandForm3AGroundCodes,
+} from '@/lib/england-possession/legal-wording';
 
 const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
+const FORM3A_GROUNDS_TEXT_MAIN_CHAR_LIMIT = 2800;
+const FORM3A_GROUNDS_CONTINUATION_NOTICE = 'Continued on the Form 3A extra sheet.';
 
 type OfficialFormData = Record<string, any>;
 
@@ -174,12 +181,142 @@ function formatCombDateValue(dateString?: string | null): string {
 function normalizeList(value: unknown): string[] {
   if (!value) return [];
   if (Array.isArray(value)) {
-    return value.map((item) => String(item).trim()).filter(Boolean);
+    return value
+      .map((item) => {
+        if (item && typeof item === 'object') {
+          const entry = item as Record<string, unknown>;
+          return String(
+            entry.code ??
+              entry.ground_code ??
+              entry.groundCode ??
+              entry.number ??
+              entry.value ??
+              entry.id ??
+              entry.label ??
+              '',
+          ).trim();
+        }
+        return String(item).trim();
+      })
+      .filter(Boolean);
   }
   return String(value)
     .split(',')
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function coerceFormText(value: unknown): string {
+  if (value === undefined || value === null || typeof value === 'object') {
+    return '';
+  }
+  return String(value).trim();
+}
+
+function getForm3AGroundSelectionSource(data: OfficialFormData): unknown {
+  const directSources = [
+    data.ground_codes,
+    data.form3a_ground_codes,
+    data.selected_grounds,
+    data.ground_numbers,
+    data.section8_grounds,
+    data.section8_grounds_selection,
+  ];
+
+  for (const source of directSources) {
+    if (Array.isArray(source) ? source.length > 0 : Boolean(source)) {
+      return source;
+    }
+  }
+
+  if (Array.isArray(data.grounds) && data.grounds.length > 0) {
+    return data.grounds;
+  }
+
+  return [];
+}
+
+function isWeakForm3AGroundsText(value: string): boolean {
+  const normalized = value.replace(/\s+/g, ' ').trim();
+  if (!normalized) {
+    return true;
+  }
+
+  if (/^(Ground\s+[0-9A-Z]+\s*)+$/i.test(normalized)) {
+    return true;
+  }
+
+  const labelOnlyPattern = /^(Ground\s+[0-9A-Z]+\s*[-–]\s*[^.:\n]+?\s+Ground\s+[0-9A-Z]+\s*)+$/i;
+  return labelOnlyPattern.test(normalized);
+}
+
+async function resolveForm3AGroundsText(data: OfficialFormData): Promise<string> {
+  const groundSource = getForm3AGroundSelectionSource(data);
+  const parsedGrounds = parseEnglandForm3AGroundCodes(groundSource);
+
+  if (parsedGrounds.grounds.length > 0 || parsedGrounds.invalidGrounds.length > 0) {
+    return buildEnglandForm3AGroundsText(groundSource);
+  }
+
+  const explicitText = coerceFormText(data.form3a_grounds_text);
+  if (explicitText && !isWeakForm3AGroundsText(explicitText)) {
+    return explicitText;
+  }
+
+  throw new EnglandForm3ALegalWordingError(
+    'Form 3A question 4.2 cannot be generated because no selected possession grounds were provided.',
+  );
+}
+
+function splitTextAtLimit(text: string, limit: number): { head: string; tail: string } {
+  if (text.length <= limit) {
+    return { head: text, tail: '' };
+  }
+
+  const boundary = Math.max(
+    text.lastIndexOf('\n', limit),
+    text.lastIndexOf('. ', limit),
+    text.lastIndexOf('; ', limit),
+    text.lastIndexOf(' ', limit),
+  );
+  const splitAt = boundary > limit * 0.55 ? boundary + 1 : limit;
+
+  return {
+    head: text.slice(0, splitAt).trim(),
+    tail: text.slice(splitAt).trim(),
+  };
+}
+
+function splitForm3AGroundsText(text: string): { mainText: string; continuationText: string } {
+  if (text.length <= FORM3A_GROUNDS_TEXT_MAIN_CHAR_LIMIT) {
+    return { mainText: text, continuationText: '' };
+  }
+
+  const blocks = text.split(/\n{2,}/);
+  const mainBlocks: string[] = [];
+  const continuationBlocks: string[] = [];
+
+  for (const block of blocks) {
+    const nextMain = [...mainBlocks, block].join('\n\n');
+    if (mainBlocks.length === 0 && block.length > FORM3A_GROUNDS_TEXT_MAIN_CHAR_LIMIT) {
+      const split = splitTextAtLimit(block, FORM3A_GROUNDS_TEXT_MAIN_CHAR_LIMIT);
+      mainBlocks.push(split.head);
+      if (split.tail) {
+        continuationBlocks.push(split.tail);
+      }
+    } else if (mainBlocks.length === 0 || nextMain.length <= FORM3A_GROUNDS_TEXT_MAIN_CHAR_LIMIT) {
+      mainBlocks.push(block);
+    } else {
+      continuationBlocks.push(block);
+    }
+  }
+
+  return {
+    mainText: `${mainBlocks.join('\n\n')}\n\n${FORM3A_GROUNDS_CONTINUATION_NOTICE}`,
+    continuationText: continuationBlocks.length > 0
+      ? `Question 4.2 continued - possession ground legal wording\n\n${continuationBlocks.join('\n\n')}`
+      : '',
+  };
 }
 
 function splitAddress(address?: string | null): string[] {
@@ -263,10 +400,21 @@ function getAddressParts(data: OfficialFormData, prefix: 'property' | 'landlord'
   };
 }
 
-function setTextValue(form: PDFForm, fieldName: string, value: string | undefined | null) {
+function setTextValue(
+  form: PDFForm,
+  fieldName: string,
+  value: string | undefined | null,
+  options: { multiline?: boolean; fontSize?: number } = {},
+) {
   if (value === undefined || value === null) return;
   const field = form.getField(fieldName);
   if (field instanceof PDFTextField) {
+    if (options.multiline) {
+      field.enableMultiline();
+    }
+    if (options.fontSize) {
+      field.setFontSize(options.fontSize);
+    }
     field.setText(String(value));
   }
 }
@@ -400,7 +548,6 @@ export async function fillForm3AForm(
   const landlord = getAddressParts(data, 'landlord');
   const earliestCourtDate = calculateEarliestCourtDate(data);
   const signatureDate = data.signature_date || new Date().toISOString().split('T')[0];
-  const extraSheetDate = data.extra_sheet_signature_date || data.signature_date || '';
   const tenantNames = [
     data.tenant_full_name,
     data.tenant_2_name,
@@ -415,12 +562,27 @@ export async function fillForm3AForm(
   const jointSignatories = buildJointSignatoryLines(data);
   const signatoryCapacity = String(data.signatory_capacity || 'landlord').toLowerCase();
   const draftedExplanation = buildEnglandForm3AExplanation(data);
-  const rawExplanation = String(data.form3a_explanation || '').trim();
+  const rawExplanation = coerceFormText(data.form3a_explanation);
   const signatoryName = data.signatory_name || data.landlord_full_name || '';
   const form3AExplanation =
-    rawExplanation && !isThinEnglandNarrative(rawExplanation)
+    rawExplanation && !isWeakForm3AGroundsText(rawExplanation)
       ? rawExplanation
       : draftedExplanation || rawExplanation || data.particulars_of_claim || '';
+  const resolvedGroundsText = await resolveForm3AGroundsText(data);
+  const { mainText: form3AGroundsText, continuationText: form3AGroundsContinuation } =
+    splitForm3AGroundsText(resolvedGroundsText);
+  const existingExtraSheetText =
+    coerceFormText(data.form3a_extra_sheet_text) || coerceFormText(data.extra_sheet_text);
+  const extraSheetText = [form3AGroundsContinuation, existingExtraSheetText]
+    .filter(Boolean)
+    .join('\n\n');
+  const extraSheetSignature =
+    coerceFormText(data.extra_sheet_signature) ||
+    (form3AGroundsContinuation ? signatoryName : '');
+  const extraSheetDate =
+    data.extra_sheet_signature_date ||
+    data.signature_date ||
+    (form3AGroundsContinuation ? signatureDate : '');
 
   setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.tenantNames, tenantNames);
   setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.propertyLine1, property.line1);
@@ -445,8 +607,14 @@ export async function fillForm3AForm(
   setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.noRightToRent, checkboxValues.no_right_to_rent);
   setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.other, checkboxValues.other);
 
-  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText, data.form3a_grounds_text || data.ground_particulars || '');
-  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText, form3AExplanation);
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText, form3AGroundsText, {
+    multiline: true,
+    fontSize: form3AGroundsContinuation ? 8 : 9,
+  });
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText, form3AExplanation, {
+    multiline: true,
+    fontSize: 9,
+  });
 
   setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.signature, signatoryName);
   setCheckboxValue(form, FORM3A_OFFICIAL_FIELD_NAMES.checkboxes.capacityLandlord, signatoryCapacity === 'landlord');
@@ -469,8 +637,11 @@ export async function fillForm3AForm(
   setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory1, jointSignatories[0] || '');
   setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory2, jointSignatories[1] || '');
   setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory3, jointSignatories[2] || '');
-  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText, data.form3a_extra_sheet_text || data.extra_sheet_text || '');
-  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetSignature, data.extra_sheet_signature || '');
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText, extraSheetText, {
+    multiline: true,
+    fontSize: 9,
+  });
+  setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetSignature, extraSheetSignature);
   setTextValue(form, FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetDate, formatCombDateValue(extraSheetDate));
 
   const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);

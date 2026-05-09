@@ -10,7 +10,10 @@ import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/
 import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
 import { generateDocument, htmlToPdf } from '@/lib/documents/generator';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
-import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
+import {
+  buildEnglandForm3AGroundsText,
+  EnglandForm3ALegalWordingError,
+} from '@/lib/england-possession/legal-wording';
 import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
 import {
   generateCompleteEvictionPack,
@@ -532,6 +535,15 @@ export async function GET(
       return errorResponse('UNSUPPORTED_DOCUMENT_TYPE', 'Unsupported preview document type', 400, { documentType });
     }
     } catch (err) {
+      if (err instanceof EnglandForm3ALegalWordingError || documentType === 'section8_notice') {
+        return errorResponse(
+          (err as any)?.code || 'FORM3A_PREVIEW_GENERATION_FAILED',
+          err instanceof Error ? err.message : 'Could not generate the real Form 3A preview',
+          (err as any)?.statusCode || 500,
+          { caseId, documentType },
+        );
+      }
+
       title = title || getEnglandPreviewTitle(documentType);
       pdfBytes = null;
       htmlContent = buildFallbackCaseSummaryHtml({ title, wizardFacts });

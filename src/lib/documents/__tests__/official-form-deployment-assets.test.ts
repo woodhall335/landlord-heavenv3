@@ -21,6 +21,11 @@ const REQUIRED_OFFICIAL_FORMS = [
   ['scotland', 'simple_procedure_response_form.pdf'],
 ];
 
+const REQUIRED_FORM3A_SOURCE_PDFS = [
+  'Form_3A_legal_wording_for_possession_grounds.pdf',
+  'Form_3A_guidance_for_landlords.pdf',
+];
+
 describe('official form deployment assets', () => {
   it('keeps every server-filled official PDF present in public/official-forms', async () => {
     for (const formPath of REQUIRED_OFFICIAL_FORMS) {
@@ -28,6 +33,15 @@ describe('official form deployment assets', () => {
       const bytes = await readFile(filePath);
 
       expect(bytes.byteLength, formPath.join('/')).toBeGreaterThan(1000);
+    }
+  });
+
+  it('keeps Form 3A legal wording source PDFs available for server generation', async () => {
+    for (const fileName of REQUIRED_FORM3A_SOURCE_PDFS) {
+      const filePath = path.join(process.cwd(), 'artifacts', 'update', fileName);
+      const bytes = await readFile(filePath);
+
+      expect(bytes.byteLength, fileName).toBeGreaterThan(1000);
     }
   });
 

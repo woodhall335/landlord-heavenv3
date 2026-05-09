@@ -1,6 +1,7 @@
 import 'server-only';
 
 import {
+  EnglandForm3ALegalWordingError,
   getEnglandGroundLegalWordings,
   type EnglandGroundLegalWording,
 } from '@/lib/england-possession/legal-wording';
@@ -32,7 +33,14 @@ function applyGroundWording(
   ground: TemplateGround,
   wording: EnglandGroundLegalWording | undefined,
 ): TemplateGround {
-  const legalText = wording?.legalWording || ground.statutory_text || ground.full_text || '';
+  if (!wording) {
+    throw new EnglandForm3ALegalWordingError(
+      'Form 3A statutory legal wording is missing for a selected possession ground.',
+      [String(ground.code ?? ground.number ?? ground.title ?? 'unknown ground')],
+    );
+  }
+
+  const legalText = wording.legalWording;
 
   return {
     ...ground,

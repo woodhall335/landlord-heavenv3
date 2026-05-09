@@ -413,7 +413,11 @@ const nextConfig = {
     '/api/admin/test-artifacts/complete-pack/download': ['artifacts/**/*'],
   },
   outputFileTracingIncludes: {
-    '/api/**': ['./public/official-forms/**/*'],
+    '/api/**': [
+      './public/official-forms/**/*',
+      './artifacts/update/Form_3A_legal_wording_for_possession_grounds.pdf',
+      './artifacts/update/Form_3A_guidance_for_landlords.pdf',
+    ],
   },
   // Allow localhost for development
   allowedDevOrigins: ['localhost:5000', 'localhost:3000'],

@@ -27,7 +27,11 @@ describe('Next config indexability rules', () => {
     const nextConfig = (await import('../../../../next.config.mjs')).default;
 
     expect(nextConfig.outputFileTracingIncludes).toMatchObject({
-      '/api/**': expect.arrayContaining(['./public/official-forms/**/*']),
+      '/api/**': expect.arrayContaining([
+        './public/official-forms/**/*',
+        './artifacts/update/Form_3A_legal_wording_for_possession_grounds.pdf',
+        './artifacts/update/Form_3A_guidance_for_landlords.pdf',
+      ]),
     });
   });
 

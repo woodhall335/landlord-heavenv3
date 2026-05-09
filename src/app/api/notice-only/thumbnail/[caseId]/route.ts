@@ -40,7 +40,10 @@ import { fillOfficialForm } from '@/lib/documents/official-forms-filler';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import { generateEnglandN215PDF, normalizeEnglandProofOfServiceMethod } from '@/lib/documents/england-n215-generator';
-import { buildEnglandForm3AGroundsText } from '@/lib/england-possession/legal-wording';
+import {
+  buildEnglandForm3AGroundsText,
+  EnglandForm3ALegalWordingError,
+} from '@/lib/england-possession/legal-wording';
 import { enrichEnglandSection8TemplateGrounds } from '@/lib/case-facts/enrich-england-section8-template-grounds';
 import {
   generateCompleteEvictionPack,
@@ -1019,6 +1022,15 @@ export async function GET(
       html = compileTemplate(content, templateData);
     }
     } catch (err) {
+      if (err instanceof EnglandForm3ALegalWordingError || resolvedDocType === 'section8_notice') {
+        return errorResponse(
+          (err as any)?.code || 'FORM3A_THUMBNAIL_GENERATION_FAILED',
+          err instanceof Error ? err.message : 'Could not generate the real Form 3A thumbnail',
+          (err as any)?.statusCode || 500,
+          { caseId, resolvedDocType },
+        );
+      }
+
       pdfThumbnail = null;
       html = buildFallbackCaseSummaryHtml({
         title: getFallbackDocumentTitle(resolvedDocType),
