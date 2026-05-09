@@ -23,6 +23,14 @@ describe('Next config indexability rules', () => {
     );
   });
 
+  it('bundles official form PDFs with API functions that fill generated documents', async () => {
+    const nextConfig = (await import('../../../../next.config.mjs')).default;
+
+    expect(nextConfig.outputFileTracingIncludes).toMatchObject({
+      '/api/**': expect.arrayContaining(['./public/official-forms/**/*']),
+    });
+  });
+
   it('keeps GSC crawl-waste legacy routes as permanent redirects', async () => {
     const nextConfig = (await import('../../../../next.config.mjs')).default;
     const redirects = await nextConfig.redirects();

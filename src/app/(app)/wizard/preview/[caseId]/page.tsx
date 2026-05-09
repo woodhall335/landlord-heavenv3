@@ -684,16 +684,16 @@ export default function WizardPreviewPage() {
           // all jurisdiction/route combinations (e.g., Wales routes)
           // =====================================================================
           if (isNoticeOnly) {
-            console.log('[Preview] Notice Only case - skipping individual document generation', {
+            console.log('[Preview] Notice Only case - using pack-backed real PDF previews', {
               caseId,
               jurisdiction: jurisdictionForGen,
               route: routeForGen,
               product: productForGen,
             });
 
-            // For Notice Only, we don't generate individual preview documents
-            // The document cards will show based on getNoticeOnlyDocuments() config
-            // Actual PDF pack is generated post-payment via /api/notice-only/preview/${caseId}
+            // For Notice Only, the document cards are configured without creating
+            // persistent preview rows. Thumbnails and embeds call the pack-backed
+            // preview APIs, which render the same real PDFs used for fulfillment.
             //
             // This prevents the "Route section_21 is not available for wales/notice_only"
             // error that occurs when trying to use /api/documents/generate for Wales routes

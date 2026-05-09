@@ -412,6 +412,9 @@ const nextConfig = {
     '/api/admin/test-artifacts/complete-pack/england/section8': ['artifacts/**/*'],
     '/api/admin/test-artifacts/complete-pack/download': ['artifacts/**/*'],
   },
+  outputFileTracingIncludes: {
+    '/api/**': ['./public/official-forms/**/*'],
+  },
   // Allow localhost for development
   allowedDevOrigins: ['localhost:5000', 'localhost:3000'],
   // Exclude PDF libraries from webpack bundling (they have native dependencies)

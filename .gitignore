@@ -44,8 +44,21 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# official court forms (large PDFs - not committed)
+# official court forms required by server-side PDF generation
 public/official-forms/**/*.pdf
+!public/official-forms/*.pdf
+!public/official-forms/Form_3A.pdf
+!public/official-forms/Form_4A.pdf
+!public/official-forms/N1_1224.pdf
+!public/official-forms/N215.pdf
+!public/official-forms/n5-eng.pdf
+!public/official-forms/n5b-eng.pdf
+!public/official-forms/n119-eng.pdf
+!public/official-forms/n325-eng.pdf
+!public/official-forms/N325A.pdf
+!public/official-forms/N5_WALES_1222.pdf
+!public/official-forms/N5B_WALES_0323.pdf
+!public/official-forms/N119_WALES_1222.pdf
 !public/official-forms/**/forms-manifest.json
 !public/official-forms/README.md
 !public/official-forms/scotland/notice_to_leave.pdf
