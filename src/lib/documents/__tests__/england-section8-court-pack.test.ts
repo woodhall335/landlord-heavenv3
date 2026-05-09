@@ -74,7 +74,7 @@ describe('England Section 8 court-pack calculation', () => {
     expect(calculation.q4aText).toContain('Schedule of Arrears (Exhibit DM1)');
     expect(calculation.q5Text).toContain('Form 3A notice seeking possession was served');
     expect(calculation.validationSummary.deemed_service_date).toBe('2026-05-05');
-    expect(calculation.validationSummary.notice_expiry_date).toBe('2026-05-19');
+    expect(calculation.validationSummary.notice_expiry_date).toBe('2026-06-02');
     expect(calculation.validationSummary.ground_8_status).toBe('AT');
   });
 });

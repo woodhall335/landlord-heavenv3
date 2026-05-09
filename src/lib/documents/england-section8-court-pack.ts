@@ -1,4 +1,5 @@
 import { resolveNoticeServiceMethod } from '@/lib/case-facts/normalize';
+import { buildCompletePackDefendantCircumstancesText } from '@/lib/england-possession/defendant-circumstances';
 import {
   calculateEnglandPossessionNoticePeriod,
   getEnglandGroundDefinition,
@@ -401,19 +402,12 @@ function buildStatutoryGroundsText(groundCodes: string[]): string {
 }
 
 function buildQ7DefendantCircumstances(sources: SourceRecord[]): string {
-  const explicit =
-    resolveStringField(
-      sources,
-      'defendant_circumstances',
-      'tenant_vulnerability_details',
-      'tenant_benefits_details',
-      'benefit_type',
-      'known_tenant_defences',
-    ) || '';
+  const merged = sources.reduceRight<Record<string, any>>(
+    (acc, source) => ({ ...acc, ...(source || {}) }),
+    {},
+  );
 
-  if (explicit) return explicit;
-
-  return "The claimant is not aware of any further information about the defendant's circumstances beyond the matters set out in the claim papers.";
+  return buildCompletePackDefendantCircumstancesText(merged);
 }
 
 function buildFirstUnpaidPeriodStart(sources: SourceRecord[]): string | null {

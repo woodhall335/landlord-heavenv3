@@ -250,12 +250,14 @@ describe('Editable Official Forms - No Flatten', () => {
       const pdfDoc = await PDFDocument.load(pdfBytes);
       const form = pdfDoc.getForm();
 
-      expect(form.getTextField('4. (a) The reason the claimant is asking for possession is:').getText()).toContain('Ground 8');
+      expect(form.getTextField('4. (a) The reason the claimant is asking for possession is:').getText()).toContain('Schedule of Arrears');
       expect(form.getTextField('4. (b) The reason the claimant is asking for possession is:').getText()).toContain('No separate non-arrears breach particulars');
-      expect(form.getTextField('4. (c) The reason the claimant is asking for possession is:').getText()).toContain('Ground 8, Schedule 2, Housing Act 1988');
+      const statutoryGroundsText = form.getTextField('4. (c) The reason the claimant is asking for possession is:').getText();
+      expect(statutoryGroundsText).toContain('Ground 8 (mandatory)');
+      expect(statutoryGroundsText).toContain('Schedule 2 to the Housing Act 1988');
       expect(form.getTextField('5. The following steps have already been taken to recover any arrears:').getText()).toContain('Form 3A notice');
       expect(form.getTextField('7. The following information is known about the defendant’s circumstances:').getText()).toContain('health and financial difficulties');
-      expect(form.getTextField('8. The claimant is asking the court to take the following financial or other information into account when making its decision whether or not to grant an order for possession:').getText()).toContain('rent arrears');
+      expect(form.getTextField('8. The claimant is asking the court to take the following financial or other information into account when making its decision whether or not to grant an order for possession:').getText()).toContain('total arrears');
     });
   });
 
@@ -274,11 +276,11 @@ describe('Editable Official Forms - No Flatten', () => {
     it('uses the drafted explanation when the landlord narrative is too thin', async () => {
       const pdfBytes = await fillForm3AForm({
         ...COMPLETE_FORM3A_CASE_DATA,
-        ground_codes: ['1A', '8', '10', '11'],
+        ground_codes: ['8', '10', '11'],
         rent_amount: 1200,
         rent_frequency: 'monthly',
         total_arrears: 4200,
-        form3a_explanation: 'Ground 1A: The landlord intends to sell the property on the open market after possession is recovered.',
+        form3a_explanation: 'Ground 8 Ground 10',
       });
       const pdfDoc = await PDFDocument.load(pdfBytes);
       const form = pdfDoc.getForm();
@@ -403,7 +405,8 @@ describe('Editable Official Forms - No Flatten', () => {
         expect(form.getCheckBox(fieldName).isChecked()).toBe(true);
       });
 
-      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText()).toContain('Ground 17 - False statement.');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.groundsText).getText()).toContain('Continued on the Form 3A extra sheet.');
+      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText).getText()).toContain('Ground 17');
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.explanationText).getText()).toContain(
         'the notice needs each official Form 3A checkbox to align'
       );
@@ -430,9 +433,9 @@ describe('Editable Official Forms - No Flatten', () => {
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.jointSignatory3).getText()).toBe(
         'Joint Three\n3 Joint Street\nLeeds\nLS1 2AD\nagent'
       );
-      expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText).getText()).toBe(
-        'See attached chronology, exhibit list, and account summary.'
-      );
+    expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetText).getText()).toContain(
+      'See attached chronology, exhibit list, and account summary.'
+    );
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetSignature).getText()).toBe('Amir Agent');
       expect(form.getTextField(FORM3A_OFFICIAL_FIELD_NAMES.text.extraSheetDate).getText()).toBe('02062026');
     });

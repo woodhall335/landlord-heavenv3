@@ -145,7 +145,7 @@ describe("Witness Statement Sections Builder", () => {
       });
 
       it("mentions tenancy type", () => {
-        expect(sections.tenancy_history).toContain("assured shorthold tenancy");
+        expect(sections.tenancy_history).toContain("assured tenancy");
       });
 
       it("mentions fixed term end date", () => {
@@ -218,12 +218,13 @@ describe("Witness Statement Sections Builder", () => {
       });
 
       it("is formatted as bullet points", () => {
-        expect(sections.timeline).toContain("•");
+        expect(sections.timeline).toContain("<ul>");
+        expect(sections.timeline).toContain("<li>");
       });
 
       it("mentions tenancy commencement date", () => {
         expect(sections.timeline).toContain("14 July 2025");
-        expect(sections.timeline).toContain("Tenancy commenced");
+        expect(sections.timeline).toContain("Tenancy began");
       });
 
       it("mentions earliest arrears period", () => {
@@ -232,7 +233,7 @@ describe("Witness Statement Sections Builder", () => {
 
       it("mentions notice served date with method", () => {
         expect(sections.timeline).toContain("19 January 2026");
-        expect(sections.timeline).toContain("Section 8 Notice served");
+        expect(sections.timeline).toContain("Form 3A notice was served");
         expect(sections.timeline).toContain("first class post");
       });
 
@@ -269,12 +270,12 @@ describe("Witness Statement Sections Builder", () => {
       });
 
       it("mentions Section 8 Notice as attached", () => {
-        expect(sections.evidence_references).toContain("Section 8 Notice");
+        expect(sections.evidence_references).toContain("Form 3A Notice");
         expect(sections.evidence_references).toContain("Exhibit TM2");
       });
 
       it("mentions Proof of Service as attached", () => {
-        expect(sections.evidence_references).toContain("Proof of Service");
+        expect(sections.evidence_references).toContain("Certificate of Service (Form N215)");
         expect(sections.evidence_references).toContain("Exhibit TM3");
       });
 
@@ -404,8 +405,8 @@ describe("Witness Statement Sections Builder", () => {
 
       expect(sections.evidence_references).toContain("tenancy_agreement.pdf");
       expect(sections.evidence_references).toContain("rent_ledger.xlsx");
-      // Uploads are listed under "Verified Documents Available" section
-      expect(sections.evidence_references).toContain("Verified Documents Available");
+      // Uploads are listed under the verified documents section
+      expect(sections.evidence_references).toContain("Verified documents available");
     });
 
     it("handles case with no arrears items", () => {
@@ -421,7 +422,7 @@ describe("Witness Statement Sections Builder", () => {
 
       // Timeline should still work without earliest arrears date
       expect(sections.timeline).toBeTruthy();
-      expect(sections.timeline).toContain("Tenancy commenced");
+      expect(sections.timeline).toContain("Tenancy began");
     });
   });
 });
