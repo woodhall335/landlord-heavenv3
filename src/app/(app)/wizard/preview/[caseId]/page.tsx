@@ -379,7 +379,7 @@ export default function WizardPreviewPage() {
     // Section 21 (no-fault) does NOT require arrears schedule
     // Section 8 and Wales fault-based routes need arrears schedule when arrears data exists
     const routeRequiresArrearsSchedule = (): boolean => {
-      const isSection8 = jurisdiction === 'england' || noticeRoute === 'section_8' || noticeRoute === 'section-8';
+      const isSection8 = noticeRoute === 'section_8' || noticeRoute === 'section-8';
       const isWalesFaultBased = noticeRoute === 'fault_based' || noticeRoute === 'fault-based' || noticeRoute === 'wales_fault_based';
       const isScotlandWithArrears = jurisdiction === 'scotland'; // Scotland Notice to Leave can include arrears grounds
       return isSection8 || isWalesFaultBased || isScotlandWithArrears;
@@ -675,7 +675,11 @@ export default function WizardPreviewPage() {
         try {
           const productForGen = inferredProduct || 'notice_only';
           const jurisdictionForGen = fetchedCase.jurisdiction || 'england';
-          const routeForGen = fetchedCase.recommended_route || 'section_8';
+          const rawRouteForGen = fetchedCase.recommended_route || 'section_8';
+          const routeForGen =
+            productForGen === 'complete_pack' && jurisdictionForGen === 'england'
+              ? 'section_8'
+              : rawRouteForGen;
           const facts = (fetchedCase.collected_facts as any) || {};
 
           // =====================================================================
@@ -796,6 +800,8 @@ export default function WizardPreviewPage() {
                     case_id: caseId,
                     document_type: docType,
                     is_preview: true,
+                    product: productForGen,
+                    route: routeForGen,
                   }),
                 });
 
@@ -1169,6 +1175,9 @@ export default function WizardPreviewPage() {
 
   // Route switching functions
   const getCurrentRoute = (): string | undefined => {
+    if (caseData?.jurisdiction === 'england') {
+      return 'section_8';
+    }
     if (caseData?.recommended_route) {
       return caseData.recommended_route;
     }
@@ -1180,9 +1189,6 @@ export default function WizardPreviewPage() {
     const currentRoute = getCurrentRoute();
     const jurisdiction = caseData?.jurisdiction;
 
-    if (jurisdiction === 'england' && currentRoute === 'section_21') {
-      return ['section_8'];
-    }
     if (jurisdiction === 'wales' && currentRoute === 'wales_section_173') {
       return ['wales_fault_based'];
     }
@@ -1238,13 +1244,50 @@ export default function WizardPreviewPage() {
       // Determine title based on error type
       let errorTitle = 'Unable to Generate Preview';
       let errorDescription = 'We need some additional information to complete your documents.';
+      const userMessageMentionsSection21 =
+        typeof validationErrors.userMessage === 'string' &&
+        /section[_\s-]*21/i.test(validationErrors.userMessage);
+      const sanitizeEnglandSection21Issue = (issue: ValidationIssue): ValidationIssue => {
+        const mentionsSection21 = [
+          issue.code,
+          issue.title,
+          issue.user_fix_hint,
+          issue.legal_reason,
+          issue.friendlyAction,
+          issue.legalRef,
+          ...(issue.howToFix || []),
+        ].some((value) => typeof value === 'string' && /section[_\s-]*21/i.test(value));
+
+        if (caseData?.jurisdiction !== 'england' || !mentionsSection21) {
+          return issue;
+        }
+
+        return {
+          ...issue,
+          title: issue.title && /section[_\s-]*21/i.test(issue.title)
+            ? 'Update notice answers'
+            : issue.title,
+          user_fix_hint:
+            'This case now uses the current Form 3A possession route. Update any remaining notice answers and regenerate.',
+          legal_reason: undefined,
+          friendlyAction: undefined,
+          howToFix: undefined,
+          legalRef: undefined,
+        };
+      };
+      const displayBlockingIssues = (validationErrors.blocking_issues || []).map(sanitizeEnglandSection21Issue);
+      const displayWarnings = (validationErrors.warnings || []).map(sanitizeEnglandSection21Issue);
 
       if (failedDoc) {
         errorTitle = `${failedDoc} Generation Blocked`;
-        if (validationErrors.userMessage) {
+        if (validationErrors.userMessage && !userMessageMentionsSection21) {
           errorDescription = validationErrors.userMessage;
-        } else if (errorCode === 'SECTION_21_BLOCKED') {
-          errorDescription = 'Section 21 eligibility requirements not met. You may need to switch to Section 8 or resolve compliance issues.';
+        } else if (
+          errorCode === 'SECTION_21_BLOCKED' ||
+          errorCode === 'ROUTE_NOT_SUPPORTED' ||
+          userMessageMentionsSection21
+        ) {
+          errorDescription = 'This case now uses the current Form 3A possession route. Refresh the preview or update any remaining notice answers before generating.';
         } else if (errorCode === 'MISSING_REQUIRED_FIELDS') {
           errorDescription = `Some required information is missing for the ${failedDoc}.`;
         } else if (hasBlockingIssues) {
@@ -1272,8 +1315,8 @@ export default function WizardPreviewPage() {
             </div>
 
             <ValidationErrors
-              blocking_issues={validationErrors.blocking_issues}
-              warnings={validationErrors.warnings}
+              blocking_issues={displayBlockingIssues}
+              warnings={displayWarnings}
               caseId={caseId}
               caseType={caseData?.case_type as 'eviction' | 'money_claim' | 'tenancy_agreement'}
               jurisdiction={caseData?.jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland'}

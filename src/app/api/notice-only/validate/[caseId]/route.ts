@@ -134,6 +134,14 @@ export async function GET(
       }
     }
 
+    if (jurisdiction === 'england' && selectedRoute !== 'section_8') {
+      console.log('[NOTICE-VALIDATE-API] Normalizing England notice route to Form 3A possession route:', {
+        raw: selectedRoute,
+        normalized: 'section_8',
+      });
+      selectedRoute = 'section_8';
+    }
+
     console.log('[NOTICE-VALIDATE-API] Validating:', { jurisdiction, route: selectedRoute });
 
     // ========================================================================

@@ -35,6 +35,10 @@ import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import {
+  resolveGenerateValidationContext,
+  resolveProductForDocument,
+} from '@/lib/documents/generate-routing';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
@@ -154,49 +158,17 @@ const generateDocumentSchema = z.object({
     'proof_of_service', // Proof of service template (editable PDF)
   ]),
   is_preview: z.boolean().optional().default(true),
+  product: z.enum([
+    'notice_only',
+    'complete_pack',
+    'eviction_pack',
+    'money_claim',
+    'tenancy_agreement',
+    'ast_standard',
+    'ast_premium',
+  ]).optional(),
+  route: z.string().optional(),
 });
-
-function resolveProductForDocument(documentType: string, caseFacts: Record<string, any>) {
-  const productFromFacts = caseFacts.__meta?.product || caseFacts.product;
-
-  if (documentType === 'ast_standard' || documentType === 'ast_premium') {
-    return documentType;
-  }
-
-  if (productFromFacts === 'complete_pack' || productFromFacts === 'notice_only') {
-    return productFromFacts;
-  }
-
-  const completePackDocs = new Set([
-    'n5_claim',
-    'n119_particulars',
-    'n5b_claim',
-    'court_filing_guide',
-  ]);
-
-  const noticeOnlyDocs = new Set([
-    'section8_notice',
-    'section21_notice',
-    'service_instructions',
-    'service_checklist',
-    'eviction_roadmap',
-    'expert_guidance',
-    'eviction_timeline',
-    'case_summary',
-    'cover_letter_to_tenant',
-    'proof_of_service',
-  ]);
-
-  if (completePackDocs.has(documentType)) {
-    return 'complete_pack';
-  }
-
-  if (noticeOnlyDocs.has(documentType)) {
-    return 'notice_only';
-  }
-
-  return productFromFacts || 'notice_only';
-}
 
 function buildAddress(...parts: Array<string | null | undefined>) {
   const cleaned = parts.map((p) => (typeof p === 'string' ? p.trim() : p)).filter(Boolean) as string[];
@@ -578,7 +550,13 @@ export async function POST(request: Request) {
       );
     }
 
-    const { case_id, document_type, is_preview } = validationResult.data;
+    const {
+      case_id,
+      document_type,
+      is_preview,
+      product: requestedProduct,
+      route: requestedRoute,
+    } = validationResult.data;
     const user = await tryGetServerUser();
 
     const supabase = user ? await createServerSupabaseClient() : createAdminClient();
@@ -655,13 +633,18 @@ export async function POST(request: Request) {
       }, { status: 422 });
     }
 
+    const normalizedRequestedRoute = normalizeRoute(requestedRoute);
     const normalizedRecommendedRoute = normalizeRoute(caseRow.recommended_route ?? undefined);
     const normalizedSelectedRoute = normalizeRoute(
       (wizardFacts as any).selected_notice_route ||
       (wizardFacts as any).eviction_route ||
       (wizardFacts as any).route_recommendation?.recommended_route
     );
-    const effectiveRoute = normalizedRecommendedRoute || normalizedSelectedRoute;
+    const effectiveRoute = normalizedRequestedRoute || normalizedRecommendedRoute || normalizedSelectedRoute;
+    const generationDocumentType =
+      canonicalJurisdiction === 'england' && document_type === 'section21_notice'
+        ? 'section8_notice'
+        : document_type;
 
     // Guard: NI only supports tenancy documents
     if (
@@ -683,31 +666,16 @@ export async function POST(request: Request) {
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
     // ============================================================================
-    // Map document_type to product and route
-    let product: string = 'notice_only';
-    let route: string = 'section_21';
+    const validationContext = resolveGenerateValidationContext({
+      documentType: generationDocumentType,
+      jurisdiction: canonicalJurisdiction,
+      effectiveRoute,
+      requestedProduct,
+      caseFacts: wizardFacts,
+    });
+    const { product, route } = validationContext;
 
-    if (document_type === 'section8_notice') {
-      product = 'notice_only';
-      route = 'section_8';
-    } else if (document_type === 'section21_notice') {
-      product = 'notice_only';
-      route = 'section_21';
-    } else if (['ast_standard', 'ast_premium'].includes(document_type)) {
-      product = 'tenancy_agreement';
-      route = 'tenancy_agreement';
-    } else if (document_type === 'notice_to_leave') {
-      product = 'notice_only';
-      route = 'notice_to_leave';
-    } else if (['prt_agreement', 'prt_premium', 'prt_hmo', 'prt_hmo_premium'].includes(document_type)) {
-      product = 'tenancy_agreement';
-      route = 'tenancy_agreement';
-    } else if (['private_tenancy', 'private_tenancy_premium'].includes(document_type)) {
-      product = 'tenancy_agreement';
-      route = 'tenancy_agreement';
-    }
-
-    if (document_type === 'section21_notice' && effectiveRoute && effectiveRoute !== 'section_21') {
+    if (generationDocumentType === 'section21_notice' && effectiveRoute && effectiveRoute !== 'section_21') {
       const routeOverride = (wizardFacts as any).route_override;
       const routeReason =
         routeOverride?.reason ||
@@ -771,7 +739,7 @@ export async function POST(request: Request) {
 
       log422Blocked({
         case_id,
-        document_type,
+        document_type: generationDocumentType,
         route,
         product,
         canonicalJurisdiction,
@@ -780,7 +748,7 @@ export async function POST(request: Request) {
 
       console.warn('[GENERATE] Unified validation blocked generation:', {
         case_id,
-        document_type,
+        document_type: generationDocumentType,
       });
       return validationError; // Already a NextResponse with standardized 422 payload
     }
@@ -803,7 +771,7 @@ export async function POST(request: Request) {
 
         log422Blocked({
           case_id,
-          document_type,
+          document_type: generationDocumentType,
           route,
           product,
           canonicalJurisdiction,
@@ -813,7 +781,7 @@ export async function POST(request: Request) {
 
         console.warn('[GENERATE] Notice-only validation blocked generation:', {
           case_id,
-          document_type,
+          document_type: generationDocumentType,
           error_code: primaryError?.code,
           included_grounds: noticeValidation.includedGrounds,
           arrears_schedule_complete: noticeValidation.arrearsScheduleComplete,
@@ -843,7 +811,7 @@ export async function POST(request: Request) {
     let documentTitle = '';
 
     try {
-      switch (document_type) {
+      switch (generationDocumentType) {
         /**
          * England & Wales eviction docs:
          * IMPORTANT: Map wizard facts -> CaseData so Section 8 generator gets property_address, grounds, etc.
@@ -1876,7 +1844,7 @@ export async function POST(request: Request) {
               'The document contains characters that cannot be rendered in PDF format. ' +
               'Please remove special symbols, emojis, or unusual punctuation from your input.',
             hint: 'Common issues: warning symbols (⚠), emojis, smart quotes, or special Unicode characters.',
-            documentType: document_type,
+            documentType: generationDocumentType,
             blocking_issues: [
               {
                 code: 'PDF_TEXT_ENCODING_ERROR',
@@ -1906,7 +1874,7 @@ export async function POST(request: Request) {
     if (generatedDoc?.pdf) {
       const adminClient = createAdminClient();
       const userFolder = caseRow.user_id || 'anonymous';
-      const fileName = `${userFolder}/${case_id}/${document_type}_${Date.now()}.pdf`;
+      const fileName = `${userFolder}/${case_id}/${generationDocumentType}_${Date.now()}.pdf`;
 
       const { error: uploadError } = await adminClient.storage
         .from('documents')
@@ -1933,7 +1901,7 @@ export async function POST(request: Request) {
       user_id: caseRow.user_id,
       ...(caseRow.user_id ? {} : { session_token: requestSessionToken }),
       case_id,
-      document_type,
+      document_type: generationDocumentType,
       document_title: documentTitle,
       jurisdiction: canonicalJurisdiction,
       html_content: generatedDoc?.html || null,
@@ -1960,7 +1928,7 @@ export async function POST(request: Request) {
       // This can happen if another request inserted between our check
       if (upsertError.code === '23505') {
         console.warn(
-          `[generate] Duplicate document detected for case=${case_id} type=${document_type} preview=${is_preview}, fetching existing record`
+          `[generate] Duplicate document detected for case=${case_id} type=${generationDocumentType} preview=${is_preview}, fetching existing record`
         );
 
         // Fetch existing record and update it
@@ -1968,7 +1936,7 @@ export async function POST(request: Request) {
           .from('documents')
           .select()
           .eq('case_id', case_id)
-          .eq('document_type', document_type)
+          .eq('document_type', generationDocumentType)
           .eq('is_preview', is_preview)
           .single();
 

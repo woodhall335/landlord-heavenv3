@@ -320,13 +320,21 @@ export async function GET(
       return errorResponse('INVALID_JURISDICTION', 'Invalid or missing jurisdiction', 422, { caseId });
     }
 
-    const selectedRoute =
+    let selectedRoute =
       wizardFacts.selected_notice_route ||
       wizardFacts.eviction_route ||
       wizardFacts.eviction_route_intent ||
       caseRow.recommended_route ||
       wizardFacts.route_recommendation?.recommended_route ||
       null;
+
+    if (jurisdiction === 'england' && selectedRoute !== 'section_8') {
+      console.log('[Notice-Only-Embed] Normalizing England notice route to Form 3A possession route:', {
+        raw: selectedRoute,
+        normalized: 'section_8',
+      });
+      selectedRoute = 'section_8';
+    }
 
     if (pack && PACK_PREVIEW_DOCUMENT_TYPES.has(documentType)) {
       let previewDocument: EvictionPackDocument | null = null;
