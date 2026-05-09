@@ -1,9 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/server';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
-import {
-  mapCaseFactsToMoneyClaimCase,
-  mapCaseFactsToScotlandMoneyClaimCase,
-} from '@/lib/documents/money-claim-wizard-mapper';
+import { mapCaseFactsToScotlandMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
 import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
 import { generateResidentialLettingDocuments } from '@/lib/documents/residential-letting-generator';
 import { getPackContents } from '@/lib/products';
@@ -763,11 +760,19 @@ async function generateDocumentsForProduct(params: {
 
   if (productType === 'money_claim') {
     const { generateMoneyClaimPack } = await import('@/lib/documents/money-claim-pack-generator');
-
-    const pack = await generateMoneyClaimPack({
-      ...mapCaseFactsToMoneyClaimCase(caseFacts as any),
-      case_id: caseId,
+    const { buildMoneyClaimGenerationInput } = await import(
+      '@/lib/documents/money-claim-generation-facts'
+    );
+    const generationInput = buildMoneyClaimGenerationInput({
+      facts: wizardFacts,
+      caseId,
+      jurisdiction: jurisdiction as any,
     });
+
+    const pack = await generateMoneyClaimPack(
+      generationInput.moneyClaimCase,
+      generationInput.caseFacts
+    );
 
     return persistGeneratedDocuments(supabase, {
       caseId,

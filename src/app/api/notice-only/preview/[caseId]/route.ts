@@ -18,6 +18,8 @@ import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from 
 import { wizardFactsToCaseFacts, mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
+import { generateNoticeOnlyPack } from '@/lib/documents/eviction-pack-generator';
+import { buildEvictionPackGenerationFacts } from '@/lib/documents/eviction-pack-facts';
 import { generateDocument } from '@/lib/documents/generator';
 import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-filler';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
@@ -32,7 +34,6 @@ import { validateForPreview } from '@/lib/validation/previewValidation';
 import { assertPaidEntitlement } from '@/lib/payments/entitlement';
 import {
   validateNoticeOnlyCase,
-  computeIncludedGrounds,
 } from '@/lib/validation/notice-only-case-validator';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { mapWalesFaultGroundsToGroundCodes, hasWalesArrearsGroundSelected, buildWalesPartDFromWizardFacts } from '@/lib/wales';
@@ -70,6 +71,25 @@ function getScotlandGroundLegalBasis(groundNumber: number): string {
     8: 'Landlord needs property for family member (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 8)',
   };
   return grounds[groundNumber] || `Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground ${groundNumber}`;
+}
+
+function toNoticePreviewCategory(category: string): NoticeOnlyDocument['category'] {
+  if (category === 'notice') return 'notice';
+  if (category === 'evidence_tool') return 'schedule';
+  if (category === 'checklist') return 'checklist';
+  return 'guidance';
+}
+
+function toNoticePreviewDocuments(
+  documents: Array<{ title: string; category: string; pdf?: Buffer }>
+): NoticeOnlyDocument[] {
+  return documents
+    .filter((document) => document.pdf)
+    .map((document) => ({
+      title: document.title,
+      category: toNoticePreviewCategory(document.category),
+      pdf: document.pdf,
+    }));
 }
 
 function getEnglandSelectedGrounds(wizardFacts: Record<string, any>, templateData: Record<string, any>): string[] {
@@ -570,6 +590,49 @@ export async function GET(
         },
         { status: 422 },
       );
+    }
+
+    if (process.env.LEGACY_NOTICE_ONLY_PREVIEW !== '1') {
+      const packFacts = buildEvictionPackGenerationFacts({
+        facts: wizardFacts,
+        caseId,
+        jurisdiction,
+        product: 'notice_only',
+        selectedRoute:
+          selected_route ||
+          caseRow.recommended_route ||
+          wizardFacts.recommended_route ||
+          wizardFacts.route_recommendation?.recommended_route,
+      });
+
+      const pack = await generateNoticeOnlyPack(packFacts);
+      const packDocuments = toNoticePreviewDocuments(pack.documents);
+
+      if (packDocuments.length === 0) {
+        console.error('[NOTICE-PREVIEW-API] Pack generator returned no PDF documents');
+        return NextResponse.json(
+          {
+            error: 'Failed to generate any documents',
+            code: 'PACK_DOCUMENTS_MISSING',
+          },
+          { status: 500 }
+        );
+      }
+
+      const previewPdf = await generateNoticeOnlyPreview(packDocuments, {
+        jurisdiction,
+        notice_type: packFacts.selected_notice_route as any,
+        includeTableOfContents: true,
+      });
+
+      return new Response(new Uint8Array(previewPdf), {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'inline; filename="notice-only-preview.pdf"',
+          'Content-Length': previewPdf.length.toString(),
+          'X-Preview-Source': 'generated-pack-pdf',
+        },
+      });
     }
 
     const documents: NoticeOnlyDocument[] = [];

@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
-import type { CaseFacts } from '@/lib/case-facts/schema';
 import {
   generateDocument,
 } from '@/lib/documents/generator';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
-import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
+import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
 import { fillN1Form, type CaseData } from '@/lib/documents/official-forms-filler';
 import { buildPdfEmbedHtml } from '@/lib/previews/documentEmbedShell';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
@@ -209,8 +207,15 @@ export async function GET(
       );
     }
 
-    const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
-    const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
+    const {
+      facts: generationFacts,
+      caseFacts,
+      moneyClaimCase,
+    } = buildMoneyClaimGenerationInput({
+      facts: wizardFacts,
+      caseId,
+      jurisdiction,
+    });
 
     let title = '';
     let html: string | null = null;
@@ -284,8 +289,8 @@ export async function GET(
 
       if (resolvedDocType === 'schedule_of_arrears') {
         const arrearsItems =
-          wizardFacts.arrears_items ||
-          wizardFacts.issues?.rent_arrears?.arrears_items ||
+          generationFacts.arrears_items ||
+          generationFacts.issues?.rent_arrears?.arrears_items ||
           caseFacts.issues?.rent_arrears?.arrears_items ||
           [];
 

@@ -3,85 +3,32 @@
  *
  * GET /api/tenancy-agreement/thumbnail/[caseId]
  *
- * Generates a watermarked JPEG thumbnail of the first page of a tenancy agreement
- * document WITHOUT creating persistent database records. This allows preview thumbnails
- * for the tenancy agreement product page, checkout confirmation, and dashboard.
- *
- * Supports:
- * - England: Assured Periodic Tenancy (Housing Act 1988 / Renters' Rights flow)
- * - Wales: Standard Occupation Contract (Renting Homes (Wales) Act 2016)
- * - Scotland: Private Residential Tenancy (Private Housing (Tenancies) (Scotland) Act 2016)
- * - Northern Ireland: Private Tenancy Agreement (Private Tenancies Act (NI) 2022)
- *
- * Query Parameters:
- * - tier: 'standard' | 'premium' (default: 'standard')
- *
- * Returns:
- * - 200 OK with image/jpeg content type
- * - 404 if case not found
- * - 422 if validation fails
- * - 500 on generation error
+ * Generates a watermarked JPEG thumbnail from the same generated tenancy PDF
+ * source used for the full document preview.
  */
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
-import { generateDocument, htmlToPdf, pdfBytesToPreviewThumbnail } from '@/lib/documents/generator';
+import { htmlToPdf, pdfBytesToPreviewThumbnail } from '@/lib/documents/generator';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
-import { getJurisdictionConfig, type TenancyJurisdiction } from '@/lib/documents/ast-generator';
+import type { TenancyJurisdiction } from '@/lib/documents/ast-generator';
 import {
   isResidentialLettingProductSku,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
 import { resolveTenancyPreviewDocumentHtml } from '@/lib/previews/tenancyPreviewDocuments';
 
-// Force Node.js runtime - Puppeteer/@sparticuz/chromium cannot run on Edge
 export const runtime = 'nodejs';
-
-// Disable static optimization
 export const dynamic = 'force-dynamic';
 
-// Environment detection
 const isVercel = process.env.VERCEL === '1' || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
 const isDev = process.env.NODE_ENV === 'development';
 const e2eEnabled = process.env.E2E_MODE === 'true' || process.env.NEXT_PUBLIC_E2E_MODE === 'true';
 
-/**
- * Structured error response
- */
 function errorResponse(code: string, message: string, status: number, details?: Record<string, unknown>) {
   const logData = { code, message, status, ...details, isVercel, timestamp: new Date().toISOString() };
   console.error(`[Tenancy-Agreement-Thumbnail] ${code}:`, logData);
   return NextResponse.json({ error: message, code, ...(isDev ? { details } : {}) }, { status });
-}
-
-/**
- * Format currency value in UK pounds
- */
-function formatCurrency(value: number | string | undefined): string {
-  if (value === undefined || value === null) return '£0.00';
-  const num = typeof value === 'string' ? parseFloat(value) : value;
-  if (isNaN(num)) return '£0.00';
-  return `£${num.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
-
-/**
- * Format date in UK legal format
- */
-function formatUKDate(dateString: string | undefined): string {
-  if (!dateString) return '';
-  try {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${day} ${month} ${year}`;
-  } catch {
-    return dateString;
-  }
 }
 
 export async function GET(
@@ -99,7 +46,6 @@ export async function GET(
       return errorResponse('E2E_THUMBNAIL_UNAVAILABLE', 'Real tenancy thumbnails are not generated in E2E mode', 503);
     }
 
-    // Parse query params
     const url = new URL(request.url);
     const tier = (url.searchParams.get('tier') || 'standard') as 'standard' | 'premium';
     const requestedProduct = url.searchParams.get('product');
@@ -109,13 +55,11 @@ export async function GET(
       return errorResponse('MISSING_CASE_ID', 'Case ID is required', 400);
     }
 
-    console.log(`[Tenancy-Agreement-Thumbnail] Request:`, { caseId, tier });
+    console.log('[Tenancy-Agreement-Thumbnail] Request:', { caseId, tier });
 
-    // Get user and create client
     const user = await tryGetServerUser();
     const supabase = user ? await createServerSupabaseClient() : createAdminClient();
 
-    // Fetch case
     let query = supabase.from('cases').select('*').eq('id', caseId);
     if (user) {
       query = query.eq('user_id', user.id);
@@ -130,220 +74,94 @@ export async function GET(
 
     const caseRow = data as any;
     const facts = caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {};
-    const modernEnglandProduct = [
-      requestedProduct,
-      facts.__meta?.canonical_product,
-      facts.__meta?.product,
-      facts.product,
-      facts.original_product,
-    ].find(
-      (value): value is ResidentialLettingProductSku => isResidentialLettingProductSku(value)
-    );
-
-    // Determine jurisdiction
     const jurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, facts) as TenancyJurisdiction;
 
     if (!jurisdiction) {
       return errorResponse('INVALID_JURISDICTION', 'Invalid or missing jurisdiction', 422);
     }
 
-    if (requestedDocumentType || (jurisdiction === 'england' && modernEnglandProduct)) {
-      console.log('[Tenancy-Agreement-Thumbnail] Document thumbnail path:', {
-        caseId,
-        product: modernEnglandProduct || requestedProduct || tier,
-        requestedDocumentType,
-      });
-
-      const previewDocument = await resolveTenancyPreviewDocumentHtml({
-        caseId,
-        facts,
-        jurisdiction,
-        tier,
-        product: jurisdiction === 'england' && modernEnglandProduct ? modernEnglandProduct : requestedProduct,
-        documentType: requestedDocumentType,
-      });
-
-      if (!previewDocument?.html) {
-        return errorResponse(
-          'THUMBNAIL_GENERATION_FAILED',
-          'No previewable document generated for this tenancy document',
-          500,
-          { caseId, product: modernEnglandProduct || requestedProduct, documentType: requestedDocumentType }
-        );
-      }
-
-      const pdfBytes = await htmlToPdf(previewDocument.html);
-      const thumbnail = await pdfBytesToPreviewThumbnail(pdfBytes, {
-        quality: 75,
-        watermarkText: 'PREVIEW',
-        documentId: `${previewDocument.document_type}-${caseId}`,
-      });
-
-      const headers: Record<string, string> = {
-        'Content-Type': 'image/jpeg',
-        'Content-Disposition': 'inline; filename="preview.jpg"',
-        'X-Content-Type-Options': 'nosniff',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
-        'X-Thumbnail-Runtime': 'nodejs',
-        'X-Jurisdiction': jurisdiction,
-        'X-Tier': modernEnglandProduct || tier,
-        'X-Product': modernEnglandProduct || requestedProduct || tier,
-        'X-Document-Type': previewDocument.document_type,
-        'X-Thumbnail-Source': 'generated-pdf',
-      };
-
-      if (!isVercel) {
-        headers['Content-Length'] = thumbnail.length.toString();
-      }
-
-      return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
-    }
-
-    // Get jurisdiction configuration
-    const config = getJurisdictionConfig(jurisdiction);
-    const templatePath = tier === 'premium' ? config.templatePaths.premium : config.templatePaths.standard;
-
-    console.log(`[Tenancy-Agreement-Thumbnail] Generating:`, {
+    const generationFacts = {
+      ...facts,
+      id: caseId,
+      case_id: caseId,
       jurisdiction,
-      tier,
-      templatePath,
-      legalFramework: config.legalFramework
-    });
-
-    // Map wizard facts to template data
-    const templateData = {
-      // Metadata
-      premium: tier === 'premium',
-      is_hmo: tier === 'premium',
-      jurisdiction: jurisdiction,
-      jurisdiction_name: config.jurisdictionLabel,
-      legal_framework: config.legalFramework,
-      document_id: `PREVIEW-${jurisdiction.toUpperCase()}-${Date.now()}`,
-      generation_timestamp: new Date().toISOString(),
-      current_date: new Date().toISOString().split('T')[0],
-      current_year: new Date().getFullYear(),
-
-      // Agreement date
-      agreement_date: formatUKDate(facts.agreement_date || facts.tenancy_start_date || new Date().toISOString().split('T')[0]),
-
-      // Landlord details
-      landlord_full_name: facts.landlord_full_name || facts.landlord_name || 'PREVIEW LANDLORD',
-      landlord_address: facts.landlord_address || facts.landlord_address_line1 || '123 Preview Street, London, EC1A 1BB',
-      landlord_address_line1: facts.landlord_address_line1 || '',
-      landlord_address_town: facts.landlord_address_town || '',
-      landlord_address_postcode: facts.landlord_address_postcode || '',
-      landlord_email: facts.landlord_email || 'landlord@example.com',
-      landlord_phone: facts.landlord_phone || '07700 000000',
-
-      // Tenant details
-      tenants: facts.tenants || [{ full_name: 'PREVIEW TENANT', email: 'tenant@example.com', phone: '07700 111111', dob: '' }],
-      number_of_tenants: facts.number_of_tenants || facts.tenants?.length || 1,
-
-      // Property details
-      property_address: facts.property_address || '456 Preview Road, London, SW1A 1AA',
-      property_address_line1: facts.property_address_line1 || '',
-      property_address_town: facts.property_address_town || '',
-      property_address_postcode: facts.property_address_postcode || '',
-      property_type: facts.property_type || 'House',
-      number_of_bedrooms: facts.number_of_bedrooms || '3',
-      furnished_status: facts.furnished_status || 'unfurnished',
-
-      // Tenancy term
-      tenancy_start_date: formatUKDate(facts.tenancy_start_date || new Date().toISOString().split('T')[0]),
-      is_fixed_term: facts.is_fixed_term !== false,
-      tenancy_end_date: formatUKDate(facts.tenancy_end_date || ''),
-      term_length: facts.term_length || '12 months',
-      rent_period: facts.rent_period || 'month',
-
-      // Rent
-      rent_amount: facts.rent_amount || 1500,
-      rent_amount_formatted: formatCurrency(facts.rent_amount || 1500),
-      rent_due_day: facts.rent_due_day || '1st',
-      payment_method: facts.payment_method || 'Bank Transfer',
-
-      // Deposit
-      deposit_amount: facts.deposit_amount || 1731,
-      deposit_amount_formatted: formatCurrency(facts.deposit_amount || 1731),
-      deposit_scheme_name: facts.deposit_scheme_name || 'DPS',
-
-      // Safety certificates
-      gas_safety_certificate: facts.gas_safety_certificate !== false,
-      electrical_safety_certificate: facts.electrical_safety_certificate !== false,
-      epc_rating: facts.epc_rating || 'C',
-      smoke_alarms_fitted: facts.smoke_alarms_fitted !== false,
-      carbon_monoxide_alarms: facts.carbon_monoxide_alarms !== false,
-
-      // Jurisdiction-specific fields for Wales
-      ...(jurisdiction === 'wales' ? {
-        contract_holder_full_name: facts.tenants?.[0]?.full_name || 'PREVIEW CONTRACT HOLDER',
-        dwelling_address: facts.property_address || '456 Preview Road, Cardiff, CF1 1AA',
-      } : {}),
-
-      // Jurisdiction-specific fields for Scotland
-      ...(jurisdiction === 'scotland' ? {
-        landlord_registration_number: facts.landlord_registration_number || 'PREVIEW-REG-12345',
-      } : {}),
-
-      // HMO-specific fields for premium tier
-      ...(tier === 'premium' ? {
-        is_hmo: true,
-        has_shared_facilities: true,
-        number_of_sharers: facts.number_of_sharers || 4,
-        hmo_licence_number: facts.hmo_licence_number || 'HMO-PREVIEW-001',
-        hmo_licence_expiry: formatUKDate(facts.hmo_licence_expiry || ''),
-        communal_areas: facts.communal_areas || 'Kitchen, bathroom, and living room are shared.',
-        joint_and_several_liability: true,
-      } : {}),
-
-      // Additional common fields
-      pets_allowed: facts.pets_allowed || false,
-      smoking_allowed: facts.smoking_allowed || false,
-      has_garden: facts.has_garden || false,
+      property_country: facts.property_country || jurisdiction,
+      __meta: {
+        ...(facts.__meta || {}),
+        case_id: caseId,
+        jurisdiction,
+      },
     };
 
-    // Generate HTML from template, then render it to the same PDF format used for delivery.
-    const doc = await generateDocument({
-      templatePath,
-      data: templateData,
-      isPreview: true,
-      outputFormat: 'html',
+    const modernEnglandProduct = [
+      requestedProduct,
+      generationFacts.__meta?.canonical_product,
+      generationFacts.__meta?.product,
+      generationFacts.product,
+      generationFacts.original_product,
+    ].find(
+      (value): value is ResidentialLettingProductSku => isResidentialLettingProductSku(value)
+    );
+
+    console.log('[Tenancy-Agreement-Thumbnail] Document thumbnail path:', {
+      caseId,
+      product: modernEnglandProduct || requestedProduct || tier,
+      requestedDocumentType,
     });
 
-    const pdfBytes = await htmlToPdf(doc.html);
+    const previewDocument = await resolveTenancyPreviewDocumentHtml({
+      caseId,
+      facts: generationFacts,
+      jurisdiction,
+      tier,
+      product: jurisdiction === 'england' && modernEnglandProduct ? modernEnglandProduct : requestedProduct,
+      documentType: requestedDocumentType,
+    });
+
+    if (!previewDocument?.html) {
+      return errorResponse(
+        'THUMBNAIL_GENERATION_FAILED',
+        'No previewable document generated for this tenancy document',
+        500,
+        { caseId, product: modernEnglandProduct || requestedProduct, documentType: requestedDocumentType }
+      );
+    }
+
+    const pdfBytes = await htmlToPdf(previewDocument.html);
     const thumbnail = await pdfBytesToPreviewThumbnail(pdfBytes, {
       quality: 75,
       watermarkText: 'PREVIEW',
-      documentId: `${jurisdiction}-${tier}-${caseId}`,
+      documentId: `${previewDocument.document_type}-${caseId}`,
     });
 
     const elapsed = Date.now() - startTime;
-    console.log(`[Tenancy-Agreement-Thumbnail] Success:`, {
+    console.log('[Tenancy-Agreement-Thumbnail] Success:', {
       caseId,
       jurisdiction,
       tier,
+      documentType: previewDocument.document_type,
       size: thumbnail.length,
       elapsed: `${elapsed}ms`,
     });
 
-    // Return JPEG image
     const headers: Record<string, string> = {
       'Content-Type': 'image/jpeg',
       'Content-Disposition': 'inline; filename="preview.jpg"',
       'X-Content-Type-Options': 'nosniff',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600', // Cache for 1 hour
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
       'X-Thumbnail-Runtime': 'nodejs',
       'X-Jurisdiction': jurisdiction,
-      'X-Tier': tier,
+      'X-Tier': modernEnglandProduct || tier,
+      'X-Product': modernEnglandProduct || requestedProduct || tier,
+      'X-Document-Type': previewDocument.document_type,
       'X-Thumbnail-Source': 'generated-pdf',
     };
 
-    // Only set Content-Length in non-Vercel environments
     if (!isVercel) {
       headers['Content-Length'] = thumbnail.length.toString();
     }
 
     return new NextResponse(new Uint8Array(thumbnail), { status: 200, headers });
-
   } catch (error: any) {
     const elapsed = Date.now() - startTime;
     return errorResponse(

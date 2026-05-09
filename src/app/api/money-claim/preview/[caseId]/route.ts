@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
-import type { CaseFacts } from '@/lib/case-facts/schema';
-import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
+import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForPreview } from '@/lib/validation/previewValidation';
@@ -95,6 +93,24 @@ export async function GET(
       );
     }
 
+    if (jurisdiction !== 'england') {
+      return NextResponse.json(
+        {
+          code: 'MONEY_CLAIM_UNSUPPORTED_JURISDICTION',
+          error: 'MONEY_CLAIM_UNSUPPORTED_JURISDICTION',
+          user_message:
+            'Money claims are only available in England. Please choose a supported product for this jurisdiction.',
+          blocking_issues: [{
+            code: 'MONEY_CLAIM_UNSUPPORTED_JURISDICTION',
+            fields: ['jurisdiction'],
+            user_fix_hint: 'Money claims are only available in England.',
+          }],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
     // ============================================================================
@@ -124,11 +140,14 @@ export async function GET(
     });
     const applyWatermark = previewStatus.applyWatermark;
 
-    const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
-    const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
+    const { caseFacts, moneyClaimCase } = buildMoneyClaimGenerationInput({
+      facts: wizardFacts,
+      caseId,
+      jurisdiction,
+    });
 
     // 🔮 This calls the full pack generator, which now includes AskHeaven AI drafting
-    const pack = await generateMoneyClaimPack(moneyClaimCase);
+    const pack = await generateMoneyClaimPack(moneyClaimCase, caseFacts);
 
     const allDocs = pack.documents || [];
 

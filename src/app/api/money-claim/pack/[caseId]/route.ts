@@ -4,9 +4,8 @@ import {
   createAdminClient,
   tryGetServerUser,
 } from '@/lib/supabase/server';
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
-import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
+import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForGenerate } from '@/lib/validation/previewValidation';
@@ -223,8 +222,13 @@ export async function GET(
       }
     }
 
-    caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
-    moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
+    const generationInput = buildMoneyClaimGenerationInput({
+      facts: wizardFacts,
+      caseId,
+      jurisdiction,
+    });
+    caseFacts = generationInput.caseFacts;
+    moneyClaimCase = generationInput.moneyClaimCase;
   } catch (mapError) {
     if (mapError instanceof Response) {
       return mapError;

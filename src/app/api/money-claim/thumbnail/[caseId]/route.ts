@@ -28,10 +28,8 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
 import { htmlToPdf, pdfBytesToPreviewThumbnail, compileTemplate, loadTemplate } from '@/lib/documents/generator';
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
-import type { CaseFacts } from '@/lib/case-facts/schema';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
-import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
+import { buildMoneyClaimGenerationInput } from '@/lib/documents/money-claim-generation-facts';
 import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
 import { fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
 
@@ -233,9 +231,16 @@ export async function GET(
       return errorResponse('INVALID_DOCUMENT_TYPE', `Unknown document type: ${documentType}`, 400);
     }
 
-    // Convert wizard facts to case facts and then to money claim case
-    const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
-    const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
+    // Convert wizard facts to the same case input used by final pack generation.
+    const {
+      facts: generationFacts,
+      caseFacts,
+      moneyClaimCase,
+    } = buildMoneyClaimGenerationInput({
+      facts: wizardFacts,
+      caseId,
+      jurisdiction,
+    });
 
     // =========================================================================
     // SPECIAL HANDLING: N1 Form - Generate from OFFICIAL PDF, not HTML template
@@ -273,7 +278,7 @@ export async function GET(
         service_postcode: moneyClaimCase.landlord_postcode || moneyClaimCase.property_postcode || '',
         damage_items: moneyClaimCase.damage_items,
         other_charges: moneyClaimCase.other_charges,
-        claimant_reference: moneyClaimCase.claimant_reference,
+      claimant_reference: moneyClaimCase.claimant_reference,
         solicitor_firm: moneyClaimCase.solicitor_firm,
       };
 
@@ -351,8 +356,8 @@ export async function GET(
 
     // Special handling for schedule of arrears
     if (resolvedDocType === 'schedule_of_arrears') {
-      const arrearsItems = wizardFacts.arrears_items ||
-        wizardFacts.issues?.rent_arrears?.arrears_items ||
+      const arrearsItems = generationFacts.arrears_items ||
+        generationFacts.issues?.rent_arrears?.arrears_items ||
         caseFacts.issues?.rent_arrears?.arrears_items || [];
 
       if (arrearsItems.length > 0) {
