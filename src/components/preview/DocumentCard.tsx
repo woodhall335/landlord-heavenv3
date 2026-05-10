@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Lock, Download, FileText, ClipboardList, CheckSquare, Shield, Scale, FileCheck, Home, Users, BookOpen, Eye, X, AlertTriangle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Lock, Download, FileText, ClipboardList, CheckSquare, Shield, Scale, FileCheck, Home, Users, BookOpen, Eye, X, AlertTriangle, Loader2 } from 'lucide-react';
 
 export interface DocumentInfo {
   id: string;
@@ -43,16 +43,29 @@ const shouldLogThumbnailDebug = process.env.NODE_ENV === 'development';
 
 export function DocumentCard({ document, isLocked, onUnlock, onDownload }: DocumentCardProps) {
   const IconComponent = iconMap[document.icon] || FileText;
-  const [showPreview, setShowPreview] = useState(false);
-  const [thumbnailError, setThumbnailError] = useState(false);
-
   // Determine thumbnail URL - either pre-loaded or from API
   const thumbnailUrl = document.thumbnailUrl ||
     (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : null);
   const previewUrl = document.previewUrl || null;
+  const [showPreview, setShowPreview] = useState(false);
+  const [thumbnailError, setThumbnailError] = useState(false);
+  const [thumbnailLoaded, setThumbnailLoaded] = useState(!thumbnailUrl);
+  const [previewLoaded, setPreviewLoaded] = useState(false);
+  const thumbnailLoading = Boolean(thumbnailUrl && !thumbnailLoaded && !thumbnailError);
   const previewUnavailableReason =
     document.previewUnavailableReason || (!previewUrl && thumbnailError ? 'Preview temporarily unavailable' : null);
   const canPreview = Boolean(previewUrl || (thumbnailUrl && !thumbnailError)) && !previewUnavailableReason;
+
+  useEffect(() => {
+    setThumbnailError(false);
+    setThumbnailLoaded(!thumbnailUrl);
+  }, [thumbnailUrl]);
+
+  useEffect(() => {
+    if (showPreview) {
+      setPreviewLoaded(false);
+    }
+  }, [showPreview, previewUrl, thumbnailUrl]);
 
   const handlePreviewClick = () => {
     if (canPreview) {
@@ -83,15 +96,27 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
           {thumbnailUrl && !thumbnailError ? (
             <div
               className={`relative w-16 h-22 flex-shrink-0 group overflow-hidden rounded-lg border bg-white shadow-sm ${canPreview ? 'cursor-pointer' : ''}`}
+              aria-busy={thumbnailLoading}
               onClick={(event) => {
                 event.stopPropagation();
                 handlePreviewClick();
               }}
             >
+              {thumbnailLoading && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-violet-50 via-white to-blue-50">
+                  <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                  <span className="text-[10px] font-medium text-gray-500">Loading preview</span>
+                </div>
+              )}
               <img
                 src={thumbnailUrl}
                 alt={`Preview of ${document.title}`}
-                className="h-full w-full object-contain bg-white"
+                className={`h-full w-full object-contain bg-white transition-opacity duration-200 ${
+                  thumbnailLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                onLoad={() => {
+                  setThumbnailLoaded(true);
+                }}
                 onError={(e) => {
                   if (shouldLogThumbnailDebug) {
                     const img = e.currentTarget;
@@ -133,6 +158,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                   }
 
                   setThumbnailError(true);
+                  setThumbnailLoaded(false);
                 }}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg transition-colors flex items-center justify-center">
@@ -156,7 +182,12 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                 <h3 className="font-semibold text-gray-900 truncate">{document.title}</h3>
                 <p className="text-sm text-gray-600 mt-1 line-clamp-2">{document.description}</p>
               </div>
-              {canPreview ? (
+              {thumbnailLoading ? (
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-violet-700">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Loading preview
+                </span>
+              ) : canPreview ? (
                 <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-violet-700">
                   <Eye className="w-3.5 h-3.5" />
                   Preview
@@ -229,20 +260,35 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                 <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
-            <div className="p-4 overflow-auto max-h-[calc(92vh-120px)] bg-gray-50">
+            <div className="relative p-4 overflow-auto max-h-[calc(92vh-120px)] bg-gray-50" aria-busy={showPreview && !previewLoaded}>
+              {showPreview && !previewLoaded && (
+                <div className="absolute inset-4 z-10 flex min-h-[320px] items-center justify-center rounded-lg border border-violet-100 bg-white/95 shadow-sm">
+                  <div className="flex flex-col items-center gap-3 text-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p className="text-sm font-medium text-gray-700">Loading document preview</p>
+                  </div>
+                </div>
+              )}
               {previewUrl ? (
                 <iframe
                   src={previewUrl}
                   title={`${document.title} full preview`}
-                  className="h-[75vh] w-full rounded-lg border bg-white shadow-lg"
+                  className={`h-[75vh] w-full rounded-lg border bg-white shadow-lg transition-opacity duration-200 ${
+                    previewLoaded ? 'opacity-100' : 'opacity-0'
+                  }`}
                   loading="lazy"
                   sandbox="allow-scripts"
+                  onLoad={() => setPreviewLoaded(true)}
                 />
               ) : thumbnailUrl ? (
                 <img
                   src={thumbnailUrl}
                   alt={`Full preview of ${document.title}`}
-                  className="mx-auto h-auto max-w-full rounded-lg bg-white shadow-lg"
+                  className={`mx-auto h-auto max-w-full rounded-lg bg-white shadow-lg transition-opacity duration-200 ${
+                    previewLoaded ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  onLoad={() => setPreviewLoaded(true)}
+                  onError={() => setPreviewLoaded(true)}
                 />
               ) : null}
             </div>

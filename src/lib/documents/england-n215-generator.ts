@@ -123,17 +123,47 @@ function formatDateForN215(value: unknown): string {
   if (!value) return '';
 
   try {
-    const raw = String(value);
-    const date = new Date(raw.includes('T') ? raw : `${raw}T00:00:00.000Z`);
-    if (Number.isNaN(date.getTime())) return sanitizeFormText(raw);
+    const raw = String(value).trim();
+    const isoMatch = raw.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:[T\s].*)?$/);
+    const ukMatch = raw.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2}|\d{4})$/);
 
-    const day = String(date.getUTCDate()).padStart(2, '0');
-    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-    const year = String(date.getUTCFullYear()).slice(-2);
-    return `${day}/${month}/${year}`;
+    let day = '';
+    let month = '';
+    let year = '';
+
+    if (isoMatch) {
+      [, year, month, day] = isoMatch;
+    } else if (ukMatch) {
+      [, day, month, year] = ukMatch;
+    } else {
+      const date = value instanceof Date
+        ? value
+        : new Date(raw.includes('T') ? raw : `${raw}T00:00:00.000Z`);
+      if (Number.isNaN(date.getTime())) {
+        return sanitizeFormText(raw).replace(/[^\d]/g, '').slice(0, 8);
+      }
+
+      day = String(date.getUTCDate());
+      month = String(date.getUTCMonth() + 1);
+      year = String(date.getUTCFullYear());
+    }
+
+    const normalizedYear = year.length === 2 ? `20${year}` : year;
+    return `${day.padStart(2, '0')}${month.padStart(2, '0')}${normalizedYear.padStart(4, '0')}`;
   } catch {
-    return sanitizeFormText(value);
+    return sanitizeFormText(value).replace(/[^\d]/g, '').slice(0, 8);
   }
+}
+
+function getDatePartsForN215(value: unknown): { day: string; month: string; year: string } | null {
+  const formatted = formatDateForN215(value);
+  if (formatted.length !== 8) return null;
+
+  return {
+    day: formatted.slice(0, 2),
+    month: formatted.slice(2, 4),
+    year: formatted.slice(4, 8),
+  };
 }
 
 function formatPostcodeForN215(value: unknown): string {
@@ -355,7 +385,7 @@ function fillSignatoryCapacity(form: PDFForm, capacity: EnglandN215Data['signato
 
 function fillSignatureBlock(form: PDFForm, data: EnglandN215Data): void {
   const signatoryName = sanitizeFormText(data.signatory_name || data.claimant_name);
-  const signatureDate = formatDateForN215(data.signature_date || data.service_date);
+  const signatureDate = getDatePartsForN215(data.signature_date || data.service_date);
 
   setTextField(form, 'Text Field 91', signatoryName);
   setTextField(form, 'Text Field 87', signatoryName);
@@ -364,10 +394,9 @@ function fillSignatureBlock(form: PDFForm, data: EnglandN215Data): void {
   fillSignatoryCapacity(form, data.signatory_capacity || 'claimant');
 
   if (signatureDate) {
-    const [day = '', month = '', year = ''] = signatureDate.split('/');
-    setTextField(form, 'Text Field 90', day);
-    setTextField(form, 'Text Field 89', month);
-    setTextField(form, 'Text Field 88', year);
+    setTextField(form, 'Text Field 90', signatureDate.day);
+    setTextField(form, 'Text Field 89', signatureDate.month);
+    setTextField(form, 'Text Field 88', signatureDate.year);
   }
 }
 
