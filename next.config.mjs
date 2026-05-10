@@ -12,6 +12,18 @@ const retiredPublicRedirects = Object.entries(retiredPublicRoutes.routeRedirects
     permanent: true,
   })
 );
+const apiStaticImageTraceExcludes = [
+  './public/images/wizard-icons/**/*',
+  './public/images/blog/**/*',
+  './public/images/whyitmatters/**/*',
+  './public/images/mascots/**/*',
+  './public/images/previews/**/*',
+  './public/images/ask jeaven page mascot.png',
+  './public/images/complete pack.png',
+  './public/images/eviction owl.png',
+  './public/images/herobg.png',
+  './public/images/heromascot.png',
+];
 
 const nextConfig = {
   /* config options here */
@@ -407,6 +419,7 @@ const nextConfig = {
   },
   devIndicators: false,
   outputFileTracingExcludes: {
+    '/app/api/**': apiStaticImageTraceExcludes,
     '/api/admin/test-artifacts/**': ['artifacts/**/*'],
     '/api/admin/test-artifacts/complete-pack/england/section21': ['artifacts/**/*'],
     '/api/admin/test-artifacts/complete-pack/england/section8': ['artifacts/**/*'],
