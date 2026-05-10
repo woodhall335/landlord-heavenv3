@@ -22,6 +22,7 @@ import {
   hasAuthoritativeArrearsData,
   type ComputedArrears,
 } from '@/lib/arrears-engine';
+import { formatArrearsPeriodEquivalent } from '@/lib/documents/arrears-wording';
 import { formatUkLegalDate } from '@/lib/case-facts/normalize';
 
 // ============================================================================
@@ -315,7 +316,7 @@ function formatArrearsSummary(data: ArrearsScheduleData): string {
 
   // Header with total
   let summary = `Rent arrears of £${arrears_total.toFixed(2)} are outstanding `;
-  summary += `(approximately ${arrears_in_months.toFixed(1)} months' rent):\n\n`;
+  summary += `(${formatArrearsPeriodEquivalent(arrears_in_months)}):\n\n`;
 
   // Month-by-month bullet list
   for (const entry of periodsWithArrears) {

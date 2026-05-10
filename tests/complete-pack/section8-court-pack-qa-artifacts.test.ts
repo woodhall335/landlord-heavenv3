@@ -129,8 +129,10 @@ describe('Section 8 court-pack QA golden artifacts', () => {
     expectContainsAll(witnessStatement, [
       'As at the date of this statement, the total arrears amount to £4,800.00.',
       'At the date of service of the Form 3A notice (4 March 2026), the total rent arrears stood at £4,800.00',
-      'This significantly exceeds the Ground 8 threshold of 3 months\' rent (£3,600.00).',
+      'This exceeds the Ground 8 threshold of 3 months\' rent (£3,600.00).',
     ]);
+    expect(witnessStatement).not.toContain('significantly exceeds');
+    expect(witnessStatement).not.toMatch(/\b\d+\.\d{2,}\s+months(?:' rent| of unpaid rent)?/i);
 
     for (const text of [caseSummary, hearingChecklist, bundleIndex]) {
       expectContainsAll(text, [

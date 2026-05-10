@@ -1,4 +1,5 @@
 import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
+import { describeGround8ThresholdComparison } from '@/lib/documents/arrears-wording';
 import {
   getEnglandGroundDefinition,
   listEnglandGroundDefinitions,
@@ -491,9 +492,16 @@ function buildArrearsDraft(data: DraftingInput, definition: EnglandGroundDefinit
       );
     }
     if (threshold && threshold.amount > 0) {
-      paragraphs.push(
-        `That figure is presented as exceeding the statutory Ground 8 threshold of ${formatCurrencyText(threshold.amount)} (${threshold.description}).`,
-      );
+      const thresholdComparison = describeGround8ThresholdComparison(totalArrears, threshold.amount);
+      if (thresholdComparison === 'meets' || thresholdComparison === 'exceeds') {
+        paragraphs.push(
+          `That figure ${thresholdComparison} the statutory Ground 8 threshold of ${formatCurrencyText(threshold.amount)} (${threshold.description}).`,
+        );
+      } else if (thresholdComparison === 'below') {
+        paragraphs.push(
+          `That figure is below the statutory Ground 8 threshold of ${formatCurrencyText(threshold.amount)} (${threshold.description}).`,
+        );
+      }
     }
   } else if (definition.code === '10') {
     paragraphs.push(

@@ -20,6 +20,7 @@ import { getArrearsScheduleData, type ArrearsScheduleData } from '../documents/a
 import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 import { getGround8Threshold, isGround8Eligible } from '@/lib/grounds/ground8-threshold';
 import { getSection8StatutoryText } from '@/lib/grounds/section8-ground-definitions';
+import { formatArrearsPeriodEquivalent } from '@/lib/documents/arrears-wording';
 
 // =============================================================================
 // DATE FORMATTING UTILITIES
@@ -3121,7 +3122,7 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
           explanation = `The tenant currently owes £${arrears.toFixed(2)} in rent arrears. The rent is £${rentAmount.toFixed(2)} payable ${rentFreq}. At the date of service of this notice, the arrears amount to ${thresholdDescription} of rent or more. This satisfies the threshold for Ground 8 under Schedule 2 of the Housing Act 1988 (as amended).`;
 
           // Build period-by-period breakdown from schedule (to match Rent Schedule)
-          particularLines.push(`<strong>Rent arrears of £${arrears.toFixed(2)} are outstanding</strong> (approximately ${arrearsInMonths.toFixed(1)} months' rent):`);
+          particularLines.push(`<strong>Rent arrears of £${arrears.toFixed(2)} are outstanding</strong> (${formatArrearsPeriodEquivalent(arrearsInMonths)}):`);
           particularLines.push('');
 
           // Add period-by-period breakdown from canonical schedule data
@@ -3145,7 +3146,7 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
         }
       } else {
         // Ground 10 or 11 - Rent Arrears (DISCRETIONARY)
-        explanation = `The tenant owes £${arrears.toFixed(2)} in rent arrears (approximately ${arrearsInMonths.toFixed(1)} months' rent).`;
+        explanation = `The tenant owes £${arrears.toFixed(2)} in rent arrears (${formatArrearsPeriodEquivalent(arrearsInMonths)}).`;
 
         // Build period-by-period breakdown from schedule
         particularLines.push(`<strong>Rent arrears of £${arrears.toFixed(2)} are outstanding</strong>:`);

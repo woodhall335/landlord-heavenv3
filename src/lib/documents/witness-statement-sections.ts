@@ -20,6 +20,11 @@ import {
   buildEnglandPossessionDraftingModel,
   buildN119DefendantCircumstancesText,
 } from '@/lib/england-possession/pack-drafting';
+import {
+  describeGround8ThresholdComparison,
+  formatArrearsPeriodEquivalent,
+  isWholeRentPeriodEquivalent,
+} from '@/lib/documents/arrears-wording';
 import { getGround8Threshold } from '@/lib/grounds/ground8-threshold';
 
 // =============================================================================
@@ -475,14 +480,20 @@ function buildGroundsForPossession(
       lines.push('');
       let noticeStatement = `At the date of service of the Form 3A notice (${formatUKDate(input.notice.served_date)}), the total rent arrears stood at ${formatCurrency(arrearsAtNotice)}`;
       if (monthsAtNotice > 0) {
-        noticeStatement += `, representing approximately ${monthsAtNotice.toFixed(1)} months' rent`;
+        const periodEquivalent = formatArrearsPeriodEquivalent(monthsAtNotice);
+        if (periodEquivalent) {
+          noticeStatement += `, representing ${periodEquivalent}`;
+        }
       }
       noticeStatement += '.';
       lines.push(noticeStatement);
 
       // Add threshold comparison if we have valid rent amount
-      if (ground8Threshold.amount > 0 && arrearsAtNotice >= ground8Threshold.amount) {
-        lines.push(`This significantly exceeds the Ground 8 threshold of ${thresholdRequirement} (${formatCurrency(ground8Threshold.amount)}).`);
+      const thresholdComparison = describeGround8ThresholdComparison(arrearsAtNotice, ground8Threshold.amount);
+      if (thresholdComparison === 'meets' || thresholdComparison === 'exceeds') {
+        lines.push(`This ${thresholdComparison} the Ground 8 threshold of ${thresholdRequirement} (${formatCurrency(ground8Threshold.amount)}).`);
+      } else if (thresholdComparison === 'below') {
+        lines.push(`This is below the Ground 8 threshold of ${thresholdRequirement} (${formatCurrency(ground8Threshold.amount)}).`);
       }
     }
 
@@ -492,7 +503,10 @@ function buildGroundsForPossession(
       const statementDate = input.signing?.signature_date || new Date().toISOString().split('T')[0];
       let arrearsStatement = `As at the date of this statement (${formatUKDate(statementDate)}), the total rent arrears amount to ${formatCurrency(arrearsAtStatement)}`;
       if (arrearsMonths > 0) {
-        arrearsStatement += `, representing approximately ${arrearsMonths.toFixed(1)} ${arrearsMonths === 1 ? 'month' : 'months'} of unpaid rent`;
+        const periodEquivalent = formatArrearsPeriodEquivalent(arrearsMonths);
+        if (periodEquivalent) {
+          arrearsStatement += `, representing ${periodEquivalent} outstanding`;
+        }
       }
       arrearsStatement += '.';
       lines.push(arrearsStatement);
@@ -745,7 +759,17 @@ function buildRentArrearsNarrative(
   lines.push(`The tenant has failed to pay rent as required under the terms of the tenancy agreement. As at the date of this statement, the total arrears amount to ${totalArrears}.`);
 
   if (arrearsMonths > 0) {
-    lines.push(`This represents ${arrearsMonths} ${arrearsMonths === 1 ? 'complete rental period' : 'complete rental periods'} during which no payment, or insufficient payment, has been received.`);
+    const periodEquivalent = formatArrearsPeriodEquivalent(arrearsMonths, {
+      wholeAsCompletePeriods: true,
+    });
+
+    if (periodEquivalent) {
+      lines.push(
+        isWholeRentPeriodEquivalent(arrearsMonths)
+          ? `This represents ${periodEquivalent} during which no payment, or insufficient payment, has been received.`
+          : `This represents ${periodEquivalent} outstanding.`
+      );
+    }
   }
 
   const scheduleExhibit = getExhibitByKey(exhibits, 'schedule_of_arrears');

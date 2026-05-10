@@ -201,9 +201,9 @@ describe("Witness Statement Sections Builder", () => {
         expect(sections.grounds_summary).toContain("£7,000.07");
       });
 
-      it("mentions approximate months of arrears", () => {
-        // The arrears_months from fixture is 7.0, which gets formatted as "7.0 months"
-        expect(sections.grounds_summary).toContain("7.0 months");
+      it("mentions arrears equivalent without trailing whole-number decimals", () => {
+        expect(sections.grounds_summary).toContain("7 months' rent");
+        expect(sections.grounds_summary).not.toContain("7.0 months");
       });
 
       it("refers to Schedule of Arrears", () => {

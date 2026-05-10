@@ -15,6 +15,7 @@ import {
   extractWitnessStatementSectionsInput,
   type WitnessStatementSectionsInput,
 } from '../witness-statement-sections';
+import { buildEnglandPossessionDraftingModel } from '@/lib/england-possession/pack-drafting';
 
 // =============================================================================
 // TEST 1: PRICING CONSISTENCY
@@ -222,6 +223,124 @@ describe('Witness Statement - No Undefined Values', () => {
     expect(extracted.evidence_uploads).not.toContain(null);
     expect(extracted.evidence_uploads).not.toContain('');
     expect(extracted.evidence_uploads.every(u => typeof u === 'string' && u.length > 0)).toBe(true);
+  });
+
+  it('renders fractional arrears periods as court-facing month wording', () => {
+    const input: WitnessStatementSectionsInput = {
+      ...baseInput,
+      arrears: {
+        total_arrears: 3064.515,
+        arrears_months: 3.0645149999999997,
+      },
+      arrearsAtNoticeDate: 3064.515,
+    };
+
+    const result = buildWitnessStatementSections(input);
+    const witnessText = Object.values(result).filter(Boolean).join(' ');
+
+    expect(result.rent_arrears).toContain("This represents approximately 3.1 months' rent outstanding.");
+    expect(result.grounds_summary).toContain("representing approximately 3.1 months' rent");
+    expect(witnessText).not.toContain('3.0645149999999997');
+    expect(witnessText).not.toContain('complete rental periods during which');
+  });
+
+  it('uses complete rental periods only for whole-number arrears equivalents', () => {
+    const input: WitnessStatementSectionsInput = {
+      ...baseInput,
+      arrears: {
+        total_arrears: 4000,
+        arrears_months: 4,
+      },
+      arrearsAtNoticeDate: 4000,
+    };
+
+    const result = buildWitnessStatementSections(input);
+
+    expect(result.rent_arrears).toContain('This represents 4 complete rental periods');
+    expect(result.rent_arrears).not.toContain('4.0');
+  });
+
+  it('does not render whole-number arrears equivalents as long decimals', () => {
+    const input: WitnessStatementSectionsInput = {
+      ...baseInput,
+      arrears: {
+        total_arrears: 3000,
+        arrears_months: 3.0,
+      },
+      arrearsAtNoticeDate: 3000,
+    };
+
+    const result = buildWitnessStatementSections(input);
+    const witnessText = Object.values(result).filter(Boolean).join(' ');
+
+    expect(witnessText).toContain("representing 3 months' rent");
+    expect(witnessText).toContain('3 complete rental periods');
+    expect(witnessText).not.toMatch(/\b3\.0+\b/);
+    expect(witnessText).not.toMatch(/\b\d+\.\d{2,}\s+months/i);
+  });
+
+  it('does not describe arrears just above the Ground 8 threshold as significant', () => {
+    const input: WitnessStatementSectionsInput = {
+      ...baseInput,
+      arrears: {
+        total_arrears: 3064.515,
+        arrears_months: 3.0645149999999997,
+      },
+      arrearsAtNoticeDate: 3064.515,
+    };
+
+    const result = buildWitnessStatementSections(input);
+
+    expect(result.grounds_summary).toContain('This meets the Ground 8 threshold');
+    expect(result.grounds_summary).not.toContain('significantly exceeds');
+  });
+
+  it('keeps arrears month equivalents to one decimal place across witness text', () => {
+    const input: WitnessStatementSectionsInput = {
+      ...baseInput,
+      section8: {
+        grounds: ['ground_8', 'ground_10', 'ground_11'],
+      },
+      arrears: {
+        total_arrears: 3064.515,
+        arrears_months: 3.0645149999999997,
+      },
+      arrearsAtNoticeDate: 3064.515,
+    };
+
+    const result = buildWitnessStatementSections(input);
+    const extractedWitnessText = Object.values(result).filter(Boolean).join(' ');
+
+    expect(extractedWitnessText).toContain("approximately 3.1 months' rent");
+    expect(extractedWitnessText).not.toMatch(/\b\d+\.\d{2,}\s+months(?:' rent| of unpaid rent)?/i);
+  });
+
+  it('uses the same restrained threshold wording in shared case summary and hearing guide drafting', () => {
+    const model = buildEnglandPossessionDraftingModel({
+      property_address: '123 Main Street, Pudsey, LS28 7PW',
+      tenancy_start_date: '2025-07-14',
+      notice_service_date: '2025-12-01',
+      notice_expiry_date: '2026-02-01',
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      ground_codes: ['8', '10'],
+      total_arrears: 3064.515,
+      arrears_items: [
+        { period_start: '2025-10-01', period_end: '2025-10-31', rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2025-11-01', period_end: '2025-11-30', rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2025-12-01', period_end: '2025-12-31', rent_paid: 0, amount_owed: 1000 },
+      ],
+    });
+    const caseSummaryText = model.caseSummary.narrativeParagraphs.join(' ');
+    const hearingGuideText = [
+      ...model.hearingChecklist.beforeItems,
+      ...model.hearingChecklist.atHearingItems,
+      ...model.hearingChecklist.warningParagraphs,
+    ].join(' ');
+
+    expect(caseSummaryText).toContain('That figure meets the statutory Ground 8 threshold');
+    expect(caseSummaryText).not.toContain('significantly exceeds');
+    expect(hearingGuideText).not.toContain('significantly exceeds');
   });
 });
 
