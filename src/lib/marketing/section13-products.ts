@@ -1,6 +1,5 @@
 import {
   ENGLAND_POST_MAY_2026_POSITION,
-  LANDLORD_GUIDANCE_DISCLAIMER,
 } from '@/lib/marketing/landlord-messaging';
 import type { ProductSalesBreakdownItem, ProductSalesCard, ProductSalesStep } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -238,16 +237,15 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   ],
   heroTitle: 'Challenge-Ready Section 13 Defence Pack for England landlords',
   heroSubtitle:
-    'Prepare for a tenant challenge with market evidence, response materials, and a clearer tribunal-facing bundle.',
+    'Use this when the rent increase may be disputed and you want the notice, evidence, replies, and tribunal bundle prepared from the start.',
   productSku: 'section13_defensive',
-  ctaLabel: `Start Challenge-Ready Section 13 Defence Pack - ${PRODUCTS.section13_defensive.displayPrice}`,
+  ctaLabel: 'Start the Challenge-Ready Section 13 Defence Pack',
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
-    'Built for landlords who need the Section 13 paperwork to stay clear if the tenant challenges the increase.',
-    LANDLORD_GUIDANCE_DISCLAIMER,
+    'For landlords who want to explain the rent figure clearly if the tenant questions or challenges it.',
   ],
   packIntro:
-    'This pack is for harder Section 13 cases. It helps you support the rent level with comparables, organise the argument and evidence, and keep response material clear when a challenge is active.',
+    'This pack is for Section 13 increases where you expect questions, negotiation, or a formal challenge. It helps you support the rent figure with comparables and keep the response material organised.',
   packBreakdown: [
     {
       name: 'Full Tribunal Bundle (Indexed Exhibits)',
@@ -332,79 +330,79 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   ],
   whyYouNeedThis: {
     intro:
-      'When challenge risk is active, the issue is not just whether you can serve the notice. The issue is whether the whole file holds together when the tenant tests the figure.',
+      'When a tenant is likely to challenge the increase, serving Form 4A is only part of the job. You also need to show why the proposed rent is reasonable and keep your evidence easy to follow.',
     cards: [
       {
-        title: 'A challenged increase needs an argument, not just a form',
+        title: 'A challenged increase needs more than a form',
         body:
-          'The tribunal will care about the reasoning and evidence behind the figure, not just whether a notice was served.',
+          'The tribunal will look at the rent figure and the evidence behind it, not just whether the notice was served.',
       },
       {
-        title: 'Disorganised paperwork weakens good cases',
+        title: 'Scattered paperwork weakens a good position',
         body:
-          'If evidence sits in different places and explanations are inconsistent, the case is harder to trust.',
+          'If the comparables, explanation, and replies do not line up, it becomes harder for your position to look reliable.',
       },
       {
-        title: 'Landlords often lose ground in the response stage',
+        title: 'The response stage matters',
         body:
-          'The way objections are answered and the paperwork is presented can change how strong the case feels long before the hearing itself.',
+          'How you answer objections can affect the tone of the dispute before it reaches a hearing, especially if your replies drift away from the evidence.',
       },
     ],
   },
   howThisHelps: {
     intro:
-      'The Challenge-Ready Section 13 Defence Pack turns the notice into a fuller landlord file that is easier to explain and present.',
+      'The Challenge-Ready Section 13 Defence Pack helps you put the rent figure, evidence, replies, and tribunal materials in one clear route.',
     cards: [
       {
-        title: 'It helps you defend the rent level itself',
+        title: 'It helps you explain the rent figure',
         body:
-          'The comparable-listings analysis shows why the number was chosen, instead of relying on bare assertion.',
+          'The comparables analysis shows how the proposed rent was chosen, so you are not relying on a bare assertion.',
       },
       {
-        title: 'It keeps the evidence joined up',
+        title: 'It keeps the evidence together',
         body:
-          'The bundle, argument summary, and exhibits are built to read together.',
+          'The bundle, argument summary, and exhibits are prepared to read as one set of materials.',
       },
       {
-        title: 'It improves your response discipline',
+        title: 'It keeps your replies consistent',
         body:
-          'The response template and briefing help you answer objections in a way that stays consistent with the evidence.',
+          'The response template and briefing help you answer objections without contradicting the notice or the market evidence.',
       },
       {
-        title: 'It gets you closer to tribunal-ready',
+        title: 'It gets you closer to tribunal ready',
         body:
-          'If the increase is challenged, you already have the structure, exhibits, and hearing preparation in place.',
+          'If the tenant challenges the increase, you already have the structure, exhibits, and preparation notes in place.',
       },
     ],
   },
   howItWorks: {
     intro:
-      'The workflow is for landlords who expect pushback and want the file prepared before it becomes a tribunal problem.',
+      'The workflow is for landlords who expect pushback and want the stronger materials prepared before the dispute becomes harder to manage.',
     steps: [
       {
         step: 'Step 01',
         title: 'Build the notice and the market case together',
         body:
-          'Add the rent figure, tenancy details, and comparable evidence so the defence uses the same facts as the notice.',
+          'Add the rent figure, tenancy details, dates, and comparable evidence so the notice and the defence materials use the same facts.',
       },
       {
         step: 'Step 02',
-        title: 'Prepare the challenge response pack',
+        title: 'Prepare the response materials',
         body:
-          'Generate the argument summary, response wording, bundle structure, and evidence checklist while the facts are organised.',
+          'Generate the argument summary, response wording, bundle structure, and evidence checklist while the details are still fresh and organised.',
       },
       {
         step: 'Step 03',
-        title: 'Move into service and challenge readiness',
+        title: 'Serve with the challenge materials ready',
         body:
-          'Review the pack, serve the notice, and keep the challenge materials ready if the tenant contests the increase.',
+          'Review the pack, serve the notice, and keep the stronger materials ready if the tenant questions or contests the increase.',
       },
     ],
   },
   cta: {
-    title: 'Prepare the stronger Section 13 defence pack now',
+    title: 'Prepare the stronger Section 13 pack now',
     body:
-      'Start here if you expect the rent increase to be challenged and want the market evidence, response material, and tribunal bundle prepared early.',
+      'Start here if you expect the increase to be questioned and want the market evidence, response wording, and tribunal bundle prepared early.',
     secondaryLabel: 'See the Standard Section 13 Rent Increase Pack',
     secondaryHref: '/products/section-13-standard',
   },
@@ -412,32 +410,32 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     {
       question: 'Do I need this pack for every rent increase?',
       answer:
-        'No. Many landlords only need the Standard Section 13 Rent Increase Pack. The Challenge-Ready Section 13 Defence Pack is for cases where challenge risk is real or tribunal preparation is already in view.',
+        'No. Many landlords only need the Standard Section 13 Rent Increase Pack. Use this route when challenge risk is real, the tenant is likely to question the figure, or tribunal preparation is already in view.',
     },
     {
       question: 'Does this include the core Section 13 notice documents as well?',
       answer:
-        'Yes. The Challenge-Ready Section 13 Defence Pack builds on the standard notice pack and adds the fuller challenge, response, and tribunal-facing materials.',
+        'Yes. It includes the core Section 13 notice documents and adds the response, evidence, argument, and tribunal-facing materials around them.',
     },
     {
       question: 'Why is the tribunal bundle included?',
       answer:
-        'Because the way the evidence is organised affects how credible the case feels. The indexed bundle helps the tribunal follow the paperwork more easily.',
+        'Because the way your evidence is organised affects how easy your case is to follow. The indexed bundle keeps the notice, comparables, exhibits, and supporting papers in a clearer order.',
     },
     {
       question: 'Does this use real comparable listings too?',
       answer:
-        'Yes. The Challenge-Ready Section 13 Defence Pack is built around the same comparable-listings workflow, then adds the fuller argument, response, and tribunal-facing materials needed when challenge risk is higher.',
+        'Yes. It uses the comparable-listings workflow, then adds the argument, response, and tribunal materials you need when the increase is more likely to be tested.',
     },
     {
       question: 'Is this still England only?',
       answer:
-        'Yes. The Challenge-Ready Section 13 Defence Pack is built for England landlords using Section 13 when a challenge is likely.',
+        'Yes. This pack is for England landlords using Section 13 and Form 4A.',
     },
     {
       question: 'Does this replace legal advice or representation?',
       answer:
-        'No. It is a document-generation and preparation pack, not a solicitor service or tribunal representation.',
+        'No. It helps you prepare documents and organise the case materials, but it is not legal advice, a solicitor service, or tribunal representation.',
     },
   ],
 };

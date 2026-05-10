@@ -39,150 +39,112 @@ export default function Section13DefenceProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 13 defence pack | support for challenged rent increases',
+      trustText: 'England Section 13 defence pack for landlords expecting a challenge',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
-      secondaryCta: { label: 'Check the challenge risk first', href: '/tools/rent-increase-challenge-checker' },
+      secondaryCta: { label: 'Compare the standard option', href: '/products/section-13-standard' },
       feature:
-        'Built for landlords who need the notice, evidence, and response materials to stay clear under challenge.',
+        'Built for landlords who want the notice, evidence, response notes, and tribunal bundle prepared together.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 defence documents',
       showReviewPill: true,
-      showTrustPositioningBar: true,
-      trustPositioningPreset: 'section13',
       children: (
         <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
           {config.heroBullets.map((bullet) => (
             <li key={bullet}>{bullet}</li>
           ))}
-          <li>Need to test whether the figure is too high? Run the free rent checker first.</li>
         </ul>
       ),
     },
     earlyProofBand: {
-      priceLabel: product.displayPrice,
-      valueSummary:
-        'This is the stronger option when you want to preview the challenge-ready Section 13 pack before you pay, including the bundle, argument summary, and response structure.',
-      includedBullets: [
-        'Official Form 4A notice kept with the wider defence pack',
-        'Bundle, argument summary, and justification analysis',
-        'Response, evidence, and challenge-preparation materials',
-      ],
-      bestFor:
-        'You expect pushback, want response materials ready, or want the stronger tribunal-facing pack from the start.',
-      notFor:
-        'You mainly need to serve and explain the increase now without the fuller challenge layer.',
       preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
-    },
-    decisionBlock: {
-      title: 'Choose Defence if the increase may be challenged',
-      intro:
-        'This page is for landlords who need more than serving the notice. It is for cases where the increase may be tested and the evidence needs to stay organised.',
-      cards: [
-        {
-          eyebrow: 'Choose this option',
-          title: 'Prepare the challenge-ready pack now',
-          body:
-            'Use the defence pack when you need Form 4A, comparables, argument summary, response materials, and bundle support to work together.',
-          tone: 'positive',
-        },
-        {
-          eyebrow: 'Choose the other option',
-          title: 'Use Standard if you only need to serve and explain the increase',
-          body:
-            'If you mainly need to set the rent, support it with comparables, and serve the notice properly, the Standard Section 13 Rent Increase Pack is often the better fit.',
-          tone: 'warning',
-        },
-      ],
-      primary: { label: 'Start the challenge-ready defence option', href: product.wizardHref },
-      secondary: {
-        label: 'Only need the standard rent increase route?',
-        href: '/products/section-13-standard',
-      },
+      fullWidthPreview: true,
     },
     whatYouGet: {
-      title: 'What you get in the challenge-ready defence pack',
-      intro: config.packIntro,
-      items: config.packBreakdown,
+      hideSection: true,
+      title: '',
+      intro: '',
     },
     comparisonBlock: {
       title: 'Standard and defence solve different rent-increase jobs',
       intro:
         'The standard pack is for serving and explaining the increase. The defence pack is for cases where challenge risk and tribunal structure matter from the start.',
+      routeGridClassName: 'mt-8 grid gap-6 lg:grid-cols-2',
       routeCards: [
         {
           name: 'Standard Section 13 Rent Increase Pack',
           whatItIs:
-            'Best when you want to propose the increase with Form 4A, comparables, and a clean service record.',
+            'For landlords who want to serve a Section 13 rent increase in England with Form 4A, market evidence, and a record of service prepared together.',
           problemItSolves:
-            'Stops the increase from looking unsupported or weak on process when it is first served.',
+            'Helps you get the figure, dates, notice, explanation, and service steps right before the tenant receives anything.',
           riskIfWrong:
-            'If the tenant is likely to challenge, you may still need the fuller defence pack later.',
+            'A bare form with weak dates or no evidence can invite questions, delays, or a challenge that is harder to answer.',
           landlordOutcome:
-            'Gives you a clear rent increase pack without the heavier tribunal-preparation layer.',
+            'Best when the increase is straightforward and you want a clear, service-ready pack.',
           href: '/products/section-13-standard',
-          ctaLabel: 'Compare the standard option',
-          imageSrc: '/images/wizard-icons/41-rent.png',
-          imageAlt: 'Standard Section 13 pack',
+          ctaLabel: 'Open the Standard Section 13 Rent Increase Pack',
+          priceLabel: PRODUCTS.section13_standard.displayPrice,
+          imageSrc: '/images/rent-increase-standard.webp',
+          imageAlt: 'Standard Section 13 rent increase pack',
         },
         {
           name: 'Challenge-Ready Section 13 Defence Pack',
           whatItIs:
-            'Best when you want the notice, comparables, response materials, and tribunal-facing bundle in one pack.',
+            'For landlords who already expect the proposed rent to be disputed, or who want a stronger file before serving.',
           problemItSolves:
-            'Prevents the rent increase case from being rebuilt later if the tenant challenges the figure or service.',
+            'Organises the evidence, response notes, and tribunal-ready material around the rent figure from the start.',
           riskIfWrong:
-            'If you only need to serve and explain the increase now, this route may be more than you need.',
+            'If challenge risk is obvious and you start with a light file, you may have to rebuild the evidence after the tenant objects.',
           landlordOutcome:
-            'Gets you closer to a tribunal-ready position if the increase is likely to be tested.',
+            'Best when you want to be ready for questions, negotiation, or tribunal scrutiny.',
           href: '/products/section-13-defence',
-          ctaLabel: 'This is my option',
+          ctaLabel: 'Open the Challenge-Ready Defence Pack',
           priceLabel: product.displayPrice,
-          imageSrc: '/images/wizard-icons/41-rent.png',
+          imageSrc: '/images/rent-increase-defence.webp',
           imageAlt: 'Challenge-ready Section 13 defence pack',
         },
       ],
     },
     objectionBlock: {
-      title: 'Common landlord questions before choosing the defence option',
+      title: 'Questions landlords ask before choosing the defence route',
       intro:
-        'These are the points landlords usually check before choosing the stronger Section 13 option.',
+        'If you think the tenant may push back, these are the points worth checking before you start.',
       items: [
         {
           question: 'Does this still include the official Form 4A notice?',
           answer:
-            'Yes. The defence route still includes Form 4A. It also adds the argument summary, bundle, response materials, and stronger evidence structure.',
+            'Yes. You still get Form 4A. This route adds the argument summary, evidence structure, response wording, and tribunal bundle around it.',
         },
         {
           question: 'When is this better than the standard pack?',
           answer:
-            'It is better when challenge risk is already visible, the tenant is likely to test the increase, or you want response and bundle materials ready early.',
+            'Choose this when a challenge already feels likely, the tenant has questioned the figure, or you want the response materials ready before things escalate.',
         },
         {
           question: 'Is this only for a tribunal hearing?',
           answer:
-            'No. It can also help earlier by keeping the file coherent while objections are being raised and answered.',
+            'No. It also helps before a hearing by keeping your evidence, explanation, and replies consistent while objections are being raised.',
         },
       ],
     },
     midPageCta: {
-      title: 'Ready to build the stronger pack?',
+      title: 'Ready to prepare the stronger pack?',
       body:
-        'Start here if you want the notice, market evidence, response materials, and tribunal-facing bundle prepared together.',
-      primary: { label: 'Start the defence-route wizard', href: product.wizardHref },
+        'Start here if you want Form 4A, market evidence, response wording, and the tribunal-facing bundle built around the same rent figure.',
+      primary: { label: 'Start the challenge-ready wizard', href: product.wizardHref },
       secondary: {
         label: 'I only need the standard option',
         href: '/products/section-13-standard',
       },
     },
     whyYouNeedThis: {
-      title: 'Why you need this',
+      title: 'Why this route helps',
       intro: config.whyYouNeedThis.intro,
       cards: config.whyYouNeedThis.cards,
     },
     howThisHelps: {
-      title: 'How this helps you',
+      title: 'What it helps you do',
       intro: config.howThisHelps.intro,
       cards: config.howThisHelps.cards,
     },
@@ -198,10 +160,7 @@ export default function Section13DefenceProductPage() {
       secondary: config.cta.secondaryLabel && config.cta.secondaryHref
         ? { label: config.cta.secondaryLabel, href: config.cta.secondaryHref }
         : undefined,
-      guideLinks: [
-        { label: 'Run the free rent checker first', href: '/tools/rent-increase-challenge-checker' },
-        ...descriptor.defaultGuideLinks,
-      ],
+      guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
       title: 'Challenge-Ready Section 13 Defence Pack FAQs',

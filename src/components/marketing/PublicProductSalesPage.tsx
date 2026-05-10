@@ -459,7 +459,7 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
     <section id="hero-proof" className="scroll-mt-24 bg-white py-10 md:py-12">
       <Container>
         {!hasSummaryContent ? (
-          <div className="mx-auto max-w-6xl min-w-0">
+          <div className={`mx-auto min-w-0 ${content.fullWidthPreview ? '' : 'max-w-6xl'}`}>
             {hasPreview ? content.preview : null}
             {content.imageSrc ? (
               <div className="relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]">

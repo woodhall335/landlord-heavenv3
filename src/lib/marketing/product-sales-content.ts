@@ -74,6 +74,7 @@ export interface ProductSalesEarlyProofBand {
   preview?: ReactNode;
   imageSrc?: string;
   imageAlt?: string;
+  fullWidthPreview?: boolean;
 }
 
 export interface ProductSalesStep {

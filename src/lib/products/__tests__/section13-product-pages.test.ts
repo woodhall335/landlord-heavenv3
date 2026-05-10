@@ -24,10 +24,14 @@ describe('Section 13 product pages', () => {
   it('keeps the defence page positioned as the challenge-ready route with preview proof', () => {
     const source = readSource('src/app/(marketing)/products/section-13-defence/page.tsx');
 
-    expect(source).toContain('Choose Defence if the increase may be challenged');
+    expect(source).toContain('fullWidthPreview: true');
     expect(source).toContain('preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
-    expect(source).toContain('What you get in the challenge-ready defence pack');
+    expect(source).toContain('Questions landlords ask before choosing the defence route');
     expect(source).toContain('Start the challenge-ready defence option');
-    expect(source).toContain('Only need the standard rent increase route?');
+    expect(source).toContain('I only need the standard option');
+    expect(source).not.toContain('Choose Defence if the increase may be challenged');
+    expect(source).not.toContain('What you get in the challenge-ready defence pack');
+    expect(source).not.toContain('Only need the standard rent increase route?');
+    expect(source).not.toContain('Run the free rent checker first');
   });
 });
