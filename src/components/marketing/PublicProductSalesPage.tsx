@@ -458,25 +458,25 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
   return (
     <section id="hero-proof" className="scroll-mt-24 bg-white py-10 md:py-12">
       <Container>
-        <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
-          {!hasSummaryContent ? (
-            <div className="min-w-0">
-              {hasPreview ? content.preview : null}
-              {content.imageSrc ? (
-                <div className="relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]">
-                  <div className="relative aspect-[16/9] w-full">
-                    <Image
-                      src={content.imageSrc}
-                      alt={content.imageAlt ?? 'Product pack preview'}
-                      fill
-                      sizes="(min-width: 1024px) 70vw, 100vw"
-                      className="object-cover object-top"
-                    />
-                  </div>
+        {!hasSummaryContent ? (
+          <div className="mx-auto max-w-6xl min-w-0">
+            {hasPreview ? content.preview : null}
+            {content.imageSrc ? (
+              <div className="relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]">
+                <div className="relative aspect-[16/9] w-full">
+                  <Image
+                    src={content.imageSrc}
+                    alt={content.imageAlt ?? 'Product pack preview'}
+                    fill
+                    sizes="(min-width: 1024px) 70vw, 100vw"
+                    className="object-cover object-top"
+                  />
                 </div>
-              ) : null}
-            </div>
-          ) : (
+              </div>
+            ) : null}
+          </div>
+        ) : (
+          <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
             <div
               className={`grid gap-8 lg:grid-cols-[0.58fr_0.42fr] ${
                 hasStandaloneImage ? 'lg:items-stretch' : 'lg:items-start'
@@ -569,8 +569,8 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
                 </div>
               ) : null}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </Container>
     </section>
   );
