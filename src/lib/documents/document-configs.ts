@@ -312,6 +312,14 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
           icon: 'court-form',
           pages: '4-6 pages',
           category: 'Court Forms',
+        },
+        {
+          id: 'proof-of-service',
+          title: 'Proof of Service Template',
+          description: 'Certificate confirming how and when the possession notice was served',
+          icon: 'evidence',
+          pages: '2 pages',
+          category: 'Evidence',
         }
       );
     }
@@ -327,6 +335,14 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
       icon: 'court-form',
       pages: '6 pages',
       category: 'Court Forms',
+    });
+    documents.push({
+      id: 'proof-of-service',
+      title: 'Proof of Service Template',
+      description: 'Certificate confirming how and when the Notice to Leave was served',
+      icon: 'evidence',
+      pages: '2 pages',
+      category: 'Evidence',
     });
   }
 

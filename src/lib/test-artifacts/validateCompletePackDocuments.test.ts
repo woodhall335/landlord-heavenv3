@@ -14,6 +14,7 @@ describe('validateCompletePackDocuments', () => {
         makeDoc('n5_claim'),
         makeDoc('n119_particulars'),
         makeDoc('proof_of_service'),
+        makeDoc('evidence_checklist'),
         makeDoc('court_filing_guide'),
       ],
       jurisdiction: 'england',
@@ -46,6 +47,7 @@ describe('validateCompletePackDocuments', () => {
         makeDoc('n5_claim'),
         makeDoc('n119_particulars'),
         makeDoc('proof_of_service'),
+        makeDoc('evidence_checklist'),
         makeDoc('court_filing_guide'),
         makeDoc('n5b_claim'),
       ],
@@ -55,5 +57,22 @@ describe('validateCompletePackDocuments', () => {
 
     expect(result.ok).toBe(false);
     expect(result.error).toContain('N5B');
+  });
+
+  it('requires the evidence checklist when the canonical complete pack includes it', () => {
+    const result = validateCompletePackDocuments({
+      documents: [
+        makeDoc('section8_notice'),
+        makeDoc('n5_claim'),
+        makeDoc('n119_particulars'),
+        makeDoc('proof_of_service'),
+        makeDoc('court_filing_guide'),
+      ],
+      jurisdiction: 'england',
+      route: 'section_8',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.error).toContain('evidence checklist');
   });
 });

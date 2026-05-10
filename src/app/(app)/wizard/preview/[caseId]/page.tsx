@@ -1082,6 +1082,7 @@ export default function WizardPreviewPage() {
       'arrears-schedule': ['arrears_schedule'],
       'evidence-checklist': ['evidence_checklist'],
       'proof-of-service': ['proof_of_service', 'proof_of_service_certificate'],
+      'proof-of-service-form-3a': ['proof_of_service', 'proof_of_service_certificate'],
       // ===========================================
       // MONEY CLAIM DOCUMENTS
       // ===========================================

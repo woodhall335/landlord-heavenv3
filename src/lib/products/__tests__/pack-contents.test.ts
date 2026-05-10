@@ -161,7 +161,7 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'court_forms_guide')).toBeUndefined();
         expect(items.find(i => i.key === 'service_record_notes')).toBeUndefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
-        expect(items.find(i => i.key === 'evidence_checklist')).toBeUndefined();
+        expect(items.find(i => i.key === 'evidence_checklist')).toBeDefined();
         expect(items.find(i => i.key === 'hearing_checklist')?.title).toBe('Hearing Preparation Guide');
         expect(items.find(i => i.key === 'court_filing_guide')).toBeDefined();
         expect(items.find(i => i.key === 'what_happens_next')).toBeDefined();
@@ -183,6 +183,7 @@ describe('getPackContents', () => {
         expect(items.find(i => i.key === 'n5_claim')).toBeDefined();
         expect(items.find(i => i.key === 'n119_particulars')).toBeDefined();
         expect(items.find(i => i.key === 'proof_of_service')).toBeDefined();
+        expect(items.find(i => i.key === 'evidence_checklist')).toBeDefined();
         // N5B not included for Section 8
         expect(items.find(i => i.key === 'n5b_claim')).toBeUndefined();
       });

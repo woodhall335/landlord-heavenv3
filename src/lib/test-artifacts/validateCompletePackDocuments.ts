@@ -40,6 +40,7 @@ export function validateCompletePackDocuments(
     ['n119_particulars', 'N119'],
     ['n5b_claim', 'N5B'],
     ['proof_of_service', 'supporting proof-of-service record'],
+    ['evidence_checklist', 'evidence checklist'],
     ['court_filing_guide', 'court filing guide'],
   ] as const) {
     const presentResult = assertPresent(key, label);

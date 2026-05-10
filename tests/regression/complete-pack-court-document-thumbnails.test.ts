@@ -25,6 +25,9 @@ const docTypeMapping: Record<string, string[]> = {
   'form-n119': ['n119_particulars', 'form_n119', 'n119_particulars_of_claim'],
   'form-n5b': ['n5b_claim', 'form_n5b', 'n5b_accelerated_possession'],
   'proof-of-service': ['proof_of_service', 'proof_of_service_certificate'],
+  'proof-of-service-form-3a': ['proof_of_service', 'proof_of_service_certificate'],
+  'evidence-checklist': ['evidence_checklist'],
+  'court-filing-guide': ['court_filing_guide'],
   'form-e': ['form_e', 'tribunal_application', 'form_e_tribunal'],
 };
 
@@ -41,8 +44,9 @@ describe('Complete Pack Court Document Thumbnails - England Section 8', () => {
     expect(docIds).toContain('form-n119');
     expect(docIds).not.toContain('form-n5b');
 
-    // Should also have proof-of-service
-    expect(docIds).toContain('proof-of-service');
+    expect(docIds).toContain('proof-of-service-form-3a');
+    expect(docIds).toContain('evidence-checklist');
+    expect(docIds).toContain('court-filing-guide');
   });
 
   it('pack-contents returns matching keys for Section 8', () => {
@@ -72,8 +76,8 @@ describe('Complete Pack Court Document Thumbnails - England Section 8', () => {
     expect(possibleTypes).toContain('n119_particulars');
   });
 
-  it('docTypeMapping resolves proof-of-service to proof_of_service', () => {
-    const possibleTypes = docTypeMapping['proof-of-service'];
+  it('docTypeMapping resolves proof-of-service-form-3a to proof_of_service', () => {
+    const possibleTypes = docTypeMapping['proof-of-service-form-3a'];
     expect(possibleTypes).toBeDefined();
     expect(possibleTypes).toContain('proof_of_service');
   });
@@ -102,24 +106,22 @@ describe('Complete Pack Court Document Thumbnails - England Section 8', () => {
   });
 });
 
-describe('Complete Pack Court Document Thumbnails - England Section 21', () => {
+describe('Complete Pack Court Document Thumbnails - England legacy Section 21 input', () => {
   const jurisdiction = 'england';
   const route = 'section_21';
 
-  it('document-configs returns N5B for Section 21 (not N5 or N119)', () => {
+  it('document-configs returns the current Form 3A/N5/N119 pack', () => {
     const docs = getCompletePackDocuments(jurisdiction, route);
     const docIds = docs.map((d) => d.id);
 
-    // Section 21 should have N5B ONLY, not N5 or N119
-    expect(docIds).toContain('form-n5b');
-    expect(docIds).not.toContain('form-n5');
-    expect(docIds).not.toContain('form-n119');
-
-    // Should also have proof-of-service
-    expect(docIds).toContain('proof-of-service');
+    expect(docIds).toContain('form-n5');
+    expect(docIds).toContain('form-n119');
+    expect(docIds).not.toContain('form-n5b');
+    expect(docIds).toContain('proof-of-service-form-3a');
+    expect(docIds).toContain('evidence-checklist');
   });
 
-  it('pack-contents returns matching keys for Section 21', () => {
+  it('pack-contents returns matching keys for the coerced England possession route', () => {
     const packItems = getPackContents({
       product: 'complete_pack',
       jurisdiction,
@@ -127,17 +129,17 @@ describe('Complete Pack Court Document Thumbnails - England Section 21', () => {
     });
     const packKeys = packItems.map((p) => p.key);
 
-    // Section 21 should have n5b_claim ONLY, not n5_claim or n119_particulars
-    expect(packKeys).toContain('n5b_claim');
-    expect(packKeys).not.toContain('n5_claim');
-    expect(packKeys).not.toContain('n119_particulars');
+    expect(packKeys).toContain('n5_claim');
+    expect(packKeys).toContain('n119_particulars');
+    expect(packKeys).not.toContain('n5b_claim');
     expect(packKeys).toContain('proof_of_service');
+    expect(packKeys).toContain('evidence_checklist');
   });
 
-  it('docTypeMapping resolves form-n5b to n5b_claim', () => {
-    const possibleTypes = docTypeMapping['form-n5b'];
+  it('docTypeMapping resolves Form 3A proof of service to proof_of_service', () => {
+    const possibleTypes = docTypeMapping['proof-of-service-form-3a'];
     expect(possibleTypes).toBeDefined();
-    expect(possibleTypes).toContain('n5b_claim');
+    expect(possibleTypes).toContain('proof_of_service');
   });
 
   it('document-configs and pack-contents are aligned for Section 21', () => {

@@ -76,6 +76,31 @@ describe('resolveDocumentPreview', () => {
     }
   });
 
+  it('routes Complete Pack N215, evidence checklist, and court guide through real pack previews', () => {
+    const documents = getCompletePackDocuments('england', 'section_8');
+    const expectedTypes: Record<string, string> = {
+      'proof-of-service-form-3a': 'proof_of_service',
+      'evidence-checklist': 'evidence_checklist',
+      'court-filing-guide': 'court_filing_guide',
+    };
+
+    for (const [configId, expectedType] of Object.entries(expectedTypes)) {
+      const document = documents.find((item) => item.id === configId);
+      expect(document, `missing complete-pack config for ${configId}`).toBeTruthy();
+
+      const resolution = resolveDocumentPreview({
+        caseId,
+        product: 'complete_pack',
+        document: document!,
+      });
+
+      expect(resolution.thumbnailUrl).toContain('pack=complete_pack');
+      expect(resolution.thumbnailUrl).toContain(`document_type=${expectedType}`);
+      expect(resolution.previewUrl).toContain('pack=complete_pack');
+      expect(resolution.previewUrl).toContain(`document_type=${expectedType}`);
+    }
+  });
+
   it('routes Wales notice cards through the document types emitted by the pack generator', () => {
     const section173Docs = getNoticeOnlyDocuments('wales', 'wales_section_173');
     const faultBasedDocs = getNoticeOnlyDocuments('wales', 'wales_fault_based');

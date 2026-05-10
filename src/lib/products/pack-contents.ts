@@ -659,6 +659,13 @@ function getEnglandCompletePackContents(args: GetPackContentsArgs): PackItem[] {
       required: true,
     },
     {
+      key: 'evidence_checklist',
+      title: 'Evidence Collection Checklist',
+      description: 'Complete list of documents to gather and keep with the possession claim evidence.',
+      category: 'Evidence',
+      required: true,
+    },
+    {
       key: 'hearing_checklist',
       title: 'Hearing Preparation Guide',
       description: 'Practical hearing guide covering the main questions, failure points, and documents to bring.',

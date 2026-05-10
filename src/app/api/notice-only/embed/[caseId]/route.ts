@@ -82,6 +82,8 @@ function getEnglandPreviewTitle(documentType: string): string {
       return 'Certificate of Service (Form N215)';
     case 'arrears_schedule':
       return 'Rent schedule / arrears statement';
+    case 'evidence_checklist':
+      return 'Evidence Collection Checklist';
     case 'case_summary':
       return 'Case Summary - Stage 1 Notice & Service';
     case 'what_happens_next':
@@ -206,6 +208,7 @@ function resolvePackDocumentType(documentType: string): string {
     compliance_checklist: 'compliance_declaration',
     pre_service_compliance: 'compliance_declaration',
     'pre-service-checklist-fault': 'pre_service_compliance_checklist',
+    'proof-of-service': 'proof_of_service',
     'proof-of-service-form-3a': 'proof_of_service',
     form_n215: 'proof_of_service',
     n215: 'proof_of_service',

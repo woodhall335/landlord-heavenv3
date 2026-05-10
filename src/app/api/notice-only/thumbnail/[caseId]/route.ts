@@ -203,6 +203,7 @@ function resolveDocumentType(configId: string, jurisdiction: string): string | n
 
   if (
     configId === 'proof_of_service' ||
+    configId === 'proof-of-service' ||
     configId === 'proof-of-service-form-3a' ||
     configId === 'form_n215' ||
     configId === 'n215'
@@ -236,7 +237,7 @@ function resolveDocumentType(configId: string, jurisdiction: string): string | n
     return 'compliance_declaration';
   }
 
-  if (configId === 'evidence_checklist') {
+  if (configId === 'evidence_checklist' || configId === 'evidence-checklist') {
     return 'evidence_checklist';
   }
 
@@ -473,10 +474,14 @@ function getFallbackDocumentTitle(docType: string): string {
       return 'Certificate of Service (Form N215)';
     case 'arrears_schedule':
       return 'Rent Schedule / Arrears Statement';
+    case 'evidence_checklist':
+      return 'Evidence Collection Checklist';
     case 'case_summary':
       return 'Case Summary - Stage 1 Notice & Service';
     case 'what_happens_next':
       return 'What Happens Next';
+    case 'court_filing_guide':
+      return 'Court Filing Guide';
     case 'n5_claim':
       return 'Claim for possession (Form N5)';
     case 'n119_particulars':

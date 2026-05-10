@@ -189,17 +189,19 @@ describe('Section 8 document hardening', () => {
       const witnessHtml = getHtml(pack, 'witness_statement');
       const bundleHtml = getHtml(pack, 'court_bundle_index');
       const checklistHtml = getHtml(pack, 'hearing_checklist');
+      const evidenceChecklistHtml = getHtml(pack, 'evidence_checklist');
       const caseSummaryHtml = getHtml(pack, 'case_summary');
       const letterHtml = getHtml(pack, 'arrears_engagement_letter');
       const proofText = toPlainText(proofHtml);
       const witnessText = toPlainText(witnessHtml);
       const bundleText = toPlainText(bundleHtml);
       const checklistText = toPlainText(checklistHtml);
+      const evidenceChecklistText = toPlainText(evidenceChecklistHtml);
       const caseSummaryText = toPlainText(caseSummaryHtml);
       const expectedExpiry = extractLabeledDate(caseSummaryText, 'Notice expiry date');
       const expectedProceedingsDate = extractLabeledDate(caseSummaryText, 'Earliest proceedings date');
 
-      for (const html of [proofHtml, witnessHtml, bundleHtml, checklistHtml, caseSummaryHtml]) {
+      for (const html of [proofHtml, witnessHtml, bundleHtml, checklistHtml, evidenceChecklistHtml, caseSummaryHtml]) {
         expect(html).not.toContain('Invalid Date');
         expectNoDebugLeakage(html);
       }
@@ -219,6 +221,8 @@ describe('Section 8 document hardening', () => {
       }
 
       expect(bundleHtml).toContain('Form 3A notice');
+      expect(evidenceChecklistText).toContain('Evidence Collection Checklist');
+      expect(evidenceChecklistText).toContain('Ground 8');
       expect(proofHtml).toContain('Form 3A notice');
       expect(proofText).toContain('Notice expiry date');
       expect(proofText).toContain('Earliest proceedings date');

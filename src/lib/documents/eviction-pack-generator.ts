@@ -1200,6 +1200,7 @@ function reorderEnglandSection8Stage2Documents(documents: EvictionPackDocument[]
     'proof_of_service',
     'witness_statement',
     'court_bundle_index',
+    'evidence_checklist',
     'hearing_checklist',
     'arrears_engagement_letter',
     'court_filing_guide',
@@ -3402,10 +3403,8 @@ export async function generateCompleteEvictionPack(
   // Keeping court filing guide and evidence tools only
 
   // 3. Generate evidence tools
-  if (jurisdiction !== 'england') {
-    const evidenceChecklist = await generateEvidenceChecklist(evictionCase, groundsData);
-    documents.push(evidenceChecklist);
-  }
+  const evidenceChecklist = await generateEvidenceChecklist(evictionCase, groundsData);
+  documents.push(evidenceChecklist);
 
   // Extract service details from wizard facts for proof of service
   // FIX 3 (Jan 2026): Ensure expiry_date is always populated for cross-document consistency
