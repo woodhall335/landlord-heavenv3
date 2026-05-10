@@ -43,7 +43,7 @@ export default function Section13StandardProductPage() {
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
-      secondaryCta: { label: 'Check the supportable range first', href: '/tools/rent-increase-challenge-checker' },
+      secondaryCta: { label: 'Compare the defence pack', href: '/products/section-13-defence' },
       feature:
         'Built for landlords who want the notice, evidence, and service record to stay clear from the start.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
@@ -56,7 +56,6 @@ export default function Section13StandardProductPage() {
           {config.heroBullets.map((bullet) => (
             <li key={bullet}>{bullet}</li>
           ))}
-          <li>Need to test the figure first? Run the free rent checker before opening the paid pack.</li>
         </ul>
       ),
     },
@@ -69,39 +68,38 @@ export default function Section13StandardProductPage() {
       intro: '',
     },
     comparisonBlock: {
-      title: 'Standard and defence solve different Section 13 jobs',
-      intro:
-        'The key choice is whether you need to serve and explain the increase now, or whether you already need challenge and tribunal materials.',
+      routeGridClassName: 'mt-8 grid gap-6 lg:grid-cols-2',
       routeCards: [
         {
           name: 'Standard Section 13 Rent Increase Pack',
           whatItIs:
-            'Best when you want to propose the increase with Form 4A, market evidence, and a clean service record.',
+            'For landlords who want to serve a Section 13 rent increase in England with Form 4A, market evidence, and a record of service prepared together.',
           problemItSolves:
-            'Stops the increase looking unsupported before the tenant sees the evidence.',
+            'Helps you get the figure, dates, notice, explanation, and service steps right before the tenant receives anything.',
           riskIfWrong:
-            'If a serious challenge is already likely, you may still need the stronger defence pack afterwards.',
+            'A bare form with weak dates or no evidence can invite questions, delays, or a challenge that is harder to answer.',
           landlordOutcome:
-            'Lets you serve the increase cleanly now and keep the evidence together.',
+            'Best when the increase is straightforward and you want a clear, service-ready pack.',
           href: '/products/section-13-standard',
-          ctaLabel: 'This is my option',
+          ctaLabel: 'Open the Standard Section 13 Rent Increase Pack',
           priceLabel: product.displayPrice,
-          imageSrc: '/images/wizard-icons/41-rent.png',
+          imageSrc: '/images/rent-increase-standard.webp',
           imageAlt: 'Standard Section 13 rent increase pack',
         },
         {
           name: 'Challenge-Ready Section 13 Defence Pack',
           whatItIs:
-            'Best when you want response, bundle, and tribunal-preparation materials as well as the notice pack.',
+            'For landlords who already expect the proposed rent to be disputed, or who want a stronger file before serving.',
           problemItSolves:
-            'Prevents the rent increase pack from being rebuilt later when the tenant challenges the figure or the service.',
+            'Organises the evidence, response notes, and tribunal-ready material around the rent figure from the start.',
           riskIfWrong:
-            'If you only need to serve and explain the increase now, the defence route may be more than you need.',
+            'If challenge risk is obvious and you start with a light file, you may have to rebuild the evidence after the tenant objects.',
           landlordOutcome:
-            'Gives you the stronger challenge-ready pack if pushback is already in view.',
+            'Best when you want to be ready for questions, negotiation, or tribunal scrutiny.',
           href: '/products/section-13-defence',
-          ctaLabel: 'Compare the defence route',
-          imageSrc: '/images/wizard-icons/41-rent.png',
+          ctaLabel: 'Open the Challenge-Ready Defence Pack',
+          priceLabel: PRODUCTS.section13_defensive.displayPrice,
+          imageSrc: '/images/rent-increase-defence.webp',
           imageAlt: 'Challenge-ready Section 13 defence pack',
         },
       ],
@@ -160,10 +158,7 @@ export default function Section13StandardProductPage() {
       secondary: config.cta.secondaryLabel && config.cta.secondaryHref
         ? { label: config.cta.secondaryLabel, href: config.cta.secondaryHref }
         : undefined,
-      guideLinks: [
-        { label: 'Run the free rent checker first', href: '/tools/rent-increase-challenge-checker' },
-        ...descriptor.defaultGuideLinks,
-      ],
+      guideLinks: descriptor.defaultGuideLinks,
     },
     faq: {
       title: 'Standard Section 13 Rent Increase Pack FAQs',

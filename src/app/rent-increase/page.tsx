@@ -110,11 +110,11 @@ export default function RentIncreaseLandingPage() {
       preset: standardDescriptor.heroPreset,
       badge: standardDescriptor.heroBadge,
       trustText: 'England Section 13 / Form 4A packs | choose the right route',
-      title: 'Increase rent in England using Section 13 / Form 4A',
+      title: 'Increase rent in England with a Section 13 pack',
       subtitle:
-        'Choose the route that fits what is happening with the tenancy. Use the Standard Section 13 Rent Increase Pack for a normal rent increase, or choose the Challenge-Ready Section 13 Defence Pack if you already expect pushback.',
+        'Prepare the right pack before you serve notice. Use the Standard Section 13 Rent Increase Pack for a routine increase, or choose the Challenge-Ready Section 13 Defence Pack if you expect the tenant to question the figure.',
       feature:
-        'Built for landlords who want Form 4A, the rent figure, the evidence, and the service record to line up before anything is served.',
+        'Get Form 4A, the rent figure, supporting evidence, and the service record prepared as one joined-up landlord file.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 rent increase workflow',
       showReviewPill: true,
@@ -128,14 +128,14 @@ export default function RentIncreaseLandingPage() {
               href={standardDescriptor.landingHref}
               pagePath="/rent-increase"
               pageType="entry_page"
-              ctaLabel="Generate Section 13 pack"
+              ctaLabel="Start the standard pack"
               ctaPosition="hero"
               eventName="entry_page_primary_cta_click"
               routeIntent="rent_increase"
               product="section13_standard"
               className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
             >
-              Generate Section 13 pack
+              Start the standard pack
             </TrackedLink>
           </div>
           <div className="w-full sm:w-auto">
@@ -143,23 +143,23 @@ export default function RentIncreaseLandingPage() {
               href={defenceDescriptor.landingHref}
               pagePath="/rent-increase"
               pageType="entry_page"
-              ctaLabel="Prepare for tenant challenge"
+              ctaLabel="Prepare a challenge-ready pack"
               ctaPosition="hero"
               eventName="entry_page_secondary_cta_click"
               routeIntent="rent_increase"
               product="section13_defensive"
               className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
             >
-              Prepare for tenant challenge
+              Prepare a challenge-ready pack
             </TrackedLink>
           </div>
         </>
       ),
       children: (
         <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
-          <li>Built for the current England Section 13 route using Form 4A.</li>
-          <li>Use the standard pack for a straightforward increase, or the defence pack when challenge risk is already part of the case.</li>
-          <li>Keeps the notice, market evidence, and service notes together in one landlord file.</li>
+          <li>Built for England's Section 13 process using Form 4A.</li>
+          <li>Start standard for most rent increases; choose challenge-ready when pushback is likely.</li>
+          <li>Keep the notice, market evidence, and service notes in one organised file.</li>
         </ul>
       ),
     },

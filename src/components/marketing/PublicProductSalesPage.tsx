@@ -154,6 +154,9 @@ function InfoCards({
   cards: ProductSalesCard[];
   sectionId: string;
 }) {
+  const gridClassName =
+    cards.length === 4 ? 'mt-8 grid gap-5 md:grid-cols-2' : 'mt-8 grid gap-5 md:grid-cols-3';
+
   return (
     <section id={sectionId} className="scroll-mt-24 bg-white py-12 md:py-16">
       <Container>
@@ -165,7 +168,7 @@ function InfoCards({
             <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">{intro}</div>
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
+          <div className={gridClassName}>
             {cards.map((card) => (
               <article
                 key={card.title}
@@ -297,12 +300,20 @@ function ComparisonBlock({
     <section id="route-compare" className="scroll-mt-24 bg-[#FCFAFF] py-12 md:py-16">
       <Container>
         <div className="mx-auto max-w-6xl">
-          <div className="max-w-3xl">
-            <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
-              {content.title}
-            </h2>
-            <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">{content.intro}</div>
-          </div>
+          {content.title || content.intro ? (
+            <div className="max-w-3xl">
+              {content.title ? (
+                <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+                  {content.title}
+                </h2>
+              ) : null}
+              {content.intro ? (
+                <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
+                  {content.intro}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className={content.routeGridClassName ?? 'mt-8 grid gap-5 lg:grid-cols-2'}>
             {content.routeCards.map((item) => (

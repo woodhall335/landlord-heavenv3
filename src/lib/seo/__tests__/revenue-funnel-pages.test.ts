@@ -47,8 +47,8 @@ describe('revenue-focused SEO funnels', () => {
     expect(landing).not.toContain('href="#rent-increase-checker"');
     expect(landing).not.toContain('Check rent increase risk');
     expect(landing).not.toContain('Use the free rent checker first');
-    expect(landing).toContain('Generate Section 13 pack');
-    expect(landing).toContain('Prepare for tenant challenge');
+    expect(landing).toContain('Start the standard pack');
+    expect(landing).toContain('Prepare a challenge-ready pack');
     expect(landing).not.toContain('Why this converts better than a guide-first page');
     expect(landing).not.toContain('Broad intent still needs a concrete next step');
     expect(landing).not.toContain('Form 4A alone is not the real buying decision');

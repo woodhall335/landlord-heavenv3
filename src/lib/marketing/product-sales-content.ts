@@ -48,8 +48,8 @@ export interface ProductSalesDecisionBlock {
 }
 
 export interface ProductSalesComparisonBlock {
-  title: string;
-  intro: ReactNode;
+  title?: string;
+  intro?: ReactNode;
   routeCards: ProductSalesRouteCard[];
   routeGridClassName?: string;
 }

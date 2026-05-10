@@ -58,7 +58,6 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
     'Built for landlords who want more than a blank Form 4A: the notice, market evidence, and service record stay together.',
-    LANDLORD_GUIDANCE_DISCLAIMER,
   ],
   packIntro:
     'This pack is for landlords who need more than a blank Form 4A. It helps you check comparable rents, choose a supportable figure, explain the increase, and keep the service record clear.',

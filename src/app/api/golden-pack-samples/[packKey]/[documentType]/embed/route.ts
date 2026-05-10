@@ -30,12 +30,9 @@ export async function GET(
 
   const url = new URL(request.url);
   const versionToken = url.searchParams.get('v');
-  const pdfUrl = new URL(
-    `/api/golden-pack-samples/${packKey}/${encodeURIComponent(decodedType)}${
-      versionToken ? `?v=${encodeURIComponent(versionToken)}` : ''
-    }`,
-    url.origin
-  ).toString();
+  const pdfUrl = `/api/golden-pack-samples/${packKey}/${encodeURIComponent(decodedType)}${
+    versionToken ? `?v=${encodeURIComponent(versionToken)}` : ''
+  }`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
