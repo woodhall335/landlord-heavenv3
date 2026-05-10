@@ -433,6 +433,12 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
   const hasPreview = Boolean(content.preview);
   const hasImage = Boolean(content.imageSrc);
   const hasStandaloneImage = hasImage && !hasPreview;
+  const hasSummaryContent = Boolean(
+    content.priceLabel ||
+    content.valueSummary ||
+    hasChecklist ||
+    hasFitSummary
+  );
 
   if (!content.priceLabel && !content.valueSummary && !hasChecklist && !hasFitSummary && !hasPreview && !hasImage) {
     return null;
@@ -442,98 +448,117 @@ function EarlyProofBand({ content }: { content: ProductSalesEarlyProofBand }) {
     <section id="hero-proof" className="scroll-mt-24 bg-white py-10 md:py-12">
       <Container>
         <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6 shadow-[0_18px_46px_rgba(24,11,49,0.06)] md:p-8">
-          <div
-            className={`grid gap-8 lg:grid-cols-[0.58fr_0.42fr] ${
-              hasStandaloneImage ? 'lg:items-stretch' : 'lg:items-start'
-            }`}
-          >
-            <div>
-              <div className="flex flex-wrap items-center gap-3">
-                {content.priceLabel ? (
-                  <span className="rounded-full border border-[#D8C8FF] bg-white px-4 py-2 text-sm font-semibold text-[#5E3E9A]">
-                    {content.priceLabel}
+          {!hasSummaryContent ? (
+            <div className="min-w-0">
+              {hasPreview ? content.preview : null}
+              {content.imageSrc ? (
+                <div className="relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)]">
+                  <div className="relative aspect-[16/9] w-full">
+                    <Image
+                      src={content.imageSrc}
+                      alt={content.imageAlt ?? 'Product pack preview'}
+                      fill
+                      sizes="(min-width: 1024px) 70vw, 100vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div
+              className={`grid gap-8 lg:grid-cols-[0.58fr_0.42fr] ${
+                hasStandaloneImage ? 'lg:items-stretch' : 'lg:items-start'
+              }`}
+            >
+              <div>
+                <div className="flex flex-wrap items-center gap-3">
+                  {content.priceLabel ? (
+                    <span className="rounded-full border border-[#D8C8FF] bg-white px-4 py-2 text-sm font-semibold text-[#5E3E9A]">
+                      {content.priceLabel}
+                    </span>
+                  ) : null}
+                  <span className="rounded-full border border-[#E8E1F8] bg-white px-4 py-2 text-sm font-semibold text-[#2A2161]">
+                    Preview before you buy
                   </span>
+                </div>
+
+                {content.valueSummary ? (
+                  <div className="mt-5 text-base leading-8 text-[#4B5565] md:text-lg">
+                    {content.valueSummary}
+                  </div>
                 ) : null}
-                <span className="rounded-full border border-[#E8E1F8] bg-white px-4 py-2 text-sm font-semibold text-[#2A2161]">
-                  Preview before you buy
-                </span>
+
+                {hasChecklist ? (
+                  <div className="mt-6">
+                    <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
+                      What you can see straight away
+                    </p>
+                    <ul className="mt-4 grid gap-3 text-sm leading-7 text-[#2A2161] md:grid-cols-2 md:text-base">
+                      {content.includedBullets?.map((bullet) => (
+                        <li key={bullet} className="flex items-start gap-3">
+                          <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#7C3AED]" />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
+                {hasFitSummary ? (
+                  <div className="mt-6 grid gap-4 md:grid-cols-2">
+                    {content.bestFor ? (
+                      <div className="rounded-[1.6rem] border border-[#D9F2E7] bg-[#F2FBF6] p-5">
+                        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#0D7A5A]">
+                          Best fit
+                        </p>
+                        <p className="mt-3 text-sm leading-7 text-[#215245] md:text-base">
+                          {content.bestFor}
+                        </p>
+                      </div>
+                    ) : null}
+                    {content.notFor ? (
+                      <div className="rounded-[1.6rem] border border-[#F3E4D0] bg-[#FFF8EF] p-5">
+                        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#A55A0F]">
+                          Not the right fit
+                        </p>
+                        <p className="mt-3 text-sm leading-7 text-[#69431E] md:text-base">
+                          {content.notFor}
+                        </p>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
 
-              {content.valueSummary ? (
-                <div className="mt-5 text-base leading-8 text-[#4B5565] md:text-lg">
-                  {content.valueSummary}
-                </div>
-              ) : null}
-
-              {hasChecklist ? (
-                <div className="mt-6">
-                  <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
-                    What you can see straight away
-                  </p>
-                  <ul className="mt-4 grid gap-3 text-sm leading-7 text-[#2A2161] md:grid-cols-2 md:text-base">
-                    {content.includedBullets?.map((bullet) => (
-                      <li key={bullet} className="flex items-start gap-3">
-                        <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#7C3AED]" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-
-              {hasFitSummary ? (
-                <div className="mt-6 grid gap-4 md:grid-cols-2">
-                  {content.bestFor ? (
-                    <div className="rounded-[1.6rem] border border-[#D9F2E7] bg-[#F2FBF6] p-5">
-                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#0D7A5A]">
-                        Best fit
-                      </p>
-                      <p className="mt-3 text-sm leading-7 text-[#215245] md:text-base">
-                        {content.bestFor}
-                      </p>
-                    </div>
-                  ) : null}
-                  {content.notFor ? (
-                    <div className="rounded-[1.6rem] border border-[#F3E4D0] bg-[#FFF8EF] p-5">
-                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#A55A0F]">
-                        Not the right fit
-                      </p>
-                      <p className="mt-3 text-sm leading-7 text-[#69431E] md:text-base">
-                        {content.notFor}
-                      </p>
+              {hasPreview || hasImage ? (
+                <div className={`min-w-0 ${hasStandaloneImage ? 'lg:flex lg:h-full' : ''}`}>
+                  {hasPreview ? content.preview : null}
+                  {content.imageSrc ? (
+                    <div
+                      className={`relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] ${
+                        hasStandaloneImage ? 'h-72 w-full lg:h-full' : ''
+                      }`}
+                    >
+                      <div
+                        className={`relative w-full ${
+                          hasStandaloneImage ? 'h-full min-h-[22rem]' : 'aspect-[4/3]'
+                        }`}
+                      >
+                        <Image
+                          src={content.imageSrc}
+                          alt={content.imageAlt ?? 'Product pack preview'}
+                          fill
+                          sizes="(min-width: 1024px) 34vw, 100vw"
+                          className="object-cover object-top"
+                        />
+                      </div>
                     </div>
                   ) : null}
                 </div>
               ) : null}
             </div>
-
-            {hasPreview || hasImage ? (
-              <div className={`min-w-0 ${hasStandaloneImage ? 'lg:flex lg:h-full' : ''}`}>
-                {hasPreview ? content.preview : null}
-                {content.imageSrc ? (
-                  <div
-                    className={`relative overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] ${
-                      hasStandaloneImage ? 'h-72 w-full lg:h-full' : ''
-                    }`}
-                  >
-                    <div
-                      className={`relative w-full ${
-                        hasStandaloneImage ? 'h-full min-h-[22rem]' : 'aspect-[4/3]'
-                      }`}
-                    >
-                      <Image
-                        src={content.imageSrc}
-                        alt={content.imageAlt ?? 'Product pack preview'}
-                        fill
-                        sizes="(min-width: 1024px) 34vw, 100vw"
-                        className="object-cover object-top"
-                      />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
-          </div>
+          )}
         </div>
       </Container>
     </section>

@@ -61,50 +61,12 @@ export default function Section13StandardProductPage() {
       ),
     },
     earlyProofBand: {
-      priceLabel: product.displayPrice,
-      valueSummary:
-        'This is the right fit when you want to propose a rent increase, explain the figure, and inspect the notice pack before you pay.',
-      includedBullets: [
-        'Official Form 4A notice prepared for England',
-        'Comparable evidence and justification report prepared together',
-        'Service record and tenant cover letter kept with the notice',
-      ],
-      bestFor:
-        'You want a supportable Section 13 rent increase pack and do not yet need tribunal-focused materials.',
-      notFor:
-        'You already expect strong pushback or want the fuller challenge-ready pack from the start.',
       preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
     },
-    decisionBlock: {
-      title: 'Choose Standard if you need to serve the rent increase now',
-      intro:
-        'This pack is for landlords who need to set a new rent figure, support it with market evidence, and keep the notice and service record clear.',
-      cards: [
-        {
-          eyebrow: 'Choose this option',
-          title: 'Propose the rent increase with a clear, evidence-backed pack',
-          body:
-            'Use the Standard pack when you want Form 4A, comparable evidence, a short report, and proof of service working together.',
-          tone: 'positive',
-        },
-        {
-          eyebrow: 'Choose the other option',
-          title: 'Choose Defence if a challenge is likely',
-          body:
-            'If the tenant is likely to challenge the increase, the Challenge-Ready Section 13 Defence Pack is the better fit.',
-          tone: 'warning',
-        },
-      ],
-      primary: { label: 'Start the standard Section 13 option', href: product.wizardHref },
-      secondary: {
-        label: 'Need the challenge-ready defence route instead?',
-        href: '/products/section-13-defence',
-      },
-    },
     whatYouGet: {
-      title: 'What you get in the standard rent increase pack',
-      intro: config.packIntro,
-      items: config.packBreakdown,
+      hideSection: true,
+      title: '',
+      intro: '',
     },
     comparisonBlock: {
       title: 'Standard and defence solve different Section 13 jobs',

@@ -47,6 +47,13 @@ describe('revenue-focused SEO funnels', () => {
     expect(landing).toContain('href="#rent-increase-checker"');
     expect(landing).toContain('Check rent increase risk');
     expect(landing.indexOf('Check rent increase risk')).toBeLessThan(landing.indexOf('Generate Section 13 pack'));
+    expect(landing).not.toContain('Why this converts better than a guide-first page');
+    expect(landing).not.toContain('Broad intent still needs a concrete next step');
+    expect(landing).not.toContain('Form 4A alone is not the real buying decision');
+    expect(landing).not.toContain('How this helps the landlord outcome');
+    expect(landing).not.toContain('The page is designed to narrow the choice fast');
+    expect(landing).not.toContain('research-led visitors');
+    expect(landing).not.toContain('CTA getting buried');
     expect(guide).toContain('RentIncreaseChallengeChecker');
     expect(guide).toContain("config.slug === 'form-4a-guide'");
     expect(guide).toContain('Check if your Form 4A rent is likely to be challenged');

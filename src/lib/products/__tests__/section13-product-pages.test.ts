@@ -10,11 +10,15 @@ describe('Section 13 product pages', () => {
   it('keeps the standard page positioned as the serve-and-evidence route with preview proof', () => {
     const source = readSource('src/app/(marketing)/products/section-13-standard/page.tsx');
 
-    expect(source).toContain('Choose Standard if you need to serve the rent increase now');
+    expect(source).toContain('earlyProofBand: {');
     expect(source).toContain('preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
-    expect(source).toContain('What you get in the standard rent increase pack');
+    expect(source).toContain('hideSection: true');
     expect(source).toContain('Start the standard Section 13 option');
-    expect(source).toContain('Need the challenge-ready defence route instead?');
+    expect(source).toContain('I need the challenge-ready defence route');
+    expect(source).not.toContain('Choose Standard if you need to serve the rent increase now');
+    expect(source).not.toContain('This is the right fit when you want to propose a rent increase');
+    expect(source).not.toContain('What you get in the standard rent increase pack');
+    expect(source).not.toContain('Need the challenge-ready defence route instead?');
   });
 
   it('keeps the defence page positioned as the challenge-ready route with preview proof', () => {
