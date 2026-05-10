@@ -35,18 +35,20 @@ describe('revenue-focused SEO funnels', () => {
     expect(tracker).toContain('trackProductView');
   });
 
-  it('routes rent increase pages to the checker before Section 13 products', () => {
+  it('routes rent increase landing directly to Section 13 products without embedded checker', () => {
     const landing = readRepoFile('src', 'app', 'rent-increase', 'page.tsx');
     const guide = readRepoFile('src', 'app', 'rent-increase', 'RentIncreaseGuidePage.tsx');
     const standaloneTool = readRepoFile('src', 'app', 'tools', 'rent-increase-challenge-checker', 'page.tsx');
     const form4a = readRepoFile('src', 'app', 'rent-increase', 'config', 'form-4a-guide.ts');
     const section13 = readRepoFile('src', 'app', 'rent-increase', 'config', 'section13-notice.ts');
 
-    expect(landing).toContain('RentIncreaseChallengeChecker');
-    expect(landing).toContain('mode="embedded"');
-    expect(landing).toContain('href="#rent-increase-checker"');
-    expect(landing).toContain('Check rent increase risk');
-    expect(landing.indexOf('Check rent increase risk')).toBeLessThan(landing.indexOf('Generate Section 13 pack'));
+    expect(landing).not.toContain('RentIncreaseChallengeChecker');
+    expect(landing).not.toContain('mode="embedded"');
+    expect(landing).not.toContain('href="#rent-increase-checker"');
+    expect(landing).not.toContain('Check rent increase risk');
+    expect(landing).not.toContain('Use the free rent checker first');
+    expect(landing).toContain('Generate Section 13 pack');
+    expect(landing).toContain('Prepare for tenant challenge');
     expect(landing).not.toContain('Why this converts better than a guide-first page');
     expect(landing).not.toContain('Broad intent still needs a concrete next step');
     expect(landing).not.toContain('Form 4A alone is not the real buying decision');

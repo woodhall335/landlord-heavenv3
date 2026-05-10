@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
-import { RentIncreaseChallengeChecker } from '@/components/tools/rent-checker';
 import type { FAQItem } from '@/components/seo/FAQSection';
 import type {
   ProductSalesPageContent,
@@ -98,11 +97,6 @@ const faqs: FAQItem[] = [
     answer:
       'Yes. The longer rent increase guide is still available if you want the full step-by-step explanation before you pick a route.',
   },
-  {
-    question: 'Can I check whether the figure looks supportable before I choose a pack?',
-    answer:
-      'Yes. The free Rent Increase & Challenge Checker lets landlords compare the current and proposed rent against live local comparables before moving into the Standard or Defence Section 13 route.',
-  },
 ];
 
 export default function RentIncreaseLandingPage() {
@@ -131,29 +125,15 @@ export default function RentIncreaseLandingPage() {
         <>
           <div className="w-full sm:w-auto">
             <TrackedLink
-              href="#rent-increase-checker"
-              pagePath="/rent-increase"
-              pageType="entry_page"
-              ctaLabel="Check rent increase risk"
-              ctaPosition="hero"
-              eventName="entry_page_primary_cta_click"
-              routeIntent="rent_increase"
-              className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
-            >
-              Check rent increase risk
-            </TrackedLink>
-          </div>
-          <div className="w-full sm:w-auto">
-            <TrackedLink
               href={standardDescriptor.landingHref}
               pagePath="/rent-increase"
               pageType="entry_page"
               ctaLabel="Generate Section 13 pack"
               ctaPosition="hero"
-              eventName="entry_page_secondary_cta_click"
+              eventName="entry_page_primary_cta_click"
               routeIntent="rent_increase"
               product="section13_standard"
-              className="hero-btn-secondary flex w-full justify-center text-center sm:w-auto"
+              className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
             >
               Generate Section 13 pack
             </TrackedLink>
@@ -178,46 +158,22 @@ export default function RentIncreaseLandingPage() {
       children: (
         <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
           <li>Built for the current England Section 13 route using Form 4A.</li>
-          <li>Helps you choose between a straightforward increase and a stronger file for a likely challenge.</li>
+          <li>Use the standard pack for a straightforward increase, or the defence pack when challenge risk is already part of the case.</li>
           <li>Keeps the notice, market evidence, and service notes together in one landlord file.</li>
-          <li>
-            Not sure which route fits yet?{' '}
-            <TrackedLink
-              href="#rent-increase-checker"
-              pagePath="/rent-increase"
-              pageType="entry_page"
-              ctaLabel="Use the free rent checker first"
-              ctaPosition="hero"
-              eventName="entry_page_secondary_cta_click"
-              routeIntent="rent_increase"
-              className="font-semibold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white"
-            >
-              Use the free rent checker first.
-            </TrackedLink>
-          </li>
         </ul>
       ),
     },
-    postHeroContent: (
-      <RentIncreaseChallengeChecker
-        mode="embedded"
-        sourcePage="/rent-increase"
-        ctaPosition="top"
-        introTitle="Check how likely your rent increase is to be challenged"
-        introCopy="Use the checker before you serve Form 4A. It compares your proposed rent with local market evidence, shows the challenge risk, and recommends the Standard or Defence Section 13 route."
-      />
-    ),
     whatYouGet: {
       title: 'Pick the right Section 13 pack',
       intro:
-        'If the increase is straightforward, the Standard pack is the natural starting point. If you expect the tenant to challenge the figure, use the Challenge-Ready pack so the evidence is stronger from the beginning.',
+        'Choose the pack by the job in front of you. If the increase is routine, start with the Standard pack. If the tenant is likely to push back, start with the Challenge-Ready pack so the evidence is stronger from the beginning.',
       routeGridClassName: 'mt-8 grid gap-6 lg:grid-cols-2',
       routeCards,
     },
     whyYouNeedThis: {
       title: 'Get the notice right before it goes out',
       intro:
-        'A rent increase is easier to explain when the form, figures, dates, and evidence all tell the same story. The pack helps you prepare that before the tenant receives the notice.',
+        'A rent increase is easier to stand behind when the form, figure, dates, evidence, and service record all match. This gives you a prepared landlord file before the tenant receives the notice.',
       cards: [
         {
           title: 'Do not treat it as just a form',
@@ -227,19 +183,19 @@ export default function RentIncreaseLandingPage() {
         {
           title: 'Match the pack to the level of risk',
           body:
-            'If the increase is straightforward, the standard route is usually enough. If the tenant has already objected, the proposed rent is sensitive, or you expect a tribunal challenge, start with the stronger defence route.',
+            'If the increase is straightforward, the Standard pack is usually enough. If the tenant has already objected, the proposed rent is sensitive, or you expect a tribunal challenge, start with the stronger defence route.',
         },
         {
-          title: 'Check the rent range first if you are unsure',
+          title: 'Keep the explanation ready',
           body:
-            'Use the free checker if you want to see how the proposed rent compares with local evidence before choosing a pack.',
+            'Tenants often ask why the rent is changing. The pack helps you keep the figure, evidence, and service steps in one place so you can answer calmly and consistently.',
         },
       ],
     },
     howThisHelps: {
       title: 'What this helps you do',
       intro:
-        'Serve the right notice, keep a record of how it was served, and have a sensible explanation ready if the tenant asks why the rent is increasing.',
+        'Serve the right notice, keep a record of how it was served, and have a clear explanation ready if the tenant questions the increase.',
       cards: [
         {
           title: 'Start with the standard route for a normal increase',
@@ -254,14 +210,14 @@ export default function RentIncreaseLandingPage() {
         {
           title: 'Read the guide if you want the rules first',
           body:
-            'The longer guide is still available if you want to understand the rules first. You can read it, run the checker, or move straight into the pack that fits your case.',
+            'The longer guide is still available if you want to understand the rules before choosing a pack. It sits behind the main route instead of getting between you and the paperwork.',
         },
       ],
     },
     howItWorks: {
       title: 'How it works',
       intro:
-        'Answer the questions once, add the rent figure and evidence, then generate the pack that matches the situation.',
+        'Choose the level of support, enter the tenancy details and rent evidence, then generate the pack that fits the risk.',
       steps: [
         {
           step: 'Step 01',
@@ -286,7 +242,7 @@ export default function RentIncreaseLandingPage() {
     cta: {
       title: 'Start with the route that fits this rent increase',
       body:
-        'For a normal rent increase, start the Standard Section 13 Rent Increase Pack. If the tenant is likely to challenge the figure, start with the Challenge-Ready Section 13 Defence Pack. If you are still unsure, check the rent range first.',
+        'For a normal rent increase, start the Standard Section 13 Rent Increase Pack. If the tenant is likely to challenge the figure, start with the Challenge-Ready Section 13 Defence Pack.',
       primary: {
         label: 'Start the Standard Section 13 Rent Increase Pack',
         href: standardDescriptor.landingHref,
@@ -296,7 +252,6 @@ export default function RentIncreaseLandingPage() {
         href: defenceDescriptor.landingHref,
       },
       guideLinks: [
-        { label: 'Check the supportable rent range first', href: '#rent-increase-checker' },
         { label: 'Read the long-form guide', href: '/products/rent-increase' },
         { label: 'Section 13 notice guide', href: '/rent-increase/section-13-notice' },
         { label: 'Form 4A guide', href: '/rent-increase/form-4a-guide' },
