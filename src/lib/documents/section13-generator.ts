@@ -342,7 +342,8 @@ export function isSection13PreviewableDocumentType(
 type SectionBlock = {
   heading?: string;
   lines: string[];
-  variant?: 'default' | 'intro' | 'callout';
+  variant?: 'default' | 'intro' | 'callout' | 'comparable_cards';
+  comparableCards?: Section13Comparable[];
 };
 
 type BundleArtifact = {
@@ -374,6 +375,19 @@ function safeText(value: string | number | null | undefined): string {
 }
 
 function formatCurrency(value: number | string | null | undefined): string {
+  if (value === null || value === undefined || value === '') {
+    return 'nil';
+  }
+
+  const numeric = typeof value === 'number' ? value : Number(String(value).replace(/[^\d.-]/g, ''));
+  if (Number.isNaN(numeric)) {
+    return String(value);
+  }
+
+  return `\u00a3${numeric.toFixed(2)}`;
+}
+
+function formatCurrencyLegacy(value: number | string | null | undefined): string {
   if (value === null || value === undefined || value === '') {
     return 'nil';
   }
@@ -832,18 +846,31 @@ async function pageCount(bytes: Uint8Array): Promise<number> {
   return pdf.getPageCount();
 }
 
+function getComparableThumbnailSource(comparable: Section13Comparable): string | null {
+  const metadata = comparable.metadata || {};
+  const candidates = [
+    metadata.imageUrl,
+    metadata.thumbnailUrl,
+    metadata.image_url,
+    metadata.thumbnail_url,
+  ];
+  const source = candidates.find((value) => typeof value === 'string' && value.trim());
+  return typeof source === 'string' ? source.trim() : null;
+}
+
 async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?: string): Promise<Uint8Array> {
   const pdfDoc = await PDFDocument.create();
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const bold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
   const logoBytes = await getBrandLogoBytes();
   const logoImage = logoBytes ? await pdfDoc.embedPng(logoBytes) : null;
+  const imageCache = new Map<string, PDFImage | null>();
   let page = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
   let cursorY = PAGE_HEIGHT - MARGIN_Y;
-  const titleFontSize = 18;
-  const headingFontSize = 12;
-  const bodyFontSize = 10.5;
-  const bodyLineHeight = 13.5;
+  const titleFontSize = 17;
+  const headingFontSize = 13;
+  const bodyFontSize = 10.25;
+  const bodyLineHeight = 15.2;
   const brandText = rgb(0.204, 0.141, 0.373);
   const brandTextStrong = rgb(0.141, 0.09, 0.247);
   const brandMuted = rgb(0.424, 0.365, 0.561);
@@ -853,18 +880,40 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
   const brandBorder = rgb(0.847, 0.8, 0.965);
   const brandBorderStrong = rgb(0.776, 0.714, 0.937);
 
+  const getComparableImage = async (source: string | null): Promise<PDFImage | null> => {
+    if (!source) return null;
+    if (imageCache.has(source)) return imageCache.get(source) ?? null;
+
+    try {
+      const bytes = source.startsWith('/')
+        ? await fs.readFile(path.join(process.cwd(), 'public', source.replace(/^\/+/, '')))
+        : /^https?:\/\//i.test(source)
+          ? new Uint8Array(await (await fetch(source)).arrayBuffer())
+          : await fs.readFile(path.resolve(process.cwd(), source));
+      const lower = source.toLowerCase();
+      const image = lower.endsWith('.jpg') || lower.endsWith('.jpeg')
+        ? await pdfDoc.embedJpg(bytes)
+        : await pdfDoc.embedPng(bytes);
+      imageCache.set(source, image);
+      return image;
+    } catch {
+      imageCache.set(source, null);
+      return null;
+    }
+  };
+
   const drawHeader = () => {
     let headerY = PAGE_HEIGHT - MARGIN_Y;
 
     if (logoImage) {
-      const scaled = logoImage.scaleToFit(168, 34);
+      const scaled = logoImage.scaleToFit(148, 30);
       page.drawImage(logoImage, {
         x: MARGIN_X,
         y: headerY - scaled.height + 2,
         width: scaled.width,
         height: scaled.height,
       });
-      headerY -= scaled.height + 10;
+      headerY -= scaled.height + 18;
     } else {
       page.drawText(safeText(SECTION13_BRAND_LABEL), {
         x: MARGIN_X,
@@ -876,14 +925,17 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
       headerY -= 16;
     }
 
-    page.drawText(safeText(title), {
-      x: MARGIN_X,
-      y: headerY,
-      font: bold,
-      size: titleFontSize,
-      color: brandTextStrong,
-    });
-    headerY -= 12;
+    for (const titleLine of wrapText(title, bold, titleFontSize, CONTENT_WIDTH)) {
+      page.drawText(safeText(titleLine), {
+        x: MARGIN_X,
+        y: headerY,
+        font: bold,
+        size: titleFontSize,
+        color: brandTextStrong,
+      });
+      headerY -= titleFontSize + 5;
+    }
+    headerY -= 4;
 
     page.drawLine({
       start: { x: MARGIN_X, y: headerY },
@@ -892,7 +944,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
       color: brandBorder,
     });
 
-    cursorY = headerY - 14;
+    cursorY = headerY - 20;
   };
 
   const addPage = () => {
@@ -903,6 +955,171 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
   const ensureSpace = (needed: number) => {
     if (cursorY - needed < MARGIN_Y) {
       addPage();
+    }
+  };
+
+  const drawComparablePlaceholderThumbnail = (
+    index: number,
+    thumbX: number,
+    thumbY: number,
+    thumbWidth: number,
+    thumbHeight: number
+  ) => {
+    const variants = [
+      { sky: rgb(0.86, 0.91, 0.98), wall: rgb(0.72, 0.62, 0.9), roof: rgb(0.35, 0.24, 0.58) },
+      { sky: rgb(0.9, 0.95, 0.93), wall: rgb(0.82, 0.72, 0.55), roof: rgb(0.42, 0.29, 0.22) },
+      { sky: rgb(0.91, 0.92, 0.97), wall: rgb(0.69, 0.74, 0.82), roof: rgb(0.25, 0.31, 0.42) },
+      { sky: rgb(0.95, 0.91, 0.86), wall: rgb(0.79, 0.61, 0.51), roof: rgb(0.47, 0.24, 0.2) },
+    ][index % 4];
+
+    page.drawRectangle({
+      x: thumbX + 1,
+      y: thumbY + 1,
+      width: thumbWidth - 2,
+      height: thumbHeight - 2,
+      color: variants.sky,
+    });
+    page.drawRectangle({
+      x: thumbX + 1,
+      y: thumbY + 1,
+      width: thumbWidth - 2,
+      height: 19,
+      color: rgb(0.68, 0.77, 0.67),
+    });
+    page.drawRectangle({
+      x: thumbX + 22,
+      y: thumbY + 22,
+      width: 62,
+      height: 34,
+      color: variants.wall,
+    });
+    page.drawRectangle({
+      x: thumbX + 16,
+      y: thumbY + 56,
+      width: 74,
+      height: 8,
+      color: variants.roof,
+    });
+    page.drawRectangle({
+      x: thumbX + 32,
+      y: thumbY + 35,
+      width: 12,
+      height: 12,
+      color: rgb(0.96, 0.94, 1),
+      borderColor: brandBorder,
+      borderWidth: 0.5,
+    });
+    page.drawRectangle({
+      x: thumbX + 62,
+      y: thumbY + 35,
+      width: 12,
+      height: 12,
+      color: rgb(0.96, 0.94, 1),
+      borderColor: brandBorder,
+      borderWidth: 0.5,
+    });
+    page.drawRectangle({
+      x: thumbX + 48,
+      y: thumbY + 22,
+      width: 12,
+      height: 20,
+      color: variants.roof,
+    });
+    page.drawText('Listing', {
+      x: thumbX + 31,
+      y: thumbY + 7,
+      font: bold,
+      size: 8,
+      color: brandText,
+    });
+  };
+
+  const drawComparableCards = async (items: Section13Comparable[]) => {
+    const cardHeight = 116;
+    const thumbWidth = 106;
+    const thumbHeight = 76;
+    const gap = 14;
+
+    for (const [index, comparable] of items.entries()) {
+      ensureSpace(cardHeight + 10);
+      const cardTop = cursorY;
+      const cardBottom = cardTop - cardHeight;
+
+      page.drawRectangle({
+        x: MARGIN_X,
+        y: cardBottom,
+        width: CONTENT_WIDTH,
+        height: cardHeight,
+        color: brandPanel,
+        borderColor: brandBorder,
+        borderWidth: 0.8,
+      });
+
+      const thumbX = MARGIN_X + 12;
+      const thumbY = cardTop - thumbHeight - 16;
+      page.drawRectangle({
+        x: thumbX,
+        y: thumbY,
+        width: thumbWidth,
+        height: thumbHeight,
+        color: rgb(0.93, 0.91, 0.98),
+        borderColor: brandBorder,
+        borderWidth: 0.6,
+      });
+
+      const image = await getComparableImage(getComparableThumbnailSource(comparable));
+      if (image) {
+        const scaled = image.scaleToFit(thumbWidth, thumbHeight);
+        page.drawImage(image, {
+          x: thumbX + (thumbWidth - scaled.width) / 2,
+          y: thumbY + (thumbHeight - scaled.height) / 2,
+          width: scaled.width,
+          height: scaled.height,
+        });
+      } else {
+        drawComparablePlaceholderThumbnail(index, thumbX, thumbY, thumbWidth, thumbHeight);
+      }
+
+      const textX = thumbX + thumbWidth + gap;
+      const textWidth = CONTENT_WIDTH - thumbWidth - gap - 26;
+      let textY = cardTop - 20;
+      const titleText = `Comparable ${index + 1}: ${comparable.addressSnippet || 'Address not recorded'}`;
+      for (const line of wrapText(titleText, bold, 10.8, textWidth)) {
+        page.drawText(safeText(line), {
+          x: textX,
+          y: textY,
+          font: bold,
+          size: 10.8,
+          color: brandTextStrong,
+        });
+        textY -= 14;
+      }
+
+      const detailLines = [
+        `Raw rent ${formatCurrency(comparable.monthlyEquivalent)} pcm | adjusted ${formatCurrency(comparable.adjustedMonthlyEquivalent)} pcm`,
+        [
+          comparable.propertyType || `${comparable.bedrooms ?? 'Unknown'} bedrooms`,
+          comparable.distanceMiles != null ? `${comparable.distanceMiles.toFixed(2)} miles away` : null,
+          comparable.sourceDateValue ? `source date ${formatDateUk(comparable.sourceDateValue)}` : null,
+        ].filter(Boolean).join(' | '),
+        `Source: ${comparable.source}${comparable.sourceUrl ? ` | ${comparable.sourceUrl}` : ''}`,
+      ].filter(Boolean);
+
+      for (const detail of detailLines) {
+        for (const line of wrapText(detail, font, 9.2, textWidth)) {
+          if (textY < cardBottom + 14) break;
+          page.drawText(safeText(line), {
+            x: textX,
+            y: textY,
+            font,
+            size: 9.2,
+            color: brandText,
+          });
+          textY -= 12;
+        }
+      }
+
+      cursorY = cardBottom - 10;
     }
   };
 
@@ -931,14 +1148,34 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         size: headingFontSize,
         color: brandTextStrong,
       });
-      const headingWidth = bold.widthOfTextAtSize(safeText(block.heading), headingFontSize);
+      cursorY -= 10;
       page.drawLine({
-        start: { x: MARGIN_X + headingWidth + 12, y: cursorY + 6 },
-        end: { x: PAGE_WIDTH - MARGIN_X, y: cursorY + 6 },
+        start: { x: MARGIN_X, y: cursorY },
+        end: { x: PAGE_WIDTH - MARGIN_X, y: cursorY },
         thickness: 0.7,
         color: brandBorder,
       });
-      cursorY -= 18;
+      cursorY -= 16;
+    }
+
+    if (block.variant === 'comparable_cards') {
+      for (const paragraph of block.lines) {
+        const wrapped = wrapText(paragraph, font, blockFontSize, CONTENT_WIDTH);
+        ensureSpace(wrapped.length * blockLineHeight + 8);
+        for (const line of wrapped) {
+          page.drawText(safeText(line), {
+            x: MARGIN_X,
+            y: cursorY,
+            font,
+            size: blockFontSize,
+            color: brandText,
+          });
+          cursorY -= blockLineHeight;
+        }
+        cursorY -= 6;
+      }
+      await drawComparableCards(block.comparableCards || []);
+      continue;
     }
 
     if (block.variant === 'intro' || block.variant === 'callout') {
@@ -1032,6 +1269,171 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         color: brandMuted,
       });
     }
+  }
+
+  return pdfDoc.save();
+}
+
+async function createCoverLetterPdf(params: {
+  state: Section13State;
+  snapshot?: Section13OutputSnapshot | null;
+  paragraphs: string[];
+  footer?: string;
+}): Promise<Uint8Array> {
+  const { state, paragraphs, footer } = params;
+  const pdfDoc = await PDFDocument.create();
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const bold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const logoBytes = await getBrandLogoBytes();
+  const logoImage = logoBytes ? await pdfDoc.embedPng(logoBytes) : null;
+  const page = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+  const text = rgb(0.12, 0.1, 0.18);
+  const muted = rgb(0.38, 0.34, 0.49);
+  const border = rgb(0.84, 0.8, 0.94);
+  const lineHeight = 16;
+  let cursorY = PAGE_HEIGHT - MARGIN_Y;
+
+  if (logoImage) {
+    const scaled = logoImage.scaleToFit(148, 30);
+    page.drawImage(logoImage, {
+      x: MARGIN_X,
+      y: cursorY - scaled.height,
+      width: scaled.width,
+      height: scaled.height,
+    });
+  } else {
+    page.drawText(SECTION13_BRAND_LABEL, {
+      x: MARGIN_X,
+      y: cursorY - 14,
+      font: bold,
+      size: 12,
+      color: text,
+    });
+  }
+
+  const senderLines = [
+    state.landlord.agentName || state.landlord.landlordName || 'Landlord',
+    buildLandlordAddress(state),
+    state.landlord.landlordEmail,
+    state.landlord.landlordPhone,
+  ].filter(Boolean);
+  let senderY = cursorY - 2;
+  for (const line of senderLines) {
+    const safeLine = safeText(line);
+    page.drawText(safeLine, {
+      x: PAGE_WIDTH - MARGIN_X - font.widthOfTextAtSize(safeLine, 9.2),
+      y: senderY,
+      font,
+      size: 9.2,
+      color: muted,
+    });
+    senderY -= 12;
+  }
+
+  cursorY -= 56;
+  page.drawLine({
+    start: { x: MARGIN_X, y: cursorY },
+    end: { x: PAGE_WIDTH - MARGIN_X, y: cursorY },
+    thickness: 0.7,
+    color: border,
+  });
+  cursorY -= 38;
+
+  const tenantLines = [
+    state.tenancy.tenantNames.join(', '),
+    buildPropertyAddress(state),
+  ].filter(Boolean);
+  for (const line of tenantLines) {
+    page.drawText(safeText(line), {
+      x: MARGIN_X,
+      y: cursorY,
+      font,
+      size: 10.5,
+      color: text,
+    });
+    cursorY -= 14;
+  }
+
+  cursorY -= 16;
+  page.drawText(formatDateUk(state.proposal.serviceDate) || formatDateUk(new Date().toISOString().slice(0, 10)), {
+    x: MARGIN_X,
+    y: cursorY,
+    font,
+    size: 10.5,
+    color: text,
+  });
+  cursorY -= 36;
+
+  page.drawText('Dear Tenant,', {
+    x: MARGIN_X,
+    y: cursorY,
+    font,
+    size: 10.8,
+    color: text,
+  });
+  cursorY -= 28;
+
+  page.drawText('Re: Section 13 rent increase notice', {
+    x: MARGIN_X,
+    y: cursorY,
+    font: bold,
+    size: 12.5,
+    color: text,
+  });
+  cursorY -= 28;
+
+  for (const paragraph of paragraphs) {
+    for (const line of wrapText(paragraph, font, 10.7, CONTENT_WIDTH)) {
+      page.drawText(safeText(line), {
+        x: MARGIN_X,
+        y: cursorY,
+        font,
+        size: 10.7,
+        color: text,
+      });
+      cursorY -= lineHeight;
+    }
+    cursorY -= 8;
+  }
+
+  cursorY -= 12;
+  page.drawText('Yours sincerely,', {
+    x: MARGIN_X,
+    y: cursorY,
+    font,
+    size: 10.7,
+    color: text,
+  });
+  cursorY -= 44;
+  page.drawLine({
+    start: { x: MARGIN_X, y: cursorY },
+    end: { x: MARGIN_X + 180, y: cursorY },
+    thickness: 0.7,
+    color: border,
+  });
+  cursorY -= 16;
+  page.drawText(safeText(state.landlord.agentName || state.landlord.landlordName || 'Landlord'), {
+    x: MARGIN_X,
+    y: cursorY,
+    font: bold,
+    size: 10.4,
+    color: text,
+  });
+
+  if (footer) {
+    page.drawLine({
+      start: { x: MARGIN_X, y: 36 },
+      end: { x: PAGE_WIDTH - MARGIN_X, y: 36 },
+      thickness: 0.5,
+      color: border,
+    });
+    page.drawText(safeText(footer), {
+      x: MARGIN_X,
+      y: 20,
+      font,
+      size: 8,
+      color: muted,
+    });
   }
 
   return pdfDoc.save();
@@ -1841,55 +2243,22 @@ async function buildCoverLetterPdf(
 ): Promise<Uint8Array> {
   const resolvedState = getSnapshotState(state, snapshot);
   const preview = getResolvedPreview(resolvedState, snapshot);
-  const casePosition = getCasePositionVariants({ state: resolvedState, snapshot });
-  const contactName =
-    resolvedState.landlord.agentName || resolvedState.landlord.landlordName || 'the landlord';
-  return createNarrativePdf(
-    'Section 13 Rent Increase Cover Letter',
-    [
-      {
-        variant: 'intro',
-        lines: [
-          'Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the market evidence relied on.',
-          casePosition.cover,
-          `Property: ${buildPropertyAddress(resolvedState)}`,
-          `Tenant(s): ${resolvedState.tenancy.tenantNames.join(', ')}`,
-        ],
-      },
-      {
-        heading: 'What is enclosed',
-        lines: [
-          '1. Form 4A showing the proposed rent and the proposed start date.',
-          '2. A rent summary identifying the comparable evidence and the landlord position on market level.',
-          `3. Contact details for ${contactName} if the tenant wants to discuss the proposal before the new rent date.`,
-        ],
-      },
-      {
-        heading: 'Rent position in brief',
-        lines: [
-          `Current rent: ${formatCurrency(resolvedState.tenancy.currentRentAmount)} ${frequencyLabel(resolvedState.tenancy.currentRentFrequency)}`,
-          `Proposed rent: ${formatCurrency(resolvedState.proposal.proposedRentAmount)} ${frequencyLabel(resolvedState.tenancy.currentRentFrequency)}`,
-          `Proposed start date: ${formatDateUk(resolvedState.proposal.proposedStartDate) || 'Not entered'}`,
-          buildConclusionSentence(resolvedState, snapshot),
-          `Comparable footing: ${buildComparableGrounding(resolvedState, [], snapshot)}.`,
-          `Assessment: ${buildBandingSummary(resolvedState, snapshot)}`,
-          buildJustificationNarrativeText(resolvedState, snapshot),
-          ...(preview?.warnings?.length ? [preview.warnings.join(' ')] : []),
-        ],
-      },
-      {
-        heading: 'Response window and service record',
-        lines: [
-          `Recorded service method: ${buildServiceMethodLabel(resolvedState)}`,
-          `Recorded service date: ${formatDateUk(resolvedState.proposal.serviceDate) || 'Not recorded'}`,
-          SECTION13_TRIBUNAL_WARNING,
-          'If the tenant queries the figure, answer from the same rent figures, dates, and comparable evidence shown in Form 4A and the justification report.',
-          'If a revised figure or later start date is agreed, record that in writing so the negotiated position does not drift away from the notice file.',
-        ],
-      },
+  const warningText = preview?.warnings?.length ? ` Please note: ${preview.warnings.join(' ')}` : '';
+
+  return createCoverLetterPdf({
+    state: resolvedState,
+    snapshot,
+    paragraphs: [
+      `The current rent is ${formatCurrency(resolvedState.tenancy.currentRentAmount)} ${frequencyLabel(resolvedState.tenancy.currentRentFrequency)}. The proposed rent is ${formatCurrency(resolvedState.proposal.proposedRentAmount)} ${frequencyLabel(resolvedState.tenancy.currentRentFrequency)}, intended to take effect from ${formatDateUk(resolvedState.proposal.proposedStartDate) || 'the date shown in Form 4A'}.`,
+      `Please find enclosed Form 4A for ${buildPropertyAddress(resolvedState)}, together with the rent increase report and service record. The report sets out the comparable market evidence relied on for the proposed figure.`,
+      `${buildComparableGroundingSentence(resolvedState, [], snapshot)} The proposed rent sits ${getMedianPositionFragment(resolvedState, snapshot)}.`,
+      `${buildConclusionSentence(resolvedState, snapshot)} ${buildBandingSummary(resolvedState, snapshot)}${warningText}`,
+      `The notice has been recorded as served by ${buildServiceMethodLabel(resolvedState)} on ${formatDateUk(resolvedState.proposal.serviceDate) || 'the service date recorded in the file'}.`,
+      SECTION13_TRIBUNAL_WARNING,
+      'Please contact me using the details above if you would like to discuss the proposed rent before the start date. Any agreed change should be confirmed in writing.',
     ],
-    'Landlord Heaven | Section 13 rent increase pack'
-  );
+    footer: 'Landlord Heaven | Section 13 rent increase pack',
+  });
 }
 
 async function buildJustificationReportPdf(
@@ -1960,14 +2329,22 @@ async function buildJustificationReportPdf(
       heading: 'Comparable overview',
       lines: buildComparableOverviewLines(resolvedState, resolvedComparables, snapshot),
     },
-      {
-        heading: 'Comparable picture',
-        lines: [
-          preview?.previewSummary || 'No comparable summary available.',
-          ...(preview?.marketCalculation?.explanationText || []),
-          ...buildComparableHighlights(resolvedState, resolvedComparables, snapshot),
-        ],
-      },
+    {
+      heading: 'Comparable listing thumbnails',
+      variant: 'comparable_cards',
+      lines: [
+        'These thumbnail cards give the landlord and tenant a quick visual reference for the local listings used in the market analysis. The figures below still control the calculation; the thumbnails are included to make the evidence easier to follow.',
+      ],
+      comparableCards: resolvedComparables.slice(0, 8),
+    },
+    {
+      heading: 'Comparable picture',
+      lines: [
+        preview?.previewSummary || 'No comparable summary available.',
+        ...(preview?.marketCalculation?.explanationText || []),
+        ...buildComparableHighlights(resolvedState, resolvedComparables, snapshot),
+      ],
+    },
     {
       heading: 'Comparables and adjustments',
       lines: buildComparableLines(resolvedState, snapshot),

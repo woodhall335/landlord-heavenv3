@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-05-07T13:33:40.791Z
+Generated: 2026-05-10T11:34:06.828Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):
@@ -9,6 +9,201 @@ Suggested scoring rubric (/10):
 - Completeness: /2
 - Landlord clarity and next steps: /2
 - Finish and polish: /1
+
+## Challenge-Ready Section 13 Defence Pack
+Folder: section13_defensive
+Documents: 13
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Rent Increase Summary [section13_rent_increase_summary]
+- Form 4A rent increase notice [section13_form_4a]
+- Rent increase justification report [section13_justification_report]
+- Property condition comparison sheet [section13_property_condition_comparison_sheet]
+- Tenant argument and landlord response guide [section13_tenant_argument_response_guide]
+- Tribunal Argument Summary [section13_tribunal_argument_summary]
+- Proof of service record [section13_proof_of_service_record]
+- Rent increase cover letter [section13_cover_letter]
+- Tribunal defence guide [section13_tribunal_defence_guide]
+- Landlord response template [section13_landlord_response_template]
+- Tribunal legal briefing [section13_legal_briefing]
+- Merged tribunal bundle PDF [section13_tribunal_bundle]
+- Tribunal bundle ZIP [section13_tribunal_bundle_zip]
+
+## HMO / Shared House Tenancy Agreement & House Management Pack
+Folder: england_hmo_shared_house_tenancy_agreement
+Documents: 10
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- HMO Setup Summary [england_hmo_setup_summary]
+- HMO / Shared House Tenancy Agreement & House Management Pack [england_hmo_shared_house_tenancy_agreement]
+- Pre-Tenancy Checklist (England) [pre_tenancy_checklist_england]
+- Keys & Handover Record [england_keys_handover_record]
+- Utilities & Meter Handover Sheet [england_utilities_handover_sheet]
+- Pet Request / Consent Addendum [england_pet_request_addendum]
+- Tenancy Variation Record [england_tenancy_variation_record]
+- Deposit Protection Certificate [deposit_protection_certificate]
+- Prescribed Information Pack [tenancy_deposit_information]
+- HMO / Shared House Rules Appendix [england_hmo_house_rules_appendix]
+
+## Money Claim Pack
+Folder: money_claim
+Documents: 10
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Particulars of claim [particulars_of_claim]
+- Schedule of arrears [arrears_schedule]
+- Interest calculation [interest_calculation]
+- Letter Before Claim (PAP-DEBT) [letter_before_claim]
+- Information Sheet for Defendants [defendant_info_sheet]
+- Reply Form [reply_form]
+- Financial Statement Form [financial_statement_form]
+- Money Claims Filing Guide [court_filing_guide]
+- Enforcement Guide [enforcement_guide]
+- Form N1 (official PDF) [n1_claim]
+
+## Premium Tenancy Agreement & Management Pack
+Folder: england_premium_tenancy_agreement
+Documents: 10
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Tenancy Setup Summary [england_tenancy_setup_summary]
+- Premium Tenancy Agreement & Management Pack [england_premium_tenancy_agreement]
+- Pre-Tenancy Checklist (England) [pre_tenancy_checklist_england]
+- Keys & Handover Record [england_keys_handover_record]
+- Utilities & Meter Handover Sheet [england_utilities_handover_sheet]
+- Pet Request / Consent Addendum [england_pet_request_addendum]
+- Tenancy Variation Record [england_tenancy_variation_record]
+- Deposit Protection Certificate [deposit_protection_certificate]
+- Prescribed Information Pack [tenancy_deposit_information]
+- Premium Management Schedule [england_premium_management_schedule]
+
+## Room Let / Lodger Agreement & Shared Home Pack
+Folder: england_lodger_agreement
+Documents: 5
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Room Let Summary [england_room_let_summary]
+- Room Let / Lodger Agreement & Shared Home Pack [england_lodger_agreement]
+- Room Let / Lodger Checklist [england_lodger_checklist]
+- Keys & Handover Record [england_keys_handover_record]
+- Lodger House Rules Appendix [england_lodger_house_rules_appendix]
+
+## Stage 1: Section 8 Notice & Service Pack
+Folder: notice_only
+Documents: 8
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Case Summary — Stage 1 Notice & Service [case_summary]
+- Form 3A notice [section8_notice]
+- Service Instructions [service_instructions]
+- Service & Validity Checklist [validity_checklist]
+- Pre-Service Compliance Declaration [compliance_declaration]
+- Certificate of Service (Form N215) [proof_of_service]
+- Rent Schedule / Arrears Statement [arrears_schedule]
+- What Happens Next [what_happens_next]
+
+## Stage 2: Section 8 Court & Possession Pack
+Folder: complete_pack
+Documents: 15
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Case Summary — Stage 2 Court & Possession [case_summary]
+- Court Readiness Status [court_readiness_status]
+- Form N5 - Claim for Possession [n5_claim]
+- Form N119 - Particulars of Claim [n119_particulars]
+- Schedule of Arrears [arrears_schedule]
+- Form 3A notice [section8_notice]
+- Certificate of Service (Form N215) [proof_of_service]
+- Witness Statement [witness_statement]
+- Court Bundle Index [court_bundle_index]
+- Evidence Collection Checklist [evidence_checklist]
+- Hearing Preparation Guide [hearing_checklist]
+- Arrears Engagement Letter [arrears_engagement_letter]
+- Court Filing Guide [court_filing_guide]
+- What Happens Next [what_happens_next]
+- Service Instructions [service_instructions]
+
+## Standard Section 13 Rent Increase Pack
+Folder: section13_standard
+Documents: 5
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Rent Increase Summary [section13_rent_increase_summary]
+- Form 4A rent increase notice [section13_form_4a]
+- Rent increase justification report [section13_justification_report]
+- Proof of service record [section13_proof_of_service_record]
+- Rent increase cover letter [section13_cover_letter]
+
+## Standard Tenancy Agreement & Setup Pack
+Folder: england_standard_tenancy_agreement
+Documents: 9
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Tenancy Setup Summary [england_tenancy_setup_summary]
+- Standard Tenancy Agreement & Setup Pack [england_standard_tenancy_agreement]
+- Pre-Tenancy Checklist (England) [pre_tenancy_checklist_england]
+- Keys & Handover Record [england_keys_handover_record]
+- Utilities & Meter Handover Sheet [england_utilities_handover_sheet]
+- Pet Request / Consent Addendum [england_pet_request_addendum]
+- Tenancy Variation Record [england_tenancy_variation_record]
+- Deposit Protection Certificate [deposit_protection_certificate]
+- Prescribed Information Pack [tenancy_deposit_information]
+
+## Student Tenancy Agreement
+Folder: england_student_tenancy_agreement
+Documents: 10
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Student Tenancy Agreement [england_student_tenancy_agreement]
+- Pre-Tenancy Checklist (England) [pre_tenancy_checklist_england]
+- Keys & Handover Record [england_keys_handover_record]
+- Utilities & Meter Handover Sheet [england_utilities_handover_sheet]
+- Pet Request / Consent Addendum [england_pet_request_addendum]
+- Tenancy Variation Record [england_tenancy_variation_record]
+- Deposit Protection Certificate [deposit_protection_certificate]
+- Prescribed Information Pack [tenancy_deposit_information]
+- Guarantor Agreement [guarantor_agreement]
+- Student Move-Out & Guarantor Schedule [england_student_move_out_schedule]
 
 ## England Tenancy Agreements Hub
 Product key: ast

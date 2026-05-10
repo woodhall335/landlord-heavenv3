@@ -125,6 +125,12 @@ function buildComparable(index: number, monthlyEquivalent: number): Section13Com
     { address: 'Apartment 21, East Parade, Leeds LS1', postcode: 'LS1 2BH', distance: 0.5 },
   ];
   const comparable = localComparables[index] ?? localComparables[0];
+  const thumbnailImages = [
+    '/images/rent-increase-standard.webp',
+    '/images/standard-section-13.webp',
+    '/images/increase-rent.webp',
+    '/images/rent-increase-defence.webp',
+  ];
 
   return {
     source: 'scraped',
@@ -143,7 +149,9 @@ function buildComparable(index: number, monthlyEquivalent: number): Section13Com
     isManual: false,
     sortOrder: index,
     adjustments: [],
-    metadata: {},
+    metadata: {
+      imageUrl: thumbnailImages[index % thumbnailImages.length],
+    },
   };
 }
 

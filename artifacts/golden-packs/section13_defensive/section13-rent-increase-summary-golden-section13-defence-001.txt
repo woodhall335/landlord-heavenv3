@@ -21,19 +21,24 @@ Listings are filtered for similar bedroom count, property type, distance, and fr
 No immediate structured warning is recorded from the current comparable and service checks, but the file
 should still be reviewed before service.
 What this file does
-It keeps Form 4A, the market evidence, and the proof-of-service record together so the proposed increase
-can be explained consistently.
+It keeps Form 4A, the market evidence, and the proof-of-service record together so the proposed increase can
+be explained consistently.
 If referred to the tribunal, the question is the open-market rent for the property on comparable terms, not
 simply whether the increase feels large or small.
 Service and validity checks
-Final check before service: use the correct Form 4A, give at least two months' notice, keep the service
-method recorded, and make sure the current and proposed rent figures match across the notice and
-supporting papers.
+Final check before service: use the correct Form 4A, give at least two months' notice, keep the service method
+recorded, and make sure the current and proposed rent figures match across the notice and supporting
+papers.
 If the tenant queries the increase, reply from the same comparable evidence and consider a written
 agreement if a revised figure or later start date is accepted.
-Next step
-Serve Form 4A using the recorded method, keep the market evidence and service record with it, and
-answer any tenant query from the same figures and comparables.
-Landlord Heaven | Section 13 rent increase summary Page 1 of 1
+Landlord Heaven | Section 13 rent increase summary Page 1 of 2
 
--- 1 of 1 --
+-- 1 of 2 --
+
+Rent Increase Summary
+Next step
+Serve Form 4A using the recorded method, keep the market evidence and service record with it, and answer
+any tenant query from the same figures and comparables.
+Landlord Heaven | Section 13 rent increase summary Page 2 of 2
+
+-- 2 of 2 --

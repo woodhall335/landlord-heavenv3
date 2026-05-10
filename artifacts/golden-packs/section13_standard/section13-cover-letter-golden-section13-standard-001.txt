@@ -1,38 +1,29 @@
-Section 13 Rent Increase Cover Letter
-Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the
-market evidence relied on.
-This proposed rent is supported by 8 comparable two-bedroom properties used in the market
-calculation, with all listed within the last 90 days and all source-backed and sits below the adjusted
-median of £1297.50 pcm. The notice file is ready to serve on the recorded facts.
-Property: 10 Sample Road, Leeds, LS1 1AA
-Tenant(s): Alex Tenant, Jordan Tenant
-What is enclosed
-1. Form 4A showing the proposed rent and the proposed start date.
-2. A rent summary identifying the comparable evidence and the landlord position on market level.
-3. Contact details for Taylor Landlord if the tenant wants to discuss the proposal before the new rent date.
-Rent position in brief
-Current rent: £1200.00 per month
-Proposed rent: £1285.00 per month
-Proposed start date: 01 June 2026
+Taylor Landlord
+1 Landlord Terrace, Leeds, LS2 2BB
+landlord@example.com
+01130000000
+Alex Tenant, Jordan Tenant
+10 Sample Road, Leeds, LS1 1AA
+25 March 2026
+Dear Tenant,
+Re: Section 13 rent increase notice
+The current rent is £1200.00 per month. The proposed rent is £1285.00 per month, intended to take effect
+from 01 June 2026.
+Please find enclosed Form 4A for 10 Sample Road, Leeds, LS1 1AA, together with the rent increase
+report and service record. The report sets out the comparable market evidence relied on for the proposed
+figure.
+This proposal is grounded in 8 comparable two-bedroom homes used in the market calculation, all listed
+within the last 90 days and all source-backed. The proposed rent sits below the adjusted median of
+£1297.50 pcm.
 The proposed rent is supported by current market evidence and sits within the lower-to-mid range of
-comparable properties locally.
-Comparable footing: 8 comparable two-bedroom properties used in the market calculation, with all listed
-within the last 90 days and all source-backed.
-Assessment: Moderate likelihood of challenge; Strong evidence.
-The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per
-month. Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended),
-the proposed increase is presented as reasonable with a moderate likelihood of challenge and strong
-evidence. The proposed rent reflects recent local listings, condition, and current market positioning for
-similar two-bedroom homes.
-Response window and service record
-Recorded service method: First class post
-Recorded service date: 25 March 2026
+comparable properties locally. Moderate likelihood of challenge; Strong evidence.
+The notice has been recorded as served by First class post on 25 March 2026.
 The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
 tribunal can set a lower rent, but not higher than the rent proposed in the notice.
-If the tenant queries the figure, answer from the same rent figures, dates, and comparable evidence shown
-in Form 4A and the justification report.
-If a revised figure or later start date is agreed, record that in writing so the negotiated position does not drift
-away from the notice file.
-Landlord Heaven | Section 13 rent increase pack Page 1 of 1
+Please contact me using the details above if you would like to discuss the proposed rent before the start
+date. Any agreed change should be confirmed in writing.
+Yours sincerely,
+Taylor Landlord
+Landlord Heaven | Section 13 rent increase pack
 
 -- 1 of 1 --

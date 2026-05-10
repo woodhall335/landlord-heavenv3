@@ -2,7 +2,7 @@
   "key": "complete_pack",
   "displayName": "Stage 2: Section 8 Court & Possession Pack",
   "outputDir": "complete_pack",
-  "documentCount": 12,
+  "documentCount": 15,
   "documents": [
     {
       "title": "Case Summary — Stage 2 Court & Possession",
@@ -165,6 +165,24 @@
       }
     },
     {
+      "title": "Evidence Collection Checklist",
+      "description": "Detailed checklist of all evidence you need to gather",
+      "category": "evidence_tool",
+      "documentType": "evidence_checklist",
+      "fileName": "evidence_collection_checklist.pdf",
+      "files": {
+        "pdf": "complete_pack/evidence_collection_checklist.pdf",
+        "text": "complete_pack/evidence_collection_checklist.txt",
+        "html": "complete_pack/evidence_collection_checklist.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
       "title": "Hearing Preparation Guide",
       "description": "Court-facing hearing guide covering validity, service, grounds, arrears, and the documents to bring.",
       "category": "guidance",
@@ -195,6 +213,42 @@
       },
       "extraction": {
         "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "Court Filing Guide",
+      "description": "Step-by-step guide for issuing the possession claim and keeping the court file aligned.",
+      "category": "guidance",
+      "documentType": "court_filing_guide",
+      "fileName": "court_filing_guide.pdf",
+      "files": {
+        "pdf": "complete_pack/court_filing_guide.pdf",
+        "text": "complete_pack/court_filing_guide.txt",
+        "html": "complete_pack/court_filing_guide.html"
+      },
+      "extraction": {
+        "pageCount": 2,
+        "isLowText": false,
+        "isMetadataOnly": false,
+        "method": "pdf_parse"
+      }
+    },
+    {
+      "title": "What Happens Next",
+      "description": "Next-step guide covering issue, hearing preparation, and enforcement handoff.",
+      "category": "guidance",
+      "documentType": "what_happens_next",
+      "fileName": "what_happens_next.pdf",
+      "files": {
+        "pdf": "complete_pack/what_happens_next.pdf",
+        "text": "complete_pack/what_happens_next.txt",
+        "html": "complete_pack/what_happens_next.html"
+      },
+      "extraction": {
+        "pageCount": 1,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

@@ -404,15 +404,12 @@ describe('Section 13 document generation hardening', () => {
     expect(coverLetter).toBeDefined();
 
     const coverText = (await extractPdfText(coverLetter!.pdf)).text.replace(/\s+/g, ' ').trim();
+    expect(coverText).toContain('Please find enclosed Form 4A for 10 Sample Road, Leeds, LS1 1AA');
     expect(coverText).toContain(
-      'Enclosed is Form 4A proposing a new rent for this tenancy, together with a short explanation of the market evidence relied on.'
+      'This proposal is grounded in 8 comparable two-bedroom homes used in the market calculation'
     );
-    expect(coverText).toContain(
-      'This proposed rent is supported by 8 comparable two-bedroom properties used in the market calculation'
-    );
-    expect(coverText).toContain('What is enclosed');
-    expect(coverText).toContain('Response window and service record');
-    expect(coverText).toContain('Recorded service method: First class post');
+    expect(coverText).toContain('together with the rent increase report and service record');
+    expect(coverText).toContain('served by First class post on 25 March 2026');
     expect(coverText).not.toContain('What to do now');
     expect(coverText).not.toContain('This tool provides assistance only');
   }, 120000);
@@ -649,9 +646,9 @@ describe('Section 13 document generation hardening', () => {
     expect(justificationText).not.toContain('This tool provides assistance only');
 
     expect(coverText).toContain(
-      'This proposed rent is supported by 8 comparable two-bedroom properties used in the market calculation'
+      'This proposal is grounded in 8 comparable two-bedroom homes used in the market calculation'
     );
-    expect(coverText).toContain('What is enclosed');
+    expect(coverText).toContain('together with the rent increase report and service record');
     expect(coverText).not.toContain('What to do now');
     expect(justificationText).toContain(
       'The recorded comparables support the proposed rent and place it below the adjusted median'

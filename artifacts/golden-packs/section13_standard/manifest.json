@@ -15,7 +15,7 @@
         "text": "section13_standard/section13-rent-increase-summary-golden-section13-standard-001.txt"
       },
       "extraction": {
-        "pageCount": 1,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -49,7 +49,7 @@
         "text": "section13_standard/section13-justification-report-golden-section13-standard-001.txt"
       },
       "extraction": {
-        "pageCount": 4,
+        "pageCount": 6,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
