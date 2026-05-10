@@ -49,7 +49,7 @@
         "text": "section13_defensive/section13-justification-report-golden-section13-defence-001.txt"
       },
       "extraction": {
-        "pageCount": 6,
+        "pageCount": 7,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -66,7 +66,7 @@
         "text": "section13_defensive/section13-property-condition-comparison-sheet-golden-section13-defence-001.txt"
       },
       "extraction": {
-        "pageCount": 2,
+        "pageCount": 3,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"
@@ -151,7 +151,7 @@
         "text": "section13_defensive/section13-tribunal-defence-guide-golden-section13-defence-001.txt"
       },
       "extraction": {
-        "pageCount": 1,
+        "pageCount": 2,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

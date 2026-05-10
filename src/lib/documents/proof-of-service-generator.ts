@@ -22,7 +22,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, PDFFont, rgb, StandardFonts } from 'pdf-lib';
 import { toWinAnsiSafeText } from './pdf-safe-text';
 
 export interface ProofOfServiceData {
@@ -108,8 +108,6 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   // Colors
   const black = rgb(0.141, 0.09, 0.247);
   const gray = rgb(0.424, 0.365, 0.561);
-  const lightGray = rgb(0.965, 0.945, 1);
-  const panelWhite = rgb(0.984, 0.98, 1);
   const warningYellow = rgb(0.965, 0.945, 1);
   const warningBorder = rgb(0.776, 0.714, 0.937);
 
@@ -127,12 +125,10 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
     page.drawLine({ start: { x: x1, y: y1 }, end: { x: x2, y: y2 }, thickness, color: black });
   };
 
-  const drawRect = (x: number, yPos: number, w: number, h: number, fill = false, fillColor = lightGray) => {
-    if (fill) {
-      page.drawRectangle({ x, y: yPos, width: w, height: h, color: fillColor });
-    }
-    page.drawRectangle({ x, y: yPos, width: w, height: h, borderColor: black, borderWidth: 1 });
+  const setFieldTextSize = (field: { setFontSize: (size: number) => void }, size = 9.5) => {
+    field.setFontSize(size);
   };
+  const sectionHeadingSize = 11;
 
   // === HEADER ===
   if (logoImage) {
@@ -143,7 +139,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
       width: scaled.width,
       height: scaled.height,
     });
-    y -= scaled.height + 14;
+    y -= scaled.height + 28;
   }
   drawText('CERTIFICATE OF SERVICE', margin, y, helveticaBold, 18);
   y -= 10;
@@ -155,21 +151,17 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   y -= 25;
 
   // === WARNING BOX ===
-  page.drawRectangle({ x: margin, y: y - 55, width: width - margin * 2, height: 55, color: warningYellow, borderColor: warningBorder, borderWidth: 1.5 });
+  const warningBoxHeight = 50;
+  const warningTop = y;
+  page.drawRectangle({ x: margin, y: warningTop - warningBoxHeight, width: width - margin * 2, height: warningBoxHeight, color: warningYellow, borderColor: warningBorder, borderWidth: 1.5 });
   y -= 10;
   drawText('IMPORTANT: This is a support record, not an official prescribed form', margin + 10, y, helveticaBold, 10);
-  y -= 15;
-  drawText('This form has been pre-filled with case information. You MUST:', margin + 10, y, helvetica, 9);
-  y -= 12;
-  drawText('• Select the actual method of service used (tick one box)', margin + 15, y, helvetica, 9);
-  y -= 12;
-  drawText('• Enter the actual date and time of service', margin + 15, y, helvetica, 9);
-  y -= 12;
-  drawText('• Sign and date this certificate after service is complete', margin + 15, y, helvetica, 9);
-  y -= 25;
+  y -= 16;
+  drawText('Complete the service method, actual service time, signature, and date after service.', margin + 10, y, helvetica, 9);
+  y = warningTop - warningBoxHeight - 18;
 
   // === SECTION 1: PARTIES ===
-  drawText('1. PARTIES', margin, y, helveticaBold, 12);
+  drawText('1. PARTIES', margin, y, helveticaBold, sectionHeadingSize);
   y -= 22;
 
   // Create form for interactive fields
@@ -179,6 +171,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('Landlord/Claimant:', margin, y, helvetica, 10);
   const landlordField = form.createTextField('landlord_name');
   landlordField.addToPage(page, { x: margin + 115, y: y - 4, width: width - margin * 2 - 115, height: 18 });
+  setFieldTextSize(landlordField);
   if (data.landlord_name) landlordField.setText(data.landlord_name);
   y -= 26;
 
@@ -186,6 +179,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('Tenant/Defendant:', margin, y, helvetica, 10);
   const tenantField = form.createTextField('tenant_name');
   tenantField.addToPage(page, { x: margin + 115, y: y - 4, width: width - margin * 2 - 115, height: 18 });
+  setFieldTextSize(tenantField);
   if (data.tenant_name) tenantField.setText(data.tenant_name);
   y -= 26;
 
@@ -193,22 +187,21 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('Property Address:', margin, y, helvetica, 10);
   const propertyField = form.createTextField('property_address');
   propertyField.addToPage(page, { x: margin + 115, y: y - 4, width: width - margin * 2 - 115, height: 18 });
+  setFieldTextSize(propertyField, 9);
   if (data.property_address) propertyField.setText(data.property_address);
   y -= 32;
 
   // === SECTION 2: DOCUMENT SERVED ===
-  drawText('2. DOCUMENT SERVED', margin, y, helveticaBold, 12);
-  y -= 22;
-
-  drawText('I served the following document(s):', margin, y, helvetica, 10);
-  y -= 18;
+  drawText('2. DOCUMENT SERVED', margin, y, helveticaBold, sectionHeadingSize);
+  y -= 34;
 
   // Document served (SAFE TO PRE-FILL - this is the notice type)
   const documentField = form.createTextField('document_served');
-  documentField.addToPage(page, { x: margin, y: y - 4, width: width - margin * 2, height: 35 });
+  documentField.addToPage(page, { x: margin, y: y - 4, width: width - margin * 2, height: 28 });
   documentField.enableMultiline();
+  setFieldTextSize(documentField, 9);
   if (data.document_served) documentField.setText(data.document_served);
-  y -= 48;
+  y -= 40;
 
   // Notice expiry date (SAFE TO PRE-FILL - calculated from wizard)
   if (data.expiry_date) {
@@ -219,7 +212,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
 
   // === SECTION 3: SERVICE DETAILS (MUST BE COMPLETED BY LANDLORD) ===
   y -= 5;
-  drawText('3. SERVICE DETAILS', margin, y, helveticaBold, 12);
+  drawText('3. SERVICE DETAILS', margin, y, helveticaBold, sectionHeadingSize);
   drawText('(You must complete this section)', margin + 130, y, helvetica, 9, gray);
   y -= 22;
 
@@ -227,6 +220,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('Date of Service:', margin, y, helvetica, 10);
   const dateField = form.createTextField('service_date');
   dateField.addToPage(page, { x: margin + 115, y: y - 4, width: 100, height: 18 });
+  setFieldTextSize(dateField);
   if (data.served_date) dateField.setText(formatUKShortDate(data.served_date));
   y -= 26;
 
@@ -234,6 +228,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('Time of Service:', margin, y, helvetica, 10);
   const timeField = form.createTextField('service_time');
   timeField.addToPage(page, { x: margin + 115, y: y - 4, width: 100, height: 18 });
+  setFieldTextSize(timeField);
   drawText('(e.g., 10:30 AM)', margin + 225, y, helvetica, 8, gray);
   y -= 26;
 
@@ -264,7 +259,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
     if (method.note) {
       drawText(method.note, margin + 250, y, helvetica, 8, gray);
     }
-    y -= 15;
+    y -= 13;
   }
 
   y -= 8;
@@ -274,21 +269,30 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('(if sent by recorded delivery)', margin + 250, y, helvetica, 8, gray);
   const trackingField = form.createTextField('tracking_number');
   trackingField.addToPage(page, { x: margin + 115, y: y - 4, width: 130, height: 18 });
+  setFieldTextSize(trackingField);
   y -= 26;
 
-  // Service address (SAFE TO PRE-FILL if different from property)
-  drawText('Service Address:', margin, y, helvetica, 10);
-  drawText('(if different from property)', margin + 95, y, helvetica, 8, gray);
-  y -= 18;
-
+  // Service address (SAFE TO PRE-FILL only if different from property)
+  const serviceAddress = data.service_address?.trim();
+  const propertyAddress = data.property_address?.trim();
   const serviceAddressField = form.createTextField('service_address');
-  serviceAddressField.addToPage(page, { x: margin, y: y - 4, width: width - margin * 2, height: 30 });
   serviceAddressField.enableMultiline();
-  if (data.service_address) serviceAddressField.setText(data.service_address);
-  y -= 40;
+  if (serviceAddress && serviceAddress !== propertyAddress) {
+    drawText('Service Address:', margin, y, helvetica, 10);
+    drawText('(if different from property)', margin + 95, y, helvetica, 8, gray);
+    y -= 18;
+
+    serviceAddressField.addToPage(page, { x: margin, y: y - 4, width: width - margin * 2, height: 28 });
+    setFieldTextSize(serviceAddressField, 9);
+    y -= 38;
+  } else {
+    serviceAddressField.addToPage(page, { x: -1000, y: -1000, width: 1, height: 1 });
+    setFieldTextSize(serviceAddressField, 1);
+  }
+  if (serviceAddress) serviceAddressField.setText(serviceAddress);
 
   // === SECTION 4: DECLARATION ===
-  drawText('4. DECLARATION', margin, y, helveticaBold, 12);
+  drawText('4. DECLARATION', margin, y, helveticaBold, sectionHeadingSize);
   y -= 20;
 
   // Declaration text
@@ -309,6 +313,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('Name of person who served:', margin, y, helvetica, 10);
   const serverNameField = form.createTextField('server_name');
   serverNameField.addToPage(page, { x: margin + 160, y: y - 4, width: width - margin * 2 - 160, height: 18 });
+  setFieldTextSize(serverNameField);
   // NEVER pre-fill server name - may be different from landlord
   y -= 26;
 
@@ -321,34 +326,12 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('Date signed:', margin, y, helvetica, 10);
   const dateSignedField = form.createTextField('date_signed');
   dateSignedField.addToPage(page, { x: margin + 80, y: y - 4, width: 100, height: 18 });
-  y -= 35;
-
-  // === SECTION 5: NOTES ===
-  drawRect(margin, y - 70, width - margin * 2, 75, true, panelWhite);
-  y -= 5;
-
-  drawText('IMPORTANT NOTES FOR COURT', margin + 10, y, helveticaBold, 10);
-  y -= 14;
-
-  const notes = [
-    '• Keep the original signed certificate - the court may require it as evidence',
-    '• If serving by post, keep the Post Office receipt as proof of posting',
-    '• For recorded delivery, keep the tracking receipt showing delivery confirmation',
-    '• The certificate must be signed AFTER service is completed, not before',
-    '• If someone else served the notice, they must sign this certificate',
-  ];
-
-  for (const note of notes) {
-    drawText(note, margin + 10, y, helvetica, 8, gray);
-    y -= 11;
-  }
+  setFieldTextSize(dateSignedField);
+  y -= 28;
 
   // === FOOTER ===
-  y = margin + 15;
-  drawLine(margin, y, width - margin, y, 1);
-  y -= 12;
+  y = 24;
   drawText(data.footer_branding || 'Generated by Landlord Heaven Court Pack', margin, y, helvetica, 8, gray);
-  drawText('This form is editable - complete and print after service', width - margin - 230, y, helvetica, 8, gray);
 
   form.updateFieldAppearances(helvetica);
 

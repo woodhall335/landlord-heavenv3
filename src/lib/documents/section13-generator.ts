@@ -1180,13 +1180,14 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
 
     if (block.variant === 'intro' || block.variant === 'callout') {
       const panelPaddingX = 12;
-      const panelPaddingY = 10;
-      const headingHeight = block.variant === 'callout' && block.heading ? 22 : 0;
+      const panelPaddingY = block.variant === 'callout' ? 18 : 12;
+      const headingHeight = block.variant === 'callout' && block.heading ? 26 : 0;
       const panelHeight = totalParagraphHeight + panelPaddingY * 2 + headingHeight;
       ensureSpace(panelHeight + 8);
+      const panelBottom = cursorY - panelHeight + 6;
       page.drawRectangle({
         x: MARGIN_X,
-        y: cursorY - panelHeight + 6,
+        y: panelBottom,
         width: CONTENT_WIDTH,
         height: panelHeight,
         color: block.variant === 'intro' ? brandSurface : brandSurfaceStrong,
@@ -1219,7 +1220,7 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         }
         cursorY -= 4;
       }
-      cursorY -= panelPaddingY - 6;
+      cursorY = panelBottom - 18;
       continue;
     }
 
@@ -2330,7 +2331,7 @@ async function buildJustificationReportPdf(
       lines: buildComparableOverviewLines(resolvedState, resolvedComparables, snapshot),
     },
     {
-      heading: 'Comparable listing thumbnails',
+      heading: 'Comparable listings',
       variant: 'comparable_cards',
       lines: [
         'These thumbnail cards give the landlord and tenant a quick visual reference for the local listings used in the market analysis. The figures below still control the calculation; the thumbnails are included to make the evidence easier to follow.',

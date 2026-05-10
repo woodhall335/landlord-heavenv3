@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T11:34:06.828Z",
+  "generatedAt": "2026-05-10T13:44:26.076Z",
   "outputRoot": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\artifacts\\golden-packs",
   "packs": [
     {
@@ -53,7 +53,7 @@
             "text": "section13_defensive/section13-justification-report-golden-section13-defence-001.txt"
           },
           "extraction": {
-            "pageCount": 6,
+            "pageCount": 7,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -70,7 +70,7 @@
             "text": "section13_defensive/section13-property-condition-comparison-sheet-golden-section13-defence-001.txt"
           },
           "extraction": {
-            "pageCount": 2,
+            "pageCount": 3,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -155,7 +155,7 @@
             "text": "section13_defensive/section13-tribunal-defence-guide-golden-section13-defence-001.txt"
           },
           "extraction": {
-            "pageCount": 1,
+            "pageCount": 2,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"
@@ -1364,7 +1364,7 @@
             "text": "section13_standard/section13-justification-report-golden-section13-standard-001.txt"
           },
           "extraction": {
-            "pageCount": 6,
+            "pageCount": 7,
             "isLowText": false,
             "isMetadataOnly": false,
             "method": "pdf_parse"

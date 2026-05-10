@@ -49,7 +49,7 @@
         "text": "section13_standard/section13-justification-report-golden-section13-standard-001.txt"
       },
       "extraction": {
-        "pageCount": 6,
+        "pageCount": 7,
         "isLowText": false,
         "isMetadataOnly": false,
         "method": "pdf_parse"

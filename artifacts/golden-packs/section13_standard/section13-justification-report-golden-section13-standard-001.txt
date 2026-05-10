@@ -27,14 +27,14 @@ The proposed rent looks broadly aligned with the market calculation currently av
 No safer-range guidance is currently needed from the market calculation.
 Challenge band: Moderate likelihood of challenge - Based on where your proposed rent sits within the
 adjusted comparable rent range.
+Landlord Heaven | Comparable analysis and justification Page 1 of 7
+
+-- 1 of 7 --
+
+Rent Increase Justification Report
 Evidence band: Strong evidence - Based on how many comparables you have, how recent they are, and how
 many are source-backed rather than manual or heavily overridden.
 Recorded reasoning
-Landlord Heaven | Comparable analysis and justification Page 1 of 6
-
--- 1 of 6 --
-
-Rent Increase Justification Report
 The proposed rent of £1285.00 per month is below the adjusted median market rent of £1297.50 per month.
 Based on the comparables analysed under section 13(4) of the Housing Act 1988 (as amended), the
 proposed increase is presented as reasonable with a moderate likelihood of challenge and strong evidence.
@@ -55,20 +55,20 @@ within the last 90 days and all source-backed
 - Evidence band: Strong evidence
 - Median calculated from 8 comparable listings used in the market calculation.
 - Listings are filtered for similar bedroom count, property type, distance, and freshness where possible.
-Comparable listing thumbnails
+Comparable listings
 These thumbnail cards give the landlord and tenant a quick visual reference for the local listings used in the
 market analysis. The figures below still control the calculation; the thumbnails are included to make the
 evidence easier to follow.
+Landlord Heaven | Comparable analysis and justification Page 2 of 7
+
+-- 2 of 7 --
+
+Rent Increase Justification Report
 Listing
 Comparable 1: Flat 2, The Calls, Leeds LS1
 Raw rent £1240.00 pcm | adjusted £1240.00 pcm
 2 bedrooms | 0.20 miles away | source date 15 March 2026
 Source: scraped | https://example.com/leeds-rent-comparable-1
-Landlord Heaven | Comparable analysis and justification Page 2 of 6
-
--- 2 of 6 --
-
-Rent Increase Justification Report
 Listing
 Comparable 2: Apartment 14, Sovereign Street, Leeds LS1
 Raw rent £1265.00 pcm | adjusted £1265.00 pcm
@@ -89,16 +89,16 @@ Comparable 5: Flat 11, Riverside Court, Leeds LS1
 Raw rent £1305.00 pcm | adjusted £1305.00 pcm
 2 bedrooms | 0.50 miles away | source date 15 March 2026
 Source: scraped | https://example.com/leeds-rent-comparable-5
+Landlord Heaven | Comparable analysis and justification Page 3 of 7
+
+-- 3 of 7 --
+
+Rent Increase Justification Report
 Listing
 Comparable 6: Apartment 6, Wellington Street, Leeds LS1
 Raw rent £1315.00 pcm | adjusted £1315.00 pcm
 2 bedrooms | 0.50 miles away | source date 15 March 2026
 Source: scraped | https://example.com/leeds-rent-comparable-6
-Landlord Heaven | Comparable analysis and justification Page 3 of 6
-
--- 3 of 6 --
-
-Rent Increase Justification Report
 Listing
 Comparable 7: Flat 3, Dock Street, Leeds LS10
 Raw rent £1330.00 pcm | adjusted £1330.00 pcm
@@ -122,6 +122,11 @@ March 2026. Included because it is a close like-for-like market match.
 Comparables and adjustments
 Used in market calculation
 1. Flat 2, The Calls, Leeds LS1 | raw £1240.00 pcm | adjusted £1240.00 pcm
+Landlord Heaven | Comparable analysis and justification Page 4 of 7
+
+-- 4 of 7 --
+
+Rent Increase Justification Report
 Included in calculation: Yes
 Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-1
@@ -129,11 +134,6 @@ Distance: 0.20 miles
 Source date (published): 15 March 2026
 Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
-Landlord Heaven | Comparable analysis and justification Page 4 of 6
-
--- 4 of 6 --
-
-Rent Increase Justification Report
 2. Apartment 14, Sovereign Street, Leeds LS1 | raw £1265.00 pcm | adjusted £1265.00 pcm
 Included in calculation: Yes
 Freshness: 24 days old
@@ -160,6 +160,11 @@ Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
 5. Flat 11, Riverside Court, Leeds LS1 | raw £1305.00 pcm | adjusted £1305.00 pcm
 Included in calculation: Yes
+Landlord Heaven | Comparable analysis and justification Page 5 of 7
+
+-- 5 of 7 --
+
+Rent Increase Justification Report
 Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-5
 Distance: 0.50 miles
@@ -167,11 +172,6 @@ Source date (published): 15 March 2026
 Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
 6. Apartment 6, Wellington Street, Leeds LS1 | raw £1315.00 pcm | adjusted £1315.00 pcm
-Landlord Heaven | Comparable analysis and justification Page 5 of 6
-
--- 5 of 6 --
-
-Rent Increase Justification Report
 Included in calculation: Yes
 Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-6
@@ -198,6 +198,11 @@ Use / exclusion reason: Included because it is a close like-for-like market matc
 Final checks before service or filing
 The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
 tribunal can set a lower rent, but not higher than the rent proposed in the notice.
+Landlord Heaven | Comparable analysis and justification Page 6 of 7
+
+-- 6 of 7 --
+
+Rent Increase Justification Report
 Check that Form 4A is the current prescribed notice and that the completed notice matches the final figures in
 the report.
 Confirm that at least two months notice is given, that the proposed start date aligns with the tenancy period,
@@ -206,6 +211,6 @@ Check that the service date, proposed start date, and rent figures match the fin
 service record, and the comparable evidence file before sending or relying on them.
 If the tenant queries the increase, respond using the same market evidence. If a revised figure or later start
 date is agreed, record that agreement in writing so it does not conflict with the notice file.
-Landlord Heaven | Comparable analysis and justification Page 6 of 6
+Landlord Heaven | Comparable analysis and justification Page 7 of 7
 
--- 6 of 6 --
+-- 7 of 7 --

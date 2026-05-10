@@ -30,12 +30,12 @@ Comparable condition: No separate condition note recorded.
 Features and furnishings: No separate feature comparison recorded.
 Size / bedrooms: 2 bedroom(s).
 Adjustment and reason: No recorded adjustment beyond the saved comparable figure.
-Photos / evidence reference: https://example.com/leeds-rent-comparable-4
-Section 13 Defensive Pack | Property condition comparison sheet Page 1 of 2
+Section 13 Defensive Pack | Property condition comparison sheet Page 1 of 3
 
--- 1 of 2 --
+-- 1 of 3 --
 
 Property Condition Comparison Sheet
+Photos / evidence reference: https://example.com/leeds-rent-comparable-4
 5. Comparable: Flat 11, Riverside Court, Leeds LS1 | £1305.00 pcm adjusted | 0.5 miles
 Subject property condition: No separate condition note recorded.
 Comparable condition: No separate condition note recorded.
@@ -67,8 +67,13 @@ Photos / evidence reference: https://example.com/leeds-rent-comparable-8
 How to use this sheet
 If a comparable needs a condition-based adjustment, say what the difference is and why it matters to market
 rent.
+Section 13 Defensive Pack | Property condition comparison sheet Page 2 of 3
+
+-- 2 of 3 --
+
+Property Condition Comparison Sheet
 If no adjustment was applied, explain why the subject property and comparable were treated as close enough
 on the saved evidence.
-Section 13 Defensive Pack | Property condition comparison sheet Page 2 of 2
+Section 13 Defensive Pack | Property condition comparison sheet Page 3 of 3
 
--- 2 of 2 --
+-- 3 of 3 --

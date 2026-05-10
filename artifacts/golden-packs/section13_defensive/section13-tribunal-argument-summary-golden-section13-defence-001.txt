@@ -31,13 +31,13 @@ Included in calculation: Yes
 Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-1
 Distance: 0.20 miles
-Source date (published): 15 March 2026
-Adjustment reason: No adjustment applied
 Section 13 Defensive Pack | Tribunal argument summary Page 1 of 4
 
 -- 1 of 4 --
 
 Tribunal Argument Summary
+Source date (published): 15 March 2026
+Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
 2. Apartment 14, Sovereign Street, Leeds LS1 | raw £1265.00 pcm | adjusted £1265.00 pcm
 Included in calculation: Yes
@@ -69,13 +69,13 @@ Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-5
 Distance: 0.50 miles
 Source date (published): 15 March 2026
-Adjustment reason: No adjustment applied
-Use / exclusion reason: Included because it is a close like-for-like market match.
 Section 13 Defensive Pack | Tribunal argument summary Page 2 of 4
 
 -- 2 of 4 --
 
 Tribunal Argument Summary
+Adjustment reason: No adjustment applied
+Use / exclusion reason: Included because it is a close like-for-like market match.
 6. Apartment 6, Wellington Street, Leeds LS1 | raw £1315.00 pcm | adjusted £1315.00 pcm
 Included in calculation: Yes
 Freshness: 24 days old
@@ -107,14 +107,14 @@ percentage increase alone.
 2. Position in the range
 Say: The figure sits below the adjusted median of £1297.50 pcm and should be judged against the adjusted
 comparable range recorded in the report.
-3. Strength of evidence
-Say: The proposal is supported by 8 source-backed comparables, with 8 listings inside the 90-day freshness
-window.
 Section 13 Defensive Pack | Tribunal argument summary Page 3 of 4
 
 -- 3 of 4 --
 
 Tribunal Argument Summary
+3. Strength of evidence
+Say: The proposal is supported by 8 source-backed comparables, with 8 listings inside the 90-day freshness
+window.
 4. Bundle integrity
 Say: The full bundle includes the notice, service record, justification report, Tribunal Argument Summary, and
 the supporting documents I rely on.
