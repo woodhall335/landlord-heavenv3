@@ -17,7 +17,7 @@ const CORE_PRICE_EXPECTATIONS: Record<
   { amount: number; display: string; pence: number }
 > = {
   notice_only: { amount: 39.99, display: '£39.99', pence: 3999 },
-  complete_pack: { amount: 79.99, display: '£79.99', pence: 7999 },
+  complete_pack: { amount: 69.99, display: '£69.99', pence: 6999 },
   money_claim: { amount: 49.99, display: '£49.99', pence: 4999 },
   section13_standard: { amount: 29.99, display: '£29.99', pence: 2999 },
   section13_defensive: { amount: 49.99, display: '£49.99', pence: 4999 },

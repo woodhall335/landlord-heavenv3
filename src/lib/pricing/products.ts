@@ -33,7 +33,7 @@ export function formatPriceRangeLabel(amounts: readonly number[]): string {
  */
 export const SEO_PRICES = {
   evictionNotice: { amount: 39.99, display: formatPriceLabel(39.99) },
-  evictionBundle: { amount: 79.99, display: formatPriceLabel(79.99) },
+  evictionBundle: { amount: 69.99, display: formatPriceLabel(69.99) },
   moneyClaim: { amount: 49.99, display: formatPriceLabel(49.99) },
   section13Standard: { amount: 29.99, display: formatPriceLabel(29.99) },
   section13Defensive: { amount: 49.99, display: formatPriceLabel(49.99) },

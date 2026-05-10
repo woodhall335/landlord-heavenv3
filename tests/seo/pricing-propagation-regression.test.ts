@@ -4,14 +4,18 @@ import path from 'path';
 
 describe('Pricing propagation regressions', () => {
   it('/pricing page uses canonical PRODUCTS prices and contains current values', () => {
-    const filePath = path.join(process.cwd(), 'src/app/(marketing)/pricing/page.tsx');
-    const content = fs.readFileSync(filePath, 'utf-8');
+    const pagePath = path.join(process.cwd(), 'src/app/(marketing)/pricing/page.tsx');
+    const pricingModulePath = path.join(process.cwd(), 'src/lib/marketing/pricing-page.ts');
+    const pageContent = fs.readFileSync(pagePath, 'utf-8');
+    const pricingModuleContent = fs.readFileSync(pricingModulePath, 'utf-8');
 
-    expect(content).toContain('PRODUCTS.notice_only.displayPrice');
-    expect(content).toContain('PRODUCTS.complete_pack.displayPrice');
-    expect(content).toContain('PRODUCTS.money_claim.displayPrice');
-    expect(content).toContain('PRODUCTS.ast_standard.displayPrice');
-    expect(content).toContain('PRODUCTS.ast_premium.displayPrice');
+    expect(pageContent).toContain('PRICING_PACKAGE_CARDS');
+    expect(pageContent).toContain('PRICING_SCHEMA_ITEMS');
+    expect(pricingModuleContent).toContain('PRODUCTS.notice_only.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.complete_pack.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.money_claim.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.ast_standard.displayPrice');
+    expect(pricingModuleContent).toContain('PRODUCTS.ast_premium.displayPrice');
   });
 
   it('rejects stale hardcoded core-product prices in app/lib surfaces', () => {
