@@ -119,6 +119,18 @@ function isSourceBacked(comparable: Section13Comparable): boolean {
   );
 }
 
+function getComparableUsageOverride(
+  comparable: Section13Comparable
+): 'auto' | 'used' | 'context' | 'excluded' {
+  const value = comparable.metadata?.userUsageOverride;
+  return value === 'used' || value === 'context' || value === 'excluded' ? value : 'auto';
+}
+
+function getComparableUsageOverrideReason(comparable: Section13Comparable): string | null {
+  const value = comparable.metadata?.userUsageReason;
+  return typeof value === 'string' && value.trim() ? value.trim() : null;
+}
+
 function getAdjustmentReason(comparable: Section13Comparable): string {
   if (!comparable.adjustments.length) {
     return 'No adjustment applied';
@@ -334,6 +346,23 @@ function buildReasonDetail(
   inClusterOutlier: boolean
 ): string {
   const reasons = [...provisional.reasonParts];
+  const usageOverride = getComparableUsageOverride(provisional.comparable);
+  const usageOverrideReason = getComparableUsageOverrideReason(provisional.comparable);
+
+  if (usageOverride !== 'auto') {
+    const actionLabel =
+      usageOverride === 'used'
+        ? 'used in the calculation'
+        : usageOverride === 'context'
+          ? 'kept for context'
+          : 'excluded from the calculation';
+    reasons.unshift(
+      usageOverrideReason
+        ? `Landlord marked this listing as ${actionLabel}: ${usageOverrideReason}.`
+        : `Landlord marked this listing as ${actionLabel}.`
+    );
+  }
+
   if (inClusterOutlier) {
     reasons.push('Rent sits well outside the main comparable cluster.');
   }
@@ -490,21 +519,49 @@ export function buildSection13MarketCalculation(
     return item;
   });
 
-  const selection = selectUsedComparableIds(filtered.filter((item) => item.initialRelevanceBand !== 'outlier'));
+  const getId = (item: ProvisionalAssessment) =>
+    item.comparable.id || `${item.comparable.addressSnippet}|${item.comparable.sortOrder}`;
+  const forcedUsedIds = new Set(
+    filtered
+      .filter((item) => getComparableUsageOverride(item.comparable) === 'used')
+      .map((item) => getId(item))
+  );
+  const forcedContextIds = new Set(
+    filtered
+      .filter((item) => getComparableUsageOverride(item.comparable) === 'context')
+      .map((item) => getId(item))
+  );
+  const forcedExcludedIds = new Set(
+    filtered
+      .filter((item) => getComparableUsageOverride(item.comparable) === 'excluded')
+      .map((item) => getId(item))
+  );
+  const selection = selectUsedComparableIds(
+    filtered.filter(
+      (item) => item.initialRelevanceBand !== 'outlier' && !forcedContextIds.has(getId(item)) && !forcedExcludedIds.has(getId(item))
+    )
+  );
+  forcedUsedIds.forEach((id) => selection.usedIds.add(id));
   const assessments: Section13ComparableAssessment[] = [];
   const usedComparables: Section13ComparableAssessment[] = [];
   const contextComparables: Section13ComparableAssessment[] = [];
   const excludedComparables: Section13ComparableAssessment[] = [];
 
   filtered.forEach((item) => {
-    const id = item.comparable.id || `${item.comparable.addressSnippet}|${item.comparable.sortOrder}`;
+    const id = getId(item);
     const inClusterOutlier = outlierIds.has(id);
-    const usageGroup =
-      item.initialRelevanceBand === 'outlier'
-        ? 'excluded'
-        : selection.usedIds.has(id)
-          ? 'used'
-          : 'context';
+    let usageGroup: 'used' | 'context' | 'excluded' = 'context';
+    if (forcedExcludedIds.has(id)) {
+      usageGroup = 'excluded';
+    } else if (forcedContextIds.has(id)) {
+      usageGroup = 'context';
+    } else if (forcedUsedIds.has(id)) {
+      usageGroup = 'used';
+    } else if (item.initialRelevanceBand === 'outlier') {
+      usageGroup = 'excluded';
+    } else if (selection.usedIds.has(id)) {
+      usageGroup = 'used';
+    }
     const assessment = buildAssessment(item, usageGroup, inClusterOutlier);
     assessments.push(assessment);
     if (usageGroup === 'used') usedComparables.push(assessment);

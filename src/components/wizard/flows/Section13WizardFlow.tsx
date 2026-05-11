@@ -33,6 +33,7 @@ import type {
   Section13ComparableAdjustment,
   Section13EvidenceUpload,
   Section13PlanRecommendation,
+  Section13PreviewMetrics,
   Section13ProductSku,
   Section13State,
 } from '@/lib/section13/types';
@@ -215,6 +216,63 @@ function getComparableThumbnailSource(
   );
 }
 
+function getComparableUsageOverride(comparable: Section13Comparable): 'auto' | 'used' | 'context' | 'excluded' {
+  const value = comparable.metadata?.userUsageOverride;
+  return value === 'used' || value === 'context' || value === 'excluded' ? value : 'auto';
+}
+
+function getMarketVerdict(
+  preview: Section13PreviewMetrics | undefined,
+  comparableCount: number
+): {
+  title: string;
+  body: string;
+  badge: string;
+  panelClassName: string;
+  badgeClassName: string;
+} {
+  if (!preview || comparableCount === 0) {
+    return {
+      title: 'Ready to build the market evidence',
+      body: 'Run the local listing check and we will show the landlord where the proposed rent sits before the notice questions.',
+      badge: 'Evidence not checked yet',
+      panelClassName: 'border-violet-200 bg-violet-50 text-violet-950',
+      badgeClassName: 'border-violet-200 bg-white text-violet-900',
+    };
+  }
+
+  if (preview.evidenceBand === 'strong' && preview.challengeBand !== 'higher_likelihood') {
+    return {
+      title: 'This is looking well supported',
+      body: preview.defensibilitySummarySentence || preview.previewSummary,
+      badge: preview.evidenceBandLabel,
+      panelClassName: 'border-emerald-200 bg-emerald-50 text-emerald-950',
+      badgeClassName: 'border-emerald-200 bg-white text-emerald-900',
+    };
+  }
+
+  if (preview.challengeBand === 'higher_likelihood' || preview.evidenceBand === 'weak') {
+    return {
+      title: 'This needs stronger evidence before service',
+      body:
+        preview.saferRangeGuidance ||
+        preview.challengeReasonSummary ||
+        'The current comparable set is not yet strong enough for a comfortable Section 13 file.',
+      badge: preview.challengeBandLabel,
+      panelClassName: 'border-rose-200 bg-rose-50 text-rose-950',
+      badgeClassName: 'border-rose-200 bg-white text-rose-900',
+    };
+  }
+
+  return {
+    title: 'This is plausible, but worth tightening',
+    body: preview.defensibilitySummarySentence || preview.previewSummary,
+    badge: preview.challengeBandLabel,
+    panelClassName: 'border-amber-200 bg-amber-50 text-amber-950',
+    badgeClassName: 'border-amber-200 bg-white text-amber-900',
+  };
+}
+
 function getStepCompleteState(
   stepId: SectionId,
   state: Section13State,
@@ -382,6 +440,7 @@ export function Section13WizardFlow({
   const hasHydratedRef = useRef(false);
   const pendingSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const saveResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoScrapeKeyRef = useRef<string | null>(null);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
 
   const localPreview = useMemo(
@@ -1015,6 +1074,29 @@ export function Section13WizardFlow({
   const currentStep = STEP_CONFIG[currentStepIndex];
 
   useEffect(() => {
+    if (loading || scrapeLoading || currentStep.id !== 'comparables' || comparables.length > 0) return;
+    const postcode = effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
+    const bedrooms = effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
+    if (!postcode || !bedrooms) return;
+
+    const scrapeKey = `${postcode.trim().toUpperCase()}|${bedrooms}`;
+    if (autoScrapeKeyRef.current === scrapeKey) return;
+    autoScrapeKeyRef.current = scrapeKey;
+    setScrapeMessage('Checking local listings automatically from the property details...');
+    void handleScrape();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    comparables.length,
+    currentStep.id,
+    effectiveState.comparablesMeta.bedrooms,
+    effectiveState.comparablesMeta.searchPostcodeRaw,
+    effectiveState.tenancy.bedrooms,
+    effectiveState.tenancy.postcodeRaw,
+    loading,
+    scrapeLoading,
+  ]);
+
+  useEffect(() => {
     if (currentStep.id !== 'outputs') return;
     if (!hasPaidDefensiveOrder) {
       setEvidenceUploads([]);
@@ -1641,9 +1723,29 @@ export function Section13WizardFlow({
           effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
         const marketSearchBedrooms =
           effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
+        const marketVerdict = getMarketVerdict(effectiveState.preview, comparables.length);
 
         return (
           <div className="space-y-6">
+            <div className={`rounded-[1.5rem] border p-5 ${marketVerdict.panelClassName}`}>
+              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div className="max-w-3xl">
+                  <span className={`inline-flex rounded-full border px-3 py-1.5 text-xs font-semibold ${marketVerdict.badgeClassName}`}>
+                    {marketVerdict.badge}
+                  </span>
+                  <h3 className="mt-4 text-xl font-semibold tracking-tight">{marketVerdict.title}</h3>
+                  <p className="mt-2 text-sm leading-7">{marketVerdict.body}</p>
+                </div>
+                {effectiveState.preview?.proposedRentMonthly ? (
+                  <div className="rounded-2xl border border-white/70 bg-white/70 px-4 py-3 text-left shadow-sm md:text-right">
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] opacity-75">Proposed rent</p>
+                    <p className="mt-1 text-2xl font-bold">{formatMoney(effectiveState.preview.proposedRentMonthly)}</p>
+                    <p className="mt-1 text-sm opacity-80">{effectiveState.preview.proposedPositionLabel}</p>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
             <div className="rounded-2xl border border-gray-200 p-4">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
@@ -1898,6 +2000,39 @@ export function Section13WizardFlow({
                         </div>
 
                         <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-4">
+                          <div className="grid gap-3 md:grid-cols-[220px_1fr]">
+                            <label className="block space-y-1">
+                              <span className="text-sm font-medium text-gray-800">Landlord decision</span>
+                              <select
+                                value={getComparableUsageOverride(comparable)}
+                                onChange={(event) =>
+                                  updateComparable(index, {
+                                    metadata: {
+                                      ...(comparable.metadata || {}),
+                                      userUsageOverride: event.target.value,
+                                    },
+                                  })
+                                }
+                                className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                              >
+                                <option value="auto">Let the wizard decide</option>
+                                <option value="used">Use in calculation</option>
+                                <option value="context">Keep for context only</option>
+                                <option value="excluded">Exclude from calculation</option>
+                              </select>
+                            </label>
+                            {renderTextInput('Reason for decision', getMetadataString(comparable.metadata, ['userUsageReason']) || '', (value) =>
+                              updateComparable(index, {
+                                metadata: {
+                                  ...(comparable.metadata || {}),
+                                  userUsageReason: value || null,
+                                },
+                              })
+                            , { placeholder: 'Example: same street, but newly refurbished / too far away / smaller rooms' })}
+                          </div>
+                        </div>
+
+                        <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-4">
                           <p className="text-sm font-semibold text-gray-950">Why this listing was {assessment?.usedInCalculation ? 'used' : assessment?.relevanceBand === 'outlier' ? 'excluded' : 'shown for context'}</p>
                           <p className="mt-2 text-sm text-gray-700">
                             {assessment?.reasonDetail || 'This listing will be classified once the preview recalculates.'}
@@ -1907,40 +2042,52 @@ export function Section13WizardFlow({
                           </p>
                         </div>
 
-                        <div className="mt-4 rounded-2xl border border-violet-100 bg-violet-50/60 p-4">
-                          <div className="flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
+                        <details
+                          className="mt-4 rounded-2xl border border-violet-100 bg-violet-50/60 p-4"
+                          open={comparable.adjustments.length > 0}
+                        >
+                          <summary className="cursor-pointer list-none">
+                            <div className="flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
+                              <div>
+                                <p className="text-sm font-semibold text-violet-950">Adjust this comparable</p>
+                                <p className="mt-1 text-sm text-violet-900/80">
+                                  Open this when the listing needs a location, condition, or amenity adjustment.
+                                </p>
+                              </div>
+                              <p className="text-sm font-semibold text-violet-950">
+                                Adjusted rent {formatMoney(comparable.adjustedMonthlyEquivalent)}
+                              </p>
+                            </div>
+                          </summary>
+                          <div className="mt-4 border-t border-violet-100 pt-4">
                             <div>
-                              <p className="text-sm font-semibold text-violet-950">Adjust this comparable</p>
                               <p className="mt-1 text-sm text-violet-900/80">
                                 Apply simple monthly deltas where the listing differs from your property.
                               </p>
                             </div>
-                            <p className="text-sm font-semibold text-violet-950">
-                              Adjusted rent {formatMoney(comparable.adjustedMonthlyEquivalent)}
-                            </p>
+                            <div className="mt-4 grid gap-3">
+                              {(['location', 'condition', 'amenities'] as const).map((category) => {
+                                const adjustment = comparable.adjustments.find((item) => item.category === category);
+                                return (
+                                  <div
+                                    key={category}
+                                    className="grid gap-3 rounded-xl border border-violet-100 bg-white p-3 md:grid-cols-[140px_150px_1fr]"
+                                  >
+                                    <div className="text-sm font-medium capitalize text-gray-900">{category}</div>
+                                    {renderTextInput('Monthly delta', adjustment?.normalizedMonthlyDelta, (value) =>
+                                      upsertAdjustment(index, category, {
+                                        normalizedMonthlyDelta: value ? Number(value) : 0,
+                                      })
+                                    , { type: 'number', step: '0.01' })}
+                                    {renderTextInput('Reason', adjustment?.reason, (value) =>
+                                      upsertAdjustment(index, category, { reason: value })
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
-                          <div className="mt-4 grid gap-3">
-                            {(['location', 'condition', 'amenities'] as const).map((category) => {
-                              const adjustment = comparable.adjustments.find((item) => item.category === category);
-                              return (
-                                <div
-                                  key={category}
-                                  className="grid gap-3 rounded-xl border border-violet-100 bg-white p-3 md:grid-cols-[140px_150px_1fr]"
-                                >
-                                  <div className="text-sm font-medium capitalize text-gray-900">{category}</div>
-                                  {renderTextInput('Monthly delta', adjustment?.normalizedMonthlyDelta, (value) =>
-                                    upsertAdjustment(index, category, {
-                                      normalizedMonthlyDelta: value ? Number(value) : 0,
-                                    })
-                                  , { type: 'number', step: '0.01' })}
-                                  {renderTextInput('Reason', adjustment?.reason, (value) =>
-                                    upsertAdjustment(index, category, { reason: value })
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
+                        </details>
 
                         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-700">
                           <span>Monthly equivalent: {formatMoney(comparable.monthlyEquivalent)}</span>
