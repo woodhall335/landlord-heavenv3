@@ -3,7 +3,6 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
-import { buildTenancyPackBreakdown } from '@/lib/marketing/tenancy-pack-breakdowns';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
@@ -11,16 +10,18 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/standard-tenancy-agreement');
 const standardWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=standard_tenancy_page&topic=tenancy';
-const standardPackBreakdown = buildTenancyPackBreakdown('england_standard_tenancy_agreement');
 const standardSampleProof = getGoldenPackProofData('england_standard_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Standard Tenancy Agreement England | Straightforward Whole-Property Let',
+  title: 'Standard Periodic Tenancy Agreement England | Landlord Heaven',
   description:
-    'Create a Standard Tenancy Agreement for a straightforward whole-property let in England, using current assured periodic wording and the practical setup paperwork landlords usually need.',
+    'Create a standard periodic tenancy agreement for a straightforward whole-property let in England, with current wording and practical setup paperwork for landlords.',
   keywords: [
+    'standard periodic tenancy agreement',
+    'standard periodic tenancy agreement england',
+    'england standard periodic tenancy agreement',
     'assured periodic tenancy agreement england',
     'england assured periodic tenancy agreement',
     'standard tenancy agreement england',
@@ -34,9 +35,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Standard Tenancy Agreement England | Straightforward Whole-Property Let',
+    title: 'Standard Periodic Tenancy Agreement England | Landlord Heaven',
     description:
-      'Create a Standard Tenancy Agreement for a straightforward whole-property let in England, using current assured periodic wording and the practical setup paperwork landlords usually need.',
+      'Create a standard periodic tenancy agreement for a straightforward whole-property let in England, with current wording and practical setup paperwork for landlords.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -49,44 +50,48 @@ export default function StandardTenancyAgreementPage() {
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
-          { name: 'Standard Tenancy Agreement', url: canonicalUrl },
+          { name: 'Standard Periodic Tenancy Agreement', url: canonicalUrl },
         ])}
       />
       <StructuredData
         data={productSchema({
-          name: 'Standard Tenancy Agreement',
-          description: PRODUCTS.england_standard_tenancy_agreement.description,
+          name: 'Standard Periodic Tenancy Agreement',
+          description:
+            'Create a standard periodic tenancy agreement for a straightforward whole-property let in England.',
           price: PRODUCTS.england_standard_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
         })}
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Standard Tenancy Agreement England"
-        subtitle="Use this standard England tenancy agreement if you are letting a whole property on a straightforward residential tenancy and want current assured periodic wording from 1 May 2026, without student, HMO, lodger, or Premium-level detail."
-        primaryCtaLabel="Start standard tenancy agreement"
+        title="Standard Periodic Tenancy Agreement England"
+        subtitle="Use this standard periodic tenancy agreement if you are letting a whole property in England and want a clear, current agreement without student, HMO, lodger, or Premium-level management wording."
+        primaryCtaLabel="Start standard periodic tenancy agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Read periodic tenancy guide"
         secondaryCtaHref="/periodic-tenancy-agreement"
-        legacyNotice="If you were searching for a standard tenancy agreement, a basic tenancy agreement, an updated AST replacement, or a current England tenancy agreement generator, this is the standard assured periodic option for a straightforward whole-property let."
-        introTitle="For a straightforward whole-property let"
+        legacyNotice="If you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement generator, this is the standard periodic tenancy agreement route for a straightforward whole-property let."
+        introTitle="For a straightforward standard periodic tenancy"
         introBody={[
-          "This is the standard option for a new England tenancy agreement where the tenancy is a straightforward whole-property let. Use it when you want current assured periodic wording without the extra operational detail included in Premium or the specialist products.",
+          "This is the standard periodic tenancy agreement for a new England tenancy where the property is being let as an ordinary whole-property home. Use it when you want current wording without the extra operational detail included in Premium or the specialist products.",
           'The generator keeps the pack practical and proportionate: the main agreement plus the key supporting documents, without making a simple tenancy feel more complicated than it needs to be.',
         ]}
         highlights={[
-          'England assured periodic agreement for a straightforward whole-property residential let',
+          'Standard periodic tenancy agreement for a straightforward whole-property residential let',
           'Keeps the wording and pack paperwork practical and proportionate',
-          'Separate from the Premium assured periodic, Student, HMO / Shared House, and Lodger routes',
+          'Separate from the Premium, Student, HMO / Shared House, and Lodger routes',
           'Guided generator with a preview before payment',
         ]}
         compliancePoints={[
-          'Built around the current England assured periodic route from 1 May 2026.',
+          'Built around the current England periodic tenancy route from 1 May 2026.',
           "Positioned for landlords who want current England wording for a straightforward let.",
           'Includes the practical England support documents that sit alongside the agreement.',
           'If the tenancy is really a student let, shared house, or resident-landlord arrangement, use the specialist product instead.',
         ]}
         keywordTargets={[
+          'standard periodic tenancy agreement',
+          'standard periodic tenancy agreement england',
+          'england standard periodic tenancy agreement',
           'standard tenancy agreement england',
           'england tenancy agreement standard',
           'basic tenancy agreement england',
@@ -98,7 +103,7 @@ export default function StandardTenancyAgreementPage() {
         ]}
         idealFor={[
           'the tenancy is a straightforward whole-property let in England',
-          'you want the current England wording with the core support pack, but not the fuller Premium assured periodic schedule',
+          'you want a standard periodic tenancy agreement with the core support pack, but not the fuller Premium schedule',
           'you want a new tenancy agreement generator for the standard England option rather than a more detailed Premium pack',
           'you want a clean standard agreement without specialist student, shared-house, or resident-landlord wording',
         ]}
@@ -109,91 +114,207 @@ export default function StandardTenancyAgreementPage() {
         ]}
         routeComparison={[
           {
-            title: 'Premium Assured Periodic Tenancy Agreement',
+            title: 'Standard Periodic Tenancy Agreement',
             description:
-              'Choose the Premium assured periodic option when the let is still a standard residential tenancy but you want more detailed operational drafting and a broader management pack.',
-            href: '/premium-tenancy-agreement',
-            ctaLabel: 'Compare Premium assured periodic route',
+              'The current England agreement for a straightforward whole-property let.',
+            href: '/standard-tenancy-agreement',
+            ctaLabel: 'Choose the Standard agreement',
+            imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
+            imageAlt: 'Standard tenancy agreement preview',
+            price: '£14.99',
+            details: [
+              {
+                label: 'Best when',
+                body: 'The current England agreement for a straightforward whole-property let.',
+              },
+              {
+                label: 'What it helps with',
+                body:
+                  'Gives landlords a clean starting point when the let is ordinary and does not need student, shared-house, or resident-landlord wording.',
+              },
+              {
+                label: 'Common problem if you choose wrong',
+                body:
+                  'If you choose a specialist option by mistake, the paperwork can become more complicated than it needs to be. If you use older wording, the core terms may be too light.',
+              },
+              {
+                label: 'How it helps you',
+                body:
+                  'Gets the tenancy in place with a clear England agreement and practical setup paperwork.',
+              },
+            ],
           },
           {
-            title: 'Periodic tenancy agreement guide',
+            title: 'Premium Tenancy Agreement',
             description:
-              'Use the periodic tenancy guide if you want the newer England terminology explained in plain English before deciding whether Standard or Premium is the better fit.',
-            href: '/periodic-tenancy-agreement',
-            ctaLabel: 'Read periodic tenancy guide',
+              'The fuller current England option for ordinary residential lets that need stronger management wording.',
+            href: '/premium-tenancy-agreement',
+            ctaLabel: 'Choose the Premium agreement',
+            imageSrc: '/images/wizard-premium-tenancy-agreement.webp',
+            imageAlt: 'Premium tenancy agreement preview',
+            price: '£24.99',
+            details: [
+              {
+                label: 'Best when',
+                body:
+                  'The fuller current England option for ordinary residential lets that need stronger management wording.',
+              },
+              {
+                label: 'What it helps with',
+                body:
+                  'Helps when the landlord wants more detail around access, reporting, inspections, keys, repairs, and hand-back.',
+              },
+              {
+                label: 'Common problem if you choose wrong',
+                body:
+                  'If a more involved let uses a lighter agreement, avoidable management arguments can start because expectations were not clear enough.',
+              },
+              {
+                label: 'How it helps you',
+                body:
+                  'Gives the landlord a stronger written framework for day-to-day tenancy management.',
+              },
+            ],
           },
           {
             title: 'Student Tenancy Agreement',
             description:
-              'Choose the Student route when guarantors, student sharers, replacement procedures, or end-of-term return standards are the main focus.',
+              'The dedicated agreement for student households in England.',
             href: '/student-tenancy-agreement',
-            ctaLabel: 'Compare Student',
+            ctaLabel: 'Choose the Student agreement',
+            imageSrc: '/images/wizard-student-tenancy-agreement.webp',
+            imageAlt: 'Student tenancy agreement preview',
+            price: '£24.99',
+            details: [
+              {
+                label: 'Best when',
+                body: 'The dedicated agreement for student households in England.',
+              },
+              {
+                label: 'What it helps with',
+                body:
+                  'Deals with guarantors, sharers, replacement requests, and end-of-term move-out more directly than a generic agreement.',
+              },
+              {
+                label: 'Common problem if you choose wrong',
+                body:
+                  'If a student household uses a generic let, key pressure points can be under-explained until something goes wrong.',
+              },
+              {
+                label: 'How it helps you',
+                body:
+                  'Gives the landlord an agreement that matches how the student property is occupied and managed.',
+              },
+            ],
           },
           {
-            title: 'HMO / Shared House',
+            title: 'HMO / Shared House Tenancy Agreement',
             description:
-              'Choose the HMO / Shared House route when shared areas, house rules, or room-by-room occupation are where the real complexity lies.',
+              'The shared-house agreement for occupiers living together and using communal areas.',
             href: '/hmo-shared-house-tenancy-agreement',
-            ctaLabel: 'Compare HMO',
+            ctaLabel: 'Choose the HMO / Shared House agreement',
+            imageSrc: '/images/wizard-hmo-agreement.webp',
+            imageAlt: 'HMO shared house tenancy agreement preview',
+            price: '£34.99',
+            details: [
+              {
+                label: 'Best when',
+                body:
+                  'The shared-house agreement for occupiers living together and using communal areas.',
+              },
+              {
+                label: 'What it helps with',
+                body:
+                  'Deals with house rules, communal spaces, sharer expectations, and shared living arrangements.',
+              },
+              {
+                label: 'Common problem if you choose wrong',
+                body:
+                  'If a shared house is treated like a straightforward whole-property let, the paperwork can miss important shared-living rules.',
+              },
+              {
+                label: 'How it helps you',
+                body:
+                  'Helps the landlord run a shared property with paperwork that fits the setup.',
+              },
+            ],
           },
           {
-            title: 'Room Let / Lodger',
+            title: 'Lodger Agreement',
             description:
-              'Choose the Lodger route when the landlord lives at the property and the occupier is sharing the home rather than taking a standard residential tenancy.',
+              'The room-let agreement for a landlord who lives in the property.',
             href: '/lodger-agreement',
-            ctaLabel: 'Compare Lodger',
+            ctaLabel: 'Choose the Lodger agreement',
+            imageSrc: '/images/wizard-lodger-agreement.webp',
+            imageAlt: 'Lodger agreement preview',
+            price: '£14.99',
+            details: [
+              {
+                label: 'Best when',
+                body: 'The room-let agreement for a landlord who lives in the property.',
+              },
+              {
+                label: 'What it helps with',
+                body:
+                  'Keeps the resident-landlord arrangement separate from a standard tenancy, with shared-home rules and notice expectations set out.',
+              },
+              {
+                label: 'Common problem if you choose wrong',
+                body:
+                  "If a lodger setup is treated like a normal tenancy, the paperwork may not match shared occupation inside the landlord's home.",
+              },
+              {
+                label: 'How it helps you',
+                body:
+                  'Gives the landlord a clearer room-let agreement for a shared-home arrangement.',
+              },
+            ],
           },
         ]}
         salesContent={{
-          packIntro:
-            'The Standard pack is built for a straightforward whole-property let. It gives you the main agreement plus the practical setup documents that stop the paperwork from feeling thin or disorganised from day one.',
-          defaultPackItems: standardPackBreakdown.defaultItems,
-          conditionalPackItems: standardPackBreakdown.conditionalItems,
-          conditionalTitle: 'Included when your answers require it',
-          conditionalIntro:
-            'Some pack items depend on how the let is being set up. Where a deposit is taken or a guarantor is used, the pack expands to cover those points properly instead of leaving you to deal with them separately.',
           sampleProof: standardSampleProof ? <GoldenPackProof data={standardSampleProof} /> : undefined,
+          showPackBreakdown: false,
           whyYouNeedThis: {
-            title: 'Why you need more than the main agreement',
+            title: 'Why a standard periodic agreement still needs proper setup',
             intro:
-              'Even a simple tenancy creates risk if the paperwork stops at the agreement itself. Handover, deposit handling, later changes, and everyday setup details are where many avoidable disputes begin.',
+              'Even a straightforward periodic tenancy can become awkward if the agreement is thin, the setup records are missing, or the wording does not match the current England position.',
             cards: [
               {
-                title: 'The tenancy pack needs evidence as well as terms',
+                title: 'The wording needs to match the let',
                 body:
-                  'A signed agreement is essential, but it does not prove what was handed over, what changed later, or whether the key setup steps were handled properly.',
-              },
-              {
-                title: 'Deposit compliance creates its own risk',
-                body:
-                  'If a deposit is taken, the supporting paperwork matters just as much as the main agreement because deposit mistakes can create financial and procedural problems later.',
+                  'A standard periodic tenancy works best when the agreement is clear about rent, occupation, access, responsibilities, and the way the property is actually being let.',
               },
               {
                 title: 'Simple lets still need clean records',
                 body:
-                  'Straightforward tenancies often get the least admin, which is exactly why smaller missing documents become harder to reconstruct when a dispute appears.',
+                  'Straightforward tenancies often get the least admin, which is why smaller missing details become harder to reconstruct when a dispute appears.',
+              },
+              {
+                title: 'Older wording can feel out of step',
+                body:
+                  'Landlords searching for an old-style AST replacement need a current standard periodic agreement, not a document that feels patched together from older assumptions.',
               },
             ],
           },
           howThisHelps: {
             title: 'How this helps you',
             intro:
-              'The Standard pack is designed to make an ordinary let easier to start, easier to evidence, and easier to manage without loading it up with specialist wording it does not need.',
+              'The Standard route is designed to help landlords set up an ordinary England tenancy clearly, without loading it up with specialist wording it does not need.',
             cards: [
               {
-                title: 'It keeps the paperwork practical',
+                title: 'It keeps the agreement proportionate',
                 body:
-                  'The pack covers the day-one paperwork landlords usually need without turning a straightforward tenancy into an over-engineered process.',
+                  'The wording is aimed at a normal whole-property let, so the agreement stays easier to read and use.',
               },
               {
-                title: 'It strengthens your position later',
+                title: 'It gives the landlord a cleaner starting point',
                 body:
-                  'The handover records, checklist, and variation record give you something clear to point back to if the facts are disputed later.',
+                  'The wizard gathers the property, tenant, rent, deposit, and setup details in one flow so the document does not feel pieced together.',
               },
               {
-                title: 'It stays proportionate',
+                title: 'It helps avoid the wrong product',
                 body:
-                  'You get the core England agreement without paying for the extra management detail that belongs in Premium or the specialist products.',
+                  'If the let is student, shared-house, lodger, or needs heavier management wording, the comparison cards point you to the better route.',
               },
             ],
           },
@@ -224,13 +345,13 @@ export default function StandardTenancyAgreementPage() {
           },
           ctaTitle: 'Start the Standard agreement pack',
           ctaBody:
-            'Use this option when the let is straightforward and you want the agreement, the setup checklist, and the supporting records prepared together from the start.',
+            'Use this option when the let is straightforward and you want a standard periodic tenancy agreement prepared for an ordinary whole-property home in England.',
         }}
         faqs={[
           {
             question: 'When should I choose this instead of the Premium assured periodic route?',
             answer:
-              'Choose this option when the let is a straightforward whole-property tenancy in England and you do not need the more detailed management, inspection, handover, and operational drafting included in the Premium assured periodic pack.',
+              'Choose this option when the let is a straightforward whole-property tenancy in England and you do not need the more detailed management, inspection, handover, and operational drafting included in the Premium pack.',
           },
           {
             question: 'Is this the new England tenancy agreement generator for the current rules?',
@@ -245,7 +366,7 @@ export default function StandardTenancyAgreementPage() {
           {
             question: 'What does this assured periodic pack include?',
             answer:
-              'The pack centres on the main agreement and includes the England pre-tenancy checklist, along with the handover records and supporting paperwork landlords usually need around the tenancy.',
+              'The pack centres on the standard periodic tenancy agreement and includes the practical setup paperwork landlords usually need around the tenancy.',
           },
           {
             question: 'Should I use this for a student or HMO let?',
@@ -253,7 +374,7 @@ export default function StandardTenancyAgreementPage() {
               'Usually not. Student and HMO / Shared House lets now have their own England products, so this standard assured periodic option is best for ordinary residential lets that do not need specialist wording.',
           },
         ]}
-        finalCtaBody="Use this standard England tenancy agreement generator when the tenancy is straightforward and the property is being let as an ordinary whole-property home. If you were searching for a Renters' Rights Act tenancy agreement for a simple let, this assured periodic option will usually be the right fit. Compare Premium or the specialist products only when the facts call for something more tailored."
+        finalCtaBody="Use this standard periodic tenancy agreement generator when the tenancy is straightforward and the property is being let as an ordinary whole-property home. Compare Premium or the specialist products only when the facts call for something more tailored."
       />
     </div>
   );

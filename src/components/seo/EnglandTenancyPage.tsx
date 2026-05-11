@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -27,15 +28,23 @@ interface EnglandTenancyRouteCard {
   description: string;
   href: string;
   ctaLabel?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  price?: string;
+  details?: Array<{
+    label: string;
+    body: string;
+  }>;
 }
 
 interface EnglandTenancySalesContent {
-  packIntro: ReactNode;
-  defaultPackItems: ProductSalesBreakdownItem[];
+  packIntro?: ReactNode;
+  defaultPackItems?: ProductSalesBreakdownItem[];
   conditionalPackItems?: ProductSalesBreakdownItem[];
   conditionalTitle?: string;
   conditionalIntro?: ReactNode;
   sampleProof?: ReactNode;
+  showPackBreakdown?: boolean;
   whyYouNeedThis: {
     title: string;
     intro: ReactNode;
@@ -78,6 +87,87 @@ interface EnglandTenancyPageProps {
   salesContent?: EnglandTenancySalesContent;
 }
 
+function RouteComparisonGrid({ routes }: { routes: EnglandTenancyRouteCard[] }) {
+  const hasRichCards = routes.some(
+    (route) => route.imageSrc || route.price || route.details?.length,
+  );
+
+  if (!hasRichCards) {
+    return (
+      <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {routes.map((route) => (
+          <div
+            key={route.title}
+            className="flex h-full flex-col rounded-[1.8rem] border border-[#E5E8F0] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
+          >
+            <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">{route.title}</h3>
+            <p className="mt-3 flex-1 text-base leading-7 text-[#546075]">{route.description}</p>
+            <Link
+              href={route.href}
+              className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
+            >
+              {route.ctaLabel || 'See agreement'}
+            </Link>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+      {routes.map((route) => (
+        <article
+          key={route.title}
+          className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_14px_34px_rgba(24,11,49,0.06)]"
+        >
+          {route.imageSrc ? (
+            <div className="relative h-56 w-full overflow-hidden border-b border-[#E8E1F8]">
+              <Image
+                src={route.imageSrc}
+                alt={route.imageAlt || route.title}
+                fill
+                sizes="(min-width: 1280px) 33vw, (min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+          ) : null}
+          <div className="flex flex-1 flex-col p-6">
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="text-2xl font-semibold tracking-tight text-[#17142B]">
+                {route.title}
+              </h3>
+              {route.price ? (
+                <span className="rounded-full border border-[#D8C8FF] bg-[#F7F1FF] px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#5E3E9A]">
+                  {route.price}
+                </span>
+              ) : null}
+            </div>
+            {route.details?.length ? (
+              <dl className="mt-5 flex-1 space-y-4 text-sm leading-7 text-[#4B5565] md:text-base">
+                {route.details.map((detail) => (
+                  <div key={`${route.title}-${detail.label}`}>
+                    <dt className="font-semibold text-[#17142B]">{detail.label}</dt>
+                    <dd>{detail.body}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : (
+              <p className="mt-5 flex-1 text-base leading-7 text-[#4B5565]">{route.description}</p>
+            )}
+            <Link
+              href={route.href}
+              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#6D28D9] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#5B21B6]"
+            >
+              {route.ctaLabel || 'See agreement'}
+            </Link>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 export function EnglandTenancyPage({
   pagePath,
   title,
@@ -101,6 +191,13 @@ export function EnglandTenancyPage({
   salesContent,
 }: EnglandTenancyPageProps) {
   const isSalesMode = Boolean(salesContent);
+  const shouldShowPackBreakdown =
+    salesContent?.showPackBreakdown !== false &&
+    Boolean(
+      salesContent?.packIntro ||
+        salesContent?.defaultPackItems?.length ||
+        salesContent?.conditionalPackItems?.length,
+    );
 
   return (
     <main className="min-h-screen bg-[#FCFBF8]">
@@ -221,18 +318,21 @@ export function EnglandTenancyPage({
               </section>
             ) : null}
 
+            {shouldShowPackBreakdown ? (
             <section className="mb-12">
               <div className="max-w-3xl">
                 <h2 className="text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
                   What you get
                 </h2>
-                <div className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
-                  {salesContent.packIntro}
-                </div>
+                {salesContent.packIntro ? (
+                  <div className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
+                    {salesContent.packIntro}
+                  </div>
+                ) : null}
               </div>
 
               <div className="mt-8 grid gap-5 lg:grid-cols-2">
-                {salesContent.defaultPackItems.map((item) => (
+                {(salesContent.defaultPackItems ?? []).map((item) => (
                   <article
                     key={item.name}
                     className="rounded-[1.8rem] border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
@@ -303,6 +403,7 @@ export function EnglandTenancyPage({
                 </div>
               ) : null}
             </section>
+            ) : null}
 
             {routeComparison.length ? (
               <section className="mb-12">
@@ -314,27 +415,7 @@ export function EnglandTenancyPage({
                     Use the comparison below if you are still checking whether this is the right agreement before you start generating the pack.
                   </p>
                 </div>
-                <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                  {routeComparison.map((route) => (
-                    <div
-                      key={route.title}
-                      className="flex h-full flex-col rounded-[1.8rem] border border-[#E5E8F0] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
-                    >
-                      <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
-                        {route.title}
-                      </h3>
-                      <p className="mt-3 flex-1 text-base leading-7 text-[#546075]">
-                        {route.description}
-                      </p>
-                      <Link
-                        href={route.href}
-                        className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
-                      >
-                        {route.ctaLabel || 'See agreement'}
-                      </Link>
-                    </div>
-                  ))}
-                </div>
+                <RouteComparisonGrid routes={routeComparison} />
               </section>
             ) : null}
 
@@ -555,27 +636,7 @@ export function EnglandTenancyPage({
                     matters more than old AST wording or a vague idea of what sounds more "premium".
                   </p>
                 </div>
-                <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                  {routeComparison.map((route) => (
-                    <div
-                      key={route.title}
-                      className="flex h-full flex-col rounded-[1.8rem] border border-[#E5E8F0] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)]"
-                    >
-                      <h3 className="text-xl font-semibold tracking-tight text-[#141B2D]">
-                        {route.title}
-                      </h3>
-                      <p className="mt-3 flex-1 text-base leading-7 text-[#546075]">
-                        {route.description}
-                      </p>
-                      <Link
-                        href={route.href}
-                        className="mt-5 inline-flex items-center text-sm font-semibold text-[#4A46C8] transition hover:text-[#2F2BA6]"
-                      >
-                        {route.ctaLabel || 'See agreement'}
-                      </Link>
-                    </div>
-                  ))}
-                </div>
+                <RouteComparisonGrid routes={routeComparison} />
               </section>
             ) : null}
           </>
