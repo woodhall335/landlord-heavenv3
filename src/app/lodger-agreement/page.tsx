@@ -3,15 +3,14 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
-import { buildTenancyPackBreakdown } from '@/lib/marketing/tenancy-pack-breakdowns';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
 const canonicalUrl = getCanonicalUrl('/lodger-agreement');
 const englandHubHref = '/products/ast';
 const lodgerWizardHref = '/wizard?product=england_lodger_agreement&src=lodger_page&topic=tenancy';
-const lodgerPackBreakdown = buildTenancyPackBreakdown('england_lodger_agreement');
 const lodgerSampleProof = getGoldenPackProofData('england_lodger_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
@@ -105,42 +104,10 @@ export default function LodgerAgreementEnglandPage() {
           'the property is a shared house or HMO with sharers but no resident landlord',
           "the case is really a whole-property Standard, Premium, or Student tenancy rather than a room let in the landlord's home",
         ]}
-        routeComparison={[
-          {
-            title: 'England tenancy chooser',
-            description:
-              'If you are not sure whether the arrangement is really a lodger setup, compare it against the full England tenancy-agreement comparison page first.',
-            href: '/products/ast',
-            ctaLabel: 'Compare England options',
-          },
-          {
-            title: 'HMO / Shared House',
-            description:
-              'Choose HMO / Shared House where the main complexity comes from sharers, communal occupation, and house rules rather than a resident landlord living in the property.',
-            href: '/hmo-shared-house-tenancy-agreement',
-            ctaLabel: 'Compare HMO',
-          },
-          {
-            title: 'Premium Tenancy Agreement',
-            description:
-              "Choose Premium when the let is an ordinary residential tenancy that needs fuller wording, not a room-let arrangement in the landlord's own home.",
-            href: '/premium-tenancy-agreement',
-            ctaLabel: 'Compare Premium',
-          },
-          {
-            title: 'Standard Tenancy Agreement',
-            description:
-              'Choose Standard when the tenancy is a straightforward whole-property let and you do not need resident-landlord room-let wording.',
-            href: '/standard-tenancy-agreement',
-            ctaLabel: 'Compare Standard',
-          },
-        ]}
+        routeComparison={englandTenancyRouteComparisonCards}
         salesContent={{
-          packIntro:
-            "The Lodger pack is built for a resident-landlord room let. It gives you the main agreement plus the checklist, house rules, and handover records that matter when someone is living inside the landlord's own home.",
-          defaultPackItems: lodgerPackBreakdown.defaultItems,
-          conditionalPackItems: lodgerPackBreakdown.conditionalItems,
           sampleProof: lodgerSampleProof ? <GoldenPackProof data={lodgerSampleProof} /> : undefined,
+          showPackBreakdown: false,
           whyYouNeedThis: {
             title: 'Why a lodger arrangement needs its own paperwork',
             intro:

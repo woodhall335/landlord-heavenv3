@@ -3,8 +3,8 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
-import { buildTenancyPackBreakdown } from '@/lib/marketing/tenancy-pack-breakdowns';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -12,7 +12,6 @@ const canonicalUrl = getCanonicalUrl('/hmo-shared-house-tenancy-agreement');
 const englandHubHref = '/products/ast';
 const hmoWizardHref =
   '/wizard?product=england_hmo_shared_house_tenancy_agreement&src=hmo_shared_page&topic=tenancy';
-const hmoPackBreakdown = buildTenancyPackBreakdown('england_hmo_shared_house_tenancy_agreement');
 const hmoSampleProof = getGoldenPackProofData('england_hmo_shared_house_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
@@ -108,45 +107,10 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           'the let is a straightforward whole-property tenancy with no real need for communal-area or sharer wording',
           'the main issue is a student household with guarantors, replacement requests, and end-of-term turnover rather than shared-house control itself',
         ]}
-        routeComparison={[
-          {
-            title: 'Premium Tenancy Agreement',
-            description:
-              'Premium is for ordinary residential lets that need more detailed day-to-day drafting, but it is not the default option for HMO or shared-house setups.',
-            href: '/premium-tenancy-agreement',
-            ctaLabel: 'Compare Premium',
-          },
-          {
-            title: 'Student Tenancy Agreement',
-            description:
-              'Choose Student when the specialist issue is student sharers, guarantors, replacement requests, and end-of-term hand-back rather than shared-house management itself.',
-            href: '/student-tenancy-agreement',
-            ctaLabel: 'Compare Student',
-          },
-          {
-            title: 'Standard Tenancy Agreement',
-            description:
-              'Choose Standard when the tenancy is a straightforward whole-property non-shared let and you do not need HMO or sharer-specific wording.',
-            href: '/standard-tenancy-agreement',
-            ctaLabel: 'Compare Standard',
-          },
-          {
-            title: 'Room Let / Lodger',
-            description:
-              'Choose Lodger where the landlord lives in the property and the arrangement is a resident-landlord room let rather than a separate shared-house tenancy.',
-            href: '/lodger-agreement',
-            ctaLabel: 'Compare Lodger',
-          },
-        ]}
+        routeComparison={englandTenancyRouteComparisonCards}
         salesContent={{
-          packIntro:
-              'The HMO / Shared House pack gives you the main agreement plus the rules, handover records, and supporting paperwork that usually make the difference between a shared house that feels organised and one that starts drifting into avoidable disputes.',
-          defaultPackItems: hmoPackBreakdown.defaultItems,
-          conditionalPackItems: hmoPackBreakdown.conditionalItems,
-          conditionalTitle: 'Included when your answers require it',
-          conditionalIntro:
-            'Where the tenancy includes a deposit or guarantor support, the pack adds the extra pack paperwork needed to keep those points properly covered as well.',
           sampleProof: hmoSampleProof ? <GoldenPackProof data={hmoSampleProof} /> : undefined,
+          showPackBreakdown: false,
           whyYouNeedThis: {
             title: 'Why shared houses need fuller paperwork',
             intro:

@@ -3,16 +3,15 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
-import { buildTenancyPackBreakdown } from '@/lib/marketing/tenancy-pack-breakdowns';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
 const canonicalUrl = getCanonicalUrl('/student-tenancy-agreement');
 const englandHubHref = '/products/ast';
 const studentWizardHref =
   '/wizard?product=england_student_tenancy_agreement&src=student_tenancy_page&topic=tenancy';
-const studentPackBreakdown = buildTenancyPackBreakdown('england_student_tenancy_agreement');
 const studentSampleProof = getGoldenPackProofData('england_student_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
@@ -107,45 +106,10 @@ export default function StudentTenancyAgreementPage() {
           'the landlord lives at the property and the arrangement is really a lodger room let',
           'the let is an ordinary non-student whole-property tenancy and Standard or Premium would be more proportionate',
         ]}
-        routeComparison={[
-          {
-            title: 'Premium Tenancy Agreement',
-            description:
-              'Premium is for ordinary residential lets that need fuller operational drafting, but it is no longer the default choice for student households.',
-            href: '/premium-tenancy-agreement',
-            ctaLabel: 'Compare Premium',
-          },
-          {
-            title: 'HMO / Shared House',
-            description:
-              'Choose HMO / Shared House when communal rules, house management, or room-by-room occupation are the main complexity, even if some occupiers are students.',
-            href: '/hmo-shared-house-tenancy-agreement',
-            ctaLabel: 'Compare HMO',
-          },
-          {
-            title: 'Standard Tenancy Agreement',
-            description:
-              'Choose Standard when the tenancy is a straightforward non-student whole-property let and you do not need student-specific wording.',
-            href: '/standard-tenancy-agreement',
-            ctaLabel: 'Compare Standard',
-          },
-          {
-            title: 'England tenancy agreement comparison',
-            description:
-              'Still deciding between Standard, Premium, Student, HMO, or Lodger? Use the main England comparison page to choose the right product.',
-            href: '/products/ast',
-            ctaLabel: 'Compare England options',
-          },
-        ]}
+        routeComparison={englandTenancyRouteComparisonCards}
         salesContent={{
-          packIntro:
-              'The Student pack is built for landlords who need the paperwork to reflect how student lets actually work. It gives you the main agreement plus the schedules and extra supporting paperwork that deal with sharers, guarantors, replacements, and end-of-term hand-back more clearly.',
-          defaultPackItems: studentPackBreakdown.defaultItems,
-          conditionalPackItems: studentPackBreakdown.conditionalItems,
-          conditionalTitle: 'Included when your answers require it',
-          conditionalIntro:
-            'Where the tenancy takes a deposit or relies on a guarantor, the pack expands to include the extra paperwork needed for those risks as well.',
           sampleProof: studentSampleProof ? <GoldenPackProof data={studentSampleProof} /> : undefined,
+          showPackBreakdown: false,
           whyYouNeedThis: {
             title: 'Why student lets need their own pack',
             intro:
