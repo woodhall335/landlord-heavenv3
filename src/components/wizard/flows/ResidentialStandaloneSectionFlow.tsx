@@ -84,6 +84,11 @@ function toTextValue(value: unknown): string {
   return String(value).trim();
 }
 
+function toEditableTextValue(value: unknown): string {
+  if (value === null || value === undefined) return '';
+  return String(value);
+}
+
 function parseLegacyTenantNames(value: unknown): string[] {
   return toTextValue(value)
     .split(',')
@@ -95,7 +100,7 @@ function sanitizeTenantRecord(value: unknown): StandaloneTenantRecord {
   const source = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
 
   return {
-    full_name: toTextValue(source.full_name),
+    full_name: toEditableTextValue(source.full_name),
     email: toTextValue(source.email),
     phone: toTextValue(source.phone),
   };
@@ -185,10 +190,11 @@ function buildTenantArrayFromFacts(
 
   return Array.from({ length: inferredCount }, (_, index) => {
     const existing = existingTenants[index] || EMPTY_TENANT;
+    const existingFullName = toEditableTextValue(existing.full_name);
 
     return {
       full_name:
-        toTextValue(existing.full_name) ||
+        existingFullName ||
         legacyNames[index] ||
         (index === 0 && legacyNames.length === 0 ? toTextValue(facts.tenant_full_name) : ''),
       email: toTextValue(existing.email) || (index === 0 ? toTextValue(facts.tenant_email) : ''),

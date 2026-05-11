@@ -91,6 +91,16 @@ function isSection13ProductSku(value: string | null | undefined): value is 'sect
   return value === 'section13_standard' || value === 'section13_defensive';
 }
 
+function isTenancyPreviewProduct(product: string, caseType?: string): boolean {
+  return (
+    caseType === 'tenancy_agreement' ||
+    product === 'tenancy_agreement' ||
+    product === 'ast_standard' ||
+    product === 'ast_premium' ||
+    isResidentialLettingProductSku(product)
+  );
+}
+
 function ASTCheckoutButton({
   caseId,
   product,
@@ -1015,8 +1025,10 @@ export default function WizardPreviewPage() {
         }
     }
 
-    if (selectedAddOns.length > 0) {
-      const addOnDocuments = selectedAddOns.flatMap((sku) =>
+    const effectiveSelectedAddOns = isTenancyPreviewProduct(product, caseType) ? [] : selectedAddOns;
+
+    if (effectiveSelectedAddOns.length > 0) {
+      const addOnDocuments = effectiveSelectedAddOns.flatMap((sku) =>
         isResidentialLettingProductSku(sku)
           ? getResidentialDocumentList(sku as ResidentialLettingProductSku, {
               englandTenancyPurpose,
@@ -1349,14 +1361,15 @@ export default function WizardPreviewPage() {
   }
 
   // Get documents and product info
-  const documents = getDocuments();
   const product = getProduct();
+  const effectiveSelectedAddOns = isTenancyPreviewProduct(product, caseData?.case_type) ? [] : selectedAddOns;
+  const documents = getDocuments();
   const productMeta = getProductMeta(product);
   const resolvedProductMeta = isResidentialLettingProductSku(product)
     ? getResidentialProductMeta(product as ResidentialLettingProductSku)
     : productMeta;
   const baseProductSku = isValidProductSku(product) ? (product as ProductSku) : null;
-  const addOnProducts = selectedAddOns
+  const addOnProducts = effectiveSelectedAddOns
     .filter((sku): sku is ProductSku => isValidProductSku(sku))
     .map((sku) => PRODUCTS[sku]);
   const selectionTotal =
@@ -1453,7 +1466,7 @@ export default function WizardPreviewPage() {
                     productName={resolvedProductMeta.name}
                     price={selectionPriceDisplay}
                     jurisdiction={caseData.jurisdiction}
-                    addOns={selectedAddOns}
+                    addOns={effectiveSelectedAddOns}
                   />
 
                   {/* Trust Signals */}
@@ -1576,7 +1589,7 @@ export default function WizardPreviewPage() {
           savings={resolvedProductMeta.savings}
           documents={documents}
           features={selectionFeatures}
-          addOns={selectedAddOns}
+          addOns={effectiveSelectedAddOns}
         />
       )}
     </>

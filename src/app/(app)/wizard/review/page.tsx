@@ -85,9 +85,6 @@ import {
   isResidentialLettingProductSku,
   RESIDENTIAL_LETTING_PRODUCTS,
 } from '@/lib/residential-letting/products';
-import {
-  getResidentialUpsellRecommendations,
-} from '@/lib/residential-letting/recommendations';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 import { getResidentialDocumentList } from '@/lib/residential-letting/document-config';
@@ -163,9 +160,6 @@ function ReviewPageInner() {
   const isNoticeOnlyFlow = product === 'notice_only';
   const isTenancyFlow = product === 'tenancy_agreement' || product === 'ast_standard' || product === 'ast_premium' || caseType === 'tenancy_agreement';
   const isResidentialStandaloneFlow = isResidentialLettingProductSku(product);
-  const residentialRecommendations: ReviewAddOnRecommendation[] = isTenancyFlow
-    ? getResidentialUpsellRecommendations(product, tenancyFacts)
-    : [];
   const evictionAddOnRecommendations: ReviewAddOnRecommendation[] =
     !isTenancyFlow &&
     isMoneyClaimAddOnEligible({
@@ -177,7 +171,7 @@ function ReviewPageInner() {
       ? [buildMoneyClaimAddOnRecommendation()]
       : [];
   const reviewRecommendations = isTenancyFlow
-    ? residentialRecommendations
+    ? []
     : evictionAddOnRecommendations;
   const evictionBlockingIssues =
     analysis && !isMoneyClaimFlow
@@ -3383,10 +3377,6 @@ function ResidentialStandaloneReviewContent({
     : [];
   const roomCount = inspectionRooms.length || inventoryRooms.length;
   const uploadCount = inspectionUploads.length || inventoryUploads.length;
-  const totalInventoryItems = inventoryRooms.reduce(
-    (total: number, room: any) => total + (Array.isArray(room.items) ? room.items.length : 0),
-    0
-  );
   const scheduleCount =
     (Array.isArray(facts.amendment_rows) ? facts.amendment_rows.length : 0) +
     (Array.isArray(facts.assignment_apportionment_rows)
@@ -3561,43 +3551,6 @@ function ResidentialStandaloneReviewContent({
     }
   })();
 
-  const fitReasons = (() => {
-    switch (product) {
-      case 'rental_inspection_report':
-        return [
-          `${roomCount} room${roomCount === 1 ? '' : 's'} captured for room-by-room reporting.`,
-          `${uploadCount} evidence upload${uploadCount === 1 ? '' : 's'} ready to be referenced in the appendix.`,
-          `${Array.isArray(facts.follow_up_items) ? facts.follow_up_items.length : 0} follow-up action item${Array.isArray(facts.follow_up_items) && facts.follow_up_items.length === 1 ? '' : 's'} prepared for the report.`,
-        ];
-      case 'inventory_schedule_condition':
-        return [
-          `${roomCount} room${roomCount === 1 ? '' : 's'} captured for the inventory baseline.`,
-          `${totalInventoryItems} item row${totalInventoryItems === 1 ? '' : 's'} prepared across the property.`,
-          `${uploadCount} evidence upload${uploadCount === 1 ? '' : 's'} can be referenced against room notes.`,
-        ];
-      case 'lease_amendment':
-        return [
-          `${Array.isArray(facts.amendment_rows) ? facts.amendment_rows.length : 0} clause amendment row${Array.isArray(facts.amendment_rows) && facts.amendment_rows.length === 1 ? '' : 's'} will render in the amendment matrix.`,
-          `Effective date set for ${formatDate(facts.amendment_effective_date)}.`,
-          'The output preserves the original tenancy and only varies the listed provisions.',
-        ];
-      case 'repayment_plan_agreement':
-        return [
-          `${Array.isArray(facts.repayment_schedule_rows) ? facts.repayment_schedule_rows.length : 0} instalment row${Array.isArray(facts.repayment_schedule_rows) && facts.repayment_schedule_rows.length === 1 ? '' : 's'} will appear in the repayment schedule.`,
-          `Arrears acknowledged at ${formatMoney(facts.arrears_total || facts.arrears_amount)}.`,
-          'Payment method, default wording, and reservation-of-rights language are included in the agreement.',
-        ];
-      case 'renewal_tenancy_agreement':
-        return [
-          `Renewal start date captured as ${formatDate(facts.renewal_start_date)}.`,
-          `${Array.isArray(facts.changed_terms_schedule) ? facts.changed_terms_schedule.length : 0} changed term row${Array.isArray(facts.changed_terms_schedule) && facts.changed_terms_schedule.length === 1 ? '' : 's'} will appear in the change schedule.`,
-          'Compliance notes and suitability warnings are carried into the final document.',
-        ];
-      default:
-        return profile?.reviewHighlights || [];
-    }
-  })().filter(Boolean);
-
   const evidenceSummary = [
     uploadCount > 0 ? `${uploadCount} upload${uploadCount === 1 ? '' : 's'} attached` : '',
     facts.photo_schedule_reference ? `Photo reference: ${facts.photo_schedule_reference}` : '',
@@ -3654,63 +3607,6 @@ function ResidentialStandaloneReviewContent({
           <p className="mt-3 text-sm leading-7 text-amber-900">{profile.cautionBanner.body}</p>
         </Card>
       ) : null}
-
-      <div className="grid gap-6 lg:grid-cols-[1.15fr,0.85fr]">
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Why this fits your answers</h2>
-          <div className="space-y-3">
-            {fitReasons.map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-2xl bg-slate-50 px-4 py-3">
-                <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 text-[#7C3AED]" />
-                <p className="text-sm text-slate-700">{item}</p>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Included sections</h2>
-          <div className="space-y-3">
-            {(profile?.outputSections || [productMeta?.label || 'Document']).map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-2xl bg-[#f7f4ec] px-4 py-3">
-                <RiFileList3Line className="mt-0.5 h-5 w-5 text-slate-900" />
-                <p className="text-sm text-slate-700">{item}</p>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-
-      {documentList.length > 0 && (
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Pack contents</h2>
-          <div className="grid gap-3 md:grid-cols-2">
-            {documentList.map((document) => (
-              <div key={document.id} className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-medium text-slate-900">{document.title}</p>
-                    <p className="mt-1 text-sm text-slate-600">{document.description}</p>
-                  </div>
-                  <span className="whitespace-nowrap rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-                    {document.pages}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-          {profile?.landing.includedHighlights.length ? (
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
-              {profile.landing.includedHighlights.map((feature: string) => (
-                <div key={feature} className="flex items-start gap-3 rounded-2xl bg-slate-50 px-4 py-3">
-                  <RiCheckboxCircleLine className="mt-0.5 h-5 w-5 text-[#7C3AED]" />
-                  <p className="text-sm text-slate-700">{feature}</p>
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </Card>
-      )}
 
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Captured facts</h2>

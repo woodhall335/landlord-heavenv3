@@ -513,6 +513,7 @@ questions:
       - id: tenant_notice_period
         label: "Tenant notice period"
         inputType: select
+        helperText: "The default Renters' Rights Act position is 2 months. You can agree a shorter written notice period, but not a longer one."
         options:
           - "2 months"
           - "1 month"

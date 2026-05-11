@@ -910,7 +910,8 @@ function commonEnglandAssuredTenancyTermsStep(title = 'Tenancy terms'): Standalo
           { value: '6 weeks', label: '6 weeks' },
           { value: '28 days', label: '28 days' },
         ],
-        helpText: 'For an England assured tenancy, the tenant notice period cannot be more than 2 months.',
+        helpText:
+          'The default Renters’ Rights Act position is 2 months. You can agree a shorter written notice period, but not a longer one.',
       },
       {
         id: 'rent_increase_method',
