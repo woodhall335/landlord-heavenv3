@@ -12,7 +12,6 @@ import {
 } from 'react-icons/ri';
 
 import { Button } from '@/components/ui/Button';
-import { DocumentProofShowcase } from '@/components/preview';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
 import { getCaseFacts } from '@/lib/wizard/facts-client';
 import { getSessionTokenHeaders } from '@/lib/session-token';
@@ -39,7 +38,6 @@ import type {
 } from '@/lib/section13/types';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { isSection13ProposalStepComplete } from '@/lib/wizard/flow-completion';
-import { getSection13CheckoutThumbnailUrl } from '@/lib/previews/section13CheckoutPreview';
 
 type SectionId =
   | 'tenancy'
@@ -62,9 +60,21 @@ const STEP_CONFIG: Array<{
 }> = [
   {
     id: 'tenancy',
-    label: 'Tenancy',
-    title: 'Tenancy and property details',
-    description: 'Add the tenancy start date, current rent, property address, and any earlier increase dates you need to rely on.',
+    label: 'Property',
+    title: 'Property and rent basics',
+    description: 'Start with the property, postcode, bedroom count, current rent, and target rent so the market evidence can appear straight away.',
+  },
+  {
+    id: 'comparables',
+    label: 'Market evidence',
+    title: 'Comparable listings and adjustments',
+    description: 'Pull local listings, review the thumbnails, edit the evidence, and adjust the comparables in one place.',
+  },
+  {
+    id: 'proposal',
+    label: 'Notice details',
+    title: 'Tenant and notice details',
+    description: 'Add the tenant names, tenancy dates, service method, and proposed start date for the Form 4A notice.',
   },
   {
     id: 'landlord',
@@ -73,34 +83,10 @@ const STEP_CONFIG: Array<{
     description: 'Add the landlord contact details and any agent serving the notice.',
   },
   {
-    id: 'proposal',
-    label: 'Proposal',
-    title: 'Proposed rent and start date',
-    description: 'Set the new rent, the service date, and the proposed start date with the post-1 May 2026 rules applied.',
-  },
-  {
-    id: 'rent_position',
-    label: 'Rent position',
-    title: 'Supportable rent position',
-    description: 'See early on how supportable the proposed rent looks before you finish the evidence.',
-  },
-  {
-    id: 'comparables',
-    label: 'Comparables',
-    title: 'Comparable listings',
-    description: 'Pull local listings and keep the strongest ones for your report.',
-  },
-  {
     id: 'charges',
     label: 'Charges',
     title: 'Charges included in rent',
     description: 'List only the charges included in the rent, not the ones the tenant pays separately.',
-  },
-  {
-    id: 'adjustments',
-    label: 'Adjustments',
-    title: 'Adjustments and justification',
-    description: 'Apply clear comparable adjustments and add any case-specific explanation you want in the report.',
   },
   {
     id: 'preview_checkout',
@@ -184,6 +170,51 @@ function getComparableFreshnessBadgeClass(assessment: Section13ComparableAssessm
   return 'border-rose-200 bg-rose-50 text-rose-800';
 }
 
+function getMetadataString(metadata: Record<string, unknown> | null | undefined, keys: string[]): string | null {
+  if (!metadata) return null;
+
+  for (const key of keys) {
+    const value = metadata[key];
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+    if (Array.isArray(value)) {
+      const firstString = value.find((item) => typeof item === 'string' && item.trim());
+      if (typeof firstString === 'string') {
+        return firstString.trim();
+      }
+    }
+  }
+
+  return null;
+}
+
+function getComparableThumbnailSource(
+  comparable: Section13Comparable,
+  assessment: Section13ComparableAssessment | null | undefined
+): string | null {
+  return (
+    getMetadataString(comparable.metadata, [
+      'imageUrl',
+      'thumbnailUrl',
+      'image_url',
+      'thumbnail_url',
+      'mainImage',
+      'mainImageUrl',
+      'photoUrl',
+    ]) ||
+    getMetadataString(assessment?.metadata, [
+      'imageUrl',
+      'thumbnailUrl',
+      'image_url',
+      'thumbnail_url',
+      'mainImage',
+      'mainImageUrl',
+      'photoUrl',
+    ])
+  );
+}
+
 function getStepCompleteState(
   stepId: SectionId,
   state: Section13State,
@@ -193,12 +224,12 @@ function getStepCompleteState(
     case 'tenancy':
       return {
         complete:
-          state.tenancy.tenantNames.some((name) => name.trim()) &&
           Boolean(state.tenancy.propertyAddressLine1) &&
           Boolean(state.tenancy.propertyTownCity) &&
           Boolean(state.tenancy.postcodeRaw) &&
-          Boolean(state.tenancy.tenancyStartDate) &&
-          state.tenancy.currentRentAmount != null,
+          state.tenancy.bedrooms != null &&
+          state.tenancy.currentRentAmount != null &&
+          state.proposal.proposedRentAmount != null,
         hasIssue: false,
       };
     case 'landlord':
@@ -211,7 +242,10 @@ function getStepCompleteState(
       };
     case 'proposal':
       return {
-        complete: isSection13ProposalStepComplete(state),
+        complete:
+          state.tenancy.tenantNames.some((name) => name.trim()) &&
+          Boolean(state.tenancy.tenancyStartDate) &&
+          isSection13ProposalStepComplete(state),
         hasIssue: Boolean(state.preview && !state.preview.enteredStartDateValid),
       };
     case 'rent_position':
@@ -401,48 +435,6 @@ export function Section13WizardFlow({
     effectiveState.selectedPlan === 'section13_defensive'
       ? 'Continue to document preview with the Defence Pack'
       : 'Continue to document preview with the Standard Pack';
-  const section13PreviewProofEntries = useMemo(
-    () =>
-      [
-        {
-          id: 'section13-form-4a',
-          title: 'Form 4A notice',
-          description: 'Current first-page proof of the official rent increase notice built from this case.',
-          thumbnailUrl: getSection13CheckoutThumbnailUrl(caseId, 'section13-form-4a') || '',
-          badge: 'Official notice',
-        },
-        {
-          id: 'section13-justification-report',
-          title: 'Justification report',
-          description: 'Current first-page proof of the comparable-evidence report generated from this case.',
-          thumbnailUrl: getSection13CheckoutThumbnailUrl(caseId, 'section13-justification-report') || '',
-          badge: 'Evidence',
-        },
-        {
-          id:
-            activePlan === 'section13_defensive'
-              ? 'section13-tribunal-argument-summary'
-              : 'section13-proof-of-service-record',
-          title:
-            activePlan === 'section13_defensive'
-              ? 'Tribunal argument summary'
-              : 'Proof of service record',
-          description:
-            activePlan === 'section13_defensive'
-              ? 'Current first-page proof of the landlord-side defensive summary in this case.'
-              : 'Current first-page proof of the notice service record in this case.',
-          thumbnailUrl:
-            getSection13CheckoutThumbnailUrl(
-              caseId,
-              activePlan === 'section13_defensive'
-                ? 'section13-tribunal-argument-summary'
-                : 'section13-proof-of-service-record'
-            ) || '',
-          badge: activePlan === 'section13_defensive' ? 'Defensive pack' : 'Service record',
-        },
-      ].filter((entry) => Boolean(entry.thumbnailUrl)),
-    [activePlan, caseId]
-  );
 
   useEffect(() => {
     let cancelled = false;
@@ -1078,62 +1070,12 @@ export function Section13WizardFlow({
       case 'tenancy':
         return (
           <div className="space-y-5">
-            <div className="grid gap-4 md:grid-cols-2">
-              {effectiveState.tenancy.tenantNames.map((tenant, index) => (
-                <div key={`tenant-${index}`} className="flex items-end gap-2">
-                  <div className="flex-1">
-                    {renderTextInput(
-                      index === 0 ? 'Tenant full name' : `Joint tenant ${index + 1}`,
-                      tenant,
-                      (value) =>
-                        updateState((prev) => ({
-                          ...prev,
-                          tenancy: {
-                            ...prev.tenancy,
-                            tenantNames: prev.tenancy.tenantNames.map((name, nameIndex) =>
-                              nameIndex === index ? value : name
-                            ),
-                          },
-                        }))
-                    )}
-                  </div>
-                  {index > 0 ? (
-                    <button
-                      type="button"
-                      className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700"
-                      onClick={() =>
-                        updateState((prev) => ({
-                          ...prev,
-                          tenancy: {
-                            ...prev.tenancy,
-                            tenantNames: prev.tenancy.tenantNames.filter((_, itemIndex) => itemIndex !== index),
-                          },
-                        }))
-                      }
-                    >
-                      Remove
-                    </button>
-                  ) : null}
-                </div>
-              ))}
+            <div className="rounded-[1.5rem] border border-violet-200 bg-violet-50 p-5">
+              <p className="text-sm font-semibold text-violet-950">Start with the market-facing facts</p>
+              <p className="mt-2 text-sm leading-6 text-violet-900">
+                Add the property and rent basics first. The next step uses these details to pull local comparables before you answer the procedural notice questions.
+              </p>
             </div>
-
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-lg border border-dashed border-violet-300 px-3 py-2 text-sm font-medium text-violet-700"
-              onClick={() =>
-                updateState((prev) => ({
-                  ...prev,
-                  tenancy: {
-                    ...prev.tenancy,
-                    tenantNames: [...prev.tenancy.tenantNames, ''],
-                  },
-                }))
-              }
-            >
-              <RiAddLine className="h-4 w-4" />
-              Add joint tenant
-            </button>
 
             <div className="grid gap-4 md:grid-cols-2">
               {renderTextInput('Property address line 1', effectiveState.tenancy.propertyAddressLine1, (value) =>
@@ -1168,12 +1110,6 @@ export function Section13WizardFlow({
                   comparablesMeta: { ...prev.comparablesMeta, bedrooms: value ? Number(value) : null },
                 }))
               , { type: 'number' })}
-              {renderTextInput('Tenancy start date', effectiveState.tenancy.tenancyStartDate, (value) =>
-                updateState((prev) => ({
-                  ...prev,
-                  tenancy: { ...prev.tenancy, tenancyStartDate: value },
-                }))
-              , { type: 'date' })}
               {renderTextInput('Current rent amount', effectiveState.tenancy.currentRentAmount, (value) =>
                 updateState((prev) => ({
                   ...prev,
@@ -1201,18 +1137,12 @@ export function Section13WizardFlow({
                   <option value="monthly">Monthly</option>
                 </select>
               </label>
-              {renderTextInput('Date of last rent increase', effectiveState.tenancy.lastRentIncreaseDate, (value) =>
+              {renderTextInput('Target new rent amount', effectiveState.proposal.proposedRentAmount, (value) =>
                 updateState((prev) => ({
                   ...prev,
-                  tenancy: { ...prev.tenancy, lastRentIncreaseDate: value || null },
+                  proposal: { ...prev.proposal, proposedRentAmount: value ? Number(value) : null },
                 }))
-              , { type: 'date' })}
-              {renderTextInput('First increase after 11 February 2003', effectiveState.tenancy.firstIncreaseAfter2003Date, (value) =>
-                updateState((prev) => ({
-                  ...prev,
-                  tenancy: { ...prev.tenancy, firstIncreaseAfter2003Date: value || null },
-                }))
-              , { type: 'date' })}
+              , { type: 'number', step: '0.01' })}
             </div>
           </div>
         );
@@ -1333,13 +1263,85 @@ export function Section13WizardFlow({
                 This step sets the new rent, the service date, and the proposed start date that carry through the official Form 4A notice and the supporting service record.
               </p>
             </div>
+
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              <p className="text-sm font-semibold text-gray-950">Tenant names for the notice</p>
+              <div className="mt-4 grid gap-4 md:grid-cols-2">
+                {effectiveState.tenancy.tenantNames.map((tenant, index) => (
+                  <div key={`tenant-${index}`} className="flex items-end gap-2">
+                    <div className="flex-1">
+                      {renderTextInput(
+                        index === 0 ? 'Tenant full name' : `Joint tenant ${index + 1}`,
+                        tenant,
+                        (value) =>
+                          updateState((prev) => ({
+                            ...prev,
+                            tenancy: {
+                              ...prev.tenancy,
+                              tenantNames: prev.tenancy.tenantNames.map((name, nameIndex) =>
+                                nameIndex === index ? value : name
+                              ),
+                            },
+                          }))
+                      )}
+                    </div>
+                    {index > 0 ? (
+                      <button
+                        type="button"
+                        className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700"
+                        onClick={() =>
+                          updateState((prev) => ({
+                            ...prev,
+                            tenancy: {
+                              ...prev.tenancy,
+                              tenantNames: prev.tenancy.tenantNames.filter((_, itemIndex) => itemIndex !== index),
+                            },
+                          }))
+                        }
+                      >
+                        Remove
+                      </button>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="mt-4 inline-flex items-center gap-2 rounded-lg border border-dashed border-violet-300 px-3 py-2 text-sm font-medium text-violet-700"
+                onClick={() =>
+                  updateState((prev) => ({
+                    ...prev,
+                    tenancy: {
+                      ...prev.tenancy,
+                      tenantNames: [...prev.tenancy.tenantNames, ''],
+                    },
+                  }))
+                }
+              >
+                <RiAddLine className="h-4 w-4" />
+                Add joint tenant
+              </button>
+            </div>
+
             <div className="grid gap-4 md:grid-cols-2">
-              {renderTextInput('Proposed rent amount', effectiveState.proposal.proposedRentAmount, (value) =>
+              {renderTextInput('Tenancy start date', effectiveState.tenancy.tenancyStartDate, (value) =>
                 updateState((prev) => ({
                   ...prev,
-                  proposal: { ...prev.proposal, proposedRentAmount: value ? Number(value) : null },
+                  tenancy: { ...prev.tenancy, tenancyStartDate: value },
                 }))
-              , { type: 'number', step: '0.01' })}
+              , { type: 'date' })}
+              {renderTextInput('Date of last rent increase', effectiveState.tenancy.lastRentIncreaseDate, (value) =>
+                updateState((prev) => ({
+                  ...prev,
+                  tenancy: { ...prev.tenancy, lastRentIncreaseDate: value || null },
+                }))
+              , { type: 'date' })}
+              {renderTextInput('First increase after 11 February 2003', effectiveState.tenancy.firstIncreaseAfter2003Date, (value) =>
+                updateState((prev) => ({
+                  ...prev,
+                  tenancy: { ...prev.tenancy, firstIncreaseAfter2003Date: value || null },
+                }))
+              , { type: 'date' })}
               {renderTextInput('Notice served date', effectiveState.proposal.serviceDate, (value) =>
                 updateState((prev) => ({
                   ...prev,
@@ -1635,24 +1637,36 @@ export function Section13WizardFlow({
           },
         ];
         const uncategorisedRows = comparableRows.filter((row) => !row.assessment);
+        const marketSearchPostcode =
+          effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
+        const marketSearchBedrooms =
+          effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
 
         return (
           <div className="space-y-6">
             <div className="rounded-2xl border border-gray-200 p-4">
-              <div className="grid gap-4 md:grid-cols-[1fr_140px_auto]">
-                {renderTextInput('Search postcode', effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw, (value) =>
-                  updateState((prev) => ({
-                    ...prev,
-                    comparablesMeta: { ...prev.comparablesMeta, searchPostcodeRaw: value },
-                  }))
-                )}
-                {renderTextInput('Bedrooms', effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms, (value) =>
-                  updateState((prev) => ({
-                    ...prev,
-                    comparablesMeta: { ...prev.comparablesMeta, bedrooms: value ? Number(value) : null },
-                  }))
-                , { type: 'number' })}
-                <div className="flex items-end">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div className="max-w-2xl">
+                  <p className="text-sm font-semibold text-gray-950">Market check for this property</p>
+                  <p className="mt-2 text-sm leading-6 text-gray-700">
+                    We use the postcode and bedroom count from step one, so the landlord does not have to answer the same search questions twice.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-900">
+                      {marketSearchPostcode || 'Postcode missing'}
+                    </span>
+                    <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-900">
+                      {marketSearchBedrooms != null ? `${marketSearchBedrooms} bedrooms` : 'Bedroom count missing'}
+                    </span>
+                    <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-900">
+                      Target rent {formatMoney(effectiveState.proposal.proposedRentAmount)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Button variant="secondary" onClick={() => setCurrentStepIndex(0)}>
+                    Edit property basics
+                  </Button>
                   <Button onClick={() => void handleScrape()} disabled={scrapeLoading}>
                     {scrapeLoading ? (
                       <>
@@ -1750,6 +1764,12 @@ export function Section13WizardFlow({
                 </div>
               ) : null}
 
+              {comparables.length > 0 ? (
+                <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-950">
+                  Review each comparable below. You can edit the rent, link, distance, image, bedrooms, and adjustment reasons directly on the listing card.
+                </div>
+              ) : null}
+
               {comparableGroups.map((group) =>
                 group.items.length > 0 ? (
                   <div key={group.key} className="space-y-3">
@@ -1789,34 +1809,63 @@ export function Section13WizardFlow({
                           </div>
                         </div>
 
-                        <div className="mt-4 grid gap-4 md:grid-cols-2">
-                          {renderTextInput('Address snippet', comparable.addressSnippet, (value) =>
-                            updateComparable(index, { addressSnippet: value })
-                          )}
-                          {renderTextInput('Property type', comparable.propertyType, (value) =>
-                            updateComparable(index, { propertyType: value })
-                          )}
-                          {renderTextInput('Rent (pcm)', comparable.rawRentValue, (value) =>
-                            updateComparable(index, {
-                              rawRentValue: value ? Number(value) : 0,
-                              rawRentFrequency: 'pcm',
-                            })
-                          , { type: 'number', step: '0.01' })}
-                          {renderTextInput('Listing date', comparable.sourceDateValue, (value) =>
-                            updateComparable(index, {
-                              sourceDateValue: value || null,
-                              sourceDateKind: value ? 'published' : comparable.sourceDateKind,
-                            })
-                          , { type: 'date' })}
-                          {renderTextInput('Listing link', comparable.sourceUrl, (value) =>
-                            updateComparable(index, {
-                              sourceUrl: value || null,
-                              source: value ? 'manual_linked' : 'manual_unlinked',
-                            })
-                          )}
-                          {renderTextInput('Distance (miles)', comparable.distanceMiles, (value) =>
-                            updateComparable(index, { distanceMiles: value ? Number(value) : null })
-                          , { type: 'number', step: '0.01' })}
+                        <div className="mt-4 grid gap-4 lg:grid-cols-[180px_minmax(0,1fr)]">
+                          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
+                            {getComparableThumbnailSource(comparable, assessment) ? (
+                              <img
+                                src={getComparableThumbnailSource(comparable, assessment) || ''}
+                                alt={`${comparable.addressSnippet || `Comparable ${index + 1}`} listing thumbnail`}
+                                className="h-44 w-full object-cover"
+                                loading="lazy"
+                                referrerPolicy="no-referrer"
+                              />
+                            ) : (
+                              <div className="flex h-44 w-full items-center justify-center px-4 text-center text-sm text-gray-500">
+                                No listing image saved yet
+                              </div>
+                            )}
+                          </div>
+                          <div className="grid gap-4 md:grid-cols-2">
+                            {renderTextInput('Address snippet', comparable.addressSnippet, (value) =>
+                              updateComparable(index, { addressSnippet: value })
+                            )}
+                            {renderTextInput('Property type', comparable.propertyType, (value) =>
+                              updateComparable(index, { propertyType: value })
+                            )}
+                            {renderTextInput('Bedrooms', comparable.bedrooms, (value) =>
+                              updateComparable(index, { bedrooms: value ? Number(value) : null })
+                            , { type: 'number' })}
+                            {renderTextInput('Rent (pcm)', comparable.rawRentValue, (value) =>
+                              updateComparable(index, {
+                                rawRentValue: value ? Number(value) : 0,
+                                rawRentFrequency: 'pcm',
+                              })
+                            , { type: 'number', step: '0.01' })}
+                            {renderTextInput('Listing date', comparable.sourceDateValue, (value) =>
+                              updateComparable(index, {
+                                sourceDateValue: value || null,
+                                sourceDateKind: value ? 'published' : comparable.sourceDateKind,
+                              })
+                            , { type: 'date' })}
+                            {renderTextInput('Listing link', comparable.sourceUrl, (value) =>
+                              updateComparable(index, {
+                                sourceUrl: value || null,
+                                source: value ? 'manual_linked' : 'manual_unlinked',
+                              })
+                            )}
+                            {renderTextInput('Thumbnail / image URL', getComparableThumbnailSource(comparable, assessment) || '', (value) =>
+                              updateComparable(index, {
+                                metadata: {
+                                  ...(comparable.metadata || {}),
+                                  imageUrl: value || null,
+                                  thumbnailUrl: value || null,
+                                },
+                              })
+                            )}
+                            {renderTextInput('Distance (miles)', comparable.distanceMiles, (value) =>
+                              updateComparable(index, { distanceMiles: value ? Number(value) : null })
+                            , { type: 'number', step: '0.01' })}
+                          </div>
                         </div>
 
                         <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -1858,6 +1907,41 @@ export function Section13WizardFlow({
                           </p>
                         </div>
 
+                        <div className="mt-4 rounded-2xl border border-violet-100 bg-violet-50/60 p-4">
+                          <div className="flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-violet-950">Adjust this comparable</p>
+                              <p className="mt-1 text-sm text-violet-900/80">
+                                Apply simple monthly deltas where the listing differs from your property.
+                              </p>
+                            </div>
+                            <p className="text-sm font-semibold text-violet-950">
+                              Adjusted rent {formatMoney(comparable.adjustedMonthlyEquivalent)}
+                            </p>
+                          </div>
+                          <div className="mt-4 grid gap-3">
+                            {(['location', 'condition', 'amenities'] as const).map((category) => {
+                              const adjustment = comparable.adjustments.find((item) => item.category === category);
+                              return (
+                                <div
+                                  key={category}
+                                  className="grid gap-3 rounded-xl border border-violet-100 bg-white p-3 md:grid-cols-[140px_150px_1fr]"
+                                >
+                                  <div className="text-sm font-medium capitalize text-gray-900">{category}</div>
+                                  {renderTextInput('Monthly delta', adjustment?.normalizedMonthlyDelta, (value) =>
+                                    upsertAdjustment(index, category, {
+                                      normalizedMonthlyDelta: value ? Number(value) : 0,
+                                    })
+                                  , { type: 'number', step: '0.01' })}
+                                  {renderTextInput('Reason', adjustment?.reason, (value) =>
+                                    upsertAdjustment(index, category, { reason: value })
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
                         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-700">
                           <span>Monthly equivalent: {formatMoney(comparable.monthlyEquivalent)}</span>
                           <span>Adjusted: {formatMoney(comparable.adjustedMonthlyEquivalent)}</span>
@@ -1883,6 +1967,27 @@ export function Section13WizardFlow({
                   {uncategorisedRows.length} comparable listing{uncategorisedRows.length === 1 ? '' : 's'} still need classification. Re-run the local market check or adjust the details above.
                 </div>
               ) : null}
+
+              <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                <label className="block space-y-1">
+                  <span className="text-sm font-medium text-gray-800">Manual justification notes</span>
+                  <textarea
+                    value={effectiveState.adjustments.manualJustification || ''}
+                    onChange={(event) =>
+                      updateState((prev) => ({
+                        ...prev,
+                        adjustments: {
+                          ...prev.adjustments,
+                          manualJustification: event.target.value,
+                        },
+                      }))
+                    }
+                    rows={5}
+                    className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                    placeholder="Add property-specific context you want preserved in the report."
+                  />
+                </label>
+              </div>
             </div>
           </div>
         );
@@ -2047,14 +2152,6 @@ export function Section13WizardFlow({
                 </div>
               ) : null}
             </div>
-
-            {section13PreviewProofEntries.length > 0 ? (
-              <DocumentProofShowcase
-                title="Actual draft proof for this case"
-                description="These first-page previews are generated from your current Section 13 answers, so you can sense-check the live notice and support documents before checkout."
-                entries={section13PreviewProofEntries}
-              />
-            ) : null}
 
             <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
               The tenant can apply to the tribunal up to the day before the proposed start date. The tribunal can set a lower rent, but not higher than the rent you propose.
