@@ -59,6 +59,8 @@ interface EnglandTenancySalesContent {
     title: string;
     intro: ReactNode;
     steps: ProductSalesStep[];
+    imageSrc?: string;
+    imageAlt?: string;
   };
   ctaTitle: string;
   ctaBody: ReactNode;
@@ -476,18 +478,34 @@ export function EnglandTenancyPage({
                   {salesContent.howItWorks.intro}
                 </div>
               </div>
-              <div className="mt-8 grid gap-5 md:grid-cols-3">
-                {salesContent.howItWorks.steps.map((step) => (
-                  <article key={step.step} className="rounded-[1.8rem] border border-[#E8E1D7] bg-white p-6">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
-                      {step.step}
-                    </p>
-                    <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#141B2D]">
-                      {step.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{step.body}</p>
-                  </article>
-                ))}
+              <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-stretch">
+                <div className="space-y-5">
+                  {salesContent.howItWorks.steps.map((step) => (
+                    <article
+                      key={step.step}
+                      className="rounded-[1.8rem] border border-[#E8E1D7] bg-white p-6"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7C3AED]">
+                        {step.step}
+                      </p>
+                      <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#141B2D]">
+                        {step.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">
+                        {step.body}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+                <div className="relative min-h-[360px] overflow-hidden rounded-[1.8rem] border border-[#E8E1D7] bg-white shadow-[0_16px_38px_rgba(31,41,55,0.08)] md:min-h-[440px] lg:min-h-full">
+                  <Image
+                    src={salesContent.howItWorks.imageSrc ?? '/tenancy-how-it-works.webp'}
+                    alt={salesContent.howItWorks.imageAlt ?? 'Tenancy agreement workflow preview'}
+                    fill
+                    sizes="(min-width: 1024px) 66vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
               </div>
             </section>
           </>

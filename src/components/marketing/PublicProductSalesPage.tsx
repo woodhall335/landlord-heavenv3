@@ -728,46 +728,48 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
       <section id="how-it-works" className="scroll-mt-24 bg-[#F7F1FF] py-12 md:py-16">
         <Container>
           <div className="mx-auto max-w-6xl rounded-[2.25rem] border border-[#E8E1F8] bg-white p-6 shadow-[0_18px_46px_rgba(24,11,49,0.07)] md:p-10">
-            <div className={hasHowItWorksImage ? 'grid gap-8 lg:grid-cols-[0.56fr_0.44fr] lg:items-stretch' : ''}>
-              <div>
-                <div className="max-w-3xl">
-                  <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
-                    {howItWorks.title}
-                  </h2>
-                  <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
-                    {howItWorks.intro}
-                  </div>
-                </div>
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-bold tracking-tight text-[#17142B] md:text-4xl">
+                {howItWorks.title}
+              </h2>
+              <div className="mt-4 text-base leading-8 text-[#4B5565] md:text-lg">
+                {howItWorks.intro}
+              </div>
+            </div>
 
-                <div className={hasHowItWorksImage ? 'mt-8 space-y-5' : 'mt-8 grid gap-5 md:grid-cols-3'}>
-                  {howItWorks.steps.map((step) => (
-                    <article
-                      key={step.step}
-                      className="rounded-[1.8rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6"
-                    >
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6D28D9]">
-                        {step.step}
-                      </p>
-                      <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#17142B]">
-                        {step.title}
-                      </h3>
-                      <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">{step.body}</p>
-                    </article>
-                  ))}
-                </div>
+            <div
+              className={
+                hasHowItWorksImage
+                  ? 'mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-stretch'
+                  : 'mt-8 grid gap-5 md:grid-cols-3'
+              }
+            >
+              <div className={hasHowItWorksImage ? 'space-y-5' : 'contents'}>
+                {howItWorks.steps.map((step) => (
+                  <article
+                    key={step.step}
+                    className="rounded-[1.8rem] border border-[#E8E1F8] bg-[#FCFAFF] p-6"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6D28D9]">
+                      {step.step}
+                    </p>
+                    <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#17142B]">
+                      {step.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-[#4B5565] md:text-base">{step.body}</p>
+                  </article>
+                ))}
               </div>
 
               {howItWorks.imageSrc ? (
-                <div className="min-w-0 lg:self-stretch">
-                  <div className="relative h-72 w-full overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] lg:h-full lg:min-h-full">
-                    <Image
-                      src={howItWorks.imageSrc}
-                      alt={howItWorks.imageAlt ?? 'How it works illustration'}
-                      fill
-                      sizes="(min-width: 1024px) 34vw, 100vw"
-                      className="object-cover object-top"
-                    />
-                  </div>
+                <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-[#E8E1F8] bg-white shadow-[0_18px_46px_rgba(24,11,49,0.08)] md:min-h-[440px] lg:min-h-full">
+                  <Image
+                    src={howItWorks.imageSrc}
+                    alt={howItWorks.imageAlt ?? 'How it works illustration'}
+                    fill
+                    sizes="(min-width: 1024px) 66vw, 100vw"
+                    className="object-cover object-top"
+                  />
                 </div>
               ) : null}
             </div>

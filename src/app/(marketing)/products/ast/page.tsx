@@ -119,7 +119,7 @@ const routeCards: ProductSalesRouteCard[] = [
   },
   {
     name: 'Lodger Agreement',
-    imageSrc: '/images/wizard-section-13-rent-increase.webp',
+    imageSrc: '/images/wizard-lodger-agreement.webp',
     imageAlt: 'Lodger agreement preview',
     priceLabel:
       tenancyProducts.find((product) => product.key === 'england_lodger_agreement')?.priceLabel,
@@ -307,6 +307,8 @@ export default function EnglandTenancyHubPage() {
       title: 'How it works',
       intro:
         'Compare the options first, then open the product page that matches the tenancy.',
+      imageSrc: '/tenancy-how-it-works.webp',
+      imageAlt: 'Landlord tenancy agreement workflow preview',
       steps: [
         {
           step: 'Step 01',
