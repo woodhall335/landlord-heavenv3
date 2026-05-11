@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 describe('Next config indexability rules', () => {
-  it('adds X-Robots-Tag headers to crawl-waste asset URLs', async () => {
+  it('adds X-Robots-Tag headers to official form PDFs only', async () => {
     const nextConfig = (await import('../../../../next.config.mjs')).default;
     const headers = await nextConfig.headers();
 
@@ -13,11 +13,12 @@ describe('Next config indexability rules', () => {
             { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
           ]),
         }),
+      ])
+    );
+    expect(headers).not.toEqual(
+      expect.arrayContaining([
         expect.objectContaining({
           source: '/favicon.ico',
-          headers: expect.arrayContaining([
-            { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
-          ]),
         }),
       ])
     );

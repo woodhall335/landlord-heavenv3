@@ -51,12 +51,6 @@ const nextConfig = {
           { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
         ],
       },
-      {
-        source: '/favicon.ico',
-        headers: [
-          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
-        ],
-      },
     ];
   },
   async redirects() {
