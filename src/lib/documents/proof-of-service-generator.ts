@@ -10,8 +10,8 @@
  * - Notice type
  * - Served date and expiry date (if known from wizard)
  *
- * The following fields are NEVER pre-filled:
- * - Service method (checkboxes) - landlord MUST select
+ * The following fields are generally left for the landlord to confirm:
+ * - Service method can be pre-ticked only when recorded by the calling workflow
  * - Time of service - landlord MUST enter
  * - Deemed service date - landlord MUST calculate
  * - Tracking number - landlord MUST enter
@@ -41,6 +41,7 @@ export interface ProofOfServiceData {
 
   // Optional footer branding override for product-specific packs
   footer_branding?: string;
+  record_context?: 'court' | 'section13';
 
   // NOT pre-filled (landlord must complete)
   // time_of_service - text field, left empty
@@ -88,8 +89,8 @@ function formatUKShortDate(dateStr: string | undefined): string {
  * Creates a professional certificate of service with fillable fields
  * for recording how legal documents were served.
  *
- * CRITICAL: Only pre-fills safe fields. Service method, time, and tracking
- * number are NEVER pre-filled to avoid fabricating evidence.
+ * CRITICAL: Only pre-fills safe fields. Time and tracking number are never
+ * pre-filled. Service method is only pre-ticked when supplied by the workflow.
  */
 export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): Promise<Uint8Array> {
   // Create a new PDF document
@@ -114,6 +115,7 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   // Layout constants
   const margin = 50;
   let y = height - margin;
+  const isSection13Record = data.record_context === 'section13';
 
   // Helper functions
   // Use toWinAnsiSafeText to sanitize Unicode characters for WinAnsi encoding
@@ -141,9 +143,18 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
     });
     y -= scaled.height + 28;
   }
-  drawText('CERTIFICATE OF SERVICE', margin, y, helveticaBold, 18);
+  drawText(isSection13Record ? 'SECTION 13 SERVICE RECORD' : 'CERTIFICATE OF SERVICE', margin, y, helveticaBold, 18);
   y -= 10;
-  drawText('(Proof of Service - support record only, not a prescribed court form)', margin, y, helvetica, 12, gray);
+  drawText(
+    isSection13Record
+      ? '(Service evidence support record for the Form 4A notice)'
+      : '(Proof of Service - support record only, not a prescribed court form)',
+    margin,
+    y,
+    helvetica,
+    12,
+    gray
+  );
   y -= 30;
 
   // Header line
@@ -155,9 +166,25 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   const warningTop = y;
   page.drawRectangle({ x: margin, y: warningTop - warningBoxHeight, width: width - margin * 2, height: warningBoxHeight, color: warningYellow, borderColor: warningBorder, borderWidth: 1.5 });
   y -= 10;
-  drawText('IMPORTANT: This is a support record, not an official prescribed form', margin + 10, y, helveticaBold, 10);
+  drawText(
+    isSection13Record
+      ? 'IMPORTANT: This is a support record, not an official prescribed tribunal form'
+      : 'IMPORTANT: This is a support record, not an official prescribed form',
+    margin + 10,
+    y,
+    helveticaBold,
+    10
+  );
   y -= 16;
-  drawText('Complete the service method, actual service time, signature, and date after service.', margin + 10, y, helvetica, 9);
+  drawText(
+    isSection13Record
+      ? 'Review the recorded method and date, then complete the time, signature, and confirmation after service.'
+      : 'Complete the service method, actual service time, signature, and date after service.',
+    margin + 10,
+    y,
+    helvetica,
+    9
+  );
   y = warningTop - warningBoxHeight - 18;
 
   // === SECTION 1: PARTIES ===
@@ -167,16 +194,16 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   // Create form for interactive fields
   const form = pdfDoc.getForm();
 
-  // Landlord/Claimant field (SAFE TO PRE-FILL)
-  drawText('Landlord/Claimant:', margin, y, helvetica, 10);
+  // Landlord field (SAFE TO PRE-FILL)
+  drawText(isSection13Record ? 'Landlord:' : 'Landlord/Claimant:', margin, y, helvetica, 10);
   const landlordField = form.createTextField('landlord_name');
   landlordField.addToPage(page, { x: margin + 115, y: y - 4, width: width - margin * 2 - 115, height: 18 });
   setFieldTextSize(landlordField);
   if (data.landlord_name) landlordField.setText(data.landlord_name);
   y -= 26;
 
-  // Tenant/Defendant field (SAFE TO PRE-FILL)
-  drawText('Tenant/Defendant:', margin, y, helvetica, 10);
+  // Tenant field (SAFE TO PRE-FILL)
+  drawText(isSection13Record ? 'Tenant(s):' : 'Tenant/Defendant:', margin, y, helvetica, 10);
   const tenantField = form.createTextField('tenant_name');
   tenantField.addToPage(page, { x: margin + 115, y: y - 4, width: width - margin * 2 - 115, height: 18 });
   setFieldTextSize(tenantField);
@@ -213,7 +240,14 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   // === SECTION 3: SERVICE DETAILS (MUST BE COMPLETED BY LANDLORD) ===
   y -= 5;
   drawText('3. SERVICE DETAILS', margin, y, helveticaBold, sectionHeadingSize);
-  drawText('(You must complete this section)', margin + 130, y, helvetica, 9, gray);
+  drawText(
+    isSection13Record ? '(Check the recorded details before relying on them)' : '(You must complete this section)',
+    margin + 130,
+    y,
+    helvetica,
+    9,
+    gray
+  );
   y -= 22;
 
   // Date of service (SAFE TO PRE-FILL if known)
@@ -232,9 +266,16 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   drawText('(e.g., 10:30 AM)', margin + 225, y, helvetica, 8, gray);
   y -= 26;
 
-  // Method of service - CHECKBOXES NEVER PRE-CHECKED
+  // Method of service
   drawText('Method of Service:', margin, y, helveticaBold, 10);
-  drawText('(Tick ONE box only)', margin + 115, y, helvetica, 9, gray);
+  drawText(
+    isSection13Record ? '(recorded from the wizard; amend if needed)' : '(Tick ONE box only)',
+    margin + 115,
+    y,
+    helvetica,
+    9,
+    gray
+  );
   y -= 18;
 
   // Checkboxes for service methods
@@ -296,11 +337,17 @@ export async function generateProofOfServicePDF(data: ProofOfServiceData = {}): 
   y -= 20;
 
   // Declaration text
-  const declarationText = [
-    'I declare that the information given in this certificate is true to the best of my',
-    'knowledge and belief. I understand that if I make a false statement I may be',
-    'liable for prosecution and that this certificate may be rejected by the court.',
-  ];
+  const declarationText = isSection13Record
+    ? [
+        'I confirm that this record reflects how the Form 4A notice was served, to the best of my',
+        'knowledge and belief. I understand that unclear or inaccurate service evidence may weaken',
+        'the landlord position if the tenant refers the proposed rent to the tribunal.',
+      ]
+    : [
+        'I declare that the information given in this certificate is true to the best of my',
+        'knowledge and belief. I understand that if I make a false statement I may be',
+        'liable for prosecution and that this certificate may be rejected by the court.',
+      ];
 
   for (const line of declarationText) {
     drawText(line, margin, y, helvetica, 9);

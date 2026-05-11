@@ -2,7 +2,7 @@ Tribunal Bundle Cover Sheet
 Pack: Section 13 Defensive Pack
 Property: 10 Sample Road, Leeds, LS1 1AA
 Tenant(s): Alex Tenant, Jordan Tenant
-Prepared on: 10 May 2026
+Prepared on: 11 May 2026
 Rules version: england_assured_section13_2026-05-01
 Bundle purpose
 Prepared for any tenant challenge to the proposed rent under section 13 of the Housing Act 1988.
@@ -599,13 +599,14 @@ Source date (published): 15 March 2026
 Adjustment reason: No adjustment applied
 Use / exclusion reason: Included because it is a close like-for-like market match.
 Final checks before service or filing
-The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
-tribunal can set a lower rent, but not higher than the rent proposed in the notice.
 Landlord Heaven | Comparable analysis and justification Page 6 of 7
 
 -- 19 of 34 --
 
 Rent Increase Justification Report
+The tenant can refer the proposed rent to the tribunal up to the day before the proposed start date. The
+tribunal will determine the open-market rent, which may be higher or lower than the figure proposed, but the
+tenant will not be required to pay more than the amount first proposed in Form 4A.
 Check that Form 4A is the current prescribed notice and that the completed notice matches the final figures in
 the report.
 Confirm that at least two months notice is given, that the proposed start date aligns with the tenancy period,

@@ -1,17 +1,17 @@
-CERTIFICATE OF SERVICE
-(Proof of Service - support record only, not a prescribed court form)
-IMPORTANT: This is a support record, not an official prescribed form
-Complete the service method, actual service time, signature, and date after service.
+SECTION 13 SERVICE RECORD
+(Service evidence support record for the Form 4A notice)
+IMPORTANT: This is a support record, not an official prescribed tribunal form
+Review the recorded method and date, then complete the time, signature, and confirmation after service.
 1. PARTIES
-Landlord/Claimant:
-Tenant/Defendant:
+Landlord:
+Tenant(s):
 Property Address:
 2. DOCUMENT SERVED
 Notice Expiry Date: 01/06/2026
-3. SERVICE DETAILS (You must complete this section)
+3. SERVICE DETAILS (Check the recorded details before relying on them)
 Date of Service:
 Time of Service: (e.g., 10:30 AM)
-Method of Service: (Tick ONE box only)
+Method of Service: (recorded from the wizard; amend if needed)
 Personal delivery (handed directly to tenant)
 Through the letterbox at the property
 By first class post (add 2 working days for deemed service)
@@ -20,9 +20,9 @@ By email (only if permitted by tenancy agreement)
 Other method (specify below)
 Tracking Number: (if sent by recorded delivery)
 4. DECLARATION
-I declare that the information given in this certificate is true to the best of my
-knowledge and belief. I understand that if I make a false statement I may be
-liable for prosecution and that this certificate may be rejected by the court.
+I confirm that this record reflects how the Form 4A notice was served, to the best of my
+knowledge and belief. I understand that unclear or inaccurate service evidence may weaken
+the landlord position if the tenant refers the proposed rent to the tribunal.
 Name of person who served:
 Signature:
 Date signed:

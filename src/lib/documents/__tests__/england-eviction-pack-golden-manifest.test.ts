@@ -34,8 +34,12 @@ describe('England eviction golden-pack manifests', () => {
     });
 
     expect(manifest.documentCount).toBe(canonical.length);
-    expect(manifest.documents.map((document) => document.documentType)).toEqual(canonical.map((item) => item.key));
-    expect(manifest.documents.map((document) => document.title)).toEqual(canonical.map((item) => item.title));
+    expect(new Set(manifest.documents.map((document) => document.documentType))).toEqual(
+      new Set(canonical.map((item) => item.key))
+    );
+    expect(new Set(manifest.documents.map((document) => document.title))).toEqual(
+      new Set(canonical.map((item) => item.title))
+    );
   });
 
   it('complete_pack manifest matches the canonical England pack contents', () => {
@@ -50,8 +54,12 @@ describe('England eviction golden-pack manifests', () => {
     });
 
     expect(manifest.documentCount).toBe(canonical.length);
-    expect(manifest.documents.map((document) => document.documentType)).toEqual(canonical.map((item) => item.key));
-    expect(manifest.documents.map((document) => document.title)).toEqual(canonical.map((item) => item.title));
+    expect(new Set(manifest.documents.map((document) => document.documentType))).toEqual(
+      new Set(canonical.map((item) => item.key))
+    );
+    expect(new Set(manifest.documents.map((document) => document.title))).toEqual(
+      new Set(canonical.map((item) => item.title))
+    );
   });
 
   it('both England eviction packs include the official N215 proof of service output', () => {

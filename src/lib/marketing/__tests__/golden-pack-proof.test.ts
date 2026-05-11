@@ -23,9 +23,10 @@ describe('getGoldenPackProofData', () => {
     const data = getGoldenPackProofData('notice_only');
 
     expect(data).not.toBeNull();
-    expect(data?.documentCount).toBe(6);
-    expect(data?.featuredEntries).toHaveLength(6);
-    expect(data?.featuredEntries[0]?.title).toMatch(/Form 3A notice/i);
+    expect(data?.documentCount).toBe(8);
+    expect(data?.featuredEntries).toHaveLength(8);
+    expect(data?.featuredEntries[0]?.title).toMatch(/Case Summary/i);
+    expect(data?.featuredEntries.map((entry) => entry.title)).toContain('Form 3A notice');
     expect(data?.featuredEntries.map((entry) => entry.title)).toContain(
       'Rent Schedule / Arrears Statement'
     );
@@ -42,7 +43,8 @@ describe('getGoldenPackProofData', () => {
 
     expect(data).not.toBeNull();
     expect(data?.documentCount).toBeGreaterThanOrEqual(10);
-    expect(data?.featuredEntries[0]?.title).toMatch(/Form 3A notice/i);
+    expect(data?.featuredEntries[0]?.title).toMatch(/Case Summary/i);
+    expect(data?.featuredEntries.map((entry) => entry.title)).toContain('Form 3A notice');
     expect(data?.featuredEntries.some((entry) => Boolean(entry.embedHref))).toBe(true);
   });
 

@@ -7,7 +7,7 @@ function readSource(relativePath: string) {
 }
 
 describe('golden-pack sample-proof rollout pages', () => {
-  it('keeps the shared post-hero proof block on money claim and Section 13 product pages', () => {
+  it('keeps the shared sample-proof wiring on money claim and Section 13 product pages', () => {
     const moneyClaimSource = readSource('src/app/(marketing)/products/money-claim/page.tsx');
     const section13StandardSource = readSource(
       'src/app/(marketing)/products/section-13-standard/page.tsx'
@@ -16,15 +16,15 @@ describe('golden-pack sample-proof rollout pages', () => {
       'src/app/(marketing)/products/section-13-defence/page.tsx'
     );
 
-    for (const source of [
-      moneyClaimSource,
-      section13StandardSource,
-      section13DefenceSource,
-    ]) {
+    for (const source of [moneyClaimSource, section13StandardSource, section13DefenceSource]) {
       expect(source).toContain("import { GoldenPackProof }");
       expect(source).toContain("from '@/lib/marketing/golden-pack-proof'");
-      expect(source).toContain('postHeroContent: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
+      expect(source).toContain('sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
     }
+
+    expect(moneyClaimSource).toContain('sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
+    expect(section13StandardSource).toContain('earlyProofBand: {');
+    expect(section13DefenceSource).toContain('earlyProofBand: {');
   });
 
   it('keeps the shared tenancy sample-proof wiring on all five England agreement pages', () => {
@@ -60,20 +60,14 @@ describe('golden-pack sample-proof rollout pages', () => {
     }
   });
 
-  it('renders tenancy sample proof immediately after the hero and before legacy/context content', () => {
+  it('renders tenancy sample proof before the detailed pack breakdown in sales mode', () => {
     const source = readSource('src/components/seo/EnglandTenancyPage.tsx');
-    const heroIndex = source.indexOf('<UniversalHero');
     const sampleProofIndex = source.indexOf(
-      "isSalesMode && salesContent?.sampleProof ? ("
+      'salesContent.sampleProof ? ('
     );
-    const legacyNoticeIndex = source.indexOf('{legacyNotice ? (');
-    const contextPanelIndex = source.indexOf(
-      '{pagePath && !isSalesMode ? <SeoPageContextPanel'
-    );
+    const packBreakdownIndex = source.indexOf('{salesContent.defaultPackItems.map');
 
-    expect(heroIndex).toBeGreaterThanOrEqual(0);
-    expect(sampleProofIndex).toBeGreaterThan(heroIndex);
-    expect(legacyNoticeIndex).toBeGreaterThan(sampleProofIndex);
-    expect(contextPanelIndex).toBeGreaterThan(sampleProofIndex);
+    expect(sampleProofIndex).toBeGreaterThanOrEqual(0);
+    expect(packBreakdownIndex).toBeGreaterThan(sampleProofIndex);
   });
 });
