@@ -125,9 +125,10 @@ export function mapArrearsItemToEntry(item: ArrearsItem, rentDueDay?: number | n
   const startFormatted = formatUkLegalDate(item.period_start) || item.period_start;
   const endFormatted = formatUkLegalDate(item.period_end) || item.period_end;
 
-  // Compute the actual due date based on rent_due_day within the period
-  let dueDate = item.period_end; // fallback to period_end if no rent_due_day
-  if (rentDueDay && rentDueDay >= 1 && rentDueDay <= 31) {
+  // Compute the actual due date based on rent_due_day within the period.
+  // For a first partial period, never show a due date before the tenancy starts.
+  let dueDate = typeof (item as any).due_date === 'string' ? (item as any).due_date : item.period_end;
+  if (!(item as any).due_date && rentDueDay && rentDueDay >= 1 && rentDueDay <= 31) {
     try {
       // Use the period_start's month/year and apply the rent_due_day
       const periodStart = new Date(item.period_start + 'T00:00:00.000Z');
@@ -137,7 +138,7 @@ export function mapArrearsItemToEntry(item: ArrearsItem, rentDueDay?: number | n
       const lastDayOfMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
       const actualDay = Math.min(rentDueDay, lastDayOfMonth);
       const dueDateObj = new Date(Date.UTC(year, month, actualDay));
-      dueDate = dueDateObj.toISOString().split('T')[0];
+      dueDate = (dueDateObj < periodStart ? periodStart : dueDateObj).toISOString().split('T')[0];
     } catch {
       // Keep fallback on error
     }

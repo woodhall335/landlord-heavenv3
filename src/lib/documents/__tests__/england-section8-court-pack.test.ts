@@ -71,7 +71,7 @@ describe('England Section 8 court-pack calculation', () => {
     expect(calculation.ground8Threshold).toBe(3000);
     expect(calculation.ground8Status).toBe('AT');
     expect(calculation.dailyRentRate).toBeCloseTo(32.88, 2);
-    expect(calculation.q4aText).toContain('Schedule of Arrears (Exhibit DM1)');
+    expect(calculation.q4aText).toContain('Schedule of Arrears (Exhibit TM1)');
     expect(calculation.q5Text).toContain('Form 3A notice seeking possession was served');
     expect(calculation.validationSummary.deemed_service_date).toBe('2026-05-05');
     expect(calculation.validationSummary.notice_expiry_date).toBe('2026-06-02');

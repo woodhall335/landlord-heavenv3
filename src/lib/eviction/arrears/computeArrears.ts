@@ -31,6 +31,38 @@ export interface ComputeEvictionArrearsParams {
 
 const roundToPennies = (value: number) => Math.round(value * 100) / 100;
 
+function alignItemsWithSchedule(
+  items: ArrearsItem[],
+  schedule: CanonicalArrearsResult['schedule']
+): ArrearsItem[] {
+  if (items.length === 0 || schedule.length === 0) {
+    return items;
+  }
+
+  return items.map((item, index) => {
+    const entry = schedule[index];
+    if (!entry) {
+      return item;
+    }
+
+    const rentDue = roundToPennies(Number(entry.amount_due) || 0);
+    const rentPaid = roundToPennies(Number(entry.amount_paid) || 0);
+    const amountOwed = roundToPennies(
+      Number.isFinite(Number(entry.arrears)) ? Number(entry.arrears) : rentDue - rentPaid
+    );
+    const rentDueChanged = Math.abs(rentDue - Number(item.rent_due || 0)) > 0.005;
+
+    return {
+      ...item,
+      rent_due: rentDue,
+      rent_paid: rentPaid,
+      amount_owed: amountOwed,
+      is_pro_rated: item.is_pro_rated || (rentDueChanged && index === schedule.length - 1) || undefined,
+      notes: entry.notes || item.notes,
+    };
+  });
+}
+
 /**
  * Pro-rate partial periods in an arrears schedule.
  *
@@ -94,7 +126,7 @@ export function proRatePartialPeriods(
     const month = months[match[2].toLowerCase()];
     const year = parseInt(match[3], 10);
     if (month === undefined) return null;
-    return new Date(year, month, day);
+    return new Date(Date.UTC(year, month, day));
   };
 
   const periodStart = parseUKDate(periodStartStr);
@@ -104,26 +136,22 @@ export function proRatePartialPeriods(
     return schedule;
   }
 
-  const daysBetween = (startDate: string, endDate: string): number => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diffTime = Math.abs(end.getTime() - start.getTime());
+  const daysBetween = (startDate: Date, endDate: Date): number => {
+    const start = Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate());
+    const end = Date.UTC(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate());
+    const diffTime = Math.abs(end - start);
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
   };
 
-  const daysInMonth = (dateStr: string): number => {
-    const date = new Date(dateStr);
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  const daysInMonth = (date: Date): number => {
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)).getUTCDate();
   };
 
   // Calculate expected full period length (days in the month)
-  const fullPeriodDays = daysInMonth(periodStart.toISOString().split('T')[0]);
+  const fullPeriodDays = daysInMonth(periodStart);
 
   // Calculate actual period days
-  const actualDays = daysBetween(
-    periodStart.toISOString().split('T')[0],
-    periodEnd.toISOString().split('T')[0]
-  );
+  const actualDays = daysBetween(periodStart, periodEnd);
 
   // Check if this is a partial period (less than full month)
   // Allow 3 day tolerance (for months with 28-31 days)
@@ -204,6 +232,7 @@ export function computeEvictionArrears(
   const canonicalTotal = proratedSchedule.length > 0 ? proratedTotal : baseTotal;
   const arrearsInMonths = calculateArrearsInMonths(canonicalTotal, rent_amount, rent_frequency);
   const normalizedItems = normalizeArrearsItems(arrears_items || []);
+  const canonicalItems = alignItemsWithSchedule(normalizedItems, proratedSchedule);
 
   if (
     Array.isArray(arrears_items) &&
@@ -219,7 +248,7 @@ export function computeEvictionArrears(
   }
 
   return {
-    items: normalizedItems,
+    items: canonicalItems,
     schedule: proratedSchedule,
     total: canonicalTotal,
     totalFormatted: formatCurrency(canonicalTotal),

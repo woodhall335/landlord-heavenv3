@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { UniversalHero } from "@/components/landing/UniversalHero";
 import Link from "next/link";
 import Image from "next/image";
 import { FAQInline } from "@/components/seo/FAQSection";
@@ -28,31 +29,24 @@ export const metadata: Metadata = generateMetadata({
 export default function HelpPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative pt-28 pb-16 md:pt-32 md:pb-36 overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/bg.webp"
-            alt="Landlord Heaven help centre background"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-
-        <Container size="large" className="relative z-10">
-          <div className="text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Support</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Help Centre</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Find quick answers about notices, rent increases, arrears, tenancy agreements, billing, and what to do next.
-            </p>
-          </div>
-        </Container>
-      </section>
+      <UniversalHero
+        preset="product_owner"
+        title="Landlord Help Centre"
+        subtitle="Find quick answers about notices, rent increases, arrears, tenancy agreements, billing, and what to do next."
+        primaryCta={{
+          label: 'Start a wizard',
+          href: '/wizard',
+        }}
+        secondaryCta={{
+          label: 'Contact support',
+          href: '/contact',
+        }}
+        feature="Practical answers for document choice, checkout, previews, downloads, and common landlord questions."
+        hideMedia
+        align="center"
+        trustText="Support for Landlord Heaven documents, tools, and accounts"
+        ariaLabel="Landlord Heaven help centre"
+      />
 
       <Container size="large" className="py-12">
 

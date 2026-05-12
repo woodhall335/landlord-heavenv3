@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { UniversalHero } from "@/components/landing/UniversalHero";
 import Link from "next/link";
-import Image from "next/image";
 import { RiMailLine, RiTimeLine } from 'react-icons/ri';
 import { generateMetadata, StructuredData, breadcrumbSchema, contactPageSchema } from "@/lib/seo";
 import {
@@ -42,31 +42,24 @@ export default function ContactPage() {
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
       <StructuredData data={contactPageSchema()} />
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-      <section className="relative pt-28 pb-16 md:pt-32 md:pb-36 overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/bg.webp"
-            alt="Landlord Heaven support background"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </div>
-
-        <Container size="medium" className="relative z-10">
-          <div className="text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Get In Touch</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Contact us</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Tell us what has gone wrong with the tenancy, what paperwork you are trying to sort out, or where you are stuck, and we will point you to the right next step.
-            </p>
-          </div>
-        </Container>
-      </section>
+        <UniversalHero
+          preset="product_owner"
+          title="Contact Landlord Heaven"
+          subtitle="Tell us what has gone wrong with the tenancy, what paperwork you are trying to sort out, or where you are stuck, and we will point you to the right next step."
+          primaryCta={{
+            label: 'Email support',
+            href: 'mailto:support@landlordheaven.co.uk',
+          }}
+          secondaryCta={{
+            label: 'Visit help centre',
+            href: '/help',
+          }}
+          feature="Support for eviction notices, Section 13 rent increases, money claims, tenancy agreements, and account questions."
+          hideMedia
+          align="center"
+          trustText="Landlord document support for England, Wales, Scotland, and Northern Ireland"
+          ariaLabel="Contact Landlord Heaven support"
+        />
 
       <Container size="medium" className="py-12">
 

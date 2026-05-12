@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
-import { Container, TealHero } from "@/components/ui";
+import { Container } from "@/components/ui";
+import { UniversalHero } from "@/components/landing/UniversalHero";
 import Link from "next/link";
 import Image from "next/image";
 import { generateMetadata, StructuredData, breadcrumbSchema, aboutPageSchema } from "@/lib/seo";
@@ -43,11 +44,25 @@ export default function AboutPage() {
       <StructuredData data={breadcrumbSchema(breadcrumbs)} />
       <StructuredData data={aboutPageSchema()} />
       <div className="min-h-screen bg-gray-50">
-        <TealHero
-        title="You should not need a solicitor just to get the paperwork started"
-        subtitle="We help you get the paperwork moving without paying solicitor rates just to start."
-        eyebrow="About Landlord Heaven"
-      />
+        <UniversalHero
+          preset="product_owner"
+          title="About Landlord Heaven"
+          highlightTitle="Landlord paperwork, made clearer"
+          subtitle="You should not need solicitor rates just to get the paperwork started. We help landlords understand the next step and prepare the right document pack with less friction."
+          primaryCta={{
+            label: 'Start a wizard',
+            href: '/wizard',
+          }}
+          secondaryCta={{
+            label: 'View pricing',
+            href: '/pricing',
+          }}
+          feature="Built for eviction notices, court paperwork, rent increases, money claims, and tenancy agreements."
+          hideMedia
+          align="center"
+          trustText="Guided landlord document preparation and practical support"
+          ariaLabel="About Landlord Heaven"
+        />
 
       {/* Mission */}
       <section className="py-16 md:py-20">

@@ -1306,6 +1306,12 @@ function extractPostcodeFromAddress(address: string | undefined): string | undef
   return undefined;
 }
 
+function isPostcodeLine(value: string | undefined): boolean {
+  if (!value) return false;
+  const postcode = extractPostcodeFromAddress(value);
+  return Boolean(postcode && postcode.replace(/\s+/g, '') === value.trim().toUpperCase().replace(/\s+/g, ''));
+}
+
 /**
  * Format a date string to UK legal format (e.g., "15 January 2026")
  */
@@ -1562,17 +1568,27 @@ export async function fillN5Form(data: CaseData, options: FormFillerOptions = {}
   }
 
   // === SERVICE ADDRESS ===
-  const serviceAddressLines = splitAddress(
-    data.service_address_line1 || data.landlord_address
-  );
+  const rawServiceAddress = data.service_address_line1 || data.landlord_address;
+  const servicePostcode =
+    data.service_postcode ||
+    data.landlord_postcode ||
+    extractPostcodeFromAddress(rawServiceAddress) ||
+    '';
+  const serviceAddressLines = formatAddressForPdf(rawServiceAddress || '', servicePostcode)
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0 && !isPostcodeLine(line));
+  const serviceTown =
+    data.service_address_town ||
+    data.landlord_address_town ||
+    (serviceAddressLines.length > 1 ? serviceAddressLines[serviceAddressLines.length - 1] : undefined);
+  const middleServiceLines = serviceAddressLines.slice(1, serviceTown ? -1 : undefined);
 
   setTextOptional(form, N5_FIELDS.ADDRESS_BUILDING, serviceAddressLines[0], ctx);
-  if (serviceAddressLines.length > 1) {
-    setTextOptional(form, N5_FIELDS.ADDRESS_LINE2, serviceAddressLines[1], ctx);
-  }
-  setTextOptional(form, N5_FIELDS.ADDRESS_TOWN, data.service_address_town || data.landlord_address_town || serviceAddressLines[2], ctx);
-  setTextOptional(form, N5_FIELDS.ADDRESS_COUNTY, data.service_address_county || serviceAddressLines[3], ctx);
-  setTextOptional(form, N5_FIELDS.ADDRESS_POSTCODE, data.service_postcode || data.landlord_postcode, ctx);
+  setTextOptional(form, N5_FIELDS.ADDRESS_LINE2, data.service_address_line2 || middleServiceLines.join('\n'), ctx);
+  setTextOptional(form, N5_FIELDS.ADDRESS_TOWN, serviceTown, ctx);
+  setTextOptional(form, N5_FIELDS.ADDRESS_COUNTY, data.service_address_county, ctx);
+  setTextOptional(form, N5_FIELDS.ADDRESS_POSTCODE, servicePostcode, ctx);
 
   // === CONTACT DETAILS ===
   setTextOptional(form, N5_FIELDS.PHONE, data.service_phone || data.landlord_phone, ctx);

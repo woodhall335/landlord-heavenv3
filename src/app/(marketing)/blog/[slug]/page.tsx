@@ -8,6 +8,7 @@ import { RelatedGuidesCarousel } from '@/components/blog/RelatedGuidesCarousel';
 import { Sources } from '@/components/blog/Sources';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { CategoryPage } from '@/components/blog/CategoryPage';
+import { UniversalHero } from '@/components/landing/UniversalHero';
 import { blogPosts, getBlogPost } from '@/lib/blog/posts';
 import { BlogPost } from '@/lib/blog/types';
 import {
@@ -912,115 +913,108 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
       <article className="min-h-screen" style={{ '--lh-sticky-top': BLOG_STICKY_TOP_OFFSET } as CSSProperties}>
         <BlogArticleStickyGuard />
-        {/* Hero Section - matches homepage pastel gradient */}
-        <header id="blog-hero" className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-3 pb-6 md:pt-5 md:pb-8">
-          <div className="container mx-auto px-4">
-            {/* Breadcrumb */}
-            <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-xs text-slate-500 sm:text-sm">
-              <Link href="/" className="text-slate-600 transition-colors hover:text-[#692ed4]">Home</Link>
+        <UniversalHero
+          id="blog-hero"
+          preset="product_owner"
+          title={seoConfig.metaTitle}
+          subtitle={seoConfig.heroIntro}
+          hideMedia
+          align="left"
+          trustText={`${post.category} landlord guide`}
+          ariaLabel={`${seoConfig.metaTitle} hero`}
+          showUsageCounter={false}
+        >
+          <div className="mt-6 max-w-4xl space-y-4 text-left">
+            <nav className="flex flex-wrap items-center gap-1.5 text-xs text-white/70 sm:text-sm">
+              <Link href="/" className="text-white/80 transition-colors hover:text-white">Home</Link>
               <span>/</span>
-              <Link href="/blog" className="text-slate-600 transition-colors hover:text-[#692ed4]">Landlord Guides</Link>
+              <Link href="/blog" className="text-white/80 transition-colors hover:text-white">Landlord Guides</Link>
               {regionConfig && (
                 <>
                   <span>/</span>
-                  <Link href={`/blog/${postRegion}`} className="text-slate-600 transition-colors hover:text-[#692ed4]">
+                  <Link href={`/blog/${postRegion}`} className="text-white/80 transition-colors hover:text-white">
                     {regionConfig.name}
                   </Link>
                 </>
               )}
               <span>/</span>
-              <span className="max-w-[220px] truncate text-slate-900">{seoConfig.metaTitle}</span>
+              <span className="max-w-[220px] truncate text-white">{seoConfig.metaTitle}</span>
             </nav>
 
-            <div className="max-w-4xl">
-              {/* Category & Meta */}
-              <div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
-                <span className="rounded-full bg-[#692ed4] px-3 py-1 font-medium text-white">
-                  {post.category}
-                </span>
-                {regionConfig && (
-                  <Link
-                    href={`/blog/${postRegion}`}
-                    className="rounded-full border border-[#e3d3ff] bg-white px-3 py-1 font-medium text-gray-700 transition-colors hover:border-[#692ed4] hover:text-[#692ed4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#692ed4] focus-visible:ring-offset-2"
-                  >
-                    {regionConfig.name}
-                  </Link>
-                )}
-                <span className="flex items-center gap-1.5 text-gray-500">
-                  <Calendar className="w-4 h-4" />
-                  {new Date(post.date).toLocaleDateString('en-GB', {
+            <div className="flex flex-wrap items-center gap-2 text-sm text-white/80">
+              <span className="rounded-full border border-white/20 bg-white/15 px-3 py-1 font-medium text-white">
+                {post.category}
+              </span>
+              {regionConfig && (
+                <Link
+                  href={`/blog/${postRegion}`}
+                  className="rounded-full border border-white/20 bg-white/10 px-3 py-1 font-medium text-white transition-colors hover:bg-white/20"
+                >
+                  {regionConfig.name}
+                </Link>
+              )}
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4" />
+                {new Date(post.date).toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                })}
+              </span>
+              {post.updatedDate && post.updatedDate !== post.date && (
+                <span className="flex items-center gap-1.5 font-medium text-emerald-100">
+                  <RefreshCw className="w-4 h-4" />
+                  Updated: {new Date(post.updatedDate).toLocaleDateString('en-GB', {
                     day: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     year: 'numeric'
                   })}
                 </span>
-                {post.updatedDate && post.updatedDate !== post.date && (
-                  <span className="flex items-center gap-1.5 text-green-600 font-medium">
-                    <RefreshCw className="w-4 h-4" />
-                    Updated: {new Date(post.updatedDate).toLocaleDateString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric'
-                    })}
-                  </span>
-                )}
-                <span className="flex items-center gap-1.5 text-gray-500">
-                  <Clock className="w-4 h-4" />
-                  {post.readTime}
+              )}
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4" />
+                {post.readTime}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
+              <span className="rounded-full border border-white/20 bg-white/15 px-3 py-1 text-white">Landlord guide</span>
+              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-white/85">{post.author.role}</span>
+            </div>
+
+            {post.reviewer && (
+              <div className="flex items-center gap-2 text-sm text-white/80">
+                <CheckCircle className="w-4 h-4 text-emerald-100" />
+                <span>
+                  Reviewed: <span className="font-medium text-white">{post.reviewer.name}</span>
+                  {post.reviewer.role && <span className="text-white/70"> ({post.reviewer.role})</span>}
                 </span>
               </div>
+            )}
 
-              <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide">
-                <span className="rounded-full border border-[#e3d3ff] bg-[#f8f1ff] px-3 py-1 text-[#692ed4]">Landlord guide</span>
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{post.author.role}</span>
-              </div>
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white/85"
+                >
+                  <Tag className="w-3 h-3" />
+                  {tag}
+                </span>
+              ))}
+            </div>
 
-              {/* Reviewer badge if available */}
-              {post.reviewer && (
-                <div className="mb-2 flex items-center gap-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  <span className="text-gray-600">
-                    Reviewed: <span className="font-medium text-gray-900">{post.reviewer.name}</span>
-                    {post.reviewer.role && <span className="text-gray-500"> ({post.reviewer.role})</span>}
-                  </span>
-                </div>
-              )}
-
-              {/* Title */}
-              <h1 className="mb-3 text-balance break-words text-3xl font-bold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-                {seoConfig.metaTitle}
-              </h1>
-
-              {/* Description */}
-              <p className="mb-5 max-w-3xl line-clamp-4 text-base leading-7 text-slate-600 md:line-clamp-3 sm:text-lg sm:leading-8">
-                {seoConfig.heroIntro}
+            <div className="rounded-2xl border border-white/20 bg-white/10 p-4 text-white shadow-sm backdrop-blur-sm sm:p-5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-white/80">
+                What this guide will help with
               </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="inline-flex items-center gap-1 text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full"
-                  >
-                    <Tag className="w-3 h-3" />
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-5 rounded-2xl border border-[#e6dbff] bg-white/90 p-4 sm:p-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#692ed4]">
-                  What this guide will help with
-                </p>
-                <p className="mt-2 text-sm text-slate-700">
-                  This guide explains the problem in plain English, then helps
-                  you work out the next sensible step.
-                </p>
-              </div>
+              <p className="mt-2 text-sm text-white/85">
+                This guide explains the problem in plain English, then helps
+                you work out the next sensible step.
+              </p>
             </div>
           </div>
-        </header>
+        </UniversalHero>
 
         {/* Urgency Banner (for S21 posts) */}
         {post.showUrgencyBanner && (

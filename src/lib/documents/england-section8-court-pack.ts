@@ -571,7 +571,7 @@ export async function buildEnglandSection8CourtPackCalculation(params: {
 
   const q4aText =
     hasGround8 || hasGround10
-      ? `The defendant has failed to pay rent as required under the tenancy agreement. The total arrears as at ${formatUKLegalDate(rawServiceDate)} stand at ${formatSterling(totalArrears)}. Full details are set out in the attached Schedule of Arrears (Exhibit DM1).`
+      ? `The defendant has failed to pay rent as required under the tenancy agreement. The total arrears as at ${formatUKLegalDate(rawServiceDate)} stand at ${formatSterling(totalArrears)}. Full details are set out in the attached Schedule of Arrears (Exhibit TM1).`
       : buildStatutoryGroundsText(groundCodes);
 
   const q5Text = `A Form 3A notice seeking possession was served on the defendant on ${formatUKLegalDate(rawServiceDate)} by ${serviceMethodText}. The notice expires on ${formatUKLegalDate(noticeExpiryDate)}.`;

@@ -2612,6 +2612,26 @@ async function generateEnglandOrWalesEvictionPack(
       notice_period_days: currentSection8TemplateData.notice_period_days || 0,
       earliest_possession_date: currentSection8TemplateData.earliest_possession_date || '',
       earliest_proceedings_date: currentSection8TemplateData.earliest_proceedings_date || '',
+      total_arrears:
+        currentSection8TemplateData.total_arrears ??
+        currentSection8TemplateData.current_arrears_total ??
+        currentSection8TemplateData.arrears_at_notice_date ??
+        caseData.total_arrears,
+      current_arrears_amount:
+        currentSection8TemplateData.current_arrears_amount ??
+        currentSection8TemplateData.current_arrears_total ??
+        currentSection8TemplateData.total_arrears ??
+        caseData.total_arrears,
+      current_arrears:
+        currentSection8TemplateData.current_arrears ??
+        currentSection8TemplateData.current_arrears_total ??
+        currentSection8TemplateData.total_arrears ??
+        caseData.total_arrears,
+      arrears_at_notice_date:
+        currentSection8TemplateData.arrears_at_notice_date ??
+        currentSection8TemplateData.total_arrears ??
+        caseData.total_arrears,
+      arrears_duration_months: currentSection8TemplateData.arrears_duration_months,
       any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
       any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
       form_name: currentSection8TemplateData.form_name,
@@ -3206,6 +3226,7 @@ export async function generateCompleteEvictionPack(
     wizardFacts?.tenancy?.rent_due_day ||
     null;
   const noticeDateInput = wizardFacts?.notice_served_date ||
+    wizardFacts?.notice_service_date ||
     wizardFacts?.notice?.service_date ||
     wizardFacts?.notice?.served_date ||
     wizardFacts?.notice_date ||
@@ -4897,6 +4918,26 @@ export async function generateNoticeOnlyPack(
           notice_period_days: section8TemplateData.notice_period_days || 0,
           earliest_possession_date: section8TemplateData.earliest_possession_date || '',
           earliest_proceedings_date: section8TemplateData.earliest_proceedings_date || '',
+          total_arrears:
+            section8TemplateData.total_arrears ??
+            section8TemplateData.current_arrears_total ??
+            section8TemplateData.arrears_at_notice_date ??
+            caseData?.total_arrears,
+          current_arrears_amount:
+            section8TemplateData.current_arrears_amount ??
+            section8TemplateData.current_arrears_total ??
+            section8TemplateData.total_arrears ??
+            caseData?.total_arrears,
+          current_arrears:
+            section8TemplateData.current_arrears ??
+            section8TemplateData.current_arrears_total ??
+            section8TemplateData.total_arrears ??
+            caseData?.total_arrears,
+          arrears_at_notice_date:
+            section8TemplateData.arrears_at_notice_date ??
+            section8TemplateData.total_arrears ??
+            caseData?.total_arrears,
+          arrears_duration_months: section8TemplateData.arrears_duration_months,
           any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
           any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
           form_name: section8TemplateData.form_name,

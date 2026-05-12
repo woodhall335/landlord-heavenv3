@@ -54,6 +54,20 @@ describe('Arrears Schedule Mapper', () => {
 
       expect(entry.arrears).toBe(600);
     });
+
+    it('does not put the first period due date before the tenancy start', () => {
+      const item: ArrearsItem = {
+        period_start: '2026-01-09',
+        period_end: '2026-01-31',
+        rent_due: 1483.87,
+        rent_paid: 0,
+        amount_owed: 1483.87,
+      };
+
+      const entry = mapArrearsItemToEntry(item, 1);
+
+      expect(entry.due_date).toBe('9 January 2026');
+    });
   });
 
   describe('mapArrearsItemsToEntries', () => {
