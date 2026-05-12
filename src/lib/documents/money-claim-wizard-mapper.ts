@@ -2,6 +2,7 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { MoneyClaimCase } from './money-claim-pack-generator';
 import type { ScotlandMoneyClaimCase } from './scotland-money-claim-pack-generator';
 import { mapArrearsItemsToEntries } from './arrears-schedule-mapper';
+import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 import { calculateMoneyClaimFee } from '@/lib/court-fees/hmcts-fees';
 import {
   buildMoneyClaimEvidenceSummary,
@@ -50,6 +51,48 @@ function formatArrearsItems(
   return mapArrearsItemsToEntries(items || [], rentDueDay);
 }
 
+function getLastArrearsPeriodEnd(
+  items: CaseFacts['issues']['rent_arrears']['arrears_items']
+): string | null {
+  for (let i = (items || []).length - 1; i >= 0; i -= 1) {
+    const periodEnd = items[i]?.period_end;
+    if (periodEnd) return periodEnd;
+  }
+
+  return null;
+}
+
+function buildCanonicalMoneyClaimArrears(facts: CaseFacts): {
+  arrears_total?: number;
+  arrears_schedule: MoneyClaimCase['arrears_schedule'];
+} {
+  const items = facts.issues.rent_arrears.arrears_items || [];
+  const fallbackTotal = facts.issues.rent_arrears.total_arrears || undefined;
+  const rentAmount = facts.tenancy.rent_amount || 0;
+  const rentFrequency = facts.tenancy.rent_frequency || 'monthly';
+
+  if (items.length === 0 || rentAmount <= 0) {
+    return {
+      arrears_total: fallbackTotal,
+      arrears_schedule: formatArrearsItems(items, facts.tenancy.rent_due_day),
+    };
+  }
+
+  const canonical = computeEvictionArrears({
+    arrears_items: items,
+    total_arrears: facts.issues.rent_arrears.total_arrears,
+    rent_amount: rentAmount,
+    rent_frequency: rentFrequency,
+    rent_due_day: facts.tenancy.rent_due_day,
+    schedule_end_date: facts.tenancy.end_date || getLastArrearsPeriodEnd(items),
+  });
+
+  return {
+    arrears_total: canonical.total || fallbackTotal,
+    arrears_schedule: canonical.schedule,
+  };
+}
+
 function normaliseFrequency(freq: CaseFacts['tenancy']['rent_frequency']): MoneyClaimCase['rent_frequency'] {
   if (freq === 'fortnightly' || freq === 'quarterly' || freq === 'weekly' || freq === 'monthly') return freq;
   return 'monthly';
@@ -64,6 +107,7 @@ function getMoneyClaimEvidenceItems(facts: CaseFacts) {
 
 export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
   const rawFacts = facts as CaseFacts & Record<string, any>;
+  const canonicalArrears = buildCanonicalMoneyClaimArrears(facts);
   const landlordAddress = buildAddress(
     facts.parties.landlord.address_line1,
     facts.parties.landlord.address_line2,
@@ -108,8 +152,8 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     tenancy_start_date: facts.tenancy.start_date || undefined,
     tenancy_end_date: facts.tenancy.end_date || undefined,
 
-    arrears_total: facts.issues.rent_arrears.total_arrears || undefined,
-    arrears_schedule: formatArrearsItems(facts.issues.rent_arrears.arrears_items, facts.tenancy.rent_due_day),
+    arrears_total: canonicalArrears.arrears_total,
+    arrears_schedule: canonicalArrears.arrears_schedule,
     damage_items: (facts.money_claim.damage_items || []) as any,
     other_charges: (facts.money_claim.other_charges || []) as any,
 
@@ -126,7 +170,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     // =========================================================================
     court_fee: facts.court.claim_amount_costs || (() => {
       // Calculate total claim amount (arrears + damages + other charges)
-      const arrearsTotal = facts.issues.rent_arrears.total_arrears || 0;
+      const arrearsTotal = canonicalArrears.arrears_total || 0;
       const damagesTotal = (facts.money_claim.damage_items || [])
         .reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
       const otherChargesTotal = (facts.money_claim.other_charges || [])
@@ -168,6 +212,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
 }
 
 export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): ScotlandMoneyClaimCase {
+  const canonicalArrears = buildCanonicalMoneyClaimArrears(facts);
   const landlordAddress = buildAddress(
     facts.parties.landlord.address_line1,
     facts.parties.landlord.address_line2,
@@ -205,8 +250,8 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     tenancy_start_date: facts.tenancy.start_date || undefined,
     tenancy_end_date: facts.tenancy.end_date || undefined,
 
-    arrears_total: facts.issues.rent_arrears.total_arrears || undefined,
-    arrears_schedule: formatArrearsItems(facts.issues.rent_arrears.arrears_items, facts.tenancy.rent_due_day),
+    arrears_total: canonicalArrears.arrears_total,
+    arrears_schedule: canonicalArrears.arrears_schedule,
     damage_items: (facts.money_claim.damage_items || []) as any,
     other_charges: (facts.money_claim.other_charges || []) as any,
 
@@ -224,7 +269,7 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     // =========================================================================
     court_fee: facts.court.claim_amount_costs || (() => {
       // Calculate total claim amount (arrears + damages + other charges)
-      const arrearsTotal = facts.issues.rent_arrears.total_arrears || 0;
+      const arrearsTotal = canonicalArrears.arrears_total || 0;
       const damagesTotal = (facts.money_claim.damage_items || [])
         .reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
       const otherChargesTotal = (facts.money_claim.other_charges || [])

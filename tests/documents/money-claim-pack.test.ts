@@ -94,6 +94,35 @@ describe('Money claim pack generator', () => {
     20000, // allow up to 20s for error path too
   );
 
+  it('passes arrears calculation notes through to the schedule template', async () => {
+    const callsBefore = (generateDocument as any).mock.calls.length;
+
+    await generateMoneyClaimPack({
+      ...sampleCase,
+      arrears_total: 64.52,
+      arrears_schedule: [
+        {
+          period: '9 May 2026 to 9 May 2026',
+          due_date: '2026-05-09',
+          amount_due: 64.52,
+          amount_paid: 0,
+          arrears: 64.52,
+          notes: 'Pro-rated for 1 day at GBP 64.52 per day.',
+        },
+      ],
+      damage_items: [],
+      other_charges: [],
+    });
+
+    const scheduleCall = (generateDocument as any).mock.calls.slice(callsBefore).find(([arg]: any[]) =>
+      arg.templatePath.includes('schedule_of_arrears.hbs')
+    );
+
+    expect(scheduleCall?.[0].data.schedule_calculation_notes).toEqual([
+      '9 May 2026 to 9 May 2026: Pro-rated for 1 day at GBP 64.52 per day.',
+    ]);
+  });
+
   it('rejects non-England jurisdictions (Scotland)', async () => {
     await expect(
       generateMoneyClaimPack({

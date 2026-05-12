@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { generateCompleteEvictionPack } from '@/lib/documents/eviction-pack-generator';
+import { generateCompleteEvictionPack, generateNoticeOnlyPack } from '@/lib/documents/eviction-pack-generator';
 import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 import { buildEnglandSection8CompletePackFacts } from '@/lib/testing/fixtures/complete-pack';
 import { __setTestJsonAIClient } from '@/lib/ai/openai-client';
@@ -149,6 +149,77 @@ describe('Complete eviction pack arrears consistency', () => {
       maximumFractionDigits: 2,
     }));
     expect(letterDoc?.html).toContain(canonical.total.toFixed(2));
+  });
+
+  it('uses the arrears schedule period day consistently as the monthly rent due day', { timeout: 20000 }, async () => {
+    const facts = buildEnglandSection8CompletePackFacts();
+    const noticeDate = '2026-05-09';
+
+    facts.notice_date = noticeDate;
+    facts.notice_served_date = noticeDate;
+    facts.tenancy_start_date = '2026-01-09';
+    facts.rent_amount = 2000;
+    facts.rent_frequency = 'monthly';
+    facts.rent_due_day = 1;
+    facts.arrears_breakdown = '';
+    facts.total_arrears = 6129.03;
+    facts.arrears_items = [
+      { period_start: '2026-01-09', period_end: '2026-02-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+      { period_start: '2026-02-09', period_end: '2026-03-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+      { period_start: '2026-03-09', period_end: '2026-04-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+      { period_start: '2026-04-09', period_end: '2026-05-08', rent_due: 2000, rent_paid: 2000, amount_owed: 0 },
+      { period_start: '2026-05-09', period_end: '2026-05-09', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+    ];
+
+    const pack = await generateCompleteEvictionPack(facts);
+    const scheduleHtml = pack.documents.find((doc) => doc.document_type === 'arrears_schedule')?.html || '';
+    const witnessHtml = pack.documents.find((doc) => doc.document_type === 'witness_statement')?.html || '';
+    const caseSummaryHtml = pack.documents.find((doc) => doc.document_type === 'case_summary')?.html || '';
+
+    expect(scheduleHtml).toContain('9th of each month');
+    expect(witnessHtml).toContain('due on the 9th of each month');
+    expect(caseSummaryHtml).toContain('on the 9th day of each rental period');
+    expect(scheduleHtml).not.toContain('1st of each month');
+    expect(witnessHtml).not.toContain('due on the 1st of each month');
+    expect(caseSummaryHtml).not.toContain('on the 1st day of each rental period');
+  });
+
+  it('uses the arrears schedule period day consistently in notice-only Section 8 packs', { timeout: 20000 }, async () => {
+    const facts = buildEnglandSection8CompletePackFacts();
+    const noticeDate = '2026-05-09';
+
+    facts.__meta = { case_id: 'notice-only-period-day', jurisdiction: 'england' };
+    facts.notice_date = noticeDate;
+    facts.notice_served_date = noticeDate;
+    facts.tenancy_start_date = '2026-01-09';
+    facts.rent_amount = 2000;
+    facts.rent_frequency = 'monthly';
+    facts.rent_due_day = 1;
+    facts.payment_day = 1;
+    facts.arrears_breakdown = '';
+    facts.total_arrears = 6129.03;
+    facts.rent_arrears_amount = 6129.03;
+    facts.selected_notice_route = 'section_8';
+    facts.recommended_route = 'section_8';
+    facts.eviction_route = 'section_8';
+    facts.section8_grounds = ['Ground 8', 'Ground 10'];
+    facts.arrears_items = [
+      { period_start: '2026-01-09', period_end: '2026-02-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+      { period_start: '2026-02-09', period_end: '2026-03-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+      { period_start: '2026-03-09', period_end: '2026-04-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+      { period_start: '2026-04-09', period_end: '2026-05-08', rent_due: 2000, rent_paid: 2000, amount_owed: 0 },
+      { period_start: '2026-05-09', period_end: '2026-05-09', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+    ];
+
+    const pack = await generateNoticeOnlyPack(facts);
+    const scheduleHtml = pack.documents.find((doc) => doc.document_type === 'arrears_schedule')?.html || '';
+    const caseSummaryHtml = pack.documents.find((doc) => doc.document_type === 'case_summary')?.html || '';
+
+    expect(scheduleHtml).toContain('9th of each month');
+    expect(caseSummaryHtml).toContain('9th day of each month');
+    expect(caseSummaryHtml).toContain('on the 9th day of each rental period');
+    expect(scheduleHtml).not.toContain('1st of each month');
+    expect(caseSummaryHtml).not.toContain('on the 1st day of each month');
   });
 
   it('falls back to legacy total when no arrears items are provided', { timeout: 20000 }, async () => {

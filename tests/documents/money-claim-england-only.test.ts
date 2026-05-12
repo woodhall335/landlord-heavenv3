@@ -73,6 +73,34 @@ describe('Money Claim England-Only Enforcement', () => {
       const noCountryCase = mapCaseFactsToMoneyClaimCase(createMinimalCaseFacts(undefined));
       expect(noCountryCase.jurisdiction).toBe('england');
     });
+
+    it('repairs saved DST-shifted arrears rows before mapping money claim totals', () => {
+      const facts = createMinimalCaseFacts('england');
+      facts.tenancy.rent_amount = 2000;
+      facts.tenancy.rent_frequency = 'monthly';
+      facts.tenancy.rent_due_day = 9;
+      facts.issues.rent_arrears.total_arrears = 6129.03;
+      facts.issues.rent_arrears.arrears_items = [
+        { period_start: '2026-01-09', period_end: '2026-02-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-02-09', period_end: '2026-03-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-03-09', period_end: '2026-04-07', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-04-08', period_end: '2026-05-07', rent_due: 2000, rent_paid: 2000, amount_owed: 0 },
+        { period_start: '2026-05-08', period_end: '2026-05-09', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+      ];
+
+      const moneyClaimCase = mapCaseFactsToMoneyClaimCase(facts);
+
+      expect(moneyClaimCase.arrears_total).toBe(6064.52);
+      expect(moneyClaimCase.arrears_schedule?.map((entry) => entry.period)).toEqual([
+        '9 January 2026 to 8 February 2026',
+        '9 February 2026 to 8 March 2026',
+        '9 March 2026 to 8 April 2026',
+        '9 April 2026 to 8 May 2026',
+        '9 May 2026 to 9 May 2026',
+      ]);
+      expect(moneyClaimCase.arrears_schedule?.[4]?.amount_due).toBe(64.52);
+      expect(moneyClaimCase.arrears_schedule?.[4]?.notes).toContain('1 day');
+    });
   });
 
   describe('Type Definitions', () => {

@@ -261,6 +261,12 @@ function resolvePaymentReference(claim: MoneyClaimCase): string {
   return 'Rent arrears payment';
 }
 
+function buildScheduleCalculationNotes(schedule: ArrearsEntry[]): string[] {
+  return schedule
+    .map((entry) => entry.notes ? `${entry.period}: ${entry.notes}` : '')
+    .filter(Boolean);
+}
+
 function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
   const normalizedArrearsSchedule = normalizeArrearsEntryRunningBalances(claim.arrears_schedule || []);
   const arrears_total = roundMoney(
@@ -504,6 +510,7 @@ async function generateEnglandMoneyClaimPack(
     ...entry,
     due_date: formatUKLegalDate(entry.due_date) || entry.due_date,
   }));
+  const scheduleCalculationNotes = buildScheduleCalculationNotes(formattedArrearsSchedule);
   const claimantReference = resolveClaimantReference(claim);
   const paymentAccountName = claim.payment_account_name?.trim() || claim.landlord_full_name;
   const paymentSortCode = claim.payment_sort_code?.trim() || '';
@@ -526,6 +533,7 @@ async function generateEnglandMoneyClaimPack(
     interest_start_date: formattedInterestStartDate,
     total_principal: totals.arrears_total + totals.damages_total + totals.other_total,
     arrears_schedule: formattedArrearsSchedule,
+    schedule_calculation_notes: scheduleCalculationNotes,
     damage_items: claim.damage_items || [],
     other_charges: claim.other_charges || [],
     pre_action_summary: buildPreActionSummary(claim),

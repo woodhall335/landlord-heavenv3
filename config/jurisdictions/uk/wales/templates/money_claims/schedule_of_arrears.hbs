@@ -27,6 +27,17 @@
 
 <p><strong>Total arrears:</strong> {{currency arrears_total}}</p>
 
+{{#if schedule_calculation_notes.length}}
+<div>
+  <strong>Calculation Notes:</strong>
+  <ul>
+    {{#each schedule_calculation_notes}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+</div>
+{{/if}}
+
 <p>
   Attach proof of payments received, bank statements and rent ledgers behind this schedule. The County Court
   expects a clear period-by-period breakdown matching the occupation contract rent frequency.
