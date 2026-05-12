@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { PRICING, REGIONAL_PRICING } from '@/lib/pricing';
 import { getWizardCta } from '@/lib/checkout/cta-mapper';
-import { PRODUCTS, SEO_PRICES, type ProductSku } from '@/lib/pricing/products';
+import { PRODUCTS, SEO_PRICES, getProductUpgradeAmount, type ProductSku } from '@/lib/pricing/products';
 
 const REPO_ROOT = process.cwd();
 const SCAN_ROOTS = ['src/app', 'src/components', 'src/lib/seo', 'src/lib/blog', 'src/data/faqs'];
@@ -16,8 +16,8 @@ const CORE_PRICE_EXPECTATIONS: Record<
   >,
   { amount: number; display: string; pence: number }
 > = {
-  notice_only: { amount: 39.99, display: '£39.99', pence: 3999 },
-  complete_pack: { amount: 69.99, display: '£69.99', pence: 6999 },
+  notice_only: { amount: 24.99, display: '£24.99', pence: 2499 },
+  complete_pack: { amount: 59.99, display: '£59.99', pence: 5999 },
   money_claim: { amount: 49.99, display: '£49.99', pence: 4999 },
   section13_standard: { amount: 29.99, display: '£29.99', pence: 2999 },
   section13_defensive: { amount: 49.99, display: '£49.99', pence: 4999 },
@@ -95,6 +95,13 @@ describe('Pricing regression checks', () => {
     for (const sku of skus) {
       expect(Math.round(PRODUCTS[sku].price * 100)).toBe(CORE_PRICE_EXPECTATIONS[sku].pence);
     }
+  });
+
+  it('charges only the current price difference for notice_only to complete_pack upgrades', () => {
+    const upgradeAmount = getProductUpgradeAmount('notice_only', 'complete_pack');
+
+    expect(upgradeAmount).toBe(35);
+    expect(Math.round((upgradeAmount ?? 0) * 100)).toBe(3500);
   });
 
   it('has no stale pricing copy on user-facing paths', () => {

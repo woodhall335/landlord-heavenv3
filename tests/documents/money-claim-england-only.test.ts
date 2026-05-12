@@ -90,16 +90,16 @@ describe('Money Claim England-Only Enforcement', () => {
 
       const moneyClaimCase = mapCaseFactsToMoneyClaimCase(facts);
 
-      expect(moneyClaimCase.arrears_total).toBe(6064.52);
+      expect(moneyClaimCase.arrears_total).toBe(8000);
       expect(moneyClaimCase.arrears_schedule?.map((entry) => entry.period)).toEqual([
         '9 January 2026 to 8 February 2026',
         '9 February 2026 to 8 March 2026',
         '9 March 2026 to 8 April 2026',
         '9 April 2026 to 8 May 2026',
-        '9 May 2026 to 9 May 2026',
+        '9 May 2026 to 8 June 2026',
       ]);
-      expect(moneyClaimCase.arrears_schedule?.[4]?.amount_due).toBe(64.52);
-      expect(moneyClaimCase.arrears_schedule?.[4]?.notes).toContain('1 day');
+      expect(moneyClaimCase.arrears_schedule?.[4]?.amount_due).toBe(2000);
+      expect(moneyClaimCase.arrears_schedule?.[4]?.notes).toBeUndefined();
     });
   });
 

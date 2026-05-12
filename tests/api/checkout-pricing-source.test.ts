@@ -8,7 +8,8 @@ describe('Checkout pricing source', () => {
     const content = fs.readFileSync(routePath, 'utf-8');
 
     expect(content).toContain('const product = PRODUCTS[productSku];');
-    expect(content).toContain('const unitAmountPence = Math.round(product.price * 100);');
-    expect(content).toContain('unit_amount: unitAmountPence');
+    expect(content).toContain('let primaryChargeAmount = product.price;');
+    expect(content).toContain('primaryChargeAmount = upgradeAmount;');
+    expect(content).toContain('unit_amount: Math.round(primaryChargeAmount * 100)');
   });
 });

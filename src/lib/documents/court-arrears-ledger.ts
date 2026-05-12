@@ -129,23 +129,6 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000;
 // ============================================================================
 
 /**
- * Get start of day for a date (midnight UTC).
- */
-function startOfDay(d: Date): Date {
-  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-}
-
-/**
- * Count days inclusive between two dates.
- * E.g., Jan 1 to Jan 3 = 3 days
- */
-function daysInclusive(a: Date, b: Date): number {
-  const aStart = startOfDay(a).getTime();
-  const bStart = startOfDay(b).getTime();
-  return Math.floor((bStart - aStart) / MS_PER_DAY) + 1;
-}
-
-/**
  * Add months to a date, preserving the day if possible.
  */
 function addMonths(date: Date, months: number): Date {
@@ -237,8 +220,8 @@ function formatPeriodShort(startStr: string, endStr: string): string {
  * - Period 2: 14th Feb → 13th Mar
  * etc.
  *
- * The final period is pro-rated if the schedule end date falls within it.
- * Pro-rata is calculated using the rent-period length (not calendar month days).
+ * The schedule end date controls which rent periods have started. Started
+ * periods are charged in full because rent is due in advance.
  */
 export function buildChargesMonthly(
   tenancyStartStr: string,
@@ -253,30 +236,9 @@ export function buildChargesMonthly(
     // Full period end is one month later, minus one day
     // E.g., 14th Jan → (14th Feb - 1 day) = 13th Feb
     const fullPeriodEnd = addDays(addMonths(periodStart, 1), -1);
-    let periodEnd = fullPeriodEnd;
-    let chargeAmount = monthlyRent;
-    let isProRated = false;
-
-    // Check if the period extends beyond the schedule end date
-    if (addDays(fullPeriodEnd, 1) > endExclusive) {
-      // Final period is partial - pro-rate
-      const partialEnd = addDays(endExclusive, -1);
-
-      // Only pro-rate if we actually have a partial period
-      if (partialEnd < fullPeriodEnd) {
-        const fullPeriodDays = daysInclusive(periodStart, fullPeriodEnd);
-        const partialDays = daysInclusive(periodStart, partialEnd);
-
-        // Pro-rate: (rent / full period days) * partial days
-        chargeAmount = (monthlyRent / fullPeriodDays) * partialDays;
-        periodEnd = partialEnd;
-        isProRated = true;
-      }
-    }
-
-    const periodLabel = isProRated
-      ? `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))} (pro-rated)`
-      : `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
+    const periodEnd = fullPeriodEnd;
+    const chargeAmount = monthlyRent;
+    const periodLabel = `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
 
     charges.push({
       kind: 'charge',
@@ -285,7 +247,7 @@ export function buildChargesMonthly(
       label: periodLabel,
       periodStart: formatDate(periodStart),
       periodEnd: formatDate(periodEnd),
-      isProRated,
+      isProRated: false,
     });
 
     // Move to next period (day after this period ends)
@@ -310,24 +272,9 @@ export function buildChargesWeekly(
   while (periodStart < endExclusive) {
     // Weekly period: 7 days (6 days after start)
     const fullPeriodEnd = addDays(periodStart, 6);
-    let periodEnd = fullPeriodEnd;
-    let chargeAmount = weeklyRent;
-    let isProRated = false;
-
-    if (addDays(fullPeriodEnd, 1) > endExclusive) {
-      const partialEnd = addDays(endExclusive, -1);
-      if (partialEnd < fullPeriodEnd) {
-        const fullPeriodDays = 7;
-        const partialDays = daysInclusive(periodStart, partialEnd);
-        chargeAmount = (weeklyRent / fullPeriodDays) * partialDays;
-        periodEnd = partialEnd;
-        isProRated = true;
-      }
-    }
-
-    const periodLabel = isProRated
-      ? `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))} (pro-rated)`
-      : `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
+    const periodEnd = fullPeriodEnd;
+    const chargeAmount = weeklyRent;
+    const periodLabel = `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
 
     charges.push({
       kind: 'charge',
@@ -336,7 +283,7 @@ export function buildChargesWeekly(
       label: periodLabel,
       periodStart: formatDate(periodStart),
       periodEnd: formatDate(periodEnd),
-      isProRated,
+      isProRated: false,
     });
 
     periodStart = addDays(periodEnd, 1);
@@ -381,24 +328,9 @@ function buildChargesFortnightly(
 
   while (periodStart < endExclusive) {
     const fullPeriodEnd = addDays(periodStart, 13); // 14 days = 13 days after start
-    let periodEnd = fullPeriodEnd;
-    let chargeAmount = fortnightlyRent;
-    let isProRated = false;
-
-    if (addDays(fullPeriodEnd, 1) > endExclusive) {
-      const partialEnd = addDays(endExclusive, -1);
-      if (partialEnd < fullPeriodEnd) {
-        const fullPeriodDays = 14;
-        const partialDays = daysInclusive(periodStart, partialEnd);
-        chargeAmount = (fortnightlyRent / fullPeriodDays) * partialDays;
-        periodEnd = partialEnd;
-        isProRated = true;
-      }
-    }
-
-    const periodLabel = isProRated
-      ? `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))} (pro-rated)`
-      : `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
+    const periodEnd = fullPeriodEnd;
+    const chargeAmount = fortnightlyRent;
+    const periodLabel = `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
 
     charges.push({
       kind: 'charge',
@@ -407,7 +339,7 @@ function buildChargesFortnightly(
       label: periodLabel,
       periodStart: formatDate(periodStart),
       periodEnd: formatDate(periodEnd),
-      isProRated,
+      isProRated: false,
     });
 
     periodStart = addDays(periodEnd, 1);
@@ -427,24 +359,9 @@ function buildChargesQuarterly(
 
   while (periodStart < endExclusive) {
     const fullPeriodEnd = addDays(addMonths(periodStart, 3), -1);
-    let periodEnd = fullPeriodEnd;
-    let chargeAmount = quarterlyRent;
-    let isProRated = false;
-
-    if (addDays(fullPeriodEnd, 1) > endExclusive) {
-      const partialEnd = addDays(endExclusive, -1);
-      if (partialEnd < fullPeriodEnd) {
-        const fullPeriodDays = daysInclusive(periodStart, fullPeriodEnd);
-        const partialDays = daysInclusive(periodStart, partialEnd);
-        chargeAmount = (quarterlyRent / fullPeriodDays) * partialDays;
-        periodEnd = partialEnd;
-        isProRated = true;
-      }
-    }
-
-    const periodLabel = isProRated
-      ? `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))} (pro-rated)`
-      : `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
+    const periodEnd = fullPeriodEnd;
+    const chargeAmount = quarterlyRent;
+    const periodLabel = `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
 
     charges.push({
       kind: 'charge',
@@ -453,7 +370,7 @@ function buildChargesQuarterly(
       label: periodLabel,
       periodStart: formatDate(periodStart),
       periodEnd: formatDate(periodEnd),
-      isProRated,
+      isProRated: false,
     });
 
     periodStart = addDays(periodEnd, 1);
@@ -473,24 +390,9 @@ function buildChargesYearly(
 
   while (periodStart < endExclusive) {
     const fullPeriodEnd = addDays(addMonths(periodStart, 12), -1);
-    let periodEnd = fullPeriodEnd;
-    let chargeAmount = yearlyRent;
-    let isProRated = false;
-
-    if (addDays(fullPeriodEnd, 1) > endExclusive) {
-      const partialEnd = addDays(endExclusive, -1);
-      if (partialEnd < fullPeriodEnd) {
-        const fullPeriodDays = daysInclusive(periodStart, fullPeriodEnd);
-        const partialDays = daysInclusive(periodStart, partialEnd);
-        chargeAmount = (yearlyRent / fullPeriodDays) * partialDays;
-        periodEnd = partialEnd;
-        isProRated = true;
-      }
-    }
-
-    const periodLabel = isProRated
-      ? `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))} (pro-rated)`
-      : `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
+    const periodEnd = fullPeriodEnd;
+    const chargeAmount = yearlyRent;
+    const periodLabel = `Rent ${formatPeriodShort(formatDate(periodStart), formatDate(periodEnd))}`;
 
     charges.push({
       kind: 'charge',
@@ -499,7 +401,7 @@ function buildChargesYearly(
       label: periodLabel,
       periodStart: formatDate(periodStart),
       periodEnd: formatDate(periodEnd),
-      isProRated,
+      isProRated: false,
     });
 
     periodStart = addDays(periodEnd, 1);

@@ -74,10 +74,6 @@ function daysInclusiveUTC(startDate: Date, endDate: Date): number {
   return Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
 }
 
-function formatCurrencyAscii(amount: number): string {
-  return `GBP ${amount.toFixed(2)}`;
-}
-
 function repairMonthlyGeneratedItems(params: {
   items: ArrearsItem[];
   rentAmount: number;
@@ -96,24 +92,19 @@ function repairMonthlyGeneratedItems(params: {
   const expected = items.map((item, index) => {
     const start = addCalendarMonthsUTC(firstStart, index);
     const fullEnd = addDaysUTC(addCalendarMonthsUTC(start, 1), -1);
-    const end = scheduleEnd && scheduleEnd >= start && scheduleEnd < fullEnd ? scheduleEnd : fullEnd;
     const fullPeriodDays = daysInclusiveUTC(start, fullEnd);
-    const actualDays = daysInclusiveUTC(start, end);
-    const isPartial = actualDays < fullPeriodDays;
-    const rentDue = isPartial ? roundToPennies((rentAmount / fullPeriodDays) * actualDays) : rentAmount;
+    const rentDue = rentAmount;
     const rentPaid = Math.min(roundToPennies(Number(item.rent_paid) || 0), rentDue);
-    const dailyRate = rentAmount / fullPeriodDays;
+    const shouldInclude = !scheduleEnd || start <= scheduleEnd;
 
     return {
       item,
       start,
-      end,
+      end: fullEnd,
       fullPeriodDays,
-      actualDays,
-      isPartial,
       rentDue,
       rentPaid,
-      dailyRate,
+      shouldInclude,
     };
   });
 
@@ -124,25 +115,34 @@ function repairMonthlyGeneratedItems(params: {
 
     const startDrift = Math.abs(daysInclusiveUTC(actualStart < start ? actualStart : start, actualStart < start ? start : actualStart) - 1);
     const endDrift = Math.abs(daysInclusiveUTC(actualEnd < end ? actualEnd : end, actualEnd < end ? end : actualEnd) - 1);
-    return index === 0 || (startDrift <= 2 && endDrift <= 2);
+    const scheduleEndDrift = scheduleEnd
+      ? Math.abs(daysInclusiveUTC(actualEnd < scheduleEnd ? actualEnd : scheduleEnd, actualEnd < scheduleEnd ? scheduleEnd : actualEnd) - 1)
+      : Number.POSITIVE_INFINITY;
+    const isTruncatedFinalPeriod = Boolean(
+      index === expected.length - 1 &&
+      scheduleEnd &&
+      actualEnd >= start &&
+      actualEnd <= end &&
+      scheduleEndDrift <= 2
+    );
+
+    return index === 0 || (startDrift <= 2 && (endDrift <= 2 || isTruncatedFinalPeriod));
   });
 
   if (!isGeneratedMonthlyShape) {
     return items;
   }
 
-  return expected.map(({ item, start, end, fullPeriodDays, actualDays, isPartial, rentDue, rentPaid, dailyRate }) => ({
+  return expected.filter(({ shouldInclude }) => shouldInclude).map(({ item, start, end, fullPeriodDays, rentDue, rentPaid }) => ({
     ...item,
     period_start: formatISODateUTC(start),
     period_end: formatISODateUTC(end),
     rent_due: rentDue,
     rent_paid: rentPaid,
     amount_owed: roundToPennies(rentDue - rentPaid),
-    is_pro_rated: isPartial || undefined,
-    days_in_period: actualDays,
-    notes: isPartial
-      ? `Pro-rated for ${actualDays} day${actualDays === 1 ? '' : 's'} at ${formatCurrencyAscii(dailyRate)} per day over a ${fullPeriodDays}-day rent period.`
-      : item.notes,
+    is_pro_rated: undefined,
+    days_in_period: fullPeriodDays,
+    notes: item.notes && /pro-?rated|pro rata/i.test(item.notes) ? undefined : item.notes,
   }));
 }
 
@@ -165,23 +165,25 @@ function alignItemsWithSchedule(
     const amountOwed = roundToPennies(
       Number.isFinite(Number(entry.arrears)) ? Number(entry.arrears) : rentDue - rentPaid
     );
-    const rentDueChanged = Math.abs(rentDue - Number(item.rent_due || 0)) > 0.005;
-
     return {
       ...item,
       rent_due: rentDue,
       rent_paid: rentPaid,
       amount_owed: amountOwed,
-      is_pro_rated: item.is_pro_rated || (rentDueChanged && index === schedule.length - 1) || undefined,
-      notes: entry.notes || item.notes,
+      is_pro_rated: undefined,
+      notes: (entry.notes || item.notes) && /pro-?rated|pro rata/i.test(entry.notes || item.notes || '')
+        ? undefined
+        : entry.notes || item.notes,
     };
   });
 }
 
 /**
- * Pro-rate partial periods in an arrears schedule.
+ * Preserve full-period arrears schedules.
  *
- * For monthly rent, if the last period is less than a full month, pro-rate the rent due amount.
+ * Kept as a compatibility export for callers/tests that imported the old helper.
+ * Rent due in advance is no longer prorated merely because a notice date falls
+ * before the end of a started rental period.
  */
 export function proRatePartialPeriods(
   schedule: Array<{
@@ -205,102 +207,10 @@ export function proRatePartialPeriods(
   running_balance?: number;
   notes?: string;
 }> {
-  if (!schedule || schedule.length === 0 || !scheduleEndDate || !rentFrequency) {
-    return schedule;
-  }
-
-  // Only handle monthly frequency for now (most common)
-  if (rentFrequency !== 'monthly') {
-    return schedule;
-  }
-
-  // Work on a copy
-  const result = [...schedule];
-  const lastIndex = result.length - 1;
-  const lastEntry = result[lastIndex];
-
-  // Parse period dates from the "X to Y" format
-  // Format is "D Month YYYY to D Month YYYY" (UK legal format)
-  const periodMatch = lastEntry.period.match(/^(.+?)\s+to\s+(.+)$/i);
-  if (!periodMatch) {
-    return schedule;
-  }
-
-  const periodStartStr = periodMatch[1].trim();
-  const periodEndStr = periodMatch[2].trim();
-
-  // Parse UK date format (e.g., "14 January 2026") to Date
-  const parseUKDate = (ukDateStr: string): Date | null => {
-    const months: Record<string, number> = {
-      january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
-      july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
-    };
-    const match = ukDateStr.match(/(\d+)\s+(\w+)\s+(\d{4})/);
-    if (!match) return null;
-    const day = parseInt(match[1], 10);
-    const month = months[match[2].toLowerCase()];
-    const year = parseInt(match[3], 10);
-    if (month === undefined) return null;
-    return new Date(Date.UTC(year, month, day));
-  };
-
-  const periodStart = parseUKDate(periodStartStr);
-  const periodEnd = parseUKDate(periodEndStr);
-
-  if (!periodStart || !periodEnd) {
-    return schedule;
-  }
-
-  const daysBetween = (startDate: Date, endDate: Date): number => {
-    const start = Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate());
-    const end = Date.UTC(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate());
-    const diffTime = Math.abs(end - start);
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-  };
-
-  const daysInMonth = (date: Date): number => {
-    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)).getUTCDate();
-  };
-
-  // Calculate expected full period length (days in the month)
-  const fullPeriodDays = daysInMonth(periodStart);
-
-  // Calculate actual period days
-  const actualDays = daysBetween(periodStart, periodEnd);
-
-  // Check if this is a partial period (less than full month)
-  // Allow 3 day tolerance (for months with 28-31 days)
-  if (actualDays >= fullPeriodDays - 3) {
-    return schedule;
-  }
-
-  // Pro-rate the rent
-  const dailyRate = rentAmount / fullPeriodDays;
-  const proRatedAmount = roundToPennies(dailyRate * actualDays);
-
-  // Calculate the difference from what was originally charged
-  const originalAmount = lastEntry.amount_due;
-  const adjustment = originalAmount - proRatedAmount;
-
-  // Update the last entry
-  result[lastIndex] = {
-    ...lastEntry,
-    amount_due: proRatedAmount,
-    arrears: roundToPennies(lastEntry.arrears - adjustment),
-    notes: `Pro-rated for ${actualDays} day${actualDays === 1 ? '' : 's'} at ${formatCurrencyAscii(dailyRate)} per day.`,
-  };
-
-  // Recalculate running balances
-  let runningBalance = 0;
-  for (let i = 0; i < result.length; i += 1) {
-    runningBalance += result[i].arrears;
-    result[i] = {
-      ...result[i],
-      running_balance: roundToPennies(runningBalance),
-    };
-  }
-
-  return result;
+  void rentAmount;
+  void rentFrequency;
+  void scheduleEndDate;
+  return schedule;
 }
 
 /**
@@ -337,23 +247,11 @@ export function computeEvictionArrears(
   const baseTotalFromSchedule = baseSchedule.reduce((sum, entry) => sum + entry.arrears, 0);
   const baseTotal = baseSchedule.length > 0 ? roundToPennies(baseTotalFromSchedule) : scheduleData.arrears_total;
 
-  const proratedSchedule = proRatePartialPeriods(
-    baseSchedule,
-    rent_amount,
-    rent_frequency,
-    schedule_end_date
-  );
-
-  const proratedTotalFromSchedule = proratedSchedule.reduce((sum, entry) => sum + entry.arrears, 0);
-  const proratedTotal = proratedSchedule.length > 0 ? roundToPennies(proratedTotalFromSchedule) : baseTotal;
-
-  const hasProrating =
-    proratedSchedule.length > 0 && Math.abs(proratedTotal - baseTotal) > 0.005;
-
-  const canonicalTotal = proratedSchedule.length > 0 ? proratedTotal : baseTotal;
+  const canonicalSchedule = baseSchedule;
+  const canonicalTotal = baseTotal;
   const arrearsInMonths = calculateArrearsInMonths(canonicalTotal, rent_amount, rent_frequency);
   const normalizedItems = normalizeArrearsItems(preparedArrearsItems);
-  const canonicalItems = alignItemsWithSchedule(normalizedItems, proratedSchedule);
+  const canonicalItems = alignItemsWithSchedule(normalizedItems, canonicalSchedule);
 
   if (
     Array.isArray(preparedArrearsItems) &&
@@ -370,20 +268,20 @@ export function computeEvictionArrears(
 
   return {
     items: canonicalItems,
-    schedule: proratedSchedule,
+    schedule: canonicalSchedule,
     total: canonicalTotal,
     totalFormatted: formatCurrency(canonicalTotal),
     arrearsAtNoticeDate: canonicalTotal,
     arrearsInMonths,
-    hasProrating,
+    hasProrating: false,
     isAuthoritative: scheduleData.is_authoritative,
     legacyWarning: scheduleData.legacy_warning,
     scheduleData: {
       ...scheduleData,
-      arrears_schedule: proratedSchedule,
+      arrears_schedule: canonicalSchedule,
       arrears_total: canonicalTotal,
       arrears_in_months: arrearsInMonths,
-      include_schedule_pdf: scheduleData.include_schedule_pdf && proratedSchedule.length > 0,
+      include_schedule_pdf: scheduleData.include_schedule_pdf && canonicalSchedule.length > 0,
     },
   };
 }

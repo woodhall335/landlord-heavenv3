@@ -94,20 +94,19 @@ describe('Money claim pack generator', () => {
     20000, // allow up to 20s for error path too
   );
 
-  it('passes arrears calculation notes through to the schedule template', async () => {
+  it('does not add arrears calculation notes for full-period rent rows', async () => {
     const callsBefore = (generateDocument as any).mock.calls.length;
 
     await generateMoneyClaimPack({
       ...sampleCase,
-      arrears_total: 64.52,
+      arrears_total: 2000,
       arrears_schedule: [
         {
-          period: '9 May 2026 to 9 May 2026',
-          due_date: '2026-05-09',
-          amount_due: 64.52,
+          period: '9 May 2026 to 8 June 2026',
+          due_date: '9 May 2026',
+          amount_due: 2000,
           amount_paid: 0,
-          arrears: 64.52,
-          notes: 'Pro-rated for 1 day at GBP 64.52 per day.',
+          arrears: 2000,
         },
       ],
       damage_items: [],
@@ -118,9 +117,7 @@ describe('Money claim pack generator', () => {
       arg.templatePath.includes('schedule_of_arrears.hbs')
     );
 
-    expect(scheduleCall?.[0].data.schedule_calculation_notes).toEqual([
-      '9 May 2026 to 9 May 2026: Pro-rated for 1 day at GBP 64.52 per day.',
-    ]);
+    expect(scheduleCall?.[0].data.schedule_calculation_notes).toEqual([]);
   });
 
   it('rejects non-England jurisdictions (Scotland)', async () => {

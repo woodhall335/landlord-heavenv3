@@ -122,9 +122,8 @@ const PERIODS_PER_MONTH: Record<NonNullable<TenancyFacts['rent_frequency']>, num
  * - Quarterly: 3-month periods
  * - Yearly: 12-month periods
  *
- * The final period is pro-rated if the cut-off/notice date falls within
- * an incomplete rental period. Pro-rata is calculated as:
- *   (rent_amount / full_period_days) * partial_days
+ * The cut-off/notice date controls which rent periods have started. Once a
+ * period has started, rent due in advance is included for the full period.
  */
 export function generateRentPeriods(input: ArrearsScheduleInput): RentPeriod[] {
   const {
@@ -161,33 +160,13 @@ export function generateRentPeriods(input: ArrearsScheduleInput): RentPeriod[] {
       break;
     }
 
-    // Check if this is a partial final period
-    const isPartialPeriod = fullPeriodEnd > endDate;
-    const effectiveEnd = isPartialPeriod ? endDate : fullPeriodEnd;
-
-    // Calculate days
     const fullPeriodDays = daysInclusive(periodStart, fullPeriodEnd);
-    const actualDays = daysInclusive(periodStart, effectiveEnd);
-
-    // Calculate rent due (pro-rata for partial periods)
-    let rentDue = rent_amount;
-    let isProRated = false;
-    let notes: string | undefined;
-
-    if (isPartialPeriod && actualDays < fullPeriodDays) {
-      // Pro-rata calculation: (rent / full period days) * actual days
-      rentDue = Math.round((rent_amount / fullPeriodDays) * actualDays * 100) / 100;
-      isProRated = true;
-      notes = `Pro-rated (${actualDays} days)`;
-    }
 
     periods.push({
       period_start: formatDate(periodStart),
-      period_end: formatDate(effectiveEnd),
-      rent_due: rentDue,
-      is_pro_rated: isProRated || undefined,
-      days_in_period: actualDays,
-      notes: notes,
+      period_end: formatDate(fullPeriodEnd),
+      rent_due: rent_amount,
+      days_in_period: fullPeriodDays,
     });
 
     // Move to next period
@@ -267,6 +246,51 @@ function daysInclusive(startDate: Date, endDate: Date): number {
   return diffDays + 1; // +1 because both start and end are inclusive
 }
 
+function roundToPennies(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
+function restoreFullRentPeriodItems(
+  items: ArrearsItem[],
+  rent_frequency: TenancyFacts['rent_frequency'],
+  rent_amount: number
+): ArrearsItem[] {
+  if (!items || items.length === 0 || !rent_frequency || rent_amount <= 0) {
+    return items;
+  }
+
+  return items.map((item) => {
+    const periodStart = parseISODateUTC(item.period_start);
+    const periodEnd = parseISODateUTC(item.period_end);
+    if (!periodStart || !periodEnd) {
+      return item;
+    }
+
+    const fullPeriodEnd = calculatePeriodEnd(periodStart, rent_frequency);
+    const isShortPeriod = periodEnd < fullPeriodEnd;
+    const hasProrationMarker =
+      item.is_pro_rated === true ||
+      (typeof item.notes === 'string' && /pro-?rated|pro rata/i.test(item.notes));
+
+    if (!isShortPeriod && !hasProrationMarker) {
+      return item;
+    }
+
+    const rentPaid = Number(item.rent_paid) || 0;
+    const fullPeriodDays = daysInclusive(periodStart, fullPeriodEnd);
+
+    return {
+      ...item,
+      period_end: formatDate(fullPeriodEnd),
+      rent_due: rent_amount,
+      amount_owed: roundToPennies(rent_amount - rentPaid),
+      is_pro_rated: undefined,
+      days_in_period: fullPeriodDays,
+      notes: undefined,
+    };
+  });
+}
+
 // ============================================================================
 // ARREARS COMPUTATION
 // ============================================================================
@@ -298,8 +322,9 @@ export function computeArrears(
     };
   }
 
-  // Normalize arrears items to ensure amount_owed is calculated
-  const normalizedItems = normalizeArrearsItems(arrears_items);
+  // Normalize arrears items to ensure full rent periods and amount_owed are calculated.
+  const fullPeriodItems = restoreFullRentPeriodItems(arrears_items, rent_frequency, rent_amount);
+  const normalizedItems = normalizeArrearsItems(fullPeriodItems);
 
   // Calculate totals
   const total_arrears = normalizedItems.reduce(
@@ -542,7 +567,7 @@ export function hasGround8Selected(groundCodes: Array<number | string>): boolean
  * Create an empty arrears schedule with generated periods.
  *
  * Used by the wizard to initialize the schedule when user starts entering data.
- * Includes pro-rata calculation for the final period if applicable.
+ * Includes the full rent for every started period.
  */
 export function createEmptyArrearsSchedule(input: ArrearsScheduleInput): ArrearsItem[] {
   const periods = generateRentPeriods(input);

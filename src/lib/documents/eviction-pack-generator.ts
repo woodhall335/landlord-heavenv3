@@ -4867,14 +4867,6 @@ export async function generateNoticeOnlyPack(
         );
       }
 
-      // Build Section 8 template data FIRST to resolve service_date from wizardFacts
-      // This ensures service_date_formatted, earliest_possession_date_formatted,
-      // tenancy_start_date_formatted, and ground_descriptions are available for templates
-      const section8TemplateData = harmonizeEnglandSection8CanonicalContext({
-        wizardFacts,
-        caseData,
-        evictionCase,
-      });
       const noticeArrearsItems: ArrearsItem[] = wizardFacts.arrears_items ||
         wizardFacts.issues?.rent_arrears?.arrears_items ||
         [];
@@ -4887,6 +4879,33 @@ export async function generateNoticeOnlyPack(
           wizardFacts?.tenancy?.rent_due_day ||
           evictionCase.payment_day,
       });
+      const noticeArrearsCutoffDate =
+        wizardFacts?.notice_served_date ||
+        wizardFacts?.notice_service_date ||
+        wizardFacts?.notice?.service_date ||
+        wizardFacts?.notice?.served_date ||
+        wizardFacts?.notice_date ||
+        noticeArrearsItems[noticeArrearsItems.length - 1]?.period_start ||
+        noticeArrearsItems[noticeArrearsItems.length - 1]?.period_end ||
+        null;
+      const noticeTotalArrearsInput =
+        wizardFacts.arrears_total ||
+        wizardFacts.total_arrears ||
+        wizardFacts.issues?.rent_arrears?.total_arrears ||
+        wizardFacts.rent_arrears_amount ||
+        null;
+      const canonicalNoticeArrears =
+        noticeArrearsItems.length > 0 || Number(noticeTotalArrearsInput || 0) > 0
+          ? computeEvictionArrears({
+              arrears_items: noticeArrearsItems,
+              total_arrears: noticeTotalArrearsInput,
+              rent_amount: evictionCase.rent_amount || wizardFacts.rent_amount || 0,
+              rent_frequency: evictionCase.rent_frequency || wizardFacts.rent_frequency || 'monthly',
+              rent_due_day: noticeRentDueDay,
+              schedule_end_date: noticeArrearsCutoffDate,
+            })
+          : null;
+
       if (noticeRentDueDay) {
         wizardFacts.rent_due_day = noticeRentDueDay;
         wizardFacts.payment_day = noticeRentDueDay;
@@ -4895,12 +4914,60 @@ export async function generateNoticeOnlyPack(
           rent_due_day: noticeRentDueDay,
         };
         evictionCase.payment_day = noticeRentDueDay;
+        if (caseData) {
+          (caseData as Record<string, any>).payment_day = noticeRentDueDay;
+          (caseData as Record<string, any>).rent_due_day = noticeRentDueDay;
+        }
+      }
+
+      if (canonicalNoticeArrears) {
+        wizardFacts.arrears_items = canonicalNoticeArrears.items;
+        wizardFacts.total_arrears = canonicalNoticeArrears.total;
+        wizardFacts.arrears_total = canonicalNoticeArrears.total;
+        wizardFacts.rent_arrears_amount = canonicalNoticeArrears.total;
+        wizardFacts.current_arrears = canonicalNoticeArrears.total;
+        wizardFacts.current_arrears_total = canonicalNoticeArrears.total;
+        wizardFacts.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+        if (wizardFacts.issues?.rent_arrears) {
+          wizardFacts.issues.rent_arrears.arrears_items = canonicalNoticeArrears.items;
+          wizardFacts.issues.rent_arrears.total_arrears = canonicalNoticeArrears.total;
+          wizardFacts.issues.rent_arrears.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+        }
+
+        evictionCase.current_arrears = canonicalNoticeArrears.total;
+        evictionCase.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+        if (caseData) {
+          caseData.total_arrears = canonicalNoticeArrears.total;
+          caseData.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+          (caseData as Record<string, any>).current_arrears = canonicalNoticeArrears.total;
+          (caseData as Record<string, any>).current_arrears_total = canonicalNoticeArrears.total;
+          (caseData as Record<string, any>).arrears_items = canonicalNoticeArrears.items;
+        }
+      }
+
+      // Build Section 8 template data after canonical arrears repair so every
+      // notice-only document shares the same total and period dates.
+      const section8TemplateData = harmonizeEnglandSection8CanonicalContext({
+        wizardFacts,
+        caseData,
+        evictionCase,
+      });
+      if (noticeRentDueDay) {
         section8TemplateData.payment_day = noticeRentDueDay;
         section8TemplateData.rent_due_day = noticeRentDueDay;
         section8TemplateData.tenancy = {
           ...(section8TemplateData.tenancy || {}),
           rent_due_day: noticeRentDueDay,
         };
+      }
+      if (canonicalNoticeArrears) {
+        section8TemplateData.arrears_items = canonicalNoticeArrears.items;
+        section8TemplateData.total_arrears = canonicalNoticeArrears.total;
+        section8TemplateData.arrears_total = canonicalNoticeArrears.total;
+        section8TemplateData.rent_arrears_amount = canonicalNoticeArrears.total;
+        section8TemplateData.current_arrears = canonicalNoticeArrears.total;
+        section8TemplateData.current_arrears_total = canonicalNoticeArrears.total;
+        section8TemplateData.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
       }
       const noticeServedDate =
         section8TemplateData.notice_service_date ||
@@ -4917,6 +4984,8 @@ export async function generateNoticeOnlyPack(
         section8TemplateData.notice_expiry_date;
       const currentArrearsTotal =
         section8TemplateData.current_arrears ??
+        section8TemplateData.current_arrears_total ??
+        section8TemplateData.total_arrears ??
         section8TemplateData.arrears_total ??
         wizardFacts?.arrears_total ??
         wizardFacts?.issues?.rent_arrears?.total_arrears ??

@@ -37,7 +37,7 @@ afterEach(() => {
 });
 
 describe('Complete eviction pack arrears consistency', () => {
-  it('returns prorated arrears items that sum to the canonical total', () => {
+  it('returns full-period arrears items that sum to the canonical total', () => {
     const canonical = computeEvictionArrears({
       arrears_items: [
         { period_start: '2026-02-01', period_end: '2026-02-28', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
@@ -54,9 +54,11 @@ describe('Complete eviction pack arrears consistency', () => {
 
     const itemTotal = canonical.items.reduce((sum, item) => sum + (item.amount_owed || 0), 0);
 
-    expect(canonical.total).toBe(6064.52);
+    expect(canonical.total).toBe(8000);
     expect(Number(itemTotal.toFixed(2))).toBe(canonical.total);
-    expect(canonical.items[3].rent_due).toBe(64.52);
+    expect(canonical.items[3].period_end).toBe('2026-05-31');
+    expect(canonical.items[3].rent_due).toBe(2000);
+    expect(canonical.items[3].is_pro_rated).toBeUndefined();
   });
 
   it('repairs DST-shifted monthly periods before calculating the notice-date arrears', () => {
@@ -75,19 +77,21 @@ describe('Complete eviction pack arrears consistency', () => {
       schedule_end_date: '2026-05-09',
     });
 
-    expect(canonical.total).toBe(6064.52);
+    expect(canonical.total).toBe(8000);
     expect(canonical.items.map((item) => `${item.period_start}:${item.period_end}`)).toEqual([
       '2026-01-09:2026-02-08',
       '2026-02-09:2026-03-08',
       '2026-03-09:2026-04-08',
       '2026-04-09:2026-05-08',
-      '2026-05-09:2026-05-09',
+      '2026-05-09:2026-06-08',
     ]);
-    expect(canonical.items[4].rent_due).toBe(64.52);
-    expect(canonical.schedule[4].notes).toContain('1 day');
+    expect(canonical.items[4].rent_due).toBe(2000);
+    expect(canonical.schedule[4].amount_due).toBe(2000);
+    expect(canonical.schedule[4].notes).toBeUndefined();
+    expect(canonical.hasProrating).toBe(false);
   });
 
-  it('keeps arrears totals aligned across schedule, notice, witness statement, and letter (prorated)', { timeout: 20000 }, async () => {
+  it('keeps arrears totals aligned across schedule, notice, witness statement, and letter', { timeout: 20000 }, async () => {
     const facts = buildEnglandSection8CompletePackFacts();
     const noticeDate = '2024-04-15';
 
@@ -175,10 +179,22 @@ describe('Complete eviction pack arrears consistency', () => {
     const scheduleHtml = pack.documents.find((doc) => doc.document_type === 'arrears_schedule')?.html || '';
     const witnessHtml = pack.documents.find((doc) => doc.document_type === 'witness_statement')?.html || '';
     const caseSummaryHtml = pack.documents.find((doc) => doc.document_type === 'case_summary')?.html || '';
+    const noticeHtml = pack.documents.find((doc) => doc.document_type === 'section8_notice')?.html || '';
+    const particularsDoc = pack.documents.find((doc) => doc.document_type === 'n119_particulars');
+    const letterHtml = pack.documents.find((doc) => doc.document_type === 'arrears_engagement_letter')?.html || '';
 
     expect(scheduleHtml).toContain('9th of each month');
+    expect(scheduleHtml).toContain('9 May 2026 to 8 June 2026');
+    expect(scheduleHtml).toContain('8000.00');
+    expect(witnessHtml).toContain('8,000.00');
+    expect(caseSummaryHtml).toContain('8,000.00');
+    expect(noticeHtml).toContain('8000.00');
+    expect(particularsDoc).toBeDefined();
+    expect(letterHtml).toContain('8000.00');
     expect(witnessHtml).toContain('due on the 9th of each month');
     expect(caseSummaryHtml).toContain('on the 9th day of each rental period');
+    expect(scheduleHtml).not.toContain('64.52');
+    expect(scheduleHtml).not.toContain('1 day');
     expect(scheduleHtml).not.toContain('1st of each month');
     expect(witnessHtml).not.toContain('due on the 1st of each month');
     expect(caseSummaryHtml).not.toContain('on the 1st day of each rental period');
@@ -216,8 +232,13 @@ describe('Complete eviction pack arrears consistency', () => {
     const caseSummaryHtml = pack.documents.find((doc) => doc.document_type === 'case_summary')?.html || '';
 
     expect(scheduleHtml).toContain('9th of each month');
+    expect(scheduleHtml).toContain('9 May 2026 to 8 June 2026');
+    expect(scheduleHtml).toContain('8000.00');
+    expect(caseSummaryHtml).toContain('8,000.00');
     expect(caseSummaryHtml).toContain('9th day of each month');
     expect(caseSummaryHtml).toContain('on the 9th day of each rental period');
+    expect(scheduleHtml).not.toContain('64.52');
+    expect(scheduleHtml).not.toContain('1 day');
     expect(scheduleHtml).not.toContain('1st of each month');
     expect(caseSummaryHtml).not.toContain('on the 1st day of each month');
   });

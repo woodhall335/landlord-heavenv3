@@ -5,7 +5,7 @@
  * figures match the Rent Schedule / Arrears Statement exactly.
  *
  * Issue: The Notice showed £4,000.00 total / £1,000.00 final period while
- * the Rent Schedule showed £3,645.16 total / £645.16 pro-rated final period.
+ * the Rent Schedule showed a truncated/pro-rated final period.
  *
  * Fix: Both documents now use the canonical arrears data from arrears-engine.ts
  * via the arrears-schedule-mapper.ts, ensuring identical figures.
@@ -17,12 +17,12 @@ import type { ArrearsItem } from '@/lib/case-facts/schema';
 
 describe('Section 8 Notice Arrears Consistency', () => {
   /**
-   * Test case with pro-rated final period:
+   * Test case with a formerly pro-rated final period:
    * - Monthly rent: £1,000
    * - Full periods: Oct, Nov, Dec (£1,000 each)
-   * - Pro-rated final period: 14 Jan – 2 Feb (20/31 days = £645.16)
+   * - Started final period: 14 Jan – 13 Feb (£1,000)
    * - No payments made
-   * - Expected total: £3,645.16
+   * - Expected total: £4,000
    */
   const createProRatedTestCase = () => {
     const arrearsItems: ArrearsItem[] = [
@@ -48,7 +48,6 @@ describe('Section 8 Notice Arrears Consistency', () => {
         amount_owed: 1000,
       },
       {
-        // Pro-rated final period: 20 days of 31-day period
         period_start: '2026-01-14',
         period_end: '2026-02-02',
         rent_due: 645.16, // (1000 / 31) * 20 ≈ 645.16
@@ -64,8 +63,8 @@ describe('Section 8 Notice Arrears Consistency', () => {
       arrearsItems,
       rentAmount: 1000,
       rentFrequency: 'monthly' as const,
-      expectedTotal: 3645.16,
-      expectedFinalPeriodArrears: 645.16,
+      expectedTotal: 4000,
+      expectedFinalPeriodArrears: 1000,
     };
   };
 
@@ -133,7 +132,7 @@ describe('Section 8 Notice Arrears Consistency', () => {
       arrearsItems,
       rentAmount: 1200,
       rentFrequency: 'monthly' as const,
-      expectedTotal: 2167.74,
+      expectedTotal: 2400,
     };
   };
 
@@ -170,7 +169,7 @@ describe('Section 8 Notice Arrears Consistency', () => {
     };
   };
 
-  describe('Pro-rated final period', () => {
+  describe('Full final period', () => {
     test('Notice total arrears equals schedule total arrears', () => {
       const testCase = createProRatedTestCase();
 
@@ -231,10 +230,10 @@ describe('Section 8 Notice Arrears Consistency', () => {
       const templateData = mapNoticeOnlyFacts(wizardFacts);
       const ground8 = templateData.grounds?.find((g: any) => g.code === 8);
 
-      // Verify pro-rated final period amount is in particulars
+      // Verify full final period amount is in particulars
       expect(ground8.particulars).toContain(`£${testCase.expectedFinalPeriodArrears.toFixed(2)}`);
 
-      // Verify the schedule has the same pro-rated amount
+      // Verify the schedule has the same full-period amount
       const finalPeriod = scheduleData.arrears_schedule[scheduleData.arrears_schedule.length - 1];
       expect(finalPeriod.arrears).toBeCloseTo(testCase.expectedFinalPeriodArrears, 2);
     });
