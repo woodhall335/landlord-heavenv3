@@ -18,7 +18,7 @@ import { blogPosts } from '@/lib/blog/posts';
 import { SITE_ORIGIN } from '@/lib/seo';
 import { freeTools } from '@/lib/tools/tools';
 import { createSupabaseAdminQuestionRepository } from '@/lib/ask-heaven/questions';
-import { getPostRegion, isPublicBlogDiscoveryRegion } from '@/lib/blog/categories';
+import { getPostRegion, getPublicBlogRegions, isPublicBlogDiscoveryRegion } from '@/lib/blog/categories';
 import { getPublicTopicHubs } from '@/lib/blog/topic-hubs';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
@@ -391,11 +391,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Pages that always get stable dates (products, tools, etc.)
+  const blogCategoryPages = getPublicBlogRegions().map((slug) => ({
+    path: `/blog/${slug}`,
+    priority: 0.8,
+    changeFrequency: 'weekly' as const,
+  }));
+
   const blogHubPages = getPublicTopicHubs().map((slug) => ({
     path: `/blog/${slug}`,
     priority: 0.82,
     changeFrequency: 'weekly' as const,
   }));
+  const publicEditorialBlogPaths = new Set<string>([
+    '/blog',
+    ...blogCategoryPages.map((page) => page.path),
+    ...blogHubPages.map((page) => page.path),
+    ...blogPosts
+      .filter((post) => getBlogSeoConfig(post, getPostRegion(post.slug)).isIndexable)
+      .map((post) => `/blog/${post.slug}`),
+  ]);
 
   const datedPages = [
     ...productPages,
@@ -408,6 +422,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...pillarPages,
     ...toolPages,
     { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
+    ...blogCategoryPages,
     ...blogHubPages,
   ];
 
@@ -423,12 +438,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const isIndexablePath = (path: string) => {
     const isExplicitlyRequested = requestedIndexablePagePaths.has(path);
+    const isPublicEditorialBlogPath = publicEditorialBlogPaths.has(path);
 
     return (
       !excludedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)) &&
       !legacyRetiredPaths.has(path) &&
       !isRetiredPublicRoute(path) &&
-      (isExplicitlyRequested ||
+      (isPublicEditorialBlogPath ||
+        isExplicitlyRequested ||
         (!isNonEnglandPublicDiscoveryPath(path) &&
           !noindexPaths.includes(path) &&
           !phase3SitemapExclusions.has(path) &&

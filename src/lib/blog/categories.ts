@@ -9,7 +9,13 @@ import { BlogPost } from './types';
 
 export type BlogRegion = 'england' | 'scotland' | 'wales' | 'northern-ireland' | 'uk';
 
-export const PUBLIC_BLOG_REGIONS: readonly BlogRegion[] = ['england'];
+export const PUBLIC_BLOG_REGIONS: readonly BlogRegion[] = [
+  'england',
+  'scotland',
+  'wales',
+  'northern-ireland',
+  'uk',
+];
 
 export interface CategoryConfig {
   slug: BlogRegion;

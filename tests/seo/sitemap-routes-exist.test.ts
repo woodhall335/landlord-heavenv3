@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import robots from '@/app/robots';
 import sitemap from '@/app/sitemap';
-import { getPostRegion } from '@/lib/blog/categories';
+import { getPostRegion, getPublicBlogRegions } from '@/lib/blog/categories';
 import { blogPosts } from '@/lib/blog/posts';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { getValidTopicHubs } from '@/lib/blog/topic-hubs';
@@ -22,6 +22,7 @@ describe('Sitemap Route Existence', () => {
       .filter((post) => getBlogSeoConfig(post, getPostRegion(post.slug)).isIndexable)
       .map((post) => `/blog/${post.slug}`);
     const topicHubRoutes = getValidTopicHubs().map((slug) => `/blog/${slug}`);
+    const blogCategoryRoutes = getPublicBlogRegions().map((slug) => `/blog/${slug}`);
     const manualConfigRoutes = [
       '/rent-increase/section-13-notice',
       '/rent-increase/how-to-increase-rent',
@@ -35,6 +36,7 @@ describe('Sitemap Route Existence', () => {
       ...staticRoutes,
       ...indexableBlogPosts,
       ...topicHubRoutes,
+      ...blogCategoryRoutes,
       ...manualConfigRoutes,
     ]);
   });
@@ -122,6 +124,10 @@ describe('Sitemap Route Existence', () => {
     expect(sitemapPaths).toEqual(
       expect.arrayContaining([
         '/blog',
+        '/blog/scotland',
+        '/blog/wales',
+        '/blog/northern-ireland',
+        '/blog/uk',
         '/blog/eviction-guides',
         '/blog/rent-arrears',
         '/blog/section-8',
@@ -139,6 +145,10 @@ describe('Sitemap Route Existence', () => {
         '/blog/england-student-tenancy-agreement-after-renters-rights-act',
         '/blog/england-hmo-shared-house-tenancy-agreement-after-renters-rights-act',
         '/blog/england-lodger-agreement-after-renters-rights-act',
+        '/blog/scotland-eviction-ground-1',
+        '/blog/wales-deposit-protection',
+        '/blog/northern-ireland-eviction-process',
+        '/blog/uk-fire-safety-landlords',
       ])
     );
   });

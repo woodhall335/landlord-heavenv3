@@ -32,8 +32,14 @@ const buildPost = (slug: string): BlogPost => ({
 });
 
 describe('public blog discovery', () => {
-  it('limits public regions and topic hubs to England-led discovery surfaces', () => {
-    expect(getPublicBlogRegions()).toEqual(['england']);
+  it('publishes all editorial blog regions while keeping topic hubs curated', () => {
+    expect(getPublicBlogRegions()).toEqual([
+      'england',
+      'scotland',
+      'wales',
+      'northern-ireland',
+      'uk',
+    ]);
     expect(getPublicTopicHubs()).toEqual([
       'eviction-guides',
       'rent-arrears',
@@ -51,17 +57,17 @@ describe('public blog discovery', () => {
     expect(getBlogSeoConfig(buildPost('section-8-guide'), null).robots).toBe('index,follow');
   });
 
-  it('noindexes non-England regional and uk-wide blog discovery posts', () => {
-    expect(isPublicBlogDiscoveryRegion('wales')).toBe(false);
-    expect(isPublicBlogDiscoveryRegion('scotland')).toBe(false);
-    expect(isPublicBlogDiscoveryRegion('northern-ireland')).toBe(false);
-    expect(isPublicBlogDiscoveryRegion('uk')).toBe(false);
+  it('keeps regional and uk-wide editorial blog posts indexable', () => {
+    expect(isPublicBlogDiscoveryRegion('wales')).toBe(true);
+    expect(isPublicBlogDiscoveryRegion('scotland')).toBe(true);
+    expect(isPublicBlogDiscoveryRegion('northern-ireland')).toBe(true);
+    expect(isPublicBlogDiscoveryRegion('uk')).toBe(true);
 
     expect(getBlogSeoConfig(buildPost('wales-section-8-guide'), 'wales').robots).toBe(
-      'noindex,follow'
+      'index,follow'
     );
     expect(getBlogSeoConfig(buildPost('uk-section-8-guide'), 'uk').robots).toBe(
-      'noindex,follow'
+      'index,follow'
     );
   });
 });
