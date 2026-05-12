@@ -459,9 +459,12 @@ export default function WizardPreviewPage() {
       try {
         setLoading(true);
         setError(null);
+        const sessionHeaders = getSessionTokenHeaders();
 
         // Fetch case data
-        const caseResponse = await fetch(`/api/cases/${caseId}`);
+        const caseResponse = await fetch(`/api/cases/${caseId}`, {
+          headers: sessionHeaders,
+        });
         if (!caseResponse.ok) {
           throw new Error('Failed to fetch case data');
         }
@@ -471,7 +474,9 @@ export default function WizardPreviewPage() {
 
         let lockedProduct: string | null = null;
         try {
-          const orderResponse = await fetch(`/api/orders/status?case_id=${caseId}`);
+          const orderResponse = await fetch(`/api/orders/status?case_id=${caseId}`, {
+            headers: sessionHeaders,
+          });
           if (orderResponse.ok) {
             const orderData = await orderResponse.json();
             if (orderData.paid && orderData.product_type) {
@@ -633,7 +638,7 @@ export default function WizardPreviewPage() {
           try {
             const checkpointResponse = await fetch('/api/wizard/checkpoint', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json', ...sessionHeaders },
               body: JSON.stringify({ case_id: caseId }),
             });
 
@@ -653,7 +658,9 @@ export default function WizardPreviewPage() {
 
             // Refetch case if checkpoint updated it
             if (checkpointData.ok && checkpointData.recommended_route) {
-              const refetchResponse = await fetch(`/api/cases/${caseId}`);
+              const refetchResponse = await fetch(`/api/cases/${caseId}`, {
+                headers: sessionHeaders,
+              });
               if (refetchResponse.ok) {
                 const refetchResult = await refetchResponse.json();
                 setCaseData(refetchResult.case);
@@ -666,7 +673,9 @@ export default function WizardPreviewPage() {
 
         // Fetch generated documents for this case (for thumbnails)
         try {
-          const docsResponse = await fetch(`/api/cases/${caseId}/documents`);
+          const docsResponse = await fetch(`/api/cases/${caseId}/documents`, {
+            headers: sessionHeaders,
+          });
           if (docsResponse.ok) {
             const docsResult = await docsResponse.json();
             if (docsResult.documents && Array.isArray(docsResult.documents)) {
@@ -717,7 +726,7 @@ export default function WizardPreviewPage() {
             try {
               const validateResponse = await fetch(`/api/notice-only/validate/${caseId}`, {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', ...sessionHeaders },
               });
 
               if (validateResponse.status === 422) {
@@ -805,7 +814,7 @@ export default function WizardPreviewPage() {
                 }
                 const response = await fetch('/api/documents/generate', {
                   method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
+                  headers: { 'Content-Type': 'application/json', ...sessionHeaders },
                   body: JSON.stringify({
                     case_id: caseId,
                     document_type: docType,

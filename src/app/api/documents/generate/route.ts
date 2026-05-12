@@ -6,7 +6,6 @@
  */
 
 import {
-  createServerSupabaseClient,
   createAdminClient,
   tryGetServerUser,
 } from '@/lib/supabase/server';
@@ -68,6 +67,7 @@ import {
   applyEnglandSection8CourtPackCalculation,
   buildEnglandSection8CourtPackCalculation,
 } from '@/lib/documents/england-section8-court-pack';
+import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -559,17 +559,15 @@ export async function POST(request: Request) {
     } = validationResult.data;
     const user = await tryGetServerUser();
 
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    const supabase = createAdminClient();
 
-    // Fetch case metadata (RLS handles auth / anon)
+    // Fetch case metadata with admin privileges, then enforce ownership/session-token
+    // access below. This keeps anonymous preview generation consistent with the
+    // rest of the wizard preview APIs.
     let caseQuery = supabase
       .from('cases')
-      .select('id, jurisdiction, user_id, collected_facts, recommended_route')
+      .select('id, jurisdiction, user_id, session_token, collected_facts, recommended_route')
       .eq('id', case_id);
-
-    if (user) {
-      caseQuery = caseQuery.eq('user_id', user.id);
-    }
 
     const { data, error: caseError } = await caseQuery.single();
 
@@ -587,12 +585,21 @@ export async function POST(request: Request) {
       id: string;
       jurisdiction: string;
       user_id: string | null;
+      session_token?: string | null;
       collected_facts?: any;
       recommended_route?: string | null;
     };
 
-    if (!caseRow.user_id && !requestSessionToken) {
-      return NextResponse.json({ error: 'Case not found', code: 'CASE_NOT_FOUND' }, { status: 404 });
+    const accessError = assertCaseReadAccess({
+      request,
+      user,
+      caseRow: {
+        user_id: caseRow.user_id,
+        session_token: caseRow.session_token ?? null,
+      },
+    });
+    if (accessError) {
+      return accessError;
     }
 
     // Load WizardFacts (source of truth) + fallback to collected_facts if present

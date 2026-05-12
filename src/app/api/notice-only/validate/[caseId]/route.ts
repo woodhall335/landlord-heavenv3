@@ -15,12 +15,13 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 import { validateForPreview } from '@/lib/validation/previewValidation';
 import { validateNoticeOnlyCase } from '@/lib/validation/notice-only-case-validator';
 import { normalizeSection8Facts } from '@/lib/wizard/normalizeSection8Facts';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { mapWalesFaultGroundsToGroundCodes } from '@/lib/wales';
+import { assertCaseReadAccess } from '@/lib/auth/case-access';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -40,14 +41,13 @@ export async function GET(
     console.log('[NOTICE-VALIDATE-API] Validating case:', caseId);
 
     const user = await tryGetServerUser();
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    const supabase = createAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', caseId);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data, error: fetchError } = await query.single();
+    const { data, error: fetchError } = await supabase
+      .from('cases')
+      .select('*')
+      .eq('id', caseId)
+      .single();
 
     if (fetchError || !data) {
       console.error('[NOTICE-VALIDATE-API] Case not found:', fetchError);
@@ -55,6 +55,23 @@ export async function GET(
     }
 
     const caseRow = data as any;
+    const accessError = assertCaseReadAccess({
+      request,
+      user,
+      caseRow: {
+        user_id: caseRow.user_id ?? null,
+        session_token: caseRow.session_token ?? null,
+      },
+    });
+    if (accessError) {
+      console.error('[NOTICE-VALIDATE-API] Access denied:', {
+        caseId,
+        userId: user?.id,
+        caseUserId: caseRow.user_id ?? null,
+      });
+      return accessError;
+    }
+
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
 
     // Normalize Section 8 facts
