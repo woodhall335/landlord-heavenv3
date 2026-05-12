@@ -342,6 +342,60 @@ describe('Witness Statement - No Undefined Values', () => {
     expect(caseSummaryText).not.toContain('significantly exceeds');
     expect(hearingGuideText).not.toContain('significantly exceeds');
   });
+
+  it('suppresses stale calculated arrears narrative while preserving factual landlord context', () => {
+    const staleCalculatedNarrative =
+      'The tenant has accrued rent arrears amounting to \u00A36064.52, which corresponds to 3.0 months of unpaid rent. This amount meets the threshold for Ground 8 under Section 8 of the Housing Act 1988.';
+    const landlordContext =
+      'The tenant admitted the arrears by email and offered a payment plan on 2 May 2026, but no payment was received.';
+
+    const staleModel = buildEnglandPossessionDraftingModel({
+      property_address: '123 Main Street, Pudsey, LS28 7PW',
+      tenancy_start_date: '2026-01-09',
+      notice_service_date: '2026-05-09',
+      notice_expiry_date: '2026-06-08',
+      rent_amount: 2000,
+      rent_frequency: 'monthly',
+      payment_day: 9,
+      ground_codes: ['8', '10'],
+      total_arrears: 8000,
+      arrears_items: [
+        { period_start: '2026-01-09', period_end: '2026-02-08', rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-02-09', period_end: '2026-03-08', rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-03-09', period_end: '2026-04-08', rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-05-09', period_end: '2026-06-08', rent_paid: 0, amount_owed: 2000 },
+      ],
+      section8_details: staleCalculatedNarrative,
+    });
+    const staleText = staleModel.caseSummary.narrativeParagraphs.join(' ');
+
+    expect(staleText).toContain('£8,000.00');
+    expect(staleText).toContain('statutory Ground 8 threshold');
+    expect(staleText).not.toContain('6064.52');
+    expect(staleText).not.toContain('3.0 months of unpaid rent');
+
+    const contextModel = buildEnglandPossessionDraftingModel({
+      property_address: '123 Main Street, Pudsey, LS28 7PW',
+      tenancy_start_date: '2026-01-09',
+      notice_service_date: '2026-05-09',
+      notice_expiry_date: '2026-06-08',
+      rent_amount: 2000,
+      rent_frequency: 'monthly',
+      payment_day: 9,
+      ground_codes: ['8', '10'],
+      total_arrears: 8000,
+      arrears_items: [
+        { period_start: '2026-01-09', period_end: '2026-02-08', rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-02-09', period_end: '2026-03-08', rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-03-09', period_end: '2026-04-08', rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-05-09', period_end: '2026-06-08', rent_paid: 0, amount_owed: 2000 },
+      ],
+      section8_details: landlordContext,
+    });
+    const contextText = contextModel.caseSummary.narrativeParagraphs.join(' ');
+
+    expect(contextText).toContain('offered a payment plan');
+  });
 });
 
 // =============================================================================

@@ -5,6 +5,9 @@ import { computeEvictionArrears } from '@/lib/eviction/arrears/computeArrears';
 import { buildEnglandSection8CompletePackFacts } from '@/lib/testing/fixtures/complete-pack';
 import { __setTestJsonAIClient } from '@/lib/ai/openai-client';
 
+const STALE_ARREARS_NARRATIVE =
+  'The tenant has accrued rent arrears amounting to £6064.52, which corresponds to 3.0 months of unpaid rent. There are 4 complete rental periods during which no rent has been paid. This amount meets the threshold for Ground 8 under Section 8 of the Housing Act 1988.';
+
 vi.mock('@/lib/documents/generator', async () => {
   const actual = await vi.importActual<typeof import('@/lib/documents/generator')>(
     '@/lib/documents/generator'
@@ -166,6 +169,11 @@ describe('Complete eviction pack arrears consistency', () => {
     facts.rent_frequency = 'monthly';
     facts.rent_due_day = 1;
     facts.arrears_breakdown = '';
+    facts.section8_details = STALE_ARREARS_NARRATIVE;
+    facts.ground_particulars = {
+      ground_8: { summary: STALE_ARREARS_NARRATIVE },
+      ground_10: { summary: STALE_ARREARS_NARRATIVE },
+    };
     facts.total_arrears = 6129.03;
     facts.arrears_items = [
       { period_start: '2026-01-09', period_end: '2026-02-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
@@ -188,6 +196,9 @@ describe('Complete eviction pack arrears consistency', () => {
     expect(scheduleHtml).toContain('8000.00');
     expect(witnessHtml).toContain('8,000.00');
     expect(caseSummaryHtml).toContain('8,000.00');
+    expect(caseSummaryHtml).toContain('statutory Ground 8 threshold');
+    expect(caseSummaryHtml).not.toContain('6064.52');
+    expect(caseSummaryHtml).not.toContain('3.0 months of unpaid rent');
     expect(noticeHtml).toContain('8000.00');
     expect(particularsDoc).toBeDefined();
     expect(letterHtml).toContain('8000.00');
@@ -213,6 +224,11 @@ describe('Complete eviction pack arrears consistency', () => {
     facts.rent_due_day = 1;
     facts.payment_day = 1;
     facts.arrears_breakdown = '';
+    facts.section8_details = STALE_ARREARS_NARRATIVE;
+    facts.ground_particulars = {
+      ground_8: { summary: STALE_ARREARS_NARRATIVE },
+      ground_10: { summary: STALE_ARREARS_NARRATIVE },
+    };
     facts.total_arrears = 6129.03;
     facts.rent_arrears_amount = 6129.03;
     facts.selected_notice_route = 'section_8';
@@ -235,6 +251,9 @@ describe('Complete eviction pack arrears consistency', () => {
     expect(scheduleHtml).toContain('9 May 2026 to 8 June 2026');
     expect(scheduleHtml).toContain('8000.00');
     expect(caseSummaryHtml).toContain('8,000.00');
+    expect(caseSummaryHtml).toContain('statutory Ground 8 threshold');
+    expect(caseSummaryHtml).not.toContain('6064.52');
+    expect(caseSummaryHtml).not.toContain('3.0 months of unpaid rent');
     expect(caseSummaryHtml).toContain('9th day of each month');
     expect(caseSummaryHtml).toContain('on the 9th day of each rental period');
     expect(scheduleHtml).not.toContain('64.52');

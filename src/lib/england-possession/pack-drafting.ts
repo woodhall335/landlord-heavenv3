@@ -276,6 +276,23 @@ function extractNarrativeCandidates(data: DraftingInput): string[] {
     .filter(Boolean);
 }
 
+function isCalculatedArrearsNarrative(normalized: string): boolean {
+  const mentionsArrears = /\b(?:arrears|unpaid rent|rent account)\b/.test(normalized);
+  const mentionsMoney = /(?:gbp|\b\d[\d,]*(?:\.\d{2})?\b)/.test(normalized);
+  const calculatedPhrases = [
+    /\bamount(?:ing)?\s+to\b/,
+    /\bcorresponds?\s+to\s+\d+(?:\.\d+)?\s+months?\b/,
+    /\brepresent(?:ing|s)?\s+\d+(?:\.\d+)?\s+months?\b/,
+    /\bmonths?\s+of\s+unpaid\s+rent\b/,
+    /\bground\s*8\s+threshold\b/,
+    /\bcomplete\s+rental\s+periods?\b/,
+    /\bfully\s+unpaid\b/,
+    /\bperiod:\s+\d{1,2}\s+[a-z]+\s+\d{4}\s+to\s+\d{1,2}\s+[a-z]+\s+\d{4}\b/,
+  ];
+
+  return mentionsArrears && mentionsMoney && calculatedPhrases.some((pattern) => pattern.test(normalized));
+}
+
 function isGeneratedArrearsSummary(text: string): boolean {
   if (!text) return false;
 
@@ -284,6 +301,10 @@ function isGeneratedArrearsSummary(text: string): boolean {
     .replace(/Ã‚Â£|Â£/g, '£')
     .trim()
     .toLowerCase();
+
+  if (isCalculatedArrearsNarrative(normalized)) {
+    return true;
+  }
 
   return (
     /^total arrears[:\s]+£?\d[\d,.]*(?:\.\d{2})?$/.test(normalized) ||
