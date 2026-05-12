@@ -4921,24 +4921,27 @@ export async function generateNoticeOnlyPack(
       }
 
       if (canonicalNoticeArrears) {
+        const noticeArrearsAtNotice =
+          canonicalNoticeArrears.arrearsAtNoticeDate ?? canonicalNoticeArrears.total;
+
         wizardFacts.arrears_items = canonicalNoticeArrears.items;
         wizardFacts.total_arrears = canonicalNoticeArrears.total;
         wizardFacts.arrears_total = canonicalNoticeArrears.total;
         wizardFacts.rent_arrears_amount = canonicalNoticeArrears.total;
         wizardFacts.current_arrears = canonicalNoticeArrears.total;
         wizardFacts.current_arrears_total = canonicalNoticeArrears.total;
-        wizardFacts.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+        wizardFacts.arrears_at_notice_date = noticeArrearsAtNotice;
         if (wizardFacts.issues?.rent_arrears) {
           wizardFacts.issues.rent_arrears.arrears_items = canonicalNoticeArrears.items;
           wizardFacts.issues.rent_arrears.total_arrears = canonicalNoticeArrears.total;
-          wizardFacts.issues.rent_arrears.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+          wizardFacts.issues.rent_arrears.arrears_at_notice_date = noticeArrearsAtNotice;
         }
 
         evictionCase.current_arrears = canonicalNoticeArrears.total;
-        evictionCase.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+        evictionCase.arrears_at_notice_date = noticeArrearsAtNotice;
         if (caseData) {
           caseData.total_arrears = canonicalNoticeArrears.total;
-          caseData.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+          caseData.arrears_at_notice_date = noticeArrearsAtNotice;
           (caseData as Record<string, any>).current_arrears = canonicalNoticeArrears.total;
           (caseData as Record<string, any>).current_arrears_total = canonicalNoticeArrears.total;
           (caseData as Record<string, any>).arrears_items = canonicalNoticeArrears.items;
@@ -4967,7 +4970,8 @@ export async function generateNoticeOnlyPack(
         section8TemplateData.rent_arrears_amount = canonicalNoticeArrears.total;
         section8TemplateData.current_arrears = canonicalNoticeArrears.total;
         section8TemplateData.current_arrears_total = canonicalNoticeArrears.total;
-        section8TemplateData.arrears_at_notice_date = canonicalNoticeArrears.arrearsAtNoticeDate;
+        section8TemplateData.arrears_at_notice_date =
+          canonicalNoticeArrears.arrearsAtNoticeDate ?? canonicalNoticeArrears.total;
       }
       const noticeServedDate =
         section8TemplateData.notice_service_date ||
