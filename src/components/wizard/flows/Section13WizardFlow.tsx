@@ -4,7 +4,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import {
   RiAddLine,
+  RiArrowDownSLine,
   RiDeleteBinLine,
+  RiEdit2Line,
   RiExternalLinkLine,
   RiLoader4Line,
   RiRefreshLine,
@@ -52,6 +54,42 @@ type SectionId =
   | 'outputs';
 
 const STORAGE_PREFIX = 'section13-wizard-draft';
+
+const PROPERTY_TYPE_OPTIONS = [
+  { value: '', label: 'Select property type' },
+  { value: 'house', label: 'House' },
+  { value: 'flat', label: 'Flat / apartment' },
+  { value: 'bungalow', label: 'Bungalow' },
+  { value: 'studio', label: 'Studio' },
+  { value: 'room', label: 'Room / shared house' },
+  { value: 'other', label: 'Other / not sure' },
+];
+
+const ADJUSTMENT_COPY: Record<
+  Section13ComparableAdjustment['category'],
+  { label: string; hint: string; placeholder: string }
+> = {
+  location: {
+    label: 'Location difference',
+    hint: 'Use this if the listing is in a clearly better or worse spot.',
+    placeholder: 'Example: listing is nearer station, so reduce it by 50',
+  },
+  condition: {
+    label: 'Condition difference',
+    hint: 'Use this if one property is more modern, larger, or in better condition.',
+    placeholder: 'Example: listing is newly refurbished, so reduce it by 75',
+  },
+  amenities: {
+    label: 'Features / bills difference',
+    hint: 'Use this for parking, garden, furnishing, bills, or other extras.',
+    placeholder: 'Example: listing includes parking, so reduce it by 40',
+  },
+  custom: {
+    label: 'Other difference',
+    hint: 'Use this for any other clear difference that affects rent.',
+    placeholder: 'Example: listing has a larger garden, so reduce it by 50',
+  },
+};
 
 const STEP_CONFIG: Array<{
   id: SectionId;
@@ -902,7 +940,9 @@ export function Section13WizardFlow({
         isManual: true,
         sortOrder: prev.length,
         adjustments: [],
-        metadata: {},
+        metadata: {
+          subjectPropertyType: effectiveState.comparablesMeta.propertyType || null,
+        },
       },
     ]);
   }
@@ -962,6 +1002,7 @@ export function Section13WizardFlow({
   async function handleScrape() {
     const postcode = effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
     const bedrooms = effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
+    const propertyType = effectiveState.comparablesMeta.propertyType || null;
     if (!postcode || !bedrooms) {
       setSaveError('Enter the property postcode and bedroom count before checking local listings.');
       return;
@@ -982,6 +1023,7 @@ export function Section13WizardFlow({
           caseId,
           postcode,
           bedrooms,
+          propertyType,
         }),
       });
 
@@ -997,6 +1039,7 @@ export function Section13WizardFlow({
           ...prev.comparablesMeta,
           searchPostcodeRaw: postcode,
           bedrooms,
+          propertyType,
           lastScrapeAt: new Date().toISOString(),
           lastScrapeSource: data.scrapeSource || null,
           lastScrapeSummary: data.scrapeSummary || null,
@@ -1077,9 +1120,10 @@ export function Section13WizardFlow({
     if (loading || scrapeLoading || currentStep.id !== 'comparables' || comparables.length > 0) return;
     const postcode = effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
     const bedrooms = effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
+    const propertyType = effectiveState.comparablesMeta.propertyType || '';
     if (!postcode || !bedrooms) return;
 
-    const scrapeKey = `${postcode.trim().toUpperCase()}|${bedrooms}`;
+    const scrapeKey = `${postcode.trim().toUpperCase()}|${bedrooms}|${propertyType}`;
     if (autoScrapeKeyRef.current === scrapeKey) return;
     autoScrapeKeyRef.current = scrapeKey;
     setScrapeMessage('Checking local listings automatically from the property details...');
@@ -1089,6 +1133,7 @@ export function Section13WizardFlow({
     comparables.length,
     currentStep.id,
     effectiveState.comparablesMeta.bedrooms,
+    effectiveState.comparablesMeta.propertyType,
     effectiveState.comparablesMeta.searchPostcodeRaw,
     effectiveState.tenancy.bedrooms,
     effectiveState.tenancy.postcodeRaw,
@@ -1185,6 +1230,28 @@ export function Section13WizardFlow({
                   comparablesMeta: { ...prev.comparablesMeta, searchPostcodeRaw: value },
                 }))
               )}
+              <label className="block space-y-2">
+                <span className="text-sm font-semibold text-[#27134a]">Property type</span>
+                <select
+                  value={effectiveState.comparablesMeta.propertyType || ''}
+                  onChange={(event) =>
+                    updateState((prev) => ({
+                      ...prev,
+                      comparablesMeta: {
+                        ...prev.comparablesMeta,
+                        propertyType: event.target.value || null,
+                      },
+                    }))
+                  }
+                  className="w-full rounded-2xl border border-[#e1d5ff] bg-[#fcfbff] px-4 py-3 text-sm shadow-sm transition focus:border-violet-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-violet-200"
+                >
+                  {PROPERTY_TYPE_OPTIONS.map((option) => (
+                    <option key={option.value || 'blank'} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
               {renderTextInput('Bedrooms', effectiveState.tenancy.bedrooms, (value) =>
                 updateState((prev) => ({
                   ...prev,
@@ -1424,7 +1491,7 @@ export function Section13WizardFlow({
                   tenancy: { ...prev.tenancy, firstIncreaseAfter2003Date: value || null },
                 }))
               , { type: 'date' })}
-              {renderTextInput('Notice served date', effectiveState.proposal.serviceDate, (value) =>
+              {renderTextInput('Proposed service date', effectiveState.proposal.serviceDate, (value) =>
                 updateState((prev) => ({
                   ...prev,
                   proposal: { ...prev.proposal, serviceDate: value || null },
@@ -1723,6 +1790,7 @@ export function Section13WizardFlow({
           effectiveState.comparablesMeta.searchPostcodeRaw || effectiveState.tenancy.postcodeRaw;
         const marketSearchBedrooms =
           effectiveState.comparablesMeta.bedrooms ?? effectiveState.tenancy.bedrooms;
+        const marketSearchPropertyType = effectiveState.comparablesMeta.propertyType || '';
         const marketVerdict = getMarketVerdict(effectiveState.preview, comparables.length);
 
         return (
@@ -1751,11 +1819,17 @@ export function Section13WizardFlow({
                 <div className="max-w-2xl">
                   <p className="text-sm font-semibold text-gray-950">Market check for this property</p>
                   <p className="mt-2 text-sm leading-6 text-gray-700">
-                    We use the postcode and bedroom count from step one, so the landlord does not have to answer the same search questions twice.
+                    We use the postcode, property type, and bedroom count from step one, so the landlord does not have to answer the same search questions twice.
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-900">
                       {marketSearchPostcode || 'Postcode missing'}
+                    </span>
+                    <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-900">
+                      {marketSearchPropertyType
+                        ? PROPERTY_TYPE_OPTIONS.find((option) => option.value === marketSearchPropertyType)?.label ||
+                          marketSearchPropertyType
+                        : 'Property type missing'}
                     </span>
                     <span className="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-900">
                       {marketSearchBedrooms != null ? `${marketSearchBedrooms} bedrooms` : 'Bedroom count missing'}
@@ -2043,45 +2117,60 @@ export function Section13WizardFlow({
                         </div>
 
                         <details
-                          className="mt-4 rounded-2xl border border-violet-100 bg-violet-50/60 p-4"
+                          className="group mt-4 rounded-2xl border-2 border-violet-200 bg-violet-50/70 p-4 shadow-sm transition hover:border-violet-300 hover:bg-violet-50"
                           open={comparable.adjustments.length > 0}
                         >
                           <summary className="cursor-pointer list-none">
-                            <div className="flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
-                              <div>
-                                <p className="text-sm font-semibold text-violet-950">Adjust this comparable</p>
-                                <p className="mt-1 text-sm text-violet-900/80">
-                                  Open this when the listing needs a location, condition, or amenity adjustment.
-                                </p>
+                            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                              <div className="flex gap-3">
+                                <span className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-700 text-white shadow-sm">
+                                  <RiEdit2Line className="h-5 w-5" />
+                                </span>
+                                <div>
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <p className="text-sm font-semibold text-violet-950">Need to adjust this listing?</p>
+                                    <span className="rounded-full border border-violet-200 bg-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-violet-800">
+                                      Click to open
+                                    </span>
+                                  </div>
+                                  <p className="mt-1 text-sm leading-6 text-violet-900/80">
+                                    Use this if this rental is clearly better or worse than your property. Add or subtract a monthly amount so the comparison is fair.
+                                  </p>
+                                </div>
                               </div>
-                              <p className="text-sm font-semibold text-violet-950">
-                                Adjusted rent {formatMoney(comparable.adjustedMonthlyEquivalent)}
-                              </p>
+                              <div className="flex items-center gap-3 text-sm font-semibold text-violet-950">
+                                <span>Adjusted rent {formatMoney(comparable.adjustedMonthlyEquivalent)}</span>
+                                <RiArrowDownSLine className="h-5 w-5 transition group-open:rotate-180" />
+                              </div>
                             </div>
                           </summary>
                           <div className="mt-4 border-t border-violet-100 pt-4">
                             <div>
-                              <p className="mt-1 text-sm text-violet-900/80">
-                                Apply simple monthly deltas where the listing differs from your property.
+                              <p className="text-sm leading-6 text-violet-900/80">
+                                Add a minus amount if the listing is better than your property. Add a plus amount if your property is better than the listing.
                               </p>
                             </div>
                             <div className="mt-4 grid gap-3">
                               {(['location', 'condition', 'amenities'] as const).map((category) => {
                                 const adjustment = comparable.adjustments.find((item) => item.category === category);
+                                const copy = ADJUSTMENT_COPY[category];
                                 return (
                                   <div
                                     key={category}
-                                    className="grid gap-3 rounded-xl border border-violet-100 bg-white p-3 md:grid-cols-[140px_150px_1fr]"
+                                    className="grid gap-3 rounded-xl border border-violet-100 bg-white p-3 md:grid-cols-[180px_160px_1fr]"
                                   >
-                                    <div className="text-sm font-medium capitalize text-gray-900">{category}</div>
-                                    {renderTextInput('Monthly delta', adjustment?.normalizedMonthlyDelta, (value) =>
+                                    <div>
+                                      <div className="text-sm font-semibold text-gray-900">{copy.label}</div>
+                                      <p className="mt-1 text-xs leading-5 text-gray-600">{copy.hint}</p>
+                                    </div>
+                                    {renderTextInput('Monthly rent change', adjustment?.normalizedMonthlyDelta, (value) =>
                                       upsertAdjustment(index, category, {
                                         normalizedMonthlyDelta: value ? Number(value) : 0,
                                       })
                                     , { type: 'number', step: '0.01' })}
-                                    {renderTextInput('Reason', adjustment?.reason, (value) =>
+                                    {renderTextInput('Why are you changing it?', adjustment?.reason, (value) =>
                                       upsertAdjustment(index, category, { reason: value })
-                                    )}
+                                    , { placeholder: copy.placeholder })}
                                   </div>
                                 );
                               })}

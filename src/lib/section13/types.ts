@@ -336,6 +336,7 @@ export interface Section13State {
     searchPostcodeRaw?: string;
     searchPostcodeNormalized?: string;
     bedrooms?: number | null;
+    propertyType?: string | null;
     lastScrapeAt?: string | null;
     lastScrapeSource?: string | null;
     lastScrapeSummary?: string | null;

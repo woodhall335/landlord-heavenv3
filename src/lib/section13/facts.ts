@@ -79,6 +79,7 @@ export function createEmptySection13State(
       searchPostcodeRaw: '',
       searchPostcodeNormalized: '',
       bedrooms: null,
+      propertyType: '',
       lastScrapeAt: null,
       lastScrapeSource: null,
       lastScrapeSummary: null,

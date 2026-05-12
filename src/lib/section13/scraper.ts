@@ -60,6 +60,7 @@ interface ScrapeContext {
   postcode: string;
   bedrooms: number;
   pageUrl: string;
+  propertyType?: string | null;
 }
 
 interface SourceScrapeSuccess {
@@ -90,9 +91,60 @@ function getOutcode(postcode: string): string {
   return fallback || compact;
 }
 
-function buildRightmoveOutcodeUrl(postcode: string): string {
+function normalizeSearchPropertyType(value: string | null | undefined): string | null {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (!normalized || normalized === 'other') return null;
+  if (normalized.includes('room') || normalized.includes('lodger')) return 'room';
+  if (normalized.includes('hmo') || normalized.includes('shared')) return 'hmo';
+  if (
+    normalized.includes('flat') ||
+    normalized.includes('apartment') ||
+    normalized.includes('studio') ||
+    normalized.includes('maisonette')
+  ) {
+    return 'flat';
+  }
+  if (normalized.includes('bungalow')) return 'bungalow';
+  if (
+    normalized.includes('house') ||
+    normalized.includes('terrace') ||
+    normalized.includes('semi') ||
+    normalized.includes('detached') ||
+    normalized.includes('cottage')
+  ) {
+    return 'house';
+  }
+
+  return null;
+}
+
+function getRightmovePropertyTypeQuery(propertyType: string | null | undefined): string | null {
+  switch (normalizeSearchPropertyType(propertyType)) {
+    case 'flat':
+      return 'flat';
+    case 'bungalow':
+      return 'bungalow';
+    case 'house':
+      return 'detached,semi-detached,terraced';
+    default:
+      return null;
+  }
+}
+
+function formatSearchScope(postcode: string, propertyType?: string | null): string {
+  const normalizedType = normalizeSearchPropertyType(propertyType);
+  const typeLabel = normalizedType && normalizedType !== 'other' ? `, ${normalizedType}` : '';
+  return `${getOutcode(postcode)} outcode search${typeLabel}`;
+}
+
+function buildRightmoveOutcodeUrl(postcode: string, propertyType?: string | null): string {
   const outcode = getOutcode(postcode);
-  return `https://${RIGHTMOVE_DOMAIN}/property-to-rent/${outcode}.html`;
+  const propertyTypes = getRightmovePropertyTypeQuery(propertyType);
+  const url = new URL(`https://${RIGHTMOVE_DOMAIN}/property-to-rent/${outcode}.html`);
+  if (propertyTypes) {
+    url.searchParams.set('propertyTypes', propertyTypes);
+  }
+  return url.toString();
 }
 
 function buildOpenRentOutcodeUrl(postcode: string): string {
@@ -334,6 +386,7 @@ function buildComparableFromRightmoveProperty(
         rightmoveId: property?.id ?? null,
         listingUpdateReason: listingUpdateReason || null,
         outcodeSearch: getOutcode(context.postcode),
+        subjectPropertyType: context.propertyType || null,
       },
     },
     index
@@ -462,6 +515,7 @@ function extractFromLegacyHtml(html: string, context: ScrapeContext): Section13C
         adjustments: [],
         metadata: {
           listingSource: 'rightmove',
+          subjectPropertyType: context.propertyType || null,
         },
       },
       results.length
@@ -505,7 +559,8 @@ async function fetchHtml(url: string): Promise<string | null> {
 async function scrapeRightmoveViaDirect(
   url: string,
   postcode: string,
-  bedrooms: number
+  bedrooms: number,
+  propertyType?: string | null
 ): Promise<SourceScrapeSuccess | null> {
   const html = await fetchHtml(url);
   if (!html) {
@@ -516,12 +571,13 @@ async function scrapeRightmoveViaDirect(
     postcode,
     bedrooms,
     pageUrl: url,
+    propertyType,
   });
   if (comparables.length > 0) {
     return {
       comparables,
       route: 'rightmove_direct',
-      summary: `Imported ${comparables.length} comparable listings from Rightmove (${getOutcode(postcode)} outcode search).`,
+      summary: `Imported ${comparables.length} comparable listings from Rightmove (${formatSearchScope(postcode, propertyType)}).`,
     };
   }
 
@@ -531,7 +587,8 @@ async function scrapeRightmoveViaDirect(
 async function scrapeRightmoveViaProxy(
   url: string,
   postcode: string,
-  bedrooms: number
+  bedrooms: number,
+  propertyType?: string | null
 ): Promise<SourceScrapeSuccess | null> {
   for (const prefix of RIGHTMOVE_PROXY_ENDPOINTS) {
     const response = await fetch(`${prefix}${encodeURIComponent(url)}`, {
@@ -548,12 +605,13 @@ async function scrapeRightmoveViaProxy(
       postcode,
       bedrooms,
       pageUrl: url,
+      propertyType,
     });
     if (comparables.length > 0) {
       return {
         comparables,
         route: 'rightmove_proxy',
-        summary: `Imported ${comparables.length} comparable listings from Rightmove via proxy (${getOutcode(postcode)} outcode search).`,
+        summary: `Imported ${comparables.length} comparable listings from Rightmove via proxy (${formatSearchScope(postcode, propertyType)}).`,
       };
     }
   }
@@ -589,7 +647,8 @@ async function launchScrapeBrowser(): Promise<any> {
 async function scrapeRightmoveViaPuppeteer(
   url: string,
   postcode: string,
-  bedrooms: number
+  bedrooms: number,
+  propertyType?: string | null
 ): Promise<SourceScrapeSuccess | null> {
   const browser = await launchScrapeBrowser();
 
@@ -607,6 +666,7 @@ async function scrapeRightmoveViaPuppeteer(
       postcode,
       bedrooms,
       pageUrl: url,
+      propertyType,
     });
 
     if (comparables.length === 0) {
@@ -616,7 +676,7 @@ async function scrapeRightmoveViaPuppeteer(
     return {
       comparables,
       route: 'rightmove_puppeteer',
-      summary: `Imported ${comparables.length} comparable listings from Rightmove via browser scrape (${getOutcode(postcode)} outcode search).`,
+      summary: `Imported ${comparables.length} comparable listings from Rightmove via browser scrape (${formatSearchScope(postcode, propertyType)}).`,
     };
   } finally {
     await browser.close();
@@ -760,6 +820,7 @@ function extractComparablesFromOpenRentHtml(
             openRentListingId: listingIdMatch?.[1] || null,
             hoursLive: Number.isFinite(hoursAgo) ? hoursAgo : null,
             outcodeSearch: getOutcode(context.postcode),
+            subjectPropertyType: context.propertyType || null,
           },
         },
         comparables.length
@@ -773,7 +834,8 @@ function extractComparablesFromOpenRentHtml(
 async function scrapeOpenRentViaDirect(
   url: string,
   postcode: string,
-  bedrooms: number
+  bedrooms: number,
+  propertyType?: string | null
 ): Promise<SourceScrapeSuccess | null> {
   const html = await fetchHtml(url);
   if (!html) {
@@ -784,6 +846,7 @@ async function scrapeOpenRentViaDirect(
     postcode,
     bedrooms,
     pageUrl: url,
+    propertyType,
   });
   if (comparables.length === 0) {
     return null;
@@ -792,18 +855,19 @@ async function scrapeOpenRentViaDirect(
   return {
     comparables,
     route: 'openrent_direct',
-    summary: `Imported ${comparables.length} comparable listings from OpenRent (${getOutcode(postcode)} outcode search).`,
+    summary: `Imported ${comparables.length} comparable listings from OpenRent (${formatSearchScope(postcode, propertyType)}).`,
   };
 }
 
 async function scrapeRightmoveSource(
   postcode: string,
-  bedrooms: number
+  bedrooms: number,
+  propertyType?: string | null
 ): Promise<{ result: SourceScrapeSuccess | null; status: ComparableSourceStatus }> {
   const normalizedPostcode = maybeNormalizeUkPostcode(postcode) || postcode.toUpperCase();
-  const url = buildRightmoveOutcodeUrl(normalizedPostcode);
+  const url = buildRightmoveOutcodeUrl(normalizedPostcode, propertyType);
 
-  const directResult = await scrapeRightmoveViaDirect(url, normalizedPostcode, bedrooms).catch(
+  const directResult = await scrapeRightmoveViaDirect(url, normalizedPostcode, bedrooms, propertyType).catch(
     () => null
   );
   if (directResult?.comparables?.length) {
@@ -819,7 +883,7 @@ async function scrapeRightmoveSource(
     };
   }
 
-  const proxyResult = await scrapeRightmoveViaProxy(url, normalizedPostcode, bedrooms).catch(
+  const proxyResult = await scrapeRightmoveViaProxy(url, normalizedPostcode, bedrooms, propertyType).catch(
     () => null
   );
   if (proxyResult?.comparables?.length) {
@@ -838,7 +902,8 @@ async function scrapeRightmoveSource(
   const puppeteerResult = await scrapeRightmoveViaPuppeteer(
     url,
     normalizedPostcode,
-    bedrooms
+    bedrooms,
+    propertyType
   ).catch(() => null);
   if (puppeteerResult?.comparables?.length) {
     return {
@@ -869,11 +934,12 @@ async function scrapeRightmoveSource(
 
 async function scrapeOpenRentSource(
   postcode: string,
-  bedrooms: number
+  bedrooms: number,
+  propertyType?: string | null
 ): Promise<{ result: SourceScrapeSuccess | null; status: ComparableSourceStatus }> {
   const normalizedPostcode = maybeNormalizeUkPostcode(postcode) || postcode.toUpperCase();
   const url = buildOpenRentOutcodeUrl(normalizedPostcode);
-  const directResult = await scrapeOpenRentViaDirect(url, normalizedPostcode, bedrooms).catch(
+  const directResult = await scrapeOpenRentViaDirect(url, normalizedPostcode, bedrooms, propertyType).catch(
     () => null
   );
 
@@ -918,6 +984,7 @@ function formatSourceNames(sourceStatuses: ComparableSourceStatus[]): string {
 function mergeLiveComparables(
   postcode: string,
   bedrooms: number,
+  propertyType: string | null | undefined,
   sourceStatuses: ComparableSourceStatus[],
   sourceResults: Array<SourceScrapeSuccess | null>
 ): LiveComparableScrapeResult {
@@ -925,8 +992,6 @@ function mergeLiveComparables(
     sourceResults.flatMap((item) => item?.comparables || []),
     bedrooms
   );
-  const outcode = getOutcode(postcode);
-
   if (merged.length < MIN_LIVE_COMPARABLES) {
     return {
       success: false,
@@ -934,7 +999,10 @@ function mergeLiveComparables(
       source: 'insufficient_live_evidence',
       summary: `We could only gather ${merged.length} live comparable listing${
         merged.length === 1 ? '' : 's'
-      } across Rightmove and OpenRent for ${outcode}. Try the search again, broaden the evidence, or add real linked comparables manually before relying on the result.`,
+      } across Rightmove and OpenRent for ${formatSearchScope(
+        postcode,
+        propertyType
+      )}. Try the search again, broaden the evidence, or add real linked comparables manually before relying on the result.`,
       sourceStatuses,
       reason: 'insufficient_live_comparables',
       retryable: true,
@@ -955,24 +1023,26 @@ function mergeLiveComparables(
     source,
     summary: `Imported ${merged.length} live comparable listing${
       merged.length === 1 ? '' : 's'
-    } from ${formatSourceNames(sourceStatuses)} (${outcode} outcode search).`,
+    } from ${formatSourceNames(sourceStatuses)} (${formatSearchScope(postcode, propertyType)}).`,
     sourceStatuses,
   };
 }
 
 export async function scrapeLiveComparables(
   postcode: string,
-  bedrooms: number
+  bedrooms: number,
+  propertyType?: string | null
 ): Promise<LiveComparableScrapeResult> {
   const normalizedPostcode = maybeNormalizeUkPostcode(postcode) || postcode.toUpperCase();
   const [rightmove, openrent] = await Promise.all([
-    scrapeRightmoveSource(normalizedPostcode, bedrooms),
-    scrapeOpenRentSource(normalizedPostcode, bedrooms),
+    scrapeRightmoveSource(normalizedPostcode, bedrooms, propertyType),
+    scrapeOpenRentSource(normalizedPostcode, bedrooms, propertyType),
   ]);
 
   return mergeLiveComparables(
     normalizedPostcode,
     bedrooms,
+    propertyType,
     [rightmove.status, openrent.status],
     [rightmove.result, openrent.result]
   );
@@ -984,4 +1054,3 @@ export async function scrapeRightmoveComparables(
 ): Promise<LiveComparableScrapeResult> {
   return scrapeLiveComparables(postcode, bedrooms);
 }
-

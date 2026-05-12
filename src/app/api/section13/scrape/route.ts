@@ -19,6 +19,7 @@ const payloadSchema = z.object({
   caseId: z.string().uuid(),
   postcode: z.string().min(3),
   bedrooms: z.number().int().min(0).max(20),
+  propertyType: z.string().trim().max(80).optional().nullable(),
 });
 
 export async function POST(request: Request) {
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
     }
 
     const supabase = createSupabaseAdminClient();
-    const { caseId, postcode, bedrooms } = parsed.data;
+    const { caseId, postcode, bedrooms, propertyType } = parsed.data;
     const { caseRow, facts, state } = await getSection13CaseData(supabase, caseId);
 
     const accessError = assertCaseWriteAccess({
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
     });
     if (accessError) return accessError;
 
-    const scrape = await scrapeLiveComparables(postcode, bedrooms);
+    const scrape = await scrapeLiveComparables(postcode, bedrooms, propertyType);
     if (!scrape.success) {
       return NextResponse.json(
         {
@@ -65,6 +66,7 @@ export async function POST(request: Request) {
         ...state.comparablesMeta,
         searchPostcodeRaw: postcode,
         bedrooms,
+        propertyType: propertyType || null,
         lastScrapeAt: new Date().toISOString(),
         lastScrapeSource: scrape.source,
         lastScrapeSummary: scrape.summary,

@@ -175,7 +175,12 @@ function buildProvisionalAssessment(
   now: Date
 ): ProvisionalAssessment {
   const subjectBedrooms = state.tenancy.bedrooms ?? null;
-  const subjectType = normalizePropertyType(comparable.metadata?.subjectPropertyType as string || state.comparablesMeta?.['propertyType' as never] as string || null);
+  const subjectType = normalizePropertyType(
+    state.comparablesMeta.propertyType ||
+      (typeof comparable.metadata?.subjectPropertyType === 'string'
+        ? comparable.metadata.subjectPropertyType
+        : null)
+  );
   const comparableType = normalizePropertyType(comparable.propertyType);
   const freshnessDays = getFreshnessDays(comparable, now);
   const freshnessBand = getFreshnessBand(freshnessDays);
