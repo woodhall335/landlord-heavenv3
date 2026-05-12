@@ -315,6 +315,17 @@
   </tbody>
 </table>
 
+{{#if schedule_calculation_notes.length}}
+<div class="info-box">
+  <strong>Calculation Notes:</strong>
+  <ul>
+    {{#each schedule_calculation_notes}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+</div>
+{{/if}}
+
 <!-- Payment Allocation Note -->
 <div class="info-box">
   <strong>Payment Allocation Method:</strong> Payments have been allocated using the FIFO (First In, First Out) method, applying payments to the oldest outstanding rent periods first. This is the standard court-accepted method for arrears allocation.

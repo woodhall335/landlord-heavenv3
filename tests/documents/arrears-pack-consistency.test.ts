@@ -59,6 +59,34 @@ describe('Complete eviction pack arrears consistency', () => {
     expect(canonical.items[3].rent_due).toBe(64.52);
   });
 
+  it('repairs DST-shifted monthly periods before calculating the notice-date arrears', () => {
+    const canonical = computeEvictionArrears({
+      arrears_items: [
+        { period_start: '2026-01-09', period_end: '2026-02-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-02-09', period_end: '2026-03-08', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-03-09', period_end: '2026-04-07', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+        { period_start: '2026-04-08', period_end: '2026-05-07', rent_due: 2000, rent_paid: 2000, amount_owed: 0 },
+        { period_start: '2026-05-08', period_end: '2026-05-09', rent_due: 2000, rent_paid: 0, amount_owed: 2000 },
+      ],
+      total_arrears: 6129.03,
+      rent_amount: 2000,
+      rent_frequency: 'monthly',
+      rent_due_day: 9,
+      schedule_end_date: '2026-05-09',
+    });
+
+    expect(canonical.total).toBe(6064.52);
+    expect(canonical.items.map((item) => `${item.period_start}:${item.period_end}`)).toEqual([
+      '2026-01-09:2026-02-08',
+      '2026-02-09:2026-03-08',
+      '2026-03-09:2026-04-08',
+      '2026-04-09:2026-05-08',
+      '2026-05-09:2026-05-09',
+    ]);
+    expect(canonical.items[4].rent_due).toBe(64.52);
+    expect(canonical.schedule[4].notes).toContain('1 day');
+  });
+
   it('keeps arrears totals aligned across schedule, notice, witness statement, and letter (prorated)', { timeout: 20000 }, async () => {
     const facts = buildEnglandSection8CompletePackFacts();
     const noticeDate = '2024-04-15';

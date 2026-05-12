@@ -139,10 +139,10 @@ export function generateRentPeriods(input: ArrearsScheduleInput): RentPeriod[] {
     return [];
   }
 
-  const startDate = new Date(tenancy_start_date);
-  const endDate = new Date(cut_off_date || notice_date || new Date().toISOString().split('T')[0]);
+  const startDate = parseISODateUTC(tenancy_start_date);
+  const endDate = parseISODateUTC(cut_off_date || notice_date || new Date().toISOString().split('T')[0]);
 
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+  if (!startDate || !endDate) {
     return [];
   }
 
@@ -192,7 +192,7 @@ export function generateRentPeriods(input: ArrearsScheduleInput): RentPeriod[] {
 
     // Move to next period
     periodStart = new Date(fullPeriodEnd);
-    periodStart.setDate(periodStart.getDate() + 1);
+    periodStart.setUTCDate(periodStart.getUTCDate() + 1);
   }
 
   return periods;
@@ -205,31 +205,31 @@ function calculatePeriodEnd(
   periodStart: Date,
   frequency: TenancyFacts['rent_frequency']
 ): Date {
-  const end = new Date(periodStart);
+  const end = new Date(periodStart.getTime());
 
   switch (frequency) {
     case 'weekly':
-      end.setDate(end.getDate() + 6); // 7-day period (inclusive)
+      end.setUTCDate(end.getUTCDate() + 6); // 7-day period (inclusive)
       break;
     case 'fortnightly':
-      end.setDate(end.getDate() + 13); // 14-day period (inclusive)
+      end.setUTCDate(end.getUTCDate() + 13); // 14-day period (inclusive)
       break;
     case 'monthly':
-      end.setMonth(end.getMonth() + 1);
-      end.setDate(end.getDate() - 1); // End of month period
+      end.setUTCMonth(end.getUTCMonth() + 1);
+      end.setUTCDate(end.getUTCDate() - 1); // End of month period
       break;
     case 'quarterly':
-      end.setMonth(end.getMonth() + 3);
-      end.setDate(end.getDate() - 1);
+      end.setUTCMonth(end.getUTCMonth() + 3);
+      end.setUTCDate(end.getUTCDate() - 1);
       break;
     case 'yearly':
-      end.setFullYear(end.getFullYear() + 1);
-      end.setDate(end.getDate() - 1);
+      end.setUTCFullYear(end.getUTCFullYear() + 1);
+      end.setUTCDate(end.getUTCDate() - 1);
       break;
     default:
       // Default to monthly
-      end.setMonth(end.getMonth() + 1);
-      end.setDate(end.getDate() - 1);
+      end.setUTCMonth(end.getUTCMonth() + 1);
+      end.setUTCDate(end.getUTCDate() - 1);
   }
 
   return end;
@@ -242,16 +242,27 @@ function formatDate(date: Date): string {
   return date.toISOString().split('T')[0];
 }
 
+function parseISODateUTC(value: string | null | undefined): Date | null {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    return null;
+  }
+  return date;
+}
+
 /**
  * Calculate the number of days between two dates (inclusive).
  */
 function daysInclusive(startDate: Date, endDate: Date): number {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  // Reset time to midnight to avoid DST issues
-  start.setHours(0, 0, 0, 0);
-  end.setHours(0, 0, 0, 0);
-  const diffTime = end.getTime() - start.getTime();
+  const start = Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate());
+  const end = Date.UTC(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate());
+  const diffTime = end - start;
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   return diffDays + 1; // +1 because both start and end are inclusive
 }

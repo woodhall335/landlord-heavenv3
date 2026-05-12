@@ -31,6 +31,121 @@ export interface ComputeEvictionArrearsParams {
 
 const roundToPennies = (value: number) => Math.round(value * 100) / 100;
 
+function parseISODateUTC(value: string | null | undefined): Date | null {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    return null;
+  }
+  return date;
+}
+
+function formatISODateUTC(date: Date): string {
+  const year = date.getUTCFullYear();
+  const month = `${date.getUTCMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getUTCDate()}`.padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function addDaysUTC(date: Date, days: number): Date {
+  const next = new Date(date.getTime());
+  next.setUTCDate(next.getUTCDate() + days);
+  return next;
+}
+
+function addCalendarMonthsUTC(date: Date, months: number): Date {
+  const next = new Date(date.getTime());
+  const originalDay = next.getUTCDate();
+  next.setUTCMonth(next.getUTCMonth() + months);
+  if (next.getUTCDate() !== originalDay) {
+    next.setUTCDate(0);
+  }
+  return next;
+}
+
+function daysInclusiveUTC(startDate: Date, endDate: Date): number {
+  const start = Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate());
+  const end = Date.UTC(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate());
+  return Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+}
+
+function formatCurrencyAscii(amount: number): string {
+  return `GBP ${amount.toFixed(2)}`;
+}
+
+function repairMonthlyGeneratedItems(params: {
+  items: ArrearsItem[];
+  rentAmount: number;
+  rentFrequency: TenancyFacts['rent_frequency'];
+  scheduleEndDate?: string | null;
+}): ArrearsItem[] {
+  const { items, rentAmount, rentFrequency, scheduleEndDate } = params;
+  if (rentFrequency !== 'monthly' || items.length === 0 || rentAmount <= 0) {
+    return items;
+  }
+
+  const firstStart = parseISODateUTC(items[0]?.period_start);
+  if (!firstStart) return items;
+
+  const scheduleEnd = parseISODateUTC(scheduleEndDate || undefined);
+  const expected = items.map((item, index) => {
+    const start = addCalendarMonthsUTC(firstStart, index);
+    const fullEnd = addDaysUTC(addCalendarMonthsUTC(start, 1), -1);
+    const end = scheduleEnd && scheduleEnd >= start && scheduleEnd < fullEnd ? scheduleEnd : fullEnd;
+    const fullPeriodDays = daysInclusiveUTC(start, fullEnd);
+    const actualDays = daysInclusiveUTC(start, end);
+    const isPartial = actualDays < fullPeriodDays;
+    const rentDue = isPartial ? roundToPennies((rentAmount / fullPeriodDays) * actualDays) : rentAmount;
+    const rentPaid = Math.min(roundToPennies(Number(item.rent_paid) || 0), rentDue);
+    const dailyRate = rentAmount / fullPeriodDays;
+
+    return {
+      item,
+      start,
+      end,
+      fullPeriodDays,
+      actualDays,
+      isPartial,
+      rentDue,
+      rentPaid,
+      dailyRate,
+    };
+  });
+
+  const isGeneratedMonthlyShape = expected.every(({ item, start, end }, index) => {
+    const actualStart = parseISODateUTC(item.period_start);
+    const actualEnd = parseISODateUTC(item.period_end);
+    if (!actualStart || !actualEnd) return false;
+
+    const startDrift = Math.abs(daysInclusiveUTC(actualStart < start ? actualStart : start, actualStart < start ? start : actualStart) - 1);
+    const endDrift = Math.abs(daysInclusiveUTC(actualEnd < end ? actualEnd : end, actualEnd < end ? end : actualEnd) - 1);
+    return index === 0 || (startDrift <= 2 && endDrift <= 2);
+  });
+
+  if (!isGeneratedMonthlyShape) {
+    return items;
+  }
+
+  return expected.map(({ item, start, end, fullPeriodDays, actualDays, isPartial, rentDue, rentPaid, dailyRate }) => ({
+    ...item,
+    period_start: formatISODateUTC(start),
+    period_end: formatISODateUTC(end),
+    rent_due: rentDue,
+    rent_paid: rentPaid,
+    amount_owed: roundToPennies(rentDue - rentPaid),
+    is_pro_rated: isPartial || undefined,
+    days_in_period: actualDays,
+    notes: isPartial
+      ? `Pro-rated for ${actualDays} day${actualDays === 1 ? '' : 's'} at ${formatCurrencyAscii(dailyRate)} per day over a ${fullPeriodDays}-day rent period.`
+      : item.notes,
+  }));
+}
+
 function alignItemsWithSchedule(
   items: ArrearsItem[],
   schedule: CanonicalArrearsResult['schedule']
@@ -172,7 +287,7 @@ export function proRatePartialPeriods(
     ...lastEntry,
     amount_due: proRatedAmount,
     arrears: roundToPennies(lastEntry.arrears - adjustment),
-    notes: `Pro-rated for ${actualDays} days (daily rate: £${dailyRate.toFixed(2)})`,
+    notes: `Pro-rated for ${actualDays} day${actualDays === 1 ? '' : 's'} at ${formatCurrencyAscii(dailyRate)} per day.`,
   };
 
   // Recalculate running balances
@@ -202,9 +317,15 @@ export function computeEvictionArrears(
     rent_due_day,
     schedule_end_date,
   } = params;
+  const preparedArrearsItems = repairMonthlyGeneratedItems({
+    items: arrears_items || [],
+    rentAmount: rent_amount,
+    rentFrequency: rent_frequency,
+    scheduleEndDate: schedule_end_date,
+  });
 
   const scheduleData = getArrearsScheduleData({
-    arrears_items,
+    arrears_items: preparedArrearsItems,
     total_arrears,
     rent_amount,
     rent_frequency,
@@ -231,12 +352,12 @@ export function computeEvictionArrears(
 
   const canonicalTotal = proratedSchedule.length > 0 ? proratedTotal : baseTotal;
   const arrearsInMonths = calculateArrearsInMonths(canonicalTotal, rent_amount, rent_frequency);
-  const normalizedItems = normalizeArrearsItems(arrears_items || []);
+  const normalizedItems = normalizeArrearsItems(preparedArrearsItems);
   const canonicalItems = alignItemsWithSchedule(normalizedItems, proratedSchedule);
 
   if (
-    Array.isArray(arrears_items) &&
-    arrears_items.length > 0 &&
+    Array.isArray(preparedArrearsItems) &&
+    preparedArrearsItems.length > 0 &&
     typeof total_arrears === 'number' &&
     Math.abs(canonicalTotal - total_arrears) > 0.01 &&
     process.env.NODE_ENV !== 'production'

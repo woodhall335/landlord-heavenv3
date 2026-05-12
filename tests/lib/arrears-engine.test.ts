@@ -153,6 +153,7 @@ describe('Arrears Engine', () => {
       const items: ArrearsItem[] = [
         { period_start: '2024-01-01', period_end: '2024-01-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
         { period_start: '2024-02-01', period_end: '2024-02-29', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
+        { period_start: '2024-03-01', period_end: '2024-03-31', rent_due: 1000, rent_paid: 0, amount_owed: 1000 },
       ];
 
       const result = validateGround8Eligibility({
@@ -163,7 +164,7 @@ describe('Arrears Engine', () => {
       });
 
       expect(result.is_eligible).toBe(true);
-      expect(result.arrears_in_months).toBe(2);
+      expect(result.arrears_in_months).toBe(3);
       expect(result.is_authoritative).toBe(true);
     });
 
@@ -534,6 +535,24 @@ describe('Arrears Engine', () => {
       expect(result.is_eligible).toBe(true);
       expect(result.arrears_in_months).toBe(3);
       expect(result.is_authoritative).toBe(true);
+    });
+
+    it('keeps monthly rent periods stable across British Summer Time changes', () => {
+      const items = createEmptyArrearsSchedule({
+        tenancy_start_date: '2026-01-09',
+        rent_amount: 2000,
+        rent_frequency: 'monthly',
+        cut_off_date: '2026-05-09',
+      });
+
+      expect(items.map((item) => `${item.period_start}:${item.period_end}`)).toEqual([
+        '2026-01-09:2026-02-08',
+        '2026-02-09:2026-03-08',
+        '2026-03-09:2026-04-08',
+        '2026-04-09:2026-05-08',
+        '2026-05-09:2026-05-09',
+      ]);
+      expect(items[4].rent_due).toBe(64.52);
     });
   });
 });

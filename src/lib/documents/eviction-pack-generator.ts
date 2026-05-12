@@ -1249,20 +1249,6 @@ function buildEnglandSection8PackSummaryData(params: {
     usualPaymentWeekday,
   } = params;
 
-  const caseSummaryDraftingData = {
-    ...wizardFacts,
-    ...evictionCase,
-    ...(caseData || {}),
-    ground_codes: (evictionCase.grounds || []).map((ground) => typeof ground === 'string' ? ground : ground.code),
-    total_arrears: currentArrearsTotal,
-    current_arrears: currentArrearsTotal,
-    arrears_at_notice_date: arrearsAtNoticeDate,
-    notice_served_date: noticeServedDate,
-    section_8_notice_date: noticeServedDate,
-    notice_expiry_date: noticeExpiryDate,
-    rent_due_day: paymentDay,
-  };
-
   const complianceStatusItems = buildCaseSummaryComplianceItems({
     evictionCase,
     caseData,
@@ -1290,6 +1276,24 @@ function buildEnglandSection8PackSummaryData(params: {
     caseData?.arrears_at_notice_date ??
     wizardFacts?.arrears_at_notice_date ??
     resolvedCurrentArrearsTotal;
+  const caseSummaryDraftingData = {
+    ...wizardFacts,
+    ...evictionCase,
+    ...(caseData || {}),
+    ...(section8RenderData || {}),
+    ground_codes: (evictionCase.grounds || []).map((ground) => typeof ground === 'string' ? ground : ground.code),
+    total_arrears: resolvedCurrentArrearsTotal,
+    current_arrears: resolvedCurrentArrearsTotal,
+    current_arrears_total: resolvedCurrentArrearsTotal,
+    arrears_at_notice_date: resolvedArrearsAtNoticeDate,
+    notice_service_date: noticeServedDate,
+    notice_served_date: noticeServedDate,
+    section_8_notice_date: noticeServedDate,
+    notice_expiry_date: noticeExpiryDate,
+    earliest_proceedings_date: earliestProceedingsDate,
+    rent_due_day: paymentDay,
+  };
+  const caseSummaryDraftingModel = buildEnglandPossessionDraftingModel(caseSummaryDraftingData);
   const validationSummarySource =
     section8RenderData?.court_pack_validation_summary ||
     caseData?.court_pack_validation_summary ||
@@ -1320,11 +1324,7 @@ function buildEnglandSection8PackSummaryData(params: {
           validationSummarySource.notice_expiry_date || noticeExpiryDate,
         earliest_proceedings_date:
           validationSummarySource.earliest_proceedings_date || earliestProceedingsDate,
-        total_arrears:
-          typeof validationSummarySource.total_arrears === 'number' &&
-          validationSummarySource.total_arrears > 0
-            ? validationSummarySource.total_arrears
-            : resolvedCurrentArrearsTotal,
+        total_arrears: resolvedCurrentArrearsTotal,
         ground_8_threshold:
           typeof validationSummarySource.ground_8_threshold === 'number' &&
           validationSummarySource.ground_8_threshold > 0
@@ -1373,6 +1373,7 @@ function buildEnglandSection8PackSummaryData(params: {
     steps_taken_text: buildN119StepsTakenText(caseSummaryDraftingData),
     defendant_circumstances_text: buildN119DefendantCircumstancesText(caseSummaryDraftingData),
     financial_info_text: buildN119FinancialInfoText(caseSummaryDraftingData),
+    drafting_model: caseSummaryDraftingModel,
     compliance_status_items: complianceStatusItems,
     court_name:
       section8RenderData?.court_name ||
@@ -3352,6 +3353,9 @@ export async function generateCompleteEvictionPack(
 	        const periodsMissed =
 	          (canonicalArrears?.schedule ?? arrearsData.arrears_schedule).filter((entry) => entry.arrears > 0).length ||
 	          arrearsData.arrears_schedule.length;
+	        const scheduleCalculationNotes = arrearsData.arrears_schedule
+	          .map((entry) => entry.notes ? `${entry.period}: ${entry.notes}` : '')
+	          .filter(Boolean);
 
 	        const scheduleDoc = await generateDocument({
           templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
@@ -3391,6 +3395,7 @@ export async function generateCompleteEvictionPack(
 	            arrears_position_note:
 	              'This schedule matches the figures relied on in the Section 8 notice and claim form (N119). Keep it updated to the latest practicable date before issuing.',
 	            periods_missed: periodsMissed,
+	            schedule_calculation_notes: scheduleCalculationNotes,
 	            schedule_role_note:
 	              'This schedule supports the pleaded arrears grounds, the witness evidence, and the court claim materials.',
           },
