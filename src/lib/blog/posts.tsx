@@ -6214,6 +6214,13 @@ const allBlogPosts: BlogPost[] = [
           home. The current route is not the old prior-notice model: landlords should focus on the 12-month
           tenancy timing rule, genuine occupation evidence, and the 4-month Form 3A notice period.
         </p>
+        <p className="text-lg text-gray-700 leading-relaxed">
+          When you have checked Ground 1 fits the facts,{' '}
+          <Link href="/products/notice-only" className="font-semibold text-primary hover:underline">
+            start your Section 8 eviction with the official Form 3A
+          </Link>{' '}
+          so the notice, service record, and evidence trail stay aligned.
+        </p>
         {section8GroundNextSteps}
         {section8TemplateCta}
 

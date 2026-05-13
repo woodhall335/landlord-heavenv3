@@ -10,7 +10,7 @@ import {
   PRODUCT_PRICE_AMOUNT_STRINGS,
   type ProductSku,
 } from '@/lib/pricing/products';
-import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
+import { REVIEW_RATING } from '@/lib/reviews/reviewStats';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
 const DIGITAL_PRODUCT_RETURN_POLICY_URL = '/refunds';
@@ -21,6 +21,7 @@ export const DIGITAL_PRODUCT_RETURN_POLICY_ID = toStructuredDataUrl(
 export const DIGITAL_PRODUCT_SHIPPING_SERVICE_ID = toStructuredDataUrl(
   '/#digital-product-shipping-service'
 );
+export const STRUCTURED_PRODUCT_REVIEW_COUNT = 1215;
 
 const DIGITAL_PRODUCT_SHIPPING_DESTINATION = {
   '@type': 'DefinedRegion',
@@ -202,13 +203,11 @@ export function buildMerchantOffer(input: MerchantOfferInput) {
 }
 
 export function buildProductAggregateRating() {
-  const reviewCount = getDynamicReviewCount();
-
   return {
     '@type': 'AggregateRating',
     ratingValue: REVIEW_RATING,
-    reviewCount: reviewCount.toString(),
-    ratingCount: reviewCount.toString(),
+    reviewCount: STRUCTURED_PRODUCT_REVIEW_COUNT.toString(),
+    ratingCount: STRUCTURED_PRODUCT_REVIEW_COUNT.toString(),
   };
 }
 
@@ -478,8 +477,6 @@ export function softwareApplicationSchema() {
   ];
   const lowPrice = Math.min(...prices).toFixed(2);
   const highPrice = Math.max(...prices).toFixed(2);
-
-  const reviewCount = getDynamicReviewCount();
 
   return {
     "@context": "https://schema.org",

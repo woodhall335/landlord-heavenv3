@@ -9,6 +9,7 @@ import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-cont
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
 const descriptor = getPublicProductDescriptor('notice_only')!;
@@ -16,8 +17,8 @@ const product = PRODUCTS.notice_only;
 const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 
 export const metadata: Metadata = {
-  title: `${descriptor.seoTitle} | England | ${product.displayPrice}`,
-  description: descriptor.metaDescription,
+  title: PRODUCT_OWNER_METADATA.noticeOnly.title,
+  description: PRODUCT_OWNER_METADATA.noticeOnly.description,
   keywords: [
     'section 8 notice',
     'section 8 notice england',
@@ -32,8 +33,8 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: `${descriptor.seoTitle} | England | ${product.displayPrice}`,
-    description: descriptor.metaDescription,
+    title: PRODUCT_OWNER_METADATA.noticeOnly.title,
+    description: PRODUCT_OWNER_METADATA.noticeOnly.description,
     url: canonicalUrl,
   },
 };
@@ -381,7 +382,13 @@ export default function NoticeOnlyPage() {
         label: 'Need the full court route instead?',
         href: '/products/complete-pack',
       },
-      guideLinks: descriptor.defaultGuideLinks,
+      guideLinks: [
+        {
+          label: 'Not sure which pack? Compare Stage 1 and Stage 2',
+          href: '/compare/section-8-stage-1-vs-stage-2',
+        },
+        ...descriptor.defaultGuideLinks,
+      ],
     },
     faq: {
       title: 'Stage 1 Notice & Service FAQs',
@@ -395,7 +402,7 @@ export default function NoticeOnlyPage() {
       <StructuredData
         data={productSchema({
           name: descriptor.displayName,
-          description: descriptor.metaDescription,
+          description: PRODUCT_OWNER_METADATA.noticeOnly.description,
           price: product.price.toString(),
           url: canonicalUrl,
         })}

@@ -47,7 +47,7 @@ describe('sitemap indexability regression', () => {
     });
   });
 
-  it('keeps retired, private, asset, and non-public regional URLs out', async () => {
+  it('keeps retired, private, asset, and non-editorial regional URLs out', async () => {
     const paths = toPathSet(await sitemap());
 
     expect(paths).not.toContain('/products/rent-tracker');
@@ -56,7 +56,7 @@ describe('sitemap indexability regression', () => {
     expect(paths).not.toContain('/wizard');
     expect(paths).not.toContain('/official-forms/n325-eng.pdf');
     expect(paths).not.toContain('/favicon.ico');
-    expect(paths).not.toContain('/blog/rent-smart-wales');
+    expect(paths).toContain('/blog/rent-smart-wales');
     expect(paths).not.toContain('/tenancy-agreements/wales');
     expect(paths).not.toContain('/tenancy-agreements/scotland');
   });

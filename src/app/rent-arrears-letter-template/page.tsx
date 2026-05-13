@@ -166,9 +166,9 @@ export default function RentArrearsLetterTemplatePage() {
                 <Link href="/money-claim-unpaid-rent" className="font-medium text-primary hover:underline">
                   money claim for unpaid rent route
                 </Link>
-                , and the{' '}
+                , and the solicitor-approved pack to{' '}
                 <Link href={moneyClaimProductHref} className="font-medium text-primary hover:underline">
-                  money claim product
+                  escalate to a formal money claim with our court pack
                 </Link>{' '}
                 once reminder letters are no longer enough.
               </p>

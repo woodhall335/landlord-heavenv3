@@ -95,6 +95,11 @@ export default function AssuredPeriodicTenancyAgreementPage() {
         'It should not try to replace the broader England agreement journey. Landlords who want to inspect the agreement itself should move to /tenancy-agreement-template, while landlords who want to compare all five live England routes should move to /products/ast.',
         'Think of this page as translation and context. Once the terminology makes sense, move into the agreement example or comparison page rather than treating this support guide as the end of the journey.',
       ]}
+      intentHookCta={{
+        href: '/standard-tenancy-agreement',
+        label: 'Buy the full periodic tenancy agreement with prescribed information',
+        suffix: 'when you already know the let is a standard England residential tenancy.',
+      }}
       currentPositionTitle="Where assured periodic wording fits in the current England route"
       currentPositionParagraphs={[
         'Assured periodic wording helps explain the direction of travel for new England lets and the way modern tenancy structures are now described. That makes it useful for support content, FAQs, and explanatory guides.',

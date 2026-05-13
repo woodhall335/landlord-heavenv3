@@ -7,6 +7,7 @@ import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-cont
 import { SECTION13_DEFENCE_PAGE } from '@/lib/marketing/section13-products';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 
@@ -16,13 +17,13 @@ const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 const product = PRODUCTS[config.productSku];
 
 export const metadata: Metadata = {
-  title: config.title,
-  description: config.description,
+  title: PRODUCT_OWNER_METADATA.section13Defence.title,
+  description: PRODUCT_OWNER_METADATA.section13Defence.description,
   keywords: config.keywords,
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: config.title,
-    description: config.description,
+    title: PRODUCT_OWNER_METADATA.section13Defence.title,
+    description: PRODUCT_OWNER_METADATA.section13Defence.description,
     url: canonicalUrl,
   },
 };
@@ -160,7 +161,13 @@ export default function Section13DefenceProductPage() {
       secondary: config.cta.secondaryLabel && config.cta.secondaryHref
         ? { label: config.cta.secondaryLabel, href: config.cta.secondaryHref }
         : undefined,
-      guideLinks: descriptor.defaultGuideLinks,
+      guideLinks: [
+        {
+          label: 'Not sure which pack? Compare Section 13 options',
+          href: '/compare/section-13-standard-vs-defence',
+        },
+        ...descriptor.defaultGuideLinks,
+      ],
     },
     faq: {
       title: 'Challenge-Ready Section 13 Defence Pack FAQs',
@@ -174,7 +181,7 @@ export default function Section13DefenceProductPage() {
       <StructuredData
         data={productSchema({
           name: descriptor.displayName,
-          description: config.description,
+          description: PRODUCT_OWNER_METADATA.section13Defence.description,
           price: product.price.toString(),
           url: canonicalUrl,
         })}

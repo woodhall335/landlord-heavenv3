@@ -342,7 +342,13 @@ export default function EnglandTenancyHubPage() {
         label: 'Open Premium Tenancy Agreement',
         href: '/premium-tenancy-agreement',
       },
-      guideLinks: descriptor.defaultGuideLinks,
+      guideLinks: [
+        {
+          label: 'Not sure which agreement? Compare all England options',
+          href: '/compare/tenancy-agreement-options-england',
+        },
+        ...descriptor.defaultGuideLinks,
+      ],
     },
     faq: {
       title: 'England tenancy agreement FAQs',

@@ -6,6 +6,7 @@ import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
 const canonicalUrl = getCanonicalUrl('/student-tenancy-agreement');
@@ -17,9 +18,8 @@ const studentSampleProof = getGoldenPackProofData('england_student_tenancy_agree
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Student Tenancy Agreement England | Guarantor and Sharer Route',
-  description:
-    'Create an England Student Tenancy Agreement with clearer wording for student sharers, guarantors, replacements, and end-of-term hand-back.',
+  title: PRODUCT_OWNER_METADATA.studentTenancy.title,
+  description: PRODUCT_OWNER_METADATA.studentTenancy.description,
   keywords: [
     'student tenancy agreement england',
     'student tenancy agreement template',
@@ -32,9 +32,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Student Tenancy Agreement England | Guarantor and Sharer Route',
-    description:
-      'Create an England Student Tenancy Agreement with clearer wording for student sharers, guarantors, replacements, and end-of-term hand-back.',
+    title: PRODUCT_OWNER_METADATA.studentTenancy.title,
+    description: PRODUCT_OWNER_METADATA.studentTenancy.description,
     url: canonicalUrl,
     type: 'website',
   },
@@ -53,7 +52,7 @@ export default function StudentTenancyAgreementPage() {
       <StructuredData
         data={productSchema({
           name: PRODUCTS.england_student_tenancy_agreement.label,
-          description: PRODUCTS.england_student_tenancy_agreement.description,
+          description: PRODUCT_OWNER_METADATA.studentTenancy.description,
           price: PRODUCTS.england_student_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
         })}

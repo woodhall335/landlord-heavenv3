@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { productSchema } from '../structured-data';
-import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
+import {
+  STRUCTURED_PRODUCT_REVIEW_COUNT,
+  productSchema,
+} from '../structured-data';
+import { REVIEW_RATING } from '@/lib/reviews/reviewStats';
 
 describe('product structured data', () => {
-  it('includes required Product fields with dynamic aggregate rating', () => {
+  it('includes required Product fields with pinned aggregate rating', () => {
     const schema = productSchema({
       name: 'Standard Section 13 Rent Increase Pack',
       description: 'Prepare Form 4A with market evidence and service record.',
@@ -32,8 +35,8 @@ describe('product structured data', () => {
       aggregateRating: {
         '@type': 'AggregateRating',
         ratingValue: REVIEW_RATING,
-        reviewCount: getDynamicReviewCount().toString(),
-        ratingCount: getDynamicReviewCount().toString(),
+        reviewCount: STRUCTURED_PRODUCT_REVIEW_COUNT.toString(),
+        ratingCount: STRUCTURED_PRODUCT_REVIEW_COUNT.toString(),
       },
     });
   });

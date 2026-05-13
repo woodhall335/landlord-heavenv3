@@ -6,6 +6,7 @@ import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
 const canonicalUrl = getCanonicalUrl('/lodger-agreement');
@@ -16,9 +17,8 @@ const lodgerSampleProof = getGoldenPackProofData('england_lodger_agreement');
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Lodger Agreement England | Resident-Landlord Room Let Route',
-  description:
-    'Create an England Lodger Agreement for a resident-landlord room let, with clearer wording on shared living, house rules, notice, and day-to-day occupation.',
+  title: PRODUCT_OWNER_METADATA.lodgerAgreement.title,
+  description: PRODUCT_OWNER_METADATA.lodgerAgreement.description,
   keywords: [
     'lodger agreement england',
     'room let agreement england',
@@ -30,9 +30,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Lodger Agreement England | Resident-Landlord Room Let Route',
-    description:
-      'Create an England Lodger Agreement for a resident-landlord room let, with clearer wording on shared living, house rules, notice, and day-to-day occupation.',
+    title: PRODUCT_OWNER_METADATA.lodgerAgreement.title,
+    description: PRODUCT_OWNER_METADATA.lodgerAgreement.description,
     url: canonicalUrl,
     type: 'website',
   },
@@ -51,7 +50,7 @@ export default function LodgerAgreementEnglandPage() {
       <StructuredData
         data={productSchema({
           name: 'Lodger Agreement',
-          description: PRODUCTS.england_lodger_agreement.description,
+          description: PRODUCT_OWNER_METADATA.lodgerAgreement.description,
           price: PRODUCTS.england_lodger_agreement.price.toFixed(2),
           url: canonicalUrl,
         })}

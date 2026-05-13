@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { RentIncreaseBridge } from '@/components/marketing/CommercialBridge';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
@@ -164,6 +165,15 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
                 </p>
               ) : null}
               <div className="mt-5 space-y-5 text-gray-700">
+                {config.slug === 'form-4a-guide' ? (
+                  <p className="leading-8">
+                    If you are ready to serve the notice after checking the rules,{' '}
+                    <Link href="/products/section-13-standard" className="font-semibold text-primary hover:underline">
+                      serve your Form 4A notice instantly
+                    </Link>{' '}
+                    with the solicitor-approved Section 13 Standard pack.
+                  </p>
+                ) : null}
                 {config.quickAnswer.map((paragraph) => (
                   <p key={paragraph} className="leading-8">
                     {paragraph}

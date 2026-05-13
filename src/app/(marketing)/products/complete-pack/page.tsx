@@ -9,6 +9,7 @@ import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-cont
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
 const descriptor = getPublicProductDescriptor('complete_pack')!;
@@ -16,8 +17,8 @@ const product = PRODUCTS.complete_pack;
 const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 
 export const metadata: Metadata = {
-  title: `${descriptor.seoTitle} | ${product.displayPrice}`,
-  description: descriptor.metaDescription,
+  title: PRODUCT_OWNER_METADATA.completePack.title,
+  description: PRODUCT_OWNER_METADATA.completePack.description,
   keywords: [
     'complete eviction pack',
     'eviction process england',
@@ -33,8 +34,8 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: `${descriptor.seoTitle} | ${product.displayPrice}`,
-    description: descriptor.metaDescription,
+    title: PRODUCT_OWNER_METADATA.completePack.title,
+    description: PRODUCT_OWNER_METADATA.completePack.description,
     url: canonicalUrl,
   },
 };
@@ -394,7 +395,13 @@ export default function CompleteEvictionPackPage() {
         label: 'Only serving notice first?',
         href: '/products/notice-only',
       },
-      guideLinks: descriptor.defaultGuideLinks,
+      guideLinks: [
+        {
+          label: 'Not sure which pack? Compare Stage 1 and Stage 2',
+          href: '/compare/section-8-stage-1-vs-stage-2',
+        },
+        ...descriptor.defaultGuideLinks,
+      ],
     },
     faq: {
       title: 'Stage 2 Court & Possession FAQs',
@@ -408,7 +415,7 @@ export default function CompleteEvictionPackPage() {
       <StructuredData
         data={productSchema({
           name: descriptor.displayName,
-          description: descriptor.metaDescription,
+          description: PRODUCT_OWNER_METADATA.completePack.description,
           price: product.price.toString(),
           url: canonicalUrl,
         })}

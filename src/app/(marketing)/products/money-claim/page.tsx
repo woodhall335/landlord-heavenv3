@@ -8,6 +8,7 @@ import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-cont
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
 const descriptor = getPublicProductDescriptor('money_claim')!;
@@ -15,8 +16,8 @@ const product = PRODUCTS.money_claim;
 const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 
 export const metadata: Metadata = {
-  title: `${descriptor.seoTitle} | Recover unpaid rent and tenant debt | ${product.displayPrice}`,
-  description: descriptor.metaDescription,
+  title: PRODUCT_OWNER_METADATA.moneyClaim.title,
+  description: PRODUCT_OWNER_METADATA.moneyClaim.description,
   keywords: [
     'money claim',
     'money claim unpaid rent',
@@ -29,8 +30,8 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: `${descriptor.seoTitle} | Recover unpaid rent and tenant debt | ${product.displayPrice}`,
-    description: descriptor.metaDescription,
+    title: PRODUCT_OWNER_METADATA.moneyClaim.title,
+    description: PRODUCT_OWNER_METADATA.moneyClaim.description,
     url: canonicalUrl,
   },
 };
@@ -313,7 +314,7 @@ export default function MoneyClaimPage() {
       <StructuredData
         data={productSchema({
           name: descriptor.displayName,
-          description: descriptor.metaDescription,
+          description: PRODUCT_OWNER_METADATA.moneyClaim.description,
           price: product.price.toString(),
           url: canonicalUrl,
         })}

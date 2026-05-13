@@ -5,6 +5,7 @@ import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -16,9 +17,8 @@ const premiumSampleProof = getGoldenPackProofData('england_premium_tenancy_agree
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Premium Periodic Tenancy Agreement England | Landlord Heaven',
-  description:
-    'Create a premium periodic tenancy agreement for an ordinary residential let in England that needs fuller drafting, stronger management wording, and clearer handover detail.',
+  title: PRODUCT_OWNER_METADATA.premiumTenancy.title,
+  description: PRODUCT_OWNER_METADATA.premiumTenancy.description,
   keywords: [
     'premium periodic tenancy agreement',
     'premium periodic tenancy agreement england',
@@ -38,9 +38,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Premium Periodic Tenancy Agreement England | Landlord Heaven',
-    description:
-      'Premium periodic tenancy agreement for ordinary residential lets in England that need fuller drafting, stronger management wording, and clearer handover detail.',
+    title: PRODUCT_OWNER_METADATA.premiumTenancy.title,
+    description: PRODUCT_OWNER_METADATA.premiumTenancy.description,
     url: canonicalUrl,
     type: 'website',
   },
@@ -59,8 +58,7 @@ export default function PremiumTenancyAgreementPage() {
       <StructuredData
         data={productSchema({
           name: 'Premium Periodic Tenancy Agreement',
-          description:
-            'Create a premium periodic tenancy agreement for an ordinary residential let in England that needs fuller management wording.',
+          description: PRODUCT_OWNER_METADATA.premiumTenancy.description,
           price: PRODUCTS.england_premium_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
         })}

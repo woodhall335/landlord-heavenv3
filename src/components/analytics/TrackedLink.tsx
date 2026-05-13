@@ -3,10 +3,12 @@
 import Link from 'next/link';
 import type { MouseEvent, ReactNode } from 'react';
 import {
+  trackAddToCart,
   trackMarketingCtaClick,
   type MarketingCtaPosition,
   type MarketingPageType,
 } from '@/lib/analytics';
+import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
 
 type TrackingEventName =
   | 'homepage_primary_cta_click'
@@ -25,6 +27,16 @@ function resolveDestinationPath(href: string): string {
   }
 
   return href;
+}
+
+function getTrackableProduct(product?: string) {
+  if (!product) return null;
+
+  if (product === 'tenancy_agreement') {
+    return PRODUCTS.ast_standard;
+  }
+
+  return product in PRODUCTS ? PRODUCTS[product as ProductSku] : null;
 }
 
 export function TrackedLink({
@@ -57,6 +69,11 @@ export function TrackedLink({
       href={href}
       className={className}
       onClick={(event) => {
+        const trackedProduct = href.includes('/wizard') ? getTrackableProduct(product) : null;
+        if (trackedProduct) {
+          trackAddToCart(trackedProduct.sku, trackedProduct.label, trackedProduct.price);
+        }
+
         trackMarketingCtaClick({
           eventName,
           pagePath,

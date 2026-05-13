@@ -137,6 +137,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/samples" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
+                  Free Samples
+                </Link>
+              </li>
+              <li>
                 <Link href="/section-8-notice" className="inline-block text-xs text-[#bdbdbd] transition-colors hover:text-white">
                   Section 8 guide
                 </Link>

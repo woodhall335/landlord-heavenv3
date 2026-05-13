@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import Link from 'next/link';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Container } from '@/components/ui/Container';
@@ -409,6 +410,18 @@ export default function HMOLicenseChecker() {
       >
         <p className="mt-4 text-sm text-white/90">Instant assessment • HMO guidance • Built to help landlords avoid licensing mistakes</p>
       </UniversalHero>
+
+      <section className="border-b border-gray-100 bg-white py-6">
+        <Container>
+          <p className="mx-auto max-w-4xl text-base leading-7 text-gray-700">
+            If the check points to shared occupation or multiple households,{' '}
+            <Link href="/hmo-shared-house-tenancy-agreement" className="font-semibold text-primary hover:underline">
+              get your HMO-compliant tenancy agreement
+            </Link>{' '}
+            before you issue terms to the occupiers.
+          </p>
+        </Container>
+      </section>
 
       {/* Legal Disclaimer Banner */}
       <div className="border-b-2 border-warning-500 bg-warning-50 py-4">

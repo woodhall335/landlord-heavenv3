@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState, useCallback, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { HeaderConfig } from '@/components/layout';
 import { Button, Card, Container, Input } from '@/components/ui';
@@ -453,6 +454,18 @@ export default function RentArrearsCalculator() {
           Instant calculation • Clear arrears summary • Built to help landlords prepare the next move
         </p>
       </UniversalHero>
+
+      <section className="border-b border-gray-100 bg-white py-6">
+        <Container>
+          <p className="mx-auto max-w-4xl text-base leading-7 text-gray-700">
+            After the calculation, you can{' '}
+            <Link href="/products/money-claim" className="font-semibold text-primary hover:underline">
+              recover rent arrears via Money Claim Online
+            </Link>{' '}
+            with the solicitor-approved pack that includes the claim forms and arrears evidence.
+          </p>
+        </Container>
+      </section>
 
       <Container className="py-12 space-y-8">
         <Card id="calculator" padding="large">

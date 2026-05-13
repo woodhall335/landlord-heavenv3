@@ -36,6 +36,11 @@ type TenancyFunnelLandingPageProps = {
   pagePath: string;
   intentHookTitle: string;
   intentHookParagraphs: string[];
+  intentHookCta?: {
+    href: string;
+    label: string;
+    suffix: string;
+  };
   currentPositionTitle: string;
   currentPositionParagraphs: string[];
   sections: FunnelSection[];
@@ -63,6 +68,7 @@ export function TenancyFunnelLandingPage({
   pagePath,
   intentHookTitle,
   intentHookParagraphs,
+  intentHookCta,
   currentPositionTitle,
   currentPositionParagraphs,
   sections,
@@ -105,6 +111,14 @@ export function TenancyFunnelLandingPage({
             {intentHookParagraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
+            {intentHookCta ? (
+              <p>
+                <Link href={intentHookCta.href} className="font-semibold text-primary hover:underline">
+                  {intentHookCta.label}
+                </Link>{' '}
+                {intentHookCta.suffix}
+              </p>
+            ) : null}
           </div>
         </section>
 

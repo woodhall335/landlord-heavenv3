@@ -27,7 +27,7 @@ export async function GET(
       'Content-Type': asset.contentType,
       'Content-Disposition': `inline; filename="${asset.fileName}"`,
       'Cache-Control': 'public, max-age=31536000, immutable',
-      'X-Robots-Tag': 'noindex, nofollow, noarchive',
+      'X-Robots-Tag': 'index, follow',
     },
   });
 }

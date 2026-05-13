@@ -5,6 +5,7 @@ import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -17,9 +18,8 @@ const hmoSampleProof = getGoldenPackProofData('england_hmo_shared_house_tenancy_
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'HMO / Shared House Tenancy Agreement England | Sharers and House Rules Route',
-  description:
-    'Create an England HMO / Shared House Tenancy Agreement with clearer wording for sharers, communal areas, house rules, and shared-house management.',
+  title: PRODUCT_OWNER_METADATA.hmoTenancy.title,
+  description: PRODUCT_OWNER_METADATA.hmoTenancy.description,
   keywords: [
     'hmo tenancy agreement england',
     'shared house tenancy agreement england',
@@ -32,9 +32,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'HMO / Shared House Tenancy Agreement England | Sharers and House Rules Route',
-    description:
-      'Create an England HMO / Shared House Tenancy Agreement with clearer wording for sharers, communal areas, house rules, and shared-house management.',
+    title: PRODUCT_OWNER_METADATA.hmoTenancy.title,
+    description: PRODUCT_OWNER_METADATA.hmoTenancy.description,
     url: canonicalUrl,
     type: 'website',
   },
@@ -53,7 +52,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
       <StructuredData
         data={productSchema({
           name: PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
-          description: PRODUCTS.england_hmo_shared_house_tenancy_agreement.description,
+          description: PRODUCT_OWNER_METADATA.hmoTenancy.description,
           price: PRODUCTS.england_hmo_shared_house_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
         })}

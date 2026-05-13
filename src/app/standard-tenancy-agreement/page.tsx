@@ -4,6 +4,7 @@ import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 import { getCanonicalUrl } from '@/lib/seo';
 
@@ -15,9 +16,8 @@ const standardSampleProof = getGoldenPackProofData('england_standard_tenancy_agr
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Standard Periodic Tenancy Agreement England | Landlord Heaven',
-  description:
-    'Create a standard periodic tenancy agreement for a straightforward whole-property let in England, with current wording and practical setup paperwork for landlords.',
+  title: PRODUCT_OWNER_METADATA.standardTenancy.title,
+  description: PRODUCT_OWNER_METADATA.standardTenancy.description,
   keywords: [
     'standard periodic tenancy agreement',
     'standard periodic tenancy agreement england',
@@ -35,9 +35,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Standard Periodic Tenancy Agreement England | Landlord Heaven',
-    description:
-      'Create a standard periodic tenancy agreement for a straightforward whole-property let in England, with current wording and practical setup paperwork for landlords.',
+    title: PRODUCT_OWNER_METADATA.standardTenancy.title,
+    description: PRODUCT_OWNER_METADATA.standardTenancy.description,
     url: canonicalUrl,
     type: 'website',
   },
@@ -56,8 +55,7 @@ export default function StandardTenancyAgreementPage() {
       <StructuredData
         data={productSchema({
           name: 'Standard Periodic Tenancy Agreement',
-          description:
-            'Create a standard periodic tenancy agreement for a straightforward whole-property let in England.',
+          description: PRODUCT_OWNER_METADATA.standardTenancy.description,
           price: PRODUCTS.england_standard_tenancy_agreement.price.toFixed(2),
           url: canonicalUrl,
         })}

@@ -35,7 +35,7 @@ export async function GET(
       'Content-Type': 'image/jpeg',
       'Cache-Control': 'public, max-age=31536000, immutable',
       'Content-Disposition': `inline; filename="${asset.fileName.replace(/\.pdf$/i, '')}-thumbnail.jpg"`,
-      'X-Robots-Tag': 'noindex, nofollow, noarchive',
+      'X-Robots-Tag': 'index, follow',
     },
   });
 }

@@ -62,10 +62,13 @@ const tenancyAgreementLinks: NavItem[] = [
   { href: '/lodger-agreement', label: 'Room Let / Lodger Agreement & Shared Home Pack' },
 ];
 
-const freeToolsLinks: NavItem[] = freeTools.map((tool) => ({
-  href: tool.href,
-  label: tool.label,
-}));
+const freeToolsLinks: NavItem[] = [
+  { href: '/samples', label: 'Free Samples' },
+  ...freeTools.map((tool) => ({
+    href: tool.href,
+    label: tool.label,
+  })),
+];
 
 export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBarProps) {
   const pathname = usePathname();

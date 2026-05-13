@@ -325,7 +325,7 @@ export async function GET(
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
       'Cache-Control': 'public, max-age=31536000, immutable',
-      'X-Robots-Tag': 'noindex, nofollow, noarchive',
+      'X-Robots-Tag': 'index, follow',
     },
   });
 }

@@ -117,6 +117,13 @@ export default function HowToRentGuidePage() {
                   The &quot;How to Rent: the checklist for renting in England&quot; is a government-published
                   document that explains:
                 </p>
+                <p>
+                  If you are preparing the written statement of terms at the same time, you can{' '}
+                  <Link href="/standard-tenancy-agreement">
+                    download a solicitor-approved tenancy agreement
+                  </Link>{' '}
+                  for the tenancy file before you serve the How to Rent guide.
+                </p>
                 <ul>
                   <li>What tenants should look for before renting</li>
                   <li>What to expect during the tenancy</li>
