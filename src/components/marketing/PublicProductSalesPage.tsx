@@ -604,6 +604,8 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
     analytics?.pageType === 'product_page'
       ? analytics.routeIntent || inferProductFromHref(hero.primaryCta?.href || '') || analytics.pagePath
       : null;
+  const heroPreTitleLabel =
+    hero.preTitleLabel ?? (analytics?.pageType === 'product_page' ? 'Solicitor-approved' : undefined);
 
   return (
     <>
@@ -616,7 +618,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
           priceLabel={earlyProofBand?.priceLabel}
         />
       ) : null}
-      <UniversalHero {...hero}>{hero.children}</UniversalHero>
+      <UniversalHero {...hero} preTitleLabel={heroPreTitleLabel}>{hero.children}</UniversalHero>
       {postHeroContent ? <section className="scroll-mt-24 bg-white py-10 md:py-12"><Container><div className="mx-auto max-w-6xl">{postHeroContent}</div></Container></section> : null}
       {decisionBlock ? <DecisionBlock content={decisionBlock} analytics={analytics} /> : null}
       {earlyProofBand ? <EarlyProofBand content={earlyProofBand} /> : null}

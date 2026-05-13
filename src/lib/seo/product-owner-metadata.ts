@@ -1,13 +1,15 @@
+import { SEO_PRICES } from '@/lib/pricing/products';
+
 export const PRODUCT_OWNER_METADATA = {
   noticeOnly: {
     path: '/products/notice-only',
-    title: 'Buy Section 8 Notice Form 3A | Eviction Pack | £24.99',
+    title: `Buy Section 8 Notice Form 3A | Eviction Pack | ${SEO_PRICES.evictionNotice.display}`,
     description:
       'Start your solicitor-approved Section 8 eviction pack. Download Form 3A, service record, N215 certificate, and arrears statement. 4.8/5.',
   },
   completePack: {
     path: '/products/complete-pack',
-    title: 'Section 8 Court Pack | Form N5 + N119 | £59.99',
+    title: `Complete Eviction Pack | Form N5 + N119 | ${SEO_PRICES.evictionBundle.display}`,
     description:
       'File a solicitor-approved possession claim pack. Includes Section 8 notice, N5, N119, witness statement, and hearing guide. 4.8/5.',
   },

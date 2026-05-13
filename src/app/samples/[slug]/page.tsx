@@ -77,7 +77,7 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
 
   return (
     <main className="min-h-screen bg-[#FCFBF8]">
-      <HeaderConfig mode="autoOnScroll" />
+      <HeaderConfig mode="solid" />
       <StructuredData
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
@@ -115,7 +115,10 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
           </div>
 
           <div className="mt-10 max-w-4xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+            <p className="inline-flex rounded-full border border-[#D8C8FF] bg-[#F7F1FF] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5E3E9A]">
+              Solicitor-approved sample pack
+            </p>
+            <p className="mt-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               {config.targetKeyword}
             </p>
             <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#141B2D] md:text-6xl">

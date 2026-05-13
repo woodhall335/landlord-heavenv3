@@ -32,6 +32,7 @@ const REVIEW_STARS = '\u2605\u2605\u2605\u2605\u2605';
 export type UniversalHeroProps = {
   preset?: PublicHeroPreset;
   variant?: 'pastel';
+  preTitleLabel?: string;
   trustText?: string;
   badge?: string;
   badgeIcon?: ReactNode;
@@ -81,6 +82,7 @@ function warnOnce(message: string) {
 
 export function UniversalHero({
   preset = 'product_owner',
+  preTitleLabel,
   trustText,
   title,
   highlightTitle,
@@ -279,10 +281,23 @@ export function UniversalHero({
               )
             )}
 
+            {preTitleLabel ? (
+              <p
+                className={clsx(
+                  'mt-5 inline-flex items-center rounded-full border border-white/70 bg-white/85 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#4c1d95] shadow-sm backdrop-blur-sm',
+                  isCenter && 'mx-auto'
+                )}
+              >
+                {preTitleLabel}
+              </p>
+            ) : null}
+
             {shouldRenderHeading && (
               <HeadingTag
                 className={clsx(
-                  'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl',
+                  preTitleLabel
+                    ? 'mt-3 text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl'
+                    : 'mt-5 text-[2.125rem] font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl',
                   shouldRenderMedia ? 'max-w-none' : 'max-w-[18ch] lg:max-w-none'
                 )}
               >

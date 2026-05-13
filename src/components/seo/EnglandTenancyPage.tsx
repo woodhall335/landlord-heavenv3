@@ -205,6 +205,7 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
+        preTitleLabel="Solicitor-approved"
         trustText="England tenancy agreements for landlords, updated for the post-May 2026 rules."
         title={title}
         subtitle={subtitle}

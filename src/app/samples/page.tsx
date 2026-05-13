@@ -66,6 +66,7 @@ export default function SamplesPage() {
 
       <UniversalHero
         badge="Free Samples"
+        preTitleLabel="Solicitor-approved sample packs"
         title="Free Landlord Document Samples"
         subtitle="Browse real sample documents from the same golden-pack manifests that power the product previews, so page counts and document lists stay in sync when packs change."
         primaryCta={{ label: 'View sample packs', href: '#sample-packs' }}
