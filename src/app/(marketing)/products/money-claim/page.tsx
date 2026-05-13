@@ -20,12 +20,19 @@ export const metadata: Metadata = {
   title: PRODUCT_OWNER_METADATA.moneyClaim.title,
   description: PRODUCT_OWNER_METADATA.moneyClaim.description,
   keywords: [
-    'money claim',
+    'money claim online pack',
+    'MCOL pack for landlords',
+    'rent arrears money claim',
+    'particulars of claim template',
+    'letter before claim template',
+    'solicitor-approved MCOL pack',
+    'money claim online UK',
+    "Renters' Rights Act debt claim",
+    'money claim online post May 2026',
+    'landlord money claim pack',
     'money claim unpaid rent',
-    'unpaid rent',
     'recover unpaid rent',
     'property damage',
-    'landlord money claim pack',
   ],
   alternates: {
     canonical: canonicalUrl,
@@ -63,6 +70,16 @@ const faqs: FAQItem[] = [
     answer:
       'The enforcement guide explains the next-stage options such as bailiffs, attachment of earnings, and charging orders so the case does not stop at judgment.',
   },
+  {
+    question: 'Is this a court approved money claim?',
+    answer:
+      'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved Money Claim pack follows current England rules and includes validation checks to help you file correctly.',
+  },
+  {
+    question: 'Is this legally binding?',
+    answer:
+      "Yes - when completed and filed correctly. This solicitor-approved pack follows post-May 2026 England rules, and the validation checklist helps you avoid common money claim mistakes.",
+  },
 ];
 
 export const runtime = 'nodejs';
@@ -80,10 +97,10 @@ export default function MoneyClaimPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England money claim pack | unpaid rent, bills, damage, and guarantor debt',
-      title: descriptor.displayName,
+      trustText: 'Money claim online pack | rent arrears, particulars, and validation checks',
+      title: 'Solicitor-approved Money Claim Pack - Recover Rent Arrears',
       subtitle:
-        'Use this pack when a tenant owes rent, damage, bills, or other tenancy debt. It helps you prepare the pre-action letter, claim details, debt schedules, and next steps in one place.',
+        "Use this MCOL pack for landlords when a tenant owes rent, damage, bills, or other tenancy debt. It helps you prepare the letter before claim template, particulars of claim template, debt schedules, and Renters' Rights Act debt claim next steps in one place.",
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,

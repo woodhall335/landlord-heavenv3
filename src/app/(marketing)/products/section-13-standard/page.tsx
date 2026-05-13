@@ -42,13 +42,13 @@ export default function Section13StandardProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 13 pack | standard option for a rent increase pack',
+      trustText: 'Form 4A generator | validated Section 13 notice for England landlords',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
       secondaryCta: { label: 'Compare the defence pack', href: '/products/section-13-defence' },
       feature:
-        'Built for landlords who want the notice, evidence, and service record to stay clear from the start.',
+        'Built for landlords who want a solicitor-approved Form 4A, evidence, and service record to stay clear from the start.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 rent increase documents',
       showReviewPill: true,

@@ -460,9 +460,9 @@ export default function RentArrearsCalculator() {
           <p className="mx-auto max-w-4xl text-base leading-7 text-gray-700">
             After the calculation, you can{' '}
             <Link href="/products/money-claim" className="font-semibold text-primary hover:underline">
-              recover rent arrears via Money Claim Online
+              build a solicitor-approved MCOL pack for landlords
             </Link>{' '}
-            with the solicitor-approved pack that includes the claim forms and arrears evidence.
+            with validated particulars of claim and arrears evidence.
           </p>
         </Container>
       </section>

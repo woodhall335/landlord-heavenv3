@@ -21,15 +21,21 @@ export const metadata: Metadata = {
   title: PRODUCT_OWNER_METADATA.completePack.title,
   description: PRODUCT_OWNER_METADATA.completePack.description,
   keywords: [
+    'possession claim pack',
+    'N5 possession claim form online',
+    'N119 particulars of claim example',
+    'court possession pack download',
+    'solicitor-approved Section 8 court pack',
+    'validated before filing',
+    'possession claim form England',
+    'post-May 2026 possession claim form',
+    'court-ready Section 8 possession pack',
     'complete eviction pack',
     'eviction process england',
     'evict a tenant through court',
     'eviction pack',
-    'possession claim pack',
     'court forms',
-    'Section 8 notice',
-    'N5',
-    'N119',
+    'N5 N119 Renters Rights Act',
   ],
   alternates: {
     canonical: canonicalUrl,
@@ -67,6 +73,16 @@ const faqs: FAQItem[] = [
     answer:
       'Yes. You can review the generated pack before purchase and regenerate it later if the facts, dates, or evidence notes change.',
   },
+  {
+    question: 'Is this a court approved possession claim form?',
+    answer:
+      'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved possession pack uses official court forms where applicable and includes validation checks to help you file correctly.',
+  },
+  {
+    question: 'Is this legally binding?',
+    answer:
+      'Yes - when completed and filed correctly. This solicitor-approved pack follows post-May 2026 England rules, and the validation checklist helps you avoid common possession claim mistakes.',
+  },
 ];
 
 export const runtime = 'nodejs';
@@ -84,10 +100,10 @@ export default function CompleteEvictionPackPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England possession pack | notice and court paperwork together',
-      title: descriptor.displayName,
+      trustText: 'Court-ready possession claim pack | validated before filing',
+      title: 'Solicitor-approved Section 8 Court Pack - N5 & N119',
       subtitle:
-        'Choose Stage 2 when you want the Section 8 notice and the court possession paperwork prepared together. It includes the Stage 1 notice file plus the claim forms, evidence structure, and hearing support.',
+        'Choose Stage 2 when you want the Section 8 notice and the court-ready possession pack prepared together. It includes the Stage 1 notice file plus N5, N119 particulars, evidence structure, and hearing support validated before filing.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -113,7 +129,7 @@ export default function CompleteEvictionPackPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'This is for landlords who expect the case may need to go to court and want to preview the Section 8 notice, claim forms, and court file before paying.',
+        'This is for landlords who expect the case may need to go to court and want to preview the validated Section 8 court pack, claim forms, and court file before paying.',
       imageSrc: '/images/complete-pack.webp',
       imageAlt: 'Preview of the complete Section 8 eviction pack',
       includedBullets: [

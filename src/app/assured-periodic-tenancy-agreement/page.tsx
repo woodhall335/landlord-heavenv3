@@ -97,7 +97,7 @@ export default function AssuredPeriodicTenancyAgreementPage() {
       ]}
       intentHookCta={{
         href: '/standard-tenancy-agreement',
-        label: 'Buy the full periodic tenancy agreement with prescribed information',
+        label: "Create a validated assured periodic tenancy agreement",
         suffix: 'when you already know the let is a standard England residential tenancy.',
       }}
       currentPositionTitle="Where assured periodic wording fits in the current England route"

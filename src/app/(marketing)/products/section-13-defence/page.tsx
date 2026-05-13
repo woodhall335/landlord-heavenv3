@@ -42,13 +42,13 @@ export default function Section13DefenceProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 13 defence pack for landlords expecting a challenge',
+      trustText: 'Section 13 tribunal bundle | solicitor-approved tribunal pack',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
       secondaryCta: { label: 'Compare the standard option', href: '/products/section-13-standard' },
       feature:
-        'Built for landlords who want the notice, evidence, response notes, and tribunal bundle prepared together.',
+        'Built for landlords who want a Section 13 response letter template, validated evidence, response notes, and tribunal bundle prepared together.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 defence documents',
       showReviewPill: true,

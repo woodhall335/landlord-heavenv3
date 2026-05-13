@@ -700,8 +700,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       },
       {
         href: '/products/notice-only',
-        title: 'Use Notice Only',
-        description: 'Generate the current England notice through the live process now.',
+        title: 'Use our validated Section 8 notice builder',
+        description: "Generate a solicitor-approved Form 3A and service record for the current Renters' Rights Act Section 8 route.",
         icon: 'document',
         type: 'product',
       },
@@ -713,7 +713,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Generate current England notice', href: '/products/notice-only' },
+    primaryCta: { label: 'Use our validated Section 8 notice builder', href: '/products/notice-only' },
     secondaryCta: { label: 'See the full England process', href: '/eviction-process-england' },
   },
   'how-to-evict-a-tenant-england': {

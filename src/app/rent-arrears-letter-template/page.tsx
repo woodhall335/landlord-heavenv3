@@ -168,7 +168,7 @@ export default function RentArrearsLetterTemplatePage() {
                 </Link>
                 , and the solicitor-approved pack to{' '}
                 <Link href={moneyClaimProductHref} className="font-medium text-primary hover:underline">
-                  escalate to a formal money claim with our court pack
+                  generate a validated rent arrears money claim pack
                 </Link>{' '}
                 once reminder letters are no longer enough.
               </p>

@@ -23,7 +23,13 @@ export const metadata: Metadata = {
   title: PRODUCT_OWNER_METADATA.studentTenancy.title,
   description: PRODUCT_OWNER_METADATA.studentTenancy.description,
   keywords: [
+    'student tenancy agreement UK',
+    'student tenancy agreement builder',
+    'student AST template',
+    'guarantor agreement for student tenancy',
+    'solicitor-approved student AST',
     'student tenancy agreement england',
+    'student tenancy post May 2026',
     'student tenancy agreement template',
     'student house agreement england',
     'student let agreement england',
@@ -62,8 +68,8 @@ export default function StudentTenancyAgreementPage() {
 
       <EnglandTenancyPage
         pagePath="/student-tenancy-agreement"
-        title="Student Tenancy Agreement England"
-        subtitle="Use this England student tenancy agreement generator when the occupiers are students and you want clearer wording on guarantors, joint tenants, replacement requests, and end-of-term move-out than a general residential pack usually provides."
+        title="Solicitor-approved Student Tenancy Agreement - Sharer & Guarantor Builder"
+        subtitle="Use this solicitor-approved student tenancy agreement builder when the occupiers are students and you want validated guarantor wording, clearer wording on joint tenants, replacement requests, and end-of-term move-out under the post-May 2026 England rules."
         primaryCtaLabel="Start student tenancy agreement"
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
@@ -76,6 +82,7 @@ export default function StudentTenancyAgreementPage() {
         ]}
         highlights={[
           'Student-focused agreement wording for shared occupation',
+          'Student AST template wording with guarantor agreement and sharer replacement controls',
           'Clearer treatment of guarantors, joint tenants, and replacement requests',
           'Better end-of-term and move-out wording than a generic residential agreement',
           'Guided generator with a preview before payment',
@@ -221,6 +228,16 @@ export default function StudentTenancyAgreementPage() {
             question: 'Does this help with end-of-term move-out expectations?',
             answer:
               'Yes. One of the key benefits of this pack is clearer wording around hand-back, key return, and end-of-term expectations, which are often more important in student lets than in ordinary residential tenancies.',
+          },
+          {
+            question: 'Is this a court approved student tenancy agreement?',
+            answer:
+              'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved student tenancy agreement follows current England rules and includes validation checks to help you complete it correctly.',
+          },
+          {
+            question: 'Is this legally binding?',
+            answer:
+              'Yes - when completed and signed correctly. This solicitor-approved template follows post-May 2026 England rules, and the validation checklist helps you avoid common student tenancy agreement mistakes.',
           },
         ]}
         finalCtaBody="Use the Student pack when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this is usually the better fit than the Standard or Premium assured periodic packs. If you are still deciding, compare it against the other England products on the main comparison page."

@@ -416,9 +416,9 @@ export default function HMOLicenseChecker() {
           <p className="mx-auto max-w-4xl text-base leading-7 text-gray-700">
             If the check points to shared occupation or multiple households,{' '}
             <Link href="/hmo-shared-house-tenancy-agreement" className="font-semibold text-primary hover:underline">
-              get your HMO-compliant tenancy agreement
+              generate a solicitor-approved HMO tenancy agreement template
             </Link>{' '}
-            before you issue terms to the occupiers.
+            with validated house rules before you issue terms to the occupiers.
           </p>
         </Container>
       </section>

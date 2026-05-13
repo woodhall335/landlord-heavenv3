@@ -4,7 +4,10 @@ import { describe, expect, it } from 'vitest';
 
 import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
 import { productSamplePages, productSamplePagePaths } from '@/lib/marketing/product-sample-pages';
-import { PRODUCT_OWNER_METADATA_LIST } from '@/lib/seo/product-owner-metadata';
+import {
+  PRODUCT_OWNER_METADATA,
+  PRODUCT_OWNER_METADATA_LIST,
+} from '@/lib/seo/product-owner-metadata';
 import {
   STRUCTURED_PRODUCT_REVIEW_COUNT,
   productSchema,
@@ -71,53 +74,184 @@ const productOwnerPages = [
 
 const earlyInternalLinks = [
   {
+    source: 'src/lib/seo/england-current-framework-pages.ts',
+    href: '/products/notice-only',
+    anchor: 'Use our validated Section 8 notice builder',
+  },
+  {
     source: 'src/app/how-to-rent-guide/page.tsx',
     href: '/standard-tenancy-agreement',
-    anchor: 'download a solicitor-approved tenancy agreement',
+    anchor: "create a Renters' Rights Act compliant tenancy agreement",
   },
   {
     source: 'src/app/rent-increase/RentIncreaseGuidePage.tsx',
     href: '/products/section-13-standard',
-    anchor: 'serve your Form 4A notice instantly',
+    anchor: 'generate a solicitor-approved Form 4A with our rent increase builder',
+  },
+  {
+    source: 'src/app/rent-increase/RentIncreaseGuidePage.tsx',
+    href: '/products/section-13-defence',
+    anchor: 'prepare a solicitor-approved tribunal evidence pack',
   },
   {
     source: 'src/app/tools/hmo-license-checker/page.tsx',
     href: '/hmo-shared-house-tenancy-agreement',
-    anchor: 'get your HMO-compliant tenancy agreement',
+    anchor: 'generate a solicitor-approved HMO tenancy agreement template',
   },
   {
     source: 'src/lib/blog/posts.tsx',
     href: '/products/notice-only',
-    anchor: 'start your Section 8 eviction with the official Form 3A',
+    anchor: 'use our validated Section 8 notice builder',
+  },
+  {
+    source: 'src/lib/blog/posts.tsx',
+    href: '/products/complete-pack',
+    anchor: 'court-ready possession pack',
   },
   {
     source: 'src/app/tools/rent-arrears-calculator/page.tsx',
     href: '/products/money-claim',
-    anchor: 'recover rent arrears via Money Claim Online',
+    anchor: 'build a solicitor-approved MCOL pack for landlords',
   },
   {
     source: 'src/app/rent-arrears-letter-template/page.tsx',
     href: '/products/money-claim',
     hrefExpression: 'moneyClaimProductHref',
-    anchor: 'escalate to a formal money claim with our court pack',
+    anchor: 'generate a validated rent arrears money claim pack',
   },
   {
     source: 'src/app/assured-periodic-tenancy-agreement/page.tsx',
     href: '/standard-tenancy-agreement',
-    anchor: 'Buy the full periodic tenancy agreement with prescribed information',
+    anchor: 'Create a validated assured periodic tenancy agreement',
   },
 ];
+
+const expectedProductMetaDescriptions = {
+  noticeOnly:
+    'Generate a solicitor-approved Section 8 notice builder for Form 3A. Validated service record and N215 included. 4.8/5. Start correctly today.',
+  completePack:
+    'Download a court-ready Section 8 possession pack with N5, N119, witness statement. Solicitor-approved, validated before filing. 4.8/5. Instant download.',
+  moneyClaim:
+    'Recover rent arrears with our solicitor-approved Money Claim pack. Includes letter before claim and particulars of claim. 4.8/5. Download now.',
+  section13Standard:
+    'Use our Form 4A generator for a Section 13 rent increase. Solicitor-approved, validated notice with market evidence. 4.8/5. Instant PDF download.',
+  section13Defence:
+    'Defend a challenged rent increase with our tribunal-ready Section 13 Defence pack. Solicitor-approved evidence templates and checklist. 4.8/5.',
+  standardTenancy:
+    'Create a solicitor-approved Standard Periodic Tenancy Agreement. AST generator for post-May 2026 rules. Validated wording. 4.8/5. Download now.',
+  premiumTenancy:
+    'Generate a solicitor-approved Premium Periodic Tenancy Agreement with stronger management wording. Post-May 2026 compliant. 4.8/5. Download.',
+  studentTenancy:
+    "Solicitor-approved Student Tenancy Agreement builder. Handles guarantors, sharers, and move-out. Renters' Rights Act compliant. 4.8/5. Download.",
+  hmoTenancy:
+    'Solicitor-approved HMO Tenancy Agreement template with validated house rules for shared houses. Post-May 2026 compliant. 4.8/5. Instant download.',
+  lodgerAgreement:
+    'Solicitor-approved Lodger Agreement for resident landlords. Room let contract with validated notice rules and house rules. 4.8/5. Instant PDF.',
+} satisfies Record<keyof typeof PRODUCT_OWNER_METADATA, string>;
+
+const pageCommercialPhraseExpectations = [
+  {
+    source: 'src/app/(marketing)/products/notice-only/page.tsx',
+    phrases: ['section 8 notice builder', 'validated section 8 notice'],
+    faq: 'Is this a court approved Section 8 notice?',
+  },
+  {
+    source: 'src/app/(marketing)/products/complete-pack/page.tsx',
+    phrases: ['court-ready Section 8 possession pack', 'validated before filing'],
+    faq: 'Is this a court approved possession claim form?',
+  },
+  {
+    source: 'src/app/(marketing)/products/money-claim/page.tsx',
+    phrases: ['MCOL pack for landlords', 'particulars of claim template'],
+    faq: 'Is this a court approved money claim?',
+  },
+  {
+    source: 'src/lib/marketing/section13-products.ts',
+    phrases: ['Form 4A generator', 'validated Section 13 notice'],
+    faq: 'Is this a court approved Section 13 notice?',
+  },
+  {
+    source: 'src/lib/marketing/section13-products.ts',
+    phrases: ['Section 13 response letter template', 'tribunal bundle'],
+    faq: 'Is this a court approved Section 13 Defence Pack?',
+  },
+  {
+    source: 'src/app/standard-tenancy-agreement/page.tsx',
+    phrases: ['periodic tenancy agreement template', 'validated tenancy agreement'],
+    faq: 'Is this a court approved tenancy agreement?',
+  },
+  {
+    source: 'src/app/premium-tenancy-agreement/page.tsx',
+    phrases: ['premium tenancy agreement builder', 'validated management wording'],
+    faq: 'Is this a court approved premium tenancy agreement?',
+  },
+  {
+    source: 'src/app/student-tenancy-agreement/page.tsx',
+    phrases: ['student tenancy agreement builder', 'validated guarantor wording'],
+    faq: 'Is this a court approved student tenancy agreement?',
+  },
+  {
+    source: 'src/app/hmo-shared-house-tenancy-agreement/page.tsx',
+    phrases: ['HMO tenancy agreement template', 'validated house rules'],
+    faq: 'Is this a court approved HMO tenancy agreement?',
+  },
+  {
+    source: 'src/app/lodger-agreement/page.tsx',
+    phrases: ['lodger room rental agreement template', 'validated lodger notice rules'],
+    faq: 'Is this a court approved lodger agreement?',
+  },
+] as const;
 
 describe('product owner SEO funnel', () => {
   it('defines commercial metadata for every product owner page', () => {
     expect(PRODUCT_OWNER_METADATA_LIST).toHaveLength(10);
 
+    for (const [key, expectedDescription] of Object.entries(expectedProductMetaDescriptions)) {
+      expect(
+        PRODUCT_OWNER_METADATA[key as keyof typeof PRODUCT_OWNER_METADATA].description
+      ).toBe(expectedDescription);
+    }
+
     for (const metadata of PRODUCT_OWNER_METADATA_LIST) {
       expect(metadata.title).toBeTruthy();
-      expect(metadata.description).toContain('solicitor-approved');
+      expect(metadata.description.toLowerCase()).toMatch(
+        /solicitor-approved|validated|builder|generator|court-ready|renters' rights act/
+      );
       expect(metadata.description).toContain('4.8/5');
-      expect(metadata.description.length).toBeGreaterThanOrEqual(115);
+      expect(metadata.description.length).toBeGreaterThanOrEqual(125);
       expect(metadata.description.length).toBeLessThanOrEqual(155);
+    }
+  });
+
+  it('puts commercial phrase coverage and safe FAQs on every product owner page', () => {
+    for (const page of pageCommercialPhraseExpectations) {
+      const source = readSource(page.source);
+
+      for (const phrase of page.phrases) {
+        expect(source.toLowerCase(), `${page.source} should include ${phrase}`).toContain(
+          phrase.toLowerCase()
+        );
+      }
+
+      expect(source, page.source).toContain(page.faq);
+      expect(source, page.source).toContain('Is this legally binding?');
+      expect(source, page.source).toContain('pre-approve');
+    }
+  });
+
+  it('keeps court approved wording limited to the safe FAQ context', () => {
+    for (const page of pageCommercialPhraseExpectations) {
+      const source = readSource(page.source);
+      const matches = [...source.matchAll(/court approved/gi)];
+
+      expect(matches.length, page.source).toBeGreaterThan(0);
+
+      for (const match of matches) {
+        const context = source.slice(Math.max(0, match.index! - 80), match.index! + 140);
+        expect(context, `${page.source} should keep court approved inside FAQ wording`).toContain(
+          'question:'
+        );
+      }
     }
   });
 

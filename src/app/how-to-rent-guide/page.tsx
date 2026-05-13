@@ -42,7 +42,7 @@ const breadcrumbs = [
   { name: 'How to Rent Guide', url: '/how-to-rent-guide' },
 ];
 const noticeOnlyHref = '/products/notice-only';
-const tenancyProductHref = '/products/ast';
+const tenancyProductHref = '/standard-tenancy-agreement';
 
 const actionChooserItems = [
   {
@@ -120,9 +120,13 @@ export default function HowToRentGuidePage() {
                 <p>
                   If you are preparing the written statement of terms at the same time, you can{' '}
                   <Link href="/standard-tenancy-agreement">
-                    download a solicitor-approved tenancy agreement
+                    create a Renters' Rights Act compliant tenancy agreement
                   </Link>{' '}
-                  for the tenancy file before you serve the How to Rent guide.
+                  for the tenancy file before you serve the How to Rent guide, or choose the{' '}
+                  <Link href="/premium-tenancy-agreement">
+                    upgraded premium periodic tenancy agreement builder
+                  </Link>{' '}
+                  if you need stronger management wording.
                 </p>
                 <ul>
                   <li>What tenants should look for before renting</li>
@@ -162,7 +166,7 @@ export default function HowToRentGuidePage() {
                   <Link href="/section-21-ban-uk">Section 21 transition guide</Link>, work through the{' '}
                   <Link href="/section-21-validity-checklist">Section 21 validity checklist</Link>,
                   and only then move into the{' '}
-                  <Link href={noticeOnlyHref}>Notice Only workflow</Link> once the compliance
+                  <Link href={noticeOnlyHref}>validated Section 8 notice builder</Link> once the compliance
                   record is clean.
                 </p>
 

@@ -23,6 +23,13 @@ export const metadata: Metadata = {
   keywords: [
     'standard periodic tenancy agreement',
     'standard periodic tenancy agreement england',
+    'periodic tenancy agreement template',
+    'assured periodic tenancy agreement',
+    'AST generator',
+    'solicitor-approved AST',
+    'validated tenancy agreement',
+    'Renters Rights Act compliant tenancy agreement',
+    'post-May 2026 periodic tenancy',
     'england standard periodic tenancy agreement',
     'assured periodic tenancy agreement england',
     'england assured periodic tenancy agreement',
@@ -64,8 +71,8 @@ export default function StandardTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Standard Periodic Tenancy Agreement England"
-        subtitle="Use this standard periodic tenancy agreement if you are letting a whole property in England and want a clear, current agreement without student, HMO, lodger, or Premium-level management wording."
+        title="Solicitor-approved Standard Tenancy Agreement - Periodic Tenancy Generator"
+        subtitle="Use this solicitor-approved standard periodic tenancy agreement if you are letting a whole property in England and want a validated tenancy agreement, AST generator wording, and current post-May 2026 rules without student, HMO, lodger, or Premium-level management wording."
         primaryCtaLabel="Start standard periodic tenancy agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Read periodic tenancy guide"
@@ -78,6 +85,7 @@ export default function StandardTenancyAgreementPage() {
         ]}
         highlights={[
           'Standard periodic tenancy agreement for a straightforward whole-property residential let',
+          "Renters' Rights Act compliant tenancy agreement with validated wording",
           'Keeps the wording and pack paperwork practical and proportionate',
           'Separate from the Premium, Student, HMO / Shared House, and Lodger routes',
           'Guided generator with a preview before payment',
@@ -374,6 +382,16 @@ export default function StandardTenancyAgreementPage() {
             question: 'Should I use this for a student or HMO let?',
             answer:
               'Usually not. Student and HMO / Shared House lets now have their own England products, so this standard assured periodic option is best for ordinary residential lets that do not need specialist wording.',
+          },
+          {
+            question: 'Is this a court approved tenancy agreement?',
+            answer:
+              'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved tenancy agreement follows current England rules and includes validation checks to help you complete it correctly.',
+          },
+          {
+            question: 'Is this legally binding?',
+            answer:
+              'Yes - when completed and signed correctly. This solicitor-approved template follows post-May 2026 England rules, and the validation checklist helps you avoid common tenancy agreement mistakes.',
           },
         ]}
         finalCtaBody="Use this standard periodic tenancy agreement generator when the tenancy is straightforward and the property is being let as an ordinary whole-property home. Compare Premium or the specialist products only when the facts call for something more tailored."

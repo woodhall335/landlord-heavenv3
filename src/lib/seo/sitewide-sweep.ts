@@ -34,9 +34,15 @@ export const SITEWIDE_SWEEP_STATIC_ROUTE_EXCLUSIONS = new Set([
 
 export const SUPPLEMENTAL_SWEEP_CLASSIFIED_ROUTES = [
   '/ast-agreement-template',
+  '/compare/section-13-standard-vs-defence',
+  '/compare/section-8-stage-1-vs-stage-2',
+  '/compare/tenancy-agreement-options-england',
+  '/products/money-claim-pack',
+  '/products/rent-increase',
   '/products/section-13-standard',
   '/products/section-13-defence',
   '/renters-rights-act-information-sheet-2026',
+  '/samples',
   '/tenancy-agreement-england-2026',
   '/tenancy-agreement-template-uk',
 ] as const;

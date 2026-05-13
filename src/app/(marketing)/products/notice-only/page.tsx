@@ -22,13 +22,21 @@ export const metadata: Metadata = {
   description: PRODUCT_OWNER_METADATA.noticeOnly.description,
   keywords: [
     'section 8 notice',
+    'section 8 notice generator',
+    'validated section 8 notice',
+    'solicitor-approved form 3a',
+    'section 8 notice builder',
+    'section 8 notice service pack',
+    'court-ready section 8 notice',
     'section 8 notice england',
+    'section 8 notice post May 2026',
+    "Renters' Rights Act Section 8 form",
     'eviction notice generator',
+    'printable section 8 notice form',
+    'section 8 notice PDF download',
     'evict a tenant legally',
-    'eviction notice',
     'form 3a',
     'landlord',
-    'England eviction notice',
   ],
   alternates: {
     canonical: canonicalUrl,
@@ -66,6 +74,16 @@ const faqs: FAQItem[] = [
     answer:
       'Yes. You can preview the generated documents before purchase and regenerate them after edits if your facts or dates change.',
   },
+  {
+    question: 'Is this a court approved Section 8 notice?',
+    answer:
+      'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved Section 8 notice follows current England rules and includes validation checks to help you serve correctly.',
+  },
+  {
+    question: 'Is this legally binding?',
+    answer:
+      "Yes - when completed and served correctly. This solicitor-approved template follows post-May 2026 England rules, and the validation checklist helps you avoid common Section 8 notice mistakes.",
+  },
 ];
 
 export const runtime = 'nodejs';
@@ -83,10 +101,10 @@ export default function NoticeOnlyPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 8 notice and service pack | serve before court',
-      title: descriptor.displayName,
+      trustText: 'England Section 8 notice generator | validated Form 3A service pack',
+      title: 'Solicitor-approved Section 8 Notice Builder - Form 3A',
       subtitle:
-        'Use Stage 1 when you need to serve the Section 8 notice first. It prepares the notice, service record, and supporting evidence so the file is clear before anything is sent to the tenant.',
+        "Use Stage 1 when you need a validated Section 8 notice and service pack before court. The guided builder prepares Form 3A, the service record, and supporting evidence for the post-May 2026 Renters' Rights Act Section 8 route.",
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -112,7 +130,7 @@ export default function NoticeOnlyPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Stage 1 is the right fit when the job today is serving notice. You can preview the actual Section 8 notice file before you pay.',
+        'Stage 1 is the right fit when the job today is serving notice. You can preview the actual court-ready Section 8 notice file before you pay.',
       imageSrc: '/images/notice-only-pack.webp',
       imageAlt: 'Preview of the Stage 1 Section 8 notice-only pack',
       includedBullets: [

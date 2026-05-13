@@ -169,9 +169,13 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
                   <p className="leading-8">
                     If you are ready to serve the notice after checking the rules,{' '}
                     <Link href="/products/section-13-standard" className="font-semibold text-primary hover:underline">
-                      serve your Form 4A notice instantly
+                      generate a solicitor-approved Form 4A with our rent increase builder
                     </Link>{' '}
-                    with the solicitor-approved Section 13 Standard pack.
+                    with the validated Section 13 Standard pack. If the tenant is likely to challenge,{' '}
+                    <Link href="/products/section-13-defence" className="font-semibold text-primary hover:underline">
+                      prepare a solicitor-approved tribunal evidence pack
+                    </Link>{' '}
+                    instead.
                   </p>
                 ) : null}
                 {config.quickAnswer.map((paragraph) => (

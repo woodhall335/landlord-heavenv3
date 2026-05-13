@@ -6217,9 +6217,13 @@ const allBlogPosts: BlogPost[] = [
         <p className="text-lg text-gray-700 leading-relaxed">
           When you have checked Ground 1 fits the facts,{' '}
           <Link href="/products/notice-only" className="font-semibold text-primary hover:underline">
-            start your Section 8 eviction with the official Form 3A
+            use our validated Section 8 notice builder
           </Link>{' '}
-          so the notice, service record, and evidence trail stay aligned.
+          so the notice, service record, and evidence trail stay aligned, or go straight to the{' '}
+          <Link href="/products/complete-pack" className="font-semibold text-primary hover:underline">
+            court-ready possession pack
+          </Link>{' '}
+          if you already expect to file N5 and N119.
         </p>
         {section8GroundNextSteps}
         {section8TemplateCta}

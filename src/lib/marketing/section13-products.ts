@@ -43,20 +43,26 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   description:
     'Prepare an England Section 13 rent increase with Form 4A, market evidence, service records, and landlord support in one pack.',
   keywords: [
+    'Form 4A generator',
+    'Section 13 notice template',
+    'Section 13 rent increase pack',
+    'solicitor-approved Form 4A',
+    'validated Section 13 notice',
+    'Form 4A England',
+    'Section 13 notice post May 2026',
+    'Form 4A Renters Rights Act',
+    'printable Section 13 notice',
     'section 13 notice rent increase',
-    'section 13 notice england',
     'form 4a rent increase',
-    'rent increase section 13',
-    'increase rent section 13',
   ],
-  heroTitle: 'Standard Section 13 Rent Increase Pack for England landlords',
+  heroTitle: 'Solicitor-approved Section 13 Notice (Form 4A) - Rent Increase Builder',
   heroSubtitle:
-    'Propose a rent increase with Form 4A, timing checks, market evidence, and a clear explanation of the new figure.',
+    'Use the Form 4A generator to create a validated Section 13 notice with timing checks, market evidence, and a clear explanation of the new figure for the post-May 2026 England route.',
   productSku: 'section13_standard',
   ctaLabel: `Start Standard Section 13 Rent Increase Pack - ${PRODUCTS.section13_standard.displayPrice}`,
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
-    'Built for landlords who want more than a blank Form 4A: the notice, market evidence, and service record stay together.',
+    'Built for landlords who want more than a blank Form 4A: the solicitor-approved notice, market evidence, and service record stay together.',
   ],
   packIntro:
     'This pack is for landlords who need more than a blank Form 4A. It helps you check comparable rents, choose a supportable figure, explain the increase, and keep the service record clear.',
@@ -220,6 +226,16 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
       answer:
         'Choose the Challenge-Ready Section 13 Defence Pack when you expect a challenge or want the fuller tribunal-facing bundle, response materials, and preparation tools from the start.',
     },
+    {
+      question: 'Is this a court approved Section 13 notice?',
+      answer:
+        'No. Courts and tribunals do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved Form 4A pack follows current England rules and includes validation checks to help you serve correctly.',
+    },
+    {
+      question: 'Is this legally binding?',
+      answer:
+        'Yes - when completed and served correctly. This solicitor-approved template follows post-May 2026 England rules, and the validation checklist helps you avoid common Section 13 notice mistakes.',
+    },
   ],
 };
 
@@ -230,19 +246,23 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     'Prepare a challenged Section 13 rent increase in England with stronger evidence, response templates, and tribunal bundle support.',
   keywords: [
     'section 13 defence pack',
+    'Section 13 tribunal bundle',
+    'challenge Section 13 notice pack',
+    'Section 13 response letter template',
+    'solicitor-approved tribunal pack',
+    'tribunal evidence checklist',
+    "Renters' Rights Act tribunal pack",
+    'Section 13 defence post May 2026',
     'section 13 tribunal defence',
-    'form 4a challenge england',
-    'section 13 tribunal guide',
-    'defend rent increase england',
   ],
-  heroTitle: 'Challenge-Ready Section 13 Defence Pack for England landlords',
+  heroTitle: 'Solicitor-approved Section 13 Defence Pack - Tribunal Ready',
   heroSubtitle:
-    'Use this when the rent increase may be disputed and you want the notice, evidence, replies, and tribunal bundle prepared from the start.',
+    'Use this Section 13 defence pack when the rent increase may be disputed and you want the notice, evidence, response letter template, and tribunal bundle prepared from the start.',
   productSku: 'section13_defensive',
   ctaLabel: 'Start the Challenge-Ready Section 13 Defence Pack',
   heroBullets: [
     ENGLAND_POST_MAY_2026_POSITION,
-    'For landlords who want to explain the rent figure clearly if the tenant questions or challenges it.',
+    'For landlords who want a solicitor-approved tribunal pack with validated evidence wording if the tenant questions or challenges the rent figure.',
   ],
   packIntro:
     'This pack is for Section 13 increases where you expect questions, negotiation, or a formal challenge. It helps you support the rent figure with comparables and keep the response material organised.',
@@ -436,6 +456,16 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
       question: 'Does this replace legal advice or representation?',
       answer:
         'No. It helps you prepare documents and organise the case materials, but it is not legal advice, a solicitor service, or tribunal representation.',
+    },
+    {
+      question: 'Is this a court approved Section 13 Defence Pack?',
+      answer:
+        'No. Courts and tribunals do not pre-approve any notice, claim form, pack, or agreement. However, this solicitor-approved tribunal pack follows current England rules and includes validation checks to help you prepare correctly.',
+    },
+    {
+      question: 'Is this legally binding?',
+      answer:
+        'Yes - when completed and used correctly. This solicitor-approved pack follows post-May 2026 England rules, and the validation checklist helps you avoid common tribunal bundle mistakes.',
     },
   ],
 };

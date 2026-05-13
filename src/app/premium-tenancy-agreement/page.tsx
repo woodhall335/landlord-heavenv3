@@ -23,6 +23,12 @@ export const metadata: Metadata = {
   description: PRODUCT_OWNER_METADATA.premiumTenancy.description,
   keywords: [
     'premium periodic tenancy agreement',
+    'enhanced AST template',
+    'premium tenancy agreement builder',
+    'solicitor-approved premium AST',
+    'validated management wording',
+    'Renters Rights Act enhanced AST',
+    'post-May 2026 premium tenancy agreement',
     'premium periodic tenancy agreement england',
     'england premium periodic tenancy agreement',
     'premium assured periodic tenancy agreement england',
@@ -67,8 +73,8 @@ export default function PremiumTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/premium-tenancy-agreement"
-        title="Premium Periodic Tenancy Agreement England"
-        subtitle="Use this premium periodic tenancy agreement when the let is still an ordinary residential tenancy, but you want fuller wording around access, repairs, handover, keys, and day-to-day management than the Standard route provides."
+        title="Solicitor-approved Premium Periodic Tenancy Agreement - Enhanced Builder"
+        subtitle="Use this solicitor-approved premium periodic tenancy agreement builder when the let is still an ordinary residential tenancy, but you want validated management wording around access, repairs, handover, keys, and day-to-day management than the Standard route provides."
         primaryCtaLabel="Start premium periodic tenancy agreement"
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Read assured periodic guide"
@@ -81,6 +87,7 @@ export default function PremiumTenancyAgreementPage() {
         ]}
         highlights={[
           'Premium periodic tenancy agreement for ordinary residential lets that need more detail than the standard version',
+          'Enhanced AST template wording for post-May 2026 England rules',
           'Adds fuller wording around management and handover',
           'Separate from Student, HMO / Shared House, and Lodger routes',
           'Guided generator with a preview before payment',
@@ -228,6 +235,16 @@ export default function PremiumTenancyAgreementPage() {
             question: 'Can I still use the standard assured periodic route if the let is straightforward?',
             answer:
               'Yes. If the tenancy is relatively simple, the standard assured periodic agreement is usually the more proportionate choice.',
+          },
+          {
+            question: 'Is this a court approved premium tenancy agreement?',
+            answer:
+              'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved premium tenancy agreement follows current England rules and includes validation checks to help you complete it correctly.',
+          },
+          {
+            question: 'Is this legally binding?',
+            answer:
+              'Yes - when completed and signed correctly. This solicitor-approved template follows post-May 2026 England rules, and the validation checklist helps you avoid common tenancy agreement mistakes.',
           },
         ]}
         finalCtaBody="Use the premium periodic option when you want a more detailed England tenancy agreement generator for a standard residential let. If the property needs more management, handover, and day-to-day detail than Standard provides, this fuller option is usually the better fit. If the arrangement is really student, shared-house, or lodger, use the dedicated product instead."
