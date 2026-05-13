@@ -77,7 +77,7 @@ export default function StudentTenancyAgreementPage() {
         legacyNotice="If you were searching for a student tenancy agreement template, a student house agreement, or a student tenancy agreement with guarantor wording, this is the dedicated England student option from 1 May 2026 rather than a generic residential agreement adapted after the fact."
         introTitle="Built for student households"
         introBody={[
-          "This pack is designed for student lets where guarantors, shared occupation, replacement requests, and end-of-term expectations usually need much clearer wording from the outset.",
+          "This pack is designed as a student tenancy agreement builder for student lets where guarantors, shared occupation, replacement requests, and end-of-term expectations usually need much clearer wording from the outset.",
           'Instead of trying to fit a student household into a general residential agreement, this pack is built around the issues that come up most often in student lets: multiple occupiers, guarantor support, mid-tenancy changes, key return, and how the property is handed back at the end of the academic cycle.',
         ]}
         highlights={[
@@ -123,7 +123,7 @@ export default function StudentTenancyAgreementPage() {
           whyYouNeedThis: {
             title: 'Why student lets need their own pack',
             intro:
-              'Student households create pressure points that do not usually show up in an ordinary residential tenancy. That is why this pack goes beyond the main agreement and deals with the student-specific admin around it.',
+              'Student households create pressure points that do not usually show up in an ordinary residential tenancy. That is why this student AST template goes beyond the main agreement and deals with guarantor agreement for student tenancy wording and the student-specific admin around it.',
             cards: [
               {
                 title: 'Guarantor support needs proper paperwork',

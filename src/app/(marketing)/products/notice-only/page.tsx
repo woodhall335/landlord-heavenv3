@@ -175,7 +175,7 @@ export default function NoticeOnlyPage() {
     whatYouGet: {
       title: 'What you get in Stage 1',
       intro:
-        'This is more than a blank notice. It is a notice-and-service file you can inspect before buying, built for landlords who need to serve first.',
+        "This is more than a blank notice. It is a Section 8 notice generator and notice-and-service file you can inspect before buying, built for landlords who need a validated Section 8 notice before they serve in England.",
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -346,7 +346,7 @@ export default function NoticeOnlyPage() {
     howThisHelps: {
       title: 'How this puts you in a stronger position',
       intro:
-        'The pack reduces notice-stage risk and makes the case easier to carry into Stage 2 if the tenant does not leave.',
+        "The pack reduces notice-stage risk and makes the case easier to carry into Stage 2 if the tenant does not leave. The section 8 notice service pack keeps the post-May 2026 Renters' Rights Act Section 8 form, dates, and service record together.",
       cards: [
         {
           title: 'It makes the notice file easier to trust',

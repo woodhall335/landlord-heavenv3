@@ -174,7 +174,7 @@ export default function CompleteEvictionPackPage() {
     whatYouGet: {
       title: 'What you get in the combined pack',
       intro:
-        'This pack includes the Stage 1 Section 8 notice file plus the court-stage possession paperwork. You can inspect the notice, claim forms, and court support before buying.',
+        'This possession claim pack includes the Stage 1 Section 8 notice file plus the court-stage possession paperwork. You can inspect the court-ready possession pack, N5 possession claim form, N119 particulars of claim, and court support before buying.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -357,7 +357,7 @@ export default function CompleteEvictionPackPage() {
     howThisHelps: {
       title: 'How the full pack improves the landlord outcome',
       intro:
-        'The pack does more than generate forms. It keeps the possession route clear from notice through court and hearing preparation.',
+        'The pack does more than generate forms. It keeps the possession route clear from notice through court and hearing preparation, with the Section 8 court pack validated before filing.',
       cards: [
         {
           title: 'It keeps the notice and court paperwork aligned',

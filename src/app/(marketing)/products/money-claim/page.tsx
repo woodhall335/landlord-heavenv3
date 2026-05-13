@@ -148,7 +148,7 @@ export default function MoneyClaimPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Preview the debt-recovery file before you pay. It is not just one claim form: it includes the pre-action letter, schedules, claim narrative, and follow-through guidance.',
+        'Preview the debt-recovery file before you pay. It is not just one claim form: it is a money claim online pack with the pre-action letter, schedules, claim narrative, and follow-through guidance.',
       includedBullets: [
         'Letter before claim',
         'Reply form and financial statement',
@@ -163,7 +163,7 @@ export default function MoneyClaimPage() {
     whatYouGet: {
       title: 'Sample pack proof',
       intro:
-        'See a real sample pack before you pay, including the documents used to explain and issue the claim.',
+        'See a real solicitor-approved MCOL pack before you pay, including the letter before claim template, particulars of claim template, and documents used to explain and issue the claim.',
       sampleProof: sampleProof ? (
         <GoldenPackProof data={sampleProof} samplePageHref={samplePage?.samplePath} />
       ) : undefined,
@@ -242,7 +242,7 @@ export default function MoneyClaimPage() {
     whyYouNeedThis: {
       title: 'Why a landlord money claim needs more than one form',
       intro:
-        'Debt recovery becomes harder when the demand letter, figures, and court claim say slightly different things. This pack helps keep them aligned.',
+        "Debt recovery becomes harder when the demand letter, figures, and court claim say slightly different things. This rent arrears money claim pack helps keep them aligned for a landlord's debt claim.",
       cards: [
         {
           title: 'The pre-action stage matters',

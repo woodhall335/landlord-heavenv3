@@ -78,7 +78,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         legacyNotice="If you searched for an HMO tenancy agreement, shared house agreement, or sharers' tenancy agreement in England, this is the dedicated option for shared occupation from 1 May 2026 rather than a standard residential pack with shared-house points bolted on afterwards."
         introTitle="Choose this when the property is being shared"
         introBody={[
-          'This pack is for England lets where the real work is managing shared occupation well. If several occupiers are sharing kitchens, bathrooms, entrances, bins, and day-to-day expectations, the paperwork should say that plainly from the start.',
+          'This HMO tenancy agreement template is for England lets where the real work is managing shared occupation well. If several occupiers are sharing kitchens, bathrooms, entrances, bins, and day-to-day expectations, the paperwork should say that plainly from the start.',
           'It is built for the friction points that usually show up first in shared houses: communal areas, visitors, quiet hours, cleaning expectations, repair reporting, handover records, and the practical rules that keep the house easier to run.',
         ]}
         highlights={[
@@ -125,7 +125,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           whyYouNeedThis: {
             title: 'Why shared houses need fuller paperwork',
             intro:
-              'A shared-house let usually breaks down on the practical points first, not the headline rent clause. If the communal rules and records are missing, the paperwork often says much less than the landlord actually needs it to say.',
+              'A shared-house let usually breaks down on the practical points first, not the headline rent clause. If the communal rules and records are missing, the paperwork often says much less than the landlord actually needs it to say, which is why this shared house tenancy agreement UK route includes HMO room rental agreement wording and validated house rules.',
             cards: [
               {
                 title: 'Communal occupation needs written rules',

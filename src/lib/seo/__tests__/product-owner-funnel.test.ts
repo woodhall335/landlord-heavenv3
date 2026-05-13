@@ -152,12 +152,12 @@ const expectedProductMetaDescriptions = {
 const pageCommercialPhraseExpectations = [
   {
     source: 'src/app/(marketing)/products/notice-only/page.tsx',
-    phrases: ['section 8 notice builder', 'validated section 8 notice'],
+    phrases: ['section 8 notice generator', 'validated Section 8 notice'],
     faq: 'Is this a court approved Section 8 notice?',
   },
   {
     source: 'src/app/(marketing)/products/complete-pack/page.tsx',
-    phrases: ['court-ready Section 8 possession pack', 'validated before filing'],
+    phrases: ['possession claim pack', 'validated before filing'],
     faq: 'Is this a court approved possession claim form?',
   },
   {
@@ -172,7 +172,7 @@ const pageCommercialPhraseExpectations = [
   },
   {
     source: 'src/lib/marketing/section13-products.ts',
-    phrases: ['Section 13 response letter template', 'tribunal bundle'],
+    phrases: ['Section 13 response letter template', 'tribunal evidence checklist'],
     faq: 'Is this a court approved Section 13 Defence Pack?',
   },
   {
@@ -187,7 +187,7 @@ const pageCommercialPhraseExpectations = [
   },
   {
     source: 'src/app/student-tenancy-agreement/page.tsx',
-    phrases: ['student tenancy agreement builder', 'validated guarantor wording'],
+    phrases: ['student tenancy agreement builder', 'guarantor agreement for student tenancy'],
     faq: 'Is this a court approved student tenancy agreement?',
   },
   {
@@ -226,11 +226,17 @@ describe('product owner SEO funnel', () => {
   it('puts commercial phrase coverage and safe FAQs on every product owner page', () => {
     for (const page of pageCommercialPhraseExpectations) {
       const source = readSource(page.source);
+      const faqIndex = source.indexOf(page.faq);
+      const nonFaqSource = faqIndex >= 0 ? source.slice(0, faqIndex) : source;
 
       for (const phrase of page.phrases) {
         expect(source.toLowerCase(), `${page.source} should include ${phrase}`).toContain(
           phrase.toLowerCase()
         );
+        expect(
+          nonFaqSource.toLowerCase(),
+          `${page.source} should include ${phrase} before the FAQ section`
+        ).toContain(phrase.toLowerCase());
       }
 
       expect(source, page.source).toContain(page.faq);

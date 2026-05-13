@@ -80,7 +80,7 @@ export default function StandardTenancyAgreementPage() {
         legacyNotice="If you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement generator, this is the standard periodic tenancy agreement route for a straightforward whole-property let."
         introTitle="For a straightforward standard periodic tenancy"
         introBody={[
-          "This is the standard periodic tenancy agreement for a new England tenancy where the property is being let as an ordinary whole-property home. Use it when you want current wording without the extra operational detail included in Premium or the specialist products.",
+          "This is the standard periodic tenancy agreement for a new England tenancy where the property is being let as an ordinary whole-property home. Use this periodic tenancy agreement template when you want a solicitor-approved AST generator with current wording but without the extra operational detail included in Premium or the specialist products.",
           'The generator keeps the pack practical and proportionate: the main agreement plus the key supporting documents, without making a simple tenancy feel more complicated than it needs to be.',
         ]}
         highlights={[
@@ -287,7 +287,7 @@ export default function StandardTenancyAgreementPage() {
           whyYouNeedThis: {
             title: 'Why a standard periodic agreement still needs proper setup',
             intro:
-              'Even a straightforward periodic tenancy can become awkward if the agreement is thin, the setup records are missing, or the wording does not match the current England position.',
+              "Even a straightforward assured periodic tenancy agreement can become awkward if the agreement is thin, the setup records are missing, or the wording does not match the current England position. This validated tenancy agreement route is built for post-May 2026 periodic tenancy setup.",
             cards: [
               {
                 title: 'The wording needs to match the let',

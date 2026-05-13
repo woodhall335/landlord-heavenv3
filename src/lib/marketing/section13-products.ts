@@ -65,7 +65,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     'Built for landlords who want more than a blank Form 4A: the solicitor-approved notice, market evidence, and service record stay together.',
   ],
   packIntro:
-    'This pack is for landlords who need more than a blank Form 4A. It helps you check comparable rents, choose a supportable figure, explain the increase, and keep the service record clear.',
+    'This pack is for landlords who need more than a blank Form 4A. The Form 4A generator helps you create a validated Section 13 notice, check comparable rents, choose a supportable figure, explain the increase, and keep the service record clear.',
   packBreakdown: [
     {
       name: 'Form 4A (Legal Rent Increase Notice)',
@@ -120,7 +120,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   ],
   whyYouNeedThis: {
     intro:
-      'Rent increases often go wrong because the notice, evidence, and service record do not line up when the tenant pushes back.',
+      'Rent increases often go wrong because the notice, evidence, and service record do not line up when the tenant pushes back. A Section 13 rent increase pack keeps the solicitor-approved Form 4A, market evidence, and service record together.',
     cards: [
       {
         title: 'A form alone does not justify the figure',
@@ -141,7 +141,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   },
   howThisHelps: {
     intro:
-      'The pack makes the increase easier to explain, easier to evidence, and harder to undermine if the tenant asks for detail.',
+      'The pack makes the increase easier to explain, easier to evidence, and harder to undermine if the tenant asks for detail. It is designed as a rent increase builder for landlords who want a Section 13 notice post May 2026.',
     cards: [
       {
         title: 'It helps you find a more supportable figure',
@@ -265,7 +265,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     'For landlords who want a solicitor-approved tribunal pack with validated evidence wording if the tenant questions or challenges the rent figure.',
   ],
   packIntro:
-    'This pack is for Section 13 increases where you expect questions, negotiation, or a formal challenge. It helps you support the rent figure with comparables and keep the response material organised.',
+    'This Section 13 defence pack is for rent increases where you expect questions, negotiation, or a formal challenge. It helps you support the rent figure with comparables and keep the Section 13 response letter template, tribunal evidence checklist, and response material organised.',
   packBreakdown: [
     {
       name: 'Full Tribunal Bundle (Indexed Exhibits)',
@@ -350,7 +350,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   ],
   whyYouNeedThis: {
     intro:
-      'When a tenant is likely to challenge the increase, serving Form 4A is only part of the job. You also need to show why the proposed rent is reasonable and keep your evidence easy to follow.',
+      "When a tenant is likely to challenge the increase, serving Form 4A is only part of the job. You also need a solicitor-approved tribunal pack that shows why the proposed rent is reasonable and keeps your Renters' Rights Act tribunal pack evidence easy to follow.",
     cards: [
       {
         title: 'A challenged increase needs more than a form',
@@ -371,7 +371,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   },
   howThisHelps: {
     intro:
-      'The Challenge-Ready Section 13 Defence Pack helps you put the rent figure, evidence, replies, and tribunal materials in one clear route.',
+      'The Challenge-Ready Section 13 Defence Pack helps you put the rent figure, evidence, replies, and Section 13 tribunal bundle in one clear route.',
     cards: [
       {
         title: 'It helps you explain the rent figure',

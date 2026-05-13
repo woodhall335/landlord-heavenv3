@@ -75,7 +75,7 @@ export default function LodgerAgreementEnglandPage() {
         legacyNotice="If you searched for a lodger agreement, room let agreement, lodger agreement template, or resident-landlord agreement in England, this is the dedicated option for a room let in your own home from 1 May 2026 rather than a standard tenancy agreement adapted afterwards."
         introTitle="Choose this when you are renting out a room in your own home"
         introBody={[
-          'This pack is for room lets where the landlord lives at the property and the occupier is sharing the home. It is kept separate from the Standard, Premium, Student, and HMO / Shared House packs because a resident-landlord setup works differently in practice.',
+          'This lodger room rental agreement template is for room lets where the landlord lives at the property and the occupier is sharing the home. It is kept separate from the Standard, Premium, Student, and HMO / Shared House packs because a resident-landlord setup works differently in practice.',
           'It is built around the points that usually matter most in a lodger arrangement: shared kitchens or bathrooms, house rules, key handling, notice expectations, guests, and the practical reality of living under the same roof.',
         ]}
         highlights={[
@@ -121,7 +121,7 @@ export default function LodgerAgreementEnglandPage() {
           whyYouNeedThis: {
             title: 'Why a lodger arrangement needs its own paperwork',
             intro:
-              'A resident-landlord room let creates a different kind of day-to-day risk from a standard tenancy. The shared-home expectations need to be written down in a way that matches the practical reality of the arrangement.',
+              'A resident-landlord room let creates a different kind of day-to-day risk from a standard tenancy. The resident landlord lodger contract, shared-home expectations, and validated lodger notice rules need to be written down in a way that matches the practical reality of the arrangement.',
             cards: [
               {
                 title: 'Shared-home rules need to be explicit',

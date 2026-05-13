@@ -82,7 +82,7 @@ export default function PremiumTenancyAgreementPage() {
         legacyNotice="If you were searching for a premium tenancy agreement, premium periodic tenancy agreement, updated AST replacement, or current England tenancy agreement generator with fuller drafting, this is the more detailed periodic route for ordinary residential lets that need stronger management and handover wording."
         introTitle="For an ordinary periodic tenancy with more detail built in"
         introBody={[
-          "This page is for landlords who need more than the standard periodic tenancy agreement but do not need a separate Student, HMO / Shared House, or Lodger product. It is the more detailed England periodic tenancy option for an ordinary residential let.",
+          "This page is for landlords who need more than the standard periodic tenancy agreement but do not need a separate Student, HMO / Shared House, or Lodger product. It is the premium tenancy agreement builder for an ordinary residential let that needs a solicitor-approved premium AST with fuller drafting.",
           'Premium keeps the tenancy on the standard residential track while adding fuller wording around inspections, repairs reporting, key handling, contractor access, utilities handover, and move-out expectations.',
         ]}
         highlights={[
@@ -135,7 +135,7 @@ export default function PremiumTenancyAgreementPage() {
           whyYouNeedThis: {
             title: 'Why landlords choose Premium',
             intro:
-              'Some lets are still ordinary residential tenancies, but the management reality is more involved. That is where a lighter agreement starts to feel too thin and the Premium pack becomes the better fit.',
+              "Some lets are still ordinary residential tenancies, but the management reality is more involved. That is where a lighter agreement starts to feel too thin and the premium periodic tenancy agreement becomes the better fit, especially where validated management wording and a Renters' Rights Act enhanced AST are useful.",
             cards: [
               {
                 title: 'The main agreement often needs more operational detail',
