@@ -19,10 +19,12 @@ describe('golden-pack sample-proof rollout pages', () => {
     for (const source of [moneyClaimSource, section13StandardSource, section13DefenceSource]) {
       expect(source).toContain("import { GoldenPackProof }");
       expect(source).toContain("from '@/lib/marketing/golden-pack-proof'");
-      expect(source).toContain('sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
+      expect(source).toContain('sampleProof ? (');
+      expect(source).toContain('<GoldenPackProof data={sampleProof}');
+      expect(source).toContain('samplePageHref={samplePage?.samplePath}');
     }
 
-    expect(moneyClaimSource).toContain('sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
+    expect(moneyClaimSource).toContain('sampleProof: sampleProof ? (');
     expect(section13StandardSource).toContain('earlyProofBand: {');
     expect(section13DefenceSource).toContain('earlyProofBand: {');
   });
@@ -60,12 +62,23 @@ describe('golden-pack sample-proof rollout pages', () => {
     }
   });
 
+  it('uses the Premium golden pack on the broad tenancy agreement template page', () => {
+    const source = readSource('src/app/tenancy-agreement-template/page.tsx');
+
+    expect(source).toContain("getGoldenPackProofData('england_premium_tenancy_agreement')");
+    expect(source).toContain(
+      "getProductSamplePageByPackKey('england_premium_tenancy_agreement')"
+    );
+    expect(source).toContain('<GoldenPackProof');
+    expect(source).not.toContain('SampleAgreementPreview');
+  });
+
   it('renders tenancy sample proof before the detailed pack breakdown in sales mode', () => {
     const source = readSource('src/components/seo/EnglandTenancyPage.tsx');
     const sampleProofIndex = source.indexOf(
       'salesContent.sampleProof ? ('
     );
-    const packBreakdownIndex = source.indexOf('{salesContent.defaultPackItems.map');
+    const packBreakdownIndex = source.indexOf('{(salesContent.defaultPackItems ?? []).map');
 
     expect(sampleProofIndex).toBeGreaterThanOrEqual(0);
     expect(packBreakdownIndex).toBeGreaterThan(sampleProofIndex);

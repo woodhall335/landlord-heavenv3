@@ -11,8 +11,8 @@ const asText = (value: unknown): string =>
 
 describe('tenancy funnel metadata', () => {
   it('positions the main hub as the England template owner', () => {
-    expect(asText(hubMetadata.title)).toBe('Tenancy Agreement Template (England) - Example & Guide');
-    expect(asText(hubMetadata.description)).toContain('real England tenancy agreement template example');
+    expect(asText(hubMetadata.title)).toBe('Tenancy Agreement Template (England) - Premium Sample');
+    expect(asText(hubMetadata.description)).toContain('Premium Tenancy Agreement golden pack sample');
     expect(asText(hubMetadata.alternates?.canonical)).toContain('/tenancy-agreement-template');
 
     const keywords = Array.isArray(hubMetadata.keywords)
@@ -36,7 +36,7 @@ describe('tenancy funnel metadata', () => {
     expect(asText(astMetadata.title)).toBe(
       'Assured Shorthold Tenancy Agreement Template | AST Legacy Guide'
     );
-    expect(asText(astMetadata.description)).toContain('Legacy AST explainer');
+    expect(asText(astMetadata.description)).toContain('Legacy AST guide');
     expect(asText(astMetadata.alternates?.canonical)).toContain(
       '/assured-shorthold-tenancy-agreement-template'
     );
@@ -46,7 +46,7 @@ describe('tenancy funnel metadata', () => {
     expect(asText(assuredPeriodicMetadata.title)).toBe(
       'Assured Periodic Tenancy Agreement | England Support Guide'
     );
-    expect(asText(assuredPeriodicMetadata.description)).toContain('support page');
+    expect(asText(assuredPeriodicMetadata.description)).toContain('Plain-English England guide');
     expect(asText(assuredPeriodicMetadata.alternates?.canonical)).toContain(
       '/assured-periodic-tenancy-agreement'
     );

@@ -60,6 +60,9 @@ export function GoldenPackProof({
         >
           See a real sample pack before you pay
         </h3>
+        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#D8D0F5]">
+          {data.displayName}
+        </p>
         <p className="mt-3 text-base leading-8 text-[#ECE8FF] md:text-lg">
           These previews and excerpts come from a real sample pack generated with example landlord
           details. They show the structure, wording, and document spread you can expect before you

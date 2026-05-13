@@ -154,29 +154,26 @@ const expectDocumentOrder = (before: HTMLElement, after: HTMLElement) => {
 };
 
 describe('tenancy funnel SEO pages', () => {
-  it('renders the rebuilt England template hub with the sample preview and the full seven-route hierarchy', () => {
+  it('renders the England template page as a Premium golden-pack sample with the route hierarchy', () => {
     render(<TenancyAgreementTemplatePage />);
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Tenancy Agreement Template (England)' })
+      screen.getByRole('heading', { level: 1, name: 'Premium Tenancy Agreement Sample' })
     ).toBeInTheDocument();
-    expect(screen.getByTestId('sample-agreement-preview')).toBeInTheDocument();
-
-    [
-      'Parties',
-      'Property',
-      'Rent',
-      'Deposit',
-      'Term',
-      'Repairs / responsibilities',
-      'Notices / ending tenancy',
-    ].forEach((heading) => {
-      expect(screen.getAllByRole('heading', { name: heading }).length).toBeGreaterThan(0);
-    });
+    expect(screen.getAllByText('Premium Tenancy Agreement & Management Pack').length).toBeGreaterThan(0);
+    expect(screen.getByText('Sample pack proof')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'View full premium sample' })).toHaveAttribute(
+      'href',
+      '/samples/premium-tenancy-agreement-example'
+    );
+    expect(screen.getByRole('link', { name: 'Start premium tenancy agreement' })).toHaveAttribute(
+      'href',
+      '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=tenancy_agreement_template&topic=tenancy'
+    );
 
     const primaryRoutesHeading = screen.getByRole('heading', {
       level: 2,
-      name: 'Primary England agreement routes',
+      name: 'Start with the Premium route shown above',
     });
     const specialistRoutesHeading = screen.getByRole('heading', {
       level: 2,
@@ -188,11 +185,11 @@ describe('tenancy funnel SEO pages', () => {
     });
     const comparisonHelpHeading = screen.getByRole('heading', {
       level: 2,
-      name: 'Need route-selection help?',
+      name: 'Need route-comparison help?',
     });
 
-    const standardLink = screen.getByRole('link', { name: /view standard agreement/i });
     const premiumLink = screen.getByRole('link', { name: /view premium agreement/i });
+    const standardLink = screen.getByRole('link', { name: /view standard agreement/i });
     const studentLink = screen.getByRole('link', { name: /view student agreement/i });
     const hmoLink = screen.getByRole('link', { name: /view hmo \/ shared house agreement/i });
     const lodgerLink = screen.getByRole('link', { name: /view lodger agreement/i });
@@ -200,13 +197,13 @@ describe('tenancy funnel SEO pages', () => {
     const assuredPeriodicLink = screen.getByRole('link', { name: /read assured periodic guide/i });
     const compareRoutesLink = screen.getByRole('link', { name: /compare all england agreement routes/i });
 
-    expect(standardLink).toHaveAttribute(
-      'href',
-      '/standard-tenancy-agreement'
-    );
     expect(premiumLink).toHaveAttribute(
       'href',
       '/premium-tenancy-agreement'
+    );
+    expect(standardLink).toHaveAttribute(
+      'href',
+      '/standard-tenancy-agreement'
     );
     expect(studentLink).toHaveAttribute('href', '/student-tenancy-agreement');
     expect(hmoLink).toHaveAttribute('href', '/hmo-shared-house-tenancy-agreement');
@@ -221,7 +218,7 @@ describe('tenancy funnel SEO pages', () => {
     expectDocumentOrder(primaryRoutesHeading, specialistRoutesHeading);
     expectDocumentOrder(specialistRoutesHeading, supportRoutesHeading);
     expectDocumentOrder(supportRoutesHeading, comparisonHelpHeading);
-    expectDocumentOrder(standardLink, premiumLink);
+    expectDocumentOrder(premiumLink, standardLink);
     expectDocumentOrder(premiumLink, studentLink);
     expectDocumentOrder(lodgerLink, astLink);
     expectDocumentOrder(assuredPeriodicLink, compareRoutesLink);
@@ -238,11 +235,11 @@ describe('tenancy funnel SEO pages', () => {
     ).toBeInTheDocument();
     expect(
       screen
-        .getAllByRole('link', { name: /view the england tenancy agreement template/i })
+        .getAllByRole('link', { name: /view the england agreement example/i })
         .every((link) => link.getAttribute('href') === '/tenancy-agreement-template')
     ).toBe(true);
     expect(
-      screen.getAllByText(/move to the england template hub first/i).length
+      screen.getAllByText(/move to the england agreement example or comparison page/i).length
     ).toBeGreaterThan(0);
   });
 
@@ -258,12 +255,12 @@ describe('tenancy funnel SEO pages', () => {
     expect(screen.queryByTestId('sample-agreement-preview')).not.toBeInTheDocument();
     expect(
       screen
-        .getAllByRole('link', { name: 'View the England tenancy agreement template' })
+        .getAllByRole('link', { name: 'View the England agreement example' })
         .some((link) => link.getAttribute('href') === '/tenancy-agreement-template')
     ).toBe(true);
     expect(
       screen
-        .getAllByRole('link', { name: 'Read the assured periodic guide' })
+        .getAllByRole('link', { name: /read (the assured periodic guide|apt guide)/i })
         .some((link) => link.getAttribute('href') === '/assured-periodic-tenancy-agreement')
     ).toBe(true);
   });
@@ -293,10 +290,10 @@ describe('tenancy funnel SEO pages', () => {
     ).toBeInTheDocument();
     expect(screen.queryByTestId('sample-agreement-preview')).not.toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'View the England tenancy agreement template' })
+      screen.getByRole('link', { name: 'View the England agreement example' })
     ).toHaveAttribute('href', '/tenancy-agreement-template');
     expect(
-      screen.getByText(/this page is not trying to replicate the main template preview/i)
+      screen.getByText(/this page is not trying to replicate the main agreement preview/i)
     ).toBeInTheDocument();
   });
 });

@@ -284,7 +284,7 @@ export function UniversalHero({
             {preTitleLabel ? (
               <p
                 className={clsx(
-                  'mt-5 inline-flex items-center rounded-full border border-white/70 bg-white/85 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#4c1d95] shadow-sm backdrop-blur-sm',
+                  'mt-5 inline-flex items-center rounded-full border border-[#9F7AEA] bg-[#7c3aed] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-[0_12px_30px_rgba(124,58,237,0.35)] backdrop-blur-sm',
                   isCenter && 'mx-auto'
                 )}
               >

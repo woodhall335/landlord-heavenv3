@@ -3,9 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
+import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
-import { SampleAgreementPreview } from '@/components/tenancy/SampleAgreementPreview';
 import { Container } from '@/components/ui/Container';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { getCanonicalUrl } from '@/lib/seo';
 import {
   StructuredData,
@@ -18,6 +20,10 @@ import {
 } from '@/lib/tenancy/england-product-model';
 
 const canonicalUrl = getCanonicalUrl('/tenancy-agreement-template');
+const premiumWizardHref =
+  '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=tenancy_agreement_template&topic=tenancy';
+const premiumSampleProof = getGoldenPackProofData('england_premium_tenancy_agreement');
+const premiumSamplePage = getProductSamplePageByPackKey('england_premium_tenancy_agreement');
 
 const comparisonRows = [
   {
@@ -25,7 +31,7 @@ const comparisonRows = [
     genericTemplate:
       'A static file that leaves the landlord to decide how much of it still fits the tenancy.',
     guidedAgreement:
-      'A live England agreement route that uses the example structure as a starting point, then shapes the wording around the actual let.',
+      'The Premium golden-pack tenancy agreement and supporting records, generated from a worked England example before you start your own guided route.',
   },
   {
     label: 'Risk of outdated wording',
@@ -39,14 +45,14 @@ const comparisonRows = [
     genericTemplate:
       'Often fragmented across several files or left for the landlord to chase separately.',
     guidedAgreement:
-      'Handled as part of a fuller agreement route so the main document and supporting pack stay aligned.',
+      'Shown together through the Premium golden pack so the agreement, setup summary, deposit records, keys, utilities, and management schedule stay aligned.',
   },
   {
     label: 'Choosing the right route',
     genericTemplate:
       'Still depends on the landlord spotting whether the let should be Standard, Premium, Student, HMO / Shared House, or Lodger.',
     guidedAgreement:
-      'Standard and Premium lead the ordinary-residential journey, with specialist and legacy support routes kept separate when the facts point elsewhere.',
+      'Premium is the lead route from this page, with Standard and specialist support still available when the facts point to a simpler or different setup.',
   },
 ];
 
@@ -59,20 +65,20 @@ const primaryRoutes: Array<{
   ctaLabel: string;
 }> = [
   {
-    sku: 'england_standard_tenancy_agreement',
-    title: 'Standard Tenancy Agreement',
-    href: '/standard-tenancy-agreement',
-    label: 'Mainstream England route',
-    body: 'Use the main England standard route when the tenancy is an ordinary residential let and you want the right agreement structure without paying for broader drafting you do not need.',
-    ctaLabel: 'View standard agreement',
-  },
-  {
     sku: 'england_premium_tenancy_agreement',
     title: 'Premium Tenancy Agreement',
     href: '/premium-tenancy-agreement',
-    label: 'Fuller ordinary-residential drafting',
-    body: 'Choose Premium when you still have a normal residential let but want broader wording around access, repairs, keys, guarantors, and day-to-day management from day one.',
+    label: 'Featured golden-pack route',
+    body: 'Choose Premium when you want the tenancy agreement shown on this page: fuller wording around access, repairs, keys, utilities, hand-back, guarantors, and day-to-day management from day one.',
     ctaLabel: 'View premium agreement',
+  },
+  {
+    sku: 'england_standard_tenancy_agreement',
+    title: 'Standard Tenancy Agreement',
+    href: '/standard-tenancy-agreement',
+    label: 'Simpler ordinary-residential alternative',
+    body: 'Use Standard when the tenancy is a straightforward ordinary residential let and you want the current England structure without the broader Premium management pack.',
+    ctaLabel: 'View standard agreement',
   },
 ];
 
@@ -184,19 +190,19 @@ const faqs: FAQItem[] = [
 const webPageSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Tenancy Agreement Template (England) - Example & Guide',
+  name: 'Tenancy Agreement Template (England) - Premium Golden Pack Sample',
   url: canonicalUrl,
   description:
-    'Review a real England tenancy agreement template example, then compare the Standard and Premium routes before choosing the agreement that fits the let.',
+    'Review the Premium Tenancy Agreement golden pack sample for England, then start the guided Premium route or compare alternatives.',
   inLanguage: 'en-GB',
 };
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Tenancy Agreement Template (England) - Example & Guide',
+  title: 'Tenancy Agreement Template (England) - Premium Sample',
   description:
-    'See a real England tenancy agreement template example with clause sections for parties, rent, deposit, term, repairs, and notices before choosing Standard or Premium.',
+    'See the Premium Tenancy Agreement golden pack sample for England, including the agreement and supporting management records, before starting the guided route.',
   keywords: [
     'tenancy agreement',
     'tenancy agreement template',
@@ -211,9 +217,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Tenancy Agreement Template (England) - Example & Guide',
+    title: 'Tenancy Agreement Template (England) - Premium Sample',
     description:
-      'Review a real England tenancy agreement example, then compare the Standard and Premium routes before choosing the agreement that fits the let.',
+      'Review the Premium Tenancy Agreement golden pack sample for England, then start the guided Premium route or compare alternatives.',
     url: canonicalUrl,
     type: 'website',
     locale: 'en_GB',
@@ -221,9 +227,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tenancy Agreement Template (England) - Example & Guide',
+    title: 'Tenancy Agreement Template (England) - Premium Sample',
     description:
-      'See a real England tenancy agreement template example and compare the Standard and Premium routes.',
+      'See the Premium Tenancy Agreement golden pack sample for England before starting the guided route.',
   },
   robots: {
     index: true,
@@ -336,27 +342,26 @@ export default function TenancyAgreementTemplatePage() {
       <main>
         <UniversalHero
           preset="content_index"
-        trustText="Real England tenancy agreement examples | compare all five landlord routes"
-          mediaSrc="/images/tenancy_agreements.webp"
-          mediaAlt="Preview of England tenancy agreement documents"
-          title="Tenancy Agreement Template"
+          trustText="Premium golden-pack sample | real England tenancy agreement preview"
+          mediaSrc="/images/wizard-premium-tenancy-agreement.webp"
+          mediaAlt="Preview of Premium Tenancy Agreement documents"
+          title="Premium Tenancy Agreement Sample"
           highlightTitle="(England)"
           subtitle={
             <>
-              See how a real England tenancy agreement reads before you choose the{' '}
-              <strong>Standard</strong>, <strong>Premium</strong>, <strong>Student</strong>,{' '}
-              <strong>HMO / Shared House</strong>, or <strong>Lodger</strong> route for your let.
+              See the <strong>Premium golden-pack tenancy agreement</strong> and supporting
+              management records before you start the guided England route.
             </>
           }
           primaryCta={{
-            label: 'Compare agreement options',
-            href: '/products/ast',
+            label: 'Start premium tenancy agreement',
+            href: premiumWizardHref,
           }}
           secondaryCta={{
-            label: 'See Standard agreement',
-            href: '/standard-tenancy-agreement',
+            label: 'View full premium sample',
+            href: premiumSamplePage?.samplePath ?? '/premium-tenancy-agreement',
           }}
-          feature="Preview the structure first, then move into the agreement route that fits the property and occupiers."
+          feature="Preview the Premium pack first, then move into the guided route with the same richer management wording."
         />
 
         <section className="py-12 md:py-16">
@@ -367,14 +372,14 @@ export default function TenancyAgreementTemplatePage() {
                   England example and guide
                 </p>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-5xl">
-                  See how the agreement reads before you choose
+                  See the Premium golden pack before you choose
                 </h2>
                 <div className="mt-5 space-y-4 text-base leading-8 text-[#556177] md:text-lg">
                   <p>
                     Landlords searching for a tenancy agreement, rent agreement, or tenancy
-                    contract usually want to inspect the wording first. This page starts with a
-                    real England example so you can see the structure before choosing the route
-                    that fits the let.
+                    contract usually want to inspect the wording first. This page now leads with
+                    the Premium golden-pack example so you can see the fuller management wording,
+                    agreement structure, and supporting documents before starting the guided route.
                   </p>
                   <p>
                     If older terminology is still shaping the search, the{' '}
@@ -397,7 +402,12 @@ export default function TenancyAgreementTemplatePage() {
               </div>
 
               <div className="mt-8 md:mt-10">
-                <SampleAgreementPreview />
+                {premiumSampleProof ? (
+                  <GoldenPackProof
+                    data={premiumSampleProof}
+                    samplePageHref={premiumSamplePage?.samplePath}
+                  />
+                ) : null}
               </div>
             </div>
           </Container>
@@ -410,13 +420,13 @@ export default function TenancyAgreementTemplatePage() {
                 Transition before route choice
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Free / generic template vs guided agreement
+                Free / generic template vs Premium golden pack
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
-                The example above shows what a real England agreement looks like. The next
-                question is whether you want to rely on a static template file or move into a
-                guided route that keeps the agreement structure, supporting documents, and tenancy
-                setup aligned.
+                The example above shows the Premium tenancy agreement and the supporting pack that
+                sits around it. The next question is whether you want to rely on a static template
+                file or move into a guided route that keeps the agreement structure, supporting
+                documents, and tenancy setup aligned.
               </p>
             </div>
 
@@ -426,7 +436,7 @@ export default function TenancyAgreementTemplatePage() {
                 <div className="border-b border-[#E5DED2] px-5 py-4 md:border-b-0 md:border-r">
                   Free / generic template
                 </div>
-                <div className="px-5 py-4">Guided agreement route</div>
+                <div className="px-5 py-4">Premium guided route</div>
               </div>
               {comparisonRows.map((row) => (
                 <div
@@ -451,11 +461,12 @@ export default function TenancyAgreementTemplatePage() {
                 Default next step after the preview
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Primary England agreement routes
+                Start with the Premium route shown above
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
-                Start with Standard or Premium when the let is an ordinary residential tenancy.
-                Those are the default mainstream England choices after the template-first preview.
+                The sample on this page is the Premium golden pack. Start there when you want the
+                fuller agreement and management records; Standard remains available for simpler
+                ordinary residential lets.
               </p>
             </div>
 
