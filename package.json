@@ -29,6 +29,7 @@
     "audit:notice-only:all": "npx -p node@20 -p tsx tsx scripts/audit-notice-only-pdfs.ts && npx -p node@20 -p tsx tsx scripts/render-notice-only-snapshots.ts && npx -p node@20 -p tsx tsx scripts/audit-notice-only-layout.ts",
     "audit:official-forms-clean": "npx -p node@20 -p tsx tsx scripts/audit-official-forms-clean.ts",
     "audit:seo": "npx -p node@20 -p tsx tsx scripts/seo-audit.ts",
+    "audit:seo-opportunities": "npx -p node@20 -p tsx tsx scripts/seo-opportunity-audit.ts",
     "audit:sitemap": "npx -p node@20 -p tsx tsx scripts/sitemap-audit.ts",
     "prove:notice-only:e2e": "npx -p node@20 -p tsx tsx scripts/prove-notice-only-e2e.ts",
     "prove:notice-only:editable": "npx -p node@20 -p tsx tsx scripts/prove-notice-only-editable-html.ts",

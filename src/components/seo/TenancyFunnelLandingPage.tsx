@@ -7,6 +7,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { FAQSection, type FAQItem } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoCtaBlock } from '@/components/seo/SeoCtaBlock';
+import { CommercialSeoNextStep } from '@/components/seo/CommercialSeoNextStep';
 import { Container } from '@/components/ui/Container';
 import { StructuredData } from '@/lib/seo/structured-data';
 
@@ -121,6 +122,12 @@ export function TenancyFunnelLandingPage({
             ) : null}
           </div>
         </section>
+
+        <CommercialSeoNextStep
+          primaryHref={primaryCtaHref}
+          secondaryHref="/premium-tenancy-agreement"
+          className="mt-10 border-y-0 bg-transparent py-0"
+        />
 
         <section className="mt-10 rounded-[2rem] border border-[#D9D7F7] bg-gradient-to-br from-[#F5F1FF] via-white to-[#F7F8FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">

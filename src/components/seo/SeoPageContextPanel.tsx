@@ -6,6 +6,7 @@ import {
   getSeoPageTaxonomy,
   type SeoScenario,
 } from '@/lib/seo/page-taxonomy';
+import { getCommercialSeoCopy } from '@/components/seo/CommercialSeoNextStep';
 
 interface SeoPageContextPanelProps {
   pathname: string;
@@ -29,6 +30,10 @@ export function SeoPageContextPanel({
   const pillarAnchor = getAnchorText(entry, 'pillar');
   const supportingAnchor = getAnchorText(entry, 'supporting');
   const productAnchor = getAnchorText(entry, 'product');
+  const commercialCopy =
+    entry.jurisdiction === 'england' || entry.jurisdiction === 'uk'
+      ? getCommercialSeoCopy(productHref, entry.secondaryProduct)
+      : null;
 
   return (
     <div
@@ -87,6 +92,18 @@ export function SeoPageContextPanel({
           </Link>
           .
         </p>
+        {commercialCopy ? (
+          <p>
+            For England cases, {commercialCopy.body}{' '}
+            <Link
+              href={commercialCopy.primary.href}
+              className="font-medium text-primary hover:underline"
+            >
+              {commercialCopy.primary.label}
+            </Link>
+            .
+          </p>
+        ) : null}
       </div>
     </div>
   );

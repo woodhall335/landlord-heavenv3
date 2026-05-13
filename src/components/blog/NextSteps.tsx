@@ -82,12 +82,12 @@ function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
     '/money-claim-n1-claim-form': 'Complete the N1 form with the right claimant, defendant, and debt details',
     '/money-claim-schedule-of-debt': 'Build a clean arrears schedule showing rent due, payments, and balance',
     '/eviction-notice-template': 'Start with the broad England notice owner before moving into transactional notice help',
-    '/products/notice-only': 'Generate a court-ready notice in minutes',
-    '/products/complete-pack': 'Everything you need for a successful eviction',
-  '/products/money-claim': 'Start the money claim pack after your evidence file and route are clear',
-  '/products/ast': 'Compare the five live England agreement types',
+    '/products/notice-only': "Use a validated Section 8 notice builder with solicitor-approved Form 3A checks before you serve.",
+    '/products/complete-pack': 'Prepare a court-ready possession pack with official court forms, N5, N119, and validation before filing.',
+  '/products/money-claim': 'Start the solicitor-approved MCOL pack for landlords, with rent arrears money claim and particulars checks.',
+  '/products/ast': "Compare Renters' Rights Act compliant tenancy agreement routes for post-May 2026 England lets.",
   '/tools/rent-arrears-calculator': 'Calculate total arrears including interest',
-  '/tenancy-agreement-template': 'See a real England tenancy agreement example and guide',
+  '/tenancy-agreement-template': 'See a validated tenancy agreement example with assured periodic wording for England.',
     '/wales-eviction-notices': 'Complete guide to Renting Homes (Wales) Act notices',
     '/scotland-eviction-notices': 'Complete guide to Notice to Leave and Scottish evictions',
     '/how-to-evict-tenant': 'Complete guide to the eviction process',
@@ -133,11 +133,11 @@ function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
 
   // Handle special label-based descriptions
   if (cta.label === 'Notice Only Bundle') {
-    description = 'Generate a court-ready eviction notice in minutes';
+    description = 'Use a validated Section 8 notice builder with solicitor-approved Form 3A checks.';
   } else if (cta.label === 'Complete Eviction Pack') {
-    description = 'Section 8 notice with all court documents included';
+    description = 'Prepare a court-ready possession pack with official court forms and filing checks.';
   } else if (cta.label === 'Tenancy Agreement Pack') {
-    description = 'Create a legally compliant tenancy agreement';
+    description = "Create a Renters' Rights Act compliant tenancy agreement for post-May 2026.";
   }
 
   // Handle special icons

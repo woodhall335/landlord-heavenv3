@@ -17,6 +17,7 @@ import {
   getPrimaryDestinationAboveFold,
   getSeoPageTaxonomyBySlug,
 } from '@/lib/seo/page-taxonomy';
+import { CommercialSeoNextStep } from '@/components/seo/CommercialSeoNextStep';
 
 const DEFAULT_UPDATED = 'March 2026';
 const AREA_SERVED_BY_JURISDICTION = {
@@ -349,6 +350,10 @@ export function EvictionIntentLandingPage({ config }: { config: IntentPageConfig
           </div>
         </Container>
       </section>
+
+      {jurisdiction === 'england' || jurisdiction === 'uk' ? (
+        <CommercialSeoNextStep primaryHref={primaryHref} secondaryHref={secondaryActionHref} />
+      ) : null}
 
       <section id="eviction-process-overview" className="py-14 bg-white">
         <Container>

@@ -13,6 +13,7 @@ import {
   formatAuthorityLinkLabel,
   getAuthorityLinks,
 } from '@/lib/seo/eviction-authority';
+import { CommercialSeoNextStep } from '@/components/seo/CommercialSeoNextStep';
 
 export interface IntentSection {
   title: string;
@@ -140,6 +141,11 @@ export function HighIntentPageShell(props: HighIntentPageShellProps) {
           </div>
         </Container>
       </section>
+
+      <CommercialSeoNextStep
+        primaryHref={props.primaryCta.href}
+        secondaryHref={props.secondaryCta?.href}
+      />
 
       {props.diagrams && props.diagrams.length > 0 ? (
         <section className="border-b border-[#E6DBFF] bg-white py-8">
