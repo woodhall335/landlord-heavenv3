@@ -6,6 +6,7 @@ import { getPostRegion, getPublicBlogRegions } from '@/lib/blog/categories';
 import { blogPosts } from '@/lib/blog/posts';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
 import { getValidTopicHubs } from '@/lib/blog/topic-hubs';
+import { productSamplePagePaths } from '@/lib/marketing/product-sample-pages';
 import { discoverStaticPageRoutes } from '@/lib/seo/static-route-inventory';
 
 describe('Sitemap Route Existence', () => {
@@ -30,6 +31,7 @@ describe('Sitemap Route Existence', () => {
       '/rent-increase/section-13-tribunal',
       '/rent-increase/market-rent-calculation',
       '/rent-increase/rent-increase-challenge',
+      ...productSamplePagePaths,
     ];
 
     knownPublicRoutes = new Set([
@@ -108,6 +110,7 @@ describe('Sitemap Route Existence', () => {
         '/renters-rights-act-eviction-rules',
         '/renters-rights-bill-tenancy-agreement',
         '/tenancy-agreements/england',
+        ...productSamplePagePaths,
         '/tools/rent-increase-challenge-checker/challenge-risk',
         '/tools/rent-increase-challenge-checker/form-4a-evidence',
         '/tools/rent-increase-challenge-checker/guide',

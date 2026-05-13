@@ -27,6 +27,7 @@ import {
   RETIRED_PUBLIC_ROUTES,
   isRetiredPublicRoute,
 } from '@/lib/public-retirements';
+import { productSamplePagePaths } from '@/lib/marketing/product-sample-pages';
 import { getPublicCatalogProducts, getPublicTenancyProducts } from '@/lib/public-products';
 import sitemapAllowlist from '../../scripts/seo-sitemap-allowlist.json';
 
@@ -164,6 +165,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/renters-rights-act-eviction-rules', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/renters-rights-bill-tenancy-agreement', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/samples', priority: 0.82, changeFrequency: 'weekly' as const },
+    ...productSamplePagePaths.map((path) => ({
+      path,
+      priority: 0.78,
+      changeFrequency: 'weekly' as const,
+    })),
     { path: '/tenancy-agreements/england', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/compare/section-8-stage-1-vs-stage-2', priority: 0.82, changeFrequency: 'weekly' as const },
     { path: '/compare/section-13-standard-vs-defence', priority: 0.8, changeFrequency: 'weekly' as const },

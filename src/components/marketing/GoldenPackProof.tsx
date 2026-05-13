@@ -1,5 +1,6 @@
 import type { GoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
 import { GoldenPackPdfShowcase } from '@/components/marketing/GoldenPackPdfShowcase';
+import Link from 'next/link';
 
 function formatGeneratedDate(value?: string): string | null {
   if (!value) {
@@ -18,7 +19,15 @@ function formatGeneratedDate(value?: string): string | null {
   }).format(date);
 }
 
-export function GoldenPackProof({ data }: { data: GoldenPackProofData }) {
+export function GoldenPackProof({
+  data,
+  samplePageHref,
+  samplePageLabel = 'View full sample',
+}: {
+  data: GoldenPackProofData;
+  samplePageHref?: string;
+  samplePageLabel?: string;
+}) {
   const generatedDate = formatGeneratedDate(data.generatedAt);
   const pdfEntries = data.featuredEntries.filter((entry) => Boolean(entry.pdfHref));
 
@@ -57,6 +66,17 @@ export function GoldenPackProof({ data }: { data: GoldenPackProofData }) {
           pay.
         </p>
       </div>
+
+      {samplePageHref ? (
+        <div className="mt-5">
+          <Link
+            href={samplePageHref}
+            className="inline-flex items-center justify-center rounded-full border border-white/16 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/16"
+          >
+            {samplePageLabel}
+          </Link>
+        </div>
+      ) : null}
 
       {pdfEntries.length ? <GoldenPackPdfShowcase entries={pdfEntries} /> : null}
 

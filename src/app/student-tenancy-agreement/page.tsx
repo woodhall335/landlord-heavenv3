@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
@@ -14,6 +15,7 @@ const englandHubHref = '/products/ast';
 const studentWizardHref =
   '/wizard?product=england_student_tenancy_agreement&src=student_tenancy_page&topic=tenancy';
 const studentSampleProof = getGoldenPackProofData('england_student_tenancy_agreement');
+const studentSamplePage = getProductSamplePageByPackKey('england_student_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -107,7 +109,9 @@ export default function StudentTenancyAgreementPage() {
         ]}
         routeComparison={englandTenancyRouteComparisonCards}
         salesContent={{
-          sampleProof: studentSampleProof ? <GoldenPackProof data={studentSampleProof} /> : undefined,
+          sampleProof: studentSampleProof ? (
+            <GoldenPackProof data={studentSampleProof} samplePageHref={studentSamplePage?.samplePath} />
+          ) : undefined,
           showPackBreakdown: false,
           whyYouNeedThis: {
             title: 'Why student lets need their own pack',

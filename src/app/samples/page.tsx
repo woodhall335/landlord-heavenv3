@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
-import { getGoldenPackProofData, type GoldenPackKey } from '@/lib/marketing/golden-pack-proof';
-import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
+import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { productSamplePages } from '@/lib/marketing/product-sample-pages';
+import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
 import {
   StructuredData,
@@ -15,76 +16,6 @@ import {
 
 const samplePagePath = '/samples';
 const canonicalUrl = getCanonicalUrl(samplePagePath);
-
-type SamplePackConfig = {
-  packKey: GoldenPackKey;
-  sku: ProductSku;
-  productHref: string;
-  sampleIntent: string;
-};
-
-const samplePackConfigs: SamplePackConfig[] = [
-  {
-    packKey: 'notice_only',
-    sku: 'notice_only',
-    productHref: '/products/notice-only',
-    sampleIntent: 'Section 8 notice sample PDF',
-  },
-  {
-    packKey: 'complete_pack',
-    sku: 'complete_pack',
-    productHref: '/products/complete-pack',
-    sampleIntent: 'Section 8 court pack sample',
-  },
-  {
-    packKey: 'money_claim',
-    sku: 'money_claim',
-    productHref: '/products/money-claim',
-    sampleIntent: 'Money Claim Online pack sample',
-  },
-  {
-    packKey: 'section13_standard',
-    sku: 'section13_standard',
-    productHref: '/products/section-13-standard',
-    sampleIntent: 'Section 13 Form 4A sample',
-  },
-  {
-    packKey: 'section13_defensive',
-    sku: 'section13_defensive',
-    productHref: '/products/section-13-defence',
-    sampleIntent: 'Section 13 tribunal defence sample',
-  },
-  {
-    packKey: 'england_standard_tenancy_agreement',
-    sku: 'england_standard_tenancy_agreement',
-    productHref: '/standard-tenancy-agreement',
-    sampleIntent: 'standard tenancy agreement sample UK',
-  },
-  {
-    packKey: 'england_premium_tenancy_agreement',
-    sku: 'england_premium_tenancy_agreement',
-    productHref: '/premium-tenancy-agreement',
-    sampleIntent: 'premium tenancy agreement example',
-  },
-  {
-    packKey: 'england_student_tenancy_agreement',
-    sku: 'england_student_tenancy_agreement',
-    productHref: '/student-tenancy-agreement',
-    sampleIntent: 'student tenancy agreement sample',
-  },
-  {
-    packKey: 'england_hmo_shared_house_tenancy_agreement',
-    sku: 'england_hmo_shared_house_tenancy_agreement',
-    productHref: '/hmo-shared-house-tenancy-agreement',
-    sampleIntent: 'HMO tenancy agreement sample',
-  },
-  {
-    packKey: 'england_lodger_agreement',
-    sku: 'england_lodger_agreement',
-    productHref: '/lodger-agreement',
-    sampleIntent: 'lodger agreement sample UK',
-  },
-];
 
 export const metadata: Metadata = {
   title: 'Free Landlord Document Samples | Section 8, Tenancy & Rent Packs',
@@ -107,7 +38,7 @@ export const metadata: Metadata = {
 };
 
 export default function SamplesPage() {
-  const samplePacks = samplePackConfigs
+  const samplePacks = productSamplePages
     .map((config) => {
       const proof = getGoldenPackProofData(config.packKey);
       return proof ? { ...config, proof, product: PRODUCTS[config.sku] } : null;
@@ -159,7 +90,7 @@ export default function SamplesPage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          {samplePacks.map(({ packKey, proof, productHref, product, sampleIntent }) => (
+          {samplePacks.map(({ packKey, proof, productHref, product, targetKeyword, samplePath, productName }) => (
             <article
               key={packKey}
               data-testid="golden-pack-sample-card"
@@ -168,7 +99,7 @@ export default function SamplesPage() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
-                    {sampleIntent}
+                    {targetKeyword}
                   </p>
                   <h3 className="mt-2 text-2xl font-bold text-[#141B2D]">{proof.displayName}</h3>
                   <p className="mt-2 text-sm text-[#546075]">
@@ -176,10 +107,10 @@ export default function SamplesPage() {
                   </p>
                 </div>
                 <Link
-                  href={productHref}
+                  href={samplePath}
                   className="inline-flex items-center justify-center rounded-lg bg-[#6D28D9] px-4 py-3 text-sm font-semibold text-white hover:bg-[#5B21B6]"
                 >
-                  View {product.shortLabel}
+                  View full sample
                 </Link>
               </div>
 
@@ -187,7 +118,7 @@ export default function SamplesPage() {
                 {proof.featuredEntries.slice(0, 3).map((entry) => (
                   <div key={entry.documentType} className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-3">
                     {entry.thumbnailHref ? (
-                      <Link href={entry.embedHref ?? entry.pdfHref ?? productHref} aria-label={`View ${entry.title} sample`}>
+                      <Link href={samplePath} aria-label={`View full ${productName} sample`}>
                         <Image
                           src={entry.thumbnailHref}
                           alt={`${entry.title} sample preview`}
@@ -205,15 +136,13 @@ export default function SamplesPage() {
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
                       {entry.embedHref ? (
-                        <Link href={entry.embedHref} className="text-primary hover:underline">
-                          View sample
+                        <Link href={samplePath} className="text-primary hover:underline">
+                          Full sample page
                         </Link>
                       ) : null}
-                      {entry.pdfHref ? (
-                        <Link href={entry.pdfHref} className="text-primary hover:underline">
-                          Open PDF
-                        </Link>
-                      ) : null}
+                      <Link href={productHref} className="text-primary hover:underline">
+                        View {product.shortLabel}
+                      </Link>
                     </div>
                   </div>
                 ))}

@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
 import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
@@ -13,6 +14,7 @@ const canonicalUrl = getCanonicalUrl('/premium-tenancy-agreement');
 const premiumWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=england_tenancy_page&topic=tenancy';
 const premiumSampleProof = getGoldenPackProofData('england_premium_tenancy_agreement');
+const premiumSamplePage = getProductSamplePageByPackKey('england_premium_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -119,7 +121,9 @@ export default function PremiumTenancyAgreementPage() {
         ]}
         routeComparison={englandTenancyRouteComparisonCards}
         salesContent={{
-          sampleProof: premiumSampleProof ? <GoldenPackProof data={premiumSampleProof} /> : undefined,
+          sampleProof: premiumSampleProof ? (
+            <GoldenPackProof data={premiumSampleProof} samplePageHref={premiumSamplePage?.samplePath} />
+          ) : undefined,
           showPackBreakdown: false,
           whyYouNeedThis: {
             title: 'Why landlords choose Premium',

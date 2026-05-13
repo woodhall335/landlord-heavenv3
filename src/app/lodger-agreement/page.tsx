@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getCanonicalUrl } from '@/lib/seo';
 import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
@@ -13,6 +14,7 @@ const canonicalUrl = getCanonicalUrl('/lodger-agreement');
 const englandHubHref = '/products/ast';
 const lodgerWizardHref = '/wizard?product=england_lodger_agreement&src=lodger_page&topic=tenancy';
 const lodgerSampleProof = getGoldenPackProofData('england_lodger_agreement');
+const lodgerSamplePage = getProductSamplePageByPackKey('england_lodger_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -105,7 +107,9 @@ export default function LodgerAgreementEnglandPage() {
         ]}
         routeComparison={englandTenancyRouteComparisonCards}
         salesContent={{
-          sampleProof: lodgerSampleProof ? <GoldenPackProof data={lodgerSampleProof} /> : undefined,
+          sampleProof: lodgerSampleProof ? (
+            <GoldenPackProof data={lodgerSampleProof} samplePageHref={lodgerSamplePage?.samplePath} />
+          ) : undefined,
           showPackBreakdown: false,
           whyYouNeedThis: {
             title: 'Why a lodger arrangement needs its own paperwork',

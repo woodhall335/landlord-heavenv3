@@ -71,6 +71,7 @@ export type GoldenPackProofData = {
   versionToken: string;
   documentCount: number;
   totalPages: number;
+  allEntries: GoldenPackProofEntry[];
   featuredEntries: GoldenPackProofEntry[];
   remainingTitles: string[];
 };
@@ -449,6 +450,7 @@ export function getGoldenPackProofData(
       (sum, document) => sum + (document.extraction?.pageCount ?? 0),
       0
     ),
+    allEntries: entries,
     featuredEntries: previewableEntries.slice(0, featuredLimit),
     remainingTitles: entries
       .filter((entry) => !entry.pdfHref)

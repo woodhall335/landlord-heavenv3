@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { englandTenancyRouteComparisonCards } from '@/lib/seo/england-tenancy-route-cards';
 import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
@@ -14,6 +15,7 @@ const englandHubHref = '/products/ast';
 const hmoWizardHref =
   '/wizard?product=england_hmo_shared_house_tenancy_agreement&src=hmo_shared_page&topic=tenancy';
 const hmoSampleProof = getGoldenPackProofData('england_hmo_shared_house_tenancy_agreement');
+const hmoSamplePage = getProductSamplePageByPackKey('england_hmo_shared_house_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -108,7 +110,9 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         ]}
         routeComparison={englandTenancyRouteComparisonCards}
         salesContent={{
-          sampleProof: hmoSampleProof ? <GoldenPackProof data={hmoSampleProof} /> : undefined,
+          sampleProof: hmoSampleProof ? (
+            <GoldenPackProof data={hmoSampleProof} samplePageHref={hmoSamplePage?.samplePath} />
+          ) : undefined,
           showPackBreakdown: false,
           whyYouNeedThis: {
             title: 'Why shared houses need fuller paperwork',

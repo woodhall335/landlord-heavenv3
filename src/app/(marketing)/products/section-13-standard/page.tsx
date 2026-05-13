@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { PublicProductSalesPage } from '@/components/marketing/PublicProductSalesPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { SECTION13_STANDARD_PAGE } from '@/lib/marketing/section13-products';
 import { PRODUCTS } from '@/lib/pricing/products';
@@ -30,6 +31,7 @@ export const metadata: Metadata = {
 
 export default function Section13StandardProductPage() {
   const sampleProof = getGoldenPackProofData('section13_standard');
+  const samplePage = getProductSamplePageByPackKey('section13_standard');
 
   const content: ProductSalesPageContent = {
     analytics: {
@@ -61,7 +63,9 @@ export default function Section13StandardProductPage() {
       ),
     },
     earlyProofBand: {
-      preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+      preview: sampleProof ? (
+        <GoldenPackProof data={sampleProof} samplePageHref={samplePage?.samplePath} />
+      ) : undefined,
     },
     whatYouGet: {
       hideSection: true,

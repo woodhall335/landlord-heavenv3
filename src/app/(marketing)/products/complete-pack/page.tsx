@@ -5,6 +5,7 @@ import { PublicProductSalesPage } from '@/components/marketing/PublicProductSale
 import type { FAQItem } from '@/components/seo/FAQSection';
 import { Section8JourneyTimeline } from '@/components/eviction/Section8JourneyTimeline';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-content';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
@@ -72,6 +73,7 @@ export const runtime = 'nodejs';
 
 export default function CompleteEvictionPackPage() {
   const sampleProof = getGoldenPackProofData('complete_pack');
+  const samplePage = getProductSamplePageByPackKey('complete_pack');
 
   const content: ProductSalesPageContent = {
     analytics: {
@@ -231,7 +233,9 @@ export default function CompleteEvictionPackPage() {
           includedByDefault: true,
         },
       ],
-      sampleProof: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined,
+      sampleProof: sampleProof ? (
+        <GoldenPackProof data={sampleProof} samplePageHref={samplePage?.samplePath} />
+      ) : undefined,
     },
     comparisonBlock: {
       title: 'Stage 2 is the full court route',

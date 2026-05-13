@@ -3,6 +3,7 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { GoldenPackProof } from '@/components/marketing/GoldenPackProof';
 import { EnglandTenancyPage } from '@/components/seo/EnglandTenancyPage';
 import { getGoldenPackProofData } from '@/lib/marketing/golden-pack-proof';
+import { getProductSamplePageByPackKey } from '@/lib/marketing/product-sample-pages';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
@@ -12,6 +13,7 @@ const canonicalUrl = getCanonicalUrl('/standard-tenancy-agreement');
 const standardWizardHref =
   '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_standard_tenancy_agreement&src=standard_tenancy_page&topic=tenancy';
 const standardSampleProof = getGoldenPackProofData('england_standard_tenancy_agreement');
+const standardSamplePage = getProductSamplePageByPackKey('england_standard_tenancy_agreement');
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -270,7 +272,9 @@ export default function StandardTenancyAgreementPage() {
           },
         ]}
         salesContent={{
-          sampleProof: standardSampleProof ? <GoldenPackProof data={standardSampleProof} /> : undefined,
+          sampleProof: standardSampleProof ? (
+            <GoldenPackProof data={standardSampleProof} samplePageHref={standardSamplePage?.samplePath} />
+          ) : undefined,
           showPackBreakdown: false,
           whyYouNeedThis: {
             title: 'Why a standard periodic agreement still needs proper setup',
