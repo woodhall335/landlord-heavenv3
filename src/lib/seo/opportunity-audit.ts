@@ -76,7 +76,7 @@ const PRIORITY_ORDER: Record<SeoOpportunityPriority, number> = {
   Low: 2,
 };
 
-const OWNER_METADATA_BY_PATH = new Map(
+const OWNER_METADATA_BY_PATH = new Map<string, (typeof PRODUCT_OWNER_METADATA_LIST)[number]>(
   PRODUCT_OWNER_METADATA_LIST.map((metadata) => [metadata.path, metadata])
 );
 
