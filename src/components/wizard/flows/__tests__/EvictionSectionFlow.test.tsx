@@ -145,37 +145,56 @@ describe('EvictionSectionFlow - England complete pack', () => {
   it('shows the complete-pack shell title and key court-ready steps', async () => {
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Choose the main reason you need possession/i);
-    expect(screen.getByText(/Tenant is not paying rent/i)).toBeDefined();
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
+    expect(screen.queryByText(/Choose the main reason you need possession/i)).toBeNull();
+    expect(screen.queryByText(/Pick the main reason you need possession/i)).toBeNull();
     expect(screen.queryByRole('region', { name: /Section 8 eviction journey timeline/i })).toBeNull();
-    expect(getStepButton("What's going on?")).toBeDefined();
-    expect(getStepButton('Who and where?')).toBeDefined();
-    expect(getStepButton('Tenancy details')).toBeDefined();
-    expect(getStepButton('Your notice')).toBeDefined();
-    expect(getStepButton('About the arrears')).toBeDefined();
-    expect(getStepButton('Evidence summary')).toBeDefined();
-    expect(getStepButton('Prepare your court claim')).toBeDefined();
-    expect(getStepButton('Review your court documents')).toBeDefined();
+    expect(screen.queryByRole('button', { name: stepButtonName("What's going on?") })).toBeNull();
+    expect(getStepButton('Landlord and tenant')).toBeDefined();
+    expect(getStepButton('Tenancy and rent')).toBeDefined();
+    expect(getStepButton('Grounds and service')).toBeDefined();
+    expect(getStepButton('Rent arrears')).toBeDefined();
+    expect(getStepButton('Court evidence')).toBeDefined();
+    expect(getStepButton('Court and signing')).toBeDefined();
+    expect(getStepButton('Review and download')).toBeDefined();
   });
 
   it('surfaces the court-pack evidence and claim assembly checkpoints', async () => {
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Choose the main reason you need possession/i);
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
 
-    expect(screen.getAllByText(/Step 1 of 9/i).length).toBeGreaterThan(0);
-    expect(getStepButton('Prepare your court claim')).toBeDefined();
-    expect(getStepButton('Review your court documents')).toBeDefined();
+    expect(screen.getAllByText(/Step 1 of 8/i).length).toBeGreaterThan(0);
+    expect(getStepButton('Court and signing')).toBeDefined();
+    expect(getStepButton('Review and download')).toBeDefined();
     expect(screen.getAllByTestId('ask-heaven-panel').length).toBeGreaterThan(0);
+  });
+
+  it('auto-seeds England to the Section 8 route when older complete-pack facts have no route', async () => {
+    render(
+      <EvictionSectionFlow
+        caseId="test-complete-pack-route-seed"
+        jurisdiction="england"
+        initialFacts={{
+          __meta: { product: 'complete_pack', jurisdiction: 'england' },
+        }}
+      />
+    );
+
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
+
+    expect(screen.queryByText(/Choose the main reason you need possession/i)).toBeNull();
+    expect(screen.queryByRole('button', { name: stepButtonName("What's going on?") })).toBeNull();
+    expect(getStepButton('Grounds and service')).toBeDefined();
   });
 
   it('skips ground details for arrears-only complete-pack cases', async () => {
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Choose the main reason you need possession/i);
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
 
-    expect(screen.queryByRole('button', { name: stepButtonName('Ground details') })).toBeNull();
-    expect(getStepButton('About the arrears')).toBeDefined();
+    expect(screen.queryByRole('button', { name: stepButtonName('Ground evidence') })).toBeNull();
+    expect(getStepButton('Rent arrears')).toBeDefined();
   });
 
   it('shows ground details and skips arrears for specialist-only complete-pack cases', async () => {
@@ -193,10 +212,10 @@ describe('EvictionSectionFlow - England complete pack', () => {
       />
     );
 
-    await screen.findByText(/Choose the main reason you need possession/i);
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
 
-    expect(getStepButton('Ground details')).toBeDefined();
-    expect(screen.queryByRole('button', { name: stepButtonName('About the arrears') })).toBeNull();
+    expect(getStepButton('Ground evidence')).toBeDefined();
+    expect(screen.queryByRole('button', { name: stepButtonName('Rent arrears') })).toBeNull();
   });
 
   it('shows ground details for non-arrears breach complete-pack cases', async () => {
@@ -214,10 +233,10 @@ describe('EvictionSectionFlow - England complete pack', () => {
       />
     );
 
-    await screen.findByText(/Choose the main reason you need possession/i);
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
 
-    expect(getStepButton('Ground details')).toBeDefined();
-    expect(screen.queryByRole('button', { name: stepButtonName('About the arrears') })).toBeNull();
+    expect(getStepButton('Ground evidence')).toBeDefined();
+    expect(screen.queryByRole('button', { name: stepButtonName('Rent arrears') })).toBeNull();
   });
 
   it('shows both ground details and arrears for mixed complete-pack cases', async () => {
@@ -231,10 +250,10 @@ describe('EvictionSectionFlow - England complete pack', () => {
       />
     );
 
-    await screen.findByText(/Choose the main reason you need possession/i);
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
 
-    expect(getStepButton('Ground details')).toBeDefined();
-    expect(getStepButton('About the arrears')).toBeDefined();
+    expect(getStepButton('Ground evidence')).toBeDefined();
+    expect(getStepButton('Rent arrears')).toBeDefined();
   });
 
   it('review step keeps the readiness summary and issue lists for the England court pack', async () => {
@@ -242,8 +261,8 @@ describe('EvictionSectionFlow - England complete pack', () => {
 
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Choose the main reason you need possession/i);
-    await user.click(getStepButton('Review your court documents'));
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
+    await user.click(getStepButton('Review and download'));
 
     await screen.findByText(/This pack is ready for document preview|You still need to fix a few things before this pack is ready/i);
     expect(screen.getByText(/Final notice service details/i)).toBeDefined();
@@ -258,8 +277,8 @@ describe('EvictionSectionFlow - England complete pack', () => {
 
     render(<EvictionSectionFlow {...englandCompletePackProps} />);
 
-    await screen.findByText(/Choose the main reason you need possession/i);
-    await user.click(getStepButton('Your notice'));
+    await screen.findByRole('heading', { name: /Landlord and tenant/i });
+    await user.click(getStepButton('Grounds and service'));
 
     expect(screen.getByText(/Form 3A notice grounds/i)).toBeDefined();
     expect(screen.queryByText(/Notice details - Step/i)).toBeNull();
@@ -312,10 +331,10 @@ describe('EvictionSectionFlow - England complete pack', () => {
 
     await screen.findByText(/Stage 1 upgraded into Stage 2/i);
     expect(screen.getByText(/court-only sections are already complete|You still need to complete:/i)).toBeDefined();
-    expect(getStepButton('Evidence summary')).toHaveAttribute('aria-current', 'step');
+    expect(getStepButton('Court evidence')).toHaveAttribute('aria-current', 'step');
     expect(screen.queryByText(/Choose the main reason you need possession/i)).toBeNull();
 
-    await user.click(getStepButton('Your notice'));
+    await user.click(getStepButton('Grounds and service'));
     expect(screen.getByText(/Have you already served a valid notice on the tenant/i)).toBeDefined();
     expect(screen.getByRole('radio', { name: /No, I need to generate a notice/i })).toBeChecked();
   });

@@ -264,14 +264,14 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     expect(screen.getByText(/Stage 1: Section 8 Notice & Service Pack/)).toBeDefined();
   });
 
-  it('should render "Tenancy" tab label for England (not "Occupation Contract")', async () => {
+  it('should render the renamed tenancy tab label for England (not "Occupation Contract")', async () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
 
     // Wait for component to load
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    // England should show "Tenancy" not "Occupation Contract"
-    expect(getStepButton('Tenancy details')).toBeDefined();
+    // England should show the simplified label, not Wales terminology.
+    expect(getStepButton('Tenancy and rent')).toBeDefined();
     expect(screen.queryByRole('button', { name: /Occupation Contract/i })).toBeNull();
   });
 
@@ -289,14 +289,16 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     // Wait for component to load
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    expect(screen.getByRole('heading', { name: /What's going on\?/i })).toBeDefined();
+    expect(queryStepButton("What's going on?")).toBeNull();
+    expect(screen.queryByText(/Choose the main reason you need possession/i)).toBeNull();
+    expect(getStepButton('Landlord and tenant')).toBeDefined();
     const selectableSection21Routes = screen.queryAllByRole('radio').filter(
       (radio) => radio.getAttribute('value') === 'section_21'
     );
     expect(selectableSection21Routes.length).toBe(0);
   });
 
-  it('should keep the England tenancy label and hide Wales terminology', async () => {
+  it('should keep the renamed England tenancy label and hide Wales terminology', async () => {
     const propsWithSection8 = {
       ...englandProps,
       initialFacts: {
@@ -311,7 +313,7 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
     // The flow should be set up for Section 8
-    expect(getStepButton('Tenancy details')).toBeDefined();
+    expect(getStepButton('Tenancy and rent')).toBeDefined();
     expect(screen.queryByText(/Occupation Contract/)).toBeNull();
   });
 
@@ -329,12 +331,12 @@ describe('NoticeOnlySectionFlow - England Jurisdiction', () => {
 
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    fireEvent.click(getStepButton('Your notice'));
+    fireEvent.click(getStepButton('Grounds and service'));
     expect(screen.getByText(/Form 3A notice grounds/i)).toBeDefined();
     expect(screen.queryByText(/Notice details - Step/i)).toBeNull();
     expect(screen.queryByText(/Notice Service Details/i)).toBeNull();
 
-    fireEvent.click(getStepButton('Review your pack'));
+    fireEvent.click(getStepButton('Review and download'));
     expect(screen.getByText(/Final notice service details/i)).toBeDefined();
     expect(screen.getByText(/What still needs attention/i)).toBeDefined();
   });
@@ -419,7 +421,8 @@ describe('NoticeOnlySectionFlow - Header and Title', () => {
 
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
     expect(screen.getByText(/Stage 1: Section 8 Notice & Service Pack/)).toBeDefined();
-    expect(screen.getByText(/Tenant is not paying rent/i)).toBeDefined();
+    expect(screen.getByRole('heading', { name: /Landlord and tenant/i })).toBeDefined();
+    expect(screen.queryByText(/Tenant is not paying rent/i)).toBeNull();
     expect(screen.queryByRole('region', { name: /Section 8 eviction journey timeline/i })).toBeNull();
   });
 
@@ -773,15 +776,36 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    expect(getStepButton("What's going on?")).toBeDefined();
-    expect(getStepButton('Who and where?')).toBeDefined();
-    expect(getStepButton('Property')).toBeDefined();
-    expect(getStepButton('Tenancy details')).toBeDefined();
-    expect(getStepButton('Quick checks')).toBeDefined();
-    expect(getStepButton('Your notice')).toBeDefined();
-    expect(queryStepButton('Ground details')).toBeNull();
-    expect(queryStepButton('About the arrears')).toBeNull();
+    expect(queryStepButton("What's going on?")).toBeNull();
+    expect(screen.queryByText(/Pick the main reason you need possession/i)).toBeNull();
+    expect(screen.queryByText(/Choose the main reason you need possession/i)).toBeNull();
+    expect(getStepButton('Landlord and tenant')).toBeDefined();
+    expect(getStepButton('Rental property')).toBeDefined();
+    expect(getStepButton('Tenancy and rent')).toBeDefined();
+    expect(getStepButton('Pre-notice checks')).toBeDefined();
+    expect(getStepButton('Grounds and service')).toBeDefined();
+    expect(queryStepButton('Ground evidence')).toBeNull();
+    expect(queryStepButton('Rent arrears')).toBeNull();
     expect(screen.queryByRole('button', { name: /Compliance/i })).toBeNull();
+  });
+
+  it('auto-seeds England to the Section 8 route when older facts have no route', async () => {
+    render(
+      <NoticeOnlySectionFlow
+        caseId="test-england-route-seed"
+        jurisdiction="england"
+        initialFacts={{
+          __meta: { product: 'notice_only', jurisdiction: 'england' },
+        }}
+      />
+    );
+
+    await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
+
+    expect(queryStepButton("What's going on?")).toBeNull();
+    expect(screen.queryByText(/Choose the main reason you need possession/i)).toBeNull();
+    expect(getStepButton('Landlord and tenant')).toHaveAttribute('aria-current', 'step');
+    expect(getStepButton('Grounds and service')).toBeDefined();
   });
 
   it('should NOT apply Wales normalization to England routes', async () => {
@@ -798,9 +822,10 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
     render(<NoticeOnlySectionFlow {...englandProps} />);
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    expect(getStepButton("What's going on?")).toBeDefined();
-    expect(queryStepButton('Ground details')).toBeNull();
-    expect(queryStepButton('About the arrears')).toBeNull();
+    expect(queryStepButton("What's going on?")).toBeNull();
+    expect(getStepButton('Landlord and tenant')).toBeDefined();
+    expect(queryStepButton('Ground evidence')).toBeNull();
+    expect(queryStepButton('Rent arrears')).toBeNull();
   });
 
   it('shows the arrears step and skips ground details for arrears-only England cases', async () => {
@@ -818,8 +843,8 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
 
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    expect(queryStepButton('Ground details')).toBeNull();
-    expect(getStepButton('About the arrears')).toBeDefined();
+    expect(queryStepButton('Ground evidence')).toBeNull();
+    expect(getStepButton('Rent arrears')).toBeDefined();
   });
 
   it('shows the ground-details step and skips arrears for specialist-only England cases', async () => {
@@ -837,8 +862,8 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
 
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    expect(getStepButton('Ground details')).toBeDefined();
-    expect(queryStepButton('About the arrears')).toBeNull();
+    expect(getStepButton('Ground evidence')).toBeDefined();
+    expect(queryStepButton('Rent arrears')).toBeNull();
   });
 
   it('shows the ground-details step for non-arrears breach grounds', async () => {
@@ -856,8 +881,8 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
 
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    expect(getStepButton('Ground details')).toBeDefined();
-    expect(queryStepButton('About the arrears')).toBeNull();
+    expect(getStepButton('Ground evidence')).toBeDefined();
+    expect(queryStepButton('Rent arrears')).toBeNull();
   });
 
   it('shows both ground details and arrears for mixed England cases', async () => {
@@ -875,8 +900,8 @@ describe('NoticeOnlySectionFlow - England Next Button', () => {
 
     await screen.findByText(/Stage 1: Section 8 Notice & Service Pack/);
 
-    expect(getStepButton('Ground details')).toBeDefined();
-    expect(getStepButton('About the arrears')).toBeDefined();
+    expect(getStepButton('Ground evidence')).toBeDefined();
+    expect(getStepButton('Rent arrears')).toBeDefined();
   });
 });
 

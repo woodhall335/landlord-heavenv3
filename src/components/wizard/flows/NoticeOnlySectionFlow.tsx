@@ -5,14 +5,13 @@
  * EvictionSectionFlow design language for consistency.
  *
  * Flow Structure (England):
- * 1. Notice Basics - Section 8 / Form 3A notice-stage pack overview
- * 2. Parties - Landlord(s) and Tenant(s) with joint support
- * 3. Property - Full address and postcode
- * 4. Tenancy - Start date, rent amount, frequency, due day
+ * 1. Parties - Landlord(s) and Tenant(s) with joint support
+ * 2. Property - Full address and postcode
+ * 3. Tenancy - Start date, rent amount, frequency, due day
+ * 4. Section 8 Compliance - Deposit, landlord duties, and wider compliance record
  * 5. Notice Details - Grounds and service details
- * 6. Section 8 Compliance - Deposit, landlord duties, and wider compliance record
- * 7. Section 8 Arrears - Arrears schedule for Grounds 8, 10, and 11
- * 8. Review - Generate and download notice
+ * 6. Section 8 Arrears - Arrears schedule for Grounds 8, 10, and 11 when relevant
+ * 7. Review - Generate and download notice
  *
  * Flow Structure (Wales):
  * 1. Case Basics - Wales route selection
@@ -186,6 +185,44 @@ interface WizardSection {
   hasWarnings?: (facts: WizardFacts, jurisdiction?: 'england' | 'wales' | 'scotland') => string[];
 }
 
+const ENGLAND_SECTION_LABELS: Record<string, string> = {
+  parties: 'Landlord and tenant',
+  property: 'Rental property',
+  tenancy: 'Tenancy and rent',
+  section8_compliance: 'Pre-notice checks',
+  notice: 'Grounds and service',
+  ground_details: 'Ground evidence',
+  section8_arrears: 'Rent arrears',
+  review: 'Review and download',
+};
+
+function relabelEnglandSection(section: WizardSection): WizardSection {
+  const label = ENGLAND_SECTION_LABELS[section.id];
+  return label ? { ...section, label } : section;
+}
+
+function normalizeNoticeOnlyFacts(
+  facts: WizardFacts,
+  jurisdiction: 'england' | 'wales' | 'scotland'
+): WizardFacts {
+  const normalizedFacts: WizardFacts = {
+    ...facts,
+    __meta: {
+      ...(facts.__meta || {}),
+      product: 'notice_only',
+      original_product: facts.__meta?.original_product ?? facts.__meta?.product ?? 'notice_only',
+      jurisdiction,
+    },
+  };
+
+  if (jurisdiction === 'england') {
+    normalizedFacts.eviction_route = 'section_8';
+    normalizedFacts.selected_notice_route = 'section_8';
+  }
+
+  return normalizedFacts;
+}
+
 // Valid routes by jurisdiction
 const ENGLAND_ROUTES = ['section_8'] as const;
 const WALES_ROUTES = ['section_173', 'fault_based'] as const;
@@ -275,7 +312,7 @@ const SECTIONS: WizardSection[] = [
       if (!route) return false;
       // England routes
       if (jurisdiction === 'england') {
-        return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]) && Boolean(facts.england_primary_issue);
+        return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
       }
       // Wales routes
       if (jurisdiction === 'wales') {
@@ -878,7 +915,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
 
   // State
   const [facts, setFacts] = useState<WizardFacts>(
-    initialFacts || { __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction } }
+    normalizeNoticeOnlyFacts(
+      initialFacts || { __meta: { product: 'notice_only', original_product: 'notice_only', jurisdiction } },
+      jurisdiction
+    )
   );
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -921,16 +961,21 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
             migratedFacts = scotlandFacts as typeof migratedFacts;
           }
 
-          setFacts((prev) => ({
-            ...prev,
-            ...migratedFacts,
-            __meta: {
-              ...prev.__meta,
-              ...(migratedFacts as Record<string, any>).__meta,
-              product: 'notice_only',
-              jurisdiction,
-            },
-          }));
+          setFacts((prev) =>
+            normalizeNoticeOnlyFacts(
+              {
+                ...prev,
+                ...migratedFacts,
+                __meta: {
+                  ...prev.__meta,
+                  ...(migratedFacts as Record<string, any>).__meta,
+                  product: 'notice_only',
+                  jurisdiction,
+                },
+              },
+              jurisdiction
+            )
+          );
         }
       } catch (err) {
         console.error('Failed to load facts:', err);
@@ -991,8 +1036,12 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
         return true;
       }
 
-      // Non-route-specific sections: show case_basics always, others once route is valid
-      if (!hasValidRoute) return section.id === 'case_basics';
+      if (!isWales && section.id === 'case_basics') {
+        return false;
+      }
+
+      // Non-route-specific sections: Wales keeps case_basics until a route is selected.
+      if (!hasValidRoute) return isWales && section.id === 'case_basics';
       return true;
     });
 
@@ -1027,7 +1076,6 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     }
 
     const englandOrder = [
-      'case_basics',
       'parties',
       'property',
       'tenancy',
@@ -1038,9 +1086,9 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       'review',
     ];
 
-    return filteredSections.sort(
-      (left, right) => englandOrder.indexOf(left.id) - englandOrder.indexOf(right.id),
-    );
+    return filteredSections
+      .sort((left, right) => englandOrder.indexOf(left.id) - englandOrder.indexOf(right.id))
+      .map(relabelEnglandSection);
   }, [jurisdiction, facts.eviction_route, facts.section8_grounds]);
 
   const currentSection = visibleSections[currentSectionIndex];

@@ -4,16 +4,25 @@
  * Redesigned wizard for eviction complete packs following a logical,
  * court-ready, jurisdiction-aware flow.
  *
- * Flow Structure (England/Wales):
- * 1. Case Basics - England Form 3A possession route and court-pack summary
- * 2. Parties - Landlord(s) and Tenant(s) with joint support
+ * Flow Structure (England):
+ * 1. Parties - Landlord(s) and Tenant(s) with joint support
+ * 2. Property - Full address and postcode
+ * 3. Tenancy - Start date, rent amount, frequency, due day
+ * 4. Notice - Reuses notice-only schema, served date, service method, expiry
+ * 5. Section 8 Arrears - arrears-led and grounds support using ArrearsScheduleStep when relevant
+ * 6. Evidence - service proof, chronology, and supporting records
+ * 7. Court & Signing - Court name, signatory details
+ * 8. Review - Blockers, warnings, generated documents
+ *
+ * Flow Structure (Wales):
+ * 1. Case Basics - Welsh notice route
+ * 2. Parties - Landlord(s) and contract-holder(s)
  * 3. Property - Full address and postcode
  * 4. Tenancy - Start date, rent amount, frequency, due day
- * 5. Notice - Reuses notice-only schema, served date, service method, expiry
- * 6. Section 8 Arrears - arrears-led and grounds support using ArrearsScheduleStep
- * 7. Evidence - service proof, chronology, and supporting records
- * 8. Court & Signing - Court name, signatory details
- * 9. Review - Blockers, warnings, generated documents
+ * 5. Notice - Route-specific Welsh notice details
+ * 6. Evidence - service proof, chronology, and supporting records
+ * 7. Court & Signing - Court name, signatory details
+ * 8. Review - Blockers, warnings, generated documents
  *
  * Flow Structure (Scotland):
  * 1. Case Basics - Jurisdiction (Scotland, PRT)
@@ -110,6 +119,23 @@ interface WizardSection {
   hasWarnings?: (facts: WizardFacts, jurisdiction?: string) => string[];
 }
 
+const ENGLAND_SECTION_LABELS: Record<string, string> = {
+  parties: 'Landlord and tenant',
+  property: 'Rental property',
+  tenancy: 'Tenancy and rent',
+  notice: 'Grounds and service',
+  ground_details: 'Ground evidence',
+  section8_arrears: 'Rent arrears',
+  evidence: 'Court evidence',
+  court_signing: 'Court and signing',
+  review: 'Review and download',
+};
+
+function relabelEnglandSection(section: WizardSection): WizardSection {
+  const label = ENGLAND_SECTION_LABELS[section.id];
+  return label ? { ...section, label } : section;
+}
+
 function hasCompleteCollectibleN215Facts(facts: WizardFacts): boolean {
   const serviceMethod = String(facts.notice_service_method || '').trim();
   const serviceLocation = String(facts.notice_service_location || 'usual_residence').trim();
@@ -161,7 +187,7 @@ const ENGLAND_WALES_SECTIONS: WizardSection[] = [
       if (jurisdiction === 'wales') {
         return WALES_ROUTES.includes(route as typeof WALES_ROUTES[number]);
       }
-      return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]) && Boolean(facts.england_primary_issue);
+      return ENGLAND_ROUTES.includes(route as typeof ENGLAND_ROUTES[number]);
     },
   },
   {
@@ -564,6 +590,11 @@ function normalizeCompletePackFacts(
     normalizedFacts.notice_already_served = false;
   }
 
+  if (jurisdiction === 'england') {
+    normalizedFacts.eviction_route = 'section_8';
+    normalizedFacts.selected_notice_route = 'section_8';
+  }
+
   return normalizedFacts;
 }
 
@@ -708,13 +739,16 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
         return section.routes.includes(route as 'section_8');
       }
 
-      // Non-route-specific sections: show case_basics always, others once route is valid
-      if (!hasValidRoute) return section.id === 'case_basics';
+      if (!isWales && section.id === 'case_basics') {
+        return false;
+      }
+
+      // Non-route-specific sections: Wales keeps case_basics until a route is selected.
+      if (!hasValidRoute) return isWales && section.id === 'case_basics';
       return true;
     });
 
     const englandOrder = [
-      'case_basics',
       'parties',
       'property',
       'tenancy',
@@ -726,9 +760,9 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       'review',
     ];
 
-    return filteredSections.sort(
-      (left, right) => englandOrder.indexOf(left.id) - englandOrder.indexOf(right.id),
-    );
+    return filteredSections
+      .sort((left, right) => englandOrder.indexOf(left.id) - englandOrder.indexOf(right.id))
+      .map((section) => (isWales ? section : relabelEnglandSection(section)));
   }, [jurisdiction, facts.eviction_route, facts.section8_grounds]);
 
   const currentSection = visibleSections[currentSectionIndex];
