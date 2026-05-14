@@ -24,11 +24,11 @@ describe('Phase 1 commercial positioning', () => {
     const completePackSource = readSource('src/app/(marketing)/products/complete-pack/page.tsx');
     const rentIncreaseHubSource = readSource('src/app/rent-increase/page.tsx');
 
-    expect(noticeSource).toContain('serve before court');
-    expect(noticeSource).toContain('need to serve the Section 8 notice first');
+    expect(noticeSource).toContain('service pack before court');
+    expect(noticeSource).toContain('need to serve the notice first');
     expect(noticeSource).toContain('notice-and-service file');
 
-    expect(completePackSource).toContain('notice and court paperwork together');
+    expect(completePackSource).toContain('Section 8 notice and court paperwork aligned');
     expect(completePackSource).toContain('The Complete Pack already includes the Stage 1 notice and service file');
     expect(completePackSource).toContain('N5, N119, witness statement, and court bundle support');
 

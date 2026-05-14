@@ -90,13 +90,13 @@ vi.mock('@/components/seo/SeoLandingWrapper', () => ({
   SeoLandingWrapper: () => null,
 }));
 
-describe('rent increase hub sample proof', () => {
+describe('rent increase hub product routing', () => {
   afterEach(() => {
     cleanup();
     document.body.innerHTML = '';
   });
 
-  it('shows the generated sample pack preview on the hub page', async () => {
+  it('shows the current Section 13 product choices on the hub page', async () => {
     const pageModule = await import('@/app/rent-increase/page');
 
     render(pageModule.default());
@@ -104,11 +104,16 @@ describe('rent increase hub sample proof', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /Increase Rent in England Using Section 13 \/ Form 4A/i,
+        name: /Increase rent in England with a Section 13 pack/i,
       })
     ).toBeInTheDocument();
-    expect(screen.getByText('Real PDF sample')).toBeInTheDocument();
-    expect(screen.getByText(/Read the full sample documents on the page/i)).toBeInTheDocument();
-    expect(screen.getByText('Documents in this sample pack')).toBeInTheDocument();
+    expect(screen.getByText('Standard Section 13 Rent Increase Pack')).toBeInTheDocument();
+    expect(screen.getByText('Challenge-Ready Section 13 Defence Pack')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Open the Standard Section 13 Rent Increase Pack' })
+    ).toHaveAttribute('href', '/products/section-13-standard');
+    expect(
+      screen.getAllByRole('link', { name: 'Open the Challenge-Ready Defence Pack' }).length
+    ).toBeGreaterThan(0);
   });
 });

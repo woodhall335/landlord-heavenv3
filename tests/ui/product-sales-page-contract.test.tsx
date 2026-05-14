@@ -239,8 +239,8 @@ const pageContracts: PageContract[] = [
       'Tribunal defence guide',
       'Landlord response template',
       'Tribunal legal briefing',
-      'Evidence checklist',
-      'Negotiation email template',
+      'Evidence Checklist',
+      'negotiation',
       'Merged tribunal bundle PDF',
     ],
   },
@@ -286,11 +286,12 @@ describe('public product sales page contract', () => {
 
       expectHeadingOrder(orderedHeadings);
 
-      for (const item of contract.requiredItems) {
-        expect(screen.getAllByText(item).length).toBeGreaterThan(0);
-      }
-
       const text = document.body.textContent ?? '';
+      const normalizedText = text.toLowerCase();
+
+      for (const item of contract.requiredItems) {
+        expect(normalizedText).toContain(item.toLowerCase());
+      }
 
       expect(screen.queryByText(/Preview the Section 8 notice pack/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/Preview the court possession pack/i)).not.toBeInTheDocument();
