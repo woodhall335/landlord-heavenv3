@@ -401,40 +401,40 @@ export default function Page() {
                   that ground before starting the Form 3A notice.
                 </p>
                 <div className="mt-4 grid gap-3 md:grid-cols-2">
-                  <Link href="/how-to-evict-a-tenant-using-ground-1" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-1" className="font-medium text-primary hover:underline">
                     Evict using Ground 1 for landlord or family occupation
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-1a" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-1a" className="font-medium text-primary hover:underline">
                     Evict using Ground 1A to sell the property
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-2" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-2" className="font-medium text-primary hover:underline">
                     Evict using Ground 2 for mortgage lender sale
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-7a" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-7a" className="font-medium text-primary hover:underline">
                     Evict using Ground 7A for serious ASB or criminal behaviour
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-8" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-8" className="font-medium text-primary hover:underline">
                     Evict using Ground 8 for serious rent arrears
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-10" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-10" className="font-medium text-primary hover:underline">
                     Evict using Ground 10 for any rent arrears
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-11" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-11" className="font-medium text-primary hover:underline">
                     Evict using Ground 11 for persistent late rent
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-12" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-12" className="font-medium text-primary hover:underline">
                     Evict using Ground 12 for breach of tenancy
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-13" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-13" className="font-medium text-primary hover:underline">
                     Evict using Ground 13 for property deterioration
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-14" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-14" className="font-medium text-primary hover:underline">
                     Evict using Ground 14 for antisocial behaviour
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-15" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-15" className="font-medium text-primary hover:underline">
                     Evict using Ground 15 for furniture deterioration
                   </Link>
-                  <Link href="/how-to-evict-a-tenant-using-ground-17" className="font-medium text-primary hover:underline">
+                  <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-17" className="font-medium text-primary hover:underline">
                     Evict using Ground 17 for a false statement by the tenant
                   </Link>
                 </div>

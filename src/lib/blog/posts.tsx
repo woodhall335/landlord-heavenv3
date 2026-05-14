@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { ImagePlaceholder } from '@/components/blog/ImagePlaceholder';
 import { BlogCTA } from '@/components/blog/BlogCTA';
@@ -46,51 +46,51 @@ const section8TemplateCta = (
       </li>
       <li>
         Ground-specific guides:{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-1" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-1" className="font-semibold text-primary hover:underline">
           Ground 1 occupation
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-1a" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-1a" className="font-semibold text-primary hover:underline">
           Ground 1A sale
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-2" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-2" className="font-semibold text-primary hover:underline">
           Ground 2 mortgagee sale
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-7a" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-7a" className="font-semibold text-primary hover:underline">
           Ground 7A serious ASB
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-8" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-8" className="font-semibold text-primary hover:underline">
           Ground 8 arrears
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-10" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-10" className="font-semibold text-primary hover:underline">
           Ground 10 arrears
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-11" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-11" className="font-semibold text-primary hover:underline">
           Ground 11 late rent
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-12" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-12" className="font-semibold text-primary hover:underline">
           Ground 12 breach
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-13" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-13" className="font-semibold text-primary hover:underline">
           Ground 13 property deterioration
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-14" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-14" className="font-semibold text-primary hover:underline">
           Ground 14 ASB
         </Link>
         ,{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-15" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-15" className="font-semibold text-primary hover:underline">
           Ground 15 furniture
         </Link>
         , and{' '}
-        <Link href="/how-to-evict-a-tenant-using-ground-17" className="font-semibold text-primary hover:underline">
+        <Link href="/section-8-grounds/how-to-evict-a-tenant-using-ground-17" className="font-semibold text-primary hover:underline">
           Ground 17 false statement
         </Link>
         .
@@ -186,7 +186,7 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          The <strong>Renters Reform Bill</strong>â€”now enacted as the <strong>Renters&apos; Rights Act 2025</strong>â€”represents
+          The <strong>Renters Reform Bill</strong>—now enacted as the <strong>Renters&apos; Rights Act 2025</strong>—represents
           the most significant overhaul of private rental law in England since the Housing Act 1988. For landlords, this
           legislation fundamentally changes how you manage tenancies, evict problem tenants, and protect your property
           investments. Understanding the new framework matters because it affects how you regain possession, increase rent, and manage risk across the whole tenancy.
@@ -220,7 +220,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           In practice, this legislation significantly shifts the balance of power towards tenants. The headline
-          changeâ€”the abolition of Section 21 no-fault evictionsâ€”is just the beginning. The Act introduces:
+          change—the abolition of Section 21 no-fault evictions—is just the beginning. The Act introduces:
         </p>
 
         <ul>
@@ -327,7 +327,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Without Section 21, you cannot evict a tenant unless you can prove one of the Section 8 grounds.
-          If you can&apos;t prove grounds, the tenant can stay indefinitelyâ€”even if you want to sell the property,
+          If you can&apos;t prove grounds, the tenant can stay indefinitely—even if you want to sell the property,
           move family in, or simply don&apos;t want them as a tenant anymore.
         </p>
 
@@ -380,7 +380,7 @@ const allBlogPosts: BlogPost[] = [
             <p className="font-semibold text-green-800">Ground 1A: Landlord Wants to Sell</p>
             <p className="text-green-700 text-sm mt-1">
               Landlord intends to sell the property. Must give 4 months&apos; notice. Cannot be used within
-              first 12 months of tenancy. Mandatory groundâ€”court must grant possession.
+              first 12 months of tenancy. Mandatory ground—court must grant possession.
             </p>
           </div>
 
@@ -546,7 +546,7 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          Registration fees have not yet been confirmed but are expected to be Â£20-50 per property.
+          Registration fees have not yet been confirmed but are expected to be £20-50 per property.
         </p>
 
         <h3>Private Rented Sector Ombudsman</h3>
@@ -557,13 +557,13 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li>Handle tenant complaints about landlord behaviour</li>
-          <li>Have power to order compensation (up to Â£25,000)</li>
+          <li>Have power to order compensation (up to £25,000)</li>
           <li>Order landlords to take specific actions</li>
           <li>Report persistent offenders to local authorities</li>
         </ul>
 
         <p>
-          Membership fees are estimated at Â£50-100 per year for portfolio landlords. Failing to join
+          Membership fees are estimated at £50-100 per year for portfolio landlords. Failing to join
           will make it impossible to evict tenants.
         </p>
 
@@ -597,7 +597,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li>You must prove groundsâ€”no more &quot;no-fault&quot; evictions</li>
+          <li>You must prove grounds—no more &quot;no-fault&quot; evictions</li>
           <li>Court hearings are usually required (more time and cost)</li>
           <li>Tenants have more opportunities to defend</li>
           <li>Some situations have no grounds at all</li>
@@ -680,7 +680,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">How do I prove I want to sell (Ground 1A)?</h3>
             <p className="text-gray-600">
-              You&apos;ll need evidence of genuine intention to sellâ€”such as estate agent marketing agreement, valuation,
+              You&apos;ll need evidence of genuine intention to sell—such as estate agent marketing agreement, valuation,
               or sale memorandum. The court can reject claims if they appear to be pretexts for eviction.
             </p>
           </div>
@@ -802,7 +802,7 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          This is why it&apos;s commonly referred to as a &quot;no-fault&quot; evictionâ€”you don&apos;t need to
+          This is why it&apos;s commonly referred to as a &quot;no-fault&quot; eviction—you don&apos;t need to
           demonstrate that the tenant has done anything wrong. You simply need to follow the
           correct legal procedure and give them the required notice period.
         </p>
@@ -858,7 +858,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Step 5: Obtain Possession Order</h3>
         <p>
           If your Section 21 notice is valid, the court <strong>must</strong> grant a possession
-          order. This is known as a &quot;mandatory&quot; groundâ€”the judge has no discretion to refuse if
+          order. This is known as a &quot;mandatory&quot; ground—the judge has no discretion to refuse if
           all requirements are met.
         </p>
 
@@ -968,7 +968,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><strong>30 April 2026:</strong> Last day to serve Section 21 notices</li>
-          <li><strong>1 May 2026:</strong> Section 21 ban takes effectâ€”no new notices allowed</li>
+          <li><strong>1 May 2026:</strong> Section 21 ban takes effect—no new notices allowed</li>
           <li><strong>31 July 2026:</strong> Last day for court proceedings on pre-ban notices</li>
         </ul>
 
@@ -1026,7 +1026,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           <strong>Always keep proof of service.</strong> Take photos, get signatures, or
-          use recorded deliveryâ€”you&apos;ll need evidence if the case goes to court.
+          use recorded delivery—you&apos;ll need evidence if the case goes to court.
         </p>
 
         <h2 id="section-21-faq" className="scroll-mt-24">Section 21 FAQ</h2>
@@ -1951,7 +1951,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ol>
-          <li><strong>Apply for warrant:</strong> Submit application and fee (Â£130 in 2026)</li>
+          <li><strong>Apply for warrant:</strong> Submit application and fee (£130 in 2026)</li>
           <li><strong>Warrant processed:</strong> 2-4 weeks for processing</li>
           <li><strong>Bailiff appointment:</strong> 2-6 weeks depending on court workload</li>
           <li><strong>Eviction day:</strong> Bailiffs attend and remove tenant if necessary</li>
@@ -2001,7 +2001,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if my tenant keeps paying rent during eviction?</h3>
             <p className="text-gray-600">
-              You should accept rent paymentsâ€”refusing could harm your case. Accepting rent during
+              You should accept rent payments—refusing could harm your case. Accepting rent during
               a valid notice period doesn&apos;t invalidate Section 21.
             </p>
           </div>
@@ -2017,7 +2017,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What delays evictions the most?</h3>
             <p className="text-gray-600">
-              Invalid notices are the biggest delayâ€”you have to start over. Other common delays
+              Invalid notices are the biggest delay—you have to start over. Other common delays
               include adjournments requested by tenants and incomplete court applications.
             </p>
           </div>
@@ -2080,7 +2080,7 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           Dealing with <strong>rent arrears eviction</strong> is one of the most stressful situations
-          England landlords face. When a tenant stops paying rent, you need to act decisivelyâ€”but correctly.
+          England landlords face. When a tenant stops paying rent, you need to act decisively—but correctly.
           This guide walks you through the complete process of evicting a tenant for rent arrears and
           recovering the money you&apos;re owed under the post-1 May 2026 Form 3A route.
         </p>
@@ -2185,7 +2185,7 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="section-8-ground-8" className="scroll-mt-24">Section 8 Ground 8: Mandatory Possession for Rent Arrears</h2>
 
         <p>
-          Ground 8 is the most powerful tool for rent arrears eviction because it&apos;s <strong>mandatory</strong>â€”
+          Ground 8 is the most powerful tool for rent arrears eviction because it&apos;s <strong>mandatory</strong>—
           the court must grant possession if the conditions are met. The judge has no discretion to refuse.
         </p>
 
@@ -2313,7 +2313,7 @@ const allBlogPosts: BlogPost[] = [
           <li><strong>Attachment of earnings:</strong> Money taken directly from wages</li>
           <li><strong>High Court writ:</strong> Enforcement officers can seize goods</li>
           <li><strong>Charging order:</strong> Secured against any property they own</li>
-          <li><strong>Bankruptcy petition:</strong> For debts over Â£5,000</li>
+          <li><strong>Bankruptcy petition:</strong> For debts over £5,000</li>
         </ul>
 
         <h2 id="preventing-arrears" className="scroll-mt-24">Preventing Future Rent Arrears</h2>
@@ -2358,7 +2358,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Should I accept partial rent payments?</h3>
             <p className="text-gray-600">
-              Generally yesâ€”courts look unfavourably on landlords who refuse reasonable payments.
+              Generally yes—courts look unfavourably on landlords who refuse reasonable payments.
               Accepting payment doesn&apos;t invalidate your notice, but it may reduce arrears below thresholds.
             </p>
           </div>
@@ -2693,7 +2693,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="font-semibold text-blue-800 text-lg mb-2">Section 21 vs Section 8</p>
           <p className="text-blue-700">
             Section 21 requires no grounds but takes longer. Section 8 requires proving grounds (like rent arrears)
-            but can be faster for serious breaches. Many landlords serve both notices togetherâ€”read our
+            but can be faster for serious breaches. Many landlords serve both notices together—read our
             <Link href="/blog/section-21-vs-section-8" className="text-blue-800 underline font-medium"> comparison guide</Link>.
           </p>
         </div>
@@ -2777,7 +2777,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Once you&apos;ve confirmed all pre-requisites are met, you can serve the Section 21 notice using
-          <Link href="/form-6a-section-21" className="text-primary hover:underline font-medium">Form 6A</Link>â€”the prescribed notice form.
+          <Link href="/form-6a-section-21" className="text-primary hover:underline font-medium">Form 6A</Link>—the prescribed notice form.
         </p>
 
         <h3>Form 6A Requirements</h3>
@@ -2850,13 +2850,13 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          These actions constitute <strong>illegal eviction</strong>â€”a criminal offence.
+          These actions constitute <strong>illegal eviction</strong>—a criminal offence.
         </p>
 
         <h2 id="court-process" className="scroll-mt-24">The Court Process</h2>
 
         <p>
-          For Section 21 claims, you typically use the <strong>Accelerated Possession Procedure</strong>â€”a
+          For Section 21 claims, you typically use the <strong>Accelerated Possession Procedure</strong>—a
           paper-based process without a hearing (in most cases).
         </p>
 
@@ -2879,7 +2879,7 @@ const allBlogPosts: BlogPost[] = [
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">2</td>
-                <td className="p-4 border-b">Submit to court with fee (Â£355)</td>
+                <td className="p-4 border-b">Submit to court with fee (£355)</td>
                 <td className="p-4 border-b">1 day</td>
               </tr>
               <tr>
@@ -2936,7 +2936,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Bailiff Enforcement</h3>
 
         <ol>
-          <li>Apply for a <strong>warrant of possession</strong> (Form N325 - Â£130 fee)</li>
+          <li>Apply for a <strong>warrant of possession</strong> (Form N325 - £130 fee)</li>
           <li>The court schedules a bailiff appointment (usually 4-6 weeks)</li>
           <li>Bailiffs attend and <strong>remove the tenant</strong> if necessary</li>
           <li>You regain possession of your property</li>
@@ -3025,7 +3025,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I claim rent arrears through Section 21?</h3>
             <p className="text-gray-600">
-              No. Section 21 only provides possessionâ€”it doesn&apos;t award money. To recover rent arrears, you
+              No. Section 21 only provides possession—it doesn&apos;t award money. To recover rent arrears, you
               need to make a separate <Link href="/products/money-claim" className="text-primary hover:underline">money claim</Link>.
               You can do this alongside or after the possession process.
             </p>
@@ -3042,7 +3042,7 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Don&apos;t Waitâ€”Section 21 Ends Soon</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Don&apos;t Wait—Section 21 Ends Soon</h3>
           <p className="text-gray-700 mb-6">
             With Section 21 ending on 1 May 2026, landlords who may need to regain possession should
             serve their notices now. Our document generator creates Section 21 notices in minutes.
@@ -3108,7 +3108,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="font-semibold text-purple-800 text-lg mb-2">Post-Section 21 World</p>
           <p className="text-purple-700">
             From 1 May 2026, Section 8/Form 3A is the primary eviction route for England landlords. The Renters&apos;
-            Rights Act 2025 introduced new and amended grounds, making Section 8 more flexibleâ€”but
+            Rights Act 2025 introduced new and amended grounds, making Section 8 more flexible—but
             you&apos;ll still need to prove your ground applies. Understanding Section 8 is now essential.
           </p>
         </div>
@@ -3148,7 +3148,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           If you prove a mandatory ground, the court <strong>must</strong> grant a possession order.
-          There is no discretionâ€”the judge cannot refuse or delay based on the tenant&apos;s circumstances.
+          There is no discretion—the judge cannot refuse or delay based on the tenant&apos;s circumstances.
         </p>
 
         <div className="overflow-x-auto my-8">
@@ -3347,7 +3347,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li><strong>Ground 8:</strong> &quot;The tenant owes Â£3,450 in rent, representing 3 months and 2 weeks
+          <li><strong>Ground 8:</strong> &quot;The tenant owes £3,450 in rent, representing 3 months and 2 weeks
           of arrears as at [date]&quot;</li>
           <li><strong>Ground 12:</strong> &quot;The tenant has breached clause 4.2 of the tenancy agreement by
           keeping a dog without permission&quot;</li>
@@ -3388,7 +3388,7 @@ const allBlogPosts: BlogPost[] = [
               </tr>
               <tr>
                 <td className="p-4 border-b font-medium">2</td>
-                <td className="p-4 border-b">Submit to county court with fee (Â£355)</td>
+                <td className="p-4 border-b">Submit to county court with fee (£355)</td>
                 <td className="p-4 border-b">1 day</td>
               </tr>
               <tr>
@@ -3595,7 +3595,7 @@ const allBlogPosts: BlogPost[] = [
           serious rent arrears. As a <strong>mandatory ground</strong>, if you prove the tenant owes at least
           3 months&apos; rent, or 13 weeks&apos; rent if paid weekly or fortnightly, at both the date of the notice
           AND at the court hearing, the judge <em>must</em>
-          grant a possession orderâ€”no exceptions, no discretion. This guide explains exactly how Ground 8
+          grant a possession order—no exceptions, no discretion. This guide explains exactly how Ground 8
           works and how to use it effectively.
         </p>
         {section8GroundNextSteps}
@@ -3627,7 +3627,7 @@ const allBlogPosts: BlogPost[] = [
 
         <div className="bg-gray-100 p-6 rounded-lg my-6 border-l-4 border-gray-500">
           <p className="italic text-gray-700">
-            &quot;Both at the date of the service of the notice... and at the date of the hearingâ€”
+            &quot;Both at the date of the service of the notice... and at the date of the hearing—
           </p>
           <p className="italic text-gray-700 mt-2">
             (a) if rent is payable weekly or fortnightly, at least 13 weeks&apos; rent is unpaid;
@@ -3673,9 +3673,9 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li>If monthly rent is Â£1,000, they must owe at least Â£3,000</li>
-          <li>If monthly rent is Â£1,500, they must owe at least Â£4,500</li>
-          <li>Partial months don&apos;t countâ€”Â£2,999 on a Â£1,000/month rent is NOT 3 months</li>
+          <li>If monthly rent is £1,000, they must owe at least £3,000</li>
+          <li>If monthly rent is £1,500, they must owe at least £4,500</li>
+          <li>Partial months don&apos;t count—£2,999 on a £1,000/month rent is NOT 3 months</li>
         </ul>
 
         <h3>2. The Two-Date Rule</h3>
@@ -3691,16 +3691,16 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           If the tenant pays down below the Ground 8 threshold at any point between these dates, they can pay
-          back up above the threshold by the hearingâ€”but many don&apos;t. Tenants who understand the system
+          back up above the threshold by the hearing—but many don&apos;t. Tenants who understand the system
           often pay just enough to defeat Ground 8.
         </p>
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-red-800 text-lg mb-2">Critical Warning</p>
           <p className="text-red-700">
-            If the monthly rent is Â£1,000 and the tenant owes Â£3,050 but pays Â£100 before the hearing,
-            leaving Â£2,950 owed, you lose Ground 8. This is why we recommend <strong>always</strong> including Grounds 10
-            and 11 as backupâ€”they&apos;re discretionary but don&apos;t have the strict threshold.
+            If the monthly rent is £1,000 and the tenant owes £3,050 but pays £100 before the hearing,
+            leaving £2,950 owed, you lose Ground 8. This is why we recommend <strong>always</strong> including Grounds 10
+            and 11 as backup—they&apos;re discretionary but don&apos;t have the strict threshold.
           </p>
         </div>
 
@@ -3742,34 +3742,34 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="p-4 border-b">September 2025</td>
-                <td className="p-4 border-b">Â£1,200</td>
-                <td className="p-4 border-b">Â£1,200</td>
-                <td className="p-4 border-b">Â£0</td>
+                <td className="p-4 border-b">£1,200</td>
+                <td className="p-4 border-b">£1,200</td>
+                <td className="p-4 border-b">£0</td>
               </tr>
               <tr>
                 <td className="p-4 border-b">October 2025</td>
-                <td className="p-4 border-b">Â£1,200</td>
-                <td className="p-4 border-b">Â£600</td>
-                <td className="p-4 border-b">Â£600</td>
+                <td className="p-4 border-b">£1,200</td>
+                <td className="p-4 border-b">£600</td>
+                <td className="p-4 border-b">£600</td>
               </tr>
               <tr>
                 <td className="p-4 border-b">November 2025</td>
-                <td className="p-4 border-b">Â£1,200</td>
-                <td className="p-4 border-b">Â£0</td>
-                <td className="p-4 border-b">Â£1,800</td>
+                <td className="p-4 border-b">£1,200</td>
+                <td className="p-4 border-b">£0</td>
+                <td className="p-4 border-b">£1,800</td>
               </tr>
               <tr>
                 <td className="p-4 border-b">December 2025</td>
-                <td className="p-4 border-b">Â£1,200</td>
-                <td className="p-4 border-b">Â£0</td>
-                <td className="p-4 border-b text-red-600 font-bold">Â£3,000</td>
+                <td className="p-4 border-b">£1,200</td>
+                <td className="p-4 border-b">£0</td>
+                <td className="p-4 border-b text-red-600 font-bold">£3,000</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <p>
-          In this example, with Â£1,200/month rent, the Ground 8 threshold is Â£3,600. The tenant would need
+          In this example, with £1,200/month rent, the Ground 8 threshold is £3,600. The tenant would need
           to owe at least that amount at both the notice date and the hearing for Ground 8 to apply.
         </p>
 
@@ -3788,7 +3788,7 @@ const allBlogPosts: BlogPost[] = [
             <strong>Wait 4 weeks</strong> - The minimum notice period for Ground 8
           </li>
           <li className="text-gray-700">
-            <strong>Apply to court</strong> - Using Form N5 and N119, pay Â£355 fee
+            <strong>Apply to court</strong> - Using Form N5 and N119, pay £355 fee
           </li>
           <li className="text-gray-700">
             <strong>Prepare evidence</strong> - Rent ledger, tenancy agreement, bank statements
@@ -3878,7 +3878,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>3. Set-Off Claims</h3>
         <p>
           Arguing that repairs were needed and they withheld rent. This can reduce the effective arrears.
-          However, for Ground 8, only actual payments countâ€”set-off is usually argued at the
+          However, for Ground 8, only actual payments count—set-off is usually argued at the
           reasonableness stage (which doesn&apos;t apply to mandatory grounds).
         </p>
 
@@ -3944,7 +3944,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant claims they can&apos;t afford to pay?</h3>
             <p className="text-gray-600">
-              For Ground 8, this is irrelevant. The ground is mandatoryâ€”if the post-May 2026 arrears threshold exists at both
+              For Ground 8, this is irrelevant. The ground is mandatory—if the post-May 2026 arrears threshold exists at both
               dates, the court must grant possession regardless of the tenant&apos;s financial situation or
               personal circumstances.
             </p>
@@ -4137,8 +4137,8 @@ const allBlogPosts: BlogPost[] = [
               </tr>
               <tr>
                 <td className="p-4 border-b">Court fee</td>
-                <td className="p-4 border-b">Â£365</td>
-                <td className="p-4 border-b">Â£365</td>
+                <td className="p-4 border-b">£365</td>
+                <td className="p-4 border-b">£365</td>
               </tr>
               <tr>
                 <td className="p-4 border-b">Attendance needed</td>
@@ -4224,13 +4224,13 @@ const allBlogPosts: BlogPost[] = [
         <h3>Step 3: Gather Documents</h3>
         <p>
           Prepare copies of your tenancy agreement, Section 21 notice, and proof of service. Make two copies of
-          everythingâ€”one for the court and one for the tenant.
+          everything—one for the court and one for the tenant.
         </p>
 
         <h3>Step 4: Submit to Court</h3>
         <p>
           Submit your claim to the county court that covers the property location. You can submit online through
-          the Possession Claims Online (PCOL) service or by post. The court fee is Â£365.
+          the Possession Claims Online (PCOL) service or by post. The court fee is £365.
         </p>
 
         <h3>Step 5: Court Serves the Tenant</h3>
@@ -4357,8 +4357,8 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>3. Invalid Section 21 Notice</h3>
         <p>
-          If your Section 21 notice is invalid for any reasonâ€”wrong form, wrong notice period, non-compliance with
-          requirementsâ€”your claim will fail. Always validate your notice before starting.
+          If your Section 21 notice is invalid for any reason—wrong form, wrong notice period, non-compliance with
+          requirements—your claim will fail. Always validate your notice before starting.
         </p>
 
         <h3>4. Missing Documents</h3>
@@ -4423,7 +4423,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I use accelerated possession for a lodger?</h3>
             <p className="text-gray-600">
-              No. Lodgers are excluded occupiers, not tenants. You don&apos;t need a court order to evict a lodgerâ€”only
+              No. Lodgers are excluded occupiers, not tenants. You don&apos;t need a court order to evict a lodger—only
               reasonable notice. The accelerated procedure is only for assured shorthold tenancies.
             </p>
           </div>
@@ -4455,7 +4455,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I add rent arrears to my claim later?</h3>
             <p className="text-gray-600">
-              Noâ€”once you&apos;ve issued an accelerated claim, you can&apos;t add a rent claim to it. You would need
+              No—once you&apos;ve issued an accelerated claim, you can&apos;t add a rent claim to it. You would need
               to issue a separate money claim (using MCOL or form N1) to recover arrears.
             </p>
           </div>
@@ -4589,7 +4589,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>2. Claiming Rent Arrears</h3>
         <p>
           If you want to recover unpaid rent as part of your eviction proceedings, you must use standard
-          possession. The accelerated procedure is possession-onlyâ€”no money claims allowed.
+          possession. The accelerated procedure is possession-only—no money claims allowed.
         </p>
 
         <h3>3. Complex Cases</h3>
@@ -4693,7 +4693,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Step 4: Pay the Court Fee</h3>
         <p>
-          The fee for a standard possession claim is <strong>Â£365</strong>. If you&apos;re also claiming rent
+          The fee for a standard possession claim is <strong>£365</strong>. If you&apos;re also claiming rent
           arrears, additional fees may apply based on the amount claimed.
         </p>
 
@@ -4811,7 +4811,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Suspended Possession Order</h3>
         <p>
           Common for rent arrears cases. The possession order is suspended as long as the tenant pays current
-          rent plus an agreed amount toward arrears (e.g., Â£50/month). If they default, the suspension lifts
+          rent plus an agreed amount toward arrears (e.g., £50/month). If they default, the suspension lifts
           and you can request a warrant.
         </p>
 
@@ -4917,11 +4917,11 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Costs</h3>
         <ul>
-          <li><strong>Court fee:</strong> Â£365 for possession claim</li>
-          <li><strong>Money claim fee:</strong> Additional fee based on amount (e.g., Â£115 for claims up to Â£5,000)</li>
-          <li><strong>Bailiff warrant:</strong> Â£130</li>
-          <li><strong>High Court transfer:</strong> Â£71 (if using HCEO instead of county court bailiff)</li>
-          <li><strong>Solicitor (optional):</strong> Â£800-2,500+ depending on complexity</li>
+          <li><strong>Court fee:</strong> £365 for possession claim</li>
+          <li><strong>Money claim fee:</strong> Additional fee based on amount (e.g., £115 for claims up to £5,000)</li>
+          <li><strong>Bailiff warrant:</strong> £130</li>
+          <li><strong>High Court transfer:</strong> £71 (if using HCEO instead of county court bailiff)</li>
+          <li><strong>Solicitor (optional):</strong> £800-2,500+ depending on complexity</li>
         </ul>
 
         <h2 id="standard-faq" className="scroll-mt-24">Standard Possession FAQ</h2>
@@ -5037,7 +5037,7 @@ const allBlogPosts: BlogPost[] = [
         <p className="text-xl text-gray-700 leading-relaxed">
           <strong>Ground 10</strong> and <strong>Ground 11</strong> are discretionary grounds for possession
           under Schedule 2 of the Housing Act 1988. Unlike the mandatory Ground 8, these grounds don&apos;t
-          guarantee possessionâ€”the court must also decide it&apos;s <em>reasonable</em> to evict. However,
+          guarantee possession—the court must also decide it&apos;s <em>reasonable</em> to evict. However,
           they&apos;re invaluable when Ground 8 conditions aren&apos;t met or as a backup strategy.
         </p>
         {section8GroundNextSteps}
@@ -5108,7 +5108,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Key Features</h3>
         <ul>
-          <li><strong>No minimum amount:</strong> Unlike Ground 8, there&apos;s no threshold. Even Â£1 of arrears qualifies</li>
+          <li><strong>No minimum amount:</strong> Unlike Ground 8, there&apos;s no threshold. Even £1 of arrears qualifies</li>
           <li><strong>Must exist at both dates:</strong> Arrears must be present when you serve notice AND at the hearing</li>
           <li><strong>Lawfully due:</strong> The rent must be legally owed under the tenancy agreement</li>
           <li><strong>Discretionary:</strong> Judge decides if eviction is reasonable</li>
@@ -5124,7 +5124,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="font-semibold text-amber-800 text-lg mb-2">Warning</p>
           <p className="text-amber-700">
             If the tenant clears <em>all</em> arrears before the hearing, Ground 10 fails because there&apos;s
-            no rent unpaid at the hearing date. This is why combining with Ground 11 is essentialâ€”Ground 11
+            no rent unpaid at the hearing date. This is why combining with Ground 11 is essential—Ground 11
             looks at payment history, not just current arrears.
           </p>
         </div>
@@ -5251,8 +5251,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-blue-800 text-lg mb-2">Landlord&apos;s Circumstances Matter</p>
           <p className="text-blue-700">
-            Judges must consider your position too. If arrears are causing you financial hardshipâ€”you
-            can&apos;t pay your mortgage, you&apos;re retired and reliant on rental incomeâ€”make this clear
+            Judges must consider your position too. If arrears are causing you financial hardship—you
+            can&apos;t pay your mortgage, you&apos;re retired and reliant on rental income—make this clear
             to the court.
           </p>
         </div>
@@ -5277,7 +5277,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Chronic Late Payers</h3>
         <p>
-          For tenants who always pay eventually but always lateâ€”creating constant stress and cash flow problemsâ€”
+          For tenants who always pay eventually but always late—creating constant stress and cash flow problems—
           Ground 11 is specifically designed for this scenario.
         </p>
 
@@ -5344,7 +5344,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
         <ul>
           <li>Current rent on time, PLUS</li>
-          <li>An agreed amount toward arrears (e.g., Â£50-100/month)</li>
+          <li>An agreed amount toward arrears (e.g., £50-100/month)</li>
         </ul>
         <p>
           If the tenant defaults on these terms, the landlord can apply for a warrant without returning to court
@@ -5353,21 +5353,21 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Adjournment</h3>
         <p>
-          The judge may adjourn (postpone) the case to see if the tenant&apos;s circumstances improveâ€”for
+          The judge may adjourn (postpone) the case to see if the tenant&apos;s circumstances improve—for
           example, if a benefits claim is pending or they&apos;ve just started a new job.
         </p>
 
         <h3>Claim Dismissed</h3>
         <p>
-          If the judge finds eviction unreasonable despite the ground being provenâ€”perhaps the tenant has
-          vulnerable circumstances and a realistic plan to payâ€”the claim may be dismissed.
+          If the judge finds eviction unreasonable despite the ground being proven—perhaps the tenant has
+          vulnerable circumstances and a realistic plan to pay—the claim may be dismissed.
         </p>
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-green-800 text-lg mb-2">Suspended Order Strategy</p>
           <p className="text-green-700">
             A suspended possession order can work in your favour. The tenant must pay consistently or
-            face eviction. If they default, you don&apos;t need another hearingâ€”just apply for a warrant.
+            face eviction. If they default, you don&apos;t need another hearing—just apply for a warrant.
             It keeps pressure on while giving them a chance.
           </p>
         </div>
@@ -5376,7 +5376,7 @@ const allBlogPosts: BlogPost[] = [
 
         <div className="space-y-6 my-8">
           <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 10 for just Â£50 of arrears?</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 10 for just £50 of arrears?</h3>
             <p className="text-gray-600">
               Technically yes, but the court is unlikely to find eviction reasonable for such a small amount.
               Ground 10 works best when combined with a significant history of arrears or persistent issues,
@@ -5414,7 +5414,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Should I accept a suspended order or push for outright possession?</h3>
             <p className="text-gray-600">
-              You can&apos;t really &quot;push&quot; for outright possessionâ€”it&apos;s the judge&apos;s decision
+              You can&apos;t really &quot;push&quot; for outright possession—it&apos;s the judge&apos;s decision
               based on reasonableness. However, you can argue against suspension by showing the tenant has broken
               previous agreements or that there&apos;s no realistic prospect of consistent payment.
             </p>
@@ -5956,7 +5956,7 @@ const allBlogPosts: BlogPost[] = [
 
         <blockquote className="border-l-4 border-purple-500 pl-4 my-6 italic text-gray-700">
           &quot;The tenant is the person, or one of the persons, to whom the tenancy was granted and the landlord
-          was induced to grant the tenancy by a false statement made knowingly or recklessly byâ€”<br/>(a) the
+          was induced to grant the tenancy by a false statement made knowingly or recklessly by—<br/>(a) the
           tenant, or<br/>(b) a person acting at the tenant&apos;s instigation.&quot;
         </blockquote>
 
@@ -5970,7 +5970,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Ground Details</h3>
         <ul>
-          <li><strong>Type:</strong> Discretionaryâ€”reasonableness test applies</li>
+          <li><strong>Type:</strong> Discretionary—reasonableness test applies</li>
           <li><strong>Notice period:</strong> 2 weeks minimum</li>
           <li><strong>Original tenant only:</strong> Applies to the person who made the false statement</li>
         </ul>
@@ -6061,7 +6061,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-amber-800 text-lg mb-2">Omissions vs Statements</p>
           <p className="text-amber-700">
-            Simply failing to volunteer information may not be enoughâ€”Ground 17 requires a positive false
+            Simply failing to volunteer information may not be enough—Ground 17 requires a positive false
             statement. However, if you asked a direct question (e.g., &quot;Do you have any CCJs?&quot;) and
             they answered falsely, that qualifies.
           </p>
@@ -6093,9 +6093,9 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Example Scenario</h3>
         <p>
-          A tenant claims to earn Â£45,000/year on their application. Your minimum requirement is income of 30x
-          monthly rent. For rent of Â£1,500/month, minimum income is Â£45,000. You later discover they actually
-          earn Â£25,000. The false statement induced you to grant the tenancy because without it, they wouldn&apos;t
+          A tenant claims to earn £45,000/year on their application. Your minimum requirement is income of 30x
+          monthly rent. For rent of £1,500/month, minimum income is £45,000. You later discover they actually
+          earn £25,000. The false statement induced you to grant the tenancy because without it, they wouldn&apos;t
           have met your criteria.
         </p>
 
@@ -6282,7 +6282,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-green-800 text-lg mb-2">Mandatory Ground</p>
           <p className="text-green-700">
-            Ground 1 is <strong>mandatory</strong>â€”if you prove the conditions are met, the court must grant
+            Ground 1 is <strong>mandatory</strong>—if you prove the conditions are met, the court must grant
             possession. The judge has no discretion to refuse based on the tenant&apos;s circumstances.
           </p>
         </div>
@@ -6492,7 +6492,7 @@ const allBlogPosts: BlogPost[] = [
         <ImagePlaceholder
           src="/images/blog/court-mandatory.svg"
           alt="Ground 1 Court Process"
-          caption="Ground 1 is mandatoryâ€”the court must grant possession if conditions are met"
+          caption="Ground 1 is mandatory—the court must grant possession if conditions are met"
         />
 
         <h2 id="ground-1-faq" className="scroll-mt-24">Ground 1 FAQ</h2>
@@ -6502,7 +6502,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">What if I never actually lived in the property?</h3>
             <p className="text-gray-600">
               You can still use Ground 1 if you require the property as your principal home now (or for your
-              spouse/civil partner). You don&apos;t have to have lived there beforeâ€”just prove you genuinely
+              spouse/civil partner). You don&apos;t have to have lived there before—just prove you genuinely
               need it now.
             </p>
           </div>
@@ -6519,7 +6519,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What counts as &quot;principal home&quot;?</h3>
             <p className="text-gray-600">
-              Your principal home is where you mainly liveâ€”your primary residence. You can only have one principal
+              Your principal home is where you mainly live—your primary residence. You can only have one principal
               home at a time. If you already have a principal home elsewhere, Ground 1 may not apply unless you&apos;re
               genuinely moving.
             </p>
@@ -6546,7 +6546,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">How long do I need to live there after getting possession?</h3>
             <p className="text-gray-600">
               There&apos;s no minimum period specified in law, but if you move in briefly then re-let, a court might
-              view future claims skeptically. The requirement is genuine intention at the time of the claimâ€”but
+              view future claims skeptically. The requirement is genuine intention at the time of the claim—but
               using Ground 1 as a workaround to simply re-let is not its intended purpose.
             </p>
           </div>
@@ -6634,7 +6634,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <blockquote className="border-l-4 border-purple-500 pl-4 my-6 italic text-gray-700">
-          &quot;The dwelling-house is subject to a mortgage granted before the beginning of the tenancy andâ€”
+          &quot;The dwelling-house is subject to a mortgage granted before the beginning of the tenancy and—
           (a) the mortgagee is entitled to exercise a power of sale... and (b) the mortgagee requires
           possession of the dwelling-house for the purpose of disposing of it with vacant possession.&quot;
         </blockquote>
@@ -6807,7 +6807,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="font-semibold text-blue-800 text-lg mb-2">Staying Ahead</p>
           <p className="text-blue-700">
             If you&apos;re struggling with mortgage payments, contact your lender immediately. Many have
-            forbearance options. Letting the situation reach repossession hurts everyoneâ€”you, your tenant,
+            forbearance options. Letting the situation reach repossession hurts everyone—you, your tenant,
             and your credit record.
           </p>
         </div>
@@ -6993,15 +6993,15 @@ const allBlogPosts: BlogPost[] = [
         <p>
           Unlike Rent Act tenancies, there is no automatic succession right for cohabitees or family
           members under assured tenancies. However, the tenancy may pass to them through the will or
-          intestacyâ€”but this is <strong>devolution</strong>, not succession, and Ground 7 can apply.
+          intestacy—but this is <strong>devolution</strong>, not succession, and Ground 7 can apply.
         </p>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
           <p className="font-semibold text-amber-800 text-lg mb-2">Succession vs. Devolution</p>
           <p className="text-amber-700">
-            <strong>Succession</strong> gives the new tenant full rights under the Housing Actâ€”Ground 7
+            <strong>Succession</strong> gives the new tenant full rights under the Housing Act—Ground 7
             doesn&apos;t apply. <strong>Devolution</strong> (through will or intestacy) passes the tenancy
-            but without the same protectionsâ€”Ground 7 can apply.
+            but without the same protections—Ground 7 can apply.
           </p>
         </div>
 
@@ -7022,7 +7022,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>What Must Happen Within 12 Months?</h3>
         <p>
-          You must <strong>begin proceedings</strong> within 12 monthsâ€”this means issuing the court claim,
+          You must <strong>begin proceedings</strong> within 12 months—this means issuing the court claim,
           not just serving notice. Work backwards:
         </p>
         <ul>
@@ -7064,7 +7064,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Step 3: Serve Section 8 Notice</h3>
         <p>
           Serve Form 3 (Section 8 notice) specifying Ground 7. Give at least 2 months&apos; notice. The
-          notice goes to whoever is occupying the propertyâ€”the &quot;personal representatives&quot; of the
+          notice goes to whoever is occupying the property—the &quot;personal representatives&quot; of the
           deceased or any other occupier.
         </p>
 
@@ -7139,7 +7139,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant&apos;s spouse still lives there?</h3>
             <p className="text-gray-600">
               If the spouse or civil partner was living there as their main home, they have likely succeeded
-              to the tenancy under the Housing Act. Ground 7 doesn&apos;t apply to successorsâ€”they have the
+              to the tenancy under the Housing Act. Ground 7 doesn&apos;t apply to successors—they have the
               same rights as the original tenant.
             </p>
           </div>
@@ -7174,7 +7174,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Is Ground 7 mandatory or discretionary?</h3>
             <p className="text-gray-600">
-              Discretionary. Even if you prove the ground, the court considers reasonablenessâ€”the circumstances
+              Discretionary. Even if you prove the ground, the court considers reasonableness—the circumstances
               of the occupiers, impact of eviction, your needs, etc. Courts generally grant possession if
               there&apos;s no good reason to refuse.
             </p>
@@ -7183,7 +7183,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if I want the tenant&apos;s family to stay?</h3>
             <p className="text-gray-600">
-              You can offer them a new tenancy agreement. This is often the simplest solutionâ€”it creates a fresh
+              You can offer them a new tenancy agreement. This is often the simplest solution—it creates a fresh
               contractual relationship with proper documentation and may avoid the need for any proceedings.
             </p>
           </div>
@@ -7244,7 +7244,7 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           <strong>Ground 12</strong> is one of the most versatile Section 8 grounds, allowing landlords to seek
-          possession when a tenant has breached <em>any</em> obligation of the tenancy agreementâ€”other than paying rent.
+          possession when a tenant has breached <em>any</em> obligation of the tenancy agreement—other than paying rent.
           Whether your tenant is subletting without permission, keeping unauthorised pets, running a business from the
           property, or persistently causing minor nuisance, Ground 12 provides a legal pathway to eviction.
         </p>
@@ -7280,7 +7280,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           This broad wording means Ground 12 can apply to virtually any clause in your tenancy agreement that the
-          tenant has failed to comply with. The key limitation is that it cannot be used for rent arrearsâ€”those
+          tenant has failed to comply with. The key limitation is that it cannot be used for rent arrears—those
           are covered by Grounds 8, 10, and 11 specifically.
         </p>
 
@@ -7345,15 +7345,15 @@ const allBlogPosts: BlogPost[] = [
         <p>
           Many tenancy agreements either prohibit pets entirely or require landlord consent. If a tenant
           keeps a dog, cat, or other animal in breach of this clause, Ground 12 applies. Note that from
-          2026, new rules require landlords to consider pet requests reasonablyâ€”but existing &quot;no pets&quot;
+          2026, new rules require landlords to consider pet requests reasonably—but existing &quot;no pets&quot;
           clauses remain enforceable for breaches that occurred before the new rules took effect.
         </p>
 
         <h3>Running a Business</h3>
         <p>
           Residential tenancy agreements typically prohibit using the property for business purposes. If
-          your tenant is running a commercial operationâ€”whether that&apos;s a shop, office, or even
-          significant internet-based business generating customer visitsâ€”this can constitute a breach.
+          your tenant is running a commercial operation—whether that&apos;s a shop, office, or even
+          significant internet-based business generating customer visits—this can constitute a breach.
         </p>
 
         <h3>Property Damage</h3>
@@ -7478,7 +7478,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Step 3: Allow Time for Remedy</h3>
         <p>
           Give the tenant genuine opportunity to fix the issue. If they remedy the breach, you cannot
-          proceed (the ground is that an obligation &quot;has been broken&quot;â€”past breaches that are
+          proceed (the ground is that an obligation &quot;has been broken&quot;—past breaches that are
           fully remedied weaken your case significantly).
         </p>
 
@@ -7536,7 +7536,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Tenant&apos;s Circumstances</h3>
         <p>
-          Courts consider the tenant&apos;s situationâ€”vulnerability, children, health issuesâ€”when
+          Courts consider the tenant&apos;s situation—vulnerability, children, health issues—when
           deciding reasonableness. This doesn&apos;t excuse breaches but may affect the court&apos;s
           decision or any suspended order terms.
         </p>
@@ -7595,7 +7595,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 12 if the tenant has fixed the breach?</h3>
             <p className="text-gray-600">
-              Technically yes, as the ground covers breaches that &quot;have been broken&quot;â€”past tense.
+              Technically yes, as the ground covers breaches that &quot;have been broken&quot;—past tense.
               However, courts are much less likely to grant possession for fully remedied breaches.
               Your case is strongest when the breach is ongoing or has caused lasting damage.
             </p>
@@ -7613,7 +7613,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Can I evict for keeping a pet without permission?</h3>
             <p className="text-gray-600">
               Yes, if your tenancy agreement prohibits pets or requires consent and the tenant has
-              breached this. However, consider the new pet rules from 2026â€”for new requests, landlords
+              breached this. However, consider the new pet rules from 2026—for new requests, landlords
               cannot unreasonably refuse. Existing breaches remain actionable.
             </p>
           </div>
@@ -7630,7 +7630,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Do I need to prove financial loss?</h3>
             <p className="text-gray-600">
-              No. Ground 12 doesn&apos;t require proving financial lossâ€”only that the tenancy obligation
+              No. Ground 12 doesn&apos;t require proving financial loss—only that the tenancy obligation
               was breached. However, demonstrating actual harm (to you, the property, or neighbours)
               strengthens your case for reasonableness.
             </p>
@@ -7719,7 +7719,7 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           If your tenant hasn&apos;t left after you served notice, the next step is court. Many landlords
-          feel anxious about attending a possession hearingâ€”it&apos;s unfamiliar territory with formal
+          feel anxious about attending a possession hearing—it&apos;s unfamiliar territory with formal
           procedures and legal terminology. This guide explains exactly what happens, how to prepare,
           and what to expect so you can approach your hearing with confidence.
         </p>
@@ -7923,7 +7923,7 @@ const allBlogPosts: BlogPost[] = [
           <li>Stand when speaking unless told otherwise</li>
           <li>Answer clearly and directly</li>
           <li>Refer to specific documents if relevant (&quot;As shown in tab 3, the rent statement...&quot;)</li>
-          <li>Don&apos;t argue with the judgeâ€”answer questions factually</li>
+          <li>Don&apos;t argue with the judge—answer questions factually</li>
         </ul>
 
         <BlogCTA variant="default" />
@@ -7940,7 +7940,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Suspended Possession Order</h3>
         <p>
           Common in Section 8 rent arrears cases. The tenant can stay <strong>provided</strong> they
-          comply with conditionsâ€”typically paying current rent plus an amount towards arrears. If
+          comply with conditions—typically paying current rent plus an amount towards arrears. If
           they breach conditions, you can apply for a bailiff warrant without another hearing.
         </p>
 
@@ -7999,7 +7999,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>If You Get a Suspended Order</h3>
         <p>
           Monitor whether the tenant complies with conditions. Keep records of all payments received.
-          If they breach conditions, you can apply for a bailiff warrantâ€”but the tenant can apply
+          If they breach conditions, you can apply for a bailiff warrant—but the tenant can apply
           to have the warrant suspended, so keep good records.
         </p>
 
@@ -8012,7 +8012,7 @@ const allBlogPosts: BlogPost[] = [
         <ImagePlaceholder
           src="/images/blog/after-hearing.svg"
           alt="Steps After Possession Hearing"
-          caption="A possession order is often not the final stepâ€”be prepared for enforcement"
+          caption="A possession order is often not the final step—be prepared for enforcement"
         />
 
         <h2 id="hearing-faq" className="scroll-mt-24">Possession Hearing FAQ</h2>
@@ -8021,7 +8021,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if the tenant doesn&apos;t attend?</h3>
             <p className="text-gray-600">
-              The hearing proceeds without them. In fact, this often makes things simplerâ€”there&apos;s
+              The hearing proceeds without them. In fact, this often makes things simpler—there&apos;s
               no defence to contest. The judge will still check your paperwork is correct before
               granting possession.
             </p>
@@ -8067,7 +8067,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Can I claim costs from the tenant?</h3>
             <p className="text-gray-600">
               You can ask for fixed costs in your claim. The court usually awards these if you win.
-              For more substantial legal costs, you&apos;d need to apply specificallyâ€”courts rarely
+              For more substantial legal costs, you&apos;d need to apply specifically—courts rarely
               award full costs against tenants in possession cases.
             </p>
           </div>
@@ -8127,7 +8127,7 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           You&apos;ve been through the entire process: served notice, attended court, and obtained a possession
-          order. But the tenant still hasn&apos;t left. The final step is bailiff enforcementâ€”county court
+          order. But the tenant still hasn&apos;t left. The final step is bailiff enforcement—county court
           bailiffs physically removing the tenant from your property. This guide explains exactly what
           happens on eviction day and how to prepare.
         </p>
@@ -8166,7 +8166,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>How to Apply</h3>
         <ol className="list-decimal pl-6 space-y-2">
           <li>Complete Form N325 (Request for Warrant of Possession)</li>
-          <li>Pay the court fee (Â£130 as of 2026)</li>
+          <li>Pay the court fee (£130 as of 2026)</li>
           <li>Submit to the county court that made the order</li>
         </ol>
 
@@ -8219,7 +8219,7 @@ const allBlogPosts: BlogPost[] = [
         <ul>
           <li><strong>Locksmith:</strong> Book a locksmith to attend and change locks immediately after eviction</li>
           <li><strong>Transport:</strong> If you&apos;ll be there, plan how you&apos;ll get to the property</li>
-          <li><strong>Support:</strong> Consider bringing someone with youâ€”these situations can be emotional</li>
+          <li><strong>Support:</strong> Consider bringing someone with you—these situations can be emotional</li>
           <li><strong>Storage:</strong> Plan for what to do with any belongings left behind</li>
         </ul>
 
@@ -8264,7 +8264,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>If the Tenant Refuses to Leave</h3>
         <p>
           Bailiffs have authority to physically remove occupants if necessary. In extreme cases, they
-          can request police assistance. However, this is rareâ€”most tenants comply when faced with
+          can request police assistance. However, this is rare—most tenants comply when faced with
           an official bailiff with a warrant.
         </p>
 
@@ -8306,7 +8306,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>What You Must Not Do</h3>
         <ul>
-          <li><strong>Don&apos;t</strong> get involved in removing the tenantâ€”that&apos;s the bailiff&apos;s job</li>
+          <li><strong>Don&apos;t</strong> get involved in removing the tenant—that&apos;s the bailiff&apos;s job</li>
           <li><strong>Don&apos;t</strong> engage in arguments or confrontations</li>
           <li><strong>Don&apos;t</strong> prevent the tenant from collecting belongings</li>
           <li><strong>Don&apos;t</strong> damage or dispose of tenant property during the eviction</li>
@@ -8368,7 +8368,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Immediate Steps</h3>
         <ol className="list-decimal pl-6 space-y-2">
-          <li><strong>Change locks:</strong> Do this immediatelyâ€”bailiffs don&apos;t do this for you</li>
+          <li><strong>Change locks:</strong> Do this immediately—bailiffs don&apos;t do this for you</li>
           <li><strong>Secure the property:</strong> Check all windows, doors, and access points</li>
           <li><strong>Document condition:</strong> Take comprehensive photos and video of the property&apos;s state</li>
           <li><strong>Utilities:</strong> Contact utility providers to transfer accounts</li>
@@ -8398,8 +8398,8 @@ const allBlogPosts: BlogPost[] = [
           If the tenant owes rent arrears or you have damage costs exceeding the deposit, consider:
         </p>
         <ul>
-          <li>Money Claim Online for debts up to Â£100,000</li>
-          <li>Small claims track for amounts under Â£10,000</li>
+          <li>Money Claim Online for debts up to £100,000</li>
+          <li>Small claims track for amounts under £10,000</li>
           <li>County Court Judgment (CCJ) if successful</li>
         </ul>
 
@@ -8427,7 +8427,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Do I have to pay for the bailiff?</h3>
             <p className="text-gray-600">
-              You pay the court fee for the warrant (Â£130). The bailiff service itself is included.
+              You pay the court fee for the warrant (£130). The bailiff service itself is included.
               If forced entry requires a locksmith, you may pay additional costs. Lock changes are
               your responsibility regardless.
             </p>
@@ -8456,7 +8456,7 @@ const allBlogPosts: BlogPost[] = [
             <p className="text-gray-600">
               Once evicted, the tenant has no right to return. If they break in, it&apos;s criminal
               trespass and potentially burglary. Call the police. You do <strong>not</strong> need
-              a new court orderâ€”the existing possession order remains valid.
+              a new court order—the existing possession order remains valid.
             </p>
           </div>
         </div>
@@ -8578,10 +8578,10 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Court Fees (2026)</h3>
         <ul>
-          <li><strong>N5B (Accelerated possession):</strong> Â£365</li>
-          <li><strong>N5 (Standard possession):</strong> Â£365</li>
-          <li><strong>N325 (Warrant of possession):</strong> Â£130</li>
-          <li><strong>N244 (Application notice):</strong> Â£119</li>
+          <li><strong>N5B (Accelerated possession):</strong> £365</li>
+          <li><strong>N5 (Standard possession):</strong> £365</li>
+          <li><strong>N325 (Warrant of possession):</strong> £130</li>
+          <li><strong>N244 (Application notice):</strong> £119</li>
         </ul>
 
         <h2 id="n5-form" className="scroll-mt-24">Form N5 - Claim for Possession of Property</h2>
@@ -8762,7 +8762,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
         <ul>
           <li><strong>When to use:</strong> After the possession order date has passed</li>
-          <li><strong>Fee:</strong> Â£130</li>
+          <li><strong>Fee:</strong> £130</li>
           <li><strong>Processing:</strong> Court issues warrant, bailiffs schedule eviction</li>
         </ul>
 
@@ -8895,7 +8895,7 @@ const allBlogPosts: BlogPost[] = [
           <h3 className="text-xl font-bold text-gray-900 mb-4">Get Pre-Filled Court Forms</h3>
           <p className="text-gray-700 mb-6">
             Our Complete Eviction Pack includes all court forms pre-filled based on your specific
-            situationâ€”N5, N5B, N119, N325â€”plus supporting documents and step-by-step guidance.
+            situation—N5, N5B, N119, N325—plus supporting documents and step-by-step guidance.
           </p>
           <Link
             href="/products/complete-pack"
@@ -8945,7 +8945,7 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           If you take a deposit from a tenant in England, you <strong>must</strong> protect it in a
-          government-approved tenancy deposit scheme within 30 days. This isn&apos;t optionalâ€”failure
+          government-approved tenancy deposit scheme within 30 days. This isn&apos;t optional—failure
           to comply can result in penalties of up to 3x the deposit amount and will prevent you from
           using Section 21 to evict. This guide covers everything you need to know about deposit
           protection in 2026.
@@ -9002,8 +9002,8 @@ const allBlogPosts: BlogPost[] = [
           Since 1 June 2019, deposits for new tenancies are capped at:
         </p>
         <ul>
-          <li><strong>5 weeks&apos; rent</strong> if annual rent is under Â£50,000</li>
-          <li><strong>6 weeks&apos; rent</strong> if annual rent is Â£50,000 or more</li>
+          <li><strong>5 weeks&apos; rent</strong> if annual rent is under £50,000</li>
+          <li><strong>6 weeks&apos; rent</strong> if annual rent is £50,000 or more</li>
         </ul>
 
         <h2 id="schemes-compared" className="scroll-mt-24">The Three Approved Schemes</h2>
@@ -9051,7 +9051,7 @@ const allBlogPosts: BlogPost[] = [
           landlords due to its free custodial option.
         </p>
         <ul>
-          <li><strong>Custodial:</strong> Freeâ€”you send the deposit to DPS who hold it</li>
+          <li><strong>Custodial:</strong> Free—you send the deposit to DPS who hold it</li>
           <li><strong>Insured:</strong> You keep the deposit but pay for insurance</li>
           <li><strong>Dispute resolution:</strong> Free alternative dispute resolution service</li>
         </ul>
@@ -9062,7 +9062,7 @@ const allBlogPosts: BlogPost[] = [
           and insured options with additional services for portfolio management.
         </p>
         <ul>
-          <li><strong>Custodial:</strong> Freeâ€”deposit held by TDS</li>
+          <li><strong>Custodial:</strong> Free—deposit held by TDS</li>
           <li><strong>Insured:</strong> Annual fee or per-deposit fee options</li>
           <li><strong>Additional services:</strong> Inventory tools, landlord resources</li>
         </ul>
@@ -9073,7 +9073,7 @@ const allBlogPosts: BlogPost[] = [
           good customer service.
         </p>
         <ul>
-          <li><strong>Custodial:</strong> Freeâ€”deposit held by MyDeposits</li>
+          <li><strong>Custodial:</strong> Free—deposit held by MyDeposits</li>
           <li><strong>Insured:</strong> Competitive fees for landlords and agents</li>
           <li><strong>Member benefits:</strong> Resources and support services</li>
         </ul>
@@ -9258,7 +9258,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Do I need to re-protect for each renewal?</h3>
             <p className="text-gray-600">
-              For a statutory periodic tenancy (rolling on after fixed term), noâ€”the original protection
+              For a statutory periodic tenancy (rolling on after fixed term), no—the original protection
               continues. For a new contractual periodic or a new fixed term, check with your scheme as
               some require you to update the protection details.
             </p>
@@ -9356,7 +9356,7 @@ const allBlogPosts: BlogPost[] = [
         <p className="text-xl text-gray-700 leading-relaxed">
           If you rent a property to multiple tenants who aren&apos;t from the same household, you may
           be operating a House in Multiple Occupation (HMO). Many HMOs require a licence from the
-          local council, and operating without one can result in fines of up to Â£30,000, rent
+          local council, and operating without one can result in fines of up to £30,000, rent
           repayment orders, and an inability to evict tenants. This guide explains everything you
           need to know about HMO licensing in England.
         </p>
@@ -9407,7 +9407,7 @@ const allBlogPosts: BlogPost[] = [
           <li>Cohabiting couples (whether married, civil partners, or unmarried)</li>
         </ul>
         <p>
-          Unrelated individualsâ€”like friends sharing a house, students, or professionalsâ€”are
+          Unrelated individuals—like friends sharing a house, students, or professionals—are
           separate households even if they share one tenancy agreement.
         </p>
 
@@ -9467,7 +9467,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="font-semibold text-blue-800 text-lg mb-2">The Storey Requirement Removed</p>
           <p className="text-blue-700">
             Before October 2018, mandatory licensing only applied to HMOs of 3+ storeys. This
-            requirement was removedâ€”now any HMO with 5+ occupants needs a licence regardless of
+            requirement was removed—now any HMO with 5+ occupants needs a licence regardless of
             the number of floors.
           </p>
         </div>
@@ -9492,8 +9492,8 @@ const allBlogPosts: BlogPost[] = [
           Fees vary by council but typically range from:
         </p>
         <ul>
-          <li><strong>New application:</strong> Â£500 - Â£1,500</li>
-          <li><strong>Renewal:</strong> Â£400 - Â£1,200</li>
+          <li><strong>New application:</strong> £500 - £1,500</li>
+          <li><strong>Renewal:</strong> £400 - £1,200</li>
           <li><strong>Additional charges:</strong> For late applications, inspections, variations</li>
         </ul>
 
@@ -9507,7 +9507,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Many councils operate <strong>additional licensing schemes</strong> covering HMOs that
-          don&apos;t meet mandatory criteria. These are local schemesâ€”you must check with your
+          don&apos;t meet mandatory criteria. These are local schemes—you must check with your
           specific council.
         </p>
 
@@ -9532,7 +9532,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Selective Licensing</h3>
         <p>
           Some councils also operate <strong>selective licensing</strong>, which covers all
-          private rented properties in designated areasâ€”not just HMOs. If your area has selective
+          private rented properties in designated areas—not just HMOs. If your area has selective
           licensing, you need a licence even for single-family lettings.
         </p>
 
@@ -9654,9 +9654,9 @@ const allBlogPosts: BlogPost[] = [
           Minimum sleeping room sizes (per person):
         </p>
         <ul>
-          <li><strong>1 person (10+ years):</strong> 6.51 mâ€”</li>
-          <li><strong>2 persons (10+ years):</strong> 10.22 mâ€”</li>
-          <li><strong>1 child (under 10):</strong> 4.64 mâ€”</li>
+          <li><strong>1 person (10+ years):</strong> 6.51 m—</li>
+          <li><strong>2 persons (10+ years):</strong> 10.22 m—</li>
+          <li><strong>1 child (under 10):</strong> 4.64 m—</li>
         </ul>
 
         <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
@@ -9666,7 +9666,7 @@ const allBlogPosts: BlogPost[] = [
           Operating an unlicensed HMO that requires a licence is a criminal offence:
         </p>
         <ul>
-          <li><strong>Civil penalty:</strong> Up to Â£30,000 per offence</li>
+          <li><strong>Civil penalty:</strong> Up to £30,000 per offence</li>
           <li><strong>Criminal fine:</strong> Unlimited (for prosecution through courts)</li>
           <li><strong>Criminal record:</strong> Potential conviction</li>
         </ul>
@@ -9702,7 +9702,7 @@ const allBlogPosts: BlogPost[] = [
 
         <div className="space-y-6 my-8">
           <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">My property has 3 tenantsâ€”do I need a licence?</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">My property has 3 tenants—do I need a licence?</h3>
             <p className="text-gray-600">
               If they&apos;re from 2+ households and share facilities, it&apos;s an HMO. You don&apos;t need
               a mandatory licence (that&apos;s 5+ occupants), but check if your council has an additional
@@ -9742,7 +9742,7 @@ const allBlogPosts: BlogPost[] = [
             <p className="text-gray-600">
               Possibly. Converting a family home to a small HMO (3-6 unrelated people) is often
               permitted development. Larger HMOs or HMOs in Article 4 areas need planning permission.
-              Check with your councilâ€”planning and licensing are separate requirements.
+              Check with your council—planning and licensing are separate requirements.
             </p>
           </div>
 
@@ -9839,7 +9839,7 @@ const allBlogPosts: BlogPost[] = [
           <h4 className="font-semibold text-blue-900">Key Information</h4>
           <p className="text-blue-800 mt-2">
             MCOL is the online system for making money claims in England and Wales. It&apos;s
-            designed for claims between Â£25 and Â£100,000 against defendants with UK addresses.
+            designed for claims between £25 and £100,000 against defendants with UK addresses.
             The process is entirely online and significantly faster than paper claims.
           </p>
         </div>
@@ -9876,7 +9876,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Limitations</h3>
         <ul>
-          <li>Maximum claim value: Â£100,000 (plus interest and costs)</li>
+          <li>Maximum claim value: £100,000 (plus interest and costs)</li>
           <li>Defendant must have a UK address</li>
           <li>You must have an email address</li>
           <li>Cannot be used for certain types of claims (e.g., possession)</li>
@@ -9901,7 +9901,7 @@ const allBlogPosts: BlogPost[] = [
           <li>You don&apos;t know how much they owe (amount must be specific)</li>
           <li>The tenant has left the country with no UK address</li>
           <li>The debt is over 6 years old</li>
-          <li>The claim exceeds Â£100,000</li>
+          <li>The claim exceeds £100,000</li>
         </ul>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
@@ -9998,8 +9998,8 @@ const allBlogPosts: BlogPost[] = [
             &quot;The Claimant is the landlord of [property address]. The Defendant was the tenant
             under an Assured Shorthold Tenancy dated [date]. The Defendant failed to pay rent
             due under the tenancy. The total rent arrears from [date] to [date] amount to
-            [Â£amount]. Despite demand, the Defendant has not paid this sum. The Claimant claims
-            [Â£amount] plus interest and costs.&quot;
+            [£amount]. Despite demand, the Defendant has not paid this sum. The Claimant claims
+            [£amount] plus interest and costs.&quot;
           </p>
         </div>
 
@@ -10033,42 +10033,42 @@ const allBlogPosts: BlogPost[] = [
             </thead>
             <tbody>
               <tr>
-                <td className="border p-3">Up to Â£300</td>
-                <td className="border p-3">Â£35</td>
-                <td className="border p-3">Â£50</td>
+                <td className="border p-3">Up to £300</td>
+                <td className="border p-3">£35</td>
+                <td className="border p-3">£50</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£300.01 - Â£500</td>
-                <td className="border p-3">Â£50</td>
-                <td className="border p-3">Â£70</td>
+                <td className="border p-3">£300.01 - £500</td>
+                <td className="border p-3">£50</td>
+                <td className="border p-3">£70</td>
               </tr>
               <tr>
-                <td className="border p-3">Â£500.01 - Â£1,000</td>
-                <td className="border p-3">Â£70</td>
-                <td className="border p-3">Â£80</td>
+                <td className="border p-3">£500.01 - £1,000</td>
+                <td className="border p-3">£70</td>
+                <td className="border p-3">£80</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£1,000.01 - Â£1,500</td>
-                <td className="border p-3">Â£80</td>
-                <td className="border p-3">Â£115</td>
+                <td className="border p-3">£1,000.01 - £1,500</td>
+                <td className="border p-3">£80</td>
+                <td className="border p-3">£115</td>
               </tr>
               <tr>
-                <td className="border p-3">Â£1,500.01 - Â£3,000</td>
-                <td className="border p-3">Â£115</td>
-                <td className="border p-3">Â£205</td>
+                <td className="border p-3">£1,500.01 - £3,000</td>
+                <td className="border p-3">£115</td>
+                <td className="border p-3">£205</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£3,000.01 - Â£5,000</td>
-                <td className="border p-3">Â£205</td>
-                <td className="border p-3">Â£455</td>
+                <td className="border p-3">£3,000.01 - £5,000</td>
+                <td className="border p-3">£205</td>
+                <td className="border p-3">£455</td>
               </tr>
               <tr>
-                <td className="border p-3">Â£5,000.01 - Â£10,000</td>
-                <td className="border p-3">Â£455</td>
+                <td className="border p-3">£5,000.01 - £10,000</td>
+                <td className="border p-3">£455</td>
                 <td className="border p-3">5% of claim value</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£10,000.01 - Â£100,000</td>
+                <td className="border p-3">£10,000.01 - £100,000</td>
                 <td className="border p-3">5% of claim value</td>
                 <td className="border p-3">5% of claim value</td>
               </tr>
@@ -10134,7 +10134,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Judgment After Hearing</h3>
         <p>
-          If they defend the claim, a hearing will be listed. For small claims (under Â£10,000),
+          If they defend the claim, a hearing will be listed. For small claims (under £10,000),
           this is usually informal and held in private. The judge will review evidence and
           decide who wins.
         </p>
@@ -10142,7 +10142,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
           <h4 className="font-semibold text-green-900">Small Claims Track</h4>
           <p className="text-green-800 mt-2">
-            Most landlord money claims under Â£10,000 go to the &quot;small claims track.&quot;
+            Most landlord money claims under £10,000 go to the &quot;small claims track.&quot;
             This means simpler procedures, limited costs recovery, and hearings are designed
             for people without lawyers. You won&apos;t recover legal fees even if you win.
           </p>
@@ -10158,28 +10158,28 @@ const allBlogPosts: BlogPost[] = [
         <h3>Warrant of Control (Bailiffs)</h3>
         <ul>
           <li>Bailiffs seize and sell goods to pay the debt</li>
-          <li>Fee: Â£77 (debts up to Â£5,000)</li>
+          <li>Fee: £77 (debts up to £5,000)</li>
           <li>Works if the defendant has valuable assets</li>
         </ul>
 
         <h3>Attachment of Earnings</h3>
         <ul>
           <li>Money deducted directly from their wages</li>
-          <li>Fee: Â£130</li>
+          <li>Fee: £130</li>
           <li>Only works if they&apos;re employed</li>
         </ul>
 
         <h3>Third Party Debt Order</h3>
         <ul>
           <li>Freezes money in their bank account</li>
-          <li>Fee: Â£130</li>
+          <li>Fee: £130</li>
           <li>Requires knowing their bank details</li>
         </ul>
 
         <h3>Charging Order</h3>
         <ul>
           <li>Secures debt against their property</li>
-          <li>Fee: Â£130</li>
+          <li>Fee: £130</li>
           <li>Only works if they own property</li>
         </ul>
 
@@ -10187,7 +10187,7 @@ const allBlogPosts: BlogPost[] = [
         <p>
           If you don&apos;t know the defendant&apos;s financial position, you can apply for an
           order requiring them to attend court and disclose their assets, income, and
-          outgoings. Fee: Â£59.
+          outgoings. Fee: £59.
         </p>
 
         <ImagePlaceholder
@@ -10230,7 +10230,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Is it worth claiming small amounts?</h3>
             <p className="text-gray-600">
-              Consider the economics. A Â£500 claim costs Â£50 in fees. If the defendant has no
+              Consider the economics. A £500 claim costs £50 in fees. If the defendant has no
               money or assets, even a CCJ may not result in payment. For very small debts,
               weigh the cost, time, and likelihood of recovery.
             </p>
@@ -10449,19 +10449,19 @@ const allBlogPosts: BlogPost[] = [
             commencing on [START DATE].
           </p>
           <p className="mb-4">
-            3. Under the tenancy agreement, the Defendant agreed to pay rent of Â£[AMOUNT]
+            3. Under the tenancy agreement, the Defendant agreed to pay rent of £[AMOUNT]
             per calendar month, payable in advance on the [DAY] of each month.
           </p>
           <p className="mb-4">
             4. The Defendant failed to pay rent as follows:
           </p>
           <ul className="mb-4 ml-4">
-            <li>[DATE]: Â£[AMOUNT] due, unpaid</li>
-            <li>[DATE]: Â£[AMOUNT] due, unpaid</li>
+            <li>[DATE]: £[AMOUNT] due, unpaid</li>
+            <li>[DATE]: £[AMOUNT] due, unpaid</li>
             <li>[Continue for each missed payment]</li>
           </ul>
           <p className="mb-4">
-            5. The total rent arrears as at [DATE] amount to Â£[TOTAL].
+            5. The total rent arrears as at [DATE] amount to £[TOTAL].
           </p>
           <p className="mb-4">
             6. The tenancy ended on [DATE]. Despite written demand dated [DATE], the
@@ -10471,7 +10471,7 @@ const allBlogPosts: BlogPost[] = [
             7. The Claimant claims:
           </p>
           <ul className="mb-4 ml-4">
-            <li>(a) Â£[AMOUNT] being rent arrears;</li>
+            <li>(a) £[AMOUNT] being rent arrears;</li>
             <li>(b) Interest pursuant to [section 69 of the County Courts Act 1984 / the tenancy agreement] at [RATE]% per annum;</li>
             <li>(c) Costs.</li>
           </ul>
@@ -10513,22 +10513,22 @@ const allBlogPosts: BlogPost[] = [
             following damage to the Property:
           </p>
           <ul className="mb-4 ml-4">
-            <li>(a) [Description of damage] - Cost of repair/replacement: Â£[AMOUNT]</li>
-            <li>(b) [Description of damage] - Cost of repair/replacement: Â£[AMOUNT]</li>
-            <li>(c) Professional cleaning required due to condition: Â£[AMOUNT]</li>
+            <li>(a) [Description of damage] - Cost of repair/replacement: £[AMOUNT]</li>
+            <li>(b) [Description of damage] - Cost of repair/replacement: £[AMOUNT]</li>
+            <li>(c) Professional cleaning required due to condition: £[AMOUNT]</li>
           </ul>
           <p className="mb-4">
-            6. The total cost of making good the damage is Â£[TOTAL].
+            6. The total cost of making good the damage is £[TOTAL].
           </p>
           <p className="mb-4">
-            7. A security deposit of Â£[AMOUNT] was held. After deduction of agreed amounts,
-            the Defendant owes an additional Â£[AMOUNT].
+            7. A security deposit of £[AMOUNT] was held. After deduction of agreed amounts,
+            the Defendant owes an additional £[AMOUNT].
           </p>
           <p className="mb-4">
             8. Despite demand dated [DATE], the Defendant has failed to pay.
           </p>
           <p className="mb-4">
-            9. The Claimant claims Â£[AMOUNT], interest, and costs.
+            9. The Claimant claims £[AMOUNT], interest, and costs.
           </p>
         </div>
 
@@ -10549,7 +10549,7 @@ const allBlogPosts: BlogPost[] = [
             to the Defendant from [START DATE]. The tenancy ended on [DATE].
           </p>
           <p className="mb-4">
-            3. Under the tenancy agreement, the Defendant agreed to pay rent of Â£[AMOUNT]
+            3. Under the tenancy agreement, the Defendant agreed to pay rent of £[AMOUNT]
             per month on the [DAY] of each month.
           </p>
           <p className="mb-4">
@@ -10560,24 +10560,24 @@ const allBlogPosts: BlogPost[] = [
             <strong>RENT ARREARS</strong>
           </p>
           <p className="mb-4">
-            5. The Defendant failed to pay rent from [DATE] to [DATE], totalling Â£[AMOUNT].
+            5. The Defendant failed to pay rent from [DATE] to [DATE], totalling £[AMOUNT].
           </p>
           <p className="mb-4">
             <strong>DAMAGE</strong>
           </p>
           <p className="mb-4">
             6. In breach of the tenancy agreement, the Defendant caused the following damage:
-            [Brief description]. The cost of repair is Â£[AMOUNT].
+            [Brief description]. The cost of repair is £[AMOUNT].
           </p>
           <p className="mb-4">
-            7. A deposit of Â£[AMOUNT] was held. After deducting [WHAT], the balance owed
-            is Â£[AMOUNT].
+            7. A deposit of £[AMOUNT] was held. After deducting [WHAT], the balance owed
+            is £[AMOUNT].
           </p>
           <p className="mb-4">
             8. Despite demand, the Defendant has not paid.
           </p>
           <p className="mb-4">
-            9. The Claimant claims Â£[TOTAL], interest, and costs.
+            9. The Claimant claims £[TOTAL], interest, and costs.
           </p>
         </div>
 
@@ -10631,8 +10631,8 @@ const allBlogPosts: BlogPost[] = [
           <h4 className="font-semibold text-green-900">Calculating Interest</h4>
           <p className="text-green-800 mt-2">
             Interest at 8% per year = 0.022% per day.<br />
-            Example: Â£5,000 debt for 90 days = Â£5,000 Ã— 0.00022 Ã— 90 = Â£99 interest.<br />
-            State in your particulars: &quot;Interest at 8% per annum from [DATE] to [DATE] = Â£[AMOUNT], and continuing at Â£[DAILY RATE] per day until judgment.&quot;
+            Example: £5,000 debt for 90 days = £5,000 × 0.00022 × 90 = £99 interest.<br />
+            State in your particulars: &quot;Interest at 8% per annum from [DATE] to [DATE] = £[AMOUNT], and continuing at £[DAILY RATE] per day until judgment.&quot;
           </p>
         </div>
 
@@ -10669,7 +10669,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Should I use a solicitor?</h3>
             <p className="text-gray-600">
-              For straightforward rent arrears under Â£10,000, you can handle it yourself.
+              For straightforward rent arrears under £10,000, you can handle it yourself.
               The small claims track is designed for litigants in person. For larger or
               complex claims, legal advice may be worthwhile.
             </p>
@@ -11834,7 +11834,7 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <h3>Application Fee</h3>
-        <p>Typically Â£50-100 - check current fees on the Scottish Courts website.</p>
+        <p>Typically £50-100 - check current fees on the Scottish Courts website.</p>
 
         <ImagePlaceholder
           src="/images/blog/tribunal-application.svg"
@@ -11937,7 +11937,7 @@ const allBlogPosts: BlogPost[] = [
         <ul>
           <li><strong>Application fee:</strong> Paid upfront, not recoverable</li>
           <li><strong>Legal fees:</strong> Generally not recoverable</li>
-          <li><strong>Sheriff officers:</strong> Separate enforcement costs (Â£200-500+)</li>
+          <li><strong>Sheriff officers:</strong> Separate enforcement costs (£200-500+)</li>
         </ul>
 
         <h2 id="tribunal-faq" className="scroll-mt-24">Tribunal FAQ</h2>
@@ -12156,10 +12156,10 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gray-50 rounded-lg p-6 my-6">
           <h4 className="font-semibold text-gray-900 mb-3">Example Calculation:</h4>
           <p className="text-gray-700">
-            <strong>Rent:</strong> Â£1,000 per month<br />
-            <strong>3 months&apos; rent:</strong> Â£3,000<br />
-            <strong>Current arrears:</strong> Â£3,500<br />
-            <strong>Result:</strong> Mandatory Ground 12 applies (if still Â£3,000+ at hearing)
+            <strong>Rent:</strong> £1,000 per month<br />
+            <strong>3 months&apos; rent:</strong> £3,000<br />
+            <strong>Current arrears:</strong> £3,500<br />
+            <strong>Result:</strong> Mandatory Ground 12 applies (if still £3,000+ at hearing)
           </p>
         </div>
 
@@ -14812,7 +14812,7 @@ const allBlogPosts: BlogPost[] = [
     slug: 'scotland-simple-procedure',
     title: 'Simple Procedure Scotland - Recovering Rent Arrears Guide 2026',
     description: 'Complete guide to using Simple Procedure in Scotland to recover rent arrears from tenants. Learn court fees, forms, and the step-by-step process.',
-    metaDescription: 'Scotland Simple Procedure guide for landlords. Recover rent arrears up to Â£5,000 through the Sheriff Court. Step-by-step process 2026.',
+    metaDescription: 'Scotland Simple Procedure guide for landlords. Recover rent arrears up to £5,000 through the Sheriff Court. Step-by-step process 2026.',
     date: '2026-01-03',
     readTime: '13 min read',
     wordCount: 1620,
@@ -14841,7 +14841,7 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="lead">
-          Simple Procedure is Scotland&apos;s streamlined court process for claims up to Â£5,000.
+          Simple Procedure is Scotland&apos;s streamlined court process for claims up to £5,000.
           It&apos;s the primary way landlords recover unpaid rent from current or former tenants
           without needing a solicitor.
         </p>
@@ -14849,9 +14849,9 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
           <h4 className="font-semibold text-blue-900">Simple Procedure Key Points</h4>
           <ul className="text-blue-800 mt-2 space-y-1">
-            <li><strong>Claim limit:</strong> Up to Â£5,000</li>
+            <li><strong>Claim limit:</strong> Up to £5,000</li>
             <li><strong>Court:</strong> Sheriff Court</li>
-            <li><strong>Fees:</strong> Â£19 to Â£104 depending on claim amount</li>
+            <li><strong>Fees:</strong> £19 to £104 depending on claim amount</li>
             <li><strong>Timeline:</strong> Typically 8-12 weeks to decision</li>
           </ul>
         </div>
@@ -14872,7 +14872,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>Key features:</p>
         <ul>
-          <li>Claims up to Â£5,000</li>
+          <li>Claims up to £5,000</li>
           <li>Streamlined court forms</li>
           <li>Informal hearing process</li>
           <li>Limited expenses awards (so losing rarely costs much)</li>
@@ -14895,7 +14895,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Not suitable for:</h3>
         <ul>
           <li>Evicting tenants (use First-tier Tribunal)</li>
-          <li>Claims over Â£5,000 (use Ordinary Cause)</li>
+          <li>Claims over £5,000 (use Ordinary Cause)</li>
           <li>Complex legal disputes</li>
         </ul>
 
@@ -14922,28 +14922,28 @@ const allBlogPosts: BlogPost[] = [
             </thead>
             <tbody>
               <tr>
-                <td className="border p-3">Up to Â£200</td>
-                <td className="border p-3">Â£19</td>
+                <td className="border p-3">Up to £200</td>
+                <td className="border p-3">£19</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£200.01 - Â£300</td>
-                <td className="border p-3">Â£34</td>
+                <td className="border p-3">£200.01 - £300</td>
+                <td className="border p-3">£34</td>
               </tr>
               <tr>
-                <td className="border p-3">Â£300.01 - Â£500</td>
-                <td className="border p-3">Â£50</td>
+                <td className="border p-3">£300.01 - £500</td>
+                <td className="border p-3">£50</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£500.01 - Â£1,500</td>
-                <td className="border p-3">Â£73</td>
+                <td className="border p-3">£500.01 - £1,500</td>
+                <td className="border p-3">£73</td>
               </tr>
               <tr>
-                <td className="border p-3">Â£1,500.01 - Â£3,000</td>
-                <td className="border p-3">Â£89</td>
+                <td className="border p-3">£1,500.01 - £3,000</td>
+                <td className="border p-3">£89</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£3,000.01 - Â£5,000</td>
-                <td className="border p-3">Â£104</td>
+                <td className="border p-3">£3,000.01 - £5,000</td>
+                <td className="border p-3">£104</td>
               </tr>
             </tbody>
           </table>
@@ -15090,9 +15090,9 @@ const allBlogPosts: BlogPost[] = [
 
         <div className="space-y-6 my-8">
           <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I claim more than Â£5,000?</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim more than £5,000?</h3>
             <p className="text-gray-600">
-              Not through Simple Procedure. For claims over Â£5,000, you need to use the
+              Not through Simple Procedure. For claims over £5,000, you need to use the
               Ordinary Cause procedure, which is more complex and usually requires a solicitor.
             </p>
           </div>
@@ -15517,7 +15517,7 @@ const allBlogPosts: BlogPost[] = [
             <li><strong>Required:</strong> All private landlords in Scotland</li>
             <li><strong>Register with:</strong> Local council where property is located</li>
             <li><strong>Duration:</strong> 3 years before renewal required</li>
-            <li><strong>Penalty:</strong> Up to Â£50,000 for non-registration</li>
+            <li><strong>Penalty:</strong> Up to £50,000 for non-registration</li>
           </ul>
         </div>
 
@@ -15627,15 +15627,15 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Principal landlord (main fee)</td>
-                <td className="border p-3">Â£70</td>
+                <td className="border p-3">£70</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Each property registered</td>
-                <td className="border p-3">Â£15</td>
+                <td className="border p-3">£15</td>
               </tr>
               <tr>
                 <td className="border p-3">Additional joint landlord</td>
-                <td className="border p-3">Â£15</td>
+                <td className="border p-3">£15</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Late application surcharge</td>
@@ -15646,7 +15646,7 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <p>
-          Example: A single landlord with 3 properties pays Â£70 + (3 - Â£15) = Â£115.
+          Example: A single landlord with 3 properties pays £70 + (3 - £15) = £115.
         </p>
 
         <ImagePlaceholder
@@ -15707,7 +15707,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Criminal Penalties</h3>
         <ul>
-          <li>Fine up to Â£50,000</li>
+          <li>Fine up to £50,000</li>
           <li>Applies to letting without registration</li>
           <li>Applies to acting as agent for unregistered landlord</li>
         </ul>
@@ -15752,7 +15752,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if I buy a new property?</h3>
             <p className="text-gray-600">
-              Add it to your existing registration. You&apos;ll pay Â£15 for the additional
+              Add it to your existing registration. You&apos;ll pay £15 for the additional
               property. Do this before letting it.
             </p>
           </div>
@@ -15829,7 +15829,7 @@ const allBlogPosts: BlogPost[] = [
             <li><strong>Definition:</strong> 3+ unrelated people sharing facilities</li>
             <li><strong>Licence from:</strong> Local council</li>
             <li><strong>Duration:</strong> Up to 3 years</li>
-            <li><strong>Penalty:</strong> Up to Â£50,000 and rent repayment orders</li>
+            <li><strong>Penalty:</strong> Up to £50,000 and rent repayment orders</li>
           </ul>
         </div>
 
@@ -15958,19 +15958,19 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">New licence (3-4 occupants)</td>
-                <td className="border p-3">Â£500 - Â£1,000</td>
+                <td className="border p-3">£500 - £1,000</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">New licence (5+ occupants)</td>
-                <td className="border p-3">Â£800 - Â£1,500</td>
+                <td className="border p-3">£800 - £1,500</td>
               </tr>
               <tr>
                 <td className="border p-3">Renewal</td>
-                <td className="border p-3">Â£400 - Â£800</td>
+                <td className="border p-3">£400 - £800</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Variation (change to existing)</td>
-                <td className="border p-3">Â£100 - Â£300</td>
+                <td className="border p-3">£100 - £300</td>
               </tr>
             </tbody>
           </table>
@@ -16032,8 +16032,8 @@ const allBlogPosts: BlogPost[] = [
         <h3>Room Sizes</h3>
         <p>Minimum room sizes typically apply:</p>
         <ul>
-          <li>Single bedroom: Usually 6.5-7 mâ€”</li>
-          <li>Double bedroom: Usually 10-11 mâ€”</li>
+          <li>Single bedroom: Usually 6.5-7 m—</li>
+          <li>Double bedroom: Usually 10-11 m—</li>
           <li>Kitchen: Depends on occupants</li>
           <li>Living space: May be required</li>
         </ul>
@@ -16051,7 +16051,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Operating Without a Licence</h3>
         <ul>
           <li>Criminal offence</li>
-          <li>Fine up to Â£50,000</li>
+          <li>Fine up to £50,000</li>
           <li>Rent Repayment Order (tenant claims back rent)</li>
           <li>Difficulty evicting tenants</li>
         </ul>
@@ -16858,7 +16858,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Under the Act, tenants become &quot;contract-holders&quot; and tenancies become
-          &quot;occupation contracts.&quot; This isn&apos;t just a name changeâ€”it reflects
+          &quot;occupation contracts.&quot; This isn&apos;t just a name change—it reflects
           a fundamental shift in how the law treats rental relationships.
         </p>
 
@@ -16948,7 +16948,7 @@ const allBlogPosts: BlogPost[] = [
           <h4 className="font-semibold text-red-900 mb-2">Registration is Mandatory</h4>
           <p className="text-red-800">
             Landlords who fail to register with Rent Smart Wales cannot legally serve
-            eviction notices. The penalty for non-registration can be up to Â£150,000
+            eviction notices. The penalty for non-registration can be up to £150,000
             under Rent Repayment Orders.
           </p>
         </div>
@@ -17469,7 +17469,7 @@ const allBlogPosts: BlogPost[] = [
           <li>Copy of the occupation contract</li>
           <li>Copy of the notice you served</li>
           <li>Proof of service</li>
-          <li>Court fee (currently around Â£355)</li>
+          <li>Court fee (currently around £355)</li>
         </ul>
 
         <h3>Step 2: Court Hearing</h3>
@@ -17753,7 +17753,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
           <h4 className="font-semibold text-green-900 mb-2">Best Practice</h4>
           <p className="text-green-800">
-            Protect deposits as soon as you receive themâ€”don&apos;t wait until close
+            Protect deposits as soon as you receive them—don&apos;t wait until close
             to the deadline. This gives you time to serve the prescribed information
             and correct any errors.
           </p>
@@ -17955,7 +17955,7 @@ const allBlogPosts: BlogPost[] = [
           <h4 className="font-semibold text-red-900 mb-2">Mandatory Registration</h4>
           <p className="text-red-800">
             Operating without registration is a criminal offence. Unregistered landlords
-            cannot serve valid eviction notices and face fines of up to Â£150,000.
+            cannot serve valid eviction notices and face fines of up to £150,000.
           </p>
         </div>
 
@@ -18063,7 +18063,7 @@ const allBlogPosts: BlogPost[] = [
           <h4 className="font-semibold text-green-900 mb-2">Using a Licensed Agent</h4>
           <p className="text-green-800">
             If you use a fully licensed letting agent to handle all letting and
-            management activities, you only need to registerâ€”not get a licence yourself.
+            management activities, you only need to register—not get a licence yourself.
             Ensure your agent is licensed with RSW.
           </p>
         </div>
@@ -18119,17 +18119,17 @@ const allBlogPosts: BlogPost[] = [
             <tbody className="bg-white divide-y divide-gray-200">
               <tr>
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">Landlord Registration</td>
-                <td className="px-6 py-4 text-sm text-gray-600">Â£10.50</td>
+                <td className="px-6 py-4 text-sm text-gray-600">£10.50</td>
                 <td className="px-6 py-4 text-sm text-gray-600">5 years</td>
               </tr>
               <tr>
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">Landlord Licence</td>
-                <td className="px-6 py-4 text-sm text-gray-600">Â£181.00</td>
+                <td className="px-6 py-4 text-sm text-gray-600">£181.00</td>
                 <td className="px-6 py-4 text-sm text-gray-600">5 years</td>
               </tr>
               <tr>
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">Agent Licence</td>
-                <td className="px-6 py-4 text-sm text-gray-600">Â£181.00</td>
+                <td className="px-6 py-4 text-sm text-gray-600">£181.00</td>
                 <td className="px-6 py-4 text-sm text-gray-600">5 years</td>
               </tr>
             </tbody>
@@ -18138,7 +18138,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Training costs are separate and vary depending on the provider. Budget around
-          Â£100-Â£200 for approved training courses.
+          £100-£200 for approved training courses.
         </p>
 
         <h2 id="exemptions" className="scroll-mt-24">Exemptions</h2>
@@ -18173,8 +18173,8 @@ const allBlogPosts: BlogPost[] = [
         <h3>Criminal Penalties</h3>
 
         <ul>
-          <li><strong>Fixed Penalty Notice:</strong> Up to Â£250</li>
-          <li><strong>Prosecution fine:</strong> Up to Â£150,000 (unlimited for repeated offences)</li>
+          <li><strong>Fixed Penalty Notice:</strong> Up to £250</li>
+          <li><strong>Prosecution fine:</strong> Up to £150,000 (unlimited for repeated offences)</li>
         </ul>
 
         <h3>Civil Consequences</h3>
@@ -18503,8 +18503,8 @@ const allBlogPosts: BlogPost[] = [
         <h3>Fees</h3>
 
         <p>
-          HMO licence fees vary by local authority. Typical fees range from Â£500 to
-          Â£1,500 for a 5-year licence. Check with your local council for exact fees.
+          HMO licence fees vary by local authority. Typical fees range from £500 to
+          £1,500 for a 5-year licence. Check with your local council for exact fees.
         </p>
 
         <h2 id="hmo-management" className="scroll-mt-24">HMO Management Regulations</h2>
@@ -18554,7 +18554,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What happens if I let an unlicensed HMO?</h3>
             <p className="text-gray-600">
-              You can be prosecuted and fined up to Â£30,000 per offence. Additionally,
+              You can be prosecuted and fined up to £30,000 per offence. Additionally,
               tenants can apply for a Rent Repayment Order to recover up to 12 months&apos;
               rent. You cannot evict tenants using Section 173 until the HMO is licensed.
             </p>
@@ -19909,7 +19909,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li>If rent is Â£1,000/month and there are two tenants, you can pursue either for the full Â£1,000</li>
+          <li>If rent is £1,000/month and there are two tenants, you can pursue either for the full £1,000</li>
           <li>Each is responsible for the other&apos;s actions</li>
           <li>Damage caused by one is the responsibility of all</li>
           <li>You don&apos;t have to pursue them equally</li>
@@ -20236,7 +20236,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="text-red-800">
             If your EICR shows C1 or C2 codes, remedial work must be completed
             within 28 days (or immediately for C1). Failure to do so is a criminal
-            offence and can result in penalties up to Â£30,000.
+            offence and can result in penalties up to £30,000.
           </p>
         </div>
 
@@ -20340,7 +20340,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Electrical Safety Penalties</h3>
 
         <ul>
-          <li>Civil penalty up to Â£30,000 per breach</li>
+          <li>Civil penalty up to £30,000 per breach</li>
           <li>Local authority can arrange remedial work at landlord&apos;s cost</li>
           <li>Criminal prosecution in serious cases</li>
           <li>Rent repayment orders</li>
@@ -20610,16 +20610,16 @@ const allBlogPosts: BlogPost[] = [
             <tbody className="bg-white divide-y divide-gray-200">
               <tr>
                 <td className="px-6 py-4">Letting a sub-standard property</td>
-                <td className="px-6 py-4">10% of rateable value (min Â£5,000)</td>
-                <td className="px-6 py-4">20% of rateable value (min Â£10,000)</td>
+                <td className="px-6 py-4">10% of rateable value (min £5,000)</td>
+                <td className="px-6 py-4">20% of rateable value (min £10,000)</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Providing false/misleading information</td>
-                <td className="px-6 py-4" colSpan={2}>Up to Â£5,000</td>
+                <td className="px-6 py-4" colSpan={2}>Up to £5,000</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Failure to comply with compliance notice</td>
-                <td className="px-6 py-4" colSpan={2}>Up to Â£5,000</td>
+                <td className="px-6 py-4" colSpan={2}>Up to £5,000</td>
               </tr>
             </tbody>
           </table>
@@ -20628,8 +20628,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
           <h4 className="font-semibold text-red-900 mb-2">Maximum Penalty</h4>
           <p className="text-red-800">
-            The maximum penalty for a single property is capped at Â£5,000 for a single
-            penalty notice, with a maximum of Â£30,000 over 18 months across all breaches.
+            The maximum penalty for a single property is capped at £5,000 for a single
+            penalty notice, with a maximum of £30,000 over 18 months across all breaches.
           </p>
         </div>
 
@@ -20643,7 +20643,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Types of Exemption</h3>
 
         <ul>
-          <li><strong>Cost cap exemption:</strong> All relevant improvements would cost more than Â£3,500 (inc. VAT)</li>
+          <li><strong>Cost cap exemption:</strong> All relevant improvements would cost more than £3,500 (inc. VAT)</li>
           <li><strong>Third party consent:</strong> Required consent (e.g., planning) has been refused</li>
           <li><strong>Devaluation:</strong> An independent surveyor confirms improvements would reduce property value by more than 5%</li>
           <li><strong>Wall insulation:</strong> Expert advice says wall insulation would damage the property</li>
@@ -22501,7 +22501,7 @@ const allBlogPosts: BlogPost[] = [
             <tbody className="bg-white divide-y divide-gray-200">
               <tr>
                 <td className="px-6 py-4">Heating</td>
-                <td className="px-6 py-4">Capable of heating main living room to 21â€”C</td>
+                <td className="px-6 py-4">Capable of heating main living room to 21—C</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Hot water</td>
@@ -22551,15 +22551,15 @@ const allBlogPosts: BlogPost[] = [
             <tbody className="bg-white divide-y divide-gray-200">
               <tr>
                 <td className="px-6 py-4">Failure to register</td>
-                <td className="px-6 py-4">Fine up to Â£2,500</td>
+                <td className="px-6 py-4">Fine up to £2,500</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Failure to provide rent book</td>
-                <td className="px-6 py-4">Fine up to Â£2,500</td>
+                <td className="px-6 py-4">Fine up to £2,500</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Letting unfit property</td>
-                <td className="px-6 py-4">Fine up to Â£5,000</td>
+                <td className="px-6 py-4">Fine up to £5,000</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Harassment/illegal eviction</td>
@@ -22869,7 +22869,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li>Letting without registration is a criminal offence</li>
-          <li>Maximum fine up to Â£2,500</li>
+          <li>Maximum fine up to £2,500</li>
           <li>Prosecuted in the magistrates&apos; court</li>
         </ul>
 
@@ -23806,7 +23806,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Typical Limits</h3>
 
         <ul>
-          <li>Â£50,000 - Â£100,000 per claim</li>
+          <li>£50,000 - £100,000 per claim</li>
           <li>Telephone legal advice helpline</li>
           <li>Access to solicitors on insurer panel</li>
         </ul>
@@ -23814,7 +23814,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
           <h4 className="font-semibold text-green-900 mb-2">Cost Effective</h4>
           <p className="text-green-800">
-            Legal expenses cover typically costs Â£20-50 per year but can save
+            Legal expenses cover typically costs £20-50 per year but can save
             thousands if you need to pursue eviction through the courts.
           </p>
         </div>
@@ -23939,7 +23939,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
           <h4 className="font-semibold text-blue-900 mb-2">Self Assessment Required</h4>
           <p className="text-blue-800">
-            If you earn more than Â£1,000 per year from property rental, you
+            If you earn more than £1,000 per year from property rental, you
             must register for Self Assessment and file a tax return annually.
             The deadline is 31 January following the tax year.
           </p>
@@ -23966,22 +23966,22 @@ const allBlogPosts: BlogPost[] = [
             <tbody className="bg-white divide-y divide-gray-200">
               <tr>
                 <td className="px-6 py-4">Personal Allowance</td>
-                <td className="px-6 py-4">Up to Â£12,570</td>
+                <td className="px-6 py-4">Up to £12,570</td>
                 <td className="px-6 py-4">0%</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Basic Rate</td>
-                <td className="px-6 py-4">Â£12,571 - Â£50,270</td>
+                <td className="px-6 py-4">£12,571 - £50,270</td>
                 <td className="px-6 py-4">20%</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Higher Rate</td>
-                <td className="px-6 py-4">Â£50,271 - Â£125,140</td>
+                <td className="px-6 py-4">£50,271 - £125,140</td>
                 <td className="px-6 py-4">40%</td>
               </tr>
               <tr>
                 <td className="px-6 py-4">Additional Rate</td>
-                <td className="px-6 py-4">Over Â£125,140</td>
+                <td className="px-6 py-4">Over £125,140</td>
                 <td className="px-6 py-4">45%</td>
               </tr>
             </tbody>
@@ -23996,8 +23996,8 @@ const allBlogPosts: BlogPost[] = [
         <h3>Property Allowance</h3>
 
         <p>
-          If your rental income is under Â£1,000 per year, you don&apos;t need to
-          report it. Between Â£1,000 and Â£2,500, you can use the Â£1,000 property
+          If your rental income is under £1,000 per year, you don&apos;t need to
+          report it. Between £1,000 and £2,500, you can use the £1,000 property
           allowance instead of claiming expenses.
         </p>
 
@@ -24101,7 +24101,7 @@ const allBlogPosts: BlogPost[] = [
         <ul>
           <li>Basic rate taxpayers: 18%</li>
           <li>Higher rate taxpayers: 24%</li>
-          <li>Annual exempt amount: Â£3,000 (2025/26)</li>
+          <li>Annual exempt amount: £3,000 (2025/26)</li>
         </ul>
 
         <h3>Calculating the Gain</h3>
@@ -24581,7 +24581,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">How much should a gas safety check cost?</h3>
             <p className="text-gray-600">
-              Typically Â£60-Â£100 for a standard property with one boiler. Prices vary by
+              Typically £60-£100 for a standard property with one boiler. Prices vary by
               location and number of appliances. Be wary of very cheap quotes - quality
               matters for safety. Get multiple quotes from Gas Safe registered engineers.
             </p>
@@ -24924,19 +24924,19 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">No valid EICR</td>
-                <td className="border p-3">Up to Â£30,000 civil penalty</td>
+                <td className="border p-3">Up to £30,000 civil penalty</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Failure to complete remedial work</td>
-                <td className="border p-3">Up to Â£30,000 civil penalty</td>
+                <td className="border p-3">Up to £30,000 civil penalty</td>
               </tr>
               <tr>
                 <td className="border p-3">Not providing EICR to tenant</td>
-                <td className="border p-3">Up to Â£30,000 civil penalty</td>
+                <td className="border p-3">Up to £30,000 civil penalty</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Not providing EICR to local authority</td>
-                <td className="border p-3">Up to Â£30,000 civil penalty</td>
+                <td className="border p-3">Up to £30,000 civil penalty</td>
               </tr>
             </tbody>
           </table>
@@ -24968,7 +24968,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">How much does an EICR cost?</h3>
             <p className="text-gray-600">
-              Typically Â£150-Â£350 depending on property size and location. Larger properties
+              Typically £150-£350 depending on property size and location. Larger properties
               with more circuits cost more. Get multiple quotes from registered electricians.
               Be wary of very cheap quotes - thorough testing takes time.
             </p>
@@ -25398,7 +25398,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">What's the penalty for not having smoke alarms?</h3>
             <p className="text-gray-600">
               Local authorities can issue remedial notices and, if not complied with, impose
-              fines up to Â£5,000. Additionally, lack of smoke alarms may invalidate insurance
+              fines up to £5,000. Additionally, lack of smoke alarms may invalidate insurance
               and expose you to civil liability if a fire occurs.
             </p>
           </div>
@@ -25513,17 +25513,17 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Rent arrears</td>
-                <td className="border p-3">Â£3,000-Â£10,000+ in lost rent</td>
+                <td className="border p-3">£3,000-£10,000+ in lost rent</td>
                 <td className="border p-3">Credit and affordability checks</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Property damage</td>
-                <td className="border p-3">Â£1,000-Â£20,000+ repairs</td>
+                <td className="border p-3">£1,000-£20,000+ repairs</td>
                 <td className="border p-3">Previous landlord references</td>
               </tr>
               <tr>
                 <td className="border p-3">Eviction costs</td>
-                <td className="border p-3">Â£5,000-Â£15,000 legal fees</td>
+                <td className="border p-3">£5,000-£15,000 legal fees</td>
                 <td className="border p-3">Comprehensive referencing</td>
               </tr>
               <tr className="bg-gray-50">
@@ -25536,7 +25536,7 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <p>
-          Professional referencing typically costs Â£20-Â£50 per applicant - a small investment
+          Professional referencing typically costs £20-£50 per applicant - a small investment
           compared to the potential losses from a problematic tenant.
         </p>
 
@@ -25702,17 +25702,17 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Basic online</td>
-                <td className="border p-3">Â£15-Â£25</td>
+                <td className="border p-3">£15-£25</td>
                 <td className="border p-3">Simple credit check only</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Standard comprehensive</td>
-                <td className="border p-3">Â£25-Â£40</td>
+                <td className="border p-3">£25-£40</td>
                 <td className="border p-3">Most private landlords</td>
               </tr>
               <tr>
                 <td className="border p-3">Premium with guarantor</td>
-                <td className="border p-3">Â£40-Â£60</td>
+                <td className="border p-3">£40-£60</td>
                 <td className="border p-3">Higher-risk applicants</td>
               </tr>
               <tr className="bg-gray-50">
@@ -26145,11 +26145,11 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">First breach - no check conducted</td>
-                <td className="border p-3">Up to Â£1,000 per lodger, Â£3,000 per tenant</td>
+                <td className="border p-3">Up to £1,000 per lodger, £3,000 per tenant</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Repeat breach</td>
-                <td className="border p-3">Up to Â£3,000 per lodger, Â£10,000 per tenant</td>
+                <td className="border p-3">Up to £3,000 per lodger, £10,000 per tenant</td>
               </tr>
               <tr>
                 <td className="border p-3">Knowingly renting to illegal immigrant</td>
@@ -26400,7 +26400,7 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Application fee</td>
-                <td className="border p-3">Â£500-Â£1,500+ depending on council</td>
+                <td className="border p-3">£500-£1,500+ depending on council</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Fit and proper person</td>
@@ -26573,9 +26573,9 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
           <h4 className="font-semibold text-red-900 mb-2">Potential Penalties</h4>
           <ul className="list-disc ml-4 text-red-800 space-y-2">
-            <li><strong>Unlicensed HMO:</strong> Unlimited fine (criminal) or up to Â£30,000 (civil)</li>
-            <li><strong>Breach of conditions:</strong> Up to Â£5,000 fine per breach</li>
-            <li><strong>Management failures:</strong> Up to Â£5,000 per breach</li>
+            <li><strong>Unlicensed HMO:</strong> Unlimited fine (criminal) or up to £30,000 (civil)</li>
+            <li><strong>Breach of conditions:</strong> Up to £5,000 fine per breach</li>
+            <li><strong>Management failures:</strong> Up to £5,000 per breach</li>
             <li><strong>Rent Repayment Orders:</strong> Up to 12 months' rent returned to tenants</li>
             <li><strong>Banning orders:</strong> Prohibited from being a landlord</li>
           </ul>
@@ -26995,7 +26995,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">What's the maximum deposit I can take?</h3>
             <p className="text-gray-600">
               For most tenancies, the maximum deposit is 5 weeks' rent. For tenancies with
-              annual rent over Â£50,000, the maximum is 6 weeks' rent. This was introduced
+              annual rent over £50,000, the maximum is 6 weeks' rent. This was introduced
               by the Tenant Fees Act 2019.
             </p>
           </div>
@@ -27269,7 +27269,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ol className="list-decimal ml-6 space-y-2 my-4">
           <li>Complete possession claim form (N5 and N119)</li>
-          <li>Pay court fee (currently Â£355 for standard claims)</li>
+          <li>Pay court fee (currently £355 for standard claims)</li>
           <li>Attend hearing and present evidence</li>
           <li>If successful, court grants possession order</li>
           <li>If tenant still doesn't leave, apply for warrant/bailiffs</li>
@@ -27309,7 +27309,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
           <h4 className="font-semibold text-blue-900 mb-2">Debt Recovery Options</h4>
           <ul className="list-disc ml-4 text-blue-800 space-y-2">
-            <li><strong>Money Claim Online:</strong> For debts under Â£10,000</li>
+            <li><strong>Money Claim Online:</strong> For debts under £10,000</li>
             <li><strong>County Court Judgment (CCJ):</strong> Formal court debt order</li>
             <li><strong>High Court Enforcement:</strong> For larger debts</li>
             <li><strong>Debt Collection Agencies:</strong> Third-party recovery</li>
@@ -29042,7 +29042,7 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <p>
-          Example: Â£12,000 annual rent - Â£200,000 property = 6% gross yield
+          Example: £12,000 annual rent - £200,000 property = 6% gross yield
         </p>
 
         <h3>Net Yield</h3>
@@ -29056,7 +29056,7 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <p>
-          Example: (Â£12,000 - Â£4,000 costs) - Â£200,000 = 4% net yield
+          Example: (£12,000 - £4,000 costs) - £200,000 = 4% net yield
         </p>
 
         <h3>Return on Investment (ROI)</h3>
@@ -29087,8 +29087,8 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><strong>Stamp Duty</strong> - 3% surcharge on additional properties</li>
-          <li><strong>Legal fees</strong> - Â£800-1,500 typically</li>
-          <li><strong>Survey</strong> - Â£300-600 depending on type</li>
+          <li><strong>Legal fees</strong> - £800-1,500 typically</li>
+          <li><strong>Survey</strong> - £300-600 depending on type</li>
           <li><strong>Mortgage fees</strong> - arrangement, valuation, broker</li>
           <li><strong>Initial repairs/renovation</strong> - varies significantly</li>
         </ul>
@@ -29302,7 +29302,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>Claim Limits</h3>
 
         <p>
-          MCOL can be used for claims up to Â£100,000. Claims over Â£10,000 are usually
+          MCOL can be used for claims up to £100,000. Claims over £10,000 are usually
           allocated to the fast track or multi-track and may require court attendance.
         </p>
 
@@ -29404,32 +29404,32 @@ const allBlogPosts: BlogPost[] = [
             </thead>
             <tbody>
               <tr>
-                <td className="border p-3">Up to Â£300</td>
-                <td className="border p-3">Â£35</td>
+                <td className="border p-3">Up to £300</td>
+                <td className="border p-3">£35</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£300.01 - Â£500</td>
-                <td className="border p-3">Â£50</td>
+                <td className="border p-3">£300.01 - £500</td>
+                <td className="border p-3">£50</td>
               </tr>
               <tr>
-                <td className="border p-3">Â£500.01 - Â£1,000</td>
-                <td className="border p-3">Â£70</td>
+                <td className="border p-3">£500.01 - £1,000</td>
+                <td className="border p-3">£70</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£1,000.01 - Â£1,500</td>
-                <td className="border p-3">Â£80</td>
+                <td className="border p-3">£1,000.01 - £1,500</td>
+                <td className="border p-3">£80</td>
               </tr>
               <tr>
-                <td className="border p-3">Â£1,500.01 - Â£3,000</td>
-                <td className="border p-3">Â£115</td>
+                <td className="border p-3">£1,500.01 - £3,000</td>
+                <td className="border p-3">£115</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="border p-3">Â£3,000.01 - Â£5,000</td>
-                <td className="border p-3">Â£205</td>
+                <td className="border p-3">£3,000.01 - £5,000</td>
+                <td className="border p-3">£205</td>
               </tr>
               <tr>
-                <td className="border p-3">Â£5,000.01 - Â£10,000</td>
-                <td className="border p-3">Â£455</td>
+                <td className="border p-3">£5,000.01 - £10,000</td>
+                <td className="border p-3">£455</td>
               </tr>
             </tbody>
           </table>
@@ -29471,7 +29471,7 @@ const allBlogPosts: BlogPost[] = [
         <h3>If They Defend the Claim</h3>
 
         <p>
-          The case may proceed to a hearing. For small claims (under Â£10,000), this is
+          The case may proceed to a hearing. For small claims (under £10,000), this is
           usually informal. Prepare your evidence and be ready to present your case.
         </p>
 
@@ -29501,22 +29501,22 @@ const allBlogPosts: BlogPost[] = [
               <tr>
                 <td className="border p-3 font-medium">Warrant of Control</td>
                 <td className="border p-3">Bailiffs seize goods to sell</td>
-                <td className="border p-3">Â£77+</td>
+                <td className="border p-3">£77+</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3 font-medium">Attachment of Earnings</td>
                 <td className="border p-3">Deducted from wages</td>
-                <td className="border p-3">Â£110</td>
+                <td className="border p-3">£110</td>
               </tr>
               <tr>
                 <td className="border p-3 font-medium">Third Party Debt Order</td>
                 <td className="border p-3">Freeze bank accounts</td>
-                <td className="border p-3">Â£110</td>
+                <td className="border p-3">£110</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3 font-medium">Charging Order</td>
                 <td className="border p-3">Secure against property</td>
-                <td className="border p-3">Â£110</td>
+                <td className="border p-3">£110</td>
               </tr>
             </tbody>
           </table>
@@ -29814,7 +29814,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">How much should I expect to pay?</h3>
             <p className="text-gray-600">
               Basic tools start from free for limited use. Comprehensive platforms
-              typically cost Â£10-50 per month depending on portfolio size. Enterprise
+              typically cost £10-50 per month depending on portfolio size. Enterprise
               solutions for larger portfolios may cost more.
             </p>
           </div>
@@ -30123,7 +30123,7 @@ const allBlogPosts: BlogPost[] = [
             <p className="text-gray-600">
               For furnished properties or high-value rentals, professional clerks provide
               independent, detailed reports that carry weight in disputes. Costs typically
-              range from Â£80-200 depending on property size.
+              range from £80-200 depending on property size.
             </p>
           </div>
 
@@ -30562,7 +30562,7 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li><strong>Up to Â£5,000</strong> per property for renting out F/G rated property</li>
+          <li><strong>Up to £5,000</strong> per property for renting out F/G rated property</li>
           <li><strong>Publication</strong> on public register of non-compliant landlords</li>
           <li><strong>Tenant claims</strong> for substandard accommodation</li>
         </ul>
@@ -30624,32 +30624,32 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Loft insulation (270mm)</td>
-                <td className="border p-3">Â£300-500</td>
+                <td className="border p-3">£300-500</td>
                 <td className="border p-3">Up to +10 points</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Cavity wall insulation</td>
-                <td className="border p-3">Â£500-1,500</td>
+                <td className="border p-3">£500-1,500</td>
                 <td className="border p-3">Up to +15 points</td>
               </tr>
               <tr>
                 <td className="border p-3">LED lighting throughout</td>
-                <td className="border p-3">Â£100-300</td>
+                <td className="border p-3">£100-300</td>
                 <td className="border p-3">+3-5 points</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">New condensing boiler</td>
-                <td className="border p-3">Â£2,000-3,500</td>
+                <td className="border p-3">£2,000-3,500</td>
                 <td className="border p-3">Up to +20 points</td>
               </tr>
               <tr>
                 <td className="border p-3">Double glazing</td>
-                <td className="border p-3">Â£3,000-8,000</td>
+                <td className="border p-3">£3,000-8,000</td>
                 <td className="border p-3">+5-10 points</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Smart heating controls</td>
-                <td className="border p-3">Â£200-400</td>
+                <td className="border p-3">£200-400</td>
                 <td className="border p-3">+3-5 points</td>
               </tr>
             </tbody>
@@ -30849,7 +30849,7 @@ const allBlogPosts: BlogPost[] = [
           <h4 className="font-semibold text-red-900 mb-2">Penalties for Unlicensed Letting</h4>
           <p className="text-red-800">
             Letting without required licenses is a criminal offense. Penalties include
-            fines up to Â£30,000, rent repayment orders, and inability to use Section 21
+            fines up to £30,000, rent repayment orders, and inability to use Section 21
             for possession. Some councils actively enforce licensing requirements.
           </p>
         </div>
@@ -30998,19 +30998,19 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Mandatory HMO</td>
-                <td className="border p-3">Â£500 - Â£1,500</td>
+                <td className="border p-3">£500 - £1,500</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Selective License</td>
-                <td className="border p-3">Â£400 - Â£900</td>
+                <td className="border p-3">£400 - £900</td>
               </tr>
               <tr>
                 <td className="border p-3">Scotland Registration</td>
-                <td className="border p-3">Â£68 (first property), Â£15 per additional</td>
+                <td className="border p-3">£68 (first property), £15 per additional</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Rent Smart Wales</td>
-                <td className="border p-3">Â£45 (registration), licensing varies</td>
+                <td className="border p-3">£45 (registration), licensing varies</td>
               </tr>
             </tbody>
           </table>
@@ -31619,9 +31619,9 @@ const allBlogPosts: BlogPost[] = [
         <h3>Additional Fees to Watch</h3>
 
         <ul>
-          <li><strong>Inventory fees</strong> - Â£75-200 for check-in inventory</li>
-          <li><strong>Check-out fees</strong> - Â£50-150</li>
-          <li><strong>Tenancy renewal fees</strong> - Â£50-150 per renewal</li>
+          <li><strong>Inventory fees</strong> - £75-200 for check-in inventory</li>
+          <li><strong>Check-out fees</strong> - £50-150</li>
+          <li><strong>Tenancy renewal fees</strong> - £50-150 per renewal</li>
           <li><strong>Property visit fees</strong> - some charge per inspection</li>
           <li><strong>Maintenance commission</strong> - mark-up on contractor costs</li>
           <li><strong>Court attendance fees</strong> - if eviction needed</li>
@@ -31939,20 +31939,20 @@ const allBlogPosts: BlogPost[] = [
         <h3>Example Void Cost</h3>
 
         <div className="bg-gray-50 rounded-lg p-6 my-6">
-          <p className="font-semibold mb-2">Property: 2-bed flat, Â£1,200/month rent</p>
+          <p className="font-semibold mb-2">Property: 2-bed flat, £1,200/month rent</p>
           <p className="text-gray-700">One month void:</p>
           <ul className="text-gray-600 mt-2">
-            <li>Lost rent: Â£1,200</li>
-            <li>Council tax: Â£150</li>
-            <li>Utilities: Â£80</li>
-            <li>Insurance uplift: Â£30</li>
-            <li><strong>Total: Â£1,460</strong></li>
+            <li>Lost rent: £1,200</li>
+            <li>Council tax: £150</li>
+            <li>Utilities: £80</li>
+            <li>Insurance uplift: £30</li>
+            <li><strong>Total: £1,460</strong></li>
           </ul>
         </div>
 
         <p>
           This demonstrates why even one extra week of void represents significant lost income.
-          Reducing void by just one week per year on this property saves around Â£365.
+          Reducing void by just one week per year on this property saves around £365.
         </p>
 
         <ImagePlaceholder
@@ -31996,7 +31996,7 @@ const allBlogPosts: BlogPost[] = [
         <ul>
           <li>Research local market regularly</li>
           <li>Price realistically - overpricing extends voids</li>
-          <li>Consider time value of money (Â£50 less rent vs 1 month void)</li>
+          <li>Consider time value of money (£50 less rent vs 1 month void)</li>
         </ul>
 
         <BlogCTA variant="inline" />
@@ -32157,9 +32157,9 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Should I reduce rent to fill a void quickly?</h3>
             <p className="text-gray-600">
-              Calculate the break-even point. If reducing rent by Â£50/month fills the
-              property 3 weeks faster, you save around Â£500 (3 weeks&apos; rent lost vs
-              Â£600/year reduction). Usually, quick letting at slightly lower rent beats
+              Calculate the break-even point. If reducing rent by £50/month fills the
+              property 3 weeks faster, you save around £500 (3 weeks&apos; rent lost vs
+              £600/year reduction). Usually, quick letting at slightly lower rent beats
               long voids at higher rent.
             </p>
           </div>
@@ -32464,8 +32464,8 @@ const allBlogPosts: BlogPost[] = [
         <h3>Pricing Psychology</h3>
 
         <ul>
-          <li>Price at exact figures tenants search (Â£1,000, Â£1,200, Â£1,500)</li>
-          <li>Consider Â£995 vs Â£1,000 - which search bracket does it appear in?</li>
+          <li>Price at exact figures tenants search (£1,000, £1,200, £1,500)</li>
+          <li>Consider £995 vs £1,000 - which search bracket does it appear in?</li>
           <li>Slightly below round numbers can increase visibility</li>
         </ul>
 
@@ -32556,7 +32556,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Should I use a professional photographer?</h3>
             <p className="text-gray-600">
-              For premium properties, professional photography (Â£100-200) often pays for
+              For premium properties, professional photography (£100-200) often pays for
               itself through faster lettings. For standard properties, good smartphone
               photos following proper techniques can work well.
             </p>
@@ -32861,7 +32861,7 @@ const allBlogPosts: BlogPost[] = [
                 <td className="border p-3">Flexible timing</td>
               </tr>
               <tr>
-                <td className="border p-3">Cost Â£80-150</td>
+                <td className="border p-3">Cost £80-150</td>
                 <td className="border p-3">Requires time and attention to detail</td>
               </tr>
             </tbody>
@@ -33072,7 +33072,7 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Membership Cost</td>
-                <td className="border p-3">From Â£89/year (2024 rates)</td>
+                <td className="border p-3">From £89/year (2024 rates)</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Advice Line</td>
@@ -33177,7 +33177,7 @@ const allBlogPosts: BlogPost[] = [
           <li>Networking with landlords in your area</li>
           <li>Relationships with local council housing teams</li>
           <li>Knowledge of local licensing requirements</li>
-          <li>Lower membership costs (often Â£20-50/year)</li>
+          <li>Lower membership costs (often £20-50/year)</li>
           <li>Regular local meetings and events</li>
         </ul>
 
@@ -33390,19 +33390,19 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Void period (3-4 weeks)</td>
-                <td className="border p-3">Â£750 - Â£1,500</td>
+                <td className="border p-3">£750 - £1,500</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Advertising and marketing</td>
-                <td className="border p-3">Â£100 - Â£300</td>
+                <td className="border p-3">£100 - £300</td>
               </tr>
               <tr>
                 <td className="border p-3">Referencing costs</td>
-                <td className="border p-3">Â£30 - Â£100</td>
+                <td className="border p-3">£30 - £100</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Cleaning and redecoration</td>
-                <td className="border p-3">Â£200 - Â£500</td>
+                <td className="border p-3">£200 - £500</td>
               </tr>
               <tr>
                 <td className="border p-3">Your time</td>
@@ -33410,14 +33410,14 @@ const allBlogPosts: BlogPost[] = [
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3"><strong>Total</strong></td>
-                <td className="border p-3"><strong>Â£1,080 - Â£2,400+</strong></td>
+                <td className="border p-3"><strong>£1,080 - £2,400+</strong></td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <p>
-          A tenant who stays five years versus annual turnover could save you Â£5,000-10,000
+          A tenant who stays five years versus annual turnover could save you £5,000-10,000
           in turnover costs alone, plus the value of consistent rental income.
         </p>
 
@@ -33564,8 +33564,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
           <h4 className="font-semibold text-amber-900 mb-2">Calculate the True Cost</h4>
           <p className="text-amber-800">
-            A Â£50/month increase yields Â£600/year. But if the tenant leaves and you
-            face a 4-week void, you&apos;ve lost Â£1,000+ in rent alone, plus costs.
+            A £50/month increase yields £600/year. But if the tenant leaves and you
+            face a 4-week void, you&apos;ve lost £1,000+ in rent alone, plus costs.
             Sometimes modest increases or none preserve more value than aggressive rises.
           </p>
         </div>
@@ -33639,7 +33639,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Should I offer incentives to stay?</h3>
             <p className="text-gray-600">
               For good tenants, yes. Calculate the cost of them leaving versus the
-              incentive cost. A new appliance or decoration refresh costing Â£500
+              incentive cost. A new appliance or decoration refresh costing £500
               is much cheaper than a void period plus finding new tenants.
             </p>
           </div>
@@ -33703,7 +33703,7 @@ const allBlogPosts: BlogPost[] = [
         <p className="lead">
           Right to Rent checks are a legal requirement for landlords in England. This
           guide explains how to conduct proper checks, which documents to accept, and
-          how to avoid civil penalties that can reach Â£20,000 per tenant in 2026.
+          how to avoid civil penalties that can reach £20,000 per tenant in 2026.
         </p>
 
         <ImagePlaceholder
@@ -33944,13 +33944,13 @@ const allBlogPosts: BlogPost[] = [
             <tbody>
               <tr>
                 <td className="border p-3">Lodger (in own home)</td>
-                <td className="border p-3">Up to Â£5,000</td>
-                <td className="border p-3">Up to Â£10,000</td>
+                <td className="border p-3">Up to £5,000</td>
+                <td className="border p-3">Up to £10,000</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="border p-3">Tenant (other property)</td>
-                <td className="border p-3">Up to Â£10,000</td>
-                <td className="border p-3">Up to Â£20,000</td>
+                <td className="border p-3">Up to £10,000</td>
+                <td className="border p-3">Up to £20,000</td>
               </tr>
             </tbody>
           </table>
@@ -34348,7 +34348,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">What are the penalties for non-compliance?</h3>
             <p className="text-gray-600">
               In England, local authorities can issue remedial notices. Failure to comply
-              can result in fines up to Â£5,000. More importantly, non-compliance risks
+              can result in fines up to £5,000. More importantly, non-compliance risks
               tenant safety and could lead to serious liability if incidents occur.
             </p>
           </div>
@@ -34453,7 +34453,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
           <h4 className="font-semibold text-red-900 mb-2">Penalties</h4>
           <p className="text-red-800">
-            In England, failing to comply can result in fines up to Â£30,000. Local
+            In England, failing to comply can result in fines up to £30,000. Local
             authorities can also arrange inspections themselves and charge the cost
             to the landlord.
           </p>
@@ -34655,7 +34655,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">How much does an EICR cost?</h3>
             <p className="text-gray-600">
-              Typical costs range from Â£100-250 depending on property size and location.
+              Typical costs range from £100-250 depending on property size and location.
               Larger properties with more circuits cost more. Always get quotes from
               registered electricians.
             </p>
@@ -34871,10 +34871,10 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gray-50 rounded-lg p-6 my-6">
           <p className="font-semibold mb-2">Example calculation:</p>
           <ul className="text-gray-600 mt-2">
-            <li>Unfurnished rent: Â£1,000/month</li>
-            <li>Furnished premium: Â£100/month (+10%)</li>
-            <li>Annual extra income: Â£1,200</li>
-            <li>Furniture cost: Â£3,000</li>
+            <li>Unfurnished rent: £1,000/month</li>
+            <li>Furnished premium: £100/month (+10%)</li>
+            <li>Annual extra income: £1,200</li>
+            <li>Furniture cost: £3,000</li>
             <li>Payback period: 2.5 years</li>
           </ul>
         </div>
@@ -35152,7 +35152,7 @@ const allBlogPosts: BlogPost[] = [
         <ol>
           <li>Check if licence required with local council</li>
           <li>Complete application form</li>
-          <li>Pay application fee (typically Â£500-1,500)</li>
+          <li>Pay application fee (typically £500-1,500)</li>
           <li>Property inspection arranged</li>
           <li>Fit and proper person test</li>
           <li>Licence issued (usually 5 years)</li>
@@ -35516,7 +35516,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6">
           <p className="font-semibold text-amber-900">Licensing Warning</p>
           <p className="text-amber-800">
-            Operating an unlicensed HMO can result in fines up to Â£30,000, rent repayment
+            Operating an unlicensed HMO can result in fines up to £30,000, rent repayment
             orders, and inability to serve Section 21 notices. Always verify licensing
             requirements with your local council.
           </p>
@@ -36061,7 +36061,7 @@ const allBlogPosts: BlogPost[] = [
               </tr>
               <tr>
                 <td className="border border-gray-200 px-4 py-2">Fees</td>
-                <td className="border border-gray-200 px-4 py-2">Vary by council, typically Â£200-500</td>
+                <td className="border border-gray-200 px-4 py-2">Vary by council, typically £200-500</td>
               </tr>
             </tbody>
           </table>
@@ -36122,7 +36122,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Holiday accommodation is subject to VAT if your total taxable turnover exceeds
-          Â£90,000. This affects pricing and potentially makes your offering less competitive
+          £90,000. This affects pricing and potentially makes your offering less competitive
           compared to non-VAT registered operators.
         </p>
 
@@ -36200,7 +36200,7 @@ const allBlogPosts: BlogPost[] = [
               <tr>
                 <td className="border border-gray-200 px-4 py-2">Public liability</td>
                 <td className="border border-gray-200 px-4 py-2">Guest injury claims</td>
-                <td className="border border-gray-200 px-4 py-2">Â£2-5 million</td>
+                <td className="border border-gray-200 px-4 py-2">£2-5 million</td>
               </tr>
               <tr>
                 <td className="border border-gray-200 px-4 py-2">Buildings</td>
@@ -37375,7 +37375,7 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           Before you can take a tenant to court for unpaid rent or other debts, you must send a
-          <strong> Letter Before Action (LBA)</strong>. This isn&apos;t just good practiceâ€”it&apos;s a legal
+          <strong> Letter Before Action (LBA)</strong>. This isn&apos;t just good practice—it&apos;s a legal
           requirement under the Pre-Action Protocol for Debt Claims. Get it wrong, and the court may
           penalise you on costs even if you win.
         </p>
@@ -37473,10 +37473,10 @@ const allBlogPosts: BlogPost[] = [
             [property address] under the assured shorthold tenancy agreement dated [date].
           </p>
           <p className="mb-4"><strong>Amount Owed:</strong></p>
-          <p className="mb-2">Unpaid rent ([dates]): Â£[amount]</p>
-          <p className="mb-2">Damage to property: Â£[amount]</p>
-          <p className="mb-2">Interest at 8% per annum: Â£[amount]</p>
-          <p className="mb-4"><strong>Total: Â£[total]</strong></p>
+          <p className="mb-2">Unpaid rent ([dates]): £[amount]</p>
+          <p className="mb-2">Damage to property: £[amount]</p>
+          <p className="mb-2">Interest at 8% per annum: £[amount]</p>
+          <p className="mb-4"><strong>Total: £[total]</strong></p>
           <p className="mb-4">
             [Explanation of how debt arose and evidence you hold]
           </p>
@@ -37507,7 +37507,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           The 30-day response period starts from when they receive the letter (or when it&apos;s deemed
-          deliveredâ€”typically 2 business days after posting).
+          delivered—typically 2 business days after posting).
         </p>
 
         <h2 id="after-sending" className="scroll-mt-24">What Happens After Sending the LBA</h2>
@@ -37520,7 +37520,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
             <h4 className="font-semibold text-green-900 mb-2">Best Case: They Pay</h4>
             <p className="text-green-800 text-sm">
-              The tenant pays in full. Matter resolvedâ€”no court needed.
+              The tenant pays in full. Matter resolved—no court needed.
             </p>
           </div>
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
@@ -37590,7 +37590,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor to send an LBA?</h3>
             <p className="text-gray-600">
               No. Landlords can send Letters Before Action themselves. The letter doesn&apos;t need
-              to be from a solicitor to be validâ€”it just needs to contain the required information.
+              to be from a solicitor to be valid—it just needs to contain the required information.
             </p>
           </div>
         </div>
@@ -37635,7 +37635,7 @@ const allBlogPosts: BlogPost[] = [
         <p className="text-xl text-gray-700 leading-relaxed">
           A <strong>County Court Judgment (CCJ)</strong> is a court order confirming that someone owes you
           money. For landlords, getting a CCJ against a tenant is the first step in legally recovering
-          unpaid rent, damage costs, or other debts. But a CCJ alone doesn&apos;t put money in your pocketâ€”
+          unpaid rent, damage costs, or other debts. But a CCJ alone doesn&apos;t put money in your pocket—
           you may need to take enforcement action too.
         </p>
 
@@ -37687,7 +37687,7 @@ const allBlogPosts: BlogPost[] = [
         </ol>
 
         <p>
-          The easiest route is when the tenant doesn&apos;t respond to your claim at allâ€”you can then
+          The easiest route is when the tenant doesn&apos;t respond to your claim at all—you can then
           request &quot;default judgment&quot; without a hearing.
         </p>
 
@@ -37721,31 +37721,31 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-2">Warrant of Control</h4>
             <p className="text-gray-600 text-sm">
-              Bailiffs seize and sell the debtor&apos;s goods. Fee: Â£77
+              Bailiffs seize and sell the debtor&apos;s goods. Fee: £77
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-2">Attachment of Earnings</h4>
             <p className="text-gray-600 text-sm">
-              Money deducted from wages. Fee: Â£110
+              Money deducted from wages. Fee: £110
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-2">Third Party Debt Order</h4>
             <p className="text-gray-600 text-sm">
-              Freeze and seize bank accounts. Fee: Â£110
+              Freeze and seize bank accounts. Fee: £110
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-2">Charging Order</h4>
             <p className="text-gray-600 text-sm">
-              Secure debt against their property. Fee: Â£119
+              Secure debt against their property. Fee: £119
             </p>
           </div>
         </div>
 
         <p>
-          For debts over Â£600, you can also transfer to High Court and use High Court Enforcement
+          For debts over £600, you can also transfer to High Court and use High Court Enforcement
           Officers (HCEOs), who are often more effective than county court bailiffs.
         </p>
 
@@ -37856,7 +37856,7 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          When a tenant owes you money, you&apos;re not just entitled to the original debtâ€”you can also
+          When a tenant owes you money, you&apos;re not just entitled to the original debt—you can also
           claim <strong>interest</strong> on top. This compensates you for being kept out of your money
           and adds a meaningful amount to your claim, especially for older debts.
         </p>
@@ -37928,42 +37928,42 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gray-50 rounded-lg p-6 my-6">
           <h3 className="font-semibold text-gray-900 mb-4">Example 1: Simple Rent Arrears</h3>
           <p className="text-gray-700 mb-2">
-            Tenant owes Â£2,000 rent. Debt became due 180 days ago.
+            Tenant owes £2,000 rent. Debt became due 180 days ago.
           </p>
           <p className="font-mono text-gray-600">
-            Interest = (Â£2,000 Ã— 0.08 Ã— 180) - 365 = <strong>Â£78.90</strong>
+            Interest = (£2,000 × 0.08 × 180) - 365 = <strong>£78.90</strong>
           </p>
         </div>
 
         <div className="bg-gray-50 rounded-lg p-6 my-6">
           <h3 className="font-semibold text-gray-900 mb-4">Example 2: Multiple Debts</h3>
           <p className="text-gray-700 mb-2">
-            Tenant owes Â£1,500 rent (due 120 days ago) + Â£800 damage (due 90 days ago).
+            Tenant owes £1,500 rent (due 120 days ago) + £800 damage (due 90 days ago).
           </p>
           <p className="font-mono text-gray-600 mb-2">
-            Rent interest = (Â£1,500 Ã— 0.08 Ã— 120) - 365 = Â£39.45
+            Rent interest = (£1,500 × 0.08 × 120) - 365 = £39.45
           </p>
           <p className="font-mono text-gray-600 mb-2">
-            Damage interest = (Â£800 Ã— 0.08 Ã— 90) - 365 = Â£15.78
+            Damage interest = (£800 × 0.08 × 90) - 365 = £15.78
           </p>
           <p className="font-mono text-gray-600">
-            Total interest = <strong>Â£55.23</strong>
+            Total interest = <strong>£55.23</strong>
           </p>
         </div>
 
         <div className="bg-gray-50 rounded-lg p-6 my-6">
           <h3 className="font-semibold text-gray-900 mb-4">Example 3: Older Debt</h3>
           <p className="text-gray-700 mb-2">
-            Tenant owes Â£3,500. Debt became due 2 years (730 days) ago.
+            Tenant owes £3,500. Debt became due 2 years (730 days) ago.
           </p>
           <p className="font-mono text-gray-600">
-            Interest = (Â£3,500 Ã— 0.08 Ã— 730) - 365 = <strong>Â£560.00</strong>
+            Interest = (£3,500 × 0.08 × 730) - 365 = <strong>£560.00</strong>
           </p>
         </div>
 
         <p>
-          As you can see, interest adds up significantly on older debts. A 2-year-old Â£3,500 debt
-          attracts Â£560 in interest alone.
+          As you can see, interest adds up significantly on older debts. A 2-year-old £3,500 debt
+          attracts £560 in interest alone.
         </p>
 
         <h2 id="including-in-claim" className="scroll-mt-24">Including Interest in Your Claim</h2>
@@ -38014,7 +38014,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Do I have to claim interest?</h3>
             <p className="text-gray-600">
-              No, it&apos;s optional. But there&apos;s no reason not toâ€”it&apos;s money you&apos;re legally entitled
+              No, it&apos;s optional. But there&apos;s no reason not to—it&apos;s money you&apos;re legally entitled
               to and adds to the pressure on the debtor to pay.
             </p>
           </div>
@@ -38090,7 +38090,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           Most landlord claims are undefended. Tenants who owe money often don&apos;t respond to court
-          claimsâ€”either because they have no defence or can&apos;t be bothered. This makes the process
+          claims—either because they have no defence or can&apos;t be bothered. This makes the process
           relatively quick.
         </p>
 
@@ -38157,7 +38157,7 @@ const allBlogPosts: BlogPost[] = [
         <ul>
           <li><strong>Defence filed:</strong> Claim transferred to local court</li>
           <li><strong>Directions questionnaire:</strong> Both parties complete (14 days)</li>
-          <li><strong>Allocation:</strong> Court decides track (small claims under Â£10k)</li>
+          <li><strong>Allocation:</strong> Court decides track (small claims under £10k)</li>
           <li><strong>Hearing date:</strong> Set 4-12 weeks in future</li>
           <li><strong>Hearing:</strong> Both parties attend, judge decides</li>
         </ul>
@@ -38184,7 +38184,7 @@ const allBlogPosts: BlogPost[] = [
         <h2 id="speeding-up" className="scroll-mt-24">Tips for Speeding Up the Process</h2>
 
         <ul>
-          <li>Send your LBA promptlyâ€”don&apos;t wait months after the debt arises</li>
+          <li>Send your LBA promptly—don&apos;t wait months after the debt arises</li>
           <li>Use MCOL rather than paper forms (faster processing)</li>
           <li>Ensure all details are correct to avoid delays</li>
           <li>Monitor your claim and respond quickly to any court requests</li>
@@ -38195,7 +38195,7 @@ const allBlogPosts: BlogPost[] = [
           <h3 className="font-semibold text-gray-900 mb-2">Get Your Documents Quickly</h3>
           <p className="text-gray-700 mb-4">
             Our Money Claim Pack generates your Letter Before Action and Particulars of Claim
-            in minutesâ€”no waiting for solicitors.
+            in minutes—no waiting for solicitors.
           </p>
           <Link
             href="/products/money-claim?src=blog_mcol_timeline"
@@ -38228,7 +38228,7 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Is High Court enforcement faster?</h3>
             <p className="text-gray-600">
               Often yes. High Court Enforcement Officers work on commission and typically act faster
-              than county court bailiffs. Available for debts over Â£600.
+              than county court bailiffs. Available for debts over £600.
             </p>
           </div>
         </div>
@@ -38273,7 +38273,7 @@ const allBlogPosts: BlogPost[] = [
         <p className="text-xl text-gray-700 leading-relaxed">
           A <strong>guarantor</strong> is someone who agrees to pay the tenant&apos;s rent and other
           obligations if the tenant can&apos;t. For landlords, having a guarantor provides crucial
-          backupâ€”especially for tenants with limited credit history or lower incomes. But when should
+          backup—especially for tenants with limited credit history or lower incomes. But when should
           you require one, and how do you enforce the guarantee if needed?
         </p>
 
@@ -38305,27 +38305,27 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
             <h4 className="font-semibold text-amber-900 mb-2">Financial Risk Indicators</h4>
             <ul className="text-amber-800 text-sm space-y-1">
-              <li>â€¢ First-time renter with no history</li>
-              <li>â€¢ Student or young professional</li>
-              <li>â€¢ Low or irregular income</li>
-              <li>â€¢ Failed credit checks</li>
-              <li>â€¢ Self-employed with variable earnings</li>
+              <li>• First-time renter with no history</li>
+              <li>• Student or young professional</li>
+              <li>• Low or irregular income</li>
+              <li>• Failed credit checks</li>
+              <li>• Self-employed with variable earnings</li>
             </ul>
           </div>
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <h4 className="font-semibold text-blue-900 mb-2">Situational Factors</h4>
             <ul className="text-blue-800 text-sm space-y-1">
-              <li>â€¢ New to the country</li>
-              <li>â€¢ Recently changed jobs</li>
-              <li>â€¢ Rent is high relative to income</li>
-              <li>â€¢ Previous CCJs (but otherwise acceptable)</li>
-              <li>â€¢ Benefits recipient</li>
+              <li>• New to the country</li>
+              <li>• Recently changed jobs</li>
+              <li>• Rent is high relative to income</li>
+              <li>• Previous CCJs (but otherwise acceptable)</li>
+              <li>• Benefits recipient</li>
             </ul>
           </div>
         </div>
 
         <p>
-          A guarantor doesn&apos;t make a bad tenant goodâ€”but it does give you someone to claim from if
+          A guarantor doesn&apos;t make a bad tenant good—but it does give you someone to claim from if
           things go wrong.
         </p>
 
@@ -38402,7 +38402,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-2">&quot;The guarantee has expired&quot;</h4>
             <p className="text-gray-600 text-sm">
-              Some guarantees are limited to an initial fixed term. Check your guarantee wordingâ€”
+              Some guarantees are limited to an initial fixed term. Check your guarantee wording—
               ideally, it should cover &quot;the tenancy and any statutory periodic continuation.&quot;
             </p>
           </div>
@@ -38443,7 +38443,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can the guarantor end their guarantee?</h3>
             <p className="text-gray-600">
-              Generally noâ€”not unilaterally. The guarantee lasts for the period specified (or the
+              Generally no—not unilaterally. The guarantee lasts for the period specified (or the
               whole tenancy if not specified). They can&apos;t simply withdraw.
             </p>
           </div>
@@ -38533,19 +38533,19 @@ const allBlogPosts: BlogPost[] = [
             <div>
               <p className="font-medium text-gray-700">End of tenancy clean:</p>
               <ul className="text-gray-600">
-                <li>â€¢ 1-bed flat: Â£150-250</li>
-                <li>â€¢ 2-bed flat/house: Â£200-350</li>
-                <li>â€¢ 3-bed house: Â£300-450</li>
-                <li>â€¢ 4+ bed house: Â£400-600+</li>
+                <li>• 1-bed flat: £150-250</li>
+                <li>• 2-bed flat/house: £200-350</li>
+                <li>• 3-bed house: £300-450</li>
+                <li>• 4+ bed house: £400-600+</li>
               </ul>
             </div>
             <div>
               <p className="font-medium text-gray-700">Additional items:</p>
               <ul className="text-gray-600">
-                <li>â€¢ Oven deep clean: Â£40-80</li>
-                <li>â€¢ Carpet cleaning: Â£25-40 per room</li>
-                <li>â€¢ Window cleaning: Â£30-60</li>
-                <li>â€¢ Garden clearance: Variable</li>
+                <li>• Oven deep clean: £40-80</li>
+                <li>• Carpet cleaning: £25-40 per room</li>
+                <li>• Window cleaning: £30-60</li>
+                <li>• Garden clearance: Variable</li>
               </ul>
             </div>
           </div>
@@ -38598,7 +38598,7 @@ const allBlogPosts: BlogPost[] = [
         </ol>
 
         <p>
-          Most landlords use the first approachâ€”resolve the deposit dispute first, then claim the
+          Most landlords use the first approach—resolve the deposit dispute first, then claim the
           balance through court.
         </p>
 
@@ -38711,7 +38711,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           <strong>Fair wear and tear</strong> is the natural deterioration that occurs through normal,
-          everyday use of a property. It&apos;s what happens when people simply live in a homeâ€”things
+          everyday use of a property. It&apos;s what happens when people simply live in a home—things
           gradually age and show signs of use.
         </p>
 
@@ -38793,10 +38793,10 @@ const allBlogPosts: BlogPost[] = [
             Many deposit schemes use expected lifespans to assess claims. For example:
           </p>
           <ul className="text-gray-600 text-sm space-y-1">
-            <li>â€¢ Carpet: 8-10 years</li>
-            <li>â€¢ Interior paint: 3-5 years</li>
-            <li>â€¢ Appliances: 5-10 years depending on type</li>
-            <li>â€¢ Wooden flooring: 15-20 years</li>
+            <li>• Carpet: 8-10 years</li>
+            <li>• Interior paint: 3-5 years</li>
+            <li>• Appliances: 5-10 years depending on type</li>
+            <li>• Wooden flooring: 15-20 years</li>
           </ul>
           <p className="text-gray-700 mt-3">
             If the item was already 80% through its lifespan, you can only claim 20% of replacement
@@ -38808,20 +38808,20 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           When claiming for damage, you should use a <strong>betterment</strong> calculation. You can&apos;t
-          claim for new-for-oldâ€”only the remaining value that was lost.
+          claim for new-for-old—only the remaining value that was lost.
         </p>
 
         <div className="bg-white border border-gray-200 rounded-lg p-6 my-6">
           <h4 className="font-semibold text-gray-900 mb-3">Example Calculation</h4>
           <p className="text-gray-600 mb-3">
-            Carpet damaged after 4 years of tenancy. Original cost: Â£800. Expected lifespan: 10 years.
+            Carpet damaged after 4 years of tenancy. Original cost: £800. Expected lifespan: 10 years.
           </p>
           <div className="font-mono text-sm bg-gray-50 p-4 rounded">
             <p>Remaining lifespan: 6 years out of 10 = 60%</p>
-            <p>Claimable amount: Â£800 Ã— 60% = <strong>Â£480</strong></p>
+            <p>Claimable amount: £800 × 60% = <strong>£480</strong></p>
           </div>
           <p className="text-gray-500 text-sm mt-3">
-            You cannot claim the full Â£800 because the carpet had already been used for 4 years.
+            You cannot claim the full £800 because the carpet had already been used for 4 years.
           </p>
         </div>
 
@@ -38946,7 +38946,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r-lg">
           <p className="text-amber-900 text-sm">
             <strong>Protocol requirement:</strong> If you reject a reasonable payment plan and later
-            go to court, the judge may penalise you on costsâ€”even if you win the case.
+            go to court, the judge may penalise you on costs—even if you win the case.
           </p>
         </div>
 
@@ -38965,8 +38965,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-green-50 rounded-lg p-6 my-6 border border-green-200">
           <h3 className="font-semibold text-green-900 mb-2">Example: Reasonable Offer</h3>
           <p className="text-green-800">
-            Debt: Â£2,000<br />
-            Offer: Â£150/month<br />
+            Debt: £2,000<br />
+            Offer: £150/month<br />
             Cleared in: 13-14 months<br />
             <strong>Verdict: Consider accepting</strong> - reasonable timeframe
           </p>
@@ -38977,7 +38977,7 @@ const allBlogPosts: BlogPost[] = [
         <p>Consider rejecting when:</p>
 
         <ul>
-          <li><strong>The offer is derisory</strong> - Â£10/month for a Â£5,000 debt</li>
+          <li><strong>The offer is derisory</strong> - £10/month for a £5,000 debt</li>
           <li><strong>It would take too long</strong> - 5+ years to clear</li>
           <li><strong>They have ability to pay more</strong> - You know their financial position</li>
           <li><strong>They&apos;ve broken promises before</strong> - Previous failed payment plans</li>
@@ -38987,8 +38987,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-red-50 rounded-lg p-6 my-6 border border-red-200">
           <h3 className="font-semibold text-red-900 mb-2">Example: Unreasonable Offer</h3>
           <p className="text-red-800">
-            Debt: Â£4,000<br />
-            Offer: Â£25/month<br />
+            Debt: £4,000<br />
+            Offer: £25/month<br />
             Cleared in: 13+ years<br />
             <strong>Verdict: Reject</strong> - unreasonable timeframe
           </p>
@@ -39009,8 +39009,8 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gray-50 rounded-lg p-6 my-6">
           <h3 className="font-semibold text-gray-900 mb-3">Sample Payment Plan Terms</h3>
           <p className="text-gray-600 text-sm">
-            &quot;I agree to pay Â£[amount] on the [date] of each month starting [date], until the
-            total debt of Â£[total] plus interest is cleared. If I miss any payment, the full
+            &quot;I agree to pay £[amount] on the [date] of each month starting [date], until the
+            total debt of £[total] plus interest is cleared. If I miss any payment, the full
             balance becomes due immediately and you may proceed with court action without
             further notice.&quot;
           </p>
@@ -39030,7 +39030,7 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          You don&apos;t need to send another full Letter Before Actionâ€”you can proceed straight
+          You don&apos;t need to send another full Letter Before Action—you can proceed straight
           to court if they&apos;ve already acknowledged the debt and then defaulted.
         </p>
 
@@ -39062,14 +39062,14 @@ const allBlogPosts: BlogPost[] = [
             <h3 className="font-semibold text-gray-900 mb-2">Should I charge interest on the payment plan?</h3>
             <p className="text-gray-600">
               You can include accrued interest in the total owed. Whether to add ongoing interest
-              is up to youâ€”it may complicate the arrangement but compensates for delayed payment.
+              is up to you—it may complicate the arrangement but compensates for delayed payment.
             </p>
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">What if they offer a partial settlement?</h3>
             <p className="text-gray-600">
-              A lump sum for less than owed? Consider the alternativeâ€”court costs, enforcement
+              A lump sum for less than owed? Consider the alternative—court costs, enforcement
               costs, and risk of recovering nothing. Sometimes 70% now beats 100% never.
             </p>
           </div>
@@ -39115,21 +39115,21 @@ const allBlogPosts: BlogPost[] = [
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
           If your tenant defends your money claim, you may end up at a small claims hearing. Don&apos;t
-          worryâ€”small claims court is designed for ordinary people without lawyers. With good preparation,
+          worry—small claims court is designed for ordinary people without lawyers. With good preparation,
           you can present your case effectively and win.
         </p>
 
         <h2 id="overview" className="scroll-mt-24">Understanding the Small Claims Track</h2>
 
         <p>
-          Claims up to Â£10,000 are usually allocated to the <strong>small claims track</strong>. This
+          Claims up to £10,000 are usually allocated to the <strong>small claims track</strong>. This
           means:
         </p>
 
         <ul>
-          <li>Informal hearingâ€”no wigs, gowns, or legal jargon</li>
+          <li>Informal hearing—no wigs, gowns, or legal jargon</li>
           <li>You can represent yourself (most people do)</li>
-          <li>Limited costs recoveryâ€”even if you win</li>
+          <li>Limited costs recovery—even if you win</li>
           <li>Judge actively helps both sides present their case</li>
           <li>Usually decided on the day</li>
         </ul>
@@ -39231,12 +39231,12 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-green-50 rounded-lg p-6 my-6 border border-green-200">
           <h3 className="font-semibold text-green-900 mb-2">Tips for Speaking</h3>
           <ul className="text-green-800 text-sm space-y-1">
-            <li>â€¢ Speak slowly and clearly</li>
-            <li>â€¢ Address the judge as &quot;Sir&quot; or &quot;Madam&quot; (or &quot;Judge&quot;)</li>
-            <li>â€¢ Stick to facts, not emotions</li>
-            <li>â€¢ Refer to page numbers in your bundle</li>
-            <li>â€¢ If you don&apos;t understand something, ask</li>
-            <li>â€¢ Stay calm even if the tenant says untrue things</li>
+            <li>• Speak slowly and clearly</li>
+            <li>• Address the judge as &quot;Sir&quot; or &quot;Madam&quot; (or &quot;Judge&quot;)</li>
+            <li>• Stick to facts, not emotions</li>
+            <li>• Refer to page numbers in your bundle</li>
+            <li>• If you don&apos;t understand something, ask</li>
+            <li>• Stay calm even if the tenant says untrue things</li>
           </ul>
         </div>
 
@@ -39262,7 +39262,7 @@ const allBlogPosts: BlogPost[] = [
           <h3 className="font-semibold text-gray-900 mb-2">Need Court Documents?</h3>
           <p className="text-gray-700 mb-4">
             Our Money Claim Pack generates professional Particulars of Claim that clearly set
-            out your caseâ€”essential for court.
+            out your case—essential for court.
           </p>
           <Link
             href="/products/money-claim?src=blog_small_claims"
@@ -39339,7 +39339,7 @@ const allBlogPosts: BlogPost[] = [
     content: (
       <>
         <p className="text-xl text-gray-700 leading-relaxed">
-          When a tenant owes you money and won&apos;t pay, it&apos;s frustratingâ€”but there&apos;s a clear
+          When a tenant owes you money and won&apos;t pay, it&apos;s frustrating—but there&apos;s a clear
           legal path to recover what you&apos;re owed. This guide walks you through every step, from
           initial contact to enforcing a court judgment.
         </p>
@@ -39372,7 +39372,7 @@ const allBlogPosts: BlogPost[] = [
           <p className="text-amber-900 text-sm">
             <strong>Reality check:</strong> If the tenant has no job, no assets, and no guarantor,
             even a CCJ won&apos;t produce immediate payment. Consider whether it&apos;s worth the court
-            feesâ€”though a CCJ does last 6 years and damages their credit.
+            fees—though a CCJ does last 6 years and damages their credit.
           </p>
         </div>
 
@@ -39409,7 +39409,7 @@ const allBlogPosts: BlogPost[] = [
         </ul>
 
         <p>
-          This isn&apos;t the formal Letter Before Action yetâ€”it&apos;s a last chance before you start
+          This isn&apos;t the formal Letter Before Action yet—it&apos;s a last chance before you start
           the legal process.
         </p>
 
@@ -39449,19 +39449,19 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <h4 className="font-semibold text-blue-900 mb-2">Money Claim Online (MCOL)</h4>
             <ul className="text-blue-800 text-sm space-y-1">
-              <li>â€¢ Faster processing</li>
-              <li>â€¢ Slightly lower fees</li>
-              <li>â€¢ Online tracking</li>
-              <li>â€¢ Best for straightforward claims</li>
+              <li>• Faster processing</li>
+              <li>• Slightly lower fees</li>
+              <li>• Online tracking</li>
+              <li>• Best for straightforward claims</li>
             </ul>
           </div>
           <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
             <h4 className="font-semibold text-purple-900 mb-2">Paper Form N1</h4>
             <ul className="text-purple-800 text-sm space-y-1">
-              <li>â€¢ No character limits</li>
-              <li>â€¢ Attach documents</li>
-              <li>â€¢ Complex claims</li>
-              <li>â€¢ Prefer paper processes</li>
+              <li>• No character limits</li>
+              <li>• Attach documents</li>
+              <li>• Complex claims</li>
+              <li>• Prefer paper processes</li>
             </ul>
           </div>
         </div>
@@ -39478,11 +39478,11 @@ const allBlogPosts: BlogPost[] = [
         </p>
 
         <ul>
-          <li><strong>Warrant of Control</strong> - Bailiffs seize goods (Â£77)</li>
-          <li><strong>Attachment of Earnings</strong> - Deductions from wages (Â£110)</li>
-          <li><strong>Third Party Debt Order</strong> - Freeze bank account (Â£110)</li>
-          <li><strong>Charging Order</strong> - Secure against property (Â£119)</li>
-          <li><strong>High Court Enforcement</strong> - For debts over Â£600</li>
+          <li><strong>Warrant of Control</strong> - Bailiffs seize goods (£77)</li>
+          <li><strong>Attachment of Earnings</strong> - Deductions from wages (£110)</li>
+          <li><strong>Third Party Debt Order</strong> - Freeze bank account (£110)</li>
+          <li><strong>Charging Order</strong> - Secure against property (£119)</li>
+          <li><strong>High Court Enforcement</strong> - For debts over £600</li>
         </ul>
 
         <p>
@@ -39529,7 +39529,7 @@ const allBlogPosts: BlogPost[] = [
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-2">Can I claim for my time spent on this?</h3>
             <p className="text-gray-600">
-              Generally no. You can claim the debt, interest, and court feesâ€”but not
+              Generally no. You can claim the debt, interest, and court fees—but not
               compensation for your time unless there&apos;s a contractual basis.
             </p>
           </div>

@@ -12,6 +12,24 @@ const retiredPublicRedirects = Object.entries(retiredPublicRoutes.routeRedirects
     permanent: true,
   })
 );
+const section8GroundRedirects = [
+  '1',
+  '1a',
+  '2',
+  '7a',
+  '8',
+  '10',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '17',
+].map((ground) => ({
+  source: `/how-to-evict-a-tenant-using-ground-${ground}`,
+  destination: `/section-8-grounds/how-to-evict-a-tenant-using-ground-${ground}`,
+  permanent: true,
+}));
 const apiStaticImageTraceExcludes = [
   './public/images/wizard-icons/**/*',
   './public/images/blog/**/*',
@@ -57,6 +75,12 @@ const nextConfig = {
   async redirects() {
     return [
       ...retiredPublicRedirects,
+      ...section8GroundRedirects,
+      {
+        source: '/evict-tenant-landlord-moving-back-in',
+        destination: '/section-8-grounds/how-to-evict-a-tenant-using-ground-1',
+        permanent: true,
+      },
       // Legacy/old URLs that were indexed by search engines
 
       // NOTE: /section-21-vs-section-8 is now an active SEO landing page route.
