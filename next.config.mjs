@@ -23,6 +23,7 @@ const apiStaticImageTraceExcludes = [
   './public/images/eviction owl.png',
   './public/images/herobg.png',
   './public/images/heromascot.png',
+  './public/checklists/**/*',
 ];
 
 const nextConfig = {
@@ -414,6 +415,7 @@ const nextConfig = {
   devIndicators: false,
   outputFileTracingExcludes: {
     '/app/api/**': apiStaticImageTraceExcludes,
+    '/money-claim': apiStaticImageTraceExcludes,
     '/api/admin/test-artifacts/**': ['artifacts/**/*'],
     '/api/admin/test-artifacts/complete-pack/england/section21': ['artifacts/**/*'],
     '/api/admin/test-artifacts/complete-pack/england/section8': ['artifacts/**/*'],
