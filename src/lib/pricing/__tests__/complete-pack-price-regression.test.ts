@@ -16,11 +16,11 @@ const CORE_PRICE_EXPECTATIONS: Record<
   >,
   { amount: number; display: string; pence: number }
 > = {
-  notice_only: { amount: 39.99, display: '£39.99', pence: 3999 },
-  complete_pack: { amount: 89.99, display: '£89.99', pence: 8999 },
-  money_claim: { amount: 49.99, display: '£49.99', pence: 4999 },
-  section13_standard: { amount: 29.99, display: '£29.99', pence: 2999 },
-  section13_defensive: { amount: 49.99, display: '£49.99', pence: 4999 },
+  notice_only: { amount: 29.99, display: '£29.99', pence: 2999 },
+  complete_pack: { amount: 59.99, display: '£59.99', pence: 5999 },
+  money_claim: { amount: 28.99, display: '£28.99', pence: 2899 },
+  section13_standard: { amount: 17.99, display: '£17.99', pence: 1799 },
+  section13_defensive: { amount: 27.99, display: '£27.99', pence: 2799 },
   ast_standard: { amount: 14.99, display: '£14.99', pence: 1499 },
   ast_premium: { amount: 24.99, display: '£24.99', pence: 2499 },
 };
@@ -100,20 +100,22 @@ describe('Pricing regression checks', () => {
   it('charges only the current price difference for notice_only to complete_pack upgrades', () => {
     const upgradeAmount = getProductUpgradeAmount('notice_only', 'complete_pack');
 
-    expect(upgradeAmount).toBe(50);
-    expect(Math.round((upgradeAmount ?? 0) * 100)).toBe(5000);
+    expect(upgradeAmount).toBe(30);
+    expect(Math.round((upgradeAmount ?? 0) * 100)).toBe(3000);
   });
 
   it('has no stale pricing copy on user-facing paths', () => {
     const staleHits: string[] = [];
     const staleRules: Array<{ label: string; pattern: RegExp }> = [
-      { label: 'Notice Only £29.99', pattern: /(Section\s*21|Section\s*8|Notice\s+Only|Eviction Notice)[^\n£]{0,120}£29\.99/i },
       { label: 'Notice Only £49.99', pattern: /(Section\s*21|Section\s*8|Notice\s+Only|Eviction Notice)[^\n£]{0,120}£49\.99/i },
       { label: 'Complete Pack £49.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£49\.99/i },
       { label: 'Complete Pack £99.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£99\.99/i },
       { label: 'Notice Only £19.99', pattern: /(Section\s*21|Section\s*8|Notice\s+Only|Eviction Notice)[^\n£]{0,120}£19\.99/i },
       { label: 'Notice Only £24.99', pattern: /(Section\s*21|Section\s*8|Notice\s+Only|Eviction Notice)[^\n£]{0,120}£24\.99/i },
-      { label: 'Complete Pack £59.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£59\.99/i },
+      { label: 'Complete Pack £89.99', pattern: /Complete(?: Eviction)? Pack[^\n£]{0,120}£89\.99/i },
+      { label: 'Money Claim £49.99', pattern: /Money Claim(?:s)?[^\n£]{0,120}£49\.99/i },
+      { label: 'Section 13 Standard £29.99', pattern: /Standard Section 13(?: Pack)?[^\n£]{0,120}£29\.99/i },
+      { label: 'Section 13 Defence £49.99', pattern: /Section 13 Defence(?: Pack)?[^\n£]{0,120}£49\.99/i },
       { label: 'Section 13 Standard £19.99', pattern: /Standard Section 13(?: Pack)?[^\n£]{0,120}£19\.99/i },
       { label: 'Section 13 Defence £34.99', pattern: /Section 13 Defence(?: Pack)?[^\n£]{0,120}£34\.99/i },
       { label: 'Money Claim £59.99', pattern: /Money Claim(?:s)?[^\n£]{0,120}£59\.99/i },

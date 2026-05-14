@@ -15,19 +15,19 @@ export const PRODUCT_OWNER_METADATA = {
   },
   moneyClaim: {
     path: '/products/money-claim',
-    title: 'Money Claim Online Pack | Recover Rent Arrears | £49.99',
+    title: `Money Claim Online Pack | Recover Rent Arrears | ${SEO_PRICES.moneyClaim.display}`,
     description:
       'Recover rent arrears with our solicitor-approved Money Claim pack. Includes letter before claim and particulars of claim. 4.8/5. Download now.',
   },
   section13Standard: {
     path: '/products/section-13-standard',
-    title: 'Section 13 Notice Form 4A | Rent Increase Pack | £29.99',
+    title: `Section 13 Notice Form 4A | Rent Increase Pack | ${SEO_PRICES.section13Standard.display}`,
     description:
       'Use our Form 4A generator for a Section 13 rent increase. Solicitor-approved, validated notice with market evidence. 4.8/5. Instant PDF download.',
   },
   section13Defence: {
     path: '/products/section-13-defence',
-    title: 'Section 13 Tribunal Defence Pack | Rent Challenge | £49.99',
+    title: `Section 13 Tribunal Defence Pack | Rent Challenge | ${SEO_PRICES.section13Defensive.display}`,
     description:
       'Defend a challenged rent increase with our tribunal-ready Section 13 Defence pack. Solicitor-approved evidence templates and checklist. 4.8/5.',
   },

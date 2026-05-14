@@ -84,9 +84,9 @@ describe('pdf-safe-text utility', () => {
 
     test('preserves extended WinAnsi characters (£, €, etc.)', () => {
       // £ is at 0xA3 in WinAnsi, should be preserved
-      const input = 'Price: £39.99';
+      const input = 'Price: £12.34';
       const output = toWinAnsiSafeText(input);
-      expect(output).toBe('Price: £39.99');
+      expect(output).toBe('Price: £12.34');
     });
 
     test('handles null and undefined gracefully', () => {

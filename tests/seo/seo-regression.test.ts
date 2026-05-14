@@ -60,7 +60,7 @@ describe('SEO Regression Tests', () => {
       const schema = productSchema({
         name: 'Test Product',
         description: 'Test',
-        price: '39.99',
+        price: '28.99',
         url: 'https://example.com',
       });
 
@@ -75,7 +75,7 @@ describe('SEO Regression Tests', () => {
       const schema = productSchema({
         name: 'Test Product',
         description: 'Test',
-        price: '39.99',
+        price: '28.99',
         url: 'https://example.com',
       });
 

@@ -579,17 +579,17 @@ describe('Wizard Landing Pages - Value Proposition Requirements', () => {
 describe('Wizard Landing Pages - Pricing Accuracy', () => {
   it('should use correct price for Eviction Notice', () => {
     expect(noticeOnlyContent.price).toBe(SEO_PRICES.evictionNotice.display);
-    expect(noticeOnlyContent.price).toBe('£39.99');
+    expect(noticeOnlyContent.price).toBe('£29.99');
   });
 
   it('should use correct price for Eviction Bundle', () => {
     expect(completePackContent.price).toBe(SEO_PRICES.evictionBundle.display);
-    expect(completePackContent.price).toBe('£89.99');
+    expect(completePackContent.price).toBe('£59.99');
   });
 
   it('should use correct price for Money Claim', () => {
     expect(moneyClaimContent.price).toBe(SEO_PRICES.moneyClaim.display);
-    expect(moneyClaimContent.price).toBe('£49.99');
+    expect(moneyClaimContent.price).toBe('£28.99');
   });
 
   it('should use correct price for Standard Tenancy Agreement', () => {
@@ -603,9 +603,9 @@ describe('Wizard Landing Pages - Pricing Accuracy', () => {
   });
 
   it('should include price in title for all products', () => {
-    expect(noticeOnlyContent.title).toContain('£39.99');
-    expect(completePackContent.title).toContain('£89.99');
-    expect(moneyClaimContent.title).toContain('£49.99');
+    expect(noticeOnlyContent.title).toContain(SEO_PRICES.evictionNotice.display);
+    expect(completePackContent.title).toContain(SEO_PRICES.evictionBundle.display);
+    expect(moneyClaimContent.title).toContain(SEO_PRICES.moneyClaim.display);
     expect(astStandardContent.title).toContain('£14.99');
     expect(astPremiumContent.title).toContain('£24.99');
   });
@@ -758,9 +758,11 @@ describe('Wizard Landing Pages - Price Regression Guard', () => {
 
   it('should include the current core prices in allowed SEO prices', () => {
     expect(ALLOWED_SEO_PRICES.size).toBeGreaterThanOrEqual(6);
-    expect(ALLOWED_SEO_PRICES.has('£39.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£89.99')).toBe(true);
-    expect(ALLOWED_SEO_PRICES.has('£49.99')).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has(SEO_PRICES.evictionNotice.display)).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has(SEO_PRICES.evictionBundle.display)).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has(SEO_PRICES.moneyClaim.display)).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has(SEO_PRICES.section13Standard.display)).toBe(true);
+    expect(ALLOWED_SEO_PRICES.has(SEO_PRICES.section13Defensive.display)).toBe(true);
     expect(ALLOWED_SEO_PRICES.has('£14.99')).toBe(true);
     expect(ALLOWED_SEO_PRICES.has('£24.99')).toBe(true);
   });

@@ -4,6 +4,7 @@ import {
   buildMoneyClaimAddOnRecommendation,
   isMoneyClaimAddOnEligible,
 } from '@/lib/wizard-crosssell';
+import { PRODUCTS } from '@/lib/pricing/products';
 
 describe('wizard cross-sell helpers', () => {
   it('shows the money claim add-on for eligible England arrears eviction flows', () => {
@@ -46,6 +47,6 @@ describe('wizard cross-sell helpers', () => {
   });
 
   it('builds the recommendation from canonical pricing', () => {
-    expect(buildMoneyClaimAddOnRecommendation().displayPrice).toBe('£29.99');
+    expect(buildMoneyClaimAddOnRecommendation().displayPrice).toBe(PRODUCTS.money_claim.displayPrice);
   });
 });

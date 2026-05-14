@@ -32,11 +32,11 @@ export function formatPriceRangeLabel(amounts: readonly number[]): string {
  * Update ONLY here when prices change. All landing pages reference these values.
  */
 export const SEO_PRICES = {
-  evictionNotice: { amount: 39.99, display: formatPriceLabel(39.99) },
-  evictionBundle: { amount: 89.99, display: formatPriceLabel(89.99) },
-  moneyClaim: { amount: 49.99, display: formatPriceLabel(49.99) },
-  section13Standard: { amount: 29.99, display: formatPriceLabel(29.99) },
-  section13Defensive: { amount: 49.99, display: formatPriceLabel(49.99) },
+  evictionNotice: { amount: 29.99, display: formatPriceLabel(29.99) },
+  evictionBundle: { amount: 59.99, display: formatPriceLabel(59.99) },
+  moneyClaim: { amount: 28.99, display: formatPriceLabel(28.99) },
+  section13Standard: { amount: 17.99, display: formatPriceLabel(17.99) },
+  section13Defensive: { amount: 27.99, display: formatPriceLabel(27.99) },
   tenancyStandard: { amount: 14.99, display: formatPriceLabel(14.99) },
   tenancyPremium: { amount: 24.99, display: formatPriceLabel(24.99) },
   tenancyStudent: { amount: 24.99, display: formatPriceLabel(24.99) },
