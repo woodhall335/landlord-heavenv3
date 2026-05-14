@@ -2220,6 +2220,45 @@ export const SEO_PAGE_TAXONOMY: Record<string, SeoPageTaxonomyEntry> = {
       product: [...anchorSets.section8NoticeProduct],
     },
   }),
+  '/how-to-evict-a-tenant-using-ground-1': section8Entry('/how-to-evict-a-tenant-using-ground-1', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-1',
+  }),
+  '/how-to-evict-a-tenant-using-ground-1a': section8Entry('/how-to-evict-a-tenant-using-ground-1a', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-1a',
+  }),
+  '/how-to-evict-a-tenant-using-ground-2': section8Entry('/how-to-evict-a-tenant-using-ground-2', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-2',
+  }),
+  '/how-to-evict-a-tenant-using-ground-7a': section8Entry('/how-to-evict-a-tenant-using-ground-7a', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-7a',
+  }),
+  '/how-to-evict-a-tenant-using-ground-8': section8Entry('/how-to-evict-a-tenant-using-ground-8', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-8',
+  }),
+  '/how-to-evict-a-tenant-using-ground-10': section8Entry('/how-to-evict-a-tenant-using-ground-10', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-10',
+  }),
+  '/how-to-evict-a-tenant-using-ground-11': section8Entry('/how-to-evict-a-tenant-using-ground-11', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-11',
+  }),
+  '/how-to-evict-a-tenant-using-ground-12': section8Entry('/how-to-evict-a-tenant-using-ground-12', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-12',
+  }),
+  '/how-to-evict-a-tenant-using-ground-13': section8Entry('/how-to-evict-a-tenant-using-ground-13', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-13',
+  }),
+  '/how-to-evict-a-tenant-using-ground-14': section8Entry('/how-to-evict-a-tenant-using-ground-14', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-14',
+  }),
+  '/how-to-evict-a-tenant-using-ground-15': section8Entry('/how-to-evict-a-tenant-using-ground-15', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-15',
+  }),
+  '/how-to-evict-a-tenant-using-ground-17': section8Entry('/how-to-evict-a-tenant-using-ground-17', '/section-8-grounds-explained', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-17',
+  }),
+  '/evict-tenant-landlord-moving-back-in': section8Entry('/evict-tenant-landlord-moving-back-in', '/how-to-evict-a-tenant-using-ground-1', {
+    canonicalTarget: '/how-to-evict-a-tenant-using-ground-1',
+  }),
   '/section-8-eviction-process': makeEntry('/section-8-eviction-process', {
     ...section8Entry('/section-8-eviction-process', SEO_PILLAR_ROUTES.evictionProcessUk, {
       canonicalTarget: '/section-8-eviction-process',

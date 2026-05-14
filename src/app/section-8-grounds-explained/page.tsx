@@ -11,7 +11,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical =
@@ -392,6 +391,54 @@ export default function Page() {
                 the evidence matters so much. The right ground is only useful if the
                 landlord can show the facts behind it clearly.
               </p>
+
+              <div className="mt-6 rounded-2xl border border-[#E6DBFF] bg-white p-5">
+                <h3 className="text-xl font-semibold text-[#2a2161]">
+                  Ground-specific eviction guides
+                </h3>
+                <p className="mt-3 leading-7 text-gray-700">
+                  If you already know the ground you need, use the commercial guide for
+                  that ground before starting the Form 3A notice.
+                </p>
+                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  <Link href="/how-to-evict-a-tenant-using-ground-1" className="font-medium text-primary hover:underline">
+                    Evict using Ground 1 for landlord or family occupation
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-1a" className="font-medium text-primary hover:underline">
+                    Evict using Ground 1A to sell the property
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-2" className="font-medium text-primary hover:underline">
+                    Evict using Ground 2 for mortgage lender sale
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-7a" className="font-medium text-primary hover:underline">
+                    Evict using Ground 7A for serious ASB or criminal behaviour
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-8" className="font-medium text-primary hover:underline">
+                    Evict using Ground 8 for serious rent arrears
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-10" className="font-medium text-primary hover:underline">
+                    Evict using Ground 10 for any rent arrears
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-11" className="font-medium text-primary hover:underline">
+                    Evict using Ground 11 for persistent late rent
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-12" className="font-medium text-primary hover:underline">
+                    Evict using Ground 12 for breach of tenancy
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-13" className="font-medium text-primary hover:underline">
+                    Evict using Ground 13 for property deterioration
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-14" className="font-medium text-primary hover:underline">
+                    Evict using Ground 14 for antisocial behaviour
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-15" className="font-medium text-primary hover:underline">
+                    Evict using Ground 15 for furniture deterioration
+                  </Link>
+                  <Link href="/how-to-evict-a-tenant-using-ground-17" className="font-medium text-primary hover:underline">
+                    Evict using Ground 17 for a false statement by the tenant
+                  </Link>
+                </div>
+              </div>
 
               <p className="mt-4 leading-7 text-gray-700">
                 One of the biggest strategic mistakes landlords make is treating grounds as

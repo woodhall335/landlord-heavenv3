@@ -44,6 +44,57 @@ const section8TemplateCta = (
         </Link>{' '}
         if you want the rule overview first.
       </li>
+      <li>
+        Ground-specific guides:{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-1" className="font-semibold text-primary hover:underline">
+          Ground 1 occupation
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-1a" className="font-semibold text-primary hover:underline">
+          Ground 1A sale
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-2" className="font-semibold text-primary hover:underline">
+          Ground 2 mortgagee sale
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-7a" className="font-semibold text-primary hover:underline">
+          Ground 7A serious ASB
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-8" className="font-semibold text-primary hover:underline">
+          Ground 8 arrears
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-10" className="font-semibold text-primary hover:underline">
+          Ground 10 arrears
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-11" className="font-semibold text-primary hover:underline">
+          Ground 11 late rent
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-12" className="font-semibold text-primary hover:underline">
+          Ground 12 breach
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-13" className="font-semibold text-primary hover:underline">
+          Ground 13 property deterioration
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-14" className="font-semibold text-primary hover:underline">
+          Ground 14 ASB
+        </Link>
+        ,{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-15" className="font-semibold text-primary hover:underline">
+          Ground 15 furniture
+        </Link>
+        , and{' '}
+        <Link href="/how-to-evict-a-tenant-using-ground-17" className="font-semibold text-primary hover:underline">
+          Ground 17 false statement
+        </Link>
+        .
+      </li>
     </ul>
   </div>
 );
