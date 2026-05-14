@@ -33,8 +33,8 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
 
   return (
     <>
-      <div className="overflow-hidden rounded-[1.85rem] border border-white/12 bg-[#130C25]/45 shadow-[0_18px_52px_rgba(9,6,18,0.24)]">
-        <div className="border-b border-white/10 px-5 py-5 md:px-6">
+      <div className="overflow-hidden rounded-[1.85rem] border border-[#34245D] bg-[#1A1231] shadow-[0_18px_52px_rgba(9,6,18,0.24)]">
+        <div className="border-b border-[#3D2D68] px-5 py-5 md:px-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#CFC4FF]">
@@ -52,7 +52,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="inline-flex items-center justify-center rounded-full border border-white/16 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/16"
+                className="inline-flex items-center justify-center rounded-full border border-[#6F5FA1] bg-[#2B2146] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#372957]"
               >
                 Open larger preview
               </button>
@@ -61,7 +61,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
         </div>
 
         <div className="grid gap-6 px-5 py-5 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.6fr)] md:px-6">
-          <div className="rounded-[1.45rem] border border-white/12 bg-white/8 p-4 md:p-5">
+          <div className="rounded-[1.45rem] border border-[#4B3B76] bg-[#241A3F] p-4 md:p-5">
             <div className="mb-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#CFC4FF]">
                 Documents in this sample pack
@@ -84,7 +84,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                       'w-full rounded-[1.15rem] border px-4 py-4 text-left transition',
                       isSelected
                         ? 'border-[#CDBBFF] bg-white text-[#261544] shadow-[0_16px_40px_rgba(255,255,255,0.1)]'
-                        : 'border-white/12 bg-white/6 text-white hover:bg-white/12',
+                        : 'border-[#4B3B76] bg-[#30244D] text-white hover:bg-[#3A2C5C]',
                     ].join(' ')}
                     aria-pressed={isSelected}
                   >
