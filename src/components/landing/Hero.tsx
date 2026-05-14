@@ -1,6 +1,9 @@
+'use client';
+
 import { UniversalHero } from './UniversalHero';
 import { homeHeroConfig } from './heroConfigs';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
+import { smoothScrollToHash } from '@/lib/browser/smoothScrollToHash';
 
 // TODO(hero-consolidation): Migrate duplicated inline heroes in
 // /app/(marketing)/help/page.tsx, /app/(marketing)/contact/page.tsx,
@@ -27,6 +30,11 @@ export function Hero() {
               ctaPosition="hero"
               eventName="homepage_primary_cta_click"
               className="hero-btn-primary flex w-full justify-center text-center sm:w-auto"
+              onClick={(event) => {
+                if (smoothScrollToHash(primaryCta.href)) {
+                  event.preventDefault();
+                }
+              }}
             >
               {primaryCta.label}
             </TrackedLink>

@@ -13,6 +13,7 @@ import { Container } from '@/components/ui';
 import { Hero, TrustBar } from '@/components/landing';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { trackHomepageSelectorView } from '@/lib/analytics';
+import { smoothScrollToHash } from '@/lib/browser/smoothScrollToHash';
 import {
   getPublicCardAccentClasses,
   PUBLIC_LAYOUT_CLASSES,
@@ -736,6 +737,11 @@ export default function HomeContent() {
                 ctaPosition="final"
                 eventName="homepage_primary_cta_click"
                 className="hero-btn-primary"
+                onClick={(event) => {
+                  if (smoothScrollToHash('#homepage-route-selector')) {
+                    event.preventDefault();
+                  }
+                }}
               >
                 Choose the right route
               </TrackedLink>
