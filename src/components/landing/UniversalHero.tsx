@@ -109,10 +109,6 @@ export function UniversalHero({
   backgroundImageSrc = '/images/bg.webp',
   reviewPillLayout = 'auto',
 }: UniversalHeroProps) {
-  const mobileTitleParts = title.split('Legal Documents');
-  const hasLegalDocumentsInTitle = mobileTitleParts.length > 1;
-  const shouldForceMobileHighlightBreak = highlightTitle === 'in Minutes, Not Days';
-  const mobileHighlightParts = shouldForceMobileHighlightBreak ? highlightTitle.split(', ') : [];
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
   const HeadingTag = isValidHeading ? headingAs : 'h1';
   const reviewCount = getDynamicReviewCount();
@@ -301,33 +297,9 @@ export function UniversalHero({
                   shouldRenderMedia ? 'max-w-none' : 'max-w-[18ch] lg:max-w-none'
                 )}
               >
-                <span className="sm:hidden">
-                  {hasLegalDocumentsInTitle ? (
-                    <>
-                      {mobileTitleParts[0]}
-                      <span className="whitespace-nowrap">Legal Documents</span>
-                      {mobileTitleParts.slice(1).join('Legal Documents')}
-                    </>
-                  ) : (
-                    title
-                  )}
-                </span>
-                <span className="hidden sm:inline">{title}</span>
+                {title}
                 {highlightTitle && (
-                  <span className="block text-white">
-                    <span className="sm:hidden">
-                      {shouldForceMobileHighlightBreak && mobileHighlightParts.length === 2 ? (
-                        <>
-                          {mobileHighlightParts[0]},
-                          <br />
-                          {mobileHighlightParts[1]}
-                        </>
-                      ) : (
-                        highlightTitle
-                      )}
-                    </span>
-                    <span className="hidden sm:inline">{highlightTitle}</span>
-                  </span>
+                  <span className="block text-white">{highlightTitle}</span>
                 )}
               </HeadingTag>
             )}
