@@ -3,6 +3,8 @@
  */
 
 import React from 'react';
+import fs from 'node:fs';
+import path from 'node:path';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { GoldenPackPdfShowcase } from './GoldenPackPdfShowcase';
@@ -68,5 +70,35 @@ describe('GoldenPackPdfShowcase', () => {
     expect(
       screen.queryByText(/Schedule of arrears showing each missed rent period and running balance\./i)
     ).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /Open larger preview/i }));
+
+    expect(screen.getByLabelText('Arrears Schedule')).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Arrears Schedule embedded sample preview').every((frame) =>
+        frame.getAttribute('src') === '/sample/arrears/embed'
+      )
+    ).toBe(true);
+  });
+
+  it('keeps PDF embed zoom controls stacked on mobile', () => {
+    const embedRouteSource = fs.readFileSync(
+      path.join(
+        process.cwd(),
+        'src/app/api/golden-pack-samples/[packKey]/[documentType]/embed/route.ts'
+      ),
+      'utf8'
+    );
+    const documentEmbedShellSource = fs.readFileSync(
+      path.join(process.cwd(), 'src/lib/previews/documentEmbedShell.ts'),
+      'utf8'
+    );
+
+    for (const source of [embedRouteSource, documentEmbedShellSource]) {
+      expect(source).toContain('@media (max-width: 640px)');
+      expect(source).toContain('.toolbar-actions');
+      expect(source).toContain('flex-direction: column');
+      expect(source).toContain('width: 100%');
+    }
   });
 });

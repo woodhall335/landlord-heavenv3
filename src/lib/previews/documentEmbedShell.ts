@@ -117,6 +117,25 @@ export function buildPdfEmbedHtml(title: string, pdfBytes: Uint8Array): string {
         text-align: center;
         padding: 24px;
       }
+      @media (max-width: 640px) {
+        .shell {
+          padding: 12px;
+          overflow-x: hidden;
+        }
+        .toolbar {
+          align-items: stretch;
+          flex-direction: column;
+          padding: 12px;
+        }
+        .toolbar-actions {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+        .toolbar button {
+          width: 100%;
+        }
+      }
     </style>
   </head>
   <body>

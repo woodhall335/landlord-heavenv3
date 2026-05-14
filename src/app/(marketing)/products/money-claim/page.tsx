@@ -161,9 +161,9 @@ export default function MoneyClaimPage() {
         'Not the right fit if your next step is possession, serving a Section 8 notice, or preparing N5 and N119.',
     },
     whatYouGet: {
-      title: 'Sample pack proof',
+      title: 'Real PDF sample',
       intro:
-        'See a real solicitor-approved MCOL pack before you pay, including the letter before claim template, particulars of claim template, and documents used to explain and issue the claim.',
+        'Read the sample debt-recovery documents on the page, including the letter before claim template, particulars of claim template, and documents used to explain and issue the claim.',
       sampleProof: sampleProof ? (
         <GoldenPackProof data={sampleProof} samplePageHref={samplePage?.samplePath} />
       ) : undefined,

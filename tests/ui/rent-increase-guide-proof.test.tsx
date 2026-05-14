@@ -96,7 +96,7 @@ describe('rent increase hub sample proof', () => {
     document.body.innerHTML = '';
   });
 
-  it('shows the generated sample pack proof on the hub page', async () => {
+  it('shows the generated sample pack preview on the hub page', async () => {
     const pageModule = await import('@/app/rent-increase/page');
 
     render(pageModule.default());
@@ -107,7 +107,8 @@ describe('rent increase hub sample proof', () => {
         name: /Increase Rent in England Using Section 13 \/ Form 4A/i,
       })
     ).toBeInTheDocument();
-    expect(screen.getByText('Sample pack proof')).toBeInTheDocument();
-    expect(screen.getByText(/See a real sample pack before you pay/i)).toBeInTheDocument();
+    expect(screen.getByText('Real PDF sample')).toBeInTheDocument();
+    expect(screen.getByText(/Read the full sample documents on the page/i)).toBeInTheDocument();
+    expect(screen.getByText('Documents in this sample pack')).toBeInTheDocument();
   });
 });

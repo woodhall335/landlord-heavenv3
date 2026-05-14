@@ -33,7 +33,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
 
   return (
     <>
-      <div className="mt-8 overflow-hidden rounded-[1.85rem] border border-white/12 bg-[#130C25]/45 shadow-[0_18px_52px_rgba(9,6,18,0.24)]">
+      <div className="overflow-hidden rounded-[1.85rem] border border-white/12 bg-[#130C25]/45 shadow-[0_18px_52px_rgba(9,6,18,0.24)]">
         <div className="border-b border-white/10 px-5 py-5 md:px-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">

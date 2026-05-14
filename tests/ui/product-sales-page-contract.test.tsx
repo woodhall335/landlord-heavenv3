@@ -107,6 +107,10 @@ vi.mock('@/components/value-proposition', () => ({
   ),
 }));
 
+vi.mock('@/components/analytics/ProductPageTracker', () => ({
+  ProductPageTracker: () => null,
+}));
+
 vi.mock('@/lib/previews/noticeOnlyPreviews', () => ({
   getNoticeOnlyPreviewData: async () => ({
     england: { section8: [] },
@@ -138,13 +142,13 @@ const pageContracts: PageContract[] = [
   {
     name: 'notice only',
     load: () => import('@/app/(marketing)/products/notice-only/page'),
-    h1: /Eviction Notice Generator \(Section 8, May 2026\)/i,
+    h1: /Solicitor-approved Section 8 Notice Builder - Form 3A/i,
     sectionTitles: [
-      'Why a Section 8 case needs more than a blank notice',
+      'Why Stage 1 needs more than a blank notice',
       'How this puts you in a stronger position',
       'How it works',
-      'Prepare the Section 8 notice with more confidence',
-      'Eviction Notice Generator FAQs',
+      'Start Stage 1 with more confidence',
+      'Stage 1 Notice & Service FAQs',
     ],
     requiredItems: [
       'Form 3A notice',
@@ -157,13 +161,13 @@ const pageContracts: PageContract[] = [
   {
     name: 'complete pack',
     load: () => import('@/app/(marketing)/products/complete-pack/page'),
-    h1: /Complete Eviction Pack/i,
+    h1: /Solicitor-approved Section 8 Court Pack - N5 & N119/i,
     sectionTitles: [
-      'Why you need the full pack instead of isolated forms',
+      'Why Stage 2 works better than separate forms',
       'How the full pack improves the landlord outcome',
       'How it works',
-      'Start the full possession file now',
-      'Complete Eviction Pack FAQs',
+      'Start Stage 2 now',
+      'Stage 2 Court & Possession FAQs',
     ],
     requiredItems: [
       'Form 3A notice',
@@ -171,13 +175,13 @@ const pageContracts: PageContract[] = [
       'Form N119 - Particulars of Claim',
       'Schedule of Arrears',
       'Evidence Collection Checklist',
-      'Proof of Service Certificate',
+      'Certificate of Service (Form N215)',
     ],
   },
   {
     name: 'money claim',
     load: () => import('@/app/(marketing)/products/money-claim/page'),
-    h1: /Money Claim Pack/i,
+    h1: /Solicitor-approved Money Claim Pack - Recover Rent Arrears/i,
     sectionTitles: [
       'Why a landlord money claim needs more than one form',
       'How this improves the landlord outcome',
@@ -200,13 +204,13 @@ const pageContracts: PageContract[] = [
   {
     name: 'section 13 standard',
     load: () => import('@/app/(marketing)/products/section-13-standard/page'),
-    h1: /Section 13 Rent Increase Pack for England landlords/i,
+    h1: /Solicitor-approved Section 13 Notice \(Form 4A\) - Rent Increase Builder/i,
     sectionTitles: [
       'Why you need this',
       'How this helps you',
       'How it works',
-      'Increase the rent with a cleaner Section 13 file',
-      'Section 13 Rent Increase FAQs',
+      'Increase the rent with a cleaner Section 13 pack',
+      'Standard Section 13 Rent Increase Pack FAQs',
     ],
     requiredItems: [
       'Form 4A rent increase notice',
@@ -218,13 +222,13 @@ const pageContracts: PageContract[] = [
   {
     name: 'section 13 defence',
     load: () => import('@/app/(marketing)/products/section-13-defence/page'),
-    h1: /Section 13 Defence Pack for England landlords/i,
+    h1: /Solicitor-approved Section 13 Defence Pack - Tribunal Ready/i,
     sectionTitles: [
-      'Why you need this',
-      'How this helps you',
+      'Why this route helps',
+      'What it helps you do',
       'How it works',
-      'Prepare the stronger Section 13 defence file now',
-      'Section 13 Defence Pack FAQs',
+      'Prepare the stronger Section 13 pack now',
+      'Challenge-Ready Section 13 Defence Pack FAQs',
     ],
     requiredItems: [
       'Form 4A rent increase notice',
@@ -269,8 +273,9 @@ describe('public product sales page contract', () => {
       await renderPage(contract.load);
 
       expect(screen.getByRole('heading', { level: 1, name: contract.h1 })).toBeInTheDocument();
-      expect(screen.getByText('Sample pack proof')).toBeInTheDocument();
-      expect(screen.getByText(/See a real sample pack before you pay/i)).toBeInTheDocument();
+      expect(screen.getByText('Real PDF sample')).toBeInTheDocument();
+      expect(screen.getByText(/Read the full sample documents on the page/i)).toBeInTheDocument();
+      expect(screen.getByText('Documents in this sample pack')).toBeInTheDocument();
       expect(
         screen.queryByRole('heading', { level: 2, name: /What you get/i })
       ).not.toBeInTheDocument();
@@ -293,7 +298,6 @@ describe('public product sales page contract', () => {
       expect(text).not.toContain('What it is');
       expect(text).not.toContain('What it does');
       expect(text).not.toContain('Why it is needed');
-      expect(text).not.toContain('How it helps you');
       expect(text).not.toContain('View route');
       expect(text).not.toContain('Wales');
       expect(text).not.toContain('Scotland');

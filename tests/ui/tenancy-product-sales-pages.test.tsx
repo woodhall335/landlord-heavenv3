@@ -106,8 +106,8 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'standard agreement',
     load: () => import('@/app/standard-tenancy-agreement/page'),
-    h1: /Standard Tenancy Agreement England/i,
-    whyTitle: 'Why you need more than the main agreement',
+    h1: /Solicitor-approved Standard Tenancy Agreement - Periodic Tenancy Generator/i,
+    whyTitle: 'Why a standard periodic agreement still needs proper setup',
     howTitle: 'How this helps you',
     ctaTitle: 'Start the Standard agreement pack',
     requiredItems: [
@@ -124,7 +124,7 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'premium agreement',
     load: () => import('@/app/premium-tenancy-agreement/page'),
-    h1: /Premium Tenancy Agreement England/i,
+    h1: /Solicitor-approved Premium Periodic Tenancy Agreement - Enhanced Builder/i,
     whyTitle: 'Why landlords choose Premium',
     howTitle: 'How this helps you',
     ctaTitle: 'Start the Premium agreement pack',
@@ -143,7 +143,7 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'student agreement',
     load: () => import('@/app/student-tenancy-agreement/page'),
-    h1: /Student Tenancy Agreement England/i,
+    h1: /Solicitor-approved Student Tenancy Agreement - Sharer & Guarantor Builder/i,
     whyTitle: 'Why student lets need their own pack',
     howTitle: 'How this helps you',
     ctaTitle: 'Start the Student agreement pack',
@@ -163,8 +163,8 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'hmo agreement',
     load: () => import('@/app/hmo-shared-house-tenancy-agreement/page'),
-    h1: /HMO \/ Shared House Tenancy Agreement England/i,
-    whyTitle: 'Why shared houses need a fuller file',
+    h1: /Solicitor-approved HMO Tenancy Agreement - Shared House Builder/i,
+    whyTitle: 'Why shared houses need fuller paperwork',
     howTitle: 'How this helps you',
     ctaTitle: 'Start the HMO / Shared House agreement pack',
     requiredItems: [
@@ -182,7 +182,7 @@ const tenancyPageContracts: TenancyPageContract[] = [
   {
     name: 'lodger agreement',
     load: () => import('@/app/lodger-agreement/page'),
-    h1: /Lodger Agreement England/i,
+    h1: /Solicitor-approved Lodger Agreement - Resident Landlord Builder/i,
     whyTitle: 'Why a lodger arrangement needs its own paperwork',
     howTitle: 'How this helps you',
     ctaTitle: 'Start the Lodger agreement pack',
@@ -213,8 +213,9 @@ describe('exact tenancy product sales pages', () => {
       await renderPage(contract.load);
 
       expect(screen.getByRole('heading', { level: 1, name: contract.h1 })).toBeInTheDocument();
-      expect(screen.getByText('Sample pack proof')).toBeInTheDocument();
-      expect(screen.getByText(/See a real sample pack before you pay/i)).toBeInTheDocument();
+      expect(screen.getByText('Real PDF sample')).toBeInTheDocument();
+      expect(screen.getByText(/Read the full sample documents on the page/i)).toBeInTheDocument();
+      expect(screen.getByText('Documents in this sample pack')).toBeInTheDocument();
       expect(
         screen.queryByRole('heading', { level: 2, name: /What you get/i })
       ).not.toBeInTheDocument();
