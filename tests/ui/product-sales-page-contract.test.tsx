@@ -273,8 +273,8 @@ describe('public product sales page contract', () => {
       await renderPage(contract.load);
 
       expect(screen.getByRole('heading', { level: 1, name: contract.h1 })).toBeInTheDocument();
-      expect(screen.getByText('Real PDF sample')).toBeInTheDocument();
-      expect(screen.getByText(/Read the full sample documents on the page/i)).toBeInTheDocument();
+      expect(screen.getByText('Sample document preview')).toBeInTheDocument();
+      expect(screen.getByText(/Inspect the sample pack before you pay/i)).toBeInTheDocument();
       expect(screen.getByText('Documents in this sample pack')).toBeInTheDocument();
       expect(
         screen.queryByRole('heading', { level: 2, name: /What you get/i })

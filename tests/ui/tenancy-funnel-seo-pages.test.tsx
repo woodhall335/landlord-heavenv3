@@ -161,8 +161,8 @@ describe('tenancy funnel SEO pages', () => {
       screen.getByRole('heading', { level: 1, name: 'Premium Tenancy Agreement Sample' })
     ).toBeInTheDocument();
     expect(screen.getAllByText('Premium Tenancy Agreement & Management Pack').length).toBeGreaterThan(0);
-    expect(screen.getByText('Real PDF sample')).toBeInTheDocument();
-    expect(screen.getByText(/Read the full sample documents on the page/i)).toBeInTheDocument();
+    expect(screen.getByText('Sample document preview')).toBeInTheDocument();
+    expect(screen.getByText(/Inspect the sample pack before you pay/i)).toBeInTheDocument();
     expect(screen.getByText('Documents in this sample pack')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'View full premium sample' })).toHaveAttribute(
       'href',

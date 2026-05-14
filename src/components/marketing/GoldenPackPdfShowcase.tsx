@@ -38,14 +38,14 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#CFC4FF]">
-                Real PDF sample
+                Sample document preview
               </p>
               <h4 className="mt-2 text-xl font-semibold text-white md:text-2xl">
-                Read the full sample documents on the page
+                Inspect the sample pack before you pay
               </h4>
               <p className="mt-2 text-sm leading-7 text-[#ECE8FF] md:text-base">
-                Read the full sample documents inside the page and switch between them without
-                leaving the product. The viewer stays focused on reading, not downloading.
+                Open each sample document directly on this page, switch between files, and check
+                the wording, layout, and supporting materials without downloading anything.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
