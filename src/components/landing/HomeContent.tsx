@@ -358,7 +358,7 @@ function RouteSelectionCard({
           alt={imageAlt}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          className="object-contain p-4 transition duration-300 group-hover:scale-[1.03]"
+          className="object-cover transition duration-300 group-hover:scale-[1.03]"
         />
       </div>
       <div className="p-6">
