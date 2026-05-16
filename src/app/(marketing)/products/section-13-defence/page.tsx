@@ -42,13 +42,13 @@ export default function Section13DefenceProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Section 13 tribunal bundle | solicitor-approved tribunal pack',
+      trustText: 'Form 4A plus evidence and tribunal bundle support',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
       secondaryCta: { label: 'Compare the standard option', href: '/products/section-13-standard' },
       feature:
-        'Built for landlords who want a Section 13 response letter template, validated evidence, response notes, and tribunal bundle prepared together.',
+        'Built for landlords who want the notice, evidence, response notes, and tribunal materials prepared together.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 defence documents',
       showReviewPill: true,
@@ -88,7 +88,7 @@ export default function Section13DefenceProductPage() {
           landlordOutcome:
             'Best when the increase is straightforward and you want a clear, service-ready pack.',
           href: '/products/section-13-standard',
-          ctaLabel: 'Open the Standard Section 13 Rent Increase Pack',
+          ctaLabel: 'Create my rent increase notice',
           priceLabel: PRODUCTS.section13_standard.displayPrice,
           imageSrc: '/images/rent-increase-standard.webp',
           imageAlt: 'Standard Section 13 rent increase pack',
@@ -104,7 +104,7 @@ export default function Section13DefenceProductPage() {
           landlordOutcome:
             'Best when you want to be ready for questions, negotiation, or tribunal scrutiny.',
           href: '/products/section-13-defence',
-          ctaLabel: 'Open the Challenge-Ready Defence Pack',
+          ctaLabel: 'Prepare for a rent challenge',
           priceLabel: product.displayPrice,
           imageSrc: '/images/rent-increase-defence.webp',
           imageAlt: 'Challenge-ready Section 13 defence pack',
@@ -137,7 +137,7 @@ export default function Section13DefenceProductPage() {
       title: 'Ready to prepare the stronger pack?',
       body:
         'Start here if you want Form 4A, market evidence, response wording, and the tribunal-facing bundle built around the same rent figure.',
-      primary: { label: 'Start the challenge-ready wizard', href: product.wizardHref },
+      primary: { label: 'Prepare for a rent challenge', href: product.wizardHref },
       secondary: {
         label: 'I only need the standard option',
         href: '/products/section-13-standard',
@@ -161,7 +161,7 @@ export default function Section13DefenceProductPage() {
     cta: {
       title: config.cta.title,
       body: config.cta.body,
-      primary: { label: 'Start the challenge-ready defence option', href: product.wizardHref },
+      primary: { label: 'Prepare for a rent challenge', href: product.wizardHref },
       secondary: config.cta.secondaryLabel && config.cta.secondaryHref
         ? { label: config.cta.secondaryLabel, href: config.cta.secondaryHref }
         : undefined,

@@ -29,7 +29,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when you need the notice stage now and may decide about court later',
     ],
     href: getProductLandingHref('notice_only'),
-    cta: 'See notice details',
+    cta: 'Create my Section 8 notice',
   },
   {
     name: 'Stage 2: Section 8 Court & Possession Pack',
@@ -43,7 +43,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when you expect the case may need to go from notice into court',
     ],
     href: getProductLandingHref('complete_pack'),
-    cta: 'See pack details',
+    cta: 'Prepare my court pack',
     featured: true,
   },
   {
@@ -58,7 +58,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when the money claim is separate from any possession action',
     ],
     href: getProductLandingHref('money_claim'),
-    cta: 'See pack details',
+    cta: 'Prepare my money claim',
   },
   {
     name: 'Standard Section 13 Rent Increase Pack',
@@ -72,7 +72,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when you do not yet expect a formal tenant challenge',
     ],
     href: getProductLandingHref('section13_standard'),
-    cta: 'See pack details',
+    cta: 'Create my rent increase notice',
   },
   {
     name: 'Challenge-Ready Section 13 Defence Pack',
@@ -86,7 +86,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when the increase needs a fuller evidence file from the start',
     ],
     href: getProductLandingHref('section13_defensive'),
-    cta: 'See pack details',
+    cta: 'Prepare for a rent challenge',
   },
   {
     name: 'Standard Tenancy Agreement',
@@ -100,7 +100,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Best when you want the standard setup without fuller management drafting',
     ],
     href: getProductLandingHref('ast_standard'),
-    cta: 'See agreement options',
+    cta: 'Choose agreement',
   },
   {
     name: 'Premium Tenancy Agreement',
@@ -114,7 +114,7 @@ export const PRICING_PACKAGE_CARDS: PricingPackageCard[] = [
       'Student, HMO / Shared House, and Lodger agreements have their own pages',
     ],
     href: getProductLandingHref('ast_premium'),
-    cta: 'See agreement options',
+    cta: 'Choose agreement',
   },
 ];
 

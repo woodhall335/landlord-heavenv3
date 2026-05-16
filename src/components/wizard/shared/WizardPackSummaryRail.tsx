@@ -49,7 +49,7 @@ export function WizardPackSummaryRail({
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7b56d8]">
-              Live pack summary
+              What you will get
             </p>
             <h3 className={`mt-2 font-semibold tracking-tight text-[#20103f] ${mobile ? 'text-base' : 'text-lg'}`}>
               {summary.heading}
@@ -57,7 +57,7 @@ export function WizardPackSummaryRail({
             <p className={`mt-1 text-[#60597a] ${mobile ? 'text-xs leading-5' : 'text-sm leading-6'}`}>{summary.subheading}</p>
           </div>
           <span className="rounded-full border border-[#ddd0ff] bg-white/92 px-3 py-1 text-xs font-semibold text-[#5b36b3] shadow-sm">
-            Live pack
+            Documents
           </span>
         </div>
 
@@ -90,7 +90,7 @@ export function WizardPackSummaryRail({
         <section className="mt-5">
           <div className="flex items-center gap-2">
             <RiFileList3Line className="h-4 w-4 text-[#6d28d9]" />
-            <h4 className="text-sm font-semibold text-[#241247]">Included in your pack</h4>
+            <h4 className="text-sm font-semibold text-[#241247]">Included</h4>
           </div>
           <ul className={`mt-3 ${mobile ? 'space-y-1.5' : 'space-y-2'}`}>
             {visibleIncludedDocuments.map((item) => (
@@ -229,7 +229,7 @@ export function WizardPackSummaryRail({
 
         <div className="mt-5 rounded-[1.3rem] border border-[#efe7ff] bg-white/88 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]">
           <p className="text-sm leading-6 text-[#5b5670]">
-            Preview before payment. You can still change your answers before we prepare the final documents.
+            You can check this before paying. You can still change your answers before we prepare the final documents.
           </p>
         </div>
       </div>
@@ -271,7 +271,7 @@ export function WizardPackSummaryRail({
       <summary className="list-none cursor-pointer rounded-[1.25rem] border border-[#e6dcff] bg-white/90 px-3.5 py-3 shadow-sm">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-[#241247]">Your pack and next steps</p>
+            <p className="text-sm font-semibold text-[#241247]">Documents and next steps</p>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               <span className="rounded-full border border-[#ddd0ff] bg-[#f8f3ff] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b46c1]">
                 {summary.currentStepDocuments[0]}

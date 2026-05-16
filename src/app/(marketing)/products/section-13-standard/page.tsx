@@ -42,13 +42,13 @@ export default function Section13StandardProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Form 4A generator | validated Section 13 notice for England landlords',
+      trustText: 'Form 4A, market evidence, and service record',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
       secondaryCta: { label: 'Compare the defence pack', href: '/products/section-13-defence' },
       feature:
-        'Built for landlords who want a solicitor-approved Form 4A, evidence, and service record to stay clear from the start.',
+        'Built for landlords who want the notice, evidence, and service record to match from the start.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 rent increase documents',
       showReviewPill: true,
@@ -86,7 +86,7 @@ export default function Section13StandardProductPage() {
           landlordOutcome:
             'Best when the increase is straightforward and you want a clear, service-ready pack.',
           href: '/products/section-13-standard',
-          ctaLabel: 'Open the Standard Section 13 Rent Increase Pack',
+          ctaLabel: 'Create my rent increase notice',
           priceLabel: product.displayPrice,
           imageSrc: '/images/rent-increase-standard.webp',
           imageAlt: 'Standard Section 13 rent increase pack',
@@ -102,7 +102,7 @@ export default function Section13StandardProductPage() {
           landlordOutcome:
             'Best when you want to be ready for questions, negotiation, or tribunal scrutiny.',
           href: '/products/section-13-defence',
-          ctaLabel: 'Open the Challenge-Ready Defence Pack',
+          ctaLabel: 'Prepare for a rent challenge',
           priceLabel: PRODUCTS.section13_defensive.displayPrice,
           imageSrc: '/images/rent-increase-defence.webp',
           imageAlt: 'Challenge-ready Section 13 defence pack',
@@ -135,7 +135,7 @@ export default function Section13StandardProductPage() {
       title: 'Ready to propose the increase?',
       body:
         'Start here if you want more than a blank Form 4A and need the notice, comparables, and service record aligned.',
-      primary: { label: 'Start the standard rent increase wizard', href: product.wizardHref },
+      primary: { label: 'Create my rent increase notice', href: product.wizardHref },
       secondary: {
         label: 'I need the challenge-ready defence route',
         href: '/products/section-13-defence',
@@ -159,7 +159,7 @@ export default function Section13StandardProductPage() {
     cta: {
       title: config.cta.title,
       body: config.cta.body,
-      primary: { label: 'Start the standard Section 13 option', href: product.wizardHref },
+      primary: { label: 'Create my rent increase notice', href: product.wizardHref },
       secondary: config.cta.secondaryLabel && config.cta.secondaryHref
         ? { label: config.cta.secondaryLabel, href: config.cta.secondaryHref }
         : undefined,

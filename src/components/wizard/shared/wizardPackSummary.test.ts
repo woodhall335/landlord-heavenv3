@@ -24,7 +24,7 @@ describe('getWizardPackSummary', () => {
       { id: 'review', label: 'Review', isCurrent: false, isComplete: false },
     ]);
 
-    expect(summary.subheading).toBe('Stage 1 notice plus Stage 2 possession claim paperwork');
+    expect(summary.subheading).toBe('The notice, claim forms, and evidence file prepared together');
     expect(summary.includedDocuments).toContain('Form 3A notice');
     expect(summary.includedDocuments).toContain('Form N5');
     expect(summary.includedDocuments).toContain('Form N119');

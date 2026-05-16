@@ -150,8 +150,8 @@ describe('getWizardCta', () => {
         source: 'validator',
       });
 
-      expect(result.primary.label).toBe('Start Eviction Pack');
-      expect(result.secondary?.label).toBe('Start Notice Only');
+      expect(result.primary.label).toBe('Prepare my court pack');
+      expect(result.secondary?.label).toBe('Create my Section 8 notice');
     });
   });
 });

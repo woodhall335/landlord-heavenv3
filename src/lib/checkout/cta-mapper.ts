@@ -38,11 +38,11 @@ const PRICE_MAP: Record<ProductKey, number> = {
 };
 
 const CTA_LABELS: Record<ProductKey, string> = {
-  notice_only: 'Start Notice Only',
-  complete_pack: 'Start Eviction Pack',
-  money_claim: 'Start Money Claim Pack',
-  ast_standard: 'Start Standard Tenancy',
-  ast_premium: 'Start Premium Tenancy',
+  notice_only: 'Create my Section 8 notice',
+  complete_pack: 'Prepare my court pack',
+  money_claim: 'Prepare my money claim',
+  ast_standard: 'Create my standard tenancy',
+  ast_premium: 'Create my premium tenancy',
 };
 
 function buildWizardHref({

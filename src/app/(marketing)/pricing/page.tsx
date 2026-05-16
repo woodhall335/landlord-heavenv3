@@ -127,7 +127,7 @@ export default function PricingPage() {
         trustText="Eviction, debt, rent increase, and tenancy agreement packs"
         title="Compare landlord document prices"
         highlightTitle="and choose the right next step"
-        subtitle="Use this page to compare prices for serving notice, preparing a possession claim, recovering tenancy debt, increasing rent, or putting an England tenancy agreement in place."
+        subtitle="Pick the document job in front of you: serve notice, prepare court papers, recover money, increase rent, or set up an England tenancy agreement."
         primaryCta={{
           label: 'Choose the right product',
           href: '/wizard?topic=eviction&src=pricing_page',
@@ -138,7 +138,7 @@ export default function PricingPage() {
       >
         <p className="mt-3 text-sm text-white/88">All prices are one-time payments.</p>
         <p className="mt-2 max-w-3xl text-sm leading-7 text-white/76">
-          Prices below are for landlords in England who need the right paperwork before serving, filing, or issuing anything.
+          Prices below are for landlords in England who need the right paperwork before they serve, file, or issue anything.
         </p>
       </UniversalHero>
 
@@ -147,7 +147,7 @@ export default function PricingPage() {
           <div className="mb-8 max-w-4xl">
             <span className="public-eyebrow">Public pricing</span>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-[#1c1431] md:text-5xl">
-              Choose the pack for the job you need to do
+              Choose the document you need now
             </h2>
             <p className="mt-4 text-lg leading-8 text-[#5d5672]">
               Start with the practical problem. If you need possession, compare
@@ -376,7 +376,7 @@ export default function PricingPage() {
             )}
           >
             <h2 className="text-3xl font-bold text-white md:text-4xl">
-              Still not sure which pack fits?
+              Not sure what you need?
             </h2>
             <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-white/76">
               Tell us what has happened with the tenancy and we will help you

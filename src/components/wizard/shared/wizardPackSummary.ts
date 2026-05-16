@@ -51,8 +51,8 @@ const PACK_CONTENTS: Record<
   { heading: string; subheading: string; includedDocuments: string[] }
 > = {
   notice_only: {
-    heading: 'Your notice pack',
-    subheading: 'Current England Section 8 notice-stage documents',
+    heading: 'Your Section 8 notice',
+    subheading: 'The notice, service steps, and checks we prepare from your answers',
     includedDocuments: [
       'Form 3A notice',
       'Service instructions',
@@ -63,8 +63,8 @@ const PACK_CONTENTS: Record<
     ],
   },
   complete_pack: {
-    heading: 'Your court-ready pack',
-    subheading: 'Stage 1 notice plus Stage 2 possession claim paperwork',
+    heading: 'Your possession court papers',
+    subheading: 'The notice, claim forms, and evidence file prepared together',
     includedDocuments: [
       'Form 3A notice',
       'Form N5',
@@ -75,8 +75,8 @@ const PACK_CONTENTS: Record<
     ],
   },
   money_claim: {
-    heading: 'Your debt recovery pack',
-    subheading: 'Pre-action, claim, and enforcement support',
+    heading: 'Your money claim',
+    subheading: 'The demand letter, schedules, and claim papers prepared from one set of facts',
     includedDocuments: [
       'Letter before claim',
       'Reply form and financial statement',
@@ -87,8 +87,8 @@ const PACK_CONTENTS: Record<
     ],
   },
   money_claim_england_wales: {
-    heading: 'Your debt recovery pack',
-    subheading: 'Pre-action, claim, and enforcement support',
+    heading: 'Your money claim',
+    subheading: 'The demand letter, schedules, and claim papers prepared from one set of facts',
     includedDocuments: [
       'Letter before claim',
       'Reply form and financial statement',
@@ -99,8 +99,8 @@ const PACK_CONTENTS: Record<
     ],
   },
   money_claim_scotland: {
-    heading: 'Your debt recovery pack',
-    subheading: 'Pre-action, claim, and enforcement support',
+    heading: 'Your money claim',
+    subheading: 'The demand letter, schedules, and claim papers prepared from one set of facts',
     includedDocuments: [
       'Letter before claim',
       'Reply form and financial statement',
@@ -144,8 +144,8 @@ const PACK_CONTENTS: Record<
     ],
   },
   section13_standard: {
-    heading: 'Your Standard Section 13 Rent Increase Pack',
-    subheading: 'Form 4A notice, service record, and evidence-led support',
+    heading: 'Your rent increase notice',
+    subheading: 'Form 4A, service record, and market evidence kept together',
     includedDocuments: [
       'Form 4A rent increase notice',
       'Rent increase justification report',
@@ -154,8 +154,8 @@ const PACK_CONTENTS: Record<
     ],
   },
   section13_defensive: {
-    heading: 'Your Challenge-Ready Section 13 Defence Pack',
-    subheading: 'Form 4A notice plus tribunal-ready support documents',
+    heading: 'Your rent challenge file',
+    subheading: 'Form 4A plus the response and tribunal materials',
     includedDocuments: [
       'Form 4A rent increase notice',
       'Rent increase justification report',
@@ -297,19 +297,19 @@ const PROOF_CARD_COPY: Partial<
   ],
   complete_pack: [
     { title: 'Form N5', detail: 'Court claim form', note: 'Built from your party, tenancy, and possession details.' },
-    { title: 'Witness statement', detail: 'Court-ready narrative', note: 'Ties the notice, arrears, and evidence into one file.' },
+    { title: 'Witness statement', detail: 'Court statement', note: 'Ties the notice, arrears, and evidence into one file.' },
   ],
   money_claim: [
-    { title: 'Letter before claim', detail: 'Pre-action document', note: 'Generated from your debt story and tenant details.' },
-    { title: 'Particulars of claim', detail: 'Court narrative', note: 'Turns your claim basis and schedules into filing-ready wording.' },
+    { title: 'Letter before claim', detail: 'Pre-action document', note: 'Prepared from your debt history and tenant details.' },
+    { title: 'Particulars of claim', detail: 'Claim wording', note: 'Turns your claim basis and schedules into court-form wording.' },
   ],
   money_claim_england_wales: [
-    { title: 'Letter before claim', detail: 'Pre-action document', note: 'Generated from your debt story and tenant details.' },
-    { title: 'Particulars of claim', detail: 'Court narrative', note: 'Turns your claim basis and schedules into filing-ready wording.' },
+    { title: 'Letter before claim', detail: 'Pre-action document', note: 'Prepared from your debt history and tenant details.' },
+    { title: 'Particulars of claim', detail: 'Claim wording', note: 'Turns your claim basis and schedules into court-form wording.' },
   ],
   money_claim_scotland: [
-    { title: 'Demand letter', detail: 'Pre-action document', note: 'Generated from your debt story and tenant details.' },
-    { title: 'Particulars of claim', detail: 'Court narrative', note: 'Turns your claim basis and schedules into filing-ready wording.' },
+    { title: 'Demand letter', detail: 'Pre-action document', note: 'Prepared from your debt history and tenant details.' },
+    { title: 'Particulars of claim', detail: 'Claim wording', note: 'Turns your claim basis and schedules into court-form wording.' },
   ],
   tenancy_agreement: [
     { title: 'Tenancy agreement', detail: 'Main document', note: 'Built from the property, tenancy, and landlord answers you provide.' },
@@ -364,7 +364,7 @@ const PROOF_PREVIEW_COPY: Partial<
       'complete_pack',
       'witness_statement',
       'Witness statement',
-      'Court-ready narrative',
+      'Court statement',
       'Shows how the pack turns the case facts into one joined-up court story.'
     ),
   ],

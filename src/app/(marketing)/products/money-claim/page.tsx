@@ -97,16 +97,16 @@ export default function MoneyClaimPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Money claim online pack | rent arrears, particulars, and validation checks',
-      title: 'Solicitor-approved Money Claim Pack - Recover Rent Arrears',
+      trustText: 'Claim unpaid rent, damage, bills, or tenancy debt',
+      title: 'Prepare a landlord money claim',
       subtitle:
-        "Use this MCOL pack for landlords when a tenant owes rent, damage, bills, or other tenancy debt. It helps you prepare the letter before claim template, particulars of claim template, debt schedules, and Renters' Rights Act debt claim next steps in one place.",
+        'Use this when a tenant owes rent, damage, bills, or other tenancy debt. Answer the questions, check the letter and claim papers before you pay, then download the money claim file.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
       },
       secondaryCta: {
-        label: 'Need possession as well? See the full eviction route',
+        label: 'Need possession instead?',
         href: '/products/complete-pack',
       },
       feature:
@@ -117,7 +117,7 @@ export default function MoneyClaimPage() {
       trustPositioningPreset: 'money_claim',
     },
     decisionBlock: {
-      title: 'Choose this pack when the job is recovering money',
+      title: 'Choose this when the job is getting money back',
       intro:
         'This page is for landlords whose main goal is getting unpaid rent, damage, bills, or guarantor debt paid back. If the urgent issue is getting the tenant out, start with the possession route instead.',
       cards: [
@@ -137,18 +137,18 @@ export default function MoneyClaimPage() {
         },
       ],
       primary: {
-        label: 'Start a landlord money claim pack',
+        label: 'Prepare my money claim',
         href: descriptor.wizardHref,
       },
       secondary: {
-        label: 'Need the possession route instead?',
+        label: 'Need possession instead?',
         href: '/products/complete-pack',
       },
     },
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Preview the debt-recovery file before you pay. It is not just one claim form: it is a money claim online pack with the pre-action letter, schedules, claim narrative, and follow-through guidance.',
+        'Preview the debt-recovery file before you pay. It includes the demand letter, schedules, claim wording, and follow-through guidance.',
       includedBullets: [
         'Letter before claim',
         'Reply form and financial statement',
@@ -161,7 +161,7 @@ export default function MoneyClaimPage() {
         'Not the right fit if your next step is possession, serving a Section 8 notice, or preparing N5 and N119.',
     },
     whatYouGet: {
-      title: 'Real PDF sample',
+      title: 'See what the money claim file looks like',
       intro:
         'Read the sample debt-recovery documents on the page, including the letter before claim template, particulars of claim template, and documents used to explain and issue the claim.',
       sampleProof: sampleProof ? (
@@ -186,7 +186,7 @@ export default function MoneyClaimPage() {
           landlordOutcome:
             'Best when recovering money is the main job.',
           href: descriptor.landingHref,
-          ctaLabel: 'Start the money claim route',
+          ctaLabel: 'Prepare my money claim',
         },
         {
           name: 'Stage 2: Section 8 Court & Possession Pack',
@@ -200,7 +200,7 @@ export default function MoneyClaimPage() {
           landlordOutcome:
             'Best when possession is the real next step.',
           href: '/products/complete-pack',
-          ctaLabel: 'Compare the Complete Eviction Pack',
+          ctaLabel: 'Compare the possession route',
         },
       ],
     },
@@ -231,18 +231,18 @@ export default function MoneyClaimPage() {
       body:
         'Start a landlord money claim pack so the letter before claim, debt schedules, and filing steps stay together from the start.',
       primary: {
-        label: 'Start a landlord money claim pack',
+        label: 'Prepare my money claim',
         href: descriptor.wizardHref,
       },
       secondary: {
-        label: 'Need the possession route instead?',
+        label: 'Need possession instead?',
         href: '/products/complete-pack',
       },
     },
     whyYouNeedThis: {
       title: 'Why a landlord money claim needs more than one form',
       intro:
-        "Debt recovery becomes harder when the demand letter, figures, and court claim say slightly different things. This rent arrears money claim pack helps keep them aligned for a landlord's debt claim.",
+        'Debt recovery becomes harder when the demand letter, figures, and court claim say slightly different things. This pack keeps them aligned.',
       cards: [
         {
           title: 'The pre-action stage matters',
@@ -286,7 +286,7 @@ export default function MoneyClaimPage() {
     howItWorks: {
       title: 'How it works',
       intro:
-        'The workflow takes you from the debt facts to a claim file without losing the thread of the case.',
+        'We keep the demand letter, figures, and claim papers tied to the same facts.',
       steps: [
         {
           step: 'Step 01',
@@ -309,15 +309,15 @@ export default function MoneyClaimPage() {
       ],
     },
     cta: {
-      title: 'Start the money claim properly',
+      title: 'Prepare the money claim without piecing it together',
       body:
         'If a tenant owes rent, damage, bills, or other tenancy debt, start here so the letter before claim, claim paperwork, and recovery steps stay together.',
       primary: {
-        label: descriptor.primaryCtaLabel,
+        label: 'Prepare my money claim',
         href: descriptor.wizardHref,
       },
       secondary: {
-        label: 'See the Complete Eviction Pack',
+        label: 'Need possession instead?',
         href: '/products/complete-pack',
       },
       guideLinks: descriptor.defaultGuideLinks,

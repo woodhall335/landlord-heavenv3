@@ -101,20 +101,20 @@ export default function NoticeOnlyPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 8 notice generator | validated Form 3A service pack',
-      title: 'Solicitor-approved Section 8 Notice Builder - Form 3A',
+      trustText: 'England Section 8 notice | Form 3A, service steps, and checks',
+      title: 'Create a Section 8 Form 3A notice',
       subtitle:
-        "Use Stage 1 when you need a validated Section 8 notice and service pack before court. The guided builder prepares Form 3A, the service record, and supporting evidence for the post-May 2026 Renters' Rights Act Section 8 route.",
+        "Use this when you need to serve a Section 8 notice in England. Answer the questions, check the Form 3A before you pay, then download the notice, service steps, and supporting record.",
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
       },
       secondaryCta: {
-        label: 'See the Stage 2 Court Pack',
+        label: 'I need court papers too',
         href: '/products/complete-pack',
       },
       feature:
-        'Most avoidable problems start with the notice, service, or evidence record. This pack helps you check those points before court is in view.',
+        'Most problems start with the notice, the dates, or how it was served. This helps you check those points before anything goes to the tenant.',
       mediaSrc: '/images/notice_bundles.webp',
       mediaAlt: 'Preview of the England Section 8 notice pack',
       showTrustPositioningBar: true,
@@ -130,7 +130,7 @@ export default function NoticeOnlyPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Stage 1 is the right fit when the job today is serving notice. You can preview the actual court-ready Section 8 notice file before you pay.',
+        'Use this if the job today is serving notice. You can check the actual Section 8 notice file before you pay.',
       imageSrc: '/images/notice-only-pack.webp',
       imageAlt: 'Preview of the Stage 1 Section 8 notice-only pack',
       includedBullets: [
@@ -139,20 +139,20 @@ export default function NoticeOnlyPage() {
         'Arrears and validity checks before anything is served',
       ],
       bestFor:
-        'You need to serve the notice first and want the service record and evidence ready before deciding about court.',
+        'You need to serve the notice first and want the service record ready before deciding about court.',
       notFor:
         'You already expect to issue a possession claim and want the notice plus court forms prepared together.',
     },
     decisionBlock: {
       title: 'Choose Stage 1 if you need to serve the notice first',
       intro:
-        'This route is for landlords who need the notice, service method, and supporting record prepared before deciding whether court action is needed.',
+        'This is for landlords who need the notice and service record prepared before deciding whether court action is needed.',
       cards: [
         {
           eyebrow: 'Choose this route',
           title: 'Serve the notice properly now',
           body:
-            'Use Stage 1 to prepare Form 3A, set out the grounds and arrears support, and keep a service record that can be used later if the tenant does not leave.',
+            'Prepare Form 3A, explain the grounds, and keep a service record you can rely on if the tenant does not leave.',
           tone: 'positive',
         },
         {
@@ -164,18 +164,18 @@ export default function NoticeOnlyPage() {
         },
       ],
       primary: {
-        label: 'Start the Section 8 notice route',
+        label: 'Create my Section 8 notice',
         href: descriptor.wizardHref,
       },
       secondary: {
-        label: 'Need the full court pack instead?',
+        label: 'Need court papers too?',
         href: '/products/complete-pack',
       },
     },
     whatYouGet: {
       title: 'What you get in Stage 1',
       intro:
-        "This is more than a blank notice. It is a Section 8 notice generator and notice-and-service file you can inspect before buying, built for landlords who need a validated Section 8 notice before they serve in England.",
+        'This is more than a blank form. You get the notice, service steps, and checks in one file, and you can inspect it before buying.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -305,9 +305,9 @@ export default function NoticeOnlyPage() {
     midPageCta: {
       title: 'Ready to serve the Section 8 notice?',
       body:
-        'Start Stage 1 if your immediate job is to get the notice, service steps, and supporting record ready before anything is sent to the tenant.',
+        'Start here if your immediate job is to get the notice and service steps ready before anything is sent to the tenant.',
       primary: {
-        label: 'Start the notice-first wizard',
+        label: 'Create my Section 8 notice',
         href: descriptor.wizardHref,
       },
       secondary: {
@@ -316,9 +316,9 @@ export default function NoticeOnlyPage() {
       },
     },
     whyYouNeedThis: {
-      title: 'Why Stage 1 needs more than a blank notice',
+      title: 'Why a blank notice is risky',
       intro:
-        'Most notice-stage problems come from small gaps in the grounds, arrears record, dates, or service method. This pack helps you check those points early.',
+        'Most notice problems come from small gaps in the grounds, arrears record, dates, or service method. This helps you check those points early.',
       cards: [
         {
           title: 'The court looks at the notice first',
@@ -368,7 +368,7 @@ export default function NoticeOnlyPage() {
     howItWorks: {
       title: 'How it works',
       intro:
-        'The workflow focuses on the facts needed for a current England Section 8 notice.',
+        'We ask for the facts needed to prepare a current England Section 8 notice.',
       imageSrc: '/images/how-it-works-notice-only.webp',
       imageAlt: 'How the Section 8 notice-only pack works',
       steps: [
@@ -386,18 +386,18 @@ export default function NoticeOnlyPage() {
         },
         {
           step: 'Step 03',
-          title: 'Generate the full notice pack',
+          title: 'Download the finished notice file',
           body:
             'Download the notice, arrears support, and service guidance so the case starts with the right paperwork.',
         },
       ],
     },
     cta: {
-      title: 'Start Stage 1 with more confidence',
+      title: 'Create the notice without guessing',
       body:
-        'Start here if you need the notice, service steps, and evidence record ready before anything is served.',
+        'Start here if you need the notice, service steps, and basic record ready before anything is served.',
       primary: {
-        label: 'Serve the Section 8 notice correctly now',
+        label: 'Create my Section 8 notice',
         href: descriptor.wizardHref,
       },
       secondary: {

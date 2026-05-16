@@ -128,15 +128,15 @@ const earlyInternalLinks = [
 
 const expectedProductMetaDescriptions = {
   noticeOnly:
-    'Generate a solicitor-approved Section 8 notice builder for Form 3A. Validated service record and N215 included. 4.8/5. Start correctly today.',
+    'Create a Section 8 Form 3A notice with service steps, N215 support, and checks before you pay. Built for England landlords serving notice.',
   completePack:
-    'Download a court-ready Section 8 possession pack with N5, N119, witness statement. Solicitor-approved, validated before filing. 4.8/5. Instant download.',
+    'Prepare Section 8 court papers with Form 3A, N5, N119, witness statement, arrears record, and filing support in one place before court.',
   moneyClaim:
-    'Recover rent arrears with our solicitor-approved Money Claim pack. Includes letter before claim and particulars of claim. 4.8/5. Download now.',
+    'Prepare a landlord money claim for unpaid rent, damage, bills, or tenancy debt, with a demand letter and claim papers you can check.',
   section13Standard:
-    'Use our Form 4A generator for a Section 13 rent increase. Solicitor-approved, validated notice with market evidence. 4.8/5. Instant PDF download.',
+    'Create a Section 13 Form 4A rent increase notice with market evidence, service record, and a tenant-facing explanation before you serve.',
   section13Defence:
-    'Defend a challenged rent increase with our tribunal-ready Section 13 Defence pack. Solicitor-approved evidence templates and checklist. 4.8/5.',
+    'Prepare for a challenged rent increase with Form 4A, market evidence, response wording, and tribunal bundle support kept together.',
   standardTenancy:
     'Create a solicitor-approved Standard Periodic Tenancy Agreement. AST generator for post-May 2026 rules. Validated wording. 4.8/5. Download now.',
   premiumTenancy:
@@ -215,9 +215,8 @@ describe('product owner SEO funnel', () => {
     for (const metadata of PRODUCT_OWNER_METADATA_LIST) {
       expect(metadata.title).toBeTruthy();
       expect(metadata.description.toLowerCase()).toMatch(
-        /solicitor-approved|validated|builder|generator|court-ready|renters' rights act/
+        /create|prepare|recover|generate|solicitor-approved|validated|builder|generator|renters' rights act/
       );
-      expect(metadata.description).toContain('4.8/5');
       expect(metadata.description.length).toBeGreaterThanOrEqual(125);
       expect(metadata.description.length).toBeLessThanOrEqual(155);
     }

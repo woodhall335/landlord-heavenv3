@@ -605,7 +605,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
       ? analytics.routeIntent || inferProductFromHref(hero.primaryCta?.href || '') || analytics.pagePath
       : null;
   const heroPreTitleLabel =
-    hero.preTitleLabel ?? (analytics?.pageType === 'product_page' ? 'Solicitor-approved' : undefined);
+    hero.preTitleLabel ?? (analytics?.pageType === 'product_page' ? 'Check before you pay' : undefined);
 
   return (
     <>

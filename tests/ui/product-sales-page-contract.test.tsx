@@ -142,12 +142,12 @@ const pageContracts: PageContract[] = [
   {
     name: 'notice only',
     load: () => import('@/app/(marketing)/products/notice-only/page'),
-    h1: /Solicitor-approved Section 8 Notice Builder - Form 3A/i,
+    h1: /Create a Section 8 Form 3A notice/i,
     sectionTitles: [
-      'Why Stage 1 needs more than a blank notice',
+      'Why a blank notice is risky',
       'How this puts you in a stronger position',
       'How it works',
-      'Start Stage 1 with more confidence',
+      'Create the notice without guessing',
       'Stage 1 Notice & Service FAQs',
     ],
     requiredItems: [
@@ -161,12 +161,12 @@ const pageContracts: PageContract[] = [
   {
     name: 'complete pack',
     load: () => import('@/app/(marketing)/products/complete-pack/page'),
-    h1: /Solicitor-approved Section 8 Court Pack - N5 & N119/i,
+    h1: /Prepare Section 8 court papers for possession/i,
     sectionTitles: [
-      'Why Stage 2 works better than separate forms',
+      'Why separate forms cause problems',
       'How the full pack improves the landlord outcome',
       'How it works',
-      'Start Stage 2 now',
+      'Prepare the court papers without piecing them together',
       'Stage 2 Court & Possession FAQs',
     ],
     requiredItems: [
@@ -181,12 +181,12 @@ const pageContracts: PageContract[] = [
   {
     name: 'money claim',
     load: () => import('@/app/(marketing)/products/money-claim/page'),
-    h1: /Solicitor-approved Money Claim Pack - Recover Rent Arrears/i,
+    h1: /Prepare a landlord money claim/i,
     sectionTitles: [
       'Why a landlord money claim needs more than one form',
       'How this improves the landlord outcome',
       'How it works',
-      'Start the money claim properly',
+      'Prepare the money claim without piecing it together',
       'Money Claim Pack FAQs',
     ],
     requiredItems: [
@@ -204,12 +204,12 @@ const pageContracts: PageContract[] = [
   {
     name: 'section 13 standard',
     load: () => import('@/app/(marketing)/products/section-13-standard/page'),
-    h1: /Solicitor-approved Section 13 Notice \(Form 4A\) - Rent Increase Builder/i,
+    h1: /Create a Section 13 Form 4A rent increase notice/i,
     sectionTitles: [
       'Why you need this',
       'How this helps you',
       'How it works',
-      'Increase the rent with a cleaner Section 13 pack',
+      'Create the rent increase notice with the evidence beside it',
       'Standard Section 13 Rent Increase Pack FAQs',
     ],
     requiredItems: [
@@ -222,12 +222,12 @@ const pageContracts: PageContract[] = [
   {
     name: 'section 13 defence',
     load: () => import('@/app/(marketing)/products/section-13-defence/page'),
-    h1: /Solicitor-approved Section 13 Defence Pack - Tribunal Ready/i,
+    h1: /Prepare for a challenged Section 13 rent increase/i,
     sectionTitles: [
       'Why this route helps',
       'What it helps you do',
       'How it works',
-      'Prepare the stronger Section 13 pack now',
+      'Prepare for the challenge before it lands',
       'Challenge-Ready Section 13 Defence Pack FAQs',
     ],
     requiredItems: [
