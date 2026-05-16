@@ -4,12 +4,13 @@ import {
   getPublicResidentialStandaloneProfiles,
   getResidentialStandaloneProfile,
 } from '@/lib/residential-letting/standalone-profiles';
+import { PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS } from '@/lib/residential-letting/products';
 
 describe('standalone profiles', () => {
   it('defines landing and review content for all public standalone products', () => {
     const profiles = getPublicResidentialStandaloneProfiles();
 
-    expect(profiles).toHaveLength(10);
+    expect(profiles).toHaveLength(PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS.length);
 
     profiles.forEach((profile) => {
       expect(profile.icon).toContain('/images/wizard-icons/');

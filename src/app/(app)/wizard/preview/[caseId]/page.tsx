@@ -187,6 +187,7 @@ function ASTCheckoutButton({
 
       // Get attribution data for checkout
       const attribution = getCheckoutAttribution();
+      const checkoutAbandoned = new Date().toISOString();
 
       // Create checkout session with attribution
       const response = await fetch('/api/checkout/create', {
@@ -198,6 +199,7 @@ function ASTCheckoutButton({
           add_ons: addOns,
           success_url: successUrl,
           cancel_url: cancelUrl,
+          checkout_abandoned: checkoutAbandoned,
           ...attribution,
         }),
       });

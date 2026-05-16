@@ -27,6 +27,7 @@ let generateSection13CoreDocuments: typeof import('../src/lib/documents/section1
 let generateSection13Pack: typeof import('../src/lib/documents/section13-generator.ts').generateSection13Pack;
 let generateSection13TribunalBundle: typeof import('../src/lib/documents/section13-generator.ts').generateSection13TribunalBundle;
 let PUBLIC_PRODUCT_DESCRIPTORS: typeof import('../src/lib/public-products.ts').PUBLIC_PRODUCT_DESCRIPTORS;
+let RESIDENTIAL_LETTING_PRODUCTS: typeof import('../src/lib/residential-letting/products.ts').RESIDENTIAL_LETTING_PRODUCTS;
 let computeSection13Preview: typeof import('../src/lib/section13/rules.ts').computeSection13Preview;
 let createEmptySection13State: typeof import('../src/lib/section13/facts.ts').createEmptySection13State;
 let buildEnglandSection8CompletePackFacts: typeof import('../src/lib/testing/fixtures/complete-pack.ts').buildEnglandSection8CompletePackFacts;
@@ -63,6 +64,7 @@ async function loadGeneratorDeps() {
     residentialLettingGenerator,
     section13Generator,
     publicProducts,
+    residentialProducts,
     section13Rules,
     section13Facts,
     completePackFixtures,
@@ -73,6 +75,7 @@ async function loadGeneratorDeps() {
     import('../src/lib/documents/residential-letting-generator.ts'),
     import('../src/lib/documents/section13-generator.ts'),
     import('../src/lib/public-products.ts'),
+    import('../src/lib/residential-letting/products.ts'),
     import('../src/lib/section13/rules.ts'),
     import('../src/lib/section13/facts.ts'),
     import('../src/lib/testing/fixtures/complete-pack.ts'),
@@ -87,6 +90,7 @@ async function loadGeneratorDeps() {
   generateSection13Pack = section13Generator.generateSection13Pack;
   generateSection13TribunalBundle = section13Generator.generateSection13TribunalBundle;
   PUBLIC_PRODUCT_DESCRIPTORS = publicProducts.PUBLIC_PRODUCT_DESCRIPTORS;
+  RESIDENTIAL_LETTING_PRODUCTS = residentialProducts.RESIDENTIAL_LETTING_PRODUCTS;
   computeSection13Preview = section13Rules.computeSection13Preview;
   createEmptySection13State = section13Facts.createEmptySection13State;
   buildEnglandSection8CompletePackFacts = completePackFixtures.buildEnglandSection8CompletePackFacts;
@@ -591,6 +595,22 @@ async function generateLodgerGolden(): Promise<GoldenPackDocumentInput[]> {
   return pack.documents;
 }
 
+function getGoldenPackDisplayName(key: string): string {
+  if (key in PUBLIC_PRODUCT_DESCRIPTORS) {
+    return PUBLIC_PRODUCT_DESCRIPTORS[key as keyof typeof PUBLIC_PRODUCT_DESCRIPTORS].displayName;
+  }
+
+  return RESIDENTIAL_LETTING_PRODUCTS[key as keyof typeof RESIDENTIAL_LETTING_PRODUCTS]?.label || key;
+}
+
+function getGoldenPackLandingReason(key: string): string {
+  if (key in PUBLIC_PRODUCT_DESCRIPTORS) {
+    return PUBLIC_PRODUCT_DESCRIPTORS[key as keyof typeof PUBLIC_PRODUCT_DESCRIPTORS].displayName;
+  }
+
+  return getGoldenPackDisplayName(key);
+}
+
 function buildScorecardTemplate(manifest: {
   generatedAt: string;
   outputRoot: string;
@@ -673,11 +693,11 @@ async function main() {
   }> = [];
 
   for (const batch of chunkKeys(cli.selectedKeys, cli.chunkSize)) {
-    const batchLabel = batch.map((key) => PUBLIC_PRODUCT_DESCRIPTORS[key].displayName).join(', ');
+    const batchLabel = batch.map((key) => getGoldenPackDisplayName(key)).join(', ');
     console.log(`\nStarting golden pack batch: ${batchLabel}`);
 
     for (const key of batch) {
-      const descriptor = PUBLIC_PRODUCT_DESCRIPTORS[key];
+      const displayName = getGoldenPackDisplayName(key);
       const start = Date.now();
 
       try {
@@ -688,7 +708,7 @@ async function main() {
             elapsedMs: Date.now() - start,
             reason: 'not present on disk',
           });
-          console.log(`Skipped ${descriptor.displayName}: not present on disk.`);
+          console.log(`Skipped ${displayName}: not present on disk.`);
           continue;
         }
 
@@ -699,27 +719,27 @@ async function main() {
             elapsedMs: Date.now() - start,
             reason: 'already complete',
           });
-          console.log(`Skipped ${descriptor.displayName}: already complete.`);
+          console.log(`Skipped ${displayName}: already complete.`);
           continue;
         }
 
-        console.log(`Generating golden pack: ${descriptor.displayName}`);
+        console.log(`Generating golden pack: ${displayName}`);
         const documents = await generators[key]();
         await saveGoldenPack({
           baseDir: OUTPUT_ROOT,
           key,
-          displayName: descriptor.displayName,
+          displayName,
           documents,
           extractText: !cli.skipTextExtraction,
         });
         const elapsedMs = Date.now() - start;
         batchSummary.push({ key, status: 'completed', elapsedMs });
-        console.log(`Completed ${descriptor.displayName} in ${(elapsedMs / 1000).toFixed(1)}s.`);
+        console.log(`Completed ${displayName} in ${(elapsedMs / 1000).toFixed(1)}s.`);
       } catch (error) {
         const elapsedMs = Date.now() - start;
         const message = error instanceof Error ? error.message : String(error);
         batchSummary.push({ key, status: 'failed', elapsedMs, reason: message });
-        console.error(`Failed ${descriptor.displayName}: ${message}`);
+        console.error(`Failed ${displayName}: ${message}`);
       }
     }
   }
@@ -732,7 +752,7 @@ async function main() {
     packs,
     nonPackProducts: NON_PACK_PUBLIC_PRODUCTS.map((key) => ({
       key,
-      displayName: PUBLIC_PRODUCT_DESCRIPTORS[key].displayName,
+      displayName: getGoldenPackLandingReason(key),
       reason: 'Public chooser / hub page, not a generated pack.',
     })),
   };
@@ -776,10 +796,10 @@ async function main() {
 
   console.log('\nGolden pack batch summary:');
   for (const entry of batchSummary) {
-    const descriptor = PUBLIC_PRODUCT_DESCRIPTORS[entry.key];
+    const displayName = getGoldenPackDisplayName(entry.key);
     const reasonSuffix = entry.reason ? ` (${entry.reason})` : '';
     console.log(
-      `- ${descriptor.displayName}: ${entry.status} in ${(entry.elapsedMs / 1000).toFixed(1)}s${reasonSuffix}`
+      `- ${displayName}: ${entry.status} in ${(entry.elapsedMs / 1000).toFixed(1)}s${reasonSuffix}`
     );
   }
   console.log(

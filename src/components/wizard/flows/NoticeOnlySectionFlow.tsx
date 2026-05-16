@@ -1643,21 +1643,32 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
       saveState={saveState}
-      banner={error ? (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <div className="flex items-center justify-between">
-            <span className="text-red-700">{error}</span>
-            <button
-              type="button"
-              onClick={handleRetrySave}
-              disabled={saving}
-              className="ml-4 px-3 py-1.5 text-sm font-medium text-red-700 bg-white border border-red-300 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? 'Retrying...' : 'Retry'}
-            </button>
-          </div>
-        </div>
-      ) : undefined}
+      banner={(
+        <>
+          {(facts.__meta as Record<string, unknown> | undefined)?.requires_review ||
+          (facts.__meta as Record<string, unknown> | undefined)?.source_case_id ? (
+            <div className="mb-6 rounded-lg border border-violet-200 bg-violet-50 p-4 text-sm leading-6 text-violet-950">
+              <div className="font-semibold text-violet-800">Prefilled from your previous case</div>
+              <p className="mt-1">Some answers were prefilled from your previous case. Please check them before continuing.</p>
+            </div>
+          ) : null}
+          {error ? (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center justify-between">
+                <span className="text-red-700">{error}</span>
+                <button
+                  type="button"
+                  onClick={handleRetrySave}
+                  disabled={saving}
+                  className="ml-4 px-3 py-1.5 text-sm font-medium text-red-700 bg-white border border-red-300 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {saving ? 'Retrying...' : 'Retry'}
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </>
+      )}
       sidebar={(
         <AskHeavenPanel
           caseId={caseId}

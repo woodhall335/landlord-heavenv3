@@ -125,6 +125,7 @@ export function PreviewPageLayout({
 
       // Get attribution data for checkout
       const attribution = getCheckoutAttribution();
+      const checkoutAbandoned = new Date().toISOString();
 
       // Create checkout session with attribution
       const response = await fetch('/api/checkout/create', {
@@ -136,6 +137,7 @@ export function PreviewPageLayout({
           add_ons: addOns,
           success_url: successUrl,
           cancel_url: cancelUrl,
+          checkout_abandoned: checkoutAbandoned,
           // Attribution fields for revenue tracking
           ...attribution,
         }),

@@ -1,4 +1,4 @@
-﻿import {
+import {
   RESIDENTIAL_LETTING_PRODUCTS,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
@@ -336,59 +336,6 @@ function commonTenantStep(title = 'Tenant details', description = 'Identify the 
   };
 }
 
-function commonTenancyCommercialsStep(title = 'Tenancy terms'): StandaloneStepConfig {
-  return {
-    id: 'tenancy_terms',
-    title,
-    description: 'Set the start date, payment cycle, and key commercial terms for the agreement.',
-    fields: [
-      { id: 'tenancy_start_date', label: 'Start date', type: 'date', required: true },
-      { id: 'rent_amount', label: 'Rent amount', type: 'currency', required: true },
-      {
-        id: 'rent_frequency',
-        label: 'Rent frequency',
-        type: 'select',
-        required: true,
-        options: [
-          { value: 'monthly', label: 'Monthly' },
-          { value: 'weekly', label: 'Weekly' },
-          { value: 'quarterly', label: 'Quarterly' },
-          { value: 'yearly', label: 'Yearly' },
-        ],
-      },
-      { id: 'rent_due_day', label: 'Rent due day', type: 'text', required: true },
-      {
-        id: 'payment_method',
-        label: 'Payment method',
-        type: 'select',
-        required: true,
-        options: [
-          { value: 'bank_transfer', label: 'Bank transfer' },
-          { value: 'standing_order', label: 'Standing order' },
-          { value: 'cash', label: 'Cash' },
-        ],
-      },
-      { id: 'deposit_amount', label: 'Deposit amount', type: 'currency', required: true },
-      {
-        id: 'bills_included_in_rent',
-        label: 'Bills included in rent',
-        type: 'radio',
-        required: true,
-        options: [
-          { value: 'yes', label: 'Yes' },
-          { value: 'no', label: 'No' },
-        ],
-      },
-      {
-        id: 'included_bills_notes',
-        label: 'Included bills details',
-        type: 'textarea',
-        visibleWhen: (facts) => facts.bills_included_in_rent === 'yes',
-      },
-    ],
-  };
-}
-
 function commonRulesAndAccessStep(): StandaloneStepConfig {
   return {
     id: 'rules_and_access',
@@ -454,13 +401,6 @@ function commonRulesAndAccessStep(): StandaloneStepConfig {
     ],
   };
 }
-
-const ENGLAND_ASSURED_PRODUCTS = new Set<ResidentialLettingProductSku>([
-  'england_standard_tenancy_agreement',
-  'england_premium_tenancy_agreement',
-  'england_student_tenancy_agreement',
-  'england_hmo_shared_house_tenancy_agreement',
-]);
 
 const ENGLAND_ASSURED_TRANSITION_REQUIRED_FACTS: string[] = [
   'england_tenancy_purpose',
@@ -543,10 +483,6 @@ const SEPARATE_BILL_TYPE_OPTIONS: StandaloneFieldOption[] = [
   { value: 'communications', label: 'Communications: telephone, internet, cable, satellite' },
   { value: 'green_deal', label: 'Green Deal energy efficiency payments' },
 ];
-
-function isEnglandAssuredProduct(product: ResidentialLettingProductSku): boolean {
-  return ENGLAND_ASSURED_PRODUCTS.has(product);
-}
 
 function isTruthySelection(value: unknown): boolean {
   if (typeof value === 'boolean') return value;
@@ -1338,18 +1274,6 @@ function createEnglandAssuredCompletionRules(product: ResidentialLettingProductS
   ];
 }
 
-function createRowId() {
-  return `row_${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function createRoom(name: string): StandaloneRoomRecord {
-  return {
-    id: createRowId(),
-    name,
-    items: [],
-  };
-}
-
 export function getDefaultStandaloneRoomTemplates(mode: 'inspection' | 'inventory'): string[] {
   const base = ['Entrance hall', 'Living room', 'Kitchen', 'Bedroom 1', 'Bathroom', 'External areas'];
   if (mode === 'inventory') {
@@ -1365,7 +1289,7 @@ const COMMON_RULES = {
       : 'This standalone residential product is currently available for England only.',
 };
 
-const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowConfig> = {
+const CONFIGS: Partial<Record<ResidentialLettingProductSku, ResidentialStandaloneFlowConfig>> = {
   england_standard_tenancy_agreement: {
     product: 'england_standard_tenancy_agreement',
     documentTitle: 'Standard Tenancy Agreement & Setup Pack',
@@ -2335,7 +2259,12 @@ const CONFIGS: Record<ResidentialLettingProductSku, ResidentialStandaloneFlowCon
 };
 
 export function getResidentialStandaloneFlowConfig(product: ResidentialLettingProductSku): ResidentialStandaloneFlowConfig {
-  return CONFIGS[product];
+  if (CONFIGS[product]) {
+    return CONFIGS[product] as ResidentialStandaloneFlowConfig;
+  }
+
+
+  throw new Error(`No residential standalone flow config defined for ${product}`);
 }
 
 export function getResidentialStandaloneVisibleSteps(

@@ -1648,6 +1648,17 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
       )}
     >
       <div className="space-y-6" style={themeStyle}>
+            {facts.__meta?.requires_review || facts.__meta?.source_case_id ? (
+              <div className="rounded-2xl border border-violet-200 bg-violet-50/95 p-5 text-sm leading-7 text-violet-950 shadow-sm">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-violet-700">
+                  Prefilled from your previous case
+                </div>
+                <p className="mt-2">
+                  Some answers were prefilled from your previous case. Please check them before continuing.
+                </p>
+              </div>
+            ) : null}
+
             {profile.cautionBanner ? (
               <div
                 className={clsx(

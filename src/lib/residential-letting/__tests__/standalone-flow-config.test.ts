@@ -315,4 +315,6 @@ describe('residential standalone flow config', () => {
       premium.steps.some((step) => step.fields?.some((field) => field.id === 'supported_accommodation_tenancy'))
     ).toBe(true);
   });
+
+
 });

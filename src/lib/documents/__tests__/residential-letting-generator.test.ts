@@ -1,4 +1,4 @@
-ï»¿import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 import { generateResidentialLettingDocuments } from '../residential-letting-generator';
 
@@ -91,7 +91,7 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-      const html = pack.documents[0].html.replace(/&#163;/g, 'Â£');
+      const html = pack.documents[0].html.replace(/&#163;/g, '£');
 
     expect(html).toContain('Executed as a deed');
     expect(html).toContain('Witness');
@@ -271,8 +271,8 @@ describe('generateResidentialLettingDocuments', () => {
         amendment_rows: [
           {
             clause_reference: 'Clause 3.1',
-            current_wording_summary: 'Rent is Â£1,500 pcm',
-            replacement_wording: 'Rent increases to Â£1,650 pcm',
+            current_wording_summary: 'Rent is £1,500 pcm',
+            replacement_wording: 'Rent increases to £1,650 pcm',
             effective_date: '2026-04-01',
           },
         ],
@@ -280,11 +280,11 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const html = pack.documents[0].html.replace(/&#163;/g, 'Â£');
+    const html = pack.documents[0].html.replace(/&#163;/g, '£');
 
     expect(html).toContain('Clause Amendment Matrix');
     expect(html).toContain('Clause 3.1');
-    expect(html).toMatch(/Rent increases to (?:Â£|&#163;)1,650 pcm/);
+    expect(html).toMatch(/Rent increases to (?:£|&#163;)1,650 pcm/);
   });
 
   test('renders structured inspection rooms and evidence appendix entries', async () => {
@@ -415,7 +415,7 @@ describe('generateResidentialLettingDocuments', () => {
 
     expect(html).toContain('Instalment Schedule');
     expect(html).toContain('First agreed instalment');
-    expect(html).toMatch(/(?:Â£|&#163;)2,000\.00|(?:Â£|&#163;)2000\.00/);
+    expect(html).toMatch(/(?:£|&#163;)2,000\.00|(?:£|&#163;)2000\.00/);
   });
 
   test('renders attached arrears schedules when detailed arrears rows are provided', async () => {
@@ -451,7 +451,7 @@ describe('generateResidentialLettingDocuments', () => {
 
     expect(html).toContain('Attached Arrears Schedule');
     expect(html).toContain('February 2026');
-    expect(html).toMatch(/(?:Â£|&#163;)1,200\.00|(?:Â£|&#163;)1200\.00/);
+    expect(html).toMatch(/(?:£|&#163;)1,200\.00|(?:£|&#163;)1200\.00/);
   });
   test('generates the expanded England assured-tenancy pack for the modern standard product', async () => {
     const pack = await generateResidentialLettingDocuments(
@@ -588,7 +588,7 @@ describe('generateResidentialLettingDocuments', () => {
         separate_bill_payment_rows: [
           {
             bill_type: 'communications',
-            amount_detail: 'Â£35 per month or the invoiced amount notified in writing',
+            amount_detail: '£35 per month or the invoiced amount notified in writing',
             due_detail: 'monthly with the rent unless a later written invoice date is given',
           },
         ],
@@ -602,9 +602,9 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const html = getDocumentHtml(pack, 'england_standard_tenancy_agreement').replace(/&#163;/g, 'Â£');
+    const html = getDocumentHtml(pack, 'england_standard_tenancy_agreement').replace(/&#163;/g, '£');
 
-    expect(html).toContain('Amount or pricing basis: Â£35 per month or the invoiced amount notified in writing.');
+    expect(html).toContain('Amount or pricing basis: £35 per month or the invoiced amount notified in writing.');
     expect(html).toContain('When due or how notified: monthly with the rent unless a later written invoice date is given.');
     expect(html).toContain('Supported Accommodation Status');
     expect(html).toContain('granted as supported accommodation');
@@ -1101,9 +1101,9 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const standardHtml = getDocumentHtml(standardPack, 'england_standard_tenancy_agreement').replace(/&#163;/g, 'Â£');
-    const hmoHtml = getDocumentHtml(hmoPack, 'england_hmo_shared_house_tenancy_agreement').replace(/&#163;/g, 'Â£');
-    const lodgerHtml = getDocumentHtml(lodgerPack, 'england_lodger_agreement').replace(/&#163;/g, 'Â£');
+    const standardHtml = getDocumentHtml(standardPack, 'england_standard_tenancy_agreement').replace(/&#163;/g, '£');
+    const hmoHtml = getDocumentHtml(hmoPack, 'england_hmo_shared_house_tenancy_agreement').replace(/&#163;/g, '£');
+    const lodgerHtml = getDocumentHtml(lodgerPack, 'england_lodger_agreement').replace(/&#163;/g, '£');
 
     expect(standardHtml).not.toContain('Pets authorised at the start: .');
     expect(standardHtml).not.toContain('Smoking policy: Not stated.');
@@ -1141,8 +1141,8 @@ describe('generateResidentialLettingDocuments', () => {
       { outputFormat: 'html' }
     );
 
-    const standardHtml = getDocumentHtml(standardPack, 'england_standard_tenancy_agreement').replace(/&#163;/g, 'Â£');
-    const lodgerHtml = getDocumentHtml(lodgerPack, 'england_lodger_agreement').replace(/&#163;/g, 'Â£');
+    const standardHtml = getDocumentHtml(standardPack, 'england_standard_tenancy_agreement').replace(/&#163;/g, '£');
+    const lodgerHtml = getDocumentHtml(lodgerPack, 'england_lodger_agreement').replace(/&#163;/g, '£');
 
     expect(standardHtml).toContain('RL-ENGLAND-STANDARD-TA-TENANCY-001');
     expect(standardHtml).not.toContain('RL-ENGLAND-STANDARD-TA-ANCY-001');
@@ -1204,6 +1204,8 @@ describe('generateResidentialLettingDocuments', () => {
       studentPack.documents.find((document) => document.document_type === 'england_tenancy_variation_record')?.pdf
     ).toBeTruthy();
   }, 120000);
+
+
 });
 
 

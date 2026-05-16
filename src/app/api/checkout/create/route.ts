@@ -179,6 +179,7 @@ const createCheckoutSchema = z.object({
   first_touch_at: z.string().nullable().optional(),
   ga_client_id: z.string().max(50).nullable().optional(),
   marketing_session_id: z.string().max(200).nullable().optional(),
+  checkout_abandoned: z.string().nullable().optional(),
 });
 
 // =============================================================================
@@ -284,6 +285,7 @@ export async function POST(request: Request) {
       first_touch_at,
       ga_client_id,
       marketing_session_id,
+      checkout_abandoned,
     } = validationResult.data;
 
     if (product_type === 'sc_money_claim') {
@@ -948,6 +950,7 @@ export async function POST(request: Request) {
         metadata: {
           add_ons: permittedAddOnSkus,
           requested_product_type: product_type,
+          checkout_abandoned: checkout_abandoned || null,
           ...(isNoticeOnlyToCompletePackUpgrade
             ? {
                 upgrade_from_product: 'notice_only',
@@ -1088,6 +1091,7 @@ export async function POST(request: Request) {
           first_touch_at: first_touch_at || '',
           ga_client_id: ga_client_id || '',
           marketing_session_id: (marketing_session_id || '').substring(0, 200),
+          checkout_abandoned: checkout_abandoned || '',
         },
         success_url: resolvedSuccessUrl,
         cancel_url: resolvedCancelUrl,

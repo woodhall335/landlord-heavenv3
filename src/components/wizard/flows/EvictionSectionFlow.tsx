@@ -1153,8 +1153,17 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
       jurisdiction={jurisdiction}
       currentStepId={currentSection?.id}
       saveState={saveState}
-      banner={error ? (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+      banner={(
+        <>
+          {(facts.__meta as Record<string, unknown> | undefined)?.requires_review ||
+          (facts.__meta as Record<string, unknown> | undefined)?.source_case_id ? (
+            <div className="mb-6 rounded-lg border border-violet-200 bg-violet-50 p-4 text-sm leading-6 text-violet-950">
+              <div className="font-semibold text-violet-800">Prefilled from your previous case</div>
+              <p className="mt-1">Some answers were prefilled from your previous case. Please check them before continuing.</p>
+            </div>
+          ) : null}
+          {error ? (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
               <div className="flex items-center justify-between">
                 <span className="text-red-700">{error}</span>
                 <button
@@ -1167,7 +1176,9 @@ const EvictionSectionFlowInner: React.FC<EvictionSectionFlowProps> = ({
                 </button>
               </div>
             </div>
-          ) : undefined}
+          ) : null}
+        </>
+      )}
       sidebar={(
         <AskHeavenPanel
           caseId={caseId}

@@ -13,7 +13,6 @@ import {
   buildEnglandDraftingContext,
   evaluateEnglandDraftingPolicy,
   type EnglandDraftingDecision,
-  type EnglandModernTenancyDraftingProduct,
 } from '@/lib/tenancy/england-drafting-policy';
 
 export interface ResidentialGeneratedDocument {
@@ -169,18 +168,6 @@ type EnglandAssuredResidentialProduct =
 type EnglandModernTenancyProduct =
   | EnglandAssuredResidentialProduct
   | 'england_lodger_agreement';
-
-function isEnglandModernTenancyDraftingProduct(
-  product: ResidentialLettingProductSku
-): product is EnglandModernTenancyDraftingProduct {
-  return (
-    product === 'england_standard_tenancy_agreement' ||
-    product === 'england_premium_tenancy_agreement' ||
-    product === 'england_student_tenancy_agreement' ||
-    product === 'england_hmo_shared_house_tenancy_agreement' ||
-    product === 'england_lodger_agreement'
-  );
-}
 
 function joinAddress(...parts: Array<string | null | undefined>) {
   return parts.map(toText).filter(Boolean).join(', ');
@@ -4371,10 +4358,7 @@ async function generateModernEnglandPack(
   product: EnglandModernTenancyProduct,
   shared: SharedResidentialData,
   outputFormat: ResidentialDocumentOutputFormat,
-  baseConfigs: Record<
-    Exclude<ResidentialLettingProductSku, 'inventory_schedule_condition' | 'rent_arrears_letter'>,
-    TemplateConfig
-  >
+  baseConfigs: Partial<Record<ResidentialLettingProductSku, TemplateConfig>>
 ): Promise<ResidentialGeneratedPack> {
   const purpose = getEnglandTenancyPurpose(shared.facts.england_tenancy_purpose);
   const draftingDecision = evaluateEnglandDraftingPolicy(
@@ -4456,7 +4440,7 @@ async function generateModernEnglandPack(
           await generateTemplatedResidentialDocument(
             assuredProduct,
             shared,
-            baseConfigs[assuredProduct],
+            baseConfigs[assuredProduct] as TemplateConfig,
             outputFormat,
             {
               sections: buildEnglandAssuredSections(assuredProduct, shared, purpose, draftingDecision),
@@ -4544,7 +4528,7 @@ async function generateModernEnglandPack(
           await generateTemplatedResidentialDocument(
             'england_lodger_agreement',
             shared,
-            baseConfigs.england_lodger_agreement,
+            baseConfigs.england_lodger_agreement as TemplateConfig,
             outputFormat,
             {
               sections: buildEnglandLodgerAgreementSections(shared),
@@ -4731,7 +4715,7 @@ async function generateModernEnglandPack(
           await generateTemplatedResidentialDocument(
             'guarantor_agreement',
             shared,
-            baseConfigs.guarantor_agreement,
+            baseConfigs.guarantor_agreement as TemplateConfig,
             outputFormat
           )
         );
@@ -4786,10 +4770,7 @@ export async function generateResidentialLettingDocuments(
   const inventoryTemplate = '_shared/standalone/inventory_standalone.hbs';
   const arrearsTemplate = 'uk/england/templates/residential/rent_arrears_letter.hbs';
 
-  const configs: Record<
-    Exclude<ResidentialLettingProductSku, 'inventory_schedule_condition' | 'rent_arrears_letter'>,
-    TemplateConfig
-  > = {
+  const configs: Partial<Record<ResidentialLettingProductSku, TemplateConfig>> = {
     england_standard_tenancy_agreement: {
       title: 'Standard Tenancy Agreement & Setup Pack',
       subtitle: 'Periodic tenancy agreement for a residential let in England',
@@ -5172,7 +5153,7 @@ export async function generateResidentialLettingDocuments(
     document = await generateTemplatedResidentialDocument(
       product,
       shared,
-      configs[product],
+      configs[product] as TemplateConfig,
       outputFormat
     );
   }

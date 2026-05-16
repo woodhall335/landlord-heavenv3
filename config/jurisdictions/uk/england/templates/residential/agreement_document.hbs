@@ -333,10 +333,14 @@
 
   <h2 class="section-title">Parties</h2>
   <p class="opening">
-    {{#if execution_as_deed}}
-      This deed is made on {{formatUKDate document_date}} by the parties identified below in relation to the Property in England.
+    {{#if document_opening_statement}}
+      {{document_opening_statement}}
     {{else}}
-      This agreement is made on {{formatUKDate document_date}} by the parties identified below in relation to the Property in England.
+      {{#if execution_as_deed}}
+        This deed is made on {{formatUKDate document_date}} by the parties identified below in relation to the Property in England.
+      {{else}}
+        This agreement is made on {{formatUKDate document_date}} by the parties identified below in relation to the Property in England.
+      {{/if}}
     {{/if}}
   </p>
 
@@ -375,7 +379,7 @@
     </table>
   {{/if}}
 
-  <h2 class="section-title">Operative Provisions</h2>
+  <h2 class="section-title">{{#if operative_heading}}{{operative_heading}}{{else}}Operative Provisions{{/if}}</h2>
   {{#each sections}}
     <section class="clause">
       <div class="clause-heading">{{add @index 1}}. {{heading}}</div>
@@ -440,40 +444,42 @@
     </div>
   {{/if}}
 
-  <section class="execution">
-    <h2 class="section-title">Execution</h2>
-    <p class="execution-copy">{{execution_statement}}</p>
-    <div class="signatures">
-      {{#each signature_parties}}
-        <div class="signature-card">
-          <div class="signature-role">{{label}}</div>
-          <div class="signature-name">{{name}}</div>
-          <div class="signature-line"></div>
-          <div class="signature-meta">
-            <span>Signature</span>
-            <span>Date</span>
-          </div>
-
-          {{#if witnessRequired}}
-            <div class="witness-block">
-              <div class="witness-label">Witness</div>
-              <div class="signature-line"></div>
-              <div class="signature-meta">
-                <span>Witness signature</span>
-                <span>Date</span>
-              </div>
-              <div class="signature-line"></div>
-              <div class="signature-meta">
-                <span>Witness name</span>
-                <span>Witness address</span>
-              </div>
-              {{#if witnessNote}}<div class="witness-note">{{witnessNote}}</div>{{/if}}
+  {{#unless hide_execution_block}}
+    <section class="execution">
+      <h2 class="section-title">Execution</h2>
+      <p class="execution-copy">{{execution_statement}}</p>
+      <div class="signatures">
+        {{#each signature_parties}}
+          <div class="signature-card">
+            <div class="signature-role">{{label}}</div>
+            <div class="signature-name">{{name}}</div>
+            <div class="signature-line"></div>
+            <div class="signature-meta">
+              <span>Signature</span>
+              <span>Date</span>
             </div>
-          {{/if}}
-        </div>
-      {{/each}}
-    </div>
-  </section>
+
+            {{#if witnessRequired}}
+              <div class="witness-block">
+                <div class="witness-label">Witness</div>
+                <div class="signature-line"></div>
+                <div class="signature-meta">
+                  <span>Witness signature</span>
+                  <span>Date</span>
+                </div>
+                <div class="signature-line"></div>
+                <div class="signature-meta">
+                  <span>Witness name</span>
+                  <span>Witness address</span>
+                </div>
+                {{#if witnessNote}}<div class="witness-note">{{witnessNote}}</div>{{/if}}
+              </div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    </section>
+  {{/unless}}
 
   <div class="footer">
     <span>Landlord Heaven file copy</span>

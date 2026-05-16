@@ -996,6 +996,7 @@ export default function CaseDetailPage() {
           upgrade_from_product: 'notice_only',
           success_url: `${baseUrl}/dashboard/cases/${caseId}?payment=success&upgraded=complete_pack`,
           cancel_url: `${baseUrl}/dashboard/cases/${caseId}?upgrade=cancelled`,
+          checkout_abandoned: new Date().toISOString(),
         }),
       });
 

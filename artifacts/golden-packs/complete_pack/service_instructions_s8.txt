@@ -3,7 +3,7 @@ golden-complete-pack-001
 JURISDICTION
 england
 GENERATED
-11 May 2026
+16 May 2026
 Stage 2: Section 8 Court & Possession Pack
 Service Playbook
 Form 3A notice is the current Form 3A Section 8 notice for England.
@@ -14,15 +14,15 @@ review as the case moves forward.
 PROPERTY 16 Willow Mews York YO24 3HX
 TENANT Ivy Carleton
 NOTICE Form 3A notice
-NOTICE SERVICE DATE 10 May 2026
-NOTICE EXPIRY DATE 10 June 2026
+NOTICE SERVICE DATE 16 May 2026
+NOTICE EXPIRY DATE 17 June 2026
 EARLIEST PROCEEDINGS
 DATE
-10 June 2026
+17 June 2026
 VALIDATION SUMMARY
-Deemed service date used: 13 May 2026
-Notice expiry date: 10 June 2026
-Earliest proceedings date: 10 June 2026
+Deemed service date used: 20 May 2026
+Notice expiry date: 17 June 2026
+Earliest proceedings date: 17 June 2026
 Total arrears: £3600.00
 Ground 8 threshold: £3600.00 (AT)
 Service Playbook
@@ -69,7 +69,7 @@ Action: Keep the service record complete and aligned before you move on.
 File Notes
 The claimant seeks possession of 16 Willow Mews York YO24 3HX relying on Ground 8 (Rent arrears),
 Ground 10 (Any rent arrears).
-Form 3A notice served on 10 May 2026, expiring on 10 June 2026, with proceedings not intended before
-10 June 2026.
+Form 3A notice served on 16 May 2026, expiring on 17 June 2026, with proceedings not intended before
+17 June 2026.
 
 -- 3 of 3 --

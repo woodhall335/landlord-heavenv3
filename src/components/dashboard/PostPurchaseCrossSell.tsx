@@ -11,7 +11,7 @@ import React from 'react';
 import Link from 'next/link';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { BadgePoundSterling, FileText } from 'lucide-react';
-import { PRODUCTS } from '@/lib/pricing/products';
+import { PRODUCTS, type ProductSku } from '@/lib/pricing/products';
 import {
   isProductSupportedInJurisdiction,
   type WizardJurisdiction,
@@ -19,13 +19,14 @@ import {
 } from '@/lib/wizard/buildWizardLink';
 
 interface CrossSellItem {
-  product: string;
+  product: ProductSku;
   title: string;
   description: string;
   price: string;
   href: string;
   icon: React.ReactNode;
   primary?: boolean;
+  prefillFromCase?: boolean;
 }
 
 interface PostPurchaseCrossSellProps {
@@ -41,7 +42,7 @@ interface PostPurchaseCrossSellProps {
   excludeProducts?: string[];
 }
 
-const CROSS_SELL_MAP: Record<string, CrossSellItem[]> = {
+const CROSS_SELL_MAP: Partial<Record<ProductSku, CrossSellItem[]>> = {
   // Notice Only buyers → Complete Pack + Money Claim
   notice_only: [
     {
@@ -52,6 +53,7 @@ const CROSS_SELL_MAP: Record<string, CrossSellItem[]> = {
       href: '/wizard?product=complete_pack&src=dashboard_crosssell',
       icon: <FileText className="w-5 h-5 text-primary" />,
       primary: true,
+      prefillFromCase: true,
     },
     {
       product: 'money_claim',
@@ -72,6 +74,7 @@ const CROSS_SELL_MAP: Record<string, CrossSellItem[]> = {
       href: '/wizard?product=money_claim&src=dashboard_crosssell',
       icon: <BadgePoundSterling className="w-5 h-5 text-blue-600" />,
       primary: true,
+      prefillFromCase: true,
     },
   ],
   // Money Claim buyers → Eviction products
@@ -95,27 +98,44 @@ const CROSS_SELL_MAP: Record<string, CrossSellItem[]> = {
     },
   ],
   // AST buyers → Eviction products
-  ast_standard: [
-    {
-      product: 'notice_only',
-      title: 'What if you need to evict?',
-      description: 'If issues arise, our Notice Only Pack has you covered from day one.',
-      price: PRODUCTS.notice_only.displayPrice,
-      href: '/wizard?product=notice_only&src=dashboard_crosssell',
-      icon: <FileText className="w-5 h-5 text-primary" />,
-    },
-  ],
-  ast_premium: [
-    {
-      product: 'notice_only',
-      title: 'What if you need to evict?',
-      description: 'If issues arise, our Notice Only Pack has you covered from day one.',
-      price: PRODUCTS.notice_only.displayPrice,
-      href: '/wizard?product=notice_only&src=dashboard_crosssell',
-      icon: <FileText className="w-5 h-5 text-primary" />,
-    },
-  ],
+  ast_standard: [],
+  ast_premium: [],
+  england_standard_tenancy_agreement: [],
+  england_premium_tenancy_agreement: [],
+  england_student_tenancy_agreement: [],
+  england_hmo_shared_house_tenancy_agreement: [],
+  england_lodger_agreement: [],
 };
+
+const tenancyAgreementCrossSells = CROSS_SELL_MAP.ast_standard || [];
+CROSS_SELL_MAP.england_standard_tenancy_agreement = tenancyAgreementCrossSells;
+CROSS_SELL_MAP.england_premium_tenancy_agreement = tenancyAgreementCrossSells;
+CROSS_SELL_MAP.england_student_tenancy_agreement = tenancyAgreementCrossSells;
+CROSS_SELL_MAP.england_hmo_shared_house_tenancy_agreement = tenancyAgreementCrossSells;
+CROSS_SELL_MAP.england_lodger_agreement = tenancyAgreementCrossSells;
+
+const CORE_WIZARD_PRODUCTS = new Set<string>([
+  'notice_only',
+  'complete_pack',
+  'money_claim',
+  'section13_standard',
+  'section13_defensive',
+  'tenancy_agreement',
+  'ast_standard',
+  'ast_premium',
+]);
+
+function getCrossSellHref(item: CrossSellItem, caseId: string | undefined): string {
+  if (!caseId || !item.prefillFromCase) {
+    return item.href;
+  }
+
+  const params = new URLSearchParams({
+    destination_product: item.product,
+    prefill_trigger: 'dashboard_crosssell',
+  });
+  return `/api/cases/${caseId}/prefill?${params.toString()}`;
+}
 
 export function PostPurchaseCrossSell({
   purchasedProduct,
@@ -131,7 +151,7 @@ export function PostPurchaseCrossSell({
     jurisdiction === 'northern-ireland'
       ? (jurisdiction as WizardJurisdiction)
       : null;
-  const crossSellItems = (CROSS_SELL_MAP[purchasedProduct] || []).filter((item) => {
+  const crossSellItems = (CROSS_SELL_MAP[purchasedProduct as ProductSku] || []).filter((item) => {
     if (excludeProducts.includes(item.product)) {
       return false;
     }
@@ -140,10 +160,14 @@ export function PostPurchaseCrossSell({
       return true;
     }
 
-    return isProductSupportedInJurisdiction(
-      item.product as WizardProduct,
-      normalizedJurisdiction
-    );
+    if (CORE_WIZARD_PRODUCTS.has(item.product)) {
+      return isProductSupportedInJurisdiction(
+        item.product as WizardProduct,
+        normalizedJurisdiction
+      );
+    }
+
+    return normalizedJurisdiction === 'england';
   });
 
   // No cross-sell items for this product
@@ -160,7 +184,7 @@ export function PostPurchaseCrossSell({
         {crossSellItems.map((item) => (
           <Link
             key={item.product}
-            href={item.href}
+            href={getCrossSellHref(item, caseId)}
             className={`block rounded-lg border p-4 transition-all hover:shadow-md ${
               item.primary
                 ? 'bg-white border-primary/30 hover:border-primary'

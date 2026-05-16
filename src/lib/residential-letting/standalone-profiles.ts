@@ -1,5 +1,6 @@
 import { getWizardIconPathByFilename } from '@/components/wizard/shared/wizardIconManifest';
 import {
+  RESIDENTIAL_LETTING_PRODUCTS,
   PUBLIC_RESIDENTIAL_LETTING_PRODUCT_SKUS,
   type ResidentialLettingProductSku,
 } from '@/lib/residential-letting/products';
@@ -103,6 +104,16 @@ function buildCommonFaqs(productLabel: string): ResidentialFaq[] {
       answer:
         'Yes. The wizard is designed to collect deal-specific facts, schedules, evidence references, and practical wording that a blank form usually leaves to the user.',
     },
+    {
+      question: 'Where do I access the finished documents?',
+      answer:
+        'After payment, the generated PDF documents are saved to the existing dashboard case file for download and later reference.',
+    },
+    {
+      question: 'Can this help with another landlord workflow later?',
+      answer:
+        'Where compatible, related-product links can reuse reviewed landlord, tenant, property, tenancy, arrears, or evidence details in a new case for checking.',
+    },
   ];
 }
 
@@ -175,7 +186,7 @@ function buildEnglandTenancyProfile(params: {
   };
 }
 
-const profiles: Record<ResidentialLettingProductSku, ResidentialStandaloneProfileSeed> = {
+const profiles: Partial<Record<ResidentialLettingProductSku, ResidentialStandaloneProfileSeed>> = {
   england_standard_tenancy_agreement: buildEnglandTenancyProfile({
     product: 'england_standard_tenancy_agreement',
     eyebrow: 'Standard Tenancy Agreement & Setup Pack',
@@ -1833,10 +1844,97 @@ function materializeProfile(
   });
 }
 
+function buildGeneratedProfile(product: ResidentialLettingProductSku): ResidentialStandaloneProfileSeed {
+  const meta = RESIDENTIAL_LETTING_PRODUCTS[product];
+
+  return {
+    product,
+    icon: icon('18-forms-bundle.png'),
+    reviewIcon: icon('12-summary-cards.png'),
+    eyebrow: meta.label,
+    heroTitle: `Create the ${meta.label.toLowerCase()} from a guided landlord workflow.`,
+    heroSubtitle:
+      'Answer plain-English questions, review the pack before payment, and keep the generated documents inside your existing dashboard case file.',
+    heroBullets: [
+      'Uses the existing guided wizard and review flow',
+      'Generates branded Landlord Heaven PDF documents',
+      'Supports dashboard continuity into related products',
+    ],
+    reviewHighlights: [
+      'Parties, property, and tenancy details',
+      'Product-specific schedules and evidence references',
+      'Reviewable document summary before checkout',
+    ],
+    reviewSummaryLabels: ['Property', 'Landlord', 'Tenant', 'Tenancy', 'Pack details'],
+    outputSections: [
+      'Pack summary',
+      'Shared landlord and tenant details',
+      'Pack-specific document set',
+      'Dashboard next-step prompts',
+    ],
+    stepIcons: {
+      property_details: icon('03-property.png'),
+      landlord: icon('39-landlord.png'),
+      tenant: icon('40-tenants.png'),
+      tenancy_terms: icon('04-tenancy.png'),
+    },
+    landing: {
+      title: `${meta.label} | Landlord Heaven`,
+      description: meta.description,
+      h1: meta.label,
+      subheading:
+        'A guided England landlord document pack with branded PDFs, review-before-payment, and dashboard continuity.',
+      overview:
+        'Use this pack when you want a structured landlord workflow rather than a blank template. It reuses the existing review, preview, checkout, and dashboard document pipeline.',
+      whyUseThis: [
+        'Keeps the landlord, tenant, property, and tenancy details together',
+        'Creates pack-specific documents from one guided set of answers',
+        'Keeps the final document inside the dashboard document flow',
+      ],
+      howWizardWorks: [
+        'Enter shared landlord, tenant, property, and tenancy details',
+        'Complete the pack-specific schedule or evidence questions',
+        'Review the pack summary before checkout and download from the dashboard',
+      ],
+      whoThisIsFor: [
+        'England residential landlords managing a live tenancy file',
+        'Landlords who want structured documents instead of disconnected templates',
+      ],
+      notFor: [
+        'Non-England property workflows',
+        'Situations needing bespoke legal advice before taking action',
+      ],
+      legalExplainer:
+        'The pack provides document automation and guidance, not legal advice. The user remains responsible for checking the facts before use.',
+      includedHighlights: [
+        'Branded PDF pack',
+        'Review-before-payment flow',
+        'Dashboard document access and related-product prompts',
+      ],
+      documentPreviewAnatomy: [
+        'Front summary and reference details',
+        'Structured schedules and evidence references',
+        'Signature, service, or execution blocks where relevant',
+      ],
+      internalLinks: [
+        {
+          label: 'Landlord documents',
+          href: '/landlord-documents-england',
+          description: 'Compare the main England landlord document routes.',
+        },
+      ],
+      faqs: buildCommonFaqs(meta.label),
+    },
+  };
+}
+
 export const RESIDENTIAL_STANDALONE_PROFILES = Object.fromEntries(
-  Object.entries(profiles).map(([sku, profile]) => [
+  Object.keys(RESIDENTIAL_LETTING_PRODUCTS).map((sku) => [
     sku,
-    materializeProfile(profile as ResidentialStandaloneProfileSeed),
+    materializeProfile(
+      (profiles[sku as ResidentialLettingProductSku] ||
+        buildGeneratedProfile(sku as ResidentialLettingProductSku)) as ResidentialStandaloneProfileSeed
+    ),
   ])
 ) as Record<ResidentialLettingProductSku, ResidentialStandaloneProfile>;
 
