@@ -21,6 +21,9 @@
 
 import fs from 'fs';
 import path from 'path';
+import { CURRENT_ENGLAND_FRAMEWORK_PAGES } from '../src/lib/seo/england-current-framework-pages';
+import { PRODUCT_OWNER_METADATA_LIST } from '../src/lib/seo/product-owner-metadata';
+import { getRentIncreaseHubPage } from '../src/app/rent-increase/content';
 
 // ANSI colors for terminal output
 const colors = {
@@ -171,6 +174,7 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
 
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
+    const sharedMetadata = getSharedMetadata(route);
 
     // Extract title from metadata object
     const titlePatterns = [
@@ -186,6 +190,9 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
         break;
       }
     }
+    if (!metadata.title && sharedMetadata?.title) {
+      metadata.title = sharedMetadata.title;
+    }
 
     // Extract description
     const descPatterns = [
@@ -200,6 +207,9 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
         break;
       }
     }
+    if (!metadata.description && sharedMetadata?.description) {
+      metadata.description = sharedMetadata.description;
+    }
 
     // Extract keywords array
     const keywordsMatch = content.match(/keywords:\s*\[([\s\S]*?)\]/);
@@ -210,12 +220,17 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
         .map(k => k.trim().replace(/['"`]/g, ''))
         .filter(Boolean);
     }
+    if ((!metadata.keywords || metadata.keywords.length === 0) && sharedMetadata?.keywords.length) {
+      metadata.keywords = sharedMetadata.keywords;
+    }
 
     // Extract H1 from JSX - multiple patterns
     const h1Patterns = [
       /<h1[^>]*>([^<]+)<\/h1>/,
       /<h1[^>]*>\s*\{?['"`]?([^<'"`{}]+)['"`]?\}?\s*<\/h1>/,
       /className="[^"]*text-[34]xl[^"]*"[^>]*>([^<]+)</,
+      /\btitle=["']([^"']+)["']/,
+      /\bheroTitle:\s*['"`]([^'"`]+)['"`]/,
     ];
 
     for (const pattern of h1Patterns) {
@@ -282,7 +297,13 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
     }
 
     // Count internal links
-    const internalLinkMatches = content.match(/href=["']\/[^"']+["']/g) || [];
+    const internalLinkMatches = [
+      ...(content.match(/href=["']\/[^"']+["']/g) || []),
+      ...(content.match(/href=\{["']\/[^"']+["']\}/g) || []),
+      ...(content.match(/href:\s*["']\/[^"']+["']/g) || []),
+      ...(content.match(/primaryCtaHref=["']\/[^"']+["']/g) || []),
+      ...(content.match(/secondaryCtaHref=["']\/[^"']+["']/g) || []),
+    ];
     metadata.internalLinksCount = internalLinkMatches.length;
 
   } catch (error) {
@@ -290,6 +311,62 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
   }
 
   return metadata;
+}
+
+function getSharedMetadata(route: string): { title: string; description: string; keywords: string[] } | null {
+  const slug = route === '/' ? '' : route.slice(1);
+
+  if (slug in CURRENT_ENGLAND_FRAMEWORK_PAGES) {
+    const page = CURRENT_ENGLAND_FRAMEWORK_PAGES[slug as keyof typeof CURRENT_ENGLAND_FRAMEWORK_PAGES];
+    return {
+      title: page.title,
+      description: page.description,
+      keywords: page.keywords,
+    };
+  }
+
+  const productOwner = PRODUCT_OWNER_METADATA_LIST.find((page) => page.path === route);
+  if (productOwner) {
+    return {
+      title: productOwner.title,
+      description: productOwner.description,
+      keywords: [],
+    };
+  }
+
+  if (route === '/products/rent-increase') {
+    const page = getRentIncreaseHubPage();
+    return {
+      title: page.metaTitle,
+      description: page.metaDescription,
+      keywords: [
+        page.primaryKeyword,
+        page.intentLabel,
+        'section 13',
+        'form 4a',
+        'rent increase england',
+      ],
+    };
+  }
+
+  if (route === '/blog') {
+    return {
+      title: 'England Landlord Guides | Section 8, Possession & Tenancy Help',
+      description:
+        'Read England landlord guides on Section 8 notices, possession claims, tenancy agreements, rent arrears, compliance steps, and the right product route.',
+      keywords: [
+        'how to evict a tenant in england',
+        'section 8 notice england',
+        'section 8',
+        'rent arrears',
+        'tenancy agreement england',
+        'possession claim england',
+        'landlord compliance',
+      ],
+    };
+  }
+
+  return null;
 }
 
 // =====================================================

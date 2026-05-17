@@ -240,9 +240,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'section-8-notice': {
     slug: 'section-8-notice',
-    title: 'Section 8 Notice for England | Grounds, Evidence, and Current Rules',
+    title: 'Section 8 Notice England | Grounds, Evidence & Rules',
     description:
-      'Learn how the current England Section 8 notice works after 1 May 2026, including grounds such as Ground 8, evidence, service, possession timing, and what to prepare before an N5 and N119 claim.',
+      'Learn how the current England Section 8 notice works after 1 May 2026, including grounds, evidence, service, timing, and N5/N119 court preparation.',
     keywords: [
       'section 8 notice england',
       'section 8 notice',
@@ -419,9 +419,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'renters-rights-act-eviction-rules': {
     slug: 'renters-rights-act-eviction-rules',
-    title: 'Renters\' Rights Act Eviction Rules for England | Landlord Guide 2026',
+    title: 'Renters\' Rights Act Eviction Rules | England Landlords',
     description:
-      'Understand the new eviction rules in England under the Renters\' Rights Act, including notice planning, possession claims, evidence, compliance checks, and what landlords should do after 1 May 2026.',
+      'Understand Renters\' Rights Act eviction rules in England, including notice planning, possession claims, evidence, compliance checks, and next landlord steps.',
     keywords: [
       'renters rights act eviction rules',
       'england eviction rules 2026',
@@ -572,9 +572,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'eviction-notice-england': {
     slug: 'eviction-notice-england',
-    title: 'England Eviction Notice Generator | Current Possession Route 2026',
+    title: 'England Eviction Notice Generator | Form 3A Route',
     description:
-      'Use the current England eviction notice generator to prepare a compliant notice, understand Form 3A, and move into N5 and N119 claim support if the case continues.',
+      'Use the current England eviction notice generator to prepare Form 3A, keep service proof, and move into N5 and N119 claim support if the case continues.',
     keywords: [
       'england eviction notice generator',
       'eviction notice england',
@@ -718,7 +718,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'how-to-evict-a-tenant-england': {
     slug: 'how-to-evict-a-tenant-england',
-    title: 'How to Evict a Tenant in England After 1 May 2026 | Landlord Guide',
+    title: 'How to Evict a Tenant in England | Landlord Guide 2026',
     description:
       'Follow how to evict a tenant in England after 1 May 2026, from route selection and notice service to N5 and N119 claims, hearings, and enforcement planning.',
     keywords: [
@@ -866,9 +866,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'eviction-process-england': {
     slug: 'eviction-process-england',
-    title: 'Eviction Process in England | Current Possession Timeline 2026',
+    title: 'Eviction Process England | Possession Timeline 2026',
     description:
-      'Follow the current eviction process in England after 1 May 2026, including notice planning, service, N5 and N119 possession claims, hearings, enforcement, and practical landlord timelines.',
+      'Follow the current eviction process in England, including notice planning, service, N5 and N119 possession claims, hearings, enforcement, and timelines.',
     keywords: [
       'eviction process england',
       'updated england eviction process',
@@ -1014,9 +1014,9 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
   },
   'eviction-notice-template': {
     slug: 'eviction-notice-template',
-    title: 'Eviction Notice Template for England | Current Notice Hub 2026',
+    title: 'Eviction Notice Template England | Current Notice Hub',
     description:
-      'Use this current England eviction notice template hub to understand the live notice route, see what belongs in the notice bundle, and move into Notice Only or Complete Pack with confidence.',
+      'Use this England eviction notice template hub to understand the current notice route, what belongs in the bundle, and when to choose Notice Only or Complete Pack.',
     keywords: [
       'eviction notice template england',
       'legally validated eviction notice generator 2026',

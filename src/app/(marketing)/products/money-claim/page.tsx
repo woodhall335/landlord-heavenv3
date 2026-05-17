@@ -26,13 +26,8 @@ export const metadata: Metadata = {
     'particulars of claim template',
     'letter before claim template',
     'landlord MCOL pack',
-    'money claim online UK',
-    "Renters' Rights Act debt claim",
-    'money claim online post May 2026',
     'landlord money claim pack',
     'money claim unpaid rent',
-    'recover unpaid rent',
-    'property damage',
   ],
   alternates: {
     canonical: canonicalUrl,

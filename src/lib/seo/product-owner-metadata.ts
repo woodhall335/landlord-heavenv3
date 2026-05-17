@@ -15,13 +15,13 @@ export const PRODUCT_OWNER_METADATA = {
   },
   moneyClaim: {
     path: '/products/money-claim',
-    title: `Prepare a Landlord Money Claim | ${SEO_PRICES.moneyClaim.display}`,
+    title: `Landlord Money Claim Pack | ${SEO_PRICES.moneyClaim.display}`,
     description:
       'Prepare a landlord money claim for unpaid rent, damage, bills, or tenancy debt, with a demand letter and claim papers you can check.',
   },
   section13Standard: {
     path: '/products/section-13-standard',
-    title: `Create Section 13 Form 4A Rent Increase Notice | ${SEO_PRICES.section13Standard.display}`,
+    title: `Section 13 Rent Increase Pack | ${SEO_PRICES.section13Standard.display}`,
     description:
       'Create a Section 13 Form 4A rent increase notice with market evidence, service record, and a tenant-facing explanation before you serve.',
   },
@@ -39,25 +39,25 @@ export const PRODUCT_OWNER_METADATA = {
   },
   premiumTenancy: {
     path: '/premium-tenancy-agreement',
-    title: 'Buy Premium Tenancy Agreement | Stronger Wording | £24.99',
+    title: 'Premium Tenancy Agreement | Stronger Wording | £24.99',
     description:
       'Create a Premium Periodic Tenancy Agreement with stronger management wording for access, repairs, keys, handover, and day-to-day control.',
   },
   studentTenancy: {
     path: '/student-tenancy-agreement',
-    title: 'Buy Student Tenancy Agreement | Guarantor Forms | £24.99',
+    title: 'Student Tenancy Agreement | Guarantor Forms | £24.99',
     description:
       'Create a Student Tenancy Agreement for England with guarantor, sharer, replacement occupier, and end-of-term wording in one pack.',
   },
   hmoTenancy: {
     path: '/hmo-shared-house-tenancy-agreement',
-    title: 'Buy HMO Tenancy Agreement | Shared House Rules | £34.99',
+    title: 'HMO Tenancy Agreement | Shared House Rules | £34.99',
     description:
       'Create an HMO or shared-house tenancy agreement with house rules, communal-area wording, and shared occupation records kept together.',
   },
   lodgerAgreement: {
     path: '/lodger-agreement',
-    title: 'Buy Lodger Agreement | Resident Landlord | £14.99',
+    title: 'Lodger Agreement | Resident Landlord | £14.99',
     description:
       'Create a Lodger Agreement for resident landlords with room-let terms, shared-home rules, notice wording, and house records in one pack.',
   },

@@ -65,6 +65,13 @@
     "pageType": "dynamic"
   },
   {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\cases\\page.tsx",
+    "route": "/(app)/dashboard/admin/cases",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\email-previews\\page.tsx",
     "route": "/(app)/dashboard/admin/email-previews",
     "isDynamic": false,
@@ -74,6 +81,13 @@
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\failed-payments\\page.tsx",
     "route": "/(app)/dashboard/admin/failed-payments",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\growth\\page.tsx",
+    "route": "/(app)/dashboard/admin/growth",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
@@ -346,8 +360,22 @@
     "pageType": "static"
   },
   {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\money-claim-pack\\page.tsx",
+    "route": "/(marketing)/products/money-claim-pack",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\notice-only\\page.tsx",
     "route": "/(marketing)/products/notice-only",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\rent-increase\\page.tsx",
+    "route": "/(marketing)/products/rent-increase",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
@@ -490,6 +518,27 @@
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\common-prt-tenancy-mistakes-scotland\\page.tsx",
     "route": "/common-prt-tenancy-mistakes-scotland",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\compare\\section-13-standard-vs-defence\\page.tsx",
+    "route": "/compare/section-13-standard-vs-defence",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\compare\\section-8-stage-1-vs-stage-2\\page.tsx",
+    "route": "/compare/section-8-stage-1-vs-stage-2",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\compare\\tenancy-agreement-options-england\\page.tsx",
+    "route": "/compare/tenancy-agreement-options-england",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
@@ -1246,6 +1295,29 @@
     "pageType": "static"
   },
   {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\samples\\notice-only\\page.tsx",
+    "route": "/samples/notice-only",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\samples\\page.tsx",
+    "route": "/samples",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\samples\\[slug]\\page.tsx",
+    "route": "/samples/[slug]",
+    "isDynamic": true,
+    "dynamicSegments": [
+      "slug"
+    ],
+    "pageType": "dynamic"
+  },
+  {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\scotland-eviction-notices\\page.tsx",
     "route": "/scotland-eviction-notices",
     "isDynamic": false,
@@ -1339,6 +1411,90 @@
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-eviction-process\\page.tsx",
     "route": "/section-8-eviction-process",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-1\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-1",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-10\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-10",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-11\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-11",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-12\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-12",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-13\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-13",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-14\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-14",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-15\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-15",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-17\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-17",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-1a\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-1a",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-2\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-2",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-7a\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-7a",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\section-8-grounds\\how-to-evict-a-tenant-using-ground-8\\page.tsx",
+    "route": "/section-8-grounds/how-to-evict-a-tenant-using-ground-8",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
@@ -1626,6 +1782,69 @@
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-arrears-calculator\\page.tsx",
     "route": "/tools/rent-arrears-calculator",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\challenge-risk\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker/challenge-risk",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\form-4a-evidence\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker/form-4a-evidence",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\guide\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker/guide",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\how-much-can-i-increase-rent\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker/how-much-can-i-increase-rent",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\market-rent-evidence\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker/market-rent-evidence",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\section-13-notice-route\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker/section-13-notice-route",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\section-13-rent-increase-calculator\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker/section-13-rent-increase-calculator",
+    "isDynamic": false,
+    "dynamicSegments": [],
+    "pageType": "static"
+  },
+  {
+    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\tools\\rent-increase-challenge-checker\\tenant-challenge\\page.tsx",
+    "route": "/tools/rent-increase-challenge-checker/tenant-challenge",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"

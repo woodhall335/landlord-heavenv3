@@ -28,6 +28,9 @@ import {
 import { INTENT_PAGES } from '../src/lib/seo/eviction-intent-pages';
 import { PHASE5_PAGES } from '../src/lib/seo/phase5-pages';
 import { PASS2_LONGFORM_PAGES } from '../src/lib/seo/pass2-longform-content';
+import { CURRENT_ENGLAND_FRAMEWORK_PAGES } from '../src/lib/seo/england-current-framework-pages';
+import { PRODUCT_OWNER_METADATA_LIST } from '../src/lib/seo/product-owner-metadata';
+import { getRentIncreaseHubPage } from '../src/app/rent-increase/content';
 
 const colors = {
   reset: '\x1b[0m',
@@ -211,6 +214,16 @@ function getSharedMetadata(route: string): SharedMetadataShape | null {
     return null;
   }
 
+  if (slug in CURRENT_ENGLAND_FRAMEWORK_PAGES) {
+    const page = CURRENT_ENGLAND_FRAMEWORK_PAGES[slug as keyof typeof CURRENT_ENGLAND_FRAMEWORK_PAGES];
+    return {
+      source: 'intent',
+      title: page.title,
+      description: page.description,
+      keywords: normalizeKeywordList(page.keywords),
+    };
+  }
+
   if (slug in INTENT_PAGES) {
     const page = INTENT_PAGES[slug];
     return {
@@ -238,6 +251,50 @@ function getSharedMetadata(route: string): SharedMetadataShape | null {
       title: page.title,
       description: page.description,
       keywords: [],
+    };
+  }
+
+  const productOwner = PRODUCT_OWNER_METADATA_LIST.find((page) => page.path === route);
+  if (productOwner) {
+    return {
+      source: 'intent',
+      title: productOwner.title,
+      description: productOwner.description,
+      keywords: [],
+    };
+  }
+
+  if (route === '/products/rent-increase') {
+    const page = getRentIncreaseHubPage();
+    return {
+      source: 'intent',
+      title: page.metaTitle,
+      description: page.metaDescription,
+      keywords: normalizeKeywordList([
+        page.primaryKeyword,
+        page.intentLabel,
+        'section 13',
+        'form 4a',
+        'rent increase england',
+      ]),
+    };
+  }
+
+  if (route === '/blog') {
+    return {
+      source: 'intent',
+      title: 'England Landlord Guides | Section 8, Possession & Tenancy Help',
+      description:
+        'Read England landlord guides on Section 8 notices, possession claims, tenancy agreements, rent arrears, compliance steps, and the right product route.',
+      keywords: normalizeKeywordList([
+        'how to evict a tenant in england',
+        'section 8 notice england',
+        'section 8',
+        'rent arrears',
+        'tenancy agreement england',
+        'possession claim england',
+        'landlord compliance',
+      ]),
     };
   }
 
@@ -339,8 +396,11 @@ function auditRoute(route: string): AuditResult {
       : content;
   const metadataWindow = extractMetadataWindow(metadataSourceContent);
   const hasMetadataExport = pageHasMetadataExport || layoutHasMetadataExport;
-  const usesSharedHelper = /getIntentPageMetadata\(|getPhase5Metadata\(|getPass2Metadata\(/.test(metadataSourceContent);
-  const usesMetadataGenerator = /=\s*generateMetadataForPageType\(|=\s*generateMetadata\(/.test(metadataSourceContent);
+  const usesSharedHelper =
+    /getIntentPageMetadata\(|getPhase5Metadata\(|getPass2Metadata\(|getCurrentFrameworkMetadata\(|getRentIncreaseGuideMetadata\(/.test(
+      metadataSourceContent,
+    );
+  const usesMetadataGenerator = /=\s*(?:buildSeoMetadata|generateMetadataForPageType|generateMetadata)\(/.test(metadataSourceContent);
   const helperGuarantees = usesSharedHelper || usesMetadataGenerator;
 
   const title = sharedMetadata?.title ?? extractFirstValue(metadataWindow, 'title');
