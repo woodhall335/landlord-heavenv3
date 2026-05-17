@@ -42,7 +42,7 @@ export default function ChallengeRiskPage() {
         },
       ]}
       primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Check challenge risk now' }}
-      secondaryCta={{ href: '/rent-increase', label: 'See the Defence route' }}
+      secondaryCta={{ href: '/rent-increase', label: 'Prepare for a rent challenge' }}
       relatedLinks={[
         ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/challenge-risk').slice(0, 4),
         { href: '/rent-increase', label: 'Compare Standard and Defence Section 13 routes' },

@@ -96,7 +96,7 @@ export const rentIncreaseRulesUkPage: RentIncreaseGuidePage = {
   midCtaTitle: 'Use England rules to build a service-ready pack',
   midCtaBody:
     'If your property is in England, generate your Section 13 notice with timeline validation and market-rent positioning in one flow.',
-  finalCtaTitle: 'Generate your Section 13 notice',
+  finalCtaTitle: 'Create my rent increase notice',
   finalCtaBody:
     'Start the Standard wizard after confirming jurisdiction and chronology assumptions, so the notice you serve reflects the right legal route as well as the right landlord narrative.',
 };

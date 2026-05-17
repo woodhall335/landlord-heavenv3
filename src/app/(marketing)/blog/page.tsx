@@ -140,7 +140,7 @@ export default function BlogPage() {
                 Landlord help that tells you what to do next
               </h2>
               <p className="mt-4 text-lg text-slate-600">
-                Start with the England landlord problem in plain English, understand the route, and
+                Begin with the England landlord problem in plain English, understand the route, and
                 then move into the right product when you are ready.
               </p>
             </div>
@@ -260,10 +260,10 @@ export default function BlogPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
                 <Link href="/products/notice-only" className="hero-btn-primary">
-                  Generate your eviction notice - {PRODUCTS.notice_only.displayPrice} -&gt;
+                  Create my Section 8 notice - {PRODUCTS.notice_only.displayPrice} -&gt;
                 </Link>
                 <Link href="/products/complete-pack" className="hero-btn-secondary">
-                  See the court pack - {PRODUCTS.complete_pack.displayPrice} -&gt;
+                  Prepare my court pack - {PRODUCTS.complete_pack.displayPrice} -&gt;
                 </Link>
               </div>
 

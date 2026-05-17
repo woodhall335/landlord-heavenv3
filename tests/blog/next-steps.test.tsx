@@ -55,12 +55,12 @@ describe('NextSteps - Section 21 Cluster', () => {
       />
     );
 
-    const cta = screen.getByRole('link', { name: /Complete Eviction Pack|Notice Only Bundle/ });
+    const cta = screen.getByRole('link', { name: /Prepare my court pack|Create my Section 8 notice/ });
     expect(cta).toBeInTheDocument();
     expect(['/products/complete-pack', '/products/notice-only']).toContain(
       cta.getAttribute('href')
     );
-    expect(['Complete Eviction Pack', 'Notice Only Bundle'].some((label) =>
+    expect(['Prepare my court pack', 'Create my Section 8 notice'].some((label) =>
       cta.textContent?.includes(label)
     )).toBe(true);
   });
@@ -97,7 +97,7 @@ describe('NextSteps - Section 8 Cluster', () => {
     expect(evictionGuide).toHaveAttribute('href', '/how-to-evict-tenant');
   });
 
-  it('renders Notice Only Bundle for section-8 posts', () => {
+  it('renders Create my Section 8 notice for section-8 posts', () => {
     render(
       <NextSteps
         slug="england-section-8-ground-14"
@@ -106,7 +106,7 @@ describe('NextSteps - Section 8 Cluster', () => {
       />
     );
 
-    const noticeOnlyBundle = screen.getByRole('link', { name: /Notice Only Bundle/ });
+    const noticeOnlyBundle = screen.getByRole('link', { name: /Create my Section 8 notice/ });
     expect(noticeOnlyBundle).toHaveAttribute('href', '/products/notice-only');
   });
 });
@@ -116,7 +116,7 @@ describe('NextSteps - Section 8 Cluster', () => {
 // =============================================================================
 
 describe('NextSteps - Rent Arrears Cluster', () => {
-  it('renders Money Claim Pack for rent arrears posts', () => {
+  it('renders Prepare my money claim for rent arrears posts', () => {
     render(
       <NextSteps
         slug="rent-arrears-eviction-guide"
@@ -125,7 +125,7 @@ describe('NextSteps - Rent Arrears Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
+    expect(screen.getByText('Prepare my money claim')).toBeInTheDocument();
   });
 
   it('renders Section 8 arrears guidance for arrears posts', () => {
@@ -140,7 +140,7 @@ describe('NextSteps - Rent Arrears Cluster', () => {
     expect(screen.getByText('Section 8 Notice for Rent Arrears')).toBeInTheDocument();
   });
 
-  it('renders Money Claim Pack for money-claim posts', () => {
+  it('renders Prepare my money claim for money-claim posts', () => {
     render(
       <NextSteps
         slug="england-money-claim-online"
@@ -149,7 +149,7 @@ describe('NextSteps - Rent Arrears Cluster', () => {
       />
     );
 
-    expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
+    expect(screen.getByText('Prepare my money claim')).toBeInTheDocument();
   });
 });
 
@@ -327,7 +327,7 @@ describe('NextSteps - Jurisdiction-Specific', () => {
       />
     );
 
-    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    expect(screen.getByText('Prepare my court pack')).toBeInTheDocument();
     expect(screen.getByText('How to Evict a Tenant Guide')).toBeInTheDocument();
   });
 
@@ -341,7 +341,7 @@ describe('NextSteps - Jurisdiction-Specific', () => {
     );
 
     // NI tenancy posts get the generic tenancy agreement pack CTA
-    expect(screen.getByText('Tenancy Agreement Pack')).toBeInTheDocument();
+    expect(screen.getByText('Choose my tenancy agreement')).toBeInTheDocument();
   });
 });
 
@@ -360,7 +360,7 @@ describe('NextSteps - Edge Cases', () => {
     );
 
     expect(screen.getByText('Ask Heaven')).toBeInTheDocument();
-    expect(screen.getByText('Tenancy Agreement Pack')).toBeInTheDocument();
+    expect(screen.getByText('Choose my tenancy agreement')).toBeInTheDocument();
   });
 
   it('limits to maximum 4 CTAs', () => {
@@ -425,8 +425,7 @@ describe('NextSteps - Link Attributes', () => {
 
     const href = askHeavenLink.getAttribute('href');
     expect(href).toContain('/ask-heaven');
-    expect(href).toContain('topic=deposit');
-    expect(href).toContain('src=blog');
+    expect(href).toBe('/ask-heaven');
   });
 
   it('Product links point to correct product pages', () => {
@@ -438,7 +437,7 @@ describe('NextSteps - Link Attributes', () => {
       />
     );
 
-    const productLink = screen.getByRole('link', { name: /Complete Eviction Pack|Notice Only Bundle/ });
+    const productLink = screen.getByRole('link', { name: /Prepare my court pack|Create my Section 8 notice/ });
     expect(['/products/complete-pack', '/products/notice-only']).toContain(
       productLink.getAttribute('href')
     );

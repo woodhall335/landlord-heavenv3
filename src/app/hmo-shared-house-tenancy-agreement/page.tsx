@@ -71,7 +71,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         pagePath="/hmo-shared-house-tenancy-agreement"
         title="Solicitor-approved HMO Tenancy Agreement - Shared House Builder"
         subtitle="Use this solicitor-approved HMO tenancy agreement template when the property is being shared and you want validated house rules, communal-area wording, and day-to-day paperwork to match how the house is actually run."
-        primaryCtaLabel="Start HMO / Shared House agreement"
+        primaryCtaLabel="Create my HMO / Shared House agreement"
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
@@ -169,7 +169,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           howItWorks: {
             title: 'How it works',
             intro:
-              'The workflow captures the shared-house details that need to be on the paperwork before the occupiers move in.',
+              'The steps capture the shared-house details that need to be on the paperwork before the occupiers move in.',
             steps: [
               {
                 step: 'Step 01',
@@ -185,13 +185,13 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               },
               {
                 step: 'Step 03',
-                title: 'Generate the full HMO / Shared House pack',
+                title: 'Create the full HMO / Shared House pack',
                 body:
                   'Download the agreement, the shared-house appendix, and the supporting paperwork as one England communal-living pack.',
               },
             ],
           },
-          ctaTitle: 'Start the HMO / Shared House agreement pack',
+          ctaTitle: 'Create the HMO / Shared House agreement pack',
           ctaBody:
             'Use this option when the property is being shared and you want the agreement, the communal rules, and the supporting records prepared together from the start.',
         }}

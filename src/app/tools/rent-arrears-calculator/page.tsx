@@ -76,7 +76,7 @@ export default function RentArrearsCalculator() {
     toolName: 'Rent Arrears Calculator',
     toolType: 'calculator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: `Upgrade to full money claim pack - ${noticeOnlyPrice}`,
+    ctaLabel: `Prepare my money claim - ${noticeOnlyPrice}`,
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [
@@ -447,8 +447,8 @@ export default function RentArrearsCalculator() {
         showReviewPill={false}
         showTrustPositioningBar
         showUsageCounter
-        primaryCta={{ label: 'Start Free Calculator ->', href: '#calculator' }}
-        secondaryCta={{ label: 'See the Money Claim Pack ->', href: '/products/money-claim' }}
+        primaryCta={{ label: 'Calculate my rent arrears', href: '#calculator' }}
+        secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim' }}
       >
         <p className="mt-4 text-sm text-white/90">
           Instant calculation • Clear arrears summary • Built to help landlords prepare the next move

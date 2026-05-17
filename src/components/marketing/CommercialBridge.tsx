@@ -232,7 +232,7 @@ export function RentIncreaseBridge({
       toolLabel="Check rent increase risk"
       primaryProduct="section13_standard"
       primaryHref="/products/section-13-standard"
-      primaryLabel="Generate Section 13 pack"
+      primaryLabel="Create my rent increase notice"
       secondaryProduct="section13_defensive"
       secondaryHref="/products/section-13-defence"
       secondaryLabel="Prepare for tenant challenge"
@@ -267,10 +267,10 @@ export function Section8Bridge({
       headline={headline}
       primaryProduct="complete_pack"
       primaryHref="/products/complete-pack"
-      primaryLabel="Choose the right eviction pack"
+      primaryLabel="Prepare my court pack"
       secondaryProduct="notice_only"
       secondaryHref="/products/notice-only"
-      secondaryLabel="Generate notice pack"
+      secondaryLabel="Create my Section 8 notice"
       ctaPosition={ctaPosition}
       riskMessage="The wrong route can delay possession"
       proofPoints={[
@@ -287,7 +287,7 @@ export function Section8Bridge({
 export function MoneyClaimBridge({
   sourcePage,
   ctaPosition,
-  headline = 'Recover unpaid rent with a court-ready money claim pack',
+  headline = 'Recover unpaid rent with a clear money claim pack',
   className,
 }: {
   sourcePage: string;
@@ -302,7 +302,7 @@ export function MoneyClaimBridge({
       headline={headline}
       primaryProduct="money_claim"
       primaryHref="/products/money-claim"
-      primaryLabel="Create money claim pack"
+      primaryLabel="Prepare my money claim"
       ctaPosition={ctaPosition}
       riskMessage="Rent arrears claims need clear figures and evidence"
       proofPoints={[
@@ -334,7 +334,7 @@ export function TenancyAgreementBridge({
       headline={headline}
       primaryProduct="ast_standard"
       primaryHref="/products/ast"
-      primaryLabel="Choose tenancy agreement pack"
+      primaryLabel="Choose my tenancy agreement"
       ctaPosition={ctaPosition}
       riskMessage="The agreement should match the property and occupier setup"
       proofPoints={[

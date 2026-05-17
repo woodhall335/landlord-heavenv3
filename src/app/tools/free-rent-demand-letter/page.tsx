@@ -69,7 +69,7 @@ export default function RentDemandLetterGenerator() {
     toolName: 'Free Rent Demand Letter Generator',
     toolType: 'generator' as const,
     productName: 'Money Claim Pack',
-    ctaLabel: `Upgrade to full money claim pack - ${noticeOnlyPrice}`,
+    ctaLabel: `Prepare my money claim - ${noticeOnlyPrice}`,
     ctaHref: '/products/money-claim',
     jurisdiction: 'uk',
     freeIncludes: [
@@ -458,8 +458,8 @@ export default function RentDemandLetterGenerator() {
         showReviewPill={false}
         showTrustPositioningBar
         showUsageCounter
-        primaryCta={{ label: 'Start Free Generator ->', href: '#generator' }}
-        secondaryCta={{ label: 'See the Full Claim Pack ->', href: '/products/notice-only?product=demand_letter' }}
+        primaryCta={{ label: 'Create my rent demand letter', href: '#generator' }}
+        secondaryCta={{ label: 'Prepare my claim pack', href: '/products/notice-only?product=demand_letter' }}
       >
         <p className="mt-4 text-sm text-white/90">
           Instant download • Clear wording • Built for landlords chasing arrears • Need examples? See our{' '}
@@ -490,7 +490,7 @@ export default function RentDemandLetterGenerator() {
           <div className="max-w-4xl mx-auto">
             <div id="generator" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
               <h2 className="mb-6 text-2xl font-bold text-gray-900">
-                Generate Your Rent Demand Letter
+                Create your rent demand letter
               </h2>
 
               <div className="mb-6 rounded-lg border-2 border-primary-200 bg-primary-50 p-5">
@@ -510,7 +510,7 @@ export default function RentDemandLetterGenerator() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-primary-600 border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 transition-all"
                     >
-                      Open Arrears Calculator
+                      Calculate arrears first
                       <RiExternalLinkLine className="h-4 w-4 text-[#7C3AED]" />
                     </a>
                   </div>
@@ -675,13 +675,13 @@ export default function RentDemandLetterGenerator() {
                   disabled={!isFormValid || isGenerating}
                   className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {isGenerating ? 'Generating Letter...' : 'Generate Free Letter'}
+                  {isGenerating ? 'Creating letter...' : 'Create free letter'}
                 </button>
 
                 {generated && (
                   <div className="rounded-lg bg-success-50 border border-success-200 p-4 space-y-4">
                     <p className="text-sm text-success-800 font-medium">
-                      Your demand letter has been generated and downloaded successfully.
+                      Your demand letter has been created and downloaded successfully.
                     </p>
 
                     <div className="rounded-lg border border-gray-200 bg-white p-4">

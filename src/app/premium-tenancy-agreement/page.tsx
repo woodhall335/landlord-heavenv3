@@ -75,7 +75,7 @@ export default function PremiumTenancyAgreementPage() {
         pagePath="/premium-tenancy-agreement"
         title="Solicitor-approved Premium Periodic Tenancy Agreement - Enhanced Builder"
         subtitle="Use this solicitor-approved premium periodic tenancy agreement builder when the let is still an ordinary residential tenancy, but you want validated management wording around access, repairs, handover, keys, and day-to-day management than the Standard route provides."
-        primaryCtaLabel="Start premium periodic tenancy agreement"
+        primaryCtaLabel="Create my Premium agreement"
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Read assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"
@@ -179,7 +179,7 @@ export default function PremiumTenancyAgreementPage() {
           howItWorks: {
             title: 'How it works',
             intro:
-              'The Premium workflow starts the same way as a standard tenancy, then adds the extra management detail that a more involved let actually needs.',
+              'The Premium steps start the same way as a standard tenancy, then add the extra management detail that a more involved let actually needs.',
             steps: [
               {
                 step: 'Step 01',
@@ -195,13 +195,13 @@ export default function PremiumTenancyAgreementPage() {
               },
               {
                 step: 'Step 03',
-                title: 'Generate the full Premium pack',
+                title: 'Create the full Premium pack',
                 body:
                   'Download the agreement, schedules, and supporting paperwork as one England tenancy pack built for a more detailed residential let.',
               },
             ],
           },
-          ctaTitle: 'Start the Premium agreement pack',
+          ctaTitle: 'Create the Premium agreement pack',
           ctaBody:
             'Use this option when the tenancy is still an ordinary residential let, but the paperwork needs more drafting depth and stronger day-to-day management support than Standard provides.',
         }}

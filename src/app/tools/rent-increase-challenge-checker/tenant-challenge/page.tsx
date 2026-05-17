@@ -42,7 +42,7 @@ export default function TenantChallengePage() {
         },
       ]}
       primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Check the rent position first' }}
-      secondaryCta={{ href: '/products/section-13-defence', label: 'Open the Defence route' }}
+      secondaryCta={{ href: '/products/section-13-defence', label: 'Prepare for a rent challenge' }}
       relatedLinks={[
         ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/tenant-challenge').slice(0, 5),
         { href: '/rent-increase', label: 'Compare Standard and Defence routes' },

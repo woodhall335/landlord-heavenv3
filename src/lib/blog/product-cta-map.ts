@@ -33,10 +33,10 @@ const DEFAULT_CONFIG: ProductCtaConfig = {
   primaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
   secondaryProductHref: BLOG_PRODUCT_ROUTES.completePack,
   eyebrow: 'Next step for landlords',
-  heading: 'Need to act on this now?',
+  heading: 'Problem clear? Create the right notice before you serve',
   intro:
-    'Work out the right notice, avoid the mistakes that slow the case down, and move to the next step without guessing.',
-  ctaLabel: 'Find out which notice you need',
+    'If the issue now points toward possession, move from guidance into a notice route that keeps grounds, dates, service, and evidence together.',
+    ctaLabel: 'Create my Section 8 notice',
   bullets: [
     'Choose the right route before you serve anything.',
     'Answer plain-English questions. We handle the legal logic.',
@@ -58,7 +58,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need to serve the current England notice?',
     intro:
       'Use the notice-only route for Form 3A, service instructions, the validity checklist, and notice-stage evidence before you serve anything.',
-    ctaLabel: 'Start the Eviction Notice Generator',
+    ctaLabel: 'Create my Section 8 notice',
     bullets: [
       'Built for the post-1 May 2026 England notice route.',
       'Keeps notice-stage work separate from court-pack paperwork.',
@@ -71,10 +71,10 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     primaryProductHref: BLOG_PRODUCT_ROUTES.completePack,
     secondaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
     eyebrow: 'Notice through court',
-    heading: 'Need the full court-ready possession file?',
+    heading: 'Need the full possession file for court?',
     intro:
       'Build the Form 3A notice, N5, N119, arrears schedule, evidence checklist, and court-facing file together.',
-    ctaLabel: 'Start the Complete Eviction Pack',
+    ctaLabel: 'Prepare my court pack',
     bullets: [
       'Connect the notice and claim paperwork from the start.',
       'Reduce mismatch between grounds, dates, arrears, and particulars.',
@@ -90,7 +90,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Ready to organise the arrears claim?',
     intro:
       'Prepare the rent debt story, arrears figures, and claim narrative before the file becomes harder to prove.',
-    ctaLabel: 'Start the Money Claim Pack',
+    ctaLabel: 'Prepare my money claim',
     bullets: [
       'Keep debt recovery separate from possession paperwork.',
       'Build a clearer arrears record and claim narrative.',
@@ -106,7 +106,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need more than a blank Form 4A?',
     intro:
       'Check local comparable listings, judge whether the proposed rent looks supportable, and build Form 4A with the justification pack.',
-    ctaLabel: 'Start the Standard Section 13 Rent Increase Pack',
+    ctaLabel: 'Create my rent increase notice',
     bullets: [
       'Uses live comparable listings to support the proposed rent.',
       'Helps avoid unsupported increases that attract challenge.',
@@ -121,8 +121,8 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     eyebrow: 'Challenge protection',
     heading: 'Expecting pushback on the rent increase?',
     intro:
-      'Add stronger challenge-response and tribunal-facing material around Form 4A, comparable evidence, and rent justification.',
-    ctaLabel: 'Start the Section 13 Defence Pack',
+      'If the proposed rent may be challenged, prepare stronger challenge-response and tribunal-facing material around Form 4A, comparable evidence, and rent justification.',
+    ctaLabel: 'Prepare for a rent challenge',
     bullets: [
       'Designed for higher-risk rent increase cases.',
       'Turns market evidence into a clearer challenge narrative.',
@@ -138,7 +138,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need a clean standard tenancy agreement?',
     intro:
       'Use the standard route for straightforward England lets where old AST-first wording may no longer be the right fit.',
-    ctaLabel: 'Create the Standard Agreement',
+    ctaLabel: 'Create my Standard agreement',
     bullets: [
       'Built for straightforward England tenancies.',
       'Avoids stale fixed-term AST assumptions.',
@@ -154,7 +154,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need broader tenancy protection?',
     intro:
       'Use Premium where the tenancy is higher-value, more complex, guarantor-backed, shared, or simply worth a stronger record.',
-    ctaLabel: 'Create the Premium Agreement',
+    ctaLabel: 'Create my Premium agreement',
     bullets: [
       'More detailed than a basic agreement route.',
       'Better fit for higher-risk lets.',
@@ -170,7 +170,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Setting up a student tenancy?',
     intro:
       'Use a route shaped around student occupiers, academic timing, guarantor expectations, and shared responsibility.',
-    ctaLabel: 'Create the Student Agreement',
+    ctaLabel: 'Create my Student agreement',
     bullets: [
       'Designed for student-let practicalities.',
       'Keeps occupier, rent, deposit, and guarantor details organised.',
@@ -186,7 +186,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need shared-house paperwork that fits?',
     intro:
       'Use the HMO/shared-house route for room, common-area, house-rule, and responsibility wording that a standard agreement may miss.',
-    ctaLabel: 'Create the HMO/Shared House Agreement',
+    ctaLabel: 'Create my HMO / Shared House agreement',
     bullets: [
       'Designed for shared occupation.',
       'Clarifies rooms, common parts, and responsibilities.',
@@ -202,7 +202,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Taking in a lodger?',
     intro:
       'Use the lodger route where you live in the property and need the arrangement recorded clearly from the start.',
-    ctaLabel: 'Create the Lodger Agreement',
+    ctaLabel: 'Create my Lodger agreement',
     bullets: [
       'Different from a normal tenancy agreement.',
       'Built for resident landlord arrangements.',
@@ -239,10 +239,10 @@ export function getBlogProductCta(
       primaryProductHref: BLOG_PRODUCT_ROUTES.moneyClaim,
       secondaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
       eyebrow: 'Unpaid rent',
-      heading: 'Ready to start recovering the money?',
+      heading: 'Tenant still owes money? Prepare the claim file',
       intro:
-        'If the arrears keep growing, move from reading to action with the documents you need for the claim.',
-      ctaLabel: 'Start recovering your rent',
+        'If the arrears keep growing, turn the problem into a clearer debt record and claim narrative before the evidence gets harder to untangle.',
+      ctaLabel: 'Prepare my money claim',
       bullets: [
         'Set out what is owed clearly before the numbers get harder to untangle.',
         'Build the claim in plain English.',
@@ -258,10 +258,10 @@ export function getBlogProductCta(
       primaryProductHref: BLOG_PRODUCT_ROUTES.ast,
       secondaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
       eyebrow: 'New tenancy',
-      heading: 'Need the agreement sorted now?',
+      heading: 'Setting up a tenancy? Choose the right agreement',
       intro:
-        'Use the right agreement for the property now so you are not fixing an old template later.',
-      ctaLabel: 'Create your tenancy agreement',
+        'If the next job is getting the tenancy in place, choose the agreement route that matches the property and arrangement now.',
+      ctaLabel: 'Create my tenancy agreement',
       bullets: [
         'Choose the right England agreement route for the tenancy you are setting up.',
         'Avoid old wording that causes problems later.',
@@ -277,10 +277,10 @@ export function getBlogProductCta(
       primaryProductHref: BLOG_PRODUCT_ROUTES.completePack,
       secondaryProductHref: BLOG_PRODUCT_ROUTES.noticeOnly,
       eyebrow: 'Court stage',
-      heading: 'Need more than just the notice?',
+      heading: 'Heading toward court? Prepare the possession file',
       intro:
-        'If the case is moving toward court, keep your notice, forms, and evidence lined up from the start.',
-      ctaLabel: 'Start your court pack',
+        'If the problem has moved beyond serving notice, keep the notice, claim forms, and evidence aligned from the start.',
+      ctaLabel: 'Prepare my court pack',
       bullets: [
         'Keep the notice and court forms consistent.',
         'Avoid paying court fees on a weak file.',

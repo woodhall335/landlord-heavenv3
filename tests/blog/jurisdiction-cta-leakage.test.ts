@@ -165,7 +165,7 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
       });
 
       expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(true);
-      expect(ctas.some((c) => c.href === '/section-8-grounds-explained')).toBe(true);
+      expect(ctas.some((c) => c.href === '/products/notice-only')).toBe(true);
     });
 
     it('rent-arrears-eviction-guide (England) should include Section 8 CTAs', () => {
@@ -178,14 +178,15 @@ describe('Jurisdiction CTA Leakage Prevention', () => {
       expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(true);
     });
 
-    it('section-21-vs-section-8 should include both Section 21 and Section 8 CTAs', () => {
+    it('section-21-vs-section-8 should include both live notice guidance and a product CTA', () => {
       const ctas = getNextStepsCTAs({
         slug: 'section-21-vs-section-8',
         tags: ['Section 21', 'Section 8', 'Eviction'],
       });
 
-      expect(ctas.some((c) => c.href === '/section-21-ban-uk')).toBe(true);
+      expect(ctas.some((c) => c.href === '/section-21-notice')).toBe(true);
       expect(ctas.some((c) => c.href === '/section-8-notice')).toBe(true);
+      expect(ctas.some((c) => c.href === '/products/notice-only')).toBe(true);
     });
   });
 

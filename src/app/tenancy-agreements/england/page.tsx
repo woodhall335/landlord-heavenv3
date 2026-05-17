@@ -79,7 +79,7 @@ export default function EnglandTenancyAgreementsPage() {
         subtitle="Use this page as a support guide for England terminology and route context, then move to the England agreement example or comparison page when you are ready to choose the right route."
         primaryCtaLabel="View the England agreement example"
         primaryCtaHref="/tenancy-agreement-template"
-        secondaryCtaLabel="Start Standard Tenancy Agreement"
+        secondaryCtaLabel="Create my Standard agreement"
         secondaryCtaHref="/standard-tenancy-agreement"
         legacyNotice="This page stays live as a support guide. It captures broader England tenancy-agreement searches and older AST-led wording, while the main example page remains /tenancy-agreement-template."
         introTitle="Why this England guide still exists"

@@ -109,7 +109,7 @@ const tenancyPageContracts: TenancyPageContract[] = [
     h1: /Solicitor-approved Standard Tenancy Agreement - Periodic Tenancy Generator/i,
     whyTitle: 'Why a standard periodic agreement still needs proper setup',
     howTitle: 'How this helps you',
-    ctaTitle: 'Start the Standard agreement pack',
+    ctaTitle: 'Create the Standard agreement pack',
     requiredItems: [
       'standard periodic tenancy agreement',
       'supporting paperwork',
@@ -124,7 +124,7 @@ const tenancyPageContracts: TenancyPageContract[] = [
     h1: /Solicitor-approved Premium Periodic Tenancy Agreement - Enhanced Builder/i,
     whyTitle: 'Why landlords choose Premium',
     howTitle: 'How this helps you',
-    ctaTitle: 'Start the Premium agreement pack',
+    ctaTitle: 'Create the Premium agreement pack',
     requiredItems: [
       'premium tenancy agreement',
       'inspections',
@@ -139,7 +139,7 @@ const tenancyPageContracts: TenancyPageContract[] = [
     h1: /Solicitor-approved Student Tenancy Agreement - Sharer & Guarantor Builder/i,
     whyTitle: 'Why student lets need their own pack',
     howTitle: 'How this helps you',
-    ctaTitle: 'Start the Student agreement pack',
+    ctaTitle: 'Create the Student agreement pack',
     requiredItems: [
       'student tenancy agreement',
       'Student Move-Out & Guarantor Schedule',
@@ -154,7 +154,7 @@ const tenancyPageContracts: TenancyPageContract[] = [
     h1: /Solicitor-approved HMO Tenancy Agreement - Shared House Builder/i,
     whyTitle: 'Why shared houses need fuller paperwork',
     howTitle: 'How this helps you',
-    ctaTitle: 'Start the HMO / Shared House agreement pack',
+    ctaTitle: 'Create the HMO / Shared House agreement pack',
     requiredItems: [
       'HMO tenancy agreement',
       'house rules',
@@ -169,7 +169,7 @@ const tenancyPageContracts: TenancyPageContract[] = [
     h1: /Solicitor-approved Lodger Agreement - Resident Landlord Builder/i,
     whyTitle: 'Why a lodger arrangement needs its own paperwork',
     howTitle: 'How this helps you',
-    ctaTitle: 'Start the Lodger agreement pack',
+    ctaTitle: 'Create the Lodger agreement pack',
     requiredItems: [
       'Lodger Agreement',
       'Lodger Checklist',

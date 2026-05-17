@@ -90,7 +90,7 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
   midCtaTitle: 'Generate a compliant Section 13 notice with built-in checks',
   midCtaBody:
     'Use the Standard pack when you are ready to turn the date, figure, and explanation into a clearer landlord file.',
-  finalCtaTitle: 'Generate your Section 13 notice',
+  finalCtaTitle: 'Create my rent increase notice',
   finalCtaBody:
     'Move from reading to action with one workflow that keeps your figures, dates, and explanation aligned before you serve.',
 };

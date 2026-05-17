@@ -73,7 +73,7 @@ export default function StandardTenancyAgreementPage() {
         pagePath="/standard-tenancy-agreement"
         title="Solicitor-approved Standard Tenancy Agreement - Periodic Tenancy Generator"
         subtitle="Use this solicitor-approved standard periodic tenancy agreement if you are letting a whole property in England and want a validated tenancy agreement, AST generator wording, and current post-May 2026 rules without student, HMO, lodger, or Premium-level management wording."
-        primaryCtaLabel="Start standard periodic tenancy agreement"
+        primaryCtaLabel="Create my Standard agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Read periodic tenancy guide"
         secondaryCtaHref="/periodic-tenancy-agreement"
@@ -126,7 +126,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The current England agreement for a straightforward whole-property let.',
             href: '/standard-tenancy-agreement',
-            ctaLabel: 'Choose the Standard agreement',
+            ctaLabel: 'Create my Standard agreement',
             imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
             imageAlt: 'Standard tenancy agreement preview',
             price: '£14.99',
@@ -157,7 +157,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The fuller current England option for ordinary residential lets that need stronger management wording.',
             href: '/premium-tenancy-agreement',
-            ctaLabel: 'Choose the Premium agreement',
+            ctaLabel: 'Create my Premium agreement',
             imageSrc: '/images/wizard-premium-tenancy-agreement.webp',
             imageAlt: 'Premium tenancy agreement preview',
             price: '£24.99',
@@ -189,7 +189,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The dedicated agreement for student households in England.',
             href: '/student-tenancy-agreement',
-            ctaLabel: 'Choose the Student agreement',
+            ctaLabel: 'Create my Student agreement',
             imageSrc: '/images/wizard-student-tenancy-agreement.webp',
             imageAlt: 'Student tenancy agreement preview',
             price: '£24.99',
@@ -220,7 +220,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The shared-house agreement for occupiers living together and using communal areas.',
             href: '/hmo-shared-house-tenancy-agreement',
-            ctaLabel: 'Choose the HMO / Shared House agreement',
+            ctaLabel: 'Create my HMO / Shared House agreement',
             imageSrc: '/images/wizard-hmo-agreement.webp',
             imageAlt: 'HMO shared house tenancy agreement preview',
             price: '£34.99',
@@ -252,7 +252,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The room-let agreement for a landlord who lives in the property.',
             href: '/lodger-agreement',
-            ctaLabel: 'Choose the Lodger agreement',
+            ctaLabel: 'Create my Lodger agreement',
             imageSrc: '/images/wizard-lodger-agreement.webp',
             imageAlt: 'Lodger agreement preview',
             price: '£14.99',
@@ -331,7 +331,7 @@ export default function StandardTenancyAgreementPage() {
           howItWorks: {
             title: 'How it works',
             intro:
-              'The workflow is built for landlords who want to get a straightforward tenancy in place properly without drafting everything from scratch.',
+              'The steps are built for landlords who want to get a straightforward tenancy in place properly without drafting everything from scratch.',
             steps: [
               {
                 step: 'Step 01',
@@ -347,13 +347,13 @@ export default function StandardTenancyAgreementPage() {
               },
               {
                 step: 'Step 03',
-                title: 'Generate the full Standard pack',
+                title: 'Create the full Standard pack',
                 body:
                   'Download the agreement and the supporting paperwork as one England tenancy pack that is ready to print and use.',
               },
             ],
           },
-          ctaTitle: 'Start the Standard agreement pack',
+          ctaTitle: 'Create the Standard agreement pack',
           ctaBody:
             'Use this option when the let is straightforward and you want a standard periodic tenancy agreement prepared for an ordinary whole-property home in England.',
         }}

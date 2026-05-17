@@ -10,6 +10,7 @@ import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-cont
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { guideLinks } from '@/lib/seo/internal-links';
 import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
@@ -420,7 +421,18 @@ export default function CompleteEvictionPackPage() {
           label: 'Not sure which pack? Compare Stage 1 and Stage 2',
           href: '/compare/section-8-stage-1-vs-stage-2',
         },
-        ...descriptor.defaultGuideLinks,
+        {
+          label: guideLinks.rentersRightsActEvictionRules.title,
+          href: guideLinks.rentersRightsActEvictionRules.href,
+        },
+        {
+          label: guideLinks.howToEvictTenantEngland.title,
+          href: guideLinks.howToEvictTenantEngland.href,
+        },
+        {
+          label: guideLinks.evictionProcessEngland.title,
+          href: guideLinks.evictionProcessEngland.href,
+        },
       ],
     },
     faq: {

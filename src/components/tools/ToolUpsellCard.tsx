@@ -55,11 +55,11 @@ export function ToolUpsellCard({
             </span>
           )}
           <h3 className="mt-3 text-2xl font-semibold text-gray-900">
-            Upgrade to court-ready pack
+            Prepare the full landlord pack
           </h3>
           <p className="mt-2 text-sm text-gray-600">
             {description ??
-              'Turn your free tool output into a court-ready bundle with the right forms, checks, and serving steps.'}
+              'Turn your free tool result into the paid pack with the right forms, checks, and next steps.'}
           </p>
         </div>
         <Link
@@ -77,17 +77,17 @@ export function ToolUpsellCard({
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Free tool includes</p>
           <ul className="mt-3 space-y-2 text-sm text-gray-700">
             {freeIncludes.map((item) => (
-              <li key={item}>• {item}</li>
+              <li key={item}>- {item}</li>
             ))}
           </ul>
         </div>
         <div className="rounded-xl border border-purple-200 bg-purple-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-purple-700">
-            Court-ready pack includes
+            Paid pack includes
           </p>
           <ul className="mt-3 space-y-2 text-sm text-purple-900">
             {paidIncludes.map((item) => (
-              <li key={item}>• {item}</li>
+              <li key={item}>- {item}</li>
             ))}
           </ul>
         </div>

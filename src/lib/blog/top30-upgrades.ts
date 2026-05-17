@@ -162,7 +162,7 @@ export function getTop30QuickAnswer(post: BlogPost): { question: string; answer:
 
   return {
     question: 'What should I do first in this eviction process stage?',
-    answer: 'Identify the procedural stage, gather the required documents, and route to the matching legal workflow.',
+    answer: 'Identify the procedural stage, gather the required documents, and choose the matching legal action route.',
     steps: ['Confirm current stage (notice, claim, order, enforcement).', 'Collect forms, dates, and service evidence.', 'Start the targeted product route to prevent rework.'],
   };
 }
@@ -171,8 +171,8 @@ export function getIntentRoutedLinks(slug: string) {
   if (slug.includes('section-21')) {
     return [
       { href: '/section-21-notice-guide', label: 'Section 21 notice guide' },
-      { href: '/products/notice-only', label: 'Start notice-only service' },
-      { href: '/products/complete-pack', label: 'Use complete pack for court-ready progression' },
+      { href: '/products/notice-only', label: 'Create my Section 8 notice' },
+      { href: '/products/complete-pack', label: 'Prepare my court pack' },
     ];
   }
 
@@ -180,13 +180,13 @@ export function getIntentRoutedLinks(slug: string) {
     return [
       { href: '/section-8-notice-guide', label: 'Section 8 notice guide' },
       { href: '/evict-tenant-not-paying-rent', label: 'Evict tenant not paying rent pathway' },
-      { href: '/products/money-claim', label: 'Start money-claim pack' },
+      { href: '/products/money-claim', label: 'Prepare my money claim' },
     ];
   }
 
   return [
     { href: '/how-to-evict-a-tenant-uk', label: 'How to evict a tenant UK process' },
-    { href: '/products/complete-pack', label: 'Start complete eviction pack' },
+    { href: '/products/complete-pack', label: 'Prepare my court pack' },
   ];
 }
 

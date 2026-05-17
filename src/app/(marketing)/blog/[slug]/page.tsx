@@ -34,7 +34,6 @@ import { AskHeavenWidget } from '@/components/ask-heaven/AskHeavenWidget';
 import { BlogAskHeavenPanel } from '@/components/blog/BlogAskHeavenPanel';
 import type { AskHeavenTopic } from '@/lib/ask-heaven/buildAskHeavenLink';
 import { FAQInline } from '@/components/seo/FAQSection';
-import { landingPageLinks, productLinks, guideLinks } from '@/lib/seo/internal-links';
 import Image from 'next/image';
 import { BlogReadingProgress } from '@/components/blog/BlogReadingProgress';
 import { BlogBackToTop } from '@/components/blog/BlogBackToTop';
@@ -46,7 +45,7 @@ import { NextSteps } from '@/components/blog/NextSteps';
 import { MoneyClaimBridge } from '@/components/marketing/CommercialBridge';
 import { getBlogImagesForPost, getBlogImagesForPostThumb } from '@/lib/blog/image-manifest';
 import { getBlogSeoConfig } from '@/lib/blog/seo';
-import { BLOG_PRODUCT_ROUTES, getBlogProductCta } from '@/lib/blog/product-cta-map';
+import { getBlogProductCta } from '@/lib/blog/product-cta-map';
 import {
   getPostsForTopicHub,
   getPublicTopicHubs,
@@ -55,7 +54,6 @@ import {
   isPublicTopicHub,
 } from '@/lib/blog/topic-hubs';
 import { getImagePlaceholderBlocks, getIntentRoutedLinks, getTop30QuickAnswer, getTop30Rank, getTop30SupplementalFaqs, getUpgradedPostVariant, isTop30UpgradedPost } from '@/lib/blog/top30-upgrades';
-import type { StageEstimate } from '@/lib/journey/state';
 import type { CSSProperties, ReactNode } from 'react';
 import { isValidElement } from 'react';
 
@@ -227,248 +225,6 @@ function extractFaqsFromContent(content: ReactNode): Array<{ question: string; a
   return extracted;
 }
 
-
-function inferBlogStageHint(post: BlogPost): StageEstimate {
-  const haystack = `${post.title} ${post.targetKeyword} ${post.tags.join(' ')}`.toLowerCase();
-
-  if (['n5', 'n119', 'court', 'hearing', 'bailiff', 'warrant'].some((keyword) => haystack.includes(keyword))) {
-    return 'court_ready';
-  }
-
-  if (
-    ['serving notice', 'eviction notice', 'proof of service', 'section 8', 'notice to leave'].some(
-      (keyword) => haystack.includes(keyword),
-    )
-  ) {
-    return 'notice_ready';
-  }
-
-  if (['demand letter', 'letter before action', 'arrears letter'].some((keyword) => haystack.includes(keyword))) {
-    return 'demand_sent';
-  }
-
-  if (['arrears', 'late rent', 'missed payment'].some((keyword) => haystack.includes(keyword))) {
-    return 'early_arrears';
-  }
-
-  return 'unknown';
-}
-
-
-const buildNextLegalSteps = (post: BlogPost, region: BlogRegion | null) => {
-  const target = post.targetKeyword.toLowerCase();
-  const tags = post.tags.map((tag) => tag.toLowerCase());
-
-  const isMoneyClaim =
-    target.includes('money claim') ||
-    target.includes('rent arrears') ||
-    tags.some((tag) => tag.includes('arrears') || tag.includes('money claim'));
-
-  const isTenancy =
-    target.includes('tenancy') ||
-    target.includes('ast') ||
-    target.includes('prt') ||
-    tags.some((tag) => tag.includes('tenancy') || tag.includes('agreement'));
-
-  const isEviction = !isMoneyClaim && !isTenancy;
-
-  const jurisdictionName = region
-    ? region === 'northern-ireland'
-      ? 'Northern Ireland'
-      : region.charAt(0).toUpperCase() + region.slice(1)
-    : 'UK';
-
-  if (isMoneyClaim) {
-    if (region === 'northern-ireland') {
-      return {
-        jurisdictionLabel: `${jurisdictionName} rent arrears`,
-        scenarioLabel: 'recovering unpaid rent',
-        primaryCTA: {
-          label: 'Download rent arrears letter',
-          href: landingPageLinks.rentArrearsTemplate.href,
-        },
-        secondaryCTA: {
-          label: 'Calculate arrears + interest',
-          href: '/tools/rent-arrears-calculator',
-        },
-        relatedLinks: [
-          {
-            href: landingPageLinks.rentArrearsTemplate.href,
-            title: landingPageLinks.rentArrearsTemplate.title,
-            description: landingPageLinks.rentArrearsTemplate.description,
-          },
-          {
-            href: '/blog/northern-ireland-private-tenancies-order',
-            title: 'NI private tenancies order',
-            description: 'Compliance steps before taking court action.',
-          },
-        ],
-      };
-    }
-
-    return {
-      jurisdictionLabel: `${jurisdictionName} rent arrears`,
-      scenarioLabel: 'recovering unpaid rent',
-      primaryCTA: {
-        label: 'Start the Money Claim Pack',
-        href: productLinks.moneyClaim.href,
-      },
-      secondaryCTA: {
-        label: 'Calculate arrears + interest',
-        href: '/tools/rent-arrears-calculator',
-      },
-      relatedLinks: [
-        {
-          href: landingPageLinks.rentArrearsTemplate.href,
-          title: landingPageLinks.rentArrearsTemplate.title,
-          description: landingPageLinks.rentArrearsTemplate.description,
-        },
-        {
-          href: '/money-claim-unpaid-rent',
-          title: 'Money claim guide',
-          description: 'Court routes, costs, and timelines for arrears claims.',
-        },
-      ],
-    };
-  }
-
-  if (isTenancy) {
-    const tenancyLink =
-      region === 'scotland'
-        ? '/private-residential-tenancy-agreement-template'
-        : region === 'wales'
-        ? '/wales-tenancy-agreement-template'
-        : region === 'northern-ireland'
-        ? '/northern-ireland-tenancy-agreement-template'
-        : '/tenancy-agreement-template';
-    const primaryTenancyHref = '/products/ast';
-    const primaryTenancyLabel =
-      region === 'england'
-        ? 'Compare England tenancy agreements'
-        : 'Get the Tenancy Agreement Pack';
-    const secondaryTenancyHref = region === 'england' ? '/tenancy-agreement-template' : tenancyLink;
-    const secondaryTenancyLabel =
-      region === 'england' ? 'See an England agreement example' : 'Download the template';
-
-    return {
-      jurisdictionLabel: `${jurisdictionName} tenancy agreements`,
-      scenarioLabel: 'creating compliant tenancy agreements',
-      primaryCTA: {
-        label: primaryTenancyLabel,
-        href: primaryTenancyHref,
-      },
-      secondaryCTA: {
-        label: secondaryTenancyLabel,
-        href: secondaryTenancyHref,
-      },
-      relatedLinks: [
-        {
-          href: primaryTenancyHref,
-          title:
-            region === 'england' ? 'England tenancy agreements for landlords' : 'Tenancy Agreement Pack',
-          description:
-            region === 'england'
-              ? 'Compare Standard, Premium, Student, HMO / Shared House, and Lodger routes on the main England comparison page.'
-              : 'Standard and Premium agreements with compliance checks.',
-        },
-        {
-          href: secondaryTenancyHref,
-          title:
-            region === 'england'
-              ? 'England tenancy agreement example'
-              : `${jurisdictionName} tenancy agreement template`,
-          description:
-            region === 'england'
-              ? 'Support page showing a real England agreement example before you choose the route.'
-              : 'Jurisdiction-specific tenancy requirements.',
-        },
-      ],
-    };
-  }
-
-  if (isEviction) {
-    if (region === 'northern-ireland') {
-      return {
-        jurisdictionLabel: `${jurisdictionName} tenancy agreements`,
-        scenarioLabel: 'NI landlord compliance',
-        primaryCTA: {
-          label: 'Create NI tenancy agreement',
-          href: '/northern-ireland-tenancy-agreement-template',
-        },
-        secondaryCTA: {
-          label: 'Tenancy agreement templates',
-          href: landingPageLinks.tenancyTemplate.href,
-        },
-        relatedLinks: [
-          {
-            href: '/northern-ireland-tenancy-agreement-template',
-            title: 'Northern Ireland tenancy agreements',
-            description: 'Private tenancy agreements for NI landlords.',
-          },
-          {
-            href: '/blog/northern-ireland-private-tenancies-order',
-            title: 'NI Private Tenancies Order guide',
-            description: 'Key obligations and compliance steps in NI.',
-          },
-        ],
-      };
-    }
-
-    const primaryRelated =
-      region === 'wales'
-        ? {
-            href: guideLinks.walesEviction.href,
-            title: guideLinks.walesEviction.title,
-            description: 'Renting Homes Act notices and timelines.',
-          }
-        : region === 'scotland'
-        ? {
-            href: guideLinks.scotlandEviction.href,
-            title: guideLinks.scotlandEviction.title,
-            description: 'Notice to Leave and tribunal steps.',
-          }
-        : {
-            href: landingPageLinks.evictionTemplate.href,
-            title: landingPageLinks.evictionTemplate.title,
-            description: landingPageLinks.evictionTemplate.description,
-          };
-
-    const secondaryRelated =
-      region === 'wales'
-        ? {
-            href: '/blog/wales-notice-periods-landlords',
-            title: 'Wales notice periods',
-            description: 'Current notice periods under Welsh law.',
-          }
-        : region === 'scotland'
-        ? {
-            href: '/blog/scotland-notice-to-leave',
-            title: 'Notice to Leave guide',
-            description: 'Notice periods and prescribed content.',
-          }
-        : {
-            href: landingPageLinks.section8Template.href,
-            title: landingPageLinks.section8Template.title,
-            description: landingPageLinks.section8Template.description,
-          };
-
-    return {
-      jurisdictionLabel: `${jurisdictionName} eviction notices`,
-      scenarioLabel: 'serving the correct notice',
-      primaryCTA: {
-        label: 'Generate an eviction notice',
-        href: productLinks.noticeOnly.href,
-      },
-      secondaryCTA: {
-        label: 'Get the Complete Eviction Pack',
-        href: productLinks.completePack.href,
-      },
-      relatedLinks: [primaryRelated, secondaryRelated],
-    };
-  }
-
-  return null;
-};
 
 const getRelatedGuides = (post: BlogPost) => {
   const normalizedTags = new Set(post.tags.map((tag) => tag.toLowerCase()));
@@ -1084,7 +840,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
                   <MoneyClaimBridge
                     sourcePage="/blog/england-money-claim-online"
                     ctaPosition="top"
-                    headline="Turn arrears into a court-ready claim"
+                    headline="Turn arrears into a clear money claim"
                   />
                 ) : null}
                 <BlogProse

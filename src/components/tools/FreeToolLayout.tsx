@@ -76,9 +76,9 @@ export function FreeToolLayout({
                 Legal Disclaimer
               </p>
               <p className="text-sm text-warning-800">
-                This free version is not court-ready and is provided for general
-                informational use only. It is not legal advice. For legally
-                validated, court-ready documents, upgrade to the paid version.
+                This free version is for general information only and is not
+                legal advice. Use the paid pack when you need checked documents
+                for serving, filing, or sending.
               </p>
             </div>
           </div>
@@ -108,7 +108,7 @@ export function FreeToolLayout({
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Upgrade to Court-Ready
+                  Prepare the Paid Pack
                 </h3>
               </div>
 
@@ -143,11 +143,11 @@ export function FreeToolLayout({
                 href={paidVersion.href}
                 className="block w-full rounded-xl bg-primary-600 px-6 py-3 text-center font-semibold text-white transition-all duration-250 hover:bg-primary-700 hover:scale-105 hover:shadow-xl"
               >
-                Get Court-Ready Version
+                Prepare the paid pack
               </Link>
 
               <p className="mt-4 text-center text-xs text-gray-600">
-                Instant download • Court-ready format
+                Instant download - checked document format
               </p>
             </div>
           </div>

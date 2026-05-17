@@ -112,7 +112,7 @@ export const noticeOnlyHeroConfig: HeroConfig = {
   title: 'Eviction Notice Generator',
   highlightTitle: '(Section 8, May 2026)',
   subtitle:
-    'Generate the current England Section 8 notice with checks on grounds, dates, service, and compliance before you serve anything.',
+    'Create the current England Section 8 notice with checks on grounds, dates, service, and compliance before you serve anything.',
   primaryCta: {
     label: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.primaryCtaLabel,
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.wizardHref,
@@ -162,7 +162,7 @@ export const moneyClaimHeroConfig: HeroConfig = {
   mediaSrc: '/images/money_claims.webp',
   trustText: 'Recover unpaid rent and tenant debt | England county court pack',
   title: 'Recover Unpaid Rent',
-  highlightTitle: 'and Start Your Money Claim Pack',
+  highlightTitle: 'and Prepare Your Money Claim Pack',
   subtitle:
     'If your tenant owes rent, damage, bills, or other tenancy debt, this England pack helps you prepare the Letter Before Claim, Form N1, debt schedule, and supporting paperwork in one place.',
   primaryCta: {
@@ -232,7 +232,7 @@ export const blogHeroConfig: HeroConfig = {
   highlightTitle: 'Deal With Arrears, and Act Faster',
   subtitle:
     'Read what matters in plain English, then move to the right next step when you are ready.',
-  primaryCta: { label: 'Browse landlord guides ->', href: '/blog' },
-  secondaryCta: { label: 'See the latest guides ->', href: '/blog?view=latest' },
+  primaryCta: { label: 'Browse landlord guides', href: '/blog' },
+  secondaryCta: { label: 'See the latest guides', href: '/blog?view=latest' },
   feature: 'Start with the problem, not the legal definition.',
 };

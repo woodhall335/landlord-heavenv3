@@ -27,7 +27,7 @@ interface StepLink extends NextStepsCTA {
 }
 
 // Map CTA hrefs to icons and descriptions
-function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
+function enrichCTA(cta: NextStepsCTA): StepLink {
   const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
     '/section-21-notice-template': FileText,
     '/section-8-notice-template': FileText,
@@ -81,13 +81,13 @@ function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
     '/money-claim-small-claims-landlord': 'Understand the small claims route, costs, and likely hearing issues',
     '/money-claim-n1-claim-form': 'Complete the N1 form with the right claimant, defendant, and debt details',
     '/money-claim-schedule-of-debt': 'Build a clean arrears schedule showing rent due, payments, and balance',
-    '/eviction-notice-template': 'Start with the broad England notice owner before moving into transactional notice help',
-    '/products/notice-only': "Use a validated Section 8 notice builder with solicitor-approved Form 3A checks before you serve.",
-    '/products/complete-pack': 'Prepare a court-ready possession pack with official court forms, N5, N119, and validation before filing.',
-  '/products/money-claim': 'Start the solicitor-approved MCOL pack for landlords, with rent arrears money claim and particulars checks.',
-  '/products/ast': "Compare Renters' Rights Act compliant tenancy agreement routes for post-May 2026 England lets.",
+    '/eviction-notice-template': 'Work out the live England notice route before you serve anything',
+    '/products/notice-only': 'Create the notice with grounds, dates, and service checks before you serve.',
+    '/products/complete-pack': 'Prepare the possession forms, N5, N119, and filing checks before court.',
+  '/products/money-claim': 'Prepare the arrears record, claim narrative, and particulars for a money claim.',
+  '/products/ast': 'Choose the England agreement route that matches the let you are setting up.',
   '/tools/rent-arrears-calculator': 'Calculate total arrears including interest',
-  '/tenancy-agreement-template': 'See a validated tenancy agreement example with assured periodic wording for England.',
+  '/tenancy-agreement-template': 'See an England agreement example before choosing the right route.',
     '/wales-eviction-notices': 'Complete guide to Renting Homes (Wales) Act notices',
     '/scotland-eviction-notices': 'Complete guide to Notice to Leave and Scottish evictions',
     '/how-to-evict-tenant': 'Complete guide to the eviction process',
@@ -132,12 +132,12 @@ function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
   }
 
   // Handle special label-based descriptions
-  if (cta.label === 'Notice Only Bundle') {
-    description = 'Use a validated Section 8 notice builder with solicitor-approved Form 3A checks.';
-  } else if (cta.label === 'Complete Eviction Pack') {
-    description = 'Prepare a court-ready possession pack with official court forms and filing checks.';
-  } else if (cta.label === 'Tenancy Agreement Pack') {
-    description = "Create a Renters' Rights Act compliant tenancy agreement for post-May 2026.";
+  if (cta.label === 'Create my Section 8 notice') {
+    description = 'Create the notice with grounds, dates, and service checks before you serve.';
+  } else if (cta.label === 'Prepare my court pack') {
+    description = 'Prepare the possession forms and filing checks before court.';
+  } else if (cta.label === 'Choose my tenancy agreement') {
+    description = 'Choose the England agreement route that matches the let.';
   }
 
   // Handle special icons
@@ -167,7 +167,7 @@ function enrichCTA(cta: NextStepsCTA, slug: string): StepLink {
 export function NextSteps({ slug, category, tags }: NextStepsProps) {
   // Use the pure helper function for CTA generation
   const rawCTAs = getNextStepsCTAs({ slug, tags, category });
-  const steps = rawCTAs.map((cta) => enrichCTA(cta, slug));
+  const steps = rawCTAs.map((cta) => enrichCTA(cta));
 
   if (steps.length === 0) {
     return null;

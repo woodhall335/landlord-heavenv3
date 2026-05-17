@@ -90,10 +90,10 @@ export const howToIncreaseRentPage: RentIncreaseGuidePage = {
     RENT_INCREASE_LINKS.challenge,
     RENT_INCREASE_LINKS.wizard,
   ],
-  midCtaTitle: 'Run the process once, then generate the pack',
+  midCtaTitle: 'Check the rent increase once, then create the pack',
   midCtaBody:
-    'Use the Standard wizard to validate chronology, position the figure, and produce service-ready outputs from one workflow.',
-  finalCtaTitle: 'Start your Section 13 workflow',
+    'Use the Standard wizard to validate chronology, position the figure, and produce service-ready outputs from one set of answers.',
+  finalCtaTitle: 'Create my rent increase notice',
   finalCtaBody:
-    'Generate your notice pack with consistent reasoning from first input to final PDF, so the paperwork reads naturally instead of looking patched together at the last minute.',
+    'Create your notice pack with consistent reasoning from first input to final PDF, so the paperwork reads naturally instead of looking patched together at the last minute.',
 };

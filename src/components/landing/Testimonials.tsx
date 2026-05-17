@@ -22,14 +22,14 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    quote: "Generated my Section 21 notice in under 10 minutes. The bundle was clearly structured and filing-ready for my England possession workflow. Faster than waiting for solicitor drafting.",
+    quote: "Created my Section 8 notice in under 10 minutes. The pack was clearly structured and ready to review before serving. Faster than waiting for solicitor drafting.",
     name: "Michael Roberts",
     role: "Portfolio Landlord",
     location: "Birmingham",
     initials: "MR",
     avatarColor: "bg-primary",
     rating: 5,
-    highlight: "Saved £250+",
+    highlight: "Saved GBP250+",
     verified: true,
   },
   {
@@ -44,14 +44,14 @@ const testimonials: Testimonial[] = [
     verified: true,
   },
   {
-    quote: "As a first-time landlord dealing with rent arrears, the Money Claim Pack walked me through everything. It generated a clear claim pack and evidence checklist for a stronger submission.",
+    quote: "As a first-time landlord dealing with rent arrears, the Money Claim Pack walked me through everything. It created a clear claim pack and evidence checklist for a stronger submission.",
     name: "David Thompson",
     role: "Landlord",
     location: "Edinburgh",
     initials: "DT",
     avatarColor: "bg-gray-600",
     rating: 5,
-    highlight: "Recovered £3,200",
+    highlight: "Recovered GBP3,200",
     verified: true,
   },
 ];

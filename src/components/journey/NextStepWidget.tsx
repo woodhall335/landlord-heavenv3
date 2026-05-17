@@ -27,15 +27,15 @@ const RECOMMENDATIONS: Record<StageEstimate, { primary: Action; secondary: Actio
   },
   demand_sent: {
     primary: { label: 'Re-check arrears totals', href: '/tools/rent-arrears-calculator' },
-    secondary: { label: 'Prepare your notice', href: '/products/notice-only' },
+    secondary: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
   },
   notice_ready: {
-    primary: { label: 'Create your eviction notice', href: '/products/notice-only' },
-    secondary: { label: 'See the Complete Eviction Pack', href: '/products/complete-pack' },
+    primary: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    secondary: { label: 'Prepare my court pack', href: '/products/complete-pack' },
   },
   court_ready: {
-    primary: { label: 'Start the Complete Eviction Pack', href: '/products/complete-pack' },
-    secondary: { label: 'Prepare a money claim', href: '/products/money-claim' },
+    primary: { label: 'Prepare my court pack', href: '/products/complete-pack' },
+    secondary: { label: 'Prepare my money claim', href: '/products/money-claim' },
   },
   unknown: {
     primary: { label: 'Ask Heaven a question', href: '/ask-heaven' },

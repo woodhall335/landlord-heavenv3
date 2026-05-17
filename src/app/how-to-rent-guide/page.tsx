@@ -56,7 +56,7 @@ const actionChooserItems = [
     title: 'Serve notice',
     body: 'Prepare the notice route, grounds, dates, and service record.',
     href: '/products/notice-only',
-    label: 'Generate notice pack',
+    label: 'Create my Section 8 notice',
     product: 'notice_only',
   },
   {

@@ -405,8 +405,8 @@ export default function HMOLicenseChecker() {
         showReviewPill={false}
         showTrustPositioningBar
         showUsageCounter
-        primaryCta={{ label: 'Start Free Checker ->', href: '#checker' }}
-        secondaryCta={{ label: 'See HMO Tenancy Agreements ->', href: '/products/ast' }}
+        primaryCta={{ label: 'Check my HMO licence position', href: '#checker' }}
+        secondaryCta={{ label: 'Choose my tenancy agreement', href: '/products/ast' }}
       >
         <p className="mt-4 text-sm text-white/90">Instant assessment • HMO guidance • Built to help landlords avoid licensing mistakes</p>
       </UniversalHero>
@@ -592,7 +592,7 @@ export default function HMOLicenseChecker() {
           </div>
         </div>
 
-        {/* Generate Button */}
+        {/* Create Button */}
         <button
           type="button"
           onClick={handleGenerate}
@@ -600,14 +600,14 @@ export default function HMOLicenseChecker() {
           className="hero-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating
-            ? 'Generating Assessment...'
-            : 'Generate Free Assessment'}
+            ? 'Creating assessment...'
+            : 'Create free assessment'}
         </button>
 
         {generated && (
           <div className="rounded-lg bg-success-50 border border-success-200 p-4">
             <p className="text-sm text-success-800 font-medium">
-              Your assessment has been generated and downloaded successfully.
+              Your assessment has been created and downloaded successfully.
             </p>
           </div>
         )}

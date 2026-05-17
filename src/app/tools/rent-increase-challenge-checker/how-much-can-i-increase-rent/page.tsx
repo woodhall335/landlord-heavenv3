@@ -42,7 +42,7 @@ export default function HowMuchCanIIncreaseRentPage() {
         },
       ]}
       primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Check the supportable rent range' }}
-      secondaryCta={{ href: '/products/section-13-standard', label: 'Open the Standard Section 13 pack' }}
+      secondaryCta={{ href: '/products/section-13-standard', label: 'Create my rent increase notice' }}
       relatedLinks={[
         ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/how-much-can-i-increase-rent').slice(0, 5),
         { href: '/products/section-13-defence', label: 'View the challenge-ready Defence pack' },

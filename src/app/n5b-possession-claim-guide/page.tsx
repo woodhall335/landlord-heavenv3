@@ -232,7 +232,7 @@ export default function Page() {
                   href={completePackProductHref}
                   className="rounded-lg bg-primary px-5 py-3 text-white"
                 >
-                  Start your court pack
+                  Prepare my court pack
                 </Link>
 
                 <Link
@@ -510,7 +510,7 @@ export default function Page() {
               title="Already thinking about court?"
               body="Use the Complete Pack if the Section 21 stage is done and you now need the notice, core court paperwork, and filing guidance together."
               primaryHref={completePackProductHref}
-              primaryLabel="Start your court pack"
+              primaryLabel="Prepare my court pack"
               secondaryHref={noticeOnlyProductHref}
               secondaryLabel="Find out which notice you need"
             />
@@ -586,7 +586,7 @@ export default function Page() {
                   href={completePackProductHref}
                   className="mt-4 inline-block text-primary"
                 >
-                  Start your court pack
+                  Prepare my court pack
                 </Link>
               </div>
 

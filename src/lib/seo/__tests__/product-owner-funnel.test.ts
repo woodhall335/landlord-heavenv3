@@ -76,7 +76,7 @@ const earlyInternalLinks = [
   {
     source: 'src/lib/seo/england-current-framework-pages.ts',
     href: '/products/notice-only',
-    anchor: 'Use our validated Section 8 notice builder',
+    anchor: 'Create my Section 8 notice',
   },
   {
     source: 'src/app/how-to-rent-guide/page.tsx',
@@ -101,12 +101,12 @@ const earlyInternalLinks = [
   {
     source: 'src/lib/blog/posts.tsx',
     href: '/products/notice-only',
-    anchor: 'use our validated Section 8 notice builder',
+    anchor: 'create your Section 8 notice',
   },
   {
     source: 'src/lib/blog/posts.tsx',
     href: '/products/complete-pack',
-    anchor: 'court-ready possession pack',
+    anchor: 'court pack',
   },
   {
     source: 'src/app/tools/rent-arrears-calculator/page.tsx',

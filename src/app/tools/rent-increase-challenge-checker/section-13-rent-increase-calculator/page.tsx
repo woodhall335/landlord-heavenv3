@@ -41,7 +41,7 @@ export default function Section13RentIncreaseCalculatorPage() {
           ],
         },
       ]}
-      primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Open the free calculator' }}
+      primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Check my rent increase' }}
       secondaryCta={{ href: '/rent-increase', label: 'Compare the Section 13 landlord routes' }}
       relatedLinks={[
         ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/section-13-rent-increase-calculator').slice(0, 5),

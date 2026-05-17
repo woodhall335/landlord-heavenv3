@@ -68,7 +68,7 @@ export default function LodgerAgreementEnglandPage() {
         pagePath="/lodger-agreement"
         title="Solicitor-approved Lodger Agreement - Resident Landlord Builder"
         subtitle="Use this solicitor-approved lodger agreement when you live in the property and are taking in a lodger, so the room let contract, validated lodger notice rules, house rules, and shared-home expectations are set out clearly from the start."
-        primaryCtaLabel="Start lodger agreement"
+        primaryCtaLabel="Create my Lodger agreement"
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
@@ -165,7 +165,7 @@ export default function LodgerAgreementEnglandPage() {
           howItWorks: {
             title: 'How it works',
             intro:
-              'The workflow focuses on the shared-home questions that matter most before a lodger moves in.',
+              'The steps focus on the shared-home questions that matter most before a lodger moves in.',
             steps: [
               {
                 step: 'Step 01',
@@ -181,13 +181,13 @@ export default function LodgerAgreementEnglandPage() {
               },
               {
                 step: 'Step 03',
-                title: 'Generate the full Lodger pack',
+                title: 'Create the full Lodger pack',
                 body:
                   "Download the agreement, checklist, handover record, and house-rules appendix as one room-let pack for the landlord's home.",
               },
             ],
           },
-          ctaTitle: 'Start the Lodger agreement pack',
+          ctaTitle: 'Create the Lodger agreement pack',
           ctaBody:
             "Use this option when you live at the property and want the room-let agreement, the shared-home rules, and the extra paperwork prepared together.",
         }}

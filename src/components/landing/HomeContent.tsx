@@ -69,7 +69,7 @@ type PreviewCard = {
   product: string;
 };
 
-type WorkflowStep = {
+type ProcessStep = {
   step: string;
   title: string;
   body: string;
@@ -104,7 +104,7 @@ const routeSelectionCards: RouteCard[] = [
     ],
     complianceNote:
       'Built around the updated England possession route from 1 May 2026, so the notice wording, timing, and supporting checks follow the post-Renters\' Rights framework.',
-    ctaLabel: 'Go to eviction notice route',
+    ctaLabel: 'Create my Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     imageSrc: '/images/section-8-notice.webp',
     imageAlt: 'Tenant not paying rent situation card',
@@ -126,7 +126,7 @@ const routeSelectionCards: RouteCard[] = [
     ],
     complianceNote:
       'Built to keep the notice, service details, and court forms consistent with the updated England process from 1 May 2026, reducing avoidable mismatch problems later.',
-    ctaLabel: 'Go to complete eviction route',
+    ctaLabel: 'Prepare my court pack',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     imageSrc: '/images/section-8-court-paperwork.webp',
     imageAlt: 'Tenant will not leave situation card',
@@ -148,7 +148,7 @@ const routeSelectionCards: RouteCard[] = [
     ],
     complianceNote:
       'Structured around the debt-claim paperwork flow so the money side is handled separately and more clearly.',
-    ctaLabel: 'Go to money claim route',
+    ctaLabel: 'Prepare my money claim',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
     imageSrc: '/images/money-claim-selector.webp',
     imageAlt: 'Recover unpaid rent bills or damage situation card',
@@ -170,7 +170,7 @@ const routeSelectionCards: RouteCard[] = [
     ],
     complianceNote:
       'Updated for the England assured tenancy rent increase route in force from 1 May 2026.',
-    ctaLabel: 'Go to rent increase route',
+    ctaLabel: 'Create my rent increase notice',
     href: '/rent-increase',
     imageSrc: '/images/section-13-selector.webp',
     imageAlt: 'Increase the rent situation card',
@@ -185,7 +185,7 @@ const routeSelectionCards: RouteCard[] = [
       'Start with the tenancy agreements hub when you need the right England agreement for the property, occupiers, and let type, including the updated Standard and Premium assured periodic routes.',
     whyRoute:
       'This route fits when you are setting up a tenancy or replacing older paperwork and want the current England route, with Standard and Premium updated for the post-Renters’ Rights Act framework from 1 May 2026.',
-    ctaLabel: 'Go to tenancy agreement route',
+    ctaLabel: 'Choose my tenancy agreement',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
     imageSrc: '/images/tenancy-agreement-selector.webp',
     imageAlt: 'Need a tenancy agreement situation card',
@@ -249,7 +249,7 @@ const previewCards: PreviewCard[] = [
       'Ready to review and print',
     ],
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
-    ctaLabel: 'Open Eviction Notice Generator',
+    ctaLabel: 'Create my Section 8 notice',
     routeIntent: 'serve_notice',
     product: 'notice_only',
   },
@@ -265,7 +265,7 @@ const previewCards: PreviewCard[] = [
       'Clear handover from notice to court',
     ],
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
-    ctaLabel: 'Open Complete Eviction Pack',
+    ctaLabel: 'Prepare my court pack',
     routeIntent: 'court_possession',
     product: 'complete_pack',
   },
@@ -281,20 +281,20 @@ const previewCards: PreviewCard[] = [
       'Agreements for standard, student, HMO, and lodger lets',
     ],
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
-    ctaLabel: 'Open Money Claim Pack',
+    ctaLabel: 'Prepare my money claim',
     routeIntent: 'recover_debt',
     product: 'money_claim',
   },
 ];
 
-const workflowSteps: WorkflowStep[] = [
+const processSteps: ProcessStep[] = [
   {
     step: '01',
     title: 'Pick the landlord job you need done',
     body:
       'Start with a Section 8 notice, a court pack, a money claim, a rent increase, or a tenancy agreement.',
     imageSrc: '/images/recover-unpaid-rent.webp',
-    imageAlt: 'Recover unpaid rent workflow step',
+    imageAlt: 'Recover unpaid rent process step',
   },
   {
     step: '02',
@@ -302,7 +302,7 @@ const workflowSteps: WorkflowStep[] = [
     body:
       'We ask for the details needed to prepare the right documents and flag issues before you pay or print.',
     imageSrc: '/images/start-eviction.webp',
-    imageAlt: 'Answer the key details workflow step',
+    imageAlt: 'Answer the key details process step',
   },
   {
     step: '03',
@@ -310,7 +310,7 @@ const workflowSteps: WorkflowStep[] = [
     body:
       'You get documents that match the task in front of you and are ready to review, save, and print.',
     imageSrc: '/images/create-tenancy-agreements.webp',
-    imageAlt: 'Generated landlord documents and agreements',
+    imageAlt: 'Landlord documents and agreements',
   },
 ];
 
@@ -601,7 +601,7 @@ export default function HomeContent() {
                 Choose the job and get the paperwork moving
               </h2>
               <div className="mt-8 space-y-5">
-                {workflowSteps.map((step) => (
+                {processSteps.map((step) => (
                   <div
                     key={step.step}
                     className="grid gap-4 rounded-[1.8rem] border border-[#efe5ff] bg-white/85 p-4 md:grid-cols-[0.28fr_0.72fr]"

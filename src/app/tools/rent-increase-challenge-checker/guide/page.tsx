@@ -52,7 +52,7 @@ export default function RentCheckerGuidePage() {
       secondaryCta={{ href: '/rent-increase', label: 'Compare the Section 13 routes' }}
       relatedLinks={[
         ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/guide').slice(0, 5),
-        { href: '/rent-increase', label: 'Open the main Section 13 route page' },
+        { href: '/rent-increase', label: 'Choose my Section 13 route' },
       ]}
     />
   );

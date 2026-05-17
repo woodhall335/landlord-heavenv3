@@ -8,7 +8,7 @@ import { BlogPost } from './types';
 
 const section21TemplateCta = (
   <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg p-4 my-6">
-    Need the post-ban landlord route instead? Start with the{' '}
+    Need the post-ban landlord route instead? Use the{' '}
     <Link href="/section-21-ban-uk" className="text-primary font-semibold hover:underline">
       Section 21 ban guide for landlords
     </Link>{' '}
@@ -35,7 +35,7 @@ const section8TemplateCta = (
         <Link href="/products/complete-pack" className="font-semibold text-primary hover:underline">
           Complete Eviction Pack
         </Link>{' '}
-        if you want the notice, N5, N119, evidence checklist, witness material, and court-ready file
+        if you want the notice, N5, N119, evidence checklist, witness material, and possession file
         working together from the start.
       </li>
       <li>
@@ -112,13 +112,13 @@ const section8GroundNextSteps = (
         href="/products/notice-only"
         className="rounded-lg border border-red-200 bg-white px-4 py-3 font-semibold text-red-900 transition-colors hover:border-red-300 hover:bg-red-100"
       >
-        Start the Eviction Notice Generator
+        Create my Section 8 notice
       </Link>
       <Link
         href="/products/complete-pack"
         className="rounded-lg border border-red-700 bg-red-700 px-4 py-3 font-semibold text-white transition-colors hover:bg-red-800"
       >
-        Start the Complete Eviction Pack
+        Prepare my court pack
       </Link>
     </div>
   </div>
@@ -704,12 +704,12 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           If there&apos;s one message to take away: <strong>do not rely on old Section 21 assumptions for a
-          new England case</strong>. Start with the current Form 3A ground, evidence, and notice period.
+          new England case</strong>. Use the current Form 3A ground, evidence, and notice period.
         </p>
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            {`Generate Form 3A Notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
+            {`Create my Section 8 notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
             {`Complete Eviction Pack (notices + court forms) - ${PRODUCTS.complete_pack.displayPrice}`}</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
@@ -999,10 +999,10 @@ const allBlogPosts: BlogPost[] = [
           use the Form 3A possession route instead of trying to serve Section 21.
         </p>
 
-        <h3>Option 1: Generate Online (Recommended)</h3>
+        <h3>Option 1: Create the current notice online</h3>
         <p>
           If you are dealing with a legacy notice, check whether it was served before the deadline and whether
-          the court-start deadline still applies. For a new case, use the current Form 3A workflow instead.
+          the court-start deadline still applies. For a new case, use the current Form 3A notice route instead.
         </p>
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
@@ -1393,7 +1393,7 @@ const allBlogPosts: BlogPost[] = [
 
         <ul>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            Generate Eviction Notice</Link></li>
+            Create my Section 8 notice</Link></li>
           <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
             Legacy Section 21 Guide</Link></li>
           <li><Link href="/products/complete-pack" className="text-primary hover:underline">
@@ -2166,7 +2166,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           <Link href="/tools/free-rent-demand-letter" className="text-primary hover:underline">
-            Generate a Free Rent Demand Letter</Link>
+            Create a free rent demand letter</Link>
         </p>
 
         <h3>Step 3: Offer a Repayment Plan (Optional)</h3>
@@ -2293,7 +2293,7 @@ const allBlogPosts: BlogPost[] = [
 
         <p>
           <Link href="/products/money-claim" className="text-primary hover:underline">
-            Generate Money Claim Documents</Link>
+            Prepare my money claim</Link>
         </p>
 
         <h3>Option 3: Use the Deposit</h3>
@@ -2392,7 +2392,7 @@ const allBlogPosts: BlogPost[] = [
           <li><Link href="/tools/free-rent-demand-letter" className="text-primary hover:underline">
             Free Rent Demand Letter Generator</Link></li>
           <li><Link href="/products/notice-only" className="text-primary hover:underline">
-            {`Generate Section 8 Notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
+            {`Create my Section 8 notice - ${PRODUCTS.notice_only.displayPrice}`}</Link></li>
           <li><Link href="/products/money-claim" className="text-primary hover:underline">
             Money Claim Document Pack</Link></li>
         </ul>
@@ -2594,7 +2594,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Where should I start if I want the current England route?</h3>
         <p>
-          Start with the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement product page</Link>
+          Use the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>
           to compare the current Standard and Premium routes.
         </p>
       </>
@@ -3044,14 +3044,14 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Don&apos;t Wait—Section 21 Ends Soon</h3>
           <p className="text-gray-700 mb-6">
-            With Section 21 ending on 1 May 2026, landlords who may need to regain possession should
-            serve their notices now. Our document generator creates Section 21 notices in minutes.
+            Section 21 ended on 1 May 2026. For a new England case, use the current Section 8 route and
+            create the notice with the right grounds, dates, and service record.
           </p>
           <Link
             href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
           >
-            Generate Section 21 Notice Now ?
+            Create my Section 8 notice
           </Link>
         </div>
       </>
@@ -3537,9 +3537,9 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Generate Your Section 8 Notice</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Create Your Section 8 Notice</h3>
           <p className="text-gray-700 mb-6">
-            Our document generator creates Section 8 notices with the right particulars
+            Create a Section 8 notice with the right particulars
             for each ground. Includes guidance on evidence gathering and the court process.
           </p>
           <Link
@@ -3970,9 +3970,9 @@ const allBlogPosts: BlogPost[] = [
         </div>
 
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Generate Your Section 8 Notice</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Create Your Section 8 Notice</h3>
           <p className="text-gray-700 mb-6">
-            Our document generator creates Section 8 notices with Ground 8, 10, and 11 set out clearly
+            Create a Section 8 notice with Ground 8, 10, and 11 set out clearly
             drafted. Includes a rent arrears schedule template and hearing preparation guide.
           </p>
           <Link
@@ -4212,7 +4212,7 @@ const allBlogPosts: BlogPost[] = [
           <Link href="/eviction-notice-template" className="text-primary hover:underline font-medium">
             Eviction notice pack
           </Link>{' '}
-          to start the paid notice route with the current England workflow.
+          to create the notice through the current England route.
         </p>
 
         <h3>Step 2: Complete Form N5B</h3>
@@ -4473,7 +4473,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Start Your Accelerated Possession Claim</h3>
           <p className="text-gray-700 mb-6">
-            Our Complete Eviction Pack includes all the documents you need for accelerated possession: validated
+            The Complete Eviction Pack includes the documents you need for accelerated possession:
             Section 21 notice, Form N5B guidance, and a step-by-step process guide. Get your landlord documents today.
           </p>
           <Link
@@ -4982,7 +4982,7 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Prepare for Your Possession Hearing</h3>
           <p className="text-gray-700 mb-6">
-            Our Complete Eviction Pack includes everything for standard possession: validated notices, Form N5
+            The Complete Eviction Pack includes the notice route, Form N5
             guidance, a rent arrears schedule template, and a hearing preparation checklist. Be fully prepared
             when you face the judge.
           </p>
@@ -5440,7 +5440,7 @@ const allBlogPosts: BlogPost[] = [
             href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Generate Section 8 Notice ?
+            Create my Section 8 notice
           </Link>
         </div>
       </>
@@ -5487,7 +5487,7 @@ const allBlogPosts: BlogPost[] = [
           <strong>Ground 14</strong> is the current England Section 8 route for antisocial behaviour, nuisance,
           annoyance, and some serious conduct near the property. Since the Renters&apos; Rights Act changes took effect
           on <strong>1 May 2026</strong>, landlords cannot fall back on Section 21 for new private-rented cases,
-          so Ground 14 cases need a clear Form 3A notice, strong incident evidence, and a court-ready chronology.
+          so Ground 14 cases need a clear Form 3A notice, strong incident evidence, and a possession chronology.
         </p>
         {section8GroundNextSteps}
         {section8TemplateCta}
@@ -6218,7 +6218,7 @@ const allBlogPosts: BlogPost[] = [
             href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Generate Section 8 Notice ?
+            Create my Section 8 notice
           </Link>
         </div>
       </>
@@ -6268,11 +6268,11 @@ const allBlogPosts: BlogPost[] = [
         <p className="text-lg text-gray-700 leading-relaxed">
           When you have checked Ground 1 fits the facts,{' '}
           <Link href="/products/notice-only" className="font-semibold text-primary hover:underline">
-            use our validated Section 8 notice builder
+            create your Section 8 notice
           </Link>{' '}
           so the notice, service record, and evidence trail stay aligned, or go straight to the{' '}
           <Link href="/products/complete-pack" className="font-semibold text-primary hover:underline">
-            court-ready possession pack
+            court pack
           </Link>{' '}
           if you already expect to file N5 and N119.
         </p>
@@ -6555,14 +6555,14 @@ const allBlogPosts: BlogPost[] = [
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Recover Your Property</h3>
           <p className="text-gray-700 mb-6">
-            Our Section 8 notice workflow uses the current Form 3A route for landlord and family occupation
+            The Section 8 notice route uses the current Form 3A route for landlord and family occupation
             claims, including the 4-month notice period and evidence prompts.
           </p>
           <Link
             href="/products/notice-only"
             className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
-            Generate Section 8 Notice ?
+            Create my Section 8 notice
           </Link>
         </div>
       </>
@@ -9790,7 +9790,7 @@ const allBlogPosts: BlogPost[] = [
     },
     reviewer: {
       name: 'Landlord Heaven Legal Review',
-      role: 'Reviewed for landlord debt recovery workflow',
+      role: 'Reviewed for landlord debt recovery routes',
     },
     heroImage: '/images/blog/mcol.svg',
     heroImageAlt: 'Money Claim Online Guide for Landlords',
@@ -10289,7 +10289,7 @@ const allBlogPosts: BlogPost[] = [
     },
     reviewer: {
       name: 'Landlord Heaven Legal Review',
-      role: 'Reviewed for landlord debt recovery workflow',
+      role: 'Reviewed for landlord debt recovery routes',
     },
     heroImage: '/images/blog/particulars.svg',
     heroImageAlt: 'How to Write Particulars of Claim',
@@ -27580,7 +27580,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Where should I start if I am unsure?</h3>
         <p>
-          Start with the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>,
+          Use the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>,
           then choose the route for the property jurisdiction.
         </p>
       </>
@@ -29224,7 +29224,7 @@ const allBlogPosts: BlogPost[] = [
     },
     reviewer: {
       name: 'Landlord Heaven Legal Review',
-      role: 'Reviewed for landlord debt recovery workflow',
+      role: 'Reviewed for landlord debt recovery routes',
     },
     heroImage: '/images/blog/money-claims.svg',
     heroImageAlt: 'UK Money Claims Online Guide',
@@ -39754,7 +39754,7 @@ const allBlogPosts: BlogPost[] = [
 
         <h3>Where should I start if I want the current England route?</h3>
         <p>
-          Start with the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>
+          Use the <Link href="/products/ast" className="text-primary font-semibold hover:underline">Landlord Heaven tenancy agreement page</Link>
           and compare the Standard and Premium routes.
         </p>
       </>

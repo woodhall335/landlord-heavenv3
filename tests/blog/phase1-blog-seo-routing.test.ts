@@ -32,7 +32,7 @@ function makePost(overrides: Partial<BlogPost>): BlogPost {
 }
 
 describe('Phase 1 blog SEO routing', () => {
-  it('routes England tenancy intent to the tenancy template owner', () => {
+  it('routes England tenancy intent to the product owner with a specific agreement route', () => {
     const config = getBlogSeoConfig(
       makePost({
         slug: 'england-tenancy-agreement-guide',
@@ -45,13 +45,13 @@ describe('Phase 1 blog SEO routing', () => {
       'england'
     );
 
-    expect(config.pillarLink.href).toBe('/tenancy-agreement-template');
-    expect(config.supportingLinks[0]?.href).toBe('/tenancy-agreement-template');
-    expect(config.supportingLinks[1]?.href).toBe('/products/ast');
+    expect(config.pillarLink.href).toBe('/products/ast');
+    expect(config.supportingLinks[0]?.href).toBe('/products/ast');
+    expect(config.supportingLinks[1]?.href).toBe('/standard-tenancy-agreement');
     expect(config.supportingLinks.some((link) => link.href === '/tenancy-agreement-template-uk')).toBe(false);
   });
 
-  it('routes England notice intent to the eviction notice template owner', () => {
+  it('routes England notice intent to the notice product owner with guide support', () => {
     const config = getBlogSeoConfig(
       makePost({
         slug: 'england-eviction-notice-guide',
@@ -64,9 +64,9 @@ describe('Phase 1 blog SEO routing', () => {
       'england'
     );
 
-    expect(config.pillarLink.href).toBe('/eviction-notice-template');
-    expect(config.supportingLinks[0]?.href).toBe('/eviction-notice-template');
-    expect(config.supportingLinks[1]?.href).toBe('/products/notice-only');
+    expect(config.pillarLink.href).toBe('/products/notice-only');
+    expect(config.supportingLinks[0]?.href).toBe('/products/notice-only');
+    expect(config.supportingLinks[1]?.href).toBe('/section-8-notice');
   });
 
   it('routes complete-pack intent to the product owner rather than bridge pages', () => {
@@ -84,12 +84,10 @@ describe('Phase 1 blog SEO routing', () => {
 
     expect(config.pillarLink.href).toBe('/products/complete-pack');
     expect(config.supportingLinks[0]?.href).toBe('/products/complete-pack');
-    expect(config.supportingLinks.some((link) => link.href === '/eviction-process-england')).toBe(
-      false
-    );
+    expect(config.supportingLinks[1]?.href).toBe('/eviction-process-england');
   });
 
-  it('routes broad money-claim intent to the money-claim owner and keeps MCOL as support only', () => {
+  it('routes broad money-claim intent to the money-claim product owner', () => {
     const config = getBlogSeoConfig(
       makePost({
         slug: 'england-money-claim-guide',
@@ -102,9 +100,9 @@ describe('Phase 1 blog SEO routing', () => {
       'england'
     );
 
-    expect(config.pillarLink.href).toBe('/money-claim');
-    expect(config.supportingLinks[0]?.href).toBe('/money-claim');
-    expect(config.supportingLinks[1]?.href).toBe('/products/money-claim');
+    expect(config.pillarLink.href).toBe('/products/money-claim');
+    expect(config.supportingLinks[0]?.href).toBe('/products/money-claim');
+    expect(config.supportingLinks[1]?.href).toBe('/money-claim-unpaid-rent');
     expect(config.supportingLinks.some((link) => link.href === '/money-claim-online-mcol')).toBe(
       false
     );

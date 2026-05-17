@@ -92,7 +92,7 @@ export const section13NoticePage: RentIncreaseGuidePage = {
   midCtaTitle: 'Build a stronger Section 13 notice from the start',
   midCtaBody:
     'Use the Standard pack to build the notice, service record, and support report from one workflow so the file stays consistent.',
-  finalCtaTitle: 'Generate your Section 13 notice now',
+  finalCtaTitle: 'Create my rent increase notice',
   finalCtaBody:
     'Use the Standard pack when you are ready to turn the timing, the figure, and the explanation into a clearer landlord file that still makes sense when someone reads it from the notice through to service and any follow-up questions.',
 };

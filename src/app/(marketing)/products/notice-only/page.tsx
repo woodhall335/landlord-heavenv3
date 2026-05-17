@@ -10,6 +10,7 @@ import type { ProductSalesPageContent } from '@/lib/marketing/product-sales-cont
 import { PRODUCTS } from '@/lib/pricing/products';
 import { getPublicProductDescriptor } from '@/lib/public-products';
 import { getCanonicalUrl } from '@/lib/seo';
+import { guideLinks } from '@/lib/seo/internal-links';
 import { PRODUCT_OWNER_METADATA } from '@/lib/seo/product-owner-metadata';
 import { StructuredData, breadcrumbSchema, productSchema } from '@/lib/seo/structured-data';
 
@@ -67,7 +68,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What if I also need the court paperwork?',
     answer:
-      'Choose the Stage 2 Court & Possession Pack if you want the Section 8 notice, N5, N119, and the court-stage possession paperwork together in one workflow.',
+      'Choose the Stage 2 Court & Possession Pack if you want the Section 8 notice, N5, N119, and the court-stage possession paperwork together in one flow.',
   },
   {
     question: 'Can I preview the pack before I pay?',
@@ -409,7 +410,18 @@ export default function NoticeOnlyPage() {
           label: 'Not sure which pack? Compare Stage 1 and Stage 2',
           href: '/compare/section-8-stage-1-vs-stage-2',
         },
-        ...descriptor.defaultGuideLinks,
+        {
+          label: guideLinks.rentersRightsActEvictionRules.title,
+          href: guideLinks.rentersRightsActEvictionRules.href,
+        },
+        {
+          label: guideLinks.section8Notice.title,
+          href: guideLinks.section8Notice.href,
+        },
+        {
+          label: guideLinks.form3aSection8.title,
+          href: guideLinks.form3aSection8.href,
+        },
       ],
     },
     faq: {

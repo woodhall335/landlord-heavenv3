@@ -63,6 +63,11 @@ const renderBlogPage = async (slug: string) => {
 
 describe('Blog page next steps rollout', () => {
   beforeEach(() => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response(null, { status: 204 })))
+    );
+
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query: string) => ({
@@ -101,6 +106,7 @@ describe('Blog page next steps rollout', () => {
   });
 
   afterEach(() => {
+    vi.unstubAllGlobals();
     cleanup();
     document.body.innerHTML = '';
   });
@@ -111,7 +117,7 @@ describe('Blog page next steps rollout', () => {
       [
         { label: 'Eviction Court Forms England', href: '/eviction-court-forms-england' },
         { label: 'N5B Form Guide', href: '/n5b-form-guide' },
-        { label: 'Complete Eviction Pack', href: '/products/complete-pack' },
+        { label: 'Prepare my court pack', href: '/products/complete-pack' },
       ],
     ],
     [
@@ -119,7 +125,7 @@ describe('Blog page next steps rollout', () => {
       [
         { label: 'Warrant of Possession Guide', href: '/warrant-of-possession-guide' },
         { label: 'Court Bailiff Eviction Guide', href: '/court-bailiff-eviction-guide' },
-        { label: 'Complete Eviction Pack', href: '/products/complete-pack' },
+        { label: 'Prepare my court pack', href: '/products/complete-pack' },
       ],
     ],
     [
@@ -127,7 +133,7 @@ describe('Blog page next steps rollout', () => {
       [
         { label: 'Eviction Court Forms England', href: '/eviction-court-forms-england' },
         { label: 'Court Possession Order Guide', href: '/court-possession-order-guide' },
-        { label: 'Complete Eviction Pack', href: '/products/complete-pack' },
+        { label: 'Prepare my court pack', href: '/products/complete-pack' },
       ],
     ],
     [
@@ -135,7 +141,7 @@ describe('Blog page next steps rollout', () => {
       [
         { label: 'Eviction Notice Template', href: '/eviction-notice-template' },
         { label: 'Section 8 Notice', href: '/section-8-notice' },
-        { label: 'Notice Only Bundle', href: '/products/notice-only' },
+        { label: 'Create my Section 8 notice', href: '/products/notice-only' },
       ],
     ],
     [
@@ -143,7 +149,7 @@ describe('Blog page next steps rollout', () => {
       [
         { label: 'Eviction Process UK Guide', href: '/eviction-process-uk' },
         { label: 'Possession Order Timeline', href: '/possession-order-timeline' },
-        { label: 'Complete Eviction Pack', href: '/products/complete-pack' },
+        { label: 'Prepare my court pack', href: '/products/complete-pack' },
       ],
     ],
     [
@@ -151,7 +157,7 @@ describe('Blog page next steps rollout', () => {
       [
         { label: 'Money Claim Guide', href: '/money-claim' },
         { label: 'Claim Unpaid Rent', href: '/money-claim-unpaid-rent' },
-        { label: 'Money Claim Pack', href: '/products/money-claim' },
+        { label: 'Prepare my money claim', href: '/products/money-claim' },
       ],
     ],
     [
@@ -159,7 +165,7 @@ describe('Blog page next steps rollout', () => {
       [
         { label: 'N1 Claim Form Guide', href: '/money-claim-n1-claim-form' },
         { label: 'Schedule of Debt Guide', href: '/money-claim-schedule-of-debt' },
-        { label: 'Money Claim Pack', href: '/products/money-claim' },
+        { label: 'Prepare my money claim', href: '/products/money-claim' },
       ],
     ],
     [
@@ -167,7 +173,7 @@ describe('Blog page next steps rollout', () => {
       [
         { label: 'Money Claim Guide', href: '/money-claim' },
         { label: 'Small Claims Court for Landlords', href: '/money-claim-small-claims-landlord' },
-        { label: 'Money Claim Pack', href: '/products/money-claim' },
+        { label: 'Prepare my money claim', href: '/products/money-claim' },
       ],
     ],
   ])('renders the next-steps block with sprint links for %s', async (slug, links) => {

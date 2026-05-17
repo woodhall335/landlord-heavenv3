@@ -70,7 +70,7 @@ export default function StudentTenancyAgreementPage() {
         pagePath="/student-tenancy-agreement"
         title="Solicitor-approved Student Tenancy Agreement - Sharer & Guarantor Builder"
         subtitle="Use this solicitor-approved student tenancy agreement builder when the occupiers are students and you want validated guarantor wording, clearer wording on joint tenants, replacement requests, and end-of-term move-out under the post-May 2026 England rules."
-        primaryCtaLabel="Start student tenancy agreement"
+        primaryCtaLabel="Create my Student agreement"
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
@@ -167,7 +167,7 @@ export default function StudentTenancyAgreementPage() {
           howItWorks: {
             title: 'How it works',
             intro:
-              'The workflow is built for student households and the extra points landlords usually need to capture before the tenancy starts.',
+              'The steps are built for student households and the extra points landlords usually need to capture before the tenancy starts.',
             steps: [
               {
                 step: 'Step 01',
@@ -183,13 +183,13 @@ export default function StudentTenancyAgreementPage() {
               },
               {
                 step: 'Step 03',
-                title: 'Generate the full Student pack',
+                title: 'Create the full Student pack',
                 body:
                   'Download the agreement, the student schedule, and the supporting records as one England student tenancy pack.',
               },
             ],
           },
-          ctaTitle: 'Start the Student agreement pack',
+          ctaTitle: 'Create the Student agreement pack',
           ctaBody:
             'Use this option when the occupiers are students and you want the agreement, the student hand-back wording, and the extra paperwork prepared as one coherent pack.',
         }}

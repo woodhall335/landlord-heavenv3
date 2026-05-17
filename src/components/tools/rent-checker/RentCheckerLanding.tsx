@@ -30,7 +30,7 @@ const steps = [
   },
   {
     title: 'Move into the right Section 13 route',
-    copy: 'Start with the Standard pack, switch to Defence, or take the fuller protection route.',
+    copy: 'Create the standard notice pack, switch to Defence, or prepare the fuller challenge file.',
     icon: ShieldCheck,
   },
 ];
@@ -74,7 +74,7 @@ export function RentCheckerLanding({ onStart }: RentCheckerLandingProps) {
                 size="large"
                 className="border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700"
               >
-                Already increasing rent? Generate Section 13 pack
+                Already increasing rent? Create my Section 13 notice
               </Button>
             </a>
           </div>

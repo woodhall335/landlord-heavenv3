@@ -91,10 +91,10 @@ export const form4aGuidePage: RentIncreaseGuidePage = {
     RENT_INCREASE_LINKS.challenge,
     RENT_INCREASE_LINKS.wizard,
   ],
-  midCtaTitle: 'Generate Form 4A from validated case data',
+  midCtaTitle: 'Create Form 4A from checked case data',
   midCtaBody:
     'Use the Standard wizard to keep form fields, timeline checks, and report language aligned from one data source.',
-  finalCtaTitle: 'Generate your Form 4A pack',
+  finalCtaTitle: 'Create my rent increase notice',
   finalCtaBody:
     'Create a service-ready Section 13 notice package with consistent fields and evidence framing, so the file still reads clearly when the tenant asks why the figure was chosen.',
 };

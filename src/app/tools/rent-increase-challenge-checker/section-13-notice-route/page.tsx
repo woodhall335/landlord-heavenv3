@@ -18,7 +18,7 @@ export default function Section13NoticeRoutePage() {
     <RentCheckerSeoPage
       eyebrow="Section 13 notice route"
       title="When to move from the free rent check into the Standard Section 13 notice route"
-      intro="Generate the formal Section 13 notice pack once the rent figure, evidence, and service plan make sense together. The checker helps you get to that point before the form is created."
+      intro="Create the formal Section 13 notice pack once the rent figure, evidence, and service plan make sense together. The checker helps you get to that point before the form is created."
       bullets={[
         'Use the checker before you generate Form 4A.',
         'Move into Standard when the increase is supportable.',
@@ -42,7 +42,7 @@ export default function Section13NoticeRoutePage() {
         },
       ]}
       primaryCta={{ href: '/tools/rent-increase-challenge-checker', label: 'Run the checker before you serve' }}
-      secondaryCta={{ href: '/rent-increase', label: 'Open the Standard Section 13 route' }}
+      secondaryCta={{ href: '/rent-increase', label: 'Create my rent increase notice' }}
       relatedLinks={[
         ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/section-13-notice-route').slice(0, 4),
         { href: '/products/rent-increase', label: 'Visit the public Section 13 product page' },

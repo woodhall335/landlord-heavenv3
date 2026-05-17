@@ -42,8 +42,8 @@ export default function ToolsHubPage() {
         badge="Free Tools"
         title="Free Tools for UK Landlords"
         subtitle="Use our free calculators, letter builders, and checks to understand your position quickly, then move into a full landlord pack if you need the paperwork for the next step."
-        primaryCTA={{ label: 'Explore Free Tools ->', href: '#tools' }}
-        secondaryCTA={{ label: 'Ask Heaven ->', href: '/ask-heaven' }}
+        primaryCTA={{ label: 'Explore free tools', href: '#tools' }}
+        secondaryCTA={{ label: 'Ask Heaven', href: '/ask-heaven' }}
         variant="pastel"
       />
 
@@ -72,7 +72,7 @@ export default function ToolsHubPage() {
                     className="hero-btn-primary block text-center"
                     aria-label={`Try ${tool.label}`}
                   >
-                    Try Free Tool -&gt;
+                    Use free tool
                   </Link>
                 </div>
               ))}
@@ -128,7 +128,7 @@ export default function ToolsHubPage() {
                   className="hero-btn-secondary text-center"
                   aria-label={`Try ${tool.label}`}
                 >
-                  Try Free Tool -&gt;
+                  Use free tool
                 </Link>
               </div>
             ))}

@@ -229,7 +229,7 @@ export default function MoneyClaimPage() {
     midPageCta: {
       title: 'Ready to prepare the money claim?',
       body:
-        'Start a landlord money claim pack so the letter before claim, debt schedules, and filing steps stay together from the start.',
+        'Prepare a landlord money claim pack so the letter before claim, debt schedules, and filing steps stay together from the start.',
       primary: {
         label: 'Prepare my money claim',
         href: descriptor.wizardHref,

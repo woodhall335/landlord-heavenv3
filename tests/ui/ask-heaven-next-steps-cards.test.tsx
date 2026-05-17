@@ -28,34 +28,40 @@ describe('Ask Heaven next-step cards', () => {
   it('shows the full England commercial set for England', () => {
     render(<AskHeavenNextStepsCards jurisdiction="england" />);
 
-    expect(screen.getByText('Notice Only Pack')).toBeInTheDocument();
+    expect(screen.getByText('Eviction Notice Generator')).toBeInTheDocument();
     expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
-    expect(screen.getByText('Money Claims Pack')).toBeInTheDocument();
-    expect(screen.getByText('Tenancy Agreements')).toBeInTheDocument();
+    expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
+    expect(screen.getByText('England Tenancy Agreements')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Create my Section 8 notice' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Prepare my court pack' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Prepare my money claim' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Choose my tenancy agreement' })).toBeInTheDocument();
   });
 
-  it('hides England-only packs for Wales and Scotland', () => {
-    const { rerender } = render(<AskHeavenNextStepsCards jurisdiction="wales" />);
+  it('keeps the same public England cards when an older non-England case is present', () => {
+    const { container, rerender } = render(<AskHeavenNextStepsCards jurisdiction="wales" />);
 
-    expect(screen.getByText('Notice Only Pack')).toBeInTheDocument();
-    expect(screen.getByText('Tenancy Agreements')).toBeInTheDocument();
-    expect(screen.queryByText('Complete Eviction Pack')).not.toBeInTheDocument();
-    expect(screen.queryByText('Money Claims Pack')).not.toBeInTheDocument();
+    expect(container.querySelector('[data-jurisdiction="wales"]')).toBeInTheDocument();
+    expect(screen.getByText('Eviction Notice Generator')).toBeInTheDocument();
+    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
+    expect(screen.getByText('England Tenancy Agreements')).toBeInTheDocument();
 
     rerender(<AskHeavenNextStepsCards jurisdiction="scotland" />);
 
-    expect(screen.getByText('Notice Only Pack')).toBeInTheDocument();
-    expect(screen.getByText('Tenancy Agreements')).toBeInTheDocument();
-    expect(screen.queryByText('Complete Eviction Pack')).not.toBeInTheDocument();
-    expect(screen.queryByText('Money Claims Pack')).not.toBeInTheDocument();
+    expect(container.querySelector('[data-jurisdiction="scotland"]')).toBeInTheDocument();
+    expect(screen.getByText('Eviction Notice Generator')).toBeInTheDocument();
+    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
+    expect(screen.getByText('England Tenancy Agreements')).toBeInTheDocument();
   });
 
-  it('keeps Northern Ireland limited to tenancy help only', () => {
+  it('keeps Northern Ireland cases on the same public England recommendation surface', () => {
     render(<AskHeavenNextStepsCards jurisdiction="northern-ireland" />);
 
-    expect(screen.getByText('Tenancy Agreements')).toBeInTheDocument();
-    expect(screen.queryByText('Notice Only Pack')).not.toBeInTheDocument();
-    expect(screen.queryByText('Complete Eviction Pack')).not.toBeInTheDocument();
-    expect(screen.queryByText('Money Claims Pack')).not.toBeInTheDocument();
+    expect(screen.getByText('Eviction Notice Generator')).toBeInTheDocument();
+    expect(screen.getByText('Complete Eviction Pack')).toBeInTheDocument();
+    expect(screen.getByText('Money Claim Pack')).toBeInTheDocument();
+    expect(screen.getByText('England Tenancy Agreements')).toBeInTheDocument();
   });
 });

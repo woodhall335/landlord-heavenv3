@@ -223,7 +223,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       {
         href: '/products/notice-only',
         title: 'Eviction Notice Pack for Landlords',
-        description: 'Generate the current England notice with the route, dates, and service steps in one place.',
+        description: 'Create the current England notice with the route, dates, and service steps in one place.',
         icon: 'document',
         type: 'product',
       },
@@ -235,8 +235,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Generate notice pack', href: '/products/notice-only' },
-    secondaryCta: { label: 'Build complete eviction pack', href: '/products/complete-pack' },
+    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    secondaryCta: { label: 'Prepare my court pack', href: '/products/complete-pack' },
   },
   'section-8-notice': {
     slug: 'section-8-notice',
@@ -282,14 +282,14 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
           title: 'Need to serve notice correctly first',
           body:
             'Start with the Eviction Notice Generator when the main job is getting the Section 8 notice, grounds, dates, and service steps right before anything goes to court.',
-          ctaLabel: 'Open Eviction Notice Generator',
+          ctaLabel: 'Create my Section 8 notice',
           href: '/products/notice-only',
         },
         {
           title: 'Already preparing for court',
           body:
             'Move straight to the Complete Eviction Pack when the case already needs the notice, N5, N119, and court-stage possession paperwork joined up in one file.',
-          ctaLabel: 'Open Complete Eviction Pack',
+          ctaLabel: 'Prepare my court pack',
           href: '/products/complete-pack',
         },
       ],
@@ -402,7 +402,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       {
         href: '/products/notice-only',
         title: 'Eviction Notice Pack for Landlords',
-        description: 'Generate the current England notice once the grounds, dates, and evidence are clear.',
+        description: 'Create the current England notice once the grounds, dates, and evidence are clear.',
         icon: 'document',
         type: 'product',
       },
@@ -414,8 +414,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Start your eviction notice pack', href: '/products/notice-only' },
-    secondaryCta: { label: 'Already moving toward court? View Complete Eviction Pack', href: '/products/complete-pack' },
+    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    secondaryCta: { label: 'Prepare my court pack', href: '/products/complete-pack' },
   },
   'renters-rights-act-eviction-rules': {
     slug: 'renters-rights-act-eviction-rules',
@@ -700,8 +700,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       },
       {
         href: '/products/notice-only',
-        title: 'Use our validated Section 8 notice builder',
-        description: "Generate a solicitor-approved Form 3A and service record for the current Renters' Rights Act Section 8 route.",
+        title: 'Create my Section 8 notice',
+        description: "Create a Form 3A and service record for the current Renters' Rights Act Section 8 route.",
         icon: 'document',
         type: 'product',
       },
@@ -713,7 +713,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Use our validated Section 8 notice builder', href: '/products/notice-only' },
+    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
     secondaryCta: { label: 'See the full England process', href: '/eviction-process-england' },
   },
   'how-to-evict-a-tenant-england': {
@@ -1009,7 +1009,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'guide',
       },
     ],
-    primaryCta: { label: 'Start your complete eviction pack', href: '/products/complete-pack' },
+    primaryCta: { label: 'Prepare my court pack', href: '/products/complete-pack' },
     secondaryCta: { label: 'Read Renters\' Rights Act Eviction Rules', href: '/renters-rights-act-eviction-rules' },
   },
   'eviction-notice-template': {
@@ -1138,7 +1138,7 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
       {
         href: '/products/notice-only',
         title: 'Eviction Notice Pack for Landlords',
-        description: 'Generate the current England notice once the route is settled.',
+        description: 'Create the current England notice once the route is settled.',
         icon: 'document',
         type: 'product',
       },
@@ -1150,8 +1150,8 @@ export const CURRENT_ENGLAND_FRAMEWORK_PAGES: Record<
         type: 'product',
       },
     ],
-    primaryCta: { label: 'Start your eviction notice pack', href: '/products/notice-only' },
-    secondaryCta: { label: 'Review Complete Eviction Pack', href: '/products/complete-pack' },
+    primaryCta: { label: 'Create my Section 8 notice', href: '/products/notice-only' },
+    secondaryCta: { label: 'Prepare my court pack', href: '/products/complete-pack' },
   },
 };
 

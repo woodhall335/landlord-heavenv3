@@ -13,6 +13,11 @@ const FILES_TO_CHECK = [
   'src/app/(marketing)/products/notice-only/page.tsx',
   'src/app/(marketing)/products/section-13-standard/page.tsx',
   'src/components/landing/heroConfigs.tsx',
+  'src/components/landing/HomeContent.tsx',
+  'src/components/marketing/CommercialBridge.tsx',
+  'src/lib/blog/product-cta-map.ts',
+  'src/lib/blog/next-steps-cta.ts',
+  'src/lib/tools/tools.ts',
   'src/lib/marketing/funnelProcessSection.ts',
   'src/lib/public-products.ts',
 ];
@@ -32,6 +37,15 @@ const BANNED_PHRASES = [
   'Used during your generated case pack workflow.',
   'Money Claim Workflow',
   'Current England route -> N5 + N119',
+  'Go to eviction notice route',
+  'Go to complete eviction route',
+  'Go to money claim route',
+  'Open Eviction Notice Generator',
+  'Start the Eviction Notice Generator',
+  'Start the Complete Eviction Pack',
+  'Start the Money Claim Pack',
+  'Start your court pack',
+  'Generate notice pack',
 ];
 
 describe('Public language sweep regression', () => {
@@ -74,8 +88,10 @@ describe('Public language sweep regression', () => {
 
     expect(wizard).toContain('Choose the landlord product you need');
     expect(wizard).toContain('Choose the product that matches the job in front of you');
-    expect(noticeOnly).toContain('Read the England Section 8 guides before you serve');
-    expect(completePack).toContain('Read the England possession guides before you file');
+    expect(noticeOnly).toContain('Create my Section 8 notice');
+    expect(completePack).toContain('Prepare my court pack');
     expect(astHub).toContain('Choose the agreement that fits the let');
+    expect(fs.readFileSync(path.join(process.cwd(), 'src/components/landing/HomeContent.tsx'), 'utf-8')).toContain('Prepare my court pack');
+    expect(fs.readFileSync(path.join(process.cwd(), 'src/lib/blog/product-cta-map.ts'), 'utf-8')).toContain('Prepare my money claim');
   });
 });

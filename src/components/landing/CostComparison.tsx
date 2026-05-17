@@ -125,7 +125,7 @@ export function CostComparison() {
 
               <div className="mt-8">
                 <Link href="/wizard" className="hero-btn-primary block w-full text-center">
-                  Start Notice Bundle Wizard -&gt;
+                  Create my Section 8 notice
                 </Link>
               </div>
             </div>
@@ -133,17 +133,17 @@ export function CostComparison() {
 
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
             <PriceAnchor
-              product="Generate landlord eviction paperwork"
+              product="Create landlord eviction paperwork"
               ourPrice={PRODUCTS.notice_only.displayPrice}
-              solicitorPrice="£200-300"
-              savings="£150+"
+              solicitorPrice="GBP200-300"
+              savings="GBP150+"
               href="/products/notice-only"
             />
             <PriceAnchor
               product="Complete eviction packs including court docs"
               ourPrice={PRODUCTS.complete_pack.displayPrice}
-              solicitorPrice="£1,500-2,500"
-              savings="£1,300+"
+              solicitorPrice="GBP1,500-2,500"
+              savings="GBP1,300+"
               href="/products/complete-pack"
               highlighted
               badge="England"
@@ -151,16 +151,16 @@ export function CostComparison() {
             <PriceAnchor
               product="Claim unpaid rent and damages"
               ourPrice={PRODUCTS.money_claim.displayPrice}
-              solicitorPrice="£800-1200"
-              savings="£650+"
+              solicitorPrice="GBP800-1200"
+              savings="GBP650+"
               href="/products/money-claim"
               badge="England"
             />
             <PriceAnchor
               product="Legally compliant tenancy agreements"
               ourPrice={TENANCY_AGREEMENT_FROM_PRICE.replace('From ', '')}
-              solicitorPrice="£150-400"
-              savings="£135+"
+              solicitorPrice="GBP150-400"
+              savings="GBP135+"
               href="/products/ast"
             />
           </div>

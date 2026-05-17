@@ -354,7 +354,7 @@ export default function TenancyAgreementTemplatePage() {
             </>
           }
           primaryCta={{
-            label: 'Start premium tenancy agreement',
+            label: 'Create my Premium agreement',
             href: premiumWizardHref,
           }}
           secondaryCta={{
@@ -461,10 +461,10 @@ export default function TenancyAgreementTemplatePage() {
                 Default next step after the preview
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Start with the Premium route shown above
+                Create the Premium agreement shown above
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
-                The sample on this page is the Premium golden pack. Start there when you want the
+                The sample on this page is the Premium golden pack. Use it when you want the
                 fuller agreement and management records; Standard remains available for simpler
                 ordinary residential lets.
               </p>

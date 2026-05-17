@@ -299,7 +299,7 @@ export function RentIncreaseChallengeChecker({
         </div>
         {!started ? (
           <Button onClick={startTool} className="hidden bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300 lg:inline-flex">
-            Start checker
+            Check my rent increase
             <ArrowRight className="h-4 w-4" />
           </Button>
         ) : null}

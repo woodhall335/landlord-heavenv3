@@ -90,7 +90,7 @@ const buildProductReformBlogPost = (spec: ProductReformBlogSpec): BlogPost => ({
   },
   reviewer: {
     name: 'Landlord Heaven Legal Review',
-    role: 'Reviewed for post-May 2026 England landlord workflow',
+    role: 'Reviewed for post-May 2026 England landlord action routes',
   },
   heroImage: spec.heroImage,
   heroImageAlt: spec.heroImageAlt,
@@ -173,14 +173,14 @@ const buildProductReformBlogPost = (spec: ProductReformBlogSpec): BlogPost => ({
 
       <BlogCTA
         variant="inline"
-        title="Product route"
-        description={`The ${spec.productLabel} route is designed to keep the post-May 2026 England paperwork aligned from the start.`}
+        title="Recommended solution"
+        description={`Use ${spec.productLabel} when this is the landlord problem you need to solve next.`}
       />
 
       <h2 id="product-alignment" className="scroll-mt-24">How this product is aligned</h2>
       <p>{spec.productAlignment}</p>
       <p>
-        Landlord Heaven is not positioning this as a generic download. The workflow asks for the facts that matter,
+        Landlord Heaven is not positioning this as a generic download. The guided route asks for the facts that matter,
         turns those answers into product-specific documents, and keeps the landlord focused on the next legal step. The
         aim is to reduce panic, reduce rework, and avoid the common mistake of treating a changed legal process as if it
         were still the same form with a new date on it.
@@ -228,17 +228,17 @@ const buildProductReformBlogPost = (spec: ProductReformBlogSpec): BlogPost => ({
       </p>
 
       <div className="my-10 rounded-2xl border border-slate-200 bg-slate-950 p-6 text-white">
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-purple-200">Ready for the new landscape</p>
-        <h3 className="mt-3 text-2xl font-bold">Start with the {spec.productLabel}</h3>
+        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-purple-200">Problem identified</p>
+        <h3 className="mt-3 text-2xl font-bold">Use {spec.productLabel} to solve it</h3>
         <p className="mt-3 text-slate-200">
           {spec.productPromise}. You can preview the route before payment and keep your answers aligned with the current
-          England landlord workflow.
+          England landlord action route.
         </p>
         <Link
           href={spec.productHref}
           className="mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-purple-100"
         >
-          Open {spec.productLabel}
+          {spec.productPromise}
         </Link>
       </div>
 
@@ -273,12 +273,12 @@ const productReformSpecs: ProductReformBlogSpec[] = [
     relatedPosts: ['england-section-8-process', 'england-section-8-ground-8', 'england-standard-possession'],
     productHref: '/products/notice-only',
     productLabel: 'Eviction Notice Generator',
-    productPromise: 'Start the Form 3A notice-only route',
+    productPromise: 'Create my Section 8 notice',
     directPain: 'You may need to act quickly, but serving the wrong notice or using stale Section 21-era assumptions can put the whole case at risk before it has properly begun.',
     whatChanged: 'For new England private rented sector possession cases after 1 May 2026, landlords need to work from the current Form 3A possession notice route rather than treating Section 21 as the default exit.',
     riskIfIgnored: 'An old notice template can leave the ground, notice period, service record, or arrears evidence unclear. That gives the tenant an avoidable route to dispute validity.',
     productAlignment: 'The Eviction Notice Generator is built for the notice stage. It focuses on the current England Form 3A notice, the selected possession grounds, the service record, and the supporting notice-stage paperwork before court is started.',
-    includes: ['Current Form 3A notice workflow for England.', 'Service instructions and validity checklist.', 'Pre-service compliance declaration.', 'Rent schedule or arrears statement where the facts require it.'],
+    includes: ['Current Form 3A notice route for England.', 'Service instructions and validity checklist.', 'Pre-service compliance declaration.', 'Rent schedule or arrears statement where the facts require it.'],
     differentiators: ['Keeps notice-only landlords out of unnecessary court-pack work.', 'Separates Form 3A notice drafting from later N5 and N119 claim paperwork.', 'Frames Section 21 as gone for the live post-May 2026 route.'],
     articleAngle: 'Use a notice-only route when the immediate job is to serve the current England Form 3A correctly.',
     whenItFits: 'Choose this route when you need the notice-stage documents before serving anything and you are not yet asking the court for possession.',
@@ -289,7 +289,7 @@ const productReformSpecs: ProductReformBlogSpec[] = [
   {
     slug: 'england-complete-eviction-pack-after-section-21-ban',
     title: 'Complete Eviction Pack After the Renters Rights Act Section 21 Ban',
-    description: 'A landlord-focused guide to the complete England eviction pack after the Renters Rights Act ended Section 21, covering Form 3A, N5, N119, and court-ready evidence.',
+    description: 'A landlord-focused guide to the complete England eviction pack after the Renters Rights Act ended Section 21, covering Form 3A, N5, N119, and possession evidence.',
     metaDescription: 'Complete eviction pack guide after the Renters Rights Act and Section 21 ban. Learn how Form 3A, N5, N119, evidence, and court paperwork work together.',
     readTime: '10 min read',
     wordCount: 1510,
@@ -302,7 +302,7 @@ const productReformSpecs: ProductReformBlogSpec[] = [
     relatedPosts: ['england-section-8-process', 'england-county-court-forms', 'england-possession-hearing'],
     productHref: '/products/complete-pack',
     productLabel: 'Complete Eviction Pack',
-    productPromise: 'Start the notice-through-court route',
+    productPromise: 'Prepare my court pack',
     directPain: 'If the tenant is not engaging, arrears are growing, or you already know the case is likely to reach court, a standalone notice can leave you rebuilding the file later.',
     whatChanged: 'The post-1 May 2026 England possession route pushes landlords into a grounds-based process. That makes consistency between the Form 3A notice, N5, N119, evidence, and witness material more important.',
     riskIfIgnored: 'If the notice says one thing and the court paperwork says another, the claim can look weak even where the landlord has a genuine possession ground.',
@@ -331,7 +331,7 @@ const productReformSpecs: ProductReformBlogSpec[] = [
     relatedPosts: ['england-money-claim-online', 'england-particulars-of-claim', 'rent-arrears-eviction-guide'],
     productHref: '/products/money-claim',
     productLabel: 'Money Claim Pack',
-    productPromise: 'Start the unpaid rent claim route',
+    productPromise: 'Prepare my money claim',
     directPain: 'When rent is unpaid, landlords often feel trapped between possession action, negotiation, and debt recovery. The key is not to let the arrears story become messy.',
     whatChanged: 'The Renters Rights Act changes possession routes, but unpaid rent can still require a separate money recovery strategy where the landlord needs judgment for the debt.',
     riskIfIgnored: 'If arrears records, payment history, notices, and pre-action correspondence are inconsistent, the debt claim becomes easier to dispute.',
@@ -365,7 +365,7 @@ const productReformSpecs: ProductReformBlogSpec[] = [
     whatChanged: 'After 1 May 2026, Section 13 is central to England rent increase practice. Landlords need the current Form 4A route and a rent figure they can explain with market evidence.',
     riskIfIgnored: 'A blank form with no supportable market reasoning can invite challenge, especially if the proposed rent looks high compared with local listings.',
     productAlignment: 'The Standard Section 13 Rent Increase Pack is more than a form. It uses local comparable listings, market position messaging, and a justification pack so landlords can choose a more supportable figure before serving.',
-    includes: ['Current Form 4A workflow.', 'Live comparable listing review.', 'Supportable rent position summary.', 'Cover letter and justification pack aligned with the proposed figure.'],
+    includes: ['Current Form 4A route.', 'Live comparable listing review.', 'Supportable rent position summary.', 'Cover letter and justification pack aligned with the proposed figure.'],
     differentiators: ['Checks real local listings rather than leaving landlords to guess.', 'Helps avoid unsupported increases that attract challenge.', 'Builds Form 4A and the explanation pack together.'],
     articleAngle: 'Use the standard Section 13 route when the goal is a supportable rent increase backed by market evidence.',
     whenItFits: 'Choose this route when you want to increase rent and need help judging whether the proposed figure looks supportable.',

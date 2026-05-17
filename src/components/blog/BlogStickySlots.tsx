@@ -20,14 +20,14 @@ const ACTIVE_SLOTS = { desktop: 0, mobile: 0 };
 function getStickyHeading(cta: ProductCtaConfig): string {
   switch (cta.iconKey) {
     case 'money-claim':
-      return 'Ready to start your claim?';
+      return 'Unpaid rent still unresolved?';
     case 'ast':
-      return 'Ready to create your agreement?';
+      return 'Setting up the tenancy now?';
     case 'complete-pack':
-      return 'Ready to start your complete pack?';
+      return 'Case moving toward court?';
     case 'notice':
     default:
-      return 'Ready to generate your notice?';
+      return 'Need to serve the notice?';
   }
 }
 

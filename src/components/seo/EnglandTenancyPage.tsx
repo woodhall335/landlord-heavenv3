@@ -501,7 +501,7 @@ export function EnglandTenancyPage({
                 <div className="relative min-h-[360px] overflow-hidden rounded-[1.8rem] border border-[#E8E1D7] bg-white shadow-[0_16px_38px_rgba(31,41,55,0.08)] md:min-h-[440px] lg:min-h-full">
                   <Image
                     src={salesContent.howItWorks.imageSrc ?? '/tenancy-how-it-works.webp'}
-                    alt={salesContent.howItWorks.imageAlt ?? 'Tenancy agreement workflow preview'}
+                    alt={salesContent.howItWorks.imageAlt ?? 'Tenancy agreement steps preview'}
                     fill
                     sizes="(min-width: 1024px) 66vw, 100vw"
                     className="object-cover"

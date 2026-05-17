@@ -39,7 +39,7 @@ describe('getNextStepsCTAs owner routing', () => {
       [
         { href: '/money-claim', label: 'Money Claim Guide' },
         { href: '/money-claim-unpaid-rent', label: 'Claim Unpaid Rent' },
-        { href: '/products/money-claim', label: 'Money Claim Pack' },
+        { href: '/products/money-claim', label: 'Prepare my money claim' },
       ],
     ],
     [
@@ -49,7 +49,7 @@ describe('getNextStepsCTAs owner routing', () => {
       [
         { href: '/money-claim-n1-claim-form', label: 'N1 Claim Form Guide' },
         { href: '/money-claim-schedule-of-debt', label: 'Schedule of Debt Guide' },
-        { href: '/products/money-claim', label: 'Money Claim Pack' },
+        { href: '/products/money-claim', label: 'Prepare my money claim' },
       ],
     ],
     [
@@ -59,7 +59,7 @@ describe('getNextStepsCTAs owner routing', () => {
       [
         { href: '/money-claim', label: 'Money Claim Guide' },
         { href: '/money-claim-small-claims-landlord', label: 'Small Claims Court for Landlords' },
-        { href: '/products/money-claim', label: 'Money Claim Pack' },
+        { href: '/products/money-claim', label: 'Prepare my money claim' },
       ],
     ],
   ])('returns curated debt-recovery routes for %s', (slug, category, tags, expected) => {

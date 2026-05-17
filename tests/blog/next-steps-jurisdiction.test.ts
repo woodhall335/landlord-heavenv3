@@ -50,13 +50,13 @@ describe('getNextStepsCTAs avoids England-only arrears links on non-England cont
       'wales-rent-arrears-notice',
       'Eviction',
       ['Rent arrears', 'Wales'],
-      ['/tenant-not-paying-rent', '/wales-eviction-notices', '/products/notice-only'],
+      ['/tenant-not-paying-rent', '/wales-eviction-notices', '/products/money-claim'],
     ],
     [
       'scotland-rent-arrears-steps',
       'Eviction',
       ['Rent arrears', 'Scotland'],
-      ['/tenant-not-paying-rent', '/scotland-eviction-notices', '/products/notice-only'],
+      ['/tenant-not-paying-rent', '/scotland-eviction-notices', '/products/money-claim'],
     ],
   ])('keeps %s free from England-only next-step links', (slug, category, tags, hrefs) => {
     const ctas = getNextStepsCTAs({ slug, category, tags });

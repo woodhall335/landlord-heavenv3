@@ -17,8 +17,10 @@ describe('Homepage language regression', () => {
     expect(homepage).not.toContain('A live count pulled from the same review counter used across the rest of the site.');
     expect(homepage).not.toContain('Good trust copy should reassure landlords quickly');
 
-    expect(homepage).toContain("const reviewSummary = `${REVIEW_RATING}/5 | ${formattedReviewCount} reviews`;");
-    expect(homepage).toContain('Average rating from landlords using Landlord Heaven.');
+    expect(homepage).toContain('Create my Section 8 notice');
+    expect(homepage).toContain('Prepare my court pack');
+    expect(homepage).toContain('Prepare my money claim');
+    expect(homepage).toContain('Average landlord rating across the product.');
     expect(homepage).toContain('Reviews left by landlords who have used the product.');
     expect(homepage).not.toContain('{reviewCount}+');
   });

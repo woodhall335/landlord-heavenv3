@@ -40,9 +40,9 @@ const cards: CardDefinition[] = [
     price: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.priceLabel,
     description:
       'For landlords in England who need the Section 8 notice, service guidance, and early route checks before serving.',
-    ctaText: 'Open Section 8 notice product',
+    ctaText: 'Create my Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
-    ariaLabel: 'Open Eviction Notice Generator',
+    ariaLabel: 'Create my Section 8 notice',
     icon: <RiFileList3Line className="h-8 w-8 text-violet-500" aria-hidden="true" />,
   },
   {
@@ -50,9 +50,9 @@ const cards: CardDefinition[] = [
     price: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.priceLabel,
     description:
       'For landlords in England who want the notice, N5, N119, and filing guidance in one product.',
-    ctaText: 'Open court possession pack',
+    ctaText: 'Prepare my court pack',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
-    ariaLabel: 'Open Complete Eviction Pack',
+    ariaLabel: 'Prepare my court pack',
     icon: <RiScales3Line className="h-8 w-8 text-violet-500" aria-hidden="true" />,
   },
   {
@@ -60,9 +60,9 @@ const cards: CardDefinition[] = [
     price: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.priceLabel,
     description:
       'For landlords in England recovering unpaid rent, damage, bills, guarantor claims, and former-tenant debt.',
-    ctaText: 'Open money claim product',
+    ctaText: 'Prepare my money claim',
     href: PUBLIC_PRODUCT_DESCRIPTORS.money_claim.landingHref,
-    ariaLabel: 'Open Money Claim Pack',
+    ariaLabel: 'Prepare my money claim',
     icon: <RiMoneyPoundCircleLine className="h-8 w-8 text-emerald-500" aria-hidden="true" />,
   },
   {
@@ -70,9 +70,9 @@ const cards: CardDefinition[] = [
     price: TENANCY_AGREEMENT_FROM_PRICE,
     description:
       'Choose the right England agreement for Standard, Premium, Student, HMO / Shared House, or Lodger use.',
-    ctaText: 'Open tenancy agreement hub',
+    ctaText: 'Choose my tenancy agreement',
     href: PUBLIC_PRODUCT_DESCRIPTORS.ast.landingHref,
-    ariaLabel: 'Open England Tenancy Agreements',
+    ariaLabel: 'Choose my tenancy agreement',
     icon: <RiFileCheckLine className="h-8 w-8 text-violet-500" aria-hidden="true" />,
   },
 ];

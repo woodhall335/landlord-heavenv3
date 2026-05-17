@@ -781,7 +781,7 @@ export function BundleUpsellBlock({
         {[
           {
             title: 'Serve correctly',
-            copy: 'Generate Form 4A and supporting notice documents.',
+            copy: 'Create Form 4A and the supporting notice documents.',
           },
           {
             title: 'Prove the rent',
@@ -1044,7 +1044,7 @@ export function RentCheckerResultPage({
             <Link href={result.primaryCtaHref} onClick={onStickyCtaClick} className="block">
               <Button fullWidth className="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300">
               {result.recommendedProduct === 'section13_standard'
-                ? 'Generate Section 13 notice'
+                ? 'Create my rent increase notice'
                 : 'Prepare for challenge'}
                 <ArrowRight className="h-4 w-4" />
               </Button>

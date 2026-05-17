@@ -32,24 +32,24 @@ describe('current England framework cluster', () => {
     expect(getCurrentFrameworkPageConfig('section-8-notice')).toMatchObject({
       ownerQueryTheme: 'section 8 notice england',
       primaryCta: {
-        label: 'Start your eviction notice pack',
+        label: 'Create my Section 8 notice',
         href: '/products/notice-only',
       },
       secondaryCta: {
-        label: 'Read Form 3A',
-        href: '/form-3-section-8',
+        label: 'Prepare my court pack',
+        href: '/products/complete-pack',
       },
     });
 
     expect(getCurrentFrameworkPageConfig('form-3-section-8')).toMatchObject({
       ownerQueryTheme: 'form 3a section 8',
       primaryCta: {
-        label: 'Start your eviction notice pack',
+        label: 'Create my Section 8 notice',
         href: '/products/notice-only',
       },
       secondaryCta: {
-        label: 'Read Section 8 Notice',
-        href: '/section-8-notice',
+        label: 'Prepare my court pack',
+        href: '/products/complete-pack',
       },
     });
 
@@ -68,7 +68,7 @@ describe('current England framework cluster', () => {
     expect(getCurrentFrameworkPageConfig('eviction-process-england')).toMatchObject({
       ownerQueryTheme: 'eviction process england',
       primaryCta: {
-        label: 'Start your complete eviction pack',
+        label: 'Prepare my court pack',
         href: '/products/complete-pack',
       },
       secondaryCta: {

@@ -115,7 +115,7 @@ export function UniversalHero({
   const presetStyles = PUBLIC_HERO_PRESET_STYLES[preset];
   const resolvedMediaSrc = mediaSrc ?? mascotSrc ?? '/images/laptop.webp';
   const resolvedMediaAlt =
-    mediaAlt ?? mascotAlt ?? 'Laptop showing legal workflow dashboard';
+    mediaAlt ?? mascotAlt ?? 'Laptop showing landlord document dashboard';
   const shouldRenderHeading = Boolean(title || highlightTitle);
   const shouldShowReviewPill = showReviewPill ?? true;
   const shouldShowUsageCounter = showUsageCounter ?? Boolean(trustText);

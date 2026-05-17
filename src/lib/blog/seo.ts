@@ -36,7 +36,7 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   'england-form-3a-eviction-notice-generator-after-renters-rights-act': {
     href: '/products/notice-only',
     label: 'Eviction Notice Generator for England landlords',
-    anchorText: 'Start the Eviction Notice Generator',
+    anchorText: 'Create my Section 8 notice',
     description: 'Create the current Form 3A notice-stage pack for England.',
     secondaryHref: '/products/complete-pack',
     secondaryLabel: 'Complete Eviction Pack',
@@ -44,21 +44,21 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   'england-complete-eviction-pack-after-section-21-ban': {
     href: '/products/complete-pack',
     label: 'Complete Eviction Pack for England',
-    anchorText: 'Start the Complete Eviction Pack',
-    description: 'Prepare Form 3A, N5, N119, and court-ready possession paperwork.',
+    anchorText: 'Prepare my court pack',
+    description: 'Prepare Form 3A, N5, N119, and the possession paperwork.',
     secondaryHref: '/products/notice-only',
     secondaryLabel: 'Eviction Notice Generator',
   },
   'england-money-claim-unpaid-rent-after-renters-rights-act': {
     href: '/products/money-claim',
     label: 'Money Claim Pack for unpaid rent',
-    anchorText: 'Start the Money Claim Pack',
+    anchorText: 'Prepare my money claim',
     description: 'Prepare the arrears record and county court money claim route.',
   },
   'england-section-13-rent-increase-pack-after-renters-rights-act': {
     href: '/products/section-13-standard',
     label: 'Standard Section 13 Rent Increase Pack',
-    anchorText: 'Start the Standard Section 13 Rent Increase Pack',
+    anchorText: 'Create my rent increase notice',
     description: 'Build Form 4A with comparable-listing support and rent justification.',
     secondaryHref: '/products/section-13-defence',
     secondaryLabel: 'Section 13 Defence Pack',
@@ -66,7 +66,7 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   'england-section-13-defence-pack-tribunal-challenge': {
     href: '/products/section-13-defence',
     label: 'Section 13 Defence Pack',
-    anchorText: 'Start the Section 13 Defence Pack',
+    anchorText: 'Prepare for a rent challenge',
     description: 'Prepare stronger challenge-response and tribunal-facing rent evidence.',
     secondaryHref: '/products/section-13-standard',
     secondaryLabel: 'Standard Section 13 Rent Increase Pack',
@@ -74,7 +74,7 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   'england-standard-tenancy-agreement-after-1-may-2026': {
     href: '/standard-tenancy-agreement',
     label: 'Standard Tenancy Agreement',
-    anchorText: 'Create the Standard Tenancy Agreement',
+    anchorText: 'Create my Standard agreement',
     description: 'Create a current England agreement for straightforward lets.',
     secondaryHref: '/premium-tenancy-agreement',
     secondaryLabel: 'Premium Tenancy Agreement',
@@ -82,7 +82,7 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   'england-premium-tenancy-agreement-after-renters-rights-act': {
     href: '/premium-tenancy-agreement',
     label: 'Premium Tenancy Agreement',
-    anchorText: 'Create the Premium Tenancy Agreement',
+    anchorText: 'Create my Premium agreement',
     description: 'Create a more detailed England agreement for higher-risk lets.',
     secondaryHref: '/standard-tenancy-agreement',
     secondaryLabel: 'Standard Tenancy Agreement',
@@ -90,7 +90,7 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   'england-student-tenancy-agreement-after-renters-rights-act': {
     href: '/student-tenancy-agreement',
     label: 'Student Tenancy Agreement',
-    anchorText: 'Create the Student Tenancy Agreement',
+    anchorText: 'Create my Student agreement',
     description: 'Create an England agreement shaped around student-let practicalities.',
     secondaryHref: '/hmo-shared-house-tenancy-agreement',
     secondaryLabel: 'HMO Shared House Tenancy Agreement',
@@ -98,7 +98,7 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   'england-hmo-shared-house-tenancy-agreement-after-renters-rights-act': {
     href: '/hmo-shared-house-tenancy-agreement',
     label: 'HMO Shared House Tenancy Agreement',
-    anchorText: 'Create the HMO Shared House Tenancy Agreement',
+    anchorText: 'Create my HMO / Shared House agreement',
     description: 'Create shared-occupation paperwork for HMOs and shared houses.',
     secondaryHref: '/premium-tenancy-agreement',
     secondaryLabel: 'Premium Tenancy Agreement',
@@ -106,7 +106,7 @@ const BLOG_SEO_PRODUCT_OVERRIDES: Record<
   'england-lodger-agreement-after-renters-rights-act': {
     href: '/lodger-agreement',
     label: 'Lodger Agreement',
-    anchorText: 'Create the Lodger Agreement',
+    anchorText: 'Create my Lodger agreement',
     description: 'Create resident-landlord paperwork for a lodger arrangement.',
     secondaryHref: '/standard-tenancy-agreement',
     secondaryLabel: 'Standard Tenancy Agreement',
@@ -308,7 +308,7 @@ const buildSupportingLinks = (intent: string, jurisdictionLabel: string) => {
       pillar,
       {
         href: '/products/money-claim',
-        label: 'Start a money claim pack (England only)',
+        label: 'Prepare my money claim (England only)',
       },
     ];
   }
@@ -319,7 +319,7 @@ const buildSupportingLinks = (intent: string, jurisdictionLabel: string) => {
         pillar,
         {
           href: '/standard-tenancy-agreement',
-          label: 'Start a standard tenancy agreement',
+          label: 'Create my Standard agreement',
         },
       ];
     }
