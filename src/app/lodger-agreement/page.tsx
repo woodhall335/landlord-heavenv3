@@ -25,8 +25,8 @@ export const metadata: Metadata = {
     'lodger agreement england',
     'resident landlord lodger contract',
     'lodger room rental agreement template',
-    'solicitor-approved lodger agreement',
-    'validated lodger notice rules',
+    'lodger agreement',
+    'lodger notice wording',
     'lodger contract PDF UK',
     'lodger agreement post May 2026',
     'room let agreement england',
@@ -66,8 +66,8 @@ export default function LodgerAgreementEnglandPage() {
 
       <EnglandTenancyPage
         pagePath="/lodger-agreement"
-        title="Solicitor-approved Lodger Agreement - Resident Landlord Builder"
-        subtitle="Use this solicitor-approved lodger agreement when you live in the property and are taking in a lodger, so the room let contract, validated lodger notice rules, house rules, and shared-home expectations are set out clearly from the start."
+        title="Lodger Agreement for Resident Landlords"
+        subtitle="Use this lodger agreement when you live in the property and are taking in a lodger, so the room let contract, notice wording, house rules, and shared-home expectations are set out clearly from the start."
         primaryCtaLabel="Create my Lodger agreement"
         primaryCtaHref={lodgerWizardHref}
         secondaryCtaLabel="View all England routes"
@@ -80,10 +80,10 @@ export default function LodgerAgreementEnglandPage() {
         ]}
         highlights={[
           'Resident-landlord room-let agreement built for shared living',
-          'Lodger room rental agreement template with validated notice rules',
+          'Lodger room rental agreement template with clear notice wording',
           'Clearer wording on house rules, shared spaces, and notice',
           'Separate from standard tenancy, student, and HMO packs',
-          'Guided generator with a preview before payment',
+          'Guided agreement pack with a preview before payment',
         ]}
         compliancePoints={[
           'Keeps the resident-landlord option separate from the main England tenancy products from 1 May 2026.',
@@ -121,7 +121,7 @@ export default function LodgerAgreementEnglandPage() {
           whyYouNeedThis: {
             title: 'Why a lodger arrangement needs its own paperwork',
             intro:
-              'A resident-landlord room let creates a different kind of day-to-day risk from a standard tenancy. The resident landlord lodger contract, shared-home expectations, and validated lodger notice rules need to be written down in a way that matches the practical reality of the arrangement.',
+              'A resident-landlord room let creates a different kind of day-to-day risk from a standard tenancy. The resident landlord lodger contract, shared-home expectations, and notice wording need to be written down in a way that matches the practical reality of the arrangement.',
             cards: [
               {
                 title: 'Shared-home rules need to be explicit',
@@ -230,12 +230,12 @@ export default function LodgerAgreementEnglandPage() {
           {
             question: 'Is this a court approved lodger agreement?',
             answer:
-              'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved lodger agreement follows current England rules and includes validation checks to help you complete it correctly.',
+              'No. Courts do not pre-approve any notice, claim form, or agreement. This lodger agreement follows current England rules and includes checks to help you complete it correctly.',
           },
           {
             question: 'Is this legally binding?',
             answer:
-              'Yes - when completed and signed correctly. This solicitor-approved template follows current England rules, and the validation checklist helps you avoid common lodger agreement mistakes. Lodger rules are not the same as assured periodic tenancy rules.',
+              'Yes - when completed and signed correctly. This template follows current England rules, and the checklist helps you avoid common lodger agreement mistakes. Lodger rules are not the same as assured periodic tenancy rules.',
           },
         ]}
         finalCtaBody="Use the Lodger pack when the landlord lives at the property and the occupier is sharing the home. If you want the agreement to reflect the practical reality of a room let, shared facilities, and house rules in a resident-landlord setup, this is usually the right fit. If that is not the arrangement, compare the other England tenancy products instead."

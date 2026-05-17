@@ -169,11 +169,11 @@ export function RentIncreaseGuidePageView({ config }: { config: RentIncreaseGuid
                   <p className="leading-8">
                     If you are ready to serve the notice after checking the rules,{' '}
                     <Link href="/products/section-13-standard" className="font-semibold text-primary hover:underline">
-                      generate a solicitor-approved Form 4A with our rent increase builder
+                      create your Section 13 rent increase notice
                     </Link>{' '}
-                    with the validated Section 13 Standard pack. If the tenant is likely to challenge,{' '}
+                    with the Section 13 Standard pack. If the tenant is likely to challenge,{' '}
                     <Link href="/products/section-13-defence" className="font-semibold text-primary hover:underline">
-                      prepare a solicitor-approved tribunal evidence pack
+                      prepare for a rent challenge
                     </Link>{' '}
                     instead.
                   </p>

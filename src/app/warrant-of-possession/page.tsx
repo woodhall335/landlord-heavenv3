@@ -6,8 +6,6 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import {
   warrantOfPossessionRelatedLinks,
-  productLinks,
-  guideLinks,
 } from '@/lib/seo/internal-links';
 import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
@@ -16,9 +14,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import {
   CheckCircle,
   Clock,
-  ArrowRight,
   FileText,
-  Shield,
   AlertTriangle,
   Gavel,
   Users,
@@ -115,7 +111,7 @@ export default function WarrantOfPossessionPage() {
         <UniversalHero
           title="Warrant of Possession Guide"
           subtitle="If the tenant still has not left after the possession date, this guide explains when landlords apply for a warrant, how the bailiff stage works, and what to organise before enforcement day."
-          primaryCta={{ label: 'Start Complete Pack', href: completePackHref }}
+          primaryCta={{ label: 'Prepare my court pack', href: completePackHref }}
           secondaryCta={{ label: 'Jump to key steps', href: '#when-to-apply' }}
           showTrustPositioningBar
           hideMedia
@@ -506,8 +502,8 @@ export default function WarrantOfPossessionPage() {
                 pageType="court"
                 variant="final"
                 jurisdiction="england"
-                title="Get your eviction documents in one place"
-                description="Use one workflow from notice through to possession so the enforcement stage is built on a cleaner file."
+                title="Prepare the possession file before enforcement"
+                description="Use one joined-up route from notice through to possession so the enforcement stage is built on a cleaner file."
               />
 
               <SeoDisclaimer className="max-w-4xl mx-auto" />

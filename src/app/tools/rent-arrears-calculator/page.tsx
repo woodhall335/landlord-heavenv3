@@ -460,9 +460,9 @@ export default function RentArrearsCalculator() {
           <p className="mx-auto max-w-4xl text-base leading-7 text-gray-700">
             After the calculation, you can{' '}
             <Link href="/products/money-claim" className="font-semibold text-primary hover:underline">
-              build a solicitor-approved MCOL pack for landlords
+              prepare a money claim pack for unpaid rent
             </Link>{' '}
-            with validated particulars of claim and arrears evidence.
+            with claim particulars and arrears evidence organised around the figures.
           </p>
         </Container>
       </section>

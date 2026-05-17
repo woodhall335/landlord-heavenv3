@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     'rent arrears money claim',
     'particulars of claim template',
     'letter before claim template',
-    'solicitor-approved MCOL pack',
+    'landlord MCOL pack',
     'money claim online UK',
     "Renters' Rights Act debt claim",
     'money claim online post May 2026',
@@ -73,12 +73,12 @@ const faqs: FAQItem[] = [
   {
     question: 'Is this a court approved money claim?',
     answer:
-      'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved Money Claim pack follows current England rules and includes validation checks to help you file correctly.',
+      'No. Courts do not pre-approve any notice, claim form, or agreement. This Money Claim pack follows current England rules and includes checks to help you file correctly.',
   },
   {
     question: 'Is this legally binding?',
     answer:
-      "Yes - when completed and filed correctly. This solicitor-approved pack follows post-May 2026 England rules, and the validation checklist helps you avoid common money claim mistakes.",
+      "Yes - when completed and filed correctly. This pack follows post-May 2026 England rules, and the checklist helps you avoid common money claim mistakes.",
   },
 ];
 
@@ -298,7 +298,7 @@ export default function MoneyClaimPage() {
           step: 'Step 02',
           title: 'Build the pre-action and claim paperwork',
           body:
-            'Generate the letter, reply documents, claim narrative, and schedules before you issue.',
+            'Prepare the letter, reply documents, claim narrative, and schedules before you issue.',
         },
         {
           step: 'Step 03',

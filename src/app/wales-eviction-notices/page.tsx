@@ -23,7 +23,6 @@ import {
   Scale,
   Shield,
   Clock,
-  FileText,
   XCircle,
 } from 'lucide-react';
 
@@ -99,7 +98,7 @@ export default function WalesEvictionNoticesPage() {
         <UniversalHero
           title="Wales Eviction Notices"
           subtitle="If your property is in Wales, start with the Welsh possession framework rather than England assumptions. This guide helps you choose the right notice route and prepare the next step properly."
-          primaryCta={{ label: 'Start Wales notice', href: noticeOnlyHref }}
+          primaryCta={{ label: 'Create my Wales notice', href: noticeOnlyHref }}
           secondaryCta={{
             label: 'Wales occupation contracts',
             href: '/wales-tenancy-agreement-template',
@@ -717,7 +716,7 @@ export default function WalesEvictionNoticesPage() {
                 jurisdictionLabel="Wales eviction notices"
                 scenarioLabel="Renting Homes Act possession"
                 primaryCTA={{
-                  label: `Generate Wales notice — ${noticeOnlyPrice}`,
+                  label: `Create my Wales notice — ${noticeOnlyPrice}`,
                   href: productLinks.noticeOnly.href,
                 }}
                 secondaryCTA={{

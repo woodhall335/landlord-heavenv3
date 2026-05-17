@@ -43,11 +43,11 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   description:
     'Prepare an England Section 13 rent increase with Form 4A, market evidence, service records, and landlord support in one pack.',
   keywords: [
-    'Form 4A generator',
+    'Form 4A pack',
     'Section 13 notice template',
     'Section 13 rent increase pack',
-    'solicitor-approved Form 4A',
-    'validated Section 13 notice',
+    'current Form 4A',
+    'checked Section 13 notice',
     'Form 4A England',
     'Section 13 notice post May 2026',
     'Form 4A Renters Rights Act',
@@ -192,7 +192,7 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
   cta: {
     title: 'Create the rent increase notice with the evidence beside it',
     body:
-      'Start here if you want Form 4A, market evidence, and the service record prepared together.',
+      'Choose this if you want Form 4A, market evidence, and the service record prepared together.',
     secondaryLabel: 'Prepare for a rent challenge',
     secondaryHref: '/products/section-13-defence',
   },
@@ -229,12 +229,12 @@ export const SECTION13_STANDARD_PAGE: Section13ProductPageConfig = {
     {
       question: 'Is this a court approved Section 13 notice?',
       answer:
-        'No. Courts and tribunals do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved Form 4A pack follows current England rules and includes validation checks to help you serve correctly.',
+        'No. Courts and tribunals do not pre-approve any notice, claim form, or agreement. This Form 4A pack follows current England rules and includes checks to help you serve correctly.',
     },
     {
       question: 'Is this legally binding?',
       answer:
-        'Yes - when completed and served correctly. This solicitor-approved template follows post-May 2026 England rules, and the validation checklist helps you avoid common Section 13 notice mistakes.',
+        'Yes - when completed and served correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common Section 13 notice mistakes.',
     },
   ],
 };
@@ -249,7 +249,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     'Section 13 tribunal bundle',
     'challenge Section 13 notice pack',
     'Section 13 response letter template',
-    'solicitor-approved tribunal pack',
+    'tribunal evidence pack',
     'tribunal evidence checklist',
     "Renters' Rights Act tribunal pack",
     'Section 13 defence post May 2026',
@@ -409,7 +409,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
         step: 'Step 02',
         title: 'Prepare the response materials',
         body:
-          'Generate the argument summary, response wording, bundle structure, and evidence checklist while the details are still fresh and organised.',
+          'Prepare the argument summary, response wording, bundle structure, and evidence checklist while the details are still fresh and organised.',
       },
       {
         step: 'Step 03',
@@ -422,7 +422,7 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
   cta: {
     title: 'Prepare for the challenge before it lands',
     body:
-      'Start here if you expect the increase to be questioned and want the market evidence, response wording, and tribunal bundle prepared early.',
+      'Choose this if you expect the increase to be questioned and want the market evidence, response wording, and tribunal bundle prepared early.',
     secondaryLabel: 'Create a standard rent increase notice',
     secondaryHref: '/products/section-13-standard',
   },
@@ -460,12 +460,12 @@ export const SECTION13_DEFENCE_PAGE: Section13ProductPageConfig = {
     {
       question: 'Is this a court approved Section 13 Defence Pack?',
       answer:
-        'No. Courts and tribunals do not pre-approve any notice, claim form, pack, or agreement. However, this solicitor-approved tribunal pack follows current England rules and includes validation checks to help you prepare correctly.',
+        'No. Courts and tribunals do not pre-approve any notice, claim form, pack, or agreement. This tribunal pack follows current England rules and includes checks to help you prepare correctly.',
     },
     {
       question: 'Is this legally binding?',
       answer:
-        'Yes - when completed and used correctly. This solicitor-approved pack follows post-May 2026 England rules, and the validation checklist helps you avoid common tribunal bundle mistakes.',
+        'Yes - when completed and used correctly. This pack follows post-May 2026 England rules, and the checklist helps you avoid common tribunal bundle mistakes.',
     },
   ],
 };

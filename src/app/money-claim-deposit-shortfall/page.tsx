@@ -20,7 +20,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, productLinks, toolLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -133,7 +133,7 @@ export default function MoneyClaimDepositShortfallPage() {
           title="Money Claim for Deposit Shortfall"
           subtitle="If the deposit does not come close to covering the damage, this guide shows you how to deal with the scheme first and then claim the shortfall in a more practical way."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_deposit_shortfall' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_deposit_shortfall' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -545,4 +545,3 @@ export default function MoneyClaimDepositShortfallPage() {
     </>
   );
 }
-

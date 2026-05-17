@@ -131,7 +131,7 @@ export default function MoneyClaimPropertyDamagePage() {
           title="Money Claim for Property Damage"
           subtitle="If a tenant has left real damage behind, this guide helps you document it properly, separate it from fair wear, and recover the repair costs in a clearer claim."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_property_damage' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_property_damage' }}
           showTrustPositioningBar
           hideMedia
         />

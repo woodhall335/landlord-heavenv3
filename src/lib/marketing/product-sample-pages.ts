@@ -27,7 +27,7 @@ function buildFaqs(productName: string, courtFormLabel: string): FAQItem[] {
     {
       question: `Does the paid ${productName} include editable case details?`,
       answer:
-        'Yes. The paid workflow creates documents from your answers, then lets you preview and regenerate the pack when the facts need updating.',
+        'Yes. The paid pack creates documents from your answers, then lets you preview and update the pack when the facts need changing.',
     },
     {
       question: `Does this sample include ${courtFormLabel}?`,
@@ -48,10 +48,10 @@ export const productSamplePages = [
     targetKeyword: 'section 8 notice example pdf',
     metaTitle: 'Section 8 Notice Example PDF | Full Sample Pack',
     metaDescription:
-      'See a section 8 notice example PDF from the solicitor-approved pack, including Form 3A, service record, N215, and arrears documents.',
+      'See a section 8 notice example PDF from the landlord pack, including Form 3A, service record, N215, and arrears documents.',
     intro:
       'Use this Section 8 notice example PDF to check what the notice, service record, and arrears support look like before you start the paid pack.',
-    ctaText: 'Ready to start? Get the solicitor-approved Section 8 Notice Pack.',
+    ctaText: 'Need to serve notice? Create my Section 8 Notice Pack.',
     faqs: buildFaqs('Section 8 Notice Pack', 'Form 3A'),
   },
   {
@@ -67,7 +67,7 @@ export const productSamplePages = [
       'See a complete eviction pack example with Section 8 notice, N5, N119, witness statement, evidence checklist, and hearing guidance.',
     intro:
       'Use this complete eviction pack example to inspect the notice-stage and court-stage documents before choosing the full possession route.',
-    ctaText: 'Ready to start? Get the solicitor-approved Complete Eviction Pack.',
+    ctaText: 'Case moving toward court? Prepare my Complete Eviction Pack.',
     faqs: buildFaqs('Complete Eviction Pack', 'N5 and N119'),
   },
   {
@@ -83,7 +83,7 @@ export const productSamplePages = [
       'See a money claim online example filled out for unpaid rent, with letter before claim, arrears schedule, and Particulars of Claim.',
     intro:
       'Use this filled-out money claim example to see how arrears, pre-action letters, and claim particulars are organised before you buy.',
-    ctaText: 'Ready to start? Get the solicitor-approved Money Claim Pack.',
+    ctaText: 'Tenant still owes money? Prepare my Money Claim Pack.',
     faqs: buildFaqs('Money Claim Pack', 'Particulars of Claim'),
   },
   {
@@ -99,7 +99,7 @@ export const productSamplePages = [
       'See a Form 4A example filled out with market evidence, service record, cover letter, and Section 13 rent increase guidance.',
     intro:
       'Use this Form 4A example to check how a rent increase notice and supporting evidence are packaged before service.',
-    ctaText: 'Ready to start? Get the solicitor-approved Section 13 Standard Pack.',
+    ctaText: 'Need to increase rent? Create my Section 13 Standard Pack.',
     faqs: buildFaqs('Section 13 Standard Pack', 'Form 4A'),
   },
   {
@@ -115,7 +115,7 @@ export const productSamplePages = [
       'See a Section 13 defence pack example with evidence templates, response letters, tribunal summary, and bundle checklist.',
     intro:
       'Use this Section 13 defence pack example to see how challenge-ready evidence and tribunal documents are structured.',
-    ctaText: 'Ready to start? Get the solicitor-approved Section 13 Defence Pack.',
+    ctaText: 'Expect a challenge? Prepare my Section 13 Defence Pack.',
     faqs: buildFaqs('Section 13 Defence Pack', 'tribunal response material'),
   },
   {
@@ -128,10 +128,10 @@ export const productSamplePages = [
     targetKeyword: 'example assured shorthold tenancy agreement uk',
     metaTitle: 'Example Assured Shorthold Tenancy Agreement UK | Sample',
     metaDescription:
-      'See an example assured shorthold tenancy agreement UK landlords can compare before buying the solicitor-approved England pack.',
+      'See an example assured shorthold tenancy agreement UK landlords can compare before choosing the England pack.',
     intro:
       'Use this standard tenancy agreement example to inspect the core agreement and supporting documents for a straightforward England let.',
-    ctaText: 'Ready to start? Get the solicitor-approved Standard Tenancy Agreement.',
+    ctaText: 'Setting up a straightforward let? Create my Standard Tenancy Agreement.',
     faqs: buildFaqs('Standard Tenancy Agreement', 'prescribed information support'),
   },
   {
@@ -147,7 +147,7 @@ export const productSamplePages = [
       'See an example premium tenancy agreement with fuller management wording for access, repairs, reporting, keys, and hand-back.',
     intro:
       'Use this premium tenancy agreement example to see the fuller management wording and supporting documents before choosing Premium.',
-    ctaText: 'Ready to start? Get the solicitor-approved Premium Tenancy Agreement.',
+    ctaText: 'Need stronger management terms? Create my Premium Tenancy Agreement.',
     faqs: buildFaqs('Premium Tenancy Agreement', 'premium management wording'),
   },
   {
@@ -163,7 +163,7 @@ export const productSamplePages = [
       'See a student tenancy agreement example UK landlords can review for guarantors, sharers, replacements, and end-of-term move-out.',
     intro:
       'Use this student tenancy agreement example to see how student sharers, guarantors, replacement occupiers, and move-out terms are handled.',
-    ctaText: 'Ready to start? Get the solicitor-approved Student Tenancy Agreement.',
+    ctaText: 'Setting up a student let? Create my Student Tenancy Agreement.',
     faqs: buildFaqs('Student Tenancy Agreement', 'guarantor and sharer wording'),
   },
   {
@@ -179,7 +179,7 @@ export const productSamplePages = [
       'See an example HMO tenancy agreement UK landlords can review for house rules, communal areas, sharer duties, and shared occupation.',
     intro:
       'Use this HMO tenancy agreement example to see how communal areas, house rules, shared facilities, and sharer expectations are documented.',
-    ctaText: 'Ready to start? Get the solicitor-approved HMO / Shared House Tenancy Agreement.',
+    ctaText: 'Managing sharers? Create my HMO / Shared House Tenancy Agreement.',
     faqs: buildFaqs('HMO / Shared House Tenancy Agreement', 'house rules and communal areas'),
   },
   {
@@ -195,7 +195,7 @@ export const productSamplePages = [
       'See a lodger agreement example UK resident landlords can review for shared-home rules, notice, occupation, and day-to-day boundaries.',
     intro:
       'Use this lodger agreement example to see how resident-landlord room lets, shared-home rules, and notice terms are documented.',
-    ctaText: 'Ready to start? Get the solicitor-approved Lodger Agreement.',
+    ctaText: 'Taking in a lodger? Create my Lodger Agreement.',
     faqs: buildFaqs('Lodger Agreement', 'resident-landlord room let wording'),
   },
 ] as const satisfies ProductSamplePageConfig[];

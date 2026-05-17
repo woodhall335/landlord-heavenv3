@@ -12,7 +12,6 @@ import { HeaderConfig } from '@/components/layout/HeaderConfig';
 import { UniversalHero } from '@/components/landing/UniversalHero';
 import { PRODUCTS } from '@/lib/pricing/products';
 
-const astProductHref = '/products/ast';
 const standardWizardHref = '/wizard?product=ast_standard&jurisdiction=wales&src=wales_tenancy_template&topic=tenancy';
 const premiumWizardHref = '/wizard?product=ast_premium&jurisdiction=wales&src=wales_tenancy_template&topic=tenancy';
 const standardPrice = PRODUCTS.ast_standard.displayPrice;
@@ -22,8 +21,8 @@ const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Wales Tenancy Agreement 2026 | Legally Validated Occupation Contract',
-  description: 'Create a Wales tenancy agreement (occupation contract) with solicitor-grade drafting and Renting Homes Act compliance checks.',
+  title: 'Wales Tenancy Agreement 2026 | Occupation Contract',
+  description: 'Create a Wales tenancy agreement (occupation contract) with Renting Homes Act checks and a clearer landlord setup file.',
   keywords: [
     'Wales tenancy agreement template',
     'Welsh tenancy agreement',
@@ -41,7 +40,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Wales Tenancy Agreement 2026 | Legally Validated Occupation Contract',
-    description: 'Legally validated Wales occupation contract with compliance-checked Renting Homes Act clauses.',
+    description: 'Wales occupation contract with Renting Homes Act checks and clear setup records.',
     type: 'article',
     url: getCanonicalUrl('/wales-tenancy-agreement-template'),
   },
@@ -129,9 +128,9 @@ export default function WalesTenancyAgreementTemplatePage() {
       <main className="min-h-screen bg-gradient-to-br from-red-50 via-white to-green-50">
         <UniversalHero
           title="Wales Tenancy Agreement"
-          subtitle="Create a legally validated Wales occupation contract with solicitor-grade and compliance-checked wording."
-          primaryCta={{ label: 'Start Standard Wales contract', href: standardWizardHref }}
-          secondaryCta={{ label: 'Start Premium Wales contract', href: premiumWizardHref }}
+          subtitle="Create a Wales occupation contract with current wording and compliance checks."
+          primaryCta={{ label: 'Create my Standard Wales contract', href: standardWizardHref }}
+          secondaryCta={{ label: 'Create my Premium Wales contract', href: premiumWizardHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -339,7 +338,7 @@ export default function WalesTenancyAgreementTemplatePage() {
           variant="section"
           jurisdiction="wales"
           title="Get Your Wales Tenancy Agreement"
-          description="Generate a Renting Homes Act compliant Occupation Contract in minutes."
+          description="Create a Renting Homes Act compliant Occupation Contract in minutes."
         />
 
         {/* Cross-sell */}

@@ -18,7 +18,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimForms, moneyClaimFormLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, moneyClaimForms, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -131,7 +131,7 @@ export default function MoneyClaimPAPFinancialStatementPage() {
           title="PAP Financial Statement for Debt Claims"
           subtitle="If a tenant replies to your letter before action with a financial statement or payment proposal, this guide helps you read it properly and decide what to do next."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_pap_financial_statement' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_pap_financial_statement' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -484,4 +484,3 @@ export default function MoneyClaimPAPFinancialStatementPage() {
     </>
   );
 }
-

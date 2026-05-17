@@ -9,7 +9,6 @@ import { getCanonicalUrl } from '@/lib/seo/urls';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import {
-  evictionRelatedLinks,
   productLinks,
   toolLinks,
   guideLinks,
@@ -32,14 +31,8 @@ import {
   Scale,
   FileText,
   Shield,
-  Gavel,
-  Calendar,
-  AlertCircle,
-  PoundSterling,
   XCircle,
   HelpCircle,
-  ChevronDown,
-  MessageSquare,
 } from 'lucide-react';
 
 const noticeOnlyProductHref = '/products/notice-only';
@@ -117,7 +110,7 @@ export default function Section8VsSection21Page() {
         <UniversalHero
           title="Section 8 vs Section 21"
           subtitle="Compare notice routes, timing, and evidence requirements so you choose the right eviction notice first time."
-          primaryCta={{ label: `Start Notice Pack — ${PRODUCTS.notice_only.displayPrice}`, href: noticeOnlyProductHref }}
+          primaryCta={{ label: `Create my Section 8 notice — ${PRODUCTS.notice_only.displayPrice}`, href: noticeOnlyProductHref }}
           secondaryCta={{ label: 'Need Court Forms Too?', href: completePackProductHref }}
           showTrustPositioningBar
           hideMedia
@@ -609,7 +602,7 @@ export default function Section8VsSection21Page() {
                       If you are dealing with a live tenancy problem, the safest approach is
                       to choose the route that actually matches the facts now. Our Notice Only
                       Pack prepares the current England Form 3A notice-stage documents, and
-                      the Complete Pack adds the N5, N119, and court-ready possession bundle.
+                      the Complete Pack adds the N5, N119, and possession bundle.
                     </p>
                   </div>
                 </div>

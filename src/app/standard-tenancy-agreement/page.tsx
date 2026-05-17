@@ -25,9 +25,9 @@ export const metadata: Metadata = {
     'standard periodic tenancy agreement england',
     'periodic tenancy agreement template',
     'assured periodic tenancy agreement',
-    'AST generator',
-    'solicitor-approved AST',
-    'validated tenancy agreement',
+    'current England tenancy agreement',
+    'standard England tenancy agreement',
+    'current tenancy agreement',
     'Renters Rights Act compliant tenancy agreement',
     'post-May 2026 periodic tenancy',
     'england standard periodic tenancy agreement',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     'periodic tenancy agreement england',
     'new england tenancy agreement',
     'renters rights act tenancy agreement england',
-    'new tenancy agreement generator england',
+    'new tenancy agreement england',
     'updated tenancy agreement england',
   ],
   alternates: { canonical: canonicalUrl },
@@ -71,24 +71,24 @@ export default function StandardTenancyAgreementPage() {
       />
       <EnglandTenancyPage
         pagePath="/standard-tenancy-agreement"
-        title="Solicitor-approved Standard Tenancy Agreement - Periodic Tenancy Generator"
-        subtitle="Use this solicitor-approved standard periodic tenancy agreement if you are letting a whole property in England and want a validated tenancy agreement, AST generator wording, and current post-May 2026 rules without student, HMO, lodger, or Premium-level management wording."
+        title="Standard Tenancy Agreement for England Landlords"
+        subtitle="Use this standard periodic tenancy agreement if you are letting a whole property in England and want current wording, setup records, and post-May 2026 terms without student, HMO, lodger, or Premium-level management wording."
         primaryCtaLabel="Create my Standard agreement"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Read periodic tenancy guide"
         secondaryCtaHref="/periodic-tenancy-agreement"
-        legacyNotice="If you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement generator, this is the standard periodic tenancy agreement route for a straightforward whole-property let."
+        legacyNotice="If you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement, this is the standard periodic tenancy agreement route for a straightforward whole-property let."
         introTitle="For a straightforward standard periodic tenancy"
         introBody={[
-          "This is the standard periodic tenancy agreement for a new England tenancy where the property is being let as an ordinary whole-property home. Use this periodic tenancy agreement template when you want a solicitor-approved AST generator with current wording but without the extra operational detail included in Premium or the specialist products.",
-          'The generator keeps the pack practical and proportionate: the main agreement plus the key supporting documents, without making a simple tenancy feel more complicated than it needs to be.',
+          'This is the standard periodic tenancy agreement for a new England tenancy where the property is being let as an ordinary whole-property home. Use this periodic tenancy agreement template when you want current wording but without the extra operational detail included in Premium or the specialist products.',
+          'The pack keeps the setup practical and proportionate: the main agreement plus the key supporting documents, without making a simple tenancy feel more complicated than it needs to be.',
         ]}
         highlights={[
           'Standard periodic tenancy agreement for a straightforward whole-property residential let',
-          "Renters' Rights Act compliant tenancy agreement with validated wording",
+          "Renters' Rights Act compliant tenancy agreement with current wording",
           'Keeps the wording and pack paperwork practical and proportionate',
           'Separate from the Premium, Student, HMO / Shared House, and Lodger routes',
-          'Guided generator with a preview before payment',
+          'Guided agreement pack with a preview before payment',
         ]}
         compliancePoints={[
           'Built around the current England periodic tenancy route from 1 May 2026.',
@@ -107,12 +107,12 @@ export default function StandardTenancyAgreementPage() {
           'ordinary residential tenancy agreement england',
           'new england tenancy agreement',
           'renters rights act tenancy agreement england',
-          'new tenancy agreement generator england',
+          'new tenancy agreement england',
         ]}
         idealFor={[
           'the tenancy is a straightforward whole-property let in England',
           'you want a standard periodic tenancy agreement with the core support pack, but not the fuller Premium schedule',
-          'you want a new tenancy agreement generator for the standard England option rather than a more detailed Premium pack',
+          'you want the standard England option rather than a more detailed Premium pack',
           'you want a clean standard agreement without specialist student, shared-house, or resident-landlord wording',
         ]}
         notFor={[
@@ -287,7 +287,7 @@ export default function StandardTenancyAgreementPage() {
           whyYouNeedThis: {
             title: 'Why a standard periodic agreement still needs proper setup',
             intro:
-              "Even a straightforward assured periodic tenancy agreement can become awkward if the agreement is thin, the setup records are missing, or the wording does not match the current England position. This validated tenancy agreement route is built for post-May 2026 periodic tenancy setup.",
+              'Even a straightforward assured periodic tenancy agreement can become awkward if the agreement is thin, the setup records are missing, or the wording does not match the current England position. This standard agreement route is built for post-May 2026 periodic tenancy setup.',
             cards: [
               {
                 title: 'The wording needs to match the let',
@@ -364,9 +364,9 @@ export default function StandardTenancyAgreementPage() {
               'Choose this option when the let is a straightforward whole-property tenancy in England and you do not need the more detailed management, inspection, handover, and operational drafting included in the Premium pack.',
           },
           {
-            question: 'Is this the new England tenancy agreement generator for the current rules?',
+            question: 'Is this the new England tenancy agreement for the current rules?',
             answer:
-               'Yes. This page is built around the current England assured periodic position and is designed as the standard new tenancy agreement generator for straightforward whole-property lets, rather than an older fixed-term AST-style starting point.',
+               'Yes. This page is built around the current England assured periodic position and is designed as the standard new tenancy agreement route for straightforward whole-property lets, rather than an older fixed-term AST-style starting point.',
           },
           {
             question: 'Is this the right Renters Rights Act tenancy agreement route for a straightforward let?',
@@ -386,15 +386,15 @@ export default function StandardTenancyAgreementPage() {
           {
             question: 'Is this a court approved tenancy agreement?',
             answer:
-              'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved tenancy agreement follows current England rules and includes validation checks to help you complete it correctly.',
+              'No. Courts do not pre-approve any notice, claim form, or agreement. This tenancy agreement follows current England rules and includes checks to help you complete it correctly.',
           },
           {
             question: 'Is this legally binding?',
             answer:
-              'Yes - when completed and signed correctly. This solicitor-approved template follows post-May 2026 England rules, and the validation checklist helps you avoid common tenancy agreement mistakes.',
+              'Yes - when completed and signed correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common tenancy agreement mistakes.',
           },
         ]}
-        finalCtaBody="Use this standard periodic tenancy agreement generator when the tenancy is straightforward and the property is being let as an ordinary whole-property home. Compare Premium or the specialist products only when the facts call for something more tailored."
+        finalCtaBody="Use this standard periodic tenancy agreement when the tenancy is straightforward and the property is being let as an ordinary whole-property home. Compare Premium or the specialist products only when the facts call for something more tailored."
       />
     </div>
   );

@@ -150,7 +150,7 @@ export default function TenantWontLeavePage() {
               enforcement.
             </>
           }
-          primaryCta={{ label: 'Start complete eviction pack', href: completePackProductHref }}
+          primaryCta={{ label: 'Prepare my court pack', href: completePackProductHref }}
           secondaryCta={{ label: 'Go to Possession Claim Guide', href: '/possession-claim-guide' }}
           variant="pastel"
         >
@@ -305,7 +305,7 @@ export default function TenantWontLeavePage() {
                           href="/eviction-notice-template"
                           className="inline-flex items-center gap-2 text-red-600 font-medium hover:underline"
                         >
-                          Start the eviction notice pack
+                          Create my eviction notice
                           <ArrowRight className="w-4 h-4" />
                         </Link>
                       </div>
@@ -505,7 +505,7 @@ export default function TenantWontLeavePage() {
                   href={completePackProductHref}
                   className="rounded-lg border border-gray-200 bg-white p-3 hover:border-red-600 transition-colors"
                 >
-                  Start the complete eviction pack
+                  Prepare my court pack
                 </Link>
                 <Link
                   href="/possession-claim-guide"
@@ -632,7 +632,7 @@ export default function TenantWontLeavePage() {
                 variant="final"
                 pagePath={PAGE_PATH}
                 jurisdiction="england"
-                title="Get Your Eviction Documents Now"
+                title="Prepare the court file before the next step"
                 description="Move from notice to possession with clearer paperwork, compliance checks and step-by-step instructions."
               />
 

@@ -134,7 +134,7 @@ export default function Section13StandardProductPage() {
     midPageCta: {
       title: 'Ready to propose the increase?',
       body:
-        'Start here if you want more than a blank Form 4A and need the notice, comparables, and service record aligned.',
+        'Choose this if you want more than a blank Form 4A and need the notice, comparables, and service record aligned.',
       primary: { label: 'Create my rent increase notice', href: product.wizardHref },
       secondary: {
         label: 'I need the challenge-ready defence route',

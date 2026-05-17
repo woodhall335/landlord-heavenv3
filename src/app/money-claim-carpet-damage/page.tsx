@@ -132,7 +132,7 @@ export default function MoneyClaimCarpetDamagePage() {
           title="Money Claim for Carpet Damage Costs"
           subtitle="If a tenant has left burns, stains, pet damage, or heavy soiling behind, this guide helps you separate fair wear from real damage and claim the right amount back."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_carpet_damage' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_carpet_damage' }}
           showTrustPositioningBar
           hideMedia
         />

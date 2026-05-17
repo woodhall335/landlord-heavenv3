@@ -8,7 +8,6 @@ import {
   ArrowRight,
   AlertTriangle,
   CalendarX,
-  FileText,
   ClipboardList,
   Receipt,
   Calculator,
@@ -19,7 +18,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimRentLinks, productLinks, toolLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -132,7 +131,7 @@ export default function MoneyClaimEarlyTerminationPage() {
           title="Money Claim for Early Termination Losses"
           subtitle="If a tenant has walked away before the fixed term ended, this guide helps you work out what rent and re-letting costs you can still recover and what evidence matters most."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_early_termination' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_early_termination' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -451,4 +450,3 @@ export default function MoneyClaimEarlyTerminationPage() {
     </>
   );
 }
-

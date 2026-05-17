@@ -146,7 +146,7 @@ export default function Page() {
         title="Section 8 Grounds Explained"
         subtitle="Understand the legal eviction grounds landlords rely on when a tenant breaches the tenancy."
         primaryCta={{ label: 'Start Section 8 Notice', href: '/products/notice-only' }}
-        secondaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
+        secondaryCta={{ label: 'Prepare my court pack', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/09-court.png"
         mediaAlt="Section 8 eviction guide icon"
         showReviewPill
@@ -688,7 +688,7 @@ export default function Page() {
                 href="/products/complete-pack"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Start Complete Eviction Pack
+                Prepare my court pack
               </Link>
             </div>
           </div>

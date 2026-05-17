@@ -193,7 +193,7 @@ export default function Page() {
         title="Tenant Left Without Paying Rent"
         subtitle="Confirm what is still owed, separate pure rent arrears from end-of-tenancy issues, and decide whether it makes sense to pursue recovery with a stronger money-claim file."
         primaryCta={{
-          label: 'Start recovering unpaid rent',
+          label: 'Prepare my money claim',
           href: '/products/money-claim',
         }}
         secondaryCta={{
@@ -275,7 +275,7 @@ export default function Page() {
                   href="/products/money-claim"
                   className="rounded-lg bg-primary px-5 py-3 text-white"
                 >
-                  Start Money Claim Pack
+                  Prepare my Money Claim Pack
                 </Link>
                 <Link
                   href="#money-claim-vs-complete-pack"
@@ -365,7 +365,7 @@ export default function Page() {
                   href="/products/money-claim"
                   className="rounded-lg bg-primary px-5 py-3 text-white"
                 >
-                  Start Money Claim Pack
+                  Prepare my Money Claim Pack
                 </Link>
                 <Link
                   href="#money-claim-vs-complete-pack"
@@ -508,7 +508,7 @@ export default function Page() {
               title="Tenant already gone? Focus on the debt file now."
               body="Once the occupation issue is over, landlords usually get better results by turning the file into a clean rent-arrears claim rather than treating it as a leftover eviction problem. Money Claim Pack is usually the stronger fit where the main task is proving the final balance clearly enough to pursue recovery."
               primaryHref="/products/money-claim"
-              primaryLabel="Start Money Claim Pack"
+              primaryLabel="Prepare my Money Claim Pack"
               secondaryHref="#money-claim-vs-complete-pack"
               secondaryLabel="Compare claim routes"
             />
@@ -751,7 +751,7 @@ export default function Page() {
               <p className="mt-2 leading-7 text-gray-700">
                 Money Claim Pack is usually the stronger fit where the tenant has
                 already left and the landlord now needs a debt-recovery
-                workflow. It is better aligned to arrears schedules, letters
+                route. It is better aligned to arrears schedules, letters
                 before action, particulars, and the core steps that support a
                 county court money claim.
               </p>
@@ -801,8 +801,8 @@ export default function Page() {
 
             <p className="mt-4 leading-7 text-gray-700">
               If the tenant has already gone and your next job is recovering
-              unpaid rent or turning the final balance into a clean claim, start
-              with Money Claim Pack. If you still need broader possession-route
+              unpaid rent or turning the final balance into a clean claim, use
+              Money Claim Pack. If you still need broader possession-route
               continuity or eviction support around the wider file, use Complete
               Pack as the secondary route.
             </p>
@@ -812,7 +812,7 @@ export default function Page() {
                 href="/products/money-claim"
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Money Claim Pack
+                Prepare my Money Claim Pack
               </Link>
               <Link
                 href="/products/complete-pack"

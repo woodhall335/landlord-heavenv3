@@ -89,7 +89,7 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
       <StructuredData
         data={productSchema({
           name: config.productName,
-          description: `${config.metaDescription} ${config.productName} is solicitor-approved and available as an instant digital pack.`,
+          description: `${config.metaDescription} ${config.productName} is available as an instant digital pack for landlords.`,
           price: product.price.toFixed(2),
           url: productUrl,
         })}
@@ -116,7 +116,7 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
 
           <div className="mt-10 max-w-4xl">
             <p className="inline-flex rounded-full border border-[#D8C8FF] bg-[#F7F1FF] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#5E3E9A]">
-              Solicitor-approved sample pack
+              Landlord sample pack
             </p>
             <p className="mt-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
               {config.targetKeyword}

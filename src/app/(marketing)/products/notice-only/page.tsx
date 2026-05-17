@@ -23,16 +23,16 @@ export const metadata: Metadata = {
   description: PRODUCT_OWNER_METADATA.noticeOnly.description,
   keywords: [
     'section 8 notice',
-    'section 8 notice generator',
-    'validated section 8 notice',
-    'solicitor-approved form 3a',
-    'section 8 notice builder',
+    'section 8 notice pack',
+    'current section 8 notice',
+    'form 3a notice pack',
     'section 8 notice service pack',
-    'court-ready section 8 notice',
+    'section 8 notice service pack',
+    'section 8 possession notice',
     'section 8 notice england',
     'section 8 notice post May 2026',
     "Renters' Rights Act Section 8 form",
-    'eviction notice generator',
+    'eviction notice pack',
     'printable section 8 notice form',
     'section 8 notice PDF download',
     'evict a tenant legally',
@@ -78,12 +78,12 @@ const faqs: FAQItem[] = [
   {
     question: 'Is this a court approved Section 8 notice?',
     answer:
-      'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved Section 8 notice follows current England rules and includes validation checks to help you serve correctly.',
+      'No. Courts do not pre-approve any notice, claim form, or agreement. This Section 8 notice pack follows current England rules and includes checks to help you serve correctly.',
   },
   {
     question: 'Is this legally binding?',
     answer:
-      "Yes - when completed and served correctly. This solicitor-approved template follows post-May 2026 England rules, and the validation checklist helps you avoid common Section 8 notice mistakes.",
+      "Yes - when completed and served correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common Section 8 notice mistakes.",
   },
 ];
 
@@ -265,7 +265,7 @@ export default function NoticeOnlyPage() {
           imageAlt: 'Section 8 notice stage',
         },
         {
-          name: 'Stage 2: Start with the full court pack',
+          name: 'Stage 2: Prepare the full court pack',
           whatItIs:
             'Best when you want the Section 8 notice, N5, N119, and hearing support in one case file.',
           problemItSolves:
@@ -306,7 +306,7 @@ export default function NoticeOnlyPage() {
     midPageCta: {
       title: 'Ready to serve the Section 8 notice?',
       body:
-        'Start here if your immediate job is to get the notice and service steps ready before anything is sent to the tenant.',
+        'Choose this if your immediate job is to get the notice and service steps ready before anything is sent to the tenant.',
       primary: {
         label: 'Create my Section 8 notice',
         href: descriptor.wizardHref,
@@ -396,7 +396,7 @@ export default function NoticeOnlyPage() {
     cta: {
       title: 'Create the notice without guessing',
       body:
-        'Start here if you need the notice, service steps, and basic record ready before anything is served.',
+        'Choose this if you need the notice, service steps, and basic record ready before anything is served.',
       primary: {
         label: 'Create my Section 8 notice',
         href: descriptor.wizardHref,

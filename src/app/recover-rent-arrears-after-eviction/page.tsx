@@ -11,7 +11,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical =
@@ -185,7 +184,7 @@ export default function Page() {
       <UniversalHero
         title="Recover Rent Arrears After Eviction"
         subtitle="Once you have possession back, this guide helps you work out what happens to the debt next and how to approach recovery with a cleaner final arrears file."
-        primaryCta={{ label: 'Start money claim pack', href: '/products/money-claim' }}
+        primaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim' }}
         secondaryCta={{ label: 'Need complete pack instead?', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Post-eviction rent arrears recovery timeline guide icon"

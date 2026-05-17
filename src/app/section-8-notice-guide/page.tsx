@@ -9,7 +9,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 import { generateMetadata } from '@/lib/seo';
 
@@ -316,9 +315,9 @@ export default function Page() {
               title="Need a Section 8 notice generated properly?"
               body="Use Notice Only if you already know Section 8 is the right route and mainly need a compliant notice workflow. Use the Complete Eviction Pack if you want broader support with route choice, evidence, and next legal steps."
               primaryHref="/products/notice-only"
-              primaryLabel="Start Notice Only"
+              primaryLabel="Create my Section 8 notice"
               secondaryHref="/products/complete-pack"
-              secondaryLabel="Start Complete Eviction Pack"
+              secondaryLabel="Prepare my court pack"
             />
 
             <Card id="section-8-rent-arrears" title="Section 8 for Rent Arrears">
@@ -584,9 +583,9 @@ export default function Page() {
               title="Choose the right Section 8 workflow before you serve"
               body="If you mainly need the notice, start with Notice Only. If you want broader preparation, stronger evidence handling, and a fuller possession workflow, choose the Complete Eviction Pack."
               primaryHref="/products/notice-only"
-              primaryLabel="Start Notice Only"
+              primaryLabel="Create my Section 8 notice"
               secondaryHref="/products/complete-pack"
-              secondaryLabel="Start Complete Eviction Pack"
+              secondaryLabel="Prepare my court pack"
             />
           </div>
         </Container>
@@ -651,13 +650,13 @@ export default function Page() {
                   href="/products/notice-only"
                   className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                 >
-                  Start Notice Only
+                  Create my Section 8 notice
                 </Link>
                 <Link
                   href="/products/complete-pack"
                   className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#F8F4FF]"
                 >
-                  Start Complete Eviction Pack
+                  Prepare my court pack
                 </Link>
               </div>
             </Card>

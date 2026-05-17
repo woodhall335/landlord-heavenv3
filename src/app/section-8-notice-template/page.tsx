@@ -168,7 +168,7 @@ export default function Section8NoticeTemplatePage() {
         <UniversalHero
           title="Section 8 Notice Template"
           subtitle="Learn how Section 8 Form 3 works, what a valid grounds-based notice should include, and when to use a guided Notice Only workflow instead of relying on a generic template."
-          primaryCta={{ label: `Start Notice Only - ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
+          primaryCta={{ label: `Create my Section 8 notice - ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
           secondaryCta={{ label: `Start full eviction support - ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
           hideMedia
@@ -249,7 +249,7 @@ export default function Section8NoticeTemplatePage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
                   >
-                    Start Notice Only - {noticeOnlyPrice}
+                    Create my Section 8 notice - {noticeOnlyPrice}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -265,7 +265,7 @@ export default function Section8NoticeTemplatePage() {
                 title="Prepare your Section 8 notice bundle"
                 subtitle="Use Notice Only for compliant Form 3 drafting, or choose a full case bundle for court paperwork guidance."
                 primaryHref="/products/notice-only"
-                primaryText={`Start Notice Only - ${noticeOnlyPrice}`}
+                primaryText={`Create my Section 8 notice - ${noticeOnlyPrice}`}
                 primaryDataCta="notice-only"
                 location="above-fold"
                 secondaryLinks={[
@@ -406,7 +406,7 @@ export default function Section8NoticeTemplatePage() {
                 <Link href="/products/notice-only" className="font-semibold text-primary hover:underline">
                   Notice Only
                 </Link>{' '}
-                once they need a court-ready Section 8 notice rather than an educational sample.
+                once they need a current Section 8 notice rather than an educational sample.
               </p>
 
               <div className="mt-6">
@@ -743,7 +743,7 @@ export default function Section8NoticeTemplatePage() {
                     href={noticeOnlyProductHref}
                     className="hero-btn-primary block w-full text-center"
                   >
-                    Start Notice Only
+                    Create my Section 8 notice
                   </Link>
                 </div>
 

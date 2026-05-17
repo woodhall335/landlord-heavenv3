@@ -136,7 +136,7 @@ export default function Section13DefenceProductPage() {
     midPageCta: {
       title: 'Ready to prepare the stronger pack?',
       body:
-        'Start here if you want Form 4A, market evidence, response wording, and the tribunal-facing bundle built around the same rent figure.',
+        'Choose this if you want Form 4A, market evidence, response wording, and the tribunal-facing bundle built around the same rent figure.',
       primary: { label: 'Prepare for a rent challenge', href: product.wizardHref },
       secondary: {
         label: 'I only need the standard option',

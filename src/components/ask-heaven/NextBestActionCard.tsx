@@ -114,30 +114,30 @@ function determineCTAMode(
 /**
  * Get jurisdiction-specific copy for eviction topics
  */
-function getEvictionCopy(jurisdiction: WizardJurisdiction): {
+function getEvictionCopy(): {
   title: string;
   description: string;
   buttonText: string;
 } {
   return {
     title: 'Serve a Section 8 Notice',
-    description: 'Create a compliant current England notice',
-    buttonText: 'Start England Notice Wizard',
+    description: 'Create the current England notice with the key route and service checks prepared',
+    buttonText: 'Create my Section 8 notice',
   };
 }
 
 /**
  * Get jurisdiction-specific copy for tenancy topics
  */
-function getTenancyCopy(jurisdiction: WizardJurisdiction): {
+function getTenancyCopy(): {
   title: string;
   description: string;
   buttonText: string;
 } {
   return {
     title: 'Create an England tenancy agreement',
-    description: 'Generate an England tenancy agreement designed for the assured periodic framework',
-    buttonText: 'Start Agreement Wizard',
+    description: 'Choose an England tenancy agreement designed for the assured periodic framework',
+    buttonText: 'Choose my tenancy agreement',
   };
 }
 
@@ -299,7 +299,7 @@ export function NextBestActionCard({
       jurisdiction,
       intent: 'tenancy',
     });
-    const tenancyCopy = tenancyIntentCopy ?? getTenancyCopy(jurisdiction);
+    const tenancyCopy = tenancyIntentCopy ?? getTenancyCopy();
     const wizardUrl = buildWizardLink({
       product: 'ast_standard',
       jurisdiction,
@@ -367,11 +367,11 @@ export function NextBestActionCard({
   });
 
   const defaultCopy = topic === 'eviction'
-    ? getEvictionCopy(jurisdiction)
+    ? getEvictionCopy()
     : {
         title: recommendation.label,
         description: recommendation.description,
-        buttonText: 'Start Wizard',
+        buttonText: 'Continue to the product',
       };
   const intentCopy = intent
     ? getAskHeavenCtaCopy({

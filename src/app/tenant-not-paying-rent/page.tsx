@@ -84,7 +84,7 @@ export default function TenantNotPayingRentPage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Tenant Not Paying Rent?"
           subtitle={<>If your tenant has stopped paying, you usually have <strong>three main routes</strong>: push for payment, start possession for arrears, or recover the debt through court. This page helps you choose the right one.</>}
-          primaryCta={{ label: 'Start your money claim', href: '/products/money-claim' }}
+          primaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim' }}
           secondaryCta={{ label: 'See Section 8 notice route', href: '/section-8-notice' }}
           variant="pastel"
         >
@@ -96,7 +96,7 @@ export default function TenantNotPayingRentPage() {
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
-              Built around court-ready paperwork
+              Built around a clear possession file
             </span>
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-500" />
@@ -221,7 +221,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/notice-only"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    {`Start Section 8 notice - ${noticeOnlyPrice}`}
+                    {`Create my Section 8 notice - ${noticeOnlyPrice}`}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -254,7 +254,7 @@ export default function TenantNotPayingRentPage() {
                     href="/products/money-claim"
                     className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
                   >
-                    {`Start money claim - ${moneyClaimPrice}`}
+                    {`Prepare my money claim - ${moneyClaimPrice}`}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -275,12 +275,12 @@ export default function TenantNotPayingRentPage() {
             <div className="max-w-4xl mx-auto">
               <FunnelCta
                 title="Need the right route for your exact arrears case?"
-                subtitle="Start with the money claim route if recovery is the priority, or move into possession support if the tenant is still in the property."
+                subtitle="Use the money claim route if recovery is the priority, or move into possession support if the tenant is still in the property."
                 primaryHref="/products/money-claim"
-                primaryText="Start money claim"
+                primaryText="Prepare my money claim"
                 primaryDataCta="money-claim"
                 location="mid"
-                secondaryLinks={[{ href: '/products/complete-pack', text: 'Need possession as well? Start full eviction support', dataCta: 'complete-pack' }]}
+                secondaryLinks={[{ href: '/products/complete-pack', text: 'Need possession as well? Prepare my court pack', dataCta: 'complete-pack' }]}
               />
             </div>
           </div>
@@ -524,7 +524,7 @@ export default function TenantNotPayingRentPage() {
                         className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                       >
                         <Gavel className="w-5 h-5" />
-                        {`Start money claim pack - ${moneyClaimPrice}`}
+                        {`Prepare my money claim - ${moneyClaimPrice}`}
                       </Link>
                       <Link
                         href="/money-claim-unpaid-rent"
@@ -558,7 +558,7 @@ export default function TenantNotPayingRentPage() {
                 variant="final"
                 pagePath="/tenant-not-paying-rent"
                 jurisdiction="england"
-                title="Start with the strongest rent arrears route"
+                title="Choose the strongest rent arrears route"
                 description="Recover unpaid rent with the money claim route, then use the Section 8 possession path when you still need the property back."
               />
 

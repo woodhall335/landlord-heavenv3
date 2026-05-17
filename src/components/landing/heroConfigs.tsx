@@ -182,9 +182,9 @@ export const moneyClaimSupportHeroConfig: HeroConfig = {
   title: 'Need help with a',
   highlightTitle: 'landlord money claim?',
   subtitle:
-    'Start with the landlord money claim pack, then use the support guides when you need help with a specific filing, evidence, or enforcement question.',
+    'Use the landlord money claim pack when the debt needs action, then use the support guides for specific filing, evidence, or enforcement questions.',
   primaryCta: {
-    label: 'Start money claim pack',
+    label: 'Prepare my money claim',
     href: '/products/money-claim',
   },
   secondaryCta: {

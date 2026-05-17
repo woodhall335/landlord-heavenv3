@@ -132,7 +132,7 @@ export default function MoneyClaimApplianceDamagePage() {
           title="Money Claim for Appliance Damage"
           subtitle="If a tenant has damaged white goods or kitchen appliances, use this guide to work out what you can fairly claim and what evidence will help you recover the cost."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?reason=property_damage&src=seo_money_claim_appliance_damage&topic=debt' }}
           showTrustPositioningBar
           hideMedia
         />

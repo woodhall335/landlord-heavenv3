@@ -20,7 +20,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimCleaningLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -133,7 +133,7 @@ export default function MoneyClaimAbandonedGoodsPage() {
           title="Money Claim for Abandoned Goods Costs"
           subtitle="If a tenant has left belongings behind, follow the right notice process first and then recover your clearance, storage, and disposal costs in a clearer money claim."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?reason=cleaning&src=seo_money_claim_abandoned_goods&topic=debt' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -581,4 +581,3 @@ export default function MoneyClaimAbandonedGoodsPage() {
     </>
   );
 }
-

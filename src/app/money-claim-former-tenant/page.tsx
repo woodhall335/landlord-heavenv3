@@ -18,7 +18,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimEnforcementLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -131,7 +131,7 @@ export default function MoneyClaimFormerTenantPage() {
           title="Money Claim Against a Former Tenant"
           subtitle="If the tenant has already gone, you can still pursue arrears, damage, or other debts. This guide helps you think through tracing, service, and whether the claim is worth it."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_former_tenant' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_former_tenant' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -410,4 +410,3 @@ export default function MoneyClaimFormerTenantPage() {
     </>
   );
 }
-

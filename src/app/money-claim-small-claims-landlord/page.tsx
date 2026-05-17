@@ -21,7 +21,7 @@ import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { FunnelCta, CrossSellBar } from '@/components/funnels';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimProcessLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -134,7 +134,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
           title="Small Claims Guide for Landlords"
           subtitle="If your tenant debt claim is heading to the small claims track, this guide explains what the hearing usually looks like, what documents matter most, and how to prepare without overcomplicating the case."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -168,7 +168,7 @@ export default function MoneyClaimSmallClaimsLandlordPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_small_claims_landlord"
                   className="inline-flex items-center justify-center gap-2 bg-white text-emerald-800 font-semibold py-4 px-8 rounded-xl hover:bg-emerald-50 transition-colors"
                 >
-                  Start money claim
+                  Prepare my money claim
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link

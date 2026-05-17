@@ -11,7 +11,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical =
@@ -185,7 +184,7 @@ export default function WarrantOfPossessionGuidePage() {
       <UniversalHero
         title="Warrant of Possession Guide"
         subtitle="If the tenant stays after the possession date, this guide explains when landlords move into the warrant stage, what enforcement involves, and how to prepare for the final handover."
-        primaryCta={{ label: 'Start Complete Eviction Pack', href: '/products/complete-pack' }}
+        primaryCta={{ label: 'Prepare my court pack', href: '/products/complete-pack' }}
         secondaryCta={{ label: 'Need notice help first?', href: '/products/notice-only' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Warrant of possession timeline guide icon"
@@ -257,7 +256,7 @@ export default function WarrantOfPossessionGuidePage() {
 
               <p className="mt-4 leading-7 text-gray-700">
                 The strongest cases treat the warrant stage as part of one continuous
-                eviction workflow. Notice quality, service proof, hearing preparation,
+                eviction route. Notice quality, service proof, hearing preparation,
                 possession order terms, and enforcement readiness all connect. The later
                 the case gets, the more expensive early mistakes usually become.
               </p>
@@ -387,9 +386,9 @@ export default function WarrantOfPossessionGuidePage() {
               title="Already beyond notice stage and into court or enforcement?"
               body="Complete Pack is usually the stronger fit where the case has moved into possession order management, hearing-stage decisions, or enforcement planning. Notice Only is generally better where the landlord still mainly needs the initial notice stage handled properly."
               primaryHref="/products/complete-pack"
-              primaryLabel="Start Complete Eviction Pack"
+              primaryLabel="Prepare my court pack"
               secondaryHref="/products/notice-only"
-              secondaryLabel="Start Notice Only"
+              secondaryLabel="Create my Section 8 notice"
             />
 
             <Card
@@ -422,7 +421,7 @@ export default function WarrantOfPossessionGuidePage() {
 
               <p className="mt-4 leading-7 text-gray-700">
                 The best mindset is to treat the warrant stage not as separate from the
-                rest of the case, but as the last segment of the same workflow. A landlord
+                rest of the case, but as the last segment of the same route. A landlord
                 who prepares for enforcement from the point of possession order often moves
                 through it with more control and fewer avoidable delays.
               </p>
@@ -638,7 +637,7 @@ export default function WarrantOfPossessionGuidePage() {
             <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               The warrant stage works best when it is planned before it becomes urgent.
-              Landlords who treat enforcement as part of one continuous legal workflow
+              Landlords who treat enforcement as part of one continuous legal route
               usually get more predictable outcomes than landlords who only start planning
               after the possession date has already passed.
             </p>
@@ -649,21 +648,21 @@ export default function WarrantOfPossessionGuidePage() {
             </p>
             <p className="mt-4 leading-7 text-gray-700">
               If your case has already moved into court, possession order, or enforcement
-              planning, start with Complete Eviction Pack. If you still mainly need the
-              initial notice stage handled properly, start with Notice Only first.
+              planning, use Complete Eviction Pack. If you still mainly need the
+              initial notice stage handled properly, use Notice Only first.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/products/complete-pack"
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Complete Eviction Pack
+                Prepare my court pack
               </Link>
               <Link
                 href="/products/notice-only"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Start Notice Only
+                Create my Section 8 notice
               </Link>
             </div>
           </div>

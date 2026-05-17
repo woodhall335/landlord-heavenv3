@@ -26,9 +26,6 @@ import {
   Mail,
   ArrowRight,
   Download,
-  Scale,
-  Clock,
-  Shield,
 } from 'lucide-react';
 
 const moneyClaimProductHref = '/products/money-claim';
@@ -147,8 +144,8 @@ export default function RentArrearsLetterTemplatePage() {
           badgeIcon={<PoundSterling className="w-4 h-4" />}
           title="Rent Arrears Letter Template UK"
           subtitle="If a tenant has fallen behind, start with a letter that sets out the arrears clearly, asks for payment properly, and leaves you in a stronger position if you need to escalate."
-          primaryCta={{ label: 'Start money claim', href: moneyClaimProductHref }}
-          secondaryCta={{ label: 'Start Section 8 notice', href: noticeOnlyProductHref }}
+          primaryCta={{ label: 'Prepare my money claim', href: moneyClaimProductHref }}
+          secondaryCta={{ label: 'Create my Section 8 notice', href: noticeOnlyProductHref }}
           showTrustPositioningBar
           hideMedia
         />
@@ -166,9 +163,9 @@ export default function RentArrearsLetterTemplatePage() {
                 <Link href="/money-claim-unpaid-rent" className="font-medium text-primary hover:underline">
                   money claim for unpaid rent route
                 </Link>
-                , and the solicitor-approved pack to{' '}
+                , and the Money Claim Pack to{' '}
                 <Link href={moneyClaimProductHref} className="font-medium text-primary hover:underline">
-                  generate a validated rent arrears money claim pack
+                  prepare a rent arrears money claim
                 </Link>{' '}
                 once reminder letters are no longer enough.
               </p>
@@ -323,7 +320,7 @@ export default function RentArrearsLetterTemplatePage() {
                 title="No response to your rent arrears letter?"
                 subtitle="Escalate with a money claim pack and keep your arrears evidence organised from the start."
                 primaryHref={moneyClaimProductHref}
-                primaryText="Start money claim"
+                primaryText="Prepare my money claim"
                 primaryDataCta="money-claim"
                 location="mid"
                 secondaryLinks={[

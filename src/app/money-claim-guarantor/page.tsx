@@ -18,7 +18,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, productLinks, residentialDocumentLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -131,7 +131,7 @@ export default function MoneyClaimGuarantorPage() {
           title="Money Claim Against a Guarantor"
           subtitle="If the tenant will not pay and you have a valid guarantee in place, this guide helps you check the wording, decide who to pursue, and recover the debt more clearly."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_guarantor' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_guarantor' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -432,4 +432,3 @@ export default function MoneyClaimGuarantorPage() {
     </>
   );
 }
-

@@ -175,7 +175,7 @@ export default function MoneyClaimTenantDefendsPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_tenant_defends"
                   className="inline-flex items-center justify-center gap-2 bg-white text-rose-800 font-semibold py-4 px-8 rounded-xl hover:bg-rose-50 transition-colors"
                 >
-                  Start money claim
+                  Prepare my money claim
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link

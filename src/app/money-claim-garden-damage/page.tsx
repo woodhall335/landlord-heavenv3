@@ -19,7 +19,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimDamageLinks, moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -132,7 +132,7 @@ export default function MoneyClaimGardenDamagePage() {
           title="Money Claim for Garden Damage Costs"
           subtitle="If a tenant has left the garden overgrown, damaged, or full of waste, this guide helps you check responsibility, gather proof, and recover the restoration costs properly."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_garden_damage' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_garden_damage' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -552,4 +552,3 @@ export default function MoneyClaimGardenDamagePage() {
     </>
   );
 }
-

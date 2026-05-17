@@ -29,13 +29,13 @@ export function getCommercialSeoCopy(
 
   if (primary === '/products/money-claim') {
     return {
-      eyebrow: 'Validated debt recovery',
-      title: 'Use a solicitor-approved MCOL pack for landlords',
+      eyebrow: 'Debt recovery',
+      title: 'Tenant still owes money? Prepare the claim file',
       body:
-        'For rent arrears, a money claim online pack works best when the arrears schedule, letter before claim template, and particulars of claim template all match. Our rent arrears money claim workflow keeps those documents together with validation checks before download.',
+        'For rent arrears, a money claim works best when the arrears schedule, letter before claim, and claim particulars all tell the same story. The Money Claim Pack keeps those documents together before you file.',
       primary: {
         href: '/products/money-claim',
-        label: 'download the solicitor-approved MCOL pack for landlords',
+        label: 'Prepare my money claim',
       },
       secondary: secondary
         ? {
@@ -50,34 +50,34 @@ export function getCommercialSeoCopy(
   if (primary === '/products/complete-pack') {
     return {
       eyebrow: 'Court-stage paperwork',
-      title: 'Prepare a court-ready possession pack before filing',
+      title: 'Tenant still staying? Prepare the possession file',
       body:
-        'When notice has expired or court is likely, a court-ready possession pack helps keep the official court forms, N5 possession claim form, N119 particulars of claim, witness statement, and evidence chronology consistent. The pack is validated before filing so avoidable date and service errors are easier to catch. If you have not served notice yet, use a validated Section 8 notice builder before moving to court.',
+        'When notice has expired or court is likely, the possession file needs the official court forms, N5 possession claim form, N119 particulars, witness statement, and evidence chronology to stay consistent. If you have not served notice yet, create the Section 8 notice first before moving to court.',
       primary: {
         href: '/products/complete-pack',
-        label: 'prepare a court-ready possession pack',
+        label: 'Prepare my court pack',
       },
       secondary: {
         href: secondary ?? '/products/notice-only',
-        label: 'use our validated Section 8 notice builder',
+        label: 'Create my Section 8 notice',
         text:
-          'If you have not served notice yet, start with the validated Section 8 notice builder first.',
+          'If you have not served notice yet, handle the notice stage first.',
       },
     };
   }
 
   if (primary === '/products/section-13-standard' || primary === '/products/section-13-defence') {
     return {
-      eyebrow: 'Validated rent increase paperwork',
-      title: 'Use a Form 4A generator with tribunal-ready checks',
+      eyebrow: 'Rent increase paperwork',
+      title: 'Need to increase rent? Keep the notice and evidence aligned',
       body:
-        'For England rent increases, a Section 13 rent increase pack should keep the Section 13 notice template, market evidence, service record, and tribunal evidence checklist aligned. Use the validated Section 13 notice workflow first, then move to a solicitor-approved tribunal pack if the tenant challenges the increase.',
+        'For England rent increases, the Section 13 notice, market evidence, service record, and challenge evidence need to line up. Use the standard pack for the notice route, then move to the defence pack if the tenant challenges the increase.',
       primary: {
         href: primary,
         label:
           primary === '/products/section-13-defence'
-            ? 'prepare a solicitor-approved tribunal evidence pack'
-            : 'generate a validated Section 13 notice',
+            ? 'Prepare for a rent challenge'
+            : 'Create my rent increase notice',
       },
       secondary: {
         href:
@@ -86,8 +86,8 @@ export function getCommercialSeoCopy(
             : '/products/section-13-defence',
         label:
           primary === '/products/section-13-defence'
-            ? 'generate a validated Section 13 notice'
-            : 'prepare a solicitor-approved tribunal evidence pack',
+            ? 'Create my rent increase notice'
+            : 'Prepare for a rent challenge',
         text:
           'Keep the notice and tribunal evidence routes connected so the paperwork stays consistent.',
       },
@@ -99,14 +99,14 @@ export function getCommercialSeoCopy(
       eyebrow: 'England tenancy paperwork',
       title: "Create a Renters' Rights Act compliant tenancy agreement",
       body:
-        'For England lets, use a validated tenancy agreement rather than recycling old AST wording. The standard periodic tenancy agreement route supports post-May 2026 rules, assured periodic tenancy agreement wording, and a guided tenancy agreement builder for landlords who need a clean download.',
+        'For England lets, use a current tenancy agreement rather than recycling old AST wording. The standard periodic agreement route supports post-May 2026 rules and a clean landlord setup file.',
       primary: {
         href: primary === '/products/ast' ? '/standard-tenancy-agreement' : primary,
         label: "create a Renters' Rights Act compliant tenancy agreement",
       },
       secondary: {
         href: '/premium-tenancy-agreement',
-        label: 'upgrade to a premium periodic tenancy agreement builder',
+        label: 'create a premium periodic tenancy agreement',
         text:
           'Use the premium builder when you need stronger management wording for access, repairs, and hand-back.',
       },
@@ -114,19 +114,19 @@ export function getCommercialSeoCopy(
   }
 
   return {
-    eyebrow: 'Validated notice stage',
-    title: 'Use a validated Section 8 notice builder before you serve',
+    eyebrow: 'Notice stage',
+    title: 'Need to serve notice? Create the Section 8 file first',
     body:
-      "For live England possession cases, a Section 8 notice generator is safer when it checks the grounds, dates, service record, and Form 3A wording together. Our solicitor-approved Form 3A workflow creates a validated Section 8 notice service pack for post-May 2026 and the Renters' Rights Act Section 8 form rules.",
+      "For live England possession cases, the Section 8 notice should connect the grounds, dates, service record, and Form 3A wording before you serve. The Notice Only pack creates the notice-stage file for post-May 2026 and the Renters' Rights Act Section 8 form rules.",
     primary: {
       href: '/products/notice-only',
-      label: 'use our validated Section 8 notice builder',
+      label: 'Create my Section 8 notice',
     },
     secondary: {
       href: secondary ?? '/products/complete-pack',
-      label: 'prepare a court-ready possession pack',
+      label: 'Prepare my court pack',
       text:
-        'If the tenant stays after notice, move into the court-ready possession pack with official court forms.',
+        'If the tenant stays after notice, move into the court pack with official court forms.',
     },
   };
 }

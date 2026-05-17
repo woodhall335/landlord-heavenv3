@@ -35,31 +35,31 @@ export const PRODUCT_OWNER_METADATA = {
     path: '/standard-tenancy-agreement',
     title: 'Buy Standard Tenancy Agreement | England AST | £14.99',
     description:
-      'Create a solicitor-approved Standard Periodic Tenancy Agreement. AST generator for post-May 2026 rules. Validated wording. 4.8/5. Download now.',
+      'Create a Standard Periodic Tenancy Agreement for a straightforward England let, with current wording and setup documents in one pack.',
   },
   premiumTenancy: {
     path: '/premium-tenancy-agreement',
     title: 'Buy Premium Tenancy Agreement | Stronger Wording | £24.99',
     description:
-      'Generate a solicitor-approved Premium Periodic Tenancy Agreement with stronger management wording. Post-May 2026 compliant. 4.8/5. Download.',
+      'Create a Premium Periodic Tenancy Agreement with stronger management wording for access, repairs, keys, handover, and day-to-day control.',
   },
   studentTenancy: {
     path: '/student-tenancy-agreement',
     title: 'Buy Student Tenancy Agreement | Guarantor Forms | £24.99',
     description:
-      "Solicitor-approved Student Tenancy Agreement builder. Handles guarantors, sharers, and move-out. Renters' Rights Act compliant. 4.8/5. Download.",
+      'Create a Student Tenancy Agreement for England with guarantor, sharer, replacement occupier, and end-of-term wording in one pack.',
   },
   hmoTenancy: {
     path: '/hmo-shared-house-tenancy-agreement',
     title: 'Buy HMO Tenancy Agreement | Shared House Rules | £34.99',
     description:
-      'Solicitor-approved HMO Tenancy Agreement template with validated house rules for shared houses. Post-May 2026 compliant. 4.8/5. Instant download.',
+      'Create an HMO or shared-house tenancy agreement with house rules, communal-area wording, and shared occupation records kept together.',
   },
   lodgerAgreement: {
     path: '/lodger-agreement',
     title: 'Buy Lodger Agreement | Resident Landlord | £14.99',
     description:
-      'Solicitor-approved Lodger Agreement for resident landlords. Room let contract with validated notice rules and house rules. 4.8/5. Instant PDF.',
+      'Create a Lodger Agreement for resident landlords with room-let terms, shared-home rules, notice wording, and house records in one pack.',
   },
 } as const;
 

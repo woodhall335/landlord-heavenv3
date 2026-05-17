@@ -20,7 +20,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimEnforcementLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -167,7 +167,7 @@ export default function MoneyClaimCCJEnforcementPage() {
                   href="/products/money-claim?topic=debt&src=seo_money_claim_ccj_enforcement"
                   className="inline-flex items-center justify-center gap-2 bg-white text-slate-800 font-semibold py-4 px-8 rounded-xl hover:bg-slate-50 transition-colors"
                 >
-                  Start money claim
+                  Prepare my money claim
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
@@ -475,4 +475,3 @@ export default function MoneyClaimCCJEnforcementPage() {
     </>
   );
 }
-

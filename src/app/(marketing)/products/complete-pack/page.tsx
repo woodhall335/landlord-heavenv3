@@ -26,11 +26,11 @@ export const metadata: Metadata = {
     'N5 possession claim form online',
     'N119 particulars of claim example',
     'court possession pack download',
-    'solicitor-approved Section 8 court pack',
-    'validated before filing',
+    'Section 8 court pack',
+    'checked before filing',
     'possession claim form England',
     'post-May 2026 possession claim form',
-    'court-ready Section 8 possession pack',
+    'Section 8 possession pack',
     'complete eviction pack',
     'eviction process england',
     'evict a tenant through court',
@@ -77,12 +77,12 @@ const faqs: FAQItem[] = [
   {
     question: 'Is this a court approved possession claim form?',
     answer:
-      'No. Courts do not pre-approve any notice, claim form, or agreement. However, this solicitor-approved possession pack uses official court forms where applicable and includes validation checks to help you file correctly.',
+      'No. Courts do not pre-approve any notice, claim form, or agreement. This possession pack uses official court forms where applicable and includes checks to help you file correctly.',
   },
   {
     question: 'Is this legally binding?',
     answer:
-      'Yes - when completed and filed correctly. This solicitor-approved pack follows post-May 2026 England rules, and the validation checklist helps you avoid common possession claim mistakes.',
+      'Yes - when completed and filed correctly. This pack follows post-May 2026 England rules, and the checklist helps you avoid common possession claim mistakes.',
   },
 ];
 
@@ -150,7 +150,7 @@ export default function CompleteEvictionPackPage() {
       cards: [
         {
           eyebrow: 'Choose this route',
-          title: 'Start with the full possession route now',
+          title: 'Prepare the full possession route now',
           body:
             'Use the Complete Pack when the case may need possession proceedings and you want the notice and court paperwork to match from day one.',
           tone: 'positive',
@@ -407,7 +407,7 @@ export default function CompleteEvictionPackPage() {
     cta: {
       title: 'Prepare the court papers without piecing them together',
       body:
-        'Start here if you want the notice, service record, claim forms, and hearing support prepared together without buying Stage 1 separately first.',
+        'Choose this if you want the notice, service record, claim forms, and hearing support prepared together without buying Stage 1 separately first.',
       primary: {
         label: 'Prepare my court pack',
         href: descriptor.wizardHref,

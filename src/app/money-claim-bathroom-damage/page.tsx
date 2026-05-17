@@ -132,7 +132,7 @@ export default function MoneyClaimBathroomDamagePage() {
           title="Money Claim for Bathroom Damage"
           subtitle="If a tenant has left mould, broken fixtures, or avoidable bathroom damage behind, use this guide to work out what you can fairly claim and what proof you will need."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?reason=property_damage&src=seo_money_claim_bathroom_damage&topic=debt' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?reason=property_damage&src=seo_money_claim_bathroom_damage&topic=debt' }}
           showTrustPositioningBar
           hideMedia
         />

@@ -18,7 +18,7 @@ import { UniversalHero } from '@/components/landing/UniversalHero';
 import { Container } from '@/components/ui/Container';
 import { SeoPageContextPanel } from '@/components/seo/SeoPageContextPanel';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
-import { moneyClaimGuides, moneyClaimUtilitiesLinks, productLinks } from '@/lib/seo/internal-links';
+import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
@@ -131,7 +131,7 @@ export default function MoneyClaimCouncilTaxPage() {
           title="Money Claim for Unpaid Council Tax"
           subtitle="If you have had to pay council tax that your tenant should have covered, this guide helps you check liability first and then recover the right amount in a clearer claim."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_council_tax' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_council_tax' }}
           showTrustPositioningBar
           hideMedia
         />
@@ -414,4 +414,3 @@ export default function MoneyClaimCouncilTaxPage() {
     </>
   );
 }
-

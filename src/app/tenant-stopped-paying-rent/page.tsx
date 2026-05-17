@@ -11,7 +11,6 @@ import {
   StructuredData,
   articleSchema,
   breadcrumbSchema,
-  faqPageSchema,
 } from '@/lib/seo/structured-data';
 
 const canonical =
@@ -192,8 +191,8 @@ export default function Page() {
       <UniversalHero
         title="Tenant Stopped Paying Rent"
         subtitle="If rent has stopped coming in, the first job is to control the arrears file properly so you can choose the right route and avoid losing time later."
-        primaryCta={{ label: 'Start notice only for arrears', href: '/products/notice-only' }}
-        secondaryCta={{ label: 'Need the court-ready bundle?', href: '/products/complete-pack' }}
+        primaryCta={{ label: 'Create my Section 8 notice', href: '/products/notice-only' }}
+        secondaryCta={{ label: 'Need possession too? Prepare my court pack', href: '/products/complete-pack' }}
         mediaSrc="/images/wizard-icons/11-calendar-timeline.png"
         mediaAlt="Rent arrears eviction timeline guide icon"
         showReviewPill
@@ -237,7 +236,7 @@ export default function Page() {
             <Card id="quick-answer" title="Quick Answer">
               <p className="mt-4 leading-7 text-gray-700">
                 When a tenant stops paying rent, landlords usually do best by treating the
-                case as a controlled arrears workflow from the first missed payment rather
+                case as a controlled arrears route from the first missed payment rather
                 than waiting for the file to become urgent. The legal route often depends
                 on how much rent is unpaid, what tenancy route is available, and how
                 strong the evidence and service history will look if the matter reaches
@@ -482,9 +481,9 @@ export default function Page() {
               title="Need the arrears route handled properly from the first step?"
               body="Use Notice Only if your route is already clear and you mainly need the first notice stage prepared properly. Use the Complete Eviction Pack if you want broader support across notice, court preparation, possession planning, and enforcement readiness."
               primaryHref="/products/notice-only"
-              primaryLabel="Start Notice Only for arrears"
+              primaryLabel="Create my Section 8 notice"
               secondaryHref="/products/complete-pack"
-              secondaryLabel="Need court-ready bundle? Complete Pack"
+              secondaryLabel="Need possession too? Prepare my court pack"
             />
 
             <Card
@@ -509,7 +508,7 @@ export default function Page() {
               </p>
 
               <p className="mt-4 leading-7 text-gray-700">
-                Good landlords therefore run the case like one workflow. The same
+                Good landlords therefore run the case as one joined-up route. The same
                 chronology should be visible from first missed payment through to final
                 possession. The same figures should appear everywhere. The same account of
                 events should support the notice, witness statement, and hearing note.
@@ -737,7 +736,7 @@ export default function Page() {
                 Notice Only is usually the better fit where the arrears route is already
                 clear, the landlord knows which notice should be used, and the main need is
                 to get the first formal stage prepared properly. It tends to suit
-                landlords who already understand the wider possession workflow.
+                landlords who already understand the wider possession route.
               </p>
 
               <h3 className="mt-5 text-lg font-semibold text-[#2a2161]">
@@ -753,7 +752,7 @@ export default function Page() {
 
               <p className="mt-4 leading-7 text-gray-700">
                 In practical terms, Notice Only is for clearer first-step cases. Complete
-                Pack is for arrears files where the wider court and possession workflow
+                Pack is for arrears files where the wider court and possession route
                 still needs to be managed carefully.
               </p>
             </Card>
@@ -771,7 +770,7 @@ export default function Page() {
             <h2 className="text-2xl font-semibold text-[#2a2161]">What to do next</h2>
             <p className="mt-4 leading-7 text-gray-700">
               Rent arrears cases usually become easier to manage when the landlord decides
-              early that the file will be treated as one controlled workflow rather than a
+              early that the file will be treated as one controlled route rather than a
               series of disconnected reactions. That means one chronology, one arrears
               schedule, one evidence index, and one clear route plan from notice to
               possession.
@@ -783,22 +782,22 @@ export default function Page() {
             </p>
             <p className="mt-4 leading-7 text-gray-700">
               If your route is already clear and you mainly need the first legal step,
-              start with Notice Only. If you want broader help across notice, evidence,
-              court readiness, and later possession planning, start with Complete Eviction
-              Pack.
+                use Notice Only. If you want broader help across notice, evidence,
+                court preparation, and later possession planning, use Complete Eviction
+                Pack.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/products/notice-only"
                 className="rounded-lg bg-primary px-5 py-3 text-white hover:opacity-95"
               >
-                Start Notice Only for arrears
+                Create my Section 8 notice
               </Link>
               <Link
                 href="/products/complete-pack"
                 className="rounded-lg border border-[#E6DBFF] bg-white px-5 py-3 text-primary hover:bg-[#FCFAFF]"
               >
-                Need court-ready bundle? Complete Pack
+                Need possession too? Prepare my court pack
               </Link>
             </div>
           </div>

@@ -79,7 +79,7 @@ export default function MoneyClaimCleaningCostsPage() {
           title="Money Claim for Cleaning Costs"
           subtitle="If a tenant leaves the property filthy or full of rubbish, this guide helps you work out what you can fairly claim, what evidence you need, and how to present it properly."
           primaryCta={{ label: 'View money claim guide', href: '/money-claim' }}
-          secondaryCta={{ label: 'Start money claim pack', href: '/products/money-claim?topic=debt&src=seo_money_claim_cleaning_costs' }}
+          secondaryCta={{ label: 'Prepare my money claim', href: '/products/money-claim?topic=debt&src=seo_money_claim_cleaning_costs' }}
           showTrustPositioningBar
           hideMedia
         />
