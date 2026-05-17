@@ -22,21 +22,20 @@ export const metadata: Metadata = {
   title: PRODUCT_OWNER_METADATA.completePack.title,
   description: PRODUCT_OWNER_METADATA.completePack.description,
   keywords: [
-    'possession claim pack',
-    'N5 possession claim form online',
-    'N119 particulars of claim example',
-    'court possession pack download',
     'Section 8 court pack',
-    'checked before filing',
-    'possession claim form England',
-    'post-May 2026 possession claim form',
     'Section 8 possession pack',
-    'complete eviction pack',
-    'eviction process england',
-    'evict a tenant through court',
-    'eviction pack',
-    'court forms',
-    'N5 N119 Renters Rights Act',
+    'Section 8 possession claim pack',
+    'Section 8 eviction pack',
+    'Section 8 eviction documents',
+    'Section 8 court papers',
+    'solicitor approved Section 8 court file',
+    'N5 N119 forms',
+    'N5 possession claim form',
+    'N119 particulars of claim',
+    'N5 N119 possession claim',
+    'rent arrears possession claim',
+    'Section 8 rent arrears court forms',
+    'court forms after Section 8 notice',
   ],
   alternates: {
     canonical: canonicalUrl,
@@ -52,7 +51,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What does the Stage 2 Court & Possession Pack include?',
     answer:
-      'It is the complete combined pack. It includes the current England Section 8 notice and service documents from Stage 1, plus Form N5, Form N119, an arrears schedule, an evidence bundle structure, and court filing guidance for Stage 2.',
+      'It is the full solicitor-approved Section 8 court and possession file for England landlords. It includes everything in Stage 1 plus N5, N119, witness statement, court readiness status, court bundle index, evidence collection checklist, court filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
   },
   {
     question: 'Who is this built for?',
@@ -75,9 +74,9 @@ const faqs: FAQItem[] = [
       'Yes. You can review the generated pack before purchase and regenerate it later if the facts, dates, or evidence notes change.',
   },
   {
-    question: 'Is this a court approved possession claim form?',
+    question: 'Does this use court approved possession claim forms?',
     answer:
-      'No. Courts do not pre-approve any notice, claim form, or agreement. This possession pack uses official court forms where applicable and includes checks to help you file correctly.',
+      'Yes. The Complete Pack uses official court-approved possession forms where required, including N5 and N119, alongside Form 3A, N215, witness statement, evidence tools, and filing and hearing support. The court still decides the claim outcome from the completed forms and evidence.',
   },
   {
     question: 'Is this legally binding?',
@@ -101,10 +100,10 @@ export default function CompleteEvictionPackPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Section 8 court papers | Form 3A, N5, N119, and evidence support',
-      title: 'Prepare Section 8 court papers for possession',
+      trustText: 'Solicitor-approved court file | Form 3A, N5, N119, evidence, and hearing support',
+      title: 'Solicitor-approved Section 8 court and possession file',
       subtitle:
-        'Use this when you want the Section 8 notice and court papers prepared together. It includes Form 3A, N5, N119, the arrears record, witness statement, and hearing support in one file you can check before paying.',
+        'Prepare the full possession file, not just the court forms. Build the Stage 1 notice/service file plus N5, N119, witness statement, court readiness status, evidence checklist, court bundle index, filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -114,7 +113,7 @@ export default function CompleteEvictionPackPage() {
         href: '/products/notice-only',
       },
       feature:
-        'If you already expect court action, start here instead of buying the notice pack first.',
+        'Stage 2 = serve, issue, evidence, and prepare for hearing. If you already expect court action, start here instead of buying the notice pack first.',
       mediaSrc: '/images/eviction_packs.webp',
       mediaAlt: 'Preview of the England Stage 2 court and possession pack',
       showTrustPositioningBar: true,
@@ -130,13 +129,13 @@ export default function CompleteEvictionPackPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Use this if the case may need court. You can check the claim forms and supporting file before you pay.',
+        'Prepare the full possession file, not just the court forms. You can check the claim forms and supporting file before you pay.',
       imageSrc: '/images/complete-pack.webp',
       imageAlt: 'Preview of the complete Section 8 eviction pack',
       includedBullets: [
-        'Stage 1 Form 3A notice and service file included',
-        'N5, N119, witness statement, and court bundle support',
-        'One possession file instead of separate notice and court rebuilds',
+        'Everything in Stage 1: Form 3A, N215, service instructions, arrears schedule, checks, and case summary',
+        'N5, N119, witness statement, court readiness status, and evidence collection checklist',
+        'Court bundle index, court filing guide, hearing checklist, what-happens-next guide, and arrears engagement letter',
       ],
       bestFor:
         'The case is likely to go to court, or you want the notice and possession claim prepared together from the start.',
@@ -144,15 +143,15 @@ export default function CompleteEvictionPackPage() {
         'You only need to serve the notice first and want to decide about court later.',
     },
     decisionBlock: {
-      title: 'Choose this if you need the court papers too',
+      title: 'Choose Stage 2 if you need the court and possession file too',
       intro:
-        'This page is for landlords who need more than a notice. It keeps the notice, service record, N5, N119, evidence, and hearing support in one case file.',
+        'This page is for landlords who need more than a notice. It keeps the solicitor-approved notice file, service record, N5, N119, evidence, and hearing support in one possession file.',
       cards: [
         {
           eyebrow: 'Choose this route',
           title: 'Prepare the full possession route now',
           body:
-            'Use the Complete Pack when the case may need possession proceedings and you want the notice and court paperwork to match from day one.',
+            'Use the Complete Pack when the case may need possession proceedings and you want the notice, issue, evidence, and hearing paperwork to match from day one.',
           tone: 'positive',
         },
         {
@@ -175,18 +174,30 @@ export default function CompleteEvictionPackPage() {
     whatYouGet: {
       title: 'What you get in the combined pack',
       intro:
-        'You get the notice and court papers in one file. You can inspect the Form 3A notice, N5 claim form, N119 particulars, arrears record, and court support before buying.',
+        'You get the Stage 1 notice and service file plus the Stage 2 court and possession bundle in one file. You can inspect the Form 3A notice, N215, N5 claim form, N119 particulars, arrears record, evidence support, and hearing preparation before buying.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
           plainEnglish:
-            'The official notice that starts the current England Section 8 possession route.',
+            'The official notice that starts the current England Section 8 possession route, carried over from the Stage 1 notice file.',
           function:
             'Gives the tenant formal notice of the grounds relied on before the case moves into court.',
           riskIfMissing:
             'If the notice is wrong or invalid, the possession claim can fail before the court forms even matter.',
           landlordOutcome:
             'Helps the court case start from a valid notice instead of an avoidable defect.',
+          includedByDefault: true,
+        },
+        {
+          name: 'Stage 1 Notice and Service File',
+          plainEnglish:
+            'The full Stage 1 file: Form 3A Section 8 notice, N215 certificate of service, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
+          function:
+            'Keeps the notice and service record aligned before the court claim is issued.',
+          riskIfMissing:
+            'If the notice and service record are weak, the later court forms can be undermined before the main evidence is considered.',
+          landlordOutcome:
+            'Gives the possession file a cleaner foundation before N5 and N119 are used.',
           includedByDefault: true,
         },
         {
@@ -214,9 +225,9 @@ export default function CompleteEvictionPackPage() {
           includedByDefault: true,
         },
         {
-          name: 'Arrears Schedule',
+          name: 'Schedule of Arrears and Arrears Engagement Letter',
           plainEnglish:
-            'A running rent breakdown showing exactly what is owed and how the arrears built up.',
+            'A running rent breakdown showing exactly what is owed, supported by an arrears engagement letter for the file.',
           function:
             'Supports both the notice and the court forms with a clear financial record.',
           riskIfMissing:
@@ -226,9 +237,21 @@ export default function CompleteEvictionPackPage() {
           includedByDefault: true,
         },
         {
-          name: 'Evidence Bundle',
+          name: 'Witness Statement',
           plainEnglish:
-            'An organised case file with the tenancy, notice, service record, arrears history, and other papers the court may need.',
+            'A structured witness statement setting out the landlord evidence in a court-readable way.',
+          function:
+            'Connects the tenancy, breach, arrears, notice, service, and claim forms into one account.',
+          riskIfMissing:
+            'A possession claim can look thin if the court forms are not supported by a clear witness narrative.',
+          landlordOutcome:
+            'Helps the judge follow the landlord position without piecing the case together.',
+          includedByDefault: true,
+        },
+        {
+          name: 'Court Readiness Status and Evidence Collection Checklist',
+          plainEnglish:
+            'A readiness check and evidence list covering the tenancy, notice, service record, arrears history, and other papers the court may need.',
           function:
             'Keeps the claim papers consistent and ready to present together instead of leaving key evidence scattered across separate files.',
           riskIfMissing:
@@ -238,9 +261,9 @@ export default function CompleteEvictionPackPage() {
           includedByDefault: true,
         },
         {
-          name: 'Court Filing Guide',
+          name: 'Court Bundle Index, Court Filing Guide, and Hearing Checklist',
           plainEnglish:
-            'Step-by-step guidance on issuing the possession claim and moving it into court.',
+            'A document bundle index, filing guide, and hearing checklist for the possession stage.',
           function:
             'Explains the filing route, what goes with the claim, and the practical steps after the notice stage.',
           riskIfMissing:
@@ -262,7 +285,7 @@ export default function CompleteEvictionPackPage() {
         {
           name: 'Stage 1: Notice and service first',
           whatItIs:
-            'Best when you only need to serve Form 3A and keep the service record clear for now.',
+            'Best when you only need to serve Form 3A and keep the N215 service record clear for now.',
           problemItSolves:
             'Stops notice-stage mistakes before they undermine the case.',
           riskIfWrong:
@@ -277,7 +300,7 @@ export default function CompleteEvictionPackPage() {
         {
           name: 'Stage 2: Notice, claim forms, and hearing support together',
           whatItIs:
-            'Best when you want the Section 8 notice, N5, N119, court readiness, and hearing support in one file.',
+            'Best when you want the Section 8 notice, N5, N119, court readiness status, evidence collection checklist, and hearing support in one file.',
           problemItSolves:
             'Stops the notice file and court file being prepared separately.',
           riskIfWrong:
@@ -305,7 +328,7 @@ export default function CompleteEvictionPackPage() {
         {
           question: 'Is this only court forms?',
           answer:
-            'No. It includes the Section 8 notice, service record, and notice-stage file as well as N5, N119, witness statement, court bundle support, and hearing preparation.',
+            'No. It includes the Section 8 notice, service record, and notice-stage file as well as N5, N119, witness statement, court readiness status, evidence collection checklist, court bundle index, filing guide, hearing checklist, eviction case summary, and arrears engagement letter.',
         },
         {
           question: 'Does this include the Section 8 notice and service record too?',
@@ -317,7 +340,7 @@ export default function CompleteEvictionPackPage() {
     midPageCta: {
       title: 'Ready to start the full Section 8 court route?',
       body:
-        'Choose the Complete Pack if you want the notice, claim forms, and hearing support prepared together.',
+        'Choose the Complete Pack if you want the notice, claim forms, evidence, and hearing support prepared together.',
       primary: {
         label: 'Prepare my court pack',
         href: descriptor.wizardHref,
@@ -358,7 +381,7 @@ export default function CompleteEvictionPackPage() {
     howThisHelps: {
       title: 'How the full pack improves the landlord outcome',
       intro:
-        'The pack keeps the possession route clear from notice through court and hearing preparation.',
+        'The solicitor-approved Section 8 court and possession file keeps the route clear from notice through issue, evidence, and hearing preparation.',
       cards: [
         {
           title: 'It keeps the notice and court paperwork aligned',
@@ -407,7 +430,7 @@ export default function CompleteEvictionPackPage() {
     cta: {
       title: 'Prepare the court papers without piecing them together',
       body:
-        'Choose this if you want the notice, service record, claim forms, and hearing support prepared together without buying Stage 1 separately first.',
+        'Choose this if you want the notice, service record, claim forms, evidence, and hearing support prepared together without buying Stage 1 separately first.',
       primary: {
         label: 'Prepare my court pack',
         href: descriptor.wizardHref,

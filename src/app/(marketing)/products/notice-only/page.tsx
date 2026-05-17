@@ -27,12 +27,17 @@ export const metadata: Metadata = {
     'current section 8 notice',
     'form 3a notice pack',
     'section 8 notice service pack',
-    'section 8 notice service pack',
+    'section 8 notice and service file',
+    'solicitor approved section 8 notice file',
+    'N215 certificate of service',
+    'section 8 validity checklist',
+    'section 8 compliance declaration',
     'section 8 possession notice',
     'section 8 notice england',
     'section 8 notice post May 2026',
     "Renters' Rights Act Section 8 form",
     'eviction notice pack',
+    'eviction notice generator',
     'printable section 8 notice form',
     'section 8 notice PDF download',
     'evict a tenant legally',
@@ -53,7 +58,7 @@ const faqs: FAQItem[] = [
   {
     question: 'What does this product generate?',
     answer:
-      'It generates an England Section 8 notice pack for the post-May 2026 rules, including the notice itself, arrears support, service guidance, and a validity checklist before you serve.',
+      'It generates an 8-document solicitor-approved Section 8 notice and service file for England landlords: Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
   },
   {
     question: 'Why is the arrears schedule included?',
@@ -76,9 +81,9 @@ const faqs: FAQItem[] = [
       'Yes. You can preview the generated documents before purchase and regenerate them after edits if your facts or dates change.',
   },
   {
-    question: 'Is this a court approved Section 8 notice?',
+    question: 'Does this use court approved Section 8 documents?',
     answer:
-      'No. Courts do not pre-approve any notice, claim form, or agreement. This Section 8 notice pack follows current England rules and includes checks to help you serve correctly.',
+      'Yes. The pack uses the current official court-approved Form 3A notice format for England, with N215 certificate of service support, arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide. You still need to complete and serve the documents correctly.',
   },
   {
     question: 'Is this legally binding?',
@@ -102,10 +107,10 @@ export default function NoticeOnlyPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'England Section 8 notice | Form 3A, service steps, and checks',
-      title: 'Create a Section 8 Form 3A notice',
+      trustText: 'Solicitor-approved notice file | Form 3A, N215, arrears, and service checks',
+      title: 'Solicitor-approved Section 8 notice and service file',
       subtitle:
-        "Use this when you need to serve a Section 8 notice in England. Answer the questions, check the Form 3A before you pay, then download the notice, service steps, and supporting record.",
+        'Prepare the notice file properly before anything goes to the tenant. Build Form 3A, N215, the arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and next-step guide in one file you can check before paying.',
       primaryCta: {
         label: descriptor.primaryCtaLabel,
         href: descriptor.wizardHref,
@@ -115,7 +120,7 @@ export default function NoticeOnlyPage() {
         href: '/products/complete-pack',
       },
       feature:
-        'Most problems start with the notice, the dates, or how it was served. This helps you check those points before anything goes to the tenant.',
+        'Stage 1 = serve correctly. Most problems start with the notice, the dates, or how it was served, so this keeps the notice and service record together before anything goes to the tenant.',
       mediaSrc: '/images/notice_bundles.webp',
       mediaAlt: 'Preview of the England Section 8 notice pack',
       showTrustPositioningBar: true,
@@ -131,29 +136,29 @@ export default function NoticeOnlyPage() {
     earlyProofBand: {
       priceLabel: product.displayPrice,
       valueSummary:
-        'Use this if the job today is serving notice. You can check the actual Section 8 notice file before you pay.',
+        'Prepare the notice file properly before anything goes to the tenant. You can check the actual Section 8 notice and service file before you pay.',
       imageSrc: '/images/notice-only-pack.webp',
       imageAlt: 'Preview of the Stage 1 Section 8 notice-only pack',
       includedBullets: [
-        'Official Form 3A notice prepared from your answers',
-        'Service guidance and Form N215 support kept with the file',
-        'Arrears and validity checks before anything is served',
+        'Form 3A Section 8 notice, N215 certificate of service, and service instructions',
+        'Rent arrears schedule, validity checklist, and compliance declaration',
+        'Case summary and what-happens-next guide for the next step',
       ],
       bestFor:
-        'You need to serve the notice first and want the service record ready before deciding about court.',
+        'You need to serve correctly first and want the service record ready before deciding about court.',
       notFor:
         'You already expect to issue a possession claim and want the notice plus court forms prepared together.',
     },
     decisionBlock: {
       title: 'Choose Stage 1 if you need to serve the notice first',
       intro:
-        'This is for landlords who need the notice and service record prepared before deciding whether court action is needed.',
+        'This is for landlords who need a solicitor-approved notice and service file prepared before deciding whether court action is needed.',
       cards: [
         {
           eyebrow: 'Choose this route',
           title: 'Serve the notice properly now',
           body:
-            'Prepare Form 3A, explain the grounds, and keep a service record you can rely on if the tenant does not leave.',
+            'Prepare Form 3A, N215, the arrears schedule, service instructions, and checks in one Stage 1 file you can rely on if the tenant does not leave.',
           tone: 'positive',
         },
         {
@@ -176,7 +181,7 @@ export default function NoticeOnlyPage() {
     whatYouGet: {
       title: 'What you get in Stage 1',
       intro:
-        'This is more than a blank form. You get the notice, service steps, and checks in one file, and you can inspect it before buying.',
+        'This is more than a blank form. You get an 8-document notice and service file, and you can inspect it before buying.',
       items: [
         {
           name: 'Form 3A (Section 8 Notice)',
@@ -191,7 +196,7 @@ export default function NoticeOnlyPage() {
           includedByDefault: true,
         },
         {
-          name: 'Arrears Schedule',
+          name: 'Rent Arrears Schedule',
           plainEnglish:
             'A rent breakdown showing what is owed and how the arrears built up.',
           function:
@@ -203,15 +208,15 @@ export default function NoticeOnlyPage() {
           includedByDefault: true,
         },
         {
-          name: 'Grounds Explanation',
+          name: 'N215 Certificate of Service',
           plainEnglish:
-            "A short explanation linking the tenant's breach to the legal grounds in the notice.",
+            'The certificate used to record how and when the notice was served.',
           function:
-            'Shows why the notice is being served and how the facts match the grounds used.',
+            'Keeps proof of service with the notice file so the court can see how the tenant was notified if the case later progresses.',
           riskIfMissing:
-            'If the case theory is unclear, the notice can feel weaker and the judge has more work to do later to understand your position.',
+            'If service cannot be shown clearly, a later possession claim can be delayed or challenged.',
           landlordOutcome:
-            'Helps the file read clearly instead of looking like a form sent without context.',
+            'Gives you a clearer service record from the first step.',
           includedByDefault: true,
         },
         {
@@ -238,6 +243,42 @@ export default function NoticeOnlyPage() {
             'Gives you a cleaner file before the tenant or the court looks closely at the notice.',
           includedByDefault: true,
         },
+        {
+          name: 'Compliance Declaration',
+          plainEnglish:
+            'A structured declaration that records the key compliance points checked before service.',
+          function:
+            'Keeps the notice, dates, grounds, and service assumptions together in one reviewable file.',
+          riskIfMissing:
+            'Without a check record, it is harder to show what was reviewed before the notice was served.',
+          landlordOutcome:
+            'Helps the file look prepared rather than improvised.',
+          includedByDefault: true,
+        },
+        {
+          name: 'Case Summary',
+          plainEnglish:
+            'A short overview of the tenancy, arrears, grounds, and intended next step.',
+          function:
+            'Summarises the facts so the notice file can be understood quickly later.',
+          riskIfMissing:
+            'If the case later moves to court, scattered facts make the file harder to rebuild.',
+          landlordOutcome:
+            'Creates a cleaner handoff into Stage 2 if you need it.',
+          includedByDefault: true,
+        },
+        {
+          name: 'What Happens Next Guide',
+          plainEnglish:
+            'A practical guide to the next steps after the Section 8 notice is served.',
+          function:
+            'Explains what to monitor during the notice period and when Stage 2 may be needed.',
+          riskIfMissing:
+            'Landlords can lose time if they are unsure what to do after service.',
+          landlordOutcome:
+            'Keeps the next step clear once the notice has gone to the tenant.',
+          includedByDefault: true,
+        },
       ],
       sampleProof: sampleProof ? (
         <GoldenPackProof data={sampleProof} samplePageHref={samplePage?.samplePath} />
@@ -251,13 +292,13 @@ export default function NoticeOnlyPage() {
         {
           name: 'Stage 1: Serve the Section 8 notice first',
           whatItIs:
-            'Best when the next step is serving Form 3A and keeping a clear service record.',
+            'Best when the next step is serving Form 3A and keeping a clear N215 service record.',
           problemItSolves:
             'Stops notice, service, and validity mistakes before they weaken the case.',
           riskIfWrong:
             'If you already need court paperwork, Stage 1 alone means you will still need the wider possession file later.',
           landlordOutcome:
-            'Lets you serve the notice now and move into Stage 2 later if needed.',
+            'Lets you serve correctly now and move into Stage 2 later if needed.',
           href: '/products/notice-only',
           ctaLabel: 'This is my route',
           priceLabel: product.displayPrice,
@@ -267,7 +308,7 @@ export default function NoticeOnlyPage() {
         {
           name: 'Stage 2: Prepare the full court pack',
           whatItIs:
-            'Best when you want the Section 8 notice, N5, N119, and hearing support in one case file.',
+            'Best when you want the Section 8 notice, N5, N119, evidence, and hearing support in one possession file.',
           problemItSolves:
             'Prevents a notice-stage file from later being rebuilt into a separate court file.',
           riskIfWrong:
@@ -289,7 +330,7 @@ export default function NoticeOnlyPage() {
         {
           question: 'Can I still move into court later?',
           answer:
-            'Yes. Stage 1 keeps the notice, service record, and supporting facts aligned so the same case can move into the court route later if needed.',
+            'Yes. Stage 1 keeps the notice, N215 service record, arrears schedule, checks, and supporting facts aligned so the same case can move into the court route later if needed.',
         },
         {
           question: 'Will I need to start over?',
@@ -299,14 +340,14 @@ export default function NoticeOnlyPage() {
         {
           question: 'Does this include the official Form 3A?',
           answer:
-            'Yes. The pack generates the current England Form 3A notice with the service and arrears paperwork needed to support it.',
+            'Yes. The pack generates the current England Form 3A notice with N215, service instructions, arrears schedule, validity checklist, compliance declaration, case summary, and what-happens-next guide.',
         },
       ],
     },
     midPageCta: {
       title: 'Ready to serve the Section 8 notice?',
       body:
-        'Choose this if your immediate job is to get the notice and service steps ready before anything is sent to the tenant.',
+        'Choose this if your immediate job is to prepare the notice file properly before anything is sent to the tenant.',
       primary: {
         label: 'Create my Section 8 notice',
         href: descriptor.wizardHref,
@@ -347,7 +388,7 @@ export default function NoticeOnlyPage() {
     howThisHelps: {
       title: 'How this puts you in a stronger position',
       intro:
-        "The pack reduces notice-stage risk and makes the case easier to carry into Stage 2 if the tenant does not leave. The section 8 notice service pack keeps the post-May 2026 Renters' Rights Act Section 8 form, dates, and service record together.",
+        "The pack reduces notice-stage risk and makes the case easier to carry into Stage 2 if the tenant does not leave. The solicitor-approved Section 8 notice and service file keeps the post-May 2026 Renters' Rights Act Section 8 form, dates, N215, arrears schedule, compliance declaration, and service record together.",
       cards: [
         {
           title: 'It makes the notice file easier to trust',
@@ -396,7 +437,7 @@ export default function NoticeOnlyPage() {
     cta: {
       title: 'Create the notice without guessing',
       body:
-        'Choose this if you need the notice, service steps, and basic record ready before anything is served.',
+        'Choose this if you need the notice, service instructions, N215, arrears schedule, and checks ready before anything is served.',
       primary: {
         label: 'Create my Section 8 notice',
         href: descriptor.wizardHref,

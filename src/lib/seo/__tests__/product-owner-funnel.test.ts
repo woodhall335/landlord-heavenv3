@@ -128,9 +128,9 @@ const earlyInternalLinks = [
 
 const expectedProductMetaDescriptions = {
   noticeOnly:
-    'Create a Section 8 Form 3A notice with service steps, N215 support, and checks before you pay. Built for England landlords serving notice.',
+    'Prepare a solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears schedule, service instructions, and checks.',
   completePack:
-    'Prepare Section 8 court papers with Form 3A, N5, N119, witness statement, arrears record, and filing support in one place before court.',
+    'Prepare a solicitor-approved Section 8 court and possession file with Form 3A, N5, N119, witness statement, evidence, and hearing support.',
   moneyClaim:
     'Prepare a landlord money claim for unpaid rent, damage, bills, or tenancy debt, with a demand letter and claim papers you can check.',
   section13Standard:
@@ -152,13 +152,13 @@ const expectedProductMetaDescriptions = {
 const pageCommercialPhraseExpectations = [
   {
     source: 'src/app/(marketing)/products/notice-only/page.tsx',
-    phrases: ['section 8 notice pack', 'current Section 8 notice'],
-    faq: 'Is this a court approved Section 8 notice?',
+    phrases: ['solicitor approved section 8 notice file', 'N215 certificate of service'],
+    faq: 'Does this use court approved Section 8 documents?',
   },
   {
     source: 'src/app/(marketing)/products/complete-pack/page.tsx',
-    phrases: ['possession claim pack', 'checked before filing'],
-    faq: 'Is this a court approved possession claim form?',
+    phrases: ['solicitor approved Section 8 court file', 'N5 N119 forms'],
+    faq: 'Does this use court approved possession claim forms?',
   },
   {
     source: 'src/app/(marketing)/products/money-claim/page.tsx',
@@ -240,7 +240,14 @@ describe('product owner SEO funnel', () => {
 
       expect(source, page.source).toContain(page.faq);
       expect(source, page.source).toContain('Is this legally binding?');
-      expect(source, page.source).toContain('pre-approve');
+      if (
+        page.source === 'src/app/(marketing)/products/notice-only/page.tsx' ||
+        page.source === 'src/app/(marketing)/products/complete-pack/page.tsx'
+      ) {
+        expect(source, page.source).toContain('court-approved');
+      } else {
+        expect(source, page.source).toContain('pre-approve');
+      }
     }
   });
 

@@ -3,15 +3,15 @@ import { SEO_PRICES } from '@/lib/pricing/products';
 export const PRODUCT_OWNER_METADATA = {
   noticeOnly: {
     path: '/products/notice-only',
-    title: `Create Section 8 Form 3A Notice | ${SEO_PRICES.evictionNotice.display}`,
+    title: `Section 8 Notice & Service File | ${SEO_PRICES.evictionNotice.display}`,
     description:
-      'Create a Section 8 Form 3A notice with service steps, N215 support, and checks before you pay. Built for England landlords serving notice.',
+      'Prepare a solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears schedule, service instructions, and checks.',
   },
   completePack: {
     path: '/products/complete-pack',
-    title: `Prepare Section 8 Court Papers | Form N5 + N119 | ${SEO_PRICES.evictionBundle.display}`,
+    title: `Section 8 Court & Possession File | ${SEO_PRICES.evictionBundle.display}`,
     description:
-      'Prepare Section 8 court papers with Form 3A, N5, N119, witness statement, arrears record, and filing support in one place before court.',
+      'Prepare a solicitor-approved Section 8 court and possession file with Form 3A, N5, N119, witness statement, evidence, and hearing support.',
   },
   moneyClaim: {
     path: '/products/money-claim',

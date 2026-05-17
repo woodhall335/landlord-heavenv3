@@ -24,13 +24,14 @@ describe('Phase 1 commercial positioning', () => {
     const completePackSource = readSource('src/app/(marketing)/products/complete-pack/page.tsx');
     const rentIncreaseHubSource = readSource('src/app/rent-increase/page.tsx');
 
-    expect(noticeSource).toContain('notice, service steps, and supporting record');
-    expect(noticeSource).toContain('need to serve the notice first');
-    expect(noticeSource).toContain('service record ready before deciding about court');
+    expect(noticeSource).toContain('Solicitor-approved Section 8 notice and service file');
+    expect(noticeSource).toContain('Prepare the notice file properly before anything goes to the tenant');
+    expect(noticeSource).toContain('Form 3A Section 8 notice, N215 certificate of service, and service instructions');
 
-    expect(completePackSource).toContain('notice and court paperwork aligned');
+    expect(completePackSource).toContain('Solicitor-approved Section 8 court and possession file');
+    expect(completePackSource).toContain('Prepare the full possession file, not just the court forms');
     expect(completePackSource).toContain('The Complete Pack already includes the Stage 1 notice and service file');
-    expect(completePackSource).toContain('N5, N119, witness statement, and court bundle support');
+    expect(completePackSource).toContain('N5, N119, witness statement, court readiness status, and evidence collection checklist');
 
     expect(rentIncreaseHubSource).toContain("reviewPillLayout: 'stacked'");
   });

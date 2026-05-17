@@ -577,9 +577,9 @@ describe('Complete Pack Integration', () => {
     const priceFromRegional = REGIONAL_PRICING.complete_pack.england;
     const priceFromFunction = getRegionalPrice('complete_pack', 'england');
 
-    expect(priceFromProducts).toBe(59.99);
-    expect(priceFromRegional).toBe(59.99);
-    expect(priceFromFunction).toBe(59.99);
+    expect(priceFromProducts).toBe(89.99);
+    expect(priceFromRegional).toBe(89.99);
+    expect(priceFromFunction).toBe(89.99);
 
     // All should match
     expect(priceFromProducts).toBe(priceFromRegional);

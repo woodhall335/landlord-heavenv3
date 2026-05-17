@@ -40,7 +40,7 @@ async function sendTestEmails() {
     to: TEST_EMAIL,
     customerName: 'John Smith',
     productName: 'Section 21 Notice Pack',
-    amount: 2999, // £29.99 in pence
+    amount: 3999, // £39.99 in pence
     orderNumber: 'ABC12345',
     downloadUrl: `${APP_URL}/dashboard/cases/test-case-id`,
   });

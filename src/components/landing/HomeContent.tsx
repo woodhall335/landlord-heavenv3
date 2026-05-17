@@ -94,13 +94,13 @@ const routeSelectionCards: RouteCard[] = [
     title: 'Tenant not paying rent',
     eyebrow: 'Usually the first step',
     description:
-      'If the tenant is in arrears and you have not served notice yet, start here. This route helps you prepare the Section 8 notice before you move into court paperwork.',
+      'If the tenant is in arrears and you have not served notice yet, start here. This route helps you prepare the solicitor-approved Section 8 notice and service file before you move into court paperwork.',
     whyRoute:
-      'It is designed for the point where you need to choose the right grounds, calculate the dates properly, and keep the notice and arrears record aligned from the start.',
+      'Stage 1 = serve correctly: choose the right grounds, calculate the dates properly, and keep the notice, N215, service instructions, and arrears record aligned from the start.',
     includes: [
-      'Official Form 3A notice for England',
-      'Ground checks, notice dates, service guidance, and arrears support',
-      'A cleaner handoff into court if the case later needs to move on',
+      'Form 3A Section 8 notice and N215 certificate of service',
+      'Rent arrears schedule, service instructions, validity checklist, and compliance declaration',
+      'Case summary and what-happens-next guide for a cleaner Stage 2 handoff',
     ],
     complianceNote:
       'Built around the updated England possession route from 1 May 2026, so the notice wording, timing, and supporting checks follow the post-Renters\' Rights framework.',
@@ -116,13 +116,13 @@ const routeSelectionCards: RouteCard[] = [
     title: 'Tenant will not leave',
     eyebrow: 'When notice is not the whole job',
     description:
-      'Use the Complete Eviction Pack when the case is already moving toward possession paperwork and court steps, or when you want the full route joined up in one place.',
+      'Use the Complete Pack when the case is already moving toward possession paperwork and court steps, or when you want the solicitor-approved Section 8 court and possession file joined up in one place.',
     whyRoute:
-      'This is the better fit when you need more than the notice alone and want the claim forms, witness evidence, service record, and filing path working together.',
+      'Stage 2 = serve, issue, evidence, and prepare for hearing: the claim forms, witness evidence, service record, and filing path work together.',
     includes: [
-      'Form 3A, Form N5, and Form N119 prepared as one possession file',
-      'Certificate of service, witness statement, bundle index, and hearing support',
-      'A clearer route from served notice to court issue and possession steps',
+      'Everything in Stage 1 plus N5, N119, and witness statement',
+      'Court readiness status, court bundle index, evidence collection checklist, and filing guide',
+      'Hearing checklist, eviction case summary, and arrears engagement letter',
     ],
     complianceNote:
       'Built to keep the notice, service details, and court forms consistent with the updated England process from 1 May 2026, reducing avoidable mismatch problems later.',
@@ -240,13 +240,13 @@ const previewCards: PreviewCard[] = [
   {
     title: 'Section 8 notice file ready to review',
     body:
-      'If you need to serve notice, you can work through the key details and prepare the paperwork without jumping between guides, forms, and checklists.',
+      'If you need to serve notice, you can prepare the solicitor-approved Section 8 notice and service file without jumping between guides, forms, and checklists.',
     imageSrc: '/images/Section-8-notie-file-ready-to-review.webp',
     imageAlt: 'Section 8 notice file ready to review',
     bullets: [
-      'Section 8 notice wording',
-      'Grounds, dates, and service checks',
-      'Ready to review and print',
+      'Form 3A and N215 service record',
+      'Arrears schedule, validity checklist, and compliance declaration',
+      'Case summary and what-happens-next guide',
     ],
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     ctaLabel: 'Create my Section 8 notice',
@@ -256,13 +256,13 @@ const previewCards: PreviewCard[] = [
   {
     title: 'Court possession paperwork in one file',
     body:
-      'When the case has moved beyond notice, you can prepare the main possession forms and keep the next steps together in one place.',
+      'When the case has moved beyond notice, you can prepare the full possession file, not just the court forms.',
     imageSrc: '/images/Court-possession-paperwork-in-one-file.webp',
     imageAlt: 'Court possession paperwork in one file',
     bullets: [
-      'Section 8, N5, and N119 together',
-      'Built for the England court route',
-      'Clear handover from notice to court',
+      'Stage 1 plus N5 and N119 together',
+      'Witness statement, evidence checklist, and court bundle index',
+      'Filing guide and hearing checklist for the England court route',
     ],
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     ctaLabel: 'Prepare my court pack',
@@ -528,8 +528,8 @@ export default function HomeContent() {
                 </p>
                 <div className="mt-6 space-y-4">
                   {[
-                    'Section 8 notices with the key checks up front',
-                    'Court forms and guidance when the case needs to move beyond notice',
+                    'Section 8 notice and service files with the key checks up front',
+                    'Court and possession files when the case needs to move beyond notice',
                     'Money claim, rent increase, and tenancy paperwork for the rest of the landlord job',
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3 text-[#2c2143]">

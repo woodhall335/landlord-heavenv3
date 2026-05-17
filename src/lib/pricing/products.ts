@@ -32,8 +32,8 @@ export function formatPriceRangeLabel(amounts: readonly number[]): string {
  * Update ONLY here when prices change. All landing pages reference these values.
  */
 export const SEO_PRICES = {
-  evictionNotice: { amount: 29.99, display: formatPriceLabel(29.99) },
-  evictionBundle: { amount: 59.99, display: formatPriceLabel(59.99) },
+  evictionNotice: { amount: 39.99, display: formatPriceLabel(39.99) },
+  evictionBundle: { amount: 89.99, display: formatPriceLabel(89.99) },
   moneyClaim: { amount: 28.99, display: formatPriceLabel(28.99) },
   section13Standard: { amount: 17.99, display: formatPriceLabel(17.99) },
   section13Defensive: { amount: 27.99, display: formatPriceLabel(27.99) },
@@ -133,7 +133,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Stage 1: Section 8 Notice & Service Pack',
     shortLabel: 'Stage 1 Notice & Service',
     description:
-      'Built to hold up if challenged: align the Section 8 notice, service, and evidence before you serve anything in England',
+      'Solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears support, service instructions, and checks before you serve in England',
     price: SEO_PRICES.evictionNotice.amount,
     displayPrice: SEO_PRICES.evictionNotice.display,
     wizardHref: '/wizard/flow?type=eviction&product=notice_only&src=product_page&topic=eviction',
@@ -144,7 +144,7 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
     label: 'Stage 2: Section 8 Court & Possession Pack',
     shortLabel: 'Stage 2 Court & Possession',
     description:
-      'Complete pack covering both the Section 8 notice/service stage and the court stage, with the notice, service record, court forms, and evidence kept in one England file',
+      'Solicitor-approved Section 8 court and possession file covering the notice, service record, N5, N119, witness statement, evidence, and hearing preparation',
     price: SEO_PRICES.evictionBundle.amount,
     displayPrice: SEO_PRICES.evictionBundle.display,
     priceNote: 'For landlords in England',

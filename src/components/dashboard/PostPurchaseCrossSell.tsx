@@ -47,8 +47,8 @@ const CROSS_SELL_MAP: Partial<Record<ProductSku, CrossSellItem[]>> = {
   notice_only: [
     {
       product: 'complete_pack',
-      title: 'Need the full court pack too?',
-      description: 'Move into the combined pack with your Stage 1 notice file, N5, N119, witness statement, and hearing support.',
+      title: 'Need the full possession file too?',
+      description: 'Move into Stage 2 with N5, N119, witness statement, evidence checklist, filing guide, and hearing support.',
       price: PRODUCTS.complete_pack.displayPrice,
       href: '/wizard?product=complete_pack&src=dashboard_crosssell',
       icon: <FileText className="w-5 h-5 text-primary" />,
@@ -82,7 +82,7 @@ const CROSS_SELL_MAP: Partial<Record<ProductSku, CrossSellItem[]>> = {
     {
       product: 'notice_only',
       title: 'Need to evict too?',
-      description: 'Get an eviction notice if you also need the tenant to leave the property.',
+      description: 'Prepare the Stage 1 Section 8 notice and service file if you also need the tenant to leave the property.',
       price: PRODUCTS.notice_only.displayPrice,
       href: '/wizard?product=notice_only&src=dashboard_crosssell',
       icon: <FileText className="w-5 h-5 text-primary" />,
@@ -90,8 +90,8 @@ const CROSS_SELL_MAP: Partial<Record<ProductSku, CrossSellItem[]>> = {
     },
     {
       product: 'complete_pack',
-      title: 'Full eviction pack',
-      description: 'Combined notice and court pack with Form 3A, N5, N119, witness statement, and hearing support.',
+      title: 'Full possession file',
+      description: 'Combined notice, court, evidence, filing, and hearing file with Form 3A, N5, N119, and witness statement.',
       price: PRODUCTS.complete_pack.displayPrice,
       href: '/wizard?product=complete_pack&src=dashboard_crosssell',
       icon: <FileText className="w-5 h-5 text-primary" />,

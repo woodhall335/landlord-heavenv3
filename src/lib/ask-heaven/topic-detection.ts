@@ -108,7 +108,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['eviction'],
     ctas: [
-      { label: 'Notice Only', href: '/products/notice-only', price: SEO_PRICES.evictionNotice.amount, topic: 'eviction', type: 'wizard' },
+      { label: 'Stage 1 Notice & Service File', href: '/products/notice-only', price: SEO_PRICES.evictionNotice.amount, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },
@@ -116,7 +116,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['eviction'],
     ctas: [
-      { label: 'Complete Pack (England)', href: '/products/complete-pack', price: SEO_PRICES.evictionBundle.amount, topic: 'eviction', type: 'wizard' },
+      { label: 'Stage 2 Court & Possession File', href: '/products/complete-pack', price: SEO_PRICES.evictionBundle.amount, topic: 'eviction', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland', 'wales', 'scotland'],
   },
@@ -132,7 +132,7 @@ const CTA_CONFIGS: TopicCTAConfig[] = [
   {
     topics: ['arrears'],
     ctas: [
-      { label: 'Notice Only', href: '/products/notice-only', price: SEO_PRICES.evictionNotice.amount, topic: 'arrears', type: 'wizard' },
+      { label: 'Stage 1 Notice & Service File', href: '/products/notice-only', price: SEO_PRICES.evictionNotice.amount, topic: 'arrears', type: 'wizard' },
     ],
     excludeJurisdictions: ['northern-ireland'],
   },

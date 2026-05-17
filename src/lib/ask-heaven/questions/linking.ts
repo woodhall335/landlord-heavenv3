@@ -64,25 +64,25 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
   eviction: [
     {
       product: 'notice_only',
-      name: 'Section 8 Notice Pack',
+      name: 'Stage 1 Notice & Service File',
       href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
-      description: 'Create the correct notice with route, dates, and service checks prepared',
+      description: 'Prepare the solicitor-approved Section 8 notice and service file before anything goes to the tenant',
       ctaText: 'Create my notice',
     },
     {
       product: 'complete_pack',
-      name: 'Complete Eviction Pack',
+      name: 'Stage 2 Court & Possession File',
       href: 'https://landlordheaven.co.uk/products/complete-pack',
-      description: 'Full eviction bundle with court forms and guidance',
+      description: 'Prepare the full possession file, not just the court forms',
       ctaText: 'Prepare my court pack',
     },
   ],
   arrears: [
     {
       product: 'notice_only',
-      name: 'Section 8 Notice (Rent Arrears)',
+      name: 'Stage 1 Notice & Service File',
       href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
-      description: 'Serve notice for rent arrears under Ground 8, 10, or 11',
+      description: 'Prepare the rent arrears Section 8 notice file with Form 3A, N215, arrears schedule, and checks',
       ctaText: 'Create my Section 8 notice',
     },
     {
@@ -132,18 +132,18 @@ export const TOPIC_TO_PRODUCTS_MAP: Record<AskHeavenPrimaryTopic, ProductLinkCon
   notice_periods: [
     {
       product: 'notice_only',
-      name: 'Notice Pack',
+      name: 'Stage 1 Notice & Service File',
       href: 'https://landlordheaven.co.uk/wizard?product=notice_only&src=product_page&topic=eviction',
-      description: 'Create notices with the correct notice periods',
+      description: 'Prepare notices with the correct notice periods, service record, and checks',
       ctaText: 'Create my notice',
     },
   ],
   court_process: [
     {
       product: 'complete_pack',
-      name: 'Court and Possession Pack',
+      name: 'Stage 2 Court & Possession File',
       href: 'https://landlordheaven.co.uk/products/complete-pack',
-      description: 'Complete documentation for possession proceedings',
+      description: 'Solicitor-approved possession file covering notice, issue, evidence, and hearing preparation',
       ctaText: 'Prepare my court pack',
     },
     {

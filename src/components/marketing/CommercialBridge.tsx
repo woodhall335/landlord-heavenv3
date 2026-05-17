@@ -274,11 +274,11 @@ export function Section8Bridge({
       ctaPosition={ctaPosition}
       riskMessage="The wrong route can delay possession"
       proofPoints={[
-        'Notice Only helps with Form 3A service',
-        'Complete Pack adds claim forms and court preparation',
-        'N5, N119, witness statement, arrears schedule, and readiness checks are covered in the court route',
+        'Notice Only prepares the solicitor-approved Form 3A notice and service file',
+        'Complete Pack prepares the solicitor-approved court and possession file',
+        'N5, N119, witness statement, court readiness, evidence checklist, bundle index, and hearing support are covered in Stage 2',
       ]}
-      body="If you only need to serve notice, start with Notice Only. If you expect to issue a claim or prepare for court, use the Complete Pack."
+      body="If you only need to serve correctly, start with Notice Only. If you expect to issue, evidence, and prepare for hearing, use the Complete Pack."
       className={className}
     />
   );

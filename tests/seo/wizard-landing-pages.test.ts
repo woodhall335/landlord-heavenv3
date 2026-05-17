@@ -579,12 +579,12 @@ describe('Wizard Landing Pages - Value Proposition Requirements', () => {
 describe('Wizard Landing Pages - Pricing Accuracy', () => {
   it('should use correct price for Eviction Notice', () => {
     expect(noticeOnlyContent.price).toBe(SEO_PRICES.evictionNotice.display);
-    expect(noticeOnlyContent.price).toBe('£29.99');
+    expect(noticeOnlyContent.price).toBe('£39.99');
   });
 
   it('should use correct price for Eviction Bundle', () => {
     expect(completePackContent.price).toBe(SEO_PRICES.evictionBundle.display);
-    expect(completePackContent.price).toBe('£59.99');
+    expect(completePackContent.price).toBe('£89.99');
   });
 
   it('should use correct price for Money Claim', () => {

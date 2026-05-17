@@ -142,7 +142,7 @@ const pageContracts: PageContract[] = [
   {
     name: 'notice only',
     load: () => import('@/app/(marketing)/products/notice-only/page'),
-    h1: /Create a Section 8 Form 3A notice/i,
+    h1: /Solicitor-approved Section 8 notice and service file/i,
     sectionTitles: [
       'Why a blank notice is risky',
       'How this puts you in a stronger position',
@@ -152,16 +152,19 @@ const pageContracts: PageContract[] = [
     ],
     requiredItems: [
       'Form 3A notice',
+      'Certificate of Service (Form N215)',
       'Service Instructions',
       'Service & Validity Checklist',
       'Pre-Service Compliance Declaration',
       'Rent Schedule / Arrears Statement',
+      'Case Summary',
+      'What Happens Next',
     ],
   },
   {
     name: 'complete pack',
     load: () => import('@/app/(marketing)/products/complete-pack/page'),
-    h1: /Prepare Section 8 court papers for possession/i,
+    h1: /Solicitor-approved Section 8 court and possession file/i,
     sectionTitles: [
       'Why separate forms cause problems',
       'How the full pack improves the landlord outcome',
@@ -171,11 +174,16 @@ const pageContracts: PageContract[] = [
     ],
     requiredItems: [
       'Form 3A notice',
+      'Certificate of Service (Form N215)',
       'Form N5 - Claim for Possession',
       'Form N119 - Particulars of Claim',
       'Schedule of Arrears',
+      'Court Readiness Status',
       'Evidence Collection Checklist',
-      'Certificate of Service (Form N215)',
+      'Court Bundle Index',
+      'Court Filing Guide',
+      'Hearing Preparation Guide',
+      'Arrears Engagement Letter',
     ],
   },
   {

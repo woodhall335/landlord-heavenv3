@@ -606,7 +606,7 @@ export function PublicProductSalesPage({ content }: { content: ProductSalesPageC
       : null;
   const heroPreTitleLabel =
     hero.preTitleLabel ??
-    (analytics?.pageType === 'product_page' ? 'Solicitor approved documents' : undefined);
+    (analytics?.pageType === 'product_page' ? 'Solicitor-approved documents' : undefined);
 
   return (
     <>

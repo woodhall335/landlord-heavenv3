@@ -76,7 +76,7 @@ describe('Merchant listing structured data', () => {
     const schema = productSchema({
       name: 'Test Product',
       description: 'Test description',
-      price: '29.99',
+      price: '39.99',
       url: 'https://landlordheaven.co.uk/products/test-product',
     }) as {
       offers: Record<string, any>;

@@ -70,7 +70,7 @@ describe('Topic Detection', () => {
       const ctas = getTopicCTAs(['eviction'], 'england');
       expect(ctas.length).toBeGreaterThan(0);
       expect(ctas.some((c) => c.label.includes('Notice'))).toBe(true);
-      expect(ctas.some((c) => c.label.includes('Complete Pack'))).toBe(true);
+      expect(ctas.some((c) => c.label.includes('Court & Possession File'))).toBe(true);
     });
 
     it('returns arrears CTAs for arrears topic', () => {

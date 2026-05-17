@@ -27,7 +27,7 @@ describe('Pricing propagation regressions', () => {
       { label: 'Notice Only £49.99', pattern: /(Section\\s*21|Section\\s*8|Notice(?:\\s+Only)?|Eviction Notice)[^\\n£]{0,120}£49\\.99/i },
       { label: 'Complete Pack £49.99', pattern: /Complete(?: Eviction)? Pack[^\\n£]{0,120}£49\\.99/i },
       { label: 'Complete Pack £79.99', pattern: /Complete(?: Eviction)? Pack[^\\n£]{0,120}£79\\.99/i },
-      { label: 'Complete Pack £89.99', pattern: /Complete(?: Eviction)? Pack[^\\n£]{0,120}£89\\.99/i },
+      { label: 'Complete Pack £59.99', pattern: /Complete(?: Eviction)? Pack[^\\n£]{0,120}£59\\.99/i },
       { label: 'Complete Pack £99.99', pattern: /Complete(?: Eviction)? Pack[^\\n£]{0,120}£99\\.99/i },
       { label: 'Money Claim £49.99', pattern: /Money Claim(?:s)?[^\\n£]{0,120}£49\\.99/i },
       { label: 'Money Claim £59.99', pattern: /Money Claim(?:s)?[^\\n£]{0,120}£59\\.99/i },

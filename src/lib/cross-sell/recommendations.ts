@@ -83,8 +83,8 @@ const MONEY_CLAIM_FOR_EVICTION: CrossSellRecommendation = {
  */
 const NOTICE_ONLY_FOR_MONEY_CLAIM: CrossSellRecommendation = {
   product: 'notice_only',
-  title: 'Eviction Notice',
-  description: 'Tenant still in the property? Serve a Section 8 notice alongside your money claim.',
+  title: 'Stage 1 Notice & Service File',
+  description: 'Tenant still in the property? Prepare the solicitor-approved Section 8 notice and service file alongside your money claim.',
   price: PRODUCTS.notice_only.displayPrice,
   ctaText: 'Get Eviction Notice',
   angle: 'tenant_still_in_property',
@@ -96,8 +96,8 @@ const NOTICE_ONLY_FOR_MONEY_CLAIM: CrossSellRecommendation = {
  */
 const COMPLETE_PACK_FOR_MONEY_CLAIM: CrossSellRecommendation = {
   product: 'complete_pack',
-  title: 'Complete Eviction Pack',
-  description: 'Need the full possession route? Get the Stage 1 notice file plus the court claim pack together.',
+  title: 'Stage 2 Court & Possession File',
+  description: 'Need the full possession route? Get Stage 1 plus N5, N119, witness statement, evidence, filing, and hearing support together.',
   price: PRODUCTS.complete_pack.displayPrice,
   ctaText: 'View Complete Pack',
   angle: 'court_proceedings',
@@ -109,8 +109,8 @@ const COMPLETE_PACK_FOR_MONEY_CLAIM: CrossSellRecommendation = {
  */
 const NOTICE_ONLY_FOR_TENANCY: CrossSellRecommendation = {
   product: 'notice_only',
-  title: 'Eviction Notices',
-  description: 'Problems with your tenant? Get guided Section 21 and Section 8 notice workflows.',
+  title: 'Stage 1 Notice & Service File',
+  description: 'Problems with your tenant? Prepare the solicitor-approved Section 8 notice and service file before anything goes to the tenant.',
   price: PRODUCTS.notice_only.displayPrice,
   ctaText: 'View Eviction Notices',
   angle: 'future_proofing',
@@ -122,8 +122,8 @@ const NOTICE_ONLY_FOR_TENANCY: CrossSellRecommendation = {
  */
 const COMPLETE_PACK_FOR_TENANCY: CrossSellRecommendation = {
   product: 'complete_pack',
-  title: 'Complete Eviction Pack',
-  description: 'Get the full notice and court-possession file together if a tenancy later becomes contested.',
+  title: 'Stage 2 Court & Possession File',
+  description: 'Get the solicitor-approved notice, court, evidence, and hearing file together if a tenancy later becomes contested.',
   price: PRODUCTS.complete_pack.displayPrice,
   ctaText: 'View Complete Pack',
   angle: 'full_eviction',
@@ -211,8 +211,8 @@ export const SECTION21_TOOL_CROSS_SELLS: CrossSellConfig = {
 export const SECTION8_TOOL_CROSS_SELLS: CrossSellConfig = {
   primary: {
     product: 'notice_only',
-    title: 'Guided Notice Pack',
-    description: 'Get guided Section 8 and Section 21 notice workflows with the right supporting prompts.',
+    title: 'Stage 1 Notice & Service File',
+    description: 'Prepare the Section 8 notice file properly with Form 3A, N215, arrears support, service instructions, and checks.',
     price: PRODUCTS.notice_only.displayPrice,
     ctaText: 'Get Notice Pack',
     angle: 'upgrade_from_free',
@@ -220,8 +220,8 @@ export const SECTION8_TOOL_CROSS_SELLS: CrossSellConfig = {
   },
   secondary: {
     product: 'complete_pack',
-    title: 'Complete Eviction Pack',
-    description: 'For the full possession route: Stage 1 notice file plus N5, N119, witness statement, and more.',
+    title: 'Stage 2 Court & Possession File',
+    description: 'For the full possession route: Stage 1 plus N5, N119, witness statement, evidence checklist, bundle index, and hearing support.',
     price: PRODUCTS.complete_pack.displayPrice,
     ctaText: 'View Complete Pack',
     angle: 'court_proceedings',
@@ -247,8 +247,8 @@ export const RENT_CALCULATOR_CROSS_SELLS: CrossSellConfig = {
   },
   secondary: {
     product: 'notice_only',
-    title: 'Eviction for Arrears',
-    description: 'Serve Section 8 notice using Ground 8/10/11 for rent arrears.',
+    title: 'Stage 1 Notice & Service File',
+    description: 'Prepare the Section 8 arrears notice and service file before anything goes to the tenant.',
     price: PRODUCTS.notice_only.displayPrice,
     ctaText: 'Get Eviction Notice',
     angle: 'arrears_eviction',
@@ -288,7 +288,7 @@ export const NOTICE_ONLY_PRODUCT_CROSS_SELLS: CrossSellConfig = {
   primary: {
     product: 'complete_pack',
     title: 'Need the full Stage 1 plus Stage 2 pack?',
-    description: 'The Complete Pack includes the notice file as well as the court-stage possession documents.',
+    description: 'The Complete Pack prepares the full possession file, not just the court forms.',
     price: PRODUCTS.complete_pack.displayPrice,
     ctaText: 'View Complete Pack',
     angle: 'upsell',

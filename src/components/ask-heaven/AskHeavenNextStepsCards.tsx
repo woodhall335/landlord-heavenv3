@@ -36,20 +36,20 @@ interface CardDefinition {
 
 const cards: CardDefinition[] = [
   {
-    title: 'Eviction Notice Generator',
+    title: 'Stage 1 Notice & Service File',
     price: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.priceLabel,
     description:
-      'For landlords in England who need the Section 8 notice, service guidance, and early route checks before serving.',
+      'For landlords in England who need a solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears, and checks.',
     ctaText: 'Create my Section 8 notice',
     href: PUBLIC_PRODUCT_DESCRIPTORS.notice_only.landingHref,
     ariaLabel: 'Create my Section 8 notice',
     icon: <RiFileList3Line className="h-8 w-8 text-violet-500" aria-hidden="true" />,
   },
   {
-    title: 'Complete Eviction Pack',
+    title: 'Stage 2 Court & Possession File',
     price: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.priceLabel,
     description:
-      'For landlords in England who want the notice, N5, N119, and filing guidance in one product.',
+      'For landlords in England who want the full possession file, not just the court forms: notice, N5, N119, evidence, filing, and hearing support.',
     ctaText: 'Prepare my court pack',
     href: PUBLIC_PRODUCT_DESCRIPTORS.complete_pack.landingHref,
     ariaLabel: 'Prepare my court pack',

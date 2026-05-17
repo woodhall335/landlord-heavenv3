@@ -10,32 +10,41 @@ describe('Section 8 eviction product pages', () => {
   it('keeps Notice Only positioned as the notice-first Stage 1 route', () => {
     const source = readSource('src/app/(marketing)/products/notice-only/page.tsx');
 
-    expect(source).toContain('serve before court');
-    expect(source).toContain('need to serve the Section 8 notice first');
+    expect(source).toContain('Solicitor-approved Section 8 notice and service file');
+    expect(source).toContain('Prepare the notice file properly before anything goes to the tenant');
     expect(source).toContain('Choose Stage 1 if you need to serve the notice first');
-    expect(source).toContain('preview the actual Section 8 notice file before you pay');
+    expect(source).toContain('8-document notice and service file');
+    expect(source).toContain('Form 3A Section 8 notice, N215 certificate of service, rent arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and what-happens-next guide');
+    expect(source).toContain('Stage 1 = serve correctly');
     expect(source).toContain("imageSrc: '/images/notice-only-pack.webp'");
     expect(source).toContain("imageSrc: '/images/how-it-works-notice-only.webp'");
-    expect(source).toContain('This is more than a blank notice.');
-    expect(source).toContain('Start the notice-first wizard');
-    expect(source).toContain('Serve the Section 8 notice correctly now');
-    expect(source).toContain('You need to serve the notice first and want the service record and evidence ready');
+    expect(source).toContain('This is more than a blank form.');
+    expect(source).toContain('N215 Certificate of Service');
+    expect(source).toContain('Compliance Declaration');
+    expect(source).toContain('Case Summary');
+    expect(source).toContain('What Happens Next Guide');
     expect(source).toContain('Section8JourneyTimeline');
   });
 
   it('keeps Complete Pack positioned as the combined Stage 1 plus Stage 2 route', () => {
     const source = readSource('src/app/(marketing)/products/complete-pack/page.tsx');
 
-    expect(source).toContain('notice and court paperwork together');
-    expect(source).toContain('Choose Stage 2 if you want the court route from the start');
+    expect(source).toContain('Solicitor-approved Section 8 court and possession file');
+    expect(source).toContain('Prepare the full possession file, not just the court forms');
+    expect(source).toContain('Choose Stage 2 if you need the court and possession file too');
     expect(source).toContain('You do not need to buy Stage 1 separately first');
-    expect(source).toContain('preview the Section 8 notice, claim forms, and court file before paying');
+    expect(source).toContain('Stage 2 = serve, issue, evidence, and prepare for hearing');
     expect(source).toContain("imageSrc: '/images/complete-pack.webp'");
     expect(source).toContain("imageSrc: '/images/how-it-works-complete-pack.webp'");
-    expect(source).toContain('It includes the Stage 1 notice file plus the claim forms');
+    expect(source).toContain('Everything in Stage 1');
     expect(source).toContain('What you get in the combined pack');
-    expect(source).toContain('Start the full Section 8 court route');
+    expect(source).toContain('Stage 1 Notice and Service File');
     expect(source).toContain('N5, N119, witness statement');
+    expect(source).toContain('court readiness status');
+    expect(source).toContain('court bundle index');
+    expect(source).toContain('evidence collection checklist');
+    expect(source).toContain('eviction case summary');
+    expect(source).toContain('arrears engagement letter');
     expect(source).toContain('without buying Stage 1 separately first');
     expect(source).toContain('Section8JourneyTimeline');
   });
@@ -43,10 +52,24 @@ describe('Section 8 eviction product pages', () => {
   it('keeps the shared public descriptors aligned with the combined-pack positioning', () => {
     const source = readSource('src/lib/public-products.ts');
 
-    expect(source).toContain("proofLabel: 'Serve the notice before court'");
+    expect(source).toContain("proofLabel: 'Solicitor-approved notice and service file'");
     expect(source).toContain(
-      "proofLabel: 'Notice and court claim file together'"
+      "proofLabel: 'Solicitor-approved court and possession file'"
     );
+  });
+
+  it('keeps solicitor-approved wording on the eviction sales surfaces', () => {
+    const sources = [
+      readSource('src/app/(marketing)/products/notice-only/page.tsx'),
+      readSource('src/app/(marketing)/products/complete-pack/page.tsx'),
+      readSource('src/app/compare/section-8-stage-1-vs-stage-2/page.tsx'),
+      readSource('src/lib/marketing/google-ads-campaigns.ts'),
+    ].join('\n').toLowerCase();
+
+    expect(sources).toContain('solicitor-approved');
+    expect(sources).toContain('solicitor approved');
+    expect(sources).not.toContain('solicitor reviewed');
+    expect(sources).not.toContain('solicitor-reviewed');
   });
 
   it('keeps the shared sales page capable of rendering conversion blocks without removing proof', () => {

@@ -27,8 +27,10 @@ describe('revenue keyword ownership', () => {
 
     expect(asKeywords(completePackMetadata.keywords)).toEqual(
       expect.arrayContaining([
-        'complete eviction pack',
-        'eviction process england',
+        'section 8 court pack',
+        'section 8 possession pack',
+        'n5 n119 forms',
+        'rent arrears possession claim',
       ])
     );
 
