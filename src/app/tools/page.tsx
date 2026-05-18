@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { freeTools } from '@/lib/tools/tools';
 import { generateMetadata } from '@/lib/seo';
+import { StructuredData, websiteSchema } from '@/lib/seo/structured-data';
 import { StandardHero } from '@/components/marketing/StandardHero';
 import { CommercialWizardLinks } from '@/components/seo/CommercialWizardLinks';
 import { analyzeContent } from '@/lib/seo/commercial-linking';
@@ -38,6 +39,7 @@ const commercialLinkingResult = analyzeContent({
 export default function ToolsHubPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <StructuredData data={websiteSchema()} />
       <StandardHero
         badge="Free Tools"
         title="Free Tools for UK Landlords"

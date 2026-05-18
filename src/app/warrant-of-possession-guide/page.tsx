@@ -19,16 +19,20 @@ const canonical =
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Warrant of Possession Guide | What Landlords Do After a Possession Order | LandlordHeaven',
+  title: 'Warrant of Possession Guide | England Landlords',
   description:
-    'A plain-English warrant of possession guide for landlords in England.',
+    'Plain-English warrant of possession guide for England landlords after a possession order, covering enforcement timing, bailiffs, notices, and common delay points.',
+  keywords: [
+    'warrant of possession guide',
+    'warrant of possession england',
+    'possession order enforcement',
+    'bailiff eviction after possession order',
+  ],
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Warrant of Possession Guide | What Landlords Do After a Possession Order | LandlordHeaven',
+    title: 'Warrant of Possession Guide | England Landlords',
     description:
       'Understand when to apply for a warrant of possession, what happens after the possession date, and how the enforcement stage usually works.',
     url: canonical,

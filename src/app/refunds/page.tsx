@@ -1,5 +1,6 @@
 ﻿import { Container } from "@/components/ui";
 import { generateMetadata } from "@/lib/seo";
+import { StructuredData, breadcrumbSchema } from "@/lib/seo/structured-data";
 import Link from "next/link";
 import { FileText, XCircle, CheckCircle2, Mail } from "lucide-react";
 
@@ -19,6 +20,12 @@ export const metadata = generateMetadata({
 export default function RefundsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "Refund Policy", url: "/refunds" },
+        ])}
+      />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>

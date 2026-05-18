@@ -39,7 +39,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Section 21 Ban | England Landlord Deadline Guide',
   description:
-    'England landlord guide to the Section 21 transition.',
+    'England landlord guide to the Section 21 ban, transition deadlines, notice timing, court cut-offs, and the move toward Section 8 possession routes.',
   keywords: [
     'section 21 ban',
     'section 21 ending',
@@ -49,8 +49,6 @@ export const metadata: Metadata = {
     'section 21 england',
     'section 8 after section 21',
     'landlord section 21 guide',
-    'serve section 21 notice',
-    'section 21 deadline england',
   ],
   alternates: {
     canonical,

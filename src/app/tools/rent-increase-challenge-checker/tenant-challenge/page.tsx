@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: 'Tenant Pushing Back on a Rent Increase | Landlord Section 13 Guide',
   description:
     'See what changes when a tenant pushes back on a rent increase and when landlords should move from the free checker into the stronger Section 13 Defence route.',
+  keywords: [
+    'tenant pushing back rent increase',
+    'tenant challenges rent increase',
+    'section 13 defence',
+    'rent increase challenge',
+  ],
   alternates: { canonical: canonicalUrl },
 };
 

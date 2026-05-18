@@ -19,16 +19,14 @@ const canonical =
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Recover Rent Arrears After Eviction | Landlord Guide to Post-Eviction Debt Recovery | LandlordHeaven',
+  title: 'Recover Rent Arrears After Eviction | Landlord Guide',
   description:
     'Plain-English landlord guide to recovering rent arrears after eviction in England, including final balance checks, evidence, and debt recovery planning.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Recover Rent Arrears After Eviction | Landlord Guide to Post-Eviction Debt Recovery | LandlordHeaven',
+    title: 'Recover Rent Arrears After Eviction | Landlord Guide',
     description:
       'Landlord guide to recovering rent arrears after eviction, what paperwork matters, and how to avoid weak post-eviction debt recovery files.',
     url: canonical,

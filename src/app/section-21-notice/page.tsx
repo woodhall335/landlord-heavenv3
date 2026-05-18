@@ -13,7 +13,7 @@ const canonical = getCanonicalUrl('/section-21-notice');
 
 export const metadata: Metadata = {
   title: 'Section 21 Notice | Historical-Only Transition Guide for England',
-  description: `England landlord guide for Section 21 notice search intent, explaining that the route is due to end on ${SECTION21_END_DATE} and what landlords should do instead under the current possession framework.`,
+  description: `England landlord guide to Section 21 notice search intent, the ${SECTION21_END_DATE} end date, and the current possession route to use instead.`,
   alternates: { canonical },
   openGraph: {
     title: 'Section 21 Notice | Historical-Only Transition Guide for England',

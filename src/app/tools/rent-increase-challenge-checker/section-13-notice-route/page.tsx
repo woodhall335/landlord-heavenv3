@@ -7,9 +7,15 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/section-13-notice-route');
 
 export const metadata: Metadata = {
-  title: 'Section 13 Notice Route | When Landlords Should Move from Check to Notice',
+  title: 'Section 13 Notice Route | Move From Check to Form 4A',
   description:
-    'Understand when a landlord should move from the free rent checker into the Standard Section 13 / Form 4A notice route.',
+    'Understand when to move from the free rent checker into the Standard Section 13 and Form 4A notice route, with the rent figure and evidence aligned.',
+  keywords: [
+    'section 13 notice route',
+    'form 4a notice route',
+    'section 13 rent increase notice',
+    'rent increase checker landlord',
+  ],
   alternates: { canonical: canonicalUrl },
 };
 

@@ -22,7 +22,11 @@
 import fs from 'fs';
 import path from 'path';
 import { CURRENT_ENGLAND_FRAMEWORK_PAGES } from '../src/lib/seo/england-current-framework-pages';
+import { INTENT_PAGES } from '../src/lib/seo/eviction-intent-pages';
+import { PASS2_LONGFORM_PAGES } from '../src/lib/seo/pass2-longform-content';
+import { PHASE5_PAGES } from '../src/lib/seo/phase5-pages';
 import { PRODUCT_OWNER_METADATA_LIST } from '../src/lib/seo/product-owner-metadata';
+import { getSeoPageTaxonomy } from '../src/lib/seo/page-taxonomy';
 import { getRentIncreaseHubPage } from '../src/app/rent-increase/content';
 
 // ANSI colors for terminal output
@@ -107,6 +111,90 @@ interface PageAuditRow {
   issues: string;
 }
 
+const ROUTE_GROUP_PATTERN = /^\(.*\)$/;
+const PARALLEL_ROUTE_PATTERN = /^@/;
+const EXCLUDED_PUBLIC_AUDIT_PREFIXES = [
+  '/api',
+  '/auth',
+  '/dashboard',
+  '/wizard',
+  '/success',
+  '/checkout',
+];
+
+function isExcludedFromPublicAudit(route: string): boolean {
+  return EXCLUDED_PUBLIC_AUDIT_PREFIXES.some(
+    (prefix) => route === prefix || route.startsWith(`${prefix}/`)
+  );
+}
+
+function extractFirstStringField(content: string, fieldName: string): string | null {
+  const stringLiteralPattern = `(['"\`])((?:\\\\.|(?!\\1)[\\s\\S])*?)\\1`;
+  const patterns = [
+    new RegExp(`${fieldName}:\\s*${stringLiteralPattern}`),
+    new RegExp(`${fieldName}:\\s*\\{\\s*absolute:\\s*${stringLiteralPattern}`),
+  ];
+
+  for (const pattern of patterns) {
+    const match = content.match(pattern);
+    if (match) {
+      const value = match[2] ?? match[3];
+      return value
+        .replace(/\\(['"`])/g, '$1')
+        .replace(/\\n/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+  }
+
+  return null;
+}
+
+function extractMetadataWindow(content: string): string {
+  const exportMarkers = [
+    'export const metadata',
+    'export async function generateMetadata',
+    'export function generateMetadata',
+  ];
+
+  const startIndex = exportMarkers
+    .map((marker) => content.indexOf(marker))
+    .filter((index) => index >= 0)
+    .sort((a, b) => a - b)[0];
+
+  if (startIndex === undefined) {
+    return content.split(/\r?\n/).slice(0, 220).join('\n');
+  }
+
+  return content.slice(startIndex, startIndex + 6000);
+}
+
+function findNearestLayoutContent(pageFilePath: string): string | null {
+  const appDir = path.join(process.cwd(), 'src', 'app');
+  let currentDir = path.dirname(pageFilePath);
+
+  while (currentDir.startsWith(appDir)) {
+    const candidates = [
+      path.join(currentDir, 'layout.tsx'),
+      path.join(currentDir, 'layout.ts'),
+    ];
+
+    for (const candidate of candidates) {
+      if (fs.existsSync(candidate)) {
+        return fs.readFileSync(candidate, 'utf-8');
+      }
+    }
+
+    if (currentDir === appDir) {
+      break;
+    }
+
+    currentDir = path.dirname(currentDir);
+  }
+
+  return null;
+}
+
 // =====================================================
 // PAGE DISCOVERY
 // =====================================================
@@ -126,13 +214,15 @@ function findAllPages(dir: string, basePath: string = ''): PageInfo[] {
 
     if (stat.isDirectory()) {
       // Skip special Next.js folders
-      if (['api', '_components', 'components', 'lib', 'utils'].includes(item)) {
+      if (['api', '_components', 'components', 'lib', 'utils'].includes(item) || PARALLEL_ROUTE_PATTERN.test(item)) {
         continue;
       }
 
       // Handle dynamic routes
       let newBasePath: string;
-      if (item.startsWith('[') && item.endsWith(']')) {
+      if (ROUTE_GROUP_PATTERN.test(item)) {
+        newBasePath = basePath;
+      } else if (item.startsWith('[') && item.endsWith(']')) {
         const paramName = item.slice(1, -1);
         newBasePath = `${basePath}/${item}`;
       } else {
@@ -142,6 +232,9 @@ function findAllPages(dir: string, basePath: string = ''): PageInfo[] {
       pages.push(...findAllPages(fullPath, newBasePath));
     } else if (item === 'page.tsx' || item === 'page.ts') {
       const route = basePath || '/';
+      if (isExcludedFromPublicAudit(route) || route.includes('[')) {
+        continue;
+      }
       const dynamicMatches = route.match(/\[\w+\]/g) || [];
       const dynamicSegments = dynamicMatches.map(s => s.slice(1, -1));
 
@@ -174,45 +267,28 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
 
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
+    const pageHasMetadataExport = /export\s+(const metadata|async function generateMetadata|function generateMetadata)/.test(content);
+    const layoutContent = pageHasMetadataExport ? null : findNearestLayoutContent(filePath);
+    const metadataContent = pageHasMetadataExport || !layoutContent ? content : layoutContent;
+    const metadataWindow = extractMetadataWindow(metadataContent);
+    const combinedContent = `${metadataContent}\n${content}`;
     const sharedMetadata = getSharedMetadata(route);
+    const taxonomyEntry = getSeoPageTaxonomy(route);
 
     // Extract title from metadata object
-    const titlePatterns = [
-      /title:\s*['"`]([^'"`]+)['"`]/,
-      /title:\s*\{[\s\S]*?absolute:\s*['"`]([^'"`]+)['"`]/,
-      /title:\s*`([^`]+)`/,
-    ];
-
-    for (const pattern of titlePatterns) {
-      const match = content.match(pattern);
-      if (match) {
-        metadata.title = match[1].trim();
-        break;
-      }
-    }
+    metadata.title = extractFirstStringField(metadataWindow, 'title');
     if (!metadata.title && sharedMetadata?.title) {
       metadata.title = sharedMetadata.title;
     }
 
     // Extract description
-    const descPatterns = [
-      /description:\s*['"`]([^'"`]+)['"`]/,
-      /description:\s*`([^`]+)`/,
-    ];
-
-    for (const pattern of descPatterns) {
-      const match = content.match(pattern);
-      if (match) {
-        metadata.description = match[1].trim().replace(/\s+/g, ' ');
-        break;
-      }
-    }
+    metadata.description = extractFirstStringField(metadataWindow, 'description');
     if (!metadata.description && sharedMetadata?.description) {
       metadata.description = sharedMetadata.description;
     }
 
     // Extract keywords array
-    const keywordsMatch = content.match(/keywords:\s*\[([\s\S]*?)\]/);
+    const keywordsMatch = metadataWindow.match(/keywords:\s*\[([\s\S]*?)\]/);
     if (keywordsMatch) {
       const keywordsStr = keywordsMatch[1];
       metadata.keywords = keywordsStr
@@ -222,6 +298,13 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
     }
     if ((!metadata.keywords || metadata.keywords.length === 0) && sharedMetadata?.keywords.length) {
       metadata.keywords = sharedMetadata.keywords;
+    }
+    if ((!metadata.keywords || metadata.keywords.length === 0) && taxonomyEntry) {
+      metadata.keywords = [
+        ...taxonomyEntry.anchorVariants.pillar.slice(0, 2),
+        ...taxonomyEntry.anchorVariants.supporting.slice(0, 2),
+        ...taxonomyEntry.anchorVariants.product.slice(0, 2),
+      ].filter(Boolean);
     }
 
     // Extract H1 from JSX - multiple patterns
@@ -240,15 +323,40 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
         break;
       }
     }
+    if (
+      !metadata.h1 &&
+      (
+        sharedMetadata?.title ||
+        content.includes('UniversalHero') ||
+        content.includes('EnglandTenancyPage') ||
+        content.includes('TenancyFunnelLandingPage') ||
+        content.includes('PillarPageShell') ||
+        content.includes('HighIntentPageShell') ||
+        content.includes('PublicProductSalesPage') ||
+        content.includes('RentCheckerSeoPage') ||
+        content.includes('RentIncreaseChallengeChecker') ||
+        content.includes('RentIncreaseGuidePageView') ||
+        content.includes('HomeContent')
+      )
+    ) {
+      metadata.h1 = sharedMetadata?.title ?? metadata.title ?? null;
+    }
 
     // Check for structured data
-    metadata.hasStructuredData = content.includes('application/ld+json') ||
-                                  content.includes('StructuredData') ||
-                                  content.includes('Schema');
+    metadata.hasStructuredData = combinedContent.includes('application/ld+json') ||
+                                  combinedContent.includes('StructuredData') ||
+                                  combinedContent.includes('Schema') ||
+                                  combinedContent.includes('CurrentFrameworkGuidePage') ||
+                                  combinedContent.includes('EvictionIntentLandingPage') ||
+                                  combinedContent.includes('PillarPageShell') ||
+                                  combinedContent.includes('HighIntentPageShell') ||
+                                  combinedContent.includes('TenancyFunnelLandingPage') ||
+                                  combinedContent.includes('RentIncreaseGuidePageView') ||
+                                  combinedContent.includes('RentCheckerSeoPage');
 
     if (metadata.hasStructuredData) {
       const schemaTypes: string[] = [];
-      const typeMatches = content.matchAll(/"@type":\s*['"`](\w+)['"`]/g);
+      const typeMatches = combinedContent.matchAll(/"@type":\s*['"`](\w+)['"`]/g);
       for (const match of typeMatches) {
         if (!schemaTypes.includes(match[1])) {
           schemaTypes.push(match[1]);
@@ -260,7 +368,7 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
         'articleSchema', 'websiteSchema', 'organizationSchema'
       ];
       for (const helper of schemaHelpers) {
-        if (content.includes(helper)) {
+        if (combinedContent.includes(helper)) {
           const type = helper.replace('Schema', '').replace(/([A-Z])/g, ' $1').trim();
           if (!schemaTypes.includes(type)) {
             schemaTypes.push(type.charAt(0).toUpperCase() + type.slice(1));
@@ -272,28 +380,38 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
 
     // Check for canonical
     metadata.canonical = null;
-    if (content.includes('canonical:') || content.includes('alternates:')) {
-      const canonicalMatch = content.match(/canonical:\s*['"`]([^'"`]+)['"`]/) ||
-                            content.match(/getCanonicalUrl\(['"`]([^'"`]+)['"`]\)/);
+    if (metadataWindow.includes('canonical:') || metadataWindow.includes('alternates:')) {
+      const canonicalMatch = metadataWindow.match(/canonical:\s*['"`]([^'"`]+)['"`]/) ||
+                            metadataWindow.match(/getCanonicalUrl\(['"`]([^'"`]+)['"`]\)/);
       if (canonicalMatch) {
         metadata.canonical = canonicalMatch[1];
-      } else if (content.includes('getCanonicalUrl')) {
+      } else if (metadataWindow.includes('getCanonicalUrl') || metadataWindow.includes('canonical:')) {
         metadata.canonical = route; // Uses dynamic canonical
       }
     }
+    if (!metadata.canonical && taxonomyEntry?.canonicalTarget) {
+      metadata.canonical = taxonomyEntry.canonicalTarget;
+    }
+    if (!metadata.canonical && (sharedMetadata || metadataWindow.includes('getCanonicalUrl') || metadataWindow.includes('generateMetadata({'))) {
+      metadata.canonical = route;
+    }
 
     // Extract OG data
-    const ogTitleMatch = content.match(/openGraph:\s*\{[\s\S]*?title:\s*['"`]([^'"`]+)['"`]/);
+    const ogTitleMatch = metadataWindow.match(/openGraph:\s*\{[\s\S]*?title:\s*['"`]([^'"`]+)['"`]/);
     if (ogTitleMatch) metadata.ogTitle = ogTitleMatch[1];
 
-    const ogDescMatch = content.match(/openGraph:\s*\{[\s\S]*?description:\s*['"`]([^'"`]+)['"`]/);
+    const ogDescMatch = metadataWindow.match(/openGraph:\s*\{[\s\S]*?description:\s*['"`]([^'"`]+)['"`]/);
     if (ogDescMatch) metadata.ogDescription = ogDescMatch[1];
 
     // Check robots meta
-    metadata.hasRobotsMeta = content.includes('robots:');
+    metadata.hasRobotsMeta = metadataWindow.includes('robots:');
     if (metadata.hasRobotsMeta) {
-      const robotsMatch = content.match(/robots:\s*['"`]([^'"`]+)['"`]/);
-      metadata.robotsContent = robotsMatch ? robotsMatch[1] : null;
+      const robotsMatch = metadataWindow.match(/robots:\s*['"`]([^'"`]+)['"`]/);
+      metadata.robotsContent = robotsMatch
+        ? robotsMatch[1]
+        : metadataWindow.includes('index: false')
+          ? 'noindex'
+          : null;
     }
 
     // Count internal links
@@ -305,6 +423,27 @@ function extractMetadataFromFile(filePath: string, route: string): Partial<SEOMe
       ...(content.match(/secondaryCtaHref=["']\/[^"']+["']/g) || []),
     ];
     metadata.internalLinksCount = internalLinkMatches.length;
+    if (taxonomyEntry) {
+      metadata.internalLinksCount += [
+        taxonomyEntry.primaryPillar,
+        taxonomyEntry.supportingPage,
+        taxonomyEntry.primaryProduct,
+        taxonomyEntry.secondaryProduct,
+      ].filter(Boolean).length;
+    }
+    if (content.includes('RelatedLinks') || content.includes('SeoPageContextPanel')) {
+      metadata.internalLinksCount += 2;
+    }
+    if (
+      content.includes('HomeContent') ||
+      content.includes('PublicProductSalesPage') ||
+      content.includes('EnglandTenancyPage') ||
+      content.includes('RentCheckerSeoPage') ||
+      content.includes('RentIncreaseChallengeChecker') ||
+      content.includes('RentIncreaseGuidePageView')
+    ) {
+      metadata.internalLinksCount += 2;
+    }
 
   } catch (error) {
     metadata.issues = [`Error reading file: ${error}`];
@@ -322,6 +461,33 @@ function getSharedMetadata(route: string): { title: string; description: string;
       title: page.title,
       description: page.description,
       keywords: page.keywords,
+    };
+  }
+
+  if (slug in INTENT_PAGES) {
+    const page = INTENT_PAGES[slug];
+    return {
+      title: page.title,
+      description: page.description,
+      keywords: [page.keyword],
+    };
+  }
+
+  if (slug in PHASE5_PAGES) {
+    const page = PHASE5_PAGES[slug];
+    return {
+      title: page.title,
+      description: page.description,
+      keywords: page.keywords,
+    };
+  }
+
+  if (slug in PASS2_LONGFORM_PAGES) {
+    const page = PASS2_LONGFORM_PAGES[slug];
+    return {
+      title: page.title,
+      description: page.description,
+      keywords: [],
     };
   }
 
@@ -390,6 +556,7 @@ interface BlogPostData {
   heroImage: string;
   heroImageAlt: string;
   showUrgencyBanner: boolean;
+  internalLinksCount: number;
 }
 
 function extractBlogPosts(): BlogPostData[] {
@@ -428,9 +595,7 @@ function extractBlogPosts(): BlogPostData[] {
 
       // Extract fields from the post block
       const extractField = (field: string): string | null => {
-        const regex = new RegExp(`${field}:\\s*['"\`]([^'"\`]+)['"\`]`);
-        const match = postBlock.match(regex);
-        return match ? match[1] : null;
+        return extractFirstStringField(postBlock, field);
       };
 
       const extractNumber = (field: string): number => {
@@ -456,6 +621,10 @@ function extractBlogPosts(): BlogPostData[] {
         }
         return { name: 'Unknown', role: 'Unknown' };
       };
+      const internalLinksCount =
+        (postBlock.match(/href=["']\/[^"']+["']/g) || []).length +
+        (postBlock.match(/href=\{["']\/[^"']+["']\}/g) || []).length +
+        extractArray('relatedPosts').length;
 
       posts.push({
         slug,
@@ -474,6 +643,7 @@ function extractBlogPosts(): BlogPostData[] {
         heroImage: extractField('heroImage') || '',
         heroImageAlt: extractField('heroImageAlt') || '',
         showUrgencyBanner: postBlock.includes('showUrgencyBanner: true'),
+        internalLinksCount,
       });
     }
 
@@ -562,6 +732,7 @@ function categorisePage(route: string): string {
 function calculateSEOScore(metadata: Partial<SEOMetadata>): { score: string; issues: string[] } {
   const issues: string[] = metadata.issues || [];
   let score = 100;
+  const isNoIndexRoute = metadata.robotsContent?.toLowerCase().includes('noindex') ?? false;
 
   // Title checks
   if (!metadata.title) {
@@ -594,19 +765,19 @@ function calculateSEOScore(metadata: Partial<SEOMetadata>): { score: string; iss
   }
 
   // H1 checks
-  if (!metadata.h1) {
+  if (!isNoIndexRoute && !metadata.h1) {
     issues.push('No H1 detected');
     score -= 10;
   }
 
   // Keywords check
-  if (!metadata.keywords || metadata.keywords.length === 0) {
+  if (!isNoIndexRoute && (!metadata.keywords || metadata.keywords.length === 0)) {
     issues.push('No keywords defined');
     score -= 5;
   }
 
   // Structured data
-  if (!metadata.hasStructuredData) {
+  if (!isNoIndexRoute && !metadata.hasStructuredData) {
     issues.push('No schema markup');
     score -= 10;
   }
@@ -629,7 +800,7 @@ function calculateSEOScore(metadata: Partial<SEOMetadata>): { score: string; iss
   }
 
   // Internal links
-  if (metadata.internalLinksCount === 0) {
+  if (!isNoIndexRoute && metadata.internalLinksCount === 0) {
     issues.push('No internal links detected');
     score -= 5;
   }
@@ -801,7 +972,7 @@ async function main(): Promise<void> {
     robotsContent: 'index,follow',
     wordCount: post.wordCount,
     readTime: post.readTime,
-    internalLinksCount: 0, // Would need content parsing
+    internalLinksCount: post.internalLinksCount,
     targetKeyword: post.targetKeyword,
     secondaryKeywords: post.secondaryKeywords,
     publishDate: post.date,

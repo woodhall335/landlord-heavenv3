@@ -16,7 +16,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Form 6A Section 21 Notice | Official Template + Guide',
   description:
-    'Plain-English landlord guide to Form 6A in England, including what the official Section 21 template does, how to avoid service mistakes, and when to move into a guided workflow.',
+    'Plain-English landlord guide to Form 6A in England, what the Section 21 template does, service mistakes, and when to use a guided workflow.',
   keywords: [
     'form 6a',
     'form 6a section 21',

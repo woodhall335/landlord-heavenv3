@@ -73,28 +73,24 @@ const faqs = [
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: "Tenant Won't Leave After Notice? What England Landlords Should Do Next",
+  title: "Tenant Won't Leave After Notice | England Landlord Guide",
   description:
-    "What to do if your tenant won't leave after notice in England.",
+    "What to do if your tenant won't leave after notice in England, including possession claims, court orders, bailiff enforcement, and the mistakes landlords must avoid.",
   keywords: [
     "tenant won't leave",
     'tenant refuses to leave',
     'tenant not leaving after section 21',
     "tenant won't move out",
     "what to do if tenant won't leave",
-    "evict tenant who won't leave",
-    'tenant staying after notice',
     'possession order',
     'bailiff eviction',
-    'tenant still in property after notice',
-    'tenant not leaving after eviction notice',
     'england possession claim',
   ],
   alternates: {
     canonical: 'https://landlordheaven.co.uk/tenant-wont-leave',
   },
   openGraph: {
-    title: "Tenant Won't Leave After Notice? What England Landlords Should Do Next",
+    title: "Tenant Won't Leave After Notice | England Landlord Guide",
     description:
       'Legal next steps when a tenant refuses to leave after notice in England, including court possession and bailiff enforcement.',
     type: 'website',
@@ -102,7 +98,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Tenant Won't Leave After Notice? What England Landlords Should Do Next",
+    title: "Tenant Won't Leave After Notice | England Landlord Guide",
     description:
       'Legal next steps when a tenant refuses to leave after notice in England.',
   },

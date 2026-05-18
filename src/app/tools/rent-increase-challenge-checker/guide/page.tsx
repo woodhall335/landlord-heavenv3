@@ -7,9 +7,15 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/guide');
 
 export const metadata: Metadata = {
-  title: 'How To Use the Rent Increase Checker | Section 13 Market Evidence Guide',
+  title: 'How To Use the Rent Increase Checker | Section 13 Guide',
   description:
     'Learn how landlords can use the Rent Increase & Challenge Checker to test market-rent evidence, challenge risk, and the next Section 13 route before serving Form 4A.',
+  keywords: [
+    'rent increase checker guide',
+    'section 13 checker guide',
+    'market rent evidence guide',
+    'form 4a checker',
+  ],
   alternates: { canonical: canonicalUrl },
 };
 

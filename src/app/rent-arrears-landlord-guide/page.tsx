@@ -18,14 +18,14 @@ const canonical = 'https://landlordheaven.co.uk/rent-arrears-landlord-guide';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Rent Arrears Landlord Guide | Recovery, Notices, Section 8 and Next Steps | LandlordHeaven',
+  title: 'Rent Arrears Landlord Guide | Recovery and Section 8',
   description:
     'Plain-English landlord guide to rent arrears, covering what to do when tenants fall behind, how to document arrears properly, and when Section 8 may fit.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title: 'Rent Arrears Landlord Guide | Recovery, Notices, Section 8 and Next Steps | LandlordHeaven',
+    title: 'Rent Arrears Landlord Guide | Recovery and Section 8',
     description:
       'Landlord guide to handling rent arrears, what evidence matters most, when to use Section 8, and how to move from arrears management to possession if needed.',
     url: canonical,

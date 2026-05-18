@@ -21,6 +21,13 @@ export const metadata: Metadata = {
   title: 'Free Landlord Document Samples | Section 8, Tenancy & Rent Packs',
   description:
     'View free landlord document samples from our golden packs, including Section 8 notice, tenancy agreement, rent increase, and money claim examples.',
+  keywords: [
+    'landlord document samples',
+    'section 8 notice sample',
+    'tenancy agreement sample',
+    'rent increase pack sample',
+    'money claim pack sample',
+  ],
   alternates: {
     canonical: canonicalUrl,
   },

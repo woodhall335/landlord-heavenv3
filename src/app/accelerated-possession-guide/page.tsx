@@ -19,16 +19,14 @@ const canonical = 'https://landlordheaven.co.uk/accelerated-possession-guide';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Accelerated Possession Guide | Section 21 Court Process for Landlords | LandlordHeaven',
+  title: 'Accelerated Possession Guide | Section 21 Court',
   description:
     'Plain-English accelerated possession guide for England landlords, covering when the route fits, what paperwork matters, and how to avoid delay in court.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Accelerated Possession Guide | Section 21 Court Process for Landlords | LandlordHeaven',
+    title: 'Accelerated Possession Guide | Section 21 Court',
     description:
       'A landlord guide to accelerated possession in England, covering when it fits, what the court expects, how long it may take, and what happens if the tenant stays put.',
     url: canonical,

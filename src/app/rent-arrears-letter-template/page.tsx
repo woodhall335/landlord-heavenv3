@@ -36,7 +36,7 @@ const moneyClaimPrice = PRODUCTS.money_claim.displayPrice;
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Rent Arrears Letter Template UK | Free Demand Letter + Legal Next Steps',
+  title: 'Rent Arrears Letter Template UK | Demand Letter',
   description:
     'Plain-English landlord guide to writing a rent arrears letter, asking for payment clearly, and deciding when to escalate to a money claim or Section 8 notice.',
   keywords: [
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/rent-arrears-letter-template',
   },
   openGraph: {
-    title: 'Rent Arrears Letter Template UK | Free Demand Letter + Legal Next Steps',
+    title: 'Rent Arrears Letter Template UK | Demand Letter',
     description:
       'Landlord guide to writing a rent arrears letter properly and deciding when to move into a money claim or Section 8 route.',
     type: 'website',

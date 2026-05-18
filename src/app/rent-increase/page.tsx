@@ -19,7 +19,7 @@ const canonicalUrl = getCanonicalUrl('/rent-increase');
 export const metadata: Metadata = {
   title: 'Increase Rent in England | Section 13 / Form 4A Packs for Landlords',
   description:
-    'Increase rent in England using Section 13 and Form 4A. Start the Standard Section 13 Rent Increase Pack or choose the Challenge-Ready Section 13 Defence Pack when challenge risk is already part of the case.',
+    'Increase rent in England using Section 13 and Form 4A. Choose the Standard notice pack or the Challenge-Ready Defence Pack when risk is higher.',
   keywords: [
     'increase rent england',
     'section 13 notice',

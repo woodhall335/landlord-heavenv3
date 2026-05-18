@@ -88,12 +88,19 @@ const GROUPS = [
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'England Landlord Documents | Live Tenancy and Arrears Routes',
+  title: 'Landlord Documents England | Live Forms and Packs',
   description:
-    'Bridge page for retired England landlord document intent, routing landlords into the current tenancy, arrears, and product pages that remain live.',
+    'Find the current England landlord document routes for tenancy agreements, eviction notices, rent arrears, money claims, and compliance tools.',
+  keywords: [
+    'landlord documents england',
+    'england landlord forms',
+    'landlord document packs',
+    'eviction notices england',
+    'tenancy agreement england',
+  ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'England Landlord Documents | Live Tenancy and Arrears Routes',
+    title: 'Landlord Documents England | Live Forms and Packs',
     description:
       'Use the current England tenancy agreement chooser, dedicated England tenancy products, and money-claim destinations instead of the retired England document pages.',
     url: canonicalUrl,

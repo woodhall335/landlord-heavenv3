@@ -21,7 +21,7 @@ const canonical = getCanonicalUrl('/money-claim-unpaid-rent');
 export const metadata: Metadata = {
   title: 'Money Claim for Unpaid Rent | England Landlord Route',
   description:
-    'Use this England landlord route when your main goal is recovering unpaid rent or other tenancy debt. Start with the money claim pack, or use the eviction route if possession is part of the problem.',
+    'Use this England landlord route to recover unpaid rent or tenancy debt, and choose eviction paperwork separately if possession is also needed.',
   alternates: {
     canonical,
   },

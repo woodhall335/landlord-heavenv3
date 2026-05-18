@@ -20,16 +20,14 @@ const canonical =
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Bailiff Eviction Process | What Happens After a Possession Order | LandlordHeaven',
+  title: 'Bailiff Eviction Process | After Possession Order',
   description:
     'Plain-English landlord guide to the bailiff eviction process in England, including enforcement steps, timing, and what to prepare before eviction day.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Bailiff Eviction Process | What Happens After a Possession Order | LandlordHeaven',
+    title: 'Bailiff Eviction Process | After Possession Order',
     description:
       'Landlord guide to the bailiff eviction process, enforcement steps, timelines, and what to prepare before eviction day.',
     url: canonical,

@@ -13,6 +13,7 @@ import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { ToolFunnelTracker } from '@/components/tools/ToolFunnelTracker';
 import { ToolUpsellCard } from '@/components/tools/ToolUpsellCard';
+import { StructuredData, softwareApplicationSchema } from '@/lib/seo/structured-data';
 import { NextStepWidget } from '@/components/journey/NextStepWidget';
 import { trackToolComplete } from '@/lib/journey/events';
 import { setJourneyState, type StageEstimate } from '@/lib/journey/state';
@@ -432,6 +433,7 @@ export default function RentArrearsCalculator() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <StructuredData data={softwareApplicationSchema()} />
       <HeaderConfig mode="autoOnScroll" />
       <ToolFunnelTracker
         toolName={upsellConfig.toolName}

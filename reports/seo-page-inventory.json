@@ -1,395 +1,98 @@
 [
   {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\auth\\confirm\\page.tsx",
-    "route": "/(app)/auth/confirm",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\auth\\forgot-password\\page.tsx",
-    "route": "/(app)/auth/forgot-password",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\auth\\login\\page.tsx",
-    "route": "/(app)/auth/login",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\auth\\reset-password\\page.tsx",
-    "route": "/(app)/auth/reset-password",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\auth\\signup\\page.tsx",
-    "route": "/(app)/auth/signup",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\auth\\verify-email\\page.tsx",
-    "route": "/(app)/auth/verify-email",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\ai-usage\\page.tsx",
-    "route": "/(app)/dashboard/admin/ai-usage",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\ask-heaven\\page.tsx",
-    "route": "/(app)/dashboard/admin/ask-heaven",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\ask-heaven\\[slug]\\page.tsx",
-    "route": "/(app)/dashboard/admin/ask-heaven/[slug]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "slug"
-    ],
-    "pageType": "dynamic"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\cases\\page.tsx",
-    "route": "/(app)/dashboard/admin/cases",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\email-previews\\page.tsx",
-    "route": "/(app)/dashboard/admin/email-previews",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\failed-payments\\page.tsx",
-    "route": "/(app)/dashboard/admin/failed-payments",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\growth\\page.tsx",
-    "route": "/(app)/dashboard/admin/growth",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\leads\\page.tsx",
-    "route": "/(app)/dashboard/admin/leads",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\legal-changes\\inbox\\page.tsx",
-    "route": "/(app)/dashboard/admin/legal-changes/inbox",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\legal-changes\\page.tsx",
-    "route": "/(app)/dashboard/admin/legal-changes",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\legal-changes\\[id]\\page.tsx",
-    "route": "/(app)/dashboard/admin/legal-changes/[id]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "id"
-    ],
-    "pageType": "dynamic"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\orders\\page.tsx",
-    "route": "/(app)/dashboard/admin/orders",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\page.tsx",
-    "route": "/(app)/dashboard/admin",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\users\\page.tsx",
-    "route": "/(app)/dashboard/admin/users",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\admin\\users\\[id]\\page.tsx",
-    "route": "/(app)/dashboard/admin/users/[id]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "id"
-    ],
-    "pageType": "dynamic"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\billing\\page.tsx",
-    "route": "/(app)/dashboard/billing",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\cases\\page.tsx",
-    "route": "/(app)/dashboard/cases",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\cases\\[id]\\page.tsx",
-    "route": "/(app)/dashboard/cases/[id]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "id"
-    ],
-    "pageType": "dynamic"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\documents\\page.tsx",
-    "route": "/(app)/dashboard/documents",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\hmo\\page.tsx",
-    "route": "/(app)/dashboard/hmo",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\hmo\\properties\\new\\page.tsx",
-    "route": "/(app)/dashboard/hmo/properties/new",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\hmo\\properties\\page.tsx",
-    "route": "/(app)/dashboard/hmo/properties",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\hmo\\properties\\[id]\\page.tsx",
-    "route": "/(app)/dashboard/hmo/properties/[id]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "id"
-    ],
-    "pageType": "dynamic"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\hmo\\tenants\\new\\page.tsx",
-    "route": "/(app)/dashboard/hmo/tenants/new",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\hmo\\tenants\\page.tsx",
-    "route": "/(app)/dashboard/hmo/tenants",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\page.tsx",
-    "route": "/(app)/dashboard",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\profile\\page.tsx",
-    "route": "/(app)/dashboard/profile",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\dashboard\\settings\\page.tsx",
-    "route": "/(app)/dashboard/settings",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\success\\[product]\\[caseId]\\page.tsx",
-    "route": "/(app)/success/[product]/[caseId]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "product",
-      "caseId"
-    ],
-    "pageType": "dynamic"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\wizard\\flow\\page.tsx",
-    "route": "/(app)/wizard/flow",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\wizard\\page.tsx",
-    "route": "/(app)/wizard",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\wizard\\preview\\[caseId]\\page.tsx",
-    "route": "/(app)/wizard/preview/[caseId]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "caseId"
-    ],
-    "pageType": "dynamic"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(app)\\wizard\\review\\page.tsx",
-    "route": "/(app)/wizard/review",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\about\\page.tsx",
-    "route": "/(marketing)/about",
+    "route": "/about",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\blog\\page.tsx",
-    "route": "/(marketing)/blog",
+    "route": "/blog",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\blog\\[slug]\\page.tsx",
-    "route": "/(marketing)/blog/[slug]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "slug"
-    ],
-    "pageType": "dynamic"
-  },
-  {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\contact\\page.tsx",
-    "route": "/(marketing)/contact",
+    "route": "/contact",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\help\\page.tsx",
-    "route": "/(marketing)/help",
+    "route": "/help",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\page.tsx",
-    "route": "/(marketing)",
+    "route": "/",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\pricing\\page.tsx",
-    "route": "/(marketing)/pricing",
+    "route": "/pricing",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\ast\\page.tsx",
-    "route": "/(marketing)/products/ast",
+    "route": "/products/ast",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\complete-pack\\page.tsx",
-    "route": "/(marketing)/products/complete-pack",
+    "route": "/products/complete-pack",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\money-claim\\page.tsx",
-    "route": "/(marketing)/products/money-claim",
+    "route": "/products/money-claim",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\money-claim-pack\\page.tsx",
-    "route": "/(marketing)/products/money-claim-pack",
+    "route": "/products/money-claim-pack",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\notice-only\\page.tsx",
-    "route": "/(marketing)/products/notice-only",
+    "route": "/products/notice-only",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\rent-increase\\page.tsx",
-    "route": "/(marketing)/products/rent-increase",
+    "route": "/products/rent-increase",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\section-13-defence\\page.tsx",
-    "route": "/(marketing)/products/section-13-defence",
+    "route": "/products/section-13-defence",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\(marketing)\\products\\section-13-standard\\page.tsx",
-    "route": "/(marketing)/products/section-13-standard",
+    "route": "/products/section-13-standard",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
@@ -421,15 +124,6 @@
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\ask-heaven\\[slug]\\page.tsx",
-    "route": "/ask-heaven/[slug]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "slug"
-    ],
-    "pageType": "dynamic"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\assured-periodic-tenancy-agreement\\page.tsx",
@@ -497,13 +191,6 @@
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\can-you-evict-a-tenant-for-property-damage\\page.tsx",
     "route": "/can-you-evict-a-tenant-for-property-damage",
-    "isDynamic": false,
-    "dynamicSegments": [],
-    "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\checkout\\e2e-started\\page.tsx",
-    "route": "/checkout/e2e-started",
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
@@ -1251,15 +938,6 @@
     "pageType": "static"
   },
   {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\rent-increase\\[slug]\\page.tsx",
-    "route": "/rent-increase/[slug]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "slug"
-    ],
-    "pageType": "dynamic"
-  },
-  {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\renters-rights-act-eviction-rules\\page.tsx",
     "route": "/renters-rights-act-eviction-rules",
     "isDynamic": false,
@@ -1307,15 +985,6 @@
     "isDynamic": false,
     "dynamicSegments": [],
     "pageType": "static"
-  },
-  {
-    "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\samples\\[slug]\\page.tsx",
-    "route": "/samples/[slug]",
-    "isDynamic": true,
-    "dynamicSegments": [
-      "slug"
-    ],
-    "pageType": "dynamic"
   },
   {
     "filePath": "C:\\Users\\t_moh\\Documents\\GitHub\\landlord-heavenv3\\src\\app\\scotland-eviction-notices\\page.tsx",

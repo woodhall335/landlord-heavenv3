@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   title: 'Section 8 Notice Only Sample | Form 3A Pack',
   description:
     'Redirecting to the current Section 8 notice sample pack with Form 3A, N215 certificate of service, arrears schedule, and service checks.',
+  keywords: [
+    'section 8 notice sample',
+    'form 3a sample',
+    'notice only pack sample',
+    'n215 certificate sample',
+  ],
   alternates: { canonical: getCanonicalUrl('/samples/section-8-notice-example') },
   robots: { index: false, follow: true },
 };

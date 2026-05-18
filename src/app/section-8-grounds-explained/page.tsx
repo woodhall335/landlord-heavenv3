@@ -19,8 +19,7 @@ const canonical =
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Section 8 Grounds Explained | Eviction Grounds Guide for Landlords | LandlordHeaven',
+  title: 'Section 8 Grounds Explained | Landlord Guide',
   description:
     'Plain-English landlord guide to Section 8 grounds in England, including when landlords use them and how they fit into the possession process.',
   alternates: {

@@ -17,6 +17,7 @@ import { FAQSection } from '@/components/seo/FAQSection';
 import { RelatedLinks } from '@/components/seo/RelatedLinks';
 import { productLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import { PRODUCTS } from '@/lib/pricing/products';
+import { StructuredData, softwareApplicationSchema } from '@/lib/seo/structured-data';
 
 const noticeOnlyPrice = PRODUCTS.notice_only.displayPrice;
 const completePackPrice = PRODUCTS.complete_pack.displayPrice;
@@ -443,6 +444,7 @@ export default function RentDemandLetterGenerator() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <StructuredData data={softwareApplicationSchema()} />
       <HeaderConfig mode="autoOnScroll" />
       <ToolFunnelTracker
         toolName={upsellConfig.toolName}

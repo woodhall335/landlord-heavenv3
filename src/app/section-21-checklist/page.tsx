@@ -22,16 +22,20 @@ const completePackHref = '/products/complete-pack';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Section 21 Checklist | Landlord Compliance, Service and Possession Readiness | LandlordHeaven',
+  title: 'Section 21 Checklist | England Landlord Compliance',
   description:
-    'A practical Section 21 checklist for landlords in England.',
+    'Practical Section 21 checklist for England landlords covering notice timing, Form 6A, deposit rules, compliance documents, service evidence, and court readiness.',
+  keywords: [
+    'section 21 checklist',
+    'section 21 compliance checklist',
+    'form 6a checklist',
+    'section 21 notice england',
+  ],
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Section 21 Checklist | Landlord Compliance, Service and Possession Readiness | LandlordHeaven',
+    title: 'Section 21 Checklist | England Landlord Compliance',
     description:
       'Plain-English guidance for landlords on Section 21 compliance, timing, service, and possession readiness before serving notice.',
     url: canonical,

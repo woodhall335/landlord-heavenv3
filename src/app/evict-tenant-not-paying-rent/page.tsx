@@ -20,16 +20,14 @@ const canonical =
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Evict Tenant Not Paying Rent | Landlord Rent Arrears Guide | LandlordHeaven',
+  title: 'Evict Tenant Not Paying Rent | Arrears Guide',
   description:
     'Plain-English landlord guide to dealing with tenants who stop paying rent in England, including route choice, arrears evidence, and possession planning.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Evict Tenant Not Paying Rent | Landlord Rent Arrears Guide | LandlordHeaven',
+    title: 'Evict Tenant Not Paying Rent | Arrears Guide',
     description:
       'Landlord guide to dealing with serious rent arrears, choosing the right route, preparing the evidence file, and moving toward possession with fewer delays.',
     url: canonical,

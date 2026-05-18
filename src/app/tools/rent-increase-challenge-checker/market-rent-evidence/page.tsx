@@ -7,9 +7,15 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/market-rent-evidence');
 
 export const metadata: Metadata = {
-  title: 'Section 13 Market Rent Evidence | How Landlords Should Judge the Figure',
+  title: 'Section 13 Market Rent Evidence | Landlord Guide',
   description:
     'Understand how landlords should read market-rent comparables before serving a Section 13 / Form 4A rent increase in England.',
+  keywords: [
+    'section 13 market rent evidence',
+    'market rent comparables',
+    'rent increase evidence',
+    'form 4a evidence',
+  ],
   alternates: { canonical: canonicalUrl },
 };
 

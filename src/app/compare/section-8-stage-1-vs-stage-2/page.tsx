@@ -36,6 +36,12 @@ export const metadata: Metadata = {
   title: 'Section 8 Notice or Court Pack? Stage 1 vs Stage 2',
   description:
     'Compare Section 8 Stage 1 notice and Stage 2 court packs. See when to use Form 3A, N5, N119, and possession claim documents.',
+  keywords: [
+    'section 8 court pack',
+    'section 8 notice pack',
+    'n5 n119 forms',
+    'section 8 possession claim pack',
+  ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Section 8 Stage 1 vs Stage 2',

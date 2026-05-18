@@ -18,16 +18,14 @@ const canonical = 'https://landlordheaven.co.uk/eviction-timeline-uk';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Eviction Timeline UK | How Long the Eviction Process Takes for Landlords | LandlordHeaven',
+  title: 'Eviction Timeline UK | How Long It Takes',
   description:
     'Plain-English landlord guide to how long eviction usually takes in England, where delays happen, and what you can do to keep the case moving.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Eviction Timeline UK | How Long the Eviction Process Takes for Landlords | LandlordHeaven',
+    title: 'Eviction Timeline UK | How Long It Takes',
     description:
       'Understand how long the eviction process usually takes, what delays landlords most often face, and how to plan from notice to enforcement.',
     url: canonical,

@@ -18,10 +18,9 @@ const canonicalUrl = getCanonicalUrl(descriptor.landingHref);
 const tenancyProducts = getPublicTenancyProducts();
 
 export const metadata: Metadata = {
-  title:
-    'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger, Periodic Guide',
+  title: 'England Tenancy Agreements | Compare Landlord Packs',
   description:
-    'Compare England tenancy agreement options for Standard, Premium, Student, HMO / Shared House, and Lodger arrangements.',
+    'Compare England tenancy agreement packs for Standard, Premium, Student, HMO or shared-house, and Lodger lets before choosing the right route.',
   keywords: [
     'England tenancy agreement',
     'tenancy agreement template england',
@@ -37,8 +36,7 @@ export const metadata: Metadata = {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title:
-      'England Tenancy Agreements | Standard, Premium, Student, HMO, Lodger, Periodic Guide',
+    title: 'England Tenancy Agreements | Compare Landlord Packs',
     description:
       'Compare Standard, Premium, Student, HMO / Shared House, and Lodger agreement options for landlords in England.',
     url: canonicalUrl,

@@ -33,9 +33,9 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 const canonical = getCanonicalUrl('/money-claim-n1-claim-form');
 
 export const metadata: Metadata = {
-  title: 'N1 Claim Form Guide | How Landlords Complete a County Court Money Claim',
+  title: 'N1 Claim Form Guide | County Court Money Claim',
   description:
-    'Landlord guide to the N1 claim form. Understand what the N1 is, when landlords use it instead of MCOL, how the sections work, and what usually matters in the particulars of claim.',
+    'Landlord guide to the N1 claim form, when to use it instead of MCOL, how sections work, and what matters in particulars of claim.',
   keywords: [
     'N1 claim form',
     'N1 form guide',
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     'N1 form template',
   ],
   openGraph: {
-    title: 'N1 Claim Form Guide | How Landlords Complete a County Court Money Claim',
+    title: 'N1 Claim Form Guide | County Court Money Claim',
     description:
       'Step-by-step landlord guide to the N1 claim form, including when to use it, what the sections cover, and how the particulars of claim usually work.',
     type: 'article',

@@ -7,9 +7,15 @@ import { getCanonicalUrl } from '@/lib/seo';
 const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/challenge-risk');
 
 export const metadata: Metadata = {
-  title: 'Section 13 Challenge Risk | When a Rent Increase Becomes Harder to Defend',
+  title: 'Section 13 Challenge Risk | Rent Increase Defence',
   description:
     'See what makes a Section 13 rent increase more likely to be challenged and when landlords should move into the stronger Defence route.',
+  keywords: [
+    'section 13 challenge risk',
+    'rent increase challenge',
+    'section 13 defence pack',
+    'tenant challenges rent increase',
+  ],
   alternates: { canonical: canonicalUrl },
 };
 

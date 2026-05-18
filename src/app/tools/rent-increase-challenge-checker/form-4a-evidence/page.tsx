@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: 'Form 4A Evidence Guide | What Landlords Should Check Before Service',
   description:
     'See what evidence landlords should line up before serving Form 4A, then use the free checker to test whether the proposed rent sits in a supportable market range.',
+  keywords: [
+    'form 4a evidence',
+    'section 13 evidence',
+    'rent increase evidence',
+    'market rent comparables',
+  ],
   alternates: { canonical: canonicalUrl },
 };
 

@@ -23,12 +23,12 @@ const currentProcessLink = '/eviction-process-england';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Section 21 vs Section 8 | Historical Comparison and Current England Route',
+  title: 'Section 21 vs Section 8 | Current England Route',
   description:
     'Understand the difference between historical Section 21 intent and the current England possession route, then move back to the current notice path.',
   alternates: { canonical },
   openGraph: {
-    title: 'Section 21 vs Section 8 | Historical Comparison and Current England Route',
+    title: 'Section 21 vs Section 8 | Current England Route',
     description:
       'A practical England guide comparing historical Section 21 terminology with the current England possession route.',
     url: canonical,

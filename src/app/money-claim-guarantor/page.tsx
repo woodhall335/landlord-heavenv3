@@ -23,7 +23,7 @@ import { moneyClaimGuides, productLinks } from '@/lib/seo/internal-links';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Claim Against Tenant Guarantor 2026 | Sue Guarantor for Rent Arrears',
+  title: 'Claim Against Tenant Guarantor | Rent Arrears Guide',
   description:
     'Recover unpaid rent and damage costs from a tenant\'s guarantor. Legal requirements, evidence needed, and court claim process for England.',
   keywords: [
@@ -35,11 +35,9 @@ export const metadata: Metadata = {
     'guarantor agreement enforcement',
     'landlord claim guarantor',
     'guarantor unpaid rent',
-    'guarantor court claim',
-    'guarantor MCOL',
   ],
   openGraph: {
-    title: 'Claim Against Tenant Guarantor 2026 | Sue Guarantor for Rent Arrears',
+    title: 'Claim Against Tenant Guarantor | Rent Arrears Guide',
     description:
       'Landlord guide to recovering unpaid rent from a tenant\'s guarantor through MCOL.',
     type: 'article',

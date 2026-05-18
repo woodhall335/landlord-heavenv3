@@ -25,7 +25,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = generateMetadata({
   title: 'Serve a Section 8 Notice 2026 | England Landlord Guide',
   description:
-    'Learn how to serve a Section 8 notice in England, choose the right grounds, preserve service evidence, prepare arrears or breach records, and avoid notice-stage mistakes that weaken possession claims.',
+    'Learn how to serve a Section 8 notice in England, choose the right grounds, preserve service evidence, and prepare arrears or breach records.',
   path: '/serve-section-8-notice',
   type: 'article',
   keywords: [

@@ -20,16 +20,14 @@ const canonical =
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Eviction Court Hearing Guide | Bundle, Evidence and What to Expect | LandlordHeaven',
+  title: 'Eviction Court Hearing Guide | Bundle and Evidence',
   description:
     'Plain-English landlord guide to eviction court hearings in England, including bundle preparation, evidence, what judges focus on, and what happens next.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Eviction Court Hearing Guide | Bundle, Evidence and What to Expect | LandlordHeaven',
+    title: 'Eviction Court Hearing Guide | Bundle and Evidence',
     description:
       'Landlord guide to preparing an eviction hearing file, understanding what judges focus on, and planning what happens after the hearing.',
     url: canonical,

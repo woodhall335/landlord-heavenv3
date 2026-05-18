@@ -6,6 +6,7 @@ import Image from "next/image";
 import { FAQInline } from "@/components/seo/FAQSection";
 import { ASK_HEAVEN_CTA } from "@/constants/askHeavenCta";
 import { generateMetadata } from "@/lib/seo";
+import { StructuredData, faqPageSchema } from "@/lib/seo/structured-data";
 import {
   LANDLORD_DOCUMENT_PRICE_RANGE,
   PRODUCTS,
@@ -13,7 +14,7 @@ import {
 import { formatPrice, PRICING } from "@/lib/pricing";
 
 export const metadata: Metadata = generateMetadata({
-  title: "Landlord Help Centre | Eviction, Rent Increase, Arrears and Tenancy FAQs",
+  title: "Landlord Help Centre | Eviction, Rent & Tenancy FAQs",
   description:
     "Get help with eviction notices, Section 13 rent increases, rent arrears claims, tenancy agreements, billing, and common landlord document questions.",
   path: "/help",
@@ -26,9 +27,33 @@ export const metadata: Metadata = generateMetadata({
   ],
 });
 
+const helpFaqSchema = faqPageSchema([
+  {
+    question: "How do I create my first document?",
+    answer:
+      "Choose the product that matches the job, answer the guided questions, preview the pack, then pay only when you are ready to download.",
+  },
+  {
+    question: "Which document pack should I use?",
+    answer:
+      "Use Notice Only for Section 8 notice service, Complete Pack for the possession file, Money Claim for debt recovery, and tenancy packs for new agreements.",
+  },
+  {
+    question: "Can I preview documents before paying?",
+    answer:
+      "Yes. The site is built around checking the document pack before payment so landlords can confirm the route and contents first.",
+  },
+  {
+    question: "Do Landlord Heaven documents replace legal advice?",
+    answer:
+      "No. The packs are document-generation products and do not replace advice from a qualified solicitor on your specific facts.",
+  },
+]);
+
 export default function HelpPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <StructuredData data={helpFaqSchema} />
       <UniversalHero
         preset="product_owner"
         title="Landlord Help Centre"

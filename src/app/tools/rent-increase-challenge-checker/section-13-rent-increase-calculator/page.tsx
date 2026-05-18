@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: 'Section 13 Rent Increase Calculator | Free Landlord Market-Check Tool',
   description:
     'Use the free Section 13 rent increase calculator to compare your current and proposed rent against local market evidence before serving Form 4A.',
+  keywords: [
+    'section 13 rent increase calculator',
+    'rent increase calculator landlord',
+    'market rent checker',
+    'form 4a rent increase',
+  ],
   alternates: { canonical: canonicalUrl },
 };
 

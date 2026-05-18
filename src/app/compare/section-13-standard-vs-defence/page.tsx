@@ -36,6 +36,12 @@ export const metadata: Metadata = {
   title: 'Section 13 Standard vs Defence Pack | Compare Rent Increase Routes',
   description:
     'Compare Section 13 Standard and Defence packs. Decide whether you need Form 4A service documents or tribunal challenge material.',
+  keywords: [
+    'section 13 standard pack',
+    'section 13 defence pack',
+    'form 4a rent increase',
+    'rent increase tribunal challenge',
+  ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Section 13 Standard vs Defence Pack',

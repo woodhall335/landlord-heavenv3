@@ -69,6 +69,12 @@ export const metadata: Metadata = {
   title: 'Which Tenancy Agreement Do I Need? England Options Compared',
   description:
     'Compare Standard, Premium, Student, HMO / Shared House, and Lodger agreements for England landlords. Choose the right solicitor-approved pack.',
+  keywords: [
+    'which tenancy agreement do i need',
+    'tenancy agreement options england',
+    'compare tenancy agreements',
+    'landlord tenancy agreement pack',
+  ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     title: 'Tenancy Agreement Options England',

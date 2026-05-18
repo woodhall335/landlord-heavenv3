@@ -321,16 +321,21 @@ function extractMetadataWindow(content: string): string {
 }
 
 function extractFirstValue(head: string, fieldName: string): string | null {
+  const stringLiteralPattern = `(['"\`])((?:\\\\.|(?!\\1)[\\s\\S])*?)\\1`;
   const patterns = [
-    new RegExp(`${fieldName}:\\s*['"\`]([^'"\`]+)['"\`]`),
-    new RegExp(`${fieldName}:\\s*\\n\\s*['"\`]([^'"\`]+)['"\`]`),
-    new RegExp(`${fieldName}:\\s*\\{\\s*absolute:\\s*['"\`]([^'"\`]+)['"\`]`),
+    new RegExp(`${fieldName}:\\s*${stringLiteralPattern}`),
+    new RegExp(`${fieldName}:\\s*\\{\\s*absolute:\\s*${stringLiteralPattern}`),
   ];
 
   for (const pattern of patterns) {
     const match = head.match(pattern);
     if (match) {
-      return match[1].replace(/\s+/g, ' ').trim();
+      const value = match[2] ?? match[3];
+      return value
+        .replace(/\\(['"`])/g, '$1')
+        .replace(/\\n/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
     }
   }
 
@@ -399,15 +404,25 @@ function auditRoute(route: string): AuditResult {
   const usesSharedHelper =
     /getIntentPageMetadata\(|getPhase5Metadata\(|getPass2Metadata\(|getCurrentFrameworkMetadata\(|getRentIncreaseGuideMetadata\(/.test(
       metadataSourceContent,
-    );
+    ) || metadataSourceContent.includes('PRODUCT_OWNER_METADATA.');
   const usesMetadataGenerator = /=\s*(?:buildSeoMetadata|generateMetadataForPageType|generateMetadata)\(/.test(metadataSourceContent);
   const helperGuarantees = usesSharedHelper || usesMetadataGenerator;
 
-  const title = sharedMetadata?.title ?? extractFirstValue(metadataWindow, 'title');
-  const description = sharedMetadata?.description ?? extractFirstValue(metadataWindow, 'description');
-  const keywords = sharedMetadata?.keywords.length
+  const extractedTitle = extractFirstValue(metadataWindow, 'title');
+  const extractedDescription = extractFirstValue(metadataWindow, 'description');
+  const extractedKeywords = extractKeywords(metadataWindow);
+
+  const title = usesSharedHelper
+    ? sharedMetadata?.title ?? extractedTitle
+    : extractedTitle ?? sharedMetadata?.title ?? null;
+  const description = usesSharedHelper
+    ? sharedMetadata?.description ?? extractedDescription
+    : extractedDescription ?? sharedMetadata?.description ?? null;
+  const keywords = usesSharedHelper && sharedMetadata?.keywords.length
     ? sharedMetadata.keywords
-    : extractKeywords(metadataWindow);
+    : extractedKeywords.length
+      ? extractedKeywords
+      : sharedMetadata?.keywords ?? [];
 
   const result: AuditResult = {
     route,

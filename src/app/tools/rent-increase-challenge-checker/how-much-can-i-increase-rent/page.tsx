@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: 'How Much Can I Increase Rent in England? | Landlord Guide',
   description:
     'Read how landlords should judge how much rent they can increase under Section 13, then use the free checker to test the supportable range before serving Form 4A.',
+  keywords: [
+    'how much can i increase rent',
+    'rent increase england',
+    'section 13 rent increase',
+    'form 4a rent increase',
+  ],
   alternates: { canonical: canonicalUrl },
 };
 

@@ -1,5 +1,6 @@
 import { Container, TealHero } from "@/components/ui";
 import { generateMetadata } from "@/lib/seo";
+import { StructuredData, breadcrumbSchema } from "@/lib/seo/structured-data";
 import Link from "next/link";
 import { Cookie, Lock, CreditCard, BarChart3, AlertTriangle } from "lucide-react";
 
@@ -19,6 +20,12 @@ export const metadata = generateMetadata({
 export default function CookiesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <StructuredData
+        data={breadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "Cookie Policy", url: "/cookies" },
+        ])}
+      />
       <TealHero title="Cookie Policy" subtitle="How we use cookies to provide the best experience." eyebrow="Compliance" />
       <Container size="medium" className="py-12">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">

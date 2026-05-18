@@ -22,16 +22,14 @@ const completePackProductLink = '/products/complete-pack';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Section 21 Validity Checklist | Landlord Compliance and Proof Guide | LandlordHeaven',
+  title: 'Section 21 Validity Checklist | Compliance Guide',
   description:
     'A plain-English Section 21 validity checklist for landlords in England, covering compliance, timing, proof, and common failure points.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Section 21 Validity Checklist | Landlord Compliance and Proof Guide | LandlordHeaven',
+    title: 'Section 21 Validity Checklist | Compliance Guide',
     description:
       'Plain-English guidance for landlords on checking Section 21 validity before service, including compliance, dates, proof, and common failure points.',
     url: canonical,

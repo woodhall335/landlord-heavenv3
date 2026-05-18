@@ -20,8 +20,7 @@ const canonical =
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Court Possession Order Guide | What Happens After a Possession Hearing | LandlordHeaven',
+  title: 'Court Possession Order Guide | Landlord Next Steps',
   description:
     'Plain-English landlord guide to court possession orders in England, including what the order means, what happens next, and when enforcement is needed.',
   alternates: {

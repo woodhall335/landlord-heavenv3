@@ -11,17 +11,19 @@ const premiumAgreementHref = '/premium-tenancy-agreement';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Renters Rights Bill Tenancy Agreement | Updated England Agreement',
+  title: 'Renters Rights Act Tenancy Agreement | England 2026',
   description:
-    'Looking for a Renters Rights Bill tenancy agreement?',
+    'Looking for a Renters Rights Act tenancy agreement? Compare current England Standard and Premium agreement routes for post-May 2026 landlord paperwork.',
   keywords: [
     'renters rights bill tenancy agreement',
     'renters rights act tenancy agreement',
     'england tenancy agreement 2026',
+    'updated england tenancy agreement',
+    'post may 2026 tenancy agreement',
   ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
-    title: 'Renters Rights Bill Tenancy Agreement | Updated England Agreement',
+    title: 'Renters Rights Act Tenancy Agreement | England 2026',
     description:
       'Search-intent page for landlords looking for a Renters Rights Bill tenancy agreement, now routed into the current England agreement flows.',
     url: canonicalUrl,
