@@ -49,7 +49,7 @@
     },
     {
       "path": "/api/cron/checkout-recovery?key=$CRON_SECRET",
-      "schedule": "17 * * * *"
+      "schedule": "17 9 * * *"
     },
     {
       "path": "/api/cron/compliance-check?key=$CRON_SECRET",
