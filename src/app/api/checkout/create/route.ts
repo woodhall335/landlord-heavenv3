@@ -9,16 +9,17 @@
  * Checkout line items use price_data so the app amount and Stripe charge stay in sync.
  *
  * IDEMPOTENCY:
- * - If case_id is provided, checkout is idempotent per (case_id, product_type)
+ * - If case_id is provided, checkout reuses valid pending sessions for the same case/product/amount
  * - Returns "already_paid" if a paid order exists
  * - Reuses existing pending session if still valid
- * - Uses Stripe idempotency keys to prevent duplicate charges
+ * - Uses payload-aware Stripe idempotency keys so changed Checkout Session params do not collide
  */
 
 import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { ensureUserProfileExists } from '@/lib/supabase/ensure-user';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import type Stripe from 'stripe';
 import { stripe, PRICE_IDS, assertValidPriceId, StripePriceIdError } from '@/lib/stripe';
 import { PRODUCTS, getProductUpgradeAmount, type ProductSku, isValidProductSku } from '@/lib/pricing/products';
 import { logger } from '@/lib/logger';
@@ -190,16 +191,43 @@ const createCheckoutSchema = z.object({
  * Generate a deterministic idempotency key for Stripe API calls.
  * This ensures the same checkout request produces the same Stripe session.
  */
-function generateIdempotencyKey(
-  caseId: string,
-  productType: string,
-  userId: string,
-  addOns: string[] = [],
-  contextKey?: string
-): string {
-  const normalizedAddOns = [...addOns].sort().join(',');
+function stableStringify(value: unknown): string {
+  if (Array.isArray(value)) {
+    return `[${value.map((item) => stableStringify(item)).join(',')}]`;
+  }
+
+  if (value && typeof value === 'object') {
+    return `{${Object.entries(value as Record<string, unknown>)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, item]) => `${JSON.stringify(key)}:${stableStringify(item)}`)
+      .join(',')}}`;
+  }
+
+  return JSON.stringify(value);
+}
+
+function generateIdempotencyKey({
+  caseId,
+  productType,
+  userId,
+  orderId,
+  checkoutPayload,
+  contextKey,
+}: {
+  caseId: string;
+  productType: string;
+  userId: string;
+  orderId: string;
+  checkoutPayload: unknown;
+  contextKey?: string;
+}): string {
   const normalizedContext = contextKey || 'default';
-  const input = `checkout:${caseId}:${productType}:${normalizedAddOns}:${normalizedContext}:${userId}`;
+  const payloadHash = crypto
+    .createHash('sha256')
+    .update(stableStringify(checkoutPayload))
+    .digest('hex')
+    .substring(0, 16);
+  const input = `checkout:v2:${caseId}:${productType}:${normalizedContext}:${userId}:${orderId}:${payloadHash}`;
   return crypto.createHash('sha256').update(input).digest('hex').substring(0, 64);
 }
 
@@ -349,7 +377,7 @@ export async function POST(request: Request) {
           .map((sku) => normalizeToPaymentSku(sku))
           .filter((sku) => sku !== normalizedProductType && isValidProductSku(sku))
       )
-    ) as ProductSku[];
+    ).sort() as ProductSku[];
 
     // Get or create Stripe customer (use admin client to ensure we can read user data)
     const { data: userData } = await adminSupabase
@@ -785,11 +813,19 @@ export async function POST(request: Request) {
               ? (['money_claim'] as const)
               : []),
           ])
-        ) as ProductSku[];
+        ).sort() as ProductSku[];
         addOnProducts = permittedAddOnSkus.map((sku) => PRODUCTS[sku]);
         totalAmount = primaryChargeAmount + addOnProducts.reduce((sum, item) => sum + item.price, 0);
       }
     }
+
+    let reusablePendingOrderWithoutSession: {
+      id: string;
+      payment_status: string;
+      stripe_session_id?: string | null;
+      stripe_checkout_url?: string | null;
+      total_amount?: number | string | null;
+    } | null = null;
 
     // =========================================================================
     // IDEMPOTENCY CHECK: Prevent double payment for same (case_id, product_type)
@@ -904,24 +940,29 @@ export async function POST(request: Request) {
             })
             .eq('id', pendingOrder.id);
         }
+
+        const pendingOrderWithoutSession = existingOrders.find(
+          (o) =>
+            o.payment_status === 'pending' &&
+            !o.stripe_session_id &&
+            Number(o.total_amount || 0) === totalAmount
+        );
+
+        if (pendingOrderWithoutSession) {
+          reusablePendingOrderWithoutSession = pendingOrderWithoutSession;
+          logger.info('Reusing pending order without saved Stripe session for checkout retry', {
+            caseId: case_id,
+            productType: product_type,
+            orderId: pendingOrderWithoutSession.id,
+            userId: user.id,
+          });
+        }
       }
     }
 
     // =========================================================================
     // CREATE NEW ORDER AND STRIPE SESSION
     // =========================================================================
-
-    // Generate idempotency key for Stripe API call (if case_id provided)
-    // Use normalizedProductType for consistent idempotency keys
-    const idempotencyKey = case_id
-      ? generateIdempotencyKey(
-          case_id,
-          normalizedProductType,
-          user.id,
-          permittedAddOnSkus,
-          isNoticeOnlyToCompletePackUpgrade ? 'upgrade:notice_only_to_complete_pack' : undefined
-        )
-      : undefined;
 
     // Create order record using admin client to avoid RLS issues
     // Amount comes from products.ts (source of truth) - already in GBP (for example 24.99)
@@ -962,11 +1003,19 @@ export async function POST(request: Request) {
         },
       };
 
-    let { data: order, error: orderError } = await adminSupabase
-      .from('orders')
-      .insert(orderPayload)
-      .select()
-      .single();
+    let order = reusablePendingOrderWithoutSession as any;
+    let orderError: any = null;
+
+    if (!order) {
+      const insertResult = await adminSupabase
+        .from('orders')
+        .insert(orderPayload)
+        .select()
+        .single();
+
+      order = insertResult.data;
+      orderError = insertResult.error;
+    }
 
     if (orderError?.code === 'PGRST204') {
       // Schema cache issue with attribution columns - retry without them
@@ -1038,67 +1087,79 @@ export async function POST(request: Request) {
       cancel_url ||
       (case_id ? `${baseUrl}/wizard/preview/${case_id}?payment=cancelled&product=${product_type}` : `${baseUrl}/dashboard`);
 
-    // Use idempotency key if we have a case_id (prevents duplicate Stripe sessions)
+    const checkoutSessionPayload: Stripe.Checkout.SessionCreateParams = {
+      customer: customerId,
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'gbp',
+            product_data: {
+              name: product.label,
+              description: isNoticeOnlyToCompletePackUpgrade
+                ? 'Upgrade from the paid Stage 1 notice file into the full Stage 2 court and possession pack for the same case.'
+                : product.description,
+            },
+            unit_amount: Math.round(primaryChargeAmount * 100),
+          },
+          quantity: 1,
+        },
+        ...addOnProducts.map((addOn) => ({
+          price_data: {
+            currency: 'gbp',
+            product_data: {
+              name: addOn.label,
+              description: addOn.description,
+            },
+            unit_amount: Math.round(addOn.price * 100),
+          },
+          quantity: 1,
+        })),
+      ],
+      metadata: {
+        user_id: user.id,
+        order_id: (order as any).id,
+        product_type,
+        add_ons: permittedAddOnSkus.join(','),
+        case_id: case_id || '',
+        upgrade_from_product: isNoticeOnlyToCompletePackUpgrade ? 'notice_only' : '',
+        upgrade_amount: isNoticeOnlyToCompletePackUpgrade ? String(primaryChargeAmount) : '',
+        // Attribution for webhook processing (Stripe metadata max 500 chars per value)
+        landing_path: (landing_path || '').substring(0, 500),
+        utm_source: (utm_source || '').substring(0, 200),
+        utm_medium: (utm_medium || '').substring(0, 200),
+        utm_campaign: (utm_campaign || '').substring(0, 200),
+        utm_term: (utm_term || '').substring(0, 200),
+        utm_content: (utm_content || '').substring(0, 200),
+        referrer: (referrer || '').substring(0, 500),
+        first_touch_at: first_touch_at || '',
+        ga_client_id: ga_client_id || '',
+        marketing_session_id: (marketing_session_id || '').substring(0, 200),
+        checkout_abandoned: checkout_abandoned || '',
+      },
+      success_url: resolvedSuccessUrl,
+      cancel_url: resolvedCancelUrl,
+      allow_promotion_codes: true,
+    };
+
+    // Use a payload-aware key if we have a case_id. Stripe requires the same
+    // idempotency key to be reused only with identical Checkout Session params.
+    const idempotencyKey = case_id
+      ? generateIdempotencyKey({
+          caseId: case_id,
+          productType: normalizedProductType,
+          userId: user.id,
+          orderId: (order as any).id,
+          checkoutPayload: checkoutSessionPayload,
+          contextKey: isNoticeOnlyToCompletePackUpgrade
+            ? 'upgrade:notice_only_to_complete_pack'
+            : undefined,
+        })
+      : undefined;
     const stripeOptions = idempotencyKey ? { idempotencyKey } : undefined;
 
-    const session = await stripe.checkout.sessions.create(
-      {
-        customer: customerId,
-        mode: 'payment',
-        payment_method_types: ['card'],
-        line_items: [
-          {
-            price_data: {
-              currency: 'gbp',
-              product_data: {
-                name: product.label,
-                description: isNoticeOnlyToCompletePackUpgrade
-                  ? 'Upgrade from the paid Stage 1 notice file into the full Stage 2 court and possession pack for the same case.'
-                  : product.description,
-              },
-              unit_amount: Math.round(primaryChargeAmount * 100),
-            },
-            quantity: 1,
-          },
-          ...addOnProducts.map((addOn) => ({
-            price_data: {
-              currency: 'gbp',
-              product_data: {
-                name: addOn.label,
-                description: addOn.description,
-              },
-              unit_amount: Math.round(addOn.price * 100),
-            },
-            quantity: 1,
-          })),
-        ],
-        metadata: {
-          user_id: user.id,
-          order_id: (order as any).id,
-          product_type,
-          add_ons: permittedAddOnSkus.join(','),
-          case_id: case_id || '',
-          upgrade_from_product: isNoticeOnlyToCompletePackUpgrade ? 'notice_only' : '',
-          upgrade_amount: isNoticeOnlyToCompletePackUpgrade ? String(primaryChargeAmount) : '',
-          // Attribution for webhook processing (Stripe metadata max 500 chars per value)
-          landing_path: (landing_path || '').substring(0, 500),
-          utm_source: (utm_source || '').substring(0, 200),
-          utm_medium: (utm_medium || '').substring(0, 200),
-          utm_campaign: (utm_campaign || '').substring(0, 200),
-          utm_term: (utm_term || '').substring(0, 200),
-          utm_content: (utm_content || '').substring(0, 200),
-          referrer: (referrer || '').substring(0, 500),
-          first_touch_at: first_touch_at || '',
-          ga_client_id: ga_client_id || '',
-          marketing_session_id: (marketing_session_id || '').substring(0, 200),
-          checkout_abandoned: checkout_abandoned || '',
-        },
-        success_url: resolvedSuccessUrl,
-        cancel_url: resolvedCancelUrl,
-        allow_promotion_codes: true,
-      },
-      stripeOptions
-    );
+    const session = await stripe.checkout.sessions.create(checkoutSessionPayload, stripeOptions);
 
     // Update order with Stripe session ID and checkout URL (use admin client)
     await adminSupabase

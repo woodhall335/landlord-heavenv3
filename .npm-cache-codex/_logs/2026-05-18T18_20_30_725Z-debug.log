@@ -1,0 +1,123 @@
+0 info it worked if it ends with ok
+1 verbose cli [
+1 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'node@20',
+1 verbose cli   '--global',
+1 verbose cli   '--prefix',
+1 verbose cli   '.npm-cache-codex\\_npx\\7396',
+1 verbose cli   '--cache',
+1 verbose cli   '.npm-cache-codex',
+1 verbose cli   '--loglevel',
+1 verbose cli   'error',
+1 verbose cli   '--json'
+1 verbose cli ]
+2 info using npm@6.14.15
+3 info using node@v14.17.6
+4 verbose npm-session add34120c9804483
+5 silly install loadCurrentTree
+6 silly install readGlobalPackageData
+7 warn registry Unexpected warning for https://registry.npmjs.org/: Miscellaneous Warning UNABLE_TO_VERIFY_LEAF_SIGNATURE: request to https://registry.npmjs.org/node failed, reason: unable to verify the first certificate
+8 warn registry Using stale data from https://registry.npmjs.org/ due to a request error during revalidation.
+9 http fetch GET 200 https://registry.npmjs.org/node 191ms (from cache)
+10 silly pacote range manifest for node@20 fetched in 223ms
+11 timing stage:loadCurrentTree Completed in 245ms
+12 silly install loadIdealTree
+13 silly install cloneCurrentTreeToIdealTree
+14 timing stage:loadIdealTree:cloneCurrentTree Completed in 0ms
+15 silly install loadShrinkwrap
+16 timing stage:loadIdealTree:loadShrinkwrap Completed in 2ms
+17 silly install loadAllDepsIntoIdealTree
+18 silly resolveWithNewModule node@20.20.2 checking installable status
+19 http fetch GET 200 https://registry.npmjs.org/node-bin-setup 77ms (from cache)
+20 silly pacote range manifest for node-bin-setup@^1.0.0 fetched in 79ms
+21 silly resolveWithNewModule node-bin-setup@1.1.4 checking installable status
+22 timing stage:loadIdealTree:loadAllDepsIntoIdealTree Completed in 87ms
+23 timing stage:loadIdealTree Completed in 90ms
+24 silly currentTree 7396
+25 silly idealTree 7396
+25 silly idealTree `-- node@20.20.2
+25 silly idealTree   `-- node-bin-setup@1.1.4
+26 silly install generateActionsToTake
+27 timing stage:generateActionsToTake Completed in 19ms
+28 silly diffTrees action count 2
+29 silly diffTrees add node-bin-setup@1.1.4
+30 silly diffTrees add node@20.20.2
+31 silly decomposeActions action count 16
+32 silly decomposeActions fetch node-bin-setup@1.1.4
+33 silly decomposeActions extract node-bin-setup@1.1.4
+34 silly decomposeActions preinstall node-bin-setup@1.1.4
+35 silly decomposeActions build node-bin-setup@1.1.4
+36 silly decomposeActions install node-bin-setup@1.1.4
+37 silly decomposeActions postinstall node-bin-setup@1.1.4
+38 silly decomposeActions finalize node-bin-setup@1.1.4
+39 silly decomposeActions refresh-package-json node-bin-setup@1.1.4
+40 silly decomposeActions fetch node@20.20.2
+41 silly decomposeActions extract node@20.20.2
+42 silly decomposeActions preinstall node@20.20.2
+43 silly decomposeActions build node@20.20.2
+44 silly decomposeActions install node@20.20.2
+45 silly decomposeActions postinstall node@20.20.2
+46 silly decomposeActions finalize node@20.20.2
+47 silly decomposeActions refresh-package-json node@20.20.2
+48 silly install executeActions
+49 silly doSerial global-install 16
+50 verbose correctMkdir C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_locks correctMkdir not in flight; initializing
+51 verbose makeCacheDir UID & GID are irrelevant on win32
+52 verbose lock using C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_locks\staging-0bb40455cdd5d319.lock for C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\.staging
+53 silly doParallel extract 2
+54 silly extract node-bin-setup@1.1.4
+55 silly extract node@20.20.2
+56 silly tarball trying node-bin-setup@^1.0.0 by hash: sha512-vWNHOne0ZUavArqPP5LJta50+S8R261Fr5SvGul37HbEDcowvLjwdvd0ZeSr0r2lTSrPxl6okq9QUw8BFGiAxA==
+57 silly tarball trying node@20 by hash: sha512-giDTzFQM0UnrbqLamATGBoSjmY4VS29kNl8okF8bXOt6fOi6wg2e3wUhqxkVHdz20LO/+8fgj17ykZvaiFrAtQ==
+58 silly extract node@20 extracted to C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\.staging\node-ae8132a2 (37ms)
+59 silly extract node-bin-setup@^1.0.0 extracted to C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\.staging\node-bin-setup-f60a5b28 (39ms)
+60 timing action:extract Completed in 43ms
+61 silly doReverseSerial unbuild 16
+62 silly doSerial remove 16
+63 silly doSerial move 16
+64 silly doSerial finalize 16
+65 silly finalize C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\node\node_modules\node-bin-setup
+66 silly finalize C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\node
+67 timing action:finalize Completed in 30ms
+68 silly doParallel refresh-package-json 2
+69 silly refresh-package-json C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\node\node_modules\node-bin-setup
+70 silly refresh-package-json C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\node
+71 timing action:refresh-package-json Completed in 35ms
+72 silly doParallel preinstall 2
+73 silly preinstall node-bin-setup@1.1.4
+74 info lifecycle node-bin-setup@1.1.4~preinstall: node-bin-setup@1.1.4
+75 silly preinstall node@20.20.2
+76 info lifecycle node@20.20.2~preinstall: node@20.20.2
+77 verbose lifecycle node@20.20.2~preinstall: unsafe-perm in lifecycle true
+78 verbose lifecycle node@20.20.2~preinstall: PATH: C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\node\node_modules\.bin;C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\.bin;C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\node_modules\.bin;C:\Users\t_moh\.codex\tmp\arg0\codex-arg0Ep76oF;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;c:\ediabas\bin;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\nodejs\;C:\Users\t_moh\.local\share\solana\install\active_release\bin;C:\Users\t_moh\AppData\Local\Microsoft\WindowsApps;C:\Users\t_moh\AppData\Roaming\npm;C:\Users\t_moh\AppData\Local\GitHubDesktop\bin;C:\Users\t_moh\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\t_moh\AppData\Local\OpenAI\Codex\bin;C:\Program Files\WindowsApps\OpenAI.Codex_26.506.3741.0_x64__2p2nqsd0c76g0\app\resources
+79 verbose lifecycle node@20.20.2~preinstall: CWD: C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\node
+80 silly lifecycle node@20.20.2~preinstall: Args: [ '/d /s /c', 'node installArchSpecificPackage' ]
+81 silly lifecycle node@20.20.2~preinstall: Returned: code: 1  signal: null
+82 info lifecycle node@20.20.2~preinstall: Failed to exec preinstall script
+83 timing action:preinstall Completed in 597ms
+84 verbose unlock done using C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_locks\staging-0bb40455cdd5d319.lock for C:\Users\t_moh\Documents\GitHub\landlord-heavenv3\.npm-cache-codex\_npx\7396\node_modules\.staging
+85 timing stage:rollbackFailedOptional Completed in 17ms
+86 timing stage:runTopLevelLifecycles Completed in 1088ms
+87 verbose stack Error: node@20.20.2 preinstall: `node installArchSpecificPackage`
+87 verbose stack Exit status 1
+87 verbose stack     at EventEmitter.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\index.js:332:16)
+87 verbose stack     at EventEmitter.emit (events.js:400:28)
+87 verbose stack     at ChildProcess.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\lib\spawn.js:55:14)
+87 verbose stack     at ChildProcess.emit (events.js:400:28)
+87 verbose stack     at maybeClose (internal/child_process.js:1055:16)
+87 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:288:5)
+88 verbose pkgid node@20.20.2
+89 verbose cwd C:\Users\t_moh\Documents\GitHub\landlord-heavenv3
+90 verbose Windows_NT 10.0.19045
+91 verbose argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "node@20" "--global" "--prefix" ".npm-cache-codex\\_npx\\7396" "--cache" ".npm-cache-codex" "--loglevel" "error" "--json"
+92 verbose node v14.17.6
+93 verbose npm  v6.14.15
+94 error code ELIFECYCLE
+95 error errno 1
+96 error node@20.20.2 preinstall: `node installArchSpecificPackage`
+96 error Exit status 1
+97 error Failed at the node@20.20.2 preinstall script.
+97 error This is probably not a problem with npm. There is likely additional logging output above.
+98 verbose exit [ 1, true ]
