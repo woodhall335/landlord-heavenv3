@@ -51,9 +51,9 @@ const astProductHref = '/products/ast';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
+  title: 'Northern Ireland Tenancy Agreement 2026',
   description:
-    `Plain-English landlord guide to creating a Northern Ireland tenancy agreement online, with NI-specific wording, current legislation, and pricing ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
+    'Plain-English landlord guide to creating a Northern Ireland tenancy agreement online, with NI-specific wording and current legislation.',
   keywords: [
     'tenancy agreement northern ireland',
     'northern ireland tenancy agreement',
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/tenancy-agreement-northern-ireland',
   },
   openGraph: {
-    title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
+    title: 'Northern Ireland Tenancy Agreement 2026',
     description:
       'Landlord guide to creating a Northern Ireland tenancy agreement online with current NI wording and clearer route choice.',
     type: 'website',
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}`,
+    title: 'Northern Ireland Tenancy Agreement 2026',
     description:
       'Create a Northern Ireland tenancy agreement online with current NI wording and clearer landlord guidance.',
   },

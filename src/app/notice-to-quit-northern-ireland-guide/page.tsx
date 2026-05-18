@@ -32,7 +32,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process',
-  description: 'Plain-English landlord guide to the Notice to Quit route in Northern Ireland, including notice periods, valid grounds, and correct service under the Private Tenancies Act (NI) 2022.',
+  description: 'Plain-English landlord guide to Notice to Quit in Northern Ireland, including notice periods, valid grounds, and service under the Private Tenancies Act.',
   keywords: [
     'notice to quit Northern Ireland',
     'NI eviction notice',

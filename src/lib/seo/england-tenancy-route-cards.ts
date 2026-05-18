@@ -1,7 +1,7 @@
 export const englandTenancyRouteComparisonCards = [
   {
     title: 'Standard Periodic Tenancy Agreement',
-    description: 'The current England agreement for a straightforward whole-property let.',
+    description: 'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
     href: '/standard-tenancy-agreement',
     ctaLabel: 'Choose the Standard agreement',
     imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
@@ -10,7 +10,7 @@ export const englandTenancyRouteComparisonCards = [
     details: [
       {
         label: 'Best when',
-        body: 'The current England agreement for a straightforward whole-property let.',
+        body: 'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
       },
       {
         label: 'What it helps with',

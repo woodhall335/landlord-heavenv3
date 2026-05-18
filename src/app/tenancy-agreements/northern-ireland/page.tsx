@@ -15,11 +15,11 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Private Tenancy Agreement Northern Ireland 2026 | ${TENANCY_AGREEMENT_FROM_PRICE}`,
-  description: `Plain-English landlord guide to creating a Private Tenancy Agreement for Northern Ireland, updated for 2026 and aligned with the Private Tenancies Act (NI) 2022. ${TENANCY_AGREEMENT_FROM_PRICE}.`,
+  title: 'Private Tenancy Agreement Northern Ireland',
+  description: 'Plain-English landlord guide to creating a Private Tenancy Agreement for Northern Ireland, with current wording and 2026 compliance points.',
   keywords: 'Private Tenancy Northern Ireland, NI tenancy agreement, Private Tenancies Act 2022, Northern Ireland rental agreement, EICR 2025, landlord NI, rental property Northern Ireland',
   openGraph: {
-    title: `Private Tenancy Agreement Northern Ireland 2026 | ${TENANCY_AGREEMENT_FROM_PRICE}`,
+    title: 'Private Tenancy Agreement Northern Ireland',
     description: 'Landlord guide to creating a Northern Ireland tenancy agreement with current wording, 2025 EICR requirements, and rent increase rules explained clearly.',
     type: 'website',
     url: getCanonicalUrl('/northern-ireland-tenancy-agreement-template'),

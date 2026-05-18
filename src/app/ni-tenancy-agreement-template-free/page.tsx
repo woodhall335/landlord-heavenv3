@@ -30,7 +30,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement 2026 | Legally Validated',
-  description: 'Compare options and generate a Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording.',
+  description: 'Compare options and generate a Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording and current NI clauses.',
   keywords: [
     'free NI tenancy agreement',
     'Northern Ireland tenancy template free',

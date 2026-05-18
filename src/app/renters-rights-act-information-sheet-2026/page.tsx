@@ -53,7 +53,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
   description:
-    "Download the free Renters' Rights Act Information Sheet 2026 PDF and understand why relying on an older tenancy agreement may expose landlords to risk under the new England regime.",
+    "Download the free Renters' Rights Act Information Sheet 2026 PDF and understand why older tenancy agreements may expose England landlords to risk.",
   keywords: [
     'renters rights act information sheet 2026',
     'renters rights information sheet pdf',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
     description:
-      "Download the England Renters' Rights Act Information Sheet 2026 PDF and see why many existing tenancy agreements may no longer be safe to rely on.",
+      "Download the England Renters' Rights Act Information Sheet 2026 PDF and see why older tenancy agreements may need review.",
     url: canonicalUrl,
     type: 'website',
   },

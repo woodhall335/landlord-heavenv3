@@ -22,7 +22,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Wales Tenancy Agreement 2026 | Occupation Contract',
-  description: 'Create a Wales tenancy agreement (occupation contract) with Renting Homes Act checks and a clearer landlord setup file.',
+  description: 'Create a Wales tenancy agreement occupation contract with Renting Homes Act checks, written statement support, and a clearer landlord setup file.',
   keywords: [
     'Wales tenancy agreement template',
     'Welsh tenancy agreement',

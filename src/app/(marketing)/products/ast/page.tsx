@@ -52,7 +52,7 @@ const routeCards: ProductSalesRouteCard[] = [
       tenancyProducts.find((product) => product.key === 'england_standard_tenancy_agreement')
         ?.priceLabel,
     whatItIs:
-      'The current England agreement for a straightforward whole-property let.',
+      'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
     problemItSolves:
       "Gives landlords a clean starting point when the let is ordinary and does not need student, shared-house, or resident-landlord wording.",
     riskIfWrong:

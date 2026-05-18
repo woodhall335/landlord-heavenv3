@@ -24,6 +24,9 @@
     "src/app/api/cron/legal-change-check/route.ts": {
       "maxDuration": 300
     },
+    "src/app/api/cron/stale-cases-cleanup/route.ts": {
+      "maxDuration": 60
+    },
     "src/app/api/seo/cron/daily/route.ts": {
       "maxDuration": 300
     }
@@ -36,6 +39,10 @@
     {
       "path": "/api/seo/cron/daily?key=$CRON_SECRET",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/stale-cases-cleanup?key=$CRON_SECRET",
+      "schedule": "0 4 * * *"
     },
     {
       "path": "/api/cron/compliance-check?key=$CRON_SECRET",

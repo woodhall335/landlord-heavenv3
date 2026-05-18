@@ -55,7 +55,7 @@ const TOOLS = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Eviction Guides for Landlords | Notices, Court Process, Arrears and Enforcement',
+  title: 'Eviction Guides for Landlords | Notices and Court',
   description: 'Browse landlord eviction guides organised by tenant problems, notices, court process, rent arrears, and possession enforcement.',
   alternates: { canonical },
   openGraph: {

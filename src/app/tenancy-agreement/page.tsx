@@ -5,7 +5,7 @@ import { getCanonicalUrl } from '@/lib/seo';
 export const metadata: Metadata = {
   title: 'Tenancy Agreement Redirect | Landlord Heaven',
   description:
-    'Legacy tenancy agreement route retained only to redirect landlords to the current England agreement example page.',
+    'Legacy tenancy agreement route retained to redirect landlords to the current England agreement example page and the right tenancy pack.',
   keywords: [
     'tenancy agreement redirect',
     'tenancy agreement template',

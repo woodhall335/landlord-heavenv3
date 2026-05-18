@@ -20,7 +20,7 @@ const canonical = 'https://landlordheaven.co.uk/how-to-evict-a-tenant-uk';
 export const metadata: Metadata = {
   title: 'How to Evict a Tenant in the UK | England Landlord Route',
   description:
-    'A practical England-first eviction route for landlords. Start with the notice route if notice comes first, or move into the complete court pack when the case is already progressing.',
+    'A practical England-first eviction route for landlords, from notice choice and Section 8 evidence to court pack preparation and next steps.',
   alternates: {
     canonical,
   },

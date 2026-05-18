@@ -30,7 +30,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Possession Claim Guide | How Landlords Apply for Court Possession',
   description:
-    'Plain-English landlord guide to possession claims in England, including N5, N5B, court fees, timelines, hearings, and the paperwork landlords usually need before applying.',
+    'Plain-English landlord guide to possession claims in England, including N5, N5B, fees, timelines, hearings, and court paperwork.',
   keywords: [
     'possession claim',
     'court possession order',

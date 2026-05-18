@@ -13,7 +13,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Fixed Term Tenancy Agreement Template | Legacy England Explainer',
   description:
-    'Legacy explainer for landlords searching fixed term tenancy agreement template in England.',
+    'Legacy fixed term tenancy agreement template explainer for England landlords, with current assured periodic wording and route choices.',
   keywords: [
     'fixed term tenancy agreement',
     'fixed term tenancy agreement template',

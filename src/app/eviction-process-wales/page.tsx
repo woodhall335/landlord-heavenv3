@@ -40,7 +40,7 @@ const noticeOnlyLink = '/products/notice-only';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process',
+  title: 'Eviction Process Wales | Section 173 and Court',
   description:
     'Plain-English landlord guide to the eviction process in Wales, including Section 173, breach notices, court steps, and next actions under the Welsh framework.',
   keywords: [
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     'written statement wales landlord',
   ],
   openGraph: {
-    title: 'Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process',
+    title: 'Eviction Process Wales | Section 173 and Court',
     description:
       'Guide to evicting a contract-holder in Wales under the Renting Homes (Wales) Act. Section 173, breach routes, court process, timelines, and landlord next steps.',
     type: 'article',

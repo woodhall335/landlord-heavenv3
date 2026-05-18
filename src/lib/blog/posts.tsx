@@ -1101,7 +1101,7 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'section-21-vs-section-8',
-    title: 'Section 21 vs Section 8 After the Renters Rights Act: What Landlords Use Now (2026)',
+    title: 'Section 21 vs Section 8 After Renters Rights Act',
     description: 'Section 21 vs Section 8 is now a transition question for England landlords. Learn what changed on 1 May 2026 and which Form 3A possession route applies now.',
     metaDescription: 'Section 21 vs Section 8 after the Renters Rights Act. Section 21 ended in England on 1 May 2026. Learn the current Form 3A and Section 8 possession routes.',
     date: '2026-01-02',
@@ -2406,7 +2406,7 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-assured-shorthold-tenancy-guide',
-    title: 'Assured Shorthold Tenancy (AST) Guide - England Legacy Search Explainer 2026',
+    title: 'AST Guide England | Legacy Search Explainer',
     description: 'England landlords still search for AST agreements, but from 1 May 2026 new agreements generally move into the assured periodic framework. This guide explains what changed and when old wording may need review.',
     metaDescription: 'England AST guide 2026. Understand legacy AST search language, the 1 May 2026 assured periodic change, and when old tenancy wording may need review.',
     date: '2026-01-03',
@@ -3561,7 +3561,7 @@ const allBlogPosts: BlogPost[] = [
     slug: 'england-section-8-ground-8',
     title: 'Section 8 Ground 8 Explained: Mandatory Rent Arrears Eviction (2026)',
     description: 'Complete guide to Section 8 Ground 8 for rent arrears eviction in England. Learn the post-May 2026 arrears threshold, how to prove arrears, court procedures, and common tenant defences.',
-    metaDescription: 'Section 8 Ground 8 rent arrears eviction guide. Mandatory possession for 3 months rent, or 13 weeks if paid weekly or fortnightly. Step-by-step process, evidence requirements, and tenant defences explained.',
+    metaDescription: 'Section 8 Ground 8 rent arrears eviction guide covering mandatory possession thresholds, evidence, court process, and tenant defences.',
     date: '2026-01-03',
     updatedDate: '2026-01-03',
     readTime: '13 min read',
@@ -3991,7 +3991,7 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-accelerated-possession',
-    title: 'Accelerated Possession Procedure England - Legacy Section 21 Guide 2026',
+    title: 'Accelerated Possession England | Legacy Guide',
     description: 'Legacy guide to accelerated possession after the Section 21 ban. Learn when old Section 21 claims may still matter and why new England cases use Form 3A instead.',
     metaDescription: 'Accelerated possession procedure legacy guide for England. Section 21 ended for new notices on 1 May 2026; new cases use Form 3A and standard possession.',
     date: '2026-01-03',
@@ -5002,7 +5002,7 @@ const allBlogPosts: BlogPost[] = [
   // ============================================
   {
     slug: 'england-section-8-ground-10-11',
-    title: 'Section 8 Ground 10 & 11 Explained: Discretionary Rent Arrears Eviction (England)',
+    title: 'Section 8 Grounds 10 and 11 | Rent Arrears Guide',
     description: 'Grounds 10 and 11 are discretionary rent arrears grounds. Learn when to use them, how they differ from Ground 8, and how to convince the court possession is reasonable.',
     metaDescription: 'Section 8 Ground 10 and 11 explained for England landlords. Discretionary rent arrears eviction when Ground 8 fails. Court considerations and success strategies.',
     date: '2026-01-03',
@@ -27408,7 +27408,7 @@ const allBlogPosts: BlogPost[] = [
   // Article 73: UK Tenancy Agreements Guide
   {
     slug: 'uk-tenancy-agreements-guide',
-    title: 'UK Tenancy Agreements Guide 2026 | England, Wales, Scotland and Northern Ireland',
+    title: 'UK Tenancy Agreements Guide 2026',
     description: 'Compare the main tenancy agreement frameworks across England, Wales, Scotland, and Northern Ireland so you choose the right wording for the property jurisdiction.',
     metaDescription: 'UK tenancy agreements guide 2026. Compare England assured periodic wording, Wales occupation contracts, Scotland PRTs, and Northern Ireland private tenancy agreements.',
     date: '2026-01-03',
@@ -27589,9 +27589,9 @@ const allBlogPosts: BlogPost[] = [
   // Article 74: UK Property Maintenance Obligations
   {
     slug: 'uk-property-maintenance-obligations',
-    title: 'UK Property Maintenance Obligations - Complete Landlord Guide 2026',
+    title: 'UK Property Maintenance Obligations Guide 2026',
     description: 'Comprehensive guide to landlord property maintenance obligations across the UK. Understand your legal responsibilities for repairs, safety, and property standards.',
-    metaDescription: 'UK landlord maintenance obligations 2026. Complete guide to repair responsibilities, safety requirements, response times, and compliance across England, Wales, Scotland & NI.',
+    metaDescription: 'UK landlord maintenance obligations guide covering repair duties, safety requirements, response times, and compliance across England, Wales, Scotland and NI.',
     date: '2026-01-03',
     readTime: '15 min read',
     wordCount: 1780,
@@ -39550,7 +39550,7 @@ const allBlogPosts: BlogPost[] = [
   // Article: England tenancy agreement review after 1 May 2026
   {
     slug: 'do-landlords-need-a-new-tenancy-agreement-after-1-may-2026',
-    title: 'Do Landlords Need a New Tenancy Agreement After 1 May 2026? England Guide',
+    title: 'New Tenancy Agreement After 1 May 2026? England Guide',
     description: 'England landlords should review whether older tenancy agreements still reflect the assured periodic framework from 1 May 2026 and whether outdated clauses may now be weaker than expected.',
     metaDescription: 'Do landlords need a new tenancy agreement after 1 May 2026? England guide to outdated clauses, assured periodic wording, and when to review or replace old templates.',
     date: '2026-03-22',

@@ -44,7 +44,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Section 8 vs Section 21 | Which Notice to Use',
   description:
-    `Section 8 vs Section 21 explained in plain English, so landlords can choose the right notice, avoid wasted time, and start with the right paperwork from ${noticeOnlyPrice}.`,
+    'Section 8 vs Section 21 explained in plain English, so landlords can choose the right notice, avoid wasted time, and prepare the paperwork.',
   keywords: [
     'section 8 vs section 21',
     'should i use section 8 or section 21',

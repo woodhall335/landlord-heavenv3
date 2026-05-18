@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   title:
     'N5B Possession Claim Guide | Accelerated Possession After Section 21',
   description:
-    'Landlord guide explaining how the N5B accelerated possession claim works after Section 21, what documents are normally required, and how to avoid common court-stage mistakes.',
+    'Landlord guide to N5B accelerated possession claims after Section 21, required documents, evidence checks, and common court-stage mistakes.',
   alternates: { canonical },
 };
 

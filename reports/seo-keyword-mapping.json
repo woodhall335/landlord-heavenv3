@@ -137,9 +137,9 @@
     "pageType": "dynamic",
     "category": "Blog - Eviction",
     "source": "blog",
-    "currentTitle": "Accelerated Possession Procedure England - Legacy Section 21 Guide 2026",
+    "currentTitle": "Accelerated Possession England | Legacy Guide",
     "currentDescription": "Accelerated possession procedure legacy guide for England. Section 21 ended for new notices on 1 May 2026; new cases use Form 3A and standard possession.",
-    "currentH1": "Accelerated Possession Procedure England - Legacy Section 21 Guide 2026",
+    "currentH1": "Accelerated Possession England | Legacy Guide",
     "currentKeywords": "Accelerated Possession, Section 21, Eviction Process, Court Procedure, England",
     "hasSchema": "Yes",
     "schemaTypes": "Article, BreadcrumbList",
@@ -149,7 +149,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (71 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/blog/england-standard-possession",
@@ -194,9 +194,9 @@
     "pageType": "dynamic",
     "category": "Blog - Eviction Grounds",
     "source": "blog",
-    "currentTitle": "Section 8 Ground 10 & 11 Explained: Discretionary Rent Arrears Eviction (England)",
+    "currentTitle": "Section 8 Grounds 10 and 11 | Rent Arrears Guide",
     "currentDescription": "Section 8 Ground 10 and 11 explained for England landlords. Discretionary rent arrears eviction when Ground 8 fails. Court considerations and success strategies.",
-    "currentH1": "Section 8 Ground 10 & 11 Explained: Discretionary Rent Arrears Eviction (England)",
+    "currentH1": "Section 8 Grounds 10 and 11 | Rent Arrears Guide",
     "currentKeywords": "Ground 10, Ground 11, Section 8, Rent Arrears, Discretionary Grounds",
     "hasSchema": "Yes",
     "schemaTypes": "Article, BreadcrumbList",
@@ -206,7 +206,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (81 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/blog/england-section-8-ground-12",
@@ -328,7 +328,7 @@
     "category": "Blog - Eviction Guides",
     "source": "blog",
     "currentTitle": "Section 8 Ground 8 Explained: Mandatory Rent Arrears Eviction (2026)",
-    "currentDescription": "Section 8 Ground 8 rent arrears eviction guide. Mandatory possession for 3 months rent, or 13 weeks if paid weekly or fortnightly. Step-by-step process, evidence requirements, and tenant defences explained.",
+    "currentDescription": "Section 8 Ground 8 rent arrears eviction guide covering mandatory possession thresholds, evidence, court process, and tenant defences.",
     "currentH1": "Section 8 Ground 8 Explained: Mandatory Rent Arrears Eviction (2026)",
     "currentKeywords": "Section 8, Ground 8, Rent Arrears, Mandatory Eviction, England, Possession Order",
     "hasSchema": "Yes",
@@ -339,7 +339,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (206 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/blog/england-section-8-process",
@@ -422,9 +422,9 @@
     "pageType": "dynamic",
     "category": "Blog - Eviction Guides",
     "source": "blog",
-    "currentTitle": "Section 21 vs Section 8 After the Renters Rights Act: What Landlords Use Now (2026)",
+    "currentTitle": "Section 21 vs Section 8 After Renters Rights Act",
     "currentDescription": "Section 21 vs Section 8 after the Renters Rights Act. Section 21 ended in England on 1 May 2026. Learn the current Form 3A and Section 8 possession routes.",
-    "currentH1": "Section 21 vs Section 8 After the Renters Rights Act: What Landlords Use Now (2026)",
+    "currentH1": "Section 21 vs Section 8 After Renters Rights Act",
     "currentKeywords": "Section 21, Section 8, Eviction, Rent Arrears, Landlord Rights",
     "hasSchema": "Yes",
     "schemaTypes": "Article, BreadcrumbList",
@@ -434,7 +434,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (83 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/blog/what-is-section-21-notice",
@@ -1239,9 +1239,9 @@
     "pageType": "dynamic",
     "category": "Blog - Property Management",
     "source": "blog",
-    "currentTitle": "UK Property Maintenance Obligations - Complete Landlord Guide 2026",
-    "currentDescription": "UK landlord maintenance obligations 2026. Complete guide to repair responsibilities, safety requirements, response times, and compliance across England, Wales, Scotland & NI.",
-    "currentH1": "UK Property Maintenance Obligations - Complete Landlord Guide 2026",
+    "currentTitle": "UK Property Maintenance Obligations Guide 2026",
+    "currentDescription": "UK landlord maintenance obligations guide covering repair duties, safety requirements, response times, and compliance across England, Wales, Scotland and NI.",
+    "currentH1": "UK Property Maintenance Obligations Guide 2026",
     "currentKeywords": "property maintenance, landlord repairs, property obligations, maintenance responsibilities, UK landlords",
     "hasSchema": "Yes",
     "schemaTypes": "Article, BreadcrumbList",
@@ -1251,7 +1251,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (174 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/blog/uk-property-marketing-guide",
@@ -1809,9 +1809,9 @@
     "pageType": "dynamic",
     "category": "Blog - Tenancy Agreements",
     "source": "blog",
-    "currentTitle": "Do Landlords Need a New Tenancy Agreement After 1 May 2026? England Guide",
+    "currentTitle": "New Tenancy Agreement After 1 May 2026? England Guide",
     "currentDescription": "Do landlords need a new tenancy agreement after 1 May 2026? England guide to outdated clauses, assured periodic wording, and when to review or replace old templates.",
-    "currentH1": "Do Landlords Need a New Tenancy Agreement After 1 May 2026? England Guide",
+    "currentH1": "New Tenancy Agreement After 1 May 2026? England Guide",
     "currentKeywords": "England tenancy agreement, Renters Rights Act, assured periodic tenancy, landlord guide, AST legacy search",
     "hasSchema": "Yes",
     "schemaTypes": "Article, BreadcrumbList",
@@ -1821,16 +1821,16 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (73 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/blog/england-assured-shorthold-tenancy-guide",
     "pageType": "dynamic",
     "category": "Blog - Tenancy Agreements",
     "source": "blog",
-    "currentTitle": "Assured Shorthold Tenancy (AST) Guide - England Legacy Search Explainer 2026",
+    "currentTitle": "AST Guide England | Legacy Search Explainer",
     "currentDescription": "England AST guide 2026. Understand legacy AST search language, the 1 May 2026 assured periodic change, and when old tenancy wording may need review.",
-    "currentH1": "Assured Shorthold Tenancy (AST) Guide - England Legacy Search Explainer 2026",
+    "currentH1": "AST Guide England | Legacy Search Explainer",
     "currentKeywords": "AST, Assured Shorthold Tenancy, England, Tenancy Agreement, Renters Rights Act, Assured Periodic",
     "hasSchema": "Yes",
     "schemaTypes": "Article, BreadcrumbList",
@@ -1840,16 +1840,16 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (76 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/blog/uk-tenancy-agreements-guide",
     "pageType": "dynamic",
     "category": "Blog - Tenancy Agreements",
     "source": "blog",
-    "currentTitle": "UK Tenancy Agreements Guide 2026 | England, Wales, Scotland and Northern Ireland",
+    "currentTitle": "UK Tenancy Agreements Guide 2026",
     "currentDescription": "UK tenancy agreements guide 2026. Compare England assured periodic wording, Wales occupation contracts, Scotland PRTs, and Northern Ireland private tenancy agreements.",
-    "currentH1": "UK Tenancy Agreements Guide 2026 | England, Wales, Scotland and Northern Ireland",
+    "currentH1": "UK Tenancy Agreements Guide 2026",
     "currentKeywords": "tenancy agreements, UK landlord guide, England tenancy agreement, occupation contract, PRT, Northern Ireland tenancy agreement",
     "hasSchema": "Yes",
     "schemaTypes": "Article, BreadcrumbList",
@@ -1859,7 +1859,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (80 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/blog/uk-tenant-referencing-guide",
@@ -2645,7 +2645,7 @@
     "pageType": "static",
     "category": "Eviction Guide",
     "source": "app",
-    "currentTitle": "Eviction Guides for Landlords | Notices, Court Process, Arrears and Enforcement",
+    "currentTitle": "Eviction Guides for Landlords | Notices and Court",
     "currentDescription": "Browse landlord eviction guides organised by tenant problems, notices, court process, rent arrears, and possession enforcement.",
     "currentH1": "Eviction guides for landlords",
     "currentKeywords": "how to evict a tenant legally, UK landlord eviction guide, Section 21 ending in 2026, what replaces Section 21, complete eviction pack for England, court-ready possession support",
@@ -2657,7 +2657,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (79 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/eviction-notice-england",
@@ -2740,7 +2740,7 @@
     "pageType": "static",
     "category": "Eviction Guide",
     "source": "app",
-    "currentTitle": "Eviction Process Wales 2026 | Section 173, Breach Notices & Court Process",
+    "currentTitle": "Eviction Process Wales | Section 173 and Court",
     "currentDescription": "Plain-English landlord guide to the eviction process in Wales, including Section 173, breach notices, court steps, and next actions under the Welsh framework.",
     "currentH1": "Wales eviction terminology landlords need to know",
     "currentKeywords": "eviction process wales, how to evict a tenant in wales, how to evict a contract-holder in wales, section 173 notice wales, section 178 notice wales, renting homes wales act eviction, occupation contract wales eviction, wales landlord possession process, tenant not leaving after section 173, contract-holder not leaving wales, wales eviction notice, written statement wales landlord",
@@ -2752,7 +2752,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (73 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/eviction-timeline-england",
@@ -2912,7 +2912,7 @@
     "category": "Eviction Guide",
     "source": "app",
     "currentTitle": "N5B Possession Claim Guide | Accelerated Possession After Section 21",
-    "currentDescription": "Landlord guide explaining how the N5B accelerated possession claim works after Section 21, what documents are normally required, and how to avoid common court-stage mistakes.",
+    "currentDescription": "Landlord guide to N5B accelerated possession claims after Section 21, required documents, evidence checks, and common court-stage mistakes.",
     "currentH1": "N5B Possession Claim Guide",
     "currentKeywords": "n5b possession claim guide",
     "hasSchema": "Yes",
@@ -2923,7 +2923,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (174 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/no-fault-eviction",
@@ -2950,7 +2950,7 @@
     "category": "Eviction Guide",
     "source": "app",
     "currentTitle": "Possession Claim Guide | How Landlords Apply for Court Possession",
-    "currentDescription": "Plain-English landlord guide to possession claims in England, including N5, N5B, court fees, timelines, hearings, and the paperwork landlords usually need before applying.",
+    "currentDescription": "Plain-English landlord guide to possession claims in England, including N5, N5B, fees, timelines, hearings, and court paperwork.",
     "currentH1": "Two Main Possession Claim Routes",
     "currentKeywords": "possession claim, court possession order, n5 form, n5b form, accelerated possession, possession proceedings, apply for possession order, county court possession, eviction court process, landlord possession claim",
     "hasSchema": "Yes",
@@ -2961,7 +2961,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (171 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/possession-order-process",
@@ -2988,7 +2988,7 @@
     "category": "Eviction Guide",
     "source": "app",
     "currentTitle": "Possession Order Timeline: From Claim to Enforcement",
-    "currentDescription": "Landlord guide to the usual possession order timeline in England, from notice through claim, order, and enforcement.",
+    "currentDescription": "Landlord guide to the usual possession order timeline in England, from notice through claim, possession order, enforcement, and bailiff-stage planning.",
     "currentH1": "Possession Order Timeline: From Claim to Enforcement",
     "currentKeywords": "possession order timeline",
     "hasSchema": "Yes",
@@ -2999,7 +2999,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (116 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/recover-rent-arrears-after-eviction",
@@ -3102,7 +3102,7 @@
     "category": "Eviction Guide",
     "source": "app",
     "currentTitle": "Warrant of Possession UK — Bailiff Eviction Guide (2026)",
-    "currentDescription": "Plain-English landlord guide to applying for a warrant of possession after a court order, including county court bailiffs, High Court enforcement, and what to expect on eviction day.",
+    "currentDescription": "Plain-English landlord guide to applying for a warrant of possession, county court bailiffs, High Court enforcement, and eviction day steps.",
     "currentH1": "Two Ways to Enforce Your Possession Order",
     "currentKeywords": "warrant of possession, bailiff eviction, n325 form, county court bailiff, high court enforcement, eviction warrant, bailiff appointment, possession warrant, enforce possession order, eviction day uk",
     "hasSchema": "Yes",
@@ -3113,7 +3113,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (182 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/warrant-of-possession-guide",
@@ -3215,7 +3215,7 @@
     "pageType": "static",
     "category": "Informational",
     "source": "app",
-    "currentTitle": "Landlord document pricing in England | Eviction, debt, rent increase, tenancy",
+    "currentTitle": "Landlord Document Pricing | England Packs",
     "currentDescription": "See one-time prices for Landlord Heaven packs covering Section 8 notices, possession claims, money claims, rent increases, and England tenancy agreements.",
     "currentH1": "Choose the document you need now",
     "currentKeywords": "landlord pricing england, eviction notice generator price, complete eviction pack price, money claim pack price, section 13 rent increase price, tenancy agreement price england, landlord document pricing",
@@ -3227,7 +3227,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (77 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/cookies",
@@ -3805,7 +3805,7 @@
     "category": "Northern Ireland",
     "source": "app",
     "currentTitle": "Notice to Quit Northern Ireland Guide 2026 | Landlord Eviction Process",
-    "currentDescription": "Plain-English landlord guide to the Notice to Quit route in Northern Ireland, including notice periods, valid grounds, and correct service under the Private Tenancies Act (NI) 2022.",
+    "currentDescription": "Plain-English landlord guide to Notice to Quit in Northern Ireland, including notice periods, valid grounds, and service under the Private Tenancies Act.",
     "currentH1": "Notice to Quit Northern Ireland: Complete Guide 2026",
     "currentKeywords": "notice to quit Northern Ireland, NI eviction notice, Northern Ireland landlord eviction, Private Tenancies Act notice, NI notice period, evict tenant Northern Ireland, landlord notice NI, NTQ Northern Ireland, possession order NI, tenant eviction NI",
     "hasSchema": "Yes",
@@ -3816,7 +3816,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (181 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/can-a-landlord-evict-for-noise-complaints",
@@ -3919,7 +3919,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "Evict Tenant for Anti-Social Behaviour: Landlord Guide",
-    "currentDescription": "Landlord guide for England when anti-social behaviour may justify eviction. Learn what evidence usually matters, what can go wrong, and when to move from complaints to formal action.",
+    "currentDescription": "Landlord guide for England when anti-social behaviour may justify eviction, with evidence checks, common risks, and when to take formal action.",
     "currentH1": "Evict Tenant for Anti-Social Behaviour: Landlord Guide",
     "currentKeywords": "evict tenant anti social behaviour",
     "hasSchema": "Yes",
@@ -3930,7 +3930,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (182 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/evict-tenant-for-damage",
@@ -3938,7 +3938,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "Evict Tenant for Damage: Section 8 Grounds and Evidence",
-    "currentDescription": "Landlord guide for England when tenant damage may justify eviction. Understand the evidence landlords usually need, the likely Section 8 issues, and when money recovery may make more sense.",
+    "currentDescription": "Landlord guide for England when tenant damage may justify eviction, covering evidence, Section 8 issues, and when money recovery may make sense.",
     "currentH1": "Evict Tenant for Damage: Section 8 Grounds and Evidence",
     "currentKeywords": "evict tenant for damage",
     "hasSchema": "Yes",
@@ -3949,7 +3949,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (189 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/fixed-term-periodic-tenancy-england",
@@ -4014,7 +4014,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "How to Evict a Tenant in the UK | England Landlord Route",
-    "currentDescription": "A practical England-first eviction route for landlords. Start with the notice route if notice comes first, or move into the complete court pack when the case is already progressing.",
+    "currentDescription": "A practical England-first eviction route for landlords, from notice choice and Section 8 evidence to court pack preparation and next steps.",
     "currentH1": "Most landlords need one of two routes",
     "currentKeywords": "how to evict a tenant uk, landlord eviction process uk, eviction steps landlord",
     "hasSchema": "Yes",
@@ -4025,7 +4025,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (181 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/how-to-evict-tenant",
@@ -4147,7 +4147,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "Renters' Rights Act Information Sheet 2026 | Free PDF Download",
-    "currentDescription": "Download the free Renters' Rights Act Information Sheet 2026 PDF and understand why relying on an older tenancy agreement may expose landlords to risk under the new England regime.",
+    "currentDescription": "Download the free Renters' Rights Act Information Sheet 2026 PDF and understand why older tenancy agreements may expose England landlords to risk.",
     "currentH1": "The Information Sheet does not make an old tenancy agreement safe",
     "currentKeywords": "renters rights act information sheet 2026, renters rights information sheet pdf, renters rights act information sheet download, england tenancy agreement risk 2026, old tenancy agreement renters rights act, renters rights act information sheet england",
     "hasSchema": "Yes",
@@ -4158,7 +4158,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (180 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/samples",
@@ -4204,7 +4204,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "Tenant Abandoned Property? Landlord Recovery Guide",
-    "currentDescription": "Landlord guide for England when a tenant appears to have abandoned the property. Learn what to check before treating the tenancy as over and what records usually matter most.",
+    "currentDescription": "Landlord guide for England when a tenant appears to have abandoned the property, with checks before treating the tenancy as over and key records.",
     "currentH1": "Tenant Abandoned Property? Landlord Recovery Guide",
     "currentKeywords": "tenant abandoned property",
     "hasSchema": "Yes",
@@ -4215,7 +4215,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (174 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tenant-anti-social-behaviour",
@@ -4223,7 +4223,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "Tenant Anti-Social Behaviour: Eviction and Evidence Guide",
-    "currentDescription": "Landlord guide for England when a tenant is accused of anti-social behaviour. Learn what evidence usually matters and when complaints are strong enough to support formal action.",
+    "currentDescription": "Landlord guide for England when a tenant is accused of anti-social behaviour, with evidence checks and when complaints may support formal action.",
     "currentH1": "Tenant Anti-Social Behaviour: Eviction and Evidence Guide",
     "currentKeywords": "tenant anti social behaviour",
     "hasSchema": "Yes",
@@ -4234,7 +4234,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (177 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tenant-breach-of-tenancy",
@@ -4242,7 +4242,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "Tenant Breach of Tenancy: What Landlords Should Do Next",
-    "currentDescription": "Landlord guide for England when a tenant is breaching the tenancy agreement. Learn how to assess the breach, what evidence usually matters, and when formal possession steps are realistic.",
+    "currentDescription": "Landlord guide for England when a tenant breaches the agreement, with evidence checks, breach assessment, and when formal possession steps are realistic.",
     "currentH1": "Tenant Breach of Tenancy: What Landlords Should Do Next",
     "currentKeywords": "tenant breach of tenancy",
     "hasSchema": "Yes",
@@ -4253,7 +4253,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (187 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tenant-damaging-property",
@@ -4279,7 +4279,7 @@
     "pageType": "static",
     "category": "Other",
     "source": "app",
-    "currentTitle": "Tenant Left Without Paying Rent | Recover Rent Arrears After a Tenant Leaves",
+    "currentTitle": "Tenant Left Without Paying Rent | Recovery Guide",
     "currentDescription": "Plain-English landlord guide to recovering unpaid rent after a tenant leaves, including final balance checks, evidence, and money-claim decisions.",
     "currentH1": "Tenant Left Without Paying Rent",
     "currentKeywords": "tenant left without paying rent",
@@ -4291,7 +4291,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (76 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/tenant-refuses-to-leave-after-notice",
@@ -4318,7 +4318,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "Tenant Refusing Access? Landlord Legal Options",
-    "currentDescription": "Landlord guide for England when a tenant keeps refusing access for inspections, repairs, or safety checks. Learn what to record and when the issue becomes serious enough to escalate.",
+    "currentDescription": "Landlord guide for England when a tenant refuses access for inspections, repairs, or safety checks, with records to keep and escalation points.",
     "currentH1": "Tenant Refusing Access? Landlord Legal Options",
     "currentKeywords": "tenant refusing access",
     "hasSchema": "Yes",
@@ -4329,7 +4329,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (182 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tenant-refusing-inspection",
@@ -4337,7 +4337,7 @@
     "category": "Other",
     "source": "app",
     "currentTitle": "Tenant Refusing Inspection? Rights, Process and Next Steps",
-    "currentDescription": "Landlord guide for England when a tenant keeps refusing inspections. Learn what to record, when access problems stay informal, and when stronger action may become realistic.",
+    "currentDescription": "Landlord guide for England when a tenant refuses inspections, covering access records, informal steps, and when stronger action may become realistic.",
     "currentH1": "Tenant Refusing Inspection? Rights, Process and Next Steps",
     "currentKeywords": "tenant refusing inspection",
     "hasSchema": "Yes",
@@ -4348,14 +4348,14 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (173 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tenant-stopped-paying-rent",
     "pageType": "static",
     "category": "Other",
     "source": "app",
-    "currentTitle": "Tenant Stopped Paying Rent 2026 | Landlord Action Plan for Arrears and Possession | LandlordHeaven",
+    "currentTitle": "Tenant Stopped Paying Rent | Landlord Action Plan",
     "currentDescription": "Plain-English landlord guide to what to do when a tenant stops paying rent, including arrears evidence, route choice, possession planning, and next steps.",
     "currentH1": "Tenant Stopped Paying Rent",
     "currentKeywords": "tenant stopped paying rent",
@@ -4367,7 +4367,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (98 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/tenant-subletting-without-permission",
@@ -4622,7 +4622,7 @@
     "category": "Scotland Eviction",
     "source": "app",
     "currentTitle": "Scotland Eviction Process | Notice to Leave & Tribunal",
-    "currentDescription": "Plain-English landlord guide to the eviction process in Scotland, including Notice to Leave, tribunal steps, and the main grounds landlords need to understand. Get court-ready documents from ${noticeOnlyPrice}.",
+    "currentDescription": "Plain-English landlord guide to the eviction process in Scotland, including Notice to Leave, tribunal steps, grounds, and evidence planning.",
     "currentH1": "Private Residential Tenancy (PRT) Explained",
     "currentKeywords": "eviction process scotland landlord, eviction tribunal scotland, notice to leave scotland, prt eviction scotland, private residential tenancy eviction, scotland eviction grounds, first tier tribunal housing scotland, landlord eviction scotland",
     "hasSchema": "Yes",
@@ -4633,7 +4633,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (210 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/prt-template-scotland",
@@ -4678,8 +4678,8 @@
     "pageType": "static",
     "category": "Scotland Eviction",
     "source": "app",
-    "currentTitle": "Scotland PRT Model Agreement Guide 2026 | Government Template vs Ours",
-    "currentDescription": "Compare the Scottish Government PRT model agreement with professional alternatives. What the model lacks explained.",
+    "currentTitle": "Scotland PRT Model Agreement Guide",
+    "currentDescription": "Compare the Scottish Government PRT model agreement with professional alternatives, setup records, landlord clauses, and practical drafting gaps.",
     "currentH1": "Scotland PRT Model Agreement: What It Is and What It Lacks",
     "currentKeywords": "Scotland PRT model agreement, Scottish Government tenancy agreement, model PRT Scotland, Scottish model tenancy, PRT model agreement comparison, government tenancy template Scotland, Scottish model agreement guide, PRT template comparison, Scotland model tenancy agreement, private residential tenancy model",
     "hasSchema": "Yes",
@@ -4690,7 +4690,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (115 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/form-6a-section-21",
@@ -4907,7 +4907,7 @@
     "category": "Section 21",
     "source": "app",
     "currentTitle": "Section 8 vs Section 21 | Which Notice to Use",
-    "currentDescription": "Section 8 vs Section 21 explained in plain English, so landlords can choose the right notice, avoid wasted time, and start with the right paperwork from ${noticeOnlyPrice}.",
+    "currentDescription": "Section 8 vs Section 21 explained in plain English, so landlords can choose the right notice, avoid wasted time, and prepare the paperwork.",
     "currentH1": "Key Differences at a Glance",
     "currentKeywords": "section 8 vs section 21, should i use section 8 or section 21, fastest way to evict tenant england, section 21 or section 8, eviction notice comparison, section 8 section 21 difference, which eviction notice to use, section 8 vs 21",
     "hasSchema": "Yes",
@@ -4918,7 +4918,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (172 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/serve-section-21-notice",
@@ -4945,7 +4945,7 @@
     "category": "Section 21",
     "source": "app",
     "currentTitle": "Tenant Ignores Section 21: What Landlords Should Do Next",
-    "currentDescription": "Landlord guide for when a tenant ignores Section 21, covering post-expiry actions, court filing and enforcement path.",
+    "currentDescription": "Landlord guide for when a tenant ignores Section 21, covering post-expiry actions, court filing, enforcement path, and evidence checks.",
     "currentH1": "Tenant Ignores Section 21: What Landlords Should Do Next",
     "currentKeywords": "tenant ignores section 21, tenant wont leave after section 21, section 21 ignored what next",
     "hasSchema": "Yes",
@@ -4956,7 +4956,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (117 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/what-happens-after-section-21",
@@ -5382,7 +5382,7 @@
     "category": "Section 8",
     "source": "app",
     "currentTitle": "Tenant Ignores Section 8: Landlord Court Action Guide",
-    "currentDescription": "Practical landlord guide for cases where tenant ignores Section 8 notice and possession action must progress to court.",
+    "currentDescription": "Practical landlord guide for cases where tenant ignores Section 8 notice and possession action moves to court, evidence, and hearing prep.",
     "currentH1": "Tenant Ignores Section 8: Landlord Court Action Guide",
     "currentKeywords": "tenant ignores section 8, section 8 notice ignored, eviction after section 8 expiry",
     "hasSchema": "Yes",
@@ -5393,7 +5393,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (118 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/what-happens-after-section-8",
@@ -5552,8 +5552,8 @@
     "pageType": "static",
     "category": "Tenancy - Northern Ireland",
     "source": "app",
-    "currentTitle": "Private Tenancy Agreement Northern Ireland 2026 | ${TENANCY_AGREEMENT_FROM_PRICE}",
-    "currentDescription": "Plain-English landlord guide to creating a Private Tenancy Agreement for Northern Ireland, updated for 2026 and aligned with the Private Tenancies Act (NI) 2022. ${TENANCY_AGREEMENT_FROM_PRICE}.",
+    "currentTitle": "Private Tenancy Agreement Northern Ireland",
+    "currentDescription": "Plain-English landlord guide to creating a Private Tenancy Agreement for Northern Ireland, with current wording and 2026 compliance points.",
     "currentH1": "Northern Ireland",
     "currentKeywords": "Northern Ireland tenancy agreement guide, NI private tenancy agreement route, Northern Ireland tenancy agreement wording, NI private tenancy rules for landlords, Northern Ireland tenancy agreement generator, NI tenancy workflow for landlords",
     "hasSchema": "Yes",
@@ -5564,7 +5564,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (81 chars, recommend 50-60); Description too long (194 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tenancy-agreements/scotland",
@@ -5590,8 +5590,8 @@
     "pageType": "static",
     "category": "Tenancy - Wales",
     "source": "app",
-    "currentTitle": "Wales Occupation Contract 2026 | Tenancy Agreement Template from ${TENANCY_AGREEMENT_FROM_PRICE}",
-    "currentDescription": "Plain-English landlord guide to creating a Wales Occupation Contract online, with Renting Homes (Wales) Act wording, written statement support, and pricing from ${TENANCY_AGREEMENT_FROM_PRICE}.",
+    "currentTitle": "Wales Occupation Contract 2026 | Template",
+    "currentDescription": "Plain-English landlord guide to creating a Wales Occupation Contract online, with Renting Homes Act wording and written statement support.",
     "currentH1": "Wales Occupation Contract Template",
     "currentKeywords": "wales occupation contract, occupation contract wales, wales tenancy agreement, wales tenancy agreement template, welsh tenancy agreement, welsh rental agreement, standard occupation contract wales, renting homes wales act 2016, written statement wales, wales landlord contract",
     "hasSchema": "Yes",
@@ -5602,7 +5602,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (96 chars, recommend 50-60); Description too long (193 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/6-month-tenancy-agreement-template",
@@ -5610,7 +5610,7 @@
     "category": "Tenancy Agreement Template",
     "source": "app",
     "currentTitle": "6 Month Tenancy Agreement Template | Legacy England Explainer",
-    "currentDescription": "Legacy 6 month tenancy agreement search page for England.",
+    "currentDescription": "Legacy 6 month tenancy agreement template guide for England landlords, explaining current assured periodic routes and which pack to use now.",
     "currentH1": "6 Month Tenancy Agreement Template",
     "currentKeywords": "6 month tenancy agreement, 6 month tenancy agreement template, england tenancy agreement",
     "hasSchema": "Yes",
@@ -5621,7 +5621,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (57 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/assured-periodic-tenancy-agreement",
@@ -5743,7 +5743,7 @@
     "category": "Tenancy Agreement Template",
     "source": "app",
     "currentTitle": "Fixed Term Tenancy Agreement Template | Legacy England Explainer",
-    "currentDescription": "Legacy explainer for landlords searching fixed term tenancy agreement template in England.",
+    "currentDescription": "Legacy fixed term tenancy agreement template explainer for England landlords, with current assured periodic wording and route choices.",
     "currentH1": "Fixed Term Tenancy Agreement Template",
     "currentKeywords": "fixed term tenancy agreement, fixed term tenancy agreement template, england tenancy agreement",
     "hasSchema": "Yes",
@@ -5754,7 +5754,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (90 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/hmo-shared-house-tenancy-agreement",
@@ -5857,7 +5857,7 @@
     "category": "Tenancy Agreement Template",
     "source": "app",
     "currentTitle": "Joint Tenancy Agreement England 2026 | Multiple Tenant Agreement",
-    "currentDescription": "Create a joint tenancy agreement for England with current England wording, multiple-tenant clauses.",
+    "currentDescription": "Create a joint tenancy agreement for England with current wording, multiple-tenant clauses, shared liability points, and setup records.",
     "currentH1": "Joint Tenancy Agreement England",
     "currentKeywords": "joint tenancy agreement template, joint tenancy agreement england, multiple tenants tenancy agreement, shared house tenancy agreement",
     "hasSchema": "Yes",
@@ -5868,7 +5868,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (99 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/ni-private-tenancy-agreement",
@@ -5895,7 +5895,7 @@
     "category": "Tenancy Agreement Template",
     "source": "app",
     "currentTitle": "Northern Ireland Tenancy Agreement 2026 | Legally Validated",
-    "currentDescription": "Compare options and generate a Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording.",
+    "currentDescription": "Compare options and generate a Northern Ireland tenancy agreement with solicitor-grade, compliance-checked wording and current NI clauses.",
     "currentH1": "Free NI Tenancy Agreement Templates: Are They Worth the Risk?",
     "currentKeywords": "free NI tenancy agreement, Northern Ireland tenancy template free, free tenancy agreement download NI, NI landlord template free, Private Tenancies Act template, free rental agreement Northern Ireland, NI tenancy document free, landlord forms free NI, Northern Ireland rental contract free, free vs paid tenancy agreement",
     "hasSchema": "Yes",
@@ -5906,7 +5906,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (115 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/northern-ireland-tenancy-agreement-template",
@@ -6104,7 +6104,7 @@
     "category": "Tenancy Agreement Template",
     "source": "app",
     "currentTitle": "Standard Periodic Tenancy Agreement",
-    "currentDescription": "The current England agreement for a straightforward whole-property let.",
+    "currentDescription": "The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.",
     "currentH1": "Standard Tenancy Agreement for England Landlords",
     "currentKeywords": "standard periodic tenancy agreement, standard periodic tenancy agreement england, periodic tenancy agreement template, assured periodic tenancy agreement, current England tenancy agreement, standard England tenancy agreement, current tenancy agreement, Renters Rights Act compliant tenancy agreement, post-May 2026 periodic tenancy, england standard periodic tenancy agreement, assured periodic tenancy agreement england, england assured periodic tenancy agreement, standard tenancy agreement england, england tenancy agreement standard, basic tenancy agreement england, periodic tenancy agreement england, new england tenancy agreement, renters rights act tenancy agreement england, new tenancy agreement england, updated tenancy agreement england",
     "hasSchema": "Yes",
@@ -6115,7 +6115,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (71 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/student-tenancy-agreement",
@@ -6142,7 +6142,7 @@
     "category": "Tenancy Agreement Template",
     "source": "app",
     "currentTitle": "Tenancy Agreement Redirect | Landlord Heaven",
-    "currentDescription": "Legacy tenancy agreement route retained only to redirect landlords to the current England agreement example page.",
+    "currentDescription": "Legacy tenancy agreement route retained to redirect landlords to the current England agreement example page and the right tenancy pack.",
     "currentH1": "",
     "currentKeywords": "tenancy agreement redirect, tenancy agreement template, legacy tenancy agreement route",
     "hasSchema": "No",
@@ -6153,7 +6153,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (113 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tenancy-agreement-england-2026",
@@ -6179,8 +6179,8 @@
     "pageType": "static",
     "category": "Tenancy Agreement Template",
     "source": "app",
-    "currentTitle": "Northern Ireland Tenancy Agreement 2026 | Create Online ${TENANCY_AGREEMENT_FROM_PRICE}",
-    "currentDescription": "Plain-English landlord guide to creating a Northern Ireland tenancy agreement online, with NI-specific wording, current legislation, and pricing ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.",
+    "currentTitle": "Northern Ireland Tenancy Agreement 2026",
+    "currentDescription": "Plain-English landlord guide to creating a Northern Ireland tenancy agreement online, with NI-specific wording and current legislation.",
     "currentH1": "What is a private tenancy agreement in Northern Ireland?",
     "currentKeywords": "tenancy agreement northern ireland, northern ireland tenancy agreement, private tenancy agreement ni, ni tenancy agreement template, landlord tenancy agreement ni, northern ireland rental agreement, private tenancies act northern ireland, create tenancy agreement northern ireland, written tenancy agreement ni, ni landlord agreement",
     "hasSchema": "Yes",
@@ -6191,7 +6191,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (87 chars, recommend 50-60); Description too long (191 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tenancy-agreement-template",
@@ -6313,7 +6313,7 @@
     "category": "Tenancy Agreement Template",
     "source": "app",
     "currentTitle": "Wales Tenancy Agreement 2026 | Occupation Contract",
-    "currentDescription": "Create a Wales tenancy agreement (occupation contract) with Renting Homes Act checks and a clearer landlord setup file.",
+    "currentDescription": "Create a Wales tenancy agreement occupation contract with Renting Homes Act checks, written statement support, and a clearer landlord setup file.",
     "currentH1": "Wales Tenancy Agreement Template",
     "currentKeywords": "Wales tenancy agreement template, Welsh tenancy agreement, Wales rental agreement, tenancy agreement Wales download, Welsh landlord contract, occupation contract Wales, renting Wales template, Cymru tenancy agreement, Wales letting agreement, Welsh rental contract",
     "hasSchema": "Yes",
@@ -6324,7 +6324,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too short (119 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/tools",
@@ -6369,7 +6369,7 @@
     "pageType": "static",
     "category": "Wales Eviction",
     "source": "app",
-    "currentTitle": "Fixed Term vs Periodic Occupation Contract Wales | Which to Choose in 2026",
+    "currentTitle": "Fixed Term vs Periodic Contract Wales",
     "currentDescription": "Plain-English landlord guide to choosing between fixed-term and periodic occupation contracts in Wales, including what happens when the fixed term ends.",
     "currentH1": "What is the difference between fixed-term and periodic in Wales?",
     "currentKeywords": "fixed term occupation contract wales, periodic occupation contract wales, fixed term vs periodic occupation contract wales, standard occupation contract wales fixed term, rolling occupation contract wales, wales tenancy contract duration, section 173 fixed term wales, what happens when fixed term ends wales, break clause occupation contract wales, renting homes act 2016 contract duration",
@@ -6381,7 +6381,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Title too long (74 chars, recommend 50-60)"
+    "issues": ""
   },
   {
     "route": "/joint-occupation-contract-wales",
@@ -6427,7 +6427,7 @@
     "category": "Wales Eviction",
     "source": "app",
     "currentTitle": "Wales Written Statement 2026 | Legal Requirements",
-    "currentDescription": "Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.",
+    "currentDescription": "Written statement requirements under the Renting Homes (Wales) Act 2016, including the 14-day deadline, required content, and template route.",
     "currentH1": "Written Statement Requirements for Wales Landlords",
     "currentKeywords": "renting homes Wales written statement, Wales written statement requirement, occupation contract written statement, Welsh tenancy written statement, renting homes act 2016 statement, 14 day written statement Wales, landlord written statement Wales, contract holder written statement, Welsh landlord obligations, Wales tenancy documentation",
     "hasSchema": "Yes",
@@ -6438,7 +6438,7 @@
     "suggestedPrimaryKeyword": "",
     "suggestedSecondaryKeywords": "",
     "seoScore": "Excellent",
-    "issues": "Description too long (177 chars, recommend 150-160)"
+    "issues": ""
   },
   {
     "route": "/standard-occupation-contract-wales",

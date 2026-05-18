@@ -19,16 +19,14 @@ const canonical =
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title:
-    'Tenant Stopped Paying Rent 2026 | Landlord Action Plan for Arrears and Possession | LandlordHeaven',
+  title: 'Tenant Stopped Paying Rent | Landlord Action Plan',
   description:
     'Plain-English landlord guide to what to do when a tenant stops paying rent, including arrears evidence, route choice, possession planning, and next steps.',
   alternates: {
     canonical,
   },
   openGraph: {
-    title:
-      'Tenant Stopped Paying Rent 2026 | Landlord Action Plan for Arrears and Possession | LandlordHeaven',
+    title: 'Tenant Stopped Paying Rent | Landlord Action Plan',
     description:
       'Learn how landlords usually respond when a tenant stops paying rent, what evidence matters most, and how to move from arrears to possession with fewer delays.',
     url: canonical,

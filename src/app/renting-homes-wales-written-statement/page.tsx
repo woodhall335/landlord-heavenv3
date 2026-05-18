@@ -21,7 +21,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Wales Written Statement 2026 | Legal Requirements',
-  description: `Written statement requirements under the Renting Homes (Wales) Act 2016. 14-day deadline, required content, and compliant template ${TENANCY_AGREEMENT_FROM_PRICE.toLowerCase()}.`,
+  description: 'Written statement requirements under the Renting Homes (Wales) Act 2016, including the 14-day deadline, required content, and template route.',
   keywords: [
     'renting homes Wales written statement',
     'Wales written statement requirement',

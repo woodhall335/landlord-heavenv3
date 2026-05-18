@@ -20,7 +20,7 @@ import { RiCheckLine } from 'react-icons/ri';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = generateMetadata({
-  title: 'Landlord document pricing in England | Eviction, debt, rent increase, tenancy',
+  title: 'Landlord Document Pricing | England Packs',
   description:
     'See one-time prices for Landlord Heaven packs covering Section 8 notices, possession claims, money claims, rent increases, and England tenancy agreements.',
   path: '/pricing',

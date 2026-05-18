@@ -13,7 +13,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Joint Tenancy Agreement England 2026 | Multiple Tenant Agreement',
   description:
-    'Create a joint tenancy agreement for England with current England wording, multiple-tenant clauses.',
+    'Create a joint tenancy agreement for England with current wording, multiple-tenant clauses, shared liability points, and setup records.',
   keywords: [
     'joint tenancy agreement template',
     'joint tenancy agreement england',

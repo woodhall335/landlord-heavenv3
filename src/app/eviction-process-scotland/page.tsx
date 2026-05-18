@@ -49,7 +49,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Scotland Eviction Process | Notice to Leave & Tribunal',
   description:
-    `Plain-English landlord guide to the eviction process in Scotland, including Notice to Leave, tribunal steps, and the main grounds landlords need to understand. Get court-ready documents from ${noticeOnlyPrice}.`,
+    'Plain-English landlord guide to the eviction process in Scotland, including Notice to Leave, tribunal steps, grounds, and evidence planning.',
   keywords: [
     'eviction process scotland landlord',
     'eviction tribunal scotland',

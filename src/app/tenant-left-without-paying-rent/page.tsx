@@ -21,7 +21,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title:
-    'Tenant Left Without Paying Rent | Recover Rent Arrears After a Tenant Leaves',
+    'Tenant Left Without Paying Rent | Recovery Guide',
   description:
     'Plain-English landlord guide to recovering unpaid rent after a tenant leaves, including final balance checks, evidence, and money-claim decisions.',
   alternates: {
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title:
-      'Tenant Left Without Paying Rent | Recover Rent Arrears After a Tenant Leaves',
+      'Tenant Left Without Paying Rent | Recovery Guide',
     description:
       'Plain-English landlord guidance on unpaid rent after a tenant leaves. Confirm the final balance, separate arrears from end-of-tenancy issues, and decide whether recovery is worth pursuing.',
     url: canonical,

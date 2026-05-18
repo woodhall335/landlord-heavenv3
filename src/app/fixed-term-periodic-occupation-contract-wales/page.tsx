@@ -33,7 +33,7 @@ const astProductHref = '/products/ast';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Fixed Term vs Periodic Occupation Contract Wales | Which to Choose in 2026',
+  title: 'Fixed Term vs Periodic Contract Wales',
   description:
     'Plain-English landlord guide to choosing between fixed-term and periodic occupation contracts in Wales, including what happens when the fixed term ends.',
   keywords: [
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     canonical: 'https://landlordheaven.co.uk/fixed-term-periodic-occupation-contract-wales',
   },
   openGraph: {
-    title: 'Fixed Term vs Periodic Occupation Contract Wales | Which to Choose in 2026',
+    title: 'Fixed Term vs Periodic Contract Wales',
     description:
       'Landlord guide to fixed-term and periodic occupation contracts in Wales, including notice rules, automatic conversion, and break clause considerations.',
     type: 'website',
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Fixed Term vs Periodic Occupation Contract Wales | Which to Choose in 2026',
+    title: 'Fixed Term vs Periodic Contract Wales',
     description:
       'Compare fixed-term and periodic occupation contracts in Wales, including Section 173 notice timing and break clause guidance.',
   },

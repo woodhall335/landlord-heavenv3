@@ -20,8 +20,8 @@ const astProductHref = '/products/ast';
 export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
-  title: 'Scotland PRT Model Agreement Guide 2026 | Government Template vs Ours',
-  description: 'Compare the Scottish Government PRT model agreement with professional alternatives. What the model lacks explained.',
+  title: 'Scotland PRT Model Agreement Guide',
+  description: 'Compare the Scottish Government PRT model agreement with professional alternatives, setup records, landlord clauses, and practical drafting gaps.',
   keywords: [
     'Scotland PRT model agreement',
     'Scottish Government tenancy agreement',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     canonical: getCanonicalUrl('/scotland-prt-model-agreement-guide'),
   },
   openGraph: {
-    title: 'Scotland PRT Model Agreement Guide 2026 | Government Template vs Ours',
+    title: 'Scotland PRT Model Agreement Guide',
     description: 'Compare the Scottish Government PRT model agreement with professionally drafted alternatives.',
     type: 'article',
     url: getCanonicalUrl('/scotland-prt-model-agreement-guide'),

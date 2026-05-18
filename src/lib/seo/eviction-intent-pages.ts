@@ -1090,7 +1090,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'tenant-abandoned-property': {
     slug: 'tenant-abandoned-property',
     title: 'Tenant Abandoned Property? Landlord Recovery Guide',
-    description: 'Landlord guide for England when a tenant appears to have abandoned the property. Learn what to check before treating the tenancy as over and what records usually matter most.',
+    description: 'Landlord guide for England when a tenant appears to have abandoned the property, with checks before treating the tenancy as over and key records.',
     h1: 'Tenant Abandoned Property? Landlord Recovery Guide',
     heroSubheadline: 'Think the tenant has left the property? This guide helps you slow the situation down, check the facts properly, and choose the safest next step before you treat the tenancy as over.',
     heroCta: 'Start the right notice',
@@ -1144,7 +1144,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'tenant-refusing-access': {
     slug: 'tenant-refusing-access',
     title: 'Tenant Refusing Access? Landlord Legal Options',
-    description: 'Landlord guide for England when a tenant keeps refusing access for inspections, repairs, or safety checks. Learn what to record and when the issue becomes serious enough to escalate.',
+    description: 'Landlord guide for England when a tenant refuses access for inspections, repairs, or safety checks, with records to keep and escalation points.',
     h1: 'Tenant Refusing Access? Landlord Legal Options',
     heroSubheadline: 'Tenant refusing access for inspections, repairs, or safety checks? This guide helps you deal with the issue calmly, build the right evidence, and decide whether the problem is heading towards formal action.',
     heroCta: 'Start the right notice',
@@ -1197,7 +1197,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'tenant-breach-of-tenancy': {
     slug: 'tenant-breach-of-tenancy',
     title: 'Tenant Breach of Tenancy: What Landlords Should Do Next',
-    description: 'Landlord guide for England when a tenant is breaching the tenancy agreement. Learn how to assess the breach, what evidence usually matters, and when formal possession steps are realistic.',
+    description: 'Landlord guide for England when a tenant breaches the agreement, with evidence checks, breach assessment, and when formal possession steps are realistic.',
     h1: 'Tenant Breach of Tenancy: What Landlords Should Do Next',
     heroSubheadline: 'If the tenant is breaching the tenancy, this page helps you work out whether the problem is serious enough for formal action and what evidence you will need if you escalate.',
     heroCta: 'Start the right notice',
@@ -1303,7 +1303,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'tenant-refusing-inspection': {
     slug: 'tenant-refusing-inspection',
     title: 'Tenant Refusing Inspection? Rights, Process and Next Steps',
-    description: 'Landlord guide for England when a tenant keeps refusing inspections. Learn what to record, when access problems stay informal, and when stronger action may become realistic.',
+    description: 'Landlord guide for England when a tenant refuses inspections, covering access records, informal steps, and when stronger action may become realistic.',
     h1: 'Tenant Refusing Inspection? Rights, Process and Next Steps',
     heroSubheadline: 'If the tenant keeps refusing inspections, this guide helps you separate everyday access issues from the situations that may justify stronger formal action.',
     heroCta: 'Start the right notice',
@@ -1356,7 +1356,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'tenant-anti-social-behaviour': {
     slug: 'tenant-anti-social-behaviour',
     title: 'Tenant Anti-Social Behaviour: Eviction and Evidence Guide',
-    description: 'Landlord guide for England when a tenant is accused of anti-social behaviour. Learn what evidence usually matters and when complaints are strong enough to support formal action.',
+    description: 'Landlord guide for England when a tenant is accused of anti-social behaviour, with evidence checks and when complaints may support formal action.',
     h1: 'Tenant Anti-Social Behaviour: Eviction and Evidence Guide',
     heroSubheadline: 'Anti-social behaviour complaints need careful handling. This guide helps landlords keep the evidence clear, understand the likely possession route, and avoid reacting in a way that weakens the file later.',
     heroCta: 'Start the right notice',
@@ -2257,7 +2257,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'evict-tenant-for-damage': {
     slug: 'evict-tenant-for-damage',
     title: 'Evict Tenant for Damage: Section 8 Grounds and Evidence',
-    description: 'Landlord guide for England when tenant damage may justify eviction. Understand the evidence landlords usually need, the likely Section 8 issues, and when money recovery may make more sense.',
+    description: 'Landlord guide for England when tenant damage may justify eviction, covering evidence, Section 8 issues, and when money recovery may make sense.',
     h1: 'Evict Tenant for Damage: Section 8 Grounds and Evidence',
     heroSubheadline: 'Damage cases are easy to overstate and easy to under-evidence. This guide helps you separate everyday disputes from serious damage that may justify formal action.',
     heroCta: 'Start the right notice',
@@ -2310,7 +2310,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'evict-tenant-anti-social-behaviour': {
     slug: 'evict-tenant-anti-social-behaviour',
     title: 'Evict Tenant for Anti-Social Behaviour: Landlord Guide',
-    description: 'Landlord guide for England when anti-social behaviour may justify eviction. Learn what evidence usually matters, what can go wrong, and when to move from complaints to formal action.',
+    description: 'Landlord guide for England when anti-social behaviour may justify eviction, with evidence checks, common risks, and when to take formal action.',
     h1: 'Evict Tenant for Anti-Social Behaviour: Landlord Guide',
     heroSubheadline: 'Anti-social behaviour cases often turn on evidence, not frustration. This guide helps you keep the record clear before you serve notice or move toward court.',
     heroCta: 'Start the right notice',
@@ -2416,7 +2416,7 @@ export const INTENT_PAGES: Record<string, IntentPageConfig> = {
   'possession-order-timeline': {
     slug: 'possession-order-timeline',
     title: 'Possession Order Timeline: From Claim to Enforcement',
-    description: 'Landlord guide to the usual possession order timeline in England, from notice through claim, order, and enforcement.',
+    description: 'Landlord guide to the usual possession order timeline in England, from notice through claim, possession order, enforcement, and bailiff-stage planning.',
     h1: 'Possession Order Timeline: From Claim to Enforcement',
     heroSubheadline: 'If you are trying to work out how long possession may take, this page breaks the process into the stages landlords actually wait through, from notice service to enforcement.',
     heroCta: 'Start the right notice',

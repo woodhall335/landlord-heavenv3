@@ -15,9 +15,9 @@ const standardPrice = PRODUCTS.ast_standard.displayPrice;
 const premiumPrice = PRODUCTS.ast_premium.displayPrice;
 
 export const metadata: Metadata = {
-  title: `Wales Occupation Contract 2026 | Tenancy Agreement Template from ${TENANCY_AGREEMENT_FROM_PRICE}`,
+  title: 'Wales Occupation Contract 2026 | Template',
   description:
-    `Plain-English landlord guide to creating a Wales Occupation Contract online, with Renting Homes (Wales) Act wording, written statement support, and pricing from ${TENANCY_AGREEMENT_FROM_PRICE}.`,
+    'Plain-English landlord guide to creating a Wales Occupation Contract online, with Renting Homes Act wording and written statement support.',
   keywords: [
     'wales occupation contract',
     'occupation contract wales',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     'wales landlord contract',
   ],
   openGraph: {
-    title: `Wales Occupation Contract 2026 | Tenancy Agreement Template from ${TENANCY_AGREEMENT_FROM_PRICE}`,
+    title: 'Wales Occupation Contract 2026 | Template',
     description:
       'Landlord guide to creating a Wales Occupation Contract with written statement wording, current Welsh compliance, and clearer route choice.',
     type: 'website',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `Wales Occupation Contract 2026 | Tenancy Agreement Template from ${TENANCY_AGREEMENT_FROM_PRICE}`,
+    title: 'Wales Occupation Contract 2026 | Template',
     description:
       'Create a Wales Occupation Contract online with written statement wording, current Welsh compliance, and clearer landlord guidance.',
   },

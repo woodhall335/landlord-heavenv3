@@ -124,7 +124,7 @@ export default function StandardTenancyAgreementPage() {
           {
             title: 'Standard Periodic Tenancy Agreement',
             description:
-              'The current England agreement for a straightforward whole-property let.',
+              'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
             href: '/standard-tenancy-agreement',
             ctaLabel: 'Create my Standard agreement',
             imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
@@ -133,7 +133,7 @@ export default function StandardTenancyAgreementPage() {
             details: [
               {
                 label: 'Best when',
-                body: 'The current England agreement for a straightforward whole-property let.',
+                body: 'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
               },
               {
                 label: 'What it helps with',

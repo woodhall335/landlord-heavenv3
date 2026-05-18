@@ -29,7 +29,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 
 export const metadata: Metadata = {
   title: 'Warrant of Possession UK — Bailiff Eviction Guide (2026)',
-  description: 'Plain-English landlord guide to applying for a warrant of possession after a court order, including county court bailiffs, High Court enforcement, and what to expect on eviction day.',
+  description: 'Plain-English landlord guide to applying for a warrant of possession, county court bailiffs, High Court enforcement, and eviction day steps.',
   keywords: [
     'warrant of possession',
     'bailiff eviction',

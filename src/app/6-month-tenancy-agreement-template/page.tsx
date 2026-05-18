@@ -13,7 +13,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: '6 Month Tenancy Agreement Template | Legacy England Explainer',
   description:
-    'Legacy 6 month tenancy agreement search page for England.',
+    'Legacy 6 month tenancy agreement template guide for England landlords, explaining current assured periodic routes and which pack to use now.',
   keywords: [
     '6 month tenancy agreement',
     '6 month tenancy agreement template',
