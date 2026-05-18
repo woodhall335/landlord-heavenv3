@@ -5,29 +5,13 @@ import { existsSync } from 'node:fs';
 
 const forwardedArgs = process.argv.slice(2);
 
-const existingNodeOptions = process.env.NODE_OPTIONS?.trim() ?? '';
-const warningFlags = [
-  '--disable-warning=MODULE_TYPELESS_PACKAGE_JSON',
-  '--disable-warning=DEP0180',
-];
-
-const nodeOptions = warningFlags.reduce((options, flag) => {
-  return options.includes(flag) ? options : `${options} ${flag}`.trim();
-}, existingNodeOptions);
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '..');
 
-const tsNodeEsmBin = path.resolve(projectRoot, 'node_modules', 'ts-node', 'dist', 'bin-esm.js');
 const auditScript = path.resolve(projectRoot, 'scripts', 'positioning-audit.ts');
-const nodeBin = process.execPath;
-const childArgs = [tsNodeEsmBin, auditScript, ...forwardedArgs];
-
-if (!existsSync(tsNodeEsmBin)) {
-  console.error(`[run-positioning-audit] Missing ts-node bin-esm entrypoint at: ${tsNodeEsmBin}`);
-  process.exit(1);
-}
+const npxBin = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+const childArgs = ['-p', 'node@20', '-p', 'tsx', 'tsx', auditScript, ...forwardedArgs];
 
 if (!existsSync(auditScript)) {
   console.error(`[run-positioning-audit] Missing audit script at: ${auditScript}`);
@@ -36,18 +20,16 @@ if (!existsSync(auditScript)) {
 
 if (process.env.LH_AUDIT_DEBUG === '1') {
   console.error('[run-positioning-audit] Debug info:');
-  console.error(`  node: ${nodeBin}`);
+  console.error(`  runner: ${npxBin}`);
   console.error(`  args: ${JSON.stringify(childArgs)}`);
   console.error(`  cwd: ${projectRoot}`);
-  console.error(`  NODE_OPTIONS: ${nodeOptions}`);
 }
 
-const child = spawn(nodeBin, childArgs, {
+const child = spawn(npxBin, childArgs, {
   cwd: projectRoot,
   stdio: 'inherit',
   env: {
     ...process.env,
-    NODE_OPTIONS: nodeOptions,
   },
   shell: false,
 });

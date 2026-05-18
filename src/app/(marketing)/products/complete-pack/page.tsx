@@ -347,7 +347,7 @@ export default function CompleteEvictionPackPage() {
     whyYouNeedThis: {
       title: 'Why separate forms cause problems',
       intro:
-        'Landlords lose time when the notice, claim form, and evidence are prepared separately and no longer read like one case.',
+        'Landlords lose time when the notice, claim form, and evidence are prepared separately and no longer read like one case. This is the middle ground between raw form downloads and paying for a solicitor to draft every document.',
       cards: [
         {
           title: 'Possession cases need continuity',
@@ -369,6 +369,13 @@ export default function CompleteEvictionPackPage() {
             'Even after the notice is served, the case can still be slowed down by bad filing, missing paperwork, or an evidence bundle that was never organised properly.',
           imageSrc: '/images/service-mistakes-undo-good-cases.webp',
           imageAlt: 'Notice service and delivery proof illustration',
+        },
+        {
+          title: 'Different from buying separate forms',
+          body:
+            'Free forms and template downloads leave you to connect the notice, service record, N5, N119, arrears, evidence, and hearing prep yourself. Complete Pack builds them as one possession file.',
+          imageSrc: '/images/complete-pack.webp',
+          imageAlt: 'Complete Section 8 possession file preview',
         },
       ],
     },

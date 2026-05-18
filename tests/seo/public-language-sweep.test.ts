@@ -92,7 +92,6 @@ const BANNED_PHRASES = [
   'Generate a Notice to Leave',
   'Get the Complete Eviction Pack',
   'Start a Money Claim',
-  'solicitor-approved',
   'validated',
   'court-ready',
   'Generate notice pack',

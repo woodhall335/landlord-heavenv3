@@ -420,7 +420,7 @@ export default function TenancyAgreementTemplatePage() {
                 Transition before route choice
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-                Free / generic template vs Premium golden pack
+                Blank file vs Premium golden pack
               </h2>
               <p className="mt-4 text-base leading-7 text-[#556177]">
                 The example above shows the Premium tenancy agreement and the supporting pack that
@@ -434,7 +434,7 @@ export default function TenancyAgreementTemplatePage() {
               <div className="grid bg-[#FBF9F4] text-sm font-semibold text-[#3A4459] md:grid-cols-[1.15fr_1fr_1fr]">
                 <div className="border-b border-[#E5DED2] px-5 py-4 md:border-b-0 md:border-r" />
                 <div className="border-b border-[#E5DED2] px-5 py-4 md:border-b-0 md:border-r">
-                  Free / generic template
+                  Blank file
                 </div>
                 <div className="px-5 py-4">Premium guided route</div>
               </div>

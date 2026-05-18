@@ -312,27 +312,6 @@ const nextConfig = {
         destination: '/scotland-eviction-notices',
         permanent: true,
       },
-      // Final SEO closeout redirects for materially identical aliases
-      {
-        source: '/complete-eviction-pack-england',
-        destination: '/products/complete-pack',
-        permanent: true,
-      },
-      {
-        source: '/eviction-pack-england',
-        destination: '/products/complete-pack',
-        permanent: true,
-      },
-      {
-        source: '/section-21-court-pack',
-        destination: '/products/complete-pack',
-        permanent: true,
-      },
-      {
-        source: '/section-8-court-pack',
-        destination: '/products/complete-pack',
-        permanent: true,
-      },
       {
         source: '/section-8-notice-generator',
         destination: '/eviction-notice-england',

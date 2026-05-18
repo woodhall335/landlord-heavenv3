@@ -36,7 +36,7 @@ export { UNIVERSAL_HERO_VIEWPORT as viewport } from '@/lib/seo/hero-theme';
 export const metadata: Metadata = {
   title: 'Northern Ireland Tenancy Agreement Template 2026',
   description:
-    'Plain-English landlord guide to Northern Ireland tenancy agreement templates, including what a valid NI agreement needs and why generic templates often cause problems.',
+    'Plain-English landlord guide to Northern Ireland tenancy agreement templates, including what a valid NI agreement needs and why off-the-shelf forms often cause problems.',
   keywords: [
     'tenancy agreement template northern ireland',
     'ni tenancy agreement template',

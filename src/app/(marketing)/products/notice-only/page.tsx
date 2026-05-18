@@ -347,7 +347,7 @@ export default function NoticeOnlyPage() {
     whyYouNeedThis: {
       title: 'Why a blank notice is risky',
       intro:
-        'Most notice problems come from small gaps in the grounds, arrears record, dates, or service method. This helps you check those points early.',
+        'Most notice problems come from small gaps in the grounds, arrears record, dates, or service method. This sits between a blank online form and a solicitor service: a fixed-price document pack built around your facts.',
       cards: [
         {
           title: 'The court looks at the notice first',
@@ -369,6 +369,13 @@ export default function NoticeOnlyPage() {
             'A strong notice can still fail if you cannot show it was served correctly and on time.',
           imageSrc: '/images/service-mistakes-undo-good-cases.webp',
           imageAlt: 'Notice service and delivery proof illustration',
+        },
+        {
+          title: 'Different from a blank form',
+          body:
+            'A blank form gives you the shell. Notice Only gives you Form 3A, N215, arrears schedule, service instructions, validity checklist, compliance declaration, case summary, and next-step guide in one file.',
+          imageSrc: '/images/notice-only-pack.webp',
+          imageAlt: 'Section 8 notice and service file preview',
         },
       ],
     },

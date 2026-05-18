@@ -270,8 +270,8 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                 <p>
                   The result is a page that is both more search-ready and more conversion-ready
                   than a generic "template" page. It does not rely on reckless overclaims.
-                  It does not blur jurisdictions. It does not treat a Scottish tenancy as
-                  though it works like an English AST with a different label on top. Instead,
+                    It does not blur jurisdictions. It does not treat a Scottish tenancy as
+                    though it works like an English AST with a different label on top. Instead,
                   it gives landlords a clearer route into a Scottish PRT agreement built for
                   how the tenancy is meant to operate in practice.
                 </p>
@@ -315,7 +315,7 @@ export default function PrivateResidentialTenancyAgreementTemplatePage() {
                     gives the tenancy a clearer starting structure, sets expectations around
                     occupation and payment, and supports a more professional landlord process.
                     It does not eliminate every future dispute, but it does provide a stronger
-                    foundation than relying on a weak generic template or a document from the
+                    foundation than relying on a weak blank form or a document from the
                     wrong UK jurisdiction.
                   </p>
                 </div>

@@ -560,7 +560,7 @@ export default function WalesOccupationContractPage() {
 
               <div className="rounded-lg bg-red-50 border border-red-200 p-6">
                 <h3 className="text-xl font-semibold text-red-900 mb-3">
-                  Using generic templates with missing Welsh wording
+                  Using blank forms with missing Welsh wording
                 </h3>
                 <p className="text-gray-700">
                   Generic tenancy agreement templates often fail to deal properly with

@@ -129,9 +129,9 @@ export default function Section8NoticeTemplatePage() {
         'A Section 8 notice usually needs correct party names, property address, the correct Form 3 route, the grounds relied on, the factual basis for those grounds, the correct notice period, correct dates, and a reliable service method. Errors in grounds or dates can weaken the case.',
     },
     {
-      question: 'Is a free Section 8 template enough?',
+      question: 'Is a blank Section 8 form enough?',
       answer:
-        'A free template may help a landlord understand the form, but it is not always enough for a live case. The stronger need is usually not just the form itself, but selecting the right grounds, getting the dates right, and serving it properly.',
+        'A blank form may help a landlord understand the layout, but it is not always enough for a live case. The stronger need is usually not just the form itself, but selecting the right grounds, getting the dates right, and serving it properly.',
     },
   ];
 
@@ -167,7 +167,7 @@ export default function Section8NoticeTemplatePage() {
       <main className="min-h-screen bg-[#fcfaff]">
         <UniversalHero
           title="Section 8 Notice Template"
-          subtitle="Learn how Section 8 Form 3 works, what a valid grounds-based notice should include, and when to use a guided Notice Only workflow instead of relying on a generic template."
+          subtitle="Learn how Section 8 Form 3 works, what a valid grounds-based notice should include, and when to use a guided Notice Only workflow instead of relying on a blank form."
           primaryCta={{ label: `Create my Section 8 notice - ${noticeOnlyPrice}`, href: noticeOnlyProductHref }}
           secondaryCta={{ label: `Start full eviction support - ${completePackPrice}`, href: completePackProductHref }}
           showTrustPositioningBar
@@ -227,10 +227,10 @@ export default function Section8NoticeTemplatePage() {
                   properly for a live case.
                 </p>
                 <p className="leading-7">
-                  For that reason, the strongest commercial push on this page should not be
-                  "download a free form and hope for the best." It should be "use the Notice Only
-                  workflow if you want the correct Section 8 notice built around your facts before
-                  service."
+                  For a live case, the aim is not to download a blank form and hope it is
+                  enough. The safer next step is to prepare a notice file that matches your
+                  grounds, dates, arrears position, and service method before anything goes to
+                  the tenant.
                 </p>
               </div>
 
@@ -240,7 +240,7 @@ export default function Section8NoticeTemplatePage() {
                   If your Section 8 notice is for a real possession case rather than background
                   reading, the safer route is usually{' '}
                   <Link href="/products/notice-only" className="font-semibold text-primary hover:underline">
-                    /products/notice-only
+                    Notice Only
                   </Link>
                   . It helps you build the correct notice and route logic before service.
                 </p>
@@ -313,10 +313,10 @@ export default function Section8NoticeTemplatePage() {
                   and must state which grounds are being used and why.
                 </p>
                 <p className="leading-7">
-                  This is also why many weak template pages underperform. They talk about Form 3
-                  as though the form is the whole job. It is not. The form is the output. The
-                  harder work is choosing the correct grounds, linking those grounds to facts,
-                  checking the dates, and preparing for the court route that may follow.
+                  This is where a simple template can let landlords down. It can make Form 3
+                  look like the whole job, when the form is only the output. The harder work is
+                  choosing the correct grounds, linking those grounds to facts, checking the
+                  dates, and preparing for the court route that may follow.
                 </p>
               </div>
 
@@ -1204,7 +1204,7 @@ export default function Section8NoticeTemplatePage() {
                 </Link>
               </div>
               <p className="mt-8 text-white/70 text-sm">
-                Grounds-based route • Cleaner service workflow • Better fit than a generic template for live cases
+                Grounds-based route • Cleaner service workflow • Better fit than a blank form for live cases
               </p>
             </div>
           </div>
