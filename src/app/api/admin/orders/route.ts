@@ -19,21 +19,7 @@ import { createAdminClient, requireServerAuth } from '@/lib/supabase/server';
 import { isAdmin } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { PRODUCTS } from '@/lib/pricing/products';
-
-const PRODUCT_NAMES: Record<string, string> = {
-  notice_only: 'Notice Only Pack',
-  complete_pack: 'Complete Eviction Pack',
-  money_claim: 'Money Claim Pack',
-  sc_money_claim: 'Simple Procedure Pack (Scotland)',
-  ast_standard: PRODUCTS.ast_standard.label,
-  ast_premium: PRODUCTS.ast_premium.label,
-  england_standard_tenancy_agreement: PRODUCTS.england_standard_tenancy_agreement.label,
-  england_premium_tenancy_agreement: PRODUCTS.england_premium_tenancy_agreement.label,
-  england_student_tenancy_agreement: PRODUCTS.england_student_tenancy_agreement.label,
-  england_hmo_shared_house_tenancy_agreement: PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
-  england_lodger_agreement: PRODUCTS.england_lodger_agreement.label,
-};
+import { getAdminProductLabel } from '@/lib/admin/products';
 
 export async function GET(request: NextRequest) {
   try {
@@ -111,7 +97,7 @@ export async function GET(request: NextRequest) {
           user_id: order.user_id,
           user_email: userData?.email || 'Unknown',
           user_name: userData?.full_name || null,
-          product_name: PRODUCT_NAMES[order.product_type] || order.product_type,
+          product_name: getAdminProductLabel(order.product_type),
           product_type: order.product_type,
           total_amount: order.total_amount,
           payment_status: order.payment_status,

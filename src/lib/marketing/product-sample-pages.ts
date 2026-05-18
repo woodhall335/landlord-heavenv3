@@ -22,12 +22,12 @@ function buildFaqs(productName: string, courtFormLabel: string): FAQItem[] {
     {
       question: `Is this ${productName} sample the full product?`,
       answer:
-        'No. It is a sample generated from the same golden-pack manifest so you can inspect the document structure, wording, and page spread before buying.',
+        'No. It is a sample generated from the same golden-pack manifest so you can inspect the document structure, wording, and page spread before buying. The paid product builds the pack around your facts instead of giving you a static form to adapt.',
     },
     {
       question: `Does the paid ${productName} include editable case details?`,
       answer:
-        'Yes. The paid pack creates documents from your answers, then lets you preview and update the pack when the facts need changing.',
+        'Yes. The paid pack creates documents from your answers, runs the relevant procedural checks, then lets you preview and update the pack when the facts need changing.',
     },
     {
       question: `Does this sample include ${courtFormLabel}?`,
@@ -130,8 +130,8 @@ export const productSamplePages = [
     metaDescription:
       'See an example assured shorthold tenancy agreement UK landlords can compare before choosing the England pack.',
     intro:
-      'Use this standard tenancy agreement example to inspect the core agreement and supporting documents for a straightforward England let.',
-    ctaText: 'Setting up a straightforward let? Create my Standard Tenancy Agreement.',
+      'Use this standard tenancy agreement example to inspect the core agreement, setup checklist, and support records before building a validated England tenancy setup pack around your own property, occupiers, rent, deposit, and management facts.',
+    ctaText: 'Setting up a straightforward let? Build my validated Standard tenancy pack.',
     faqs: buildFaqs('Standard Tenancy Agreement', 'prescribed information support'),
   },
   {
@@ -146,8 +146,8 @@ export const productSamplePages = [
     metaDescription:
       'See an example premium tenancy agreement with fuller management wording for access, repairs, reporting, keys, and hand-back.',
     intro:
-      'Use this premium tenancy agreement example to see the fuller management wording and supporting documents before choosing Premium.',
-    ctaText: 'Need stronger management terms? Create my Premium Tenancy Agreement.',
+      'Use this premium tenancy agreement example to see the fuller management wording, handover records, and support documents before creating a fact-built Premium pack with stronger control around access, repairs, keys, reporting, and hand-back.',
+    ctaText: 'Need stronger management terms? Build my validated Premium tenancy pack.',
     faqs: buildFaqs('Premium Tenancy Agreement', 'premium management wording'),
   },
   {
@@ -162,8 +162,8 @@ export const productSamplePages = [
     metaDescription:
       'See a student tenancy agreement example UK landlords can review for guarantors, sharers, replacements, and end-of-term move-out.',
     intro:
-      'Use this student tenancy agreement example to see how student sharers, guarantors, replacement occupiers, and move-out terms are handled.',
-    ctaText: 'Setting up a student let? Create my Student Tenancy Agreement.',
+      'Use this student tenancy agreement example to see how guarantors, sharers, replacement occupiers, and end-of-term move-out are handled before building a validated student pack around the actual household.',
+    ctaText: 'Setting up a student let? Build my validated Student tenancy pack.',
     faqs: buildFaqs('Student Tenancy Agreement', 'guarantor and sharer wording'),
   },
   {
@@ -178,8 +178,8 @@ export const productSamplePages = [
     metaDescription:
       'See an example HMO tenancy agreement UK landlords can review for house rules, communal areas, sharer duties, and shared occupation.',
     intro:
-      'Use this HMO tenancy agreement example to see how communal areas, house rules, shared facilities, and sharer expectations are documented.',
-    ctaText: 'Managing sharers? Create my HMO / Shared House Tenancy Agreement.',
+      'Use this HMO tenancy agreement example to see how communal areas, house rules, shared facilities, and sharer expectations are documented before building a validated shared-house management pack around the property setup.',
+    ctaText: 'Managing sharers? Build my validated HMO / Shared House pack.',
     faqs: buildFaqs('HMO / Shared House Tenancy Agreement', 'house rules and communal areas'),
   },
   {
@@ -194,8 +194,8 @@ export const productSamplePages = [
     metaDescription:
       'See a lodger agreement example UK resident landlords can review for shared-home rules, notice, occupation, and day-to-day boundaries.',
     intro:
-      'Use this lodger agreement example to see how resident-landlord room lets, shared-home rules, and notice terms are documented.',
-    ctaText: 'Taking in a lodger? Create my Lodger Agreement.',
+      'Use this lodger agreement example to see how resident-landlord room lets, shared-home rules, notice terms, and day-to-day boundaries are documented before building a validated shared-home pack around your facts.',
+    ctaText: 'Taking in a lodger? Build my validated Lodger pack.',
     faqs: buildFaqs('Lodger Agreement', 'resident-landlord room let wording'),
   },
 ] as const satisfies ProductSamplePageConfig[];

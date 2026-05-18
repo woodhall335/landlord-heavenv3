@@ -19,8 +19,7 @@ describe('golden-pack sample-proof rollout pages', () => {
     for (const source of [moneyClaimSource, section13StandardSource, section13DefenceSource]) {
       expect(source).toContain("import { GoldenPackProof }");
       expect(source).toContain("from '@/lib/marketing/golden-pack-proof'");
-      expect(source).toContain('sampleProof ? (');
-      expect(source).toContain('<GoldenPackProof data={sampleProof}');
+      expect(source).toContain('<GoldenPackProof');
       expect(source).toContain('samplePageHref={samplePage?.samplePath}');
     }
 

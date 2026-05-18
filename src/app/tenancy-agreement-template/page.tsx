@@ -350,18 +350,18 @@ export default function TenancyAgreementTemplatePage() {
           subtitle={
             <>
               See the <strong>Premium golden-pack tenancy agreement</strong> and supporting
-              management records before you start the guided England route.
+              management records before you start the guided England route built around your facts.
             </>
           }
           primaryCta={{
-            label: 'Create my Premium agreement',
+            label: 'Build my validated Premium pack',
             href: premiumWizardHref,
           }}
           secondaryCta={{
             label: 'View full premium sample',
             href: premiumSamplePage?.samplePath ?? '/premium-tenancy-agreement',
           }}
-          feature="Preview the Premium pack first, then move into the guided route with the same richer management wording."
+          feature="Preview the Premium pack first, then move into the fixed-price, solicitor-approved workflow with the same richer management wording."
         />
 
         <section className="py-12 md:py-16">

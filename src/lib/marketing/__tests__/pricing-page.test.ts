@@ -20,9 +20,9 @@ describe('pricing page product mapping', () => {
       expect.arrayContaining([
         expect.objectContaining({
           productSku: 'notice_only',
-          bestFor: expect.stringContaining('serve a Section 8 notice'),
+          bestFor: expect.stringContaining('Section 8 notice and service file'),
           points: expect.arrayContaining([
-            expect.stringContaining('notice, service steps, and key checks'),
+            expect.stringContaining('Form 3A, N215'),
           ]),
         }),
         expect.objectContaining({
@@ -31,7 +31,7 @@ describe('pricing page product mapping', () => {
         }),
         expect.objectContaining({
           productSku: 'section13_standard',
-          bestFor: expect.stringContaining('Form 4A and clear evidence'),
+          bestFor: expect.stringContaining('Form 4A, current local comparables'),
         }),
       ])
     );

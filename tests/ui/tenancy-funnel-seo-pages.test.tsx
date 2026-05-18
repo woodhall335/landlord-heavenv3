@@ -168,7 +168,7 @@ describe('tenancy funnel SEO pages', () => {
       'href',
       '/samples/premium-tenancy-agreement-example'
     );
-    expect(screen.getByRole('link', { name: 'Create my Premium agreement' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Build my validated Premium pack' })).toHaveAttribute(
       'href',
       '/wizard/flow?type=tenancy_agreement&jurisdiction=england&product=england_premium_tenancy_agreement&src=tenancy_agreement_template&topic=tenancy'
     );

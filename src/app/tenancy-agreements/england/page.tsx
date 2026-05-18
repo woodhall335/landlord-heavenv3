@@ -76,17 +76,17 @@ export default function EnglandTenancyAgreementsPage() {
       <EnglandTenancyPage
         pagePath={pagePath}
         title="England Tenancy Agreement Guide"
-        subtitle="Use this page as a support guide for England terminology and route context, then move to the England agreement example or comparison page when you are ready to choose the right route."
+        subtitle="Use this page as a support guide for England terminology and route context, then move to the England agreement example or comparison page when you are ready to build a validated tenancy setup pack from your facts."
         primaryCtaLabel="View the England agreement example"
         primaryCtaHref="/tenancy-agreement-template"
-        secondaryCtaLabel="Create my Standard agreement"
+        secondaryCtaLabel="Build my validated Standard pack"
         secondaryCtaHref="/standard-tenancy-agreement"
         legacyNotice="This page stays live as a support guide. It captures broader England tenancy-agreement searches and older AST-led wording, while the main example page remains /tenancy-agreement-template."
         introTitle="Why this England guide still exists"
         introBody={[
           'Landlords do not always arrive with clean template-first intent. Some want the document example immediately, while others want context on the wording shift from older AST terminology or reassurance that they are still on the right England route.',
-          'That is why this page remains live as support content. Its job is to explain the route landscape, keep England-specific terminology straight, and move users to the England agreement example or comparison page instead of leaving them with a vague overview.',
-          'Once the example page has satisfied the broad template question, landlords can branch into Standard, Premium, the specialist routes, or the full comparison page if they still need side-by-side help.',
+          'That is why this page remains live as support content. Its job is to explain the route landscape, keep England-specific terminology straight, and move users to the England agreement example or comparison page instead of leaving them with a vague overview or a static wording-only form.',
+          'Once the example page has satisfied the broad template question, landlords can branch into Standard, Premium, the specialist routes, or the full comparison page and build a fixed-price, solicitor-approved document preparation workflow around their property, occupiers, rent, deposit, and management facts.',
         ]}
         highlights={[
           'Keeps the England agreement pages discoverable without trying to replace the main example page',
@@ -110,16 +110,16 @@ export default function EnglandTenancyAgreementsPage() {
           {
             title: 'England agreement example',
             description:
-              'See the sample agreement preview first, then move into Standard or Premium once the template intent has been satisfied.',
+              'See the sample agreement preview first, then move into a validated Standard or Premium pack once the template intent has been satisfied.',
             href: '/tenancy-agreement-template',
             ctaLabel: 'View agreement example',
           },
           {
             title: 'Standard tenancy agreement',
             description:
-              'Use the main mainstream route for straightforward whole-property lets once you know the ordinary residential path is the right fit.',
+              'Build the validated mainstream route for straightforward whole-property lets once you know the ordinary residential path is the right fit.',
             href: '/standard-tenancy-agreement',
-            ctaLabel: 'View Standard',
+            ctaLabel: 'Build Standard pack',
           },
           {
             title: 'Compare all England routes',

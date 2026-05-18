@@ -574,6 +574,78 @@ The Landlord Heaven Team
 }
 
 /**
+ * Send a case preview recovery email for users who reached preview but did not pay.
+ */
+export async function sendCasePreviewRecoveryEmail(params: {
+  to: string;
+  customerName: string;
+  productName: string;
+  resumeUrl: string;
+  stage: 'manual' | 'day_1' | 'day_7';
+}): Promise<{ success: boolean; error?: string }> {
+  const { to, customerName, productName, resumeUrl, stage } = params;
+  const stageLine =
+    stage === 'day_7'
+      ? 'Your saved draft is still available if you want to come back to it.'
+      : 'Your saved draft is ready when you want to continue.';
+
+  const cardContent = `
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${customerName},</p>
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">${stageLine} You can return to your Landlord Heaven draft, review the preview, and continue to secure checkout when you are ready.</p>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+      <tr>
+        <td bgcolor="${COLORS.cardBgAlt}" style="background-color: ${COLORS.cardBgAlt}; padding: 20px; border-radius: 6px; border: 1px solid ${COLORS.border};">
+          <p style="margin: 0 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Saved document pack</p>
+          <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary};">${productName}</p>
+        </td>
+      </tr>
+    </table>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+      <tr>
+        <td align="center">
+          ${getBulletproofButton('Resume My Draft', resumeUrl)}
+        </td>
+      </tr>
+    </table>
+
+    ${getInfoBox('This secure link is intended for your use only. If you no longer need the document pack, you can ignore this email.')}
+
+    <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button does not work, copy and paste this link into your browser:<br><a href="${resumeUrl}" style="color: ${COLORS.primaryLight}; text-decoration: none;">${resumeUrl}</a></p>
+  `;
+
+  const emailContent = `
+    ${getLogoRow()}
+    ${getHeaderBanner('Resume Your Landlord Heaven Draft')}
+    ${getContentCard(cardContent)}
+    ${getEmailFooter(false)}
+  `;
+
+  const html = getEmailWrapper(emailContent);
+  const text = `
+Hi ${customerName},
+
+${stageLine} You can return to your Landlord Heaven draft, review the preview, and continue to secure checkout when you are ready.
+
+Saved document pack: ${productName}
+
+Resume your draft: ${resumeUrl}
+
+If you no longer need the document pack, you can ignore this email.
+
+The Landlord Heaven Team
+  `;
+
+  return sendEmail({
+    to,
+    subject: `Resume your ${productName} draft`,
+    html,
+    text,
+  });
+}
+
+/**
  * Send welcome email (for new users)
  */
 export async function sendWelcomeEmail(params: {

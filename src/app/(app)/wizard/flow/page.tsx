@@ -332,8 +332,8 @@ function WizardFlowContent() {
 
       // Resume existing case if editing
       if (editCaseId) {
-        if (type === 'rent_increase' && recoveryToken) {
-          const recoveryResponse = await fetch('/api/section13/recover', {
+        if (recoveryToken) {
+          const recoveryResponse = await fetch('/api/cases/recover', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

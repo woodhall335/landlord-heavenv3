@@ -15,6 +15,11 @@ import {
   setMetadataColumnExists,
 } from '@/lib/payments/safe-order-metadata';
 import { getEditWindowStatusWithOverride } from '@/lib/payments/edit-window';
+import {
+  deriveCaseProductType,
+  deriveCaseRecoveryContact,
+  isPreviewAbandonedCase,
+} from '@/lib/cases/recovery';
 
 type RawCase = {
   id: string;
@@ -22,9 +27,12 @@ type RawCase = {
   case_type: string;
   jurisdiction: string;
   status: string;
+  workflow_status: string | null;
+  wizard_completed_at: string | null;
   wizard_progress: number | null;
   created_at: string;
   updated_at: string;
+  collected_facts: Record<string, any> | null;
 };
 
 type RawUser = {
@@ -60,6 +68,7 @@ type AdminCasesResponse = {
     paid_or_generated: number;
     requires_action: number;
     failed_fulfillment: number;
+    preview_abandoned: number;
     edit_window_open: number;
     docs_ready: number;
   };
@@ -109,6 +118,8 @@ function applyPreset(caseItem: AdminCaseRecord, preset: AdminCasesPreset): boole
       );
     case 'paid_awaiting_docs':
       return caseItem.payment_status === 'paid' && !caseItem.has_final_documents;
+    case 'preview_abandoned':
+      return caseItem.is_preview_abandoned;
     case 'edit_window_open':
       return caseItem.edit_window_open;
     case 'docs_ready':
@@ -225,7 +236,9 @@ export async function GET(request: NextRequest) {
 
     let casesQuery = adminClient
       .from('cases')
-      .select('id, user_id, case_type, jurisdiction, status, wizard_progress, created_at, updated_at')
+      .select(
+        'id, user_id, case_type, jurisdiction, status, workflow_status, wizard_progress, wizard_completed_at, collected_facts, created_at, updated_at'
+      )
       .order('updated_at', { ascending: false });
 
     if (caseType !== 'all') {
@@ -301,24 +314,33 @@ export async function GET(request: NextRequest) {
         orderMetadata?.edit_window_override_ends_at ?? null
       );
       const userRecord = caseItem.user_id ? users.get(caseItem.user_id) : null;
+      const productType = deriveCaseProductType(caseItem, relatedOrder || null);
+      const recoveryContact = deriveCaseRecoveryContact(caseItem, userRecord || null);
       const paymentStatusValue = relatedOrder?.payment_status || null;
       const visibleFulfillmentStatus = visibleFulfillmentState.fulfillmentStatus;
       const requiresAction = visibleFulfillmentStatus === 'requires_action';
       const failedFulfillment = visibleFulfillmentStatus === 'failed';
       const documentsReady = hasFinalDocuments;
+      const previewAbandoned = isPreviewAbandonedCase({
+        caseItem,
+        order: relatedOrder || null,
+        hasFinalDocuments,
+      });
 
       return {
         case_id: caseItem.id,
         order_id: relatedOrder?.id || null,
         user_id: caseItem.user_id,
-        user_email: userRecord?.email || 'Unknown',
-        user_name: userRecord?.full_name || null,
+        user_email: recoveryContact.email || userRecord?.email || 'Unknown',
+        user_name: recoveryContact.name || userRecord?.full_name || null,
         case_type: caseItem.case_type,
         jurisdiction: caseItem.jurisdiction,
         status: caseItem.status,
+        workflow_status: caseItem.workflow_status || null,
         wizard_progress: caseItem.wizard_progress || 0,
-        product_type: relatedOrder?.product_type || null,
-        product_name: getAdminProductName(relatedOrder?.product_type || null),
+        wizard_completed_at: caseItem.wizard_completed_at || null,
+        product_type: productType,
+        product_name: getAdminProductName(productType),
         payment_status: paymentStatusValue,
         fulfillment_status: visibleFulfillmentStatus,
         has_final_documents: hasFinalDocuments,
@@ -330,6 +352,9 @@ export async function GET(request: NextRequest) {
         requires_action: requiresAction,
         failed_fulfillment: failedFulfillment,
         documents_ready: documentsReady,
+        is_preview_abandoned: previewAbandoned,
+        recovery_email: recoveryContact.email,
+        can_send_restart_link: previewAbandoned && Boolean(recoveryContact.email),
         can_retry_fulfillment:
           paymentStatusValue === 'paid' &&
           !hasFinalDocuments &&
@@ -345,7 +370,10 @@ export async function GET(request: NextRequest) {
     });
 
     let filteredCases = normalizedCases.filter(
-      (caseItem) => caseItem.payment_status === 'paid' || caseItem.has_final_documents
+      (caseItem) =>
+        caseItem.payment_status === 'paid' ||
+        caseItem.has_final_documents ||
+        caseItem.is_preview_abandoned
     );
 
     if (preset !== 'all') {
@@ -430,6 +458,7 @@ export async function GET(request: NextRequest) {
         paid_or_generated: filteredCases.length,
         requires_action: filteredCases.filter((caseItem) => caseItem.requires_action).length,
         failed_fulfillment: filteredCases.filter((caseItem) => caseItem.failed_fulfillment).length,
+        preview_abandoned: filteredCases.filter((caseItem) => caseItem.is_preview_abandoned).length,
         edit_window_open: filteredCases.filter((caseItem) => caseItem.edit_window_open).length,
         docs_ready: filteredCases.filter((caseItem) => caseItem.documents_ready).length,
       },

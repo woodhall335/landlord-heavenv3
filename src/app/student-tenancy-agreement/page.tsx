@@ -64,7 +64,7 @@ export default function StudentTenancyAgreementPage() {
         pagePath="/student-tenancy-agreement"
         title="Student Tenancy Agreement for England Landlords"
         subtitle="Use this student tenancy agreement when the occupiers are students and you want guarantor wording, clearer wording on joint tenants, replacement requests, and end-of-term move-out under the post-May 2026 England rules."
-        primaryCtaLabel="Create my Student agreement"
+        primaryCtaLabel="Build my validated Student pack"
         primaryCtaHref={studentWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
@@ -72,14 +72,15 @@ export default function StudentTenancyAgreementPage() {
         introTitle="Built for student households"
         introBody={[
           'This pack is designed for student lets where guarantors, shared occupation, replacement requests, and end-of-term expectations usually need much clearer wording from the outset.',
-          'Instead of trying to fit a student household into a general residential agreement, this pack is built around the issues that come up most often in student lets: multiple occupiers, guarantor support, mid-tenancy changes, key return, and how the property is handed back at the end of the academic cycle.',
+          'Instead of trying to fit a student household into a general residential template, this pack is built around the issues that come up most often in student lets: multiple occupiers, guarantor support, mid-tenancy changes, key return, and how the property is handed back at the end of the academic cycle.',
+          'The workflow validates the product fit and key setup facts before preview, so the agreement, student schedule, guarantor material, and support records are created around the actual household rather than adapted from a static download.',
         ]}
         highlights={[
           'Student-focused agreement wording for shared occupation',
           'Student AST template wording with guarantor agreement and sharer replacement controls',
           'Clearer treatment of guarantors, joint tenants, and replacement requests',
           'Better end-of-term and move-out wording than a generic residential agreement',
-          'Guided agreement pack with a preview before payment',
+          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Built around the current England position from 1 May 2026 for the main tenancy wording.',
@@ -183,9 +184,9 @@ export default function StudentTenancyAgreementPage() {
               },
             ],
           },
-          ctaTitle: 'Create the Student agreement pack',
+          ctaTitle: 'Build the validated Student tenancy pack',
           ctaBody:
-            'Use this option when the occupiers are students and you want the agreement, the student hand-back wording, and the extra paperwork prepared as one coherent pack.',
+            'Use this option when the occupiers are students and you want solicitor-approved document preparation for the agreement, student hand-back wording, guarantor support, and extra paperwork as one coherent pack.',
         }}
         faqs={[
           {
@@ -234,7 +235,7 @@ export default function StudentTenancyAgreementPage() {
               'Yes - when completed and signed correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common student tenancy agreement mistakes.',
           },
         ]}
-        finalCtaBody="Use the Student pack when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this is usually the better fit than the Standard or Premium assured periodic packs. If you are still deciding, compare it against the other England products on the main comparison page."
+        finalCtaBody="Use the Student workflow when the occupiers are students and you want the agreement to reflect how student lets actually work in practice. If guarantors, sharers, replacements, and end-of-term hand-back matter from the start, this validated pack is usually the better fit than the Standard or Premium assured periodic packs. If you are still deciding, compare it against the other England products on the main comparison page."
       />
     </div>
   );

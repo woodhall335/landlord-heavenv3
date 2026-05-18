@@ -137,12 +137,12 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     eyebrow: 'Current England agreement',
     heading: 'Need a clean standard tenancy agreement?',
     intro:
-      'Use the standard route for straightforward England lets where old AST-first wording may no longer be the right fit.',
-    ctaLabel: 'Create my Standard agreement',
+      'Use the standard route for straightforward England lets where old AST-first wording or a generic template may no longer be the right fit.',
+    ctaLabel: 'Build my validated Standard pack',
     bullets: [
       'Built for straightforward England tenancies.',
       'Avoids stale fixed-term AST assumptions.',
-      'Preview the agreement before payment.',
+      'Preview the validated agreement pack before payment.',
     ],
     iconKey: 'ast',
     usedDefault: false,
@@ -153,8 +153,8 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     eyebrow: 'Stronger agreement',
     heading: 'Need broader tenancy protection?',
     intro:
-      'Use Premium where the tenancy is higher-value, more complex, guarantor-backed, shared, or simply worth a stronger record.',
-    ctaLabel: 'Create my Premium agreement',
+      'Use Premium where the tenancy is higher-value, more complex, guarantor-backed, shared, or simply worth a stronger validated record.',
+    ctaLabel: 'Build my validated Premium pack',
     bullets: [
       'More detailed than a basic agreement route.',
       'Better fit for higher-risk lets.',
@@ -170,7 +170,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Setting up a student tenancy?',
     intro:
       'Use a route shaped around student occupiers, academic timing, guarantor expectations, and shared responsibility.',
-    ctaLabel: 'Create my Student agreement',
+    ctaLabel: 'Build my validated Student pack',
     bullets: [
       'Designed for student-let practicalities.',
       'Keeps occupier, rent, deposit, and guarantor details organised.',
@@ -186,7 +186,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Need shared-house paperwork that fits?',
     intro:
       'Use the HMO/shared-house route for room, common-area, house-rule, and responsibility wording that a standard agreement may miss.',
-    ctaLabel: 'Create my HMO / Shared House agreement',
+    ctaLabel: 'Build my validated HMO / Shared House pack',
     bullets: [
       'Designed for shared occupation.',
       'Clarifies rooms, common parts, and responsibilities.',
@@ -202,7 +202,7 @@ const PRODUCT_REFORM_CTA_OVERRIDES: Record<string, ProductCtaConfig> = {
     heading: 'Taking in a lodger?',
     intro:
       'Use the lodger route where you live in the property and need the arrangement recorded clearly from the start.',
-    ctaLabel: 'Create my Lodger agreement',
+    ctaLabel: 'Build my validated Lodger pack',
     bullets: [
       'Different from a normal tenancy agreement.',
       'Built for resident landlord arrangements.',

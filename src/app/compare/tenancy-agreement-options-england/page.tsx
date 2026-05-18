@@ -19,31 +19,31 @@ const tenancyOptions = [
     label: 'Standard',
     href: '/standard-tenancy-agreement',
     sku: 'england_standard_tenancy_agreement' as const,
-    fit: 'Ordinary whole-property residential lets in England.',
+    fit: 'Ordinary whole-property residential lets in England that need a validated setup pack rather than a static wording-only form.',
   },
   {
     label: 'Premium',
     href: '/premium-tenancy-agreement',
     sku: 'england_premium_tenancy_agreement' as const,
-    fit: 'Landlords who want fuller wording on access, reporting, repairs, and hand-back.',
+    fit: 'Landlords who want fuller wording on access, reporting, repairs, and hand-back built from their management facts.',
   },
   {
     label: 'Student',
     href: '/student-tenancy-agreement',
     sku: 'england_student_tenancy_agreement' as const,
-    fit: 'Student sharers, guarantors, replacements, and end-of-term move-out handling.',
+    fit: 'Student sharers, guarantors, replacements, and end-of-term move-out handling with the supporting records kept together.',
   },
   {
     label: 'HMO / Shared House',
     href: '/hmo-shared-house-tenancy-agreement',
     sku: 'england_hmo_shared_house_tenancy_agreement' as const,
-    fit: 'HMO or shared-house occupation with house rules and communal area wording.',
+    fit: 'HMO or shared-house occupation with house rules, communal area wording, and shared-house management records.',
   },
   {
     label: 'Lodger',
     href: '/lodger-agreement',
     sku: 'england_lodger_agreement' as const,
-    fit: 'Resident-landlord room lets where the occupier shares the landlord home.',
+    fit: 'Resident-landlord room lets where the occupier shares the landlord home and the house rules need to be clear.',
   },
 ];
 
@@ -68,7 +68,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: 'Which Tenancy Agreement Do I Need? England Options Compared',
   description:
-    'Compare Standard, Premium, Student, HMO / Shared House, and Lodger agreements for England landlords. Choose the right solicitor-approved pack.',
+    'Compare Standard, Premium, Student, HMO / Shared House, and Lodger workflows for England landlords. Choose the right solicitor-approved, fact-built setup pack.',
   keywords: [
     'which tenancy agreement do i need',
     'tenancy agreement options england',
@@ -110,18 +110,23 @@ export default function TenancyAgreementOptionsComparisonPage() {
       <UniversalHero
         badge="Compare"
         title="Which Tenancy Agreement Do I Need?"
-        subtitle="Compare the five England agreement routes, then choose the pack that matches the property, occupier setup, and management risk."
-        primaryCta={{ label: 'View Agreement Hub', href: '/products/ast' }}
+        subtitle="Compare the five England agreement workflows, then choose the validated setup pack that matches the property, occupier setup, rent, deposit, and management risk."
+        primaryCta={{ label: 'Build my validated tenancy pack', href: '/products/ast' }}
         secondaryCta={{ label: 'View Free Samples', href: '/samples' }}
         mediaSrc="/images/wizard-icons/10-signing.png"
         mediaAlt="Tenancy agreement comparison documents"
         showReviewPill
         showTrustPositioningBar
+        trustPositioningPreset="ast"
+        trustPositioningHeadline="Choose the correct England agreement workflow before you start, then build from your facts and preview before payment."
       />
 
       <Container className="py-12 md:py-16">
         <section className="rounded-lg border border-[#E8E1D7] bg-white p-6">
           <h2 className="text-3xl font-bold text-[#141B2D]">Start with the occupier setup</h2>
+          <p className="mt-3 max-w-3xl text-base leading-7 text-[#546075]">
+            Landlord Heaven is for routine solicitor-approved document preparation, not legal advice or representation. A solicitor is better for bespoke disputes; a low-cost wording-only download is cheaper but will not validate the tenancy route or build the procedural setup pack from your answers.
+          </p>
           <div className="mt-6 grid gap-4 md:grid-cols-5">
             {tenancyOptions.map((option) => (
               <Link key={option.href} href={option.href} className="rounded-lg border border-[#E8E1D7] p-4 hover:border-[#7C3AED]">
@@ -148,7 +153,7 @@ export default function TenancyAgreementOptionsComparisonPage() {
                   <td className="p-4 font-semibold text-[#141B2D]">{option.label}</td>
                   <td className="p-4">
                     <Link href={option.href} className="font-semibold text-primary hover:underline">
-                      View {option.label}
+                      Build {option.label}
                     </Link>
                   </td>
                 </tr>

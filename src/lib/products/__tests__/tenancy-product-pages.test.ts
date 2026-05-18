@@ -11,7 +11,7 @@ describe('tenancy product pages', () => {
     const source = readSource('src/app/(marketing)/products/ast/page.tsx');
 
     expect(source).toContain('Choose the agreement that fits the let');
-    expect(source).toContain('Compare the five England agreement options.');
+    expect(source).toContain('Compare the five England agreement workflows.');
     expect(source).toContain('Choose the agreement before you start');
     expect(source).toContain('Common landlord questions before choosing an England tenancy agreement');
     expect(source).toContain('Standard, Premium, Student, HMO / Shared House, and Lodger');
@@ -76,18 +76,20 @@ describe('tenancy product pages', () => {
     const standardSource = readSource('src/app/standard-tenancy-agreement/page.tsx');
     const premiumSource = readSource('src/app/premium-tenancy-agreement/page.tsx');
 
-    expect(standardSource).toContain("title: 'Standard Tenancy Agreement England");
-    expect(standardSource).toContain("name: 'Standard Tenancy Agreement'");
+    expect(standardSource).toContain('PRODUCT_OWNER_METADATA.standardTenancy.title');
+    expect(standardSource).toContain('Standard Tenancy Agreement for England Landlords');
     expect(standardSource).toContain('assured periodic');
     expect(standardSource).toContain('Renters Rights Act tenancy agreement');
-    expect(standardSource).toContain('new tenancy agreement generator');
+    expect(standardSource).toContain('Build my validated Standard pack');
+    expect(standardSource).toContain('not a static form to adapt alone');
     expect(standardSource).toContain('legacyNotice=');
 
-    expect(premiumSource).toContain("title: 'Premium Tenancy Agreement England");
-    expect(premiumSource).toContain("name: 'Premium Tenancy Agreement'");
+    expect(premiumSource).toContain('PRODUCT_OWNER_METADATA.premiumTenancy.title');
+    expect(premiumSource).toContain('Premium Periodic Tenancy Agreement for England Landlords');
     expect(premiumSource).toContain('assured periodic');
     expect(premiumSource).toContain('Renters Rights Act tenancy agreement');
-    expect(premiumSource).toContain('new tenancy agreement generator');
+    expect(premiumSource).toContain('Build my validated Premium pack');
+    expect(premiumSource).toContain('not a static form');
     expect(premiumSource).toContain('england tenancy agreement management schedule');
     expect(premiumSource).toContain('you want a stronger pack with a management schedule and handover records');
   });
@@ -98,10 +100,10 @@ describe('tenancy product pages', () => {
     const lodgerSource = readSource('src/app/lodger-agreement/page.tsx');
 
     expect(studentSource).toContain('sampleProof: studentSampleProof');
-    expect(studentSource).toContain('routeComparison={[');
+    expect(studentSource).toContain('routeComparison={englandTenancyRouteComparisonCards}');
     expect(hmoSource).toContain('sampleProof: hmoSampleProof');
-    expect(hmoSource).toContain('routeComparison={[');
+    expect(hmoSource).toContain('routeComparison={englandTenancyRouteComparisonCards}');
     expect(lodgerSource).toContain('sampleProof: lodgerSampleProof');
-    expect(lodgerSource).toContain('routeComparison={[');
+    expect(lodgerSource).toContain('routeComparison={englandTenancyRouteComparisonCards}');
   });
 });

@@ -8,6 +8,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
+import { getAdminProductLabel } from '@/lib/admin/products';
 
 describe('Admin Orders API Response Schema', () => {
   /**
@@ -97,20 +98,12 @@ describe('Admin Orders API Response Schema', () => {
     });
   });
 
-  it('should validate product types mapping', () => {
-    const productTypeMapping: Record<string, string> = {
-      notice_only: 'Notice Only Pack',
-      complete_pack: 'Complete Eviction Pack',
-      money_claim: 'Money Claim Pack',
-      sc_money_claim: 'Simple Procedure Pack (Scotland)',
-      ast_standard: 'England Assured Periodic Tenancy',
-      ast_premium: 'England Assured Periodic Tenancy (Premium)',
-    };
-
-    // Verify mapping exists for common types
-    expect(productTypeMapping['notice_only']).toBe('Notice Only Pack');
-    expect(productTypeMapping['complete_pack']).toBe('Complete Eviction Pack');
-    expect(productTypeMapping['money_claim']).toBe('Money Claim Pack');
+  it('should validate central admin product type labels', () => {
+    expect(getAdminProductLabel('notice_only')).toBe('Stage 1: Section 8 Notice & Service Pack');
+    expect(getAdminProductLabel('complete_pack')).toBe('Stage 2: Section 8 Court & Possession Pack');
+    expect(getAdminProductLabel('money_claim')).toBe('Money Claim Pack');
+    expect(getAdminProductLabel('section13_standard')).toBe('Supported Rent Increase Pack');
+    expect(getAdminProductLabel('section13_defensive')).toBe('Tribunal-Ready Rent Increase Pack');
   });
 
   it('should calculate totalPages correctly', () => {

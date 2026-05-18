@@ -73,22 +73,22 @@ export default function StandardTenancyAgreementPage() {
         pagePath="/standard-tenancy-agreement"
         title="Standard Tenancy Agreement for England Landlords"
         subtitle="Use this standard periodic tenancy agreement if you are letting a whole property in England and want current wording, setup records, and post-May 2026 terms without student, HMO, lodger, or Premium-level management wording."
-        primaryCtaLabel="Create my Standard agreement"
+        primaryCtaLabel="Build my validated Standard pack"
         primaryCtaHref={standardWizardHref}
         secondaryCtaLabel="Read periodic tenancy guide"
         secondaryCtaHref="/periodic-tenancy-agreement"
         legacyNotice="If you were searching for a standard tenancy agreement, basic tenancy agreement, updated AST replacement, or current England tenancy agreement, this is the standard periodic tenancy agreement route for a straightforward whole-property let."
         introTitle="For a straightforward standard periodic tenancy"
         introBody={[
-          'This is the standard periodic tenancy agreement for a new England tenancy where the property is being let as an ordinary whole-property home. Use this periodic tenancy agreement template when you want current wording but without the extra operational detail included in Premium or the specialist products.',
-          'The pack keeps the setup practical and proportionate: the main agreement plus the key supporting documents, without making a simple tenancy feel more complicated than it needs to be.',
+          'This is the standard periodic tenancy agreement workflow for a new England tenancy where the property is being let as an ordinary whole-property home. Use this route when you want current wording built around your property, occupiers, rent, deposit, and management facts, not a static form to adapt alone.',
+          'The pack keeps the setup practical and proportionate: the main agreement plus the key supporting documents, validation checks, and preview-before-payment workflow, without making a simple tenancy feel more complicated than it needs to be.',
         ]}
         highlights={[
           'Standard periodic tenancy agreement for a straightforward whole-property residential let',
           "Renters' Rights Act compliant tenancy agreement with current wording",
           'Keeps the wording and pack paperwork practical and proportionate',
           'Separate from the Premium, Student, HMO / Shared House, and Lodger routes',
-          'Guided agreement pack with a preview before payment',
+          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Built around the current England periodic tenancy route from 1 May 2026.',
@@ -126,7 +126,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The current England agreement for a straightforward whole-property let, with setup records, key clauses, and practical landlord wording.',
             href: '/standard-tenancy-agreement',
-            ctaLabel: 'Create my Standard agreement',
+            ctaLabel: 'Build my validated Standard pack',
             imageSrc: '/images/wizard-standard-tenancy-agreement.webp',
             imageAlt: 'Standard tenancy agreement preview',
             price: '£14.99',
@@ -157,7 +157,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The fuller current England option for ordinary residential lets that need stronger management wording.',
             href: '/premium-tenancy-agreement',
-            ctaLabel: 'Create my Premium agreement',
+            ctaLabel: 'Build my validated Premium pack',
             imageSrc: '/images/wizard-premium-tenancy-agreement.webp',
             imageAlt: 'Premium tenancy agreement preview',
             price: '£24.99',
@@ -189,7 +189,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The dedicated agreement for student households in England.',
             href: '/student-tenancy-agreement',
-            ctaLabel: 'Create my Student agreement',
+            ctaLabel: 'Build my validated Student pack',
             imageSrc: '/images/wizard-student-tenancy-agreement.webp',
             imageAlt: 'Student tenancy agreement preview',
             price: '£24.99',
@@ -220,7 +220,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The shared-house agreement for occupiers living together and using communal areas.',
             href: '/hmo-shared-house-tenancy-agreement',
-            ctaLabel: 'Create my HMO / Shared House agreement',
+            ctaLabel: 'Build my validated HMO pack',
             imageSrc: '/images/wizard-hmo-agreement.webp',
             imageAlt: 'HMO shared house tenancy agreement preview',
             price: '£34.99',
@@ -252,7 +252,7 @@ export default function StandardTenancyAgreementPage() {
             description:
               'The room-let agreement for a landlord who lives in the property.',
             href: '/lodger-agreement',
-            ctaLabel: 'Create my Lodger agreement',
+            ctaLabel: 'Build my validated Lodger pack',
             imageSrc: '/images/wizard-lodger-agreement.webp',
             imageAlt: 'Lodger agreement preview',
             price: '£14.99',
@@ -353,9 +353,9 @@ export default function StandardTenancyAgreementPage() {
               },
             ],
           },
-          ctaTitle: 'Create the Standard agreement pack',
+          ctaTitle: 'Build the validated Standard tenancy pack',
           ctaBody:
-            'Use this option when the let is straightforward and you want a standard periodic tenancy agreement prepared for an ordinary whole-property home in England.',
+            'Use this option when the let is straightforward and you want solicitor-approved document preparation with validation checks instead of a wording-only form for an ordinary whole-property home in England.',
         }}
         faqs={[
           {
@@ -394,7 +394,7 @@ export default function StandardTenancyAgreementPage() {
               'Yes - when completed and signed correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common tenancy agreement mistakes.',
           },
         ]}
-        finalCtaBody="Use this standard periodic tenancy agreement when the tenancy is straightforward and the property is being let as an ordinary whole-property home. Compare Premium or the specialist products only when the facts call for something more tailored."
+        finalCtaBody="Use this standard periodic tenancy agreement workflow when the tenancy is straightforward and the property is being let as an ordinary whole-property home. Build the agreement from your facts, preview before payment, and compare Premium or the specialist products only when the facts call for something more tailored."
       />
     </div>
   );

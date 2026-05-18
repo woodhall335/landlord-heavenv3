@@ -16,11 +16,33 @@ import {
 
 const samplePagePath = '/samples';
 const canonicalUrl = getCanonicalUrl(samplePagePath);
+const samplePositioningCards = [
+  {
+    title: 'Compared with a solicitor',
+    body:
+      'A solicitor is still the right choice for bespoke advice or a dispute, but routine landlord document setup can be slower and more expensive than a fixed-price workflow. Landlord Heaven gives you solicitor-approved document preparation without solicitor representation.',
+  },
+  {
+    title: 'Compared with a wording-only download',
+    body:
+      'A wording-only download gives you text to edit. These packs are built from landlord facts, include procedural checks, and keep the agreement, notice, claim, service, evidence, or support documents together.',
+  },
+  {
+    title: 'What Landlord Heaven validates before checkout',
+    body:
+      'The workflow checks the key facts, dates, route choices, product fit, and document readiness before you move from preview to payment, so you are not simply downloading a blank form.',
+  },
+  {
+    title: 'Preview the pack before you pay',
+    body:
+      'Inspect the sample, start the guided workflow, preview your own generated pack, then pay when the documents match the facts you entered.',
+  },
+] as const;
 
 export const metadata: Metadata = {
   title: 'Free Landlord Document Samples | Section 8, Tenancy & Rent Packs',
   description:
-    'View free landlord document samples from our golden packs, including Section 8 notice, tenancy agreement, rent increase, and money claim examples.',
+    'View free landlord document samples from solicitor-approved workflows that build notices, claims, rent increase files, and tenancy packs around landlord facts.',
   keywords: [
     'landlord document samples',
     'section 8 notice sample',
@@ -75,13 +97,14 @@ export default function SamplesPage() {
         badge="Free Samples"
         preTitleLabel="Solicitor-approved sample packs"
         title="Free Landlord Document Samples"
-        subtitle="Browse real sample documents from the same golden-pack manifests that power the product previews, so page counts and document lists stay in sync when packs change."
+        subtitle="Browse real sample documents, then move into the fixed-price workflow that builds the notice, claim, rent increase file, or tenancy setup pack around your facts. This is not a static form library."
         primaryCta={{ label: 'View sample packs', href: '#sample-packs' }}
         secondaryCta={{ label: 'Compare tenancy options', href: '/compare/tenancy-agreement-options-england' }}
         mediaSrc="/images/wizard-icons/18-forms-bundle.png"
         mediaAlt="Landlord document sample pack"
         showReviewPill
         showTrustPositioningBar
+        trustPositioningHeadline="Inspect the sample, then build a validated landlord document pack around your facts before you pay."
       />
 
       <Container id="sample-packs" className="py-12 md:py-16">
@@ -90,10 +113,10 @@ export default function SamplesPage() {
             Golden-pack sample library
           </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
-            Inspect sample PDFs before choosing the right pack
+            Inspect sample PDFs before choosing the right workflow
           </h2>
           <p className="mt-4 text-lg leading-8 text-[#546075]">
-            Each card is generated from the latest product pack manifest, so document counts, total pages, featured files, and viewer links stay aligned with the live packs.
+            Each card is generated from the latest product pack manifest, so document counts, total pages, featured files, and viewer links stay aligned with the live packs. The paid route then creates the finished documents from your own answers and validation checks.
           </p>
         </div>
 
@@ -165,6 +188,30 @@ export default function SamplesPage() {
             </article>
           ))}
         </div>
+      </Container>
+
+      <Container className="pb-12 md:pb-16">
+        <section className="rounded-[2rem] border border-[#D8C8FF] bg-[#F7F2FF] p-6 shadow-[0_16px_38px_rgba(67,44,126,0.08)] md:p-8">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
+              Why these samples sell the workflow
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+              A sample is useful only if the paid product builds the right pack
+            </h2>
+            <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
+              Use the PDFs to inspect the output, then use Landlord Heaven to build a fixed-price, solicitor-approved document workflow around the facts of the tenancy, notice, claim, or rent increase. It is document preparation and procedural support, not legal advice, solicitor representation, or court approval.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            {samplePositioningCards.map((card) => (
+              <article key={card.title} className="rounded-[1.5rem] border border-[#E4DAFF] bg-white p-5">
+                <h3 className="text-lg font-semibold text-[#141B2D]">{card.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
       </Container>
     </main>
   );

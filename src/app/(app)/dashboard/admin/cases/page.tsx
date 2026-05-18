@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Container } from "@/components/ui";
 import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
 import type {
@@ -14,6 +14,7 @@ import {
   getAdminCaseTypeLabel,
   getAdminJurisdictionLabel,
 } from "@/lib/admin/case-manager";
+import { ADMIN_PRODUCT_OPTIONS } from "@/lib/admin/products";
 
 interface AdminCasesApiResponse {
   success: boolean;
@@ -23,6 +24,7 @@ interface AdminCasesApiResponse {
     paid_or_generated: number;
     requires_action: number;
     failed_fulfillment: number;
+    preview_abandoned: number;
     edit_window_open: number;
     docs_ready: number;
   };
@@ -35,11 +37,12 @@ interface AdminCasesApiResponse {
   error?: string;
 }
 
-type ModalAction = "retry" | "resume" | "regenerate" | "reopen" | null;
+type ModalAction = "retry" | "resume" | "regenerate" | "reopen" | "restart" | null;
 
 const presetOptions: Array<{ value: AdminCasesPreset; label: string }> = [
   { value: "needs_attention", label: "Needs attention" },
   { value: "paid_awaiting_docs", label: "Paid awaiting docs" },
+  { value: "preview_abandoned", label: "Preview abandoned" },
   { value: "edit_window_open", label: "Edit window open" },
   { value: "docs_ready", label: "Docs ready" },
 ];
@@ -161,18 +164,6 @@ export default function AdminCasesPage() {
     sortBy,
   ]);
 
-  const uniqueProducts = useMemo(
-    () =>
-      Array.from(
-        new Map(
-          cases
-            .filter((caseItem) => caseItem.product_type)
-            .map((caseItem) => [caseItem.product_type!, caseItem.product_name])
-        ).entries()
-      ),
-    [cases]
-  );
-
   const openModal = (action: Exclude<ModalAction, null>, caseItem: AdminCaseRecord) => {
     setSelectedCase(caseItem);
     setModalAction(action);
@@ -195,6 +186,8 @@ export default function AdminCasesPage() {
           ? "resume-fulfillment"
           : modalAction === "regenerate"
           ? "regenerate"
+          : modalAction === "restart"
+          ? "send-restart-link"
           : "reopen-edit-window";
 
       const response = await fetch(`/api/admin/cases/${selectedCase.case_id}/${actionPath}`, {
@@ -211,6 +204,8 @@ export default function AdminCasesPage() {
         text:
           modalAction === "reopen"
             ? "Edit window reopened successfully."
+            : modalAction === "restart"
+            ? "Restart link sent successfully."
             : modalAction === "regenerate"
             ? "Documents regenerated successfully."
             : modalAction === "resume"
@@ -234,6 +229,8 @@ export default function AdminCasesPage() {
       ? "Resume fulfillment?"
       : modalAction === "regenerate"
       ? "Regenerate final documents?"
+      : modalAction === "restart"
+      ? "Send restart link?"
       : "Reopen edit window?";
 
   const modalMessage =
@@ -243,6 +240,8 @@ export default function AdminCasesPage() {
       ? "This will resume fulfillment using the current case facts."
       : modalAction === "regenerate"
       ? "This will delete and regenerate the current final documents from the latest case data."
+      : modalAction === "restart"
+      ? "This will email the customer a secure link to resume their saved draft and continue to checkout."
       : "This will reopen the 30-day edit window from now so support can update answers and regenerate documents.";
 
   if (loading) {
@@ -295,7 +294,7 @@ export default function AdminCasesPage() {
           </div>
         )}
 
-        <div className="mb-6 grid gap-4 md:grid-cols-5">
+        <div className="mb-6 grid gap-4 md:grid-cols-3 xl:grid-cols-6">
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Paid / Generated</p>
             <p className="mt-2 text-3xl font-bold text-charcoal">{stats?.paid_or_generated || 0}</p>
@@ -307,6 +306,10 @@ export default function AdminCasesPage() {
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Failed Fulfillment</p>
             <p className="mt-2 text-3xl font-bold text-red-700">{stats?.failed_fulfillment || 0}</p>
+          </div>
+          <div className="rounded-lg border border-gray-200 bg-white p-5">
+            <p className="text-sm text-gray-600">Preview Abandoned</p>
+            <p className="mt-2 text-3xl font-bold text-purple-700">{stats?.preview_abandoned || 0}</p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Edit Window Open</p>
@@ -368,9 +371,9 @@ export default function AdminCasesPage() {
                 className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-primary"
               >
                 <option value="all">All</option>
-                {uniqueProducts.map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
+                {ADMIN_PRODUCT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>
@@ -484,6 +487,11 @@ export default function AdminCasesPage() {
                       <td className="p-4">
                         <div className="text-sm text-charcoal">{caseItem.product_name || "Unknown"}</div>
                         <div className="mt-1 text-xs text-gray-500">Progress {caseItem.wizard_progress}%</div>
+                        {caseItem.is_preview_abandoned && (
+                          <div className="mt-2 inline-block rounded-full bg-purple-100 px-2 py-1 text-xs font-semibold text-purple-700">
+                            Preview abandoned
+                          </div>
+                        )}
                       </td>
                       <td className="p-4">
                         <span className={`inline-block rounded-full px-2 py-1 text-xs font-semibold ${statusPillClass(caseItem.payment_status)}`}>
@@ -519,6 +527,9 @@ export default function AdminCasesPage() {
                             ? new Date(caseItem.edit_window_ends_at).toLocaleDateString("en-GB")
                             : "Not paid"}
                         </div>
+                        {caseItem.can_send_restart_link && (
+                          <div className="mt-1 text-xs text-purple-700">Restart email available</div>
+                        )}
                       </td>
                       <td className="p-4">
                         <div className="flex flex-col gap-2 text-sm">
@@ -531,6 +542,11 @@ export default function AdminCasesPage() {
                           <Link href={`/dashboard/cases/${caseItem.case_id}#documents`} className="font-semibold text-primary hover:underline">
                             View documents
                           </Link>
+                          {caseItem.can_send_restart_link && (
+                            <button onClick={() => openModal("restart", caseItem)} className="text-left font-semibold text-purple-700 hover:text-primary">
+                              Send restart link
+                            </button>
+                          )}
                           {caseItem.can_retry_fulfillment && (
                             <button onClick={() => openModal("retry", caseItem)} className="text-left font-semibold text-charcoal hover:text-primary">
                               Retry fulfillment

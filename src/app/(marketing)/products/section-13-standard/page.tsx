@@ -32,6 +32,11 @@ export const metadata: Metadata = {
 export default function Section13StandardProductPage() {
   const sampleProof = getGoldenPackProofData('section13_standard');
   const samplePage = getProductSamplePageByPackKey('section13_standard');
+  const samplePreviewEntries = config.packBreakdown.map((item) => ({
+    title: item.name,
+    description: item.plainEnglish,
+    categoryLabel: 'Pack output',
+  }));
 
   const content: ProductSalesPageContent = {
     analytics: {
@@ -63,9 +68,13 @@ export default function Section13StandardProductPage() {
       ),
     },
     earlyProofBand: {
-      preview: sampleProof ? (
-        <GoldenPackProof data={sampleProof} samplePageHref={samplePage?.samplePath} />
-      ) : undefined,
+      preview: (
+        <GoldenPackProof
+          data={sampleProof}
+          fallbackEntries={samplePreviewEntries}
+          samplePageHref={samplePage?.samplePath}
+        />
+      ),
     },
     whatYouGet: {
       title: 'What you get',

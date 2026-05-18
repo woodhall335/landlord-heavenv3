@@ -62,22 +62,22 @@ export default function PremiumTenancyAgreementPage() {
         pagePath="/premium-tenancy-agreement"
         title="Premium Periodic Tenancy Agreement for England Landlords"
         subtitle="Use this premium periodic tenancy agreement when the let is still an ordinary residential tenancy, but you want stronger management wording around access, repairs, handover, keys, and day-to-day control than the Standard route provides."
-        primaryCtaLabel="Create my Premium agreement"
+        primaryCtaLabel="Build my validated Premium pack"
         primaryCtaHref={premiumWizardHref}
         secondaryCtaLabel="Read assured periodic guide"
         secondaryCtaHref="/assured-periodic-tenancy-agreement"
         legacyNotice="If you were searching for a premium tenancy agreement, premium periodic tenancy agreement, updated AST replacement, or current England tenancy agreement with fuller drafting, this is the more detailed periodic route for ordinary residential lets that need stronger management and handover wording."
         introTitle="For an ordinary periodic tenancy with more detail built in"
         introBody={[
-          'This page is for landlords who need more than the standard periodic tenancy agreement but do not need a separate Student, HMO / Shared House, or Lodger product. It is the premium tenancy agreement route for an ordinary residential let that needs fuller drafting.',
-          'Premium keeps the tenancy on the standard residential track while adding fuller wording around inspections, repairs reporting, key handling, contractor access, utilities handover, and move-out expectations.',
+          'This page is for landlords who need more than the standard periodic tenancy agreement but do not need a separate Student, HMO / Shared House, or Lodger product. It is the premium tenancy agreement workflow for an ordinary residential let that needs fuller drafting built around the property, occupiers, rent, deposit, and management facts, not a static form to adapt alone.',
+          'Premium keeps the tenancy on the standard residential track while adding fuller wording around inspections, repairs reporting, key handling, contractor access, utilities handover, and move-out expectations, with validation checks before preview and payment.',
         ]}
         highlights={[
           'Premium periodic tenancy agreement for ordinary residential lets that need more detail than the standard version',
           'Enhanced AST template wording for post-May 2026 England rules',
           'Adds fuller wording around management and handover',
           'Separate from Student, HMO / Shared House, and Lodger routes',
-          'Guided agreement pack with a preview before payment',
+          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Built on the same current England periodic route as Standard from 1 May 2026.',
@@ -188,9 +188,9 @@ export default function PremiumTenancyAgreementPage() {
               },
             ],
           },
-          ctaTitle: 'Create the Premium agreement pack',
+          ctaTitle: 'Build the validated Premium tenancy pack',
           ctaBody:
-            'Use this option when the tenancy is still an ordinary residential let, but the paperwork needs more drafting depth and stronger day-to-day management support than Standard provides.',
+            'Use this option when the tenancy is still an ordinary residential let, but the paperwork needs solicitor-approved drafting depth, validation checks, and stronger day-to-day management support than Standard provides.',
         }}
         faqs={[
           {
@@ -234,7 +234,7 @@ export default function PremiumTenancyAgreementPage() {
               'Yes - when completed and signed correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common tenancy agreement mistakes.',
           },
         ]}
-        finalCtaBody="Use the premium periodic option when you want a more detailed England tenancy agreement for a standard residential let. If the property needs more management, handover, and day-to-day detail than Standard provides, this fuller option is usually the better fit. If the arrangement is really student, shared-house, or lodger, use the dedicated product instead."
+        finalCtaBody="Use the premium periodic workflow when you want a more detailed England tenancy agreement built from your facts for a standard residential let. If the property needs more management, handover, and day-to-day detail than Standard provides, this fuller option is usually the better fit. If the arrangement is really student, shared-house, or lodger, use the dedicated product instead."
       />
     </div>
   );

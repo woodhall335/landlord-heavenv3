@@ -89,6 +89,24 @@ interface EnglandTenancyPageProps {
   salesContent?: EnglandTenancySalesContent;
 }
 
+const tenancyPositioningCards = [
+  {
+    title: 'Compared with a wording-only download',
+    body:
+      'A static download gives you a document to edit. Landlord Heaven asks for the property, occupier, rent, deposit, guarantor, and management facts, then builds the agreement and support pack around those answers.',
+  },
+  {
+    title: 'Compared with using a solicitor',
+    body:
+      'A solicitor is the safer choice for complex advice or representation. For routine tenancy setup, this fixed-price workflow gives landlords solicitor-approved document preparation without solicitor rates or delays.',
+  },
+  {
+    title: 'Validated before preview',
+    body:
+      'The workflow checks the agreement route, core tenancy facts, deposit and guarantor inputs where relevant, product fit, and procedural readiness before the pack moves to preview.',
+  },
+] as const;
+
 function RouteComparisonGrid({ routes }: { routes: EnglandTenancyRouteCard[] }) {
   const hasRichCards = routes.some(
     (route) => route.imageSrc || route.price || route.details?.length,
@@ -205,8 +223,8 @@ export function EnglandTenancyPage({
     <main className="min-h-screen bg-[#FCFBF8]">
       <UniversalHero
         badge="England tenancy agreements"
-        preTitleLabel="Solicitor-approved"
-        trustText="England tenancy agreements for landlords, updated for the post-May 2026 rules."
+        preTitleLabel="Solicitor-approved document preparation"
+        trustText="Validated England tenancy setup packs for landlords, updated for the post-May 2026 rules."
         title={title}
         subtitle={subtitle}
         primaryCta={{ label: primaryCtaLabel, href: primaryCtaHref }}
@@ -215,10 +233,12 @@ export function EnglandTenancyPage({
             ? { label: secondaryCtaLabel, href: secondaryCtaHref }
             : undefined
         }
-        feature="Choose the agreement that fits the way you are letting the property."
+        feature="Create a validated England tenancy setup pack around your property, occupiers, rent, deposit, and management facts."
         mediaSrc="/images/tenancy_agreements.webp"
         mediaAlt="Tenancy agreement documents and landlord paperwork"
         showTrustPositioningBar
+        trustPositioningPreset="ast"
+        trustPositioningHeadline="Build the agreement from your facts, validate the setup, preview before payment, and keep the procedural pack together."
       />
 
       <Container className="py-12 md:py-16">
@@ -241,7 +261,32 @@ export function EnglandTenancyPage({
                   {introBody.map((paragraph, index) => (
                     <p key={`sales-intro-${index}`}>{paragraph}</p>
                   ))}
+                  <p>
+                    Landlord Heaven is not selling a static wording-only form. It is a solicitor-approved document preparation workflow that builds a validated England tenancy setup pack around your property, occupiers, rent, deposit, guarantor, and management facts.
+                  </p>
                 </div>
+              </div>
+            </section>
+
+            <section className="mb-12 rounded-[2rem] border border-[#D8C8FF] bg-[#F7F2FF] p-6 shadow-[0_14px_32px_rgba(91,86,232,0.08)] md:p-8">
+              <div className="max-w-3xl">
+                <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+                  Why landlords choose the workflow
+                </p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+                  Create the agreement from your facts, not from a static form
+                </h2>
+                <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
+                  This is fixed-price, solicitor-approved document preparation for routine landlord setup. It helps you follow the procedure and preview the agreement before payment, but it is not legal advice, solicitor representation, or a court-approved tenancy agreement.
+                </p>
+              </div>
+              <div className="mt-8 grid gap-5 md:grid-cols-3">
+                {tenancyPositioningCards.map((card) => (
+                  <article key={card.title} className="rounded-[1.5rem] border border-[#E4DAFF] bg-white p-5">
+                    <h3 className="text-lg font-semibold text-[#141B2D]">{card.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
+                  </article>
+                ))}
               </div>
             </section>
 
@@ -313,7 +358,7 @@ export function EnglandTenancyPage({
                       See the actual pack before you pay
                     </h2>
                     <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
-                      The preview lets you inspect the actual agreement pack, not just read a promise about it.
+                      The preview lets you inspect the actual agreement pack, not just read a promise about it. Use the sample proof to see the outputs, then build and preview your own agreement before checkout.
                     </p>
                   </div>
                   <div className="mt-6">{salesContent.sampleProof}</div>

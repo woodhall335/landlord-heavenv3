@@ -64,14 +64,15 @@ export default function HmoSharedHouseTenancyAgreementPage() {
         pagePath="/hmo-shared-house-tenancy-agreement"
         title="HMO / Shared House Tenancy Agreement for England Landlords"
         subtitle="Use this HMO tenancy agreement template when the property is being shared and you want house rules, communal-area wording, and day-to-day paperwork to match how the house is actually run."
-        primaryCtaLabel="Create my HMO / Shared House agreement"
+        primaryCtaLabel="Build my validated HMO pack"
         primaryCtaHref={hmoWizardHref}
         secondaryCtaLabel="View all England routes"
         secondaryCtaHref={englandHubHref}
         legacyNotice="If you searched for an HMO tenancy agreement, shared house agreement, or sharers' tenancy agreement in England, this is the dedicated option for shared occupation from 1 May 2026 rather than a standard residential pack with shared-house points bolted on afterwards."
         introTitle="Choose this when the property is being shared"
         introBody={[
-          'This HMO tenancy agreement template is for England lets where the real work is managing shared occupation well. If several occupiers are sharing kitchens, bathrooms, entrances, bins, and day-to-day expectations, the paperwork should say that plainly from the start.',
+          'This HMO tenancy agreement workflow is for England lets where the real work is managing shared occupation well. If several occupiers are sharing kitchens, bathrooms, entrances, bins, and day-to-day expectations, the paperwork should say that plainly from the start instead of relying on a one-size-fits-all form.',
+          'The workflow validates the product fit and shared-house setup before preview, so the agreement, house rules, communal records, and management paperwork are built around how the property is actually occupied.',
           'It is built for the friction points that usually show up first in shared houses: communal areas, visitors, quiet hours, cleaning expectations, repair reporting, handover records, and the practical rules that keep the house easier to run.',
         ]}
         highlights={[
@@ -79,7 +80,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
           'HMO room rental agreement support with clear house rules clause wording',
           'House rules and communal-area expectations kept clear from the outset',
           'Separate from Standard, Premium, Student, and Lodger routes',
-          'Guided agreement pack with a preview before payment',
+          'Solicitor-approved guided agreement pack with validation checks and a preview before payment',
         ]}
         compliancePoints={[
           'Built around the current England position from 1 May 2026 for the main tenancy wording.',
@@ -184,9 +185,9 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               },
             ],
           },
-          ctaTitle: 'Create the HMO / Shared House agreement pack',
+          ctaTitle: 'Build the validated HMO / Shared House pack',
           ctaBody:
-            'Use this option when the property is being shared and you want the agreement, the communal rules, and the supporting records prepared together from the start.',
+            'Use this option when the property is being shared and you want solicitor-approved document preparation for the agreement, communal rules, and supporting records from the start.',
         }}
         faqs={[
           {
@@ -235,7 +236,7 @@ export default function HmoSharedHouseTenancyAgreementPage() {
               'Yes - when completed and signed correctly. This template follows post-May 2026 England rules, and the checklist helps you avoid common shared-house agreement mistakes.',
           },
         ]}
-        finalCtaBody="Use the HMO / Shared House pack when the real complexity is shared occupation, communal areas, and day-to-day house management. If the occupiers are sharers and you want the agreement to reflect how the house is actually going to be lived in, this is usually a better fit than the Standard or Premium packs."
+        finalCtaBody="Use the HMO / Shared House workflow when the real complexity is shared occupation, communal areas, and day-to-day house management. If the occupiers are sharers and you want the agreement to reflect how the house is actually going to be lived in, this validated pack is usually a better fit than the Standard or Premium packs."
       />
     </div>
   );

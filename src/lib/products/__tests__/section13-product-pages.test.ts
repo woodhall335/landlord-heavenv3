@@ -11,10 +11,12 @@ describe('Section 13 product pages', () => {
     const source = readSource('src/app/(marketing)/products/section-13-standard/page.tsx');
 
     expect(source).toContain('earlyProofBand: {');
-    expect(source).toContain('preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
-    expect(source).toContain('hideSection: true');
-    expect(source).toContain('Start the standard Section 13 option');
-    expect(source).toContain('I need the challenge-ready defence route');
+    expect(source).toContain('const samplePreviewEntries = config.packBreakdown.map');
+    expect(source).toContain('fallbackEntries={samplePreviewEntries}');
+    expect(source).toContain('samplePageHref={samplePage?.samplePath}');
+    expect(source).toContain('Build my supported rent increase');
+    expect(source).toContain('Prepare for a rent challenge');
+    expect(source).toContain('Supported Rent Increase Pack FAQs');
     expect(source).not.toContain('Choose Standard if you need to serve the rent increase now');
     expect(source).not.toContain('This is the right fit when you want to propose a rent increase');
     expect(source).not.toContain('What you get in the standard rent increase pack');
@@ -25,10 +27,13 @@ describe('Section 13 product pages', () => {
     const source = readSource('src/app/(marketing)/products/section-13-defence/page.tsx');
 
     expect(source).toContain('fullWidthPreview: true');
-    expect(source).toContain('preview: sampleProof ? <GoldenPackProof data={sampleProof} /> : undefined');
+    expect(source).toContain('const samplePreviewEntries = config.packBreakdown.map');
+    expect(source).toContain('fallbackEntries={samplePreviewEntries}');
+    expect(source).toContain('samplePageHref={samplePage?.samplePath}');
     expect(source).toContain('Questions landlords ask before choosing the defence route');
-    expect(source).toContain('Start the challenge-ready defence option');
-    expect(source).toContain('I only need the standard option');
+    expect(source).toContain('Prepare for a rent challenge');
+    expect(source).toContain('I only need the supported option');
+    expect(source).toContain('Tribunal-Ready Rent Increase Pack FAQs');
     expect(source).not.toContain('Choose Defence if the increase may be challenged');
     expect(source).not.toContain('What you get in the challenge-ready defence pack');
     expect(source).not.toContain('Only need the standard rent increase route?');
