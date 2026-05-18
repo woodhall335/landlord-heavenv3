@@ -9,7 +9,7 @@ import { REVIEW_RATING } from '@/lib/reviews/reviewStats';
 describe('product structured data', () => {
   it('includes required Product fields with pinned aggregate rating', () => {
     const schema = productSchema({
-      name: 'Standard Section 13 Rent Increase Pack',
+      name: 'Supported Rent Increase Pack',
       description: 'Prepare Form 4A with market evidence and service record.',
       price: '39',
       url: 'https://landlordheaven.co.uk/products/section-13-standard',
@@ -18,7 +18,7 @@ describe('product structured data', () => {
     expect(schema).toMatchObject({
       '@context': 'https://schema.org',
       '@type': 'Product',
-      name: 'Standard Section 13 Rent Increase Pack',
+      name: 'Supported Rent Increase Pack',
       description: 'Prepare Form 4A with market evidence and service record.',
       url: 'https://landlordheaven.co.uk/products/section-13-standard',
       brand: {

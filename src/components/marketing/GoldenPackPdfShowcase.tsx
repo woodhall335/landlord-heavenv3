@@ -37,7 +37,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
         <div className="border-b border-[#3D2D68] px-5 py-5 md:px-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#CFC4FF]">
+              <p className="text-xs font-semibold tracking-[0.08em] text-[#CFC4FF]">
                 Sample document preview
               </p>
               <h4 className="mt-2 text-xl font-semibold text-white md:text-2xl">

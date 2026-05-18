@@ -16,12 +16,12 @@ type PositioningContent = {
 
 export const POSITIONING_CONTENT: Record<PositioningPreset, PositioningContent> = {
   default: {
-    headline: 'Plain-English help, the right documents, and checks that stop avoidable mistakes before they cost you months.',
+    headline: 'Build the notice, service file, court pack, claim pack, or tenancy document around your facts before you pay.',
     bullets: [
-      'We flag problems before you generate anything, so you do not waste time on the wrong route.',
-      'Answer plain-English questions and we build the documents that fit your case.',
-      'Preview first, fix anything that changed, and regenerate without starting from scratch.',
-      'Built around the forms courts and tribunals actually expect to see.',
+      'Answer plain-English questions and get documents built around your case, not a blank template.',
+      'Preview the pack before payment, fix the facts, and regenerate without starting again.',
+      'Use a fixed-price, instant workflow for the landlord file you actually need.',
+      'Built around the forms courts and tribunals expect, without claiming legal advice or court approval.',
     ],
   },
   home: {
@@ -34,39 +34,39 @@ export const POSITIONING_CONTENT: Record<PositioningPreset, PositioningContent> 
     ],
   },
   notice_only: {
-    headline: 'Need to serve an eviction notice fast? We help you choose the right route and avoid the mistakes that force you to start again.',
+    headline: 'Need to serve an eviction notice fast? Build the Section 8 notice and service file around the landlord facts.',
     bullets: [
-      'We help you work out the right notice before you lose time on the wrong one.',
-      'We flag problems with your case before you generate, so you do not serve an invalid notice.',
-      'Preview your notice pack before you pay, then update it fast if the facts change.',
-      'Built on the forms courts and tribunals expect, with service guidance to help you do it properly.',
+      'Generate a solicitor-approved Form 3A notice with the service steps kept beside it.',
+      'Check route, dates, arrears, and service details before anything goes to the tenant.',
+      'Preview your notice pack before you pay, then update and regenerate if the facts change.',
+      'Use fixed-price notice preparation without implying solicitor representation or court approval.',
     ],
   },
   complete_pack: {
-    headline: 'Your tenant still is not leaving. This pack helps you move from notice to court without stitching it all together yourself.',
+    headline: 'Your tenant still is not leaving. Build the notice-to-court possession file without stitching forms together yourself.',
     bullets: [
-      'Keep your notice, claim forms, and supporting paperwork lined up from the start.',
-      'We help you avoid inconsistencies that can waste court fees and add more delay.',
-      'Get the key court-stage documents together in one place instead of piecing them together later.',
-      'Use clear filing guidance so you know what to do after the notice expires.',
+      'Keep Form 3A, N215, N5, N119, evidence, and hearing material aligned.',
+      'Use facts from the case once so the notice, claim forms, and court pack stay consistent.',
+      'Preview before payment and regenerate when the possession facts change.',
+      'Fixed-price, solicitor-approved document preparation, not a guarantee of the court outcome.',
     ],
   },
   money_claim: {
-    headline: 'Your tenant owes you money. We help you start recovering it with a clear claim pack, not a pile of forms.',
+    headline: 'Your tenant owes you money. Build a claim pack from arrears, damage, bills, and debt facts, not a loose form.',
     bullets: [
-      'Set out what is owed clearly, so you are not scrambling to explain the numbers later.',
-      'Get the pre-action and court documents you need in one pack for England claims.',
-      'Update figures quickly if arrears grow or new losses come to light.',
-      'Move from unpaid rent to a money claim without paying a solicitor just to draft the paperwork.',
+      'Structure the demand, claim details, schedule, and evidence around the debt you enter.',
+      'Keep rent arrears, damage, bills, guarantor debt, and interest calculations together.',
+      'Preview the claim pack before payment and regenerate if the figures change.',
+      'Use a fixed-price England money-claim workflow instead of paying solicitor rates to draft the first file.',
     ],
   },
   section13: {
-    headline: "You want to raise the rent properly. We help you check the timing, explain the figure, and keep the file ready if the tenant challenges it.",
+    headline: "You want to raise the rent properly. Build a market-supported Section 13 file before you serve Form 4A.",
     bullets: [
-      'Check the Section 13 timing before you serve anything, so you do not trip over avoidable date mistakes.',
-      'Build Form 4A, the support report, and proof of service as one coherent landlord file.',
-      'Use market comparables to explain the figure in plain English instead of relying on guesswork.',
-      'Upgrade into the defence route when challenge risk or tribunal preparation becomes part of the job.',
+      'Check current rent, proposed rent, timing, and evidence strength before the notice goes out.',
+      'Build Form 4A, the rent summary, cover letter, market evidence, and service record as one coherent file.',
+      'Use current advertised rents for similar homes nearby to help explain the proposed figure.',
+      'Choose the tribunal-ready route when challenge risk means you want response and bundle materials from the start.',
     ],
   },
   ast: {

@@ -70,12 +70,12 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     category: 'money_claim',
   },
   [PRICE_IDS.SECTION13_STANDARD]: {
-    name: 'Standard Section 13 Rent Increase Pack',
+    name: 'Supported Rent Increase Pack',
     type: 'one_time',
     category: 'rent_increase',
   },
   [PRICE_IDS.SECTION13_DEFENSIVE]: {
-    name: 'Challenge-Ready Section 13 Defence Pack',
+    name: 'Tribunal-Ready Rent Increase Pack',
     type: 'one_time',
     category: 'rent_increase',
   },

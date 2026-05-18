@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiCheckLine, RiShieldCheckFill } from 'react-icons/ri';
+import { TrustPositioningBar } from '@/components/marketing/TrustPositioningBar';
 import { UsageTodayCounter } from '@/components/seo/UsageTodayCounter';
 import type { PositioningPreset } from '@/lib/marketing/positioning';
 import { getDynamicReviewCount, REVIEW_RATING } from '@/lib/reviews/reviewStats';
@@ -23,7 +24,7 @@ type HeroCta = {
 const SECTION_WRAP_CLASSES =
   'relative isolate overflow-visible pt-28 pb-10 sm:pt-32 sm:pb-12 lg:overflow-hidden lg:pt-36 lg:pb-16';
 const MOBILE_MEDIA_WRAP_CLASSES =
-  'relative z-0 float-right mr-[-20%] ml-4 mt-3 mb-5 w-[72%] max-w-[560px] pt-0 sm:w-[64%] lg:hidden';
+  'relative z-0 float-right mr-0 ml-4 mt-3 mb-5 w-[58%] max-w-[500px] pt-0 sm:w-[58%] lg:hidden';
 const SUBTITLE_CLASSES =
   'relative z-10 mt-4 px-0 py-0 text-lg leading-relaxed text-white/85 sm:max-w-[52ch] sm:text-xl';
 const CTA_WRAP_CLASSES = 'mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center';
@@ -107,6 +108,9 @@ export function UniversalHero({
   showReviewPill,
   showUsageCounter,
   backgroundImageSrc = '/images/bg.webp',
+  showTrustPositioningBar = false,
+  trustPositioningPreset = 'default',
+  trustPositioningHeadline,
   reviewPillLayout = 'auto',
 }: UniversalHeroProps) {
   const isValidHeading = headingAs === 'h1' || headingAs === 'h2';
@@ -377,6 +381,14 @@ export function UniversalHero({
                 <span className="text-white/85">{feature}</span>
               </div>
             )}
+
+            {showTrustPositioningBar ? (
+              <TrustPositioningBar
+                preset={trustPositioningPreset}
+                headline={trustPositioningHeadline}
+                className={isCenter ? 'mx-auto max-w-5xl text-left' : undefined}
+              />
+            ) : null}
 
             {children}
 

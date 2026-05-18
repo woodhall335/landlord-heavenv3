@@ -35,8 +35,8 @@ export const SEO_PRICES = {
   evictionNotice: { amount: 39.99, display: formatPriceLabel(39.99) },
   evictionBundle: { amount: 89.99, display: formatPriceLabel(89.99) },
   moneyClaim: { amount: 28.99, display: formatPriceLabel(28.99) },
-  section13Standard: { amount: 17.99, display: formatPriceLabel(17.99) },
-  section13Defensive: { amount: 27.99, display: formatPriceLabel(27.99) },
+  section13Standard: { amount: 39.99, display: formatPriceLabel(39.99) },
+  section13Defensive: { amount: 69.99, display: formatPriceLabel(69.99) },
   tenancyStandard: { amount: 14.99, display: formatPriceLabel(14.99) },
   tenancyPremium: { amount: 24.99, display: formatPriceLabel(24.99) },
   tenancyStudent: { amount: 24.99, display: formatPriceLabel(24.99) },
@@ -164,9 +164,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   section13_standard: {
     sku: 'section13_standard',
-    label: 'Standard Section 13 Rent Increase Pack',
-    shortLabel: 'Standard Section 13',
-    description: 'Propose a rent increase with Form 4A, market evidence, and the service record kept together',
+    label: 'Supported Rent Increase Pack',
+    shortLabel: 'Supported Rent Increase',
+    description:
+      'Includes Form 4A, market evidence, rent increase summary, cover letter, and service record for England landlords',
     price: SEO_PRICES.section13Standard.amount,
     displayPrice: SEO_PRICES.section13Standard.display,
     priceNote: 'For landlords in England',
@@ -175,9 +176,10 @@ export const PRODUCTS: Record<ProductSku, ProductConfig> = {
   },
   section13_defensive: {
     sku: 'section13_defensive',
-    label: 'Challenge-Ready Section 13 Defence Pack',
-    shortLabel: 'Challenge-Ready Defence',
-    description: 'Tribunal-ready Section 13 bundle with challenge guidance, evidence tools, and response documents',
+    label: 'Tribunal-Ready Rent Increase Pack',
+    shortLabel: 'Tribunal-Ready Rent Increase',
+    description:
+      'Adds an indexed tribunal bundle, defence guide, argument summary, response template, legal briefing, and challenge response materials',
     price: SEO_PRICES.section13Defensive.amount,
     displayPrice: SEO_PRICES.section13Defensive.display,
     priceNote: 'For landlords in England',

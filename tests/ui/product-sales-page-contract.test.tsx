@@ -136,6 +136,7 @@ type PageContract = {
   h1: RegExp;
   sectionTitles: string[];
   requiredItems: string[];
+  expectsWhatYouGet?: boolean;
 };
 
 const pageContracts: PageContract[] = [
@@ -212,13 +213,14 @@ const pageContracts: PageContract[] = [
   {
     name: 'section 13 standard',
     load: () => import('@/app/(marketing)/products/section-13-standard/page'),
-    h1: /Create a Section 13 Form 4A rent increase notice/i,
+    h1: /Serve a market-supported rent increase, not just a bare Form 4A/i,
     sectionTitles: [
+      'What you get',
       'Why you need this',
       'How this helps you',
       'How it works',
-      'Create the rent increase notice with the evidence beside it',
-      'Standard Section 13 Rent Increase Pack FAQs',
+      'Build the supported rent increase file before you serve',
+      'Supported Rent Increase Pack FAQs',
     ],
     requiredItems: [
       'Form 4A rent increase notice',
@@ -226,17 +228,19 @@ const pageContracts: PageContract[] = [
       'Proof of service record',
       'Rent increase cover letter',
     ],
+    expectsWhatYouGet: true,
   },
   {
     name: 'section 13 defence',
     load: () => import('@/app/(marketing)/products/section-13-defence/page'),
-    h1: /Prepare for a challenged Section 13 rent increase/i,
+    h1: /Prepare the rent increase file as if it may be challenged/i,
     sectionTitles: [
+      'What you get',
       'Why this route helps',
       'What it helps you do',
       'How it works',
-      'Prepare for the challenge before it lands',
-      'Challenge-Ready Section 13 Defence Pack FAQs',
+      'Prepare the tribunal-ready file before the challenge lands',
+      'Tribunal-Ready Rent Increase Pack FAQs',
     ],
     requiredItems: [
       'Form 4A rent increase notice',
@@ -251,6 +255,7 @@ const pageContracts: PageContract[] = [
       'negotiation',
       'Merged tribunal bundle PDF',
     ],
+    expectsWhatYouGet: true,
   },
 ];
 
@@ -284,9 +289,13 @@ describe('public product sales page contract', () => {
       expect(screen.getByText('Sample document preview')).toBeInTheDocument();
       expect(screen.getByText(/Inspect the sample pack before you pay/i)).toBeInTheDocument();
       expect(screen.getByText('Documents in this sample pack')).toBeInTheDocument();
-      expect(
-        screen.queryByRole('heading', { level: 2, name: /What you get/i })
-      ).not.toBeInTheDocument();
+      if (contract.expectsWhatYouGet) {
+        expect(screen.getByRole('heading', { level: 2, name: /What you get/i })).toBeInTheDocument();
+      } else {
+        expect(
+          screen.queryByRole('heading', { level: 2, name: /What you get/i })
+        ).not.toBeInTheDocument();
+      }
 
       const orderedHeadings = contract.sectionTitles.map((title) =>
         screen.getByRole('heading', { level: 2, name: title })

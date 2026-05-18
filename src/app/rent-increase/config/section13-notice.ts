@@ -54,7 +54,7 @@ export const section13NoticePage: RentIncreaseGuidePage = {
     ],
     avoidChallenges: [
       'To reduce the chance of a challenge, make the proposal legible and proportionate. Show where the figure sits in the local range, use recent comparables, and keep the explanation calm and specific. A tenant may still disagree, but a clear file removes a lot of confusion-driven escalation.',
-      'Use this page with the linked Form 4A and market-rent pages, then move into the Standard pack once the figure and date are settled. Keep the notice, proof of service, and report together so the whole case can be read as one joined-up file.',
+      'Use this page with the linked Form 4A and market-rent pages, then move into the Supported pack once the figure and date are settled. Keep the notice, proof of service, and report together so the whole case can be read as one joined-up file.',
       'When the tenant asks questions, use the same clear explanation you used in the report. Repeating the same factual basis calmly is often the simplest way to keep the dispute from becoming more complicated than it needs to be.',
       'That consistency matters because a landlord file often stops feeling natural the moment the wording starts changing from document to document. A stable explanation is easier for you to rely on and easier for someone else to follow if the case needs to be reviewed later.',
     ],
@@ -91,8 +91,8 @@ export const section13NoticePage: RentIncreaseGuidePage = {
   ],
   midCtaTitle: 'Build a stronger Section 13 notice from the start',
   midCtaBody:
-    'Use the Standard pack to build the notice, service record, and support report from one workflow so the file stays consistent.',
+    'Use the Supported pack to build the notice, service record, and support report from one workflow so the file stays consistent.',
   finalCtaTitle: 'Create my rent increase notice',
   finalCtaBody:
-    'Use the Standard pack when you are ready to turn the timing, the figure, and the explanation into a clearer landlord file that still makes sense when someone reads it from the notice through to service and any follow-up questions.',
+    'Use the Supported pack when you are ready to turn the timing, the figure, and the explanation into a clearer landlord file that still makes sense when someone reads it from the notice through to service and any follow-up questions.',
 };

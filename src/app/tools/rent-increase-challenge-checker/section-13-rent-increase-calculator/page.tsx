@@ -42,7 +42,7 @@ export default function Section13RentIncreaseCalculatorPage() {
         {
           title: 'What to do with the result',
           body: [
-            'If the rent sits in a supportable range, you can move into the Standard Section 13 pack with more confidence. If the figure is high against the evidence, the safer move is to prepare for challenge before the notice goes out.',
+            'If the rent sits in a supportable range, you can move into the Supported Rent Increase Pack with more confidence. If the figure is high against the evidence, the safer move is to prepare for challenge before the notice goes out.',
             'That keeps the paid step practical. You are not buying a pack because the page says so; you are choosing the pack that matches the risk in front of you.',
           ],
         },
@@ -51,7 +51,7 @@ export default function Section13RentIncreaseCalculatorPage() {
       secondaryCta={{ href: '/rent-increase', label: 'Compare the Section 13 landlord routes' }}
       relatedLinks={[
         ...getRentCheckerSeoLinks('/tools/rent-increase-challenge-checker/section-13-rent-increase-calculator').slice(0, 5),
-        { href: '/products/section-13-standard', label: 'View the Standard Section 13 pack' },
+        { href: '/products/section-13-standard', label: 'View the Supported Rent Increase Pack' },
       ]}
     />
   );

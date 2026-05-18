@@ -43,6 +43,7 @@ export const SUPPLEMENTAL_SWEEP_CLASSIFIED_ROUTES = [
   '/products/section-13-defence',
   '/renters-rights-act-information-sheet-2026',
   '/samples',
+  '/samples/notice-only',
   '/tenancy-agreement-england-2026',
   '/tenancy-agreement-template-uk',
 ] as const;

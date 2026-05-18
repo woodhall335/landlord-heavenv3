@@ -41,7 +41,7 @@ describe('metadata text normalization', () => {
     );
   });
 
-  it('should flag duplicate site names and keyword targeting misses', () => {
+  it('should flag duplicate site names without treating meta keywords as snippet copy', () => {
     const issues = auditMetadataText({
       title: 'Section 21 Guide | Landlord Heaven | Landlord Heaven',
       description:
@@ -50,7 +50,7 @@ describe('metadata text normalization', () => {
     });
 
     expect(issues.some((issue) => issue.code === 'duplicate_site_name')).toBe(true);
-    expect(issues.some((issue) => issue.code === 'keyword_targeting_miss')).toBe(true);
+    expect(issues.some((issue) => issue.code === 'keyword_targeting_miss')).toBe(false);
   });
 });
 

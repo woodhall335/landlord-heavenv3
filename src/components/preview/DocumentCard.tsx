@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Lock, Download, FileText, ClipboardList, CheckSquare, Shield, Scale, FileCheck, Home, Users, BookOpen, Eye, X, AlertTriangle, Loader2 } from 'lucide-react';
 
 export interface DocumentInfo {
@@ -48,27 +48,29 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
     (document.documentId ? `/api/documents/thumbnail/${document.documentId}` : null);
   const previewUrl = document.previewUrl || null;
   const [showPreview, setShowPreview] = useState(false);
-  const [thumbnailError, setThumbnailError] = useState(false);
-  const [thumbnailLoaded, setThumbnailLoaded] = useState(!thumbnailUrl);
+  const [thumbnailState, setThumbnailState] = useState({
+    url: thumbnailUrl,
+    error: false,
+    loaded: !thumbnailUrl,
+  });
   const [previewLoaded, setPreviewLoaded] = useState(false);
+  if (thumbnailState.url !== thumbnailUrl) {
+    setThumbnailState({
+      url: thumbnailUrl,
+      error: false,
+      loaded: !thumbnailUrl,
+    });
+  }
+  const thumbnailError = thumbnailState.error;
+  const thumbnailLoaded = thumbnailState.loaded;
   const thumbnailLoading = Boolean(thumbnailUrl && !thumbnailLoaded && !thumbnailError);
   const previewUnavailableReason =
     document.previewUnavailableReason || (!previewUrl && thumbnailError ? 'Preview temporarily unavailable' : null);
   const canPreview = Boolean(previewUrl || (thumbnailUrl && !thumbnailError)) && !previewUnavailableReason;
 
-  useEffect(() => {
-    setThumbnailError(false);
-    setThumbnailLoaded(!thumbnailUrl);
-  }, [thumbnailUrl]);
-
-  useEffect(() => {
-    if (showPreview) {
-      setPreviewLoaded(false);
-    }
-  }, [showPreview, previewUrl, thumbnailUrl]);
-
   const handlePreviewClick = () => {
     if (canPreview) {
+      setPreviewLoaded(false);
       setShowPreview(true);
     }
   };
@@ -115,7 +117,9 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                   thumbnailLoaded ? 'opacity-100' : 'opacity-0'
                 }`}
                 onLoad={() => {
-                  setThumbnailLoaded(true);
+                  setThumbnailState((state) =>
+                    state.url === thumbnailUrl ? { ...state, error: false, loaded: true } : state
+                  );
                 }}
                 onError={(e) => {
                   if (shouldLogThumbnailDebug) {
@@ -157,8 +161,9 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
                       });
                   }
 
-                  setThumbnailError(true);
-                  setThumbnailLoaded(false);
+                  setThumbnailState((state) =>
+                    state.url === thumbnailUrl ? { ...state, error: true, loaded: false } : state
+                  );
                 }}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg transition-colors flex items-center justify-center">

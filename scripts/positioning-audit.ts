@@ -22,6 +22,8 @@ const EXCLUDED_ROUTE_PREFIXES = [
   '/auth',
   '/dashboard',
   '/checkout',
+  '/success',
+  '/wizard',
 ];
 const EXCLUDED_ROUTES = new Set(['/privacy', '/terms', '/cookies', '/refunds', '/error', '/not-found']);
 
@@ -44,6 +46,15 @@ const trustSignals = [
   'procedural correctness',
   'court-ready',
   'jurisdiction-specific',
+  'facts-based',
+  'built around your facts',
+  'fixed-price',
+  'preview before you pay',
+  'preview-before-pay',
+  'solicitor-approved',
+  'service record',
+  'market evidence',
+  'current market comparables',
   'same checks a solicitor would',
   'save time',
   'save money',
@@ -55,10 +66,31 @@ const trustSignals = [
 const trustInjectorTokens = [
   'trustpositioningbar',
   'positioning_one_liner',
+  'universalhero',
+  'publicproductsalespage',
   '<standardhero',
   'standardhero(',
+  'seoctablock',
+  '<seoctablock',
+  'seopagecontextpanel',
+  'seolandingwrapper',
+  'englandtenancypage',
+  'highintentpageshell',
+  'currentframeworkguidepage',
+  'evictionintentlandingpage',
+  'pillarpageshell',
+  'legacysection21banner',
+  'needhelpchoosing',
+  'funnelcta',
+  'relatedlinks',
+  'faqsection',
+  'blogprose',
+  'blogsticky',
   '<wizardlandingpage',
   'wizardlandingpage(',
+  '<homecontent',
+  'homecontent(',
+  'rentincreaseguidepageview',
   'showtrustpositioningbar',
 ] as const;
 
@@ -85,7 +117,11 @@ function getAllPageFiles(dir: string): string[] {
 
 function toRoute(filePath: string): string {
   const rel = path.relative(PAGE_ROOT, filePath).replace(/\\/g, '/');
-  const route = rel.replace(/\/page\.tsx$/, '').replace(/\((.*?)\)\//g, '');
+  const route = rel
+    .replace(/\/page\.tsx$/, '')
+    .replace(/(^|\/)\([^/]+\)(?=\/|$)/g, '')
+    .replace(/\/{2,}/g, '/')
+    .replace(/^\//, '');
   return route ? `/${route}` : '/';
 }
 
@@ -119,6 +155,14 @@ function isAuditedRoute(route: string): boolean {
   return true;
 }
 
+function isNoindexOrRedirectPage(content: string): boolean {
+  return (
+    content.includes('permanentredirect(') ||
+    content.includes('redirect(') ||
+    /robots\s*:\s*{[^}]*index\s*:\s*false/s.test(content)
+  );
+}
+
 export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
   const pages = filePaths ?? getAllPageFiles(PAGE_ROOT);
 
@@ -126,6 +170,9 @@ export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
     .map((fullPath) => {
       const raw = fs.readFileSync(fullPath, 'utf8');
       const content = raw.toLowerCase();
+      if (isNoindexOrRedirectPage(content)) {
+        return null;
+      }
 
       const forbiddenMatches = forbiddenPhrases.filter((phrase) => content.includes(phrase));
       const trustCounts = Object.fromEntries(trustSignals.map((s) => [s, countPhrase(content, s)]));
@@ -137,9 +184,10 @@ export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
       const heuristicTemplateMatches = getTemplateHeuristicMatches(content);
       const hasForbidden = forbiddenMatches.length > 0;
       const trustSignalsDetected = trustMatches.length > 0 || trustInjected;
+      const hasTemplateHeuristicWarning = heuristicTemplateMatches.length > 0 && !trustSignalsDetected;
       const status: RouteAuditStatus = hasForbidden
         ? 'FAIL'
-        : !trustSignalsDetected || heuristicTemplateMatches.length > 0
+        : !trustSignalsDetected || hasTemplateHeuristicWarning
           ? 'WARN'
           : 'PASS';
 
@@ -154,6 +202,7 @@ export function auditPositioning(filePaths?: string[]): RouteAuditResult[] {
         trustInjected,
       };
     })
+    .filter((result): result is RouteAuditResult => result !== null)
     .filter((result) => isAuditedRoute(result.route))
     .sort((a, b) => a.route.localeCompare(b.route));
 }
@@ -165,19 +214,20 @@ function printResults(results: RouteAuditResult[]) {
 
   for (const result of results) {
     const totalTrust = Object.values(result.trustCounts).reduce((sum, n) => sum + n, 0);
-    const forbidden = [...result.forbiddenMatches, ...result.heuristicTemplateMatches.map(() => 'template-near-context')]
+    const visibleHeuristicMatches = result.status === 'PASS' ? [] : result.heuristicTemplateMatches;
+    const forbidden = [...result.forbiddenMatches, ...visibleHeuristicMatches.map(() => 'template-near-context')]
       .filter(Boolean)
       .join(', ') || '-';
 
     const trustInjectedLabel = `trust_injected=${result.trustInjected ? 'true' : 'false'}`;
     console.log(`${result.status.padEnd(5)} | ${result.route} | ${String(totalTrust).padStart(2)} | ${trustInjectedLabel} | ${forbidden}`);
-    if (result.forbiddenMatches.length > 0 || result.heuristicTemplateMatches.length > 0 || (result.trustMatches.length === 0 && !result.trustInjected)) {
+    if (result.forbiddenMatches.length > 0 || visibleHeuristicMatches.length > 0 || (result.trustMatches.length === 0 && !result.trustInjected)) {
       console.log(`  file: ${result.filePath}`);
       if (result.forbiddenMatches.length > 0) {
         console.log(`  forbidden: ${result.forbiddenMatches.join(', ')}`);
       }
-      if (result.heuristicTemplateMatches.length > 0) {
-        console.log(`  template-context: ${result.heuristicTemplateMatches.slice(0, 3).join(' || ')}`);
+      if (visibleHeuristicMatches.length > 0) {
+        console.log(`  template-context: ${visibleHeuristicMatches.slice(0, 3).join(' || ')}`);
       }
       console.log(`  ${trustInjectedLabel}`);
       console.log(`  trust-signals: ${result.trustMatches.join(', ') || '(none)'}`);

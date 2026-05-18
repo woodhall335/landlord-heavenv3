@@ -70,12 +70,12 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
     {
       question: 'How many CTAs should a landlord expect on each page?',
       answer:
-        'Each page gives clear ways to move from guidance into the Standard Section 13 wizard.',
+        'Each page gives clear ways to move from guidance into the Supported Rent Increase Pack wizard.',
     },
     {
       question: 'When is the Defensive pack mentioned?',
       answer:
-        'When challenge or tribunal risk becomes part of the picture. The Standard pack is the main starting point; the Defence Pack is for stronger preparation when the file is likely to be tested.',
+        'When challenge or tribunal risk becomes part of the picture. The Supported pack is the main starting point; the Tribunal-Ready pack is for stronger preparation when the file is likely to be tested.',
     },
   ],
   relatedLinks: [
@@ -89,7 +89,7 @@ export const rentIncreaseHubPage: RentIncreaseGuidePage = {
   samplePackKey: 'section13_standard',
   midCtaTitle: 'Generate a compliant Section 13 notice with built-in checks',
   midCtaBody:
-    'Use the Standard pack when you are ready to turn the date, figure, and explanation into a clearer landlord file.',
+    'Use the Supported pack when you are ready to turn the date, figure, and explanation into a clearer landlord file.',
   finalCtaTitle: 'Create my rent increase notice',
   finalCtaBody:
     'Move from reading to action with one workflow that keeps your figures, dates, and explanation aligned before you serve.',

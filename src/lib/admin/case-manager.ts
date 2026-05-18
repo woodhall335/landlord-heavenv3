@@ -60,8 +60,8 @@ export const ADMIN_CASE_PRODUCT_NAMES: Record<string, string> = {
   england_hmo_shared_house_tenancy_agreement:
     PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
   england_lodger_agreement: PRODUCTS.england_lodger_agreement.label,
-  section13_standard: 'Standard Section 13 Rent Increase Pack',
-  section13_defensive: 'Challenge-Ready Section 13 Defence Pack',
+  section13_standard: 'Supported Rent Increase Pack',
+  section13_defensive: 'Tribunal-Ready Rent Increase Pack',
 };
 
 export function getAdminCaseTypeLabel(caseType: string): string {

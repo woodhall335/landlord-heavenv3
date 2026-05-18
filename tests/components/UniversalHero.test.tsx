@@ -143,19 +143,23 @@ describe('UniversalHero', () => {
     process.env.NODE_ENV = previousEnv;
   });
 
-  it('does not render the old badge or lower trust positioning block', () => {
+  it('renders the trust positioning bar when requested without bringing back the old badge', () => {
     render(
       <UniversalHero
         {...baseProps}
         badge="For landlords in England"
         showTrustPositioningBar
         trustPositioningHeadline="Need to serve an eviction notice fast?"
+        trustPositioningPreset="notice_only"
       />,
     );
 
     expect(screen.queryByText('For landlords in England')).not.toBeInTheDocument();
     expect(
-      screen.queryByText('Need to serve an eviction notice fast?'),
-    ).not.toBeInTheDocument();
+      screen.getByText('Need to serve an eviction notice fast?'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Preview your notice pack before you pay/i),
+    ).toBeInTheDocument();
   });
 });

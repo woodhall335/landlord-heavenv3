@@ -178,6 +178,7 @@ export default function EnglandTenancyHubPage() {
       highlightTitle: 'tenancy agreement for the let',
       subtitle:
         'Start with Standard for a straightforward whole-property let. Use Premium for fuller management wording. Use Student, HMO / Shared House, or Lodger only when the setup matches those routes.',
+      showTrustPositioningBar: true,
       primaryCta: {
         label: 'Open Standard Tenancy Agreement',
         href: '/standard-tenancy-agreement',
@@ -190,7 +191,7 @@ export default function EnglandTenancyHubPage() {
     decisionBlock: {
       title: 'Choose the agreement before you start',
       intro:
-        'Use this page to choose the agreement that matches the property, occupiers, and way the let will be managed.',
+        'Use this page to choose the jurisdiction-specific agreement that matches the property, occupiers, and way the let will be managed.',
       cards: [
         {
           eyebrow: 'Most common choice',

@@ -57,7 +57,7 @@ export const howToIncreaseRentPage: RentIncreaseGuidePage = {
     ],
     avoidChallenges: [
       'Challenge prevention is mostly about legibility and discipline. Use recent comparables, explain range position clearly, and keep evidence references accessible. Avoid overstatement. A calm, evidence-led explanation is usually more persuasive than a defensive tone focused on landlord costs.',
-      'When ready, generate the Standard pack and keep outputs unchanged for service and follow-up. If challenge signals appear later, escalate to tribunal-focused material without rewriting the original rationale. Stable reasoning is a core quality marker in contested cases.',
+      'When ready, generate the Supported pack and keep outputs unchanged for service and follow-up. If challenge signals appear later, escalate to tribunal-focused material without rewriting the original rationale. Stable reasoning is a core quality marker in contested cases.',
       'Set expectations early in tenant communication: explain that the figure is tied to local evidence and that supporting documents are already organised. This gives the tenant a clear route to understand the proposal and reduces the chance that uncertainty alone drives escalation.',
     ],
   }),
@@ -75,7 +75,7 @@ export const howToIncreaseRentPage: RentIncreaseGuidePage = {
     {
       question: 'How many CTAs should this process page include?',
       answer:
-        'It should include an intro CTA, a mid-page CTA, and a final CTA, all routing to the Standard Section 13 wizard.',
+        'It should include an intro CTA, a mid-page CTA, and a final CTA, all routing to the Supported Rent Increase Pack wizard.',
     },
     {
       question: 'When do I mention the Defensive option?',

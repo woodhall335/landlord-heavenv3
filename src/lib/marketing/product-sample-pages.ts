@@ -92,15 +92,15 @@ export const productSamplePages = [
     slug: 'form-4a-example',
     samplePath: '/samples/form-4a-example',
     productHref: '/products/section-13-standard',
-    productName: 'Section 13 Standard Pack',
+    productName: 'Supported Rent Increase Pack',
     targetKeyword: 'form 4a example filled out',
     metaTitle: 'Form 4A Example Filled Out | Section 13 Sample',
     metaDescription:
       'See a Form 4A example filled out with market evidence, service record, cover letter, and Section 13 rent increase guidance.',
     intro:
       'Use this Form 4A example to check how a rent increase notice and supporting evidence are packaged before service.',
-    ctaText: 'Need to increase rent? Create my Section 13 Standard Pack.',
-    faqs: buildFaqs('Section 13 Standard Pack', 'Form 4A'),
+    ctaText: 'Need to increase rent? Create my Supported Rent Increase Pack.',
+    faqs: buildFaqs('Supported Rent Increase Pack', 'Form 4A'),
   },
   {
     packKey: 'section13_defensive',
@@ -108,15 +108,15 @@ export const productSamplePages = [
     slug: 'section-13-defence-pack-example',
     samplePath: '/samples/section-13-defence-pack-example',
     productHref: '/products/section-13-defence',
-    productName: 'Section 13 Defence Pack',
-    targetKeyword: 'section 13 defence pack example',
-    metaTitle: 'Section 13 Defence Pack Example | Tribunal Sample',
+    productName: 'Tribunal-Ready Rent Increase Pack',
+    targetKeyword: 'section 13 tribunal ready rent increase pack example',
+    metaTitle: 'Tribunal-Ready Rent Increase Pack Example | Tribunal Sample',
     metaDescription:
-      'See a Section 13 defence pack example with evidence templates, response letters, tribunal summary, and bundle checklist.',
+      'See a tribunal-ready rent increase pack example with evidence templates, response letters, tribunal summary, and bundle checklist.',
     intro:
-      'Use this Section 13 defence pack example to see how challenge-ready evidence and tribunal documents are structured.',
-    ctaText: 'Expect a challenge? Prepare my Section 13 Defence Pack.',
-    faqs: buildFaqs('Section 13 Defence Pack', 'tribunal response material'),
+      'Use this tribunal-ready rent increase pack example to see how challenge-ready evidence and tribunal documents are structured.',
+    ctaText: 'Expect a challenge? Prepare my Tribunal-Ready Rent Increase Pack.',
+    faqs: buildFaqs('Tribunal-Ready Rent Increase Pack', 'tribunal response material'),
   },
   {
     packKey: 'england_standard_tenancy_agreement',

@@ -42,16 +42,18 @@ export default function Section13DefenceProductPage() {
     hero: {
       preset: descriptor.heroPreset,
       badge: descriptor.heroBadge,
-      trustText: 'Form 4A plus evidence and tribunal bundle support',
+      trustText: 'Form 4A plus current market evidence, response materials, legal briefing, and tribunal bundle support',
       title: config.heroTitle,
       subtitle: config.heroSubtitle,
       primaryCta: { label: config.ctaLabel, href: product.wizardHref },
-      secondaryCta: { label: 'Compare the standard option', href: '/products/section-13-standard' },
+      secondaryCta: { label: 'Compare the supported option', href: '/products/section-13-standard' },
       feature:
-        'Built for landlords who want the notice, evidence, response notes, and tribunal materials prepared together.',
+        'Built for landlords who want the notice, current comparables, response notes, legal briefing, and tribunal materials prepared together through a step-by-step route.',
       mediaSrc: '/images/wizard-icons/41-rent.png',
       mediaAlt: 'Section 13 defence documents',
       showReviewPill: true,
+      showTrustPositioningBar: true,
+      trustPositioningPreset: 'section13',
       children: (
         <ul className="mt-6 space-y-2 text-sm text-white/90 md:text-base">
           {config.heroBullets.map((bullet) => (
@@ -67,9 +69,9 @@ export default function Section13DefenceProductPage() {
       fullWidthPreview: true,
     },
     whatYouGet: {
-      hideSection: true,
-      title: '',
-      intro: '',
+      title: 'What you get',
+      intro: config.packIntro,
+      items: config.packBreakdown,
     },
     comparisonBlock: {
       title: 'Standard and defence solve different rent-increase jobs',
@@ -78,27 +80,27 @@ export default function Section13DefenceProductPage() {
       routeGridClassName: 'mt-8 grid gap-6 lg:grid-cols-2',
       routeCards: [
         {
-          name: 'Standard Section 13 Rent Increase Pack',
+          name: 'Supported Rent Increase Pack',
           whatItIs:
-            'For landlords who want to serve a Section 13 rent increase in England with Form 4A, market evidence, and a record of service prepared together.',
+            'For landlords who want to serve a market-supported Section 13 rent increase in England with Form 4A, current comparables, and a record of service prepared together.',
           problemItSolves:
-            'Helps you get the figure, dates, notice, explanation, and service steps right before the tenant receives anything.',
+            'Helps you get the figure, dates, notice, rent summary, nearby advertised rental comparisons, and service steps right before the tenant receives anything.',
           riskIfWrong:
             'A bare form with weak dates or no evidence can invite questions, delays, or a challenge that is harder to answer.',
           landlordOutcome:
             'Best when the increase is straightforward and you want a clear, service-ready pack.',
           href: '/products/section-13-standard',
-          ctaLabel: 'Create my rent increase notice',
+          ctaLabel: 'Build my supported rent increase',
           priceLabel: PRODUCTS.section13_standard.displayPrice,
           imageSrc: '/images/rent-increase-standard.webp',
-          imageAlt: 'Standard Section 13 rent increase pack',
+          imageAlt: 'Supported Section 13 rent increase pack',
         },
         {
-          name: 'Challenge-Ready Section 13 Defence Pack',
+          name: 'Tribunal-Ready Rent Increase Pack',
           whatItIs:
             'For landlords who already expect the proposed rent to be disputed, or who want a stronger file before serving.',
           problemItSolves:
-            'Organises the evidence, response notes, and tribunal-ready material around the rent figure from the start.',
+            'Organises the evidence, response notes, legal briefing, and tribunal-ready material around the rent figure from the start.',
           riskIfWrong:
             'If challenge risk is obvious and you start with a light file, you may have to rebuild the evidence after the tenant objects.',
           landlordOutcome:
@@ -107,7 +109,7 @@ export default function Section13DefenceProductPage() {
           ctaLabel: 'Prepare for a rent challenge',
           priceLabel: product.displayPrice,
           imageSrc: '/images/rent-increase-defence.webp',
-          imageAlt: 'Challenge-ready Section 13 defence pack',
+          imageAlt: 'Tribunal-ready Section 13 rent increase pack',
         },
       ],
     },
@@ -136,10 +138,10 @@ export default function Section13DefenceProductPage() {
     midPageCta: {
       title: 'Ready to prepare the stronger pack?',
       body:
-        'Choose this if you want Form 4A, market evidence, response wording, and the tribunal-facing bundle built around the same rent figure.',
+            'Choose this if you want Form 4A, current market evidence, response wording, legal briefing, and the tribunal-facing bundle built around the same rent figure.',
       primary: { label: 'Prepare for a rent challenge', href: product.wizardHref },
       secondary: {
-        label: 'I only need the standard option',
+        label: 'I only need the supported option',
         href: '/products/section-13-standard',
       },
     },
@@ -174,7 +176,7 @@ export default function Section13DefenceProductPage() {
       ],
     },
     faq: {
-      title: 'Challenge-Ready Section 13 Defence Pack FAQs',
+      title: 'Tribunal-Ready Rent Increase Pack FAQs',
       items: config.faqs,
     },
   };
@@ -194,7 +196,7 @@ export default function Section13DefenceProductPage() {
         data={breadcrumbSchema([
           { name: 'Home', url: getCanonicalUrl('/') },
           { name: 'Pricing', url: getCanonicalUrl('/pricing') },
-          { name: 'Challenge-Ready Section 13 Defence Pack', url: canonicalUrl },
+          { name: 'Tribunal-Ready Rent Increase Pack', url: canonicalUrl },
         ])}
       />
       <PublicProductSalesPage content={content} />

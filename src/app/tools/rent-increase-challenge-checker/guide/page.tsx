@@ -49,7 +49,7 @@ export default function RentCheckerGuidePage() {
         {
           title: 'Move into the right paid route',
           body: [
-            'Use the Standard Section 13 route when the figure looks supportable and you want the notice, rent summary, and service record aligned. Use Defence when the rent may still be arguable but the tenant is likely to test it.',
+            'Use the Supported Rent Increase Pack when the figure looks supportable and you want the notice, rent summary, and service record aligned. Use the Tribunal-Ready route when the rent may still be arguable but the tenant is likely to test it.',
             'That is the point of the free tool: it turns research into a practical next step instead of leaving you with a pile of guidance and no clear route.',
           ],
         },

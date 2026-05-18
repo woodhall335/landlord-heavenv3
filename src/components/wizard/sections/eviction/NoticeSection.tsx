@@ -434,10 +434,7 @@ export const PlannedNoticeServiceReviewPanel: React.FC<PlannedNoticeServiceRevie
 }) => {
   const today = useMemo(() => getTodayIsoDate(), []);
   const serviceDate = getPlannedNoticeServiceDate(facts, today);
-  const period = useMemo(
-    () => getNoticePeriodForGrounds(getSelectedSection8Grounds(facts)),
-    [facts.section8_grounds]
-  );
+  const period = getNoticePeriodForGrounds(getSelectedSection8Grounds(facts));
   const suggestedExpiryDate = useMemo(
     () => calculatePlannedNoticeExpiryDate(facts, today),
     [facts, today]

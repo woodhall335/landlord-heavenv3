@@ -104,16 +104,16 @@ describe('rent increase hub product routing', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /Increase rent in England with a Section 13 pack/i,
+        name: /Check whether your rent increase is likely to stand up before you serve Form 4A/i,
       })
     ).toBeInTheDocument();
-    expect(screen.getByText('Standard Section 13 Rent Increase Pack')).toBeInTheDocument();
-    expect(screen.getByText('Challenge-Ready Section 13 Defence Pack')).toBeInTheDocument();
+    expect(screen.getAllByText('Supported Rent Increase Pack').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Tribunal-Ready Rent Increase Pack').length).toBeGreaterThan(0);
     expect(
-      screen.getByRole('link', { name: 'Open the Standard Section 13 Rent Increase Pack' })
+      screen.getByRole('link', { name: 'Open the Supported Rent Increase Pack' })
     ).toHaveAttribute('href', '/products/section-13-standard');
     expect(
-      screen.getAllByRole('link', { name: 'Open the Challenge-Ready Defence Pack' }).length
+      screen.getAllByRole('link', { name: 'Open the Tribunal-Ready Rent Increase Pack' }).length
     ).toBeGreaterThan(0);
   });
 });

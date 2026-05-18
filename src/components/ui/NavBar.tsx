@@ -192,28 +192,32 @@ export function NavBar({ user: serverUser, headerMode, scrollThreshold }: NavBar
   useEffect(() => {
     checkAuthState();
 
-    const supabase = getSupabaseBrowserClient();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event: AuthChangeEvent, session: Session | null) => {
-        if (event === 'SIGNED_IN' && session?.user) {
-          setClientUser({
-            email: session.user.email || '',
-            name: session.user.user_metadata?.full_name,
-          });
-        } else if (event === 'SIGNED_OUT') {
-          setClientUser(null);
-        } else if (event === 'TOKEN_REFRESHED' && session?.user) {
-          setClientUser({
-            email: session.user.email || '',
-            name: session.user.user_metadata?.full_name,
-          });
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        async (event: AuthChangeEvent, session: Session | null) => {
+          if (event === 'SIGNED_IN' && session?.user) {
+            setClientUser({
+              email: session.user.email || '',
+              name: session.user.user_metadata?.full_name,
+            });
+          } else if (event === 'SIGNED_OUT') {
+            setClientUser(null);
+          } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+            setClientUser({
+              email: session.user.email || '',
+              name: session.user.user_metadata?.full_name,
+            });
+          }
         }
-      }
-    );
+      );
 
-    return () => {
-      subscription.unsubscribe();
-    };
+      return () => {
+        subscription.unsubscribe();
+      };
+    } catch {
+      return undefined;
+    }
   }, [checkAuthState]);
 
   const user = clientUser;

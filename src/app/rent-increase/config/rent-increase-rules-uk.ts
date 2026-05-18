@@ -60,7 +60,7 @@ export const rentIncreaseRulesUkPage: RentIncreaseGuidePage = {
     ],
     avoidChallenges: [
       'Avoid challenge escalation by being explicit early: jurisdiction, process route, date basis, and comparable method. Concise clarity reduces misunderstanding and demonstrates that the proposal is structured rather than improvised.',
-      'After confirming England scope, move to the notice and Form 4A pages, then generate the Standard pack. Keep your file stable and avoid rewriting rationale after service. Stability in wording and method is a practical advantage if the tenant tests the proposal.',
+      'After confirming England scope, move to the notice and Form 4A pages, then generate the Supported pack. Keep your file stable and avoid rewriting rationale after service. Stability in wording and method is a practical advantage if the tenant tests the proposal.',
       'In tenant-facing language, avoid broad legal commentary and focus on practical clarity: what date applies, what figure is proposed, and what evidence basis was used. Straightforward communication lowers friction and keeps discussions focused on verifiable points.',
     ],
   }),

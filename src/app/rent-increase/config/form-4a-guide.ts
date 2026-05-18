@@ -58,7 +58,7 @@ export const form4aGuidePage: RentIncreaseGuidePage = {
     ],
     avoidChallenges: [
       'To reduce challenge likelihood, prioritize clarity over complexity. Keep values precise, wording plain, and document roles separate. If a tenant can understand proposal structure quickly, procedural objections based on confusion become less likely.',
-      'After validation, generate the Standard pack and preserve outputs unchanged for service. If tenant challenges later, use unchanged pack as your anchor rather than revising form text reactively.',
+      'After validation, generate the Supported pack and preserve outputs unchanged for service. If tenant challenges later, use unchanged pack as your anchor rather than revising form text reactively.',
       'Before service, read the form and cover letter together as one tenant-facing packet. If wording is clear across both, misunderstandings usually decrease. A coordinated form-plus-letter review takes little time and often prevents unnecessary follow-up disputes.',
     ],
   }),

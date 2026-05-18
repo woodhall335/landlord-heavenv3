@@ -39,18 +39,18 @@ export const RENT_INCREASE_LINKS = {
   },
   wizard: {
     href: RENT_INCREASE_WIZARD_HREF,
-    label: 'Start the Standard Section 13 Rent Increase Pack',
+    label: 'Start the Supported Rent Increase Pack',
   },
   standardProduct: {
     href: '/products/section-13-standard',
-    label: 'Standard Section 13 Rent Increase Pack',
+    label: 'Supported Rent Increase Pack',
   },
   defenceProduct: {
     href: '/products/section-13-defence',
-    label: 'Challenge-Ready Section 13 Defence Pack',
+    label: 'Tribunal-Ready Rent Increase Pack',
   },
   defenceWizard: {
     href: RENT_INCREASE_DEFENCE_WIZARD_HREF,
-    label: 'Start the Challenge-Ready Section 13 Defence Pack',
+    label: 'Start the Tribunal-Ready Rent Increase Pack',
   },
 } as const satisfies Record<string, RentIncreaseGuideLink>;

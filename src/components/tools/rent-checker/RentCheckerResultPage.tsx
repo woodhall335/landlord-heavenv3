@@ -77,8 +77,8 @@ function getToneClasses(result: RentCheckerResult) {
 
 function recommendedRouteLabel(result: RentCheckerResult) {
   return result.recommendedProduct === 'section13_standard'
-    ? 'Standard Section 13 Pack'
-    : 'Section 13 Defence Pack';
+    ? 'Supported Rent Increase Pack'
+    : 'Tribunal-Ready Rent Increase Pack';
 }
 
 const DEFAULT_TRACKING_CONTEXT: Required<RentCheckerTrackingContext> = {
@@ -709,8 +709,8 @@ export function ProductComparisonStrip({ result }: { result: RentCheckerResult }
           <thead>
             <tr className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
               <th className="px-6 py-4">Feature</th>
-              <th className="px-6 py-4">Standard Section 13 Pack</th>
-              <th className="px-6 py-4">Section 13 Defence Pack</th>
+              <th className="px-6 py-4">Supported Rent Increase Pack</th>
+              <th className="px-6 py-4">Tribunal-Ready Rent Increase Pack</th>
               <th className="px-6 py-4">Recommended route</th>
             </tr>
           </thead>
@@ -943,7 +943,7 @@ export function RentCheckerInsufficientEvidencePage({
             <div className="rounded-2xl bg-slate-50 p-4">
               <p className="text-sm text-slate-600">Best path from here</p>
               <p className="mt-1 text-lg font-semibold text-slate-950">
-                Retry the live search or move into the Standard pack with real linked evidence
+                Retry the live search or move into the Supported pack with real linked evidence
               </p>
             </div>
 

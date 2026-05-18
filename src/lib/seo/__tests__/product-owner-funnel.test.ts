@@ -167,13 +167,13 @@ const pageCommercialPhraseExpectations = [
   },
   {
     source: 'src/lib/marketing/section13-products.ts',
-    phrases: ['Form 4A pack', 'checked Section 13 notice'],
+    phrases: ['market-supported rent increase file', 'current comparable rental evidence'],
     faq: 'Is this a court approved Section 13 notice?',
   },
   {
     source: 'src/lib/marketing/section13-products.ts',
-    phrases: ['Section 13 response letter template', 'tribunal evidence checklist'],
-    faq: 'Is this a court approved Section 13 Defence Pack?',
+    phrases: ['Tenant Argument Response Guide', 'Indexed Tribunal Bundle'],
+    faq: 'Is this a court approved Tribunal-Ready Rent Increase Pack?',
   },
   {
     source: 'src/app/standard-tenancy-agreement/page.tsx',

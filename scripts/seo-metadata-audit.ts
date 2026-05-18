@@ -22,6 +22,7 @@ import {
   normalizeKeywordList,
   SEO_DESCRIPTION_RECOMMENDED_MAX,
   SEO_DESCRIPTION_RECOMMENDED_MIN,
+  SEO_KEYWORDS_RECOMMENDED_MAX,
   SEO_TITLE_RECOMMENDED_MAX,
   SEO_TITLE_RECOMMENDED_MIN,
 } from '../src/lib/seo/metadata';
@@ -64,6 +65,10 @@ type SharedMetadataShape = {
   description: string;
   keywords: string[];
 };
+
+function generatedKeywordList(keywords: string[] = []): string[] {
+  return normalizeKeywordList(keywords).slice(0, SEO_KEYWORDS_RECOMMENDED_MAX);
+}
 
 type AuditResult = {
   route: string;
@@ -220,7 +225,7 @@ function getSharedMetadata(route: string): SharedMetadataShape | null {
       source: 'intent',
       title: page.title,
       description: page.description,
-      keywords: normalizeKeywordList(page.keywords),
+      keywords: generatedKeywordList(page.keywords),
     };
   }
 
@@ -230,7 +235,7 @@ function getSharedMetadata(route: string): SharedMetadataShape | null {
       source: 'intent',
       title: page.title,
       description: page.description,
-      keywords: normalizeKeywordList([page.keyword]),
+      keywords: generatedKeywordList([page.keyword]),
     };
   }
 
@@ -240,7 +245,7 @@ function getSharedMetadata(route: string): SharedMetadataShape | null {
       source: 'phase5',
       title: page.title,
       description: page.description,
-      keywords: normalizeKeywordList(page.keywords),
+      keywords: generatedKeywordList(page.keywords),
     };
   }
 
@@ -250,7 +255,7 @@ function getSharedMetadata(route: string): SharedMetadataShape | null {
       source: 'pass2',
       title: page.title,
       description: page.description,
-      keywords: [],
+      keywords: generatedKeywordList([page.heroTitle.replace(/[?:|].*$/, '').trim()]),
     };
   }
 
@@ -270,7 +275,7 @@ function getSharedMetadata(route: string): SharedMetadataShape | null {
       source: 'intent',
       title: page.metaTitle,
       description: page.metaDescription,
-      keywords: normalizeKeywordList([
+      keywords: generatedKeywordList([
         page.primaryKeyword,
         page.intentLabel,
         'section 13',
@@ -470,11 +475,11 @@ function auditRoute(route: string): AuditResult {
 
 function printPolicy(): void {
   console.log(colors.bold + 'SEO metadata policy' + colors.reset);
-  console.log(`- Page title target: ${SEO_TITLE_RECOMMENDED_MIN}-${SEO_TITLE_RECOMMENDED_MAX} characters`);
-  console.log(`- Meta description target: ${SEO_DESCRIPTION_RECOMMENDED_MIN}-${SEO_DESCRIPTION_RECOMMENDED_MAX} characters`);
-  console.log('- Page titles should not repeat the site name more than once');
-  console.log('- At least one keyword phrase should appear in the page title or description');
-  console.log('');
+console.log(`- Page title target: ${SEO_TITLE_RECOMMENDED_MIN}-${SEO_TITLE_RECOMMENDED_MAX} characters`);
+console.log(`- Meta description target: ${SEO_DESCRIPTION_RECOMMENDED_MIN}-${SEO_DESCRIPTION_RECOMMENDED_MAX} characters`);
+console.log('- Page titles should not repeat the site name more than once');
+console.log('- Keyword mapping is audited separately by audit:seo-keywords');
+console.log('');
 }
 
 function printResults(results: AuditResult[]): void {

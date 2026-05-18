@@ -2199,7 +2199,7 @@ async function buildPropertyConditionComparisonSheetPdf(
         ],
       },
     ],
-    'Section 13 Defensive Pack | Property condition comparison sheet'
+    'Tribunal-Ready Rent Increase Pack | Property condition comparison sheet'
   );
 }
 
@@ -2234,7 +2234,7 @@ async function buildTenantArgumentResponseGuidePdf(
         ],
       },
     ],
-    'Section 13 Defensive Pack | Tenant argument and landlord response guide'
+    'Tribunal-Ready Rent Increase Pack | Tenant argument and landlord response guide'
   );
 }
 
@@ -2420,7 +2420,7 @@ async function buildDefenceGuidePdf(state: Section13State): Promise<Uint8Array> 
         ],
       },
     ],
-    'Section 13 Defensive Pack | Tribunal defence guide'
+    'Tribunal-Ready Rent Increase Pack | Tribunal defence guide'
   );
 }
 
@@ -2466,7 +2466,7 @@ async function buildLandlordResponseTemplatePdf(state: Section13State): Promise<
         ],
       },
     ],
-    'Section 13 Defensive Pack | Landlord response template'
+    'Tribunal-Ready Rent Increase Pack | Landlord response template'
   );
 }
 
@@ -2519,7 +2519,7 @@ async function buildLegalBriefingPdf(state: Section13State): Promise<Uint8Array>
         ],
       },
     ],
-    'Section 13 Defensive Pack | Legal briefing'
+    'Tribunal-Ready Rent Increase Pack | Legal briefing'
   );
 }
 
@@ -2583,7 +2583,7 @@ async function buildTribunalArgumentSummaryPdf(
         ],
       },
     ],
-    'Section 13 Defensive Pack | Tribunal argument summary'
+    'Tribunal-Ready Rent Increase Pack | Tribunal argument summary'
   );
 }
 
@@ -2619,7 +2619,7 @@ async function buildEvidenceChecklistPdf(state: Section13State, evidenceUploads:
         ],
       },
     ],
-    'Section 13 Defensive Pack | Evidence checklist'
+    'Tribunal-Ready Rent Increase Pack | Evidence checklist'
   );
 }
 
@@ -2642,12 +2642,12 @@ async function buildNegotiationEmailTemplatePdf(state: Section13State): Promise<
         ],
       },
     ],
-    'Section 13 Defensive Pack | Negotiation email template'
+    'Tribunal-Ready Rent Increase Pack | Negotiation email template'
   );
 }
 
 async function createBundleCoverPdf(state: Section13State, productType: Section13ProductSku): Promise<Uint8Array> {
-  const packLabel = productType === 'section13_defensive' ? 'Section 13 Defensive Pack' : 'Section 13 Standard Pack';
+  const packLabel = productType === 'section13_defensive' ? 'Tribunal-Ready Rent Increase Pack' : 'Supported Rent Increase Pack';
   return createNarrativePdf(
     'Tribunal Bundle Cover Sheet',
     [
@@ -2683,7 +2683,7 @@ async function createBundleIndexPdf(artifacts: BundleArtifact[]): Promise<Uint8A
   return createNarrativePdf(
     'Tribunal Bundle Index',
     [{ lines }],
-    'Section 13 Defensive Pack | Bundle index'
+    'Tribunal-Ready Rent Increase Pack | Bundle index'
   );
 }
 
@@ -2874,7 +2874,7 @@ export async function generateSection13PreviewableDocument(params: {
       documentType as (typeof SECTION13_CORE_DOCUMENT_TYPES)[number]
     )
   ) {
-    throw new Error(`Document type ${documentType} requires the Section 13 Defensive Pack`);
+    throw new Error(`Document type ${documentType} requires the Tribunal-Ready Rent Increase Pack`);
   }
 
   switch (documentType) {

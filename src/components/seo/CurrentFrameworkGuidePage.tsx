@@ -14,6 +14,7 @@ import {
   breadcrumbSchema,
   faqPageSchema,
 } from '@/lib/seo/structured-data';
+import { normalizeKeywordList, SEO_KEYWORDS_RECOMMENDED_MAX } from '@/lib/seo/metadata';
 import { getCanonicalUrl } from '@/lib/seo';
 import type { CurrentFrameworkPageConfig } from '@/lib/seo/england-current-framework-pages';
 import { getCurrentEnglandFrameworkLinks } from '@/lib/seo/internal-links';
@@ -24,7 +25,7 @@ export function getCurrentFrameworkMetadata(config: CurrentFrameworkPageConfig):
   return {
     title: config.title,
     description: config.description,
-    keywords: config.keywords,
+    keywords: normalizeKeywordList(config.keywords).slice(0, SEO_KEYWORDS_RECOMMENDED_MAX),
     alternates: { canonical },
     openGraph: {
       title: config.title,

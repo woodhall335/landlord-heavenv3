@@ -105,9 +105,12 @@ export const PASS2_LONGFORM_PAGES: Record<string, HighIntentPageContent> = Objec
 );
 
 export function getPass2Metadata(page: HighIntentPageContent): Metadata {
+  const primaryKeyword = page.heroTitle.replace(/[?:|].*$/, '').trim();
+
   return generateMetadataForPageType({
     title: page.title,
     description: page.description,
+    keywords: [primaryKeyword],
     path: `/${page.slug}`,
     type: 'article',
     pageType: 'guide',

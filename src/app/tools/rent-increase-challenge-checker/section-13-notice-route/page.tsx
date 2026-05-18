@@ -9,7 +9,7 @@ const canonicalUrl = getCanonicalUrl('/tools/rent-increase-challenge-checker/sec
 export const metadata: Metadata = {
   title: 'Section 13 Notice Route | Move From Check to Form 4A',
   description:
-    'Understand when to move from the free rent checker into the Standard Section 13 and Form 4A notice route, with the rent figure and evidence aligned.',
+    'Understand when to move from the free rent checker into the Supported Rent Increase Pack and Form 4A notice route, with the rent figure and evidence aligned.',
   keywords: [
     'section 13 notice route',
     'form 4a notice route',
@@ -23,7 +23,7 @@ export default function Section13NoticeRoutePage() {
   return (
     <RentCheckerSeoPage
       eyebrow="Section 13 notice route"
-      title="When to move from the free rent check into the Standard Section 13 notice route"
+      title="When to move from the free rent check into the supported Section 13 notice route"
       intro="Create the formal Section 13 notice pack once the rent figure, evidence, and service plan make sense together. The checker helps you get to that point before the form is created."
       bullets={[
         'Use the checker before you generate Form 4A.',
@@ -35,7 +35,7 @@ export default function Section13NoticeRoutePage() {
         {
           title: 'Use Standard when the increase looks straightforward',
           body: [
-            'The Standard Section 13 pack is for landlords who have a supportable figure and want the notice, market justification, and service record to stay aligned.',
+            'The Supported Rent Increase Pack is for landlords who have a supportable figure and want the notice, market justification, and service record to stay aligned.',
             'Run the checker first, settle the figure, then generate the pack once the evidence and the proposed rent are pointing in the same direction.',
           ],
         },

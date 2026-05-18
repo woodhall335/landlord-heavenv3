@@ -373,7 +373,7 @@ export default function CompleteEvictionPackPage() {
         {
           title: 'Different from buying separate forms',
           body:
-            'Free forms and template downloads leave you to connect the notice, service record, N5, N119, arrears, evidence, and hearing prep yourself. Complete Pack builds them as one possession file.',
+            'Blank court forms leave you to connect the notice, service record, N5, N119, arrears, evidence, and hearing prep yourself. Complete Pack builds them as one possession file.',
           imageSrc: '/images/complete-pack.webp',
           imageAlt: 'Complete Section 8 possession file preview',
         },

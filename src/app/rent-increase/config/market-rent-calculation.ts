@@ -58,7 +58,7 @@ export const marketRentCalculationPage: RentIncreaseGuidePage = {
     ],
     avoidChallenges: [
       'The strongest challenge-prevention move is to show your method upfront. Briefly explain how many comparables were used, how recent they are, and where the proposed figure sits in the adjusted range. This shifts conversation from assertion to method.',
-      'After setting the figure, generate the Standard pack and keep pricing narrative stable across cover letter, report, and correspondence. Stability signals discipline and reduces opportunities for procedural disagreement.',
+      'After setting the figure, generate the Supported pack and keep pricing narrative stable across cover letter, report, and correspondence. Stability signals discipline and reduces opportunities for procedural disagreement.',
       'Where tenants ask for more detail, provide structured clarity rather than raw data dumps. A short method summary plus key metrics often resolves concerns better than long, unstructured lists. Clear method communication is a practical de-escalation tool in evidence-sensitive disputes.',
       'If your evidence band is moderate or weak, state the limitation and next step openly instead of hiding it. Transparent confidence framing can maintain trust while you strengthen the comparable set through better sources or refreshed data.',
     ],

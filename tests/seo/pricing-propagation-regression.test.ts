@@ -33,6 +33,8 @@ describe('Pricing propagation regressions', () => {
       { label: 'Money Claim £59.99', pattern: /Money Claim(?:s)?[^\\n£]{0,120}£59\\.99/i },
       { label: 'Standard Section 13 £29.99', pattern: /(?:Standard\\s+)?Section 13(?: Rent Increase)?(?: Pack)?[^\\n£]{0,120}£29\\.99/i },
       { label: 'Section 13 Defence £49.99', pattern: /Section 13 Defence(?: Pack)?[^\\n£]{0,120}£49\\.99/i },
+      { label: 'Section 13 Standard £17.99', pattern: /(?:Standard\\s+)?Section 13(?: Rent Increase)?(?: Pack)?[^\\n£]{0,120}£17\\.99/i },
+      { label: 'Section 13 Defence £27.99', pattern: /(?:Section 13 Defence|Challenge-Ready|Tribunal-Ready)[^\\n£]{0,120}£27\\.99/i },
       { label: 'Standard tenancy £9.99', pattern: /Standard\\s+(?:AST|PRT|Contract)[^\\n£]{0,120}£9\\.99/i },
       { label: 'Premium tenancy £19.99', pattern: /Premium\\s+(?:AST|PRT|Contract)[^\\n£]{0,120}£19\\.99/i },
     ];

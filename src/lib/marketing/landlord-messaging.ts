@@ -8,21 +8,21 @@ export const LANDLORD_GUIDANCE_DISCLAIMER =
   'Guided document preparation and practical support for landlords. Not a solicitor service or legal representation.';
 
 export const SECTION13_STANDARD_SUMMARY =
-  'Use the Standard Section 13 Rent Increase Pack when you want to propose a new rent properly, check the timing first, and serve a Form 4A backed by market evidence.';
+  'Use the Supported Rent Increase Pack when you want to propose a new rent properly, check the timing first, and serve a Form 4A backed by current comparable market evidence.';
 
 export const SECTION13_DEFENCE_SUMMARY =
-  'Use the Challenge-Ready Section 13 Defence Pack when the tenant is likely to challenge the increase and you want a more complete tribunal-ready file, guidance, and response tools.';
+  'Use the Tribunal-Ready Rent Increase Pack when the tenant is likely to challenge the increase and you want a more complete tribunal-ready file, guidance, legal briefing, and response tools.';
 
 export const SECTION13_STANDARD_DOCUMENTS = [
   'Form 4A rent increase notice',
-  'Rent increase justification report',
+  'Rent increase summary and current comparable evidence',
   'Proof of service record',
   'Landlord guidance on what to check before you serve',
 ] as const;
 
 export const SECTION13_DEFENCE_DOCUMENTS = [
-  'Everything in the Standard pack',
-  'Challenge and tribunal preparation guidance',
-  'Response templates and landlord briefing notes',
+  'Everything in the Supported pack',
+  'Indexed tribunal bundle and preparation guidance',
+  'Response templates, legal briefing, and landlord notes',
   'A fuller evidence-led bundle for defended rent increase cases',
 ] as const;

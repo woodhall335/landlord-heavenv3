@@ -52,13 +52,13 @@ export function buildRentCheckerEmailSequence(result: RentCheckerResult): RentCh
         'Form 4A still needs the dates, notice period, and service record to line up properly.',
         'Check the two-month notice window, keep the market evidence together, and record how the notice is served.',
         '',
-        `Use the Standard pack: ${makeAbsoluteUrl('/products/section-13-standard?src=rent_checker_email')}`,
+        `Use the Supported pack: ${makeAbsoluteUrl('/products/section-13-standard?src=rent_checker_email')}`,
       ].join('\n'),
       html: `
         <h2>Before you serve a Section 13 notice</h2>
         <p>Form 4A still needs the dates, notice period, and service record to line up properly.</p>
         <p>Check the two-month notice window, keep the market evidence together, and record how the notice is served.</p>
-        <p><a href="${makeAbsoluteUrl('/products/section-13-standard?src=rent_checker_email')}">View the Standard Section 13 Pack</a></p>
+        <p><a href="${makeAbsoluteUrl('/products/section-13-standard?src=rent_checker_email')}">View the Supported Rent Increase Pack</a></p>
       `,
     },
     {
@@ -77,7 +77,7 @@ export function buildRentCheckerEmailSequence(result: RentCheckerResult): RentCh
         <h2>What if the tenant challenges the rent?</h2>
         <p>If the tenant pushes back, the market comparables, notice dates, and service record matter fast.</p>
         <p>A challenge-ready file helps you explain the rent and respond if the matter reaches tribunal.</p>
-        <p><a href="${makeAbsoluteUrl('/products/section-13-defence?src=rent_checker_email')}">View the Challenge-Ready Defence Pack</a></p>
+        <p><a href="${makeAbsoluteUrl('/products/section-13-defence?src=rent_checker_email')}">View the Tribunal-Ready Rent Increase Pack</a></p>
       `,
     },
     {

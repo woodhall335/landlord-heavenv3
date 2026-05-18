@@ -159,8 +159,8 @@ const PLAN_FEATURES: Record<Section13ProductSku, string[]> = {
 };
 
 const SECTION13_PLAN_TITLES: Record<Section13ProductSku, string> = {
-  section13_standard: 'Standard Section 13 Rent Increase Pack',
-  section13_defensive: 'Challenge-Ready Section 13 Defence Pack',
+  section13_standard: 'Supported Rent Increase Pack',
+  section13_defensive: 'Tribunal-Ready Rent Increase Pack',
 };
 
 function getLocalStorageKey(caseId: string) {
@@ -530,7 +530,7 @@ export function Section13WizardFlow({
   const recommendedPlanTitle = SECTION13_PLAN_TITLES[planRecommendation.recommendedPlan];
   const checkoutButtonLabel =
     effectiveState.selectedPlan === 'section13_defensive'
-      ? 'Continue to document preview with the Defence Pack'
+      ? 'Continue to document preview with the Tribunal-Ready pack'
       : 'Continue to document preview with the Standard Pack';
 
   useEffect(() => {
@@ -2406,7 +2406,7 @@ export function Section13WizardFlow({
             <div className="rounded-2xl border border-gray-200 bg-white p-4">
               <p className="text-sm font-semibold text-gray-950">What is included in your pack</p>
               <p className="mt-2 text-sm text-gray-700">
-                {selectedPlanTitle} includes the live Form 4A draft, the justification report, and the delivery material tied to this case. The Challenge-Ready Section 13 Defence Pack adds the extra challenge-response and tribunal-facing bundle tools when you need stronger protection.
+                {selectedPlanTitle} includes the live Form 4A draft, the justification report, and the delivery material tied to this case. The Tribunal-Ready Rent Increase Pack adds the extra challenge-response and tribunal-facing bundle tools when you need stronger preparation.
               </p>
             </div>
 
@@ -2458,7 +2458,7 @@ export function Section13WizardFlow({
 
             <div className="rounded-2xl border border-gray-200 p-4">
               <p className="text-sm text-gray-700">
-                Payment unlocks the completed Form 4A, your full report, and, for Challenge-Ready Section 13 Defence Pack purchases, the tribunal-ready bundle tools.
+                Payment unlocks the completed Form 4A, your full report, and, for Tribunal-Ready Rent Increase Pack purchases, the tribunal-ready bundle tools.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Button onClick={() => void continueToSharedCheckoutPreview()} disabled={checkoutLoading}>
@@ -2853,7 +2853,7 @@ export function Section13WizardFlow({
 
   return (
     <WizardShellV3
-      title={product === 'section13_defensive' ? 'Challenge-Ready Section 13 Defence Pack' : 'Standard Section 13 Rent Increase Pack'}
+      title={product === 'section13_defensive' ? 'Tribunal-Ready Rent Increase Pack' : 'Supported Rent Increase Pack'}
       completedCount={completedCount}
       totalCount={STEP_CONFIG.length}
       progress={(completedCount / STEP_CONFIG.length) * 100}

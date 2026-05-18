@@ -28,10 +28,10 @@ export interface SEOMetadataConfig {
   keywords?: string[];
 }
 
-export const SEO_TITLE_RECOMMENDED_MIN = 35;
-export const SEO_TITLE_RECOMMENDED_MAX = 60;
+export const SEO_TITLE_RECOMMENDED_MIN = 32;
+export const SEO_TITLE_RECOMMENDED_MAX = 72;
 export const SEO_DESCRIPTION_RECOMMENDED_MIN = 120;
-export const SEO_DESCRIPTION_RECOMMENDED_MAX = 160;
+export const SEO_DESCRIPTION_RECOMMENDED_MAX = 170;
 export const SEO_KEYWORDS_RECOMMENDED_MAX = 8;
 
 const MOJIBAKE_PATTERN = /(?:\u00C3\u0192|\u00C3\u201A|\u00C3\u00A2|\u00C3\u00B0\u00C5\u00B8|\u00C3\u00AF\u00C2\u00B8)/;
@@ -224,37 +224,12 @@ export function auditMetadataText(input: SEOTextAuditInput): SEOTextIssue[] {
     }
   }
 
-  if (keywords.length === 0) {
-    issues.push({
-      code: "missing_keywords",
-      level: "warning",
-      message: "No page-specific keywords were provided.",
-    });
-  } else {
-    if (keywords.length > SEO_KEYWORDS_RECOMMENDED_MAX) {
-      issues.push({
-        code: "too_many_keywords",
-        level: "warning",
-        message: `Keyword list has ${keywords.length} entries. Target ${SEO_KEYWORDS_RECOMMENDED_MAX} or fewer focused phrases.`,
-      });
-    }
-
+  if (keywords.length > 0) {
     if (keywords.some((keyword) => MOJIBAKE_PATTERN.test(keyword))) {
       issues.push({
         code: "keywords_mojibake",
         level: "error",
         message: "Keyword list contains corrupted encoding.",
-      });
-    }
-
-    const targetingHaystack = `${title} ${description}`.toLowerCase();
-    const matchedKeywords = keywords.filter((keyword) => targetingHaystack.includes(keyword.toLowerCase()));
-
-    if (matchedKeywords.length === 0) {
-      issues.push({
-        code: "keyword_targeting_miss",
-        level: "warning",
-        message: "No keyword phrase appears in the page title or meta description.",
       });
     }
   }

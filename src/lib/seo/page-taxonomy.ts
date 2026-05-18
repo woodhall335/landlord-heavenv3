@@ -197,12 +197,12 @@ const anchorSets = {
     'rent arrears recovery pack',
   ],
   section13StandardProduct: [
-    'Standard Section 13 rent increase pack',
+    'Supported Rent Increase Pack',
     'Form 4A rent increase pack for landlords',
     'supportable rent increase notice pack',
   ],
   section13DefenceProduct: [
-    'Challenge-Ready Section 13 Defence Pack',
+    'Tribunal-Ready Rent Increase Pack',
     'defend a challenged rent increase',
     'tribunal-ready rent increase support',
   ],
