@@ -28,6 +28,7 @@ export interface AdminCaseRecord {
   fulfillment_status: string | null;
   has_final_documents: boolean;
   final_document_count: number;
+  preview_document_count: number;
   edit_window_open: boolean;
   edit_window_ends_at: string | null;
   created_at: string;
@@ -37,6 +38,13 @@ export interface AdminCaseRecord {
   documents_ready: boolean;
   is_preview_abandoned: boolean;
   recovery_email: string | null;
+  recovery_last_event_type: string | null;
+  recovery_last_event_at: string | null;
+  recovery_last_stage: 'manual' | 'day_1' | 'day_7' | null;
+  recovery_last_error: string | null;
+  recovery_manual_sent_at: string | null;
+  recovery_day_1_sent_at: string | null;
+  recovery_day_7_sent_at: string | null;
   can_send_restart_link: boolean;
   can_retry_fulfillment: boolean;
   can_resume_fulfillment: boolean;

@@ -121,10 +121,11 @@ export function isPreviewAbandonedCase(params: {
   caseItem: CaseLike;
   order?: OrderLike;
   hasFinalDocuments: boolean;
+  hasPreviewDocuments?: boolean;
 }): boolean {
   if (params.hasFinalDocuments) return false;
   if (params.order?.payment_status === 'paid') return false;
-  return isCasePreviewReached(params.caseItem);
+  return Boolean(params.hasPreviewDocuments || isCasePreviewReached(params.caseItem));
 }
 
 export function createCaseRecoveryToken(): {

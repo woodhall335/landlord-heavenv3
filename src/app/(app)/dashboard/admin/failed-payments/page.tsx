@@ -4,6 +4,7 @@ import { Container } from "@/components/ui";
 import { createAdminClient, requireServerAuth } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/auth";
 import { PRODUCTS, isValidProductSku, type ProductSku } from "@/lib/pricing/products";
+import { getAdminProductLabel } from "@/lib/admin/products";
 import { RecoveryEmailButton } from "./RecoveryEmailButton";
 
 interface FailedPayment {
@@ -17,10 +18,56 @@ interface FailedPayment {
   stripe_payment_intent_id: string | null;
   stripe_checkout_url: string | null;
   created_at: string;
+  recovery_status: "not_sent" | "sent" | "failed";
+  recovery_last_event_at: string | null;
+  recovery_last_error: string | null;
 }
 
 interface AdminFailedPaymentsPageProps {
   searchParams?: Record<string, string | string[] | undefined>;
+}
+
+type EmailEventRow = {
+  email: string;
+  event_type: string;
+  event_data: Record<string, any> | null;
+  created_at: string;
+};
+
+type RecoveryEventSummary = {
+  status: "sent" | "failed";
+  created_at: string;
+  error: string | null;
+};
+
+const CHECKOUT_RECOVERY_SENT_EVENT = "checkout_recovery_sent";
+const CHECKOUT_RECOVERY_FAILED_EVENT = "checkout_recovery_failed";
+
+function daysAgoIso(days: number): string {
+  return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+}
+
+function buildRecoveryEventMap(events: EmailEventRow[]) {
+  const map = new Map<string, RecoveryEventSummary>();
+
+  for (const event of events) {
+    const orderId = event.event_data?.order_id;
+    if (typeof orderId !== "string" || !orderId) continue;
+
+    const existing = map.get(orderId);
+    if (existing && new Date(existing.created_at) >= new Date(event.created_at)) continue;
+
+    map.set(orderId, {
+      status: event.event_type === CHECKOUT_RECOVERY_SENT_EVENT ? "sent" : "failed",
+      created_at: event.created_at,
+      error:
+        typeof event.event_data?.error === "string" && event.event_data.error
+          ? event.event_data.error
+          : null,
+    });
+  }
+
+  return map;
 }
 
 export default async function AdminFailedPaymentsPage({ searchParams }: AdminFailedPaymentsPageProps) {
@@ -71,8 +118,19 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
     (users || []).map((user) => [user.id, { email: user.email, full_name: user.full_name }])
   );
 
+  const { data: recoveryEvents } = await adminClient
+    .from("email_events")
+    .select("email, event_type, event_data, created_at")
+    .in("event_type", [CHECKOUT_RECOVERY_SENT_EVENT, CHECKOUT_RECOVERY_FAILED_EVENT])
+    .gte("created_at", daysAgoIso(90))
+    .order("created_at", { ascending: false })
+    .limit(5000);
+
+  const recoveryEventByOrder = buildRecoveryEventMap((recoveryEvents || []) as EmailEventRow[]);
+
   failedPayments = (orders || []).map((order) => {
     const userInfo = userMap.get(order.user_id);
+    const recoveryEvent = recoveryEventByOrder.get(order.id) || null;
     return {
       id: order.id,
       user_id: order.user_id,
@@ -84,6 +142,9 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
       stripe_payment_intent_id: order.stripe_payment_intent_id,
       stripe_checkout_url: order.stripe_checkout_url || null,
       created_at: order.created_at,
+      recovery_status: recoveryEvent?.status || "not_sent",
+      recovery_last_event_at: recoveryEvent?.created_at || null,
+      recovery_last_error: recoveryEvent?.error || null,
     };
   });
 
@@ -116,7 +177,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
 
   function getProductName(productType: string): string {
     if (isValidProductSku(productType)) {
-      return PRODUCTS[productType as ProductSku].label;
+      return getAdminProductLabel(productType as ProductSku);
     }
 
     const names: Record<string, string> = {
@@ -131,7 +192,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
       england_hmo_shared_house_tenancy_agreement: PRODUCTS.england_hmo_shared_house_tenancy_agreement.label,
       england_lodger_agreement: PRODUCTS.england_lodger_agreement.label,
     };
-    return names[productType] || productType;
+    return names[productType] || getAdminProductLabel(productType);
   }
 
   function getStatusColor(status: string): string {
@@ -146,7 +207,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
   }
 
   function formatGbpAmount(amount: number | string | null | undefined): string {
-    return `£${normalizeGbpAmount(amount).toFixed(2)}`;
+    return `\u00a3${normalizeGbpAmount(amount).toFixed(2)}`;
   }
 
   function normalizeGbpAmount(amount: number | string | null | undefined): number {
@@ -249,8 +310,54 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
                         </span>
                       </td>
                       <td className="p-4">
+                        <div className="mb-2">
+                          <span
+                            className={`inline-block rounded-full px-2 py-1 text-xs font-semibold ${
+                              payment.recovery_status === "sent"
+                                ? "bg-green-100 text-green-700"
+                                : payment.recovery_status === "failed"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {payment.recovery_status === "sent"
+                              ? "Recovery sent"
+                              : payment.recovery_status === "failed"
+                              ? "Recovery failed"
+                              : "Not sent"}
+                          </span>
+                          {payment.recovery_last_event_at && (
+                            <div className="mt-1 text-xs text-gray-500">
+                              {new Date(payment.recovery_last_event_at).toLocaleString("en-GB", {
+                                day: "2-digit",
+                                month: "short",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </div>
+                          )}
+                          {payment.recovery_last_error && (
+                            <div className="mt-1 max-w-[12rem] text-xs text-red-600">
+                              {payment.recovery_last_error}
+                            </div>
+                          )}
+                        </div>
                         {payment.payment_status === "pending" && payment.stripe_checkout_url && payment.user_email !== "Unknown" ? (
-                          <RecoveryEmailButton orderId={payment.id} />
+                          <RecoveryEmailButton
+                            orderId={payment.id}
+                            initialStatus={
+                              payment.recovery_status === "sent"
+                                ? "already_sent"
+                                : payment.recovery_status === "failed"
+                                ? "error"
+                                : "idle"
+                            }
+                            initialMessage={
+                              payment.recovery_status === "sent"
+                                ? "Already sent for this order"
+                                : payment.recovery_last_error
+                            }
+                          />
                         ) : (
                           <span className="text-xs text-gray-400">Unavailable</span>
                         )}
@@ -299,7 +406,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
         </div>
 
         {/* Summary Stats */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-4 gap-6">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <p className="text-sm text-gray-600 mb-1">Total Failed</p>
             <p className="text-3xl font-bold text-red-600">{failedPayments.length}</p>
@@ -314,6 +421,12 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
             <p className="text-sm text-gray-600 mb-1">Pending</p>
             <p className="text-3xl font-bold text-orange-600">
               {failedPayments.filter((p) => p.payment_status === "pending").length}
+            </p>
+          </div>
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <p className="text-sm text-gray-600 mb-1">Recovery Sent</p>
+            <p className="text-3xl font-bold text-purple-700">
+              {failedPayments.filter((p) => p.recovery_status === "sent").length}
             </p>
           </div>
         </div>

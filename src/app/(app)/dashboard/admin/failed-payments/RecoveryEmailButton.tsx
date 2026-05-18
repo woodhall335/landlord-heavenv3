@@ -5,11 +5,18 @@ import { useState } from "react";
 interface RecoveryEmailButtonProps {
   orderId: string;
   disabled?: boolean;
+  initialStatus?: "idle" | "sent" | "already_sent" | "error";
+  initialMessage?: string | null;
 }
 
-export function RecoveryEmailButton({ orderId, disabled = false }: RecoveryEmailButtonProps) {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "already_sent" | "error">("idle");
-  const [message, setMessage] = useState<string | null>(null);
+export function RecoveryEmailButton({
+  orderId,
+  disabled = false,
+  initialStatus = "idle",
+  initialMessage = null,
+}: RecoveryEmailButtonProps) {
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "already_sent" | "error">(initialStatus);
+  const [message, setMessage] = useState<string | null>(initialMessage);
 
   async function sendRecoveryEmail() {
     setStatus("sending");

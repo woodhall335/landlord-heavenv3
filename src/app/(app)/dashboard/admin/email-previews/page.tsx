@@ -29,6 +29,36 @@ const EMAIL_TEMPLATES: EmailTemplate[] = [
     subject: "Purchase Confirmation - {Product} (#{Order})",
   },
   {
+    id: "checkout-recovery",
+    name: "Checkout Recovery",
+    description: "Sent from failed payments or the checkout recovery cron when payment was not completed",
+    subject: "Finish your {Product}",
+  },
+  {
+    id: "case-preview-recovery-manual",
+    name: "Case Preview Recovery (Manual)",
+    description: "Sent by admin from preview-abandoned cases",
+    subject: "Resume your {Product} draft",
+  },
+  {
+    id: "case-preview-recovery-day-1",
+    name: "Case Preview Recovery (Day 1)",
+    description: "Sent 24 hours after a customer reaches preview but does not pay",
+    subject: "Resume your {Product} draft",
+  },
+  {
+    id: "case-preview-recovery-day-7",
+    name: "Case Preview Recovery (Day 7)",
+    description: "Sent 7 days after preview abandonment when still unpaid",
+    subject: "Resume your {Product} draft",
+  },
+  {
+    id: "section13-recovery-link",
+    name: "Section 13 Recovery Link",
+    description: "Sent from the Section 13 wizard when a landlord asks to resume their draft",
+    subject: "Resume your Section 13 Wizard draft",
+  },
+  {
     id: "password-reset",
     name: "Password Reset",
     description: "Sent when user requests password reset",
@@ -250,6 +280,37 @@ function getDangerBox(content: string): string {
   `;
 }
 
+function getCasePreviewRecoveryPreviewBody(
+  customerName: string,
+  productName: string,
+  stageLine: string,
+  buttonLabel: string
+): string {
+  const resumeUrl = `${appUrl}/wizard/flow?type=rent_increase&jurisdiction=england&case_id=example-case&recovery_token=example-token&product=section13_standard`;
+
+  return `
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${customerName},</p>
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">${stageLine} You can return to your Landlord Heaven draft, review the preview, and continue to secure checkout when you are ready.</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+      <tr>
+        <td bgcolor="${COLORS.cardBgAlt}" style="background-color: ${COLORS.cardBgAlt}; padding: 20px; border-radius: 6px; border: 1px solid ${COLORS.border};">
+          <p style="margin: 0 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Saved document pack</p>
+          <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary};">${productName}</p>
+        </td>
+      </tr>
+    </table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+      <tr>
+        <td align="center">
+          ${getButton(buttonLabel, resumeUrl)}
+        </td>
+      </tr>
+    </table>
+    ${getInfoBox("This secure link is intended for your use only. If you no longer need the document pack, you can ignore this email.")}
+    <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button does not work, copy and paste this link into your browser:<br><a href="${resumeUrl}" style="color: ${COLORS.primaryLight}; text-decoration: none;">${resumeUrl}</a></p>
+  `;
+}
+
 export default function AdminEmailPreviewsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -362,6 +423,74 @@ export default function AdminEmailPreviewsPage() {
           </table>
           ${getInfoBox(`<strong style="color: ${COLORS.white};">What's Next:</strong><br>1. Download your documents from your dashboard<br>2. Review and print (if needed)<br>3. Follow the step-by-step filing guide included<br>4. Contact us if you need any assistance`)}
           <p style="margin: 30px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">Thanks for choosing Landlord Heaven!<br><strong style="color: ${COLORS.lightGray};">The Landlord Heaven Team</strong></p>
+        `,
+        false
+      ),
+
+      "checkout-recovery": generateOutlookSafeEmail(
+        "Finish Your Document Pack",
+        COLORS.primary,
+        `
+          <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi Alex,</p>
+          <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">You started checkout for a Landlord Heaven document pack, but it looks like payment was not completed.</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+            <tr>
+              <td bgcolor="${COLORS.cardBgAlt}" style="background-color: ${COLORS.cardBgAlt}; padding: 20px; border-radius: 6px; border: 1px solid ${COLORS.border};">
+                <p style="margin: 0 0 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Checkout summary</p>
+                <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary};">${PRODUCTS.section13_standard.label}</p>
+                <p style="margin: 8px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray};">Price: ${PRODUCTS.section13_standard.displayPrice}</p>
+              </td>
+            </tr>
+          </table>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+            <tr>
+              <td align="center">
+                ${getButton("Continue Checkout", `${appUrl}/checkout/resume/example`)}
+              </td>
+            </tr>
+          </table>
+          ${getInfoBox("If you already completed payment, you can ignore this email. If the checkout link has expired, start checkout again from your dashboard and we will resume the saved case.")}
+          <p style="margin: 30px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">Questions? Reply to this email and we will help.<br><strong style="color: ${COLORS.lightGray};">The Landlord Heaven Team</strong></p>
+        `,
+        false
+      ),
+
+      "case-preview-recovery-manual": generateOutlookSafeEmail(
+        "Resume Your Landlord Heaven Draft",
+        COLORS.primary,
+        getCasePreviewRecoveryPreviewBody("Alex", PRODUCTS.section13_standard.label, "Your saved draft is ready when you want to continue.", "Resume My Draft"),
+        false
+      ),
+
+      "case-preview-recovery-day-1": generateOutlookSafeEmail(
+        "Resume Your Landlord Heaven Draft",
+        COLORS.primary,
+        getCasePreviewRecoveryPreviewBody("Alex", PRODUCTS.section13_standard.label, "Your saved draft is ready when you want to continue.", "Resume My Draft"),
+        false
+      ),
+
+      "case-preview-recovery-day-7": generateOutlookSafeEmail(
+        "Resume Your Landlord Heaven Draft",
+        COLORS.primary,
+        getCasePreviewRecoveryPreviewBody("Alex", PRODUCTS.section13_defensive.label, "Your saved draft is still available if you want to come back to it.", "Resume My Draft"),
+        false
+      ),
+
+      "section13-recovery-link": generateOutlookSafeEmail(
+        "Resume Your Section 13 Wizard Draft",
+        COLORS.primary,
+        `
+          <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Your Section 13 Wizard draft is ready to resume.</p>
+          <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">Use the secure link below to return to the saved rent increase workflow for 12 Example Street and continue building your market-supported Form 4A pack.</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+            <tr>
+              <td align="center">
+                ${getButton("Resume Section 13 Wizard", `${appUrl}/wizard/flow?type=rent_increase&jurisdiction=england&case_id=example-case&recovery_token=example-token`)}
+              </td>
+            </tr>
+          </table>
+          ${getInfoBox("The recovery link is intended for your use only. If you did not request it, you can ignore this email.")}
+          <p style="margin: 25px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: ${COLORS.mutedGray}; word-break: break-all; line-height: 1.5;">If the button does not work, copy and paste the secure resume link into your browser.</p>
         `,
         false
       ),

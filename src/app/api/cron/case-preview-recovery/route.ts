@@ -192,7 +192,7 @@ async function executeCasePreviewRecovery(request: NextRequest) {
         .select('id, case_id, user_id, product_type, payment_status, created_at')
         .in('case_id', caseIds)
         .order('created_at', { ascending: false }),
-      supabase.from('documents').select('case_id').in('case_id', caseIds).eq('is_preview', false),
+      supabase.from('documents').select('case_id, is_preview').in('case_id', caseIds),
       userIds.length
         ? supabase.from('users').select('id, email, full_name').in('id', userIds)
         : Promise.resolve({ data: [], error: null }),
@@ -216,9 +216,15 @@ async function executeCasePreviewRecovery(request: NextRequest) {
       orderByCase.set(order.case_id, pickBestOrder(orderByCase.get(order.case_id), order));
     }
 
-    const finalDocumentCaseIds = new Set(
-      ((documentsResult.data || []) as Array<{ case_id: string }>).map((document) => document.case_id)
-    );
+    const finalDocumentCaseIds = new Set<string>();
+    const previewDocumentCaseIds = new Set<string>();
+    for (const document of (documentsResult.data || []) as Array<{ case_id: string; is_preview: boolean | null }>) {
+      if (document.is_preview) {
+        previewDocumentCaseIds.add(document.case_id);
+      } else {
+        finalDocumentCaseIds.add(document.case_id);
+      }
+    }
     const userById = new Map(((usersResult.data || []) as UserRow[]).map((user) => [user.id, user]));
     const sentEvents = (eventsResult.data || []) as EmailEventRow[];
 
@@ -234,10 +240,16 @@ async function executeCasePreviewRecovery(request: NextRequest) {
       const dueStage = getDueStage(caseRow, sentEvents);
       const relatedOrder = orderByCase.get(caseRow.id) || null;
       const hasFinalDocuments = finalDocumentCaseIds.has(caseRow.id);
+      const hasPreviewDocuments = previewDocumentCaseIds.has(caseRow.id);
 
       if (
         !dueStage ||
-        !isPreviewAbandonedCase({ caseItem: caseRow, order: relatedOrder, hasFinalDocuments })
+        !isPreviewAbandonedCase({
+          caseItem: caseRow,
+          order: relatedOrder,
+          hasFinalDocuments,
+          hasPreviewDocuments,
+        })
       ) {
         skipped += 1;
         skippedCaseIds.push(caseRow.id);

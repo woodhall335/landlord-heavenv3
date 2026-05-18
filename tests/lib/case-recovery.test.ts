@@ -65,6 +65,48 @@ describe('case recovery helpers', () => {
     ).toBe(false);
   });
 
+  it('treats cases with preview documents as preview abandoned even if legacy progress was not stamped', () => {
+    const caseItem = {
+      id: 'case-legacy-preview',
+      case_type: 'tenancy_agreement',
+      jurisdiction: 'england',
+      workflow_status: 'in_progress',
+      wizard_progress: 0,
+      wizard_completed_at: null,
+      collected_facts: { __meta: { product: 'ast_standard' } },
+    };
+
+    expect(
+      isPreviewAbandonedCase({
+        caseItem,
+        order: null,
+        hasFinalDocuments: false,
+        hasPreviewDocuments: true,
+      })
+    ).toBe(true);
+  });
+
+  it('keeps non-preview drafts out of preview abandoned recovery', () => {
+    const caseItem = {
+      id: 'case-draft',
+      case_type: 'eviction',
+      jurisdiction: 'england',
+      workflow_status: 'in_progress',
+      wizard_progress: 40,
+      wizard_completed_at: null,
+      collected_facts: { __meta: { product: 'notice_only' } },
+    };
+
+    expect(
+      isPreviewAbandonedCase({
+        caseItem,
+        order: null,
+        hasFinalDocuments: false,
+        hasPreviewDocuments: false,
+      })
+    ).toBe(false);
+  });
+
   it('builds a generic wizard recovery URL with product and token', () => {
     const url = buildCaseRecoveryUrl({
       baseUrl: 'https://landlordheaven.co.uk',

@@ -27,6 +27,8 @@ interface AdminCasesApiResponse {
     preview_abandoned: number;
     edit_window_open: number;
     docs_ready: number;
+    restart_link_available: number;
+    recovery_emails_sent_30d: number;
   };
   meta: {
     page: number;
@@ -57,6 +59,23 @@ function statusPillClass(status: string | null) {
   return "bg-gray-100 text-gray-600";
 }
 
+function formatDateTime(value: string | null) {
+  if (!value) return "Never";
+  return new Date(value).toLocaleString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function recoveryStageLabel(stage: AdminCaseRecord["recovery_last_stage"]) {
+  if (stage === "day_1") return "Day 1";
+  if (stage === "day_7") return "Day 7";
+  if (stage === "manual") return "Manual";
+  return "None";
+}
+
 export default function AdminCasesPage() {
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(true);
@@ -79,6 +98,8 @@ export default function AdminCasesPage() {
   const [modalAction, setModalAction] = useState<ModalAction>(null);
   const [selectedCase, setSelectedCase] = useState<AdminCaseRecord | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [selectedCaseIds, setSelectedCaseIds] = useState<string[]>([]);
+  const [bulkRestartLoading, setBulkRestartLoading] = useState(false);
 
   const pageSize = 20;
 
@@ -151,6 +172,12 @@ export default function AdminCasesPage() {
   }, [loadCases]);
 
   useEffect(() => {
+    setSelectedCaseIds((current) =>
+      current.filter((caseId) => cases.some((caseItem) => caseItem.case_id === caseId))
+    );
+  }, [cases]);
+
+  useEffect(() => {
     setCurrentPage(1);
   }, [
     searchTerm,
@@ -219,6 +246,78 @@ export default function AdminCasesPage() {
       setMessage({ type: "error", text: error.message || "Action failed" });
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  const restartableCases = cases.filter((caseItem) => caseItem.can_send_restart_link);
+  const selectedRestartableCases = cases.filter(
+    (caseItem) => selectedCaseIds.includes(caseItem.case_id) && caseItem.can_send_restart_link
+  );
+  const allRestartableOnPageSelected =
+    restartableCases.length > 0 &&
+    restartableCases.every((caseItem) => selectedCaseIds.includes(caseItem.case_id));
+
+  const toggleSelectedCase = (caseItem: AdminCaseRecord) => {
+    if (!caseItem.can_send_restart_link) return;
+
+    setSelectedCaseIds((current) =>
+      current.includes(caseItem.case_id)
+        ? current.filter((caseId) => caseId !== caseItem.case_id)
+        : [...current, caseItem.case_id]
+    );
+  };
+
+  const toggleAllRestartableOnPage = () => {
+    const restartableIds = restartableCases.map((caseItem) => caseItem.case_id);
+    setSelectedCaseIds((current) => {
+      if (restartableIds.every((caseId) => current.includes(caseId))) {
+        return current.filter((caseId) => !restartableIds.includes(caseId));
+      }
+
+      return Array.from(new Set([...current, ...restartableIds]));
+    });
+  };
+
+  const handleBulkRestartLinks = async () => {
+    if (selectedRestartableCases.length === 0) return;
+
+    setBulkRestartLoading(true);
+    setMessage(null);
+
+    let sent = 0;
+    const failures: string[] = [];
+
+    for (const caseItem of selectedRestartableCases) {
+      try {
+        const response = await fetch(`/api/admin/cases/${caseItem.case_id}/send-restart-link`, {
+          method: "POST",
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(payload.error || payload.message || "Failed to send restart link");
+        }
+
+        sent += 1;
+      } catch (error: any) {
+        failures.push(`${caseItem.case_id.slice(0, 8)}: ${error.message || "failed"}`);
+      }
+    }
+
+    setSelectedCaseIds([]);
+    await loadCases();
+    setBulkRestartLoading(false);
+
+    if (failures.length) {
+      setMessage({
+        type: sent > 0 ? "success" : "error",
+        text: `Sent ${sent} restart link${sent === 1 ? "" : "s"}; ${failures.length} failed. ${failures.slice(0, 3).join("; ")}`,
+      });
+    } else {
+      setMessage({
+        type: "success",
+        text: `Sent ${sent} restart link${sent === 1 ? "" : "s"} successfully.`,
+      });
     }
   };
 
@@ -294,7 +393,7 @@ export default function AdminCasesPage() {
           </div>
         )}
 
-        <div className="mb-6 grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+        <div className="mb-6 grid gap-4 md:grid-cols-3 xl:grid-cols-7">
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Paid / Generated</p>
             <p className="mt-2 text-3xl font-bold text-charcoal">{stats?.paid_or_generated || 0}</p>
@@ -318,6 +417,11 @@ export default function AdminCasesPage() {
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <p className="text-sm text-gray-600">Docs Ready</p>
             <p className="mt-2 text-3xl font-bold text-green-700">{stats?.docs_ready || 0}</p>
+          </div>
+          <div className="rounded-lg border border-gray-200 bg-white p-5">
+            <p className="text-sm text-gray-600">Recovery Sent 30d</p>
+            <p className="mt-2 text-3xl font-bold text-purple-700">{stats?.recovery_emails_sent_30d || 0}</p>
+            <p className="mt-1 text-xs text-gray-500">{stats?.restart_link_available || 0} restartable now</p>
           </div>
         </div>
 
@@ -448,6 +552,37 @@ export default function AdminCasesPage() {
           </div>
         </div>
 
+        {preset === "preview_abandoned" && (
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-purple-200 bg-purple-50 p-4">
+            <div>
+              <p className="text-sm font-semibold text-purple-950">Bulk preview recovery</p>
+              <p className="mt-1 text-xs text-purple-800">
+                {selectedRestartableCases.length} selected with usable email - {restartableCases.length} restartable on this page
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={toggleAllRestartableOnPage}
+                disabled={restartableCases.length === 0 || bulkRestartLoading}
+                className="rounded-lg border border-purple-300 bg-white px-4 py-2 text-sm font-semibold text-purple-800 hover:border-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {allRestartableOnPageSelected ? "Clear page selection" : "Select restartable on page"}
+              </button>
+              <button
+                type="button"
+                onClick={handleBulkRestartLinks}
+                disabled={selectedRestartableCases.length === 0 || bulkRestartLoading}
+                className="rounded-lg bg-purple-700 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-800 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {bulkRestartLoading
+                  ? "Sending..."
+                  : `Send ${selectedRestartableCases.length || ""} restart link${selectedRestartableCases.length === 1 ? "" : "s"}`}
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
           {casesLoading ? (
             <div className="p-8 text-center text-gray-500">Loading cases...</div>
@@ -458,6 +593,16 @@ export default function AdminCasesPage() {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
+                    <th className="w-12 p-4 text-left text-sm font-semibold text-charcoal">
+                      <input
+                        type="checkbox"
+                        aria-label="Select all restartable cases on this page"
+                        checked={allRestartableOnPageSelected}
+                        onChange={toggleAllRestartableOnPage}
+                        disabled={restartableCases.length === 0 || bulkRestartLoading}
+                        className="h-4 w-4 rounded border-gray-300 text-purple-700 focus:ring-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
+                      />
+                    </th>
                     <th className="p-4 text-left text-sm font-semibold text-charcoal">Case</th>
                     <th className="p-4 text-left text-sm font-semibold text-charcoal">Customer</th>
                     <th className="p-4 text-left text-sm font-semibold text-charcoal">Route</th>
@@ -465,12 +610,23 @@ export default function AdminCasesPage() {
                     <th className="p-4 text-left text-sm font-semibold text-charcoal">Fulfillment</th>
                     <th className="p-4 text-left text-sm font-semibold text-charcoal">Docs</th>
                     <th className="p-4 text-left text-sm font-semibold text-charcoal">Edit Window</th>
+                    <th className="p-4 text-left text-sm font-semibold text-charcoal">Recovery</th>
                     <th className="p-4 text-left text-sm font-semibold text-charcoal">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {cases.map((caseItem) => (
                     <tr key={caseItem.case_id} className="border-t align-top hover:bg-gray-50">
+                      <td className="p-4">
+                        <input
+                          type="checkbox"
+                          aria-label={`Select case ${caseItem.case_id}`}
+                          checked={selectedCaseIds.includes(caseItem.case_id)}
+                          onChange={() => toggleSelectedCase(caseItem)}
+                          disabled={!caseItem.can_send_restart_link || bulkRestartLoading}
+                          className="h-4 w-4 rounded border-gray-300 text-purple-700 focus:ring-purple-500 disabled:cursor-not-allowed disabled:opacity-40"
+                        />
+                      </td>
                       <td className="p-4">
                         <div className="text-sm font-semibold text-charcoal">{caseItem.case_id.slice(0, 8)}...</div>
                         <div className="mt-1 text-xs text-gray-500">
@@ -517,6 +673,11 @@ export default function AdminCasesPage() {
                         <div className="text-xs text-gray-500">
                           {caseItem.has_final_documents ? "final docs" : "no final docs"}
                         </div>
+                        {caseItem.preview_document_count > 0 && (
+                          <div className="mt-1 text-xs text-purple-700">
+                            {caseItem.preview_document_count} preview doc{caseItem.preview_document_count === 1 ? "" : "s"}
+                          </div>
+                        )}
                       </td>
                       <td className="p-4">
                         <div className={`text-sm font-semibold ${caseItem.edit_window_open ? "text-primary" : "text-gray-600"}`}>
@@ -529,6 +690,46 @@ export default function AdminCasesPage() {
                         </div>
                         {caseItem.can_send_restart_link && (
                           <div className="mt-1 text-xs text-purple-700">Restart email available</div>
+                        )}
+                      </td>
+                      <td className="p-4">
+                        <div className="text-sm font-semibold text-charcoal">
+                          {caseItem.recovery_last_event_at
+                            ? `${recoveryStageLabel(caseItem.recovery_last_stage)} email`
+                            : caseItem.can_send_restart_link
+                            ? "Ready to send"
+                            : "Not available"}
+                        </div>
+                        <div className="mt-1 text-xs text-gray-500">
+                          {caseItem.recovery_last_event_at
+                            ? formatDateTime(caseItem.recovery_last_event_at)
+                            : caseItem.recovery_email || "No email"}
+                        </div>
+                        {caseItem.recovery_last_error && (
+                          <div className="mt-1 max-w-[14rem] text-xs text-red-600">
+                            {caseItem.recovery_last_error}
+                          </div>
+                        )}
+                        {(caseItem.recovery_manual_sent_at ||
+                          caseItem.recovery_day_1_sent_at ||
+                          caseItem.recovery_day_7_sent_at) && (
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {caseItem.recovery_manual_sent_at && (
+                              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-700">
+                                Manual
+                              </span>
+                            )}
+                            {caseItem.recovery_day_1_sent_at && (
+                              <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[11px] font-semibold text-purple-700">
+                                Day 1
+                              </span>
+                            )}
+                            {caseItem.recovery_day_7_sent_at && (
+                              <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[11px] font-semibold text-purple-700">
+                                Day 7
+                              </span>
+                            )}
+                          </div>
                         )}
                       </td>
                       <td className="p-4">

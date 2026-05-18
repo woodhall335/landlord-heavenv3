@@ -323,6 +323,7 @@ function getStepCompleteState(
           Boolean(state.tenancy.propertyAddressLine1) &&
           Boolean(state.tenancy.propertyTownCity) &&
           Boolean(state.tenancy.postcodeRaw) &&
+          Boolean(state.comparablesMeta.propertyType) &&
           state.tenancy.bedrooms != null &&
           state.tenancy.currentRentAmount != null &&
           state.proposal.proposedRentAmount != null,
@@ -1115,6 +1116,21 @@ export function Section13WizardFlow({
   });
 
   const currentStep = STEP_CONFIG[currentStepIndex];
+  const currentStepState = getStepCompleteState(currentStep.id, effectiveState, comparables);
+  const mustCompleteCurrentStep =
+    currentStep.id === 'tenancy' || currentStep.id === 'proposal' || currentStep.id === 'landlord';
+  const continueDisabled =
+    currentStepIndex === STEP_CONFIG.length - 1 ||
+    (mustCompleteCurrentStep && !currentStepState.complete) ||
+    checkoutLoading;
+  const continueDisabledReason =
+    currentStep.id === 'tenancy'
+      ? 'Complete the property address, town/city, postcode, property type, bedrooms, current rent, and target rent before continuing.'
+      : currentStep.id === 'proposal'
+        ? 'Complete the tenant, tenancy date, service date, proposed start date, and service method before continuing.'
+        : currentStep.id === 'landlord'
+          ? 'Complete the landlord name and address details before continuing.'
+          : null;
 
   useEffect(() => {
     if (loading || scrapeLoading || currentStep.id !== 'comparables' || comparables.length > 0) return;
@@ -1175,7 +1191,7 @@ export function Section13WizardFlow({
     label: string,
     value: string | number | null | undefined,
     onChange: (value: string) => void,
-    options?: { type?: string; placeholder?: string; step?: string }
+    options?: { type?: string; placeholder?: string; step?: string; required?: boolean }
   ) {
     return (
       <label className="block space-y-2">
@@ -1186,6 +1202,7 @@ export function Section13WizardFlow({
           onChange={(event) => onChange(event.target.value)}
           placeholder={options?.placeholder}
           step={options?.step}
+          required={options?.required}
           className="w-full rounded-2xl border border-[#e1d5ff] bg-[#fcfbff] px-4 py-3 text-sm shadow-sm transition focus:border-violet-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-violet-200"
         />
       </label>
@@ -1210,7 +1227,7 @@ export function Section13WizardFlow({
                   ...prev,
                   tenancy: { ...prev.tenancy, propertyAddressLine1: value },
                 }))
-              )}
+              , { required: true })}
               {renderTextInput('Property address line 2', effectiveState.tenancy.propertyAddressLine2, (value) =>
                 updateState((prev) => ({
                   ...prev,
@@ -1222,17 +1239,18 @@ export function Section13WizardFlow({
                   ...prev,
                   tenancy: { ...prev.tenancy, propertyTownCity: value },
                 }))
-              )}
+              , { required: true })}
               {renderTextInput('Postcode', effectiveState.tenancy.postcodeRaw, (value) =>
                 updateState((prev) => ({
                   ...prev,
                   tenancy: { ...prev.tenancy, postcodeRaw: value },
                   comparablesMeta: { ...prev.comparablesMeta, searchPostcodeRaw: value },
                 }))
-              )}
+              , { required: true })}
               <label className="block space-y-2">
                 <span className="text-sm font-semibold text-[#27134a]">Property type</span>
                 <select
+                  required
                   value={effectiveState.comparablesMeta.propertyType || ''}
                   onChange={(event) =>
                     updateState((prev) => ({
@@ -1258,13 +1276,13 @@ export function Section13WizardFlow({
                   tenancy: { ...prev.tenancy, bedrooms: value ? Number(value) : null },
                   comparablesMeta: { ...prev.comparablesMeta, bedrooms: value ? Number(value) : null },
                 }))
-              , { type: 'number' })}
+              , { type: 'number', required: true })}
               {renderTextInput('Current rent amount', effectiveState.tenancy.currentRentAmount, (value) =>
                 updateState((prev) => ({
                   ...prev,
                   tenancy: { ...prev.tenancy, currentRentAmount: value ? Number(value) : null },
                 }))
-              , { type: 'number', step: '0.01' })}
+              , { type: 'number', step: '0.01', required: true })}
               <label className="block space-y-1">
                 <span className="text-sm font-medium text-gray-800">Current rent frequency</span>
                 <select
@@ -1291,7 +1309,7 @@ export function Section13WizardFlow({
                   ...prev,
                   proposal: { ...prev.proposal, proposedRentAmount: value ? Number(value) : null },
                 }))
-              , { type: 'number', step: '0.01' })}
+              , { type: 'number', step: '0.01', required: true })}
             </div>
           </div>
         );
@@ -2871,6 +2889,10 @@ export function Section13WizardFlow({
           <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
             {saveError}
           </div>
+        ) : mustCompleteCurrentStep && !currentStepState.complete && continueDisabledReason ? (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            {continueDisabledReason}
+          </div>
         ) : saving ? (
           <div className="mb-4 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700">
             Saving your draft…
@@ -2897,15 +2919,17 @@ export function Section13WizardFlow({
             <button
               type="button"
               onClick={() => {
+                if (mustCompleteCurrentStep && !currentStepState.complete) return;
                 if (currentStep.id === 'preview_checkout' && !orderStatus?.paid) {
                   void continueToSharedCheckoutPreview();
                   return;
                 }
                 setCurrentStepIndex((index) => Math.min(STEP_CONFIG.length - 1, index + 1));
               }}
-              disabled={currentStepIndex === STEP_CONFIG.length - 1}
+              disabled={continueDisabled}
+              title={continueDisabled && continueDisabledReason ? continueDisabledReason : undefined}
               className={`px-7 py-2.5 text-sm font-semibold rounded-xl transition-all min-w-[160px] ${
-                currentStepIndex === STEP_CONFIG.length - 1
+                continueDisabled
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
                   : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_6px_16px_rgba(109,40,217,0.28)] hover:from-violet-700 hover:to-fuchsia-700'
               }`}

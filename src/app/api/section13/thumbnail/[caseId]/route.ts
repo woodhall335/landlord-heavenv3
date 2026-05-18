@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { isAdmin } from '@/lib/auth';
 import { pdfBytesToPreviewThumbnail } from '@/lib/documents/generator';
 import {
   SECTION13_CORE_DOCUMENT_TYPES,
@@ -9,11 +10,7 @@ import {
 import { computeSection13Preview } from '@/lib/section13/rules';
 import { getDefaultSection13StateForCase, getSection13Comparables } from '@/lib/section13/server';
 import type { Section13ProductSku } from '@/lib/section13/types';
-import {
-  createAdminClient,
-  createServerSupabaseClient,
-  tryGetServerUser,
-} from '@/lib/supabase/server';
+import { createAdminClient, tryGetServerUser } from '@/lib/supabase/server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -74,6 +71,12 @@ function resolveSection13ProductType(
     : 'section13_standard';
 }
 
+function canReadPreviewCase(user: { id: string } | null, caseRow: { user_id?: string | null }): boolean {
+  if (!caseRow.user_id) return true;
+  if (!user) return false;
+  return caseRow.user_id === user.id || isAdmin(user.id);
+}
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ caseId: string }> }
@@ -114,14 +117,9 @@ export async function GET(
     }
 
     const user = await tryGetServerUser();
-    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    const supabase = createAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', caseId);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data, error: fetchError } = await query.single();
+    const { data, error: fetchError } = await supabase.from('cases').select('*').eq('id', caseId).single();
 
     if (fetchError || !data) {
       console.error('[Section13-Thumbnail] Case not found:', fetchError);
@@ -129,6 +127,9 @@ export async function GET(
     }
 
     const caseRow = data as any;
+    if (!canReadPreviewCase(user, caseRow)) {
+      return errorResponse('CASE_NOT_FOUND', 'Case not found', 404);
+    }
     const facts = (caseRow.collected_facts || caseRow.wizard_facts || caseRow.facts || {}) as Record<
       string,
       any

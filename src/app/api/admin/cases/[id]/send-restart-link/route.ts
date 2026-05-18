@@ -54,7 +54,7 @@ export async function POST(_request: NextRequest, context: RouteContext) {
           .select('id, case_id, user_id, product_type, payment_status, created_at')
           .eq('case_id', caseId)
           .order('created_at', { ascending: false }),
-        supabase.from('documents').select('id').eq('case_id', caseId).eq('is_preview', false),
+        supabase.from('documents').select('id, is_preview').eq('case_id', caseId),
       ]);
 
     if (ordersError) {
@@ -65,13 +65,15 @@ export async function POST(_request: NextRequest, context: RouteContext) {
     }
 
     const relatedOrder = (orderRows || []).reduce<any | null>(pickBestOrder, null);
-    const hasFinalDocuments = Boolean((documentRows || []).length);
+    const hasFinalDocuments = (documentRows || []).some((document: any) => !document.is_preview);
+    const hasPreviewDocuments = (documentRows || []).some((document: any) => Boolean(document.is_preview));
 
     if (
       !isPreviewAbandonedCase({
         caseItem: caseRow as any,
         order: relatedOrder,
         hasFinalDocuments,
+        hasPreviewDocuments,
       })
     ) {
       return NextResponse.json(

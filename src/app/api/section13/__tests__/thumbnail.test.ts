@@ -107,7 +107,7 @@ describe('Section 13 thumbnail route', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mocks.currentUser = null;
+    mocks.currentUser = { id: 'user-1' };
     mocks.caseRow = {
       id: caseId,
       user_id: 'user-1',
@@ -180,6 +180,33 @@ describe('Section 13 thumbnail route', () => {
         productType: 'section13_standard',
       })
     );
+  });
+
+  it('allows anonymous preview thumbnails for unlinked Section 13 cases', async () => {
+    mocks.currentUser = null;
+    mocks.caseRow = {
+      ...mocks.caseRow!,
+      user_id: null,
+    };
+
+    const response = await callRoute(
+      `http://localhost/api/section13/thumbnail/${caseId}?document_type=section13_form_4a`
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get('Content-Type')).toBe('image/jpeg');
+  });
+
+  it('returns 404 for linked cases owned by a different user', async () => {
+    mocks.currentUser = { id: 'other-user' };
+
+    const response = await callRoute(
+      `http://localhost/api/section13/thumbnail/${caseId}?document_type=section13_form_4a`
+    );
+    const payload = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(payload.code).toBe('CASE_NOT_FOUND');
   });
 
   it('forces defensive product generation for defensive-only documents', async () => {
