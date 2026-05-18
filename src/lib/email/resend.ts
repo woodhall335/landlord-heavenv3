@@ -489,6 +489,91 @@ The Landlord Heaven Team
 }
 
 /**
+ * Send abandoned checkout recovery email.
+ */
+export async function sendAbandonedCheckoutRecoveryEmail(params: {
+  to: string;
+  customerName: string;
+  productName: string;
+  amount: number;
+  checkoutUrl: string;
+}): Promise<{ success: boolean; error?: string }> {
+  const { to, customerName, productName, amount, checkoutUrl } = params;
+  const displayAmount = formatPriceLabel(amount);
+
+  const checkoutSummaryContent = `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+      <tr>
+        <td bgcolor="${COLORS.cardBgAlt}" style="background-color: ${COLORS.cardBgAlt}; padding: 20px; border-radius: 6px; border: 1px solid ${COLORS.border};">
+          <p style="margin: 0 0 15px 0; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: ${COLORS.primary};">Saved checkout</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Document pack:</td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.lightGray}; text-align: right;">${productName}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: ${COLORS.white};">Price:</td>
+              <td style="padding: 8px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bold; color: ${COLORS.primary}; text-align: right;">${displayAmount}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  `;
+
+  const cardContent = `
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.white}; line-height: 1.6;">Hi ${customerName},</p>
+    <p style="margin: 0 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: ${COLORS.lightGray}; line-height: 1.6;">You started checkout for a Landlord Heaven document pack, but it looks like payment was not completed.</p>
+
+    ${checkoutSummaryContent}
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+      <tr>
+        <td align="center">
+          ${getBulletproofButton('Continue Checkout', checkoutUrl)}
+        </td>
+      </tr>
+    </table>
+
+    ${getInfoBox('If you already completed payment, you can ignore this email. If the checkout link has expired, start checkout again from your dashboard and we will resume the saved case.')}
+
+    <p style="margin: 30px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: ${COLORS.mutedGray};">Questions? Reply to this email and we will help.<br><strong style="color: ${COLORS.lightGray};">The Landlord Heaven Team</strong></p>
+  `;
+
+  const emailContent = `
+    ${getLogoRow()}
+    ${getHeaderBanner('Finish Your Document Pack')}
+    ${getContentCard(cardContent)}
+    ${getEmailFooter(false)}
+  `;
+
+  const html = getEmailWrapper(emailContent);
+
+  const text = `
+Hi ${customerName},
+
+You started checkout for ${productName}, but it looks like payment was not completed.
+
+Price: ${displayAmount}
+
+Continue checkout: ${checkoutUrl}
+
+If you already completed payment, you can ignore this email. If the checkout link has expired, start checkout again from your dashboard and we will resume the saved case.
+
+Questions? Reply to this email and we will help.
+
+The Landlord Heaven Team
+  `;
+
+  return sendEmail({
+    to,
+    subject: `Finish your ${productName}`,
+    html,
+    text,
+  });
+}
+
+/**
  * Send welcome email (for new users)
  */
 export async function sendWelcomeEmail(params: {

@@ -71,6 +71,20 @@ type AdminCasesResponse = {
   };
 };
 
+const ADMIN_CASES_IN_CHUNK_SIZE = 200;
+const ORDER_SELECT_WITH_METADATA =
+  'id, case_id, user_id, product_type, payment_status, fulfillment_status, paid_at, created_at, metadata';
+const ORDER_SELECT_WITHOUT_METADATA =
+  'id, case_id, user_id, product_type, payment_status, fulfillment_status, paid_at, created_at';
+
+function chunkValues<T>(values: T[], chunkSize = ADMIN_CASES_IN_CHUNK_SIZE): T[][] {
+  const chunks: T[][] = [];
+  for (let index = 0; index < values.length; index += chunkSize) {
+    chunks.push(values.slice(index, index + chunkSize));
+  }
+  return chunks;
+}
+
 function pickBestOrder(current: RawOrder | undefined, candidate: RawOrder): RawOrder {
   if (!current) return candidate;
 
@@ -102,6 +116,85 @@ function applyPreset(caseItem: AdminCaseRecord, preset: AdminCasesPreset): boole
     default:
       return true;
   }
+}
+
+async function fetchUsersByIds(adminClient: ReturnType<typeof createAdminClient>, userIds: string[]) {
+  const users: RawUser[] = [];
+
+  for (const chunk of chunkValues(userIds)) {
+    const { data, error } = await adminClient
+      .from('users')
+      .select('id, email, full_name')
+      .in('id', chunk);
+
+    if (error) {
+      return { data: users, error };
+    }
+
+    users.push(...((data || []) as RawUser[]));
+  }
+
+  return { data: users, error: null };
+}
+
+async function fetchOrdersByCaseIds(adminClient: ReturnType<typeof createAdminClient>, caseIds: string[]) {
+  const orders: RawOrder[] = [];
+  let includeMetadata = true;
+
+  for (const chunk of chunkValues(caseIds)) {
+    const selectFields = includeMetadata ? ORDER_SELECT_WITH_METADATA : ORDER_SELECT_WITHOUT_METADATA;
+    let { data, error } = await adminClient
+      .from('orders')
+      .select(selectFields)
+      .in('case_id', chunk)
+      .order('created_at', { ascending: false });
+
+    if (error && includeMetadata && isMetadataColumnMissingError(error)) {
+      setMetadataColumnExists(false);
+      includeMetadata = false;
+      const fallback = await adminClient
+        .from('orders')
+        .select(ORDER_SELECT_WITHOUT_METADATA)
+        .in('case_id', chunk)
+        .order('created_at', { ascending: false });
+      data = fallback.data as any;
+      error = fallback.error;
+    }
+
+    if (error) {
+      return { data: orders, error };
+    }
+
+    orders.push(...((data || []) as unknown as RawOrder[]));
+  }
+
+  return { data: orders, error: null };
+}
+
+async function fetchFinalDocumentCounts(
+  adminClient: ReturnType<typeof createAdminClient>,
+  caseIds: string[]
+) {
+  const finalDocumentCounts = new Map<string, number>();
+
+  for (const chunk of chunkValues(caseIds)) {
+    const { data, error } = await adminClient
+      .from('documents')
+      .select('case_id, is_preview')
+      .in('case_id', chunk)
+      .eq('is_preview', false);
+
+    if (error) {
+      return { data: finalDocumentCounts, error };
+    }
+
+    for (const document of data || []) {
+      const caseId = (document as { case_id: string }).case_id;
+      finalDocumentCounts.set(caseId, (finalDocumentCounts.get(caseId) || 0) + 1);
+    }
+  }
+
+  return { data: finalDocumentCounts, error: null };
 }
 
 export async function GET(request: NextRequest) {
@@ -150,39 +243,25 @@ export async function GET(request: NextRequest) {
     const caseIds = cases.map((caseItem) => caseItem.id);
     const userIds = Array.from(new Set(cases.map((caseItem) => caseItem.user_id).filter(Boolean))) as string[];
 
-    const { data: usersData } = userIds.length
-      ? await adminClient
-          .from('users')
-          .select('id, email, full_name')
-          .in('id', userIds)
-      : { data: [] };
+    const { data: usersData, error: usersError } = userIds.length
+      ? await fetchUsersByIds(adminClient, userIds)
+      : { data: [], error: null };
+
+    if (usersError) {
+      console.error('Failed to fetch admin case users:', usersError);
+      return NextResponse.json({ error: 'Failed to fetch case users' }, { status: 500 });
+    }
+
     const users = new Map<string, RawUser>(
       ((usersData || []) as RawUser[]).map((userItem) => [userItem.id, userItem])
     );
 
-    const ORDER_SELECT_WITH_METADATA =
-      'id, case_id, user_id, product_type, payment_status, fulfillment_status, paid_at, created_at, metadata';
-    const ORDER_SELECT_WITHOUT_METADATA =
-      'id, case_id, user_id, product_type, payment_status, fulfillment_status, paid_at, created_at';
-
     let orders: RawOrder[] = [];
     if (caseIds.length) {
-      let { data: ordersData, error: ordersError } = await adminClient
-        .from('orders')
-        .select(ORDER_SELECT_WITH_METADATA)
-        .in('case_id', caseIds)
-        .order('created_at', { ascending: false });
-
-      if (ordersError && isMetadataColumnMissingError(ordersError)) {
-        setMetadataColumnExists(false);
-        const fallback = await adminClient
-          .from('orders')
-          .select(ORDER_SELECT_WITHOUT_METADATA)
-          .in('case_id', caseIds)
-          .order('created_at', { ascending: false });
-        ordersData = fallback.data as any;
-        ordersError = fallback.error;
-      }
+      const { data: ordersData, error: ordersError } = await fetchOrdersByCaseIds(
+        adminClient,
+        caseIds
+      );
 
       if (ordersError) {
         console.error('Failed to fetch admin case orders:', ordersError);
@@ -197,23 +276,13 @@ export async function GET(request: NextRequest) {
       orderByCase.set(order.case_id, pickBestOrder(orderByCase.get(order.case_id), order));
     }
 
-    const { data: documentsData, error: documentsError } = caseIds.length
-      ? await adminClient
-          .from('documents')
-          .select('case_id, is_preview')
-          .in('case_id', caseIds)
-          .eq('is_preview', false)
-      : { data: [], error: null };
+    const { data: finalDocumentCounts, error: documentsError } = caseIds.length
+      ? await fetchFinalDocumentCounts(adminClient, caseIds)
+      : { data: new Map<string, number>(), error: null };
 
     if (documentsError) {
       console.error('Failed to fetch admin case documents:', documentsError);
       return NextResponse.json({ error: 'Failed to fetch case documents' }, { status: 500 });
-    }
-
-    const finalDocumentCounts = new Map<string, number>();
-    for (const document of documentsData || []) {
-      const caseId = (document as { case_id: string }).case_id;
-      finalDocumentCounts.set(caseId, (finalDocumentCounts.get(caseId) || 0) + 1);
     }
 
     const normalizedCases: AdminCaseRecord[] = cases.map((caseItem) => {

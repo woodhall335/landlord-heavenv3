@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { Container } from "@/components/ui";
 import { createAdminClient, requireServerAuth } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/auth";
-import { PRODUCTS } from "@/lib/pricing/products";
+import { PRODUCTS, isValidProductSku, type ProductSku } from "@/lib/pricing/products";
+import { RecoveryEmailButton } from "./RecoveryEmailButton";
 
 interface FailedPayment {
   id: string;
@@ -14,6 +15,7 @@ interface FailedPayment {
   total_amount: number;
   payment_status: string;
   stripe_payment_intent_id: string | null;
+  stripe_checkout_url: string | null;
   created_at: string;
 }
 
@@ -46,7 +48,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
 
   const { data: orders, error } = await adminClient
     .from("orders")
-    .select("id, user_id, product_type, total_amount, payment_status, stripe_payment_intent_id, created_at")
+    .select("id, user_id, product_type, total_amount, payment_status, stripe_payment_intent_id, stripe_checkout_url, created_at")
     .in("payment_status", ["failed", "pending"])
     .order("created_at", { ascending: false });
 
@@ -80,6 +82,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
       total_amount: order.total_amount,
       payment_status: order.payment_status,
       stripe_payment_intent_id: order.stripe_payment_intent_id,
+      stripe_checkout_url: order.stripe_checkout_url || null,
       created_at: order.created_at,
     };
   });
@@ -112,6 +115,10 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
   };
 
   function getProductName(productType: string): string {
+    if (isValidProductSku(productType)) {
+      return PRODUCTS[productType as ProductSku].label;
+    }
+
     const names: Record<string, string> = {
       notice_only: "Notice Only",
       complete_pack: "Complete Eviction Pack",
@@ -136,6 +143,17 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
       default:
         return "bg-gray-100 text-gray-700";
     }
+  }
+
+  function formatGbpAmount(amount: number | string | null | undefined): string {
+    return `£${normalizeGbpAmount(amount).toFixed(2)}`;
+  }
+
+  function normalizeGbpAmount(amount: number | string | null | undefined): number {
+    const numericAmount = Number(amount);
+    if (!Number.isFinite(numericAmount)) return 0;
+
+    return numericAmount > 999 ? numericAmount / 100 : numericAmount;
   }
 
   return (
@@ -179,12 +197,13 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Amount</th>
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Status</th>
                   <th className="text-left p-4 text-sm font-semibold text-charcoal">Error</th>
+                  <th className="text-left p-4 text-sm font-semibold text-charcoal">Recovery</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedPayments.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="p-8 text-center text-gray-600">
+                    <td colSpan={8} className="p-8 text-center text-gray-600">
                       {searchTerm ? "No failed payments match your search" : "No failed payments found"}
                     </td>
                   </tr>
@@ -216,7 +235,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
                       </td>
                       <td className="p-4">
                         <span className="text-sm font-semibold text-charcoal">
-                          £{(payment.total_amount / 100).toFixed(2)}
+                          {formatGbpAmount(payment.total_amount)}
                         </span>
                       </td>
                       <td className="p-4">
@@ -228,6 +247,13 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
                         <span className="text-xs text-red-600">
                           Payment failed or pending
                         </span>
+                      </td>
+                      <td className="p-4">
+                        {payment.payment_status === "pending" && payment.stripe_checkout_url && payment.user_email !== "Unknown" ? (
+                          <RecoveryEmailButton orderId={payment.id} />
+                        ) : (
+                          <span className="text-xs text-gray-400">Unavailable</span>
+                        )}
                       </td>
                     </tr>
                   ))
@@ -281,10 +307,7 @@ export default async function AdminFailedPaymentsPage({ searchParams }: AdminFai
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <p className="text-sm text-gray-600 mb-1">Lost Revenue</p>
             <p className="text-3xl font-bold text-red-600">
-              £
-              {(
-                failedPayments.reduce((sum, p) => sum + p.total_amount, 0) / 100
-              ).toFixed(2)}
+              {formatGbpAmount(failedPayments.reduce((sum, p) => sum + normalizeGbpAmount(p.total_amount), 0))}
             </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
