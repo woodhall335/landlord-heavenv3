@@ -5,31 +5,31 @@ export const PRODUCT_OWNER_METADATA = {
     path: '/products/notice-only',
     title: `Landlord Section 8 Notice & Service File | ${SEO_PRICES.evictionNotice.display}`,
     description:
-      'Prepare a solicitor-approved landlord Section 8 notice and service file with Form 3A, N215, arrears schedule, service instructions, and checks.',
+      'Prepare a solicitor-approved Section 8 notice and service file with Form 3A, N215, arrears schedule, service instructions, and checks.',
   },
   completePack: {
     path: '/products/complete-pack',
     title: `Evict a Tenant Through Court | ${SEO_PRICES.evictionBundle.display}`,
     description:
-      'Prepare a solicitor-approved eviction pack with court forms, Form 3A, N5, N119, witness statement, evidence, and hearing support.',
+      'Prepare a solicitor-approved Section 8 court and possession file with Form 3A, N5, N119, witness statement, evidence, and hearing support.',
   },
   moneyClaim: {
     path: '/products/money-claim',
     title: `Landlord Money Claim Pack | ${SEO_PRICES.moneyClaim.display}`,
     description:
-      'Prepare a landlord money claim for unpaid rent, property damage, bills, or tenancy debt, with a demand letter and claim papers you can check.',
+      'Prepare a landlord money claim for unpaid rent, damage, bills, or tenancy debt, with a demand letter and claim papers you can check.',
   },
   section13Standard: {
     path: '/products/section-13-standard',
     title: `Supported Rent Increase Pack | Section 13 Form 4A | ${SEO_PRICES.section13Standard.display}`,
     description:
-      'Prepare a market-supported Section 13 Form 4A rent increase file with current local comparables, summary, cover letter, and service record before you serve.',
+      'Create a Section 13 Form 4A rent increase notice with market evidence, service record, and a tenant-facing explanation before you serve.',
   },
   section13Defence: {
     path: '/products/section-13-defence',
     title: `Tribunal-Ready Rent Increase Pack | Section 13 | ${SEO_PRICES.section13Defensive.display}`,
     description:
-      'Prepare for a challenged Section 13 rent increase with Form 4A, current market comparables, response wording, legal briefing, and indexed tribunal bundle support.',
+      'Prepare for a challenged rent increase with Form 4A, market evidence, response wording, and tribunal bundle support kept together.',
   },
   standardTenancy: {
     path: '/standard-tenancy-agreement',

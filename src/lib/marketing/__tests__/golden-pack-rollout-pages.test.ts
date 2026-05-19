@@ -7,25 +7,37 @@ function readSource(relativePath: string) {
 }
 
 describe('golden-pack sample-proof rollout pages', () => {
-  it('keeps the shared sample-proof wiring on money claim and Section 13 product pages', () => {
-    const moneyClaimSource = readSource('src/app/(marketing)/products/money-claim/page.tsx');
-    const section13StandardSource = readSource(
-      'src/app/(marketing)/products/section-13-standard/page.tsx'
-    );
-    const section13DefenceSource = readSource(
-      'src/app/(marketing)/products/section-13-defence/page.tsx'
-    );
+  it('keeps the shared sample-proof wiring on eviction, money claim and Section 13 product pages', () => {
+    const pages = [
+      {
+        source: readSource('src/app/(marketing)/products/notice-only/page.tsx'),
+        assertion: 'sampleProof: sampleProof ? (',
+      },
+      {
+        source: readSource('src/app/(marketing)/products/complete-pack/page.tsx'),
+        assertion: 'sampleProof: sampleProof ? (',
+      },
+      {
+        source: readSource('src/app/(marketing)/products/money-claim/page.tsx'),
+        assertion: 'sampleProof: sampleProof ? (',
+      },
+      {
+        source: readSource('src/app/(marketing)/products/section-13-standard/page.tsx'),
+        assertion: 'earlyProofBand: {',
+      },
+      {
+        source: readSource('src/app/(marketing)/products/section-13-defence/page.tsx'),
+        assertion: 'earlyProofBand: {',
+      },
+    ];
 
-    for (const source of [moneyClaimSource, section13StandardSource, section13DefenceSource]) {
+    for (const { source, assertion } of pages) {
       expect(source).toContain("import { GoldenPackProof }");
       expect(source).toContain("from '@/lib/marketing/golden-pack-proof'");
       expect(source).toContain('<GoldenPackProof');
       expect(source).toContain('samplePageHref={samplePage?.samplePath}');
+      expect(source).toContain(assertion);
     }
-
-    expect(moneyClaimSource).toContain('sampleProof: sampleProof ? (');
-    expect(section13StandardSource).toContain('earlyProofBand: {');
-    expect(section13DefenceSource).toContain('earlyProofBand: {');
   });
 
   it('keeps the shared tenancy sample-proof wiring on all five England agreement pages', () => {
@@ -81,5 +93,17 @@ describe('golden-pack sample-proof rollout pages', () => {
 
     expect(sampleProofIndex).toBeGreaterThanOrEqual(0);
     expect(packBreakdownIndex).toBeGreaterThan(sampleProofIndex);
+  });
+
+  it('makes the samples page an obvious hub for all dedicated sample pages', () => {
+    const source = readSource('src/app/samples/page.tsx');
+
+    expect(source).toContain('const sampleDirectoryGroups');
+    expect(source).toContain('id="sample-directory"');
+    expect(source).toContain('Browse sample hub');
+    expect(source).toContain('productSamplePages.filter');
+    expect(source).toContain('href={sample.samplePath}');
+    expect(source).toContain('href={samplePath}');
+    expect(source).toContain('data-testid="golden-pack-sample-card"');
   });
 });

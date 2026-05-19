@@ -45,7 +45,7 @@ export function GoldenPackProof({
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold tracking-[0.08em] text-[#CFC4FF]">
-              Sample document preview
+              Golden pack sample preview unavailable
             </p>
             <h4 className="mt-2 text-xl font-semibold text-white md:text-2xl">
               Inspect the sample pack before you pay

@@ -112,7 +112,7 @@ export const productSamplePages = [
     targetKeyword: 'section 13 tribunal ready rent increase pack example',
     metaTitle: 'Tribunal-Ready Rent Increase Pack Example | Tribunal Sample',
     metaDescription:
-      'See a tribunal-ready rent increase pack example with evidence templates, response letters, tribunal summary, and bundle checklist.',
+      'See a Section 13 tribunal ready rent increase pack example with evidence templates, response letters, tribunal summary, and bundle checklist.',
     intro:
       'Use this tribunal-ready rent increase pack example to see how challenge-ready evidence and tribunal documents are structured.',
     ctaText: 'Expect a challenge? Prepare my Tribunal-Ready Rent Increase Pack.',

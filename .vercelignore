@@ -7,7 +7,12 @@
 _npx
 node_modules
 tmp
-artifacts
+artifacts/*
+!artifacts/golden-packs/
+!artifacts/golden-packs/**
+!artifacts/update/
+!artifacts/update/Form_3A_legal_wording_for_possession_grounds.pdf
+!artifacts/update/Form_3A_guidance_for_landlords.pdf
 audit
 audit-output
 output

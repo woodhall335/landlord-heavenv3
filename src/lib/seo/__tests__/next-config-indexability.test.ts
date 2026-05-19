@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 describe('Next config indexability rules', () => {
   it('adds X-Robots-Tag headers to official form PDFs only', async () => {
@@ -34,6 +36,17 @@ describe('Next config indexability rules', () => {
         './artifacts/update/Form_3A_guidance_for_landlords.pdf',
       ]),
     });
+  });
+
+  it('deploys golden pack samples for the public sample preview API', async () => {
+    const nextConfig = (await import('../../../../next.config.mjs')).default;
+    const vercelIgnore = readFileSync(join(process.cwd(), '.vercelignore'), 'utf8');
+
+    expect(nextConfig.outputFileTracingIncludes).toMatchObject({
+      '/api/golden-pack-samples/**': expect.arrayContaining(['./artifacts/golden-packs/**/*']),
+    });
+    expect(vercelIgnore).toContain('artifacts/*');
+    expect(vercelIgnore).toContain('!artifacts/golden-packs/**');
   });
 
   it('keeps GSC crawl-waste legacy routes as permanent redirects', async () => {

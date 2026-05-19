@@ -51,7 +51,7 @@ describe('GoldenPackProof', () => {
       />
     );
 
-    expect(screen.getByText('Sample document preview')).toBeInTheDocument();
+    expect(screen.getByText('Golden pack sample preview unavailable')).toBeInTheDocument();
     expect(screen.getByText(/Inspect the sample pack before you pay/i)).toBeInTheDocument();
     expect(screen.getByText(/Review the documents this pack is designed to produce/i)).toBeInTheDocument();
     expect(screen.getByText('Form 4A rent increase notice')).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe('GoldenPackProof', () => {
       />
     );
 
-    expect(screen.getByText('Sample document preview')).toBeInTheDocument();
+    expect(screen.getByText('Golden pack sample preview unavailable')).toBeInTheDocument();
     expect(screen.getByText(/Inspect the sample pack before you pay/i)).toBeInTheDocument();
     expect(screen.getByText('Current comparable rental evidence')).toBeInTheDocument();
     expect(screen.getByText(/Nearby advertised rental properties/i)).toBeInTheDocument();

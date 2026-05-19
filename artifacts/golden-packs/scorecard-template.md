@@ -1,6 +1,6 @@
 # England Golden Pack Scorecard
 
-Generated: 2026-05-16T13:56:14.845Z
+Generated: 2026-05-19T19:37:20.489Z
 Output root: C:/Users/t_moh/Documents/GitHub/landlord-heavenv3/artifacts/golden-packs
 
 Suggested scoring rubric (/10):
@@ -9,29 +9,6 @@ Suggested scoring rubric (/10):
 - Completeness: /2
 - Landlord clarity and next steps: /2
 - Finish and polish: /1
-
-## Challenge-Ready Section 13 Defence Pack
-Folder: section13_defensive
-Documents: 13
-Score: 
-What works: 
-Issues found: 
-What would move this to 9/10: 
-
-Documents:
-- Rent Increase Summary [section13_rent_increase_summary]
-- Form 4A rent increase notice [section13_form_4a]
-- Rent increase justification report [section13_justification_report]
-- Property condition comparison sheet [section13_property_condition_comparison_sheet]
-- Tenant argument and landlord response guide [section13_tenant_argument_response_guide]
-- Tribunal Argument Summary [section13_tribunal_argument_summary]
-- Proof of service record [section13_proof_of_service_record]
-- Rent increase cover letter [section13_cover_letter]
-- Tribunal defence guide [section13_tribunal_defence_guide]
-- Landlord response template [section13_landlord_response_template]
-- Tribunal legal briefing [section13_legal_briefing]
-- Merged tribunal bundle PDF [section13_tribunal_bundle]
-- Tribunal bundle ZIP [section13_tribunal_bundle_zip]
 
 ## HMO / Shared House Tenancy Agreement & House Management Pack
 Folder: england_hmo_shared_house_tenancy_agreement
@@ -151,21 +128,6 @@ Documents:
 - What Happens Next [what_happens_next]
 - Service Instructions [service_instructions]
 
-## Standard Section 13 Rent Increase Pack
-Folder: section13_standard
-Documents: 5
-Score: 
-What works: 
-Issues found: 
-What would move this to 9/10: 
-
-Documents:
-- Rent Increase Summary [section13_rent_increase_summary]
-- Form 4A rent increase notice [section13_form_4a]
-- Rent increase justification report [section13_justification_report]
-- Proof of service record [section13_proof_of_service_record]
-- Rent increase cover letter [section13_cover_letter]
-
 ## Standard Tenancy Agreement & Setup Pack
 Folder: england_standard_tenancy_agreement
 Documents: 9
@@ -204,6 +166,44 @@ Documents:
 - Prescribed Information Pack [tenancy_deposit_information]
 - Guarantor Agreement [guarantor_agreement]
 - Student Move-Out & Guarantor Schedule [england_student_move_out_schedule]
+
+## Supported Rent Increase Pack
+Folder: section13_standard
+Documents: 5
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Rent Increase Summary [section13_rent_increase_summary]
+- Form 4A rent increase notice [section13_form_4a]
+- Rent increase justification report [section13_justification_report]
+- Proof of service record [section13_proof_of_service_record]
+- Rent increase cover letter [section13_cover_letter]
+
+## Tribunal-Ready Rent Increase Pack
+Folder: section13_defensive
+Documents: 13
+Score: 
+What works: 
+Issues found: 
+What would move this to 9/10: 
+
+Documents:
+- Rent Increase Summary [section13_rent_increase_summary]
+- Form 4A rent increase notice [section13_form_4a]
+- Rent increase justification report [section13_justification_report]
+- Property condition comparison sheet [section13_property_condition_comparison_sheet]
+- Tenant argument and landlord response guide [section13_tenant_argument_response_guide]
+- Tribunal Argument Summary [section13_tribunal_argument_summary]
+- Proof of service record [section13_proof_of_service_record]
+- Rent increase cover letter [section13_cover_letter]
+- Tribunal defence guide [section13_tribunal_defence_guide]
+- Landlord response template [section13_landlord_response_template]
+- Tribunal legal briefing [section13_legal_briefing]
+- Merged tribunal bundle PDF [section13_tribunal_bundle]
+- Tribunal bundle ZIP [section13_tribunal_bundle_zip]
 
 ## England Tenancy Agreements Hub
 Product key: ast

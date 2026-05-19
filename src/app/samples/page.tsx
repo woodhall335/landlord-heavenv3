@@ -16,6 +16,35 @@ import {
 
 const samplePagePath = '/samples';
 const canonicalUrl = getCanonicalUrl(samplePagePath);
+const sampleDirectoryGroups = [
+  {
+    title: 'Eviction and possession',
+    body: 'Notice-stage and court-stage packs for rent arrears possession work.',
+    slugs: ['section-8-notice-example', 'complete-eviction-pack-example'],
+  },
+  {
+    title: 'Debt recovery',
+    body: 'Pre-action and claim documents for unpaid rent after the tenancy route is clear.',
+    slugs: ['money-claim-online-example'],
+  },
+  {
+    title: 'Rent increase',
+    body: 'Section 13 Form 4A and tribunal-ready evidence samples for England rent increases.',
+    slugs: ['form-4a-example', 'section-13-defence-pack-example'],
+  },
+  {
+    title: 'Tenancy agreements',
+    body: 'Agreement samples for standard, premium, student, HMO/shared house, and lodger lets.',
+    slugs: [
+      'standard-tenancy-agreement-example',
+      'premium-tenancy-agreement-example',
+      'student-tenancy-agreement-example',
+      'hmo-tenancy-agreement-example',
+      'lodger-agreement-example',
+    ],
+  },
+] as const;
+
 const samplePositioningCards = [
   {
     title: 'Compared with a solicitor',
@@ -98,14 +127,59 @@ export default function SamplesPage() {
         preTitleLabel="Solicitor-approved sample packs"
         title="Free Landlord Document Samples"
         subtitle="Browse real sample documents, then move into the fixed-price workflow that builds the notice, claim, rent increase file, or tenancy setup pack around your facts. This is not a static form library."
-        primaryCta={{ label: 'View sample packs', href: '#sample-packs' }}
-        secondaryCta={{ label: 'Compare tenancy options', href: '/compare/tenancy-agreement-options-england' }}
+        primaryCta={{ label: 'Browse sample hub', href: '#sample-directory' }}
+        secondaryCta={{ label: 'View PDF previews', href: '#sample-packs' }}
         mediaSrc="/images/wizard-icons/18-forms-bundle.png"
         mediaAlt="Landlord document sample pack"
         showReviewPill
         showTrustPositioningBar
         trustPositioningHeadline="Inspect the sample, then build a validated landlord document pack around your facts before you pay."
       />
+
+      <Container id="sample-directory" className="py-10 md:py-12">
+        <section className="rounded-lg border border-[#E8E1D7] bg-white p-6 shadow-[0_14px_32px_rgba(31,41,55,0.05)] md:p-8">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
+              Sample hub
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#141B2D] md:text-4xl">
+              Open the exact sample page you need
+            </h2>
+            <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
+              Every public sample page is linked here, grouped by landlord workflow. Each one opens a full sample page with the current golden-pack PDFs and a route back to the matching product.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 lg:grid-cols-4">
+            {sampleDirectoryGroups.map((group) => {
+              const groupSamples = productSamplePages.filter((sample) =>
+                (group.slugs as readonly string[]).includes(sample.slug)
+              );
+
+              return (
+                <article key={group.title} className="rounded-lg border border-[#E8E1D7] bg-[#FCFBF8] p-5">
+                  <h3 className="text-lg font-semibold text-[#141B2D]">{group.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#546075]">{group.body}</p>
+                  <div className="mt-5 space-y-2">
+                    {groupSamples.map((sample) => (
+                      <Link
+                        key={sample.samplePath}
+                        href={sample.samplePath}
+                        className="block rounded-lg border border-[#E8E1D7] bg-white px-3 py-3 text-sm font-semibold text-[#141B2D] transition hover:border-[#C7B4FF] hover:text-[#5B21B6]"
+                      >
+                        {sample.productName}
+                        <span className="mt-1 block text-xs font-medium leading-5 text-[#6B7280]">
+                          {sample.targetKeyword}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      </Container>
 
       <Container id="sample-packs" className="py-12 md:py-16">
         <div className="mb-8 max-w-3xl">
@@ -132,7 +206,11 @@ export default function SamplesPage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#7C3AED]">
                     {targetKeyword}
                   </p>
-                  <h3 className="mt-2 text-2xl font-bold text-[#141B2D]">{proof.displayName}</h3>
+                  <h3 className="mt-2 text-2xl font-bold text-[#141B2D]">
+                    <Link href={samplePath} className="hover:text-[#5B21B6]">
+                      {proof.displayName}
+                    </Link>
+                  </h3>
                   <p className="mt-2 text-sm text-[#546075]">
                     {proof.documentCount} documents, {proof.totalPages} pages total
                   </p>

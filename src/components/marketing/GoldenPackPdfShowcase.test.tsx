@@ -50,6 +50,8 @@ describe('GoldenPackPdfShowcase', () => {
       />
     );
 
+    expect(screen.getByText('Golden pack sample preview')).toBeInTheDocument();
+    expect(screen.getByText(/Inspect the real sample PDFs before you pay/i)).toBeInTheDocument();
     expect(screen.getByText(/Documents in this sample pack/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Choose a document from the list to load its full sample preview/i)

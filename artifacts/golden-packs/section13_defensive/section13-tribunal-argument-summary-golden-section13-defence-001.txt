@@ -31,7 +31,7 @@ Included in calculation: Yes
 Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-1
 Distance: 0.20 miles
-Section 13 Defensive Pack | Tribunal argument summary Page 1 of 4
+Tribunal-Ready Rent Increase Pack | Tribunal argument summary Page 1 of 4
 
 -- 1 of 4 --
 
@@ -69,7 +69,7 @@ Freshness: 24 days old
 Source: scraped | https://example.com/leeds-rent-comparable-5
 Distance: 0.50 miles
 Source date (published): 15 March 2026
-Section 13 Defensive Pack | Tribunal argument summary Page 2 of 4
+Tribunal-Ready Rent Increase Pack | Tribunal argument summary Page 2 of 4
 
 -- 2 of 4 --
 
@@ -107,7 +107,7 @@ percentage increase alone.
 2. Position in the range
 Say: The figure sits below the adjusted median of £1297.50 pcm and should be judged against the adjusted
 comparable range recorded in the report.
-Section 13 Defensive Pack | Tribunal argument summary Page 3 of 4
+Tribunal-Ready Rent Increase Pack | Tribunal argument summary Page 3 of 4
 
 -- 3 of 4 --
 
@@ -121,6 +121,6 @@ the supporting documents I rely on.
 Important limit
 This summary is a concise argument brief drawn from the saved case facts and comparable analysis. It
 supports presentation of the case, but it does not guarantee a tribunal outcome.
-Section 13 Defensive Pack | Tribunal argument summary Page 4 of 4
+Tribunal-Ready Rent Increase Pack | Tribunal argument summary Page 4 of 4
 
 -- 4 of 4 --

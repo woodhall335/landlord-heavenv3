@@ -38,10 +38,10 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
               <p className="text-xs font-semibold tracking-[0.08em] text-[#CFC4FF]">
-                Sample document preview
+                Golden pack sample preview
               </p>
               <h4 className="mt-2 text-xl font-semibold text-white md:text-2xl">
-                Inspect the sample pack before you pay
+                Inspect the real sample PDFs before you pay
               </h4>
               <p className="mt-2 text-sm leading-7 text-[#ECE8FF] md:text-base">
                 Open each sample document directly on this page, switch between files, and check

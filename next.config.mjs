@@ -430,6 +430,7 @@ const nextConfig = {
       './artifacts/update/Form_3A_legal_wording_for_possession_grounds.pdf',
       './artifacts/update/Form_3A_guidance_for_landlords.pdf',
     ],
+    '/api/golden-pack-samples/**': ['./artifacts/golden-packs/**/*'],
   },
   // Allow localhost for development
   allowedDevOrigins: ['localhost:5000', 'localhost:3000'],
