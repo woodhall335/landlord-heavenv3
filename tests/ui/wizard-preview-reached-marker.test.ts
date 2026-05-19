@@ -16,6 +16,14 @@ describe('generic wizard preview reached marker', () => {
     expect(source).toContain('...sessionHeaders');
   });
 
+  it('marks wizard review visits so non-Section-13 products enter preview recovery', () => {
+    const source = readSource('src/app/(app)/wizard/review/page.tsx');
+
+    expect(source).toContain(`/api/cases/${'${caseId}'}/preview-reached`);
+    expect(source).toContain("source: 'wizard_review_page'");
+    expect(source).toContain('...getSessionTokenHeaders()');
+  });
+
   it('persists a preview-ready workflow marker and preview metadata', () => {
     const source = readSource('src/app/api/cases/[id]/preview-reached/route.ts');
 

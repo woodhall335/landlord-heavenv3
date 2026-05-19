@@ -254,8 +254,19 @@ function ReviewPageInner() {
         landing_url: attribution.landing_url,
         first_seen_at: attribution.first_seen_at,
       });
+
+      fetch(`/api/cases/${caseId}/preview-reached`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...getSessionTokenHeaders() },
+        body: JSON.stringify({
+          product,
+          source: 'wizard_review_page',
+        }),
+      }).catch((previewMarkerError) => {
+        console.warn('Failed to mark case review/preview reached:', previewMarkerError);
+      });
     }
-  }, [analysis, product, jurisdiction, hasBlockingIssues]);
+  }, [analysis, caseId, product, jurisdiction, hasBlockingIssues]);
 
   // Fetch payment status to determine if this is a regeneration flow
   useEffect(() => {

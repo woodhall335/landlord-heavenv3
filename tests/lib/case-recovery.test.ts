@@ -4,6 +4,7 @@ import {
   buildCaseRecoveryUrl,
   deriveCaseProductType,
   deriveCaseRecoveryContact,
+  getHistoricalPreviewBackfillReason,
   isPreviewAbandonedCase,
 } from '@/lib/cases/recovery';
 
@@ -144,6 +145,57 @@ describe('case recovery helpers', () => {
         hasPreviewDocuments: false,
       })
     ).toBe(false);
+  });
+
+  it('can conservatively identify historical non-Section-13 review-ready cases for backfill', () => {
+    expect(
+      getHistoricalPreviewBackfillReason({
+        id: 'historical-money-claim',
+        case_type: 'money_claim',
+        jurisdiction: 'england',
+        workflow_status: 'in_progress',
+        wizard_progress: 0,
+        wizard_completed_at: null,
+        collected_facts: {
+          __meta: { product: 'money_claim', jurisdiction: 'england' },
+          landlord_full_name: 'Alex Landlord',
+          landlord_address_line1: '1 High Street',
+          landlord_address_postcode: 'SW1A 1AA',
+          tenant_full_name: 'Taylor Tenant',
+          defendant_address_line1: '2 High Street',
+          tenancy_start_date: '2025-01-01',
+          rent_amount: 1200,
+          rent_frequency: 'monthly',
+          claiming_rent_arrears: true,
+          money_claim: {
+            court_name: 'County Court Money Claims Centre',
+            basis_of_claim: 'Rent arrears under the tenancy agreement.',
+            charge_interest: false,
+            evidence_types_available: ['tenancy_agreement'],
+          },
+          arrears_items: [{ month: 'January', amount: 1200 }],
+          letter_before_claim_sent: true,
+          evidence_reviewed: true,
+        },
+      })
+    ).toBe('money_claim_review_ready_facts');
+  });
+
+  it('does not backfill incomplete historical drafts', () => {
+    expect(
+      getHistoricalPreviewBackfillReason({
+        id: 'draft-money-claim',
+        case_type: 'money_claim',
+        jurisdiction: 'england',
+        workflow_status: 'in_progress',
+        wizard_progress: 0,
+        wizard_completed_at: null,
+        collected_facts: {
+          __meta: { product: 'money_claim', jurisdiction: 'england' },
+          landlord_full_name: 'Alex Landlord',
+        },
+      })
+    ).toBeNull();
   });
 
   it('builds a generic wizard recovery URL with product and token', () => {

@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import { isValidProductSku, type ProductSku } from '@/lib/pricing/products';
+import { isValidProductSku, type ProductSku } from '../pricing/products';
 
 export type CaseRecoveryStage = 'manual' | 'day_1' | 'day_7';
 
@@ -119,6 +119,182 @@ export function isCasePreviewReached(caseItem: CaseLike): boolean {
       workflowStatus === 'awaiting_payment' ||
       firstString(meta.preview_reached_at, meta.preview_viewed_at, meta.preview_last_viewed_at)
   );
+}
+
+function isPresent(value: unknown): boolean {
+  if (typeof value === 'string') return value.trim().length > 0;
+  return value !== null && value !== undefined && value !== false;
+}
+
+function hasItems(value: unknown): boolean {
+  return Array.isArray(value) && value.length > 0;
+}
+
+function getProductFromCaseFacts(caseItem: CaseLike): string | null {
+  return deriveCaseProductType(caseItem, null);
+}
+
+function hasCommonLandlordTenantPropertyTenancyFacts(facts: Record<string, any>): boolean {
+  return (
+    isPresent(facts.landlord_full_name || facts.parties?.landlord?.name) &&
+    isPresent(facts.tenant_full_name || facts.parties?.tenants?.[0]?.name || facts.tenants?.[0]?.full_name) &&
+    isPresent(facts.property_address_line1 || facts.property?.address_line1) &&
+    isPresent(facts.property_address_postcode || facts.property?.postcode) &&
+    isPresent(facts.tenancy_start_date || facts.tenancy?.start_date) &&
+    isPresent(facts.rent_amount || facts.tenancy?.rent_amount)
+  );
+}
+
+function getEvictionRoute(facts: Record<string, any>): string | null {
+  return firstString(
+    facts.selected_notice_route,
+    facts.eviction_route,
+    facts.route_recommendation?.recommended_route,
+    facts.recommended_route
+  );
+}
+
+function hasHistoricalEvictionReviewReadyFacts(caseItem: CaseLike): boolean {
+  const facts = caseItem.collected_facts || {};
+  const product = getProductFromCaseFacts(caseItem);
+  const jurisdiction = caseItem.jurisdiction || facts.__meta?.jurisdiction;
+  const route = getEvictionRoute(facts);
+
+  if (!hasCommonLandlordTenantPropertyTenancyFacts(facts) || !route) return false;
+
+  if (jurisdiction === 'england') {
+    const selectedGrounds = facts.section8_grounds || facts.selected_grounds || [];
+    const noticeReady =
+      facts.notice_already_served === false
+        ? hasItems(selectedGrounds)
+        : isPresent(facts.notice_served_date) && isPresent(facts.notice_service_method);
+    if (!noticeReady) return false;
+
+    if (product === 'complete_pack') {
+      return (
+        isPresent(facts.evidence_reviewed || facts.evidence_bundle_ready) &&
+        isPresent(facts.court_name) &&
+        isPresent(facts.signatory_name) &&
+        isPresent(facts.signatory_capacity)
+      );
+    }
+
+    return true;
+  }
+
+  if (jurisdiction === 'wales') {
+    if (route === 'section_173' || route === 'wales_section_173') {
+      return (
+        facts.user_declaration === true &&
+        isPresent(facts.rent_smart_wales_registered) &&
+        isPresent(facts.written_statement_provided)
+      );
+    }
+
+    if (route === 'fault_based' || route === 'wales_fault_based') {
+      return facts.user_declaration === true && hasItems(facts.wales_fault_grounds);
+    }
+  }
+
+  if (jurisdiction === 'scotland') {
+    const tribunalReady =
+      product !== 'complete_pack' ||
+      (isPresent(facts.understands_tribunal_process) &&
+        isPresent(facts.signatory_name) &&
+        isPresent(facts.signatory_capacity));
+    return isPresent(facts.scotland_eviction_ground) && isPresent(facts.notice_service_method) && tribunalReady;
+  }
+
+  return false;
+}
+
+function hasHistoricalMoneyClaimReviewReadyFacts(caseItem: CaseLike): boolean {
+  const facts = caseItem.collected_facts || {};
+  const jurisdiction = caseItem.jurisdiction || facts.__meta?.jurisdiction;
+  const hasClaimType =
+    facts.claiming_rent_arrears === true ||
+    facts.claiming_damages === true ||
+    facts.claiming_other === true;
+  const hasClaimDetails =
+    jurisdiction === 'england' || jurisdiction === 'wales'
+      ? hasClaimType && isPresent(facts.money_claim?.court_name || facts.court_name)
+      : hasClaimType;
+  const hasClaimStatement =
+    isPresent(facts.money_claim?.basis_of_claim) &&
+    (jurisdiction !== 'england' && jurisdiction !== 'wales'
+      ? true
+      : facts.money_claim?.charge_interest === true || facts.money_claim?.charge_interest === false);
+  const hasPreAction =
+    isPresent(facts.letter_before_claim_sent) ||
+    isPresent(facts.pap_letter_date) ||
+    isPresent(facts.money_claim?.generate_pap_documents);
+  const hasEvidence =
+    isPresent(facts.evidence_reviewed) ||
+    hasItems(facts.uploaded_documents) ||
+    hasItems(facts.evidence?.files) ||
+    hasItems(facts.money_claim?.evidence_types_available);
+
+  return (
+    isPresent(facts.landlord_full_name || facts.company_name) &&
+    isPresent(facts.landlord_address_line1) &&
+    isPresent(facts.landlord_address_postcode) &&
+    isPresent(facts.tenant_full_name) &&
+    isPresent(facts.defendant_address_line1 || facts.property_address_line1) &&
+    isPresent(facts.tenancy_start_date) &&
+    isPresent(facts.rent_amount) &&
+    isPresent(facts.rent_frequency) &&
+    hasClaimDetails &&
+    hasClaimStatement &&
+    hasPreAction &&
+    hasEvidence
+  );
+}
+
+function hasHistoricalTenancyReviewReadyFacts(caseItem: CaseLike): boolean {
+  const facts = caseItem.collected_facts || {};
+  const tenants = facts.tenants || facts.parties?.tenants || [];
+
+  return (
+    isPresent(facts.product_tier || facts.__meta?.product) &&
+    isPresent(facts.property_address_line1) &&
+    isPresent(facts.property_address_town) &&
+    isPresent(facts.property_address_postcode) &&
+    isPresent(facts.landlord_full_name) &&
+    isPresent(facts.landlord_email) &&
+    isPresent(facts.landlord_address_line1) &&
+    isPresent(facts.landlord_address_postcode) &&
+    hasItems(tenants) &&
+    isPresent(tenants[0]?.full_name || tenants[0]?.name) &&
+    isPresent(facts.tenancy_start_date) &&
+    isPresent(facts.rent_amount) &&
+    isPresent(facts.rent_due_day) &&
+    facts.deposit_amount !== null &&
+    facts.deposit_amount !== undefined
+  );
+}
+
+export function getHistoricalPreviewBackfillReason(caseItem: CaseLike): string | null {
+  if (isCasePreviewReached(caseItem)) return 'already_preview_marked';
+
+  const facts = caseItem.collected_facts || {};
+  const meta = facts.__meta || {};
+  if (firstString(meta.review_reached_at, meta.review_viewed_at, meta.review_last_viewed_at)) {
+    return 'review_meta';
+  }
+
+  if (caseItem.case_type === 'eviction' && hasHistoricalEvictionReviewReadyFacts(caseItem)) {
+    return 'eviction_review_ready_facts';
+  }
+
+  if (caseItem.case_type === 'money_claim' && hasHistoricalMoneyClaimReviewReadyFacts(caseItem)) {
+    return 'money_claim_review_ready_facts';
+  }
+
+  if (caseItem.case_type === 'tenancy_agreement' && hasHistoricalTenancyReviewReadyFacts(caseItem)) {
+    return 'tenancy_review_ready_facts';
+  }
+
+  return null;
 }
 
 export function isPreviewAbandonedCase(params: {
