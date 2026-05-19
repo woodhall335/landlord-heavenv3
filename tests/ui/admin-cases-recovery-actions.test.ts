@@ -33,6 +33,8 @@ describe('admin cases preview-abandoned recovery UI contract', () => {
 
   it('shows production proof for preview-abandoned recovery emails', () => {
     expect(apiSource).toContain('CASE_PREVIEW_RECOVERY_SENT_EVENT_TYPES');
+    expect(apiSource).toContain('ADMIN_CASES_FETCH_PAGE_SIZE');
+    expect(apiSource).toContain('.range(from, to)');
     expect(apiSource).toContain('recovery_last_event_at');
     expect(apiSource).toContain('recovery_emails_sent_30d');
     expect(apiSource).toContain('hasPreviewDocuments: previewDocumentCount > 0');

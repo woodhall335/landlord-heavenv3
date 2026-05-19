@@ -98,7 +98,7 @@ const tenancyPositioningCards = [
   {
     title: 'Compared with using a solicitor',
     body:
-      'A solicitor is the safer choice for complex advice or representation. For routine tenancy setup, this fixed-price workflow gives landlords solicitor-approved document preparation without solicitor rates or delays.',
+      'A solicitor is the safer choice for complex dispute work. For routine tenancy setup, this fixed-price workflow gives landlords solicitor-approved document preparation without solicitor rates or delays.',
   },
   {
     title: 'Validated before preview',
@@ -277,7 +277,7 @@ export function EnglandTenancyPage({
                   Create the agreement from your facts, not from a static form
                 </h2>
                 <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
-                  This is fixed-price, solicitor-approved document preparation for routine landlord setup. It helps you follow the procedure and preview the agreement before payment, but it is not legal advice, solicitor representation, or a court-approved tenancy agreement.
+                  This is fixed-price, solicitor-approved document preparation for routine landlord setup. It helps you follow the procedure, validate the key tenancy facts, and preview the agreement before payment.
                 </p>
               </div>
               <div className="mt-8 grid gap-5 md:grid-cols-3">

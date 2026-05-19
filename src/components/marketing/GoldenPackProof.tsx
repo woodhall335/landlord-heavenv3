@@ -40,7 +40,7 @@ export function GoldenPackProof({
   }
 
   return (
-    <div className="overflow-hidden rounded-[1.85rem] border border-[#34245D] bg-[#1A1231] shadow-[0_18px_52px_rgba(9,6,18,0.24)]">
+    <div className="overflow-hidden rounded-lg border border-[#34245D] bg-[#1A1231] shadow-[0_18px_52px_rgba(9,6,18,0.24)]">
       <div className="border-b border-[#3D2D68] px-5 py-5 md:px-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
@@ -69,10 +69,7 @@ export function GoldenPackProof({
 
       <div className="grid gap-4 px-5 py-5 md:grid-cols-2 lg:grid-cols-3 md:px-6">
         {visibleEntries.map((entry) => (
-          <article
-            key={entry.title}
-            className="rounded-[1.15rem] border border-[#4B3B76] bg-[#241A3F] p-4"
-          >
+          <article key={entry.title} className="rounded-lg border border-[#4B3B76] bg-[#241A3F] p-4">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#CFC4FF]">
               {entry.categoryLabel ?? 'Pack output'}
             </p>

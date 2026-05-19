@@ -20,7 +20,7 @@ const samplePositioningCards = [
   {
     title: 'Compared with a solicitor',
     body:
-      'A solicitor is still the right choice for bespoke advice or a dispute, but routine landlord document setup can be slower and more expensive than a fixed-price workflow. Landlord Heaven gives you solicitor-approved document preparation without solicitor representation.',
+      'A solicitor is still the right choice for bespoke dispute work, but routine landlord document setup can be slower and more expensive than a fixed-price workflow. Landlord Heaven gives you solicitor-approved document preparation built around the facts you enter.',
   },
   {
     title: 'Compared with a wording-only download',
@@ -191,7 +191,7 @@ export default function SamplesPage() {
       </Container>
 
       <Container className="pb-12 md:pb-16">
-        <section className="rounded-[2rem] border border-[#D8C8FF] bg-[#F7F2FF] p-6 shadow-[0_16px_38px_rgba(67,44,126,0.08)] md:p-8">
+        <section className="rounded-lg border border-[#D8C8FF] bg-[#F7F2FF] p-6 shadow-[0_16px_38px_rgba(67,44,126,0.08)] md:p-8">
           <div className="max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#6D28D9]">
               Why these samples sell the workflow
@@ -200,12 +200,12 @@ export default function SamplesPage() {
               A sample is useful only if the paid product builds the right pack
             </h2>
             <p className="mt-4 text-base leading-8 text-[#546075] md:text-lg">
-              Use the PDFs to inspect the output, then use Landlord Heaven to build a fixed-price, solicitor-approved document workflow around the facts of the tenancy, notice, claim, or rent increase. It is document preparation and procedural support, not legal advice, solicitor representation, or court approval.
+              Use the PDFs to inspect the output, then use Landlord Heaven to build a fixed-price, solicitor-approved document workflow around the facts of the tenancy, notice, claim, or rent increase.
             </p>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             {samplePositioningCards.map((card) => (
-              <article key={card.title} className="rounded-[1.5rem] border border-[#E4DAFF] bg-white p-5">
+              <article key={card.title} className="rounded-lg border border-[#E4DAFF] bg-white p-5">
                 <h3 className="text-lg font-semibold text-[#141B2D]">{card.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-[#546075] md:text-base">{card.body}</p>
               </article>

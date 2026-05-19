@@ -16,7 +16,7 @@ describe('sample and tenancy commercial positioning', () => {
     expect(source).toContain('Compared with a wording-only download');
     expect(source).toContain('What Landlord Heaven validates before checkout');
     expect(source).toContain('Preview the pack before you pay');
-    expect(source).toContain('not legal advice, solicitor representation, or court approval');
+    expect(source).toContain('solicitor-approved document workflow around the facts');
     expect(source).toContain('This is not a static form library');
   });
 
@@ -27,7 +27,7 @@ describe('sample and tenancy commercial positioning', () => {
     expect(source).toContain('Why this is not just another sample PDF');
     expect(source).toContain('Inspect the sample, then build the pack around your facts');
     expect(source).toContain('What Landlord Heaven validates before checkout');
-    expect(source).toContain('not legal advice, solicitor representation, or a court-approved outcome');
+    expect(source).toContain('solicitor-approved procedural workflow');
     expect(source).toContain('Build my {config.productName}');
   });
 
@@ -59,7 +59,7 @@ describe('sample and tenancy commercial positioning', () => {
     expect(source).toContain('Compared with a wording-only download');
     expect(source).toContain('Compared with using a solicitor');
     expect(source).toContain('Validated before preview');
-    expect(source).toContain('not legal advice, solicitor representation, or a court-approved tenancy agreement');
+    expect(source).toContain('validate the key tenancy facts');
     expect(source).toContain('See the actual pack before you pay');
   });
 

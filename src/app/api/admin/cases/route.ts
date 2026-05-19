@@ -101,6 +101,7 @@ type AdminCasesResponse = {
 };
 
 const ADMIN_CASES_IN_CHUNK_SIZE = 200;
+const ADMIN_CASES_FETCH_PAGE_SIZE = 1000;
 const ORDER_SELECT_WITH_METADATA =
   'id, case_id, user_id, product_type, payment_status, fulfillment_status, paid_at, created_at, metadata';
 const ORDER_SELECT_WITHOUT_METADATA =
@@ -154,6 +155,41 @@ function applyPreset(caseItem: AdminCaseRecord, preset: AdminCasesPreset): boole
       return caseItem.documents_ready;
     default:
       return true;
+  }
+}
+
+async function fetchAdminCaseRows(
+  adminClient: ReturnType<typeof createAdminClient>,
+  caseType: string
+) {
+  const cases: RawCase[] = [];
+
+  for (let from = 0; ; from += ADMIN_CASES_FETCH_PAGE_SIZE) {
+    const to = from + ADMIN_CASES_FETCH_PAGE_SIZE - 1;
+    let casesQuery = adminClient
+      .from('cases')
+      .select(
+        'id, user_id, case_type, jurisdiction, status, workflow_status, wizard_progress, wizard_completed_at, collected_facts, created_at, updated_at'
+      )
+      .order('updated_at', { ascending: false })
+      .range(from, to);
+
+    if (caseType !== 'all') {
+      casesQuery = casesQuery.eq('case_type', caseType);
+    }
+
+    const { data, error } = await casesQuery;
+
+    if (error) {
+      return { data: cases, error };
+    }
+
+    const pageRows = (data || []) as RawCase[];
+    cases.push(...pageRows);
+
+    if (pageRows.length < ADMIN_CASES_FETCH_PAGE_SIZE) {
+      return { data: cases, error: null };
+    }
   }
 }
 
@@ -336,18 +372,10 @@ export async function GET(request: NextRequest) {
     const sortBy = (searchParams.get('sortBy') || 'risk') as AdminCasesSortBy;
     const sortOrder = searchParams.get('sortOrder') || 'desc';
 
-    let casesQuery = adminClient
-      .from('cases')
-      .select(
-        'id, user_id, case_type, jurisdiction, status, workflow_status, wizard_progress, wizard_completed_at, collected_facts, created_at, updated_at'
-      )
-      .order('updated_at', { ascending: false });
-
-    if (caseType !== 'all') {
-      casesQuery = casesQuery.eq('case_type', caseType);
-    }
-
-    const { data: casesData, error: casesError } = await casesQuery;
+    const { data: casesData, error: casesError } = await fetchAdminCaseRows(
+      adminClient,
+      caseType
+    );
 
     if (casesError) {
       console.error('Failed to fetch admin cases:', casesError);

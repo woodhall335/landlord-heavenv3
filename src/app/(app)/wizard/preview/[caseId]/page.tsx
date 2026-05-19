@@ -515,6 +515,16 @@ export default function WizardPreviewPage() {
           jurisdiction: fetchedCase.jurisdiction || 'unknown',
           caseId,
         });
+        fetch(`/api/cases/${caseId}/preview-reached`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...sessionHeaders },
+          body: JSON.stringify({
+            product: searchParams.get('product') || productFromFacts,
+            source: 'wizard_preview_page',
+          }),
+        }).catch((previewMarkerError) => {
+          console.warn('Failed to mark case preview reached:', previewMarkerError);
+        });
 
         // Try to generate/load preview
         const factsMeta = (fetchedCase.collected_facts as any)?.meta || {};

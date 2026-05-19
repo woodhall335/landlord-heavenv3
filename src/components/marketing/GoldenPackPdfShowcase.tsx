@@ -33,7 +33,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
 
   return (
     <>
-      <div className="overflow-hidden rounded-[1.85rem] border border-[#34245D] bg-[#1A1231] shadow-[0_18px_52px_rgba(9,6,18,0.24)]">
+      <div className="overflow-hidden rounded-lg border border-[#34245D] bg-[#1A1231] shadow-[0_18px_52px_rgba(9,6,18,0.24)]">
         <div className="border-b border-[#3D2D68] px-5 py-5 md:px-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
@@ -61,7 +61,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
         </div>
 
         <div className="grid gap-6 px-5 py-5 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.6fr)] md:px-6">
-          <div className="rounded-[1.45rem] border border-[#4B3B76] bg-[#241A3F] p-4 md:p-5">
+          <div className="rounded-lg border border-[#4B3B76] bg-[#241A3F] p-4 md:p-5">
             <div className="mb-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#CFC4FF]">
                 Documents in this sample pack
@@ -81,7 +81,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
                     type="button"
                     onClick={() => setSelectedTitle(entry.title)}
                     className={[
-                      'w-full rounded-[1.15rem] border px-4 py-4 text-left transition',
+                      'w-full rounded-lg border px-4 py-4 text-left transition',
                       isSelected
                         ? 'border-[#CDBBFF] bg-white text-[#261544] shadow-[0_16px_40px_rgba(255,255,255,0.1)]'
                         : 'border-[#4B3B76] bg-[#30244D] text-white hover:bg-[#3A2C5C]',
@@ -122,8 +122,8 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-[1.45rem] border border-[#D9D1FF] bg-[#F8F5FF] p-3 shadow-[0_16px_40px_rgba(31,20,59,0.12)]">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-[1rem] border border-[#E3DBFF] bg-white px-4 py-3">
+          <div className="overflow-hidden rounded-lg border border-[#D9D1FF] bg-[#F8F5FF] p-3 shadow-[0_16px_40px_rgba(31,20,59,0.12)]">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#E3DBFF] bg-white px-4 py-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6F54C8]">
                   Selected sample
@@ -143,7 +143,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
               </p>
             </div>
 
-            <div className="overflow-hidden rounded-[1.1rem] border border-[#E3DBFF] bg-white">
+            <div className="overflow-hidden rounded-lg border border-[#E3DBFF] bg-white">
               {selectedEntry.embedHref ? (
                 <iframe
                   key={selectedEntry.embedHref}
@@ -175,7 +175,7 @@ export function GoldenPackPdfShowcase({ entries }: { entries: PdfEntry[] }) {
               {selectedEntry.pageCount ? <span>{selectedEntry.pageCount} pages</span> : null}
               <span>Embedded sample reader</span>
             </div>
-            <div className="overflow-hidden rounded-[1.2rem] border border-slate-200 bg-white shadow-[0_12px_32px_rgba(15,23,42,0.08)]">
+            <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_12px_32px_rgba(15,23,42,0.08)]">
               {selectedEntry.embedHref ? (
                 <iframe
                   key={selectedEntry.embedHref}

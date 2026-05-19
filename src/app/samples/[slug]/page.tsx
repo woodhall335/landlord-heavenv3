@@ -29,7 +29,7 @@ const comparisonCards = [
   {
     title: 'Compared with a solicitor',
     body:
-      'Use a solicitor when you need bespoke legal advice, negotiation, or representation. Use Landlord Heaven when you want fixed-price, solicitor-approved document preparation for a routine landlord workflow.',
+      'Use a solicitor for bespoke dispute work or complex negotiation. Use Landlord Heaven when you want fixed-price, solicitor-approved document preparation for a routine landlord workflow.',
   },
   {
     title: 'Compared with a wording-only download',
@@ -166,7 +166,7 @@ function ProductSamplePageView({ config }: { config: ProductSamplePageConfig }) 
               Inspect the sample, then build the pack around your facts
             </h2>
             <p className="mt-4 text-base leading-8 text-[#546075]">
-              A free sample is useful for checking the output. The paid {config.productName} is the next step when you want a solicitor-approved procedural workflow that turns your answers into a previewable landlord document pack. It is not legal advice, solicitor representation, or a court-approved outcome.
+              A free sample is useful for checking the output. The paid {config.productName} is the next step when you want a solicitor-approved procedural workflow that turns your answers into a previewable landlord document pack.
             </p>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2">

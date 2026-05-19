@@ -86,6 +86,45 @@ describe('case recovery helpers', () => {
     ).toBe(true);
   });
 
+  it('treats completed or preview-marked generic wizard cases as preview abandoned', () => {
+    expect(
+      isPreviewAbandonedCase({
+        caseItem: {
+          id: 'completed-eviction',
+          case_type: 'eviction',
+          jurisdiction: 'england',
+          status: 'completed',
+          workflow_status: 'in_progress',
+          wizard_progress: 0,
+          collected_facts: { __meta: { product: 'notice_only' } },
+        },
+        order: null,
+        hasFinalDocuments: false,
+      })
+    ).toBe(true);
+
+    expect(
+      isPreviewAbandonedCase({
+        caseItem: {
+          id: 'preview-last-viewed-tenancy',
+          case_type: 'tenancy_agreement',
+          jurisdiction: 'england',
+          status: 'in_progress',
+          workflow_status: 'in_progress',
+          wizard_progress: 0,
+          collected_facts: {
+            __meta: {
+              product: 'england_standard_tenancy_agreement',
+              preview_last_viewed_at: '2026-05-18T12:00:00.000Z',
+            },
+          },
+        },
+        order: null,
+        hasFinalDocuments: false,
+      })
+    ).toBe(true);
+  });
+
   it('keeps non-preview drafts out of preview abandoned recovery', () => {
     const caseItem = {
       id: 'case-draft',

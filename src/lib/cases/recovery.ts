@@ -20,6 +20,7 @@ type CaseLike = {
   id: string;
   case_type: string;
   jurisdiction: string;
+  status?: string | null;
   wizard_progress?: number | null;
   wizard_completed_at?: string | null;
   workflow_status?: string | null;
@@ -109,11 +110,14 @@ export function deriveCaseRecoveryContact(caseItem: CaseLike, user?: UserLike): 
 
 export function isCasePreviewReached(caseItem: CaseLike): boolean {
   const workflowStatus = caseItem.workflow_status || '';
+  const meta = caseItem.collected_facts?.__meta || {};
   return Boolean(
-    caseItem.wizard_completed_at ||
+    caseItem.status === 'completed' ||
+      caseItem.wizard_completed_at ||
       (caseItem.wizard_progress || 0) >= 100 ||
       workflowStatus === 'preview_ready' ||
-      workflowStatus === 'awaiting_payment'
+      workflowStatus === 'awaiting_payment' ||
+      firstString(meta.preview_reached_at, meta.preview_viewed_at, meta.preview_last_viewed_at)
   );
 }
 
