@@ -202,6 +202,43 @@ describe('GA4 analytics dispatch', () => {
     );
   });
 
+  it('normalizes Section 13 preview checkout as a review step event', async () => {
+    const { trackWizardStepCompleteWithAttribution } = await import('../../analytics');
+
+    trackWizardStepCompleteWithAttribution({
+      product: 'section13_standard',
+      jurisdiction: 'england',
+      step: 'preview_checkout',
+      stepIndex: 5,
+      totalSteps: 7,
+      caseId: 'case-section13-1',
+      src: 'rent_increase_hub',
+      topic: 'rent_increase',
+    });
+
+    expect(gtag).toHaveBeenCalledTimes(2);
+    expect(gtag).toHaveBeenNthCalledWith(
+      1,
+      'event',
+      'wizard_step_complete',
+      expect.objectContaining({
+        product: 'section13_standard',
+        step_name: 'preview_checkout',
+        step_group: 'review',
+      })
+    );
+    expect(gtag).toHaveBeenNthCalledWith(
+      2,
+      'event',
+      'wizard_step_review_complete',
+      expect.objectContaining({
+        product: 'section13_standard',
+        step_name: 'preview_checkout',
+        step_group: 'review',
+      })
+    );
+  });
+
   it('suppresses duplicate wizard step dispatches for the same case and step group', async () => {
     const { trackWizardStepCompleteWithAttribution } = await import('../../analytics');
 

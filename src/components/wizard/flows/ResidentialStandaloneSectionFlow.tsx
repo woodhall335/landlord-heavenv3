@@ -8,9 +8,12 @@ import { clsx } from 'clsx';
 import { Input } from '@/components/ui';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { WizardShellV3 } from '@/components/wizard/shared/WizardShellV3';
+import { trackWizardStepCompleteWithAttribution } from '@/lib/analytics';
+import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
 import { getResidentialStandaloneProfile } from '@/lib/residential-letting/standalone-profiles';
 import { getResidentialStandaloneThemeVars } from '@/lib/residential-letting/standalone-theme';
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
+import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 import {
   calculateArrearsScheduleTotal,
   getResidentialStandaloneCompletionErrors,
@@ -702,9 +705,41 @@ export function ResidentialStandaloneSectionFlow({ caseId, jurisdiction, product
     updateFact(fieldId, rooms);
   };
 
+  const trackCurrentStepComplete = () => {
+    if (!stepCompletion[activeStep]?.isComplete || !step?.id) return;
+
+    const normalizedStep = normalizeWizardStep(step.id);
+    const shouldTrack = markStepCompleted(step.id, {
+      caseId,
+      product,
+      jurisdiction,
+      stepGroup: normalizedStep.stepGroup,
+    });
+
+    if (!shouldTrack) return;
+
+    const attribution = getWizardAttribution();
+    trackWizardStepCompleteWithAttribution({
+      product,
+      jurisdiction,
+      step: step.id,
+      stepIndex: activeStep,
+      totalSteps: visibleSteps.length,
+      caseId,
+      src: attribution.src,
+      topic: attribution.topic,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      landing_url: attribution.landing_url,
+      first_seen_at: attribution.first_seen_at,
+    });
+  };
+
   const next = async () => {
     setErrors([]);
     await save();
+    trackCurrentStepComplete();
 
     if (activeStep < visibleSteps.length - 1) {
       setActiveStep((current) => current + 1);

@@ -41,6 +41,12 @@ import type {
 } from '@/lib/section13/types';
 import { PRODUCTS } from '@/lib/pricing/products';
 import { isSection13ProposalStepComplete } from '@/lib/wizard/flow-completion';
+import {
+  trackWizardReviewViewWithAttribution,
+  trackWizardStepCompleteWithAttribution,
+} from '@/lib/analytics';
+import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
+import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
 type SectionId =
   | 'tenancy'
@@ -480,6 +486,7 @@ export function Section13WizardFlow({
   const pendingSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const saveResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoScrapeKeyRef = useRef<string | null>(null);
+  const hasTrackedReviewRef = useRef(false);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
 
   const localPreview = useMemo(
@@ -659,6 +666,7 @@ export function Section13WizardFlow({
     setCheckoutError(null);
 
     try {
+      trackCurrentStepComplete();
       await persistDraft({ awaitingPayment: true });
       const params = new URLSearchParams({
         product: effectiveState.selectedPlan,
@@ -1131,6 +1139,66 @@ export function Section13WizardFlow({
         : currentStep.id === 'landlord'
           ? 'Complete the landlord name and address details before continuing.'
           : null;
+
+  function trackCurrentStepComplete() {
+    if (!currentStepState.complete) return;
+
+    const normalizedStep = normalizeWizardStep(currentStep.id);
+    const shouldTrack = markStepCompleted(currentStep.id, {
+      caseId,
+      product,
+      jurisdiction,
+      stepGroup: normalizedStep.stepGroup,
+    });
+
+    if (!shouldTrack) return;
+
+    const attribution = getWizardAttribution();
+    trackWizardStepCompleteWithAttribution({
+      product,
+      jurisdiction,
+      step: currentStep.id,
+      stepIndex: currentStepIndex,
+      totalSteps: STEP_CONFIG.length,
+      caseId,
+      src: attribution.src,
+      topic: attribution.topic,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      landing_url: attribution.landing_url,
+      first_seen_at: attribution.first_seen_at,
+    });
+  }
+
+  useEffect(() => {
+    if (loading || currentStep.id !== 'preview_checkout' || hasTrackedReviewRef.current) return;
+
+    hasTrackedReviewRef.current = true;
+    const attribution = getWizardAttribution();
+    trackWizardReviewViewWithAttribution({
+      product,
+      jurisdiction,
+      hasBlockers: Boolean(currentStepState.hasIssue),
+      hasWarnings: Boolean(effectiveState.preview?.warnings?.length),
+      caseId,
+      src: attribution.src,
+      topic: attribution.topic,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      landing_url: attribution.landing_url,
+      first_seen_at: attribution.first_seen_at,
+    });
+  }, [
+    caseId,
+    currentStep.id,
+    currentStepState.hasIssue,
+    effectiveState.preview?.warnings?.length,
+    jurisdiction,
+    loading,
+    product,
+  ]);
 
   useEffect(() => {
     if (loading || scrapeLoading || currentStep.id !== 'comparables' || comparables.length > 0) return;
@@ -2924,6 +2992,7 @@ export function Section13WizardFlow({
                   void continueToSharedCheckoutPreview();
                   return;
                 }
+                trackCurrentStepComplete();
                 setCurrentStepIndex((index) => Math.min(STEP_CONFIG.length - 1, index + 1));
               }}
               disabled={continueDisabled}
