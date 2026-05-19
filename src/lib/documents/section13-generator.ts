@@ -18,6 +18,7 @@ import {
 
 import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
 import { toWinAnsiSafeText } from '@/lib/documents/pdf-safe-text';
+import { getReliableComparableDistanceMiles } from '@/lib/section13/comparable-distance';
 import {
   SECTION13_CHALLENGE_EXPLAINER,
   SECTION13_EVIDENCE_EXPLAINER,
@@ -1133,7 +1134,9 @@ async function createNarrativePdf(title: string, blocks: SectionBlock[], footer?
         `Raw rent ${formatCurrency(comparable.monthlyEquivalent)} pcm | adjusted ${formatCurrency(comparable.adjustedMonthlyEquivalent)} pcm`,
         [
           comparable.propertyType || `${comparable.bedrooms ?? 'Unknown'} bedrooms`,
-          comparable.distanceMiles != null ? `${comparable.distanceMiles.toFixed(2)} miles away` : null,
+          getReliableComparableDistanceMiles(comparable) != null
+            ? `${getReliableComparableDistanceMiles(comparable)!.toFixed(2)} miles away`
+            : null,
           comparable.sourceDateValue ? `source date ${formatDateUk(comparable.sourceDateValue)}` : null,
         ].filter(Boolean).join(' | '),
         `Source: ${comparable.source}${comparable.sourceUrl ? ' | listing link saved in case file' : ''}`,
@@ -1959,7 +1962,9 @@ function buildComparableLines(
         `   Freshness: ${comparable.freshnessLabel}`,
         `   Source: ${comparable.source}${comparable.sourceUrl ? ` | ${comparable.sourceUrl}` : ''}`,
         comparable.propertyType ? `   Property type: ${comparable.propertyType}` : null,
-        comparable.distanceMiles != null ? `   Distance: ${comparable.distanceMiles.toFixed(2)} miles` : null,
+        getReliableComparableDistanceMiles(comparable) != null
+          ? `   Distance: ${getReliableComparableDistanceMiles(comparable)!.toFixed(2)} miles`
+          : null,
         comparable.sourceDateValue ? `   Source date (${comparable.sourceDateKind}): ${formatDateUk(comparable.sourceDateValue)}` : null,
         `   Adjustment reason: ${comparable.adjustmentReason}`,
         `   Use / exclusion reason: ${comparable.reasonDetail}`,

@@ -112,4 +112,33 @@ describe('buildSection13MarketCalculation', () => {
       calculation.explanationText.some((line) => line.includes('extends to 180-day comparables'))
     ).toBe(true);
   });
+
+  it('treats scraped zero-mile distances as unknown instead of precise evidence', () => {
+    const state = buildState();
+    const comparables = [
+      buildComparable(1200, { addressSnippet: 'Scraped zero', sortOrder: 0, distanceMiles: 0 }),
+      buildComparable(1250, {
+        addressSnippet: 'Manual exact',
+        sortOrder: 1,
+        source: 'manual_linked',
+        isManual: true,
+        distanceMiles: 0,
+      }),
+    ];
+
+    const calculation = buildSection13MarketCalculation(
+      state,
+      comparables,
+      new Date('2026-05-03T10:00:00.000Z')
+    );
+
+    const allAssessments = [
+      ...calculation.usedComparables,
+      ...calculation.contextComparables,
+      ...calculation.excludedComparables,
+    ];
+
+    expect(allAssessments.find((item) => item.addressSnippet === 'Scraped zero')?.distanceMiles).toBeNull();
+    expect(allAssessments.find((item) => item.addressSnippet === 'Manual exact')?.distanceMiles).toBe(0);
+  });
 });

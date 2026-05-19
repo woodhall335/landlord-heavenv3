@@ -163,6 +163,30 @@ describe('section13 live comparable scraper', () => {
     expect(result.comparables[0].metadata?.imageUrl).toBe('https://media.rightmove.co.uk/1000.jpg');
   });
 
+  it('does not preserve scraped zero-mile distances as precise evidence', async () => {
+    mockFetchByUrl({
+      rightmove: buildRightmoveHtml(
+        Array.from({ length: 3 }, (_, index) =>
+          buildRightmoveProperty(index, {
+            bedrooms: 2,
+            displayAddress: `Zero distance comparable ${index + 1}, Leeds`,
+            distance: 0,
+          })
+        )
+      ),
+      openrent: '<html><body>No cards</body></html>',
+    });
+
+    const result = await scrapeLiveComparables('LS1 4AP', 2);
+
+    expect(result.success).toBe(true);
+    if (!result.success) {
+      throw new Error('Expected live comparable success');
+    }
+
+    expect(result.comparables.every((item) => item.distanceMiles == null)).toBe(true);
+  });
+
   it('merges OpenRent listings into the live comparable set with images and addresses', async () => {
     mockFetchByUrl({
       rightmove: buildRightmoveHtml([

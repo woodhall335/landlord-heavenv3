@@ -16,6 +16,7 @@ import type {
   Section13RentFrequency,
   Section13State,
 } from './types';
+import { getReliableComparableDistanceMiles } from './comparable-distance';
 
 export type RentCheckerUserType = 'landlord';
 export type RentCheckerPropertyType = 'flat' | 'house' | 'room' | 'hmo' | 'other';
@@ -264,7 +265,8 @@ function buildComparableSourceLabel(item: Section13ComparableAssessment): string
         ? 'Rightmove'
         : item.sourceDomain || 'Market listing';
   const listed = item.listedDateLabel ? `Listed ${item.listedDateLabel}` : null;
-  const distance = item.distanceMiles != null ? `${item.distanceMiles.toFixed(1)} miles away` : null;
+  const reliableDistance = getReliableComparableDistanceMiles(item);
+  const distance = reliableDistance != null ? `${reliableDistance.toFixed(1)} miles away` : null;
   return [sourceName, listed, distance].filter(Boolean).join(' | ');
 }
 
@@ -281,7 +283,7 @@ function buildComparableListings(
     sourceUrl: item.sourceUrl || null,
     imageUrl: buildComparableImageUrl(item),
     sourceLabel: buildComparableSourceLabel(item),
-    distanceMiles: item.distanceMiles ?? null,
+    distanceMiles: getReliableComparableDistanceMiles(item),
     listedDate: item.listedDateLabel,
     freshnessStatus: item.freshnessLabel,
     reasonLabel: item.reasonLabel,

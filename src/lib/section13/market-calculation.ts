@@ -7,6 +7,7 @@ import type {
   Section13MarketCalculation,
   Section13State,
 } from './types';
+import { getReliableComparableDistanceMiles } from './comparable-distance';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const PRIMARY_FRESHNESS_DAYS = 90;
@@ -216,7 +217,7 @@ function buildProvisionalAssessment(
         Boolean(comparable.metadata.allInclusive) !== Boolean(comparable.metadata?.subjectBillsIncluded)
     );
   const reasonParts: string[] = [];
-  const distanceMiles = comparable.distanceMiles ?? null;
+  const distanceMiles = getReliableComparableDistanceMiles(comparable);
 
   if (freshnessBand === 'extended_180') {
     reasonParts.push('Older comparable inside the 180-day fallback window.');
@@ -422,7 +423,7 @@ function buildAssessment(
     bedrooms: comparable.bedrooms ?? null,
     propertyType: comparable.propertyType || null,
     furnishedStatus: readComparableFurnishedStatus(comparable),
-    distanceMiles: comparable.distanceMiles ?? null,
+    distanceMiles: getReliableComparableDistanceMiles(comparable),
     rentPcmRaw: Number(comparable.monthlyEquivalent.toFixed(2)),
     rentPcmAdjusted: Number(comparable.adjustedMonthlyEquivalent.toFixed(2)),
     freshnessDays: provisional.freshnessDays,

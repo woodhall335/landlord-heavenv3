@@ -1,4 +1,5 @@
 export * from './csv';
+export * from './comparable-distance';
 export * from './facts';
 export * from './market-calculation';
 export * from './postcode';

@@ -1,5 +1,6 @@
 import { maybeNormalizeUkPostcode, getDomainFromUrl } from './postcode';
 import { buildComparableFromPartial } from './server';
+import { getReliableComparableDistanceMiles } from './comparable-distance';
 import type { Section13Comparable, Section13SourceDateKind } from './types';
 
 const RIGHTMOVE_PROXY_ENDPOINTS = [
@@ -246,6 +247,14 @@ function parseDistanceMiles(value: unknown): number | null {
   return Number(fromText.toFixed(2));
 }
 
+function parseScrapedDistanceMiles(value: unknown): number | null {
+  return getReliableComparableDistanceMiles({
+    distanceMiles: parseDistanceMiles(value),
+    source: 'scraped',
+    isManual: false,
+  });
+}
+
 function normalizeImageUrl(value: unknown, fallbackDomain?: string): string | null {
   if (typeof value !== 'string') {
     return null;
@@ -377,7 +386,7 @@ function buildComparableFromRightmoveProperty(
       bedrooms: Number.isFinite(Number(property?.bedrooms)) ? Number(property.bedrooms) : null,
       rawRentValue: amount,
       rawRentFrequency: inferRentFrequency(rentFrequencyHint),
-      distanceMiles: parseDistanceMiles(property?.distance ?? property?.formattedDistance),
+      distanceMiles: parseScrapedDistanceMiles(property?.distance ?? property?.formattedDistance),
       isManual: false,
       adjustments: [],
       metadata: {
@@ -810,8 +819,13 @@ function extractComparablesFromOpenRentHtml(
           bedrooms: titleShape.bedrooms,
           rawRentValue: amount,
           rawRentFrequency: 'pcm',
-          distanceMiles:
-            Number.isFinite(kilometers) ? Number((kilometers * MILES_PER_KM).toFixed(2)) : null,
+          distanceMiles: getReliableComparableDistanceMiles({
+            distanceMiles: Number.isFinite(kilometers)
+              ? Number((kilometers * MILES_PER_KM).toFixed(2))
+              : null,
+            source: 'scraped',
+            isManual: false,
+          }),
           isManual: false,
           adjustments: [],
           metadata: {

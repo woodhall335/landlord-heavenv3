@@ -46,6 +46,7 @@ import {
   trackWizardStepCompleteWithAttribution,
 } from '@/lib/analytics';
 import { normalizeWizardStep } from '@/lib/analytics/wizard-step-taxonomy';
+import { getReliableComparableDistanceMiles } from '@/lib/section13/comparable-distance';
 import { getWizardAttribution, markStepCompleted } from '@/lib/wizard/wizardAttribution';
 
 type SectionId =
@@ -2096,7 +2097,9 @@ export function Section13WizardFlow({
                           <div className="rounded-2xl bg-gray-50 p-3 text-sm text-gray-700">
                             <div className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Distance / source</div>
                             <div className="mt-1 text-base font-semibold text-gray-950">
-                              {comparable.distanceMiles != null ? `${comparable.distanceMiles.toFixed(1)} miles` : 'Distance unknown'}
+                              {getReliableComparableDistanceMiles(comparable) != null
+                                ? `${getReliableComparableDistanceMiles(comparable)!.toFixed(1)} miles`
+                                : 'Distance unknown'}
                             </div>
                             <div className="mt-1 text-xs text-gray-500">
                               {assessment?.sourceDomain || comparable.sourceDomain || comparable.source}
